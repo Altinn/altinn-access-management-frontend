@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react';
 import * as React from 'react';
-import { Button } from '@digdir/designsystemet-react';
+import { DsButton } from '@altinn/altinn-components';
 
 import store from '@/rtk/app/store';
 import { Dialog, DialogContent, type DialogProps } from '@/components';
@@ -45,7 +45,7 @@ describe('Dialog', () => {
       >
         <DialogContent>
           Dialog innhold
-          <Button onClick={handleClickSpy}>Knapp</Button>
+          <DsButton onClick={handleClickSpy}>Knapp</DsButton>
         </DialogContent>
       </Dialog>,
     );

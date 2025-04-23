@@ -1,6 +1,6 @@
 import React from 'react';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { TenancyIcon } from '@navikt/aksel-icons';
+import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import classes from './SystemUserHeader.module.css';
 
@@ -14,13 +14,13 @@ export const SystemUserHeader = ({ title, subTitle }: SystemUserHeaderProps): Re
     <div className={classes.systemUserDetailsHeader}>
       <TenancyIcon fontSize={60} />
       <div className={classes.headingContainer}>
-        <Heading
+        <DsHeading
           level={1}
           data-size='sm'
         >
           {title}
-        </Heading>
-        {subTitle && <Paragraph data-size='xs'>for {subTitle}</Paragraph>}
+        </DsHeading>
+        {subTitle && <DsParagraph data-size='xs'>for {subTitle}</DsParagraph>}
       </div>
     </div>
   );

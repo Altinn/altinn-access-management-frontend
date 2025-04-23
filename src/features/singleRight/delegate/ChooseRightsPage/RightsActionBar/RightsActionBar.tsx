@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Button } from '@digdir/designsystemet-react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
+import { DsButton } from '@altinn/altinn-components';
 
 import { ActionBar, type ActionBarProps } from '@/components';
 import { getButtonIconSize } from '@/resources/utils';
@@ -28,7 +29,7 @@ export const RightsActionBar = ({
   const { t } = useTranslation();
 
   const removeButton = (
-    <Button
+    <DsButton
       variant='tertiary'
       data-size={compact ? 'lg' : 'md'}
       onClick={onRemoveClick}
@@ -39,7 +40,7 @@ export const RightsActionBar = ({
         fontSize={getButtonIconSize(!compact)}
         title={t('common.remove')}
       />
-    </Button>
+    </DsButton>
   );
 
   return (

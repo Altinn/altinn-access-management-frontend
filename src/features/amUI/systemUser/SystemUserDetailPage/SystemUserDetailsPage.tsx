@@ -1,7 +1,13 @@
 import React from 'react';
-import { Alert, Spinner, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
+import { DsSpinner, DsAlert, DsParagraph } from '@altinn/altinn-components';
+
+import { RightsList } from '../components/RightsList/RightsList';
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
+
+import classes from './SystemUserDetailsPage.module.css';
 
 import { useDeleteSystemuserMutation, useGetSystemUserQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -11,12 +17,6 @@ import { SystemUserPath } from '@/routes/paths';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-
-import { RightsList } from '../components/RightsList/RightsList';
-import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
-
-import classes from './SystemUserDetailsPage.module.css';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
@@ -65,10 +65,12 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
           }
         >
           {isLoadingSystemUser && (
-            <Spinner aria-label={t('systemuser_detailpage.loading_systemuser')} />
+            <DsSpinner aria-label={t('systemuser_detailpage.loading_systemuser')} />
           )}
           {isLoadSystemUserError && (
-            <Alert data-color='danger'>{t('systemuser_detailpage.load_systemuser_error')}</Alert>
+            <DsAlert data-color='danger'>
+              {t('systemuser_detailpage.load_systemuser_error')}
+            </DsAlert>
           )}
           {systemUser && (
             <div className={classes.systemUserDetails}>
@@ -80,7 +82,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
                 resources={systemUser.resources}
                 accessPackages={systemUser.accessPackages}
               />
-              <Paragraph
+              <DsParagraph
                 data-size='xs'
                 className={classes.createdBy}
               >
@@ -91,7 +93,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
                     day: '2-digit',
                   }),
                 })}
-              </Paragraph>
+              </DsParagraph>
             </div>
           )}
         </PageContainer>

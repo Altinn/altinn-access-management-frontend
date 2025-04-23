@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { Button, Paragraph, Spinner, ValidationMessage } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, ExclamationmarkTriangleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
+import { DsButton, DsParagraph, DsSpinner, DsValidationMessage } from '@altinn/altinn-components';
+
+import classes from './ResourceActionBar.module.css';
 
 import { ActionBar, type ActionBarProps } from '@/components';
 import { useUpdate } from '@/resources/hooks/useUpdate';
 import { usePrevious } from '@/resources/hooks';
 import { ServiceStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { getButtonIconSize } from '@/resources/utils';
-
-import classes from './ResourceActionBar.module.css';
 
 export interface ResourceActionBarProps
   extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children'> {
@@ -76,7 +76,7 @@ export const ResourceActionBar = ({
   }, [status]);
 
   const addButton = (
-    <Button
+    <DsButton
       variant='tertiary'
       data-size={compact ? 'lg' : 'md'}
       onClick={() => {
@@ -90,11 +90,11 @@ export const ResourceActionBar = ({
         title='add'
         fontSize={getButtonIconSize(!compact)}
       />
-    </Button>
+    </DsButton>
   );
 
   const undoButton = (
-    <Button
+    <DsButton
       variant='tertiary'
       data-size={compact ? 'lg' : 'md'}
       onClick={onRemoveClick}
@@ -105,24 +105,24 @@ export const ResourceActionBar = ({
         title={t('common.undo')}
         fontSize={getButtonIconSize(!compact)}
       />
-    </Button>
+    </DsButton>
   );
 
   const loadingText = (
-    <Paragraph
+    <DsParagraph
       className={classes.loadingText}
       data-size='sm'
     >
-      <Spinner
+      <DsSpinner
         aria-label={t('common.loading')}
         data-size='sm'
       />
       {!compact && t('common.loading')}
-    </Paragraph>
+    </DsParagraph>
   );
 
   const notDelegableLabel = (
-    <ValidationMessage
+    <DsValidationMessage
       className={classes.notDelegableContainer}
       onClick={() => {
         setOpen(!open);
@@ -134,7 +134,7 @@ export const ResourceActionBar = ({
         fontSize={getButtonIconSize(!compact)}
         aria-label={errorText}
       />
-    </ValidationMessage>
+    </DsValidationMessage>
   );
 
   const action = () => {

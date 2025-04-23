@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { useState, useEffect, useId, type ReactNode } from 'react';
-import { Button, Spinner, Heading } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-
-import { arraysEqual, getButtonIconSize } from '@/resources/utils';
-import { usePrevious } from '@/resources/hooks';
+import { DsHeading, DsButton, DsSpinner } from '@altinn/altinn-components';
 
 import type { FilterOption } from './utils';
 import { OptionDisplay } from './OptionDisplay';
 import classes from './Filter.module.css';
 import { Floatover } from './Floatover';
 import { FilterButton } from './FilterButton';
+
+import { usePrevious } from '@/resources/hooks';
+import { arraysEqual, getButtonIconSize } from '@/resources/utils';
 
 export interface FilterProps {
   /** The provided filter options, defined in values and labels */
@@ -129,13 +129,13 @@ export const Filter = ({
 
   const modalHeader = () => (
     <div className={classes.modalHeader}>
-      <Heading
+      <DsHeading
         data-size='xs'
         level={3}
       >
         {label}
-      </Heading>
-      <Button
+      </DsHeading>
+      <DsButton
         variant='tertiary'
         data-color='neutral'
         onClick={handleOpenOrClose}
@@ -147,7 +147,7 @@ export const Filter = ({
           aria-label={String(t('common.close'))}
           fontSize={getButtonIconSize(false)}
         />
-      </Button>
+      </DsButton>
     </div>
   );
 
@@ -174,7 +174,7 @@ export const Filter = ({
         {fullScreenModal && modalHeader()}
         {isLoading || options === undefined ? (
           <div className={classes.loadingContainer}>
-            <Spinner
+            <DsSpinner
               aria-label={t('common.loading')}
               data-size='md'
             />
@@ -191,7 +191,7 @@ export const Filter = ({
               />
             </div>
             <div className={cn(classes.filterActions, { [classes.modal]: fullScreenModal })}>
-              <Button
+              <DsButton
                 className={classes.resetButton}
                 data-size={fullScreenModal ? 'md' : 'sm'}
                 variant='tertiary'
@@ -199,14 +199,14 @@ export const Filter = ({
                 onClick={checkedFilters.length === 0 ? undefined : handleReset}
               >
                 {resetButtonLabel}
-              </Button>
-              <Button
+              </DsButton>
+              <DsButton
                 data-size={fullScreenModal ? 'md' : 'sm'}
                 onClick={hasChanges ? handleOpenOrClose : undefined}
                 aria-disabled={!hasChanges}
               >
                 {applyButtonLabel}
-              </Button>
+              </DsButton>
             </div>
           </>
         )}

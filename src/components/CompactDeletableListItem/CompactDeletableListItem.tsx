@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { Button } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import * as React from 'react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
-
-import { useMediaQuery } from '@/resources/hooks';
-import { getButtonIconSize } from '@/resources/utils';
+import { DsButton } from '@altinn/altinn-components';
 
 import { BorderedList } from '../BorderedList';
 
 import classes from './CompactDeletableListItem.module.css';
+
+import { useMediaQuery } from '@/resources/hooks';
+import { getButtonIconSize } from '@/resources/utils';
 
 export enum ListTextColor {
   primary = 'primary',
@@ -58,7 +58,7 @@ export const CompactDeletableListItem = ({
           </div>
           <div className={classes.deleteSection}>
             {removeCallback && (
-              <Button
+              <DsButton
                 variant={'tertiary'}
                 color={'danger'}
                 data-size='md'
@@ -78,7 +78,7 @@ export const CompactDeletableListItem = ({
               >
                 <MinusCircleIcon fontSize={getButtonIconSize(!isSm)} />
                 {!isSm && t('common.remove')}
-              </Button>
+              </DsButton>
             )}
           </div>
         </div>

@@ -5,9 +5,9 @@ import {
   FilesFillIcon,
   ChevronRightDoubleIcon,
 } from '@navikt/aksel-icons';
-import { Button, Paragraph } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { useNavigate } from 'react-router';
+import { DsButton, DsParagraph } from '@altinn/altinn-components';
 
 import { ActionBar, type ActionBarProps } from '../ActionBar';
 
@@ -56,7 +56,7 @@ export const CollectionBar = ({
         }
         additionalText={
           !compact && (
-            <Paragraph
+            <DsParagraph
               role='status'
               data-size='sm'
               className={cn(classes.counterText, classes[color])}
@@ -66,12 +66,12 @@ export const CollectionBar = ({
                 width={20}
               />
               {collection.length.toString() + ' ' + t('common.added')}
-            </Paragraph>
+            </DsParagraph>
           )
         }
         actions={
           !compact && (
-            <Button
+            <DsButton
               variant='tertiary'
               data-size='sm'
               className={cn(classes.buttonText, classes[color])}
@@ -79,7 +79,7 @@ export const CollectionBar = ({
               disabled={disabledProceedButton}
             >
               <ChevronRightDoubleCircleFillIcon fontSize={'1.5rem'} /> {t('common.proceed')}
-            </Button>
+            </DsButton>
           )
         }
         color={color}
@@ -87,7 +87,7 @@ export const CollectionBar = ({
         <div className={cn(classes.content, { [classes.compact]: compact })}>{collection}</div>
       </ActionBar>
       {compact && (
-        <Button
+        <DsButton
           className={classes.compactProceedButton}
           variant='tertiary'
           data-size='sm'
@@ -95,7 +95,7 @@ export const CollectionBar = ({
           disabled={disabledProceedButton}
         >
           {t('common.proceed')} <ChevronRightDoubleIcon fontSize={'1.2rem'} />
-        </Button>
+        </DsButton>
       )}
     </>
   );

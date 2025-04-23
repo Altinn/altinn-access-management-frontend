@@ -1,10 +1,16 @@
-import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
 import * as React from 'react';
 import { PlusIcon, PencilIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { useDispatch } from 'react-redux';
+import { DsSpinner, DsButton, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
+
+import { DelegationType } from '../DelegationType';
+
+import { OrgDelegationActionBar } from './OrgDelegationActionBar';
+import classes from './OverviewPageContent.module.css';
+import { useSoftDeleteApi } from './useSoftDeleteApi';
 
 import { useMediaQuery } from '@/resources/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -19,12 +25,6 @@ import {
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { resetState } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import { resetChosenApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-
-import { DelegationType } from '../DelegationType';
-
-import { OrgDelegationActionBar } from './OrgDelegationActionBar';
-import classes from './OverviewPageContent.module.css';
-import { useSoftDeleteApi } from './useSoftDeleteApi';
 
 export interface OverviewPageContentInterface {
   delegationType: DelegationType;
@@ -119,7 +119,7 @@ export const OverviewPageContent = ({
     } else if (loading) {
       return (
         <div className={classes.spinnerContainer}>
-          <Spinner aria-label={t('common.loading')} />
+          <DsSpinner aria-label={t('common.loading')} />
         </div>
       );
     } else if (overviewOrgs && overviewOrgs.length < 1) {
@@ -169,7 +169,7 @@ export const OverviewPageContent = ({
 
       {delegationType === DelegationType.Offered && (
         <div className={classes.delegateNewButton}>
-          <Button
+          <DsButton
             variant='secondary'
             onClick={() =>
               navigate(`/${ApiDelegationPath.OfferedApiDelegations}/${ApiDelegationPath.ChooseApi}`)
@@ -177,21 +177,21 @@ export const OverviewPageContent = ({
             data-size='md'
           >
             <PlusIcon fontSize={getButtonIconSize(true)} /> {t('api_delegation.delegate_new_api')}
-          </Button>
+          </DsButton>
         </div>
       )}
-      <Alert
+      <DsAlert
         data-color='info'
         data-size='md'
       >
-        <Heading
+        <DsHeading
           level={2}
           data-size='sm'
           className={classes.alertHeading}
         >
           {t('api_delegation.card_title')}
-        </Heading>
-        <Paragraph>
+        </DsHeading>
+        <DsParagraph>
           {t('api_delegation.api_panel_content')}{' '}
           <Link
             to='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
@@ -200,20 +200,20 @@ export const OverviewPageContent = ({
           >
             {t('common.maskinporten')}
           </Link>
-        </Paragraph>
-      </Alert>
+        </DsParagraph>
+      </DsAlert>
       {deletedItems && deletedItems?.failedDeleteions?.length > 0 && (
-        <Alert
+        <DsAlert
           role='alert'
           data-color='danger'
           title={t('api_delegation.revoke_delegation_failed')}
         >
-          <Heading
+          <DsHeading
             level={3}
             data-size='sm'
           >
             {t('api_delegation.revoke_delegation_failed')}
-          </Heading>
+          </DsHeading>
           <ul>
             {deletedItems.failedDeleteions.map((item) => (
               <li key={item.apiId}>
@@ -221,13 +221,13 @@ export const OverviewPageContent = ({
               </li>
             ))}
           </ul>
-        </Alert>
+        </DsAlert>
       )}
       <StatusMessageForScreenReader>{deletedItemsStatusMessage}</StatusMessageForScreenReader>
       <div className={classes.explanatoryContainer}>
         {overviewOrgs && overviewOrgs.length > 0 && (
           <>
-            <Heading
+            <DsHeading
               level={3}
               data-size={isSm ? 'sm' : 'md'}
               className={classes.apiSubheading}
@@ -235,10 +235,10 @@ export const OverviewPageContent = ({
               {delegationType === DelegationType.Offered
                 ? t('api_delegation.you_have_delegated_accesses')
                 : t('api_delegation.you_have_received_accesses')}
-            </Heading>
+            </DsHeading>
 
             <div className={classes.editButton}>
-              <Button
+              <DsButton
                 variant='tertiary'
                 onClick={() => {
                   softRestoreAll();
@@ -256,7 +256,7 @@ export const OverviewPageContent = ({
                     <XMarkOctagonIcon fontSize={getButtonIconSize(true)} /> {t('common.cancel')}
                   </>
                 )}
-              </Button>
+              </DsButton>
             </div>
           </>
         )}
@@ -264,13 +264,13 @@ export const OverviewPageContent = ({
       <>{activeDelegations()}</>
       {isEditable && (
         <div className={classes.saveSection}>
-          <Button
+          <DsButton
             disabled={loading || itemsToDelete.length === 0}
             onClick={confirmRevoke}
             data-color='accent'
           >
             {t('api_delegation.save')}
-          </Button>
+          </DsButton>
         </div>
       )}
     </div>

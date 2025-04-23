@@ -1,9 +1,14 @@
-import { Button, Search, Skeleton } from '@digdir/designsystemet-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
+import { DsSkeleton, DsSearch, DsButton } from '@altinn/altinn-components';
+
+import { ApiActionBar } from '../../components/ApiActionBar';
+
+import classes from './ChooseApiPage.module.css';
+import { ApiSearchResults } from './ApiSearchResult';
 
 import { Page, PageHeader, PageContent, PageContainer } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
@@ -30,11 +35,6 @@ import type { ResourceOwner } from '@/rtk/features/resourceApi';
 import { ResourceType, useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-
-import { ApiActionBar } from '../../components/ApiActionBar';
-
-import classes from './ChooseApiPage.module.css';
-import { ApiSearchResults } from './ApiSearchResult';
 
 export const ChooseApiPage = () => {
   const [searchString, setSearchString] = useState('');
@@ -139,23 +139,23 @@ export const ChooseApiPage = () => {
     const skeletonHeight = '66px';
     return (
       <>
-        <Skeleton
+        <DsSkeleton
           variant='rectangle'
           height={skeletonHeight}
         />
-        <Skeleton
+        <DsSkeleton
           variant='rectangle'
           height={skeletonHeight}
         />
-        <Skeleton
+        <DsSkeleton
           variant='rectangle'
           height={skeletonHeight}
         />
-        <Skeleton
+        <DsSkeleton
           variant='rectangle'
           height={skeletonHeight}
         />
-        <Skeleton
+        <DsSkeleton
           variant='rectangle'
           height={skeletonHeight}
         />
@@ -166,7 +166,7 @@ export const ChooseApiPage = () => {
   const ChosenApiSkeleton = () => {
     const skeletonHeight = '66px';
     return Array.from(urlParams).map((_, index) => (
-      <Skeleton
+      <DsSkeleton
         variant='rectangle'
         key={index}
         height={skeletonHeight}
@@ -192,20 +192,20 @@ export const ChooseApiPage = () => {
             </h2>
             <search className={classes.semanticOnlyTag}>
               <div className={classes.searchFormTextInputSection}>
-                <Search data-size='md'>
-                  <Search.Input
+                <DsSearch data-size='md'>
+                  <DsSearch.Input
                     aria-label={t('api_delegation.search_for_api')}
                     placeholder={t('api_delegation.search_for_api')}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                       debouncedSearch(event.target.value);
                     }}
                   />
-                  <Search.Clear
+                  <DsSearch.Clear
                     onClick={() => {
                       setSearchString('');
                     }}
                   />
-                </Search>
+                </DsSearch>
               </div>
               <div className={classes.searchFormFilterSection}>
                 <Filter
@@ -257,7 +257,7 @@ export const ChooseApiPage = () => {
               </div>
             </div>
             <div className={classes.navigationSection}>
-              <Button
+              <DsButton
                 variant={'secondary'}
                 onClick={() =>
                   navigate(
@@ -269,8 +269,8 @@ export const ChooseApiPage = () => {
                 }
               >
                 {t('common.cancel')}
-              </Button>
-              <Button
+              </DsButton>
+              <DsButton
                 disabled={chosenApis.length < 1}
                 onClick={() =>
                   navigate(
@@ -282,7 +282,7 @@ export const ChooseApiPage = () => {
                 }
               >
                 {t('common.next')}
-              </Button>
+              </DsButton>
             </div>
           </div>
         </PageContent>

@@ -1,13 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
-
-import AltinnLogo from '@/assets/AltinnTextLogo.svg?react';
-import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import type { RegisteredSystem } from '../../types';
 
 import classes from './RequestPageBase.module.css';
+
+import AltinnLogo from '@/assets/AltinnTextLogo.svg?react';
+import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 interface RequestPageBaseProps {
   system?: RegisteredSystem;
@@ -38,16 +39,16 @@ export const RequestPageBase = ({
           )}
         </div>
         <div className={classes.vendorRequestBlock}>
-          <Heading
+          <DsHeading
             level={1}
             data-size='lg'
           >
             {heading}
-          </Heading>
+          </DsHeading>
         </div>
         <div className={classes.vendorRequestBlock}>{children}</div>
         {system && (
-          <Paragraph
+          <DsParagraph
             data-size='sm'
             className={classes.vendorInfo}
           >
@@ -56,7 +57,7 @@ export const RequestPageBase = ({
               vendorName: system.systemVendorOrgName,
               vendorOrg: system.systemVendorOrgNumber.match(/.{1,3}/g)?.join(' '),
             })}
-          </Paragraph>
+          </DsParagraph>
         )}
       </div>
     </div>

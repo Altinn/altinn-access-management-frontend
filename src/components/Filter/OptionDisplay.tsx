@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Checkbox, Paragraph, Search } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
-
-import { arraysEqual } from '@/resources/utils';
-import { usePrevious } from '@/resources/hooks';
+import { DsCheckbox, DsParagraph } from '@altinn/altinn-components';
 
 import { optionSearch } from './utils';
 import type { FilterOption } from './utils';
 import classes from './OptionDisplay.module.css';
+
+import { arraysEqual } from '@/resources/utils';
+import { usePrevious } from '@/resources/hooks';
 
 export interface OptionDisplayProps {
   options: FilterOption[];
@@ -96,7 +96,7 @@ export const OptionDisplay = ({
         tabIndex={-1}
       >
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-        <Checkbox
+        <DsCheckbox
           className={classes.optionCheckbox}
           onChange={() => {
             handleSelection(option.value);
@@ -105,14 +105,14 @@ export const OptionDisplay = ({
           value={option.value}
           checked={isSelected}
           aria-label={option.label}
-        ></Checkbox>
-        <Paragraph
+        ></DsCheckbox>
+        <DsParagraph
           asChild
           className={classes.optionLabel}
           data-size={compact ? 'sm' : 'md'}
         >
           <label>{option.label}</label>
-        </Paragraph>
+        </DsParagraph>
       </button>
     );
   });
@@ -121,20 +121,20 @@ export const OptionDisplay = ({
     <div className={classes.optionDisplay}>
       {searchable && (
         <div className={classes.searchField}>
-          <Search data-size='sm'>
-            <Search.Input
+          <DsSearch data-size='sm'>
+            <DsSearch.Input
               aria-label={String(t('common.search'))}
               placeholder={String(t('common.search'))}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 handleSearch(event.target.value);
               }}
             />
-            <Search.Clear
+            <DsSearch.Clear
               onClick={() => {
                 handleSearch('');
               }}
             />
-          </Search>
+          </DsSearch>
         </div>
       )}
       <div

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { DogIcon } from '@navikt/aksel-icons';
+import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { Page } from './Page';
 import { PageHeader } from './PageHeader';
@@ -13,20 +13,20 @@ const exampleArgs = {
     <>
       <PageHeader icon={<DogIcon />}>This is a header</PageHeader>
       <PageContent>
-        <Heading
+        <DsHeading
           level={2}
           data-size='md'
         >
           This is a page
-        </Heading>
-        <Paragraph>
+        </DsHeading>
+        <DsParagraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
           ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
           reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
           sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
           est
-        </Paragraph>
+        </DsParagraph>
       </PageContent>
     </>
   ),

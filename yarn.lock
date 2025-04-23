@@ -19,9 +19,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:0.25.0":
-  version: 0.25.0
-  resolution: "@altinn/altinn-components@npm:0.25.0"
+"@altinn/altinn-components@npm:0.25.2":
+  version: 0.25.2
+  resolution: "@altinn/altinn-components@npm:0.25.2"
   dependencies:
     "@digdir/designsystemet-css": "npm:^1.0.3"
     "@digdir/designsystemet-react": "npm:^1.0.3"
@@ -34,7 +34,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/b1d9e76a3ec8e901be9b68b1f319e55a53c07f1e1a95e61d89763802157f4b88d7c2651c9503a6d0099a6d09a0dbda59b9b320b206281252253ae3b14d167e40
+  checksum: 10/83cb8e28c4fddf4ec13bfde507a80d3315f087d11bbcdf79dcd7a5df3c5edc3375703b9d8744c0b3c7e534d19e80148bc64c5a9d57f367cb670038517474e371
   languageName: node
   linkType: hard
 
@@ -3116,7 +3116,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:0.25.0"
+    "@altinn/altinn-components": "npm:0.25.2"
     "@axe-core/playwright": "npm:^4.10.1"
     "@digdir/designsystemet-css": "npm:1.0.3"
     "@digdir/designsystemet-react": "npm:1.0.3"

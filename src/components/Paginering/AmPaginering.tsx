@@ -1,9 +1,9 @@
-import type { PaginationProps } from '@digdir/designsystemet-react';
-import { Pagination, usePagination } from '@digdir/designsystemet-react';
+import type { DsPaginationProps } from '@altinn/altinn-components';
+import { DsPagination, useDsPagination } from '@altinn/altinn-components';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-export interface AmPaginationProps extends PaginationProps {
+export interface AmPaginationProps extends DsPaginationProps {
   totalPages: number;
   showPages?: number;
   setCurrentPage?: (page: number) => void;
@@ -23,7 +23,7 @@ export const AmPagination = ({
   size,
 }: AmPaginationProps) => {
   const { t } = useTranslation();
-  const { pages, prevButtonProps, nextButtonProps } = usePagination({
+  const { pages, prevButtonProps, nextButtonProps } = useDsPagination({
     currentPage,
     setCurrentPage,
     onChange,
@@ -32,34 +32,34 @@ export const AmPagination = ({
   });
 
   return (
-    <Pagination
+    <DsPagination
       data-size={size || 'md'}
       className={className}
     >
-      <Pagination.List>
-        <Pagination.Item>
-          <Pagination.Button {...prevButtonProps}>
+      <DsPagination.List>
+        <DsPagination.Item>
+          <DsPagination.Button {...prevButtonProps}>
             {!hideLabels && t('common.previous')}
-          </Pagination.Button>
-        </Pagination.Item>
+          </DsPagination.Button>
+        </DsPagination.Item>
         {pages.map(({ page, itemKey, buttonProps }) => (
-          <Pagination.Item key={itemKey}>
+          <DsPagination.Item key={itemKey}>
             {typeof page === 'number' && (
-              <Pagination.Button
+              <DsPagination.Button
                 {...buttonProps}
                 aria-label={`${t('common.page')} ${page}`}
               >
                 {page}
-              </Pagination.Button>
+              </DsPagination.Button>
             )}
-          </Pagination.Item>
+          </DsPagination.Item>
         ))}
-        <Pagination.Item>
-          <Pagination.Button {...nextButtonProps}>
+        <DsPagination.Item>
+          <DsPagination.Button {...nextButtonProps}>
             {!hideLabels && t('common.next')}
-          </Pagination.Button>
-        </Pagination.Item>
-      </Pagination.List>
-    </Pagination>
+          </DsPagination.Button>
+        </DsPagination.Item>
+      </DsPagination.List>
+    </DsPagination>
   );
 };

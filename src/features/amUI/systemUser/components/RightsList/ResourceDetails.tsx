@@ -1,10 +1,9 @@
 import React from 'react';
-import { Avatar } from '@altinn/altinn-components';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
-
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { Avatar, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import classes from './RightsList.module.css';
+
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface ResourceDetailsProps {
   resource: ServiceResource;
@@ -22,16 +21,16 @@ export const ResourceDetails = ({ resource }: ResourceDetailsProps): React.React
           name={resource.resourceOwnerName ?? ''}
         />
         <div>
-          <Heading
+          <DsHeading
             level={1}
             data-size='xs'
           >
             {resource.title}
-          </Heading>
-          <Paragraph data-size='xs'>{resource.resourceOwnerName}</Paragraph>
+          </DsHeading>
+          <DsParagraph data-size='xs'>{resource.resourceOwnerName}</DsParagraph>
         </div>
       </div>
-      <Paragraph data-size='sm'>{resource.description}</Paragraph>
+      <DsParagraph data-size='sm'>{resource.description}</DsParagraph>
     </>
   );
 };

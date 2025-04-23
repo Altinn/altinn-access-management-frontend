@@ -1,9 +1,17 @@
-import { Button, Spinner, Search, Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import cn from 'classnames';
+import { DsHeading, DsSearch, DsSpinner, DsButton } from '@altinn/altinn-components';
+
+import { DelegationType } from '../../components/DelegationType';
+
+import classes from './ChooseOrgPage.module.css';
+import { DelegableOrgItems } from './DelegableOrgItems';
+import { ChosenItems } from './ChosenItems';
+import { ChooseOrgInfoPanel } from './ChooseOrgInfoPanel';
+import { mapOverviewOrgToOrganization, useOrgSearch } from './useOrgSearch';
 
 import { Page, PageHeader, PageContent, PageContainer, RestartPrompter } from '@/components';
 import { removeOrg } from '@/rtk/features/apiDelegation/apiDelegationSlice';
@@ -17,14 +25,6 @@ import { useFetchOverviewOrgsQuery } from '@/rtk/features/apiDelegation/overview
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import type { Organization } from '@/rtk/features/lookupApi';
-
-import { DelegationType } from '../../components/DelegationType';
-
-import classes from './ChooseOrgPage.module.css';
-import { DelegableOrgItems } from './DelegableOrgItems';
-import { ChosenItems } from './ChosenItems';
-import { ChooseOrgInfoPanel } from './ChooseOrgInfoPanel';
-import { mapOverviewOrgToOrganization, useOrgSearch } from './useOrgSearch';
 
 export const ChooseOrgPage = () => {
   const partyId = getCookie('AltinnPartyId');
@@ -94,55 +94,55 @@ export const ChooseOrgPage = () => {
           <StatusMessageForScreenReader>{chosenItemsStatusMessage}</StatusMessageForScreenReader>
           <div className={classes.pageContentContainer}>
             <search className={classes.semanticOnlyTag}>
-              <Heading
+              <DsHeading
                 data-size='md'
                 level={2}
                 className={classes.chooseOrgSecondHeader}
               >
                 {t('api_delegation.new_org_content_text')}
-              </Heading>
+              </DsHeading>
 
-              <Search
+              <DsSearch
                 data-size='md'
                 className={classes.searchContainer}
               >
-                <Search.Input
+                <DsSearch.Input
                   aria-label={t('api_delegation.search_for_buisness')}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     handleSearch(event.target.value);
                   }}
                   value={searchString}
                 />
-                <Search.Clear
+                <DsSearch.Clear
                   aria-label={t('common.clear')}
                   onClick={() => {
                     handleSearch('');
                   }}
                 />
-              </Search>
+              </DsSearch>
               {viewLoading ? (
                 <div className={cn(common.spinnerContainer, classes.viewLoadingSection)}>
-                  <Spinner aria-label={t('common.loading')} />
+                  <DsSpinner aria-label={t('common.loading')} />
                 </div>
               ) : (
                 <>
                   <div className={classes.searchResultsSection}>
                     {searchString === '' ? (
-                      <Heading
+                      <DsHeading
                         data-size='2xs'
                         level={4}
                         className={classes.actionBarContainerText}
                       >
                         {t('api_delegation.businesses_previously_delegated_to')}
-                      </Heading>
+                      </DsHeading>
                     ) : (
-                      <Heading
+                      <DsHeading
                         data-size='2xs'
                         level={4}
                         className={classes.actionBarContainerText}
                       >
                         {t('api_delegation.businesses_search_results')}
-                      </Heading>
+                      </DsHeading>
                     )}
                     <StatusMessageForScreenReader>
                       {!isFetching &&
@@ -158,7 +158,7 @@ export const ChooseOrgPage = () => {
 
                     {isFetching ? (
                       <div className={common.spinnerContainer}>
-                        <Spinner aria-label={t('common.loading')} />
+                        <DsSpinner aria-label={t('common.loading')} />
                       </div>
                     ) : (
                       <DelegableOrgItems
@@ -173,13 +173,13 @@ export const ChooseOrgPage = () => {
             <div className={classes.selectedSearchResultsSection}>
               {chosenOrgs.length > 0 && (
                 <>
-                  <Heading
+                  <DsHeading
                     level={4}
                     data-size='2xs'
                     className={classes.chosenOrgsHeader}
                   >
                     {t('api_delegation.businesses_going_to_get_access')}
-                  </Heading>
+                  </DsHeading>
                   <ChosenItems
                     chosenOrgs={chosenOrgs}
                     handleSoftRemove={handleSoftRemove}
@@ -191,7 +191,7 @@ export const ChooseOrgPage = () => {
           </div>
 
           <div className={classes.navigationSection}>
-            <Button
+            <DsButton
               variant={'secondary'}
               onClick={() =>
                 navigate(
@@ -200,8 +200,8 @@ export const ChooseOrgPage = () => {
               }
             >
               {t('common.previous')}
-            </Button>
-            <Button
+            </DsButton>
+            <DsButton
               disabled={chosenOrgs.length === 0 || chosenApis.length === 0}
               onClick={() =>
                 navigate(
@@ -213,7 +213,7 @@ export const ChooseOrgPage = () => {
               }
             >
               {t('common.next')}
-            </Button>
+            </DsButton>
           </div>
         </PageContent>
       </Page>

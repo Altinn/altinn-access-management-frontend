@@ -1,10 +1,10 @@
 import React from 'react';
-import { Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
-
-import { useGetReporteeQuery, type ReporteeInfo } from '@/rtk/features/userInfoApi';
+import { DsSpinner, DsParagraph } from '@altinn/altinn-components';
 
 import classes from './CanCreateSystemUser.module.css';
+
+import { useGetReporteeQuery, type ReporteeInfo } from '@/rtk/features/userInfoApi';
 
 interface CreateSystemUserCheckProps {
   children: React.ReactNode;
@@ -27,14 +27,14 @@ export const CreateSystemUserCheck = ({
 
   return (
     <>
-      {isLoadingReporteeData && <Spinner aria-label='' />}
+      {isLoadingReporteeData && <DsSpinner aria-label='' />}
       {reporteeData && !canCreateSystemUser(reporteeData) && (
-        <Paragraph className={classes.noRightsParagraph}>
+        <DsParagraph className={classes.noRightsParagraph}>
           <span className={classes.noRightsParagraphBold}>
             {t('systemuser_overviewpage.no_key_role1')}{' '}
           </span>
           {t('systemuser_overviewpage.no_key_role2')}
-        </Paragraph>
+        </DsParagraph>
       )}
       {reporteeData && canCreateSystemUser(reporteeData) && children}
     </>

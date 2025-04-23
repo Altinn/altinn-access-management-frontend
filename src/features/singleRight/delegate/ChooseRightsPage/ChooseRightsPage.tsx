@@ -2,9 +2,16 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
-import { Button, Paragraph, Popover } from '@digdir/designsystemet-react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useEffect, useState } from 'react';
+import { DsPopover, DsParagraph, DsButton } from '@altinn/altinn-components';
+
+import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
+
+import { RightsActionBar } from './RightsActionBar/RightsActionBar';
+import type { ChipRight } from './RightsActionBarContent/RightsActionBarContent';
+import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';
+import classes from './ChooseRightsPage.module.css';
 
 import {
   Page,
@@ -34,13 +41,6 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-
-import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
-
-import { RightsActionBar } from './RightsActionBar/RightsActionBar';
-import type { ChipRight } from './RightsActionBarContent/RightsActionBarContent';
-import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';
-import classes from './ChooseRightsPage.module.css';
 
 type Service = {
   serviceIdentifier: string;
@@ -202,36 +202,36 @@ export const ChooseRightsPage = () => {
   const navigationButtons = () => {
     return (
       <>
-        <Popover.TriggerContext>
-          <Popover.Trigger
+        <DsPopover.TriggerContext>
+          <DsPopover.Trigger
             variant='primary'
             data-color='accent'
             disabled={delegationCount < 1}
             onClick={() => setPopoverOpen(!popoverOpen)}
           >
             {t('common.finish_delegation')}
-          </Popover.Trigger>
-          <Popover
+          </DsPopover.Trigger>
+          <DsPopover
             onClose={() => setPopoverOpen(false)}
             open={popoverOpen}
             color={'info'}
             placement={'top'}
           >
-            <Paragraph>
+            <DsParagraph>
               {t('single_rights.confirm_delegation_text', { name: recipientName })}
-            </Paragraph>
+            </DsParagraph>
             <div className={classes.popoverButtonContainer}>
-              <Button
+              <DsButton
                 onClick={() => {
                   onConfirm();
                 }}
               >
                 {t('common.confirm')}
-              </Button>
+              </DsButton>
             </div>
-          </Popover>
-        </Popover.TriggerContext>
-        <Button
+          </DsPopover>
+        </DsPopover.TriggerContext>
+        <DsButton
           variant='secondary'
           data-color='accent'
           onClick={() => {
@@ -241,7 +241,7 @@ export const ChooseRightsPage = () => {
           }}
         >
           {t('single_rights.add_more_services')}
-        </Button>
+        </DsButton>
       </>
     );
   };
@@ -329,11 +329,11 @@ export const ChooseRightsPage = () => {
             />
           ) : (
             <>
-              <Paragraph variant='long'>
+              <DsParagraph variant='long'>
                 {t('single_rights.choose_rights_page_top_text', { name: recipientName })}
-              </Paragraph>
+              </DsParagraph>
               <div className={classes.secondaryText}>
-                <Paragraph>{t('single_rights.choose_rights_page_secondary_text')}</Paragraph>
+                <DsParagraph>{t('single_rights.choose_rights_page_secondary_text')}</DsParagraph>
               </div>
               <div className={classes.serviceResources}>{chooseRightsActionBars}</div>
               <ProgressModal

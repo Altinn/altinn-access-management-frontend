@@ -1,17 +1,7 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router';
-import { Alert, Spinner, Button, Heading, Paragraph } from '@digdir/designsystemet-react';
-
-import {
-  useApproveChangeRequestMutation,
-  useGetChangeRequestQuery,
-  useRejectChangeRequestMutation,
-} from '@/rtk/features/systemUserApi';
-import { SystemUserPath } from '@/routes/paths';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
@@ -20,6 +10,16 @@ import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
+
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { SystemUserPath } from '@/routes/paths';
+import {
+  useApproveChangeRequestMutation,
+  useGetChangeRequestQuery,
+  useRejectChangeRequestMutation,
+} from '@/rtk/features/systemUserApi';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
@@ -92,38 +92,38 @@ export const SystemUserChangeRequestPage = () => {
       heading={t('systemuser_change_request.banner_title')}
     >
       {!changeRequestId && (
-        <Alert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</Alert>
+        <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
       )}
       {(loadingChangeRequestError || (changeRequest && !changeRequest.system)) && (
-        <Alert data-color='danger'>
+        <DsAlert data-color='danger'>
           {(loadingChangeRequestError as { data: ProblemDetail }).data.status === 404
             ? t('systemuser_change_request.load_change_request_error_notfound')
             : t('systemuser_change_request.load_change_request_error')}
-        </Alert>
+        </DsAlert>
       )}
       {isLoadingChangeRequest && (
-        <Spinner aria-label={t('systemuser_change_request.loading_change_request')} />
+        <DsSpinner aria-label={t('systemuser_change_request.loading_change_request')} />
       )}
       {changeRequest?.system && (
         <>
           {changeRequest.status === 'Accepted' && (
-            <Alert data-color='info'>{t('systemuser_change_request.request_accepted')}</Alert>
+            <DsAlert data-color='info'>{t('systemuser_change_request.request_accepted')}</DsAlert>
           )}
           {changeRequest.status === 'Rejected' && (
-            <Alert data-color='info'>{t('systemuser_change_request.request_rejected')}</Alert>
+            <DsAlert data-color='info'>{t('systemuser_change_request.request_rejected')}</DsAlert>
           )}
           {changeRequest.status === 'Timedout' && (
-            <Alert data-color='info'>{t('systemuser_change_request.request_expired')}</Alert>
+            <DsAlert data-color='info'>{t('systemuser_change_request.request_expired')}</DsAlert>
           )}
-          <Heading
+          <DsHeading
             level={2}
             data-size='sm'
           >
             {t('systemuser_change_request.change_request_header', {
               vendorName: changeRequest.system.name,
             })}
-          </Heading>
-          <Paragraph>
+          </DsHeading>
+          <DsParagraph>
             <Trans
               i18nKey={'systemuser_request.system_description'}
               values={{
@@ -131,21 +131,21 @@ export const SystemUserChangeRequestPage = () => {
                 partyName: reporteeData?.name,
               }}
             ></Trans>
-          </Paragraph>
+          </DsParagraph>
           <div />
-          <Heading
+          <DsHeading
             level={3}
             data-size='xs'
           >
             {changeRequest.resources.length + changeRequest.accessPackages.length === 1
               ? t('systemuser_change_request.rights_list_header_single')
               : t('systemuser_change_request.rights_list_header')}
-          </Heading>
+          </DsHeading>
           <RightsList
             resources={changeRequest.resources}
             accessPackages={changeRequest.accessPackages}
           />
-          <Paragraph>{t('systemuser_request.withdraw_consent_info')}</Paragraph>
+          <DsParagraph>{t('systemuser_request.withdraw_consent_info')}</DsParagraph>
           <div>
             {acceptChangeRequestError && (
               <DelegationCheckError
@@ -154,16 +154,16 @@ export const SystemUserChangeRequestPage = () => {
               />
             )}
             {isRejectChangeRequestError && (
-              <Alert
+              <DsAlert
                 data-color='danger'
                 role='alert'
               >
                 {t('systemuser_change_request.reject_error')}
-              </Alert>
+              </DsAlert>
             )}
             <CreateSystemUserCheck>
               <ButtonRow>
-                <Button
+                <DsButton
                   variant='primary'
                   aria-disabled={isActionButtonDisabled}
                   onClick={acceptChangeRequest}
@@ -172,8 +172,8 @@ export const SystemUserChangeRequestPage = () => {
                   {isAcceptingChangeRequest
                     ? t('systemuser_change_request.accept_loading')
                     : t('systemuser_change_request.accept')}
-                </Button>
-                <Button
+                </DsButton>
+                <DsButton
                   variant='tertiary'
                   aria-disabled={isActionButtonDisabled}
                   onClick={rejectChangeRequest}
@@ -182,7 +182,7 @@ export const SystemUserChangeRequestPage = () => {
                   {isRejectingChangeRequest
                     ? t('systemuser_change_request.reject_loading')
                     : t('systemuser_change_request.reject')}
-                </Button>
+                </DsButton>
               </ButtonRow>
             </CreateSystemUserCheck>
           </div>

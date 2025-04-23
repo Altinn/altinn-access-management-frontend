@@ -1,6 +1,6 @@
-import { Skeleton, Paragraph } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import cn from 'classnames';
+import { DsSkeleton, DsParagraph } from '@altinn/altinn-components';
 
 import searchClasses from '../SearchSection/SearchSection.module.css';
 
@@ -10,7 +10,7 @@ export const ChooseServiceSkeleton = () => {
   const actionBars = Array(10)
     .fill(1)
     .map((elem, index) => (
-      <Skeleton
+      <DsSkeleton
         variant='rectangle'
         key={index}
         height='66px'
@@ -19,15 +19,15 @@ export const ChooseServiceSkeleton = () => {
 
   return (
     <>
-      <Paragraph variant='long'>
-        <Skeleton variant='text' />
-        <Skeleton
+      <DsParagraph variant='long'>
+        <DsSkeleton variant='text' />
+        <DsSkeleton
           variant='text'
           width='80%'
         />
-      </Paragraph>
+      </DsParagraph>
 
-      <Skeleton
+      <DsSkeleton
         variant='rectangle'
         height={'100px'}
       />
@@ -35,18 +35,18 @@ export const ChooseServiceSkeleton = () => {
       <div className={searchClasses.searchSection}>
         <div className={searchClasses.searchInputs}>
           <div className={searchClasses.searchField}>
-            <Paragraph>
-              <Skeleton
+            <DsParagraph>
+              <DsSkeleton
                 variant='text'
                 width='200px'
               />
-            </Paragraph>
-            <Skeleton
+            </DsParagraph>
+            <DsSkeleton
               variant='rectangle'
               height='42px'
             />
           </div>
-          <Skeleton
+          <DsSkeleton
             variant='rectangle'
             height='30px'
             width='187px'
@@ -55,15 +55,15 @@ export const ChooseServiceSkeleton = () => {
         </div>
 
         <div className={searchClasses.resultCountAndChips}>
-          <Paragraph>
-            <Skeleton
+          <DsParagraph>
+            <DsSkeleton
               variant='text'
               width='200px'
             />
-          </Paragraph>
+          </DsParagraph>
           {actionBars}
           <div className={cn(searchClasses.pagination, classes.pagination)}>
-            <Skeleton
+            <DsSkeleton
               variant='rectangle'
               width='500px'
               height='50px'
@@ -73,12 +73,12 @@ export const ChooseServiceSkeleton = () => {
       </div>
 
       <div className={classes.navButtons}>
-        <Skeleton
+        <DsSkeleton
           variant='rectangle'
           width='120px'
           height='44px'
         />
-        <Skeleton
+        <DsSkeleton
           variant='rectangle'
           width='120px'
           height='44px'

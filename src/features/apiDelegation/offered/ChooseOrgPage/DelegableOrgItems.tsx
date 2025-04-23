@@ -1,7 +1,9 @@
-import { Button } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { DsButton } from '@altinn/altinn-components';
+
+import classes from './ChooseOrgPage.module.css';
 
 import { ActionBar } from '@/components';
 import { addOrg } from '@/rtk/features/apiDelegation/apiDelegationSlice';
@@ -9,8 +11,6 @@ import { useAppDispatch } from '@/rtk/app/hooks';
 import type { Organization } from '@/rtk/features/lookupApi';
 import common from '@/resources/css/Common.module.css';
 import { getButtonIconSize } from '@/resources/utils';
-
-import classes from './ChooseOrgPage.module.css';
 
 interface DelegatableOrgItemsProps {
   delegableOrgs: Organization[];
@@ -38,7 +38,7 @@ export const DelegableOrgItems = ({
               subtitle={t('common.org_nr') + ' ' + org.orgNumber}
               headingLevel={5}
               actions={
-                <Button
+                <DsButton
                   variant={'tertiary'}
                   color={'accent'}
                   onClick={() => {
@@ -50,7 +50,7 @@ export const DelegableOrgItems = ({
                   icon={true}
                 >
                   <PlusCircleIcon fontSize={getButtonIconSize(false)} />
-                </Button>
+                </DsButton>
               }
               color={'neutral'}
             />

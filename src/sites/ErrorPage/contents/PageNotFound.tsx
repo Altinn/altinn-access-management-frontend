@@ -1,66 +1,68 @@
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
-import { Paragraph, Heading, Link } from '@digdir/designsystemet-react';
-
-import SeagullIcon from '@/assets/Seagull.svg?react';
+import { DsHeading, DsParagraph, DsLink } from '@altinn/altinn-components';
 
 import classes from '../ErrorPage.module.css';
+
+import SeagullIcon from '@/assets/Seagull.svg?react';
 
 export const PageNotFound = () => {
   const { t } = useTranslation();
 
   return (
     <div className={classes.errorContent}>
-      <Heading
+      <DsHeading
         data-size='lg'
         level={1}
         className={classes.header}
       >
         {t('error_page.not_found_site_header')}
-      </Heading>
+      </DsHeading>
       <div className={classes.flexContainer}>
         <div className={classes.leftContainer}>
-          <Paragraph
+          <DsParagraph
             data-size='lg'
             variant='long'
             className={classes.contentText}
           >
             {t('error_page.not_found_site_upper_text')}
-          </Paragraph>
+          </DsParagraph>
 
-          <Paragraph
+          <DsParagraph
             data-size='lg'
             variant='long'
             className={classes.contentText}
           >
-            <Link href='https://www.altinn.no/ui/MessageBox'>{t('error_page.go_to_inbox')}</Link>
-          </Paragraph>
+            <DsLink href='https://www.altinn.no/ui/MessageBox'>
+              {t('error_page.go_to_inbox')}
+            </DsLink>
+          </DsParagraph>
 
-          <Paragraph
+          <DsParagraph
             data-size='lg'
             variant='long'
             className={classes.contentText}
           >
-            <Link href='https://www.altinn.no/ui/Profile'>{t('error_page.go_to_profile')}</Link>
-          </Paragraph>
+            <DsLink href='https://www.altinn.no/ui/Profile'>{t('error_page.go_to_profile')}</DsLink>
+          </DsParagraph>
 
-          <Paragraph
+          <DsParagraph
             data-size='lg'
             variant='long'
             className={classes.contentText}
           >
-            <Link href='https://www.altinn.no/skjemaoversikt/'>
+            <DsLink href='https://www.altinn.no/skjemaoversikt/'>
               {t('error_page.find_and_submit_scheme')}
-            </Link>
-          </Paragraph>
+            </DsLink>
+          </DsParagraph>
 
-          <Paragraph
+          <DsParagraph
             data-size='lg'
             variant='long'
             className={classes.contentText}
           >
             {t('error_page.not_found_site_lower_text')}
-          </Paragraph>
+          </DsParagraph>
         </div>
         <div className={classes.rightContainer}>
           <SeagullIcon />
