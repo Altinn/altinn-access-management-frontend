@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
+import { SnackbarProvider } from '@altinn/altinn-components';
 import { DsSpinner, DsAlert } from '@altinn/altinn-components';
 
 import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
@@ -65,11 +66,13 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
           </DsAlert>
         )}
         {systemUser && customers && agentDelegations && (
-          <SystemUserAgentDelegationPageContent
-            systemUser={systemUser}
-            customers={customers}
-            existingAgentDelegations={agentDelegations}
-          />
+          <SnackbarProvider>
+            <SystemUserAgentDelegationPageContent
+              systemUser={systemUser}
+              customers={customers}
+              existingAgentDelegations={agentDelegations}
+            />
+          </SnackbarProvider>
         )}
       </PageLayoutWrapper>
     </PageWrapper>

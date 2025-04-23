@@ -11,14 +11,6 @@ import {
   useSnackbar,
 } from '@altinn/altinn-components';
 
-import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import type { AgentDelegation, AgentDelegationCustomer, SystemUser } from '../types';
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
-import { RightsList } from '../components/RightsList/RightsList';
-
-import classes from './SystemUserAgentDelegationPage.module.css';
-import { CustomerList } from './CustomerList';
-
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { SystemUserPath } from '@/routes/paths';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
@@ -28,6 +20,14 @@ import {
   useRemoveCustomerMutation,
 } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+import type { AgentDelegation, AgentDelegationCustomer, SystemUser } from '../types';
+import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
+import { RightsList } from '../components/RightsList/RightsList';
+
+import classes from './SystemUserAgentDelegationPage.module.css';
+import { CustomerList } from './CustomerList';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
