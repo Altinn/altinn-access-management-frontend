@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import '@digdir/designsystemet-theme/altinn.css';
-import '@digdir/designsystemet-css';
+// import '@digdir/designsystemet-theme/altinn.css';
+// import '@digdir/designsystemet-css';
 import '@/resources/css/Common.module.css';
 import '@/resources/css/systemuser.css';
 import '@altinn/altinn-components/dist/global.css';

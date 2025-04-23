@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import type { RegisteredSystem } from '../../types';

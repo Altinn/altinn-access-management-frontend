@@ -1,13 +1,13 @@
-import type { AlertProps } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import cn from 'classnames';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import type { DsAlertProps } from '@altinn/altinn-components';
 import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import classes from './RestartPrompter.module.css';
 
-interface RestartPrompterProps extends AlertProps {
+interface RestartPrompterProps extends DsAlertProps {
   /* Sets spacing on the bottom of the component */
   spacingBottom?: boolean;
 

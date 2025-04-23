@@ -1,18 +1,19 @@
-import {
-  Button,
-  List,
-  Paragraph,
-  Spinner,
-  Alert,
-  Heading,
-  ListUnordered,
-} from '@digdir/designsystemet-react';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import {
+  DsButton,
+  DsHeading,
+  DsAlert,
+  DsParagraph,
+  DsListUnordered,
+} from '@altinn/altinn-components';
+import Paragraph from '@navikt/aksel-icons/dist/react/esm/Paragraph';
 
-import { ActionBar, type ActionBarProps } from '@/components';
+import classes from './ApiActionBar.module.css';
+
+import { ActionBar, List, type ActionBarProps } from '@/components';
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 import { type DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useDelegationCheckMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
@@ -23,8 +24,6 @@ import type {
 } from '@/dataObjects/dtos/resourceDelegation';
 import ScopeList from '@/components/ScopeList/ScopeList';
 import { getButtonIconSize } from '@/resources/utils';
-
-import classes from './ApiActionBar.module.css';
 
 export interface ApiActionBarProps extends Pick<ActionBarProps, 'color'> {
   /** Defines the functionality and behaviour of the actionbar, whether it is used to add a new api or to remove one that was previously added */
@@ -90,7 +89,7 @@ export const ApiActionBar = ({
             data-size='md'
           />
         ) : (
-          <Button
+          <DsButton
             variant={'tertiary'}
             data-color='accent'
             onClick={onAddClick}
@@ -99,10 +98,10 @@ export const ApiActionBar = ({
             icon
           >
             <PlusCircleIcon fontSize={getButtonIconSize(false)} />
-          </Button>
+          </DsButton>
         ))}
       {variant === 'remove' && (
-        <Button
+        <DsButton
           variant={'tertiary'}
           color={'danger'}
           onClick={onRemove}
@@ -112,7 +111,7 @@ export const ApiActionBar = ({
           icon
         >
           <MinusCircleIcon fontSize={getButtonIconSize(false)} />
-        </Button>
+        </DsButton>
       )}
     </>
   );
@@ -122,25 +121,25 @@ export const ApiActionBar = ({
       <div className={classes.content}>
         {api.scopes?.length > 0 && (
           <div className={classes.scopeList}>
-            <Heading
+            <DsHeading
               data-size='2xs'
               level={5}
               className={classes.actionBarContentHeading}
             >
               <>{t('api_delegation.scopes')}:</>
-            </Heading>
+            </DsHeading>
             <ScopeList scopeList={api.scopes} />
           </div>
         )}
         {api.rightDescription && (
           <>
-            <Heading
+            <DsHeading
               data-size='2xs'
               level={5}
               className={classes.actionBarContentHeading}
             >
               {t('api_delegation.description')}
-            </Heading>
+            </DsHeading>
             <Paragraph>{api.rightDescription}</Paragraph>
           </>
         )}
@@ -149,18 +148,18 @@ export const ApiActionBar = ({
         )}
         {api.description && (
           <>
-            <Heading
+            <DsHeading
               data-size='2xs'
               level={5}
               className={classes.actionBarContentHeading}
             >
               {t('api_delegation.additional_description')}
-            </Heading>
-            <Paragraph>{api.description}</Paragraph>
+            </DsHeading>
+            <DsParagraph>{api.description}</DsParagraph>
           </>
         )}
         {api.description === undefined && (
-          <Paragraph>{t('api_delegation.data_retrieval_failed')}</Paragraph>
+          <DsParagraph>{t('api_delegation.data_retrieval_failed')}</DsParagraph>
         )}
       </div>
     );
@@ -169,35 +168,37 @@ export const ApiActionBar = ({
   const errorContent = () => {
     if (error) {
       return (
-        <Alert
+        <DsAlert
           role='alert'
           data-color='danger'
           className={classes.errorContent}
         >
-          <Paragraph variant='long'>{t(`${getErrorCodeTextKey(ErrorCode.HTTPError)}`)}</Paragraph>
-        </Alert>
+          <DsParagraph variant='long'>
+            {t(`${getErrorCodeTextKey(ErrorCode.HTTPError)}`)}
+          </DsParagraph>
+        </DsAlert>
       );
     } else if (accessResult?.details[0].code === ErrorCode.InsufficientAuthenticationLevel) {
       return (
-        <Alert
+        <DsAlert
           role='alert'
           data-color='danger'
           className={classes.errorContent}
         >
-          <Paragraph variant='long'>
+          <DsParagraph variant='long'>
             {t(`${getErrorCodeTextKey(ErrorCode.InsufficientAuthenticationLevel)}`)}
-          </Paragraph>
-          <ListUnordered>
+          </DsParagraph>
+          <DsListUnordered>
             <List.Item>{t('common.minid')}</List.Item>
             <List.Item>{t('common.bankid')}</List.Item>
             <List.Item>{t('common.commfides')}</List.Item>
             <List.Item>{t('common.buypass')}</List.Item>
-          </ListUnordered>
-        </Alert>
+          </DsListUnordered>
+        </DsAlert>
       );
     } else if (accessResult?.details[0].code === ErrorCode.MissingRoleAccess) {
       return (
-        <Alert
+        <DsAlert
           role='alert'
           data-color='danger'
           className={classes.errorContent}
@@ -206,17 +207,17 @@ export const ApiActionBar = ({
             {t('single_rights.missing_role_access', { you: t('common.you_uppercase') })}{' '}
             {t('single_rights.ceo_or_main_admin_can_help')}
           </Paragraph>
-        </Alert>
+        </DsAlert>
       );
     } else {
       return (
-        <Alert
+        <DsAlert
           role='alert'
           data-color='danger'
           className={classes.errorContent}
         >
           <Paragraph>{t(`${getErrorCodeTextKey('')}`)}</Paragraph>
-        </Alert>
+        </DsAlert>
       );
     }
   };
