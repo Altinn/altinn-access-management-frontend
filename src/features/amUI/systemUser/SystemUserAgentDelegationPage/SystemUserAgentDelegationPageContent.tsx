@@ -184,7 +184,7 @@ export const SystemUserAgentDelegationPageContent = ({
             onAddCustomer={onAddCustomer}
             onRemoveCustomer={onRemoveCustomer}
           />
-          <div className={classes.customerListSnackbarWrapper}>
+          <div>
             <Button onClick={onCloseModal}>{t('systemuser_agent_delegation.confirm_close')}</Button>
             <Snackbar className={classes.customerListSnackbar} />
           </div>
