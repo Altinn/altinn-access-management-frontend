@@ -1,8 +1,11 @@
 import React from 'react';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
+import { Link as DSLink } from '@digdir/designsystemet-react';
 import { Link } from 'react-router';
 import { Button, DsLink } from '@altinn/altinn-components';
+
+import classes from './PageContainer.module.css';
 
 import classes from './PageContainer.module.css';
 

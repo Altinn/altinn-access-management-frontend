@@ -3,6 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { DsSpinner } from '@altinn/altinn-components';
 
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { useGetReporteeQuery, useGetUserAccessesQuery } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
+import { filterDigdirRole } from '@/resources/utils/roleUtils';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
+
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { UserRoles } from '../common/UserRoles/UserRoles';
@@ -14,15 +23,7 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
-
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { PageWrapper } from '@/components';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
-import { useGetReporteeQuery, useGetUserAccessesQuery } from '@/rtk/features/userInfoApi';
-import { amUIPath } from '@/routes/paths';
-import { filterDigdirRole } from '@/resources/utils/roleUtils';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
+import { DeleteUserModal } from './DeleteUserModal';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -42,6 +43,10 @@ export const UserRightsPage = () => {
 
   const { displayLimitedPreviewLaunch } = window.featureFlags;
 
+  if (!party || !reportee) {
+    return null;
+  }
+
   return (
     <PageWrapper>
       <PartyRepresentationProvider
@@ -50,7 +55,15 @@ export const UserRightsPage = () => {
       >
         <DelegationModalProvider>
           <PageLayoutWrapper>
-            <PageContainer backUrl={`/${amUIPath.Users}`}>
+            <PageContainer
+              backUrl={`/${amUIPath.Users}`}
+              contentActions={
+                <DeleteUserModal
+                  user={party}
+                  reporteeName={reportee?.name}
+                />
+              }
+            >
               {!isLoading && allAccesses ? (
                 <>
                   <UserPageHeader

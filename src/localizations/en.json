@@ -299,6 +299,12 @@
     "resource_type_text": "Single right",
     "delete_confirm_message": "Are you sure you want to delete this?"
   },
+  "delete_user": {
+    "trigger_button": "Delete user",
+    "heading": "Are you sure you want to delete this user?",
+    "message": "{{user_name}} will lose all rights they have on behalf of {{reportee_name}}. This action cannot be undone.",
+    "yes_button": "Yes, delete"
+  },
   "reportee_rights_page": {
     "page_title": "Our access to other companies - Altinn",
     "heading_subtitle": "Power of attorney given to {{name}}"
@@ -334,7 +340,7 @@
       "general_heading": "You cannot give access to this service",
       "technical_error_heading": "Something went wrong",
       "undelegable_service": "{{resourceOwner}} has determined that this service cannot be given to others.",
-      "technical_error": "Sorry, a technical error has occurred. Please contact Altinn user service if the problem persists.",
+      "technical_error": "A technical error has occurred. Please try again or contact Altinn user service if the problem persists.",
       "time_of_error": "Error occurred at time: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",

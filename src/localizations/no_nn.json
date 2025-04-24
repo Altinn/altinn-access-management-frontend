@@ -68,7 +68,7 @@
     "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt.",
     "show_more": "Se meir",
     "show_less": "Se mindre",
-    "technical_error": "Beklagar, det har skjedd ein teknisk feil. Ver venleg å ta kontakt med Altinn brukerservice om problemet held fram.",
+    "technical_error": "Det har skjedd ein teknisk feil. Ver venleg å prøv igjen eller ta kontakt med Altinn brukerservice om problemet held fram.",
     "time_of_error": "Tidspunkt feilen oppstod: {{time}}",
     "error_status": "HttpStatus: {{status}}",
     "ssn": "Fødselsnummer",
@@ -294,6 +294,12 @@
     "roles_title": "Administratortilganger",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
+  },
+  "delete_user": {
+    "trigger_button": "Slett brukar",
+    "heading": "Er du sikker på at du vil slette denne brukaren?",
+    "message": "{{user_name}} vil miste alle fullmaktar dei har for {{reportee_name}}. Denne handlinga kan du ikkje angre.",
+    "yes_button": "Ja, slett"
   },
   "reportee_rights_page": {
     "page_title": "Våre tilganger hos andre - Altinn",

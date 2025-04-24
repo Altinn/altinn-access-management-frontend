@@ -2,8 +2,10 @@ import { Button, TextField, DsParagraph } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { t } from 'i18next';
 
+import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+
 import classes from './NewUserModal.module.css';
-import { createErrorDetails, NewUserAlert } from './NewUserAlert';
+import { NewUserAlert } from './NewUserAlert';
 
 import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
 import { useAddRightHolderMutation } from '@/rtk/features/userInfoApi';
@@ -38,8 +40,8 @@ export const NewOrgContent = () => {
           userType='org'
           error={
             isGetOrgError
-              ? createErrorDetails(isGetOrgError, getOrgError)
-              : addError && createErrorDetails(isAddError, addError)
+              ? createErrorDetails(getOrgError)
+              : addError && createErrorDetails(addError)
           }
         />
       )}

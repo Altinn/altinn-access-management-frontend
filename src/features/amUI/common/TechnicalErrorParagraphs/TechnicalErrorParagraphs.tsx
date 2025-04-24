@@ -1,3 +1,5 @@
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import type { DsParagraphProps } from '@altinn/altinn-components';
 import { DsParagraph } from '@altinn/altinn-components';
 import React from 'react';
@@ -42,3 +44,11 @@ export const TechnicalErrorParagraphs = ({
     </>
   );
 };
+
+export const createErrorDetails = (error: FetchBaseQueryError | SerializedError | undefined) =>
+  error && 'status' in error
+    ? {
+        status: error.status.toString(),
+        time: error.data as string,
+      }
+    : null;

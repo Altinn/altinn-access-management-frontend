@@ -1,7 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import type { SerializedError } from '@reduxjs/toolkit';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import { TechnicalErrorParagraphs } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -46,14 +44,3 @@ export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
     </DsAlert>
   );
 };
-
-export const createErrorDetails = (
-  isError: boolean,
-  error: FetchBaseQueryError | SerializedError | undefined,
-) =>
-  isError && error && 'status' in error
-    ? {
-        status: error.status.toString(),
-        time: error.data as string,
-      }
-    : null;

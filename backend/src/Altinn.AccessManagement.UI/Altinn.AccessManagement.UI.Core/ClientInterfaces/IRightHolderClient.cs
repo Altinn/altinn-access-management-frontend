@@ -12,5 +12,13 @@
         /// <param name="to">The GUID identifying the target party to which the assignment should be created.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
         Task<HttpResponseMessage> PostNewRightHolder(Guid party, Guid to, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        ///   Revokes all rights associated with a right holder by revoking their status as a right holder for another party.
+        /// </summary>
+        /// <param name="party">The uuid pf the reportee party, from which the right holder is have their rights revoked</param>
+        /// <param name="to">The party that is to lose their right holder status</param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to);
     }
 }

@@ -113,6 +113,22 @@
     "subunits": []
   },
   {
+    "partyUuid": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
+    "name": "Digitaliseringsdirektoratet",
+    "organizationNumber": "991825827",
+    "personId": null,
+    "partyId": 81373777,
+    "type": "Organization",
+    "unitType": "LLC",
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [
+    ],
+    "subunits": [
+    ]
+  },
+  {
     "partyUuid": "1feb089d-6d08-d38a-a85d-6d4fe709ceb0",
     "name": "Narnia Economics",
     "organizationNumber": "644227165",
@@ -188,21 +204,21 @@
     "onlyHierarchyElementWithNoAccess": false,
     "person": null,
     "organization": {
-        "orgNumber": "312229854",
-        "name": "Sein Dyktig Mår",
-        "unitType": "OPMV",
-        "telephoneNumber": null,
-        "mobileNumber": null,
-        "faxNumber": null,
-        "eMailAddress": "",
-        "internetAddress": null,
-        "mailingAddress": null,
-        "mailingPostalCode": null,
-        "mailingPostalCity": null,
-        "businessAddress": null,
-        "businessPostalCode": null,
-        "businessPostalCity": null,
-        "unitStatus": "N"
+      "orgNumber": "312229854",
+      "name": "Sein Dyktig Mår",
+      "unitType": "OPMV",
+      "telephoneNumber": null,
+      "mobileNumber": null,
+      "faxNumber": null,
+      "eMailAddress": "",
+      "internetAddress": null,
+      "mailingAddress": null,
+      "mailingPostalCode": null,
+      "mailingPostalCity": null,
+      "businessAddress": null,
+      "businessPostalCode": null,
+      "businessPostalCity": null,
+      "unitStatus": "N"
     },
     "childParties": null
   },
@@ -540,7 +556,7 @@
         "onlyHierarchyElementWithNoAccess": false,
         "authorizedResources": [],
         "authorizedRoles": [
-          "REGN", 
+          "REGN",
           "LEDE"
         ],
         "subunits": []
