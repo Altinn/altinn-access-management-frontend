@@ -169,13 +169,5 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Check if a user has the right to delegate a role
         /// </summary>
         Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId);
-
-        /// <summary>
-        ///   Revokes all rights associated with a right holder by revoking their status as a right holder for another party.
-        /// </summary>
-        /// <param name="party">The uuid pf the reportee party, from which the right holder is have their rights revoked</param>
-        /// <param name="to">The party that is to lose their right holder status</param>
-        /// <returns></returns>
-        Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to);
     }
 }

@@ -44,6 +44,10 @@ export const UserRightsPage = () => {
 
   const { displayLimitedPreviewLaunch } = window.featureFlags;
 
+  if (!party || !reportee) {
+    return null;
+  }
+
   return (
     <SnackbarProvider>
       <PageWrapper>
@@ -55,7 +59,12 @@ export const UserRightsPage = () => {
             <PageLayoutWrapper>
               <PageContainer
                 backUrl={`/${amUIPath.Users}`}
-                contentActions={<DeleteUserModal />}
+                contentActions={
+                  <DeleteUserModal
+                    user={party}
+                    reporteeName={reportee?.name}
+                  />
+                }
               >
                 {!isLoading && allAccesses ? (
                   <>

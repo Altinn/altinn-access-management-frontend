@@ -158,13 +158,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         ///     Endpoint for revoking all rights associated with a right holder by revoking their status as a right holder for another party.
         /// </summary>
         /// <param name="partyUuid">The uuid pf the reportee party, from which the right holder is have their rights revoked</param>
-        /// <param name="rightHolder">The party that is to lose their right holder status</param>
+        /// <param name="rightholderPartyUuid">The uuid of the party that is to lose their right holder status</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete]
         [Authorize]
         [Route("reportee/{partyUuid}/rightholder")]
-        public async Task<ActionResult> RevokeAccessPackageAccess([FromRoute] Guid partyUuid, [FromQuery] Guid rightHolder)
+        public async Task<ActionResult> RevokeAccessPackageAccess([FromRoute] Guid partyUuid, [FromQuery] Guid rightholderPartyUuid)
         {
             if (!ModelState.IsValid)
             {
@@ -173,7 +173,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                var response = await _userService.RevokeRightHolder(partyUuid, rightHolder);
+                var response = await _userService.RevokeRightHolder(partyUuid, rightholderPartyUuid);
                 return Ok(response);
             }
             catch (HttpStatusException ex)

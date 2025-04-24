@@ -62,5 +62,22 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             return httpResponse;
         }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to)
+        {
+            string endpointUrl = $"enduser/access/parties?party={party}&to={to}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            var httpResponse = await _client.DeleteAsync(token, endpointUrl);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Unexpected http response. Status code: {httpResponse.StatusCode}, Reason: {httpResponse.ReasonPhrase}");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
+            }
+
+            return httpResponse;
+        }
     }
 }

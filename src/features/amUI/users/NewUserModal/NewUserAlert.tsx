@@ -1,8 +1,6 @@
 import { Alert, Paragraph } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import type { SerializedError } from '@reduxjs/toolkit';
 
 import { TechnicalErrorParagraphs } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
@@ -42,14 +40,3 @@ export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
     </Alert>
   );
 };
-
-export const createErrorDetails = (
-  isError: boolean,
-  error: FetchBaseQueryError | SerializedError | undefined,
-) =>
-  isError && error && 'status' in error
-    ? {
-        status: error.status.toString(),
-        time: error.data as string,
-      }
-    : null;

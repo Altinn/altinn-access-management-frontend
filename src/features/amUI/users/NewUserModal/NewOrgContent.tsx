@@ -6,8 +6,10 @@ import { Paragraph } from '@digdir/designsystemet-react';
 import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
 import { useAddRightHolderMutation } from '@/rtk/features/userInfoApi';
 
+import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+
 import classes from './NewUserModal.module.css';
-import { createErrorDetails, NewUserAlert } from './NewUserAlert';
+import { NewUserAlert } from './NewUserAlert';
 
 export const NewOrgContent = () => {
   const [orgNumber, setOrgNumber] = useState('');
@@ -39,8 +41,8 @@ export const NewOrgContent = () => {
           userType='org'
           error={
             isGetOrgError
-              ? createErrorDetails(isGetOrgError, getOrgError)
-              : addError && createErrorDetails(isAddError, addError)
+              ? createErrorDetails(getOrgError)
+              : addError && createErrorDetails(addError)
           }
         />
       )}

@@ -86,6 +86,17 @@ export const userInfoApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
     }),
+    removeRightHolder: builder.mutation<void, string>({
+      query: (partyUuidToBeRemoved) => ({
+        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder?rightholderPartyUuid=${partyUuidToBeRemoved}`,
+        method: 'DELETE',
+      }),
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
+      },
+    }),
     getReporteeListForParty: builder.query<User[], void>({
       query: () => {
         const partyUuid = getCookie('AltinnPartyUuid');
@@ -123,6 +134,7 @@ export const {
   useGetReporteeQuery,
   useGetRightHoldersQuery,
   useAddRightHolderMutation,
+  useRemoveRightHolderMutation,
   useGetUserAccessesQuery,
   useValidateNewUserPersonMutation,
   useGetReporteeListForPartyQuery,

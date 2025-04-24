@@ -37,5 +37,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             var response = new HttpResponseMessage(HttpStatusCode.OK);
             return Task.FromResult(response);
         }
+
+        /// <inheritdoc/>
+        public Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to)
+        {
+
+            if (party == Guid.Empty)
+            {
+                throw new HttpStatusException("Test", "Testing unexpected status from backend", HttpStatusCode.BadRequest, null);
+            }
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            return Task.FromResult(response);
+        }
     }
 }
