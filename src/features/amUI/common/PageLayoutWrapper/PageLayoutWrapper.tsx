@@ -1,9 +1,12 @@
-import React, { ChangeEvent, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import type { AccountMenuItem, MenuGroupProps, MenuItemProps } from '@altinn/altinn-components';
-import { Layout, RootProvider } from '@altinn/altinn-components';
+import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import { HandshakeIcon, InboxIcon, MenuGridIcon, PersonChatIcon } from '@navikt/aksel-icons';
+
+import { SidebarItems } from './SidebarItems';
 
 import {
   useGetReporteeListForAuthorizedUserQuery,
@@ -13,8 +16,6 @@ import {
 import { amUIPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
-
-import { SidebarItems } from './SidebarItems';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -188,6 +189,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       >
         {children}
       </Layout>
+      <Snackbar />
     </RootProvider>
   );
 };
