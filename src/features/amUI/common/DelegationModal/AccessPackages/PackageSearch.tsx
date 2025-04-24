@@ -1,16 +1,16 @@
 import { Trans, useTranslation } from 'react-i18next';
-import { Heading, Search } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
-
-import { debounce } from '@/resources/utils';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
+import { DsSearch, DsHeading } from '@altinn/altinn-components';
 
 import type { DelegationAction } from '../EditModal';
 import { useDelegationModalContext } from '../DelegationModalContext';
 
 import classes from './PackageSearch.module.css';
+
+import { debounce } from '@/resources/utils';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { Party } from '@/rtk/features/lookupApi';
+import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
@@ -41,7 +41,7 @@ export const PackageSearch = ({
   return (
     toParty && (
       <>
-        <Heading
+        <DsHeading
           level={2}
           data-size='sm'
         >
@@ -50,12 +50,12 @@ export const PackageSearch = ({
             values={{ name: toParty.name }}
             components={{ strong: <strong /> }}
           />
-        </Heading>
+        </DsHeading>
         <search className={classes.searchSection}>
           <div className={classes.searchInputs}>
             <div className={classes.searchField}>
-              <Search data-size='sm'>
-                <Search.Input
+              <DsSearch data-size='sm'>
+                <DsSearch.Input
                   aria-label={t('single_rights.search_label')}
                   placeholder={t('single_rights.search_label')}
                   value={searchString}
@@ -64,14 +64,14 @@ export const PackageSearch = ({
                     setSearchString(event.target.value);
                   }}
                 />
-                <Search.Clear
+                <DsSearch.Clear
                   onClick={() => {
                     setDebouncedSearchString('');
                     setSearchString('');
                     setCurrentPage(1);
                   }}
                 />
-              </Search>
+              </DsSearch>
             </div>
           </div>
           <div className={classes.searchResults}>

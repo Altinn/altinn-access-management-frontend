@@ -1,4 +1,4 @@
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -12,30 +12,30 @@ export const RecipientErrorAlert = ({ userUUID, partyUUID }: RecipientErrorAlert
 
   if (!userUUID && !partyUUID) {
     return (
-      <Alert data-color='danger'>
-        <Heading
+      <DsAlert data-color='danger'>
+        <DsHeading
           level={3}
           data-size='sm'
         >
           {t('single_rights.missing_recipient_error_title')}
-        </Heading>
-        <Paragraph>{t('single_rights.missing_recipient_error_message')}</Paragraph>
-      </Alert>
+        </DsHeading>
+        <DsParagraph>{t('single_rights.missing_recipient_error_message')}</DsParagraph>
+      </DsAlert>
     );
   } else {
     return (
-      <Alert
+      <DsAlert
         role='alert'
         data-color='danger'
       >
-        <Heading
+        <DsHeading
           level={3}
           data-size='sm'
         >
           {t('single_rights.faulty_recipient_error_title')}
-        </Heading>
-        <Paragraph>{t('single_rights.faulty_recipient_error_message')}</Paragraph>
-      </Alert>
+        </DsHeading>
+        <DsParagraph>{t('single_rights.faulty_recipient_error_message')}</DsParagraph>
+      </DsAlert>
     );
   }
 };

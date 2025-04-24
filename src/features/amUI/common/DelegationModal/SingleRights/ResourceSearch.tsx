@@ -1,9 +1,21 @@
 import * as React from 'react';
-import { Alert, Chip, Heading, Paragraph, Search, Spinner } from '@digdir/designsystemet-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router';
-import { ResourceListItem } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsChip,
+  DsHeading,
+  DsParagraph,
+  DsSearch,
+  DsSpinner,
+  ResourceListItem,
+} from '@altinn/altinn-components';
+import { useCallback } from 'react';
+
+import { useDelegationModalContext } from '../DelegationModalContext';
+
+import classes from './ResourceSearch.module.css';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
@@ -16,11 +28,6 @@ import { Filter, List } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import type { Party } from '@/rtk/features/lookupApi';
-
-import { useDelegationModalContext } from '../DelegationModalContext';
-
-import classes from './ResourceSearch.module.css';
-import { useCallback } from 'react';
 
 export interface ResourceSearchProps {
   onSelection: (resource: ServiceResource) => void;
@@ -80,7 +87,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
   const filterChips = () => (
     <div className={classes.filterChips}>
       {filters.map((filterValue: string) => (
-        <Chip.Removable
+        <DsChip.Removable
           data-size='sm'
           key={filterValue}
           aria-label={`${t('common.remove')} ${String(getFilterLabel(filterValue))}`}
@@ -89,7 +96,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
           }}
         >
           {getFilterLabel(filterValue)}
-        </Chip.Removable>
+        </DsChip.Removable>
       ))}
     </div>
   );
@@ -98,7 +105,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
     if (isFetching) {
       return (
         <div className={classes.spinner}>
-          <Spinner
+          <DsSpinner
             aria-label={t('common.loading')}
             data-size='md'
           />
@@ -107,30 +114,30 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
     }
     if (error) {
       return (
-        <Alert
+        <DsAlert
           role='alert'
           className={classes.searchError}
           data-color='danger'
         >
-          <Heading
+          <DsHeading
             level={2}
             data-size='xs'
           >
             {t('common.general_error_title')}
-          </Heading>
-          <Paragraph>{t('common.general_error_paragraph')}</Paragraph>
-        </Alert>
+          </DsHeading>
+          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+        </DsAlert>
       );
     }
     return (
       <>
         <div className={classes.resultCountAndChips}>
           {totalNumberOfResults !== undefined && (
-            <Paragraph>
+            <DsParagraph>
               {displayPopularResources
                 ? t('single_rights.popular_services')
                 : `${String(totalNumberOfResults)} ${t('single_rights.search_hits')}`}
-            </Paragraph>
+            </DsParagraph>
           )}
           {filterChips()}
         </div>
@@ -187,7 +194,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
 
   return (
     <>
-      <Heading
+      <DsHeading
         level={2}
         data-size='sm'
       >
@@ -196,12 +203,12 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
           values={{ name: toParty?.name }}
           components={{ strong: <strong /> }}
         />
-      </Heading>
+      </DsHeading>
       <search className={classes.searchSection}>
         <div className={classes.searchInputs}>
           <div className={classes.searchField}>
-            <Search aria-label={t('single_rights.search_label')}>
-              <Search.Input
+            <DsSearch aria-label={t('single_rights.search_label')}>
+              <DsSearch.Input
                 aria-label={t('single_rights.search_label')}
                 placeholder={t('single_rights.search_label')}
                 value={searchString}
@@ -210,14 +217,14 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
                   setSearchString(event.target.value);
                 }}
               />
-              <Search.Clear
+              <DsSearch.Clear
                 onClick={() => {
                   setDebouncedSearchString('');
                   setSearchString('');
                   setCurrentPage(1);
                 }}
               />
-            </Search>
+            </DsSearch>
           </div>
           <Filter
             className={classes.filter}

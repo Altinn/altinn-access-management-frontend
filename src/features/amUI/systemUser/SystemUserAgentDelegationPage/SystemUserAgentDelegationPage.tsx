@@ -1,8 +1,9 @@
 import React from 'react';
-import { Alert, Spinner } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { SnackbarProvider } from '@altinn/altinn-components';
+import { SnackbarProvider, DsSpinner, DsAlert } from '@altinn/altinn-components';
+
+import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
 
 import {
   useGetAssignedCustomersQuery,
@@ -13,8 +14,6 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageWrapper } from '@/components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
-
-import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
 
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();
@@ -50,18 +49,20 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     <PageWrapper>
       <PageLayoutWrapper>
         {(isLoadingSystemUser || isLoadingCustomers || isLoadingAssignedCustomers) && (
-          <Spinner aria-label={t('systemuser_detailpage.loading_systemuser')} />
+          <DsSpinner aria-label={t('systemuser_detailpage.loading_systemuser')} />
         )}
         {isLoadSystemUserError && (
-          <Alert data-color='danger'>{t('systemuser_detailpage.load_systemuser_error')}</Alert>
+          <DsAlert data-color='danger'>{t('systemuser_detailpage.load_systemuser_error')}</DsAlert>
         )}
         {isLoadCustomersError && (
-          <Alert data-color='danger'>{t('systemuser_agent_delegation.load_customers_error')}</Alert>
+          <DsAlert data-color='danger'>
+            {t('systemuser_agent_delegation.load_customers_error')}
+          </DsAlert>
         )}
         {isLoadAssignedCustomersError && (
-          <Alert data-color='danger'>
+          <DsAlert data-color='danger'>
             {t('systemuser_agent_delegation.load_assigned_customers_error')}
-          </Alert>
+          </DsAlert>
         )}
         {systemUser && customers && agentDelegations && (
           <SnackbarProvider>

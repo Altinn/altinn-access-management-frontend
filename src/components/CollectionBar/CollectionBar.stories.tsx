@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from '@digdir/designsystemet-react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
+import { DsButton } from '@altinn/altinn-components';
 
 import { ActionBar } from '../ActionBar';
 
@@ -47,7 +47,7 @@ const exampleCollection = sampleList.map((item) => (
     subtitle={item.subtitle}
     color={item.color}
     actions={
-      <Button
+      <DsButton
         variant='tertiary'
         data-size={'sm'}
         onClick={() => console.log('Remove')}
@@ -55,7 +55,7 @@ const exampleCollection = sampleList.map((item) => (
         data-color='danger'
       >
         <MinusCircleIcon />
-      </Button>
+      </DsButton>
     }
   />
 ));

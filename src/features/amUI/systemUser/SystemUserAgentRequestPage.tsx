@@ -1,17 +1,7 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router';
-import { Alert, Spinner, Button, Heading, Paragraph } from '@digdir/designsystemet-react';
-
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { SystemUserPath } from '@/routes/paths';
-import {
-  useGetAgentSystemUserRequestQuery,
-  useApproveAgentSystemUserRequestMutation,
-  useRejectAgentSystemUserRequestMutation,
-} from '@/rtk/features/systemUserApi';
+import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
@@ -20,6 +10,16 @@ import { DelegationCheckError } from './components/DelegationCheckError/Delegati
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
 import { RightsList } from './components/RightsList/RightsList';
+
+import {
+  useGetAgentSystemUserRequestQuery,
+  useApproveAgentSystemUserRequestMutation,
+  useRejectAgentSystemUserRequestMutation,
+} from '@/rtk/features/systemUserApi';
+import { SystemUserPath } from '@/routes/paths';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
@@ -92,38 +92,38 @@ export const SystemUserAgentRequestPage = () => {
       heading={t('systemuser_agent_request.banner_title')}
     >
       {!requestId && (
-        <Alert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</Alert>
+        <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
       )}
       {(loadingRequestError || (request && !request.system)) && (
-        <Alert data-color='danger'>
+        <DsAlert data-color='danger'>
           {(loadingRequestError as { data: ProblemDetail }).data.status === 404
             ? t('systemuser_request.load_creation_request_error_notfound')
             : t('systemuser_request.load_creation_request_error')}
-        </Alert>
+        </DsAlert>
       )}
       {isLoadingRequest && (
-        <Spinner aria-label={t('systemuser_request.loading_creation_request')} />
+        <DsSpinner aria-label={t('systemuser_request.loading_creation_request')} />
       )}
       {request?.system && (
         <>
           {request.status === 'Accepted' && (
-            <Alert data-color='info'>{t('systemuser_request.request_accepted')}</Alert>
+            <DsAlert data-color='info'>{t('systemuser_request.request_accepted')}</DsAlert>
           )}
           {request.status === 'Rejected' && (
-            <Alert data-color='info'>{t('systemuser_request.request_rejected')}</Alert>
+            <DsAlert data-color='info'>{t('systemuser_request.request_rejected')}</DsAlert>
           )}
           {request.status === 'Timedout' && (
-            <Alert data-color='info'>{t('systemuser_request.request_expired')}</Alert>
+            <DsAlert data-color='info'>{t('systemuser_request.request_expired')}</DsAlert>
           )}
-          <Heading
+          <DsHeading
             level={2}
             data-size='sm'
           >
             {t('systemuser_request.creation_header', {
               vendorName: request.system.name,
             })}
-          </Heading>
-          <Paragraph>
+          </DsHeading>
+          <DsParagraph>
             <Trans
               i18nKey={'systemuser_agent_request.system_description'}
               values={{
@@ -131,15 +131,15 @@ export const SystemUserAgentRequestPage = () => {
                 companyName: reporteeData?.name,
               }}
             ></Trans>
-          </Paragraph>
-          <Heading
+          </DsParagraph>
+          <DsHeading
             level={3}
             data-size='xs'
           >
             {request.accessPackages.length === 1
               ? t('systemuser_request.rights_list_header_single')
               : t('systemuser_request.rights_list_header')}
-          </Heading>
+          </DsHeading>
           <RightsList
             resources={[]}
             accessPackages={request.accessPackages}
@@ -153,16 +153,16 @@ export const SystemUserAgentRequestPage = () => {
               />
             )}
             {isRejectCreationRequestError && (
-              <Alert
+              <DsAlert
                 data-color='danger'
                 role='alert'
               >
                 {t('systemuser_request.reject_error')}
-              </Alert>
+              </DsAlert>
             )}
             <CreateSystemUserCheck>
               <ButtonRow>
-                <Button
+                <DsButton
                   variant='primary'
                   aria-disabled={isActionButtonDisabled}
                   onClick={acceptSystemUser}
@@ -171,8 +171,8 @@ export const SystemUserAgentRequestPage = () => {
                   {isAcceptingSystemUser
                     ? t('systemuser_request.accept_loading')
                     : t('systemuser_request.accept')}
-                </Button>
-                <Button
+                </DsButton>
+                <DsButton
                   variant='tertiary'
                   aria-disabled={isActionButtonDisabled}
                   onClick={rejectSystemUser}
@@ -181,7 +181,7 @@ export const SystemUserAgentRequestPage = () => {
                   {isRejectingSystemUser
                     ? t('systemuser_request.reject_loading')
                     : t('systemuser_request.reject')}
-                </Button>
+                </DsButton>
               </ButtonRow>
             </CreateSystemUserCheck>
           </div>

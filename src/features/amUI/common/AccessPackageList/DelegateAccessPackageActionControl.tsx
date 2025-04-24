@@ -1,7 +1,7 @@
-import { Paragraph, Spinner } from '@digdir/designsystemet-react';
-import { Button } from '@altinn/altinn-components';
+import { Button, DsSpinner } from '@altinn/altinn-components';
 import { ExclamationmarkTriangleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
+
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 interface DelegateAccessPackageActionControlsProps {
@@ -25,7 +25,7 @@ export const DelegateAccessPackageActionControl = ({
 
   if (isLoading) {
     return (
-      <Spinner
+      <DsSpinner
         data-size='xs'
         aria-hidden='true'
       />

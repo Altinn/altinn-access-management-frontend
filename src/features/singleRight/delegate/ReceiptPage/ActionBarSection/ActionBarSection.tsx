@@ -1,9 +1,13 @@
 import { useTranslation } from 'react-i18next';
-import { Paragraph, ValidationMessage } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useState, useEffect } from 'react';
 import cn from 'classnames';
+import { DsParagraph, DsValidationMessage } from '@altinn/altinn-components';
+
+import { ReceiptActionBarContent } from '../ReceiptActionBarContent/ReceiptActionBarContent';
+
+import classes from './ActionBarSection.module.css';
 
 import { useAppSelector } from '@/rtk/app/hooks';
 import type { Right, ProcessedDelegation } from '@/rtk/features/singleRights/singleRightsSlice';
@@ -12,10 +16,6 @@ import {
   ReduxStatusResponse,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { ActionBar } from '@/components';
-
-import { ReceiptActionBarContent } from '../ReceiptActionBarContent/ReceiptActionBarContent';
-
-import classes from './ActionBarSection.module.css';
 
 type ActionBarSectionProps = {
   recipientName: string;
@@ -80,7 +80,7 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
         if (numFailedDelegations > 1) {
           return (
             <div className={classes.additionalTextContainer}>
-              <ValidationMessage
+              <DsValidationMessage
                 //TODO check if this is the correct value for this component if its actually an Alert ?
                 data-color='danger'
                 className={classes.additionalText}
@@ -91,19 +91,19 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
                   ' ' +
                   t('common.failed_lowercase')}
                 <ExclamationmarkTriangleIcon className={classes.warningIcon} />
-              </ValidationMessage>
+              </DsValidationMessage>
             </div>
           );
         } else if (isRejectedDelegation) {
           return (
             <div className={classes.additionalTextContainer}>
-              <ValidationMessage
+              <DsValidationMessage
                 data-color='danger'
                 className={classes.additionalTextRejected}
               >
                 {t('common.failed')}
                 <ExclamationmarkTriangleIcon className={classes.warningIconRejected} />
-              </ValidationMessage>
+              </DsValidationMessage>
             </div>
           );
         } else {
@@ -113,23 +113,23 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
 
       const failedDelegationIngress = () => {
         return (
-          <Paragraph
+          <DsParagraph
             variant='long'
             className={classes.failedText}
           >
             {t('single_rights.woops_something_went_wrong_ingress')}
-          </Paragraph>
+          </DsParagraph>
         );
       };
 
       const successfulDelegationParagraph = (extraSpacing: boolean) => {
         return (
-          <Paragraph
+          <DsParagraph
             variant='long'
             className={cn(extraSpacing && classes.successText)}
           >
             {t('single_rights.has_received_these_rights', { name: recipientName })}
-          </Paragraph>
+          </DsParagraph>
         );
       };
 
@@ -166,7 +166,9 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
     <>
       {actionBars}
       {hasSuccessfullDelegations && (
-        <Paragraph variant='long'>{t('single_rights.rights_are_valid_until_deletion')}</Paragraph>
+        <DsParagraph variant='long'>
+          {t('single_rights.rights_are_valid_until_deletion')}
+        </DsParagraph>
       )}
     </>
   );

@@ -1,6 +1,6 @@
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { DsAlert, DsParagraph, DsHeading } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
@@ -25,11 +25,11 @@ export const ResourceAlert = ({ resource, error, rightReasons }: ResourceAlertPr
   if (resource.delegable === false) {
     headingText = t('delegation_modal.service_error.general_heading');
     content = (
-      <Paragraph>
+      <DsParagraph>
         {t('delegation_modal.service_error.undelegable_service', {
           resourceOwner: resource.resourceOwnerName,
         })}
-      </Paragraph>
+      </DsParagraph>
     );
   } else if (error) {
     headingText = t('delegation_modal.service_error.technical_error_heading');
@@ -49,22 +49,27 @@ export const ResourceAlert = ({ resource, error, rightReasons }: ResourceAlertPr
     ) {
       headingText = t('delegation_modal.service_error.general_heading');
       content = (
-        <Paragraph>
+        <DsParagraph>
           {t('delegation_modal.service_error.access_list_service', {
             resourceOwner: resource.resourceOwnerName,
             reportee: reportee?.name,
           })}
-        </Paragraph>
+        </DsParagraph>
       );
     } else {
       headingText = t('delegation_modal.service_error.general_heading');
-      content = <Paragraph>{t('delegation_modal.service_error.missing_rights')}</Paragraph>;
+      content = <DsParagraph>{t('delegation_modal.service_error.missing_rights')}</DsParagraph>;
     }
   }
   return (
-    <Alert data-color='danger'>
-      <Heading data-size='2xs'>{headingText}</Heading>
+    <DsAlert data-color='danger'>
+      <DsHeading
+        level={2}
+        data-size='2xs'
+      >
+        {headingText}
+      </DsHeading>
       {content}
-    </Alert>
+    </DsAlert>
   );
 };

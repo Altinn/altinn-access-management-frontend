@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert } from '@digdir/designsystemet-react';
+import { DsAlert } from '@altinn/altinn-components';
 
 import type { ProblemDetail } from '../../types';
 
@@ -50,7 +50,7 @@ export const DelegationCheckError = ({
 
   return (
     <div className={classes.delegationCheckError}>
-      <Alert data-color='danger'>{getErrorMessage()}</Alert>
+      <DsAlert data-color='danger'>{getErrorMessage()}</DsAlert>
     </div>
   );
 };

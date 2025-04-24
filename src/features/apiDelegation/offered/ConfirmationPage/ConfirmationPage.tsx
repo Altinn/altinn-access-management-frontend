@@ -1,8 +1,11 @@
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
-import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useDispatch } from 'react-redux';
+import { DsHeading, DsParagraph, DsButton, DsSpinner, DsAlert } from '@altinn/altinn-components';
+
+import classes from './ConfirmationPage.module.css';
+import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegationLists';
 
 import { useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -14,9 +17,6 @@ import { usePostApiDelegationMutation } from '@/rtk/features/apiDelegation/apiDe
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
 import { overviewOrgApi } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
-
-import classes from './ConfirmationPage.module.css';
-import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegationLists';
 
 export const ConfirmationPage = () => {
   const dispatch = useDispatch();
@@ -62,13 +62,13 @@ export const ConfirmationPage = () => {
       <>
         {failedApiDelegations.length > 0 && (
           <>
-            <Heading
+            <DsHeading
               data-size='md'
               level={2}
               className={classes.alertHeading}
             >
               {t('api_delegation.failed_delegations')}
-            </Heading>
+            </DsHeading>
             <DelegationReceiptList
               items={failedApiDelegations}
               contentColor={ListTextColor.error}
@@ -77,32 +77,32 @@ export const ConfirmationPage = () => {
         )}
         {successfulApiDelegations.length > 0 && (
           <>
-            <Heading
+            <DsHeading
               data-size='md'
               level={2}
               className={classes.alertHeading}
             >
               {t('api_delegation.succesful_delegations')}
-            </Heading>
+            </DsHeading>
             <DelegationReceiptList items={successfulApiDelegations} />
           </>
         )}
-        <Paragraph
+        <DsParagraph
           variant='long'
           className={classes.list}
         >
           {successfulApiDelegations.length === 0
             ? t('api_delegation.receipt_page_failed_text')
             : t('api_delegation.receipt_page_bottom_text')}
-        </Paragraph>
+        </DsParagraph>
         <div className={classes.navigationSection}>
-          <Button
+          <DsButton
             data-color='accent'
             variant='primary'
             onClick={navigateToOverview}
           >
             {t('api_delegation.receipt_page_main_button')}
-          </Button>
+          </DsButton>
         </div>
       </>
     );
@@ -117,25 +117,25 @@ export const ConfirmationPage = () => {
       delegationRecieptContent()
     ) : (
       <>
-        <Heading
+        <DsHeading
           data-size='sm'
           level={2}
         >
           {t('api_delegation.confirmation_page_content_top_text')}
-        </Heading>
+        </DsHeading>
         <DelegableApiList />
-        <Heading
+        <DsHeading
           data-size='sm'
           level={2}
         >
           {t('api_delegation.confirmation_page_content_second_text')}
-        </Heading>
+        </DsHeading>
         <DelegableOrgList />
-        <Paragraph data-size='lg'>
+        <DsParagraph data-size='lg'>
           {t('api_delegation.confirmation_page_content_bottom_text')}
-        </Paragraph>
+        </DsParagraph>
         <div className={classes.navigationSection}>
-          <Button
+          <DsButton
             data-color='accent'
             variant='secondary'
             onClick={() =>
@@ -145,14 +145,14 @@ export const ConfirmationPage = () => {
             }
           >
             {t('common.previous')}
-          </Button>
-          <Button
+          </DsButton>
+          <DsButton
             onClick={handleConfirm}
             data-color='accent'
           >
-            {isLoading && <Spinner aria-label={t('common.loading')} />}
+            {isLoading && <DsSpinner aria-label={t('common.loading')} />}
             {t('common.confirm')}
-          </Button>
+          </DsButton>
         </div>
       </>
     );
@@ -185,19 +185,19 @@ export const ConfirmationPage = () => {
               delegationContent()
             )}
             {isError && (
-              <Alert
+              <DsAlert
                 title={t('common.general_error_title')}
                 data-color='danger'
               >
-                <Heading
+                <DsHeading
                   level={2}
                   data-size='xs'
                   className={classes.alertHeading}
                 >
                   {t('common.general_error_title')}
-                </Heading>
+                </DsHeading>
                 {`${t('common.general_error_paragraph')}`}
-              </Alert>
+              </DsAlert>
             )}
           </PageContent>
         </Page>

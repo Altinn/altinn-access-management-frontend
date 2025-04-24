@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Paragraph } from '@digdir/designsystemet-react';
+import { DsParagraph } from '@altinn/altinn-components';
 
 import { Dialog } from './Dialog';
 import { DialogContent } from './DialogContent';
@@ -25,7 +25,7 @@ export default {
         {...args}
       >
         <DialogContent>
-          <Paragraph
+          <DsParagraph
             variant='long'
             data-size='sm'
           >
@@ -33,7 +33,7 @@ export default {
             dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum,
             lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor
             erat. Vestibulum posuere fringilla iaculis
-          </Paragraph>
+          </DsParagraph>
         </DialogContent>
       </Dialog>
     );

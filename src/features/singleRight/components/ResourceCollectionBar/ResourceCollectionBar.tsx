@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Button } from '@digdir/designsystemet-react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
+import { DsButton } from '@altinn/altinn-components';
 
 import type { CollectionBarProps } from '@/components';
 import { ActionBar, CollectionBar } from '@/components';
@@ -50,7 +50,7 @@ export const ResourceCollectionBar = ({
       size='small'
       color='success'
       actions={
-        <Button
+        <DsButton
           variant='tertiary'
           data-size={'sm'}
           onClick={() => {
@@ -66,7 +66,7 @@ export const ResourceCollectionBar = ({
               title={t('common.remove')}
             />
           )}
-        </Button>
+        </DsButton>
       }
     ></ActionBar>
   ));

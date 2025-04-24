@@ -1,7 +1,8 @@
-import { Badge, Tabs } from '@digdir/designsystemet-react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DsBadge, DsTabs } from '@altinn/altinn-components';
+
 import classes from './RightsTabs.module.css';
 interface RightsTabsProps {
   tabBadge?: { accessPackages: number; services: number; roles: number };
@@ -22,67 +23,67 @@ export const RightsTabs = ({
   const { displayLimitedPreviewLaunch, displayResourceDelegation } = window.featureFlags;
 
   return (
-    <Tabs
+    <DsTabs
       defaultValue='packages'
       data-size='sm'
       value={chosenTab}
       onChange={setChosenTab}
     >
-      <Tabs.List>
-        <Tabs.Tab value='packages'>
-          <Badge
+      <DsTabs.List>
+        <DsTabs.Tab value='packages'>
+          <DsBadge
             data-size='sm'
             color={chosenTab === 'packages' ? 'accent' : 'neutral'}
             count={tabBadge?.accessPackages ?? 0}
             maxCount={99}
           />
           {t('user_rights_page.access_packages_title')}
-        </Tabs.Tab>
+        </DsTabs.Tab>
         {displayResourceDelegation && (
-          <Tabs.Tab value='singleRights'>
-            <Badge
+          <DsTabs.Tab value='singleRights'>
+            <DsBadge
               data-size='sm'
               color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
               count={tabBadge?.services ?? 0}
               maxCount={99}
             />
             {t('user_rights_page.single_rights_title')}
-          </Tabs.Tab>
+          </DsTabs.Tab>
         )}
         {displayLimitedPreviewLaunch && (
-          <Tabs.Tab value='roleAssignments'>
-            <Badge
+          <DsTabs.Tab value='roleAssignments'>
+            <DsBadge
               data-size='sm'
               color={chosenTab === 'roleAssignments' ? 'accent' : 'neutral'}
               count={tabBadge?.roles ?? 0}
               maxCount={99}
             />
             {t('user_rights_page.roles_title')}
-          </Tabs.Tab>
+          </DsTabs.Tab>
         )}
-      </Tabs.List>
-      <Tabs.Panel
+      </DsTabs.List>
+      <DsTabs.Panel
         className={classes.tabContent}
         value='packages'
       >
         {packagesPanel}
-      </Tabs.Panel>
+      </DsTabs.Panel>
       {displayResourceDelegation && (
-        <Tabs.Panel
+        <DsTabs.Panel
           className={classes.tabContent}
           value='singleRights'
         >
           {singleRightsPanel}
-        </Tabs.Panel>
+        </DsTabs.Panel>
       )}
       {displayLimitedPreviewLaunch && (
-        <Tabs.Panel
+        <DsTabs.Panel
           className={classes.tabContent}
           value='roleAssignments'
         >
           {roleAssignmentsPanel}
-        </Tabs.Panel>
+        </DsTabs.Panel>
       )}
-    </Tabs>
+    </DsTabs>
   );
 };

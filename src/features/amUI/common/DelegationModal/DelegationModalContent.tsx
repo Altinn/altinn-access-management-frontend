@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { Dialog } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import type { JSX } from 'react';
 import { useEffect, useRef } from 'react';
-import { Button } from '@altinn/altinn-components';
+import { Button, DsDialog } from '@altinn/altinn-components';
 
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
 
 import classes from './DelegationModal.module.css';
 import { ResourceSearch } from './SingleRights/ResourceSearch';
@@ -17,8 +16,9 @@ import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import type { DelegationAction } from './EditModal';
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
+
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export interface DelegationModalProps {
   delegationType: DelegationType;
@@ -111,15 +111,15 @@ export const DelegationModalContent = ({
   }
 
   return (
-    <Dialog.TriggerContext>
-      <Dialog.Trigger
+    <DsDialog.TriggerContext>
+      <DsDialog.Trigger
         data-size='sm'
         variant='primary'
         className={classes.triggerButton}
       >
         {triggerButtonText} <PlusIcon />
-      </Dialog.Trigger>
-      <Dialog
+      </DsDialog.Trigger>
+      <DsDialog
         className={classes.modalDialog}
         closedby='any'
         closeButton={t('common.close')}
@@ -140,7 +140,7 @@ export const DelegationModalContent = ({
           )}
           <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
         </>
-      </Dialog>
-    </Dialog.TriggerContext>
+      </DsDialog>
+    </DsDialog.TriggerContext>
   );
 };

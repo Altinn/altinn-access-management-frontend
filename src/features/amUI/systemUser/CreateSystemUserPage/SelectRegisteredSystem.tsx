@@ -1,17 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Button, Combobox, Heading, Paragraph } from '@digdir/designsystemet-react';
 import { Link, useNavigate } from 'react-router';
-
-import { useGetRegisteredSystemsQuery } from '@/rtk/features/systemUserApi';
-import { SystemUserPath } from '@/routes/paths';
-import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
+import { DsHeading, DsParagraph, DsAlert, DsButton, DsCombobox } from '@altinn/altinn-components';
 
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import type { RegisteredSystem } from '../types';
 import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
 
 import classes from './CreateSystemUser.module.css';
+
+import { useGetRegisteredSystemsQuery } from '@/rtk/features/systemUserApi';
+import { SystemUserPath } from '@/routes/paths';
+import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 
 const isStringMatch = (inputString: string, matchString = ''): boolean => {
   return matchString.toLowerCase().indexOf(inputString.toLowerCase()) >= 0;
@@ -46,21 +46,21 @@ export const SelectRegisteredSystem = ({
       onNavigateBack={() => navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`)}
     >
       <div className={classes.creationPageContainer}>
-        <Heading
+        <DsHeading
           level={1}
           data-size='sm'
         >
           {t('systemuser_creationpage.sub_title')}
-        </Heading>
+        </DsHeading>
         <CreateSystemUserCheck>
-          <Paragraph
+          <DsParagraph
             data-size='sm'
             className={classes.systemDescription}
           >
             {t('systemuser_creationpage.content_text1')}
-          </Paragraph>
+          </DsParagraph>
           <div className={classes.inputContainer}>
-            <Combobox
+            <DsCombobox
               label={t('systemuser_creationpage.pull_down_menu_label')}
               loading={isLoadingRegisteredSystems}
               loadingLabel={t('systemuser_creationpage.loading_systems')}
@@ -75,36 +75,38 @@ export const SelectRegisteredSystem = ({
             >
               {registeredSystems?.map((system) => {
                 return (
-                  <Combobox.Option
+                  <DsCombobox.Option
                     key={system.systemId}
                     value={system.systemId}
                     description={`${system.systemVendorOrgName} (${system.systemVendorOrgNumber})`}
                   >
                     {system.name}
-                  </Combobox.Option>
+                  </DsCombobox.Option>
                 );
               })}
-            </Combobox>
+            </DsCombobox>
             {isLoadRegisteredSystemsError && (
-              <Alert data-color='danger'>{t('systemuser_creationpage.load_vendors_error')}</Alert>
+              <DsAlert data-color='danger'>
+                {t('systemuser_creationpage.load_vendors_error')}
+              </DsAlert>
             )}
           </div>
           <ButtonRow>
-            <Button
+            <DsButton
               variant='primary'
               onClick={handleConfirm}
               disabled={!selectedSystem}
             >
               {t('systemuser_creationpage.confirm_button')}
-            </Button>
-            <Button
+            </DsButton>
+            <DsButton
               variant='tertiary'
               asChild
             >
               <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}>
                 {t('common.cancel')}
               </Link>
-            </Button>
+            </DsButton>
           </ButtonRow>
         </CreateSystemUserCheck>
       </div>

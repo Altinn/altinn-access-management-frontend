@@ -1,9 +1,12 @@
-import { Button } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
+import { DsButton } from '@altinn/altinn-components';
+
+import classes from './ReceiptPage.module.css';
+import { ActionBarSection } from './ActionBarSection/ActionBarSection';
 
 import { SingleRightPath } from '@/routes/paths';
 import { Page, PageContainer, PageContent, PageHeader, RestartPrompter } from '@/components';
@@ -12,9 +15,6 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { redirectToSevicesAvailableForUser } from '@/resources/utils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-
-import classes from './ReceiptPage.module.css';
-import { ActionBarSection } from './ActionBarSection/ActionBarSection';
 
 export const ReceiptPage = () => {
   const { t } = useTranslation();
@@ -58,13 +58,13 @@ export const ReceiptPage = () => {
                 <ActionBarSection recipientName={String(recipientName)} />
               </div>
               <div className={classes.navigationContainer}>
-                <Button
+                <DsButton
                   onClick={() => redirectToSevicesAvailableForUser(userID, partyID)}
                   color={'accent'}
                 >
                   {t('common.finished')}
-                </Button>
-                <Button
+                </DsButton>
+                <DsButton
                   onClick={() => {
                     navigate(
                       `/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseService}?${urlParams}`,
@@ -74,7 +74,7 @@ export const ReceiptPage = () => {
                   variant={'secondary'}
                 >
                   {t('single_rights.give_more_rights')}
-                </Button>
+                </DsButton>
               </div>
             </>
           )}

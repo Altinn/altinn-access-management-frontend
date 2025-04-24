@@ -1,13 +1,13 @@
-import type { AlertProps } from '@digdir/designsystemet-react';
-import { Alert, Button, Heading, Paragraph } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import cn from 'classnames';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import type { DsAlertProps } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import classes from './RestartPrompter.module.css';
 
-interface RestartPrompterProps extends AlertProps {
+interface RestartPrompterProps extends DsAlertProps {
   /* Sets spacing on the bottom of the component */
   spacingBottom?: boolean;
 
@@ -34,21 +34,21 @@ export const RestartPrompter = ({
   const { t } = useTranslation();
 
   return (
-    <Alert
+    <DsAlert
       color={severity}
       className={cn({ [classes.spacing]: spacingBottom })}
     >
-      <Heading
+      <DsHeading
         data-size='sm'
         level={2}
         className={classes.title}
       >
         {title}
-      </Heading>
-      {ingress && <Paragraph variant='long'>{ingress}</Paragraph>}
+      </DsHeading>
+      {ingress && <DsParagraph variant='long'>{ingress}</DsParagraph>}
       {restartPath && (
         <div className={classes.restartButton}>
-          <Button
+          <DsButton
             variant='primary'
             data-color='accent'
             data-size='md'
@@ -57,9 +57,9 @@ export const RestartPrompter = ({
             }}
           >
             {t('common.restart')}
-          </Button>
+          </DsButton>
         </div>
       )}
-    </Alert>
+    </DsAlert>
   );
 };

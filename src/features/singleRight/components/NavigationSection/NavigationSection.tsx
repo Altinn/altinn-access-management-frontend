@@ -1,8 +1,8 @@
-import { Button, Popover, Paragraph } from '@digdir/designsystemet-react';
 import { t } from 'i18next';
 import type { HTMLAttributes } from 'react';
 import React, { useState } from 'react';
 import cn from 'classnames';
+import { DsButton, DsPopover, DsParagraph } from '@altinn/altinn-components';
 
 import classes from './NavigationSection.module.css';
 
@@ -34,16 +34,16 @@ export const NavigationSection = ({
       className={cn([classes.navigationSectionContainer, className])}
       {...props}
     >
-      <Button
+      <DsButton
         variant='primary'
         data-color='accent'
         disabled={nextButtonProps.disabled}
         onClick={nextButtonProps.onNext}
       >
         {t('common.proceed')}
-      </Button>
-      <Popover.TriggerContext>
-        <Popover.Trigger
+      </DsButton>
+      <DsPopover.TriggerContext>
+        <DsPopover.Trigger
           variant='tertiary'
           color={cancelButtonProps.showWarning ? 'danger' : 'accent'}
           data-size='md'
@@ -54,32 +54,32 @@ export const NavigationSection = ({
           }
         >
           {t('common.cancel')}
-        </Popover.Trigger>
-        <Popover
+        </DsPopover.Trigger>
+        <DsPopover
           placement='top'
           open={popoverOpen}
           data-color='danger'
           onClose={() => setPopoverOpen(false)}
         >
-          <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
+          <DsParagraph>{t('single_rights.cancel_popover_text')}</DsParagraph>
           <div className={classes.NavigationSection}>
-            <Button
+            <DsButton
               onClick={cancelButtonProps.onCancel}
               color={'danger'}
               variant={'primary'}
             >
               {t('common.yes')}
-            </Button>
-            <Button
+            </DsButton>
+            <DsButton
               onClick={() => setPopoverOpen(false)}
               color={'danger'}
               variant={'tertiary'}
             >
               {t('single_rights.no_stay_here')}
-            </Button>
+            </DsButton>
           </div>
-        </Popover>
-      </Popover.TriggerContext>
+        </DsPopover>
+      </DsPopover.TriggerContext>
     </div>
   );
 };

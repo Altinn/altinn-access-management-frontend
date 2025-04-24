@@ -1,18 +1,17 @@
 import { useParams } from 'react-router';
 import React, { useRef, useState } from 'react';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
-
-import type { Role } from '@/rtk/features/roleApi';
-import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { RoleList } from '../../common/RoleList/RoleList';
 import { RoleInfoModal } from '../../common/RoleList/RoleInfoModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
-
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';
+
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import type { Role } from '@/rtk/features/roleApi';
 
 interface RoleSectionProps {
   numberOfAccesses?: number;
@@ -31,14 +30,14 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
   return (
     <>
       <OldRolesAlert />
-      <Heading
+      <DsHeading
         level={2}
         data-size='2xs'
         id='access_packages_title'
       >
         {t('role.current_roles_title', { count: numberOfAccesses })}
-      </Heading>
-      <Paragraph data-size='sm'>{t('role.roles_description')}</Paragraph>
+      </DsHeading>
+      <DsParagraph data-size='sm'>{t('role.roles_description')}</DsParagraph>
       <RoleList
         availableActions={[
           isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,

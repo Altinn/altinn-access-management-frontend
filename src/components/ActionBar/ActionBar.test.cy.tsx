@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react';
-import { Button } from '@digdir/designsystemet-react';
 import * as React from 'react';
+import { DsButton } from '@altinn/altinn-components';
 
 import store from '@/rtk/app/store';
 import { ActionBar, type ActionBarProps } from '@/components';
@@ -84,7 +84,7 @@ describe('ActionBar', () => {
   });
   describe('Expandability and actions', () => {
     it('Should render correctly when all props are set and it is expandable', () => {
-      const actionButton = <Button>Action</Button>;
+      const actionButton = <DsButton>Action</DsButton>;
       cy.mount(expandableActionBar({ actions: actionButton, open: true, onClick: cy.stub }));
       cy.get('[data-testid="action-bar-icon"]').should('exist');
       cy.get('button').should('contain', 'Title');
@@ -95,7 +95,7 @@ describe('ActionBar', () => {
     });
 
     it('should render correctly when all props are set and it is not expandable', () => {
-      const actionButton = <Button>Action</Button>;
+      const actionButton = <DsButton>Action</DsButton>;
       cy.mount(nonExpandableActionBar({ actions: actionButton }));
       cy.get('[data-testid="action-bar-icon"]').should('not.exist');
       cy.contains('Title');
@@ -168,12 +168,12 @@ describe('ActionBar', () => {
       const handleActionClickSpy = cy.spy(handleActionClick).as('handleActionClickSpy');
 
       const actionButton = (
-        <Button
+        <DsButton
           onClick={handleActionClickSpy}
           aria-label='add'
         >
           Placeholder
-        </Button>
+        </DsButton>
       );
       cy.mount(nonExpandableActionBar({ actions: actionButton, onClick: handleClickSpy }));
       cy.get('button[aria-label*="add"]').click();

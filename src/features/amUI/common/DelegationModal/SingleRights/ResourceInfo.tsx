@@ -1,9 +1,18 @@
 import * as React from 'react';
-import { Alert, Button, Chip, Heading, Paragraph } from '@digdir/designsystemet-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Avatar, Badge, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import {
+  Avatar,
+  Badge,
+  Button,
+  DsAlert,
+  DsChip,
+  DsHeading,
+  DsParagraph,
+  SnackbarDuration,
+  useSnackbar,
+} from '@altinn/altinn-components';
 
 import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -236,7 +245,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
 
   const chips = () =>
     resource?.resourceType === 'AltinnApp' ? (
-      <Chip.Checkbox
+      <DsChip.Checkbox
         data-size='sm'
         checked={rights.some((r) => r.checked === true)}
         disabled={!rights.some((r) => r.delegable === true)}
@@ -245,7 +254,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
         }}
       >
         {t('common.action_access')}
-      </Chip.Checkbox>
+      </DsChip.Checkbox>
     ) : (
       rights.map((right: ChipRight) => {
         const actionText = Object.values(LocalizedAction).includes(right.action as LocalizedAction)
@@ -253,7 +262,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
           : right.action;
         return (
           <div key={right.rightKey}>
-            <Chip.Checkbox
+            <DsChip.Checkbox
               data-size='sm'
               checked={right.checked}
               disabled={!right.delegable}
@@ -269,7 +278,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
               }}
             >
               {actionText}
-            </Chip.Checkbox>
+            </DsChip.Checkbox>
           </div>
         );
       })
@@ -291,12 +300,12 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
             />
             <div className={classes.resource}>
               <div className={classes.infoHeading}>
-                <Heading
+                <DsHeading
                   level={3}
                   data-size='sm'
                 >
                   {resource.title}
-                </Heading>
+                </DsHeading>
                 {hasAccess && (
                   <Badge
                     label={t('common.has_poa')}
@@ -306,11 +315,11 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                 )}
               </div>
 
-              <Paragraph>{resource.resourceOwnerName}</Paragraph>
+              <DsParagraph>{resource.resourceOwnerName}</DsParagraph>
             </div>
           </div>
-          {resource.description && <Paragraph>{resource.description}</Paragraph>}
-          {resource.rightDescription && <Paragraph>{resource.rightDescription}</Paragraph>}
+          {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
+          {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
           {displayResourceAlert ? (
             <ResourceAlert
               error={delegationCheckErrorDetails}
@@ -320,33 +329,33 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
           ) : (
             <>
               {delegationErrorMessage && (
-                <Alert
+                <DsAlert
                   data-color='danger'
                   data-size='sm'
                 >
-                  <Heading
+                  <DsHeading
                     level={3}
                     data-size='xs'
                   >
                     {t('delegation_modal.technical_error_message.heading')}
-                  </Heading>
-                  <Paragraph>
+                  </DsHeading>
+                  <DsParagraph>
                     {t('delegation_modal.technical_error_message.message')} {delegationErrorMessage}
-                  </Paragraph>
-                </Alert>
+                  </DsParagraph>
+                </DsAlert>
               )}
               {missingAccessMessage && (
-                <Alert
+                <DsAlert
                   data-color='info'
                   data-size='sm'
                 >
                   {missingAccessMessage}
-                </Alert>
+                </DsAlert>
               )}
               <div className={classes.rightsSection}>
-                <Heading
-                  data-size='xs'
+                <DsHeading
                   level={4}
+                  data-size='xs'
                 >
                   {hasAccess && !hasUnsavedChanges ? (
                     <Trans
@@ -361,7 +370,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                       components={{ strong: <strong /> }}
                     />
                   )}
-                </Heading>
+                </DsHeading>
                 <div className={classes.rightChips}>{chips()}</div>
               </div>
             </>

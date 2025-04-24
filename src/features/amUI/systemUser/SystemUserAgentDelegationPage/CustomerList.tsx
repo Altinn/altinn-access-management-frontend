@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Search, Spinner, ValidationMessage } from '@digdir/designsystemet-react';
-import { List } from '@altinn/altinn-components';
+import {
+  DsButton,
+  DsSearch,
+  DsSpinner,
+  List,
+  DsValidationMessage,
+} from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-
-import { AmPagination } from '@/components/Paginering';
 
 import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
+
+import { AmPagination } from '@/components/Paginering';
 
 const filterCustomerList = (
   list: AgentDelegationCustomer[],
@@ -68,18 +73,18 @@ export const CustomerList = ({
   return (
     <div>
       <div className={classes.listHeader}>
-        <Search
+        <DsSearch
           className={classes.searchBar}
           data-size='sm'
         >
-          <Search.Input
+          <DsSearch.Input
             aria-label={t('systemuser_agent_delegation.customer_search')}
             value={searchValue}
             onChange={onSearch}
             placeholder={t('systemuser_agent_delegation.customer_search')}
           />
-          <Search.Clear />
-        </Search>
+          <DsSearch.Clear />
+        </DsSearch>
         {children}
       </div>
       <List
@@ -139,24 +144,24 @@ const ListControls = ({
     <div className={classes.listControls}>
       {isLoading && (
         <div className={classes.loadingSpinner}>
-          <Spinner
+          <DsSpinner
             data-size='sm'
             aria-hidden
           />
         </div>
       )}
       {isError && delegation && (
-        <ValidationMessage data-size='sm'>
+        <DsValidationMessage data-size='sm'>
           {t('systemuser_agent_delegation.remove_system_user_error')}
-        </ValidationMessage>
+        </DsValidationMessage>
       )}
       {isError && !delegation && (
-        <ValidationMessage data-size='sm'>
+        <DsValidationMessage data-size='sm'>
           {t('systemuser_agent_delegation.add_system_user_error')}
-        </ValidationMessage>
+        </DsValidationMessage>
       )}
       {!isLoading && delegation && onRemoveCustomer && (
-        <Button
+        <DsButton
           variant='tertiary'
           data-size='sm'
           data-color='danger'
@@ -166,10 +171,10 @@ const ListControls = ({
           onClick={() => onRemoveCustomer(delegation, customer.name)}
         >
           <MinusCircleIcon /> {t('systemuser_agent_delegation.remove_from_system_user')}
-        </Button>
+        </DsButton>
       )}
       {!isLoading && !delegation && onAddCustomer && (
-        <Button
+        <DsButton
           variant='tertiary'
           data-size='sm'
           aria-label={t('systemuser_agent_delegation.add_to_system_user_aria', {
@@ -178,7 +183,7 @@ const ListControls = ({
           onClick={() => onAddCustomer(customer.id, customer.name)}
         >
           <PlusCircleIcon /> {t('systemuser_agent_delegation.add_to_system_user')}
-        </Button>
+        </DsButton>
       )}
     </div>
   );

@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { ButtonProps } from '@altinn/altinn-components';
-import { Button, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { Button, DsSpinner, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 import { ExclamationmarkTriangleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Spinner } from '@digdir/designsystemet-react';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -83,7 +82,7 @@ export const DelegateRoleButton = ({
   };
   if (showSpinner && (delegationCheckUninitialized || delegationCheckLoading)) {
     return (
-      <Spinner
+      <DsSpinner
         data-size='xs'
         aria-hidden='true'
       />

@@ -1,7 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Button, Spinner } from '@digdir/designsystemet-react';
 import { Link, useNavigate } from 'react-router';
+import { DsSpinner, DsAlert, DsButton } from '@altinn/altinn-components';
+
+import type { ProblemDetail, RegisteredSystem } from '../types';
+import { RightsList } from '../components/RightsList/RightsList';
+import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
+import { ButtonRow } from '../components/ButtonRow/ButtonRow';
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+
+import classes from './CreateSystemUser.module.css';
 
 import {
   useCreateSystemUserMutation,
@@ -11,14 +19,6 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-
-import type { ProblemDetail, RegisteredSystem } from '../types';
-import { RightsList } from '../components/RightsList/RightsList';
-import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
-import { ButtonRow } from '../components/ButtonRow/ButtonRow';
-import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-
-import classes from './CreateSystemUser.module.css';
 
 interface RightsIncludedProps {
   selectedSystem: RegisteredSystem;
@@ -61,7 +61,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
   const numberOfRights = (rights?.resources?.length || 0) + (rights?.accessPackages?.length || 0);
 
   if (isLoadingRights) {
-    return <Spinner aria-label={t('systemuser_includedrightspage.loading_rights')} />;
+    return <DsSpinner aria-label={t('systemuser_includedrightspage.loading_rights')} />;
   }
 
   return (
@@ -92,15 +92,15 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
             />
           )}
           {isLoadRightsError && (
-            <Alert
+            <DsAlert
               data-color='danger'
               role='alert'
             >
               {t('systemuser_includedrightspage.load_rights_error')}
-            </Alert>
+            </DsAlert>
           )}
           <ButtonRow>
-            <Button
+            <DsButton
               variant='primary'
               onClick={handleConfirmSystemUser}
               disabled={isCreatingSystemUser || isLoadRightsError}
@@ -109,15 +109,15 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
               {isCreatingSystemUser
                 ? t('systemuser_includedrightspage.creating_systemuser')
                 : t('systemuser_includedrightspage.confirm_button')}
-            </Button>
-            <Button
+            </DsButton>
+            <DsButton
               variant='tertiary'
               asChild
             >
               <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}>
                 {t('common.cancel')}
               </Link>
-            </Button>
+            </DsButton>
           </ButtonRow>
         </div>
       </div>

@@ -1,9 +1,15 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { Paragraph, Heading, Button, Dialog } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Snackbar, useSnackbar } from '@altinn/altinn-components';
+import {
+  DsButton,
+  DsDialog,
+  DsHeading,
+  DsParagraph,
+  Snackbar,
+  useSnackbar,
+} from '@altinn/altinn-components';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { SystemUserPath } from '@/routes/paths';
@@ -161,21 +167,21 @@ export const SystemUserAgentDelegationPageContent = ({
         )
       }
     >
-      <Dialog
+      <DsDialog
         ref={modalRef}
         className={classes.delegationModal}
         onClose={onCloseModal}
         closedby='any'
       >
         <div className={classes.flexContainer}>
-          <Heading
+          <DsHeading
             level={1}
             data-size='sm'
           >
             {t('systemuser_agent_delegation.assign_customers', {
               integrationTitle: systemUser?.integrationTitle,
             })}
-          </Heading>
+          </DsHeading>
           <CustomerList
             list={customers}
             delegations={delegations}
@@ -185,18 +191,20 @@ export const SystemUserAgentDelegationPageContent = ({
             onRemoveCustomer={onRemoveCustomer}
           />
           <div>
-            <Button onClick={onCloseModal}>{t('systemuser_agent_delegation.confirm_close')}</Button>
+            <DsButton onClick={onCloseModal}>
+              {t('systemuser_agent_delegation.confirm_close')}
+            </DsButton>
             <Snackbar className={classes.customerListSnackbar} />
           </div>
         </div>
-      </Dialog>
+      </DsDialog>
       {systemUser && (
         <div className={classes.flexContainer}>
           <SystemUserHeader
             title={systemUser.integrationTitle}
             subTitle={reporteeData?.name}
           />
-          <Heading
+          <DsHeading
             level={2}
             data-size='xs'
           >
@@ -205,44 +213,44 @@ export const SystemUserAgentDelegationPageContent = ({
               : t('systemuser_agent_delegation.access_package_plural', {
                   accessPackageCount: systemUser.accessPackages.length,
                 })}
-          </Heading>
+          </DsHeading>
           <RightsList
             resources={[]}
             accessPackages={systemUser.accessPackages}
             hideHeadings
           />
-          <Heading
+          <DsHeading
             level={2}
             data-size='xs'
             className={classes.customerHeading}
           >
             {t('systemuser_agent_delegation.assigned_customers_header')}
-          </Heading>
+          </DsHeading>
           {assignedCustomers.length === 0 ? (
             <>
-              <Paragraph>{t('systemuser_agent_delegation.no_assigned_customers')}</Paragraph>
+              <DsParagraph>{t('systemuser_agent_delegation.no_assigned_customers')}</DsParagraph>
               <div>
-                <Button
+                <DsButton
                   variant='secondary'
                   onClick={enableAddCustomers}
                 >
                   <PlusIcon />
                   {t('systemuser_agent_delegation.add_customers')}
-                </Button>
+                </DsButton>
               </div>
             </>
           ) : (
             <CustomerList list={assignedCustomers}>
-              <Button
+              <DsButton
                 variant='secondary'
                 onClick={enableAddCustomers}
               >
                 <PencilIcon />
                 {t('systemuser_agent_delegation.edit_customers')}
-              </Button>
+              </DsButton>
             </CustomerList>
           )}
-          <Paragraph
+          <DsParagraph
             data-size='xs'
             className={classes.createdBy}
           >
@@ -253,7 +261,7 @@ export const SystemUserAgentDelegationPageContent = ({
                 day: '2-digit',
               }),
             })}
-          </Paragraph>
+          </DsParagraph>
         </div>
       )}
     </PageContainer>

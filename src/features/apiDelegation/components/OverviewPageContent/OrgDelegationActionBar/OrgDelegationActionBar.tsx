@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Button } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { MinusCircleIcon, ArrowUndoIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { DsButton } from '@altinn/altinn-components';
+
+import classes from './OrgDelegationActionBar.module.css';
 
 import type {
   DeletionDto,
@@ -12,8 +14,6 @@ import type {
 import { DeletableListItem, ActionBar, BorderedList } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import { getButtonIconSize } from '@/resources/utils';
-
-import classes from './OrgDelegationActionBar.module.css';
 
 export interface OrgDelegationActionBarProps {
   organization: OverviewOrg;
@@ -53,7 +53,7 @@ export const OrgDelegationActionBar = ({
   const actions = (
     <>
       {delegateToOrgCallback && (
-        <Button
+        <DsButton
           variant={'tertiary'}
           color={'accent'}
           data-size={'md'}
@@ -61,11 +61,11 @@ export const OrgDelegationActionBar = ({
           aria-label={String(t('api_delegation.delegate_new_api'))}
         >
           <PlusCircleIcon fontSize='1.5rem' /> {t('api_delegation.delegate_new_api')}
-        </Button>
+        </DsButton>
       )}
       {isEditable &&
         (isAllSoftDeleted ? (
-          <Button
+          <DsButton
             variant={'tertiary'}
             color={'neutral'}
             data-size={'md'}
@@ -75,10 +75,10 @@ export const OrgDelegationActionBar = ({
           >
             <ArrowUndoIcon fontSize={getButtonIconSize(!isSm)} />
             {!isSm && t('common.undo')}
-          </Button>
+          </DsButton>
         ) : (
           <div>
-            <Button
+            <DsButton
               variant={'tertiary'}
               color={'danger'}
               data-size={'md'}
@@ -88,7 +88,7 @@ export const OrgDelegationActionBar = ({
             >
               <MinusCircleIcon fontSize={getButtonIconSize(!isSm)} />
               {!isSm && t('api_delegation.delete')}
-            </Button>
+            </DsButton>
           </div>
         ))}
     </>

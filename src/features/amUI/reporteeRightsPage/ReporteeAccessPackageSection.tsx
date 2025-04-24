@@ -1,15 +1,14 @@
-import { Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useRef, useState } from 'react';
-
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { DsHeading } from '@altinn/altinn-components';
 
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
+
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface ReporteeAccessPackageSectionProps {
   numberOfAccesses?: number;
@@ -32,13 +31,13 @@ export const ReporteeAccessPackageSection = ({
   return (
     <>
       <OldRolesAlert />
-      <Heading
+      <DsHeading
         level={2}
         data-size='2xs'
         id='access_packages_title'
       >
         {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
-      </Heading>
+      </DsHeading>
       <AccessPackageList
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         useDeleteConfirm

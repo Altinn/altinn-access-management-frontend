@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Paragraph } from '@digdir/designsystemet-react';
+import { DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import { ActionBar } from './ActionBar';
 
@@ -8,7 +8,7 @@ type ActionbarPropsAndCustomArgs = React.ComponentProps<typeof ActionBar>;
 
 const ExampleActions = (
   <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-    <Button
+    <DsButton
       variant='tertiary'
       data-color='accent'
       data-size='md'
@@ -16,8 +16,8 @@ const ExampleActions = (
       onClick={() => console.log('Edit')}
     >
       <PencilIcon />
-    </Button>
-    <Button
+    </DsButton>
+    <DsButton
       variant='tertiary'
       data-color='danger'
       data-size='md'
@@ -25,7 +25,7 @@ const ExampleActions = (
       onClick={() => console.log('Delete')}
     >
       <TrashIcon />
-    </Button>
+    </DsButton>
   </div>
 );
 
@@ -37,13 +37,13 @@ const exampleArgs: ActionbarPropsAndCustomArgs = {
   defaultOpen: true,
   actions: ExampleActions,
   children: (
-    <Paragraph variant='long'>
+    <DsParagraph variant='long'>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
       labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
       laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
       voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
       non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </Paragraph>
+    </DsParagraph>
   ),
 };
 

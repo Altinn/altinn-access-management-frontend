@@ -1,7 +1,7 @@
-import { Alert, Button, Paragraph, Popover } from '@digdir/designsystemet-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DsPopover, DsParagraph, DsAlert, DsButton } from '@altinn/altinn-components';
 
 import { ButtonRow } from '../ButtonRow/ButtonRow';
 
@@ -27,55 +27,55 @@ export const DeleteSystemUserPopover = ({
 
   return (
     <div className={classes.systemUserDeleteButtonContainer}>
-      <Popover.TriggerContext>
-        <Popover.Trigger
+      <DsPopover.TriggerContext>
+        <DsPopover.Trigger
           variant='tertiary'
           data-color='danger'
           onClick={() => setIsPopoverOpen(true)}
         >
           <TrashIcon aria-hidden />
           {t('systemuser_detailpage.delete_systemuser')}
-        </Popover.Trigger>
-        <Popover
+        </DsPopover.Trigger>
+        <DsPopover
           open={isPopoverOpen}
           data-color='danger'
           className={classes.deletePopover}
           onClose={() => setIsPopoverOpen(false)}
         >
           {hasAgentDelegation ? (
-            <Paragraph>{t('systemuser_detailpage.delete_has_customer_warning')}</Paragraph>
+            <DsParagraph>{t('systemuser_detailpage.delete_has_customer_warning')}</DsParagraph>
           ) : (
             <>
               {t('systemuser_detailpage.delete_systemuser_body', {
                 title: integrationTitle,
               })}
               {isDeleteError && (
-                <Alert
+                <DsAlert
                   data-color='danger'
                   role='alert'
                 >
                   {t('systemuser_detailpage.delete_systemuser_error')}
-                </Alert>
+                </DsAlert>
               )}
               <ButtonRow>
-                <Button
+                <DsButton
                   data-color='danger'
                   disabled={isDeletingSystemUser}
                   onClick={handleDeleteSystemUser}
                 >
                   {t('systemuser_detailpage.delete_systemuser')}
-                </Button>
-                <Button
+                </DsButton>
+                <DsButton
                   variant='tertiary'
                   onClick={() => setIsPopoverOpen(false)}
                 >
                   {t('common.cancel')}
-                </Button>
+                </DsButton>
               </ButtonRow>
             </>
           )}
-        </Popover>
-      </Popover.TriggerContext>
+        </DsPopover>
+      </DsPopover.TriggerContext>
     </div>
   );
 };

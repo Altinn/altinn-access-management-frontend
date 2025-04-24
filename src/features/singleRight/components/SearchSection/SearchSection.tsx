@@ -4,7 +4,18 @@ import * as React from 'react';
 import { FilterIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Chip, Heading, Paragraph, Spinner, Alert, Search } from '@digdir/designsystemet-react';
+import {
+  DsSpinner,
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsSearch,
+  DsChip,
+} from '@altinn/altinn-components';
+
+import { ResourceActionBar } from '../ResourceActionBar';
+
+import classes from './SearchSection.module.css';
 
 import { Filter } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
@@ -22,10 +33,6 @@ import {
 import { arraysEqual, debounce } from '@/resources/utils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { AmPagination } from '@/components/Paginering';
-
-import { ResourceActionBar } from '../ResourceActionBar';
-
-import classes from './SearchSection.module.css';
 
 export interface SearchSectionParams {
   /** The callback function to be called when a service is selected. */
@@ -86,7 +93,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
   const filterChips = () => (
     <div className={classes.filterChips}>
       {filters.map((filterValue: string) => (
-        <Chip.Removable
+        <DsChip.Removable
           data-size='sm'
           key={filterValue}
           aria-label={t('common.remove') + ' ' + String(getFilterLabel(filterValue))}
@@ -95,7 +102,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           }}
         >
           {getFilterLabel(filterValue)}
-        </Chip.Removable>
+        </DsChip.Removable>
       ))}
     </div>
   );
@@ -104,7 +111,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     if (isFetching) {
       return (
         <div className={classes.spinner}>
-          <Spinner
+          <DsSpinner
             aria-label={t('common.loading')}
             data-size='xl'
           />
@@ -112,20 +119,20 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
       );
     } else if (error) {
       return (
-        <Alert
+        <DsAlert
           role='alert'
           className={classes.searchError}
           data-color='danger'
         >
-          <Heading
+          <DsHeading
             level={2}
             data-size='xs'
             className={classes.searchErrorHeading}
           >
             {t('common.general_error_title')}
-          </Heading>
-          <Paragraph>{t('common.general_error_paragraph')}</Paragraph>
-        </Alert>
+          </DsHeading>
+          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+        </DsAlert>
       );
     } else {
       const totalPages =
@@ -134,11 +141,11 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         <>
           <div className={classes.resultCountAndChips}>
             {totalNumberOfResults !== undefined && (
-              <Paragraph>
+              <DsParagraph>
                 {displayPopularResources
                   ? t('single_rights.popular_services')
                   : String(totalNumberOfResults) + ' ' + t('single_rights.search_hits')}
-              </Paragraph>
+              </DsParagraph>
             )}
             {filterChips()}
           </div>
@@ -210,23 +217,25 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         >
           <div className={classes.serviceResourceContent}>
             {prioritizedErrorCodes?.length > 0 && (
-              <Alert
+              <DsAlert
                 role='alert'
                 data-color='danger'
                 className={classes.notDelegableAlert}
               >
-                <Heading data-size='xs'>{t('single_rights.cannot_delegate_alert_heading')}</Heading>
-                <Paragraph>
+                <DsHeading data-size='xs'>
+                  {t('single_rights.cannot_delegate_alert_heading')}
+                </DsHeading>
+                <DsParagraph>
                   {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}`, {
                     you: t('common.you_uppercase'),
                     serviceowner: resource.resourceOwnerName,
                     reporteeorg: reporteeData?.name,
                   })}
-                </Paragraph>
-              </Alert>
+                </DsParagraph>
+              </DsAlert>
             )}
-            <Paragraph data-size='sm'>{resource.description}</Paragraph>
-            <Paragraph data-size='sm'>{resource.rightDescription}</Paragraph>
+            <DsParagraph data-size='sm'>{resource.description}</DsParagraph>
+            <DsParagraph data-size='sm'>{resource.rightDescription}</DsParagraph>
           </div>
         </ResourceActionBar>
       </li>
@@ -242,20 +251,20 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     <search className={classes.searchSection}>
       <div className={classes.searchInputs}>
         <div className={classes.searchField}>
-          <Search data-size='md'>
-            <Search.Input
+          <DsSearch data-size='md'>
+            <DsSearch.Input
               aria-label={String(t('single_rights.search_label'))}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 debouncedSearch(event.target.value);
               }}
             />
-            <Search.Clear
+            <DsSearch.Clear
               onClick={() => {
                 setSearchString('');
                 setCurrentPage(1);
               }}
             />
-          </Search>
+          </DsSearch>
         </div>
         <Filter
           className={classes.filter}

@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
-import { Paragraph, Heading, Chip, Alert } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
+import { DsAlert, DsChip, DsHeading, DsParagraph } from '@altinn/altinn-components';
+
+import classes from './RightsActionBarContent.module.css';
 
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { ErrorCode, getErrorCodeTextKey, prioritizeErrors } from '@/resources/utils/errorCodeUtils';
 import { type Details } from '@/rtk/features/singleRights/singleRightsSlice';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
-
-import classes from './RightsActionBarContent.module.css';
 
 export type ChipRight = {
   action: string;
@@ -94,19 +94,19 @@ export const RightsActionBarContent = ({
 
   const serviceResourceContent = (
     <>
-      <Paragraph>{serviceDescription}</Paragraph>
-      <Paragraph>{rightDescription}</Paragraph>
-      <Paragraph>{t('single_rights.action_bar_adjust_rights_text')}</Paragraph>
+      <DsParagraph>{serviceDescription}</DsParagraph>
+      <DsParagraph>{rightDescription}</DsParagraph>
+      <DsParagraph>{t('single_rights.action_bar_adjust_rights_text')}</DsParagraph>
       <div className={classes.chipContainer}>
         {serviceType === 'AltinnApp' ? (
           <div>
-            <Chip.Checkbox
+            <DsChip.Checkbox
               data-size='sm'
               checked={altinnAppAccess}
               onClick={toggleAllDelegableRights}
             >
               {t('common.action_access')}
-            </Chip.Checkbox>
+            </DsChip.Checkbox>
           </div>
         ) : (
           rights
@@ -119,7 +119,7 @@ export const RightsActionBarContent = ({
                 : right.action;
               return (
                 <div key={index}>
-                  <Chip.Checkbox
+                  <DsChip.Checkbox
                     data-size='sm'
                     checked={right.checked}
                     onClick={() => {
@@ -127,7 +127,7 @@ export const RightsActionBarContent = ({
                     }}
                   >
                     {actionText}
-                  </Chip.Checkbox>
+                  </DsChip.Checkbox>
                 </div>
               );
             })
@@ -138,15 +138,15 @@ export const RightsActionBarContent = ({
 
   const alertContainer = hasUndelegableRights && (
     <div className={classes.alertContainer}>
-      <Alert data-color='warning'>
-        <Heading
+      <DsAlert data-color='warning'>
+        <DsHeading
           data-size={'xs'}
           level={4}
           className={classes.alertHeader}
         >
           {t('single_rights.alert_partially_delegable_header')}
-        </Heading>
-        <Paragraph>
+        </DsHeading>
+        <DsParagraph>
           {t('single_rights.one_or_more_rights_is_undelegable', {
             reason: t(`${getErrorCodeTextKey(errorList[0])}`, {
               you: t('common.you_lowercase'),
@@ -154,19 +154,19 @@ export const RightsActionBarContent = ({
               reporteeorg: reportee,
             }),
           })}
-        </Paragraph>
+        </DsParagraph>
         {errorList[0] === ErrorCode.MissingRoleAccess ||
           (errorList[0] === ErrorCode.MissingDelegationAccess && (
-            <Paragraph>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
+            <DsParagraph>{t('single_rights.ceo_or_main_admin_can_help')}</DsParagraph>
           ))}
 
-        <Heading
+        <DsHeading
           className={classes.undelegableRightsHeader}
           data-size='2xs'
           level={5}
         >
           {t('single_rights.you_cant_delegate_these_rights')}
-        </Heading>
+        </DsHeading>
         <div className={classes.chipContainer}>
           {rights
             .filter((right: ChipRight) => right.delegable === false)
@@ -180,7 +180,7 @@ export const RightsActionBarContent = ({
             })
             .join(', ')}
         </div>
-      </Alert>
+      </DsAlert>
     </div>
   );
 

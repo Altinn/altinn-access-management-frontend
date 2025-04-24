@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
-
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Link } from 'react-router';
-import { Alert, Heading, Paragraph, Link as DsLink } from '@digdir/designsystemet-react';
-import styles from './OldRolesAlert.module.css';
+import { DsAlert, DsParagraph, DsLink, DsHeading } from '@altinn/altinn-components';
+
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+
+import styles from './OldRolesAlert.module.css';
+
 import { getRedirectToServicesAvailableForUserUrl } from '@/resources/utils';
 import { useFetchRecipientInfo } from '@/resources/hooks/useFetchRecipientInfo';
 import { getHostUrl } from '@/resources/utils/pathUtils';
@@ -19,17 +21,17 @@ export const OldRolesAlert = () => {
       : `${getHostUrl()}ui/profile/`;
 
   return (
-    <Alert data-color='info'>
+    <DsAlert data-color='info'>
       <div className={styles.container}>
-        <Heading
-          data-size='xs'
+        <DsHeading
           level={2}
+          data-size='xs'
           className={styles.heading}
         >
           {t('a2Alerts.launchAlertHeading')}
-        </Heading>
+        </DsHeading>
 
-        <Paragraph>{t('a2Alerts.launchAlertContent')}</Paragraph>
+        <DsParagraph>{t('a2Alerts.launchAlertContent')}</DsParagraph>
         <DsLink asChild>
           <Link
             to={url}
@@ -40,6 +42,6 @@ export const OldRolesAlert = () => {
           </Link>
         </DsLink>
       </div>
-    </Alert>
+    </DsAlert>
   );
 };

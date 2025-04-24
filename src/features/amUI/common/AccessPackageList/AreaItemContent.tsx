@@ -1,14 +1,15 @@
-import { Alert, Button, Heading, Paragraph } from '@digdir/designsystemet-react';
-import { ListBase } from '@altinn/altinn-components';
+import {
+  ListBase,
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  Button,
+  DsButton,
+} from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
@@ -18,6 +19,11 @@ import type { ExtendedAccessArea } from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
 import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
+
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
@@ -62,7 +68,7 @@ export const AreaItemContent = ({
   const isSm = useIsMobileOrSmaller();
   return (
     <div className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}>
-      <Paragraph>{area.description}</Paragraph>
+      <DsParagraph>{area.description}</DsParagraph>
       {packages.assigned.length > 0 && (
         <ListBase aria-label={t('access_packages.given_packages_title')}>
           {packages.assigned.map((pkg) => (
@@ -87,7 +93,7 @@ export const AreaItemContent = ({
       )}
 
       {!showAvailablePackagesExternal && (
-        <Button
+        <DsButton
           variant='tertiary'
           onClick={() => setShowAvailablePackages((prev) => !prev)}
           className={classes.showAvailablePackagesButton}
@@ -99,13 +105,13 @@ export const AreaItemContent = ({
           ) : (
             <ChevronDownIcon aria-label={t('common.open')} />
           )}
-        </Button>
+        </DsButton>
       )}
       {showAvailablePackages && delegationCheckError && (
-        <Alert data-color='danger'>
-          <Heading level={3}>
+        <DsAlert data-color='danger'>
+          <DsHeading level={3}>
             {t('access_packages.delegation_check.delegation_check_error_heading')}
-          </Heading>
+          </DsHeading>
           <TechnicalErrorParagraphs
             message={t('access_packages.delegation_check.delegation_check_error_message_plural', {
               count: 2,
@@ -113,7 +119,7 @@ export const AreaItemContent = ({
             status={delegationCheckError.httpStatus}
             time={delegationCheckError.timestamp}
           />
-        </Alert>
+        </DsAlert>
       )}
       {packages.available.length > 0 && showAvailablePackages && (
         <ListBase aria-label={t('access_packages.available_packages_title')}>

@@ -1,15 +1,15 @@
-import { Button } from '@digdir/designsystemet-react';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
+import { DsButton } from '@altinn/altinn-components';
+
+import classes from './ChooseOrgPage.module.css';
 
 import { ActionBar } from '@/components';
 import type { Organization } from '@/rtk/features/lookupApi';
 import common from '@/resources/css/Common.module.css';
 import { getButtonIconSize } from '@/resources/utils';
-
-import classes from './ChooseOrgPage.module.css';
 
 interface ChosenItemsProps {
   chosenOrgs: Organization[];
@@ -36,7 +36,7 @@ export const ChosenItems = ({
               title={org.name}
               subtitle={t('common.org_nr') + ' ' + org.orgNumber}
               actions={
-                <Button
+                <DsButton
                   variant={'tertiary'}
                   color={'danger'}
                   onClick={() => {
@@ -49,7 +49,7 @@ export const ChosenItems = ({
                   icon={true}
                 >
                   <MinusCircleIcon fontSize={getButtonIconSize(false)} />
-                </Button>
+                </DsButton>
               }
               color={'success'}
             />

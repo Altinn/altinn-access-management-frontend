@@ -1,20 +1,18 @@
-import type { PopoverProps } from '@digdir/designsystemet-react';
-import { Paragraph, Popover } from '@digdir/designsystemet-react';
 import type { JSX } from 'react';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ButtonProps } from '@altinn/altinn-components';
-import { Button } from '@altinn/altinn-components';
+import type { ButtonProps, DsPopoverProps } from '@altinn/altinn-components';
+import { Button, DsPopover, DsParagraph } from '@altinn/altinn-components';
 
 import classes from './ButtonWithConfirmPopup.module.css';
 
-interface ButtonWithConfirmPopupProps extends Omit<PopoverProps, 'children'> {
+interface ButtonWithConfirmPopupProps extends Omit<DsPopoverProps, 'children'> {
   onConfirm: () => void;
   message: string;
   confirmButtonProps?: ButtonProps;
   cancelButtonProps?: ButtonProps;
   triggerButtonProps?: ButtonProps;
-  popoverProps?: PopoverProps;
+  popoverProps?: DsPopoverProps;
   confirmButtonContent?: JSX.Element | string;
   cancelButtonContent?: JSX.Element | string;
   triggerButtonContent?: JSX.Element | string;
@@ -36,14 +34,14 @@ export const ButtonWithConfirmPopup = ({
   const [open, setOpen] = useState(false);
 
   return (
-    <Popover.TriggerContext>
-      <Popover.Trigger
+    <DsPopover.TriggerContext>
+      <DsPopover.Trigger
         asChild={true}
         onClick={() => setOpen(true)}
       >
         <Button {...triggerButtonProps}>{triggerButtonContent}</Button>
-      </Popover.Trigger>
-      <Popover
+      </DsPopover.Trigger>
+      <DsPopover
         onClose={() => setOpen(false)}
         open={open}
         id={id.current}
@@ -51,7 +49,7 @@ export const ButtonWithConfirmPopup = ({
         data-color='neutral'
         {...popoverProps}
       >
-        <Paragraph className={classes.confirmPopupMessage}>{message}</Paragraph>
+        <DsParagraph className={classes.confirmPopupMessage}>{message}</DsParagraph>
         <div className={classes.confirmPopupButtons}>
           <Button
             variant='outline'
@@ -69,7 +67,7 @@ export const ButtonWithConfirmPopup = ({
             {confirmButtonContent || t('common.confirm')}
           </Button>
         </div>
-      </Popover>
-    </Popover.TriggerContext>
+      </DsPopover>
+    </DsPopover.TriggerContext>
   );
 };

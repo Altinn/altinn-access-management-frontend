@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@digdir/designsystemet-react';
-
-import { getRedirectToProfileUrl } from '@/resources/utils';
+import { DsButton } from '@altinn/altinn-components';
 
 import { UserInfoBar } from '../UserInfoBar/UserInfoBar';
 
 import classes from './PageContainer.module.css';
+
+import { getRedirectToProfileUrl } from '@/resources/utils';
 
 export interface PageContainerProps {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
       <div className={classes.pageContainer}>
         <UserInfoBar />
         <div className={classes.closeButtonContainer}>
-          <Button
+          <DsButton
             icon={true}
             title={t('common.close')}
             className={classes.closeButton}
@@ -36,7 +36,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
                 className={classes.closeIcon}
               />
             </a>
-          </Button>
+          </DsButton>
         </div>
         <div>{children}</div>
       </div>

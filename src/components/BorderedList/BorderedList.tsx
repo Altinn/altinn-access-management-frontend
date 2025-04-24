@@ -1,7 +1,6 @@
-import type { ListUnorderedProps } from '@digdir/designsystemet-react';
-import { ListUnordered } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import * as React from 'react';
+import { DsListUnordered, type DsListUnorderedProps } from '@altinn/altinn-components';
 
 import classes from './BorderedList.module.css';
 
@@ -10,7 +9,7 @@ export type BorderedListProps = {
    * Style of the border separating the items
    */
   borderStyle?: 'solid' | 'dashed';
-} & ListUnorderedProps;
+} & DsListUnorderedProps;
 
 export const BorderedList = ({
   borderStyle = 'dashed',
@@ -19,12 +18,12 @@ export const BorderedList = ({
   ...rest
 }: BorderedListProps) => {
   return (
-    <ListUnordered
+    <DsListUnordered
       className={cn(classes.borderedList, { [classes[borderStyle]]: borderStyle }, className)}
       style={{ paddingLeft: 0 }}
       {...rest}
     >
       {children}
-    </ListUnordered>
+    </DsListUnordered>
   );
 };

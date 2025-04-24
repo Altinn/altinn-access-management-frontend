@@ -2,7 +2,7 @@ import * as React from 'react';
 import { forwardRef, type ReactNode } from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { Button } from '@digdir/designsystemet-react';
+import { DsButton } from '@altinn/altinn-components';
 
 import classes from './FilterButton.module.css';
 
@@ -52,7 +52,7 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
     };
     return (
       <div className={cn(classes.filterButtonContainer, className)}>
-        <Button
+        <DsButton
           {...restHTMLProps}
           data-size='sm'
           ref={ref}
@@ -68,7 +68,7 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
               aria-hidden
             />
           </div>
-        </Button>
+        </DsButton>
         {activeNotification()}
       </div>
     );

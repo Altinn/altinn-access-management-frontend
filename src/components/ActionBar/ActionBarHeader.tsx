@@ -3,7 +3,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 import { forwardRef } from 'react';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
+import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { useActionBarContext } from './Context';
 import classes from './ActionBarHeader.module.css';
@@ -40,7 +40,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
         break;
     }
     return (
-      <Heading
+      <DsHeading
         level={headingLevel}
         data-size={headingSize}
         ref={ref}
@@ -64,19 +64,19 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
                 <ActionBarIcon />
               </div>
               <div className={classes.actionBarTexts}>
-                <Paragraph
+                <DsParagraph
                   className={classes.title}
                   data-size={paragraphSize}
                 >
                   {title}
-                </Paragraph>
+                </DsParagraph>
                 {subtitle && (
-                  <Paragraph
+                  <DsParagraph
                     data-size='xs'
                     className={classes.subtitle}
                   >
                     {subtitle}
-                  </Paragraph>
+                  </DsParagraph>
                 )}
               </div>
             </div>
@@ -84,19 +84,19 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
         ) : (
           <div className={cn(classes.actionBarHeader)}>
             <div className={classes.actionBarTexts}>
-              <Paragraph
+              <DsParagraph
                 data-size={paragraphSize}
                 className={classes.title}
               >
                 {title}
-              </Paragraph>
+              </DsParagraph>
               {subtitle && (
-                <Paragraph
+                <DsParagraph
                   data-size='xs'
                   className={classes.subtitle}
                 >
                   {subtitle}
-                </Paragraph>
+                </DsParagraph>
               )}
             </div>
           </div>
@@ -118,7 +118,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
             <ActionBarActions>{actions}</ActionBarActions>
           </div>
         )}
-      </Heading>
+      </DsHeading>
     );
   },
 );

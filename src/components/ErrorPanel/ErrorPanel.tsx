@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import classes from './ErrorPanel.module.css';
 
@@ -22,44 +22,44 @@ export const ErrorPanel = ({ title, message, statusCode, ...props }: ErrorPanelP
   const time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
 
   return (
-    <Alert
+    <DsAlert
       {...props}
       color={'danger'}
       data-size='lg'
     >
-      <Heading
+      <DsHeading
         level={2}
         data-size='sm'
       >
         {title}
-      </Heading>
+      </DsHeading>
       <div>
-        <Paragraph
+        <DsParagraph
           data-size='sm'
           className={classes.errorListItem}
         >
           {t('common.error_status_code')}: {statusCode}
-        </Paragraph>
-        <Paragraph
+        </DsParagraph>
+        <DsParagraph
           data-size='sm'
           className={classes.errorListItem}
         >
           {t('common.error_message')}: {message}
-        </Paragraph>
-        <Paragraph
+        </DsParagraph>
+        <DsParagraph
           data-size='sm'
           className={classes.errorListItem}
         >
           {t('common.date')}: {date}
-        </Paragraph>
+        </DsParagraph>
 
-        <Paragraph
+        <DsParagraph
           data-size='sm'
           className={classes.errorListItem}
         >
           {t('common.time')}: {time}
-        </Paragraph>
+        </DsParagraph>
       </div>
-    </Alert>
+    </DsAlert>
   );
 };

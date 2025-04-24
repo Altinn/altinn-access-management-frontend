@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { Dialog, DialogContent, type DialogProps } from '@/components';
-import { useMediaQuery } from '@/resources/hooks';
+import { DsParagraph, DsSpinner } from '@altinn/altinn-components';
 
 import { CircularProgress } from '../CircularProgress';
 
 import classes from './ProgressModal.module.css';
+
+import { Dialog, DialogContent, type DialogProps } from '@/components';
+import { useMediaQuery } from '@/resources/hooks';
 
 export interface ProgressModalProps extends Pick<DialogProps, 'open'> {
   /** The text that's displayed besides the spinner */
@@ -62,9 +62,9 @@ export const ProgressModal = ({
           {loadingText && (
             <div className={classes.loadingTextContainer}>
               <div className={classes.loadingText}>
-                <Paragraph>{loadingText}</Paragraph>
+                <DsParagraph>{loadingText}</DsParagraph>
               </div>
-              <Spinner aria-label={t('common.loading')} />
+              <DsSpinner aria-label={t('common.loading')} />
             </div>
           )}
         </div>

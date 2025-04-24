@@ -1,15 +1,6 @@
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
-import { Avatar } from '@altinn/altinn-components';
+import { Avatar, DsAlert, DsParagraph, DsHeading } from '@altinn/altinn-components';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import {
-  useDelegationCheckQuery,
-  useGetRolesForUserQuery,
-  type Role,
-} from '@/rtk/features/roleApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
 import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
 import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
@@ -21,6 +12,14 @@ import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { StatusSection } from '../StatusSection';
 
 import classes from './RoleInfo.module.css';
+
+import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import {
+  useDelegationCheckQuery,
+  useGetRolesForUserQuery,
+  type Role,
+} from '@/rtk/features/roleApi';
 
 export interface PackageInfoProps {
   role: Role;
@@ -63,33 +62,40 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
           imageUrlAlt={role?.area?.name}
           type='company'
         />
-        <Heading
+        <DsHeading
           level={3}
-          title={role?.name}
           data-size='sm'
         >
           {role?.name}
-        </Heading>
+        </DsHeading>
       </div>
 
       {!!actionError && (
-        <Alert
+        <DsAlert
           data-color='danger'
           data-size='sm'
         >
           {userHasRole ? (
-            <Heading data-size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
+            <DsHeading
+              level={4}
+              data-size='2xs'
+            >
+              {t('delegation_modal.general_error.revoke_heading')}
+            </DsHeading>
           ) : (
-            <Heading data-size='2xs'>
+            <DsHeading
+              level={4}
+              data-size='2xs'
+            >
               {t('delegation_modal.general_error.delegate_heading')}
-            </Heading>
+            </DsHeading>
           )}
           <TechnicalErrorParagraphs
             size='xs'
             status={actionError.httpStatus}
             time={actionError.timestamp}
           />
-        </Alert>
+        </DsAlert>
       )}
 
       <StatusSection
@@ -103,7 +109,7 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
         }
       />
 
-      <Paragraph>{role?.description}</Paragraph>
+      <DsParagraph>{role?.description}</DsParagraph>
 
       <div className={classes.actions}>
         {!userHasRole && availableActions.includes(DelegationAction.REQUEST) && (

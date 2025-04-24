@@ -1,17 +1,22 @@
 import React from 'react';
-import { Button, Heading, Dialog } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
-import { AccessPackageList, ResourceList } from '@altinn/altinn-components';
+import {
+  AccessPackageList,
+  DsButton,
+  DsDialog,
+  DsHeading,
+  ResourceList,
+} from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
-
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { getButtonIconSize } from '@/resources/utils';
 
 import type { SystemUserAccessPackage } from '../../types';
 
 import classes from './RightsList.module.css';
 import { AccessPackageInfo } from './AccessPackageInfo';
 import { ResourceDetails } from './ResourceDetails';
+
+import { getButtonIconSize } from '@/resources/utils';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface RightsListProps {
   resources: ServiceResource[];
@@ -51,7 +56,7 @@ export const RightsList = ({
       {accessPackages.length > 0 && (
         <div>
           {!hideHeadings && (
-            <Heading
+            <DsHeading
               data-size='2xs'
               level={2}
               className={classes.rightHeading}
@@ -61,7 +66,7 @@ export const RightsList = ({
                 : t('systemuser_detailpage.right_accesspackage_plural', {
                     accessPackageCount: accessPackages.length,
                   })}
-            </Heading>
+            </DsHeading>
           )}
           <AccessPackageList
             items={accessPackages.map((accessPackage) => {
@@ -86,7 +91,7 @@ export const RightsList = ({
       {resources.length > 0 && (
         <div>
           {!hideHeadings && (
-            <Heading
+            <DsHeading
               data-size='2xs'
               level={2}
               className={classes.rightHeading}
@@ -96,7 +101,7 @@ export const RightsList = ({
                 : t('systemuser_detailpage.right_resource_plural', {
                     resourcesCount: resources.length,
                   })}
-            </Heading>
+            </DsHeading>
           )}
           <ResourceList
             defaultItemSize='md'
@@ -115,13 +120,13 @@ export const RightsList = ({
           />
         </div>
       )}
-      <Dialog
+      <DsDialog
         ref={modalRef}
         onClose={closeModal}
         closedby='any'
       >
         {selectedAccessPackage && selectedResource && (
-          <Button
+          <DsButton
             variant='tertiary'
             data-color='neutral'
             data-size='sm'
@@ -130,7 +135,7 @@ export const RightsList = ({
           >
             <ArrowLeftIcon fontSize={getButtonIconSize(true)} />
             {t('common.back')}
-          </Button>
+          </DsButton>
         )}
         {selectedAccessPackage && !selectedResource && (
           <AccessPackageInfo
@@ -139,7 +144,7 @@ export const RightsList = ({
           />
         )}
         {selectedResource && <ResourceDetails resource={selectedResource} />}
-      </Dialog>
+      </DsDialog>
     </div>
   );
 };
