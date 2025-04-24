@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
+import { RootProvider, Snackbar } from '@altinn/altinn-components';
 
-import store from '@/rtk/app/store';
-
-import { SnackbarProvider } from '../Snackbar';
+import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { DelegationModal, DelegationType } from './DelegationModal';
-import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationModalProvider } from './DelegationModalContext';
+
+import store from '@/rtk/app/store';
 
 type DelegationModalProps = React.ComponentProps<typeof DelegationModal>;
 
@@ -21,7 +21,7 @@ export default {
     },
   },
   render: (props) => (
-    <SnackbarProvider>
+    <RootProvider>
       <DelegationModalProvider>
         <Provider store={store}>
           <PartyRepresentationProvider
@@ -32,7 +32,8 @@ export default {
           </PartyRepresentationProvider>
         </Provider>
       </DelegationModalProvider>
-    </SnackbarProvider>
+      <Snackbar />
+    </RootProvider>
   ),
 } as Meta;
 
