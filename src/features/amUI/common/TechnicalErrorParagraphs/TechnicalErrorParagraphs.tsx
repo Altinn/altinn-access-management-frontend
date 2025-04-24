@@ -1,5 +1,7 @@
 import type { ParagraphProps } from '@digdir/designsystemet-react';
 import { Paragraph } from '@digdir/designsystemet-react';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -42,3 +44,11 @@ export const TechnicalErrorParagraphs = ({
     </>
   );
 };
+
+export const createErrorDetails = (error: FetchBaseQueryError | SerializedError | undefined) =>
+  error && 'status' in error
+    ? {
+        status: error.status.toString(),
+        time: error.data as string,
+      }
+    : null;

@@ -1,0 +1,15 @@
+.modal {
+  max-width: 600px;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.buttons {
+  padding-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}

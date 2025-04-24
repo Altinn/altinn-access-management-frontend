@@ -2,9 +2,10 @@ import React from 'react';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { Link as DSLink } from '@digdir/designsystemet-react';
-import classes from './PageContainer.module.css';
 import { Link } from 'react-router';
 import { Button } from '@altinn/altinn-components';
+
+import classes from './PageContainer.module.css';
 
 /**
  * Layout component that provides consistent structure for pages.

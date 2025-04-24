@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -150,6 +151,40 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 _logger.LogError(ex, "GetReportee failed to fetch right holders");
                 return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for revoking all rights associated with a right holder by revoking their status as a right holder for another party.
+        /// </summary>
+        /// <param name="partyUuid">The uuid of the reportee party, from which the right holder is to have their rights revoked</param>
+        /// <param name="rightholderPartyUuid">The uuid of the party that is to lose their right holder status</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpDelete]
+        [Authorize]
+        [Route("reportee/{partyUuid}/rightholder")]
+        public async Task<ActionResult> RevokeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid rightholderPartyUuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _userService.RevokeRightHolder(partyUuid, rightholderPartyUuid);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
         }
 
