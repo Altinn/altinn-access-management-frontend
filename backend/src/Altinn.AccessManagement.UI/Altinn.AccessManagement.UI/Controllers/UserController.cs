@@ -164,7 +164,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpDelete]
         [Authorize]
         [Route("reportee/{partyUuid}/rightholder")]
-        public async Task<ActionResult> RevokeAccessPackageAccess([FromRoute] Guid partyUuid, [FromQuery] Guid rightholderPartyUuid)
+        public async Task<ActionResult> RevokeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid rightholderPartyUuid)
         {
             if (!ModelState.IsValid)
             {

@@ -85,6 +85,17 @@
     "inheritingRightHolders": []
   },
   {
+    "partyUuid": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
+    "partyType": "Organization",
+    "name": "Digitaliseringsdirektoratet",
+    "registryRoles": [
+    ],
+    "personId": null,
+    "organizationNumber": "991825827",
+    "unitType": "LLC",
+    "inheritingRightHolders": []
+  },
+  {
     "partyUuid": "1feb089d-6d08-d38a-a85d-6d4fe709ceb0",
     "partyType": "Organization",
     "name": "Narnia Economics",
@@ -145,21 +156,21 @@
     "onlyHierarchyElementWithNoAccess": false,
     "person": null,
     "organization": {
-        "orgNumber": "312229854",
-        "name": "Sein Dyktig Mår",
-        "unitType": "OPMV",
-        "telephoneNumber": null,
-        "mobileNumber": null,
-        "faxNumber": null,
-        "eMailAddress": "",
-        "internetAddress": null,
-        "mailingAddress": null,
-        "mailingPostalCode": null,
-        "mailingPostalCity": null,
-        "businessAddress": null,
-        "businessPostalCode": null,
-        "businessPostalCity": null,
-        "unitStatus": "N"
+      "orgNumber": "312229854",
+      "name": "Sein Dyktig Mår",
+      "unitType": "OPMV",
+      "telephoneNumber": null,
+      "mobileNumber": null,
+      "faxNumber": null,
+      "eMailAddress": "",
+      "internetAddress": null,
+      "mailingAddress": null,
+      "mailingPostalCode": null,
+      "mailingPostalCity": null,
+      "businessAddress": null,
+      "businessPostalCode": null,
+      "businessPostalCity": null,
+      "unitStatus": "N"
     },
     "childParties": null
   },
@@ -381,7 +392,7 @@
     "partyUuid": "8c4f7b43-6016-18f0-4042-3252f0921b5a",
     "partyType": "Organization",
     "name": "Brown, Little and Stiedemann",
-    "registryRoles": ["REGN"],
+    "registryRoles": [ "REGN" ],
     "personId": null,
     "organizationNumber": "803894122",
     "unitType": "Inc",
@@ -391,7 +402,7 @@
         "partyType": "Person",
         "name": "Santa Claus",
         "registryRoles": [
-          "REGN", 
+          "REGN",
           "LEDE"
         ],
         "personId": "24120098626",
