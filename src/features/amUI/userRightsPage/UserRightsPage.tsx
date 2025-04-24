@@ -14,7 +14,6 @@ import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
 import { UserRoles } from '../common/UserRoles/UserRoles';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
@@ -49,66 +48,62 @@ export const UserRightsPage = () => {
   }
 
   return (
-    <SnackbarProvider>
-      <PageWrapper>
-        <PartyRepresentationProvider
-          fromPartyUuid={getCookie('AltinnPartyUuid')}
-          toPartyUuid={id ?? ''}
-        >
-          <DelegationModalProvider>
-            <PageLayoutWrapper>
-              <PageContainer
-                backUrl={`/${amUIPath.Users}`}
-                contentActions={
-                  <DeleteUserModal
-                    user={party}
-                    reporteeName={reportee?.name}
-                  />
-                }
-              >
-                {!isLoading && allAccesses ? (
-                  <>
-                    <UserPageHeader
-                      userName={party?.name}
-                      userType={party?.partyTypeName}
-                      subHeading={`for ${reportee?.name}`}
-                      roles={
-                        displayLimitedPreviewLaunch &&
-                        !!reportee?.partyUuid &&
-                        !!party?.partyUuid && (
-                          <UserRoles
-                            rightOwnerUuid={reportee.partyUuid}
-                            rightHolderUuid={party.partyUuid}
-                          />
-                        )
-                      }
-                    />
-                    <RightsTabs
-                      tabBadge={{
-                        accessPackages: allAccesses.accessPackages?.length ?? 0,
-                        services: allAccesses.services?.length ?? 0,
-                        roles: filterDigdirRole(allAccesses.roles).length ?? 0,
-                      }}
-                      packagesPanel={
-                        <AccessPackageSection
-                          numberOfAccesses={allAccesses.accessPackages?.length}
+    <PageWrapper>
+      <PartyRepresentationProvider
+        fromPartyUuid={getCookie('AltinnPartyUuid')}
+        toPartyUuid={id ?? ''}
+      >
+        <DelegationModalProvider>
+          <PageLayoutWrapper>
+            <PageContainer
+              backUrl={`/${amUIPath.Users}`}
+              contentActions={
+                <DeleteUserModal
+                  user={party}
+                  reporteeName={reportee?.name}
+                />
+              }
+            >
+              {!isLoading && allAccesses ? (
+                <>
+                  <UserPageHeader
+                    userName={party?.name}
+                    userType={party?.partyTypeName}
+                    subHeading={`for ${reportee?.name}`}
+                    roles={
+                      displayLimitedPreviewLaunch &&
+                      !!reportee?.partyUuid &&
+                      !!party?.partyUuid && (
+                        <UserRoles
+                          rightOwnerUuid={reportee.partyUuid}
+                          rightHolderUuid={party.partyUuid}
                         />
-                      }
-                      singleRightsPanel={<SingleRightsSection />}
-                      roleAssignmentsPanel={
-                        <RoleSection numberOfAccesses={allAccesses.accessPackages?.length} />
-                      }
-                    />
-                  </>
-                ) : (
-                  // TODO: Add proper aria-label for loading
-                  <Spinner aria-label='loading' />
-                )}
-              </PageContainer>
-            </PageLayoutWrapper>
-          </DelegationModalProvider>
-        </PartyRepresentationProvider>
-      </PageWrapper>
-    </SnackbarProvider>
+                      )
+                    }
+                  />
+                  <RightsTabs
+                    tabBadge={{
+                      accessPackages: allAccesses.accessPackages?.length ?? 0,
+                      services: allAccesses.services?.length ?? 0,
+                      roles: filterDigdirRole(allAccesses.roles).length ?? 0,
+                    }}
+                    packagesPanel={
+                      <AccessPackageSection numberOfAccesses={allAccesses.accessPackages?.length} />
+                    }
+                    singleRightsPanel={<SingleRightsSection />}
+                    roleAssignmentsPanel={
+                      <RoleSection numberOfAccesses={allAccesses.accessPackages?.length} />
+                    }
+                  />
+                </>
+              ) : (
+                // TODO: Add proper aria-label for loading
+                <Spinner aria-label='loading' />
+              )}
+            </PageContainer>
+          </PageLayoutWrapper>
+        </DelegationModalProvider>
+      </PartyRepresentationProvider>
+    </PageWrapper>
   );
 };
