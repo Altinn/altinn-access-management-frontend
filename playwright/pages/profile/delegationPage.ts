@@ -123,6 +123,15 @@ export class delegateRoleToUser {
     await this.page.locator('span.col', { hasText: roleName1 }).click();
     await this.page.locator('span.col', { hasText: roleName2 }).click();
     await this.page.getByRole('button', { name: 'Ferdig' }).click();
+    const emailTextbox = this.page.getByRole('textbox', { name: 'Epost' });
+    if (await emailTextbox.isVisible()) {
+      await emailTextbox.click();
+      await emailTextbox.fill('test@email.com');
+      await this.page.getByRole('button', { name: 'Fullfør' }).first().click();
+    } else {
+      console.log('Mailid is already registered');
+    }
+    await this.page.getByRole('link', { name: 'Ferdig' }).click();
     await this.page.goto(process.env.BASE_URL + '/ui/profile');
     await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
     await this.page.getByRole('link', { name: reporteeName }).click();
