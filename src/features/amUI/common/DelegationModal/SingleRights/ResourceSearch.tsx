@@ -5,10 +5,10 @@ import { useParams } from 'react-router';
 import {
   DsAlert,
   DsChip,
+  DsHeading,
   DsParagraph,
   DsSearch,
   DsSpinner,
-  Heading,
   ResourceListItem,
 } from '@altinn/altinn-components';
 import { useCallback } from 'react';
@@ -119,12 +119,12 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
           className={classes.searchError}
           data-color='danger'
         >
-          <Heading
-            as='h2'
+          <DsHeading
+            level={2}
             data-size='xs'
           >
             {t('common.general_error_title')}
-          </Heading>
+          </DsHeading>
           <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
         </DsAlert>
       );
@@ -194,8 +194,8 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
 
   return (
     <>
-      <Heading
-        as='h2'
+      <DsHeading
+        level={2}
         data-size='sm'
       >
         <Trans
@@ -203,7 +203,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
           values={{ name: toParty?.name }}
           components={{ strong: <strong /> }}
         />
-      </Heading>
+      </DsHeading>
       <search className={classes.searchSection}>
         <div className={classes.searchInputs}>
           <div className={classes.searchField}>

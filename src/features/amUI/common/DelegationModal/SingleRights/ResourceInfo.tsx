@@ -8,8 +8,8 @@ import {
   Button,
   DsAlert,
   DsChip,
+  DsHeading,
   DsParagraph,
-  Heading,
   SnackbarDuration,
   useSnackbar,
 } from '@altinn/altinn-components';
@@ -300,12 +300,12 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
             />
             <div className={classes.resource}>
               <div className={classes.infoHeading}>
-                <Heading
-                  as='h3'
+                <DsHeading
+                  level={3}
                   data-size='sm'
                 >
                   {resource.title}
-                </Heading>
+                </DsHeading>
                 {hasAccess && (
                   <Badge
                     label={t('common.has_poa')}
@@ -333,12 +333,12 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                   data-color='danger'
                   data-size='sm'
                 >
-                  <Heading
-                    as='h3'
+                  <DsHeading
+                    level={3}
                     data-size='xs'
                   >
                     {t('delegation_modal.technical_error_message.heading')}
-                  </Heading>
+                  </DsHeading>
                   <DsParagraph>
                     {t('delegation_modal.technical_error_message.message')} {delegationErrorMessage}
                   </DsParagraph>
@@ -353,9 +353,9 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                 </DsAlert>
               )}
               <div className={classes.rightsSection}>
-                <Heading
+                <DsHeading
+                  level={4}
                   data-size='xs'
-                  as='h4'
                 >
                   {hasAccess && !hasUnsavedChanges ? (
                     <Trans
@@ -370,7 +370,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                       components={{ strong: <strong /> }}
                     />
                   )}
-                </Heading>
+                </DsHeading>
                 <div className={classes.rightChips}>{chips()}</div>
               </div>
             </>
