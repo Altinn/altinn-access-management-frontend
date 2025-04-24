@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Role;
@@ -9,6 +10,7 @@ using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -22,16 +24,22 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly ILogger _logger;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly IRoleService _roleService;
+        private readonly FeatureFlags _featureFlags;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleController"/> class
         /// </summary>
-        public RoleController(IHttpContextAccessor httpContextAccessor, ILogger<RoleController> logger, IRoleService roleService)
+        public RoleController(
+            IHttpContextAccessor httpContextAccessor, 
+            ILogger<RoleController> logger, 
+            IRoleService roleService, 
+            IOptions<FeatureFlags> featureFlags)
         {
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _roleService = roleService;
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
+            _featureFlags = featureFlags.Value;
         }
 
         /// <summary>
@@ -78,7 +86,12 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            
+            if (!_featureFlags.DisplayLimitedPreviewLaunch)
+            {
+                return StatusCode(404, "Feature not available");
+            }
+            
             try
             {
                 return await _roleService.RoleDelegationCheck(rightOwner, roleId);
@@ -109,6 +122,11 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (!_featureFlags.DisplayLimitedPreviewLaunch)
+            {
+                return StatusCode(404, "Feature not available");
+            }
+            
             try
             {
                 var httpContext = _httpContextAccessor.HttpContext;
@@ -135,7 +153,12 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            
+            if (!_featureFlags.DisplayLimitedPreviewLaunch)
+            {
+                return StatusCode(404, "Feature not available");
+            }
+            
             try
             {
                 var response = await _roleService.CreateRoleDelegation(from, to, roleId);
@@ -161,7 +184,12 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            
+            if (!_featureFlags.DisplayLimitedPreviewLaunch)
+            {
+                return StatusCode(404, "Feature not available");
+            }
+            
             try
             {
                 var response = await _roleService.DeleteRoleDelegation(assignmentId);

@@ -14,7 +14,8 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <param name="title">The title of the error</param>
         /// <param name="statusCode">The status code of the error</param>
         /// <param name="traceId">The id of the error that can be traced</param>
-        public HttpStatusException(string type, string title, HttpStatusCode statusCode, string traceId)
+        /// <param name="message">A message or reason phraze to describe the error</param>
+        public HttpStatusException(string type, string title, HttpStatusCode statusCode, string traceId, string message = "") : base(message)
         {
             Type = type;
             Title = title;

@@ -3,6 +3,7 @@
     "error": "Feil",
     "restart": "Start på nytt",
     "close": "Lukk",
+    "open": "Åpne",
     "back": "Tilbake",
     "changes_made_msg": "Endringer gjort. Klikk på lagre for å gjøre dem gjeldende",
     "status_code": "Statuskode",
@@ -10,6 +11,7 @@
     "broennoeysund_register": "Brønnøysundregistrene",
     "error_message": "Feilmelding",
     "loading": "Laster",
+    "success": "Fullført",
     "error_status_code": "Feilmeldingens statuskode",
     "error_time_stamp": "Tidsstempel",
     "date": "Dato",
@@ -247,6 +249,9 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
   },
   "access_packages": {
+    "given_packages_title": "Mottatte tilgangspakker",
+    "available_packages_title": "Tilgjengelige tilgangspakker",
+    "other_available": "Andre tilgjengelige",
     "current_access_packages_title": "{{count}} tilgangspakker",
     "give_new_button": "Gi fullmakt til ny tilgangspakke",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
@@ -264,7 +269,7 @@
   },
   "role": {
     "current_roles_title": "{{count}} administratortilganger",
-    "roles_description": "Dette fullmaktsområdet omfatter fullmakter til å administrere tilganger for virksomheten. Det er ikke knyttet noen ressurser eller tjenester til disse tilgangene.",
+    "roles_description": "Her finner du fullmakter for å administrere tilganger for virksomheten. Det er ikke knyttet noen ressurser eller tjenester til disse tilgangene.",
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
     "role_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{role}}.",
     "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",
@@ -290,7 +295,6 @@
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
     "roles_title": "Administratortilganger",
-    "roles_description": "Administratortilganger gir tilgang til å gi fullmakter til andre brukere. Det er ikke knyttet noen spesifikke tjenester til disse fullmaktene.",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -308,8 +312,9 @@
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tjenester",
-    "inherited_role_org_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes.",
-    "delegation_check_not_delegable": "Du kan ikke gi denne tilgangspakken fordi du mangler tilgang til den selv.",
+    "has_package_message": "{{user_name}} har denne fullmakten.",
+    "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
+    "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten fordi du mangler den selv.",
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
@@ -344,6 +349,11 @@
     "modal_title": "Legg til ny person eller virksomhet",
     "trigger_button": "Legg til bruker",
     "add_button": "Legg til bruker"
+  },
+  "a2Alerts": {
+    "launchAlertHeading": "Vi fornyer Altinn",
+    "launchAlertContent": "Denne brukeren kan også ha fullmakter fra tidligere Altinn.",
+    "launchAlertLinkText": "Se fullmakter fra tidligere Altinn"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",
@@ -523,6 +533,8 @@
     "load_assigned_customers_error": "Kunne ikke laste tilknyttede kunder",
     "assign_customers": "Hvilke kunder skal knyttes til systemtilgangen {{integrationTitle}}?",
     "confirm_close": "Bekreft og lukk",
+    "customer_added": "{{customerName}} er lagt til systemtilgangen",
+    "customer_removed": "{{customerName}} er fjernet fra systemtilgangen",
     "assigned_customers_header": "Kunder tilknyttet systemtilgangen",
     "no_assigned_customers": "Denne systemtilgangen har ingen kunder",
     "access_package_single": "Fullmakt til 1 tilgangspakke",

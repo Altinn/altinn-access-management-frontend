@@ -2,6 +2,7 @@ import React from 'react';
 import { Alert, Spinner } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
+import { SnackbarProvider } from '@altinn/altinn-components';
 
 import {
   useGetAssignedCustomersQuery,
@@ -63,11 +64,13 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
           </Alert>
         )}
         {systemUser && customers && agentDelegations && (
-          <SystemUserAgentDelegationPageContent
-            systemUser={systemUser}
-            customers={customers}
-            existingAgentDelegations={agentDelegations}
-          />
+          <SnackbarProvider>
+            <SystemUserAgentDelegationPageContent
+              systemUser={systemUser}
+              customers={customers}
+              existingAgentDelegations={agentDelegations}
+            />
+          </SnackbarProvider>
         )}
       </PageLayoutWrapper>
     </PageWrapper>

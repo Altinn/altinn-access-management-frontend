@@ -1,9 +1,12 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import type { AccountMenuItem, MenuGroupProps, MenuItemProps } from '@altinn/altinn-components';
-import { Layout, RootProvider } from '@altinn/altinn-components';
+import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import { HandshakeIcon, InboxIcon, MenuGridIcon, PersonChatIcon } from '@navikt/aksel-icons';
+
+import { SidebarItems } from './SidebarItems';
 
 import {
   useGetReporteeListForAuthorizedUserQuery,
@@ -13,8 +16,6 @@ import {
 import { amUIPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
-
-import { SidebarItems } from './SidebarItems';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -29,7 +30,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
   const { pathname } = useLocation();
-
+  const [searchString, setSearchString] = useState<string>('');
   const isSm = useIsTabletOrSmaller();
 
   const headerLinks: MenuItemProps[] = [
@@ -136,13 +137,18 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             accountGroups,
             accounts,
             accountSearch: {
+              name: 'account-search',
+              value: searchString,
+              onChange: (event: ChangeEvent<HTMLInputElement>) => {
+                setSearchString(event.target.value);
+              },
               placeholder: t('header.search-label'),
-              name: 'search-account',
               hidden: false,
               getResultsLabel: (hits: number) => {
                 return `${hits} ${t('header.search-hits')}`;
               },
             },
+            isVirtualized: accounts.length > 20,
             onSelectAccount: (accountId) => {
               const redirectUrl = window.location.pathname.includes('systemuser')
                 ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
@@ -183,6 +189,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       >
         {children}
       </Layout>
+      <Snackbar />
     </RootProvider>
   );
 };

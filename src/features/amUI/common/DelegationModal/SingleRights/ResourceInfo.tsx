@@ -3,7 +3,13 @@ import { Alert, Button, Chip, Heading, Paragraph } from '@digdir/designsystemet-
 import { Trans, useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Avatar, Badge } from '@altinn/altinn-components';
+import { Avatar, Badge, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+
+import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+
+import classes from './ResourceInfo.module.css';
+import { ResourceAlert } from './ResourceAlert';
 
 import type {
   DelegationCheckedRight,
@@ -24,14 +30,6 @@ import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-
-import { useSnackbar } from '../../Snackbar';
-import { SnackbarDuration, SnackbarMessageVariant } from '../../Snackbar/SnackbarProvider';
-import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
-
-import classes from './ResourceInfo.module.css';
-import { ResourceAlert } from './ResourceAlert';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 export type ChipRight = {
   action: string;
@@ -183,15 +181,14 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
         () => {
           openSnackbar({
             message: t('delegation_modal.edit_success', { name: toParty?.name }),
-            variant: SnackbarMessageVariant.Default,
-            duration: SnackbarDuration.long,
+            color: 'success',
           });
           onDelegate?.();
         },
         () =>
           openSnackbar({
             message: t('delegation_modal.error_message', { name: toParty?.name }),
-            variant: SnackbarMessageVariant.Default,
+            color: 'alert',
             duration: SnackbarDuration.infinite,
           }),
       );
@@ -210,8 +207,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
 
         openSnackbar({
           message: t('delegation_modal.success_message', { name: toParty?.name }),
-          variant: SnackbarMessageVariant.Default,
-          duration: SnackbarDuration.long,
+          color: 'success',
         });
 
         const notDelegatedActions = response.rightDelegationResults.filter(

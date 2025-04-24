@@ -3,16 +3,17 @@ import { Paragraph, Heading, Button, Dialog } from '@digdir/designsystemet-react
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
+import { Snackbar, useSnackbar } from '@altinn/altinn-components';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { SystemUserPath } from '@/routes/paths';
+import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import {
   useAssignCustomerMutation,
   useDeleteAgentSystemuserMutation,
   useRemoveCustomerMutation,
 } from '@/rtk/features/systemUserApi';
-import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
-import { SystemUserPath } from '@/routes/paths';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 import type { AgentDelegation, AgentDelegationCustomer, SystemUser } from '../types';
@@ -54,6 +55,7 @@ export const SystemUserAgentDelegationPageContent = ({
   const [assignedCustomers, setAssignedCustomers] = useState<AgentDelegationCustomer[]>(
     getAssignedCustomers(customers, existingAgentDelegations),
   );
+  const { openSnackbar, dismissSnackbar } = useSnackbar();
 
   const { data: reporteeData } = useGetReporteeQuery();
 
@@ -81,10 +83,26 @@ export const SystemUserAgentDelegationPageContent = ({
     setErrorIds((oldErrorIds) => [...oldErrorIds, customerId]);
   };
 
-  const onAddCustomer = (customerId: string): void => {
+  const showConfirmationSnackbar = (message: string, color: 'success' | 'info'): void => {
+    dismissSnackbar();
+    openSnackbar({
+      message: message,
+      color: color,
+      dismissable: false,
+      className: classes.customerListSnackbar,
+    });
+  };
+
+  const onAddCustomer = (customerId: string, customerName: string): void => {
     setLoadingIds((oldLoadingIds) => [...oldLoadingIds, customerId]);
     const onAddSuccess = (delegation: AgentDelegation) => {
       setDelegations((oldDelegations) => [...oldDelegations, delegation]);
+      showConfirmationSnackbar(
+        t('systemuser_agent_delegation.customer_added', {
+          customerName,
+        }),
+        'success',
+      );
     };
     assignCustomer({ partyId, systemUserId: id ?? '', customerId: customerId, partyUuid })
       .unwrap()
@@ -93,11 +111,17 @@ export const SystemUserAgentDelegationPageContent = ({
       .finally(() => resetLoadingId(customerId));
   };
 
-  const onRemoveCustomer = (toRemove: AgentDelegation): void => {
+  const onRemoveCustomer = (toRemove: AgentDelegation, customerName: string): void => {
     setLoadingIds((oldLoadingIds) => [...oldLoadingIds, toRemove.customerId]);
     const onRemoveSuccess = () => {
       setDelegations((oldDelegations) =>
         oldDelegations.filter((delegation) => delegation.delegationId !== toRemove.delegationId),
+      );
+      showConfirmationSnackbar(
+        t('systemuser_agent_delegation.customer_removed', {
+          customerName,
+        }),
+        'info',
       );
     };
     removeCustomer({
@@ -162,6 +186,7 @@ export const SystemUserAgentDelegationPageContent = ({
           />
           <div>
             <Button onClick={onCloseModal}>{t('systemuser_agent_delegation.confirm_close')}</Button>
+            <Snackbar className={classes.customerListSnackbar} />
           </div>
         </div>
       </Dialog>

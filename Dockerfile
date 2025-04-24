@@ -1,5 +1,5 @@
 # Building accessmanagement frontend
-FROM node:22-slim AS generate-accessmanagement-frontend
+FROM node:22-slim@sha256:373f9e53a753877bcbd21e6e7884682f6b1988ee63a4c4129e9051bb96546081 AS generate-accessmanagement-frontend
 
 WORKDIR /build
 COPY . .
@@ -8,14 +8,14 @@ RUN corepack enable && \
     yarn build
 
 # Building the backend
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS generate-accessmanagement-backend
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine@sha256:2303ad5956875eb82d3c6195e43f0e8e1378a6252869f2d4d200e067130ff5b5 AS generate-accessmanagement-backend
 
 WORKDIR /build
 COPY backend .
 RUN dotnet publish src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj -c Release -o /app_output
 
 # Building the final image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine@sha256:374a0ebc32ae59692470070a8bbcdef1186250d446836bf6ec8ac08a5c623667 AS final
 
 WORKDIR /app
 EXPOSE 80

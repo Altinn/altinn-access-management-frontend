@@ -1,5 +1,5 @@
 {
-  "accessPackages": ["annleggadmin", "eiendom_kjop", "magibruk"],
+  "accessPackages": ["fef4aac0-d227-4ef6-834b-cc2eb4b942ed", "eiendom_kjop", "magibruk"],
   "services": ["appid-502", "a3-app2"],
   "roles": []
 }

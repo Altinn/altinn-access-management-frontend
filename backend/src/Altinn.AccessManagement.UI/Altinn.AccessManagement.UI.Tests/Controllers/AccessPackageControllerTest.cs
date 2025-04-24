@@ -93,7 +93,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             Dictionary<string, List<AccessPackageDelegation>> actualResult = JsonSerializer.Deserialize<Dictionary<string, List<AccessPackageDelegation>>>(await response.Content.ReadAsStringAsync(), options);
-            
+
             AssertionUtil.AssertCollections(expectedResult.Keys, actualResult.Keys, Assert.Equal);
             foreach (string key in actualResult.Keys)
             {
@@ -171,7 +171,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            string packageId = "annleggadmin";
+            string packageId = "fef4aac0-d227-4ef6-834b-cc2eb4b942ed";
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/accesspackage/{from}/{to}/{packageId}/revoke");
@@ -286,13 +286,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage response = await _client.PostAsync(
-                $"accessmanagement/api/v1/accesspackage/delegationcheck", 
+                $"accessmanagement/api/v1/accesspackage/delegationcheck",
                 new StringContent(
-                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }), 
+                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }),
                         System.Text.Encoding.UTF8, "application/json"
                     )
                 );
-            
+
             var content = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -300,7 +300,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.NotNull(response.Content);
 
             List<AccessPackageDelegationCheckResponse> actual = JsonSerializer.Deserialize<List<AccessPackageDelegationCheckResponse>>(await response.Content.ReadAsStringAsync(), options);
-            AssertionUtil.AssertCollections(actual, expectedResult, AssertionUtil.AssertEqual);  
+            AssertionUtil.AssertCollections(actual, expectedResult, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
@@ -313,23 +313,23 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             var packageIds = new List<string>();
-            
+
             // Act
             HttpResponseMessage response = await _client.PostAsync(
-                $"accessmanagement/api/v1/accesspackage/delegationcheck", 
+                $"accessmanagement/api/v1/accesspackage/delegationcheck",
                 new StringContent(
-                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }), 
+                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }),
                         System.Text.Encoding.UTF8, "application/json"
                     )
                 );
-            
+
             var content = await response.Content.ReadAsStringAsync();
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
-         /// <summary>
+        /// <summary>
         ///    Test case: Handles unexpected error
         ///    Expected: Returns internal server error
         /// </summary>
@@ -342,19 +342,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             {
                 "fa84bffc-ac17-40cd-af9c-61c89f92e44c"  // valid package id that will trigger an unexpected exception in mock client
             };
-            
+
             // Act
             HttpResponseMessage response = await _client.PostAsync(
-                $"accessmanagement/api/v1/accesspackage/delegationcheck", 
+                $"accessmanagement/api/v1/accesspackage/delegationcheck",
                 new StringContent(
-                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }), 
+                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }),
                         System.Text.Encoding.UTF8, "application/json"
                     )
                 );
-            
+
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
-    }   
+    }
 }

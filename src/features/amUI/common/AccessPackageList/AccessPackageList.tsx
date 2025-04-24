@@ -19,6 +19,7 @@ import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
 interface AccessPackageListProps {
   showAllPackages?: boolean;
   showAllAreas?: boolean;
+  minimizeAvailablePackages?: boolean;
   isLoading?: boolean;
   availableActions?: DelegationAction[];
   searchString?: string;
@@ -33,6 +34,7 @@ interface AccessPackageListProps {
 export const AccessPackageList = ({
   showAllAreas,
   showAllPackages,
+  minimizeAvailablePackages,
   isLoading,
   availableActions,
   onSelect,
@@ -100,6 +102,7 @@ export const AccessPackageList = ({
                   onRevoke={onRevoke}
                   onRequest={onRequest}
                   useDeleteConfirm={useDeleteConfirm}
+                  showAvailablePackages={!minimizeAvailablePackages}
                 />
               </AreaItem>
             );

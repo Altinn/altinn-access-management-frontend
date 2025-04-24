@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
@@ -6,8 +7,6 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
-
-import { useSnackbar } from '../Snackbar';
 
 interface useAccessPackageActionsProps {
   toUuid: string;
@@ -24,8 +23,9 @@ export const useAccessPackageActions = ({
   onRevokeSuccess,
   onRevokeError,
 }: useAccessPackageActionsProps) => {
-  const delegatePackage = useDelegateAccessPackage();
-  const revokePackage = useRevokeAccessPackage();
+  const { delegatePackage, isLoading: isDelegationLoading } = useDelegateAccessPackage();
+  const { revokePackage, isLoading: isRevokeLoading } = useRevokeAccessPackage();
+  const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
   const { data: toParty } = useGetPartyByUUIDQuery(toUuid ?? '');
@@ -39,6 +39,7 @@ export const useAccessPackageActions = ({
           name: toParty.name,
           accessPackage: accessPackage.name,
         }),
+        color: 'success',
       });
     }
   };
@@ -56,6 +57,8 @@ export const useAccessPackageActions = ({
           name: toParty.name,
           accessPackage: accessPackage.name,
         }),
+        color: 'alert',
+        duration: SnackbarDuration.infinite,
       });
     }
   };
@@ -68,6 +71,7 @@ export const useAccessPackageActions = ({
           name: toParty.name,
           accessPackage: accessPackage.name,
         }),
+        color: 'success',
       });
     }
   };
@@ -85,6 +89,8 @@ export const useAccessPackageActions = ({
           name: toParty.name,
           accessPackage: accessPackage.name,
         }),
+        color: 'alert',
+        duration: SnackbarDuration.infinite,
       });
     }
   };
@@ -126,8 +132,7 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRequest = (accessPackage: AccessPackage) =>
-    console.error('requestPackage is not implemented');
+  const onRequest = () => console.error('requestPackage is not implemented');
 
-  return { onDelegate, onRevoke, onRequest };
+  return { onDelegate, onRevoke, onRequest, isDelegationLoading, isRevokeLoading, isLoading };
 };

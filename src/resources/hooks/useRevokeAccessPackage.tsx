@@ -3,9 +3,9 @@ import { useRevokeDelegationMutation } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 
 export const useRevokeAccessPackage = () => {
-  const [revoke] = useRevokeDelegationMutation();
+  const [revoke, { isLoading }] = useRevokeDelegationMutation();
 
-  const delegatePackage = (
+  const revokePackage = (
     toParty: Party,
     resource: AccessPackage,
     onSuccess?: () => void,
@@ -21,5 +21,5 @@ export const useRevokeAccessPackage = () => {
       });
   };
 
-  return delegatePackage;
+  return { revokePackage, isLoading };
 };

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
@@ -7,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -19,15 +21,21 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
+        private readonly FeatureFlags _featureFlags;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class
         /// </summary>
-        public UserController(IUserService profileService, IHttpContextAccessor httpContextAccessor, ILogger<UserController> logger)
+        public UserController(
+            IUserService profileService,
+            IHttpContextAccessor httpContextAccessor,
+            ILogger<UserController> logger,
+            IOptions<FeatureFlags> featureFlags)
         {
             _userService = profileService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
+            _featureFlags = featureFlags.Value;
         }
 
         /// <summary>
@@ -88,7 +96,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 _logger.LogError(ex, "GetReportee failed to fetch reportee information");
                 return StatusCode(500);
             }
-        } 
+        }
 
         /// <summary>
         /// Endpoint for retrieving party if party exists in the authenticated users reporteelist
@@ -159,7 +167,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             try
             {
                 return await _userService.GetReporteeList(partyUuid);
@@ -183,7 +191,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("reportee/{partyId}/rightholder/validateperson")]
+        [Route("reportee/{partyUuid}/rightholder/validateperson")]
         public async Task<ActionResult<Guid>> ValidatePerson([FromBody] ValidatePersonInput validationInput)
         {
             if (!ModelState.IsValid)
@@ -191,6 +199,11 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (!_featureFlags.DisplayLimitedPreviewLaunch)
+            {
+                return StatusCode(404, "Feature not available");
+            }
+            
             try
             {
                 Guid? partyUuid = await _userService.ValidatePerson(validationInput.Ssn, validationInput.LastName);
@@ -219,6 +232,35 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 _logger.LogError(ex, "ValidatePerson failed unexpectedly");
                 return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for adding a new party as a right holder to reportee party.
+        /// </summary>
+        /// <param name="partyUuid">The uuid of the reportee party</param>
+        /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder</param>
+        /// <returns>The result of the adding</returns>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("reportee/{partyUuid}/rightholder")]
+        public async Task<ActionResult<HttpResponseMessage>> AddReporteeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid rightholderPartyUuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var response = await _userService.AddReporteeRightHolder(partyUuid, rightholderPartyUuid);
+                return Ok();
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
             }
         }
 

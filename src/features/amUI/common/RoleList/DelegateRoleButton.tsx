@@ -1,17 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import type { ButtonProps } from '@altinn/altinn-components';
-import { Button } from '@altinn/altinn-components';
+import { Button, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 import { ExclamationmarkTriangleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-
-import type { Party } from '@/rtk/features/lookupApi';
-import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
-import { Role, useDelegateMutation, useDelegationCheckQuery } from '@/rtk/features/roleApi';
-
-import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
-import { useSnackbar } from '../Snackbar';
-import { ActionError } from '@/resources/hooks/useActionError';
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { Spinner } from '@digdir/designsystemet-react';
+
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+
+import type { Role } from '@/rtk/features/roleApi';
+import { useDelegateMutation, useDelegationCheckQuery } from '@/rtk/features/roleApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 interface DelegateRoleButtonProps extends Omit<ButtonProps, 'icon'> {
   accessRole: Role;
@@ -53,12 +50,13 @@ export const DelegateRoleButton = ({
 
   const onClick = () => {
     const snackbar = (isSuccessful: boolean) => {
+      const color: 'success' | 'alert' = isSuccessful ? 'success' : 'alert';
       const snackbarData = {
         message: t(isSuccessful ? 'role.role_delegation_success' : 'role.role_delegation_error', {
           role: accessRole.name,
           name: toParty?.name,
         }),
-        variant: SnackbarMessageVariant.Default,
+        color: color,
         duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
       };
       openSnackbar(snackbarData);

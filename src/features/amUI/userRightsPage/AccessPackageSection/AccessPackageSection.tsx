@@ -10,6 +10,7 @@ import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 import { ActiveDelegations } from './ActiveDelegations';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';
 
 export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: number }) => {
   const { t } = useTranslation();
@@ -21,6 +22,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
   return (
     party && (
       <>
+        <OldRolesAlert />
         <Heading
           level={2}
           data-size='2xs'

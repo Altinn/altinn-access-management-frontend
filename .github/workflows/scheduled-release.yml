@@ -43,7 +43,7 @@ jobs:
 
       - name: split release version f.ex v2023.1 will be split into output0 v2023 and output1 1
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
-        uses: winterjung/split@v2
+        uses: winterjung/split@a211a1c46e35fcdc4097d59dd6282d4a9859651b # v2
         id: split
         with:
           msg: '${{ fromJson(steps.get_latest_release_version.outputs.data).tag_name }}'
@@ -51,7 +51,7 @@ jobs:
 
       - name: split 'v' and year f.ex v2023 will be split into output0 v and output1 2023
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
-        uses: winterjung/split@v2
+        uses: winterjung/split@a211a1c46e35fcdc4097d59dd6282d4a9859651b # v2
         id: splitv
         with:
           msg: '${{steps.split.outputs._0}}'
@@ -106,7 +106,7 @@ jobs:
     needs: [getlatestrelease]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -123,7 +123,7 @@ jobs:
         run: echo "commitid=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Login to GHCR
-        uses: docker/login-action@v3.3.0
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -133,7 +133,7 @@ jobs:
         uses: battila7/get-version-action@v2
 
       - name: Add Version tag to Docker Image
-        uses: shrink/actions-docker-registry-tag@v4
+        uses: shrink/actions-docker-registry-tag@f04afd0559f66b288586792eb150f45136a927fa # v4
         with:
           registry: ${{ env.REGISTRY }}
           repository: '${{ env.IMAGE_NAME }}'
@@ -150,7 +150,7 @@ jobs:
     timeout-minutes: 60
     steps:
       # Drafts your next Release notes as Pull Requests are merged into "master"
-      - uses: release-drafter/release-drafter@v6.1.0
+      - uses: release-drafter/release-drafter@b1476f6e6eb133afa41ed8589daba6dc69b4d3f5 # v6.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

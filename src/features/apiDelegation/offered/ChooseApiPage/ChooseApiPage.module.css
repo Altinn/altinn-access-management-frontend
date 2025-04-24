@@ -12,6 +12,7 @@
 .delegableApisContainer {
   height: 400px;
   overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .unstyledListItem {
