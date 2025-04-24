@@ -173,8 +173,8 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                var response = await _userService.RevokeRightHolder(partyUuid, rightholderPartyUuid);
-                return Ok(response);
+                await _userService.RevokeRightHolder(partyUuid, rightholderPartyUuid);
+                return NoContent();
             }
             catch (HttpStatusException ex)
             {

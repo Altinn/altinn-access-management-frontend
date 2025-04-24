@@ -518,7 +518,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///    Expected: Returns 200 OK
         /// </summary>
         [Fact]
-        public async Task RevokeRightHolder_ValidInput_ReturnsOk()
+        public async Task RevokeRightHolder_ValidInput_ReturnsNoContent()
         {
             // Arrange
             var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
@@ -532,7 +532,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={rightHolderPartyUuid}");
 
             // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, httpResponse.StatusCode);
         }
 
         /// <summary>

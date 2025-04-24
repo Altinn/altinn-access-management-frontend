@@ -29,6 +29,10 @@ export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeN
       .unwrap()
       .then(() => {
         setIsSuccess(true);
+      })
+      .catch((err) => {
+        // Error is already captured by RTK Query's isError and error states
+        console.error('Failed to delete user:', err);
       });
   };
 
