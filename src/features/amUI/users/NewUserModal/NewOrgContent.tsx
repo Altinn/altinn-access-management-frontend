@@ -4,8 +4,6 @@ import { t } from 'i18next';
 
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
-import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
 

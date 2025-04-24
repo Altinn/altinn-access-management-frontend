@@ -21,7 +21,7 @@ export const LoadingAnimation = ({
         className={classes.loadingSection}
         aria-live='polite'
       >
-        <Spinner
+        <DsSpinner
           data-size='lg'
           aria-label={t('common.loading')}
         />
