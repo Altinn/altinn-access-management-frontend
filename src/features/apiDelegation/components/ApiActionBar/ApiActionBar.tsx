@@ -8,12 +8,13 @@ import {
   DsAlert,
   DsParagraph,
   DsListUnordered,
+  DsSpinner,
+  DsListItem,
 } from '@altinn/altinn-components';
-import Paragraph from '@navikt/aksel-icons/dist/react/esm/Paragraph';
 
 import classes from './ApiActionBar.module.css';
 
-import { ActionBar, List, type ActionBarProps } from '@/components';
+import { ActionBar, type ActionBarProps } from '@/components';
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 import { type DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useDelegationCheckMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
@@ -84,7 +85,7 @@ export const ApiActionBar = ({
     <>
       {variant === 'add' &&
         (isLoading === true ? (
-          <Spinner
+          <DsSpinner
             aria-label={t('common.loading')}
             data-size='md'
           />
@@ -140,11 +141,11 @@ export const ApiActionBar = ({
             >
               {t('api_delegation.description')}
             </DsHeading>
-            <Paragraph>{api.rightDescription}</Paragraph>
+            <DsParagraph>{api.rightDescription}</DsParagraph>
           </>
         )}
         {api.rightDescription === undefined && (
-          <Paragraph>{t('api_delegation.data_retrieval_failed')}</Paragraph>
+          <DsParagraph>{t('api_delegation.data_retrieval_failed')}</DsParagraph>
         )}
         {api.description && (
           <>
@@ -189,10 +190,10 @@ export const ApiActionBar = ({
             {t(`${getErrorCodeTextKey(ErrorCode.InsufficientAuthenticationLevel)}`)}
           </DsParagraph>
           <DsListUnordered>
-            <List.Item>{t('common.minid')}</List.Item>
-            <List.Item>{t('common.bankid')}</List.Item>
-            <List.Item>{t('common.commfides')}</List.Item>
-            <List.Item>{t('common.buypass')}</List.Item>
+            <DsListItem>{t('common.minid')}</DsListItem>
+            <DsListItem>{t('common.bankid')}</DsListItem>
+            <DsListItem>{t('common.commfides')}</DsListItem>
+            <DsListItem>{t('common.buypass')}</DsListItem>
           </DsListUnordered>
         </DsAlert>
       );
@@ -203,10 +204,10 @@ export const ApiActionBar = ({
           data-color='danger'
           className={classes.errorContent}
         >
-          <Paragraph>
+          <DsParagraph>
             {t('single_rights.missing_role_access', { you: t('common.you_uppercase') })}{' '}
             {t('single_rights.ceo_or_main_admin_can_help')}
-          </Paragraph>
+          </DsParagraph>
         </DsAlert>
       );
     } else {
@@ -216,7 +217,7 @@ export const ApiActionBar = ({
           data-color='danger'
           className={classes.errorContent}
         >
-          <Paragraph>{t(`${getErrorCodeTextKey('')}`)}</Paragraph>
+          <DsParagraph>{t(`${getErrorCodeTextKey('')}`)}</DsParagraph>
         </DsAlert>
       );
     }

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsDialog, DsParagraph, DsSpinner } from '@altinn/altinn-components';
+import { DsParagraph, DsSpinner } from '@altinn/altinn-components';
 
 import { CircularProgress } from '../CircularProgress';
 
 import classes from './ProgressModal.module.css';
 
-import { DialogContent, type DialogProps } from '@/components';
+import { Dialog, DialogContent, type DialogProps } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 
 export interface ProgressModalProps extends Pick<DialogProps, 'open'> {
@@ -48,7 +48,7 @@ export const ProgressModal = ({
   const isSm = useMediaQuery('(max-width: 768px)');
 
   return (
-    <DsDialog open={open}>
+    <Dialog open={open}>
       <DialogContent>
         <div className={classes.content}>
           <div className={classes.circularProgressContainer}>
@@ -69,6 +69,6 @@ export const ProgressModal = ({
           )}
         </div>
       </DialogContent>
-    </DsDialog>
+    </Dialog>
   );
 };
