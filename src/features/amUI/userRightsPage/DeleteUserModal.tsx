@@ -1,14 +1,9 @@
-import { Button } from '@altinn/altinn-components';
-import { Alert, Dialog, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Button, DsAlert, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { t } from 'i18next';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
-
-import { useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import { amUIPath } from '@/routes/paths';
 
 import {
   createErrorDetails,
@@ -17,6 +12,10 @@ import {
 import { LoadingAnimation } from '../common/LoadingAnimation/LoadingAnimation';
 
 import classes from './DeleteUserModal.module.css';
+
+import { useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
+import type { Party } from '@/rtk/features/lookupApi';
+import { amUIPath } from '@/routes/paths';
 
 export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeName: string }) => {
   const [deleteUser, { isLoading, isError, error }] = useRemoveRightHolderMutation();
@@ -41,15 +40,15 @@ export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeN
   const errorDetails = isError ? createErrorDetails(error) : null;
 
   return (
-    <Dialog.TriggerContext>
-      <Dialog.Trigger
+    <DsDialog.TriggerContext>
+      <DsDialog.Trigger
         data-size='sm'
         variant='tertiary'
       >
         {t('delete_user.trigger_button')}
         <TrashIcon style={{ fontSize: '1.4rem' }} />
-      </Dialog.Trigger>
-      <Dialog
+      </DsDialog.Trigger>
+      <DsDialog
         ref={dialogRef}
         closedby='any'
         closeButton={t('common.close')}
@@ -63,9 +62,9 @@ export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeN
           />
         ) : (
           <div className={classes.modalContent}>
-            <Heading>{t('delete_user.heading')}</Heading>
+            <DsHeading>{t('delete_user.heading')}</DsHeading>
 
-            <Paragraph data-size='sm'>
+            <DsParagraph data-size='sm'>
               <Trans
                 i18nKey='delete_user.message'
                 values={{
@@ -73,9 +72,9 @@ export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeN
                   reportee_name: reporteeName,
                 }}
               />
-            </Paragraph>
+            </DsParagraph>
             {isError && errorDetails && (
-              <Alert
+              <DsAlert
                 data-size='sm'
                 data-color='danger'
               >
@@ -84,7 +83,7 @@ export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeN
                   time={errorDetails.time}
                   size='sm'
                 />
-              </Alert>
+              </DsAlert>
             )}
             <div className={classes.buttons}>
               <Button
@@ -103,7 +102,7 @@ export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeN
             </div>
           </div>
         )}
-      </Dialog>
-    </Dialog.TriggerContext>
+      </DsDialog>
+    </DsDialog.TriggerContext>
   );
 };
