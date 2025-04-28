@@ -32,7 +32,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
 
-  const onChangeLocale = async (event: ChangeEvent<HTMLInputElement>) => {
+  const onChangeLocale = (event: ChangeEvent<HTMLInputElement>) => {
     const newLocale = event.target.value;
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
