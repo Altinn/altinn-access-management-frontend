@@ -2,6 +2,15 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { useGetUserAccessesQuery } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { filterDigdirRole } from '@/resources/utils/roleUtils';
+import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
+
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { UserRoles } from '../common/UserRoles/UserRoles';
@@ -13,24 +22,15 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';
 
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { PageWrapper } from '@/components';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
-import { useGetReporteeQuery, useGetUserAccessesQuery } from '@/rtk/features/userInfoApi';
-import { amUIPath } from '@/routes/paths';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { filterDigdirRole } from '@/resources/utils/roleUtils';
-import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
-
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
   const { id: reporteeUuid } = useParams();
 
-  const { data: reportee } = useGetReporteeQuery();
-  const { data: party } = useGetPartyByUUIDQuery(reporteeUuid ?? '');
+  const { data: toParty } = useGetPartyByUUIDQuery(getCookie('AltinnPartyUuid') ?? '');
+  const { data: fromParty } = useGetPartyByUUIDQuery(reporteeUuid ?? '');
 
   useDocumentTitle(t('user_rights_page.page_title'));
-  const name = reporteeUuid ? party?.name : '';
+  const name = reporteeUuid ? fromParty?.name : '';
 
   const { data: allAccesses } = useGetUserAccessesQuery({
     from: reporteeUuid ?? '',
@@ -51,15 +51,17 @@ export const ReporteeRightsPage = () => {
             <PageContainer backUrl={`/${amUIPath.Reportees}`}>
               <UserPageHeader
                 userName={name}
-                userType={party?.partyTypeName}
-                subHeading={t('reportee_rights_page.heading_subtitle', { name: reportee?.name })}
+                userType={fromParty?.partyTypeName}
+                secondaryAvatarName={toParty?.name}
+                secondaryAvatarType={toParty?.partyTypeName}
+                subHeading={t('reportee_rights_page.heading_subtitle', { name: toParty?.name })}
                 roles={
                   displayLimitedPreviewLaunch &&
-                  !!reportee?.partyUuid &&
-                  !!party?.partyUuid && (
+                  !!toParty?.partyUuid &&
+                  !!fromParty?.partyUuid && (
                     <UserRoles
-                      rightOwnerUuid={reportee.partyUuid}
-                      rightHolderUuid={party.partyUuid}
+                      rightOwnerUuid={toParty.partyUuid}
+                      rightHolderUuid={fromParty.partyUuid}
                     />
                   )
                 }
