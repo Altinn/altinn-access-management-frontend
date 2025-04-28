@@ -35,7 +35,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const onChangeLocale = async (event: ChangeEvent<HTMLInputElement>) => {
     const newLocale = event.target.value;
     i18n.changeLanguage(newLocale);
-    document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Lax`;
+    document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
 
   const isSm = useIsTabletOrSmaller();
