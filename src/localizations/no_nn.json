@@ -87,7 +87,8 @@
     "back-label": "Tilbake",
     "all_services": "Alle tjenester",
     "chat": "Få hjelp på chat",
-    "log_out": "Logg ut"
+    "log_out": "Logg ut",
+    "locale_title": "Vel språk"
   },
   "footer": {
     "about_altinn": "Om Altinn",

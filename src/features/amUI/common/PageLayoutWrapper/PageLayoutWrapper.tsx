@@ -26,13 +26,19 @@ const getAccountType = (type: string): 'company' | 'person' => {
 };
 
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
-  const isSm = useIsTabletOrSmaller();
 
+  const onChangeLocale = (event: ChangeEvent<HTMLInputElement>) => {
+    const newLocale = event.target.value;
+    i18n.changeLanguage(newLocale);
+    document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
+  };
+
+  const isSm = useIsTabletOrSmaller();
   const headerLinks: MenuItemProps[] = [
     {
       groupId: 1,
@@ -123,13 +129,21 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         color={'company'}
         theme='subtle'
         header={{
+          locale: {
+            title: t('header.locale_title'),
+            options: [
+              { label: 'Norsk (bokmål)', value: 'no_nb', checked: i18n.language === 'no_nb' },
+              { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
+              { label: 'English', value: 'en', checked: i18n.language === 'en' },
+            ],
+            onChange: onChangeLocale,
+          },
           logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
           currentAccount: {
             name: reportee?.name || '',
             type: getAccountType(reportee?.type ?? ''),
             id: reportee?.partyUuid || '',
           },
-
           menu: {
             menuLabel: t('header.menu-label'),
             backLabel: t('header.back-label'),
