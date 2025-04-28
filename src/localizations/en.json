@@ -90,7 +90,8 @@
     "back-label": "Back",
     "all_services": "All services",
     "chat": "Get help on chat",
-    "log_out": "Log out"
+    "log_out": "Log out",
+    "locale_title": "Choose language"
   },
   "footer": {
     "about_altinn": "About Altinn",

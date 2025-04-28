@@ -93,29 +93,32 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             string goToUrl = HttpUtility.UrlEncode($"{_generalSettings.FrontendBaseUrl}{Request.Path}{Request.QueryString}");
             string redirectUrl = $"{_platformSettings.ApiAuthenticationEndpoint}authentication?goto={goToUrl}";
-            
+
             return Redirect(redirectUrl);
         }
 
         private async Task SetLanguageCookie()
         {
-            // Get the language code from the Altinn persistence cookie
-            string languageCode = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(_httpContextAccessor.HttpContext);
-            
-            // If the language code is not found in the Altinn persistence cookie, get the language code from user profile.
-            if (string.IsNullOrEmpty(languageCode))
+            if (HttpContext.Request.Cookies.ContainsKey("selectedLanguage") == false)
             {
-                int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-                UserProfileFE user = await _userService.GetUserProfile(userId);
-                languageCode = LanguageHelper.GetFrontendStandardLanguage(user?.ProfileSettingPreference?.Language);
-            }
+                // Get the language code from the Altinn persistence cookie
+                string languageCode = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(_httpContextAccessor.HttpContext);
 
-            HttpContext.Response.Cookies.Append("selectedLanguage", languageCode ?? "no_nb", new CookieOptions
-            {
-                // Make this cookie readable by Javascript.
-                HttpOnly = false,
-                SameSite = SameSiteMode.Strict
-            });
+                // If the language code is not found in the Altinn persistence cookie, get the language code from user profile.
+                if (string.IsNullOrEmpty(languageCode))
+                {
+                    int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+                    UserProfileFE user = await _userService.GetUserProfile(userId);
+                    languageCode = LanguageHelper.GetFrontendStandardLanguage(user?.ProfileSettingPreference?.Language);
+                }
+
+                HttpContext.Response.Cookies.Append("selectedLanguage", languageCode ?? "no_nb", new CookieOptions
+                {
+                    // Make this cookie readable by Javascript.
+                    HttpOnly = false,
+                    SameSite = SameSiteMode.Strict
+                });
+            }
         }
 
         private async Task<bool> ShouldShowAppView()
