@@ -6,6 +6,9 @@
 
 .avatar {
   grid-area: avatar;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .name {
   grid-area: name;
