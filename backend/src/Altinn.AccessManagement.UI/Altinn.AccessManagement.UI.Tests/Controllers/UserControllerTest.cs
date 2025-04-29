@@ -659,7 +659,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?partyId=invalid-party-id");
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party=invalid-party-id");
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
