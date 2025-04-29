@@ -93,7 +93,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             if (!httpResponse.IsSuccessStatusCode)
             {
-                _logger.LogError($"Unexpected http response calling {endpointUrl}. Status code: {httpResponse.StatusCode}, Reason: {httpResponse.ReasonPhrase}");
+-                _logger.LogError($"Unexpected http response calling {endpointUrl}. Status code: {httpResponse.StatusCode}, Reason: {httpResponse.ReasonPhrase}");
++                _logger.LogError($"Unexpected http response. Status code: {httpResponse.StatusCode}, Reason: {httpResponse.ReasonPhrase}");
++                _logger.LogDebug($"Request URL was: {endpointUrl}");
                 throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
             }
 
