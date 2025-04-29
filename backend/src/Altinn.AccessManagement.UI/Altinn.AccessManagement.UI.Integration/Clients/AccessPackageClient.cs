@@ -74,5 +74,18 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw error;
             }
         }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateAccessPackageDelegation(Guid party, Guid to, Guid from, string packageId, string languageCode)
+        {
+            string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={party}&package={packageId}&packageUrn={""}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            var httpResponse = await _client.PostAsync(token, endpointUrl, null);
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+
+            return httpResponse;
+        }
     }
 }

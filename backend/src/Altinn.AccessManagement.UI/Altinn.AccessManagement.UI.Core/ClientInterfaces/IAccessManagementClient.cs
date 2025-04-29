@@ -116,15 +116,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string packageId);
 
         /// <summary>
-        ///    Creates a new delegation of an access package
-        /// </summary>
-        /// <param name="party">The party that is delegating the access</param>
-        /// <param name="to">The id of the right holder that will receive the delegation</param>
-        /// <param name="packageId">The id of the package to be delegated</param>
-        /// <param name="languageCode">The code of the language on which texts are to be returned</param>
-        Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode);
-
-        /// <summary>
         ///   Checks if the user can delegate access packages on behalf of the specified reportee
         /// </summary>
         /// <param name="delegationCheckRequest">The request containing the packages to check and the reportee to check on behalf of</param>

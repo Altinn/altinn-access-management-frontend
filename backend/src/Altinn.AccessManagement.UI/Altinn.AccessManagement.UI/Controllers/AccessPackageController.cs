@@ -92,18 +92,22 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         ///     Endpoint for delegating a accesspackage from the reportee party to a third party
         /// </summary>
+        /// <param name="party">The uuid of the party that is performing the access delegation</param>
+        /// <param name="to">The id of the right holder that will receive the access</param>
+        /// <param name="from">The id of the party that the rightholder will be granted access on behalf of</param>
+        /// <param name="packageId">The id of the package to be delegated</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("delegate/{party}/{packageId}/{to}")]
-        public async Task<ActionResult> CreateAccessPackageDelegation([FromRoute] string party, [FromRoute] string packageId, [FromRoute] Guid to)
+        [Route("delegations")]
+        public async Task<ActionResult> CreateAccessPackageDelegation([FromQuery] Guid party, [FromQuery] Guid to, [FromQuery] Guid from, [FromQuery] string packageId)
         {
             try
             {
                 var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
 
-                HttpResponseMessage response = await _accessPackageService.CreateDelegation(party, to, packageId, languageCode);
+                HttpResponseMessage response = await _accessPackageService.CreateDelegation(party, to, from, packageId, languageCode);
                 if (response.IsSuccessStatusCode)
                 {
                     return Ok(await response.Content.ReadAsStringAsync());
@@ -176,7 +180,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("delegationcheck")]
-        public async Task<ActionResult<List<AccessPackageDelegationCheckResponse>>> RoleDelegationCheck([FromBody] DelegationCheckRequest delegationCheckRequest)
+        public async Task<ActionResult<List<AccessPackageDelegationCheckResponse>>> DelegationCheck([FromBody] DelegationCheckRequest delegationCheckRequest)
         {
             if (!ModelState.IsValid || delegationCheckRequest.PackageIds == null || delegationCheckRequest.PackageIds.Length == 0)
             {

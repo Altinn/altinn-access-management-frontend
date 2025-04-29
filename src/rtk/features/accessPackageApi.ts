@@ -90,11 +90,19 @@ export const accessPackageApi = createApi({
       },
       invalidatesTags: ['AccessPackages'],
     }),
-    delegatePackage: builder.mutation<void, { to: string; packageId: string }>({
+    delegatePackage: builder.mutation<
+      void,
+      { to: string; packageId: string; party?: string; from?: string }
+    >({
       invalidatesTags: ['AccessPackages'],
-      query: (args) => {
+      query: ({
+        to,
+        from = getCookie('AltinnPartyUuid'),
+        packageId,
+        party = getCookie('AltinnPartyUuid'),
+      }) => {
         return {
-          url: `delegate/${getCookie('AltinnPartyId')}/${args.packageId}/${args.to}`,
+          url: `delegations?party=${party}&to=${to}&from=${from}&packageId=${packageId}`,
           method: 'POST',
         };
       },
