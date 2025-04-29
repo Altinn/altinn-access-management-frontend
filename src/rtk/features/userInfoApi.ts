@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-
 import type { Party } from './lookupApi';
+
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 interface UserInfoApiResponse {
   party: Party;
@@ -71,10 +71,10 @@ export const userInfoApi = createApi({
       query: () => `reportee/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
     }),
-    getRightHolders: builder.query<User[], void>({
-      query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
-      keepUnusedDataFor: 300,
-    }),
+    // getRightHolders: builder.query<User[], void>({
+    //   query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
+    //   keepUnusedDataFor: 300,
+    // }),
     addRightHolder: builder.mutation<void, string>({
       query: (partyUuidToBeAdded) => ({
         url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder?rightholderPartyUuid=${partyUuidToBeAdded}`,
@@ -86,6 +86,13 @@ export const userInfoApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
     }),
+    getRightHolders: builder.query<User[], { partyUuid: string; fromUuid: string; toUuid: string }>(
+      {
+        query: ({ partyUuid, fromUuid, toUuid }) =>
+          `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
+        keepUnusedDataFor: 300,
+      },
+    ),
     removeRightHolder: builder.mutation<void, string>({
       query: (partyUuidToBeRemoved) => ({
         url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder?rightholderPartyUuid=${partyUuidToBeRemoved}`,
@@ -132,7 +139,7 @@ export const userInfoApi = createApi({
 export const {
   useGetUserInfoQuery,
   useGetReporteeQuery,
-  useGetRightHoldersQuery,
+  useLazyGetRightHoldersQuery,
   useAddRightHolderMutation,
   useRemoveRightHolderMutation,
   useGetUserAccessesQuery,

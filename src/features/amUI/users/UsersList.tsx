@@ -1,16 +1,17 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
 import { UserList } from '../common/UserList/UserList';
 import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 
 import { debounce } from '@/resources/utils';
-import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useLazyGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import type { User } from '@/rtk/features/userInfoApi';
 
 const extractFromList = (
@@ -31,8 +32,23 @@ const extractFromList = (
 
 export const UsersList = () => {
   const { t } = useTranslation();
+  const { fromParty } = usePartyRepresentation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
-  const { data: rightHolders, isLoading } = useGetRightHoldersQuery();
+
+  const [trigger, { data: rightHolders, isLoading: loadingRightHolders }, lastPromiseInfo] =
+    useLazyGetRightHoldersQuery();
+  console.debug('🪵 ~ UsersList ~ rightHolders:', rightHolders);
+
+  useEffect(() => {
+    if (fromParty?.partyUuid) {
+      trigger({
+        partyUuid: fromParty.partyUuid,
+        fromUuid: fromParty.partyUuid,
+        toUuid: '', // all
+      });
+    }
+  }, [fromParty, trigger]);
+
   const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
 
   const [currentUserAsRightHolder, setCurrentUserAsRightHolder] = useState<User>();
@@ -100,7 +116,7 @@ export const UsersList = () => {
       <UserList
         userList={userList || []}
         searchString={searchString}
-        isLoading={isLoading}
+        isLoading={loadingRightHolders}
         listItemTitleAs='h2'
       />
     </div>

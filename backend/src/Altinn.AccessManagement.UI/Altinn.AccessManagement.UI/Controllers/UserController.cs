@@ -328,5 +328,45 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
             }
         }
+
+        /// <summary>
+        /// Gets the assignments between the authenticated user's selected party and the specified target party (to, from or both).
+        /// </summary>
+        /// <param name="party">The string representation of the GUID identifying the party the authenticated user is acting on behalf of.</param>
+        /// <param name="from">The string representation of the GUID identifying the party the authenticated user is acting for (optional).</param>
+        /// <param name="to">The string representation of the GUID identifying the target party to which the assignment should be created (optional).</param>
+        /// <remarks>
+        /// Party must match From or To
+        /// Either from or to must be provided
+        /// </remarks>
+        /// <returns>Returns a list of assignments between the authenticated user's selected party and the specified target party.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("rightholders")]
+        public async Task<ActionResult> GetRightholders([FromQuery] string party, [FromQuery] string from, [FromQuery] string to)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (string.IsNullOrEmpty(party) || (string.IsNullOrEmpty(from) && string.IsNullOrEmpty(to)))
+            {
+                return BadRequest("Either 'from' or 'to' query parameter must be provided.");
+            }
+
+            try
+            {
+                string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
+
+                var rightHolders = await _userService.GetRightHolders(party, from, to);
+
+                return Ok(rightHolders);
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
+            }
+        }
     }
 }

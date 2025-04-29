@@ -20,5 +20,15 @@
         /// <param name="to">The party that is to lose their right holder status</param>
         /// <returns></returns>
         Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to);
+
+        /// <summary>
+        ///   Gets all right holders for a given party.
+        /// </summary>
+        /// <param name="party">The GUID identifying the party for which to retrieve right holders.</param>
+        /// <param name="from">The GUID identifying the party from which to retrieve right holders.</param>
+        /// <param name="to">The GUID identifying the party to which to retrieve right holders.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+        /// <returns>A task representing the asynchronous operation, with a result of type <see cref="HttpResponseMessage"/>.</returns>
+        Task<HttpResponseMessage> GetRightHolders(string party, string from, string to);
     }
 }

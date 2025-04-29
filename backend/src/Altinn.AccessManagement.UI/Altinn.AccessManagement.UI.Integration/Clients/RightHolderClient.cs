@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<HttpResponseMessage> PostNewRightHolder(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
-            string endpointUrl = $"enduser/access/parties?party={party}&to={to}";
+            string endpointUrl = $"enduser/connections?party={party}&from={party}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             var httpResponse = await _client.PostAsync(token, endpointUrl, null);
@@ -66,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc/>
         public async Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to)
         {
-            string endpointUrl = $"enduser/access/parties?party={party}&to={to}";
+            string endpointUrl = $"enduser/connections?party={party}&from={party}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             var httpResponse = await _client.DeleteAsync(token, endpointUrl);
@@ -74,6 +74,26 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             if (!httpResponse.IsSuccessStatusCode)
             {
                 _logger.LogError($"Unexpected http response. Status code: {httpResponse.StatusCode}, Reason: {httpResponse.ReasonPhrase}");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
+            }
+
+            return httpResponse;
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> GetRightHolders(string party, string from, string to)
+        {
+            // Start with the base endpoint and the mandatory party parameter
+            var endpointBuilder = new System.Text.StringBuilder($"enduser/connections?party={party}&from={from ?? string.Empty}&to={to ?? string.Empty}");
+
+            string endpointUrl = endpointBuilder.ToString();
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            var httpResponse = await _client.GetAsync(token, endpointUrl);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Unexpected http response calling {endpointUrl}. Status code: {httpResponse.StatusCode}, Reason: {httpResponse.ReasonPhrase}");
                 throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
             }
 

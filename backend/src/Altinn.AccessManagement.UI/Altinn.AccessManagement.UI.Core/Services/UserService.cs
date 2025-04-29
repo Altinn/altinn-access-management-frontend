@@ -1,4 +1,7 @@
-﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using System.Net;
+using System.Text.Json;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.User;
@@ -125,5 +128,59 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             return await _rightHolderClient.PostNewRightHolder(partyUuid, rightholderPartyUuid);
         }
+
+        /// <inheritdoc/>
+        public async Task<List<RightHolderInfo>> GetRightHolders(string party, string from, string to)
+        {
+            HttpResponseMessage res = await _rightHolderClient.GetRightHolders(party, from, to);
+            if (res.StatusCode == HttpStatusCode.OK)
+            {
+                try
+                {
+                    string content = await res.Content.ReadAsStringAsync();
+
+                    List<RightHolderInfo> rightHolders = JsonSerializer.Deserialize<List<RightHolderInfo>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    return rightHolders ?? new List<RightHolderInfo>();
+                }
+                catch (JsonException ex)
+                {
+                    _logger.LogError(ex, "Failed to deserialize RightHolders response from backend.");
+
+                    throw new ApplicationException("Failed to parse response from backend.", ex);
+                }
+            }
+            else
+            {
+                string errorContent = await res.Content.ReadAsStringAsync();
+                _logger.LogError("Unexpected status code {StatusCode} from GetRightHolders backend: {ErrorContent}", res.StatusCode, errorContent);
+                throw new HttpStatusException("GetRightHoldersError", $"Unexpected status code from backend: {res.StatusCode}", res.StatusCode, errorContent);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Model representing the information of a right holder
+    /// </summary>
+    public class RightHolderInfo
+    {
+        /// <summary>
+        /// The unique identifier of the right holder
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// The id of the role
+        /// </summary>
+        public Guid RoleId { get; set; }
+
+        /// <summary>
+        /// The id of the from party
+        /// </summary>
+        public Guid FromId { get; set; }
+
+        /// <summary>
+        /// The id of the to party
+        /// </summary>
+        public Guid ToId { get; set; }
     }
 }

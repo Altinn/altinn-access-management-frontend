@@ -74,5 +74,14 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder</param>
         /// <returns>The result of the adding</returns>
         Task<HttpResponseMessage> AddReporteeRightHolder(Guid partyUuid, Guid rightholderPartyUuid);
+        
+        /// <summary>
+        /// Endpoint for getting all right holders for a given party, from a given party to a given party.
+        /// </summary>
+        /// <param name="party">The uuid of the reportee party</param>
+        /// <param name="from">The uuid of the party from which to get right holders</param>
+        /// <param name="to">The uuid of the party to which to get right holders</param>
+        /// <returns> A list of RightHolderInfo </returns>
+        Task<List<RightHolderInfo>> GetRightHolders(string party, string from, string to);
     }
 }
