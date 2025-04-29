@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
-            if (packageId == string.Empty)
+            if (packageId == string.Empty || packageId == null)
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
             }

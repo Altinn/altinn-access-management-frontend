@@ -207,12 +207,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task CreateAccessPackageDelegation_ValidRequest_ReturnsCreated()
         {
             // Arrange
-            var party = "51329012";
-            var packageId = "test_package_id";
+            var party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            var packageId = "test_package_id";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}/{packageId}/{to}", null);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&package={packageId}", null);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -227,12 +228,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task CreateAccessPackageDelegation_UnexpectedException()
         {
             // Arrange
-            var party = "********";
-            var packageId = "test_package_id";
+            var party = Guid.Empty;
+            var from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            var packageId = "test_package_id";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}/{packageId}/{to}", null);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&package={packageId}", null);
 
             // Assert
             Assert.False(response.IsSuccessStatusCode);
@@ -248,12 +250,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
 
-            var party = "51329012";
-            var packageId = "";
+            var party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            var packageId = string.Empty;
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}/{packageId}/{to}", null);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&package={packageId}", null);
 
             // Assert
             Assert.False(response.IsSuccessStatusCode);
