@@ -83,7 +83,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<HttpResponseMessage> GetRightHolders(string party, string from, string to)
         {
-            // Start with the base endpoint and the mandatory party parameter
             var endpointBuilder = new System.Text.StringBuilder($"enduser/connections?party={party}&from={from ?? string.Empty}&to={to ?? string.Empty}");
 
             string endpointUrl = endpointBuilder.ToString();
