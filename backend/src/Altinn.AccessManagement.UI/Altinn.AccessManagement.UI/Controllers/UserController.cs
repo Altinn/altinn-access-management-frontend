@@ -345,11 +345,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("rightholders")]
         public async Task<ActionResult> GetRightholders([FromQuery] string party, [FromQuery] string from, [FromQuery] string to)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (string.IsNullOrEmpty(party) || (string.IsNullOrEmpty(from) && string.IsNullOrEmpty(to)))
             {
                 return BadRequest("Either 'from' or 'to' query parameter must be provided.");
