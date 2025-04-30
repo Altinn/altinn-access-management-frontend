@@ -49,10 +49,15 @@ export const AccessPackageList = ({
     searchString ?? '',
   );
   const { fromParty, toParty } = usePartyRepresentation();
-  const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery({
-    from: fromParty?.partyUuid ?? '',
-    to: toParty?.partyUuid ?? '',
-  });
+  const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery(
+    {
+      from: fromParty?.partyUuid ?? '',
+      to: toParty?.partyUuid ?? '',
+    },
+    {
+      skip: !toParty?.partyUuid || !fromParty?.partyUuid,
+    },
+  );
 
   const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
 

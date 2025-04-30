@@ -206,22 +206,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         //// Access packages
 
         /// <inheritdoc />
-        public async Task<List<AccessPackageAccess>> GetAccessPackageAccesses(string to, string from, string languageCode)
-        {
-            ThrowExceptionIfTriggerParty(from);
-
-            try
-            {
-                string dataPath = Path.Combine(dataFolder, "AccessPackage", "GetDelegations", $"{from}_{to}.json");
-                return await Task.FromResult(Util.GetMockData<List<AccessPackageAccess>>(dataPath));
-            }
-            catch
-            {
-                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
-            }
-        }
-
-        /// <inheritdoc />
         public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string resourceId)
         {
             string dataPath = Path.Combine(dataFolder, "AccessPackage", "RevokeDelegation");

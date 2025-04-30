@@ -59,15 +59,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<Dictionary<string, List<AccessPackageDelegation>>> GetDelegationsToRightHolder(Guid party, Guid to, Guid from, string languageCode)
+        public async Task<Dictionary<string, List<AccessPackageDelegation>>> GetDelegations(Guid party, Guid to, Guid from, string languageCode)
         {
-            List<AccessPackageAccess> accessesFromAM = await _accessManagementClient.GetAccessPackageAccesses(party, to, from, languageCode);
+            List<AccessPackageAccess> accessesFromAM = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
 
             Dictionary<string, List<AccessPackageDelegation>> sortedAccesses = new Dictionary<string, List<AccessPackageDelegation>>();
             
             foreach (AccessPackageAccess access in accessesFromAM)
             {
-                var isInherited = access.AccessDetails.DelegatedTo != rightHolderUuid; 
+                var isInherited = access.AccessDetails.DelegatedTo != to; 
                 AccessPackageDelegation delegation = new AccessPackageDelegation(access.AccessPackage.Id.ToString(), access.AccessDetails, isInherited, null);
                 if (isInherited)
                 {

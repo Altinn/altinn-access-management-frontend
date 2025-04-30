@@ -2,6 +2,7 @@
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
@@ -39,6 +40,22 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             IEnumerable<SearchObject<AccessPackage>> searchResults = Util.GetMockData<IEnumerable<SearchObject<AccessPackage>>>($"{dataFolder}/AccessPackage/packages.json");
 
             return searchString != null ? Task.FromResult(searchResults.Where(sr => sr.Object.Name.ToLower().Contains(searchString.ToLower()))) : Task.FromResult(searchResults);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<AccessPackageAccess>> GetAccessPackageAccesses(Guid party, Guid to, Guid from, string languageCode)
+        {
+            Util.ThrowExceptionIfTriggerParty(from.ToString());
+
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "AccessPackage", "GetDelegations", $"{from}_{to}.json");
+                return await Task.FromResult(Util.GetMockData<List<AccessPackageAccess>>(dataPath));
+            }
+            catch
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
         }
     }
 }

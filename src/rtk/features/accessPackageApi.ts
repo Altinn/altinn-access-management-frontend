@@ -74,10 +74,10 @@ export const accessPackageApi = createApi({
     }),
     getUserDelegations: builder.query<
       { [key: string]: AccessPackageDelegation[] },
-      { from: string; to: string }
+      { from: string; to: string; party?: string }
     >({
-      query: ({ from, to }) => {
-        return `delegations/${from}/${to}`;
+      query: ({ from, to, party = getCookie('AltinnPartyUuid') }) => {
+        return `delegations?from=${from}&to=${to}&party=${party}`;
       },
       providesTags: ['AccessPackages'],
     }),
