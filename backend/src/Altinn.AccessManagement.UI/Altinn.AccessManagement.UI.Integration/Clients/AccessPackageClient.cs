@@ -74,5 +74,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw error;
             }
         }
+
+        /// <inheritdoc />
+        public async Task<List<AccessPackageAccess>> GetAccessPackageAccesses(Guid party, Guid to, Guid from, string languageCode)
+        {
+            string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}"; // TODO: Switch with actual backend endpoint when available
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<AccessPackageAccess>>(response);
+        }
     }
 }

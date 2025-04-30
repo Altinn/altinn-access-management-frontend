@@ -98,15 +98,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         //// Access packages
 
         /// <summary>
-        ///     Gets all access package delegations from someone to someone (or multiple someones)
-        /// </summary>
-        /// <param name="to">the one(s) who has received the delegated access. Can be either a guid or one of the following strings: "all", "me"</param>
-        /// <param name="from">The the one(s) whose rights have been delegated to the one(s) specified in to. Can be either a guid or one of the following strings: "all", "me"</param>
-        /// <param name="languageCode">The code of the language on which texts are to be returned</param>
-        /// <returns>A list of all access package delegations</returns>
-        Task<List<AccessPackageAccess>> GetAccessPackageAccesses(string to, string from, string languageCode);
-
-        /// <summary>
         ///     Revokes access to a given package for a right holder (to) on behalf of a party (from)
         /// </summary>
         /// <param name="from">The party which has granted access to the package to the right holder</param>
