@@ -113,7 +113,7 @@ export class delegateRoleToUser {
     const emailTextbox = this.page.getByRole('textbox', { name: 'Epost' });
     if (await emailTextbox.isVisible()) {
       await emailTextbox.click();
-      await emailTextbox.fill('test@email.com');
+      await emailTextbox.fill('test123@emailtesforaltinndonotreply.com');
       await this.page.getByRole('button', { name: 'Fullfør' }).first().click();
     } else {
       console.log('Mailid is already registered');
