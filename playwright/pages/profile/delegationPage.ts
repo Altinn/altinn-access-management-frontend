@@ -118,7 +118,6 @@ export class delegateRoleToUser {
     } else {
       console.log('Mailid is already registered');
     }
-    await this.page.getByRole('button', { name: 'Fullfør' }).first().click();
     await this.page.getByRole('link', { name: 'Ferdig' }).click();
     await this.page.goto(process.env.BASE_URL + '/ui/profile');
   }
