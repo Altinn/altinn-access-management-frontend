@@ -35,9 +35,9 @@ export const UsersList = () => {
   const { fromParty } = usePartyRepresentation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
 
-  const [trigger, { data: rightHolders, isLoading: loadingRightHolders }, lastPromiseInfo] =
+  const [trigger, { data: rightHolders, isLoading: loadingRightHolders }] =
     useLazyGetRightHoldersQuery();
-  console.debug('🪵 ~ UsersList ~ rightHolders:', rightHolders);
+  // console.debug('🪵 ~ UsersList ~ rightHolders:', rightHolders);
 
   useEffect(() => {
     if (fromParty?.partyUuid) {

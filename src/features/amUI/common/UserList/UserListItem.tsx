@@ -1,6 +1,7 @@
 import type { ListItemProps } from '@altinn/altinn-components';
 import { ListItem } from '@altinn/altinn-components';
-import { ElementType, useEffect, useState } from 'react';
+import type { ElementType } from 'react';
+import { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -42,7 +43,8 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
         {...props}
         size={size}
         title={user.name}
-        description={user.registryRoles.map((role) => t(`user_role.${role}`)).join(', ')}
+        description={user.registryRoles.map((role) => t(role)).join(', ')}
+        // description={user.registryRoles.map((role) => t(`user_role.${role}`)).join(', ')}
         avatar={{
           name: user.name,
           type: user.partyType.toString() === 'Organization' ? 'company' : 'person',

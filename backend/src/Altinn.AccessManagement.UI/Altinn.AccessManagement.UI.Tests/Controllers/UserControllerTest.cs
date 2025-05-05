@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Models;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -700,6 +701,40 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetRightholders_HandlesError()
+        {
+            /// Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={Guid.Empty}&from=1&to=2");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+
+        [Fact]
+        public async Task GetRightholders_ReturnsRightholdersList()
+        {
+            /// Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            var partyId = "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5";
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{partyId}.json");
+            List<RightHolderInfo> expectedResponse = Util.GetMockData<List<RightHolderInfo>>(path);
+           
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party=e1b1ef73-2a8b-4349-b37f-63ae7e8290b5&from=1&to=2");
+            List<RightHolderInfo> actualResponse = await response.Content.ReadFromJsonAsync<List<RightHolderInfo>>();
+            
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
     }
 }

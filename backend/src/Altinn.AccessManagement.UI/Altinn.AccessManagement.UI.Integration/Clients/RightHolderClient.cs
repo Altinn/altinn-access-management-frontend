@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -87,15 +88,21 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             string endpointUrl = endpointBuilder.ToString();
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-            var httpResponse = await _client.GetAsync(token, endpointUrl);
-
-            if (!httpResponse.IsSuccessStatusCode)
+            try
             {
-                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
+                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
+                }
+                
+                return httpResponse;
             }
-
-            return httpResponse;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while getting right holders");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
+            }
         }
     }
 }

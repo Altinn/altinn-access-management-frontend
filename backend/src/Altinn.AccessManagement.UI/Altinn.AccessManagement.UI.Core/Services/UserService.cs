@@ -157,30 +157,4 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
         }
     }
-
-    /// <summary>
-    /// Model representing the information of a right holder
-    /// </summary>
-    public class RightHolderInfo
-    {
-        /// <summary>
-        /// The unique identifier of the right holder
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// The id of the role
-        /// </summary>
-        public Guid RoleId { get; set; }
-
-        /// <summary>
-        /// The id of the from party
-        /// </summary>
-        public Guid FromId { get; set; }
-
-        /// <summary>
-        /// The id of the to party
-        /// </summary>
-        public Guid ToId { get; set; }
-    }
 }

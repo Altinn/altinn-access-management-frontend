@@ -1,8 +1,48 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import type { Party } from './lookupApi';
+import { processRightholdersToUsers } from './processRightholdersToUsers';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+
+export interface Entity {
+  id: string;
+  typeId: string;
+  variantId: string;
+  name: string;
+  refId: string;
+  parentId: string | null;
+}
+
+export interface Role {
+  id: string;
+  entityTypeId: string;
+  providerId: string;
+  name: string;
+  code: string;
+  description: string;
+  isKeyRole: boolean;
+  urn: string;
+}
+
+export interface Rightholder {
+  from: Entity;
+  role: Role;
+  to: Entity;
+  facilitator: Entity | null;
+  facilitatorRole: Role | null;
+  id: string;
+  fromId: string;
+  roleId: string;
+  toId: string;
+  facilitatorId: string | null;
+  facilitatorRoleId: string | null;
+  source: string;
+  isDirect: boolean;
+  isParent: boolean;
+  isRoleMap: boolean;
+  isKeyRole: boolean;
+}
 
 interface UserInfoApiResponse {
   party: Party;
@@ -25,10 +65,10 @@ export interface ReporteeInfo {
 }
 
 export enum PartyType {
-  None = 0,
-  Person = 1,
-  Organization = 2,
-  SelfIdentified = 3,
+  None = 'None',
+  Person = 'Person',
+  Organization = 'Organization',
+  SelfIdentified = 'SelfIdentified',
 }
 
 export interface User {
@@ -91,6 +131,9 @@ export const userInfoApi = createApi({
         query: ({ partyUuid, fromUuid, toUuid }) =>
           `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
         keepUnusedDataFor: 300,
+        transformResponse: (response: Rightholder[]) => {
+          return processRightholdersToUsers(response);
+        },
       },
     ),
     removeRightHolder: builder.mutation<void, string>({
