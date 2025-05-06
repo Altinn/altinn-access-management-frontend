@@ -27,11 +27,6 @@ public class PartyInfo
     public string Name { get; set; }
 
     /// <summary>
-    /// Gets or sets the reference ID for the party (e.g., organization number or SSN).
-    /// </summary>
-    public string RefId { get; set; } // Assuming this can be a string (like org number or SSN)
-
-    /// <summary>
     /// Gets or sets the parent party's unique identifier, if applicable.
     /// </summary>
     public Guid? ParentId { get; set; }

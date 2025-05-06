@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import type { Party } from './lookupApi';
-import { processRightholdersToUsers } from './processRightholdersToUsers';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -75,7 +74,7 @@ export interface User {
   partyUuid: string;
   partyType: PartyType;
   name: string;
-  registryRoles: string[];
+  roles: string[];
   organizationNumber?: string;
   unitType?: string;
   inheritingUsers: User[];
@@ -131,9 +130,6 @@ export const userInfoApi = createApi({
         query: ({ partyUuid, fromUuid, toUuid }) =>
           `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
         keepUnusedDataFor: 300,
-        transformResponse: (response: Rightholder[]) => {
-          return processRightholdersToUsers(response);
-        },
       },
     ),
     removeRightHolder: builder.mutation<void, string>({

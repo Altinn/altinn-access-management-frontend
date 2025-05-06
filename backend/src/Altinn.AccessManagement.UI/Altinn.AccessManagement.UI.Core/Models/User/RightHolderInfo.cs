@@ -72,18 +72,20 @@ public class RightHolderInfo
     public bool IsDirect { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the relationship is with a parent party.
+    /// Gets or sets a value indicating whether the relationship is with a parent party. 
+    /// (e.g., a parent organization if this is a sub-unit).
     /// </summary>
     public bool IsParent { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the relationship is a role mapping.
+    /// This indicates that the role is not directly assigned but is mapped from another role.
     /// </summary>
     public bool IsRoleMap { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the role is a key role.
-    /// Note: This may be redundant if also present in <see cref="RoleInfo"/>.
+    /// 
     /// </summary>
     public bool IsKeyRole { get; set; }
 }

@@ -2,9 +2,7 @@ import type { ListItemProps } from '@altinn/altinn-components';
 import { ListItem } from '@altinn/altinn-components';
 import type { ElementType } from 'react';
 import { useEffect, useState } from 'react';
-import cn from 'classnames';
 import { Link } from 'react-router';
-import { useTranslation } from 'react-i18next';
 
 import { ListWrapper } from './ListWrapper';
 import type { ExtendedUser } from './useFilteredUsers';
@@ -29,7 +27,6 @@ const userHeadingLevelForMapper = (level?: ElementType) => {
 };
 
 export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListItemProps) => {
-  const { t } = useTranslation();
   const hasInheritingUsers = user.inheritingUsers?.length > 0;
   const [isExpanded, setExpanded] = useState(false);
   useEffect(
@@ -43,8 +40,7 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
         {...props}
         size={size}
         title={user.name}
-        description={user.registryRoles.map((role) => t(role)).join(', ')}
-        // description={user.registryRoles.map((role) => t(`user_role.${role}`)).join(', ')}
+        description={user.roles?.join(', ') ?? ''}
         avatar={{
           name: user.name,
           type: user.partyType.toString() === 'Organization' ? 'company' : 'person',

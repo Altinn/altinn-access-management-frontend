@@ -331,7 +331,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.OrganizationNumber, actual.OrganizationNumber);
             Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.PartyType, actual.PartyType);
-            AssertCollections(expected.RegistryRoles, actual.RegistryRoles, Assert.Equal);
+            AssertCollections(expected.Roles, actual.Roles, Assert.Equal);
 
         }
 

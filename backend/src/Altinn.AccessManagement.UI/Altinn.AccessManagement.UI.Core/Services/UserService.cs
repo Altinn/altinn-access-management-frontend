@@ -130,7 +130,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<RightHolderInfo>> GetRightHolders(string party, string from, string to)
+        public async Task<List<User>> GetRightHolders(string party, string from, string to)
         {
             HttpResponseMessage res = await _rightHolderClient.GetRightHolders(party, from, to);
             if (res.StatusCode == HttpStatusCode.OK)
@@ -140,7 +140,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     string content = await res.Content.ReadAsStringAsync();
 
                     List<RightHolderInfo> rightHolders = JsonSerializer.Deserialize<List<RightHolderInfo>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    return rightHolders ?? new List<RightHolderInfo>();
+                    var users = RightholderProcessor.ProcessRightholdersToUsers(rightHolders);
+                    return users;
                 }
                 catch (JsonException ex)
                 {
