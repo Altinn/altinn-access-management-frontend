@@ -1,8 +1,8 @@
+namespace Altinn.AccessManagement.UI.Core.Models.User;
+
 using System.Collections.Generic;
 using System.Linq;
-
 using Altinn.AccessManagement.UI.Core.Enums;
-namespace Altinn.AccessManagement.UI.Core.Models.User;
 
 /// <summary>
 /// This class is responsible for processing rightholders and mapping them to user objects.
@@ -10,7 +10,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.User;
 /// </summary>
 public static class RightholderProcessor
 {
-
     private const string OrganizationTypeId = "8c216e2f-afdd-4234-9ba2-691c727bb33d";
 
     /// <summary>
@@ -42,16 +41,16 @@ public static class RightholderProcessor
     /// </summary>
     /// <param name="rightholders">The list of RightHolderInfo objects to process.</param>
     /// <returns>A list of User objects representing the processed rightholders.</returns>
- public static List<User> ProcessRightholdersToUsers(List<RightHolderInfo> rightholders)
- {
-+    if (rightholders == null)
-+    {
-+        return new List<User>();
-+    }
-+
-     var topLevelUsers = new Dictionary<Guid, User>();
-     var inheritingUsers = new List<RightHolderInfo>();
-     var roleSets = new Dictionary<Guid, HashSet<string>>();
+    public static List<User> ProcessRightholdersToUsers(List<RightHolderInfo> rightholders)
+    {
+        if (rightholders == null)
+        {
+            return new List<User>();
+        }
+
+        var topLevelUsers = new Dictionary<Guid, User>();
+        var inheritingUsers = new List<RightHolderInfo>();
+        var roleSets = new Dictionary<Guid, HashSet<string>>();
 
         foreach (var rh in rightholders)
         {
@@ -90,25 +89,25 @@ public static class RightholderProcessor
             }
         }
 
-     foreach (var rh in inheritingUsers)
-     {
-         var userId = rh.To.Id;
-         var facilitatorId = rh.Facilitator?.Id;
+        foreach (var rh in inheritingUsers)
+        {
+            var userId = rh.To.Id;
+            var facilitatorId = rh.Facilitator?.Id;
 
-         if (facilitatorId.HasValue && topLevelUsers.TryGetValue(facilitatorId.Value, out var facilitator))
-         {
-             if (rh.IsRoleMap)
-             {
-                 if (topLevelUsers.TryGetValue(userId, out var topNode))
-                 {
-                     AddUniqueRole(roleSets[userId], rh.Role.Name);
-                     topNode.Roles = roleSets[userId].ToList();
-                 }
-             }
-             else
-             {
-                 var existingInheritingUser = facilitator.InheritingUsers
-                     .FirstOrDefault(user => user.PartyUuid == userId);
+            if (facilitatorId.HasValue && topLevelUsers.TryGetValue(facilitatorId.Value, out var facilitator))
+            {
+                if (rh.IsRoleMap)
+                {
+                    if (topLevelUsers.TryGetValue(userId, out var topNode))
+                    {
+                        AddUniqueRole(roleSets[userId], rh.Role.Name);
+                        topNode.Roles = roleSets[userId].ToList();
+                    }
+                }
+                else
+                {
+                    var existingInheritingUser = facilitator.InheritingUsers
+                        .FirstOrDefault(user => user.PartyUuid == userId);
 
                     if (existingInheritingUser == null)
                     {
@@ -133,6 +132,6 @@ public static class RightholderProcessor
             }
         }
 
-     return topLevelUsers.Values.ToList();
- }
+        return topLevelUsers.Values.ToList();
+    }
 }
