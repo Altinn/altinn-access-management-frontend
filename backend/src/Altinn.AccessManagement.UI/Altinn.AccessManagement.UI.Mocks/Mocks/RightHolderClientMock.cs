@@ -58,9 +58,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     Content = new StringContent(jsonContent, Encoding.UTF8, "application/json")
                 };
                 return Task.FromResult(response);
-                
+
             }
-            
+
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StringContent("[]", Encoding.UTF8, "application/json")
@@ -70,6 +70,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc/>
         public Task<HttpResponseMessage> PostNewRightHolder(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
+            if (party == Guid.Empty)
+            {
+                throw new HttpStatusException("Test", "Mock bad request", HttpStatusCode.BadRequest, null);
+            }
             var response = new HttpResponseMessage(HttpStatusCode.OK);
             return Task.FromResult(response);
         }
