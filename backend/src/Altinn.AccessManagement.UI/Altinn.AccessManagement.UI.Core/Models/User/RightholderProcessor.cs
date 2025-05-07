@@ -10,6 +10,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.User;
 /// </summary>
 public static class RightholderProcessor
 {
+
+    private const string OrganizationTypeId = "8c216e2f-afdd-4234-9ba2-691c727bb33d";
+
     /// <summary>
     /// Maps a type identifier to an AuthorizedPartyType.
     /// </summary>
@@ -17,7 +20,7 @@ public static class RightholderProcessor
     /// <returns>The corresponding AuthorizedPartyType.</returns>
     public static AuthorizedPartyType MapUserType(string typeId) => typeId switch
     {
-        "8c216e2f-afdd-4234-9ba2-691c727bb33d" => AuthorizedPartyType.Organization,
+        OrganizationTypeId => AuthorizedPartyType.Organization,
         _ => AuthorizedPartyType.Person
     };
 
@@ -50,43 +53,42 @@ public static class RightholderProcessor
      var inheritingUsers = new List<RightHolderInfo>();
      var roleSets = new Dictionary<Guid, HashSet<string>>();
 
-     foreach (var rh in rightholders)
-     {
-         var userType = MapUserType(rh.To.TypeId.ToString());
-         if (
-             userType == AuthorizedPartyType.Organization ||
-             (userType == AuthorizedPartyType.Person &&
-                 rh.IsDirect &&
-                 !rh.IsParent &&
-                 !rh.IsRoleMap &&
-                 !rh.IsKeyRole))
-         {
-             var userId = rh.To.Id;
-             if (!topLevelUsers.TryGetValue(userId, out var user))
-             {
-                 var roles = new HashSet<string> { rh.Role.Name };
-                 roleSets[userId] = roles;
-                 topLevelUsers[userId] = new User
-                 {
-                     PartyUuid = userId,
-                     PartyType = userType,
-                     Name = rh.To.Name,
-                     Roles = roles.ToList(),
-                     // OrganizationNumber = rh.To.RefId,
-                     InheritingUsers = new List<User>()
-                 };
-             }
-             else
-             {
-                 AddUniqueRole(roleSets[userId], rh.Role.Name);
-                 user.Roles = roleSets[userId].ToList();
-             }
-         }
-         else
-         {
-             inheritingUsers.Add(rh);
-         }
-     }
+        foreach (var rh in rightholders)
+        {
+            var userType = MapUserType(rh.To.TypeId.ToString());
+            if (
+                userType == AuthorizedPartyType.Organization ||
+                (userType == AuthorizedPartyType.Person &&
+                    rh.IsDirect &&
+                    !rh.IsParent &&
+                    !rh.IsRoleMap &&
+                    !rh.IsKeyRole))
+            {
+                var userId = rh.To.Id;
+                if (!topLevelUsers.TryGetValue(userId, out var user))
+                {
+                    var roles = new HashSet<string> { rh.Role.Name };
+                    roleSets[userId] = roles;
+                    topLevelUsers[userId] = new User
+                    {
+                        PartyUuid = userId,
+                        PartyType = userType,
+                        Name = rh.To.Name,
+                        Roles = roles.ToList(),
+                        InheritingUsers = new List<User>()
+                    };
+                }
+                else
+                {
+                    AddUniqueRole(roleSets[userId], rh.Role.Name);
+                    user.Roles = roleSets[userId].ToList();
+                }
+            }
+            else
+            {
+                inheritingUsers.Add(rh);
+            }
+        }
 
      foreach (var rh in inheritingUsers)
      {
@@ -108,29 +110,28 @@ public static class RightholderProcessor
                  var existingInheritingUser = facilitator.InheritingUsers
                      .FirstOrDefault(user => user.PartyUuid == userId);
 
-                 if (existingInheritingUser == null)
-                 {
-                     var roles = new HashSet<string> { rh.Role.Name };
-                     var inheritingUser = new User
-                     {
-                         PartyUuid = userId,
-                         PartyType = MapUserType(rh.To.TypeId.ToString()),
-                         Name = rh.To.Name,
-                         Roles = roles.ToList(),
-                         // OrganizationNumber = rh.To.RefId,
-                         InheritingUsers = new List<User>()
-                     };
-                     facilitator.InheritingUsers.Add(inheritingUser);
-                     roleSets[userId] = roles;
-                 }
-                 else
-                 {
-                     AddUniqueRole(roleSets[userId], rh.Role.Name);
-                     existingInheritingUser.Roles = roleSets[userId].ToList();
-                 }
-             }
-         }
-     }
+                    if (existingInheritingUser == null)
+                    {
+                        var roles = new HashSet<string> { rh.Role.Name };
+                        var inheritingUser = new User
+                        {
+                            PartyUuid = userId,
+                            PartyType = MapUserType(rh.To.TypeId.ToString()),
+                            Name = rh.To.Name,
+                            Roles = roles.ToList(),
+                            InheritingUsers = new List<User>()
+                        };
+                        facilitator.InheritingUsers.Add(inheritingUser);
+                        roleSets[userId] = roles;
+                    }
+                    else
+                    {
+                        AddUniqueRole(roleSets[userId], rh.Role.Name);
+                        existingInheritingUser.Roles = roleSets[userId].ToList();
+                    }
+                }
+            }
+        }
 
      return topLevelUsers.Values.ToList();
  }
