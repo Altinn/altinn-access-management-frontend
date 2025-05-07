@@ -1552,5 +1552,105 @@
     "isParent": false,
     "isRoleMap": false,
     "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "b3f5c1e8-4e3b-4d2a-8c3e-1f2b3d4e5f6a",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Maskinporten administrator",
+      "code": "maskinporten-administrator",
+      "description": "Gir bruker mulighet til å administrere tilgang til maskinporten scopes",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:maskinporten-administrator"
+    },
+    "to": {
+      "id": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "INTELLIGENT ALBATROSS",
+      "refId": "03848496544",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "id": "01961596-311c-7398-880f-f54029e25782",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "b3f5c1e8-4e3b-4d2a-8c3e-1f2b3d4e5f6a",
+    "toId": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTMAP",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": true,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "to": {
+      "id": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "INTELLIGENT ALBATROSS",
+      "refId": "03848496544",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "01961596-311c-7398-880f-f54029e25782",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "toId": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
   }
 ]

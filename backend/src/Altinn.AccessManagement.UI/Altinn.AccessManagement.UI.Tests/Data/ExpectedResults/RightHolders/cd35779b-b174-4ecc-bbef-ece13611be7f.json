@@ -4,7 +4,14 @@
     "partyType": "Person",
     "name": "TOM KARNAPP",
     "registryRoles": null,
-    "roles": ["Daglig leder", "Varamedlem"],
+    "roles": [
+      "Daglig leder",
+      "Varamedlem",
+      "Maskinporten administrator",
+      "Hovedadministrator",
+      "Tilgangsstyrer",
+      "Klientadministrator"
+    ],
     "organizationNumber": null,
     "unitType": null,
     "inheritingUsers": []
@@ -45,7 +52,13 @@
     "partyType": "Person",
     "name": "SITRONGUL MEDALJONG",
     "registryRoles": null,
-    "roles": ["Styrets leder"],
+    "roles": [
+      "Styrets leder",
+      "Hovedadministrator",
+      "Tilgangsstyrer",
+      "Klientadministrator",
+      "Maskinporten administrator"
+    ],
     "organizationNumber": null,
     "unitType": null,
     "inheritingUsers": []
@@ -173,5 +186,15 @@
         "inheritingUsers": []
       }
     ]
+  },
+  {
+    "partyUuid": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+    "partyType": "Person",
+    "name": "INTELLIGENT ALBATROSS",
+    "registryRoles": null,
+    "roles": ["Rettighetshaver", "Maskinporten administrator"],
+    "organizationNumber": null,
+    "unitType": null,
+    "inheritingUsers": []
   }
 ]

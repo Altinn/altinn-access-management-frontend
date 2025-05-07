@@ -49,22 +49,26 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
             }
-            if (party == "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5")
-            {
-                var testDataPath = Path.Combine(dataFolder, "RightHolders", "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5.json");
+            try {
+
+                var testDataPath = Path.Combine(dataFolder, "RightHolders", $"{party}.json");
                 var jsonContent = File.ReadAllText(testDataPath);
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = new StringContent(jsonContent, Encoding.UTF8, "application/json")
                 };
                 return Task.FromResult(response);
-
-            }
-
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+            }  
+            catch
             {
-                Content = new StringContent("[]", Encoding.UTF8, "application/json")
-            });
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent("[]", Encoding.UTF8, "application/json")
+                });
+            }
+            
+
+            
         }
 
         /// <inheritdoc/>
