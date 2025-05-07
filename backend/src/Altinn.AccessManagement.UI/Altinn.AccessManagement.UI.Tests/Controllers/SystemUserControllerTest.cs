@@ -224,7 +224,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SystemUserFE expectedResponse = Util.GetMockData<SystemUserFE>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyId}/{systemUserId}");
             SystemUserFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<SystemUserFE>();
 
             // Assert
@@ -245,7 +245,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyId}/{systemUserId}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
@@ -286,6 +286,58 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}?partyuuid={partyUuid}");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: UpdateSystemUser checks that the system user with given id for given party is updated
+        ///     Expected: UpdateSystemUser returns no content
+        /// </summary>
+        [Fact]
+        public async Task UpdateSystemUser_ReturnsNoContent()
+        {
+            // Arrange
+            int partyId = 51329012;
+            string systemUserId = "123e4567-e89b-12d3-a456-426614174000";
+            HttpStatusCode expectedResponse = HttpStatusCode.NoContent;
+            SystemUserUpdate dto = new SystemUserUpdate
+            {
+                IntegrationTitle = "Nytt navn",
+            };
+
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PatchAsync($"accessmanagement/api/v1/systemuser/{partyId}/{systemUserId}", content);
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: UpdateSystemUser checks that system user with given id for given party is not updated when it is not found
+        ///     Expected: UpdateSystemUser returns not found
+        /// </summary>
+        [Fact]
+        public async Task UpdateSystemUser_ReturnsNotFound()
+        {
+            // Arrange
+            int partyId = 51329012;
+            string systemUserId = "e60073ad-c661-4ca0-b74c-40238ad333e9";
+            HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
+            SystemUserUpdate dto = new SystemUserUpdate
+            {
+                IntegrationTitle = "Nytt navn",
+            };
+
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PatchAsync($"accessmanagement/api/v1/systemuser/{partyId}/{systemUserId}", content);
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
