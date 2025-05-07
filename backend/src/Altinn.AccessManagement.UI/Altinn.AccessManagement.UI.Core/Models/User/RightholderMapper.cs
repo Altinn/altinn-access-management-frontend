@@ -10,7 +10,6 @@ using Altinn.AccessManagement.UI.Core.Enums;
 /// </summary>
 public static class RightholderMapper
 {
-
     /// <summary>
     /// Processes a list of <see cref="RightHolderInfo"/> objects and maps them to a list of <see cref="User"/> objects.
     /// </summary>
