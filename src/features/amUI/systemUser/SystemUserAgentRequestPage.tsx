@@ -27,7 +27,7 @@ export const SystemUserAgentRequestPage = () => {
   useDocumentTitle(t('systemuser_agent_request.page_title'));
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
-  const partyId = getCookie('AltinnPartyId');
+  const partyId = getCookie('AltinnPartyUuid');
 
   const {
     data: request,

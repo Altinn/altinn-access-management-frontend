@@ -47,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<SystemUser> GetSpecificSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
+        public async Task<SystemUser> GetSpecificSystemUser(Guid partyId, Guid id, CancellationToken cancellationToken)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<SystemUser>> CreateNewSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
+        public async Task<Result<SystemUser>> CreateNewSystemUser(Guid partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<bool> DeleteSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
+        public async Task<bool> DeleteSystemUser(Guid partyId, Guid id, CancellationToken cancellationToken)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<SystemUser>> GetSystemUsersForParty(int partyId, CancellationToken cancellationToken)
+        public async Task<List<SystemUser>> GetSystemUsersForParty(Guid partyId, CancellationToken cancellationToken)
         {
             try
             {
@@ -154,7 +154,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<SystemUser> GetAgentSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
+        public async Task<SystemUser> GetAgentSystemUser(Guid partyId, Guid id, CancellationToken cancellationToken)
         {
             try
             {
@@ -180,7 +180,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<SystemUser>> GetAgentSystemUsersForParty(int partyId, CancellationToken cancellationToken)
+        public async Task<List<SystemUser>> GetAgentSystemUsersForParty(Guid partyId, CancellationToken cancellationToken)
         {
             try
             {
@@ -206,12 +206,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid facilitatorId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> DeleteAgentSystemUser(Guid partyId, Guid systemUserId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserId}?facilitatorId={facilitatorId}";
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserId}";
 
                 HttpResponseMessage response = await _httpClient.DeleteAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);

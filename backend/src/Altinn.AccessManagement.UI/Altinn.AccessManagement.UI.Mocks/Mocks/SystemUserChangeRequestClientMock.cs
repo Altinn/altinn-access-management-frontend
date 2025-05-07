@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<Result<SystemUserChangeRequest>> GetSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken)
+        public Task<Result<SystemUserChangeRequest>> GetSystemUserChangeRequest(Guid partyId, Guid changeRequestId, CancellationToken cancellationToken)
         {
             SystemUserChangeRequest systemUserChangeRequest = Util.GetMockData<SystemUserChangeRequest>($"{dataFolder}/SystemUser/systemUserChangeRequest.json");
             if (changeRequestId != systemUserChangeRequest.Id)
@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<Result<bool>> ApproveSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken)
+        public Task<Result<bool>> ApproveSystemUserChangeRequest(Guid partyId, Guid changeRequestId, CancellationToken cancellationToken)
         {
             SystemUserChangeRequest systemUserChangeRequest = Util.GetMockData<SystemUserChangeRequest>($"{dataFolder}/SystemUser/systemUserChangeRequest.json");
             if (changeRequestId != systemUserChangeRequest.Id)
@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
                 /// <inheritdoc />
-        public Task<Result<bool>> RejectSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken)
+        public Task<Result<bool>> RejectSystemUserChangeRequest(Guid partyId, Guid changeRequestId, CancellationToken cancellationToken)
         {
             SystemUserChangeRequest systemUserChangeRequest = Util.GetMockData<SystemUserChangeRequest>($"{dataFolder}/SystemUser/systemUserChangeRequest.json");
             if (changeRequestId != systemUserChangeRequest.Id)

@@ -47,12 +47,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid facilitatorId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<List<AgentDelegation>> GetSystemUserAgentDelegations(Guid partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/agent/{partyId}/{facilitatorId}/{systemUserGuid}/delegations";
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/delegations";
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -73,7 +73,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<List<AgentDelegation>>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
+        public async Task<Result<List<AgentDelegation>>> AddClient(Guid partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -101,12 +101,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> RemoveClient(int partyId, Guid facilitatorId, Guid delegationId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RemoveClient(Guid partyId, Guid delegationId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/agent/{partyId}/delegation/{delegationId}?facilitatorId={facilitatorId}";
+                string endpointUrl = $"systemuser/agent/{partyId}/delegation/{delegationId}";
 
                 HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);

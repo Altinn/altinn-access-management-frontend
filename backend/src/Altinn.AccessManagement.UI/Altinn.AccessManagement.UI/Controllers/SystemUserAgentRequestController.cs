@@ -30,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("{partyId}/{agentRequestId}")]
-        public async Task<ActionResult> GetAgentRequestByPartyIdAndRequestId([FromRoute] int partyId, [FromRoute] Guid agentRequestId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetAgentRequestByPartyIdAndRequestId([FromRoute] Guid partyId, [FromRoute] Guid agentRequestId, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             Result<SystemUserAgentRequestFE> req = await _systemUserAgentRequestService.GetSystemUserAgentRequest(partyId, agentRequestId, languageCode, cancellationToken);
@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost("{partyId}/{agentRequestId}/approve")]
-        public async Task<ActionResult> ApproveSystemUserAgentRequest([FromRoute] int partyId, [FromRoute] Guid agentRequestId, CancellationToken cancellationToken)
+        public async Task<ActionResult> ApproveSystemUserAgentRequest([FromRoute] Guid partyId, [FromRoute] Guid agentRequestId, CancellationToken cancellationToken)
         {
             Result<bool> req = await _systemUserAgentRequestService.ApproveSystemUserAgentRequest(partyId, agentRequestId, cancellationToken);
             if (req.IsProblem)
@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost("{partyId}/{agentRequestId}/reject")]
-        public async Task<ActionResult> RejectSystemUserAgentRequest([FromRoute] int partyId, [FromRoute] Guid agentRequestId, CancellationToken cancellationToken)
+        public async Task<ActionResult> RejectSystemUserAgentRequest([FromRoute] Guid partyId, [FromRoute] Guid agentRequestId, CancellationToken cancellationToken)
         {
             Result<bool> req = await _systemUserAgentRequestService.RejectSystemUserAgentRequest(partyId, agentRequestId, cancellationToken);
             if (req.IsProblem)
