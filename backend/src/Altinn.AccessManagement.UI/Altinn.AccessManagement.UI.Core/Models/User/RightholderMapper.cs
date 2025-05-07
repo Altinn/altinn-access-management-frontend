@@ -79,7 +79,10 @@ public static class RightholderMapper
             var userId = rh.To.Id;
             var facilitatorId = rh.Facilitator?.Id;
             var roleName = rh.Role?.Name;
-            if (!facilitatorId.HasValue || !topLevelUsers.TryGetValue(facilitatorId.Value, out var facilitator)) continue;
+            if (!facilitatorId.HasValue || !topLevelUsers.TryGetValue(facilitatorId.Value, out var facilitator)) 
+            {
+                continue;
+            }
 
             if (rh.IsRoleMap)
             {
@@ -107,10 +110,11 @@ public static class RightholderMapper
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(roleName)) {
+                    if (!string.IsNullOrEmpty(roleName)) 
+                    {
                         (roleSets[userId] ??= new HashSet<string>()).Add(roleName);
                     }
-                    
+
                     existing.Roles = roleSets[userId].ToList();
                 }
             }
