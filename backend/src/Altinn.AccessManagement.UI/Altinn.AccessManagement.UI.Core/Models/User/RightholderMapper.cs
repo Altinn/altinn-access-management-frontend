@@ -38,7 +38,7 @@ public static class RightholderMapper
     /// </summary>
     /// <param name="typeId">The type identifier to map.</param>
     /// <returns>The corresponding <see cref="AuthorizedPartyType"/>.</returns>
-    public static AuthorizedPartyType MapUserType(string typeId) => typeId switch
+    private static AuthorizedPartyType MapUserType(string typeId) => typeId switch
     {
         OrganizationTypeId => AuthorizedPartyType.Organization,
         _ => AuthorizedPartyType.Person
