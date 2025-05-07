@@ -140,7 +140,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     string content = await res.Content.ReadAsStringAsync();
 
                     List<RightHolderInfo> rightHolders = JsonSerializer.Deserialize<List<RightHolderInfo>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    var users = RightholderProcessor.ProcessRightholdersToUsers(rightHolders);
+                    var users = RightholderMapper.MapRightholdersToUsers(rightHolders);
                     return users;
                 }
                 catch (JsonException ex)
