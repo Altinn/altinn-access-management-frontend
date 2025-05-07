@@ -94,5 +94,77 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// </summary>
         public static ProblemDescriptor CustomerIdNotFound { get; }
             = _factory.Create(28, HttpStatusCode.BadRequest, "The customer id was not provided or did not validate.");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor CustomerDelegation_FailedToRevoke { get; }
+            = _factory.Create(31, HttpStatusCode.BadRequest, "Party does not match delegation facilitator.");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_AssignmentNotFound { get; }
+            = _factory.Create(32, HttpStatusCode.BadRequest, "Assignment not found.");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_FailedToDeleteAgent { get; }
+            = _factory.Create(33, HttpStatusCode.BadRequest, "Failed to delete the agent system user");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_ExpectedAgentUserType { get; }
+            = _factory.Create(34, HttpStatusCode.BadRequest, "The system user type of the provided system user GUID is not an agent.");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_HasDelegations { get; }
+            = _factory.Create(35, HttpStatusCode.BadRequest, "The system user has delegations from customer. Remove the delegations before deleting the system user");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_ExpectedStandardUserType { get; }
+            = _factory.Create(36, HttpStatusCode.BadRequest, "The system user type of the provided system user GUID is not standard.");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_TooManyAssignments { get; }
+            = _factory.Create(37, HttpStatusCode.BadRequest, "To many assignment found");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_DelegationNotFound { get; }
+            = _factory.Create(38, HttpStatusCode.BadRequest, "Delegation not found");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_InvalidDelegationFacilitator { get; }
+            = _factory.Create(39, HttpStatusCode.BadRequest, "Party does not match delegation facilitator");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_DeleteDelegation_PartyMismatch { get; }
+            = _factory.Create(40, HttpStatusCode.BadRequest, "Party does not match delegation assignments");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor PartyId_Request_Mismatch { get; }
+            = _factory.Create(41, HttpStatusCode.Forbidden, "Party does not match request's orgno");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor PartyId_AgentRequest_Mismatch { get; }
+            = _factory.Create(42, HttpStatusCode.Forbidden, "Party does not match agent request's orgno");
     }
 }
