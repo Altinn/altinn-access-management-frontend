@@ -1,7 +1,7 @@
-using Altinn.AccessManagement.UI.Core.Enums;
 using System.Collections.Generic;
 using System.Linq;
 
+using Altinn.AccessManagement.UI.Core.Enums;
 namespace Altinn.AccessManagement.UI.Core.Models.User;
 
 /// <summary>
