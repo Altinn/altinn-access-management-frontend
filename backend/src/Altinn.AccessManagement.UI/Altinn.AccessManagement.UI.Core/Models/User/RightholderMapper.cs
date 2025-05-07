@@ -11,19 +11,6 @@ using Altinn.AccessManagement.UI.Core.Enums;
 public static class RightholderMapper
 {
     /// <summary>
-    /// The type identifier representing an organization.
-    /// </summary>
-    private const string OrganizationTypeId = "8c216e2f-afdd-4234-9ba2-691c727bb33d";
-
-    /// <summary>
-    /// Maps a type identifier to an <see cref="AuthorizedPartyType"/>.
-    /// </summary>
-    /// <param name="typeId">The type identifier to map.</param>
-    /// <returns>The corresponding <see cref="AuthorizedPartyType"/>.</returns>
-    private static AuthorizedPartyType MapUserType(string typeId) =>
-        typeId == OrganizationTypeId ? AuthorizedPartyType.Organization : AuthorizedPartyType.Person;
-
-    /// <summary>
     /// Processes a list of <see cref="RightHolderInfo"/> objects and maps them to a list of <see cref="User"/> objects.
     /// </summary>
     /// <param name="rightholders">The list of <see cref="RightHolderInfo"/> objects to process.</param>
@@ -79,7 +66,7 @@ public static class RightholderMapper
             var userId = rh.To.Id;
             var facilitatorId = rh.Facilitator?.Id;
             var roleName = rh.Role?.Name;
-            if (!facilitatorId.HasValue || !topLevelUsers.TryGetValue(facilitatorId.Value, out var facilitator)) 
+            if (!facilitatorId.HasValue || !topLevelUsers.TryGetValue(facilitatorId.Value, out var facilitator))
             {
                 continue;
             }
@@ -110,7 +97,7 @@ public static class RightholderMapper
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(roleName)) 
+                    if (!string.IsNullOrEmpty(roleName))
                     {
                         (roleSets[userId] ??= new HashSet<string>()).Add(roleName);
                     }
@@ -122,6 +109,19 @@ public static class RightholderMapper
 
         return topLevelUsers.Values.ToList();
     }
+
+    /// <summary>
+    /// The type identifier representing an organization.
+    /// </summary>
+    private const string OrganizationTypeId = "8c216e2f-afdd-4234-9ba2-691c727bb33d";
+
+    /// <summary>
+    /// Maps a type identifier to an <see cref="AuthorizedPartyType"/>.
+    /// </summary>
+    /// <param name="typeId">The type identifier to map.</param>
+    /// <returns>The corresponding <see cref="AuthorizedPartyType"/>.</returns>
+    private static AuthorizedPartyType MapUserType(string typeId) =>
+        typeId == OrganizationTypeId ? AuthorizedPartyType.Organization : AuthorizedPartyType.Person;
 
     /// <summary>
     /// Determines if a <see cref="RightHolderInfo"/> object represents a top-level user.
