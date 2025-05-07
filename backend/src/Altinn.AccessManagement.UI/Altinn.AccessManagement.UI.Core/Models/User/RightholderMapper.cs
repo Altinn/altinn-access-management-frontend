@@ -127,8 +127,19 @@ public static class RightholderMapper
         }
         else
         {
-            AddUniqueRole(roleSets[userId], rightholder.Role.Name);
-            user.Roles = roleSets[userId].ToList();
+        else
+        {
+            if (roleSets.TryGetValue(userId, out var roles))
+            {
+                AddUniqueRole(roles, rightholder.Role.Name);
+                user.Roles = roles.ToList();
+            }
+            else
+            {
+                var newRoles = new HashSet<string> { rightholder.Role.Name };
+                roleSets[userId] = newRoles;
+                user.Roles = newRoles.ToList();
+            }
         }
     }
 
