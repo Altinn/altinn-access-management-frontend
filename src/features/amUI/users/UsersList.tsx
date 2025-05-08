@@ -37,7 +37,6 @@ export const UsersList = () => {
 
   const [trigger, { data: rightHolders, isLoading: loadingRightHolders }] =
     useLazyGetRightHoldersQuery();
-  // console.debug('🪵 ~ UsersList ~ rightHolders:', rightHolders);
 
   useEffect(() => {
     if (fromParty?.partyUuid) {

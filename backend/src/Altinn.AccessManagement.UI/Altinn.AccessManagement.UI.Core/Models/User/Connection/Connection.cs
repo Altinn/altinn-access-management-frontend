@@ -4,7 +4,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.User;
 /// Represents detailed information about a right holder relationship (assignment) between parties,
 /// including delegation, roles, and facilitators. This model is aligned with the structure from the external API.
 /// </summary>
-public class RightHolderInfo
+public class Connection
 {
     /// <summary>
     /// Gets or sets the party that delegates the right (the assigner).

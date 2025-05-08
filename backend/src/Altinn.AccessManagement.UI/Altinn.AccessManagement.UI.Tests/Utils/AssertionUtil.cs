@@ -553,23 +553,5 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             Assert.Equal(expected.CustomerId, actual.CustomerId);
         }
-
-        public static void AssertEqual(RightHolderInfo expected, RightHolderInfo actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.FromId, actual.FromId);
-            Assert.Equal(expected.RoleId, actual.RoleId);
-            Assert.Equal(expected.ToId, actual.ToId);
-            Assert.Equal(expected.FacilitatorId, actual.FacilitatorId);
-            Assert.Equal(expected.FacilitatorRoleId, actual.FacilitatorRoleId);
-            Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(expected.From.Name, actual.From.Name);
-            Assert.Equal(expected.Role.Name, actual.Role.Name);
-            Assert.Equal(expected.Role.Code, actual.Role.Code);
-            Assert.Equal(expected.Role.Description, actual.Role.Description);
-            Assert.Equal(expected.To.Name, actual.To.Name);
-        }
     }
 }

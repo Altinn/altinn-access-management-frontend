@@ -39,7 +39,7 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
       <ListItem
         {...props}
         size={size}
-        title={user.name}
+        title={`${user.name} ${user.organizationNumber && !hasInheritingUsers ? `(${user.organizationNumber})` : ''}`}
         description={user.roles?.join(', ') ?? ''}
         avatar={{
           name: user.name,

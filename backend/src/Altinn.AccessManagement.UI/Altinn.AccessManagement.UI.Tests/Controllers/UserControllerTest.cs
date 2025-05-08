@@ -718,21 +718,22 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
 
-        [Fact]
-        public async Task GetRightholders_ReturnsRightholdersList()
+        [Theory]
+        [InlineData("cd35779b-b174-4ecc-bbef-ece13611be7f", "cd35779b-b174-4ecc-bbef-ece13611be7f", "")]
+        [InlineData("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199", "", "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199")]
+        public async Task GetRightholders_ReturnsRightholdersList(string party, string from, string to)
         {
             /// Arrange
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            var partyId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{partyId}.json");
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{party}.json");
             List<User> expectedResponse = Util.GetMockData<List<User>>(path);
-           
+
             // Act
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={partyId}&from={partyId}&to=");
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={party}&from={from}&to={to}");
             var resJson = await response.Content.ReadAsStringAsync();
             List<User> actualResponse = await response.Content.ReadFromJsonAsync<List<User>>();
-            
+
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);

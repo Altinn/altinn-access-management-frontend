@@ -139,8 +139,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     string content = await res.Content.ReadAsStringAsync();
 
-                    List<RightHolderInfo> rightHolders = JsonSerializer.Deserialize<List<RightHolderInfo>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    var users = RightholderMapper.MapRightholdersToUsers(rightHolders);
+                    List<Connection> rightHolders = JsonSerializer.Deserialize<List<Connection>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    var users = string.IsNullOrEmpty(to) 
+                        ? ConnectionMapper.MapToRightholders(rightHolders) 
+                        : ConnectionMapper.MapToReportees(rightHolders);
                     return users;
                 }
                 catch (JsonException ex)

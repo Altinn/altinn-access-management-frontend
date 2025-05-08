@@ -30,4 +30,9 @@ public class PartyInfo
     /// Gets or sets the parent party's unique identifier, if applicable.
     /// </summary>
     public Guid? ParentId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the identifier for the party, if applicable (SSN of OrgNumber).
+    /// </summary>
+    public string RefId { get; set; }
 }
