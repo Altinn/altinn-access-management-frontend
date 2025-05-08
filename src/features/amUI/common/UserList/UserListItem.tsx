@@ -40,7 +40,7 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
         {...props}
         size={size}
         title={`${user.name} ${user.organizationNumber && !hasInheritingUsers ? `(${user.organizationNumber})` : ''}`}
-        description={user.roles?.join(', ') ?? ''}
+        description={user.registryRoles?.join(', ') ?? ''}
         avatar={{
           name: user.name,
           type: user.partyType.toString() === 'Organization' ? 'company' : 'person',

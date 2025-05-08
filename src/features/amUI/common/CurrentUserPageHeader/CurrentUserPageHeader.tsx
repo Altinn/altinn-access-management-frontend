@@ -1,5 +1,4 @@
-import { ListItem, ListItemBase, ListItemHeader } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
+import { ListItemBase, ListItemHeader } from '@altinn/altinn-components';
 
 import classes from './CurrentUserPageHeader.module.css';
 import { CurrentUserSkeleton } from './CurrentUserSkeleton';
@@ -13,7 +12,6 @@ interface CurrentUserPageHeaderProps {
 }
 
 export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserPageHeaderProps) => {
-  const { t } = useTranslation();
   return (
     <div className={classes.currentUser}>
       {loading ? (
@@ -28,7 +26,7 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
           <ListItemHeader
             size='xl'
             title={currentUser?.name}
-            description={currentUser?.roles?.join(', ')}
+            description={currentUser?.registryRoles?.join(', ')}
             avatar={{
               type: 'person',
               name: currentUser?.name || '',

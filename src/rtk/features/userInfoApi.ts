@@ -4,45 +4,6 @@ import type { Party } from './lookupApi';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-export interface Entity {
-  id: string;
-  typeId: string;
-  variantId: string;
-  name: string;
-  refId: string;
-  parentId: string | null;
-}
-
-export interface Role {
-  id: string;
-  entityTypeId: string;
-  providerId: string;
-  name: string;
-  code: string;
-  description: string;
-  isKeyRole: boolean;
-  urn: string;
-}
-
-export interface Rightholder {
-  from: Entity;
-  role: Role;
-  to: Entity;
-  facilitator: Entity | null;
-  facilitatorRole: Role | null;
-  id: string;
-  fromId: string;
-  roleId: string;
-  toId: string;
-  facilitatorId: string | null;
-  facilitatorRoleId: string | null;
-  source: string;
-  isDirect: boolean;
-  isParent: boolean;
-  isRoleMap: boolean;
-  isKeyRole: boolean;
-}
-
 interface UserInfoApiResponse {
   party: Party;
   userUuid: string;
@@ -74,7 +35,7 @@ export interface User {
   partyUuid: string;
   partyType: PartyType;
   name: string;
-  roles: string[];
+  registryRoles: string[];
   organizationNumber?: string;
   unitType?: string;
   inheritingUsers: User[];
