@@ -667,11 +667,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         [Theory]
-        [InlineData(null, null, null)]
-        [InlineData("", "", "")]
-        [InlineData("party-id", "", "")]
-        [InlineData("", "from-id", "")]
-        [InlineData("", "from-id", "to-id")]
+        [InlineData("b0a79f3d-4cef-430a-9774-301b754e0f6f", null, null)]
+        [InlineData("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199", "", "")]
         public async Task GetRightholders_MissingPartyAndFromOrTo_ReturnsBadRequest(string party, string from, string to)
         {
             /// Arrange
@@ -687,10 +684,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         [Theory]
-        [InlineData("party-id", "from-id", "")]
-        [InlineData("party-id", "", "to-id")]
-        [InlineData("party-id", "from-id", "to-id")]
-        public async Task GetRightholders_ValidInput_ReturnsRightholders(string party, string from, string to)
+        [InlineData(null, "b0a79f3d-4cef-430a-9774-301b754e0f6f", "")]
+        [InlineData("", "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199", "")]
+        [InlineData("", "b0a79f3d-4cef-430a-9774-301b754e0f6f", "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199")]
+        public async Task GetRightholders_MissingPartyAndFromOrTo_ReturnsInvalidModelState(string party, string from, string to)
         {
             /// Arrange
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
@@ -700,7 +697,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={party}&from={from}&to={to}");
 
             // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Contains("The value '' is invalid", await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -711,7 +709,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={Guid.Empty}&from=1&to=2");
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={Guid.Empty}&from={Guid.Empty}&to={Guid.Empty}");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);

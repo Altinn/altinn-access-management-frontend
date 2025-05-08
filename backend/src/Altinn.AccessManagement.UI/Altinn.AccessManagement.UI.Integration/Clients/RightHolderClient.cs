@@ -82,9 +82,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> GetRightHolders(string party, string from, string to)
+        public async Task<HttpResponseMessage> GetRightHolders(Guid party, Guid? from, Guid? to)
         {
-            var endpointBuilder = new System.Text.StringBuilder($"enduser/connections?party={party}&from={from ?? string.Empty}&to={to ?? string.Empty}");
+            var endpointBuilder = new System.Text.StringBuilder($"enduser/connections?party={party}&from={from?.ToString() ?? string.Empty}&to={to?.ToString() ?? string.Empty}");
 
             string endpointUrl = endpointBuilder.ToString();
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 {
                     throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
                 }
-                
+
                 return httpResponse;
             }
             catch (Exception ex)

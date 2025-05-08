@@ -130,7 +130,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<User>> GetRightHolders(string party, string from, string to)
+        public async Task<List<User>> GetRightHolders(Guid party, Guid? from, Guid? to)
         {
             HttpResponseMessage res = await _rightHolderClient.GetRightHolders(party, from, to);
             if (res.StatusCode == HttpStatusCode.OK)
@@ -140,8 +140,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     string content = await res.Content.ReadAsStringAsync();
 
                     List<Connection> rightHolders = JsonSerializer.Deserialize<List<Connection>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                    var users = string.IsNullOrEmpty(to) 
+                    
+                    // Map the response to the frontend model for either right holders or reportees
+                    // depending on the presence of the 'from' parameter
+                    var users = from.HasValue 
                         ? ConnectionMapper.MapToRightholders(rightHolders) 
                         : ConnectionMapper.MapToReportees(rightHolders);
                     return users;

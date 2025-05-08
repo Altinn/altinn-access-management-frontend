@@ -82,6 +82,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="from">The uuid of the party from which to get right holders</param>
         /// <param name="to">The uuid of the party to which to get right holders</param>
         /// <returns> A list of RightHolderInfo </returns>
-        Task<List<User>> GetRightHolders(string party, string from, string to);
+        Task<List<User>> GetRightHolders(Guid party, Guid? from, Guid? to);
     }
 }

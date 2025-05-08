@@ -28,6 +28,6 @@
         /// <param name="from">The GUID identifying the party from which to retrieve right holders.</param>
         /// <param name="to">The GUID identifying the party to which to retrieve right holders.</param>
         /// <returns>A task representing the asynchronous operation, with a result of type <see cref="HttpResponseMessage"/>.</returns>
-        Task<HttpResponseMessage> GetRightHolders(string party, string from, string to);
+        Task<HttpResponseMessage> GetRightHolders(Guid party, Guid? from, Guid? to);
     }
 }

@@ -43,9 +43,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc/>
-        public Task<HttpResponseMessage> GetRightHolders(string party, string from, string to)
+        public Task<HttpResponseMessage> GetRightHolders(Guid party, Guid? from, Guid? to)
         {
-            if (party == Guid.Empty.ToString())
+            if (party == Guid.Empty)
             {
                 throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
             }
