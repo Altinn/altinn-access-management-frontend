@@ -39,12 +39,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
                 /// <summary>
                 ///    Creates a new delegation of an access package
                 /// </summary>
-                /// <param name="party">Identifies the selected party the authenticated user is acting on behalf of.</param>
-                /// <param name="to">The id of the right holder that will recieve the delegation</param>
+                /// <param name="party">The party that is performing the access delegation</param>
+                /// <param name="to">The id of the right holder that will receive the access</param>
+                /// <param name="from">The id of the party that the rightholder will be granted access on behalf of</param>
                 /// <param name="packageId">The id of the package to be delegated</param>
-                /// <param name="languageCode">The code of the language on which texts are to be returned</param>
                 /// <returns></returns> 
-                Task<HttpResponseMessage> CreateDelegation(string party, Guid to, string packageId, string languageCode);
+                Task<HttpResponseMessage> CreateDelegation(Guid party, Guid to, Guid from, string packageId);
 
                 /// <summary>
                 ///    Checks if the user can delegate access packages on behalf of the specified reportee
