@@ -1,8 +1,5 @@
 namespace Altinn.AccessManagement.UI.Core.Models.User;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Altinn.AccessManagement.UI.Core.Enums;
 
 /// <summary>
@@ -11,9 +8,9 @@ using Altinn.AccessManagement.UI.Core.Enums;
 /// </summary>
 public static class ConnectionMapper
 {
-    private const string OrganizationTypeId = "8c216e2f-afdd-4234-9ba2-691c727bb33d";
+    private static readonly Guid OrganizationTypeId = new Guid("8c216e2f-afdd-4234-9ba2-691c727bb33d");
 
-    private static AuthorizedPartyType MapUserType(string typeId) =>
+    private static AuthorizedPartyType MapUserType(Guid typeId) =>
         typeId == OrganizationTypeId ? AuthorizedPartyType.Organization : AuthorizedPartyType.Person;
 
     /// <summary>
@@ -25,31 +22,6 @@ public static class ConnectionMapper
         {
             roles.Add(role);
         }
-    }
-
-    private static void AddOrUpdateUser(
-        Dictionary<Guid, User> userMap,
-        Guid id,
-        AuthorizedPartyType type,
-        string name,
-        string role,
-        string orgNumber = null)
-    {
-        if (!userMap.TryGetValue(id, out var user))
-        {
-            user = new User
-            {
-                PartyUuid = id,
-                PartyType = type,
-                Name = name,
-                Roles = new List<string>(),
-                InheritingUsers = new List<User>(),
-                OrganizationNumber = orgNumber
-            };
-            userMap[id] = user;
-        }
-        
-        AddUniqueRole(user.Roles, role);
     }
 
     /// <summary>
@@ -72,9 +44,9 @@ public static class ConnectionMapper
             if (connection.IsDirect)
             {
                 var fromId = connection.From.Id;
-                var fromType = MapUserType(connection.From.TypeId.ToString());
+                var fromType = MapUserType(connection.From.TypeId);
                 var roleName = connection.Role?.Name;
-                var userType = MapUserType(connection.From.TypeId.ToString());
+                var userType = MapUserType(connection.From.TypeId);
 
                 if (reporteeMap.TryGetValue(fromId, out var reportee))
                 {
@@ -87,10 +59,11 @@ public static class ConnectionMapper
                         PartyUuid = fromId,
                         PartyType = fromType,
                         Name = connection.From.Name,
-                        Roles = new List<string> { roleName },
+                        Roles = new List<string> { },
                         InheritingUsers = new List<User>(),
                         OrganizationNumber = userType == AuthorizedPartyType.Organization ? connection.From.RefId : null,
                     };
+                    AddUniqueRole(reportee.Roles, roleName);
                     reporteeMap[fromId] = reportee;
                 }
             }
@@ -105,7 +78,7 @@ public static class ConnectionMapper
             var userId = unit.From.Id;
             var parentId = unit.From.ParentId.Value;
             var roleName = unit.Role?.Name;
-            var userType = MapUserType(unit.From.TypeId.ToString());
+            var userType = MapUserType(unit.From.TypeId);
 
             if (reporteeMap.TryGetValue(parentId, out var parent))
             {
@@ -121,10 +94,11 @@ public static class ConnectionMapper
                         PartyUuid = userId,
                         PartyType = userType,
                         Name = unit.From.Name,
-                        Roles = new List<string> { roleName },
+                        Roles = new List<string> { },
                         InheritingUsers = null,
                         OrganizationNumber = userType == AuthorizedPartyType.Organization ? unit.From.RefId : null,
                     };
+                    AddUniqueRole(inheritingUser.Roles, roleName);
                     parent.InheritingUsers.Add(subunit);
                 }
             }
@@ -153,10 +127,14 @@ public static class ConnectionMapper
         {
             var userId = connection.To.Id;
             var roleName = connection.Role?.Name;
-            var userType = MapUserType(connection.To.TypeId.ToString());
+            var userType = MapUserType(connection.To.TypeId);
 
             if (userType == AuthorizedPartyType.Organization ||
-                (userType == AuthorizedPartyType.Person && connection.IsDirect && !connection.IsParent && !connection.IsRoleMap && !connection.IsKeyRole))
+                (userType == AuthorizedPartyType.Person
+                    && connection.IsDirect
+                    && !connection.IsParent
+                    && !connection.IsRoleMap
+                    && !connection.IsKeyRole))
             {
                 if (!rightholderMap.TryGetValue(userId, out var user))
                 {
@@ -219,7 +197,7 @@ public static class ConnectionMapper
                         var inheritingUser = new User
                         {
                             PartyUuid = userId,
-                            PartyType = MapUserType(rh.To.TypeId.ToString()),
+                            PartyType = MapUserType(rh.To.TypeId),
                             Name = rh.To.Name,
                             Roles = roles,
                             InheritingUsers = new List<User>()
