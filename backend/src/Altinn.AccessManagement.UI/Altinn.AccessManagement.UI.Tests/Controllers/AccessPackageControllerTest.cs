@@ -273,7 +273,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             var party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             var from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
-            var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            int to = 0;
             var packageId = string.Empty;
 
             // Act
