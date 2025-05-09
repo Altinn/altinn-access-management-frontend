@@ -83,8 +83,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             var httpResponse = await _client.PostAsync(token, endpointUrl, null);
 
-            var content = await httpResponse.Content.ReadAsStringAsync();
-
             return httpResponse;
         }
     }

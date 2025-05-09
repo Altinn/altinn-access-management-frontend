@@ -213,7 +213,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var packageId = "test_package_id";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&package={packageId}", null);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&packageId={packageId}", null);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -234,7 +234,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var packageId = "test_package_id";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&package={packageId}", null);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&packageId={packageId}", null);
 
             // Assert
             Assert.False(response.IsSuccessStatusCode);
@@ -256,7 +256,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var packageId = string.Empty;
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&package={packageId}", null);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&packageId={packageId}", null);
 
             // Assert
             Assert.False(response.IsSuccessStatusCode);
