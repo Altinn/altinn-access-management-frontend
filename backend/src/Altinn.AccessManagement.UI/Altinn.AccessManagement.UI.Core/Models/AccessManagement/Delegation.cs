@@ -1,6 +1,4 @@
-﻿using Altinn.AccessManagement.Core.Extensions;
-
-namespace Altinn.AccessMgmt.Core.Models;
+﻿namespace Altinn.AccessMgmt.Core.Models;
 
 /// <summary>
 /// Delegation between two assignments

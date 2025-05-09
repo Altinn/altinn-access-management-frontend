@@ -43,10 +43,14 @@ export const useAreaPackageList = ({
         if (activeDelegationArea) {
           const pkgs = area.accessPackages.reduce(
             (pkgAcc, pkg) => {
-              const hasAccess = activeDelegationArea.some((d) => d.accessPackageId === pkg.id);
-
-              if (hasAccess) {
-                pkgAcc.assigned.push(pkg);
+              const pkgAccess = activeDelegationArea.find((d) => d.accessPackageId === pkg.id);
+              if (pkgAccess !== undefined) {
+                const aquiredPkg = {
+                  ...pkg,
+                  inherited: pkgAccess.inherited,
+                  inheritedFrom: pkgAccess.inheritedFrom,
+                };
+                pkgAcc.assigned.push(aquiredPkg);
               } else if (showAllPackages) {
                 pkgAcc.available.push(pkg);
               }

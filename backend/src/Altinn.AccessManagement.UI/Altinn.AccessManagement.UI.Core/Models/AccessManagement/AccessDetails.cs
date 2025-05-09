@@ -21,5 +21,23 @@
         public DateTime LastChangedOn { get; set; }
 
         // Alternative: AccessThrough (direktedelegering, arv, etc..)
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="delegatedFrom">The id of the party delegated from</param>
+        /// <param name="DelegatedTo">The id of the party delegated to</param>
+        public AccessDetails(Guid delegatedFrom, Guid DelegatedTo)
+        {
+            DelegatedFrom = delegatedFrom;
+            this.DelegatedTo = DelegatedTo;
+        }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public AccessDetails()
+        {
+        }
     }
 }

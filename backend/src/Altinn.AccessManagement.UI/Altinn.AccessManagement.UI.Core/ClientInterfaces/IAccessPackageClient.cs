@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessMgmt.Core.Models;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -24,6 +25,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="from">The uuid of the party whose accesses have been delegated (or empty, if delegations from all parties are to be returned)</param>
         /// <param name="languageCode">The code of the language on which texts are to be returned</param>
         /// <returns>A list of all access package delegations</returns>
-        Task<List<AccessPackageAccess>> GetAccessPackageAccesses(Guid party, Guid to, Guid from, string languageCode);
+        Task<List<ConnectionPackage>> GetAccessPackageAccesses(Guid party, Guid to, Guid from, string languageCode);
     }
 }

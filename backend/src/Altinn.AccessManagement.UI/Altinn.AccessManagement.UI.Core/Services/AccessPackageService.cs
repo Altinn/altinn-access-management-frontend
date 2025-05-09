@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessMgmt.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -61,27 +62,30 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>
         public async Task<Dictionary<string, List<AccessPackageDelegation>>> GetDelegations(Guid party, Guid to, Guid from, string languageCode)
         {
-            List<AccessPackageAccess> accessesFromAM = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
+            List<ConnectionPackage> accessesFromAM = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
 
             Dictionary<string, List<AccessPackageDelegation>> sortedAccesses = new Dictionary<string, List<AccessPackageDelegation>>();
-            
-            foreach (AccessPackageAccess access in accessesFromAM)
+            IEnumerable<SearchObject<AccessPackage>> allPackages = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, null);
+
+            foreach (ConnectionPackage access in accessesFromAM)
             {
-                var isInherited = access.AccessDetails.DelegatedTo != to; 
-                AccessPackageDelegation delegation = new AccessPackageDelegation(access.AccessPackage.Id.ToString(), access.AccessDetails, isInherited, null);
-                if (isInherited)
+                AccessPackageDelegation delegation = new AccessPackageDelegation(access);
+                if (delegation.Inherited)
                 {
-                    var inheritedFrom = await _lookupService.GetPartyByUUID(access.AccessDetails.DelegatedTo);
+                    Guid inheritedFromGuid = access.FacilitatorId ?? access.FromId;
+                    var inheritedFrom = await _lookupService.GetPartyByUUID(inheritedFromGuid);
                     delegation.InheritedFrom = inheritedFrom;
                 }
-                
-                if (!sortedAccesses.ContainsKey(access.AccessPackage.Area.Id))
+
+                string areaId = allPackages.FirstOrDefault(x => x.Object.Id == access.PackageId)?.Object.Area.Id;
+
+                if (!sortedAccesses.ContainsKey(areaId))
                 {
-                    sortedAccesses.Add(access.AccessPackage.Area.Id, new List<AccessPackageDelegation> { delegation });
+                    sortedAccesses.Add(areaId, new List<AccessPackageDelegation> { delegation });
                 }
                 else
                 {
-                    sortedAccesses[access.AccessPackage.Area.Id].Add(delegation);
+                    sortedAccesses[areaId].Add(delegation);
                 }
             }
 

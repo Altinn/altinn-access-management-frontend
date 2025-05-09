@@ -5,14 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { MenuElipsisHorizontalIcon, PackageIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 
-import { useDelegationModalContext } from '../DelegationModalContext';
-import { DelegationAction } from '../EditModal';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
-import { StatusSection } from '../StatusSection';
-
-import classes from './AccessPackageInfo.module.css';
-
 import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
@@ -22,6 +14,14 @@ import {
   type AccessPackage,
 } from '@/rtk/features/accessPackageApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
+
+import { useDelegationModalContext } from '../DelegationModalContext';
+import { DelegationAction } from '../EditModal';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
+import { StatusSection } from '../StatusSection';
+
+import classes from './AccessPackageInfo.module.css';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -57,14 +57,19 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     from: fromParty?.partyUuid ?? '',
   });
 
-  const userHasPackage = React.useMemo(() => {
+  const delegationAccess = React.useMemo(() => {
     if (activeDelegations && !isFetching) {
-      return Object.values(activeDelegations)
-        .flat()
-        .some((delegation) => delegation.accessPackageId === accessPackage.id);
+      return (
+        Object.values(activeDelegations)
+          .flat()
+          .find((delegation) => delegation.accessPackageId) ?? null
+      );
     }
-    return false;
+    return null;
   }, [activeDelegations, isFetching, accessPackage.id]);
+
+  const userHasPackage = delegationAccess !== null;
+  const accessIsInherited = delegationAccess?.inherited ?? false;
 
   const [delegationCheckError, setDelegationCheckError] = useState<ActionError | null>(null);
 
@@ -169,7 +174,9 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
           <StatusSection
             userHasAccess={userHasPackage}
             showMissingRightsMessage={showMissingRightsMessage}
-            inheritedFrom={accessPackage.inherited ? accessPackage.inheritedFrom?.name : undefined}
+            inheritedFrom={
+              delegationAccess?.inherited ? delegationAccess.inheritedFrom?.name : undefined
+            }
           />
 
           <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
@@ -194,7 +201,12 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
           <div className={classes.actions}>
             {userHasPackage && availableActions.includes(DelegationAction.REVOKE) && (
-              <Button onClick={() => onRevoke(accessPackage)}>{t('common.delete_poa')}</Button>
+              <Button
+                disabled={accessIsInherited}
+                onClick={() => onRevoke(accessPackage)}
+              >
+                {t('common.delete_poa')}
+              </Button>
             )}
             {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
               <Button

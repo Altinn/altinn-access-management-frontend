@@ -50,7 +50,6 @@ export const RevokeAccessPackageActionControl = ({
         icon={MinusCircleIcon}
         variant='text'
         size='sm'
-        disabled={pkg.inherited}
         onClick={onRevoke}
       >
         {t('common.delete_poa')}

@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using Altinn.AccessMgmt.Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -43,14 +44,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<List<AccessPackageAccess>> GetAccessPackageAccesses(Guid party, Guid to, Guid from, string languageCode)
+        public async Task<List<ConnectionPackage>> GetAccessPackageAccesses(Guid party, Guid to, Guid from, string languageCode)
         {
             Util.ThrowExceptionIfTriggerParty(from.ToString());
 
             try
             {
                 string dataPath = Path.Combine(dataFolder, "AccessPackage", "GetDelegations", $"{from}_{to}.json");
-                return await Task.FromResult(Util.GetMockData<List<AccessPackageAccess>>(dataPath));
+                return await Task.FromResult(Util.GetMockData<List<ConnectionPackage>>(dataPath));
             }
             catch
             {

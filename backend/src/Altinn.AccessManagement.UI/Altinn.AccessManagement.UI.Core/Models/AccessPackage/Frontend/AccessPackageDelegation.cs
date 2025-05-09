@@ -1,5 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
-using Altinn.Platform.Register.Models;
+using Altinn.AccessMgmt.Core.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
 {
@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         /// <summary>
         /// The access package that the recipient has access to
         /// </summary>
-        public string AccessPackageId { get; set; }
+        public Guid AccessPackageId { get; set; }
 
         /// <summary>
         /// Details pertaining the deleagtion of the access
@@ -31,16 +31,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="accessPackageId">the id of access package</param>
-        /// <param name="delegationDetails">the delegation details</param>
-        /// <param name="inherited">If inherited or delegated directly</param>
-        /// <param name="inheritedFrom">The party from which the access was inherited</param>
-        public AccessPackageDelegation(string accessPackageId, AccessDetails delegationDetails, bool inherited, PartyFE inheritedFrom = null)
+        /// <param name="packageConnection">The package connection data as received from backend</param>
+        public AccessPackageDelegation(ConnectionPackage packageConnection)
         {
-            AccessPackageId = accessPackageId;
-            DelegationDetails = delegationDetails;
-            Inherited = inherited;
-            InheritedFrom = inheritedFrom;
+            AccessPackageId = packageConnection.PackageId;
+            DelegationDetails = new AccessDetails(packageConnection.FromId, packageConnection.ToId);
+            Inherited = packageConnection.IsKeyRole || packageConnection.IsParent || packageConnection.IsRoleMap || packageConnection.PackageSource == "ROLE";
         }
     }
 }
