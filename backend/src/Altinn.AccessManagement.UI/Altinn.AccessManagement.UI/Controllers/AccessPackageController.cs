@@ -103,7 +103,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("delegations")]
         public async Task<ActionResult> CreateAccessPackageDelegation([FromQuery] Guid party, [FromQuery] Guid to, [FromQuery] Guid from, [FromQuery] string packageId)
         {
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
