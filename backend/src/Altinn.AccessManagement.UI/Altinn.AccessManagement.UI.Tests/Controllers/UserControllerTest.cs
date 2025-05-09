@@ -496,7 +496,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddReporteeRightHolder_TriggersHttpStatusException_ReturnsErrorStatus()
         {
             // Arrange
-            // Using Guid.Empty will trigger the HttpStatusException in RightHolderClientMock
+            // Using Guid.Empty will trigger the InternalServerError in RightHolderClientMock
             var reporteePartyUuid = Guid.Empty;
             var rightHolderPartyUuid = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
 
@@ -509,7 +509,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 null);
 
             // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
             string content = await httpResponse.Content.ReadAsStringAsync();
             Assert.Contains("Unexpected HttpStatus response", content);
         }

@@ -77,6 +77,11 @@ public static class ConnectionMapper
         {
             var userId = unit.From.Id;
             var parentId = unit.From.ParentId.Value;
+            if (!unit.From.ParentId.HasValue)
+            {
+                continue;
+            }
+
             var roleName = unit.Role?.Name;
             var userType = MapUserType(unit.From.TypeId);
 
@@ -98,7 +103,7 @@ public static class ConnectionMapper
                         InheritingUsers = null,
                         OrganizationNumber = userType == AuthorizedPartyType.Organization ? unit.From.RefId : null,
                     };
-                    AddUniqueRole(inheritingUser.Roles, roleName);
+                    AddUniqueRole(subunit.Roles, roleName);
                     parent.InheritingUsers.Add(subunit);
                 }
             }

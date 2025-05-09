@@ -49,7 +49,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
             }
-            try {
+            try
+            {
 
                 var testDataPath = Path.Combine(dataFolder, "RightHolders", $"{party}.json");
                 var jsonContent = File.ReadAllText(testDataPath);
@@ -58,7 +59,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     Content = new StringContent(jsonContent, Encoding.UTF8, "application/json")
                 };
                 return Task.FromResult(response);
-            }  
+            }
             catch
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
@@ -66,9 +67,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     Content = new StringContent("[]", Encoding.UTF8, "application/json")
                 });
             }
-            
 
-            
+
+
         }
 
         /// <inheritdoc/>
@@ -76,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             if (party == Guid.Empty)
             {
-                throw new HttpStatusException("Test", "Mock bad request", HttpStatusCode.BadRequest, null);
+                throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
             }
             var response = new HttpResponseMessage(HttpStatusCode.OK);
             return Task.FromResult(response);

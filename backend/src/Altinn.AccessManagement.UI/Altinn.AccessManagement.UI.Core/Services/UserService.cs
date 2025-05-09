@@ -133,7 +133,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<User>> GetRightHolders(Guid party, Guid? from, Guid? to)
         {
             HttpResponseMessage res = await _rightHolderClient.GetRightHolders(party, from, to);
-            if (res.StatusCode == HttpStatusCode.OK)
+            if (res.IsSuccessStatusCode)
             {
                 try
                 {
