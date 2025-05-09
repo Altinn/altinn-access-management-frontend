@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 
+import { useFilteredUsers } from './useFilteredUsers';
+
 import type { User } from '@/rtk/features/userInfoApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
-
-import { useFilteredUsers } from './useFilteredUsers';
 
 const mockUsers: User[] = [
   {

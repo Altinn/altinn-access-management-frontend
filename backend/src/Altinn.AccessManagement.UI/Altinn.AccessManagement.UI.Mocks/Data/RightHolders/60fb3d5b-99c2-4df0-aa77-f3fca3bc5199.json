@@ -1,0 +1,181 @@
+[
+  {
+    "delegation": null,
+    "from": {
+      "id": "f77b719a-ee24-4fe9-9d41-278c51432284",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "1f1e3720-b8a8-490e-8304-e81da21e3d3b",
+      "name": "RAKRYGGET UNG TIGER AS",
+      "refId": "311379054",
+      "parentId": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199"
+    },
+    "role": {
+      "id": "5f868b06-7531-448c-a275-a2dfa100f840",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Har som registreringsenhet BEDR",
+      "code": "hovedenhet",
+      "description": "Har som registreringsenhet",
+      "isKeyRole": false,
+      "urn": "urn:altinn:external-role:ccr:hovedenhet",
+      "isAssignable": false
+    },
+    "to": {
+      "id": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "RAKRYGGET UNG TIGER AS",
+      "refId": "313523497",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "01961597-9b5a-7563-9b1e-88ec12ae07d9",
+    "fromId": "f77b719a-ee24-4fe9-9d41-278c51432284",
+    "roleId": "5f868b06-7531-448c-a275-a2dfa100f840",
+    "toId": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "1f1e3720-b8a8-490e-8304-e81da21e3d3b",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "311312294",
+      "parentId": "cd35779b-b174-4ecc-bbef-ece13611be7f"
+    },
+    "role": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver",
+      "isAssignable": false
+    },
+    "to": {
+      "id": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "RAKRYGGET UNG TIGER AS",
+      "refId": "313523497",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "facilitatorRole": null,
+    "id": "0196aaf8-1616-7eab-90c8-4476c84d0f31",
+    "fromId": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+    "roleId": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+    "toId": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "PARENT",
+    "isDirect": false,
+    "isParent": true,
+    "isRoleMap": false,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver",
+      "isAssignable": false
+    },
+    "to": {
+      "id": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "RAKRYGGET UNG TIGER AS",
+      "refId": "313523497",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "0196aaf8-1616-7eab-90c8-4476c84d0f31",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+    "toId": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "ec4a83c6-4aac-437c-ac63-2e365bb00a34",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "7d356f18-2f72-49b5-a6f2-83d7c0871991",
+      "name": "UTNYTTENDE STRIDLYNT ISBJØRN SA",
+      "refId": "314192834",
+      "parentId": null
+    },
+    "role": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver",
+      "isAssignable": false
+    },
+    "to": {
+      "id": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "RAKRYGGET UNG TIGER AS",
+      "refId": "313523497",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "0196aecd-bc9f-7bcd-b316-1cdbd2862ba9",
+    "fromId": "ec4a83c6-4aac-437c-ac63-2e365bb00a34",
+    "roleId": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+    "toId": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  }
+]

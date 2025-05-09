@@ -2,9 +2,9 @@ import { Avatar, DsParagraph, DsHeading } from '@altinn/altinn-components';
 import type { ReactNode } from 'react';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
-
 import classes from './UserPageHeader.module.css';
+
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface UserPageHeaderProps {
   userName?: string;
@@ -23,6 +23,8 @@ export const UserPageHeader = ({
   secondaryAvatarName,
   secondaryAvatarType,
 }: UserPageHeaderProps) => {
+  // const data = {};
+
   const avatar = () => {
     if (secondaryAvatarName && secondaryAvatarType) {
       return (

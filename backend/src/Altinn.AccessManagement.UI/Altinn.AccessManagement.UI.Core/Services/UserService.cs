@@ -1,4 +1,7 @@
-﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using System.Net;
+using System.Text.Json;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.User;
@@ -124,6 +127,40 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<HttpResponseMessage> AddReporteeRightHolder(Guid partyUuid, Guid rightholderPartyUuid)
         {
             return await _rightHolderClient.PostNewRightHolder(partyUuid, rightholderPartyUuid);
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<User>> GetRightHolders(Guid party, Guid? from, Guid? to)
+        {
+            HttpResponseMessage res = await _rightHolderClient.GetRightHolders(party, from, to);
+            if (res.IsSuccessStatusCode)
+            {
+                try
+                {
+                    string content = await res.Content.ReadAsStringAsync();
+
+                    List<Connection> rightHolders = JsonSerializer.Deserialize<List<Connection>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    
+                    // Map the response to the frontend model for either right holders or reportees
+                    // depending on the presence of the 'from' parameter
+                    var users = from.HasValue 
+                        ? ConnectionMapper.MapToRightholders(rightHolders) 
+                        : ConnectionMapper.MapToReportees(rightHolders);
+                    return users;
+                }
+                catch (JsonException ex)
+                {
+                    _logger.LogError(ex, "Failed to deserialize RightHolders response from backend.");
+
+                    throw new ApplicationException("Failed to parse response from backend.", ex);
+                }
+            }
+            else
+            {
+                string errorContent = await res.Content.ReadAsStringAsync();
+                _logger.LogError("Unexpected status code {StatusCode} from GetRightHolders backend: {ErrorContent}", res.StatusCode, errorContent);
+                throw new HttpStatusException("GetRightHoldersError", $"Unexpected status code from backend: {res.StatusCode}", res.StatusCode, errorContent);
+            }
         }
     }
 }

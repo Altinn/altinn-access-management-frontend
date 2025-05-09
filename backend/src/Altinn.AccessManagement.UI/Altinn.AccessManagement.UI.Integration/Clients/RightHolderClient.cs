@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -49,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<HttpResponseMessage> PostNewRightHolder(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
-            string endpointUrl = $"enduser/access/parties?party={party}&to={to}";
+            string endpointUrl = $"enduser/connections?party={party}&from={party}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             var httpResponse = await _client.PostAsync(token, endpointUrl, null);
@@ -66,7 +67,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc/>
         public async Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to)
         {
-            string endpointUrl = $"enduser/access/parties?party={party}&to={to}";
+            string endpointUrl = $"enduser/connections?party={party}&from={party}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             var httpResponse = await _client.DeleteAsync(token, endpointUrl);
@@ -78,6 +79,30 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             return httpResponse;
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> GetRightHolders(Guid party, Guid? from, Guid? to)
+        {
+            var endpointBuilder = new System.Text.StringBuilder($"enduser/connections?party={party}&from={from?.ToString() ?? string.Empty}&to={to?.ToString() ?? string.Empty}");
+
+            string endpointUrl = endpointBuilder.ToString();
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            try
+            {
+                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
+                }
+
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while getting right holders");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
+            }
         }
     }
 }

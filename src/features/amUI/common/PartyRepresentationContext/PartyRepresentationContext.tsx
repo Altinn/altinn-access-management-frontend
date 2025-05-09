@@ -6,8 +6,8 @@ import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 interface PartyRepresentationProviderProps {
   children: JSX.Element | JSX.Element[];
-  fromPartyUuid: string;
-  toPartyUuid: string;
+  fromPartyUuid?: string;
+  toPartyUuid?: string;
 }
 
 export interface PartyRepresentationContextOutput {
@@ -27,8 +27,10 @@ export const PartyRepresentationProvider = ({
   toPartyUuid,
 }: PartyRepresentationProviderProps) => {
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetUserInfoQuery();
-  const { data: fromParty, isLoading: fromPartyIsLoading } = useGetPartyByUUIDQuery(fromPartyUuid);
-  const { data: toParty, isLoading: toPartyIsLoading } = useGetPartyByUUIDQuery(toPartyUuid);
+  const { data: fromParty, isLoading: fromPartyIsLoading } = useGetPartyByUUIDQuery(
+    fromPartyUuid ?? '',
+  );
+  const { data: toParty, isLoading: toPartyIsLoading } = useGetPartyByUUIDQuery(toPartyUuid ?? '');
 
   return (
     <PartyRepresentationContext.Provider
