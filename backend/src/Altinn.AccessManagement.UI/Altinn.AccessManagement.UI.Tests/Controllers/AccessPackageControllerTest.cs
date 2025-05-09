@@ -246,7 +246,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///    Expected: Returns a not successfull status code
         /// </summary>
         [Fact]
-        public async Task CreateAccessPackageDelegation_BadRequest()
+        public async Task CreateAccessPackageDelegation_BadRequestFromBackend()
+        {
+            // Arrange
+
+            var party = "00000000-0000-0000-0000-000000000000";
+            var from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            var packageId = "test_package_id";
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&packageId={packageId}", null);
+
+            // Assert
+            Assert.False(response.IsSuccessStatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: Create a new access package delegation that throws exception in backend
+        ///    Expected: Returns a not successfull status code
+        /// </summary>
+        [Fact]
+        public async Task CreateAccessPackageDelegation_BadRequestFromBFF()
         {
             // Arrange
 
