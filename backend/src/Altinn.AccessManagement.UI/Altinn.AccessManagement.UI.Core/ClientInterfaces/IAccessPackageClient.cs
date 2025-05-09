@@ -23,7 +23,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="to">The id of the right holder that will receive the access</param>
         /// <param name="from">The id of the party that the rightholder will be granted access on behalf of</param>
         /// <param name="packageId">The id of the package to be delegated</param>
-        /// <param name="languageCode">The code of the language on which texts are to be returned</param>
-        Task<HttpResponseMessage> CreateAccessPackageDelegation(Guid party, Guid to, Guid from, string packageId, string languageCode);
+        Task<HttpResponseMessage> CreateAccessPackageDelegation(Guid party, Guid to, Guid from, string packageId);
     }
 }

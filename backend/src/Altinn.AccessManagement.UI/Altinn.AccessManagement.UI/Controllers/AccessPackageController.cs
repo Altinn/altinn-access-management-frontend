@@ -103,11 +103,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("delegations")]
         public async Task<ActionResult> CreateAccessPackageDelegation([FromQuery] Guid party, [FromQuery] Guid to, [FromQuery] Guid from, [FromQuery] string packageId)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
-                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-
-                HttpResponseMessage response = await _accessPackageService.CreateDelegation(party, to, from, packageId, languageCode);
+                HttpResponseMessage response = await _accessPackageService.CreateDelegation(party, to, from, packageId);
                 if (response.IsSuccessStatusCode)
                 {
                     return Ok(await response.Content.ReadAsStringAsync());
