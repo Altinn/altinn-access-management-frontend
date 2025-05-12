@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Models;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -495,7 +496,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddReporteeRightHolder_TriggersHttpStatusException_ReturnsErrorStatus()
         {
             // Arrange
-            // Using Guid.Empty will trigger the HttpStatusException in RightHolderClientMock
+            // Using Guid.Empty will trigger the InternalServerError in RightHolderClientMock
             var reporteePartyUuid = Guid.Empty;
             var rightHolderPartyUuid = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
 
@@ -508,7 +509,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 null);
 
             // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
             string content = await httpResponse.Content.ReadAsStringAsync();
             Assert.Contains("Unexpected HttpStatus response", content);
         }
@@ -645,6 +646,95 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        ///   Test case: GetRightholders returns bad request when invalid model state
+        ///   Expected: Returns 400 Bad Request
+        /// </summary>
+        [Fact]
+        public async Task GetRightholders_BadRequestOnInvalidModelState()
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party=invalid-party-id");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("b0a79f3d-4cef-430a-9774-301b754e0f6f", null, null)]
+        [InlineData("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199", "", "")]
+        public async Task GetRightholders_MissingPartyAndFromOrTo_ReturnsBadRequest(string party, string from, string to)
+        {
+            /// Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={party}&from={from}&to={to}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("Either 'from' or 'to' query parameter must be provided.", await response.Content.ReadAsStringAsync());
+        }
+
+        [Theory]
+        [InlineData(null, "b0a79f3d-4cef-430a-9774-301b754e0f6f", "")]
+        [InlineData("", "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199", "")]
+        [InlineData("", "b0a79f3d-4cef-430a-9774-301b754e0f6f", "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199")]
+        public async Task GetRightholders_MissingPartyAndFromOrTo_ReturnsInvalidModelState(string party, string from, string to)
+        {
+            /// Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={party}&from={from}&to={to}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Contains("The value '' is invalid", await response.Content.ReadAsStringAsync());
+        }
+
+        [Fact]
+        public async Task GetRightholders_HandlesError()
+        {
+            /// Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={Guid.Empty}&from={Guid.Empty}&to={Guid.Empty}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+
+        [Theory]
+        [InlineData("cd35779b-b174-4ecc-bbef-ece13611be7f", "cd35779b-b174-4ecc-bbef-ece13611be7f", "")]
+        [InlineData("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199", "", "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199")]
+        public async Task GetRightholders_ReturnsRightholdersList(string party, string from, string to)
+        {
+            /// Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{party}.json");
+            List<User> expectedResponse = Util.GetMockData<List<User>>(path);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={party}&from={from}&to={to}");
+            var resJson = await response.Content.ReadAsStringAsync();
+            List<User> actualResponse = await response.Content.ReadFromJsonAsync<List<User>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
     }
 }

@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
 import { UserList } from '../common/UserList/UserList';
 import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
@@ -31,8 +32,20 @@ const extractFromList = (
 
 export const UsersList = () => {
   const { t } = useTranslation();
+  const { fromParty } = usePartyRepresentation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
-  const { data: rightHolders, isLoading } = useGetRightHoldersQuery();
+
+  const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
+    {
+      partyUuid: fromParty?.partyUuid ?? '',
+      fromUuid: fromParty?.partyUuid ?? '',
+      toUuid: '', // all
+    },
+    {
+      skip: !fromParty?.partyUuid,
+    },
+  );
+
   const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
 
   const [currentUserAsRightHolder, setCurrentUserAsRightHolder] = useState<User>();
@@ -100,7 +113,7 @@ export const UsersList = () => {
       <UserList
         userList={userList || []}
         searchString={searchString}
-        isLoading={isLoading}
+        isLoading={loadingRightHolders}
         listItemTitleAs='h2'
       />
     </div>

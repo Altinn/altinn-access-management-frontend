@@ -1,0 +1,1656 @@
+[
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "b3f5c1e8-4e3b-4d2a-8c3e-1f2b3d4e5f6a",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Maskinporten administrator",
+      "code": "maskinporten-administrator",
+      "description": "Gir bruker mulighet til å administrere tilgang til maskinporten scopes",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:maskinporten-administrator"
+    },
+    "to": {
+      "id": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "TOM KARNAPP",
+      "refId": "03848496544",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "id": "01961596-311c-7398-880f-f54029e25782",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "b3f5c1e8-4e3b-4d2a-8c3e-1f2b3d4e5f6a",
+    "toId": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTMAP",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": true,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "ba1c261c-20ec-44e2-9e0b-4e7cfe9f36e7",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Hovedadministrator",
+      "code": "hovedadministrator",
+      "description": "Gir mulighet til å administrere alle tilganger for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:hovedadministrator"
+    },
+    "to": {
+      "id": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "TOM KARNAPP",
+      "refId": "03848496544",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "id": "01961596-311c-7398-880f-f54029e25782",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "ba1c261c-20ec-44e2-9e0b-4e7cfe9f36e7",
+    "toId": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTMAP",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": true,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "6c1fbcb9-609c-4ab8-a048-3be8d7da5a82",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Tilgangsstyrer",
+      "code": "tilgangsstyrer",
+      "description": "Gir mulighet til å gi videre tilganger for virksomheten som man selv har mottatt",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:tilgangsstyrer"
+    },
+    "to": {
+      "id": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "TOM KARNAPP",
+      "refId": "03848496544",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "id": "01961596-311c-7398-880f-f54029e25782",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "6c1fbcb9-609c-4ab8-a048-3be8d7da5a82",
+    "toId": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTMAP",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": true,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "6795081e-e69c-4efd-8d42-2bfccd346777",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Klientadministrator",
+      "code": "klientadministrator",
+      "description": "Gir mulighet til å administrere tilgang til tjenester videre til ansatte på vegne av deres kunder",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:klientadministrator"
+    },
+    "to": {
+      "id": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "TOM KARNAPP",
+      "refId": "03848496544",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "id": "01961596-311c-7398-880f-f54029e25782",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "6795081e-e69c-4efd-8d42-2bfccd346777",
+    "toId": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTMAP",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": true,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "to": {
+      "id": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "TOM KARNAPP",
+      "refId": "03848496544",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "01961596-311c-7398-880f-f54029e25782",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "toId": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "d41d67f2-15b0-4c82-95db-b8d5baaa14a4",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Varamedlem",
+      "code": "varamedlem",
+      "description": "Fysisk- eller juridisk person som er stedfortreder for et styremedlem",
+      "isKeyRole": false,
+      "urn": "urn:altinn:external-role:ccr:varamedlem"
+    },
+    "to": {
+      "id": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "TOM KARNAPP",
+      "refId": "03848496544",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "01961596-311c-7472-b27f-d90d0ffbb601",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "d41d67f2-15b0-4c82-95db-b8d5baaa14a4",
+    "toId": "e1b1ef73-2a8b-4349-b37f-63ae7e8290b5",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "46e27685-b3ba-423e-8b42-faab54de5817",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Regnskapsfører",
+      "code": "regnskapsforer",
+      "description": "Regnskapsfører",
+      "isKeyRole": false,
+      "urn": "urn:altinn:external-role:ccr:regnskapsforer"
+    },
+    "to": {
+      "id": "170bcef3-bf8a-4f4e-8970-062c89cd2c4e",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "UMOTIVERT FANTASILØS TIGER AS",
+      "refId": "314240553",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "01961596-311c-79f0-a83f-fa72ba4ef4d2",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "46e27685-b3ba-423e-8b42-faab54de5817",
+    "toId": "170bcef3-bf8a-4f4e-8970-062c89cd2c4e",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "to": {
+      "id": "3967bdc2-4e92-49e8-a6e0-23f243e08054",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "SPONTAN MANDAGSBIL",
+      "refId": "24887798954",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "170bcef3-bf8a-4f4e-8970-062c89cd2c4e",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "UMOTIVERT FANTASILØS TIGER AS",
+      "refId": "314240553",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "46e27685-b3ba-423e-8b42-faab54de5817",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Regnskapsfører",
+      "code": "regnskapsforer",
+      "description": "Regnskapsfører",
+      "isKeyRole": false,
+      "urn": "urn:altinn:external-role:ccr:regnskapsforer"
+    },
+    "id": "01961596-311c-79f0-a83f-fa72ba4ef4d2",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "toId": "3967bdc2-4e92-49e8-a6e0-23f243e08054",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Styrets leder",
+      "code": "styreleder",
+      "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:styreleder"
+    },
+    "to": {
+      "id": "525d6dfb-6078-4551-ab98-dd7906574348",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "LITEN JEANS",
+      "refId": "06898397546",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "170bcef3-bf8a-4f4e-8970-062c89cd2c4e",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "UMOTIVERT FANTASILØS TIGER AS",
+      "refId": "314240553",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "46e27685-b3ba-423e-8b42-faab54de5817",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Regnskapsfører",
+      "code": "regnskapsforer",
+      "description": "Regnskapsfører",
+      "isKeyRole": false,
+      "urn": "urn:altinn:external-role:ccr:regnskapsforer"
+    },
+    "id": "01961596-311c-79f0-a83f-fa72ba4ef4d2",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+    "toId": "525d6dfb-6078-4551-ab98-dd7906574348",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "ba1c261c-20ec-44e2-9e0b-4e7cfe9f36e7",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Hovedadministrator",
+      "code": "hovedadministrator",
+      "description": "Gir mulighet til å administrere alle tilganger for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:hovedadministrator"
+    },
+    "to": {
+      "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "SITRONGUL MEDALJONG",
+      "refId": "20838198385",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Styrets leder",
+      "code": "styreleder",
+      "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:styreleder"
+    },
+    "id": "01961596-311c-7f40-8a51-58d02c0186b2",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "ba1c261c-20ec-44e2-9e0b-4e7cfe9f36e7",
+    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTMAP",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": true,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "6c1fbcb9-609c-4ab8-a048-3be8d7da5a82",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Tilgangsstyrer",
+      "code": "tilgangsstyrer",
+      "description": "Gir mulighet til å gi videre tilganger for virksomheten som man selv har mottatt",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:tilgangsstyrer"
+    },
+    "to": {
+      "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "SITRONGUL MEDALJONG",
+      "refId": "20838198385",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Styrets leder",
+      "code": "styreleder",
+      "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:styreleder"
+    },
+    "id": "01961596-311c-7f40-8a51-58d02c0186b2",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "6c1fbcb9-609c-4ab8-a048-3be8d7da5a82",
+    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTMAP",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": true,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "6795081e-e69c-4efd-8d42-2bfccd346777",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Klientadministrator",
+      "code": "klientadministrator",
+      "description": "Gir mulighet til å administrere tilgang til tjenester videre til ansatte på vegne av deres kunder",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:klientadministrator"
+    },
+    "to": {
+      "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "SITRONGUL MEDALJONG",
+      "refId": "20838198385",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Styrets leder",
+      "code": "styreleder",
+      "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:styreleder"
+    },
+    "id": "01961596-311c-7f40-8a51-58d02c0186b2",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "6795081e-e69c-4efd-8d42-2bfccd346777",
+    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTMAP",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": true,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Styrets leder",
+      "code": "styreleder",
+      "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:styreleder"
+    },
+    "to": {
+      "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "SITRONGUL MEDALJONG",
+      "refId": "20838198385",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "01961596-311c-7f40-8a51-58d02c0186b2",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "b3f5c1e8-4e3b-4d2a-8c3e-1f2b3d4e5f6a",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Maskinporten administrator",
+      "code": "maskinporten-administrator",
+      "description": "Gir bruker mulighet til å administrere tilgang til maskinporten scopes",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:maskinporten-administrator"
+    },
+    "to": {
+      "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "SITRONGUL MEDALJONG",
+      "refId": "20838198385",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Styrets leder",
+      "code": "styreleder",
+      "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:styreleder"
+    },
+    "id": "01961596-311c-7f40-8a51-58d02c0186b2",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "b3f5c1e8-4e3b-4d2a-8c3e-1f2b3d4e5f6a",
+    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTMAP",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": true,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "to": {
+      "id": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "4f6c04d2-7223-41cc-8135-bb91d79ed311",
+      "name": "DIGITALISERINGSDIREKTORATET",
+      "refId": "991825827",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "019685fd-89ce-7d09-8edf-698282fc8535",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+    "toId": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "to": {
+      "id": "b90749da-f2ba-4b9f-89cc-9ee5d9db2f3d",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "GUSTAV SÆBØ",
+      "refId": "03107000991",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "4f6c04d2-7223-41cc-8135-bb91d79ed311",
+      "name": "DIGITALISERINGSDIREKTORATET",
+      "refId": "991825827",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "id": "019685fd-89ce-7d09-8edf-698282fc8535",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "toId": "b90749da-f2ba-4b9f-89cc-9ee5d9db2f3d",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "to": {
+      "id": "0af54454-f037-45e8-b08d-0feb0910d860",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "HILDEGUNN SLETTUM",
+      "refId": "12096800833",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "4f6c04d2-7223-41cc-8135-bb91d79ed311",
+      "name": "DIGITALISERINGSDIREKTORATET",
+      "refId": "991825827",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "id": "019685fd-89ce-7d09-8edf-698282fc8535",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "toId": "0af54454-f037-45e8-b08d-0feb0910d860",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "2651ed07-f31b-4bc1-87bd-4d270742a19d",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Innehaver",
+      "code": "innehaver",
+      "description": "Fysisk person som er eier av et enkeltpersonforetak",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:innehaver"
+    },
+    "to": {
+      "id": "e07770f7-3f02-4350-a6ba-52cc5144ca91",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "GYLDEN MUSKEL",
+      "refId": "29845497581",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "6220333d-95e2-4d79-9ad1-bc9f017762e1",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "d78400f0-27d9-488a-886c-e264cc5c77ba",
+      "name": "IMPULSIV FORSKJELLIG KATT JAGUAR",
+      "refId": "313303306",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "id": "0196a454-5b57-70b4-8b78-336e7b73c2d4",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "2651ed07-f31b-4bc1-87bd-4d270742a19d",
+    "toId": "e07770f7-3f02-4350-a6ba-52cc5144ca91",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "to": {
+      "id": "e07770f7-3f02-4350-a6ba-52cc5144ca91",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "GYLDEN MUSKEL",
+      "refId": "29845497581",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "6220333d-95e2-4d79-9ad1-bc9f017762e1",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "d78400f0-27d9-488a-886c-e264cc5c77ba",
+      "name": "IMPULSIV FORSKJELLIG KATT JAGUAR",
+      "refId": "313303306",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "id": "0196a454-5b57-70b4-8b78-336e7b73c2d4",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "toId": "e07770f7-3f02-4350-a6ba-52cc5144ca91",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "to": {
+      "id": "6220333d-95e2-4d79-9ad1-bc9f017762e1",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "d78400f0-27d9-488a-886c-e264cc5c77ba",
+      "name": "IMPULSIV FORSKJELLIG KATT JAGUAR",
+      "refId": "313303306",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "0196a454-5b57-70b4-8b78-336e7b73c2d4",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+    "toId": "6220333d-95e2-4d79-9ad1-bc9f017762e1",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "to": {
+      "id": "40f76699-d5ef-41fb-8051-ee7f51c45bc9",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "GYLDEN KETSJUP",
+      "refId": "07899397422",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "3f8e7d85-0dc5-4ab8-a5d0-8fcfa3926d01",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "3ae468d4-ea92-471d-b7b1-924e49b0d619",
+      "name": "ORANSJE ALLSLAGS HAMSTER KF",
+      "refId": "310167010",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "id": "0196a455-4736-7b7e-a222-784a02f88f2c",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "toId": "40f76699-d5ef-41fb-8051-ee7f51c45bc9",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Styrets leder",
+      "code": "styreleder",
+      "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:styreleder"
+    },
+    "to": {
+      "id": "c21be02f-0aa9-4e00-83fb-c917284503d6",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "SAMARBEIDSVILLIG ELEV",
+      "refId": "11875395566",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "3f8e7d85-0dc5-4ab8-a5d0-8fcfa3926d01",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "3ae468d4-ea92-471d-b7b1-924e49b0d619",
+      "name": "ORANSJE ALLSLAGS HAMSTER KF",
+      "refId": "310167010",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "id": "0196a455-4736-7b7e-a222-784a02f88f2c",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+    "toId": "c21be02f-0aa9-4e00-83fb-c917284503d6",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "to": {
+      "id": "3f8e7d85-0dc5-4ab8-a5d0-8fcfa3926d01",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "3ae468d4-ea92-471d-b7b1-924e49b0d619",
+      "name": "ORANSJE ALLSLAGS HAMSTER KF",
+      "refId": "310167010",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "0196a455-4736-7b7e-a222-784a02f88f2c",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+    "toId": "3f8e7d85-0dc5-4ab8-a5d0-8fcfa3926d01",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "18baa914-ac43-4663-9fa4-6f5760dc68eb",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Deltaker delt ansvar",
+      "code": "deltaker-delt-ansvar",
+      "description": "Fysisk- eller juridisk person som har personlig ansvar for deler av selskapets forpliktelser",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:deltaker-delt-ansvar"
+    },
+    "to": {
+      "id": "ddbf87dc-c29f-470f-b81d-1cc10721d6a0",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "UTÅLMODIG ABONNEMENT",
+      "refId": "05929897961",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "fe1bb511-f009-440e-b000-625acce2de92",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "b3433097-38b9-4a47-bd50-a4bb794cab3d",
+      "name": "POSSESSIV FUNKSJONELL HUND DA",
+      "refId": "311048724",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "id": "0196a485-2a8b-7e58-9b63-4f09af8a8831",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "18baa914-ac43-4663-9fa4-6f5760dc68eb",
+    "toId": "ddbf87dc-c29f-470f-b81d-1cc10721d6a0",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "to": {
+      "id": "ddbf87dc-c29f-470f-b81d-1cc10721d6a0",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "UTÅLMODIG ABONNEMENT",
+      "refId": "05929897961",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "fe1bb511-f009-440e-b000-625acce2de92",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "b3433097-38b9-4a47-bd50-a4bb794cab3d",
+      "name": "POSSESSIV FUNKSJONELL HUND DA",
+      "refId": "311048724",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "id": "0196a485-2a8b-7e58-9b63-4f09af8a8831",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "toId": "ddbf87dc-c29f-470f-b81d-1cc10721d6a0",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "18baa914-ac43-4663-9fa4-6f5760dc68eb",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Deltaker delt ansvar",
+      "code": "deltaker-delt-ansvar",
+      "description": "Fysisk- eller juridisk person som har personlig ansvar for deler av selskapets forpliktelser",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:deltaker-delt-ansvar"
+    },
+    "to": {
+      "id": "55d097af-bb71-4493-81ee-55dc64177bdd",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "HORISONTAL KINO",
+      "refId": "28929799153",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "fe1bb511-f009-440e-b000-625acce2de92",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "b3433097-38b9-4a47-bd50-a4bb794cab3d",
+      "name": "POSSESSIV FUNKSJONELL HUND DA",
+      "refId": "311048724",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "id": "0196a485-2a8b-7e58-9b63-4f09af8a8831",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "18baa914-ac43-4663-9fa4-6f5760dc68eb",
+    "toId": "55d097af-bb71-4493-81ee-55dc64177bdd",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Styrets leder",
+      "code": "styreleder",
+      "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:styreleder"
+    },
+    "to": {
+      "id": "ddbf87dc-c29f-470f-b81d-1cc10721d6a0",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "UTÅLMODIG ABONNEMENT",
+      "refId": "05929897961",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "fe1bb511-f009-440e-b000-625acce2de92",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "b3433097-38b9-4a47-bd50-a4bb794cab3d",
+      "name": "POSSESSIV FUNKSJONELL HUND DA",
+      "refId": "311048724",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "id": "0196a485-2a8b-7e58-9b63-4f09af8a8831",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+    "toId": "ddbf87dc-c29f-470f-b81d-1cc10721d6a0",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "to": {
+      "id": "fe1bb511-f009-440e-b000-625acce2de92",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "b3433097-38b9-4a47-bd50-a4bb794cab3d",
+      "name": "POSSESSIV FUNKSJONELL HUND DA",
+      "refId": "311048724",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "0196a485-2a8b-7e58-9b63-4f09af8a8831",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+    "toId": "fe1bb511-f009-440e-b000-625acce2de92",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "18baa914-ac43-4663-9fa4-6f5760dc68eb",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Deltaker delt ansvar",
+      "code": "deltaker-delt-ansvar",
+      "description": "Fysisk- eller juridisk person som har personlig ansvar for deler av selskapets forpliktelser",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:deltaker-delt-ansvar"
+    },
+    "to": {
+      "id": "56c2a17c-a400-4aa3-9682-3497c8e458a9",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "MEMORERENDE BRUK",
+      "refId": "04887697340",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "fe1bb511-f009-440e-b000-625acce2de92",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "b3433097-38b9-4a47-bd50-a4bb794cab3d",
+      "name": "POSSESSIV FUNKSJONELL HUND DA",
+      "refId": "311048724",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:rettighetshaver"
+    },
+    "id": "0196a485-2a8b-7e58-9b63-4f09af8a8831",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "18baa914-ac43-4663-9fa4-6f5760dc68eb",
+    "toId": "56c2a17c-a400-4aa3-9682-3497c8e458a9",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTKEY",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": true
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "b3f5c1e8-4e3b-4d2a-8c3e-1f2b3d4e5f6a",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Maskinporten administrator",
+      "code": "maskinporten-administrator",
+      "description": "Gir bruker mulighet til å administrere tilgang til maskinporten scopes",
+      "isKeyRole": false,
+      "urn": "urn:altinn:role:maskinporten-administrator"
+    },
+    "to": {
+      "id": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "INTELLIGENT ALBATROSS",
+      "refId": "03848496544",
+      "parentId": null
+    },
+    "facilitator": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "facilitatorRole": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "id": "01961596-311c-7398-880f-f54029e25782",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "b3f5c1e8-4e3b-4d2a-8c3e-1f2b3d4e5f6a",
+    "toId": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECTMAP",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": true,
+    "isKeyRole": false
+  },
+  {
+    "delegation": null,
+    "from": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "typeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "variantId": "263762ec-54fc-4eae-b7a1-17e92eea9a5c",
+      "name": "DISKRET NÆR TIGER AS",
+      "refId": "310202398",
+      "parentId": null
+    },
+    "role": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Rettighetshaver",
+      "code": "rettighetshaver",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder"
+    },
+    "to": {
+      "id": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+      "typeId": "bfe09e70-e868-44b3-8d81-dfe0e13e058a",
+      "variantId": "b0690e14-7a75-45a4-8c02-437f6705b5ee",
+      "name": "INTELLIGENT ALBATROSS",
+      "refId": "03848496544",
+      "parentId": null
+    },
+    "facilitator": null,
+    "facilitatorRole": null,
+    "id": "01961596-311c-7398-880f-f54029e25782",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "roleId": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "toId": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+    "facilitatorId": null,
+    "facilitatorRoleId": null,
+    "source": "DIRECT",
+    "isDirect": true,
+    "isParent": false,
+    "isRoleMap": false,
+    "isKeyRole": false
+  }
+]
