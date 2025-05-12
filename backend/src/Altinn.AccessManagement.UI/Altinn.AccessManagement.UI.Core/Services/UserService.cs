@@ -132,34 +132,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>
         public async Task<List<User>> GetRightHolders(Guid party, Guid? from, Guid? to)
         {
-            HttpResponseMessage res = await _rightHolderClient.GetRightHolders(party, from, to);
-            if (res.IsSuccessStatusCode)
+            List<Connection> res = await _rightHolderClient.GetRightHolders(party, from, to);
+            try
             {
-                try
-                {
-                    string content = await res.Content.ReadAsStringAsync();
-
-                    List<Connection> rightHolders = JsonSerializer.Deserialize<List<Connection>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    
-                    // Map the response to the frontend model for either right holders or reportees
-                    // depending on the presence of the 'from' parameter
-                    var users = from.HasValue 
-                        ? ConnectionMapper.MapToRightholders(rightHolders) 
-                        : ConnectionMapper.MapToReportees(rightHolders);
-                    return users;
-                }
-                catch (JsonException ex)
-                {
-                    _logger.LogError(ex, "Failed to deserialize RightHolders response from backend.");
-
-                    throw new ApplicationException("Failed to parse response from backend.", ex);
-                }
+                // Map the response to the frontend model for either right holders or reportees
+                // depending on the presence of the 'from' parameter
+                var users = from.HasValue
+                    ? ConnectionMapper.MapToRightholders(res)
+                    : ConnectionMapper.MapToReportees(res);
+                return users;
             }
-            else
+            catch (JsonException ex)
             {
-                string errorContent = await res.Content.ReadAsStringAsync();
-                _logger.LogError("Unexpected status code {StatusCode} from GetRightHolders backend: {ErrorContent}", res.StatusCode, errorContent);
-                throw new HttpStatusException("GetRightHoldersError", $"Unexpected status code from backend: {res.StatusCode}", res.StatusCode, errorContent);
+                _logger.LogError(ex, "Failed to deserialize RightHolders response from backend.");
+
+                throw new ApplicationException("Failed to parse response from backend.", ex);
             }
         }
     }

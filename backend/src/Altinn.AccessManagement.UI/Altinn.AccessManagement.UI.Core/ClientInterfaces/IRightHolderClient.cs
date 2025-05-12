@@ -1,4 +1,6 @@
-﻿namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
+﻿using Altinn.AccessManagement.UI.Core.Models.User;
+
+namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>
     /// Interface for client to integrate with access package metadata
@@ -28,6 +30,6 @@
         /// <param name="from">The GUID identifying the party from which to retrieve right holders.</param>
         /// <param name="to">The GUID identifying the party to which to retrieve right holders.</param>
         /// <returns>A task representing the asynchronous operation, with a result of type <see cref="HttpResponseMessage"/>.</returns>
-        Task<HttpResponseMessage> GetRightHolders(Guid party, Guid? from, Guid? to);
+        Task<List<Connection>> GetRightHolders(Guid party, Guid? from, Guid? to);
     }
 }

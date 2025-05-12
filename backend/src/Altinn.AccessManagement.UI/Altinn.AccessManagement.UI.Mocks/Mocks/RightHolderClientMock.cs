@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Bogus.Extensions.UnitedKingdom;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -43,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc/>
-        public Task<HttpResponseMessage> GetRightHolders(Guid party, Guid? from, Guid? to)
+        public Task<List<Connection>> GetRightHolders(Guid party, Guid? from, Guid? to)
         {
             if (party == Guid.Empty)
             {
@@ -51,25 +52,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             try
             {
-
                 var testDataPath = Path.Combine(dataFolder, "RightHolders", $"{party}.json");
                 var jsonContent = File.ReadAllText(testDataPath);
-                var response = new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent(jsonContent, Encoding.UTF8, "application/json")
-                };
-                return Task.FromResult(response);
+                var connections = JsonSerializer.Deserialize<List<Connection>>(jsonContent, options);
+                return Task.FromResult(connections);
             }
             catch
             {
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent("[]", Encoding.UTF8, "application/json")
-                });
+                return Task.FromResult(new List<Connection>());
             }
-
-
-
         }
 
         /// <inheritdoc/>

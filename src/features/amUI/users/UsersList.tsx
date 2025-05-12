@@ -11,7 +11,7 @@ import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 
 import { debounce } from '@/resources/utils';
-import { useLazyGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import type { User } from '@/rtk/features/userInfoApi';
 
 const extractFromList = (
@@ -35,18 +35,16 @@ export const UsersList = () => {
   const { fromParty } = usePartyRepresentation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
 
-  const [trigger, { data: rightHolders, isLoading: loadingRightHolders }] =
-    useLazyGetRightHoldersQuery();
-
-  useEffect(() => {
-    if (fromParty?.partyUuid) {
-      trigger({
-        partyUuid: fromParty.partyUuid,
-        fromUuid: fromParty.partyUuid,
-        toUuid: '', // all
-      });
-    }
-  }, [fromParty, trigger]);
+  const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
+    {
+      partyUuid: fromParty?.partyUuid ?? '',
+      fromUuid: fromParty?.partyUuid ?? '',
+      toUuid: '', // all
+    },
+    {
+      skip: !fromParty?.partyUuid,
+    },
+  );
 
   const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsSearch } from '@altinn/altinn-components';
 
@@ -8,23 +8,22 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import classes from './ReporteePage.module.css';
 
 import { debounce } from '@/resources/utils';
-import { useLazyGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
 
 export const ReporteesList = () => {
   const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
 
-  const [trigger, { data: rightHolders, isLoading }] = useLazyGetRightHoldersQuery();
-
-  useEffect(() => {
-    if (fromParty?.partyUuid) {
-      trigger({
-        partyUuid: fromParty.partyUuid,
-        fromUuid: '', // all
-        toUuid: fromParty.partyUuid,
-      });
-    }
-  }, [fromParty, trigger]);
+  const { data: rightHolders, isLoading } = useGetRightHoldersQuery(
+    {
+      partyUuid: fromParty?.partyUuid ?? '',
+      fromUuid: '', // all
+      toUuid: fromParty?.partyUuid ?? '',
+    },
+    {
+      skip: !fromParty?.partyUuid,
+    },
+  );
 
   const [searchString, setSearchString] = useState<string>('');
 

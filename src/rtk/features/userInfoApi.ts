@@ -139,7 +139,7 @@ export const userInfoApi = createApi({
 export const {
   useGetUserInfoQuery,
   useGetReporteeQuery,
-  useLazyGetRightHoldersQuery,
+  useGetRightHoldersQuery,
   useAddRightHolderMutation,
   useRemoveRightHolderMutation,
   useGetUserAccessesQuery,
