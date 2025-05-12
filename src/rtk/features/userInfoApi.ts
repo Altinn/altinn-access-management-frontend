@@ -35,7 +35,7 @@ export interface User {
   partyUuid: string;
   partyType: PartyType;
   name: string;
-  registryRoles: string[];
+  roles: string[];
   organizationNumber?: string;
   unitType?: string;
   inheritingUsers: User[];
