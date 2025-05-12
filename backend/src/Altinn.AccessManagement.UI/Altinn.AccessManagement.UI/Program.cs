@@ -198,6 +198,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddMvc();
     services.AddHealthChecks().AddCheck<HealthCheck>("accessmanagement_ui_health_check");
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
+    services.Configure<Altinn.Common.PEP.Configuration.PlatformSettings>(config.GetSection("PlatformSettings"));
+
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
     services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
     services.Configure<FeatureFlags>(config.GetSection("FeatureFlags"));
