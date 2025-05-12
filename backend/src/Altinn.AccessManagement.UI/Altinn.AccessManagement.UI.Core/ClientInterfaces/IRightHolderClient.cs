@@ -29,7 +29,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The GUID identifying the party for which to retrieve right holders.</param>
         /// <param name="from">The GUID identifying the party from which to retrieve right holders.</param>
         /// <param name="to">The GUID identifying the party to which to retrieve right holders.</param>
-        /// <returns>A task representing the asynchronous operation, with a result of type <see cref="HttpResponseMessage"/>.</returns>
+        /// <returns> A list of <see cref="Connection"/> objects representing the right holders.</returns>
         Task<List<Connection>> GetRightHolders(Guid party, Guid? from, Guid? to);
     }
 }
