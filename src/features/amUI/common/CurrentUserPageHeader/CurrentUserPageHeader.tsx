@@ -26,7 +26,7 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
           <ListItemHeader
             size='xl'
             title={currentUser?.name}
-            description={currentUser?.registryRoles?.join(', ')}
+            description={currentUser?.roles?.join(', ')}
             avatar={{
               type: 'person',
               name: currentUser?.name || '',
