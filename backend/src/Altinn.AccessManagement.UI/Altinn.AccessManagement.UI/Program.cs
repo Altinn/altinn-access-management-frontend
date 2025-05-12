@@ -1,5 +1,6 @@
 using Altinn.AccessManagement.Configuration;
 using Altinn.AccessManagement.Core.Helpers;
+using Altinn.AccessManagement.UI.Authorization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -12,6 +13,10 @@ using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.Common.AccessTokenClient.Services;
+using Altinn.Common.PEP.Authorization;
+using Altinn.Common.PEP.Clients;
+using Altinn.Common.PEP.Implementation;
+using Altinn.Common.PEP.Interfaces;
 using AltinnCore.Authentication.JwtCookie;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
@@ -19,6 +24,7 @@ using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.IdentityModel.Logging;
@@ -54,6 +60,10 @@ builder.Services.AddMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("isAdmin", policy => policy.Requirements.Add(new ResourceAccessRequirement("read", "altinn_maskinporten_scope_delegation")));
+
+builder.Services.AddScoped<IAuthorizationHandler, EndUserResourceAccessHandler>();
 
 WebApplication app = builder.Build();
 
@@ -195,6 +205,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
+    
+    services.AddSingleton<IPDP, PDPAppSI>();
 
     ConfigureMockableClients(services, config);
 
@@ -287,6 +299,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 {
     MockSettings mockSettings = config.GetSection("MockSettings").Get<MockSettings>() ?? new MockSettings(false);
 
+    if (mockSettings.PDP)
+    {
+        services.AddHttpClient<AuthorizationApiClient>();
+    }
+    else
+    {
+        services.AddHttpClient<AuthorizationApiClient>();
+    }  
+    
     if (mockSettings.AccessManagement)
     {
         services.AddHttpClient<IAccessManagementClient, AccessManagementClientMock>();
@@ -386,7 +407,7 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
         services.AddSingleton<ISystemUserAgentRequestClient, SystemUserAgentRequestClientMock>();
         services.AddSingleton<ISystemUserAgentDelegationClient, SystemUserAgentDelegationClientMock>();
     }
-    else 
+    else
     {
         services.AddSingleton<ISystemUserAgentRequestClient, SystemUserAgentRequestClient>();
         services.AddSingleton<ISystemUserAgentDelegationClient, SystemUserAgentDelegationClient>();
