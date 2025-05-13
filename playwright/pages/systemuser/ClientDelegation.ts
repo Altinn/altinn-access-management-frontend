@@ -42,6 +42,7 @@ export class ClientDelegationPage {
   }
 
   async confirmDelegation() {
+    await expect(this.confirmButton).toBeVisible();
     await this.confirmButton.click();
   }
 
