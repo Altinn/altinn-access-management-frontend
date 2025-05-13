@@ -10,19 +10,23 @@ test.describe.configure({ timeout: 10000 });
 
 test.describe('Klientdelegering – Regnskapsfører og revisor', () => {
   let api: ApiRequests;
-  let systemId = '';
-  const name = `Playwright-e2e-regn-revi-${Date.now()}-${Math.random()}`;
 
   test.beforeEach(async ({ page }) => {
     api = new ApiRequests();
-    systemId = await api.createSystemInSystemregisterWithAccessPackages(name);
 
     const login = new loginWithUser(page);
     await login.loginWithUser(env('PID_REVISOR_REGNSKAPSFOERER'));
     await login.chooseReportee(env('AKTOER_REVISOR_REGNSKAPSFOERER'));
   });
 
-  test('Ansvarlig revisor', async ({ page }) => {
+  test('Legg til og slett kunde og slett Systembruker - Ansvarlig revisor', async ({ page }) => {
+    const name = `Playwright-e2e-revisor-${Date.now()}-${Math.random()}`;
+    const customer = {
+      label: 'HUSLØS DJERV TIGER',
+      confirmation: 'HUSLØS DJERV TIGER AS',
+    };
+
+    const systemId = await api.createSystemInSystemregisterWithAccessPackages(name);
     const clientDelegationPage = new ClientDelegationPage(page);
     const accessPackage = 'ansvarlig-revisor';
     const externalRef = TestdataApi.generateExternalRef();
@@ -34,18 +38,23 @@ test.describe('Klientdelegering – Regnskapsfører og revisor', () => {
       env('ORG_REVISOR_REGNSKAPSFOERER'),
     );
 
-    //Navigate to approve System User Request for Agent request
     await page.goto(response.confirmUrl);
     await clientDelegationPage.confirmDelegation();
     await clientDelegationPage.openAccessPackageModal(name);
-
     await clientDelegationPage.openAccessPackage('Ansvarlig revisor');
-    await clientDelegationPage.addCustomer('HUSLØS DJERV TIGER', 'HUSLØS DJERV TIGER AS');
-    await clientDelegationPage.removeCustomer('HUSLØS DJERV TIGER AS');
+    await clientDelegationPage.addCustomer(customer.label, customer.confirmation);
+    await clientDelegationPage.removeCustomer(customer.confirmation);
     await clientDelegationPage.deleteSystemUser(name);
   });
 
-  test('Regnskapsfører', async ({ page }) => {
+  test('Legg til og slett kunde og slett Systembruker - Regnskapsfører', async ({ page }) => {
+    const name = `Playwright-e2e-regnskapsforer-${Date.now()}-${Math.random()}`;
+    const customer = {
+      label: 'FINTFØLENDE GJESTFRI HAMSTER',
+      confirmation: 'FINTFØLENDE GJESTFRI HAMSTER KF',
+    };
+
+    const systemId = await api.createSystemInSystemregisterWithAccessPackages(name);
     const clientDelegationPage = new ClientDelegationPage(page);
     const accessPackage = 'regnskapsforer-lonn';
     const externalRef = TestdataApi.generateExternalRef();
@@ -61,30 +70,31 @@ test.describe('Klientdelegering – Regnskapsfører og revisor', () => {
     await clientDelegationPage.confirmDelegation();
     await clientDelegationPage.openAccessPackageModal(name);
     await clientDelegationPage.openAccessPackage('Regnskapsfører lønn');
-    await clientDelegationPage.addCustomer(
-      'FINTFØLENDE GJESTFRI HAMSTER',
-      'FINTFØLENDE GJESTFRI HAMSTER KF',
-    );
-    await clientDelegationPage.removeCustomer('FINTFØLENDE GJESTFRI HAMSTER KF');
+    await clientDelegationPage.addCustomer(customer.label, customer.confirmation);
+    await clientDelegationPage.removeCustomer(customer.confirmation);
     await clientDelegationPage.deleteSystemUser(name);
   });
 });
 
 test.describe('Klientdelegering – Forretningsfører', () => {
   let api: ApiRequests;
-  let systemId = '';
-  const name = `Playwright-e2e-forretningsforer-${Date.now()}-${Math.random()}`;
 
   test.beforeEach(async ({ page }) => {
     api = new ApiRequests();
-    systemId = await api.createSystemInSystemregisterWithAccessPackages(name);
 
     const login = new loginWithUser(page);
     await login.loginWithUser(env('PID_FORRETNINGSFORER'));
     await login.chooseReportee(env('AKTOER_FORRETNINGSFOERER'));
   });
 
-  test('Opprett og godkjenn forespørsel for "forretningsfører"', async ({ page }) => {
+  test('Legg til og slett kunde og slett Systembruker', async ({ page }) => {
+    const name = `Playwright-e2e-forretningsforer-${Date.now()}-${Math.random()}`;
+    const customer = {
+      label: 'SAMEIET TREG PATENT LØVE',
+      confirmation: 'SAMEIET TREG PATENT LØVE',
+    };
+
+    const systemId = await api.createSystemInSystemregisterWithAccessPackages(name);
     const clientDelegationPage = new ClientDelegationPage(page);
     const accessPackage = 'forretningsforer-eiendom';
     const externalRef = TestdataApi.generateExternalRef();
@@ -96,14 +106,12 @@ test.describe('Klientdelegering – Forretningsfører', () => {
       env('ORG_FORRETNINGSFORER'),
     );
 
-    //Navigate to approve System User Request for Agent request
     await page.goto(response.confirmUrl);
     await clientDelegationPage.confirmDelegation();
     await clientDelegationPage.openAccessPackageModal(name);
-
     await clientDelegationPage.openAccessPackage('Forretningsforer eiendom');
-    await clientDelegationPage.addCustomer('SAMEIET TREG PATENT LØVE', 'SAMEIET TREG PATENT LØVE');
-    await clientDelegationPage.removeCustomer('SAMEIET TREG PATENT LØVE');
+    await clientDelegationPage.addCustomer(customer.label, customer.confirmation);
+    await clientDelegationPage.removeCustomer(customer.confirmation);
     await clientDelegationPage.deleteSystemUser(name);
   });
 });
