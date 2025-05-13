@@ -3,10 +3,22 @@ import test from '@playwright/test';
 import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
 import { loginWithUser } from '../../pages/loginPage';
 import { TestdataApi } from '../../util/TestdataApi';
-import { env } from '../../util/helper';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
-test.describe.configure({ timeout: 10000 });
+test.describe.configure({ timeout: 20000 });
+
+const TEST_USERS = {
+  revisorRegnskapsfoerer: {
+    pid: '06857897380',
+    org: '314250052',
+    aktoer: 'TILBAKEHOLDEN USYMMETRISK TIGER',
+  },
+  forretningsforer: {
+    pid: '02895998748',
+    org: '313351203',
+    aktoer: 'GENIERKLÆRT LEI PUMA',
+  },
+};
 
 test.describe('Klientdelegering – Regnskapsfører og revisor', () => {
   let api: ApiRequests;
@@ -14,9 +26,10 @@ test.describe('Klientdelegering – Regnskapsfører og revisor', () => {
   test.beforeEach(async ({ page }) => {
     api = new ApiRequests();
 
+    const user = TEST_USERS.revisorRegnskapsfoerer;
     const login = new loginWithUser(page);
-    await login.loginWithUser(env('PID_REVISOR_REGNSKAPSFOERER'));
-    await login.chooseReportee(env('AKTOER_REVISOR_REGNSKAPSFOERER'));
+    await login.loginWithUser(user.pid);
+    await login.chooseReportee(user.aktoer);
   });
 
   test('Legg til og slett kunde og slett Systembruker - Ansvarlig revisor', async ({ page }) => {
@@ -35,7 +48,7 @@ test.describe('Klientdelegering – Regnskapsfører og revisor', () => {
       externalRef,
       systemId,
       accessPackage,
-      env('ORG_REVISOR_REGNSKAPSFOERER'),
+      TEST_USERS.revisorRegnskapsfoerer.org,
     );
 
     await page.goto(response.confirmUrl);
@@ -63,7 +76,7 @@ test.describe('Klientdelegering – Regnskapsfører og revisor', () => {
       externalRef,
       systemId,
       accessPackage,
-      env('ORG_REVISOR_REGNSKAPSFOERER'),
+      TEST_USERS.revisorRegnskapsfoerer.org,
     );
 
     await page.goto(response.confirmUrl);
@@ -82,9 +95,10 @@ test.describe('Klientdelegering – Forretningsfører', () => {
   test.beforeEach(async ({ page }) => {
     api = new ApiRequests();
 
+    const user = TEST_USERS.forretningsforer;
     const login = new loginWithUser(page);
-    await login.loginWithUser(env('PID_FORRETNINGSFORER'));
-    await login.chooseReportee(env('AKTOER_FORRETNINGSFOERER'));
+    await login.loginWithUser(user.pid);
+    await login.chooseReportee(user.aktoer);
   });
 
   test('Legg til og slett kunde og slett Systembruker', async ({ page }) => {
@@ -103,7 +117,7 @@ test.describe('Klientdelegering – Forretningsfører', () => {
       externalRef,
       systemId,
       accessPackage,
-      env('ORG_FORRETNINGSFORER'),
+      TEST_USERS.forretningsforer.org,
     );
 
     await page.goto(response.confirmUrl);

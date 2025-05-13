@@ -2,7 +2,6 @@ import test, { expect } from '@playwright/test';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { loginWithUser } from 'playwright/pages/loginPage';
-import { Util } from 'playwright/util/Util';
 
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
