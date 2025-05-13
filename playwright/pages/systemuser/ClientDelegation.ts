@@ -59,9 +59,15 @@ export class ClientDelegationPage {
   }
 
   async addCustomer(customerLabel: string, confirmationText: string) {
+    await expect(this.addCustomerButton).toBeVisible();
     await this.addCustomerButton.click();
+    const customerButton = this.addCustomerButtonByName(customerLabel);
+    await expect(customerButton).toBeVisible();
     await this.addCustomerButtonByName(customerLabel).click();
+    const confirmation = this.confirmationText(`${confirmationText} er lagt`);
+    await expect(confirmation).toBeVisible();
     await this.confirmationText(`${confirmationText} er lagt`).click();
+    await expect(this.confirmAndCloseButton).toBeVisible();
     await this.confirmAndCloseButton.click();
   }
 
