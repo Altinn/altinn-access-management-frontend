@@ -31,6 +31,7 @@ export class loginWithUser {
 
   async chooseReportee(reportee: string) {
     await this.page.getByRole('searchbox', { name: 'Søk etter aktør' }).fill(reportee);
+    await this.page.keyboard.press('Enter'); //For long lists you need to search
     const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
     await chosenReportee.click();
     await this.page.goto((process.env.BASE_URL as string) + '/ui/profile');
