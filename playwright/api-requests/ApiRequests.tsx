@@ -141,19 +141,14 @@ export class ApiRequests {
     externalRef: string,
     systemId: string,
     accessPackageUrn: string,
-    redirectUrl = '',
+    partyOrgNo: string,
   ) {
-    const partyOrgNo = process.env.ALTINN_PARTY_ORG_CLIENT_DELEGATION;
-    if (!partyOrgNo) {
-      throw new Error('Missing ALTINN_PARTY_ORG_CLIENT_DELEGATION environment variable');
-    }
-
     const payload = {
       externalRef,
       systemId,
       partyOrgNo,
       accessPackages: [{ urn: `urn:altinn:accesspackage:${accessPackageUrn}` }],
-      redirectUrl,
+      redirectUrl: '',
     };
 
     const endpoint = 'v1/systemuser/request/vendor/agent';
