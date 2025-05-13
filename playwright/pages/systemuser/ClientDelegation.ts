@@ -66,9 +66,15 @@ export class ClientDelegationPage {
   }
 
   async removeCustomer(name: string) {
+    await expect(this.modifyCustomersButton).toBeVisible();
     await this.modifyCustomersButton.click();
+    const removeButton = this.removeCustomerButtonByName(name);
+    await expect(removeButton).toBeVisible();
     await this.removeCustomerButtonByName(name).click();
+    const confirmation = this.confirmationText(`${name} er fjernet fra Systemtilgangen`);
+    await expect(confirmation).toBeVisible();
     await this.confirmationText(`${name} er fjernet fra Systemtilgangen`).click();
+    await expect(this.confirmAndCloseButton).toBeVisible();
     await this.confirmAndCloseButton.click();
   }
 
