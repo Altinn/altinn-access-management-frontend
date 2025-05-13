@@ -12,12 +12,10 @@ test.describe('Klientdelegering', () => {
   let systemId = '';
   const name = `Playwright-e2e-${Date.now()}_${Math.random()}`;
 
-  test.beforeAll(async () => {
-    api = new ApiRequests();
-    systemId = await api.createSystemInSystemregisterWithAccessPackages(name); // Create system before tests
-  });
-
   test.beforeEach(async ({ page }) => {
+    api = new ApiRequests();
+
+    systemId = await api.createSystemInSystemregisterWithAccessPackages(name); // Create system before tests
     const login = new loginWithUser(page);
 
     try {
@@ -76,6 +74,47 @@ test.describe('Klientdelegering', () => {
 
   test('Opprett og godkjenn forespørsel for "regnskapsfører"', async ({ page }) => {
     const accessPackage = 'regnskapsforer-lonn';
+    const externalRef = TestdataApi.generateExternalRef();
+
+    const response = api.postClientDelegationAgentRequest(externalRef, systemId, accessPackage);
+    await page.goto((await response).confirmUrl);
+    await page.getByRole('button', { name: 'Godkjenn' }).click();
+
+    //Click System user
+    await page.getByRole('link', { name: name }).click();
+    const packageButton = page.getByRole('button', { name: 'Regnskapsfører lønn' });
+    await expect(packageButton).toBeVisible();
+    await packageButton.click();
+    //Assert modal is visibler - todo
+
+    await page.keyboard.press('Escape');
+    //Assert modal is hidden - todo
+
+    //Add customer
+    await page.getByRole('button', { name: 'Legg til kunder' }).click();
+    await page.getByRole('button', { name: 'Legg til FINTFØLENDE GJESTFRI HAMSTER' }).click();
+    await page.getByText('FINTFØLENDE GJESTFRI HAMSTER KF er lagt').click();
+
+    //Lukk modal og sjekk at kunde er lagt til
+    await page.getByRole('button', { name: 'Bekreft og lukk' }).click();
+    //Todo: får ikke verifisert kunde lagt til, resolver til to kliss like elementer med samme state?
+
+    //Fjern kunde
+    await page.getByRole('button', { name: 'Legg til eller fjern kunder' }).click();
+    await page.getByRole('button', { name: 'FINTFØLENDE GJESTFRI HAMSTER KF' }).click();
+    await page.getByText('FINTFØLENDE GJESTFRI HAMSTER KF er fjernet fra Systemtilgangen').click();
+    await page.getByRole('button', { name: 'Bekreft og lukk' }).click();
+
+    // Slett Systembruker
+    await page.getByRole('button', { name: 'Slett systemtilgang' }).first().click();
+    await page.getByRole('button', { name: 'Slett systemtilgang' }).nth(1).click(); //Ugly but exact same definition as previous one
+
+    //Verify system user is no longer available
+    await expect(page.getByRole('link', { name })).toHaveCount(0);
+  });
+
+  test('Klientdelegering for "forretningsfører"', async ({ page }) => {
+    const accessPackage = 'forretningsforer-eiendom';
     const externalRef = TestdataApi.generateExternalRef();
 
     const response = api.postClientDelegationAgentRequest(externalRef, systemId, accessPackage);
