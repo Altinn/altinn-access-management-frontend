@@ -33,7 +33,6 @@ export class ClientDelegationPage {
   }
 
   removeCustomerButtonByName(name: string): Locator {
-  removeCustomerButtonByName(name: string): Locator {
     return this.page.getByRole('button', { name: `Fjern ${name}` });
   }
 
