@@ -33,7 +33,8 @@ export class ClientDelegationPage {
   }
 
   removeCustomerButtonByName(name: string): Locator {
-    return this.page.getByRole('button', { name });
+  removeCustomerButtonByName(name: string): Locator {
+    return this.page.getByRole('button', { name: `Fjern ${name}` });
   }
 
   confirmationText(text: string): Locator {
