@@ -2,6 +2,8 @@
 import type { Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 
+import { env } from 'playwright/util/helper';
+
 export class ClientDelegationPage {
   readonly page: Page;
 
@@ -20,12 +22,8 @@ export class ClientDelegationPage {
     this.deleteSystemAccessButtons = page.getByRole('button', { name: 'Slett systemtilgang' });
   }
 
-  accessPackageModal(name: string): Locator {
+  systemUserLink(name: string): Locator {
     return this.page.getByRole('link', { name });
-  }
-
-  accessPackageButton(name: string): Locator {
-    return this.page.getByRole('button', { name });
   }
 
   addCustomerButtonByName(name: string): Locator {
@@ -40,13 +38,11 @@ export class ClientDelegationPage {
     return this.page.getByText(text);
   }
 
-  async confirmDelegation() {
+  async confirmAndCreateSystemUser(accessPackage: string) {
+    const button = this.page.getByRole('button', { name: accessPackage });
+    expect(button).toBeVisible();
     await expect(this.confirmButton).toBeVisible();
     await this.confirmButton.click();
-  }
-
-  async openAccessPackageModal(name: string) {
-    await this.accessPackageModal(name).click();
   }
 
   async openAccessPackage(accessPackage: string) {
@@ -86,6 +82,9 @@ export class ClientDelegationPage {
   async deleteSystemUser(name: string) {
     await this.deleteSystemAccessButtons.first().click();
     await this.deleteSystemAccessButtons.nth(1).click();
-    await expect(this.accessPackageModal(name)).toHaveCount(0);
+
+    //Should close modal and take you back to overview page
+    await expect(this.page).toHaveURL(env('SYSYEMUSER_URL'));
+    await expect(this.systemUserLink(name)).toHaveCount(0);
   }
 }

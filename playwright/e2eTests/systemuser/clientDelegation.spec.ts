@@ -20,7 +20,7 @@ const TEST_USERS = {
   },
 };
 
-test.describe('Klientdelegering – Regnskapsfører og revisor', () => {
+test.describe('Klientdelegering for Regnskapsfører og revisor', () => {
   let api: ApiRequests;
 
   test.beforeEach(async ({ page }) => {
@@ -34,6 +34,7 @@ test.describe('Klientdelegering – Regnskapsfører og revisor', () => {
 
   test('Legg til og slett kunde og slett Systembruker - Ansvarlig revisor', async ({ page }) => {
     const name = `Playwright-e2e-revisor-${Date.now()}-${Math.random()}`;
+
     const customer = {
       label: 'HUSLØS DJERV TIGER',
       confirmation: 'HUSLØS DJERV TIGER AS',
@@ -52,8 +53,9 @@ test.describe('Klientdelegering – Regnskapsfører og revisor', () => {
     );
 
     await page.goto(response.confirmUrl);
-    await clientDelegationPage.confirmDelegation();
-    await clientDelegationPage.openAccessPackageModal(name);
+
+    await clientDelegationPage.confirmAndCreateSystemUser('Ansvarlig revisor');
+    await clientDelegationPage.systemUserLink(name).click();
     await clientDelegationPage.openAccessPackage('Ansvarlig revisor');
     await clientDelegationPage.addCustomer(customer.label, customer.confirmation);
     await clientDelegationPage.removeCustomer(customer.confirmation);
@@ -80,8 +82,8 @@ test.describe('Klientdelegering – Regnskapsfører og revisor', () => {
     );
 
     await page.goto(response.confirmUrl);
-    await clientDelegationPage.confirmDelegation();
-    await clientDelegationPage.openAccessPackageModal(name);
+    await clientDelegationPage.confirmAndCreateSystemUser('Regnskapsfører lønn');
+    await clientDelegationPage.systemUserLink(name).click();
     await clientDelegationPage.openAccessPackage('Regnskapsfører lønn');
     await clientDelegationPage.addCustomer(customer.label, customer.confirmation);
     await clientDelegationPage.removeCustomer(customer.confirmation);
@@ -121,8 +123,8 @@ test.describe('Klientdelegering – Forretningsfører', () => {
     );
 
     await page.goto(response.confirmUrl);
-    await clientDelegationPage.confirmDelegation();
-    await clientDelegationPage.openAccessPackageModal(name);
+    await clientDelegationPage.confirmAndCreateSystemUser('Forretningsforer eiendom');
+    await clientDelegationPage.systemUserLink(name).click();
     await clientDelegationPage.openAccessPackage('Forretningsforer eiendom');
     await clientDelegationPage.addCustomer(customer.label, customer.confirmation);
     await clientDelegationPage.removeCustomer(customer.confirmation);
