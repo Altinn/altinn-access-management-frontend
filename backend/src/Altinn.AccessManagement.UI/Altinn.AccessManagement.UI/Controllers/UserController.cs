@@ -368,5 +368,24 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
             }
         }
+
+        /// <summary>
+        /// Endpoint for checking if the authenticated user has access to a resource.
+        /// </summary>
+        [HttpGet]
+        [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_TROUGH)]
+        [Route("isAdmin")]
+        public ActionResult<bool> CheckAccess()
+        {
+            // Access the HasRequestedPermission flag from HttpContext.Items
+            if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) && 
+                hasPermissionObj is bool hasPermission)
+            {
+                return Ok(hasPermission);
+            }
+            
+            // If the flag isn't present, return false
+            return Ok(false);
+        }
     }
 }

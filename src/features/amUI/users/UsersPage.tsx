@@ -10,7 +10,7 @@ import classes from './UsersList.module.css';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -18,7 +18,8 @@ export const UsersPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('users_page.page_title'));
   const { data: reportee } = useGetReporteeQuery();
-
+  const { data: isAdminData } = useGetIsAdminQuery();
+  console.debug('🪵 ~ UsersPage ~ isAdminData:', isAdminData);
   rerouteIfNotConfetti();
 
   return (

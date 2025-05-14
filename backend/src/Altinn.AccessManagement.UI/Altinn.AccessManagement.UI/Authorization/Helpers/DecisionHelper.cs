@@ -36,6 +36,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
 
             string party = queryParams.FirstOrDefault(p => p.Key == ParamParty).Value.FirstOrDefault();
 
+
             request.AccessSubject.Add(CreateSubjectCategory(context.User.Claims));
             request.Action.Add(CreateActionCategory(requirement.ActionType));
 
@@ -75,38 +76,6 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
 
             return ValidateDecisionResult(response.Response[0], user);
         }
-
-        /// <summary>
-        /// Gets the users partyUuid
-        /// </summary>
-        /// <param name="context">the http context</param>
-        /// <returns>the logged in users id</returns>
-        // public static Guid GetUserPartyUuid(HttpContext context)
-        // {
-        //     var claim = context.User?.Claims.FirstOrDefault(c => c.Type.Equals(AltinnCoreClaimTypes.PartyUuid));
-        //     if (claim != null && Guid.TryParse(claim.Value, out Guid partyUuid))
-        //     {
-        //         return partyUuid;
-        //     }
-
-        //     return Guid.Empty;
-        // }
-
-        /// <summary>
-        /// Gets the users id
-        /// </summary>
-        /// <param name="context">the http context</param>
-        /// <returns>the logged in users id</returns>
-        // public static int GetUserId(HttpContext context)
-        // {
-        //     var claim = context.User?.Claims.FirstOrDefault(c => c.Type.Equals(AltinnCoreClaimTypes.UserId));
-        //     if (claim != null && int.TryParse(claim.Value, out int userId))
-        //     {
-        //         return userId;
-        //     }
-
-        //     return 0;
-        // }
 
         /// <summary>
         /// Gets the 'from' parameter from the query string

@@ -68,9 +68,8 @@ namespace Altinn.AccessManagement.UI.Authorization
                 await Task.CompletedTask;
                 return;
             }
-
-            // httpContext.Items.Add("HasRequestedPermission", false);
-            // context.Succeed(requirement);
+            httpContext.Items.Add("HasRequestedPermission", false);
+            context.Succeed(requirement);
             await Task.CompletedTask;
         }
     }
