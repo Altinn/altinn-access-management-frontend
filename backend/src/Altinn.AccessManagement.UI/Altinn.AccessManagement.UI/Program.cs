@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.Configuration;
+using Altinn.AccessManagement.Core.Constants;
 using Altinn.AccessManagement.Core.Helpers;
 using Altinn.AccessManagement.UI.Authorization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
@@ -61,7 +62,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("isAdmin", policy => policy.Requirements.Add(new ResourceAccessRequirement("read", "altinn_maskinporten_scope_delegation")));
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_TROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_enduser_access_management", true)));
 
 builder.Services.AddScoped<IAuthorizationHandler, EndUserResourceAccessHandler>();
 
@@ -206,10 +207,10 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
-    services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
-    
-    services.AddSingleton<IPDP, PDPAppSI>();
 
+    services.AddSingleton<IPDP, PDPAppSI>();
+    services.AddHttpClient<AuthorizationApiClient>();
+    
     ConfigureMockableClients(services, config);
 
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -227,7 +228,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISystemUserChangeRequestService, SystemUserChangeRequestService>();
     services.AddSingleton<ISystemUserAgentRequestService, SystemUserAgentRequestService>();
     services.AddSingleton<ISystemUserAgentDelegationService, SystemUserAgentDelegationService>();
-
+    services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
     services.AddSingleton<IRoleService, RoleService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
     services.AddTransient<ResourceHelper, ResourceHelper>();
@@ -301,15 +302,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 {
     MockSettings mockSettings = config.GetSection("MockSettings").Get<MockSettings>() ?? new MockSettings(false);
 
-    if (mockSettings.PDP)
-    {
-        services.AddHttpClient<AuthorizationApiClient>();
-    }
-    else
-    {
-        services.AddHttpClient<AuthorizationApiClient>();
-    }  
-    
+    // if (mockSettings.PDP)
+    // {
+    //     services.AddSingleton<IAuthorizationApiClientWrapper, AuthorizationApiClientMock>();
+    // }
+    // else
+    // {
+    //     services.AddSingleton<IAuthorizationApiClientWrapper, AuthorizationApiClientWrapper>();
+    // }
+
     if (mockSettings.AccessManagement)
     {
         services.AddHttpClient<IAccessManagementClient, AccessManagementClientMock>();

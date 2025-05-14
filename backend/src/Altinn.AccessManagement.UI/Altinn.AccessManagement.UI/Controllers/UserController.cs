@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Altinn.AccessManagement.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
