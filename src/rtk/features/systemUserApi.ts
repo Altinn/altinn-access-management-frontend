@@ -131,8 +131,8 @@ export const systemUserApi = createApi({
     }),
 
     // system user request
-    getSystemUserRequest: builder.query<SystemUserRequest, { partyId: string; requestId: string }>({
-      query: ({ partyId, requestId }) => `systemuser/request/${partyId}/${requestId}`,
+    getSystemUserRequest: builder.query<SystemUserRequest, { requestId: string }>({
+      query: ({ requestId }) => `systemuser/request/${requestId}`,
     }),
     approveSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({
@@ -150,12 +150,8 @@ export const systemUserApi = createApi({
     }),
 
     // change request
-    getChangeRequest: builder.query<
-      SystemUserRequest,
-      { partyId: string; changeRequestId: string }
-    >({
-      query: ({ partyId, changeRequestId }) =>
-        `systemuser/changerequest/${partyId}/${changeRequestId}`,
+    getChangeRequest: builder.query<SystemUserRequest, { changeRequestId: string }>({
+      query: ({ changeRequestId }) => `systemuser/changerequest/${changeRequestId}`,
     }),
     approveChangeRequest: builder.mutation<void, { partyId: string; changeRequestId: string }>({
       query: ({ partyId, changeRequestId }) => ({
@@ -173,11 +169,8 @@ export const systemUserApi = createApi({
     }),
 
     // agent request
-    getAgentSystemUserRequest: builder.query<
-      SystemUserRequest,
-      { partyId: string; requestId: string }
-    >({
-      query: ({ partyId, requestId }) => `systemuser/agentrequest/${partyId}/${requestId}`,
+    getAgentSystemUserRequest: builder.query<SystemUserRequest, { requestId: string }>({
+      query: ({ requestId }) => `systemuser/agentrequest/${requestId}`,
     }),
     approveAgentSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({

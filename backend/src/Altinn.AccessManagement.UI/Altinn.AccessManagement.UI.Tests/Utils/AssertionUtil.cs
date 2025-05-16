@@ -491,6 +491,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
@@ -505,6 +506,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
@@ -519,6 +521,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);

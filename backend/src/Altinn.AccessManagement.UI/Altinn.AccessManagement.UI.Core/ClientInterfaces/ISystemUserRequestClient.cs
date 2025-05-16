@@ -11,11 +11,10 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <summary>
         /// Get a system user request
         /// </summary>
-        /// <param name="partyId">Used to identify the party the system user request is for.</param>
         /// <param name="requestId">The id of the system user request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The system user request</returns>
-        Task<Result<SystemUserRequest>> GetSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken);
+        Task<Result<SystemUserRequest>> GetSystemUserRequest(Guid requestId, CancellationToken cancellationToken);
         
         /// <summary>
         /// Approve a system user request to create a new system user
