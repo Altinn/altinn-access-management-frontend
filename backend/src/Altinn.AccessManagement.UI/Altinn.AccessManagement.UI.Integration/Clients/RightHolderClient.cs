@@ -100,7 +100,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 
                 string content = await httpResponse.Content.ReadAsStringAsync();
                 PaginatedResult<Connection> rightHolders = JsonSerializer.Deserialize<PaginatedResult<Connection>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                var holders = rightHolders.Items.ToList();
 
                 return rightHolders.Items.ToList();
             }

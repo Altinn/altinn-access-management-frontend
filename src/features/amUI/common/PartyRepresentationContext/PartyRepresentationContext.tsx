@@ -48,7 +48,7 @@ export const PartyRepresentationProvider = ({
     { skip: !fromPartyUuid || !toPartyUuid },
   );
 
-  if (connections?.length === 0) {
+  if (!isConnectionLoading && connections?.length === 0) {
     throw new Error(
       'Cannot use PartyRepresentationProvider without a connection between the two provided parties',
     );
