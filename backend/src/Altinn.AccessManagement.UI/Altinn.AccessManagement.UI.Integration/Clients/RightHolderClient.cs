@@ -3,6 +3,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -98,9 +99,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
                 
                 string content = await httpResponse.Content.ReadAsStringAsync();
-                List<Connection> rightHolders = JsonSerializer.Deserialize<List<Connection>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    
-                return rightHolders;
+                PaginatedResult<Connection> rightHolders = JsonSerializer.Deserialize<PaginatedResult<Connection>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                var holders = rightHolders.Items.ToList();
+
+                return rightHolders.Items.ToList();
             }
             catch (Exception ex)
             {

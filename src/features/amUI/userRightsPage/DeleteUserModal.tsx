@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
 
+import { useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
+
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
@@ -13,18 +16,22 @@ import { LoadingAnimation } from '../common/LoadingAnimation/LoadingAnimation';
 
 import classes from './DeleteUserModal.module.css';
 
-import { useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import { amUIPath } from '@/routes/paths';
-
-export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeName: string }) => {
+export const DeleteUserModal = ({
+  userName,
+  userUuid,
+  reporteeName,
+}: {
+  userName: string;
+  userUuid: string;
+  reporteeName: string;
+}) => {
   const [deleteUser, { isLoading, isError, error }] = useRemoveRightHolderMutation();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
 
   const onDeleteUser = () => {
-    deleteUser(user.partyUuid)
+    deleteUser(userUuid)
       .unwrap()
       .then(() => {
         setIsSuccess(true);
@@ -68,7 +75,7 @@ export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeN
               <Trans
                 i18nKey='delete_user.message'
                 values={{
-                  user_name: user?.name,
+                  user_name: userName,
                   reportee_name: reporteeName,
                 }}
               />

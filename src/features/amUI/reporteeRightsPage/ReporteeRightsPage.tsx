@@ -4,7 +4,6 @@ import { useParams } from 'react-router';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import { useGetUserAccessesQuery } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -17,7 +16,10 @@ import { UserRoles } from '../common/UserRoles/UserRoles';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import {
+  PartyRepresentationProvider,
+  usePartyRepresentation,
+} from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';
@@ -26,8 +28,7 @@ export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
   const { id: reporteeUuid } = useParams();
 
-  const { data: toParty } = useGetPartyByUUIDQuery(getCookie('AltinnPartyUuid') ?? '');
-  const { data: fromParty } = useGetPartyByUUIDQuery(reporteeUuid ?? '');
+  const { toParty, fromParty } = usePartyRepresentation();
 
   useDocumentTitle(t('user_rights_page.page_title'));
   const name = reporteeUuid ? fromParty?.name : '';
@@ -44,6 +45,7 @@ export const ReporteeRightsPage = () => {
     <PartyRepresentationProvider
       fromPartyUuid={reporteeUuid ?? ''}
       toPartyUuid={getCookie('AltinnPartyUuid')}
+      actingPartyUuid={getCookie('AltinnPartyUuid')}
     >
       <DelegationModalProvider>
         <PageWrapper>
@@ -56,7 +58,7 @@ export const ReporteeRightsPage = () => {
                 secondaryAvatarType={toParty?.partyTypeName}
                 subHeading={t('reportee_rights_page.heading_subtitle', { name: toParty?.name })}
                 roles={
-                  displayLimitedPreviewLaunch &&
+                  !displayLimitedPreviewLaunch &&
                   !!toParty?.partyUuid &&
                   !!fromParty?.partyUuid && (
                     <UserRoles

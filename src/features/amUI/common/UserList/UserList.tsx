@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph } from '@altinn/altinn-components';
 
+import type { User } from '@/rtk/features/userInfoApi';
+
 import { ListWrapper } from './ListWrapper';
 import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
 
-import type { User } from '@/rtk/features/userInfoApi';
-
 export interface UserListProps {
-  userList: User[];
+  userList?: User[];
   searchString: string;
   isLoading?: boolean;
   listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -27,10 +27,10 @@ export const UserList = ({ userList, searchString, isLoading, listItemTitleAs }:
         role='alert'
         data-size='lg'
       >
-        {users.length === 0 ? t('users_page.user_no_search_result') : ''}
+        {!isLoading && users && users.length === 0 ? t('users_page.user_no_search_result') : ''}
       </DsParagraph>
       <ListWrapper
-        userList={users}
+        userList={users ?? []}
         spacing={2}
         size='md'
         isLoading={isLoading}
