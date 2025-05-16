@@ -10,17 +10,14 @@ import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';
 
 import { ActiveDelegations } from './ActiveDelegations';
 
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
-
 export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: number }) => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const { selfParty } = usePartyRepresentation();
-  const { data: party } = useGetPartyByUUIDQuery(id ?? '');
+  const { selfParty, toParty } = usePartyRepresentation();
   const isCurrentUser = selfParty?.partyUuid === id;
 
   return (
-    party && (
+    toParty && (
       <>
         <OldRolesAlert />
         <DsHeading

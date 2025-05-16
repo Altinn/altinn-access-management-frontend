@@ -2,11 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
 import { RootProvider, Snackbar } from '@altinn/altinn-components';
 
+import store from '@/rtk/app/store';
+
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { RoleList } from './RoleList';
-
-import store from '@/rtk/app/store';
 
 type RoleListPropsAndCustomArgs = React.ComponentProps<typeof RoleList>;
 
@@ -19,6 +19,7 @@ export default {
         <PartyRepresentationProvider
           fromPartyUuid='123'
           toPartyUuid='456'
+          actingPartyUuid='123'
         >
           <RoleList
             {...args}

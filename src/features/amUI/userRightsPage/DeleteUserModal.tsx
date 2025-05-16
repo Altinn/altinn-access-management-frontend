@@ -5,26 +5,31 @@ import { useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
 
+import { useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
+
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { LoadingAnimation } from '../common/LoadingAnimation/LoadingAnimation';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './DeleteUserModal.module.css';
 
-import { useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import { amUIPath } from '@/routes/paths';
-
-export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeName: string }) => {
+export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from' }) => {
   const [deleteUser, { isLoading, isError, error }] = useRemoveRightHolderMutation();
+  const { toParty, fromParty } = usePartyRepresentation();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
 
   const onDeleteUser = () => {
-    deleteUser(user.partyUuid)
+    if (!toParty || !fromParty) {
+      console.error('Missing party information');
+      return;
+    }
+    deleteUser({ toPartyUuid: toParty.partyUuid, fromPartyUuid: fromParty.partyUuid })
       .unwrap()
       .then(() => {
         setIsSuccess(true);
@@ -34,6 +39,9 @@ export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeN
         console.error('Failed to delete user:', err);
       });
   };
+
+  const userName = direction === 'to' ? toParty?.name : fromParty?.name;
+  const reporteeName = direction === 'to' ? fromParty?.name : toParty?.name;
 
   const redirectToUsersPage = () => navigate(`/${amUIPath.Users}`);
 
@@ -68,7 +76,7 @@ export const DeleteUserModal = ({ user, reporteeName }: { user: Party; reporteeN
               <Trans
                 i18nKey='delete_user.message'
                 values={{
-                  user_name: user?.name,
+                  user_name: userName,
                   reportee_name: reporteeName,
                 }}
               />

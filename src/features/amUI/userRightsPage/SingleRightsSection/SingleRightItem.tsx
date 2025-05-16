@@ -7,7 +7,6 @@ import { useRef } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Party } from '@/rtk/features/lookupApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { EditModal } from '../../common/DelegationModal/EditModal';
 
