@@ -31,33 +31,39 @@ export const RightsTabs = ({
     >
       <DsTabs.List>
         <DsTabs.Tab value='packages'>
-          <DsBadge
-            data-size='sm'
-            color={chosenTab === 'packages' ? 'accent' : 'neutral'}
-            count={tabBadge?.accessPackages ?? 0}
-            maxCount={99}
-          />
+          {tabBadge && (
+            <DsBadge
+              data-size='sm'
+              color={chosenTab === 'packages' ? 'accent' : 'neutral'}
+              count={tabBadge?.accessPackages ?? 0}
+              maxCount={99}
+            />
+          )}
           {t('user_rights_page.access_packages_title')}
         </DsTabs.Tab>
         {displayResourceDelegation && (
           <DsTabs.Tab value='singleRights'>
-            <DsBadge
-              data-size='sm'
-              color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
-              count={tabBadge?.services ?? 0}
-              maxCount={99}
-            />
+            {tabBadge && (
+              <DsBadge
+                data-size='sm'
+                color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
+                count={tabBadge?.services ?? 0}
+                maxCount={99}
+              />
+            )}
             {t('user_rights_page.single_rights_title')}
           </DsTabs.Tab>
         )}
-        {displayLimitedPreviewLaunch && (
+        {!displayLimitedPreviewLaunch && (
           <DsTabs.Tab value='roleAssignments'>
-            <DsBadge
-              data-size='sm'
-              color={chosenTab === 'roleAssignments' ? 'accent' : 'neutral'}
-              count={tabBadge?.roles ?? 0}
-              maxCount={99}
-            />
+            {tabBadge && (
+              <DsBadge
+                data-size='sm'
+                color={chosenTab === 'roleAssignments' ? 'accent' : 'neutral'}
+                count={tabBadge?.roles ?? 0}
+                maxCount={99}
+              />
+            )}
             {t('user_rights_page.roles_title')}
           </DsTabs.Tab>
         )}
@@ -76,7 +82,7 @@ export const RightsTabs = ({
           {singleRightsPanel}
         </DsTabs.Panel>
       )}
-      {displayLimitedPreviewLaunch && (
+      {!displayLimitedPreviewLaunch && (
         <DsTabs.Panel
           className={classes.tabContent}
           value='roleAssignments'

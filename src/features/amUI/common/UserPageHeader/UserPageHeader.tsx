@@ -1,44 +1,60 @@
 import { Avatar, DsParagraph, DsHeading } from '@altinn/altinn-components';
-import type { ReactNode } from 'react';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
-
-import classes from './UserPageHeader.module.css';
+import { t } from 'i18next';
 
 import { PartyType } from '@/rtk/features/userInfoApi';
 
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { UserRoles } from '../UserRoles/UserRoles';
+
+import classes from './UserPageHeader.module.css';
+
 interface UserPageHeaderProps {
-  userName?: string;
-  userType?: PartyType;
-  subHeading?: string;
-  roles?: ReactNode;
-  secondaryAvatarName?: string;
-  secondaryAvatarType?: PartyType;
+  direction: 'to' | 'from';
+  displayDirection?: boolean;
+  displayRoles?: boolean;
 }
 
 export const UserPageHeader = ({
-  userName,
-  userType,
-  subHeading,
-  roles,
-  secondaryAvatarName,
-  secondaryAvatarType,
+  direction = 'to',
+  displayDirection = false,
+  displayRoles = true,
 }: UserPageHeaderProps) => {
-  // const data = {};
+  const { toParty, fromParty } = usePartyRepresentation();
+
+  if (!toParty && !fromParty) {
+    return null;
+  }
+
+  const user = direction === 'to' ? toParty : fromParty;
+  const secondaryParty = direction === 'to' ? fromParty : toParty;
+
+  const subHeading =
+    direction === 'to'
+      ? `for ${fromParty?.name}`
+      : t('reportee_rights_page.heading_subtitle', { name: toParty?.name });
+
+  const roles = (
+    <UserRoles
+      rightOwnerUuid={fromParty?.partyUuid ?? ''}
+      rightHolderUuid={toParty?.partyUuid ?? ''}
+    />
+  );
 
   const avatar = () => {
-    if (secondaryAvatarName && secondaryAvatarType) {
+    if (displayDirection) {
       return (
         <div className={classes.avatar}>
           <Avatar
-            name={userName || ''}
+            name={user?.name ?? ''}
             size={'lg'}
-            type={userType === PartyType.Organization ? 'company' : 'person'}
+            type={user?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
           />
           <ArrowRightIcon style={{ fontSize: '1.5rem' }} />
           <Avatar
-            name={secondaryAvatarName}
+            name={secondaryParty?.name ?? ''}
             size={'lg'}
-            type={secondaryAvatarType === PartyType.Organization ? 'company' : 'person'}
+            type={secondaryParty?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
           />
         </div>
       );
@@ -46,9 +62,9 @@ export const UserPageHeader = ({
     return (
       <Avatar
         className={classes.avatar}
-        name={userName || ''}
+        name={user?.name || ''}
         size={'lg'}
-        type={userType === PartyType.Organization ? 'company' : 'person'}
+        type={user?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
       />
     );
   };
@@ -61,7 +77,7 @@ export const UserPageHeader = ({
         data-size='sm'
         className={classes.heading}
       >
-        {userName}
+        {user?.name}
       </DsHeading>
       {subHeading && (
         <DsParagraph
@@ -71,7 +87,7 @@ export const UserPageHeader = ({
           {subHeading}
         </DsParagraph>
       )}
-      {roles && <div className={classes.userRoles}>{roles}</div>}
+      {displayRoles && <div className={classes.userRoles}>{roles}</div>}
     </div>
   );
 };

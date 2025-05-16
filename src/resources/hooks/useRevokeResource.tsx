@@ -1,4 +1,3 @@
-import type { Party } from '@/rtk/features/lookupApi';
 import { useRevokeResourceMutation } from '@/rtk/features/singleRights/singleRightsApi';
 
 export const useRevokeResource = () => {
@@ -6,13 +5,13 @@ export const useRevokeResource = () => {
 
   const revokeResource = (
     resourceId: string,
-    fromParty: Party,
-    toParty: Party,
+    fromPartyUuid: string,
+    toPartyUuid: string,
     onSuccess?: () => void,
     onError?: () => void,
   ) => {
-    const from = fromParty.partyUuid;
-    const to = toParty.partyUuid;
+    const from = fromPartyUuid;
+    const to = toPartyUuid;
 
     revoke({
       from,

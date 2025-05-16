@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
 import { RootProvider, Snackbar } from '@altinn/altinn-components';
 
+import store from '@/rtk/app/store';
+
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { DelegationModal, DelegationType } from './DelegationModal';
 import { DelegationModalProvider } from './DelegationModalContext';
-
-import store from '@/rtk/app/store';
 
 type DelegationModalProps = React.ComponentProps<typeof DelegationModal>;
 
@@ -27,6 +27,7 @@ export default {
           <PartyRepresentationProvider
             fromPartyUuid='123'
             toPartyUuid='123'
+            actingPartyUuid='123'
           >
             <DelegationModal {...(props as DelegationModalProps)} />
           </PartyRepresentationProvider>
