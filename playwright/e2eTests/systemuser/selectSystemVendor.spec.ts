@@ -34,7 +34,6 @@ test.describe('System Register', async () => {
 
   test.afterEach(async () => {
     if (system) {
-      console.log('Removing system');
       await TestdataApi.removeSystem(system);
     }
   });
