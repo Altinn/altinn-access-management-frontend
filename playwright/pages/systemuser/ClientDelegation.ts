@@ -80,8 +80,13 @@ export class ClientDelegationPage {
   }
 
   async deleteSystemUser(name: string) {
-    await this.deleteSystemAccessButtons.first().click();
-    await this.deleteSystemAccessButtons.nth(1).click();
+    const deleteButton = this.deleteSystemAccessButtons.first();
+    await expect(deleteButton).toBeVisible();
+    await deleteButton.click();
+
+    const confirmDeleteButton = this.deleteSystemAccessButtons.nth(1);
+    await expect(confirmDeleteButton).toBeVisible();
+    await confirmDeleteButton.click();
 
     //Should close modal and take you back to overview page
     await expect(this.page).toHaveURL(env('SYSYEMUSER_URL'));
