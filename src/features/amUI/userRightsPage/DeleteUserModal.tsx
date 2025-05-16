@@ -13,25 +13,23 @@ import {
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { LoadingAnimation } from '../common/LoadingAnimation/LoadingAnimation';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './DeleteUserModal.module.css';
 
-export const DeleteUserModal = ({
-  userName,
-  userUuid,
-  reporteeName,
-}: {
-  userName: string;
-  userUuid: string;
-  reporteeName: string;
-}) => {
+export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from' }) => {
   const [deleteUser, { isLoading, isError, error }] = useRemoveRightHolderMutation();
+  const { toParty, fromParty } = usePartyRepresentation();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
 
   const onDeleteUser = () => {
-    deleteUser(userUuid)
+    if (!toParty || !fromParty) {
+      console.error('Missing party information');
+      return;
+    }
+    deleteUser({ toPartyUuid: toParty.partyUuid, fromPartyUuid: fromParty.partyUuid })
       .unwrap()
       .then(() => {
         setIsSuccess(true);
@@ -41,6 +39,9 @@ export const DeleteUserModal = ({
         console.error('Failed to delete user:', err);
       });
   };
+
+  const userName = direction === 'to' ? toParty?.name : fromParty?.name;
+  const reporteeName = direction === 'to' ? fromParty?.name : toParty?.name;
 
   const redirectToUsersPage = () => navigate(`/${amUIPath.Users}`);
 
