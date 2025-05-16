@@ -5,7 +5,8 @@ import { loginWithUser } from '../../pages/loginPage';
 import { TestdataApi } from '../../util/TestdataApi';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
-test.describe.configure({ timeout: 20000 });
+test.describe.configure({ timeout: 40000 });
+// Skipping these tests until this bug is fixed, these tests will keep failing in AT envirnoments until /GET Delegations work: https://github.com/Altinn/altinn-authorization-tmp/issues/689
 
 const TEST_USERS = {
   revisorRegnskapsfoerer: {
@@ -20,7 +21,7 @@ const TEST_USERS = {
   },
 };
 
-test.describe('Klientdelegering for Regnskapsfører og revisor', () => {
+test.describe.skip('Klientdelegering for Regnskapsfører og revisor', () => {
   let api: ApiRequests;
 
   test.beforeEach(async ({ page }) => {
@@ -91,7 +92,7 @@ test.describe('Klientdelegering for Regnskapsfører og revisor', () => {
   });
 });
 
-test.describe('Klientdelegering – Forretningsfører', () => {
+test.describe.skip('Klientdelegering: Forretningsfører', () => {
   let api: ApiRequests;
 
   test.beforeEach(async ({ page }) => {
