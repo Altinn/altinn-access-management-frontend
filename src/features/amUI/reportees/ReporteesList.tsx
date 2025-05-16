@@ -8,12 +8,12 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import classes from './ReporteePage.module.css';
 
 import { debounce } from '@/resources/utils';
-import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
 
 export const ReporteesList = () => {
   const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
-
+  const { data: isAdmin, isLoading: isAdminIsLoading } = useGetIsAdminQuery();
   const { data: rightHolders, isLoading } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
@@ -51,9 +51,10 @@ export const ReporteesList = () => {
         </DsSearch>
       </div>
       <UserList
+        isAdmin={isAdmin}
         userList={rightHolders || []}
         searchString={searchString}
-        isLoading={isLoading}
+        isLoading={isLoading || isAdminIsLoading}
         listItemTitleAs='h2'
       />
     </div>

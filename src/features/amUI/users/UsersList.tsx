@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
@@ -11,7 +11,11 @@ import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 
 import { debounce } from '@/resources/utils';
-import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetRightHoldersQuery,
+  useGetUserInfoQuery,
+} from '@/rtk/features/userInfoApi';
 import type { User } from '@/rtk/features/userInfoApi';
 
 const extractFromList = (
@@ -33,6 +37,7 @@ const extractFromList = (
 export const UsersList = () => {
   const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
+  const { data: isAdmin } = useGetIsAdminQuery();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
@@ -111,6 +116,7 @@ export const UsersList = () => {
         <NewUserButton />
       </div>
       <UserList
+        isAdmin={isAdmin}
         userList={userList || []}
         searchString={searchString}
         isLoading={loadingRightHolders}
