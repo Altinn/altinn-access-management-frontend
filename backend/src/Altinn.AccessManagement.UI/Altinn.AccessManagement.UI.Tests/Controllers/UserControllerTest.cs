@@ -763,7 +763,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: CheckAccess returns false when user doesn't have admin permissions
+        /// Test case: CheckAccess returns false when user doesn't have admin permissions through either party or userid
         /// Expected: Returns false
         /// </summary>
         [Fact]
@@ -774,7 +774,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var token = PrincipalUtil.GetToken(regularUserId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var partyId = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            var partyId = Guid.Parse("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
 
             // Act
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/isAdmin?party={partyId}");
