@@ -9,7 +9,6 @@ import type { ExtendedUser } from './useFilteredUsers';
 
 interface UserListItemProps extends ListItemProps {
   user: ExtendedUser;
-  isAdmin?: boolean;
 }
 
 const userHeadingLevelForMapper = (level?: ElementType) => {
@@ -27,13 +26,7 @@ const userHeadingLevelForMapper = (level?: ElementType) => {
   }
 };
 
-export const UserListItem = ({
-  user,
-  size = 'lg',
-  titleAs,
-  isAdmin,
-  ...props
-}: UserListItemProps) => {
+export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListItemProps) => {
   const hasInheritingUsers = user.inheritingUsers?.length > 0;
   const [isExpanded, setExpanded] = useState(false);
   useEffect(
@@ -54,28 +47,25 @@ export const UserListItem = ({
         }}
         expanded={isExpanded}
         collapsible={hasInheritingUsers}
-        interactive={hasInheritingUsers || isAdmin}
-        linkIcon={!hasInheritingUsers && isAdmin}
+        interactive={hasInheritingUsers}
+        linkIcon={!hasInheritingUsers}
         onClick={() => {
           if (hasInheritingUsers) setExpanded(!isExpanded);
         }}
         as={
           hasInheritingUsers
             ? 'button'
-            : isAdmin
-              ? (props) => (
-                  <Link
-                    {...props}
-                    to={user.partyUuid}
-                  />
-                )
-              : 'div'
+            : (props) => (
+                <Link
+                  {...props}
+                  to={user.partyUuid}
+                />
+              )
         }
         titleAs={titleAs}
       />
       {hasInheritingUsers && isExpanded && (
         <ListWrapper
-          isAdmin={isAdmin}
           userList={[{ ...user, inheritingUsers: [] }, ...user.inheritingUsers]}
           size='sm'
           spacing={1}
