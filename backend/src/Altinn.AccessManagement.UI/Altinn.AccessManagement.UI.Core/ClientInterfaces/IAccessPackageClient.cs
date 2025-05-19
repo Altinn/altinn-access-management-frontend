@@ -24,5 +24,15 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="from">The id of the party that the rightholder will be granted access on behalf of</param>
         /// <param name="packageId">The id of the package to be delegated</param>
         Task<HttpResponseMessage> CreateAccessPackageDelegation(Guid party, Guid to, Guid from, string packageId);
+
+        /// <summary>
+        ///     Revokes access to a given package for a right holder (to) on behalf of a party (from)
+        /// </summary>
+        /// <param name="from">The party which has granted access to the package to the right holder</param>
+        /// <param name="to">The right holder which currently has access to the access package</param>
+        /// <param name="party">The party that is performing the action</param>
+        /// <param name="packageId">The access package which the right holder is to lose access to on behalf of the given party (from)</param>
+        /// <returns>A HttpResponseMessage denoting whether or not the action was successful.</returns>
+        Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string packageId);
     }
 }

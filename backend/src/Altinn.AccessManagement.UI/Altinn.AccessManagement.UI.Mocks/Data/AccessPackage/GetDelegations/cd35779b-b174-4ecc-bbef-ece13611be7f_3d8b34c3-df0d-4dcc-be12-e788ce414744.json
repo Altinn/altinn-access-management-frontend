@@ -1,0 +1,174 @@
+[
+  {
+    "AccessPackage": {
+      "provider": {
+        "id": "73dfe32a-8f21-465c-9242-40d82e61f320",
+        "name": "Digdir",
+        "refId": null
+      },
+      "entityType": {
+        "id": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+        "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
+        "name": "Organisasjon"
+      },
+      "area": {
+        "id": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
+        "name": "Jordbruk, skogbruk, jakt, fiske og akvakultur",
+        "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til jordbruk, skogbruk, jakt, fiske og akvakultur.",
+        "IconUrl": "https://www.svgrepo.com/show/355875/plant.svg",
+        "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4"
+      },
+      "id": "7b8a3aaa-c8ed-4ac4-923a-335f4f9eb45a",
+      "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "areaId": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
+      "name": "Dyrehold",
+      "description": "Denne tilgangspakken gir tilgang til tjenester knyttet til dyrehold. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+      "isDelegable": true,
+      "Resources": [
+      ]
+    },
+    "To": {
+      "Name": "Digitaliseringsdirektoratet",
+      "Uuid": "3d8b34c3-df0d-4dcc-be12-e788ce414744"
+    },
+    "From": {
+      "Name": "DISKRET NÆR TIGER AS",
+      "Uuid": "cd35779b-b174-4ecc-bbef-ece13611be7f"
+    },
+    "AccessDetails": {
+      "DelegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "DelegatedTo": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
+      "LastChangedOn": "2024-11-22T14:57:39.2568955+01:00"
+    }
+  },
+  {
+    "AccessPackage": {
+      "provider": {
+        "id": "73dfe32a-8f21-465c-9242-40d82e61f320",
+        "name": "Digdir",
+        "refId": null
+      },
+      "entityType": {
+        "id": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+        "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
+        "name": "Organisasjon"
+      },
+      "area": {
+        "id": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
+        "name": "Jordbruk, skogbruk, jakt, fiske og akvakultur",
+        "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til jordbruk, skogbruk, jakt, fiske og akvakultur.",
+        "IconUrl": "https://www.svgrepo.com/show/355875/plant.svg",
+        "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4"
+      },
+      "id": "c5bbbc3f-605a-4dcb-a587-32124d7bb76d",
+      "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "areaId": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
+      "name": "Jordbruk",
+      "description": "Denne tilgangspakken gir tilgang til tjenester knyttet til jordbruk. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.  ",
+      "isDelegable": true,
+      "Resources": [
+      ]
+    },
+    "To": {
+      "Name": "RIKTIG MINIMALISTISK PIGGSVIN",
+      "Uuid": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84"
+    },
+    "From": {
+      "Name": "DISKRET NÆR TIGER AS",
+      "Uuid": "cd35779b-b174-4ecc-bbef-ece13611be7f"
+    },
+    "AccessDetails": {
+      "DelegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "DelegatedTo": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84",
+      "LastChangedOn": "2024-10-22T14:57:39.2568955+01:00"
+    }
+  },
+  {
+    "AccessPackage": {
+      "provider": {
+        "id": "73dfe32a-8f21-465c-9242-40d82e61f320",
+        "name": "Digdir",
+        "refId": null
+      },
+      "entityType": {
+        "id": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+        "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
+        "name": "Organisasjon"
+      },
+      "area": {
+        "id": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
+        "name": "Miljø, ulykke og sikkerhet",
+        "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til miljø, ulykke og sikkerhet.",
+        "IconUrl": "https://www.svgrepo.com/show/522869/hand-heart.svg",
+        "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145"
+      },
+      "id": "bacc9294-56fd-457f-930e-59ee4a7a3894",
+      "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "areaId": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
+      "name": "Bærekraft",
+      "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til tiltak og rapportering på bærekraft. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+      "isDelegable": true,
+      "Resources": [
+      ]
+    },
+    "To": {
+      "Name": "Digitaliseringsdirektoratet",
+      "Uuid": "3d8b34c3-df0d-4dcc-be12-e788ce414744"
+    },
+    "From": {
+      "Name": "DISKRET NÆR TIGER AS",
+      "Uuid": "cd35779b-b174-4ecc-bbef-ece13611be7f"
+    },
+    "AccessDetails": {
+      "DelegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "DelegatedTo": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
+      "LastChangedOn": "2024-10-22T14:57:39.2568955+01:00"
+    }
+  },
+  {
+    "AccessPackage": {
+      "Id": "91cf61ae-69ab-49d5-b51a-80591c91f255",
+      "Name": "Ordinær post til virksomheten",
+      "Description": "Denne fullmakten gir tilgang til all mottatt post som ikke innholder sensitiv/taushetsbelagt informasjon som sendes virksomheten. Fullmakten gis normalt til de i virksomheten som håndterer mottak av post. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+      "Tags": [
+        {
+          "Id": "c022ae24-f729-48d0-b859-f08d1faa6c83",
+          "Name": "Post"
+        }
+      ],
+      "EntityType": {
+        "Id": "EEC6B868-3DA0-4721-87B2-63C5686014C6",
+        "Name": "Organisasjon"
+      },
+      "Area": {
+        "Id": "6F938DE8-34F2-4BAB-A0C6-3A3EB64AAD3B",
+        "Name": "Post og arkiv",
+        "Description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til post og arkiv.",
+        "IconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iIzIzMjYyQSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMyA1LjI1YS43NS43NSAwIDAgMC0uNzUuNzV2MTNjMCAuNDE0LjMzNi43NS43NS43NWgxOGEuNzUuNzUgMCAwIDAgLjc1LS43NVY2YS43NS43NSAwIDAgMC0uNzUtLjc1SDNabS43NSAxMS45NCA1LjI3My01LjI3M0wzLjc1IDguNHY4Ljc4OFptNi41NDYtNC40MjVMNC44MSAxOC4yNWgxNC4zNzhsLTUuNDg1LTUuNDg1LTEuMjg4Ljg1OWEuNzUuNzUgMCAwIDEtLjgzMiAwbC0xLjI4OC0uODU5Wm00LjY4MS0uODQ4TDIwLjI1IDguNHY4Ljc4OGwtNS4yNzMtNS4yNzJabS0xMS01LjE2N0wxMiAxMi4wOTlsOC4wMjMtNS4zNDlIMy45NzdaIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=",
+        "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4"
+      },
+      "Provider": {
+        "Id": "181C5364-2988-4F48-925C-62844576B5B0",
+        "Name": "Digdir"
+      },
+      "Resources": [
+      ]
+    },
+    "To": {
+      "Name": "RIKTIG MINIMALISTISK PIGGSVIN",
+      "Uuid": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84"
+    },
+    "From": {
+      "Name": "DISKRET NÆR TIGER AS",
+      "Uuid": "cd35779b-b174-4ecc-bbef-ece13611be7f"
+    },
+    "AccessDetails": {
+      "DelegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "DelegatedTo": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84",
+      "LastChangedOn": "2024-10-22T14:57:39.2568955+01:00"
+    }
+  }
+]
