@@ -2,12 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
-import { ButtonWithConfirmPopup } from '../../common/ButtonWithConfirmPopup/ButtonWithConfirmPopup';
-
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
-import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import type { Party } from '@/rtk/features/lookupApi';
+
+import { ButtonWithConfirmPopup } from '../../common/ButtonWithConfirmPopup/ButtonWithConfirmPopup';
+import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 
 interface DeleteResourceButton {
   resource: ServiceResource;
@@ -15,14 +15,10 @@ interface DeleteResourceButton {
   fullText?: boolean;
 }
 
-export const DeleteResourceButton = ({
-  resource,
-  toParty,
-  fullText = false,
-}: DeleteResourceButton) => {
+export const DeleteResourceButton = ({ resource, fullText = false }: DeleteResourceButton) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
-  const { data: representingParty } = useGetReporteePartyQuery();
+  const { fromParty, toParty } = usePartyRepresentation();
   const revoke = useRevokeResource();
 
   const snackbar = (isSuccessful: boolean) => {
@@ -41,7 +37,8 @@ export const DeleteResourceButton = ({
   };
 
   return (
-    representingParty && (
+    fromParty &&
+    toParty && (
       <ButtonWithConfirmPopup
         message={t('user_rights_page.delete_confirm_message')}
         triggerButtonProps={{
@@ -60,8 +57,8 @@ export const DeleteResourceButton = ({
         onConfirm={() =>
           revoke(
             resource.identifier,
-            representingParty,
-            toParty,
+            fromParty.partyUuid,
+            toParty.partyUuid,
             () => snackbar(true),
             () => snackbar(false),
           )

@@ -3,17 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { DsHeading } from '@altinn/altinn-components';
 
-import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
-
-import classes from './SingleRightsSection.module.css';
-import SingleRightItem from './SingleRightItem';
-
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { List } from '@/features/amUI/common/List/List';
 import usePagination from '@/resources/hooks/usePagination';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import { AmPagination } from '@/components/Paginering';
+
+import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
+import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import classes from './SingleRightsSection.module.css';
+import SingleRightItem from './SingleRightItem';
 
 export const SingleRightsSection = () => {
   const { t } = useTranslation();
@@ -28,7 +28,7 @@ export const SingleRightsSection = () => {
     userId: id || '',
   });
 
-  const { data: toParty } = useGetPartyByUUIDQuery(id ?? '');
+  const { toParty } = usePartyRepresentation();
   const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights ?? [], 5);
 
   return (

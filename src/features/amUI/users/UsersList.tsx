@@ -3,6 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
+import { debounce } from '@/resources/utils';
+import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import type { User } from '@/rtk/features/userInfoApi';
+
 import { UserList } from '../common/UserList/UserList';
 import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -10,18 +14,14 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 
-import { debounce } from '@/resources/utils';
-import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
-import type { User } from '@/rtk/features/userInfoApi';
-
 const extractFromList = (
   list: User[],
   uuidToRemove: string,
-  onRemove: (removed: User) => void,
+  onRemove?: (removed: User) => void,
 ): User[] => {
   const remainingList = list.reduce<User[]>((acc, item) => {
     if (item.partyUuid === uuidToRemove) {
-      onRemove(item);
+      onRemove?.(item);
     } else {
       acc.push(item);
     }
@@ -47,15 +47,27 @@ export const UsersList = () => {
   );
 
   const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
+  const { data: currentUserAsRightHolder, isLoading: currentUserConnectionLoading } =
+    useGetRightHoldersQuery(
+      {
+        partyUuid: fromParty?.partyUuid ?? '',
+        fromUuid: fromParty?.partyUuid ?? '',
+        toUuid: currentUser?.uuid ?? '',
+      },
+      {
+        skip: !fromParty?.partyUuid || !currentUser?.uuid,
+      },
+    );
 
-  const [currentUserAsRightHolder, setCurrentUserAsRightHolder] = useState<User>();
   const [searchString, setSearchString] = useState<string>('');
 
   const userList = useMemo(() => {
+    if (!rightHolders) {
+      return null;
+    }
     const remainingAfterExtraction = extractFromList(
       rightHolders || [],
       currentUser?.uuid ?? 'loading',
-      setCurrentUserAsRightHolder,
     );
     return remainingAfterExtraction;
   }, [rightHolders, currentUser]);
@@ -69,16 +81,16 @@ export const UsersList = () => {
 
   return (
     <div className={classes.usersList}>
-      {displayLimitedPreviewLaunch && (
+      {!displayLimitedPreviewLaunch && currentUserAsRightHolder && (
         <>
           <CurrentUserPageHeader
-            currentUser={currentUserAsRightHolder}
-            loading={currentUserLoading}
+            currentUser={currentUserAsRightHolder[0]}
+            loading={currentUserLoading || currentUserConnectionLoading}
             as={(props) =>
               currentUserAsRightHolder ? (
                 <Link
                   {...props}
-                  to={`${currentUserAsRightHolder?.partyUuid}`}
+                  to={`${currentUserAsRightHolder[0]?.partyUuid}`}
                 />
               ) : (
                 <div {...props} />
@@ -111,9 +123,9 @@ export const UsersList = () => {
         <NewUserButton />
       </div>
       <UserList
-        userList={userList || []}
+        userList={userList ?? undefined}
         searchString={searchString}
-        isLoading={loadingRightHolders}
+        isLoading={!userList || loadingRightHolders}
         listItemTitleAs='h2'
       />
     </div>

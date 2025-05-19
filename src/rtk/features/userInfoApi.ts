@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import type { Party } from './lookupApi';
-
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+
+import type { Party } from './lookupApi';
 
 interface UserInfoApiResponse {
   party: Party;
@@ -25,10 +25,10 @@ export interface ReporteeInfo {
 }
 
 export enum PartyType {
-  None = 'None',
-  Person = 'Person',
-  Organization = 'Organization',
-  SelfIdentified = 'SelfIdentified',
+  Person = 1,
+  Organization = 2,
+  SelfIdentified = 3,
+  SubUnit = 4,
 }
 
 export interface User {
@@ -93,9 +93,9 @@ export const userInfoApi = createApi({
         keepUnusedDataFor: 300,
       },
     ),
-    removeRightHolder: builder.mutation<void, string>({
-      query: (partyUuidToBeRemoved) => ({
-        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder?rightholderPartyUuid=${partyUuidToBeRemoved}`,
+    removeRightHolder: builder.mutation<void, { toPartyUuid: string; fromPartyUuid: string }>({
+      query: ({ toPartyUuid, fromPartyUuid }) => ({
+        url: `reportee/${fromPartyUuid}/rightholder?rightholderPartyUuid=${toPartyUuid}`,
         method: 'DELETE',
       }),
       transformErrorResponse: (response: {

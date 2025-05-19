@@ -36,7 +36,9 @@ export const ReporteeAccessPackageSection = ({
         data-size='2xs'
         id='access_packages_title'
       >
-        {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
+        {t('access_packages.current_access_packages_title', {
+          count: numberOfAccesses ?? 0,
+        })}
       </DsHeading>
       <AccessPackageList
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}

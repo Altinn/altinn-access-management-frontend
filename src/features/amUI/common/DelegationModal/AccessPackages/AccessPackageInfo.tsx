@@ -5,14 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { MenuElipsisHorizontalIcon, PackageIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 
-import { useDelegationModalContext } from '../DelegationModalContext';
-import { DelegationAction } from '../EditModal';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
-import { StatusSection } from '../StatusSection';
-
-import classes from './AccessPackageInfo.module.css';
-
 import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
@@ -22,6 +14,14 @@ import {
   type AccessPackage,
 } from '@/rtk/features/accessPackageApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
+
+import { useDelegationModalContext } from '../DelegationModalContext';
+import { DelegationAction } from '../EditModal';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
+import { StatusSection } from '../StatusSection';
+
+import classes from './AccessPackageInfo.module.css';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -37,7 +37,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     onRevoke,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
-    toUuid: toParty?.partyUuid || '',
     onDelegateSuccess: () => {
       setActionSuccess(true);
       setTimeout(() => setActionSuccess(false), 2000);

@@ -62,6 +62,7 @@ export const lookupApi = createApi({
     }),
     getPartyByUUID: builder.query<Party, string>({
       query: (partyUUID) => `party/${partyUUID}`,
+      keepUnusedDataFor: 300,
     }),
     getOrganization: builder.query<Organization, string>({
       query: (orgNumber) => `org/${orgNumber}`,

@@ -47,16 +47,16 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
         {t('new_user_modal.modal_title')}
       </DsHeading>
       <DsTabs
-        defaultValue='person'
+        defaultValue={displayLimitedPreviewLaunch ? 'org' : 'person'}
         data-size='sm'
       >
         <DsTabs.List>
-          {displayLimitedPreviewLaunch && (
+          {!displayLimitedPreviewLaunch && (
             <DsTabs.Tab value='person'>{t('new_user_modal.person')}</DsTabs.Tab>
           )}
           <DsTabs.Tab value='org'>{t('new_user_modal.organization')}</DsTabs.Tab>
         </DsTabs.List>
-        {displayLimitedPreviewLaunch && (
+        {!displayLimitedPreviewLaunch && (
           <DsTabs.Panel value='person'>
             <NewPersonContent />
           </DsTabs.Panel>
