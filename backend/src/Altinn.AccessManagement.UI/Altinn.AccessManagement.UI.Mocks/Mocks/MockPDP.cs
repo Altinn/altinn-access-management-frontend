@@ -19,9 +19,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             var userIdAttribute = GetAccessSubjectAttribute(xacmlJsonRequest, "urn:altinn:userid");
             var partyUuidAttribute = GetAccessResourceAttribute(xacmlJsonRequest, "urn:altinn:party:uuid");
 
-            if (userIdAttribute.Value.Any() || partyUuidAttribute.Value.Any())
+            if (userIdAttribute?.Value?.Any() == true || partyUuidAttribute?.Value?.Any() == true)
             {
-                if (userIdAttribute?.Value == denyUserId || partyUuidAttribute?.Value == denyPartyUuid)
+               if (userIdAttribute?.Value?.Contains(denyUserId) == true || partyUuidAttribute?.Value?.Contains(denyPartyUuid) == true) 
                 {
                     response = new XacmlJsonResponse
                     {
