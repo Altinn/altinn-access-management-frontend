@@ -4177,6 +4177,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"csv-parse@npm:^5.6.0":
+  version: 5.6.0
+  resolution: "csv-parse@npm:5.6.0"
+  checksum: 10/4c82e11f50ae0ccbac2aed716ef2502d0468bf96552083561db789fc0258ee4bb0a30106fcfb2684f153cb4042f0413e0eac3645d5466874803b7ccdeba67ac8
+  languageName: node
+  linkType: hard
+
 "cypress-real-events@npm:^1.14.0":
   version: 1.14.0
   resolution: "cypress-real-events@npm:1.14.0"
@@ -8477,6 +8484,7 @@ __metadata:
     "@types/node": "npm:^22.0.0"
     axios: "npm:^1.6.8"
     cross-env: "npm:^7.0.3"
+    csv-parse: "npm:^5.6.0"
     dotenv: "npm:^16.4.5"
   languageName: unknown
   linkType: soft
