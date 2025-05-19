@@ -736,5 +736,54 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
+
+
+        /// <summary>
+        /// Test case: CheckAccess returns true when user has admin permissions
+        /// Expected: Returns true
+        /// </summary>
+        [Fact]
+        public async Task CheckAccess_WithAdminPermission_ReturnsTrue()
+        {
+            // Arrang
+            const int adminUserId = 20004938;
+            var token = PrincipalUtil.GetToken(adminUserId, 1234, 2);
+
+            var partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isAdmin?party={partyId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            bool hasAccess = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.True(hasAccess);
+        }
+
+        /// <summary>
+        /// Test case: CheckAccess returns false when user doesn't have admin permissions
+        /// Expected: Returns false
+        /// </summary>
+        [Fact]
+        public async Task CheckAccess_WithoutAdminPermission_ReturnsFalse()
+        {
+            // Arrange
+            const int regularUserId = 1234;
+            var token = PrincipalUtil.GetToken(regularUserId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var partyId = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isAdmin?party={partyId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            bool hasAccess = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.False(hasAccess);
+        }
+
     }
 }

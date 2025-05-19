@@ -378,14 +378,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("isAdmin")]
         public ActionResult<bool> CheckAccess()
         {
-            // Access the HasRequestedPermission flag from HttpContext.Items
             if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) && 
                 hasPermissionObj is bool hasPermission)
             {
                 return Ok(hasPermission);
             }
             
-            // If the flag isn't present, return false
             return Ok(false);
         }
     }

@@ -208,9 +208,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
 
-    services.AddSingleton<IPDP, PDPAppSI>();
     services.AddHttpClient<AuthorizationApiClient>();
-    
     ConfigureMockableClients(services, config);
 
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -302,14 +300,14 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 {
     MockSettings mockSettings = config.GetSection("MockSettings").Get<MockSettings>() ?? new MockSettings(false);
 
-    // if (mockSettings.PDP)
-    // {
-    //     services.AddSingleton<IAuthorizationApiClientWrapper, AuthorizationApiClientMock>();
-    // }
-    // else
-    // {
-    //     services.AddSingleton<IAuthorizationApiClientWrapper, AuthorizationApiClientWrapper>();
-    // }
+    if (mockSettings.PDP)
+    {
+        services.AddSingleton<IPDP, MockPDP>();
+    }
+    else 
+    {
+        services.AddSingleton<IPDP, PDPAppSI>();
+    }
 
     if (mockSettings.AccessManagement)
     {

@@ -36,7 +36,6 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
 
             string party = queryParams.FirstOrDefault(p => p.Key == ParamParty).Value.FirstOrDefault();
 
-
             request.AccessSubject.Add(CreateSubjectCategory(context.User.Claims));
             request.Action.Add(CreateActionCategory(requirement.ActionType));
 
