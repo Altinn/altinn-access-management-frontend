@@ -3,16 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
-import { debounce } from '@/resources/utils';
-import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
-import type { User } from '@/rtk/features/userInfoApi';
-
 import { UserList } from '../common/UserList/UserList';
 import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
+
+import type { User } from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { debounce } from '@/resources/utils';
 
 const extractFromList = (
   list: User[],
@@ -33,7 +33,6 @@ const extractFromList = (
 export const UsersList = () => {
   const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
-  const { data: isAdmin } = useGetIsAdminQuery();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(

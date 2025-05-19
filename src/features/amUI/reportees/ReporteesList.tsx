@@ -13,6 +13,7 @@ import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
 export const ReporteesList = () => {
   const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
+
   const { data: rightHolders, isLoading } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',

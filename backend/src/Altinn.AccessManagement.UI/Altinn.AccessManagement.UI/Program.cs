@@ -14,7 +14,6 @@ using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.Common.AccessTokenClient.Services;
-using Altinn.Common.PEP.Authorization;
 using Altinn.Common.PEP.Clients;
 using Altinn.Common.PEP.Implementation;
 using Altinn.Common.PEP.Interfaces;
@@ -208,6 +207,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
 
+    services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
     services.AddHttpClient<AuthorizationApiClient>();
     ConfigureMockableClients(services, config);
 
@@ -226,7 +226,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISystemUserChangeRequestService, SystemUserChangeRequestService>();
     services.AddSingleton<ISystemUserAgentRequestService, SystemUserAgentRequestService>();
     services.AddSingleton<ISystemUserAgentDelegationService, SystemUserAgentDelegationService>();
-    services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
     services.AddSingleton<IRoleService, RoleService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
     services.AddTransient<ResourceHelper, ResourceHelper>();
