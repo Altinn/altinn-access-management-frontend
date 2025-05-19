@@ -376,7 +376,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_THROUGH)]
         [Route("isAdmin")]
-        public ActionResult<bool> CheckAccess()
+        public ActionResult<bool> IsAdmin()
         {
             if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) && 
                 hasPermissionObj is bool hasPermission)
