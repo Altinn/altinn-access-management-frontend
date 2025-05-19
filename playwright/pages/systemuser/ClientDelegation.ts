@@ -8,18 +8,20 @@ export class ClientDelegationPage {
   readonly page: Page;
 
   readonly confirmButton: Locator;
-  readonly addCustomerButton: Locator;
+  readonly addCustomersButton: Locator;
   readonly confirmAndCloseButton: Locator;
   readonly deleteSystemAccessButtons: Locator;
   readonly modifyCustomersButton: Locator;
+  readonly clientSearchBox: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.confirmButton = page.getByRole('button', { name: 'Godkjenn' });
-    this.addCustomerButton = page.getByRole('button', { name: 'Legg til kunder' });
+    this.addCustomersButton = page.getByRole('button', { name: 'Legg til kunder' });
     this.modifyCustomersButton = page.getByRole('button', { name: 'Legg til eller fjern kunder' });
     this.confirmAndCloseButton = page.getByRole('button', { name: 'Bekreft og lukk' });
     this.deleteSystemAccessButtons = page.getByRole('button', { name: 'Slett systemtilgang' });
+    this.clientSearchBox = page.getByRole('searchbox', { name: 'Søk etter kunde' });
   }
 
   systemUserLink(name: string): Locator {
@@ -53,9 +55,15 @@ export class ClientDelegationPage {
     await this.page.keyboard.press('Escape');
   }
 
-  async addCustomer(customerLabel: string, confirmationText: string) {
-    await expect(this.addCustomerButton).toBeVisible();
-    await this.addCustomerButton.click();
+  async addCustomer(
+    customerLabel: string,
+    confirmationText: string,
+    orgnummer: string = '234234234',
+  ) {
+    await expect(this.addCustomersButton).toBeVisible();
+    //add step to search for customer first:
+    await this.addCustomersButton.click();
+    await this.clientSearchBox.fill(orgnummer);
     const customerButton = this.addCustomerButtonByName(customerLabel);
     await expect(customerButton).toBeVisible();
     await this.addCustomerButtonByName(customerLabel).click();
@@ -89,7 +97,7 @@ export class ClientDelegationPage {
     await confirmDeleteButton.click();
 
     //Should close modal and take you back to overview page
-    await expect(this.page).toHaveURL(env('SYSYEMUSER_URL'));
+    await expect(this.page).toHaveURL(env('SYSTEMUSER_URL'));
     await expect(this.systemUserLink(name)).toHaveCount(0);
   }
 }

@@ -1,3 +1,5 @@
+import { TestdataApi } from 'playwright/util/TestdataApi';
+
 import { Token } from './Token';
 
 export class ApiRequests {
@@ -138,11 +140,12 @@ export class ApiRequests {
   }
 
   public async postClientDelegationAgentRequest(
-    externalRef: string,
     systemId: string,
     accessPackageUrn: string,
     partyOrgNo: string,
   ) {
+    const externalRef = TestdataApi.generateExternalRef();
+
     const payload = {
       externalRef,
       systemId,
