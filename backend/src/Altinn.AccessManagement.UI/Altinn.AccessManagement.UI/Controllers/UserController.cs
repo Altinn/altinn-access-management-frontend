@@ -374,7 +374,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Endpoint for checking if the authenticated user has access to a resource.
         /// </summary>
         [HttpGet]
-        [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_TROUGH)]
+        [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_THROUGH)]
         [Route("isAdmin")]
         public ActionResult<bool> CheckAccess()
         {

@@ -18,6 +18,6 @@
         /// <summary>
         /// Policy tag for authorizing Altinn.Platform.Authorization API access from Altinn Authorization
         /// </summary>
-        public const string POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_TROUGH = "AccessManagementEndUserReadOrAuthorizedParty";
+        public const string POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_THROUGH = "AccessManagementEndUserReadOrAuthorizedParty";
     }
 }
