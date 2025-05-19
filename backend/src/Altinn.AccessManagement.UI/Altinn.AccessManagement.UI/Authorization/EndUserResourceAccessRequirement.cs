@@ -14,7 +14,7 @@ namespace Altinn.AccessManagement.UI.Authorization
         public string ActionType { get; set; }
 
         /// <summary>
-        /// Gets or sets the resourcId for the resource that authorization should verified for
+        /// Gets or sets the resourceId for the resource that authorization should verified for
         /// </summary>
         public string ResourceId { get; set; }
 
@@ -24,7 +24,7 @@ namespace Altinn.AccessManagement.UI.Authorization
         public bool AllowAllowUnauthorizedParty { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the Altinn.Common.PEP.Authorization.ResourceAccessRequirement class
+        /// Initializes a new instance of the <see cref="EndUserResourceAccessRequirement"/> class.
         /// </summary>
         /// <param name="actionType">The Action type for this requirement</param>
         /// <param name="resourceId">The resource id for the resource authorization is verified for</param>
