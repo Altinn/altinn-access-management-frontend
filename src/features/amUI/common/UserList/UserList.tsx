@@ -12,16 +12,9 @@ export interface UserListProps {
   searchString: string;
   isLoading?: boolean;
   listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-  isAdmin?: boolean;
 }
 
-export const UserList = ({
-  userList,
-  searchString,
-  isLoading,
-  listItemTitleAs,
-  isAdmin = false,
-}: UserListProps) => {
+export const UserList = ({ userList, searchString, isLoading, listItemTitleAs }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
     users: userList,
@@ -37,7 +30,6 @@ export const UserList = ({
         {users.length === 0 ? t('users_page.user_no_search_result') : ''}
       </DsParagraph>
       <ListWrapper
-        isAdmin={isAdmin}
         userList={users}
         spacing={2}
         size='md'

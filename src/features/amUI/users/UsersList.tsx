@@ -115,13 +115,14 @@ export const UsersList = () => {
         </DsSearch>
         <NewUserButton />
       </div>
-      <UserList
-        isAdmin={isAdmin}
-        userList={userList || []}
-        searchString={searchString}
-        isLoading={loadingRightHolders}
-        listItemTitleAs='h2'
-      />
+      {isAdmin && (
+        <UserList
+          userList={userList || []}
+          searchString={searchString}
+          isLoading={loadingRightHolders}
+          listItemTitleAs='h2'
+        />
+      )}
     </div>
   );
 };

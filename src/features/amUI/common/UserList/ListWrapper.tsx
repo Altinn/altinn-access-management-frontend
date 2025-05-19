@@ -15,7 +15,6 @@ export interface UserListProps {
   indent?: boolean;
   isLoading?: boolean;
   listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-  isAdmin?: boolean;
 }
 
 export const ListWrapper = ({
@@ -25,7 +24,6 @@ export const ListWrapper = ({
   isLoading,
   indent,
   listItemTitleAs,
-  isAdmin = false,
 }: UserListProps) => {
   return (
     <div className={cn(indent ? classes.indent : '')}>
@@ -35,7 +33,6 @@ export const ListWrapper = ({
         ) : (
           userList?.map((user) => (
             <UserListItem
-              isAdmin={isAdmin}
               size={size}
               key={user.partyUuid}
               user={user}
