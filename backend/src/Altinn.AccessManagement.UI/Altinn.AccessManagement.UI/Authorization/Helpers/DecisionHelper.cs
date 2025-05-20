@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
             XacmlJsonCategory resource = CreateResourceCategoryForResource(requirement.ResourceId);
             request.Resource.Add(resource);
 
-            if (Guid.TryParse(party, out Guid partyUuid))
+            if (queryParams.TryGetValue(ParamParty, out var partyValues) && Guid.TryParse(partyValues.FirstOrDefault(), out Guid partyUuid))
             {
                 resource.Attribute.Add(CreateXacmlJsonAttribute(MatchAttributeIdentifiers.PartyUuidAttribute, partyUuid.ToString(), DefaultType, DefaultIssuer));
             }
@@ -68,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
             ArgumentNullException.ThrowIfNull(user, nameof(user));
 
             // We request one thing and then only want one result
-            if (response.Response == null || response.Response.Count != 1) 
+            if (response.Response == null || response.Response.Count != 1)
             {
                 return false;
             }
@@ -148,16 +148,20 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
                 if (attributeMinLvAuth != null)
                 {
                     string minAuthenticationLevel = attributeMinLvAuth.Value;
-                    Claim usersAuthenticationLevel = user.Claims.First(c => c.Type == "urn:altinn:authlevel");
+
+                    Claim usersAuthenticationLevel = user.Claims.FirstOrDefault(c => c.Type == "urn:altinn:authlevel");
 
                     // Checks that the user meets the minimum authentication level
-                    if (Convert.ToInt32(usersAuthenticationLevel.Value) < Convert.ToInt32(minAuthenticationLevel))
+                    if (usersAuthenticationLevel == null ||
+                        !int.TryParse(usersAuthenticationLevel.Value, out int userLevel) ||
+                        !int.TryParse(minAuthenticationLevel, out int requiredLevel) ||
+                        userLevel < requiredLevel)
                     {
                         return false;
                     }
                 }
             }
-
+            
             return true;
         }
 
@@ -262,7 +266,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
                     {
                         return true;
                     }
-                    
+
                     return false;
                 }
                 catch (JsonException)
