@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../util/loadFacilitators';
 import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
@@ -73,7 +73,9 @@ test.describe('Klientdelegering', () => {
 
     //Approve system user and click it
     await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
+    await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
     await clientDelegationPage.systemUserLink(name).click();
+
     await clientDelegationPage.openAccessPackage(accessPackageDisplayName);
 
     // Add customers to system user and remove them after so you can delete system user
@@ -83,6 +85,7 @@ test.describe('Klientdelegering', () => {
         customer.confirmation,
         customer.orgnummer,
       );
+
       await clientDelegationPage.removeCustomer(customer.confirmation);
     }
 

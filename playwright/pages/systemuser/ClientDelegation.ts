@@ -74,7 +74,6 @@ export class ClientDelegationPage {
     // Verify customer was added
     const confirmation = this.confirmationText(`${confirmationText} er lagt`);
     await expect(confirmation).toBeVisible();
-    // await this.confirmationText(`${confirmationText} er lagt`).click();
 
     //Close customers modal
     await expect(this.confirmAndCloseButton).toBeVisible();
