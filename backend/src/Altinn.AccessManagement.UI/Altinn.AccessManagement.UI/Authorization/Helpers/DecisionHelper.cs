@@ -28,6 +28,9 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
         /// <returns></returns>
         public static XacmlJsonRequestRoot CreateDecisionRequest(AuthorizationHandlerContext context, EndUserResourceAccessRequirement requirement, IQueryCollection queryParams)
         {
+            ArgumentNullException.ThrowIfNull(requirement, nameof(requirement));
+            ArgumentException.ThrowIfNullOrEmpty(requirement.ResourceId, nameof(requirement.ResourceId));
+            
             XacmlJsonRequest request = new XacmlJsonRequest();
             request.AccessSubject = new List<XacmlJsonCategory>();
             request.Action = new List<XacmlJsonCategory>();
