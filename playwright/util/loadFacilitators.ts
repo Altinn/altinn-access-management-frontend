@@ -17,7 +17,7 @@ export interface CustomerData {
 
 export enum FacilitatorRole {
   Revisor = 'revisor',
-  Forretningsforer = 'forretningsforer',
+  Forretningsfoerer = 'Forretningsfoerer',
   Regnskapsfoerer = 'regnskapsfoerer',
 }
 
@@ -87,7 +87,7 @@ export function loadCustomers(role: FacilitatorRole): CustomerData[] {
 export function loadAllFacilitators(): Record<FacilitatorRole, Facilitator> {
   return {
     [FacilitatorRole.Revisor]: loadFacilitator(FacilitatorRole.Revisor),
-    [FacilitatorRole.Forretningsforer]: loadFacilitator(FacilitatorRole.Forretningsforer),
+    [FacilitatorRole.Forretningsfoerer]: loadFacilitator(FacilitatorRole.Forretningsfoerer),
     [FacilitatorRole.Regnskapsfoerer]: loadFacilitator(FacilitatorRole.Regnskapsfoerer),
   };
 }

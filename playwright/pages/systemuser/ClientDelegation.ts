@@ -61,28 +61,42 @@ export class ClientDelegationPage {
     orgnummer: string = '234234234',
   ) {
     await expect(this.addCustomersButton).toBeVisible();
-    //add step to search for customer first:
     await this.addCustomersButton.click();
+
+    //Customers have different sorting per environment, so most consistent option is to search
     await this.clientSearchBox.fill(orgnummer);
+
+    // Add customer
     const customerButton = this.addCustomerButtonByName(customerLabel);
     await expect(customerButton).toBeVisible();
     await this.addCustomerButtonByName(customerLabel).click();
+
+    // Verify customer was added
     const confirmation = this.confirmationText(`${confirmationText} er lagt`);
     await expect(confirmation).toBeVisible();
-    await this.confirmationText(`${confirmationText} er lagt`).click();
+    // await this.confirmationText(`${confirmationText} er lagt`).click();
+
+    //Close customers modal
     await expect(this.confirmAndCloseButton).toBeVisible();
     await this.confirmAndCloseButton.click();
   }
 
   async removeCustomer(name: string) {
+    // Open the modify customers modal
     await expect(this.modifyCustomersButton).toBeVisible();
     await this.modifyCustomersButton.click();
+
+    // Find and click the remove button for the specified customer
     const removeButton = this.removeCustomerButtonByName(name);
     await expect(removeButton).toBeVisible();
     await this.removeCustomerButtonByName(name).click();
+
+    // Verify the customer removal confirmation text is visible and click it
     const confirmation = this.confirmationText(`${name} er fjernet fra Systemtilgangen`);
     await expect(confirmation).toBeVisible();
-    await this.confirmationText(`${name} er fjernet fra Systemtilgangen`).click();
+    // await this.confirmationText(`${name} er fjernet fra Systemtilgangen`).click();
+
+    // Close the customers modal after removal
     await expect(this.confirmAndCloseButton).toBeVisible();
     await this.confirmAndCloseButton.click();
   }
@@ -92,6 +106,7 @@ export class ClientDelegationPage {
     await expect(deleteButton).toBeVisible();
     await deleteButton.click();
 
+    // Same id on both delete buttons, have to use indexes
     const confirmDeleteButton = this.deleteSystemAccessButtons.nth(1);
     await expect(confirmDeleteButton).toBeVisible();
     await confirmDeleteButton.click();
