@@ -48,27 +48,36 @@ namespace Altinn.AccessManagement.UI.Authorization
                 return;
             }
 
-            XacmlJsonRequestRoot request = DecisionHelper.CreateDecisionRequest(context, requirement, httpContext.Request.Query);
-
-            XacmlJsonResponse response = await _pdp.GetDecisionForRequest(request);
-
-            bool userHasRequestedPartyAccess = DecisionHelper.ValidatePdpDecision(response, context.User);
-
-            if (userHasRequestedPartyAccess)
+            try
             {
-                // The user is authorized to access the resource by policy set it in context and succeed
-                httpContext.Items.Add("HasRequestedPermission", true);
-                context.Succeed(requirement);
-                await Task.CompletedTask;
-                return;
+                XacmlJsonRequestRoot request = DecisionHelper.CreateDecisionRequest(context, requirement, httpContext.Request.Query);
+
+                XacmlJsonResponse response = await _pdp.GetDecisionForRequest(request);
+
+                bool userHasRequestedPartyAccess = DecisionHelper.ValidatePdpDecision(response, context.User);
+
+                if (userHasRequestedPartyAccess)
+                {
+                    // The user is authorized to access the resource by policy set it in context and succeed
+                    httpContext.Items.Add("HasRequestedPermission", true);
+                    context.Succeed(requirement);
+                    await Task.CompletedTask;
+                    return;
+                }
+                else if (!requirement.AllowAllowUnauthorizedParty)
+                {
+                    context.Fail();
+                    await Task.CompletedTask;
+                    return;
+                }
             }
-            else if (!requirement.AllowAllowUnauthorizedParty)
+            catch
             {
                 context.Fail();
                 await Task.CompletedTask;
                 return;
             }
-            
+
             httpContext.Items.Add("HasRequestedPermission", false);
             context.Succeed(requirement);
             await Task.CompletedTask;

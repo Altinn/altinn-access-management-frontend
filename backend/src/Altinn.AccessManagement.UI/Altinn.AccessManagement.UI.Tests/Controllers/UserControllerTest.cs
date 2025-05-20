@@ -785,5 +785,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.False(hasAccess);
         }
 
+        /// <summary>
+        /// Test case: CheckAccess returns Forbidden when partyId is null invalid
+        /// Expected: Returns false
+        /// </summary>
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("not-a-guid")]
+        public async Task MethodName_InvalidInputs_ReturnsBadRequest(string invalid_party)
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isAdmin?party={invalid_party}");
+            
+            // Assert
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
     }
 }
