@@ -2,7 +2,6 @@ import test, { expect } from '@playwright/test';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { loginWithUser } from 'playwright/pages/loginPage';
-import { Util } from 'playwright/util/Util';
 
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
@@ -26,8 +25,7 @@ test.describe('Godkjenn og avvis Systembruker endringsforespørsel', () => {
     await api.approveSystemuserRequest(response.id);
 
     const confirmUrlChangeRequest = await api.postSystemuserChangeRequest(externalRef);
-    const newUrl = Util.useAccessManagementUrlChangeRequest(confirmUrlChangeRequest);
-    await page.goto(newUrl);
+    await page.goto(confirmUrlChangeRequest);
     await page.getByRole('button', { name: 'Avvis' }).click();
 
     //Expect user to be logged out
@@ -47,8 +45,7 @@ test.describe('Godkjenn og avvis Systembruker endringsforespørsel', () => {
     await api.approveSystemuserRequest(response.id);
 
     const confirmUrlChangeRequest = await api.postSystemuserChangeRequest(externalRef);
-    const newUrl = Util.useAccessManagementUrlChangeRequest(confirmUrlChangeRequest);
-    await page.goto(newUrl);
+    await page.goto(confirmUrlChangeRequest);
     await page.getByRole('button', { name: 'Godkjenn' }).click();
 
     //Expect user to be logged out
