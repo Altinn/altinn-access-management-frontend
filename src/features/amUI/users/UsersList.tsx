@@ -11,7 +11,11 @@ import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 
 import type { User } from '@/rtk/features/userInfoApi';
-import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetRightHoldersQuery,
+  useGetUserInfoQuery,
+} from '@/rtk/features/userInfoApi';
 import { debounce } from '@/resources/utils';
 
 const extractFromList = (
@@ -34,6 +38,7 @@ export const UsersList = () => {
   const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
     {
@@ -122,12 +127,14 @@ export const UsersList = () => {
         </DsSearch>
         <NewUserButton />
       </div>
-      <UserList
-        userList={userList ?? undefined}
-        searchString={searchString}
-        isLoading={!userList || loadingRightHolders}
-        listItemTitleAs='h2'
-      />
+      {isAdmin && (
+        <UserList
+          userList={userList ?? undefined}
+          searchString={searchString}
+          isLoading={!userList || loadingRightHolders}
+          listItemTitleAs='h2'
+        />
+      )}
     </div>
   );
 };

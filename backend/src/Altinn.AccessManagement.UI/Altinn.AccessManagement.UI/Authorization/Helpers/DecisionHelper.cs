@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
             XacmlJsonCategory resource = CreateResourceCategoryForResource(requirement.ResourceId);
             request.Resource.Add(resource);
 
-            if (queryParams.TryGetValue(ParamParty, out var partyValues) && Guid.TryParse(partyValues.FirstOrDefault(), out Guid partyUuid))
+            if (Guid.TryParse(party, out Guid partyUuid))
             {
                 resource.Attribute.Add(CreateXacmlJsonAttribute(MatchAttributeIdentifiers.PartyUuidAttribute, partyUuid.ToString(), DefaultType, DefaultIssuer));
             }
@@ -68,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
             ArgumentNullException.ThrowIfNull(user, nameof(user));
 
             // We request one thing and then only want one result
-            if (response.Response == null || response.Response.Count != 1)
+            if (response.Response == null || response.Response.Count != 1) 
             {
                 return false;
             }
@@ -87,38 +87,6 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
             if (Guid.TryParse(from, out Guid fromGuid))
             {
                 return fromGuid;
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the 'to' parameter from the query string
-        /// </summary>
-        /// <param name="context">The HTTP context containing the request</param>
-        /// <returns>The 'to' parameter as a Guid if valid, otherwise null</returns>
-        public static Guid? GetToParam(HttpContext context)
-        {
-            string from = context.Request.Query[ParamTo];
-            if (Guid.TryParse(from, out Guid toGuid))
-            {
-                return toGuid;
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the 'party' parameter from the query string
-        /// </summary>
-        /// <param name="context">The HTTP context containing the request</param>
-        /// <returns>The 'party' parameter as a Guid if valid, otherwise null</returns>
-        public static Guid? GetPartyParam(HttpContext context)
-        {
-            string from = context.Request.Query[ParamParty];
-            if (Guid.TryParse(from, out Guid partyGuid))
-            {
-                return partyGuid;
             }
 
             return null;
@@ -148,20 +116,16 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
                 if (attributeMinLvAuth != null)
                 {
                     string minAuthenticationLevel = attributeMinLvAuth.Value;
-
-                    Claim usersAuthenticationLevel = user.Claims.FirstOrDefault(c => c.Type == "urn:altinn:authlevel");
+                    Claim usersAuthenticationLevel = user.Claims.First(c => c.Type == "urn:altinn:authlevel");
 
                     // Checks that the user meets the minimum authentication level
-                    if (usersAuthenticationLevel == null ||
-                        !int.TryParse(usersAuthenticationLevel.Value, out int userLevel) ||
-                        !int.TryParse(minAuthenticationLevel, out int requiredLevel) ||
-                        userLevel < requiredLevel)
+                    if (Convert.ToInt32(usersAuthenticationLevel.Value) < Convert.ToInt32(minAuthenticationLevel))
                     {
                         return false;
                     }
                 }
             }
-            
+
             return true;
         }
 
@@ -266,7 +230,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
                     {
                         return true;
                     }
-
+                    
                     return false;
                 }
                 catch (JsonException)
