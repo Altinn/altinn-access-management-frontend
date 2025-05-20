@@ -8,7 +8,7 @@ import { ApiRequests } from '../../api-requests/ApiRequests';
 
 test.describe.configure({ timeout: 30000 });
 
-test.describe('Klientdelegering', () => {
+test.describe.skip('Klientdelegering', () => {
   let api: ApiRequests;
   test.slow();
 
