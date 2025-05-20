@@ -301,11 +301,11 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 
     if (mockSettings.PDP)
     {
-        services.AddSingleton<IPDP, MockPDP>();
+        services.AddTransient<IPDP, MockPDP>();
     }
     else 
     {
-        services.AddSingleton<IPDP, PDPAppSI>();
+        services.AddTransient<IPDP, PDPAppSI>();
     }
 
     if (mockSettings.AccessManagement)

@@ -1,4 +1,4 @@
-namespace Altinn.AccessManagement.UI.Authorization.Helper
+namespace Altinn.AccessManagement.UI.Authorization.Helpers
 {
     /// <summary>
     /// Altinn specific XACML constants used for urn identifiers and attributes
@@ -23,7 +23,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helper
             /// <summary>
             /// The Obligation Assignment Id prefix.
             /// </summary>
-            public const string ObligationAssignmentid = "urn:altinn:obligation-assignmentid:";
+            public const string ObligationAssignmentId = "urn:altinn:obligation-assignmentid:";
         }
 
         /// <summary>

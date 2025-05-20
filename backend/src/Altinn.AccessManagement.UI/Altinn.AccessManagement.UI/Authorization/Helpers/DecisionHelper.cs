@@ -4,7 +4,7 @@ using Altinn.AccessManagement.Core.Models;
 using Altinn.Authorization.ABAC.Xacml;
 using Altinn.Authorization.ABAC.Xacml.JsonProfile;
 using Microsoft.AspNetCore.Authorization;
-using static Altinn.AccessManagement.UI.Authorization.Helper.AltinnXacmlConstants;
+using static Altinn.AccessManagement.UI.Authorization.Helpers.AltinnXacmlConstants;
 
 namespace Altinn.AccessManagement.UI.Authorization.Helpers
 {
@@ -68,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
             ArgumentNullException.ThrowIfNull(user, nameof(user));
 
             // We request one thing and then only want one result
-            if (response?.Response.Count != 1)
+            if (response.Response == null || response.Response.Count != 1) 
             {
                 return false;
             }
@@ -255,13 +255,21 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
         {
             if (claim.Type.Equals("authorization_details"))
             {
-                userClaim = JsonSerializer.Deserialize<SystemUserClaim>(claim.Value, Options);
-                if (userClaim?.Systemuser_id != null && userClaim.Systemuser_id.Count > 0)
+                try
                 {
-                    return true;
+                    userClaim = JsonSerializer.Deserialize<SystemUserClaim>(claim.Value, Options);
+                    if (userClaim?.Systemuser_id != null && userClaim.Systemuser_id.Count > 0)
+                    {
+                        return true;
+                    }
+                    
+                    return false;
                 }
-
-                return false;
+                catch (JsonException)
+                {
+                    userClaim = null;
+                    return false;
+                }
             }
             else
             {
