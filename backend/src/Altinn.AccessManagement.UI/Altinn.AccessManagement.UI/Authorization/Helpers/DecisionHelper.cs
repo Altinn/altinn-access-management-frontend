@@ -150,11 +150,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
             // Mapping all claims on user to attributes
             foreach (Claim claim in claims)
             {
-                if (IsSystemUserClaim(claim, out SystemUserClaim userClaim))
-                {
-                    attributes.Add(CreateXacmlJsonAttribute(MatchAttributeIdentifiers.SystemUserUuid, userClaim.Systemuser_id[0], DefaultType, claim.Issuer));
-                }
-                else if (IsUserIdClaim(claim.Type))
+                if (IsUserIdClaim(claim.Type))
                 {
                     attributes.Add(CreateXacmlJsonAttribute(MatchAttributeIdentifiers.UserAttribute, claim.Value, DefaultType, claim.Issuer));
                 }
@@ -217,33 +213,6 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
                 CreateXacmlJsonAttribute(MatchAttributeIdentifiers.ActionId, actionType, DefaultType, DefaultIssuer, includeResult),
             ];
             return actionAttributes;
-        }
-
-        private static bool IsSystemUserClaim(Claim claim, out SystemUserClaim userClaim)
-        {
-            if (claim.Type.Equals("authorization_details"))
-            {
-                try
-                {
-                    userClaim = JsonSerializer.Deserialize<SystemUserClaim>(claim.Value, Options);
-                    if (userClaim?.Systemuser_id != null && userClaim.Systemuser_id.Count > 0)
-                    {
-                        return true;
-                    }
-                    
-                    return false;
-                }
-                catch (JsonException)
-                {
-                    userClaim = null;
-                    return false;
-                }
-            }
-            else
-            {
-                userClaim = null;
-                return false;
-            }
         }
 
         private static bool IsUserIdClaim(string name)
