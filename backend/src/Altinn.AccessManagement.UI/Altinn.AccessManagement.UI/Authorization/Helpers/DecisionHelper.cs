@@ -14,6 +14,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
     public class DecisionHelper
     {
         private const string ParamParty = "party";
+        private const string ParamFrom = "from";
         private const string DefaultIssuer = "Altinn";
         private const string DefaultType = "string";
 
@@ -72,6 +73,22 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
             }
 
             return ValidateDecisionResult(response.Response[0], user);
+        }
+
+        /// <summary>
+        /// Gets the 'from' parameter from the query string
+        /// </summary>
+        /// <param name="context">The HTTP context containing the request</param>
+        /// <returns>The 'from' parameter as a Guid if valid, otherwise null</returns>
+        public static Guid? GetFromParam(HttpContext context)
+        {
+            string from = context.Request.Query[ParamFrom];
+            if (Guid.TryParse(from, out Guid fromGuid))
+            {
+                return fromGuid;
+            }
+
+            return null;
         }
 
         /// <summary>
