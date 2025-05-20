@@ -21,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemUserClientMock).Assembly.Location).LocalPath), "Data");
         }
 
-        public Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid facilitatorId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public Task<List<AgentDelegation>> GetSystemUserAgentDelegations(Guid partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
             Guid regnskapsforerSystemUserId = Guid.Parse("61844188-3789-4b84-9314-2be1fdbc6633");
             Guid revisorSystemUserId = Guid.Parse("244c56a5-3737-44ac-8f3b-8697c5e281da");
@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new List<AgentDelegation>());
         }
 
-        public Task<Result<List<AgentDelegation>>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
+        public Task<Result<List<AgentDelegation>>> AddClient(Guid partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
         {
             if (delegationRequest.CustomerId.Equals(Guid.Parse("82cc64c5-60ff-4184-8c07-964c3a1e6fc7"))) 
             {
@@ -64,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }]));
         }
 
-        public Task<Result<bool>> RemoveClient(int partyId, Guid facilitatorId, Guid delegationId, CancellationToken cancellationToken)
+        public Task<Result<bool>> RemoveClient(Guid partyId, Guid delegationId, CancellationToken cancellationToken)
         {
             if (delegationId.Equals(Guid.Parse("60f1ade9-ed48-4083-a369-178d45d6ffd1"))) 
             {

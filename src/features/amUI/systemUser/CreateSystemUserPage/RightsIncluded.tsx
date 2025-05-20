@@ -28,7 +28,7 @@ interface RightsIncludedProps {
 export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsIncludedProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const partyId = getCookie('AltinnPartyId');
+  const partyId = getCookie('AltinnPartyUuid');
   const { data: reporteeData } = useGetReporteeQuery();
 
   const {
@@ -58,7 +58,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
     }
   };
 
-  const numberOfRights = (rights?.resources?.length || 0) + (rights?.accessPackages?.length || 0);
+  const numberOfRights = (rights?.resources?.length ?? 0) + (rights?.accessPackages?.length ?? 0);
 
   if (isLoadingRights) {
     return <DsSpinner aria-label={t('systemuser_includedrightspage.loading_rights')} />;

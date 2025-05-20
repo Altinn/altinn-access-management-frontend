@@ -47,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("{partyId}")]
-        public async Task<ActionResult> GetSystemUserListForLoggedInUser([FromRoute] int partyId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetSystemUserListForLoggedInUser([FromRoute] Guid partyId, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             Result<List<SystemUserFE>> list = await _systemUserService.GetAllSystemUsersForParty(partyId, languageCode, cancellationToken);
@@ -69,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("{partyId}/{systemUserGuid}")]
-        public async Task<ActionResult> GetSystemUserDetailsById([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetSystemUserDetailsById([FromRoute] Guid partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             SystemUserFE details = await _systemUserService.GetSpecificSystemUser(partyId, systemUserGuid, languageCode, cancellationToken);
@@ -91,7 +91,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("agent/{partyId}")]
-        public async Task<ActionResult> GetAgentSystemUsersForParty([FromRoute] int partyId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetAgentSystemUsersForParty([FromRoute] Guid partyId, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             Result<List<SystemUserFE>> list = await _systemUserService.GetAgentSystemUsersForParty(partyId, languageCode, cancellationToken);
@@ -113,7 +113,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>A single agent system user</returns>
         [Authorize]
         [HttpGet("agent/{partyId}/{systemUserGuid}")]
-        public async Task<ActionResult> GetAgentSystemUserDetailsById([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetAgentSystemUserDetailsById([FromRoute] Guid partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             SystemUserFE details = await _systemUserService.GetAgentSystemUser(partyId, systemUserGuid, languageCode, cancellationToken);
@@ -131,15 +131,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="partyId">Party user represents</param>
         /// <param name="systemUserGuid">System user id to delete</param>
-        /// <param name="partyUuid">Party uuid of party user represents</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpDelete("agent/{partyId}/{systemUserGuid}")]
-        public async Task<ActionResult> DeleteAgentSystemUser([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromQuery] Guid partyUuid, CancellationToken cancellationToken)
+        public async Task<ActionResult> DeleteAgentSystemUser([FromRoute] Guid partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            Result<bool> result = await _systemUserService.DeleteAgentSystemUser(partyId, systemUserGuid, partyUuid, cancellationToken);
+            Result<bool> result = await _systemUserService.DeleteAgentSystemUser(partyId, systemUserGuid, cancellationToken);
             if (result.IsProblem)
             {
                 return result.Problem.ToActionResult(); 
@@ -160,7 +159,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpPost("{partyId}")]
-        public async Task<ActionResult> Post([FromRoute] int partyId, [FromBody] NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
+        public async Task<ActionResult> Post([FromRoute] Guid partyId, [FromBody] NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
         {
             Result<SystemUser> systemUserResult = await _systemUserService.CreateSystemUser(partyId, newSystemUser, cancellationToken);
 
@@ -188,7 +187,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpDelete("{partyId}/{systemUserGuid}")]
-        public async Task<ActionResult> Delete([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<ActionResult> Delete([FromRoute] Guid partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
             bool result = await _systemUserService.DeleteSystemUser(partyId, systemUserGuid, cancellationToken);
             if (result)

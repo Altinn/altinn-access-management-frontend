@@ -30,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("{partyId}/{requestId}")]
-        public async Task<ActionResult> GetRequestByPartyIdAndRequestId([FromRoute] int partyId, [FromRoute] Guid requestId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetRequestByPartyIdAndRequestId([FromRoute] Guid partyId, [FromRoute] Guid requestId, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             Result<SystemUserRequestFE> req = await _systemUserRequestService.GetSystemUserRequest(partyId, requestId, languageCode, cancellationToken);
@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost("{partyId}/{requestId}/approve")]
-        public async Task<ActionResult> ApproveSystemUserRequest([FromRoute] int partyId, [FromRoute] Guid requestId, CancellationToken cancellationToken)
+        public async Task<ActionResult> ApproveSystemUserRequest([FromRoute] Guid partyId, [FromRoute] Guid requestId, CancellationToken cancellationToken)
         {
             Result<bool> req = await _systemUserRequestService.ApproveSystemUserRequest(partyId, requestId, cancellationToken);
             if (req.IsProblem)
@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost("{partyId}/{requestId}/reject")]
-        public async Task<ActionResult> RejectSystemUserRequest([FromRoute] int partyId, [FromRoute] Guid requestId, CancellationToken cancellationToken)
+        public async Task<ActionResult> RejectSystemUserRequest([FromRoute] Guid partyId, [FromRoute] Guid requestId, CancellationToken cancellationToken)
         {
             Result<bool> req = await _systemUserRequestService.RejectSystemUserRequest(partyId, requestId, cancellationToken);
             if (req.IsProblem)

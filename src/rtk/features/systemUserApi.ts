@@ -83,37 +83,34 @@ export const systemUserApi = createApi({
     getAgentSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
       query: ({ partyId, systemUserId }) => `systemuser/agent/${partyId}/${systemUserId}`,
     }),
-    deleteAgentSystemuser: builder.mutation<
-      void,
-      { partyId: string; systemUserId: string; partyUuid: string }
-    >({
-      query: ({ partyId, systemUserId, partyUuid }) => ({
-        url: `systemuser/agent/${partyId}/${systemUserId}?partyuuid=${partyUuid}`,
+    deleteAgentSystemuser: builder.mutation<void, { partyId: string; systemUserId: string }>({
+      query: ({ partyId, systemUserId }) => ({
+        url: `systemuser/agent/${partyId}/${systemUserId}`,
         method: 'DELETE',
       }),
       invalidatesTags: [Tags.SystemUsers],
     }),
     getCustomers: builder.query<
       AgentDelegationCustomer[],
-      { partyId: string; systemUserId: string; partyUuid: string }
+      { partyId: string; systemUserId: string }
     >({
-      query: ({ partyId, systemUserId, partyUuid }) =>
-        `systemuser/agentdelegation/${partyId}/${systemUserId}/customers?partyuuid=${partyUuid}`,
+      query: ({ partyId, systemUserId }) =>
+        `systemuser/agentdelegation/${partyId}/${systemUserId}/customers`,
       keepUnusedDataFor: Infinity,
     }),
     getAssignedCustomers: builder.query<
       AgentDelegation[],
-      { partyId: string; systemUserId: string; partyUuid: string }
+      { partyId: string; systemUserId: string }
     >({
-      query: ({ partyId, systemUserId, partyUuid }) =>
-        `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation?partyuuid=${partyUuid}`,
+      query: ({ partyId, systemUserId }) =>
+        `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation`,
     }),
     assignCustomer: builder.mutation<
       AgentDelegation,
-      { partyId: string; systemUserId: string; customerId: string; partyUuid: string }
+      { partyId: string; systemUserId: string; customerId: string }
     >({
-      query: ({ partyId, systemUserId, customerId, partyUuid }) => ({
-        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation?partyuuid=${partyUuid}`,
+      query: ({ partyId, systemUserId, customerId }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation`,
         method: 'POST',
         body: {
           customerId: customerId,
@@ -122,10 +119,10 @@ export const systemUserApi = createApi({
     }),
     removeCustomer: builder.mutation<
       void,
-      { partyId: string; systemUserId: string; delegationId: string; partyUuid: string }
+      { partyId: string; systemUserId: string; delegationId: string }
     >({
-      query: ({ partyId, systemUserId, delegationId, partyUuid }) => ({
-        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation/${delegationId}?partyuuid=${partyUuid}`,
+      query: ({ partyId, systemUserId, delegationId }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation/${delegationId}`,
         method: 'DELETE',
       }),
     }),

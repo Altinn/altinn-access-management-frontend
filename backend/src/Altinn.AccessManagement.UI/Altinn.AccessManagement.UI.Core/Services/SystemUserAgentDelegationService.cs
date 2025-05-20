@@ -33,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
         
         /// <inheritdoc /> 
-        public async Task<Result<List<CustomerPartyFE>>> GetSystemUserCustomers(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        public async Task<Result<List<CustomerPartyFE>>> GetSystemUserCustomers(Guid partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
             SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, systemUserGuid, cancellationToken);
             IEnumerable<string> accessPackageUrns = systemUser.AccessPackages.Select(x => x.Urn);
@@ -60,14 +60,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 customerType = CustomerRoleType.None;
             }
 
-            CustomerList customers = await _registerClient.GetPartyCustomers(partyUuid, customerType, cancellationToken);
+            CustomerList customers = await _registerClient.GetPartyCustomers(partyId, customerType, cancellationToken);
             return MapCustomerListToCustomerFE(customers);
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<AgentDelegationFE>>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        public async Task<Result<List<AgentDelegationFE>>> GetSystemUserAgentDelegations(Guid partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, partyUuid, systemUserGuid, cancellationToken);
+            List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, systemUserGuid, cancellationToken);
 
             return delegations.Select(delegation => 
             {
@@ -81,12 +81,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, Guid partyUuid, AgentDelegationRequestFE delegationRequestFe, CancellationToken cancellationToken)
+        public async Task<Result<AgentDelegationFE>> AddClient(Guid partyId, Guid systemUserGuid, AgentDelegationRequestFE delegationRequestFe, CancellationToken cancellationToken)
         {
             AgentDelegationRequest delegationRequest = new()
             {
-                CustomerId = delegationRequestFe.CustomerId,
-                FacilitatorId = partyUuid
+                CustomerId = delegationRequestFe.CustomerId
             };
 
             Result<List<AgentDelegation>> newAgentDelegations = await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
@@ -111,9 +110,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RemoveClient(Guid partyId, Guid delegationId, CancellationToken cancellationToken)
         {
-            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, partyUuid, delegationId, cancellationToken);
+            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, delegationId, cancellationToken);
             if (response.IsProblem)
             {
                 return new Result<bool>(response.Problem);

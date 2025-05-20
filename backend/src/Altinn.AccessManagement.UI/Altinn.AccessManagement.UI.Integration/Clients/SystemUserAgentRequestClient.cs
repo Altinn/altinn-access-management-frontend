@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<SystemUserAgentRequest>> GetSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserAgentRequest>> GetSystemUserAgentRequest(Guid partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {        
             try
             {
@@ -81,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> ApproveSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> ApproveSystemUserAgentRequest(Guid partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> RejectSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RejectSystemUserAgentRequest(Guid partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
             try
             {

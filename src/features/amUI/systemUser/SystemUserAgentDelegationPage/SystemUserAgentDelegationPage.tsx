@@ -18,8 +18,7 @@ import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();
   const { t } = useTranslation();
-  const partyId = getCookie('AltinnPartyId');
-  const partyUuid = getCookie('AltinnPartyUuid');
+  const partyId = getCookie('AltinnPartyUuid');
 
   useDocumentTitle(t('systemuser_agent_delegation.page_title'));
 
@@ -27,13 +26,13 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     data: systemUser,
     isError: isLoadSystemUserError,
     isLoading: isLoadingSystemUser,
-  } = useGetAgentSystemUserQuery({ partyId, systemUserId: id || '' });
+  } = useGetAgentSystemUserQuery({ partyId, systemUserId: id ?? '' });
 
   const {
     data: customers,
     isError: isLoadCustomersError,
     isLoading: isLoadingCustomers,
-  } = useGetCustomersQuery({ partyId, systemUserId: id ?? '', partyUuid });
+  } = useGetCustomersQuery({ partyId, systemUserId: id ?? '' });
 
   const {
     data: agentDelegations,
@@ -41,8 +40,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     isLoading: isLoadingAssignedCustomers,
   } = useGetAssignedCustomersQuery({
     partyId: partyId,
-    systemUserId: id || '',
-    partyUuid,
+    systemUserId: id ?? '',
   });
 
   return (
