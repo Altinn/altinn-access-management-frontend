@@ -121,6 +121,26 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
         public List<IdValuePair> AuthorizationReference { get; set; }
 
         /// <summary>
+        /// Consent template defines which template to use if resource is a consent resource
+        /// </summary>
+        public string ConsentTemplate { get; set; }
+
+        /// <summary>
+        /// Consent text is markdown text used if resource is a consent resource
+        /// </summary>
+        public Dictionary<string, string> ConsentText { get; set; }
+
+        /// <summary>
+        /// Defines consentmetadata for consent resources
+        /// </summary>
+        public Dictionary<string, ConsentMetadata> ConsentMetadata { get; set; }
+
+        /// <summary>
+        /// Defines if consent is a one time consent
+        /// </summary>
+        public bool IsOneTimeConsent { get; set; }
+
+        /// <summary>
         /// Writes key information when this object is written to Log.
         /// </summary>
         /// <returns></returns>
@@ -128,5 +148,16 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
         {
             return $"Identifier: {Identifier}, ResourceType: {ResourceType}";
         }
+    }
+
+    /// <summary>
+    /// Model describing the consent metadata for a resource
+    /// </summary>
+    public class ConsentMetadata
+    {
+        /// <summary>
+        /// Define if metadata is optional
+        /// </summary>
+        public bool Optional { get; set; }
     }
 }

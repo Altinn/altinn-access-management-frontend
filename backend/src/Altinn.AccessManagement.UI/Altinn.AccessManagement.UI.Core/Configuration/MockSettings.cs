@@ -61,6 +61,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool SystemUserAgentDelegation { get; set; }
 
         /// <summary>
+        /// Set to run ConsentClient locally during runtime
+        /// </summary>
+        public bool Consent { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MockSettings()

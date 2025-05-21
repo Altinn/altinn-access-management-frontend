@@ -1,0 +1,42 @@
+{
+  "isPoa": false,
+  "title": {
+    "nb": "Samtykke til bruk av dine data",
+    "nn": "Samtykke til bruk av dine data",
+    "en": "Consent to use of your data"
+  },
+  "heading": {
+    "nb": "DISKRET NÆR TIGER AS ønsker å hente opplysninger om deg",
+    "nn": "DISKRET NÆR TIGER AS ønskjer å hente opplysningar om deg",
+    "en": "DISKRET NÆR TIGER AS requests information about you"
+  },
+  "serviceIntro": {
+    "nb": "Ved at du samtykker, får DISKRET NÆR TIGER AS tilgang til følgende opplysninger om deg",
+    "nn": "Ved at du samtykker, får DISKRET NÆR TIGER AS tilgang til følgjande opplysningar om deg",
+    "en": "By giving consent, DISKRET NÆR TIGER AS gets access to the following information about you"
+  },
+  "consentMessage": {
+    "nb": "Dette er en melding fra banken",
+    "nn": "Dette er ei melding fra banken",
+    "en": "This is a message from the bank"
+  },
+  "expiration": {
+    "nb": "Samtykket er tidsavgrenset og vil gå ut 21.05.2025 11:11",
+    "nn": "Samtykket er tidsavgrensa og vil gå ut 21.05.2025 11:11",
+    "en": "The consent is time-limited, and will expire 21.05.2025 11:11"
+  },
+  "rights": [
+    {
+      "title": {
+        "en": "Inntektsopplysninger",
+        "nb": "Inntektsopplysninger",
+        "nn": "Inntektsopplysninger"
+      },
+      "consentTextHtml": {
+        "en": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) 2016: Inntekt",
+        "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) 2016: Inntekt",
+        "nn": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) 2016: Inntekt"
+      }
+    }
+  ]
+}
