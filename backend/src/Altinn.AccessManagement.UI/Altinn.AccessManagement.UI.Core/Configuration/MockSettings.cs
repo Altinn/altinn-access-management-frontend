@@ -6,6 +6,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
     public class MockSettings
     {
         /// <summary>
+        /// Set to mock PDP during runtime
+        /// </summary>
+        public bool PDP { get; set; }
+
+        /// <summary>
         /// Set to mock AccessManagementClient during runtime
         /// </summary>
         public bool AccessManagement { get; set; }

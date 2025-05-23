@@ -121,6 +121,9 @@ export const userInfoApi = createApi({
       query: ({ from, to }) => `from/${from}/to/${to}/accesses`,
       keepUnusedDataFor: 300,
     }),
+    getIsAdmin: builder.query<boolean, void>({
+      query: () => `isAdmin?party=${getCookie('AltinnPartyUuid')}`,
+    }),
     validateNewUserPerson: builder.mutation<string, { ssn: string; lastName: string }>({
       query: ({ ssn, lastName }) => ({
         url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/validateperson`,
@@ -146,6 +149,7 @@ export const {
   useValidateNewUserPersonMutation,
   useGetReporteeListForPartyQuery,
   useGetReporteeListForAuthorizedUserQuery,
+  useGetIsAdminQuery,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;
