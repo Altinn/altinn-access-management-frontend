@@ -157,7 +157,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpDelete]
         [Authorize]
-        [Route("revoke")]
+        [Route("delegations")]
         public async Task<ActionResult> RevokeAccessPackageAccess([FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] Guid party, [FromQuery] string packageId)
         {
             if (!ModelState.IsValid || (party != to && party != from))
