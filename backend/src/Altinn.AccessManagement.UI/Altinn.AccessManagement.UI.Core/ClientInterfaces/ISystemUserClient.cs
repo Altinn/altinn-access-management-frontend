@@ -77,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="facilitatorId">Id of facilitator owning systemuser</param>
         /// <param name="accessPackages">List of access packages</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Boolean whether delete was successful or not</returns>
+        /// <returns>List of customers associated with the specified access packages</returns>
         Task<Result<List<Customer>>> GetClients(int partyId, Guid facilitatorId, List<string> accessPackages, CancellationToken cancellationToken);
     }
 }

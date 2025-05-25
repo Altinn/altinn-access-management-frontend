@@ -98,14 +98,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<Result<List<Customer>>> GetClients(int partyId, Guid facilitatorId, List<string> accessPackages, CancellationToken cancellationToken)
         {
-            string dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemRegisterClientMock).Assembly.Location).LocalPath), "Data");
+            string dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemUserClientMock).Assembly.Location).LocalPath), "Data");
             string jsonFile = ""; 
             
             if (accessPackages.Any(x => x == "ansvarlig-revisor" || x == "revisormedarbeider"))
             {
                 jsonFile = "revisorCustomers.json";
             }
-            else if (accessPackages.Any(x => x == "regnskapsforer-med-signeringsrettighet" || x == "regnskapsforer-uten-signeringsrettighet" || x =="regnskapsforer-lonn"))
+            else if (accessPackages.Any(x => x == "regnskapsforer-med-signeringsrettighet" 
+                                         || x == "regnskapsforer-uten-signeringsrettighet" 
+                                         || x == "regnskapsforer-lonn"))
             {
                 jsonFile = "regnskapsforerCustomers.json";
             }
@@ -113,6 +115,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 jsonFile = "forretningsforerCustomers.json";
             }
+            else
+            {
+                // No known access package → return empty result
+                return Task.FromResult(new Result<List<Customer>>(new List<Customer>()));
+            }
+
+            if (string.IsNullOrEmpty(jsonFile))
+            {
+                // Safety guard: if jsonFile somehow still empty
+                return Task.FromResult(new Result<List<Customer>>(new List<Customer>()));
+            }
+
             List<Customer> customers = Util.GetMockData<List<Customer>>($"{dataFolder}/SystemUser/{jsonFile}");
             
             return Task.FromResult(new Result<List<Customer>>(customers));
