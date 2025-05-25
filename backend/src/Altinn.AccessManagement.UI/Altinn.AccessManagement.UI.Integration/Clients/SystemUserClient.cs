@@ -241,7 +241,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"systemuser/agent/{partyId}/clients?facilitatorId={facilitatorId}{packageQuery}";
 
-                HttpResponseMessage response = await _httpClient.DeleteAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
                 
                 if (response.IsSuccessStatusCode)
