@@ -95,6 +95,29 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new Result<bool>(true));
         }
 
+        /// <inheritdoc />
+        public Task<Result<List<Customer>>> GetClients(int partyId, Guid facilitatorId, List<string> accessPackages, CancellationToken cancellationToken)
+        {
+            string dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemRegisterClientMock).Assembly.Location).LocalPath), "Data");
+            string jsonFile = ""; 
+            
+            if (accessPackages.Any(x => x == "ansvarlig-revisor" || x == "revisormedarbeider"))
+            {
+                jsonFile = "revisorCustomers.json";
+            }
+            else if (accessPackages.Any(x => x == "regnskapsforer-med-signeringsrettighet" || x == "regnskapsforer-uten-signeringsrettighet" || x =="regnskapsforer-lonn"))
+            {
+                jsonFile = "regnskapsforerCustomers.json";
+            }
+            else if (accessPackages.Any(x => x == "forretningsforer-eiendom"))
+            {
+                jsonFile = "forretningsforerCustomers.json";
+            }
+            List<Customer> customers = Util.GetMockData<List<Customer>>($"{dataFolder}/SystemUser/{jsonFile}");
+            
+            return Task.FromResult(new Result<List<Customer>>(customers));
+        }
+
         internal static class TestErrors
         {
             private static readonly ProblemDescriptorFactory _factory
