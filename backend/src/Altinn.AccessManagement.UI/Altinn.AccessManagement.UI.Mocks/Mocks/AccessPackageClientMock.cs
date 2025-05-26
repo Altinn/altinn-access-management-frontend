@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 
 
@@ -69,7 +70,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
             if (mockResponse.IsSuccessStatusCode)
             {
-                return mockResponse;
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
             }
             throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
         }
