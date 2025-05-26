@@ -786,7 +786,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: CheckAccess returns Forbidden when partyId is null invalid
+        /// Test case: CheckAccess returns Forbidden when partyId is null or invalid
         /// Expected: Returns false
         /// </summary>
         [Theory]
