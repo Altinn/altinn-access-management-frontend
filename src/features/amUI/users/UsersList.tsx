@@ -17,6 +17,7 @@ import {
   useGetUserInfoQuery,
 } from '@/rtk/features/userInfoApi';
 import { debounce } from '@/resources/utils';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 const extractFromList = (
   list: User[],
@@ -38,7 +39,10 @@ export const UsersList = () => {
   const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
-  const { data: isAdmin } = useGetIsAdminQuery();
+
+  const partyUuid = getCookie('AltinnPartyUuid');
+
+  const { data: isAdmin } = useGetIsAdminQuery({ partyUuid });
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
     {
@@ -47,7 +51,7 @@ export const UsersList = () => {
       toUuid: '', // all
     },
     {
-      skip: !fromParty?.partyUuid,
+      skip: !fromParty?.partyUuid || !isAdmin,
     },
   );
 
