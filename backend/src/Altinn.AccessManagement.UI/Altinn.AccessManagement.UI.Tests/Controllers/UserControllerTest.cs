@@ -763,7 +763,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: CheckAccess returns false when user doesn't have admin permissions through either party or userid
+        /// Test case: CheckAccess returns false when user doesn't have admin permissions for the provided party
         /// Expected: Returns false
         /// </summary>
         [Fact]
