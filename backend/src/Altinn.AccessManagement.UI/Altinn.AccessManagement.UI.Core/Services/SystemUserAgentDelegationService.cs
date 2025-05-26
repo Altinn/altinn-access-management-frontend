@@ -30,6 +30,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Result<List<CustomerPartyFE>>> GetSystemUserCustomers(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
             SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, systemUserGuid, cancellationToken);
+            if (systemUser is null) 
+            {
+                return new Result<List<CustomerPartyFE>>(Problem.SystemUserNotFound);
+            }
+
             List<string> accessPackages = systemUser.AccessPackages.Select(x => x.Urn.Split(":").Last()).ToList();
 
             Result<List<Customer>> customers = await _systemUserClient.GetClients(partyId, partyUuid, accessPackages, cancellationToken);

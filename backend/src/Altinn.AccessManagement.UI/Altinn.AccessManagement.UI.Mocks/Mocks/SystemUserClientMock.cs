@@ -117,8 +117,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             else
             {
-                // No known access package → return empty result
-                return Task.FromResult(new Result<List<Customer>>(new List<Customer>()));
+                // No known access package → return error
+                return Task.FromResult(new Result<List<Customer>>(TestErrors.AgentSystemUser_FailedToGetClients));
             }
 
             if (string.IsNullOrEmpty(jsonFile))
@@ -139,6 +139,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             public static ProblemDescriptor SystemNotFound { get; }
                 = _factory.Create(11, HttpStatusCode.NotFound, "System not found");
+
+            public static ProblemDescriptor AgentSystemUser_FailedToGetClients { get; }
+            = _factory.Create(45, HttpStatusCode.BadRequest, "Failed to get clients");
         }
     }
 }
