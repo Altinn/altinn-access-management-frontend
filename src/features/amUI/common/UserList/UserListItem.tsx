@@ -47,6 +47,7 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
         }}
         expanded={isExpanded}
         collapsible={hasInheritingUsers}
+        interactive={hasInheritingUsers}
         linkIcon={!hasInheritingUsers}
         onClick={() => {
           if (hasInheritingUsers) setExpanded(!isExpanded);

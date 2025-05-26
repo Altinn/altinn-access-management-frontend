@@ -21,6 +21,11 @@
         public string ApiAuthenticationEndpoint { get; set; }
 
         /// <summary>
+        /// Gets or sets the authorization api endpoint
+        /// </summary>
+        public string ApiAuthorizationEndpoint { get; set; }
+
+        /// <summary>
         /// Gets or sets the profile api endpoint.
         /// </summary>
         public string ApiProfileEndpoint { get; set; }
