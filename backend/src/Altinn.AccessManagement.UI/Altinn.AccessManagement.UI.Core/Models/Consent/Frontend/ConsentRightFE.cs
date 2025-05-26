@@ -6,6 +6,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
     public class ConsentRightFE
     {
         /// <summary>
+        /// Resource identifier
+        /// </summary>
+        public required string Identifier { get; set; }
+
+        /// <summary>
         /// Resource title
         /// </summary>
         public required Dictionary<string, string> Title { get; set; }

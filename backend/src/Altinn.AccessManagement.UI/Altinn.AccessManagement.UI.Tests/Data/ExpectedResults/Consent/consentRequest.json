@@ -27,6 +27,7 @@
   },
   "rights": [
     {
+      "identifier": "consent-test-resource",
       "title": {
         "en": "Inntektsopplysninger",
         "nb": "Inntektsopplysninger",

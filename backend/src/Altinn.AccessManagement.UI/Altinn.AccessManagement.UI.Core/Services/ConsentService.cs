@@ -54,6 +54,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 rights.Add(new()
                 {
+                    Identifier = resource.Identifier,
                     Title = resource.Title,
                     ConsentTextHtml = ReplaceMetadataInTranslationsDict(resource.ConsentText, right.MetaData), // TODO: convert to markdown
                 });

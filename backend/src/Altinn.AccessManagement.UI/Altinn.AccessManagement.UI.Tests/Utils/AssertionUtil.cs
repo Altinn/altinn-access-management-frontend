@@ -579,6 +579,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
+            Assert.Equal(expected.Identifier, actual.Identifier);
             Assert.Equal(expected.Title, actual.Title);
             Assert.Equal(expected.ConsentTextHtml, actual.ConsentTextHtml);
         }
