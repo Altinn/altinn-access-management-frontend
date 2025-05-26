@@ -7,11 +7,18 @@ export const useRevokeAccessPackage = () => {
 
   const revokePackage = (
     toParty: Party,
+    fromParty: Party,
+    actingParty: Party,
     resource: AccessPackage,
     onSuccess?: () => void,
     onError?: (status: string | number) => void,
   ) => {
-    revoke({ to: toParty.partyUuid, packageId: resource.id })
+    revoke({
+      to: toParty.partyUuid,
+      packageId: resource.id,
+      from: fromParty.partyUuid,
+      party: actingParty.partyUuid,
+    })
       .unwrap()
       .then(() => {
         onSuccess?.();
