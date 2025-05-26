@@ -745,7 +745,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task CheckAccess_WithAdminPermission_ReturnsTrue()
         {
-            // Arrang
+            // Arrange
             const int adminUserId = 20004938;
             var token = PrincipalUtil.GetToken(adminUserId, 1234, 2);
 
