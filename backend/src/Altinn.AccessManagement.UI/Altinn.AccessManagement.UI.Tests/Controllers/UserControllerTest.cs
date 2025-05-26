@@ -793,7 +793,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [InlineData(null)]
         [InlineData("")]
         [InlineData("not-a-guid")]
-        public async Task MethodName_InvalidInputs_ReturnsBadRequest(string invalid_party)
+        public async Task CheckAccess_InvalidInputs_ReturnsBadRequest(string invalid_party)
         {
             // Arrange
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
