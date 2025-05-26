@@ -3,16 +3,21 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
-import { debounce } from '@/resources/utils';
-import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
-import type { User } from '@/rtk/features/userInfoApi';
-
 import { UserList } from '../common/UserList/UserList';
 import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
+
+import type { User } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetRightHoldersQuery,
+  useGetUserInfoQuery,
+} from '@/rtk/features/userInfoApi';
+import { debounce } from '@/resources/utils';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 const extractFromList = (
   list: User[],
@@ -35,6 +40,10 @@ export const UsersList = () => {
   const { fromParty } = usePartyRepresentation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
 
+  const partyUuid = getCookie('AltinnPartyUuid');
+
+  const { data: isAdmin } = useGetIsAdminQuery({ partyUuid });
+
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
@@ -42,7 +51,7 @@ export const UsersList = () => {
       toUuid: '', // all
     },
     {
-      skip: !fromParty?.partyUuid,
+      skip: !fromParty?.partyUuid || !isAdmin,
     },
   );
 
@@ -122,12 +131,14 @@ export const UsersList = () => {
         </DsSearch>
         <NewUserButton />
       </div>
-      <UserList
-        userList={userList ?? undefined}
-        searchString={searchString}
-        isLoading={!userList || loadingRightHolders}
-        listItemTitleAs='h2'
-      />
+      {isAdmin && (
+        <UserList
+          userList={userList ?? undefined}
+          searchString={searchString}
+          isLoading={!userList || loadingRightHolders}
+          listItemTitleAs='h2'
+        />
+      )}
     </div>
   );
 };

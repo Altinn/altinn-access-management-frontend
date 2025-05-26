@@ -1,5 +1,7 @@
 using Altinn.AccessManagement.Configuration;
+using Altinn.AccessManagement.Core.Constants;
 using Altinn.AccessManagement.Core.Helpers;
+using Altinn.AccessManagement.UI.Authorization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -12,6 +14,9 @@ using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.Common.AccessTokenClient.Services;
+using Altinn.Common.PEP.Clients;
+using Altinn.Common.PEP.Implementation;
+using Altinn.Common.PEP.Interfaces;
 using AltinnCore.Authentication.JwtCookie;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
@@ -19,6 +24,7 @@ using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.IdentityModel.Logging;
@@ -54,6 +60,10 @@ builder.Services.AddMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_enduser_access_management", true)));
+
+builder.Services.AddScoped<IAuthorizationHandler, EndUserResourceAccessHandler>();
 
 WebApplication app = builder.Build();
 
@@ -188,14 +198,17 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddMvc();
     services.AddHealthChecks().AddCheck<HealthCheck>("accessmanagement_ui_health_check");
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
+    services.Configure<Altinn.Common.PEP.Configuration.PlatformSettings>(config.GetSection("PlatformSettings"));
+
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
     services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
     services.Configure<FeatureFlags>(config.GetSection("FeatureFlags"));
     services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
-    services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
 
+    services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
+    services.AddHttpClient<AuthorizationApiClient>();
     ConfigureMockableClients(services, config);
 
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -214,7 +227,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISystemUserAgentRequestService, SystemUserAgentRequestService>();
     services.AddSingleton<ISystemUserAgentDelegationService, SystemUserAgentDelegationService>();
     services.AddSingleton<IConsentService, ConsentService>();
-
     services.AddSingleton<IRoleService, RoleService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
     services.AddTransient<ResourceHelper, ResourceHelper>();
@@ -287,6 +299,15 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
 void ConfigureMockableClients(IServiceCollection services, IConfiguration config)
 {
     MockSettings mockSettings = config.GetSection("MockSettings").Get<MockSettings>() ?? new MockSettings(false);
+
+    if (mockSettings.PDP)
+    {
+        services.AddTransient<IPDP, MockPDP>();
+    }
+    else 
+    {
+        services.AddTransient<IPDP, PDPAppSI>();
+    }
 
     if (mockSettings.AccessManagement)
     {
@@ -387,7 +408,7 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
         services.AddSingleton<ISystemUserAgentRequestClient, SystemUserAgentRequestClientMock>();
         services.AddSingleton<ISystemUserAgentDelegationClient, SystemUserAgentDelegationClientMock>();
     }
-    else 
+    else
     {
         services.AddSingleton<ISystemUserAgentRequestClient, SystemUserAgentRequestClient>();
         services.AddSingleton<ISystemUserAgentDelegationClient, SystemUserAgentDelegationClient>();
