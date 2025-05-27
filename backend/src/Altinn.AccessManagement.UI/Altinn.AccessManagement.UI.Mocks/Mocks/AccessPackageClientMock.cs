@@ -2,12 +2,14 @@
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 
 
@@ -58,6 +60,19 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Created));
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string resourceId)
+        {
+            string dataPath = Path.Combine(dataFolder, "AccessPackage", "RevokeDelegation");
+
+            var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
+            if (mockResponse.IsSuccessStatusCode)
+            {
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
+            }
+            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
         }
     }
 }

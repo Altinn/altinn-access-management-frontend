@@ -151,17 +151,28 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
         /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="party">The party that is performing the action (must be equal to either to or from)</param>
         /// <param name="packageId">The identifier of the access package that is to be revoked</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete]
         [Authorize]
-        [Route("{from}/{to}/{packageId}/revoke")]
-        public async Task<ActionResult> RevokeAccessPackageAccess([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] string packageId)
+        [Route("delegations")]
+        public async Task<ActionResult> RevokeAccessPackageAccess([FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] Guid party, [FromQuery] string packageId)
         {
+            if (!ModelState.IsValid || (party != to && party != from))
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (string.IsNullOrEmpty(packageId))
+            {
+                return BadRequest("PackageId is required");
+            }
+
             try
             {
-                var response = await _accessPackageService.RevokeAccessPackage(from, to, packageId);
+                var response = await _accessPackageService.RevokeAccessPackage(from, to, party, packageId);
                 return Ok(response);
             }
             catch (HttpStatusException ex)
