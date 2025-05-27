@@ -25,5 +25,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether or not to only display the service/resource delegation feature in the UI
         /// </summary>
         public bool DisplayResourceDelegation { get; set; }
+
+        /// <summary>
+        /// Wether to show the new AMUI to PRIV users
+        /// </summary>
+        public bool RestrictPrivUse { get; set; }
     }
 }

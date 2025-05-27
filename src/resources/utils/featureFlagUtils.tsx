@@ -6,3 +6,10 @@ export const rerouteIfNotConfetti = () => {
     navigate('/not-found');
   }
 };
+
+export const availableForUserTypeCheck = (userType?: string) => {
+  if ((userType && userType === 'Organization') || window.featureFlags?.restrictPrivUse === true) {
+    return true;
+  }
+  return false;
+};

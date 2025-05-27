@@ -567,5 +567,9 @@
     "18_delegation_right_missing_delegation_access": "Delegering av tjenester feilet: du har ikke rettigheter til å direkte delegere tjenester.",
     "19_delegation_right_missing_srr_right_access": "Delegering av tjenester feilet: en eller flere tjenester bruker tilgangslister der virksomhet ikke har tilgang.",
     "20_delegation_right_insufficient_authentication_level": "Delegering av tjenester feilet: en eller flere tjenester krever eksplisitt tilgangsnivå."
+  },
+  "page_not_avialable": {
+    "title": "Siden er ikke tilgjengelig",
+    "text": "De nye tilgangsstyringssidene er ikke klare for privatpersoner helt enda. Dersom du mente å se på tilgangene til en virksomhet, vennligst bytt til denne i menyen."
   }
 }
