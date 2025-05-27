@@ -8,27 +8,22 @@ import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { NotAvailableAlert } from '../notAvailableAlert/NotAvailableAlert';
+import { AlertIfNotAvailableForUserType } from '../common/notAvailableAlert/NotAvailableAlert';
 
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
 import { DeleteUserModal } from './DeleteUserModal';
 
-import {
-  availableForUserTypeCheck,
-  rerouteIfNotConfetti,
-} from '@/resources/utils/featureFlagUtils';
+import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { amUIPath } from '@/routes/paths';
 import { PageWrapper } from '@/components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const { data: reportee } = useGetReporteeQuery();
 
   useDocumentTitle(t('user_rights_page.page_title'));
 
@@ -38,12 +33,12 @@ export const UserRightsPage = () => {
 
   return (
     <PageWrapper>
-      {availableForUserTypeCheck(reportee?.type) ? (
-        <PartyRepresentationProvider
-          actingPartyUuid={getCookie('AltinnPartyUuid')}
-          fromPartyUuid={getCookie('AltinnPartyUuid')}
-          toPartyUuid={id ?? undefined}
-        >
+      <PartyRepresentationProvider
+        actingPartyUuid={getCookie('AltinnPartyUuid')}
+        fromPartyUuid={getCookie('AltinnPartyUuid')}
+        toPartyUuid={id ?? undefined}
+      >
+        <AlertIfNotAvailableForUserType>
           <DelegationModalProvider>
             <PageLayoutWrapper>
               <PageContainer
@@ -62,10 +57,8 @@ export const UserRightsPage = () => {
               </PageContainer>
             </PageLayoutWrapper>
           </DelegationModalProvider>
-        </PartyRepresentationProvider>
-      ) : (
-        <NotAvailableAlert />
-      )}
+        </AlertIfNotAvailableForUserType>
+      </PartyRepresentationProvider>
     </PageWrapper>
   );
 };

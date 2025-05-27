@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { NotAvailableAlert } from '../notAvailableAlert/NotAvailableAlert';
+import { AlertIfNotAvailableForUserType } from '../common/notAvailableAlert/NotAvailableAlert';
 
 import classes from './ReporteePage.module.css';
 import { ReporteesList } from './ReporteesList';
@@ -12,24 +12,21 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { availableForUserTypeCheck } from '@/resources/utils/featureFlagUtils';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();
   const { data: party } = useGetReporteePartyQuery();
-  const { data: reportee } = useGetReporteeQuery();
 
   useDocumentTitle(t('reportees_page.page_title'));
 
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        {availableForUserTypeCheck(reportee?.type) ? (
-          <PartyRepresentationProvider
-            fromPartyUuid={getCookie('AltinnPartyUuid')}
-            actingPartyUuid={getCookie('AltinnPartyUuid')}
-          >
+        <PartyRepresentationProvider
+          fromPartyUuid={getCookie('AltinnPartyUuid')}
+          actingPartyUuid={getCookie('AltinnPartyUuid')}
+        >
+          <AlertIfNotAvailableForUserType>
             <div className={classes.reporteeListHeading}>
               <DsHeading
                 level={1}
@@ -39,10 +36,8 @@ export const ReporteesPage = () => {
               </DsHeading>
             </div>
             <ReporteesList />
-          </PartyRepresentationProvider>
-        ) : (
-          <NotAvailableAlert />
-        )}
+          </AlertIfNotAvailableForUserType>
+        </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>
   );
