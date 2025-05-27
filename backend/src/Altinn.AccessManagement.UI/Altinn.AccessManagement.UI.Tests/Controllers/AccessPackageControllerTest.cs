@@ -166,7 +166,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///    Expected: RevokeAccessPackageAccess returns ok on valid input
         /// </summary>
         [Fact]
-        public async Task RevokeAccessPackageAccess_returns_no_content_on_valid_input()
+        public async Task RevokeAccessPackageAccess_returns_ok_on_valid_input()
         {
             // Arrange
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
