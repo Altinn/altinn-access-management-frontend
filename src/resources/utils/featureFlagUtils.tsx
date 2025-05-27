@@ -8,7 +8,7 @@ export const rerouteIfNotConfetti = () => {
 };
 
 export const availableForUserTypeCheck = (userType?: string) => {
-  if ((userType && userType === 'Organization') || window.featureFlags?.restrictPrivUse === true) {
+  if ((userType && userType === 'Organization') || window.featureFlags?.restrictPrivUse === false) {
     return true;
   }
   return false;

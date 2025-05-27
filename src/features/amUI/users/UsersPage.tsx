@@ -4,7 +4,7 @@ import { DsHeading } from '@altinn/altinn-components';
 
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { AlertIfNotAvailableForUserType } from '../common/notAvailableAlert/NotAvailableAlert';
+import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
 
 import { UsersList } from './UsersList';
 import classes from './UsersList.module.css';

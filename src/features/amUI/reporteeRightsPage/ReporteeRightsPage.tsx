@@ -8,7 +8,7 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { AlertIfNotAvailableForUserType } from '../common/notAvailableAlert/NotAvailableAlert';
+import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
 
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';

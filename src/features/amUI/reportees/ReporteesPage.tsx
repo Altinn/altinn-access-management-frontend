@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { AlertIfNotAvailableForUserType } from '../common/notAvailableAlert/NotAvailableAlert';
+import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
 
 import classes from './ReporteePage.module.css';
 import { ReporteesList } from './ReporteesList';
