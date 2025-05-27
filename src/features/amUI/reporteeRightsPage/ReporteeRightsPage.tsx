@@ -29,12 +29,12 @@ export const ReporteeRightsPage = () => {
 
   const { displayLimitedPreviewLaunch } = window.featureFlags;
   return (
-    <PartyRepresentationProvider
-      fromPartyUuid={reporteeUuid ?? ''}
-      toPartyUuid={getCookie('AltinnPartyUuid')}
-      actingPartyUuid={getCookie('AltinnPartyUuid')}
-    >
-      <AlertIfNotAvailableForUserType>
+    <AlertIfNotAvailableForUserType>
+      <PartyRepresentationProvider
+        fromPartyUuid={reporteeUuid ?? ''}
+        toPartyUuid={getCookie('AltinnPartyUuid')}
+        actingPartyUuid={getCookie('AltinnPartyUuid')}
+      >
         <DelegationModalProvider>
           <PageWrapper>
             <PageLayoutWrapper>
@@ -53,7 +53,7 @@ export const ReporteeRightsPage = () => {
             </PageLayoutWrapper>
           </PageWrapper>
         </DelegationModalProvider>
-      </AlertIfNotAvailableForUserType>
-    </PartyRepresentationProvider>
+      </PartyRepresentationProvider>
+    </AlertIfNotAvailableForUserType>
   );
 };

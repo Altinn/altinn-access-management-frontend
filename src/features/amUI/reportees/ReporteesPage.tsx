@@ -22,11 +22,11 @@ export const ReporteesPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <PartyRepresentationProvider
-          fromPartyUuid={getCookie('AltinnPartyUuid')}
-          actingPartyUuid={getCookie('AltinnPartyUuid')}
-        >
-          <AlertIfNotAvailableForUserType>
+        <AlertIfNotAvailableForUserType>
+          <PartyRepresentationProvider
+            fromPartyUuid={getCookie('AltinnPartyUuid')}
+            actingPartyUuid={getCookie('AltinnPartyUuid')}
+          >
             <div className={classes.reporteeListHeading}>
               <DsHeading
                 level={1}
@@ -36,8 +36,8 @@ export const ReporteesPage = () => {
               </DsHeading>
             </div>
             <ReporteesList />
-          </AlertIfNotAvailableForUserType>
-        </PartyRepresentationProvider>
+          </PartyRepresentationProvider>
+        </AlertIfNotAvailableForUserType>
       </PageLayoutWrapper>
     </PageWrapper>
   );

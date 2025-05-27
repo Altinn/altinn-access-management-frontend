@@ -25,11 +25,11 @@ export const UsersPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <PartyRepresentationProvider
-          fromPartyUuid={getCookie('AltinnPartyUuid')}
-          actingPartyUuid={getCookie('AltinnPartyUuid')}
-        >
-          <AlertIfNotAvailableForUserType>
+        <AlertIfNotAvailableForUserType>
+          <PartyRepresentationProvider
+            fromPartyUuid={getCookie('AltinnPartyUuid')}
+            actingPartyUuid={getCookie('AltinnPartyUuid')}
+          >
             <DsHeading
               level={1}
               data-size='md'
@@ -38,8 +38,8 @@ export const UsersPage = () => {
               {t('users_page.main_page_heading', { name: reportee?.name || '' })}
             </DsHeading>
             <UsersList />
-          </AlertIfNotAvailableForUserType>
-        </PartyRepresentationProvider>
+          </PartyRepresentationProvider>
+        </AlertIfNotAvailableForUserType>
       </PageLayoutWrapper>
     </PageWrapper>
   );

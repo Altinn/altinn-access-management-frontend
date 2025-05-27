@@ -33,12 +33,12 @@ export const UserRightsPage = () => {
 
   return (
     <PageWrapper>
-      <PartyRepresentationProvider
-        actingPartyUuid={getCookie('AltinnPartyUuid')}
-        fromPartyUuid={getCookie('AltinnPartyUuid')}
-        toPartyUuid={id ?? undefined}
-      >
-        <AlertIfNotAvailableForUserType>
+      <AlertIfNotAvailableForUserType>
+        <PartyRepresentationProvider
+          actingPartyUuid={getCookie('AltinnPartyUuid')}
+          fromPartyUuid={getCookie('AltinnPartyUuid')}
+          toPartyUuid={id ?? undefined}
+        >
           <DelegationModalProvider>
             <PageLayoutWrapper>
               <PageContainer
@@ -57,8 +57,8 @@ export const UserRightsPage = () => {
               </PageContainer>
             </PageLayoutWrapper>
           </DelegationModalProvider>
-        </AlertIfNotAvailableForUserType>
-      </PartyRepresentationProvider>
+        </PartyRepresentationProvider>
+      </AlertIfNotAvailableForUserType>
     </PageWrapper>
   );
 };
