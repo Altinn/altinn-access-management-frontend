@@ -21,8 +21,8 @@ export const AlertIfNotAvailableForUserType = ({
 
   return (
     <DsAlert data-color='warning'>
-      <Heading as='h1'>{t('page_not_avialable.title')}</Heading>
-      {t('page_not_avialable.text')}
+      <Heading as='h1'>{t('page_not_available.title')}</Heading>
+      {t('page_not_available.text')}
     </DsAlert>
   );
 };

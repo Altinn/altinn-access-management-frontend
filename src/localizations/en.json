@@ -570,7 +570,7 @@
     "19_delegation_right_missing_srr_right_access": "Delegation of services failed: one or more services use access lists where the organization does not have access.",
     "20_delegation_right_insufficient_authentication_level": "Delegation of services failed: one or more services require an explicit access level."
   },
-  "page_not_avialable": {
+  "page_not_available": {
     "title": "This page is not available",
     "text": "The new access management pages are not quite ready for private individuals yet. If you meant to view the accesses for an organization, please switch to it in the menu."
   }

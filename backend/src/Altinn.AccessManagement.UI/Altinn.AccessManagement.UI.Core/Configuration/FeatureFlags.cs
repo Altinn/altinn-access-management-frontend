@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayResourceDelegation { get; set; }
 
         /// <summary>
-        /// Wether to show the new AMUI to PRIV users
+        /// Whether to show the new AMUI to PRIV users
         /// </summary>
         public bool RestrictPrivUse { get; set; }
     }

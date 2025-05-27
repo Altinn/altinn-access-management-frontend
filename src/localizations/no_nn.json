@@ -567,7 +567,7 @@
     "19_delegation_right_missing_srr_right_access": "Delegering av tenester feila: ei eller fleire tenester nyttar tilgangslister der verksemda ikkje har tilgang.",
     "20_delegation_right_insufficient_authentication_level": "Delegering av tenester feila: ei eller fleire tenester krev eksplisitt tilgangsnivå."
   },
-  "page_not_avialable": {
+  "page_not_available": {
     "title": "Sida er ikkje tilgjengelig",
     "text": "Dei nye tilgangsstyringssidene er ikkje klare for privatpersonar heilt enno. Dersom du meinte å sjå på tilgangane til ei verksemd, ver vennleg og byt til denne i menyen."
   }
