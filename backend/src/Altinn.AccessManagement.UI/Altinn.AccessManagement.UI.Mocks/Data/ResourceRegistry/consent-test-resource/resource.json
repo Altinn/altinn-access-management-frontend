@@ -2,19 +2,19 @@
   "identifier": "consent-test-resource",
   "version": "1",
   "title": {
-    "en": "Inntektsopplysninger",
+    "en": "Income information",
     "nb": "Inntektsopplysninger",
-    "nn": "Inntektsopplysninger"
+    "nn": "Inntektsopplysningar"
   },
   "description": {
-    "en": "Inntektsopplysninger.",
-    "nb": "Inntektsopplysninger.",
-    "nn": "Inntektsopplysninger."
+    "en": "Income information",
+    "nb": "Inntektsopplysninger",
+    "nn": "Inntektsopplysningar"
   },
   "rightDescription": {
-    "en": "Inntektsopplysninger.",
-    "nb": "Inntektsopplysninger.",
-    "nn": "Inntektsopplysninger."
+    "en": "Income information",
+    "nb": "Inntektsopplysninger",
+    "nn": "Inntektsopplysningar"
   },
   "status": "Completed",
   "contactPoints": [
@@ -43,9 +43,9 @@
   "resourceType": "ConsentResource",
   "consentTemplate": "default",
   "consentText": {
-    "en": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}: Inntekt",
-    "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}: Inntekt",
-    "nn": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}: Inntekt"
+    "en": "Information reported in connection with the tax return (self-declaration) 2023: \n- Income\n- Tax deductions\n- Assets (incl. housing, car and other assets)\n- Debt \n\n You can see for yourself what information the Tax Administration has about you on the [A-melding](https://www.skatteetaten.no).",
+    "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) 2023: \n- Inntekt\n- Skattefradrag\n- Formue (inkl. bolig, bil og andre verdier)\n- Gjeld \n\n Du kan selv se hvilke opplysninger Skatteetaten har om deg på innsyn [A-melding](https://www.skatteetaten.no).",
+    "nn": "Opplysningar rapportert i forbindelse med skattemeldinga (sjølvmeldinga) 2023: \n- Inntekt\n- Skattefradrag\n- Formue (inkl. bustad, bil og andre verdiar)\n- Gjeld \n\n Du kan sjølv sjå kva opplysningar Skatteetaten har om deg på innsyn [A-melding](https://www.skatteetaten.no)."
   },
   "consentMetadata": {
     "inntektsaar": { "optional": false }
