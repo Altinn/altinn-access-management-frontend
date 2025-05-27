@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
@@ -56,7 +57,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     Identifier = resource.Identifier,
                     Title = resource.Title,
-                    ConsentTextHtml = ReplaceMetadataInTranslationsDict(resource.ConsentText, right.MetaData), // TODO: convert to markdown
+                    ConsentTextHtml = ReplaceMarkdownInText(ReplaceMetadataInTranslationsDict(resource.ConsentText, right.MetaData)),
                 });
             }
             
@@ -144,6 +145,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return sb.ToString();
+        }
+
+        private static Dictionary<string, string> ReplaceMarkdownInText(Dictionary<string, string> translations)
+        {
+            Dictionary<string, string> replacedTranslations = new();
+
+            foreach (var (key, value) in translations)
+            {
+                replacedTranslations[key] = MarkdownConverter.ConvertToHtml(value);
+            }
+
+            return replacedTranslations;
         }
     }
 }
