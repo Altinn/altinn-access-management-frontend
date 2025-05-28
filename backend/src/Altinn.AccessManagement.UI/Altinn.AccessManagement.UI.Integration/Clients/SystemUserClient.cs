@@ -239,7 +239,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string packageQuery = accessPackages.Aggregate(string.Empty, (acc, accessPackage) => acc + $"&packages={accessPackage}");
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/agent/{partyId}/clients?facilitatorId={facilitatorId}{packageQuery}";
+                string endpointUrl = $"systemuser/agent/{partyId}/clients?facilitator={facilitatorId}{packageQuery}";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
