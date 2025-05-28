@@ -68,6 +68,12 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// <summary>
         /// Gets a <see cref="ProblemDescriptor"/>.
         /// </summary>
+        public static ProblemDescriptor SystemUserNotFound { get; }
+            = _factory.Create(15, HttpStatusCode.NotFound, "The SystemUser was not found.");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
         public static ProblemDescriptor DelegationRightMissingRoleAccess { get; }
             = _factory.Create(16, HttpStatusCode.Forbidden, "DelegationCheck failed with error: Has not access by a delegation of role in ER or Altinn.");
 
@@ -94,5 +100,23 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// </summary>
         public static ProblemDescriptor CustomerIdNotFound { get; }
             = _factory.Create(28, HttpStatusCode.BadRequest, "The customer id was not provided or did not validate.");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_FailedToGetClients_Unauthorized { get; }
+            = _factory.Create(43, HttpStatusCode.Unauthorized, "Unauthorized");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_FailedToGetClients_Forbidden { get; }
+            = _factory.Create(44, HttpStatusCode.Forbidden, "Forbidden");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AgentSystemUser_FailedToGetClients { get; }
+            = _factory.Create(45, HttpStatusCode.BadRequest, "Failed to get clients");
     }
 }

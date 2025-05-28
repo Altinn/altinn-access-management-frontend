@@ -1,7 +1,7 @@
 namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
 {
     /// <summary>
-    /// Specific SystemUser frontend model of PartyRecord
+    /// Specific SystemUser frontend model of Customer
     /// </summary>
     public class CustomerPartyFE
     {

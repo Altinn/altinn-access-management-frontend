@@ -231,5 +231,33 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        /// <inheritdoc/>
+        public async Task<Result<List<Customer>>> GetClients(int partyId, Guid facilitatorId, List<string> accessPackages, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string packageQuery = accessPackages.Aggregate(string.Empty, (acc, accessPackage) => acc + $"&packages={accessPackage}");
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/clients?facilitator={facilitatorId}{packageQuery}";
+
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<List<Customer>>(responseContent, _jsonSerializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserClient // GetClients // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetClients // Exception");
+                throw;
+            }
+        }
     }
 }

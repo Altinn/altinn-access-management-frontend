@@ -171,10 +171,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string party = from;
             string packageId = "fef4aac0-d227-4ef6-834b-cc2eb4b942ed";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/accesspackage/{from}/{to}/{packageId}/revoke");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&from={from}&to={to}&packageId={packageId}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -190,10 +191,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string party = from;
             string packageId = "invalid_package_id";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/accesspackage/{from}/{to}/{packageId}/revoke");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&from={from}&to={to}&packageId={packageId}");
 
             // Assert
             Assert.False(httpResponse.IsSuccessStatusCode);
