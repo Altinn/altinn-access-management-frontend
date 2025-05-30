@@ -21,6 +21,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         public required string To { get; set; }
 
         /// <summary>
+        /// Defines the party that handles the consent request on behalf of the requesting party.
+        /// </summary>
+        public required string HandledBy { get; set; }
+
+        /// <summary>
         /// Defines how long the concent is valid
         /// </summary>
         public required DateTimeOffset ValidTo { get; set; }

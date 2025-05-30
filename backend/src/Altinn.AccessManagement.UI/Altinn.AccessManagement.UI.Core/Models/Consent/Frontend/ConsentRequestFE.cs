@@ -41,6 +41,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         public Dictionary<string, string> ConsentMessage { get; set; }
 
         /// <summary>
+        /// Consent handledBy, if consent is handled by different party than From
+        /// </summary>
+        public Dictionary<string, string> HandledBy { get; set; }
+
+        /// <summary>
         /// Consent expiration text
         /// </summary>
         public Dictionary<string, string> Expiration { get; set; }

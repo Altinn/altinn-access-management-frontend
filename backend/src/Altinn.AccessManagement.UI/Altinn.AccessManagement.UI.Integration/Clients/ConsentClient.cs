@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"accessmanagement/api/v1/enduser/consent/request/{consentRequestId}";
+                string endpointUrl = $"accessmanagement/api/v1/enduser/consentrequests/{consentRequestId}";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);

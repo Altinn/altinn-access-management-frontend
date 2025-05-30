@@ -2,6 +2,7 @@
   "id": "e2071c55-6adf-487b-af05-9198a230ed44",
   "from": "urn:altinn:person:identifier-no:20838198385",
   "to": "urn:altinn:organization:identifier-no:310202398",
+  "handledBy": "urn:altinn:organization:identifier-no:313160300",
   "validTo": "2025-05-21T11:11:24.9535551+00:00",
   "consentRights": [
     {

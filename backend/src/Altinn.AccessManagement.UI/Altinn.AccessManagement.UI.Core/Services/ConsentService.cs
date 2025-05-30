@@ -93,6 +93,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Title = ReplaceMetadataInTranslationsDict(title, staticMetadata),
                 Heading = ReplaceMetadataInTranslationsDict(heading, staticMetadata),
                 ServiceIntro = ReplaceMetadataInTranslationsDict(serviceIntro, staticMetadata),
+                HandledBy = ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata),
                 ConsentMessage = request.Value.Requestmessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
                 Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata)
             };
@@ -102,10 +103,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             Party to = await GetParty(request.To);
             Party from = await GetParty(request.From);
+            Party handledBy = request.HandledBy != null ? await GetParty(request.HandledBy) : null;
             return new()
             {
                 { "CoveredBy", to.Name },
                 { "OfferedBy", from.Name },
+                { "HandledBy", handledBy?.Name },
                 { "Expiration", request.ValidTo.ToString("dd.MM.yyyy hh:mm", CultureInfo.InvariantCulture) }
             };
         }
