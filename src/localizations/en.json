@@ -290,7 +290,8 @@
   },
   "reportees_page": {
     "page_title": "Our access to other companies - Altinn",
-    "main_page_heading": "Authorizations {{name}} has with others"
+    "main_page_heading": "Authorizations {{name}} has with others",
+    "not_admin_alert": "You do not have access to this page for {{name}}. Please switch to a different page or change to a reportee you have sufficient rights for."
   },
   "user_rights_page": {
     "page_title": "User access - Altinn",

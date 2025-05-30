@@ -22,6 +22,7 @@ export interface ReporteeInfo {
   partyUuid: string;
   partyId: string;
   authorizedRoles: string[];
+  subunits?: ReporteeInfo[];
 }
 
 export enum PartyType {

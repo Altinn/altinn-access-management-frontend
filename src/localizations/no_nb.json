@@ -289,7 +289,8 @@
   },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
-    "main_page_heading": "Fullmakter {{name}} har hos andre"
+    "main_page_heading": "Fullmakter {{name}} har hos andre",
+    "not_admin_alert": "Du har ikke tilgang til å se denne siden hos {{name}}. Vennligst bytt side eller velg en annen aktør."
   },
   "user_rights_page": {
     "page_title": "Brukertilganger - Altinn",
