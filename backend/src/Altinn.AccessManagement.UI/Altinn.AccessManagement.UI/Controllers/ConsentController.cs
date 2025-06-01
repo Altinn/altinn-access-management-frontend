@@ -1,9 +1,12 @@
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
+using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -16,13 +19,20 @@ namespace Altinn.AccessManagement.UI.Controllers
     public class ConsentController : ControllerBase
     {
         private readonly IConsentService _consentService;
+        private readonly IOptions<PlatformSettings> _platformSettings;
+        private readonly IOptions<GeneralSettings> _generalSettings;
 
         /// <summary>
         /// Constructor for <see cref="ConsentController"/>
         /// </summary>
-        public ConsentController(IConsentService consentService)
+        public ConsentController(
+            IConsentService consentService,        
+            IOptions<PlatformSettings> platformSettings, 
+            IOptions<GeneralSettings> generalSettings)
         {
             _consentService = consentService;
+            _platformSettings = platformSettings;
+            _generalSettings = generalSettings;
         }
         
         /// <summary>
@@ -32,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("{consentRequestId}")]
+        [HttpGet("request/{consentRequestId}")]
         public async Task<ActionResult> GetConsentRequest([FromRoute] Guid consentRequestId, CancellationToken cancellationToken)
         {
             Result<ConsentRequestFE> consentRequest = await _consentService.GetConsentRequest(consentRequestId, cancellationToken);
@@ -43,6 +53,30 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
 
             return Ok(consentRequest.Value);
+        }
+
+        /// <summary>
+        /// Logout after user acccepts or rejects consent
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("request/{consentRequestId}/logout")]
+        public IActionResult Logout(Guid consentRequestId)
+        {
+            CookieOptions cookieOptions = new()
+            {
+                Domain = _generalSettings.Value.Hostname,
+                HttpOnly = true,
+                Secure = true,
+                IsEssential = true,
+                SameSite = SameSiteMode.Lax
+            };
+
+            // store cookie value for redirect
+            HttpContext.Response.Cookies.Append("AltinnLogoutInfo", $"ConsentRequestId={consentRequestId}", cookieOptions);
+            
+            string logoutUrl = $"{_platformSettings.Value.ApiAuthenticationEndpoint}logout";
+            return Redirect(logoutUrl);
         }
     }
 }
