@@ -66,11 +66,39 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // ConsentClient // GetConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
+                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsentRequest // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<bool>> RejectConsentRequest(Guid consentRequestId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"accessmanagement/api/v1/enduser/consentrequests/{consentRequestId}/reject";
+
+                HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, null);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // ConsentClient // RejectConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // RejectConsentRequest // Exception");
                 throw;
             }
         }

@@ -13,8 +13,16 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <param name="consentRequestId">The id of the consentRequest to retrieve</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Requested system user</returns>
+        /// <returns>Requested consent request</returns>
         Task<Result<ConsentRequestDetails>> GetConsentRequest(Guid consentRequestId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Rejects a consent request
+        /// </summary>
+        /// <param name="consentRequestId">The id of the consentRequest to reject</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Boolean value if reject was successful or not</returns>
+        Task<Result<bool>> RejectConsentRequest(Guid consentRequestId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets all consent templates

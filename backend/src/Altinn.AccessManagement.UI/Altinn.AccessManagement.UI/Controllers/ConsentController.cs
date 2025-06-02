@@ -56,6 +56,26 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        /// Reject consent request
+        /// </summary>
+        /// <param name="consentRequestId">Consent request to reject</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("request/{consentRequestId}/reject")]
+        public async Task<ActionResult> RejectConsent([FromRoute] Guid consentRequestId, CancellationToken cancellationToken)
+        {
+            Result<bool> rejectResponse = await _consentService.RejectConsentRequest(consentRequestId, cancellationToken);
+
+            if (rejectResponse.IsProblem)
+            {
+                return rejectResponse.Problem.ToActionResult();
+            }
+
+            return Ok(rejectResponse.Value);
+        }
+
+        /// <summary>
         /// Logout after user acccepts or rejects consent
         /// </summary>
         /// <returns></returns>

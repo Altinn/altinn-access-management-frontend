@@ -40,7 +40,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
             // GET consent request
             Result<ConsentRequestDetails> request = await _consentClient.GetConsentRequest(consentRequestId, cancellationToken);
 
-            // TODO: sjekk her om bruker har tilgang til å se denne requesten?
+            if (request.IsProblem)
+            {
+                return request.Problem;
+            }
 
             // GET all resources in request
             string templateId = string.Empty;
@@ -97,6 +100,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ConsentMessage = request.Value.Requestmessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
                 Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata)
             };
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<bool>> RejectConsentRequest(Guid consentRequestId, CancellationToken cancellationToken)
+        {
+            return await _consentClient.RejectConsentRequest(consentRequestId, cancellationToken);
         }
 
         private async Task<Dictionary<string, string>> GetStaticMetadata(ConsentRequestDetails request)

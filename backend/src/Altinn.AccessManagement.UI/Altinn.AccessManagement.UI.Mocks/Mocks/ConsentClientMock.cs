@@ -1,3 +1,4 @@
+using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -23,13 +24,40 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<Result<ConsentRequestDetails>> GetConsentRequest(Guid consentRequestId, CancellationToken cancellationToken)
         {
             ConsentRequestDetails request = Util.GetMockData<ConsentRequestDetails>($"{dataFolder}/Consent/consentRequest.json");
-            return Task.FromResult(new Result<ConsentRequestDetails>(request));
+            if (consentRequestId == request.Id)
+            {
+                return Task.FromResult(new Result<ConsentRequestDetails>(request));
+            }
+            return Task.FromResult(new Result<ConsentRequestDetails>(ConsentTestErrors.ConsentNotFound));
+
+        }
+
+         public Task<Result<bool>> RejectConsentRequest(Guid consentRequestId, CancellationToken cancellationToken)
+        {
+            ConsentRequestDetails request = Util.GetMockData<ConsentRequestDetails>($"{dataFolder}/Consent/consentRequest.json");
+            if (consentRequestId == request.Id)
+            {
+                return Task.FromResult(new Result<bool>(true));
+            }
+            return Task.FromResult(new Result<bool>(ConsentTestErrors.ConsentCantBeRejected));
         }
 
         public Task<List<ConsentTemplate>> GetConsentTemplates()
         {
            List<ConsentTemplate> consentTemplates = Util.GetMockData<List<ConsentTemplate>>($"{dataFolder}/Consent/consentTemplates.json");
            return Task.FromResult(consentTemplates);
+        }
+
+        internal static class ConsentTestErrors
+        {
+            private static readonly ProblemDescriptorFactory _factory
+                = ProblemDescriptorFactory.New("CTUI");
+
+            public static ProblemDescriptor ConsentNotFound { get; }
+                = _factory.Create(1, HttpStatusCode.NotFound, "Consent not found");
+
+            public static ProblemDescriptor ConsentCantBeRejected { get; }
+                = _factory.Create(15, HttpStatusCode.BadRequest, "Consent cant be rejected. Wrong status");
         }
     }
 }
