@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.Authorization.ProblemDetails;
@@ -7,6 +8,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     /// <summary>
     /// Problem descriptors for the consent BFF.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class ConsentProblemMapper
     {
         /// <summary>
@@ -16,7 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         {
             if (!string.IsNullOrEmpty(problemDetails?.ErrorCode.ToString()))
             {
-                return problemDetails?.ErrorCode.ToString() switch
+                return problemDetails.ErrorCode.ToString() switch
                 {
                     "AM-00000" => ConsentProblem.NotAuthorizedForConsentRequest,
                     "AM-00001" => ConsentProblem.ConsentNotFound,

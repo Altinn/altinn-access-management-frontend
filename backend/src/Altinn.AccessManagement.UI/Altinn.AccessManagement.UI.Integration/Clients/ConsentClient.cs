@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="httpContextAccessor">The HTTP context accessor instance.</param>
         /// <param name="platformSettings">The platform settings.</param>
         public ConsentClient(
-            ILogger<IConsentClient> logger, 
+            ILogger<ConsentClient> logger, 
             HttpClient httpClient, 
             IHttpContextAccessor httpContextAccessor, 
             IOptions<PlatformSettings> platformSettings)
@@ -114,12 +114,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                JsonSerializerOptions options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                };
                 string content = await response.Content.ReadAsStringAsync();
-                consentTemplates = JsonSerializer.Deserialize<List<ConsentTemplate>>(content, options);
+                consentTemplates = JsonSerializer.Deserialize<List<ConsentTemplate>>(content, _jsonSerializerOptions);
             }
 
             return consentTemplates;
