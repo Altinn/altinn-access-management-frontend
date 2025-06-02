@@ -93,6 +93,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Id = request.Value.Id,
                 Rights = rights,
                 IsPoa = consentTemplate.IsPoa,
+                Status = request.Value.ConsentRequestStatus,
                 Title = ReplaceMetadataInTranslationsDict(title, staticMetadata),
                 Heading = ReplaceMetadataInTranslationsDict(heading, staticMetadata),
                 ServiceIntro = ReplaceMetadataInTranslationsDict(serviceIntro, staticMetadata),
