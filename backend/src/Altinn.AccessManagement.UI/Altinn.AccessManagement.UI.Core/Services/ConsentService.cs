@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
@@ -67,6 +68,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
             // GET metadata template used in resource
             List<ConsentTemplate> consentTemplates = await _consentClient.GetConsentTemplates();
             ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) => template.Id == templateId);
+            if (consentTemplate == null)
+            {
+                return ConsentProblem.ConsentTemplateNotFound;
+            }
 
             Dictionary<string, string> title;
             Dictionary<string, string> heading;
