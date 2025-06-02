@@ -190,18 +190,15 @@ enum UserDeletionStatus {
 }
 
 const determineUserDeletionStatus = (
-  connections: { roles: string[] }[] | undefined
+  connections: { roles: string[] }[] | undefined,
 ): UserDeletionStatus => {
   if (connections && connections.length > 0) {
     const roles =
       connections.length > 1
-        ? connections.reduce(
-            (acc, connection) => { 
-              acc.push(...connection.roles);
-              return acc;
-            },
-            [] as string[]
-          )
+        ? connections.reduce((acc, connection) => {
+            acc.push(...connection.roles);
+            return acc;
+          }, [] as string[])
         : connections[0].roles;
 
     if (roles.every((r) => r === 'Rettighetshaver')) {
