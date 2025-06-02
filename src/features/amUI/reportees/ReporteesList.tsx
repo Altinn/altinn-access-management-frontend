@@ -55,6 +55,7 @@ export const ReporteesList = () => {
         searchString={searchString}
         isLoading={isLoading}
         listItemTitleAs='h2'
+        interactive
       />
     </div>
   );
