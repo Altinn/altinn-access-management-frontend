@@ -7,6 +7,8 @@ import { Link } from 'react-router';
 import { ListWrapper } from './ListWrapper';
 import type { ExtendedUser } from './useFilteredUsers';
 
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+
 interface UserListItemProps extends ListItemProps {
   user: ExtendedUser;
 }
@@ -29,6 +31,8 @@ const userHeadingLevelForMapper = (level?: ElementType) => {
 export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListItemProps) => {
   const hasInheritingUsers = user.inheritingUsers?.length > 0;
   const [isExpanded, setExpanded] = useState(false);
+  const { data: isAdmin } = useGetIsAdminQuery();
+
   useEffect(
     () => setExpanded((user.matchInInheritingUsers && hasInheritingUsers) ?? false),
     [user.matchInInheritingUsers, hasInheritingUsers],
@@ -47,7 +51,7 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
         }}
         expanded={isExpanded}
         collapsible={hasInheritingUsers}
-        interactive={hasInheritingUsers}
+        interactive={isAdmin}
         linkIcon={!hasInheritingUsers}
         onClick={() => {
           if (hasInheritingUsers) setExpanded(!isExpanded);
