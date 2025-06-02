@@ -302,7 +302,11 @@
   "delete_user": {
     "trigger_button": "Slett bruker",
     "heading": "Er du sikker på at du vil slette denne brukeren?",
-    "message": "{{user_name}} vil miste alle fullmakter de har for {{reportee_name}}. Denne handlingen kan ikke angres.",
+    "message": "{{user_name}} vil miste alle fullmakter de har for {{reportee_name}}. <i>Denne handlingen kan ikke angres.</i>",
+    "limited_deletion_heading": "Ønsker du å slette tilganger som ikke er knyttet til Enhetsregisteret?",
+    "limited_deletion_message": "<p>{{user_name}} har fullmakter gjennom sine roller i Enhetsregisteret og kan derfor ikke slettes fullstendig fra {{reportee_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjøre det via <erLink>Samordnet registermelding</erLink>.</p><p> Ønsker du å slette alle tilganger som ikke er knyttet til Enhetsregisteret? <i>Denne handlingen kan ikke angres.</i></p>",
+    "deletion_not_allowed_heading": "Brukeren kan ikke slettes",
+    "deletion_not_allowed_message": "{{user_name}} har kun fullmakter gjennom sine roller i Enhetsregisteret og kan derfor ikke slettes fra {{reportee_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjøre det via <erLink>Samordnet registermelding</erLink>.",
     "yes_button": "Ja, slett"
   },
   "reportee_rights_page": {

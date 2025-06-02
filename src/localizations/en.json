@@ -304,6 +304,10 @@
     "trigger_button": "Delete user",
     "heading": "Are you sure you want to delete this user?",
     "message": "{{user_name}} will lose all rights they have on behalf of {{reportee_name}}. This action cannot be undone.",
+    "limited_deletion_heading": "Do you want to delete access rights not linked to the Central Coordinating Register for Legal Entities?",
+    "limited_deletion_message": "<p>{{user_name}} has authorizations through their roles in the Central Coordinating Register for Legal Entities and therefore cannot be completely deleted from {{reportee_name}} in Altinn. If you wish to change this, you can do so via <erLink>the Coordinated Register Notification</erLink>.</p><p> Do you want to delete all access rights not linked to the Central Coordinating Register for Legal Entities? <i>This action cannot be undone.</i></p>",
+    "deletion_not_allowed_heading": "The user cannot be deleted",
+    "deletion_not_allowed_message": "{{user_name}} only has authorizations through their roles in the Central Coordinating Register for Legal Entities and therefore cannot be deleted from {{reportee_name}} in Altinn. If you wish to change this, you can do so via <erLink>the Coordinated Register Notification</erLink>.",
     "yes_button": "Yes, delete"
   },
   "reportee_rights_page": {

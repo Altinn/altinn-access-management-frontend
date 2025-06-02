@@ -1,12 +1,9 @@
 import { Button, DsAlert, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { t } from 'i18next';
-import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useMemo, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
-
-import { useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
-import { amUIPath } from '@/routes/paths';
 
 import {
   createErrorDetails,
@@ -17,12 +14,32 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 
 import classes from './DeleteUserModal.module.css';
 
+import { amUIPath } from '@/routes/paths';
+import { useGetRightHoldersQuery, useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
+
+const srmLink =
+  'https://www.altinn.no/Pages/ServiceEngine/Start/StartService.aspx?ServiceEditionCode=1&ServiceCode=3498&M=SP&DontChooseReportee=true&O=personal';
+
 export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from' }) => {
   const [deleteUser, { isLoading, isError, error }] = useRemoveRightHolderMutation();
-  const { toParty, fromParty } = usePartyRepresentation();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
+
+  const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  const { data: connections, isLoading: isConnectionLoading } = useGetRightHoldersQuery(
+    {
+      fromUuid: fromParty?.partyUuid ?? '',
+      toUuid: toParty?.partyUuid ?? '',
+      partyUuid: actingParty?.partyUuid ?? '',
+    },
+    { skip: !fromParty?.partyUuid || !toParty?.partyUuid || !actingParty?.partyUuid },
+  );
+
+  const status = useMemo(
+    () => determineUserDeletionStatus(connections),
+    [connections, isConnectionLoading],
+  );
 
   const onDeleteUser = () => {
     if (!toParty || !fromParty) {
@@ -62,7 +79,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
         closeButton={t('common.close')}
         className={classes.modal}
       >
-        {isLoading || isSuccess ? (
+        {isLoading || isConnectionLoading || isSuccess ? (
           <LoadingAnimation
             isLoading={isLoading}
             displaySuccess={isSuccess}
@@ -70,17 +87,67 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
           />
         ) : (
           <div className={classes.modalContent}>
-            <DsHeading>{t('delete_user.heading')}</DsHeading>
-
-            <DsParagraph data-size='sm'>
-              <Trans
-                i18nKey='delete_user.message'
-                values={{
-                  user_name: userName,
-                  reportee_name: reporteeName,
-                }}
-              />
-            </DsParagraph>
+            {status === UserDeletionStatus.FullDeletionAllowed && (
+              <>
+                <DsHeading>{t('delete_user.heading')}</DsHeading>
+                <DsParagraph>
+                  <Trans
+                    i18nKey='delete_user.message'
+                    values={{
+                      user_name: userName,
+                      reportee_name: reporteeName,
+                    }}
+                  />
+                </DsParagraph>
+              </>
+            )}
+            {status === UserDeletionStatus.LimitedDeletionOnly && (
+              <>
+                <DsHeading>{t('delete_user.limited_deletion_heading')}</DsHeading>
+                <Trans
+                  i18nKey='delete_user.limited_deletion_message'
+                  values={{
+                    user_name: userName,
+                    reportee_name: reporteeName,
+                  }}
+                  components={{
+                    p: <DsParagraph data-size='sm'></DsParagraph>,
+                    erLink: (
+                      <Link
+                        to={srmLink}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      ></Link>
+                    ),
+                  }}
+                />
+              </>
+            )}
+            {status === UserDeletionStatus.DeletionNotAllowed && (
+              <>
+                <DsHeading>
+                  {t('delete_user.deletion_not_allowed_heading', { reportee_name: reporteeName })}
+                </DsHeading>
+                <DsParagraph>
+                  <Trans
+                    i18nKey='delete_user.deletion_not_allowed_message'
+                    values={{
+                      user_name: userName,
+                      reportee_name: reporteeName,
+                    }}
+                    components={{
+                      erLink: (
+                        <Link
+                          to={srmLink}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                        ></Link>
+                      ),
+                    }}
+                  />
+                </DsParagraph>
+              </>
+            )}
             {isError && errorDetails && (
               <DsAlert
                 data-size='sm'
@@ -94,18 +161,22 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
               </DsAlert>
             )}
             <div className={classes.buttons}>
-              <Button
-                color='danger'
-                onClick={onDeleteUser}
-              >
-                {t('delete_user.yes_button')}
-              </Button>
+              {status !== UserDeletionStatus.DeletionNotAllowed && (
+                <Button
+                  color='danger'
+                  onClick={onDeleteUser}
+                >
+                  {t('delete_user.yes_button')}
+                </Button>
+              )}
               <Button
                 color='neutral'
                 variant='text'
                 onClick={() => dialogRef.current?.close()}
               >
-                {t('common.cancel')}
+                {status === UserDeletionStatus.DeletionNotAllowed
+                  ? t('common.cancel')
+                  : t('common.close')}
               </Button>
             </div>
           </div>
@@ -113,4 +184,22 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
       </DsDialog>
     </DsDialog.TriggerContext>
   );
+};
+
+enum UserDeletionStatus {
+  FullDeletionAllowed = 'FullDeletionAllowed',
+  LimitedDeletionOnly = 'LimitedDeletionOnly',
+  DeletionNotAllowed = 'DeletionNotAllowed',
+}
+
+const determineUserDeletionStatus = (connections: { roles: string[] }[] | undefined) => {
+  if (connections && connections?.length > 0) {
+    const roles =
+      connections?.length > 1
+        ? connections.reduce((acc, connection) => [...acc, ...connection.roles], [] as string[])
+        : connections[0].roles;
+    if (roles.every((r) => r === 'Rettighetshaver')) return UserDeletionStatus.FullDeletionAllowed;
+    if (roles.some((r) => r === 'Rettighetshaver')) return UserDeletionStatus.LimitedDeletionOnly;
+    return UserDeletionStatus.DeletionNotAllowed;
+  }
 };
