@@ -189,14 +189,30 @@ enum UserDeletionStatus {
   DeletionNotAllowed = 'DeletionNotAllowed',
 }
 
-const determineUserDeletionStatus = (connections: { roles: string[] }[] | undefined) => {
-  if (connections && connections?.length > 0) {
+const determineUserDeletionStatus = (
+  connections: { roles: string[] }[] | undefined
+): UserDeletionStatus => {
+  if (connections && connections.length > 0) {
     const roles =
-      connections?.length > 1
-        ? connections.reduce((acc, connection) => [...acc, ...connection.roles], [] as string[])
+      connections.length > 1
+        ? connections.reduce(
+            (acc, connection) => { 
+              acc.push(...connection.roles);
+              return acc;
+            },
+            [] as string[]
+          )
         : connections[0].roles;
-    if (roles.every((r) => r === 'Rettighetshaver')) return UserDeletionStatus.FullDeletionAllowed;
-    if (roles.some((r) => r === 'Rettighetshaver')) return UserDeletionStatus.LimitedDeletionOnly;
+
+    if (roles.every((r) => r === 'Rettighetshaver')) {
+      return UserDeletionStatus.FullDeletionAllowed;
+    }
+    if (roles.some((r) => r === 'Rettighetshaver')) {
+      return UserDeletionStatus.LimitedDeletionOnly;
+    }
     return UserDeletionStatus.DeletionNotAllowed;
   }
+
+  // Default fallback to satisfy the declared return type
+  return UserDeletionStatus.FullDeletionAllowed;
 };
