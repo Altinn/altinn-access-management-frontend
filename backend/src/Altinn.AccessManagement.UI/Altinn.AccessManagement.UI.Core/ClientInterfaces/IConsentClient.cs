@@ -28,6 +28,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Gets all consent templates
         /// </summary>
         /// <returns>Consent templates</returns>
-        Task<List<ConsentTemplate>> GetConsentTemplates();
+        Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken);
     }
 }

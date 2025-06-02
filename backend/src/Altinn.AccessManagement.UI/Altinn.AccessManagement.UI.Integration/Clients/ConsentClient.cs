@@ -104,7 +104,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<ConsentTemplate>> GetConsentTemplates()
+        public async Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken)
         {
             List<ConsentTemplate> consentTemplates = new List<ConsentTemplate>();
 

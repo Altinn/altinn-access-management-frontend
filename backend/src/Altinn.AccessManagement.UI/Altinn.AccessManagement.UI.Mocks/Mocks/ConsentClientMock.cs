@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new Result<bool>(ConsentTestErrors.ConsentCantBeRejected));
         }
 
-        public Task<List<ConsentTemplate>> GetConsentTemplates()
+        public Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken)
         {
            List<ConsentTemplate> consentTemplates = Util.GetMockData<List<ConsentTemplate>>($"{dataFolder}/Consent/consentTemplates.json");
            return Task.FromResult(consentTemplates);

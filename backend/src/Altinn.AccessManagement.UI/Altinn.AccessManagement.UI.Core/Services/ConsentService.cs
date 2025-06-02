@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IResourceRegistryClient _resourceRegistryClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemUserService"/> class.
+        /// Initializes a new instance of the <see cref="ConsentService"/> class.
         /// </summary>
         /// <param name="consentClient">The consent client.</param>
         /// <param name="registerClient">The register client.</param>
@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             
             // GET metadata template used in resource
-            List<ConsentTemplate> consentTemplates = await _consentClient.GetConsentTemplates();
+            List<ConsentTemplate> consentTemplates = await _consentClient.GetConsentTemplates(cancellationToken);
             ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) => template.Id == templateId);
             if (consentTemplate == null)
             {
@@ -132,13 +132,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 { "CoveredBy", to.Name },
                 { "OfferedBy", from.Name },
                 { "HandledBy", handledBy?.Name },
-                { "Expiration", request.ValidTo?.ToString("dd.MM.yyyy hh:mm", CultureInfo.InvariantCulture) }
+                { "Expiration", request.ValidTo?.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) }
             };
         }
 
         private static bool IsOrgUrn(string urn)
         {
-            return urn.Contains("altinn:organization:identifier-no");
+            return urn.StartsWith("urn:altinn:organization:identifier-no");
         }
 
         private async Task<Party> GetParty(string urn)
