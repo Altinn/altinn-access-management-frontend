@@ -9,7 +9,7 @@ using Altinn.AccessManagement.UI.Tests.Utils;
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    ///     Test class for <see cref="ConsentControllerTest"></see>
+    ///     Test class for <see cref="ConsentController"></see>
     /// </summary>
     [Collection("ConsentControllerTest")]
     public class ConsentControllerTest : IClassFixture<CustomWebApplicationFactory<ConsentController>>
@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private readonly HttpClient _client;
         private readonly string _expectedDataPath = "Data/ExpectedResults";
 
-        private readonly string PERSON_CONSENT_ID ="e2071c55-6adf-487b-af05-9198a230ed44";
+        private readonly string PERSON_CONSENT_ID = "e2071c55-6adf-487b-af05-9198a230ed44";
         private readonly string ORG_CONSENT_ID = "7e540335-d82f-41e9-8b8f-619336d792b4";
 
         /// <summary>
@@ -66,8 +66,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             ConsentRequestFE expectedResponse = Util.GetMockData<ConsentRequestFE>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{requestId}");
-            string content = await httpResponse.Content.ReadAsStringAsync();
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{requestId}");       
             ConsentRequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<ConsentRequestFE>();
 
             // Assert

@@ -1,7 +1,7 @@
 namespace Altinn.AccessManagement.UI.Core.Models.Consent
 {
     /// <summary>
-    /// A resurce attribute identifying part or whole resource
+    /// A resource attribute identifying part or whole resource
     /// </summary>
     public class ConsentResourceAttribute
     {

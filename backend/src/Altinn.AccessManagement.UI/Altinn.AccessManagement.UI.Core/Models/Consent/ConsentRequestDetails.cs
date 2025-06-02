@@ -28,7 +28,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         public required string? HandledBy { get; set; }
 
         /// <summary>
-        /// Defines how long the concent is valid
+        /// Defines how long the consent is valid
         /// </summary>
         public required DateTimeOffset? ValidTo { get; set; }
 
