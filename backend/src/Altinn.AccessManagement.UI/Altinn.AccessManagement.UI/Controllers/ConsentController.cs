@@ -62,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("request/{consentRequestId}/reject")]
+        [HttpPost("request/{consentRequestId}/reject")]
         public async Task<ActionResult> RejectConsent([FromRoute] Guid consentRequestId, CancellationToken cancellationToken)
         {
             Result<bool> rejectResponse = await _consentService.RejectConsentRequest(consentRequestId, cancellationToken);

@@ -66,5 +66,39 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
+
+        /// <summary>
+        ///     Test case: RejectConsentRequest checks that consent request is rejected
+        ///     Expected: RejectConsentRequest returns true when consent request is rejected
+        /// </summary>
+        [Fact]
+        public async Task RejectConsentRequest_ReturnsOk()
+        {
+            // Arrange
+            string requestId = "e2071c55-6adf-487b-af05-9198a230ed44";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/consent/request/{requestId}/reject", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+         /// <summary>
+        ///     Test case: RejectConsentRequest checks that error is returned when consent cannot be rejected
+        ///     Expected: RejectConsentRequest returns error
+        /// </summary>
+        [Fact]
+        public async Task RejectConsentRequest_ReturnsError()
+        {
+            // Arrange
+            string requestId = "602445ee-3cdd-462d-aeb9-e74c7bfd89ad";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/consent/request/{requestId}/reject", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
     }
 }
