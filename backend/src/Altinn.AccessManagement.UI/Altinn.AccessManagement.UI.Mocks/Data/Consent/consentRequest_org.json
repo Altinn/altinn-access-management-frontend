@@ -1,0 +1,21 @@
+{
+  "id": "7e540335-d82f-41e9-8b8f-619336d792b4",
+  "from": "urn:altinn:organization:identifier-no:910493353",
+  "to": "urn:altinn:organization:identifier-no:310202398",
+  "handledBy": null,
+  "status": "created",
+  "validTo": null,
+  "consentRights": [
+    {
+      "action": ["read"],
+      "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource-poa" }],
+      "metadata": null
+    }
+  ],
+  "requestmessage": {
+    "nb": "Dette er en melding fra banken",
+    "nn": "Dette er ei melding fra banken",
+    "en": "This is a message from the bank"
+  },
+  "consentRequestStatus": "created"
+}

@@ -9,13 +9,9 @@
     {
       "action": ["read"],
       "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource" }],
-      "metadata": { "inntektsaar": "2016" }
+      "metadata": { "inntektsAar": "2016" }
     }
   ],
-  "requestmessage": {
-    "nb": "Dette er en melding fra banken",
-    "nn": "Dette er ei melding fra banken",
-    "en": "This is a message from the bank"
-  },
+  "requestmessage": null,
   "consentRequestStatus": "created"
 }

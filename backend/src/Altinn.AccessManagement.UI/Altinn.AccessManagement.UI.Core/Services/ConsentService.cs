@@ -53,16 +53,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
             foreach (ConsentRight right in request.Value.ConsentRights)
             {
                 string resourceId = right.Resource.Find(x => x.Type == "urn:altinn:resource")?.Value;
-                ServiceResource resource = await _resourceRegistryClient.GetResource(resourceId);
-                templateId = resource.ConsentTemplate;
-                isOneTimeConsent = resource.IsOneTimeConsent;
 
-                rights.Add(new()
+                try 
                 {
-                    Identifier = resource.Identifier,
-                    Title = resource.Title,
-                    ConsentTextHtml = ReplaceMarkdownInText(ReplaceMetadataInTranslationsDict(resource.ConsentText, right.MetaData)),
-                });
+                    ServiceResource resource = await _resourceRegistryClient.GetResource(resourceId);
+                    templateId = resource.ConsentTemplate;
+                    isOneTimeConsent = resource.IsOneTimeConsent;
+
+                    rights.Add(new()
+                    {
+                        Identifier = resource.Identifier,
+                        Title = resource.Title,
+                        ConsentTextHtml = ReplaceMarkdownInText(ReplaceMetadataInTranslationsDict(resource.ConsentText, right.MetaData)),
+                    });
+                }
+                catch
+                {
+                    return ConsentProblem.ConsentResourceNotFound;
+                }
             }
             
             // GET metadata template used in resource
@@ -124,7 +132,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 { "CoveredBy", to.Name },
                 { "OfferedBy", from.Name },
                 { "HandledBy", handledBy?.Name },
-                { "Expiration", request.ValidTo.ToString("dd.MM.yyyy hh:mm", CultureInfo.InvariantCulture) }
+                { "Expiration", request.ValidTo?.ToString("dd.MM.yyyy hh:mm", CultureInfo.InvariantCulture) }
             };
         }
 
@@ -142,6 +150,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private static Dictionary<string, string> ReplaceMetadataInTranslationsDict(Dictionary<string, string> translations, Dictionary<string, string> metadata)
         {
+            if (metadata == null)
+            {
+                return translations;
+            }
+            
             Dictionary<string, string> replacedTranslations = new();
 
             foreach (var (key, value) in translations)

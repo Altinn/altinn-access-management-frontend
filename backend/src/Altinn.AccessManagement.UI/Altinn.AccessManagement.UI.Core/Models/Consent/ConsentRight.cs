@@ -1,3 +1,5 @@
+#nullable enable
+
 namespace Altinn.AccessManagement.UI.Core.Models.Consent
 {
     /// <summary>
@@ -19,6 +21,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// The metadata for the right. Can be multiple but in most concents it is only one.   
         /// Keys are case insensitive.
         /// </summary>
-        public Dictionary<string, string> MetaData { get; set; }
+        public Dictionary<string, string>? MetaData { get; set; }
      }
 }

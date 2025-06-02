@@ -17,9 +17,9 @@
     "en": "By giving consent, DISKRET NÆR TIGER AS gets access to the following information about you"
   },
   "consentMessage": {
-    "nb": "Dette er en melding fra banken",
-    "nn": "Dette er ei melding fra banken",
-    "en": "This is a message from the bank"
+    "nb": "Ved å samtykke, gir du Skatteetaten rett til å utlevere opplysninger om deg direkte til DISKRET NÆR TIGER AS. Banken får opplysningene for å behandle søknaden din om finansiering",
+    "nn": "Ved å samtykka, gir du Skatteetaten rett til å utlevera opplysningar om deg direkte til DISKRET NÆR TIGER AS. Banken får opplysningane for å behandla søknaden din om finansiering.",
+    "en": "By consenting you grant the The Norwegian Tax Administration the right to disclose information about you directly to DISKRET NÆR TIGER AS. The bank receives the information to process your application for financing"
   },
   "expiration": {
     "nb": "Samtykket er tidsavgrenset og vil gå ut 21.05.2025 11:11",

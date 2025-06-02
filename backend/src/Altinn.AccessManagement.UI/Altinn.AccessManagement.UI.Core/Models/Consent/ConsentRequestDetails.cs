@@ -1,3 +1,5 @@
+#nullable enable
+
 namespace Altinn.AccessManagement.UI.Core.Models.Consent
 {
     /// <summary>
@@ -23,12 +25,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// <summary>
         /// Defines the party that handles the consent request on behalf of the requesting party.
         /// </summary>
-        public required string HandledBy { get; set; }
+        public required string? HandledBy { get; set; }
 
         /// <summary>
         /// Defines how long the concent is valid
         /// </summary>
-        public required DateTimeOffset ValidTo { get; set; }
+        public required DateTimeOffset? ValidTo { get; set; }
 
         /// <summary>
         /// The consented rights.
@@ -38,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// <summary>
         /// The request message
         /// </summary>
-        public Dictionary<string, string> Requestmessage { get; set; }
+        public Dictionary<string, string>? Requestmessage { get; set; }
 
         /// <summary>
         /// The status of the consent request

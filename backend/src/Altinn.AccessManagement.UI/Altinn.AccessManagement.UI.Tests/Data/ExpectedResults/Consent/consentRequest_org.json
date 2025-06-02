@@ -1,0 +1,44 @@
+{
+  "isPoa": true,
+  "status": "created",
+  "title": {
+    "nb": "Fullmakt til å handle på vegne av LEPSØY OG TONSTAD",
+    "nn": "Fullmakt til å handla på vegne av LEPSØY OG TONSTAD",
+    "en": "Power of attorney to act on behalf of LEPSØY OG TONSTAD"
+  },
+  "heading": {
+    "nb": "DISKRET NÆR TIGER AS ønsker å utføre tjenester på vegne av LEPSØY OG TONSTAD",
+    "nn": "DISKRET NÆR TIGER AS ønsker å utføra tenester på vegne av LEPSØY OG TONSTAD",
+    "en": "DISKRET NÆR TIGER AS requests power of attorney from LEPSØY OG TONSTAD"
+  },
+  "serviceIntro": {
+    "nb": "Ved at du gir fullmakt, får DISKRET NÆR TIGER AS tilgang til følgende tjenester på vegne av LEPSØY OG TONSTAD",
+    "nn": "Ved at du gjer fullmakt, får DISKRET NÆR TIGER AS tilgang til følgjande tenester på vegne av LEPSØY OG TONSTAD",
+    "en": "By granting power of attorney, DISKRET NÆR TIGER AS get access to the following services on behalf of LEPSØY OG TONSTAD"
+  },
+  "consentMessage": {
+    "nb": "Dette er en melding fra banken",
+    "nn": "Dette er ei melding fra banken",
+    "en": "This is a message from the bank"
+  },
+  "expiration": {
+    "nb": "Fullmakten gjelder én gangs bruk av tjenestene",
+    "nn": "Fullmakta gjeld bruk av tenestene éin gong",
+    "en": "The power of attorney applies for one-time access to the service."
+  },
+  "rights": [
+    {
+      "identifier": "consent-test-resource-poa",
+      "title": {
+        "en": "Power of attorney to perform a service",
+        "nb": "Fullmakt til å utføre en tjeneste",
+        "nn": "Fullmakt til å utføre ei teneste"
+      },
+      "consentTextHtml": {
+        "en": "<p>Power of attorney to perform a great service.</p>\n",
+        "nb": "<p>Fullmakt til å utføre en bra tjeneste</p>\n",
+        "nn": "<p>Fullmakt til å utføre ei bra teneste</p>\n"
+      }
+    }
+  ]
+}
