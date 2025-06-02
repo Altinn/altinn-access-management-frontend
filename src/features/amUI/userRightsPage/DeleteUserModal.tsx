@@ -36,10 +36,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
     { skip: !fromParty?.partyUuid || !toParty?.partyUuid || !actingParty?.partyUuid },
   );
 
-  const status = useMemo(
-    () => determineUserDeletionStatus(connections),
-    [connections, isConnectionLoading],
-  );
+  const status = useMemo(() => determineUserDeletionStatus(connections), [connections]);
 
   const onDeleteUser = () => {
     if (!toParty || !fromParty) {
