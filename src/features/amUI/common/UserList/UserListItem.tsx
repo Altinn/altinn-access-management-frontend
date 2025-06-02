@@ -26,9 +26,16 @@ const userHeadingLevelForMapper = (level?: ElementType) => {
   }
 };
 
-export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListItemProps) => {
+export const UserListItem = ({
+  user,
+  size = 'lg',
+  titleAs,
+  interactive = false,
+  ...props
+}: UserListItemProps) => {
   const hasInheritingUsers = user.inheritingUsers?.length > 0;
   const [isExpanded, setExpanded] = useState(false);
+
   useEffect(
     () => setExpanded((user.matchInInheritingUsers && hasInheritingUsers) ?? false),
     [user.matchInInheritingUsers, hasInheritingUsers],
@@ -47,7 +54,7 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
         }}
         expanded={isExpanded}
         collapsible={hasInheritingUsers}
-        interactive={hasInheritingUsers}
+        interactive={interactive}
         linkIcon={!hasInheritingUsers}
         onClick={() => {
           if (hasInheritingUsers) setExpanded(!isExpanded);
@@ -71,6 +78,7 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
           spacing={1}
           indent
           listItemTitleAs={userHeadingLevelForMapper(titleAs)}
+          interactive={interactive}
         />
       )}
     </>

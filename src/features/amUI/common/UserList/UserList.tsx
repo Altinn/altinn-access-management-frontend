@@ -1,20 +1,27 @@
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph } from '@altinn/altinn-components';
 
-import type { User } from '@/rtk/features/userInfoApi';
-
 import { ListWrapper } from './ListWrapper';
 import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
+
+import type { User } from '@/rtk/features/userInfoApi';
 
 export interface UserListProps {
   userList?: User[];
   searchString: string;
   isLoading?: boolean;
   listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  interactive?: boolean;
 }
 
-export const UserList = ({ userList, searchString, isLoading, listItemTitleAs }: UserListProps) => {
+export const UserList = ({
+  userList,
+  searchString,
+  isLoading,
+  listItemTitleAs,
+  interactive,
+}: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
     users: userList,
@@ -35,6 +42,7 @@ export const UserList = ({ userList, searchString, isLoading, listItemTitleAs }:
         size='md'
         isLoading={isLoading}
         listItemTitleAs={listItemTitleAs}
+        interactive={interactive}
       />
       {hasNextPage && (
         <div className={classes.showMoreButtonContainer}>
