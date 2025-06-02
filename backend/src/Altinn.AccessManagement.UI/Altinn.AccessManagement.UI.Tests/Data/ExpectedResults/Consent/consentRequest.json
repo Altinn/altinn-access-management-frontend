@@ -30,14 +30,14 @@
     {
       "identifier": "consent-test-resource",
       "title": {
-        "en": "Inntektsopplysninger",
+        "en": "Income information",
         "nb": "Inntektsopplysninger",
-        "nn": "Inntektsopplysninger"
+        "nn": "Inntektsopplysningar"
       },
       "consentTextHtml": {
-        "en": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) 2016: Inntekt",
-        "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) 2016: Inntekt",
-        "nn": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) 2016: Inntekt"
+        "en": "<p>Information reported in connection with the tax return (self-declaration) 2023:</p>\n<ul>\n<li>Income</li>\n<li>Tax deductions</li>\n<li>Assets (incl. housing, car and other assets)</li>\n<li>Debt</li>\n</ul>\n<p>You can see for yourself what information the Tax Administration has about you on the <a href=\"https://www.skatteetaten.no\">A-melding</a>.</p>\n",
+        "nb": "<p>Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) 2023:</p>\n<ul>\n<li>Inntekt</li>\n<li>Skattefradrag</li>\n<li>Formue (inkl. bolig, bil og andre verdier)</li>\n<li>Gjeld</li>\n</ul>\n<p>Du kan selv se hvilke opplysninger Skatteetaten har om deg på innsyn <a href=\"https://www.skatteetaten.no\">A-melding</a>.</p>\n",
+        "nn": "<p>Opplysningar rapportert i forbindelse med skattemeldinga (sjølvmeldinga) 2023:</p>\n<ul>\n<li>Inntekt</li>\n<li>Skattefradrag</li>\n<li>Formue (inkl. bustad, bil og andre verdiar)</li>\n<li>Gjeld</li>\n</ul>\n<p>Du kan sjølv sjå kva opplysningar Skatteetaten har om deg på innsyn <a href=\"https://www.skatteetaten.no\">A-melding</a>.</p>\n"
       }
     }
   ]

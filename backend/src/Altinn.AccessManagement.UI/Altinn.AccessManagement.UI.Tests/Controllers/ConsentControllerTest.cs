@@ -43,12 +43,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{requestId}");
-            string response = await httpResponse.Content.ReadAsStringAsync();
             ConsentRequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<ConsentRequestFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: GetConsentRequest checks that error is returned when consent is not found
+        ///     Expected: GetConsentRequest returns error
+        /// </summary>
+        [Fact]
+        public async Task GetConsentRequest_ReturnsError()
+        {
+            // Arrange
+            string requestId = "602445ee-3cdd-462d-aeb9-e74c7bfd89ad";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{requestId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
     }
 }
