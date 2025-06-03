@@ -2,6 +2,8 @@ import { ListItem } from '@altinn/altinn-components';
 
 import type { User } from '@/rtk/features/userInfoApi';
 
+import type { User } from '@/rtk/features/userInfoApi';
+
 import classes from './CurrentUserPageHeader.module.css';
 import { CurrentUserSkeleton } from './CurrentUserSkeleton';
 
