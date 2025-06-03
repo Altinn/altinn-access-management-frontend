@@ -2,6 +2,7 @@ import React from 'react';
 import type { MenuItemProps, MenuItemSize } from '@altinn/altinn-components';
 import { HandshakeIcon, InboxIcon, PersonGroupIcon, TenancyIcon } from '@navikt/aksel-icons';
 import { t } from 'i18next';
+import type { LinkProps } from 'react-router';
 import { Link } from 'react-router';
 
 import { amUIPath, SystemUserPath } from '@/routes/paths';
@@ -32,10 +33,10 @@ export const SidebarItems = (isSmall: boolean = false, pathname: string = '') =>
       title: t('sidebar.users'),
       selected: pathname?.includes(`/${amUIPath.Users}`),
       icon: PersonGroupIcon,
-      as: (props) => (
+      as: (props: LinkProps) => (
         <Link
-          to={`/${amUIPath.Users}`}
           {...props}
+          to={`/${amUIPath.Users}`}
         />
       ),
     },
@@ -46,10 +47,10 @@ export const SidebarItems = (isSmall: boolean = false, pathname: string = '') =>
       title: t('sidebar.reportees'),
       selected: pathname?.includes(`/${amUIPath.Reportees}`),
       icon: InboxIcon,
-      as: (props) => (
+      as: (props: LinkProps) => (
         <Link
-          to={`/${amUIPath.Reportees}`}
           {...props}
+          to={`/${amUIPath.Reportees}`}
         />
       ),
     },

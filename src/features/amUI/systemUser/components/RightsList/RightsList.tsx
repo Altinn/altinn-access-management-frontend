@@ -9,14 +9,14 @@ import {
 } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
+import { getButtonIconSize } from '@/resources/utils';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
 import type { SystemUserAccessPackage } from '../../types';
 
 import classes from './RightsList.module.css';
 import { AccessPackageInfo } from './AccessPackageInfo';
 import { ResourceDetails } from './ResourceDetails';
-
-import { getButtonIconSize } from '@/resources/utils';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface RightsListProps {
   resources: ServiceResource[];
@@ -104,7 +104,7 @@ export const RightsList = ({
             </DsHeading>
           )}
           <ResourceList
-            defaultItemSize='md'
+            size='md'
             items={resources.map((resource) => {
               return {
                 id: resource.identifier,

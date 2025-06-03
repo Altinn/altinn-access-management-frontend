@@ -88,7 +88,7 @@ export const CustomerList = ({
         {children}
       </div>
       <List
-        defaultItemSize='sm'
+        size='sm'
         className={classes.customerList}
         items={filteredSearchList.slice(startIndex, endIndex)?.map((customer) => {
           return {

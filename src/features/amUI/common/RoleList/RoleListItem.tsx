@@ -1,7 +1,6 @@
 import { ListItem } from '@altinn/altinn-components';
 
 import type { ExtendedRole } from '@/rtk/features/roleApi';
-import type { Party } from '@/rtk/features/lookupApi';
 
 interface RoleLIstItemProps {
   role: ExtendedRole;
@@ -23,13 +22,12 @@ export const RoleListItem = ({
       id={role.id}
       onClick={onClick}
       as='button'
-      title={role.name}
+      title={{ children: role.name, as: 'h3' }}
       size='sm'
       color={active ? 'company' : 'neutral'}
-      theme='subtle'
+      variant='subtle'
       loading={loading}
       controls={controls}
-      titleAs={'h3'}
     />
   );
 };
