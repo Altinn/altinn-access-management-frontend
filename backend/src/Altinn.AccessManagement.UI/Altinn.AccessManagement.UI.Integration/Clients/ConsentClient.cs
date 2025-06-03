@@ -111,10 +111,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             // Get consent templates from altinn-studio-docs. Will be moved to resource registry later.
             string endpointUrl = "https://raw.githubusercontent.com/Altinn/altinn-studio-docs/consent-templates/content/authorization/architecture/resourceregistry/consent_templates.json";
 
-            HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+            HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl, cancellationToken);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                string content = await response.Content.ReadAsStringAsync();
+                string content = await response.Content.ReadAsStringAsync(cancellationToken);
                 consentTemplates = JsonSerializer.Deserialize<List<ConsentTemplate>>(content, _jsonSerializerOptions);
             }
 
