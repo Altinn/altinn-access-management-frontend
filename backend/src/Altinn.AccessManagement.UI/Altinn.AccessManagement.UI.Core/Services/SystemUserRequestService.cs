@@ -35,9 +35,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<SystemUserRequestFE>> GetSystemUserRequest(int partyId, Guid requestId, string languageCode, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserRequestFE>> GetSystemUserRequest(Guid requestId, string languageCode, CancellationToken cancellationToken)
         {
-            Result<SystemUserRequest> request = await _systemUserRequestClient.GetSystemUserRequest(partyId, requestId, cancellationToken);
+            Result<SystemUserRequest> request = await _systemUserRequestClient.GetSystemUserRequest(requestId, cancellationToken);
             
             if (request.IsProblem)
             {
@@ -55,6 +55,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return new SystemUserRequestFE() 
             {
                 Id = request.Value.Id,
+                PartyId = request.Value.PartyId,
+                PartyUuid = request.Value.PartyUuid,
                 Status = request.Value.Status,
                 RedirectUrl = request.Value.RedirectUrl,
                 Resources = enrichedRights.Resources,

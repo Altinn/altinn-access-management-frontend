@@ -3,14 +3,6 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
-import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
-import type { ProblemDetail } from './types';
-import { ButtonRow } from './components/ButtonRow/ButtonRow';
-import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
-import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
-import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
-import { RightsList } from './components/RightsList/RightsList';
-
 import {
   useGetAgentSystemUserRequestQuery,
   useApproveAgentSystemUserRequestMutation,
@@ -20,6 +12,14 @@ import { SystemUserPath } from '@/routes/paths';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+
+import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
+import type { ProblemDetail } from './types';
+import { ButtonRow } from './components/ButtonRow/ButtonRow';
+import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
+import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
+import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
+import { RightsList } from './components/RightsList/RightsList';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
@@ -89,6 +89,7 @@ export const SystemUserAgentRequestPage = () => {
   return (
     <RequestPageBase
       system={request?.system}
+      reporteeName={reporteeData?.name}
       heading={t('systemuser_agent_request.banner_title')}
     >
       {!requestId && (
