@@ -172,8 +172,8 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
                 onClick={() => dialogRef.current?.close()}
               >
                 {status === UserDeletionStatus.DeletionNotAllowed
-                  ? t('common.cancel')
-                  : t('common.close')}
+                  ? t('common.close')
+                  : t('common.cancel')}
               </Button>
             </div>
           </div>
