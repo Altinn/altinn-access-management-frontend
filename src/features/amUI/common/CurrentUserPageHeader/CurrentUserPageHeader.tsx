@@ -2,8 +2,6 @@ import { ListItem } from '@altinn/altinn-components';
 
 import type { User } from '@/rtk/features/userInfoApi';
 
-import type { User } from '@/rtk/features/userInfoApi';
-
 import classes from './CurrentUserPageHeader.module.css';
 import { CurrentUserSkeleton } from './CurrentUserSkeleton';
 
@@ -23,7 +21,7 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
       ) : (
         <ListItem
           size='xl'
-          title={{ as: 'h2', children: currentUser?.name, size: 'xl' }}
+          title={{ as: 'h2', children: currentUser?.name, size: 'lg' }}
           description={{
             as: 'p',
             children: `${description.slice(0, 100)}${description.length > 100 ? '...' : ''}`,

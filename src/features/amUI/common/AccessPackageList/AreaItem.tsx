@@ -40,6 +40,8 @@ export const AreaItem = ({
       color='company'
       badge={{ label: badgeText, color: 'company' }}
       expanded={expanded}
+      as={'button'}
+      collapsible
     >
       {children}
     </ListItem>
