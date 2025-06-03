@@ -52,6 +52,10 @@ export interface AgentDelegationCustomer {
   id: string;
   name: string;
   orgNo: string;
+  access: {
+    role: string;
+    packages: string[];
+  }[];
 }
 
 export interface AgentDelegation {

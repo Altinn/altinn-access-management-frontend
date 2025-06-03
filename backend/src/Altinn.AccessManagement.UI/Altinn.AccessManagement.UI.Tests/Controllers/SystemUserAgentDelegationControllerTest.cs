@@ -209,7 +209,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             
             AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
-                CustomerId = Guid.Parse(customerId)
+                CustomerId = Guid.Parse(customerId),
+                Access = 
+                [
+                    new ClientRoleAccessPackages()
+                    {
+                        Role = "urn:altinn:external-role:ccr:regnskapsforer",
+                        Packages = ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+                    }
+                ]
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
@@ -244,7 +252,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             
             AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
-                CustomerId = Guid.Parse(customerId)
+                CustomerId = Guid.Parse(customerId),
+                Access = 
+                [
+                    new ClientRoleAccessPackages()
+                    {
+                        Role = "urn:altinn:external-role:ccr:revisor",
+                        Packages = ["urn:altinn:accesspackage:ansvarlig-revisor"]
+                    }
+                ]
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
@@ -280,6 +296,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
                 CustomerId = Guid.Parse(customerId),
+                Access = 
+                [
+                    new ClientRoleAccessPackages()
+                    {
+                        Role = "urn:altinn:external-role:ccr:regnskapsforer",
+                        Packages = ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+                    }
+                ]
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");

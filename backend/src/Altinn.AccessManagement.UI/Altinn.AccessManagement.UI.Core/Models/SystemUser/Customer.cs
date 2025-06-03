@@ -19,5 +19,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// Organisation number
         /// </summary>
         public required string OrganizationIdentifier { get; set; }
+
+        /// <summary>
+        /// Gets or sets a collection of all access information for the client 
+        /// </summary>
+        public List<ClientRoleAccessPackages> Access { get; set; } = [];
     }
 }

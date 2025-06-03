@@ -2,26 +2,56 @@
   {
     "partyUuid": "b4c3ba12-7e87-4ae1-84f8-426b1decfacf",
     "displayName": "VIKESÅ OG ÅLVUNDFJORD",
-    "organizationIdentifier": "910510789"
+    "organizationIdentifier": "910510789",
+    "access": [
+      {
+        "role": "urn:altinn:external-role:ccr:regnskapsforer",
+        "packages": ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+      }
+    ]
   },
   {
     "partyUuid": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
     "displayName": "RAKRYGGET UNG TIGER AS",
-    "organizationIdentifier": "313523497"
+    "organizationIdentifier": "313523497",
+    "access": [
+      {
+        "role": "urn:altinn:external-role:ccr:regnskapsforer",
+        "packages": ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+      }
+    ]
   },
   {
     "partyUuid": "6b0574ae-f569-4c0d-a8d4-8ad56f427890",
     "displayName": "Digitaliseringsdirektoratet",
-    "organizationIdentifier": "991825827"
+    "organizationIdentifier": "991825827",
+    "access": [
+      {
+        "role": "urn:altinn:external-role:ccr:regnskapsforer",
+        "packages": ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+      }
+    ]
   },
   {
     "partyUuid": "82cc64c5-60ff-4184-8c07-964c3a1e6fc7",
     "displayName": "Kan ikke legges til",
-    "organizationIdentifier": "881825827"
+    "organizationIdentifier": "881825827",
+    "access": [
+      {
+        "role": "urn:altinn:external-role:ccr:regnskapsforer",
+        "packages": ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+      }
+    ]
   },
   {
     "partyUuid": "56d8ef08-d1c3-4dac-8b62-461c18ce612b",
     "displayName": "Kan ikke fjernes",
-    "organizationIdentifier": "313131317"
+    "organizationIdentifier": "313131317",
+    "access": [
+      {
+        "role": "urn:altinn:external-role:ccr:regnskapsforer",
+        "packages": ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+      }
+    ]
   }
 ]

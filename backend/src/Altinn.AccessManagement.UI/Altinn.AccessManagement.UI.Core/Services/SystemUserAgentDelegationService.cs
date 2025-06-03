@@ -68,6 +68,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             AgentDelegationRequest delegationRequest = new()
             {
                 CustomerId = delegationRequestFe.CustomerId,
+                Access = delegationRequestFe.Access,
                 FacilitatorId = partyUuid
             };
 
