@@ -5,6 +5,9 @@ import { Link, useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
 
+import { amUIPath } from '@/routes/paths';
+import { useGetRightHoldersQuery, useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
+
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
@@ -13,9 +16,6 @@ import { LoadingAnimation } from '../common/LoadingAnimation/LoadingAnimation';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './DeleteUserModal.module.css';
-
-import { amUIPath } from '@/routes/paths';
-import { useGetRightHoldersQuery, useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
 
 const srmLink =
   'https://www.altinn.no/Pages/ServiceEngine/Start/StartService.aspx?ServiceEditionCode=1&ServiceCode=3498&M=SP&DontChooseReportee=true&O=personal';
@@ -181,7 +181,5 @@ const determineUserDeletionStatus = (
     }
     return UserDeletionStatus.DeletionNotAllowed;
   }
-
-  // Default fallback to satisfy the declared return type
   return UserDeletionStatus.FullDeletionAllowed;
 };
