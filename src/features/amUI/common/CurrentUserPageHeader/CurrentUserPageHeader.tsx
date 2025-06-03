@@ -12,6 +12,8 @@ interface CurrentUserPageHeaderProps {
 }
 
 export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserPageHeaderProps) => {
+  const description = currentUser?.roles?.join(', ') ?? '';
+
   return (
     <div className={classes.currentUser}>
       {loading ? (
@@ -20,7 +22,10 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
         <ListItem
           size='xl'
           title={{ as: 'h2', children: currentUser?.name, size: 'xl' }}
-          description={{ as: 'p', children: currentUser?.roles?.join(', ') }}
+          description={{
+            as: 'p',
+            children: `${description.slice(0, 100)}${description.length > 100 ? '...' : ''}`,
+          }}
           icon={{
             type: 'person',
             name: currentUser?.name || '',

@@ -144,11 +144,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             onChange: onChangeLocale,
           },
           logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
-          // currentAccount: {
-          //   name: reportee?.name || '',
-          //   type: getAccountType(reportee?.type ?? ''),
-          //   id: reportee?.partyUuid || '',
-          // },
           menu: {
             accountMenu: {
               items: accounts,

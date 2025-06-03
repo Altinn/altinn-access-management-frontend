@@ -42,6 +42,8 @@ export const UserListItem = ({
     [user.matchInInheritingUsers, hasInheritingUsers],
   );
 
+  const description = user.roles?.join(', ') ?? '';
+
   return (
     <>
       <ListItem
@@ -53,7 +55,7 @@ export const UserListItem = ({
         }}
         description={{
           as: userHeadingLevelForMapper(titleAs ?? 'h3'),
-          children: user.roles?.join(', ') ?? '',
+          children: `${description.slice(0, 100)}${description.length > 100 ? '...' : ''}`,
         }}
         icon={{
           name: user.name,
