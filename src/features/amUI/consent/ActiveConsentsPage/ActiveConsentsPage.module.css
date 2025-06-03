@@ -1,0 +1,10 @@
+.activeConsentsHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--ds-size-8);
+}
+
+.expandedListItem {
+  padding: var(--ds-size-8) var(--ds-size-15);
+}

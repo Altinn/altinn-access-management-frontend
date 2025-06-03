@@ -449,7 +449,7 @@
     "content_text1": "If you are unsure about which vendor system to choose, we recommend that you contact the provider of the vendor system. Altinn has not made any assessment of the quality and safety of the vendor systems in the list.",
     "pull_down_menu_label": "Choose vendor system",
     "confirm_button": "Proceed",
-    "choose": "Chosse ...",
+    "choose": "Choose ...",
     "load_vendors_error": "Could not load system providers",
     "loading_systems": "Loading vendors and systems..."
   },
@@ -569,5 +569,27 @@
     "18_delegation_right_missing_delegation_access": "Delegation of services failed: you do not have the rights to directly delegate services.",
     "19_delegation_right_missing_srr_right_access": "Delegation of services failed: one or more services use access lists where the organization does not have access.",
     "20_delegation_right_insufficient_authentication_level": "Delegation of services failed: one or more services require an explicit access level."
+  },
+  "consent_request": {
+    "page_title": "Aprovve consent/power of attorney - Altinn",
+    "loading_consent": "Loading request...",
+    "approve_consent": "Yes, I give consent",
+    "reject_consent": "No, I do not give consent",
+    "approve_poa": "Yes, I give power of attorney",
+    "reject_poa": "No, I do not give power of attorney",
+    "approve_error": "Could not give consent",
+    "approve_error_poa": "Could not grant power of attorney",
+    "reject_error": "Could not reject consent",
+    "reject_error_poa": "Could not reject power of attorney"
+  },
+  "consent_errors": {
+    "not_authorized_for_consent": "User is not authorized to give consent/power of attorney",
+    "consent_not_found": "Consent/power of attorney does not exist",
+    "wrong_consent_status": "Consent/power of attorney has wrong status to be able to consent/grant power of attorney",
+    "wrong_revoke_status": "Consent/power of attorney has wrong status to be revoked",
+    "wrong_reject_status": "Consent/power of attorney has wrong status to be rejected",
+    "consent_is_revoked": "Consent/power of attorney is revoked",
+    "consent_is_expired": "Consent/power of attorney has expired",
+    "consent_is_not_accepted": "Consent/power of attorney is not approved"
   }
 }

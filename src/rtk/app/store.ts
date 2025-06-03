@@ -13,6 +13,7 @@ import { lookupApi } from '../features/lookupApi';
 import { userInfoApi } from '../features/userInfoApi';
 import { roleApi } from '../features/roleApi';
 import { systemUserApi } from '../features/systemUserApi';
+import { consentApi } from '../features/consentApi';
 
 const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ const store = configureStore({
     [accessPackageApi.reducerPath]: accessPackageApi.reducer,
     [roleApi.reducerPath]: roleApi.reducer,
     [systemUserApi.reducerPath]: systemUserApi.reducer,
+    [consentApi.reducerPath]: consentApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -40,6 +42,7 @@ const store = configureStore({
       accessPackageApi.middleware,
       roleApi.middleware,
       systemUserApi.middleware,
+      consentApi.middleware,
     ),
 });
 

@@ -566,5 +566,27 @@
     "18_delegation_right_missing_delegation_access": "Delegering av tenester feila: du har ikkje rettar til å direkte delegere tenester.",
     "19_delegation_right_missing_srr_right_access": "Delegering av tenester feila: ei eller fleire tenester nyttar tilgangslister der verksemda ikkje har tilgang.",
     "20_delegation_right_insufficient_authentication_level": "Delegering av tenester feila: ei eller fleire tenester krev eksplisitt tilgangsnivå."
+  },
+  "consent_request": {
+    "page_title": "Godkjenn samtykke/fullmakt - Altinn",
+    "loading_consent": "Laster forespørsel...",
+    "approve_consent": "Ja, eg gir samtykke",
+    "reject_consent": "Nei, eg gir ikkje samtykke",
+    "approve_poa": "Ja, eg gir fullmakt",
+    "reject_poa": "Nei, eg gir ikkje fullmakt",
+    "approve_error": "Kunne ikkje gi samtykke",
+    "approve_error_poa": "Kunne ikkje gi fullmakt",
+    "reject_error": "Kunne ikkje avvise samtykke",
+    "reject_error_poa": "Kunne ikkje avvise fullmakt"
+  },
+  "consent_errors": {
+    "not_authorized_for_consent": "Bruker er ikkje autorisert for å gi samtykke/fullmakt",
+    "consent_not_found": "Samtykket/fullmakten finnes ikkje",
+    "wrong_consent_status": "Samtykket/fullmakten har feil status for å kunne samtykke/gi fullmakt",
+    "wrong_revoke_status": "Samtykket/fullmakten har feil status for å kunne trekkes",
+    "wrong_reject_status": "Samtykket/fullmakten har feil status for å kunne avvises",
+    "consent_is_revoked": "Samtykket/fullmakten er trukket",
+    "consent_is_expired": "Samtykket/fullmakten har utløpt",
+    "consent_is_not_accepted": "Samtykket/fullmakten er ikkje godkjent"
   }
 }

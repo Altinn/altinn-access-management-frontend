@@ -567,5 +567,27 @@
     "18_delegation_right_missing_delegation_access": "Delegering av tjenester feilet: du har ikke rettigheter til å direkte delegere tjenester.",
     "19_delegation_right_missing_srr_right_access": "Delegering av tjenester feilet: en eller flere tjenester bruker tilgangslister der virksomhet ikke har tilgang.",
     "20_delegation_right_insufficient_authentication_level": "Delegering av tjenester feilet: en eller flere tjenester krever eksplisitt tilgangsnivå."
+  },
+  "consent_request": {
+    "page_title": "Godkjenn samtykke/fullmakt - Altinn",
+    "loading_consent": "Laster forespørsel...",
+    "approve_consent": "Ja, jeg gir samtykke",
+    "reject_consent": "Nei, jeg gir ikke samtykke",
+    "approve_poa": "Ja, jeg gir fullmakt",
+    "reject_poa": "Nei, jeg gir ikke fullmakt",
+    "approve_error": "Kunne ikke gi samtykke",
+    "approve_error_poa": "Kunne ikke gi fullmakt",
+    "reject_error": "Kunne ikke avvise samtykke",
+    "reject_error_poa": "Kunne ikke avvise fullmakt"
+  },
+  "consent_errors": {
+    "not_authorized_for_consent": "Bruker er ikke autorisert for å gi samtykke/fullmakt",
+    "consent_not_found": "Samtykket/fullmakten finnes ikke",
+    "wrong_consent_status": "Samtykket/fullmakten har feil status for å kunne samtykke/gi fullmakt",
+    "wrong_revoke_status": "Samtykket/fullmakten har feil status for å kunne trekkes",
+    "wrong_reject_status": "Samtykket/fullmakten har feil status for å kunne avvises",
+    "consent_is_revoked": "Samtykket/fullmakten er trukket",
+    "consent_is_expired": "Samtykket/fullmakten har utløpt",
+    "consent_is_not_accepted": "Samtykket/fullmakten er ikke godkjent"
   }
 }
