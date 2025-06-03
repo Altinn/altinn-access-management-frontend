@@ -13,7 +13,7 @@ public class RoleInfo
     /// <summary>
     /// Gets or sets the unique identifier for the entity type associated with the role.
     /// </summary>
-    public Guid EntityTypeId { get; set; }
+    public Guid? EntityTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the unique identifier for the provider of the role.

@@ -41,13 +41,15 @@ export const UserListItem = ({
     [user.matchInInheritingUsers, hasInheritingUsers],
   );
 
+  const description = user.roles?.join(', ') ?? '';
+
   return (
     <>
       <ListItem
         {...props}
         size={size}
         title={`${user.name} ${user.organizationNumber && !hasInheritingUsers ? `(${user.organizationNumber})` : ''}`}
-        description={user.roles?.join(', ') ?? ''}
+        description={`${description.slice(0, 100)}${description.length > 100 && '...'}`}
         avatar={{
           name: user.name,
           type: user.partyType.toString() === 'Organization' ? 'company' : 'person',
