@@ -215,7 +215,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     new ClientRoleAccessPackages()
                     {
                         Role = "urn:altinn:external-role:ccr:regnskapsforer",
-                        Packages = ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+                        Packages = ["regnskapsforer-med-signeringsrettighet"]
                     }
                 ]
             };
@@ -258,7 +258,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     new ClientRoleAccessPackages()
                     {
                         Role = "urn:altinn:external-role:ccr:revisor",
-                        Packages = ["urn:altinn:accesspackage:ansvarlig-revisor"]
+                        Packages = ["ansvarlig-revisor"]
                     }
                 ]
             };
@@ -301,7 +301,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     new ClientRoleAccessPackages()
                     {
                         Role = "urn:altinn:external-role:ccr:regnskapsforer",
-                        Packages = ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+                        Packages = ["regnskapsforer-med-signeringsrettighet"]
                     }
                 ]
             };

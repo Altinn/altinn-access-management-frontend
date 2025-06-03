@@ -6,7 +6,7 @@
     "access": [
       {
         "role": "urn:altinn:external-role:ccr:forretningsforer",
-        "packages": ["urn:altinn:accesspackage:forretningsforer-eiendom"]
+        "packages": ["forretningsforer-eiendom"]
       }
     ]
   }

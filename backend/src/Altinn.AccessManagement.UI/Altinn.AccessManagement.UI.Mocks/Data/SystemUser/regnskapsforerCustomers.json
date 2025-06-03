@@ -6,7 +6,7 @@
     "access": [
       {
         "role": "urn:altinn:external-role:ccr:regnskapsforer",
-        "packages": ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+        "packages": ["regnskapsforer-med-signeringsrettighet"]
       }
     ]
   },
@@ -17,7 +17,7 @@
     "access": [
       {
         "role": "urn:altinn:external-role:ccr:regnskapsforer",
-        "packages": ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+        "packages": ["regnskapsforer-med-signeringsrettighet"]
       }
     ]
   },
@@ -28,7 +28,7 @@
     "access": [
       {
         "role": "urn:altinn:external-role:ccr:regnskapsforer",
-        "packages": ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+        "packages": ["regnskapsforer-med-signeringsrettighet"]
       }
     ]
   },
@@ -39,7 +39,7 @@
     "access": [
       {
         "role": "urn:altinn:external-role:ccr:regnskapsforer",
-        "packages": ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+        "packages": ["regnskapsforer-med-signeringsrettighet"]
       }
     ]
   },
@@ -50,7 +50,7 @@
     "access": [
       {
         "role": "urn:altinn:external-role:ccr:regnskapsforer",
-        "packages": ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"]
+        "packages": ["regnskapsforer-med-signeringsrettighet"]
       }
     ]
   }

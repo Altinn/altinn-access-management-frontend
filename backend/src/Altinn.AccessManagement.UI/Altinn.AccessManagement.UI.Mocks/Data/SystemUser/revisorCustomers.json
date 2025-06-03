@@ -6,7 +6,7 @@
     "access": [
       {
         "role": "urn:altinn:external-role:ccr:revisor",
-        "packages": ["urn:altinn:accesspackage:ansvarlig-revisor"]
+        "packages": ["ansvarlig-revisor"]
       }
     ]
   }
