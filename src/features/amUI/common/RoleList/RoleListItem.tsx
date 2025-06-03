@@ -1,7 +1,6 @@
 import { ListItem } from '@altinn/altinn-components';
 
 import type { ExtendedRole } from '@/rtk/features/roleApi';
-import type { Party } from '@/rtk/features/lookupApi';
 
 interface RoleLIstItemProps {
   role: ExtendedRole;
