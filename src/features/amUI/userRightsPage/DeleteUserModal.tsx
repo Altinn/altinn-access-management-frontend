@@ -84,67 +84,24 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
           />
         ) : (
           <div className={classes.modalContent}>
-            {status === UserDeletionStatus.FullDeletionAllowed && (
-              <>
-                <DsHeading>{t('delete_user.heading')}</DsHeading>
-                <DsParagraph>
-                  <Trans
-                    i18nKey='delete_user.message'
-                    values={{
-                      user_name: userName,
-                      reportee_name: reporteeName,
-                    }}
-                  />
-                </DsParagraph>
-              </>
-            )}
-            {status === UserDeletionStatus.LimitedDeletionOnly && (
-              <>
-                <DsHeading>{t('delete_user.limited_deletion_heading')}</DsHeading>
-                <Trans
-                  i18nKey='delete_user.limited_deletion_message'
-                  values={{
-                    user_name: userName,
-                    reportee_name: reporteeName,
-                  }}
-                  components={{
-                    p: <DsParagraph data-size='sm'></DsParagraph>,
-                    erLink: (
-                      <Link
-                        to={srmLink}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                      ></Link>
-                    ),
-                  }}
-                />
-              </>
-            )}
-            {status === UserDeletionStatus.DeletionNotAllowed && (
-              <>
-                <DsHeading>
-                  {t('delete_user.deletion_not_allowed_heading', { reportee_name: reporteeName })}
-                </DsHeading>
-                <DsParagraph>
-                  <Trans
-                    i18nKey='delete_user.deletion_not_allowed_message'
-                    values={{
-                      user_name: userName,
-                      reportee_name: reporteeName,
-                    }}
-                    components={{
-                      erLink: (
-                        <Link
-                          to={srmLink}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                        ></Link>
-                      ),
-                    }}
-                  />
-                </DsParagraph>
-              </>
-            )}
+            <DsHeading>{t(i18nKeysByStatus[status].headingKey)}</DsHeading>
+            <Trans
+              i18nKey={i18nKeysByStatus[status].messageKey}
+              values={{
+                user_name: userName,
+                reportee_name: reporteeName,
+              }}
+              components={{
+                p: <DsParagraph data-size='sm'></DsParagraph>,
+                erLink: (
+                  <Link
+                    to={srmLink}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  ></Link>
+                ),
+              }}
+            />
             {isError && errorDetails && (
               <DsAlert
                 data-size='sm'
@@ -188,6 +145,21 @@ enum UserDeletionStatus {
   LimitedDeletionOnly = 'LimitedDeletionOnly',
   DeletionNotAllowed = 'DeletionNotAllowed',
 }
+
+const i18nKeysByStatus = {
+  [UserDeletionStatus.FullDeletionAllowed]: {
+    headingKey: 'delete_user.heading',
+    messageKey: 'delete_user.message',
+  },
+  [UserDeletionStatus.LimitedDeletionOnly]: {
+    headingKey: 'delete_user.limited_deletion_heading',
+    messageKey: 'delete_user.limited_deletion_message',
+  },
+  [UserDeletionStatus.DeletionNotAllowed]: {
+    headingKey: 'delete_user.deletion_not_allowed_heading',
+    messageKey: 'delete_user.deletion_not_allowed_message',
+  },
+};
 
 const determineUserDeletionStatus = (
   connections: { roles: string[] }[] | undefined,
