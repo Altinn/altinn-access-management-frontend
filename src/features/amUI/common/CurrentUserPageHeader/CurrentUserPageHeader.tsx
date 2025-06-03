@@ -1,5 +1,4 @@
-import { ListItem, ListItemBase, ListItemHeader } from '@altinn/altinn-components';
-import { size } from 'cypress/types/lodash';
+import { ListItem } from '@altinn/altinn-components';
 
 import type { User } from '@/rtk/features/userInfoApi';
 
