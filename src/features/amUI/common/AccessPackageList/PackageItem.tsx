@@ -17,8 +17,7 @@ export const PackageItem = ({ pkg, onSelect, controls, hasAccess }: PackageItemP
     <AccessPackageListItem
       key={pkg.id}
       id={pkg.id}
-      title={pkg.name}
-      titleAs='h4'
+      title={{ children: pkg.name, as: 'h4' }}
       description={t('access_packages.package_number_of_resources', {
         count: pkg.resources.length,
       })}

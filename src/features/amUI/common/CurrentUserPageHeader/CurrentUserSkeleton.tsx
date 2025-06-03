@@ -7,7 +7,7 @@ export const CurrentUserSkeleton = () => {
       size='xl'
       title='xxxxxxxx xxxxxxxx'
       description='xxxxxxx, xxxxxxx'
-      avatar={{
+      icon={{
         type: 'person',
         name: '',
       }}

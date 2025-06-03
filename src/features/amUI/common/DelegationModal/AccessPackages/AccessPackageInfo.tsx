@@ -186,7 +186,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               <List
                 items={listItems}
                 spacing='xs'
-                defaultItemSize='xs'
+                size='xs'
               />
             </div>
           </div>

@@ -1,9 +1,10 @@
-import { ListItemBase, ListItemHeader } from '@altinn/altinn-components';
+import { ListItem, ListItemBase, ListItemHeader } from '@altinn/altinn-components';
+import { size } from 'cypress/types/lodash';
+
+import type { User } from '@/rtk/features/userInfoApi';
 
 import classes from './CurrentUserPageHeader.module.css';
 import { CurrentUserSkeleton } from './CurrentUserSkeleton';
-
-import type { User } from '@/rtk/features/userInfoApi';
 
 interface CurrentUserPageHeaderProps {
   currentUser?: User;
@@ -17,24 +18,16 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
       {loading ? (
         <CurrentUserSkeleton />
       ) : (
-        <ListItemBase
-          as='div'
-          variant='solid'
-          theme='default'
-          shadow='xs'
-        >
-          <ListItemHeader
-            size='xl'
-            title={currentUser?.name}
-            description={currentUser?.roles?.join(', ')}
-            avatar={{
-              type: 'person',
-              name: currentUser?.name || '',
-            }}
-            as={as}
-            titleAs={'h2'}
-          />
-        </ListItemBase>
+        <ListItem
+          size='xl'
+          title={{ as: 'h2', children: currentUser?.name, size: 'xl' }}
+          description={{ as: 'p', children: currentUser?.roles?.join(', ') }}
+          icon={{
+            type: 'person',
+            name: currentUser?.name || '',
+          }}
+          as={as}
+        />
       )}
     </div>
   );

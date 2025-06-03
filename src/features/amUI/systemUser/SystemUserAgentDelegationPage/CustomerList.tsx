@@ -9,11 +9,11 @@ import {
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
+import { AmPagination } from '@/components/Paginering';
+
 import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
-
-import { AmPagination } from '@/components/Paginering';
 
 const filterCustomerList = (
   list: AgentDelegationCustomer[],
@@ -88,7 +88,7 @@ export const CustomerList = ({
         {children}
       </div>
       <List
-        defaultItemSize='sm'
+        size='sm'
         className={classes.customerList}
         items={filteredSearchList.slice(startIndex, endIndex)?.map((customer) => {
           return {

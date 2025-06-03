@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ListBase } from '@altinn/altinn-components';
+import { List } from '@altinn/altinn-components';
 
 import {
   type ExtendedRole,
@@ -72,7 +72,7 @@ export const RoleList = ({
   return (
     <div className={classes.roleLists}>
       {groupedRoles && groupedRoles.activeRoles.length > 0 && (
-        <ListBase>
+        <List>
           {groupedRoles.activeRoles.map((role) => (
             <RoleListItem
               key={role.id}
@@ -97,10 +97,10 @@ export const RoleList = ({
               }
             />
           ))}
-        </ListBase>
+        </List>
       )}
       {groupedRoles && groupedRoles.availableRoles.length > 0 && (
-        <ListBase>
+        <List>
           {groupedRoles.availableRoles.map((role) => (
             <RoleListItem
               key={role.id}
@@ -129,7 +129,7 @@ export const RoleList = ({
               }
             />
           ))}
-        </ListBase>
+        </List>
       )}
     </div>
   );

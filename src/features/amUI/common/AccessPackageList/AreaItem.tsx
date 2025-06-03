@@ -1,8 +1,9 @@
-import { AccessAreaListItem } from '@altinn/altinn-components';
+import { ListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { ExtendedAccessArea } from './useAreaPackageList';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
+import type { ExtendedAccessArea } from './useAreaPackageList';
 
 interface AreaItemProps {
   area: ExtendedAccessArea;
@@ -30,18 +31,17 @@ export const AreaItem = ({
       : undefined;
 
   return (
-    <AccessAreaListItem
+    <ListItem
       key={area.id}
       id={area.id}
-      name={area.name}
-      colorTheme='company'
-      iconUrl={area.iconUrl}
-      badgeText={badgeText}
-      expanded={expanded}
-      titleAs='h3'
+      title={{ children: area.name, as: 'h3' }}
       onClick={() => toggleExpandedArea(area.id)}
+      icon={{ iconUrl: area.iconUrl }}
+      color='company'
+      badge={{ label: badgeText, color: 'company' }}
+      expanded={expanded}
     >
       {children}
-    </AccessAreaListItem>
+    </ListItem>
   );
 };

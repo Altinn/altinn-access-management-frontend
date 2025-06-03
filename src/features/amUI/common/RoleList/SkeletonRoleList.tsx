@@ -1,4 +1,4 @@
-import { ListBase, ListItem, DsSkeleton, DsParagraph, DsHeading } from '@altinn/altinn-components';
+import { List, ListItem, DsSkeleton, DsParagraph, DsHeading } from '@altinn/altinn-components';
 
 import classes from './roleSection.module.css';
 
@@ -27,17 +27,17 @@ export const SkeletonRoleList = () => {
           width={100}
         />
       </DsParagraph>
-      <ListBase>
+      <List>
         {listSkeleton.map((role) => (
           <ListItem
             key={role.id}
             title={role.name}
             data-color='neutral'
-            theme='subtle'
+            variant='subtle'
             loading
           />
         ))}
-      </ListBase>
+      </List>
     </div>
   );
 };

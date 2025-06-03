@@ -9,6 +9,7 @@ import type { ExtendedUser } from './useFilteredUsers';
 
 interface UserListItemProps extends ListItemProps {
   user: ExtendedUser;
+  titleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
 
 const userHeadingLevelForMapper = (level?: ElementType) => {
@@ -46,9 +47,15 @@ export const UserListItem = ({
       <ListItem
         {...props}
         size={size}
-        title={`${user.name} ${user.organizationNumber && !hasInheritingUsers ? `(${user.organizationNumber})` : ''}`}
-        description={user.roles?.join(', ') ?? ''}
-        avatar={{
+        title={{
+          as: titleAs ?? 'h3',
+          children: `${user.name} ${user.organizationNumber && !hasInheritingUsers ? `(${user.organizationNumber})` : ''}`,
+        }}
+        description={{
+          as: userHeadingLevelForMapper(titleAs ?? 'h3'),
+          children: user.roles?.join(', ') ?? '',
+        }}
+        icon={{
           name: user.name,
           type: user.partyType.toString() === 'Organization' ? 'company' : 'person',
         }}
@@ -69,7 +76,6 @@ export const UserListItem = ({
                 />
               )
         }
-        titleAs={titleAs}
       />
       {hasInheritingUsers && isExpanded && (
         <ListWrapper

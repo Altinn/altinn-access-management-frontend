@@ -1,11 +1,4 @@
-import {
-  ListBase,
-  DsAlert,
-  DsHeading,
-  DsParagraph,
-  Button,
-  DsButton,
-} from '@altinn/altinn-components';
+import { List, DsAlert, DsHeading, DsParagraph, Button, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
@@ -70,7 +63,7 @@ export const AreaItemContent = ({
     <div className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}>
       <DsParagraph>{area.description}</DsParagraph>
       {packages.assigned.length > 0 && (
-        <ListBase aria-label={t('access_packages.given_packages_title')}>
+        <List aria-label={t('access_packages.given_packages_title')}>
           {packages.assigned.map((pkg) => (
             <PackageItem
               key={pkg.id}
@@ -89,7 +82,7 @@ export const AreaItemContent = ({
               }
             />
           ))}
-        </ListBase>
+        </List>
       )}
 
       {!showAvailablePackagesExternal && (
@@ -122,7 +115,7 @@ export const AreaItemContent = ({
         </DsAlert>
       )}
       {packages.available.length > 0 && showAvailablePackages && (
-        <ListBase aria-label={t('access_packages.available_packages_title')}>
+        <List aria-label={t('access_packages.available_packages_title')}>
           {packages.available.map((pkg) => (
             <PackageItem
               key={pkg.id}
@@ -142,7 +135,7 @@ export const AreaItemContent = ({
               }
             />
           ))}
-        </ListBase>
+        </List>
       )}
     </div>
   );

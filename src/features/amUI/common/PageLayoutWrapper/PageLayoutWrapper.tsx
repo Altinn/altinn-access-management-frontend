@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react';
 import React, { useMemo, useState } from 'react';
-import type { AccountMenuItem, MenuGroupProps, MenuItemProps } from '@altinn/altinn-components';
+import type { MenuGroupProps, MenuItemProps } from '@altinn/altinn-components';
 import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
@@ -108,7 +108,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
   };
 
-  const accounts: AccountMenuItem[] = useMemo(() => {
+  const accounts = useMemo(() => {
     if (!reporteeList || !userinfo || !reportee) {
       return [];
     }
@@ -144,39 +144,48 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             onChange: onChangeLocale,
           },
           logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
-          currentAccount: {
-            name: reportee?.name || '',
-            type: getAccountType(reportee?.type ?? ''),
-            id: reportee?.partyUuid || '',
-          },
+          // currentAccount: {
+          //   name: reportee?.name || '',
+          //   type: getAccountType(reportee?.type ?? ''),
+          //   id: reportee?.partyUuid || '',
+          // },
           menu: {
+            accountMenu: {
+              items: accounts,
+              groups: accountGroups,
+              currentAccount: {
+                name: reportee?.name || '',
+                type: getAccountType(reportee?.type ?? ''),
+                id: reportee?.partyUuid || '',
+              },
+              search: {
+                name: 'account-search',
+                value: searchString,
+                onChange: (event: ChangeEvent<HTMLInputElement>) => {
+                  setSearchString(event.target.value);
+                },
+                placeholder: t('header.search-label'),
+                hidden: false,
+                getResultsLabel: (hits: number) => {
+                  return `${hits} ${t('header.search-hits')}`;
+                },
+              },
+              onSelectAccount: (accountId) => {
+                const redirectUrl = window.location.pathname.includes('systemuser')
+                  ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
+                  : window.location.href;
+                (window as Window).open(
+                  `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
+                  '_self',
+                );
+              },
+              menuItemsVirtual: {
+                isVirtualized: accounts.length > 20,
+              },
+            },
             menuLabel: t('header.menu-label'),
             backLabel: t('header.back-label'),
             changeLabel: t('header.change-label'),
-            accountGroups,
-            accounts,
-            accountSearch: {
-              name: 'account-search',
-              value: searchString,
-              onChange: (event: ChangeEvent<HTMLInputElement>) => {
-                setSearchString(event.target.value);
-              },
-              placeholder: t('header.search-label'),
-              hidden: false,
-              getResultsLabel: (hits: number) => {
-                return `${hits} ${t('header.search-hits')}`;
-              },
-            },
-            isVirtualized: accounts.length > 20,
-            onSelectAccount: (accountId) => {
-              const redirectUrl = window.location.pathname.includes('systemuser')
-                ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
-                : window.location.href;
-              (window as Window).open(
-                `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
-                '_self',
-              );
-            },
             items: headerLinks,
             logoutButton: {
               label: t('header.log_out'),

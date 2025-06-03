@@ -9,7 +9,16 @@ import path from 'node:path';
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
-    alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
+    alias: [
+      { find: '@', replacement: path.resolve(__dirname, 'src') },
+      {
+        find: /^@digdir\/designsystemet-theme$/,
+        replacement: path.resolve(
+          __dirname,
+          'node_modules/@digdir/designsystemet-theme/brand/altinn.css',
+        ),
+      },
+    ],
   },
   server: {
     cors: {

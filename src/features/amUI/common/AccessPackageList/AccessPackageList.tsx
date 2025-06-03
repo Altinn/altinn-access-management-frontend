@@ -1,4 +1,4 @@
-import { ListBase } from '@altinn/altinn-components';
+import { List } from '@altinn/altinn-components';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
@@ -81,7 +81,7 @@ export const AccessPackageList = ({
       {loadingDelegations || loadingPackageAreas || isLoading ? (
         <SkeletonAccessPackageList />
       ) : (
-        <ListBase>
+        <List>
           {displayAreas.map((area) => {
             const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
 
@@ -106,7 +106,7 @@ export const AccessPackageList = ({
               </AreaItem>
             );
           })}
-        </ListBase>
+        </List>
       )}
     </div>
   );
