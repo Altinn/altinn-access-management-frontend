@@ -50,7 +50,7 @@ export const AccessPackageInfo = ({
             titleAs: 'h3',
             ownerLogoUrl: resource.resourceOwnerLogoUrl,
             ownerLogoUrlAlt: resource.resourceOwnerName,
-            ownerName: resource.resourceOwnerName,
+            ownerName: resource.resourceOwnerName ?? '',
             resourceName: resource.title,
             onClick: () => onSelectResource(resource),
           };
