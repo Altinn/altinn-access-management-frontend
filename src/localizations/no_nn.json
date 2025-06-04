@@ -83,6 +83,7 @@
     "search-label": "Finn bruker",
     "search-hits": "treff",
     "account_you": "Deg selv",
+    "current-end-user-label": "Logget inn som {{currentUser}}",
     "account_others": "Andre kontoer",
     "back-label": "Tilbake",
     "all_services": "Alle tjenester",

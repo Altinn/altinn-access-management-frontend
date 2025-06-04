@@ -81,8 +81,9 @@
   "header": {
     "access_management": "Access Management",
     "inbox": "Inbox",
-    "account_you": "Deg selv",
-    "account_others": "Andre kontoer",
+    "account_you": "Yourself",
+    "current-end-user-label": "Logged in as {{currentUser}}",
+    "account_others": "Other accounts",
     "menu-label": "Menu",
     "change-label": "Change",
     "search-label": "Find user",

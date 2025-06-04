@@ -95,6 +95,7 @@
     "inbox": "Innboks",
     "menu-label": "Meny",
     "account_you": "Deg selv",
+    "current-end-user-label": "Logget inn som {{currentUser}}",
     "account_others": "Andre kontoer",
     "change-label": "Bytt",
     "search-label": "Finn bruker",
