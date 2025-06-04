@@ -40,7 +40,7 @@
   "accessListMode": "Disabled",
   "selfIdentifiedUserEnabled": false,
   "enterpriseUserEnabled": true,
-  "resourceType": "ConsentResource",
+  "resourceType": "Consent",
   "consentTemplate": "poa",
   "consentText": {
     "en": "Power of attorney to perform a great service.",
