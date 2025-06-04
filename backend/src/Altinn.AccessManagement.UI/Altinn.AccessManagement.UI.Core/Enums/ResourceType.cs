@@ -48,6 +48,6 @@
         /// <summary>
         /// Consent resource type
         /// </summary>
-        ConsentResource = 1 << 7,
+        Consent = 1 << 7,
     }
 }
