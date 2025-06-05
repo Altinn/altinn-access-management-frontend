@@ -13,7 +13,7 @@
 }
 
 .filterButton {
-  background-color: var(--ds-color-neutral-background-subtle);
+  background-color: var(--ds-color-neutral-background-tinted);
   padding: 0 18px;
   color: #000;
   border-radius: 50px;

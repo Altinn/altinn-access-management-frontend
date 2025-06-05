@@ -9,15 +9,15 @@
   display: flex;
   align-items: start;
   flex-direction: column;
-  border-left: 1px solid var(--ds-color-neutral-contrast-subtle);
-  border-right: 1px solid var(--ds-color-neutral-contrast-subtle);
-  border-top: 1px solid var(--ds-color-neutral-contrast-subtle);
+  border-left: 1px solid var(--ds-color-accent-border-subtle);
+  border-right: 1px solid var(--ds-color-accent-border-subtle);
+  border-top: 1px solid var(--ds-color-accent-border-subtle);
 }
 
 .option {
   width: 100%;
   border: none;
-  border-bottom: 1px solid var(--ds-color-neutral-contrast-subtle);
+  border-bottom: 1px solid var(--ds-color-accent-border-subtle);
   background-color: var(--ds-color-neutral-contrast-default);
   cursor: pointer;
   font: inherit;
@@ -36,7 +36,7 @@
 }
 
 .option:hover {
-  background-color: var(--ds-global-blue-2);
+  background-color: var(--ds-color-accent-surface-hover);
   border-bottom: 2px solid var(--ds-color-accent-border-default);
   padding: 8px 0 7px 0;
 }
@@ -50,7 +50,7 @@
 }
 
 .option:active {
-  background-color: #b3d0ea;
+  background-color: var(--ds-color-company-surface-active);
 }
 
 .scrollContainer {
