@@ -49,8 +49,8 @@ export const AccessPackageInfo = ({
             as: 'button',
             titleAs: 'h3',
             ownerLogoUrl: resource.resourceOwnerLogoUrl,
-            ownerLogoUrlAlt: resource.resourceOwnerName,
-            ownerName: resource.resourceOwnerName,
+            ownerLogoUrlAlt: resource.resourceOwnerName ?? '',
+            ownerName: resource.resourceOwnerName ?? '',
             resourceName: resource.title,
             onClick: () => onSelectResource(resource),
           };

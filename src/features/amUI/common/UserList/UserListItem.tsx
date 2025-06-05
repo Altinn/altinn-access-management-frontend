@@ -26,13 +26,22 @@ const userHeadingLevelForMapper = (level?: ElementType) => {
   }
 };
 
-export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListItemProps) => {
+export const UserListItem = ({
+  user,
+  size = 'lg',
+  titleAs,
+  interactive = false,
+  ...props
+}: UserListItemProps) => {
   const hasInheritingUsers = user.inheritingUsers?.length > 0;
   const [isExpanded, setExpanded] = useState(false);
+
   useEffect(
     () => setExpanded((user.matchInInheritingUsers && hasInheritingUsers) ?? false),
     [user.matchInInheritingUsers, hasInheritingUsers],
   );
+
+  const description = user.roles?.join(', ') ?? '';
 
   return (
     <>
@@ -40,14 +49,14 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
         {...props}
         size={size}
         title={`${user.name} ${user.organizationNumber && !hasInheritingUsers ? `(${user.organizationNumber})` : ''}`}
-        description={user.roles?.join(', ') ?? ''}
+        description={`${description.slice(0, 100)}${description.length > 100 ? '...' : ''}`}
         avatar={{
           name: user.name,
           type: user.partyType.toString() === 'Organization' ? 'company' : 'person',
         }}
         expanded={isExpanded}
         collapsible={hasInheritingUsers}
-        interactive={hasInheritingUsers}
+        interactive={interactive}
         linkIcon={!hasInheritingUsers}
         onClick={() => {
           if (hasInheritingUsers) setExpanded(!isExpanded);
@@ -71,6 +80,7 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
           spacing={1}
           indent
           listItemTitleAs={userHeadingLevelForMapper(titleAs)}
+          interactive={interactive}
         />
       )}
     </>

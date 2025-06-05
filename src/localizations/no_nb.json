@@ -289,7 +289,8 @@
   },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
-    "main_page_heading": "Fullmakter {{name}} har hos andre"
+    "main_page_heading": "Fullmakter {{name}} har hos andre",
+    "not_admin_alert": "Du har ikke tilgang til å se denne siden hos {{name}}. Vennligst bytt side eller velg en annen aktør."
   },
   "user_rights_page": {
     "page_title": "Brukertilganger - Altinn",
@@ -302,7 +303,11 @@
   "delete_user": {
     "trigger_button": "Slett bruker",
     "heading": "Er du sikker på at du vil slette denne brukeren?",
-    "message": "{{user_name}} vil miste alle fullmakter de har for {{reportee_name}}. Denne handlingen kan ikke angres.",
+    "message": "<p>{{user_name}} vil miste alle fullmakter de har for {{reportee_name}}. <i>Denne handlingen kan ikke angres.</i></p>",
+    "limited_deletion_heading": "Ønsker du å slette tilganger som ikke er knyttet til Enhetsregisteret?",
+    "limited_deletion_message": "<p>{{user_name}} har fullmakter gjennom sine roller i Enhetsregisteret og kan derfor ikke slettes fullstendig fra {{reportee_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjøre det via <erLink>Samordnet registermelding</erLink>.</p><p>Ønsker du å slette alle tilganger som ikke er knyttet til Enhetsregisteret? <i>Denne handlingen kan ikke angres.</i></p>",
+    "deletion_not_allowed_heading": "Brukeren kan ikke slettes",
+    "deletion_not_allowed_message": "<p>{{user_name}} har kun fullmakter gjennom sine roller i Enhetsregisteret og kan derfor ikke slettes fra {{reportee_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjøre det via <erLink>Samordnet registermelding</erLink>.</p>",
     "yes_button": "Ja, slett"
   },
   "reportee_rights_page": {
@@ -567,6 +572,10 @@
     "18_delegation_right_missing_delegation_access": "Delegering av tjenester feilet: du har ikke rettigheter til å direkte delegere tjenester.",
     "19_delegation_right_missing_srr_right_access": "Delegering av tjenester feilet: en eller flere tjenester bruker tilgangslister der virksomhet ikke har tilgang.",
     "20_delegation_right_insufficient_authentication_level": "Delegering av tjenester feilet: en eller flere tjenester krever eksplisitt tilgangsnivå."
+  },
+  "page_not_available": {
+    "title": "Siden er ikke tilgjengelig",
+    "text": "De nye tilgangsstyringssidene er ikke klare for privatpersoner helt enda. Dersom du mente å se på tilgangene til en virksomhet, vennligst bytt til denne i menyen."
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",

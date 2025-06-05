@@ -15,6 +15,7 @@ export interface UserListProps {
   indent?: boolean;
   isLoading?: boolean;
   listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  interactive?: boolean;
 }
 
 export const ListWrapper = ({
@@ -24,6 +25,7 @@ export const ListWrapper = ({
   isLoading,
   indent,
   listItemTitleAs,
+  interactive,
 }: UserListProps) => {
   return (
     <div className={cn(indent ? classes.indent : '')}>
@@ -37,6 +39,7 @@ export const ListWrapper = ({
               key={user.partyUuid}
               user={user}
               titleAs={listItemTitleAs}
+              interactive={interactive}
             />
           ))
         )}

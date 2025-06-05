@@ -21,11 +21,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         public bool IsPoa { get; set; }
 
         /// <summary>
-        /// Consent status
-        /// </summary>
-        public ConsentRequestStatusType Status { get; set; }
-
-        /// <summary>
         /// Consent title
         /// </summary>
         public Dictionary<string, string> Title { get; set; }

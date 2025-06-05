@@ -11,6 +11,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         public string Id { get; set; } = string.Empty;
 
         /// <summary>
+        /// Template version number
+        /// </summary>
+        public int Version { get; set; }
+
+        /// <summary>
         /// Title of the consent template
         /// </summary>
         public string Title { get; set; } = string.Empty;

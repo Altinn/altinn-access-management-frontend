@@ -286,7 +286,8 @@
   },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
-    "main_page_heading": "Fullmakter {{name}} har hos andre"
+    "main_page_heading": "Fullmakter {{name}} har hos andre",
+    "not_admin_alert": "Du har ikkje tilgang til å se denne sida hos {{name}}. Vennligst bytt side eller velg ein annen aktør."
   },
   "user_rights_page": {
     "page_title": "Brukertilgang - Altinn",
@@ -300,6 +301,10 @@
     "trigger_button": "Slett brukar",
     "heading": "Er du sikker på at du vil slette denne brukaren?",
     "message": "{{user_name}} vil miste alle fullmaktar dei har for {{reportee_name}}. Denne handlinga kan du ikkje angre.",
+    "limited_deletion_heading": "Ønskjer du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
+    "limited_deletion_message": "<p>{{user_name}} har fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast fullstendig frå {{reportee_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p> Ønskjer du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angrast.</i></p>",
+    "deletion_not_allowed_heading": "Brukaren kan ikkje slettast",
+    "deletion_not_allowed_message": "{{user_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{reportee_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.",
     "yes_button": "Ja, slett"
   },
   "reportee_rights_page": {
@@ -566,6 +571,10 @@
     "18_delegation_right_missing_delegation_access": "Delegering av tenester feila: du har ikkje rettar til å direkte delegere tenester.",
     "19_delegation_right_missing_srr_right_access": "Delegering av tenester feila: ei eller fleire tenester nyttar tilgangslister der verksemda ikkje har tilgang.",
     "20_delegation_right_insufficient_authentication_level": "Delegering av tenester feila: ei eller fleire tenester krev eksplisitt tilgangsnivå."
+  },
+  "page_not_available": {
+    "title": "Sida er ikkje tilgjengelig",
+    "text": "Dei nye tilgangsstyringssidene er ikkje klare for privatpersonar heilt enno. Dersom du meinte å sjå på tilgangane til ei verksemd, ver vennleg og byt til denne i menyen."
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",

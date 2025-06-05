@@ -3,7 +3,6 @@
   "from": "urn:altinn:person:identifier-no:20838198385",
   "to": "urn:altinn:organization:identifier-no:310202398",
   "handledBy": "urn:altinn:organization:identifier-no:313160300",
-  "status": "created",
   "validTo": "2025-05-21T11:11:24.9535551+00:00",
   "consentRights": [
     {
@@ -12,5 +11,8 @@
       "metadata": { "inntektsAar": "2016" }
     }
   ],
-  "requestmessage": null
+  "requestmessage": null,
+  "redirectUrl": "https://smartbank.no/consent",
+  "templateId": "sblanesoknad",
+  "templateVersion": 1
 }

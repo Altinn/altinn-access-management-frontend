@@ -7,6 +7,7 @@ declare global {
       displayResourceDelegation: boolean;
       displayConfettiPackage: boolean;
       displayLimitedPreviewLaunch: boolean;
+      restrictPrivUse: boolean;
     };
   }
 }
