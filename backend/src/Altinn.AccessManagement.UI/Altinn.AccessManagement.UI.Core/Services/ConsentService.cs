@@ -129,7 +129,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 { "CoveredBy", to.Name },
                 { "OfferedBy", from.Name },
                 { "HandledBy", handledBy?.Name },
-                { "Expiration", request.ValidTo?.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) }
+                { "Expiration", request.ValidTo.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) }
             };
         }
 
