@@ -1,7 +1,10 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -120,6 +123,54 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/consent/request/{requestId}/reject", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: ApproveConsentRequest checks that consent request is approved
+        ///     Expected: ApproveConsentRequest returns true when consent request is approved
+        /// </summary>
+        [Fact]
+        public async Task ApproveConsentRequest_ReturnsOk()
+        {
+            // Arrange
+            string requestId = PERSON_CONSENT_ID;
+            ApproveConsentContext dto = new()
+            {
+                Language = "nb"
+            };
+
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/consent/request/{requestId}/approve", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+         /// <summary>
+        ///     Test case: ApproveConsentRequest checks that error is returned when consent cannot be rejected
+        ///     Expected: ApproveConsentRequest returns error
+        /// </summary>
+        [Fact]
+        public async Task ApproveConsentRequestReturnsError()
+        {
+            // Arrange
+            string requestId = "602445ee-3cdd-462d-aeb9-e74c7bfd89ad";
+            ApproveConsentContext dto = new()
+            {
+                Language = "nb"
+            };
+
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/consent/request/{requestId}/approve", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);

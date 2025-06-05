@@ -25,6 +25,15 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<Result<bool>> RejectConsentRequest(Guid consentRequestId, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Approves a consent request
+        /// </summary>
+        /// <param name="consentRequestId">The consent id to approve</param>
+        /// <param name="context">Context when approving</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Boolean value if approve was successful or not</returns>
+        Task<Result<bool>> ApproveConsentRequest(Guid consentRequestId, ApproveConsentContext context, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Gets all consent templates
         /// </summary>
         /// <returns>Consent templates</returns>

@@ -104,6 +104,35 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
+        public async Task<Result<bool>> ApproveConsentRequest(Guid consentRequestId, ApproveConsentContext context, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"accessmanagement/api/v1/bff/consentrequests/{consentRequestId}/accept";
+                var content = JsonContent.Create(context);
+                
+                HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // ConsentClient // ApproveConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // ApproveConsentRequest // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
         public async Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken)
         {
             List<ConsentTemplate> consentTemplates = new List<ConsentTemplate>();

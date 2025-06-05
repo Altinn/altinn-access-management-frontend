@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
@@ -53,6 +54,27 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
 
             return Ok(consentRequest.Value);
+        }
+
+        /// <summary>
+        /// Approve consent request
+        /// </summary>
+        /// <param name="consentRequestId">Consent request to approve</param>
+        /// <param name="context">Context when approving</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("request/{consentRequestId}/approve")]
+        public async Task<ActionResult> ApproveConsent([FromRoute] Guid consentRequestId, ApproveConsentContext context, CancellationToken cancellationToken)
+        {
+            Result<bool> approveResponse = await _consentService.ApproveConsentRequest(consentRequestId, context, cancellationToken);
+
+            if (approveResponse.IsProblem)
+            {
+                return approveResponse.Problem.ToActionResult();
+            }
+
+            return Ok(approveResponse.Value);
         }
 
         /// <summary>
