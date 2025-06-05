@@ -9,11 +9,11 @@ import {
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
+import { AmPagination } from '@/components/Paginering';
+
 import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
-
-import { AmPagination } from '@/components/Paginering';
 
 const filterCustomerList = (
   list: AgentDelegationCustomer[],
@@ -34,7 +34,7 @@ interface CustomerListProps {
   delegations?: AgentDelegation[];
   loadingIds?: string[];
   errorIds?: string[];
-  onAddCustomer?: (customerId: string, customerName: string) => void;
+  onAddCustomer?: (customer: AgentDelegationCustomer) => void;
   onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
   children?: React.ReactNode;
 }
@@ -128,7 +128,7 @@ interface ListControlsProps {
   isLoading?: boolean;
   isError?: boolean;
   onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
-  onAddCustomer?: (customerId: string, customerName: string) => void;
+  onAddCustomer?: (customer: AgentDelegationCustomer) => void;
 }
 const ListControls = ({
   customer,
@@ -180,7 +180,7 @@ const ListControls = ({
           aria-label={t('systemuser_agent_delegation.add_to_system_user_aria', {
             customerName: customer.name,
           })}
-          onClick={() => onAddCustomer(customer.id, customer.name)}
+          onClick={() => onAddCustomer(customer)}
         >
           <PlusCircleIcon /> {t('systemuser_agent_delegation.add_to_system_user')}
         </DsButton>

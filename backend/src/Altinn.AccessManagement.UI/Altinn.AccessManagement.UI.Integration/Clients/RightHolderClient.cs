@@ -69,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc/>
         public async Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to)
         {
-            string endpointUrl = $"enduser/connections?party={party}&from={party}&to={to}";
+            string endpointUrl = $"enduser/connections?party={party}&from={party}&to={to}&cascade=true";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             var httpResponse = await _client.DeleteAsync(token, endpointUrl);
@@ -97,7 +97,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 {
                     throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
                 }
-                
+
                 string content = await httpResponse.Content.ReadAsStringAsync();
                 PaginatedResult<Connection> rightHolders = JsonSerializer.Deserialize<PaginatedResult<Connection>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 

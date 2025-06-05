@@ -99,22 +99,22 @@ export const SystemUserAgentDelegationPageContent = ({
     });
   };
 
-  const onAddCustomer = (customerId: string, customerName: string): void => {
-    setLoadingIds((oldLoadingIds) => [...oldLoadingIds, customerId]);
+  const onAddCustomer = (customer: AgentDelegationCustomer): void => {
+    setLoadingIds((oldLoadingIds) => [...oldLoadingIds, customer.id]);
     const onAddSuccess = (delegation: AgentDelegation) => {
       setDelegations((oldDelegations) => [...oldDelegations, delegation]);
       showConfirmationSnackbar(
         t('systemuser_agent_delegation.customer_added', {
-          customerName,
+          customerName: customer.name,
         }),
         'success',
       );
     };
-    assignCustomer({ partyId, systemUserId: id ?? '', customerId: customerId, partyUuid })
+    assignCustomer({ partyId, systemUserId: id ?? '', customer: customer, partyUuid })
       .unwrap()
       .then(onAddSuccess)
-      .catch(() => setErrorId(customerId))
-      .finally(() => resetLoadingId(customerId));
+      .catch(() => setErrorId(customer.id))
+      .finally(() => resetLoadingId(customer.id));
   };
 
   const onRemoveCustomer = (toRemove: AgentDelegation, customerName: string): void => {

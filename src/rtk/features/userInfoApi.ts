@@ -22,6 +22,7 @@ export interface ReporteeInfo {
   partyUuid: string;
   partyId: string;
   authorizedRoles: string[];
+  subunits?: ReporteeInfo[];
 }
 
 export enum PartyType {
@@ -59,6 +60,7 @@ export const userInfoApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['UserInfo', 'RightHolders'],
   endpoints: (builder) => ({
     getUserInfo: builder.query<UserInfo, void>({
       query: () => 'profile',
@@ -90,7 +92,8 @@ export const userInfoApi = createApi({
       {
         query: ({ partyUuid, fromUuid, toUuid }) =>
           `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
-        keepUnusedDataFor: 300,
+        keepUnusedDataFor: 3,
+        providesTags: ['RightHolders'],
       },
     ),
     removeRightHolder: builder.mutation<void, { toPartyUuid: string; fromPartyUuid: string }>({
