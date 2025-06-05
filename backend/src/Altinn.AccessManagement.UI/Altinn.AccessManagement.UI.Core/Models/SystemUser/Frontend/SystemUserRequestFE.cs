@@ -19,6 +19,20 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         public Guid Id { get; set; }
 
         /// <summary>
+        /// PartyId of the SystemUser's Party (the customer that delegates rights to the systemuser).
+        /// </summary>
+        [Required]
+        [JsonPropertyName("partyId")]
+        public string PartyId { get; set; }
+
+        /// <summary>
+        /// PartyUuid of the SystemUser's Party (the customer that delegates rights to the systemuser).
+        /// </summary>
+        [Required]
+        [JsonPropertyName("partyUuid")]
+        public Guid PartyUuid { get; set; }
+
+        /// <summary>
         /// Initially the request is "new", 
         /// other values are "accepted", "rejected", "denied"
         /// </summary>

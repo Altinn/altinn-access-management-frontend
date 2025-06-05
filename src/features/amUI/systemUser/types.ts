@@ -35,6 +35,8 @@ type RequestStatus = 'New' | 'Accepted' | 'Rejected' | 'Denied' | 'Timedout';
 
 export interface SystemUserRequest {
   id: string;
+  partyId: string;
+  partyUuid: string;
   status: RequestStatus;
   redirectUrl?: string;
   system: RegisteredSystem;
