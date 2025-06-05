@@ -16,6 +16,7 @@
     "nn": "Dette er ei melding fra banken",
     "en": "This is a message from the bank"
   },
+  "redirectUrl": "https://smartbank.no/poa",
   "templateId": "poa",
   "templateVersion": 1
 }

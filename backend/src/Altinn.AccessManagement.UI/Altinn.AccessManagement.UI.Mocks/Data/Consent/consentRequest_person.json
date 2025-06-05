@@ -12,6 +12,7 @@
     }
   ],
   "requestmessage": null,
+  "redirectUrl": "https://smartbank.no/consent",
   "templateId": "sblanesoknad",
   "templateVersion": 1
 }
