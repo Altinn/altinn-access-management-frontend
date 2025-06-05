@@ -47,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// </summary>
         public required string RedirectUrl { get; set; }
 
-       /// <summary>
+        /// <summary>
         /// The consent template id.
         /// </summary>
         public required string TemplateId { get; set; }
