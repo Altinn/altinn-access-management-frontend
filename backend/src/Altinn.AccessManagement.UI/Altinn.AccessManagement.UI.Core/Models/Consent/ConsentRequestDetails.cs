@@ -43,8 +43,18 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         public Dictionary<string, string>? Requestmessage { get; set; }
 
         /// <summary>
-        /// The status of the consent request
+        /// Redirect url for the user to be redirected after consent is given or denied.
         /// </summary>
-        public ConsentRequestStatusType ConsentRequestStatus { get; set; }
+        public required string RedirectUrl { get; set; } = string.Empty;
+
+       /// <summary>
+        /// The consent template id.
+        /// </summary>
+        public string? TemplateId { get; set; }
+
+        /// <summary>
+        /// The version of the consent template.
+        /// </summary>
+        public int? TemplateVersion { get; set; }
     }
 }

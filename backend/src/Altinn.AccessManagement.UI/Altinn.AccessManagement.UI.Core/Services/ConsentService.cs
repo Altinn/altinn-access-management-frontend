@@ -47,7 +47,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             // GET all resources in request
-            string templateId = string.Empty;
             bool isOneTimeConsent = false;
             List<ConsentRightFE> rights = [];
             foreach (ConsentRight right in request.Value.ConsentRights)
@@ -57,7 +56,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 try 
                 {
                     ServiceResource resource = await _resourceRegistryClient.GetResource(resourceId);
-                    templateId = resource.ConsentTemplate;
                     isOneTimeConsent = resource.IsOneTimeConsent;
 
                     rights.Add(new()
@@ -75,7 +73,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             // GET metadata template used in resource
             List<ConsentTemplate> consentTemplates = await _consentClient.GetConsentTemplates(cancellationToken);
-            ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) => template.Id == templateId);
+            ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) => template.Id == request.Value.TemplateId && template.Version == request.Value.TemplateVersion);
             if (consentTemplate == null)
             {
                 return ConsentProblem.ConsentTemplateNotFound;
@@ -106,7 +104,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Id = request.Value.Id,
                 Rights = rights,
                 IsPoa = consentTemplate.IsPoa,
-                Status = request.Value.ConsentRequestStatus,
                 Title = ReplaceMetadataInTranslationsDict(title, staticMetadata),
                 Heading = ReplaceMetadataInTranslationsDict(heading, staticMetadata),
                 ServiceIntro = ReplaceMetadataInTranslationsDict(serviceIntro, staticMetadata),

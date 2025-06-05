@@ -3,7 +3,6 @@
   "from": "urn:altinn:organization:identifier-no:910493353",
   "to": "urn:altinn:organization:identifier-no:310202398",
   "handledBy": null,
-  "status": "created",
   "validTo": null,
   "consentRights": [
     {
@@ -16,5 +15,7 @@
     "nb": "Dette er en melding fra banken",
     "nn": "Dette er ei melding fra banken",
     "en": "This is a message from the bank"
-  }
+  },
+  "templateId": "poa",
+  "templateVersion": 1
 }

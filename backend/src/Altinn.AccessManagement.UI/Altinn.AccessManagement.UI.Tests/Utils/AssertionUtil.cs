@@ -571,7 +571,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Expiration, actual.Expiration);
             Assert.Equal(expected.ServiceIntro, actual.ServiceIntro);
             Assert.Equal(expected.IsPoa, actual.IsPoa);
-            Assert.Equal(expected.Status, actual.Status);
             AssertCollections(expected.Rights, actual.Rights, AssertEqual);
         }
 
