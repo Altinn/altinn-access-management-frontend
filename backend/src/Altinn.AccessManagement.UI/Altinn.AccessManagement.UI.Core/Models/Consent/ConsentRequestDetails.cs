@@ -25,12 +25,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// <summary>
         /// Defines the party that handles the consent request on behalf of the requesting party.
         /// </summary>
-        public required string? HandledBy { get; set; }
+        public string? HandledBy { get; set; }
 
         /// <summary>
         /// Defines how long the consent is valid
         /// </summary>
-        public required DateTimeOffset? ValidTo { get; set; }
+        public required DateTimeOffset ValidTo { get; set; }
 
         /// <summary>
         /// The consented rights.
@@ -45,16 +45,16 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// <summary>
         /// Redirect url for the user to be redirected after consent is given or denied.
         /// </summary>
-        public required string RedirectUrl { get; set; } = string.Empty;
+        public required string RedirectUrl { get; set; }
 
        /// <summary>
         /// The consent template id.
         /// </summary>
-        public string? TemplateId { get; set; }
+        public required string TemplateId { get; set; }
 
         /// <summary>
         /// The version of the consent template.
         /// </summary>
-        public int? TemplateVersion { get; set; }
+        public required int TemplateVersion { get; set; }
     }
 }
