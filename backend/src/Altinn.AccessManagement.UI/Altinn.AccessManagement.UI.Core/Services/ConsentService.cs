@@ -111,7 +111,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Title = ReplaceMetadataInTranslationsDict(title, staticMetadata),
                 Heading = ReplaceMetadataInTranslationsDict(heading, staticMetadata),
                 ServiceIntro = ReplaceMetadataInTranslationsDict(serviceIntro, staticMetadata),
-                HandledBy = ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata),
+                HandledBy = handledBy != null ? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata) : null,
                 ConsentMessage = request.Value.RequestMessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
                 Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata),
                 PartyName = isFromOrg ? from.Name : null
