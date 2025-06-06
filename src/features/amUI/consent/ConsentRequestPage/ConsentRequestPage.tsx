@@ -166,7 +166,7 @@ export const ConsentRequestPage = () => {
               <DsParagraph className={classes.expiration}>
                 {request.expiration[language]}
               </DsParagraph>
-              <DsParagraph>{request.handledBy[language]}</DsParagraph>
+              {request.handledBy && <DsParagraph>{request.handledBy[language]}</DsParagraph>}
               {approveConsentError && (
                 <ConsentRequestError
                   error={approveConsentError as { data: ProblemDetail }}
