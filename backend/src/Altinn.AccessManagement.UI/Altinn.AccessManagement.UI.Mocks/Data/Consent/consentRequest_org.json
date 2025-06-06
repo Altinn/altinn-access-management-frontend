@@ -11,7 +11,7 @@
       "metadata": null
     }
   ],
-  "requestmessage": {
+  "requestMessage": {
     "nb": "Dette er en melding fra banken",
     "nn": "Dette er ei melding fra banken",
     "en": "This is a message from the bank"
