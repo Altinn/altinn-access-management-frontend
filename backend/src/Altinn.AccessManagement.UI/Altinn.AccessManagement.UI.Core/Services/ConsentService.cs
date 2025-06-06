@@ -98,7 +98,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             var expirationText = isOneTimeConsent ? consentTemplate.Texts.ExpirationOneTime : consentTemplate.Texts.Expiration;
-            Dictionary<string, string> staticMetadata = await GetStaticMetadata(request.Value);
+            
+            Party to = await GetParty(request.Value.To);
+            Party from = await GetParty(request.Value.From);
+            Party handledBy = request.Value.HandledBy != null ? await GetParty(request.Value.HandledBy) : null;
+            Dictionary<string, string> staticMetadata = GetStaticMetadata(to, from, handledBy, request.Value.ValidTo);
             return new ConsentRequestFE()
             {
                 Id = request.Value.Id,
@@ -109,7 +113,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ServiceIntro = ReplaceMetadataInTranslationsDict(serviceIntro, staticMetadata),
                 HandledBy = ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata),
                 ConsentMessage = request.Value.RequestMessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
-                Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata)
+                Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata),
+                PartyName = isFromOrg ? from.Name : null
             };
         }
 
@@ -125,17 +130,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _consentClient.ApproveConsentRequest(consentRequestId, context, cancellationToken);
         }
 
-        private async Task<Dictionary<string, string>> GetStaticMetadata(ConsentRequestDetails request)
+        private static Dictionary<string, string> GetStaticMetadata(Party to, Party from, Party handledBy, DateTimeOffset requestValidTo)
         {
-            Party to = await GetParty(request.To);
-            Party from = await GetParty(request.From);
-            Party handledBy = request.HandledBy != null ? await GetParty(request.HandledBy) : null;
             return new()
             {
                 { "CoveredBy", to.Name },
                 { "OfferedBy", from.Name },
                 { "HandledBy", handledBy?.Name },
-                { "Expiration", request.ValidTo.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) }
+                { "Expiration", requestValidTo.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) }
             };
         }
 
@@ -147,7 +149,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private async Task<Party> GetParty(string urn)
         {
             string id = urn.Split(':').Last();
-            Party party = IsOrgUrn(urn) ? await _registerClient.GetPartyForOrganization(id) : await _registerClient.GetPartyForPerson(id);
+            Party party = IsOrgUrn(urn) 
+                ? await _registerClient.GetPartyForOrganization(id) 
+                : await _registerClient.GetPartyForPerson(id);
             return party;
         }
 
