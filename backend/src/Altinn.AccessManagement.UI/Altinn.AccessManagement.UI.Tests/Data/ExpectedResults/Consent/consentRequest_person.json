@@ -25,6 +25,7 @@
     "nn": "Samtykket er tidsavgrensa og vil gå ut 21.05.2025 11:11",
     "en": "The consent is time-limited, and will expire 21.05.2025 11:11"
   },
+  "partyName": null,
   "rights": [
     {
       "identifier": "consent-test-resource",

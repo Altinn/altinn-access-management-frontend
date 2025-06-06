@@ -25,6 +25,7 @@
     "nn": "Fullmakta gjeld bruk av tenestene éin gong",
     "en": "The power of attorney applies for one-time access to the service."
   },
+  "partyName": "LEPSØY OG TONSTAD",
   "rights": [
     {
       "identifier": "consent-test-resource-poa",
