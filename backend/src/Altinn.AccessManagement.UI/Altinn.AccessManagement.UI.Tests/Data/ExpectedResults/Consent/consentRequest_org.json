@@ -1,4 +1,5 @@
 {
+  "id": "7e540335-d82f-41e9-8b8f-619336d792b4",
   "isPoa": true,
   "title": {
     "nb": "Fullmakt til å handle på vegne av LEPSØY OG TONSTAD",
@@ -25,6 +26,7 @@
     "nn": "Fullmakta gjeld bruk av tenestene éin gong",
     "en": "The power of attorney applies for one-time access to the service."
   },
+  "handledBy": null,
   "partyName": "LEPSØY OG TONSTAD",
   "rights": [
     {

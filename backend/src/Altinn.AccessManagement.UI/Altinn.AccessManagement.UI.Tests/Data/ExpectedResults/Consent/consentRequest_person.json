@@ -1,4 +1,5 @@
 {
+  "id": "e2071c55-6adf-487b-af05-9198a230ed44",
   "isPoa": false,
   "title": {
     "nb": "Samtykke til bruk av dine data",
@@ -24,6 +25,11 @@
     "nb": "Samtykket er tidsavgrenset og vil gå ut 21.05.2025 11:11",
     "nn": "Samtykket er tidsavgrensa og vil gå ut 21.05.2025 11:11",
     "en": "The consent is time-limited, and will expire 21.05.2025 11:11"
+  },
+  "handledBy": {
+    "nb": "STA TOM TIGER AS foretar dette oppslaget på vegne av DISKRET NÆR TIGER AS.",
+    "nn": "STA TOM TIGER AS gjer dette oppslaget på vegne av DISKRET NÆR TIGER AS.",
+    "en": "STA TOM TIGER AS performs the lookup on behalf of DISKRET NÆR TIGER AS."
   },
   "partyName": null,
   "rights": [

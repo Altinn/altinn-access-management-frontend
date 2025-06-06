@@ -565,11 +565,13 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
+            Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Title, actual.Title);
             Assert.Equal(expected.Heading, actual.Heading);
             Assert.Equal(expected.ConsentMessage, actual.ConsentMessage);
             Assert.Equal(expected.Expiration, actual.Expiration);
             Assert.Equal(expected.ServiceIntro, actual.ServiceIntro);
+            Assert.Equal(expected.HandledBy, actual.HandledBy);
             Assert.Equal(expected.IsPoa, actual.IsPoa);
             Assert.Equal(expected.PartyName, actual.PartyName);
             AssertCollections(expected.Rights, actual.Rights, AssertEqual);
