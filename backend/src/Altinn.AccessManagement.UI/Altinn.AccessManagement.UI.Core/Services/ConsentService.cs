@@ -108,7 +108,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Heading = ReplaceMetadataInTranslationsDict(heading, staticMetadata),
                 ServiceIntro = ReplaceMetadataInTranslationsDict(serviceIntro, staticMetadata),
                 HandledBy = ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata),
-                ConsentMessage = request.Value.Requestmessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
+                ConsentMessage = request.Value.RequestMessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
                 Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata)
             };
         }
