@@ -19,6 +19,7 @@ import {
   useRejectConsentRequestMutation,
 } from '@/rtk/features/consentApi';
 import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
+import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import type { ConsentLanguage, ConsentRight, ProblemDetail } from '../types';
 import { transformText } from '../utils';
@@ -45,6 +46,8 @@ export const ConsentRequestPage = () => {
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
 
+  const { data: userData } = useGetUserInfoQuery();
+
   const {
     data: request,
     isLoading: isLoadingRequest,
@@ -62,11 +65,12 @@ export const ConsentRequestPage = () => {
   const [postRejectConsent, { error: rejectConsentError, isLoading: isRejectingConsent }] =
     useRejectConsentRequestMutation();
 
-  const isActionButtonDisabled = isApprovingConsent || isRejectingConsent; // TODO: har ikke consent request status??
+  const isActionButtonDisabled = isApprovingConsent || isRejectingConsent;
 
   const approveConsent = (): void => {
     if (!isActionButtonDisabled && request) {
-      postApproveConsent({ requestId: request.id })
+      const language = getLanguage(i18n.language);
+      postApproveConsent({ requestId: request.id, language })
         .unwrap()
         .then(() => logoutAndRedirect());
     }
@@ -92,6 +96,19 @@ export const ConsentRequestPage = () => {
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
 
+  if (isLoadingRequest) {
+    return <DsSpinner aria-label={t('consent_request.loading_consent')} />;
+  }
+
+  if (loadRequestError) {
+    return (
+      <ConsentRequestError
+        error={loadRequestError as { data: ProblemDetail }}
+        defaultError='En vanlig feil'
+      />
+    );
+  }
+
   return (
     <RootProvider>
       <Layout
@@ -112,19 +129,12 @@ export const ConsentRequestPage = () => {
           },
           logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
           currentAccount: {
-            name: 'Martin',
-            type: 'person',
-            id: '213',
+            name: request?.partyName ?? (userData?.name || ''),
+            type: request?.partyName ? 'company' : 'person',
+            id: '',
           },
         }}
       >
-        {isLoadingRequest && <DsSpinner aria-label={t('consent_request.loading_consent')} />}
-        {loadRequestError && (
-          <ConsentRequestError
-            error={loadRequestError as { data: ProblemDetail }}
-            defaultError='En vanlig feil'
-          />
-        )}
         {request && (
           <>
             <div className={classes.consentBlock}>

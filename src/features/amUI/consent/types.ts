@@ -20,6 +20,7 @@ export interface ConsentRequest {
   consentMessage: ConsentLanguage;
   expiration: ConsentLanguage;
   handledBy: ConsentLanguage;
+  partyName?: string;
 }
 
 export interface ProblemDetail {
