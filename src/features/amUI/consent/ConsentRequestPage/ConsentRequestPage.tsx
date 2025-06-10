@@ -22,22 +22,10 @@ import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import type { ConsentLanguage, ConsentRight, ProblemDetail } from '../types';
-import { transformText } from '../utils';
+import { getLanguage, transformText } from '../utils';
 
 import classes from './ConsentRequestPage.module.css';
 import { ConsentRequestError } from './ConsentRequestError';
-
-const getLanguage = (language: string | null): keyof ConsentLanguage => {
-  switch (language) {
-    case 'no_nb':
-      return 'nb';
-    case 'no_nn':
-      return 'nn';
-    case 'en':
-      return 'en';
-  }
-  return 'nb'; // Default to Norwegian if no cookie is set
-};
 
 export const ConsentRequestPage = () => {
   const { t, i18n } = useTranslation();
@@ -47,6 +35,7 @@ export const ConsentRequestPage = () => {
   const requestId = searchParams.get('id') ?? '';
 
   const { data: userData } = useGetUserInfoQuery();
+  const language = getLanguage(i18n.language);
 
   const {
     data: request,
@@ -69,7 +58,6 @@ export const ConsentRequestPage = () => {
 
   const approveConsent = (): void => {
     if (!isActionButtonDisabled && request) {
-      const language = getLanguage(i18n.language);
       postApproveConsent({ requestId: request.id, language })
         .unwrap()
         .then(() => logoutAndRedirect());
@@ -88,8 +76,6 @@ export const ConsentRequestPage = () => {
     window.location.assign(`${import.meta.env.BASE_URL}/request/${request?.id}/logout`);
   };
 
-  const language = getLanguage(i18n.language);
-
   const onChangeLocale = (event: ChangeEvent<HTMLInputElement>) => {
     const newLocale = event.target.value;
     i18n.changeLanguage(newLocale);
@@ -104,7 +90,7 @@ export const ConsentRequestPage = () => {
     return (
       <ConsentRequestError
         error={loadRequestError as { data: ProblemDetail }}
-        defaultError='En vanlig feil'
+        defaultError='consent_request.load_consent_error'
       />
     );
   }
@@ -112,7 +98,7 @@ export const ConsentRequestPage = () => {
   return (
     <RootProvider>
       <Layout
-        color={'company'}
+        color={'neutral'}
         theme='subtle'
         header={{
           menu: {
@@ -170,13 +156,21 @@ export const ConsentRequestPage = () => {
               {approveConsentError && (
                 <ConsentRequestError
                   error={approveConsentError as { data: ProblemDetail }}
-                  defaultError={t('consent_request.approve_error')}
+                  defaultError={
+                    request.isPoa
+                      ? t('consent_request.approve_error_poa')
+                      : t('consent_request.approve_error')
+                  }
                 />
               )}
               {rejectConsentError && (
                 <ConsentRequestError
                   error={rejectConsentError as { data: ProblemDetail }}
-                  defaultError={t('consent_request.reject_error')}
+                  defaultError={
+                    request.isPoa
+                      ? t('consent_request.reject_error_poa')
+                      : t('consent_request.reject_error')
+                  }
                 />
               )}
               <div className={classes.buttonRow}>
@@ -191,9 +185,9 @@ export const ConsentRequestPage = () => {
                     : t('consent_request.approve_consent')}
                 </DsButton>
                 <DsButton
-                  variant='secondary'
+                  variant='tertiary'
                   aria-disabled={isActionButtonDisabled}
-                  loading={isApprovingConsent}
+                  loading={isRejectingConsent}
                   onClick={rejectConsent}
                 >
                   {request.isPoa

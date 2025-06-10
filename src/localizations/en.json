@@ -582,6 +582,7 @@
   "consent_request": {
     "page_title": "Aprovve consent/power of attorney - Altinn",
     "loading_consent": "Loading request...",
+    "load_consent_error": "Could not load consent/power of attorney",
     "approve_consent": "Yes, I give consent",
     "reject_consent": "No, I do not give consent",
     "approve_poa": "Yes, I give power of attorney",

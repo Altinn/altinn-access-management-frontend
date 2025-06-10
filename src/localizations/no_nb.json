@@ -580,6 +580,7 @@
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
     "loading_consent": "Laster forespørsel...",
+    "load_consent_error": "Kunne ikke laste samtykke/fullmakt",
     "approve_consent": "Ja, jeg gir samtykke",
     "reject_consent": "Nei, jeg gir ikke samtykke",
     "approve_poa": "Ja, jeg gir fullmakt",
