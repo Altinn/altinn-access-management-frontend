@@ -103,7 +103,6 @@ describe('SystemUserOverviewPage', () => {
     renderSystemUserOverviewPage();
 
     const systemUserBadge = await screen.findByText('systemuser_overviewpage.new_system_user');
-
     expect(systemUserBadge).toBeInTheDocument();
   });
 
@@ -113,14 +112,19 @@ describe('SystemUserOverviewPage', () => {
       http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/${testPartyId}`, () => {
         return HttpResponse.json(systemUsers);
       }),
+      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/agent/${testPartyId}`, () => {
+        return HttpResponse.json([]);
+      }),
     );
     renderSystemUserOverviewPage();
 
-    const systemUserActionBar = await screen.findAllByText('SmartCloud');
-    await user.click(systemUserActionBar[0]);
+    const heading = await screen.findByRole('heading', { name: 'SmartCloud', level: 2 });
+    const header = heading.closest('header');
+    const link = header?.querySelector('a');
+    expect(link).toBeInTheDocument();
+    await user.click(link!);
 
     const mockedContent = await screen.findByText(mockedDetailsPageContent);
-
     expect(mockedContent).toBeInTheDocument();
   });
 
@@ -143,17 +147,22 @@ describe('SystemUserOverviewPage', () => {
   test('should navigate to agent system user when agent system user is clicked', async () => {
     const user = userEvent.setup();
     server.use(
+      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/${testPartyId}`, () => {
+        return HttpResponse.json([]);
+      }),
       http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/agent/${testPartyId}`, () => {
         return HttpResponse.json(agentSystemUsers);
       }),
     );
     renderSystemUserOverviewPage();
 
-    const systemUserActionBar = await screen.findAllByText('Tripletex');
-    await user.click(systemUserActionBar[0]);
+    const heading = await screen.findByRole('heading', { name: 'Tripletex', level: 2 });
+    const header = heading.closest('header');
+    const link = header?.querySelector('a');
+    expect(link).toBeInTheDocument();
+    await user.click(link!);
 
     const mockedContent = await screen.findByText(mockedAgentDetailsPageContent);
-
     expect(mockedContent).toBeInTheDocument();
   });
 });

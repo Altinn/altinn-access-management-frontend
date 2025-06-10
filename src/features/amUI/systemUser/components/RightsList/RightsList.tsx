@@ -75,13 +75,16 @@ export const RightsList = ({
                 titleAs: 'h3',
                 size: 'md',
                 id: accessPackage.id,
-                title: accessPackage.name,
-                description:
-                  accessPackage.resources.length === 1
-                    ? t('systemuser_detailpage.accesspackage_resources_list_singular')
-                    : t('systemuser_detailpage.accesspackage_resources_list_plural', {
-                        resourcesCount: accessPackage.resources.length,
-                      }),
+                title: { children: accessPackage.name, as: 'h3' },
+                description: {
+                  as: 'p',
+                  children:
+                    accessPackage.resources.length === 1
+                      ? t('systemuser_detailpage.accesspackage_resources_list_singular')
+                      : t('systemuser_detailpage.accesspackage_resources_list_plural', {
+                          resourcesCount: accessPackage.resources.length,
+                        }),
+                },
                 onClick: () => onSelectAccessPackage(accessPackage),
               };
             })}

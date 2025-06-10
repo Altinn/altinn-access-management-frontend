@@ -28,6 +28,7 @@ const getAccountType = (type: string): 'company' | 'person' => {
 
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t, i18n } = useTranslation();
+  const isSm = useIsTabletOrSmaller();
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
   const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery();
@@ -40,7 +41,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
 
-  const isSm = useIsTabletOrSmaller();
   const headerLinks: MenuItemProps[] = [
     {
       groupId: 'apps',
