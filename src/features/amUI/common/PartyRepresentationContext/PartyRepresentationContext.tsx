@@ -1,14 +1,21 @@
 import type { JSX } from 'react';
 import { createContext, useContext } from 'react';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 import { useGetPartyByUUIDQuery, type Party } from '@/rtk/features/lookupApi';
 import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+
+import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
+import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 interface PartyRepresentationProviderProps {
   children: JSX.Element | JSX.Element[];
   fromPartyUuid?: string;
   toPartyUuid?: string;
   actingPartyUuid?: string;
+  goBackLink?: string;
 }
 
 export interface PartyRepresentationContextOutput {
@@ -16,7 +23,8 @@ export interface PartyRepresentationContextOutput {
   toParty?: Party;
   actingParty?: Party;
   selfParty?: Party;
-  isLoading: boolean;
+  isLoading?: boolean;
+  isError?: boolean;
 }
 
 export const PartyRepresentationContext = createContext<PartyRepresentationContextOutput | null>(
@@ -43,37 +51,42 @@ export const PartyRepresentationProvider = ({
     throw new Error('PartyRepresentationProvider must be used with an acting party UUID');
   }
 
-  const { data: connections, isLoading: isConnectionLoading } = useGetRightHoldersQuery(
+  const {
+    data: connections,
+    isLoading: isConnectionLoading,
+    error,
+  } = useGetRightHoldersQuery(
     { fromUuid: fromPartyUuid ?? '', toUuid: toPartyUuid ?? '', partyUuid: fromPartyUuid ?? '' },
     { skip: !fromPartyUuid || !toPartyUuid },
   );
 
-  if (!isConnectionLoading && connections?.length === 0) {
-    throw new Error(
-      'Cannot use PartyRepresentationProvider without a connection between the two provided parties',
-    );
-  }
+  const invalidConnection =
+    !isConnectionLoading &&
+    !!fromPartyUuid &&
+    !!toPartyUuid &&
+    (connections?.length === 0 || connections === undefined);
 
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetUserInfoQuery();
   const { data: fromParty, isLoading: fromPartyIsLoading } = useGetPartyByUUIDQuery(
     fromPartyUuid ?? '',
-    { skip: isConnectionLoading || (!!toPartyUuid && !connections) },
+    { skip: isConnectionLoading || invalidConnection || (!!toPartyUuid && !connections) },
   );
   const { data: toParty, isLoading: toPartyIsLoading } = useGetPartyByUUIDQuery(toPartyUuid ?? '', {
-    skip: isConnectionLoading || (!!fromPartyUuid && !connections),
+    skip: isConnectionLoading || invalidConnection || (!!fromPartyUuid && !connections),
   });
 
   return (
     <PartyRepresentationContext.Provider
       value={{
-        fromParty,
-        toParty,
+        fromParty: invalidConnection ? undefined : fromParty,
+        toParty: invalidConnection ? undefined : toParty,
         actingParty: fromPartyUuid == actingPartyUuid ? fromParty : toParty,
         selfParty: currentUser?.party,
         isLoading: fromPartyIsLoading || toPartyIsLoading || currentUserIsLoading,
+        isError: invalidConnection,
       }}
     >
-      {children}
+      {invalidConnection ? connectionErrorAlert(error) : children}
     </PartyRepresentationContext.Provider>
   );
 };
@@ -84,4 +97,24 @@ export const usePartyRepresentation = (): PartyRepresentationContextOutput => {
     throw new Error('usePartyRepresentation must be used within a PartyRepresentationProvider');
   }
   return context;
+};
+
+const connectionErrorAlert = (error: FetchBaseQueryError | SerializedError | undefined) => {
+  if (error) {
+    const errorDetails = createErrorDetails(error);
+    return (
+      <DsAlert data-color='danger'>
+        <TechnicalErrorParagraphs
+          status={errorDetails?.status ?? ''}
+          time={errorDetails?.time ?? ''}
+        />
+      </DsAlert>
+    );
+  }
+
+  return (
+    <DsAlert data-color='warning'>
+      <DsParagraph>Ojsann, her var det ingenting å se.</DsParagraph>
+    </DsAlert>
+  );
 };
