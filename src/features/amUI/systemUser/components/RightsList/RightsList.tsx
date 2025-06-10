@@ -1,12 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  AccessPackageList,
-  DsButton,
-  DsDialog,
-  DsHeading,
-  ResourceList,
-} from '@altinn/altinn-components';
+import { AccessPackageList, DsButton, DsDialog, DsHeading, List } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 import { getButtonIconSize } from '@/resources/utils';
@@ -72,12 +66,11 @@ export const RightsList = ({
             items={accessPackages.map((accessPackage) => {
               return {
                 as: 'button',
-                titleAs: 'h3',
                 size: 'md',
                 id: accessPackage.id,
                 title: { children: accessPackage.name, as: 'h3' },
                 description: {
-                  as: 'p',
+                  as: 'h4',
                   children:
                     accessPackage.resources.length === 1
                       ? t('systemuser_detailpage.accesspackage_resources_list_singular')
@@ -106,17 +99,20 @@ export const RightsList = ({
                   })}
             </DsHeading>
           )}
-          <ResourceList
+          <List
             size='md'
             items={resources.map((resource) => {
               return {
                 id: resource.identifier,
                 as: 'button',
-                titleAs: 'h3',
-                ownerLogoUrl: resource.resourceOwnerLogoUrl,
-                ownerLogoUrlAlt: resource.resourceOwnerName,
-                ownerName: resource.resourceOwnerName,
-                resourceName: resource.title,
+                title: { as: 'h3', children: resource.title },
+                description: { as: 'h4', children: resource.resourceOwnerName },
+                icon: {
+                  name: resource.resourceOwnerName,
+                  imageUrl: resource.resourceOwnerLogoUrl,
+                  imageUrlAlt: resource.resourceOwnerName,
+                  type: 'company',
+                },
                 onClick: () => onSelectResource(resource),
               };
             })}
