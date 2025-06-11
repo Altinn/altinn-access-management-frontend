@@ -363,7 +363,9 @@
     "organization": "Organization",
     "modal_title": "Add new person or organization",
     "trigger_button": "Add user",
-    "add_button": "Add user"
+    "add_person_button": "Add person",
+    "add_org_button": "Add organization",
+    "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future."
   },
   "a2Alerts": {
     "launchAlertHeading": "We are renewing Altinn",

@@ -1,4 +1,4 @@
-import { Button, TextField } from '@altinn/altinn-components';
+import { Button, DsAlert, TextField } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { t } from 'i18next';
 
@@ -13,6 +13,7 @@ export const NewPersonContent = () => {
   const [errorTime, setErrorTime] = useState<string>('');
 
   const [validateNewPerson, { error, isError, isLoading }] = useValidateNewUserPersonMutation();
+  const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
 
   const errorDetails =
     isError && error && 'status' in error
@@ -32,6 +33,10 @@ export const NewPersonContent = () => {
         setErrorTime(new Date().toISOString());
       });
   };
+
+  if (displayLimitedPreviewLaunch) {
+    return <DsAlert data-color='info'>{t('new_user_modal.limited_preview_message')}</DsAlert>;
+  }
 
   return (
     <div className={classes.newPersonContent}>
@@ -59,7 +64,7 @@ export const NewPersonContent = () => {
           loading={isLoading}
           onClick={navigateIfValidPerson}
         >
-          {t('new_user_modal.add_button')}
+          {t('new_user_modal.add_person_button')}
         </Button>
       </div>
     </div>

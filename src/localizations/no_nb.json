@@ -362,7 +362,9 @@
     "organization": "Virksomhet",
     "modal_title": "Legg til ny person eller virksomhet",
     "trigger_button": "Legg til bruker",
-    "add_button": "Legg til bruker"
+    "add_person_button": "Legg til person",
+    "add_org_button": "Legg til virksomhet",
+    "limited_preview_message": "Du kan dessverre ikke legge til personer helt enda. Dette vil komme senere."
   },
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyer Altinn",

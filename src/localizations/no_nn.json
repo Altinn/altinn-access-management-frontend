@@ -359,7 +359,9 @@
     "organization": "Virksemnd",
     "modal_title": "Legg til ny person eller virksemnd",
     "trigger_button": "Legg til brukar",
-    "add_button": "Legg til brukar"
+    "add_person_button": "Legg til person",
+    "add_org_button": "Legg til virksomheit",
+    "limited_preview_message": "Du kan diverre ikkje legge til personar heilt enda. Dette vil komme seinare."
   },
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyer Altinn",

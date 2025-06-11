@@ -2,13 +2,13 @@ import { Button, TextField, DsParagraph } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { t } from 'i18next';
 
+import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
+import { useAddRightHolderMutation } from '@/rtk/features/userInfoApi';
+
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-
-import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
-import { useAddRightHolderMutation } from '@/rtk/features/userInfoApi';
 
 export const NewOrgContent = () => {
   const [orgNumber, setOrgNumber] = useState('');
@@ -70,7 +70,7 @@ export const NewOrgContent = () => {
           loading={isLoading}
           onClick={onAdd}
         >
-          {t('new_user_modal.add_button')}
+          {t('new_user_modal.add_org_button')}
         </Button>
       </div>
     </div>

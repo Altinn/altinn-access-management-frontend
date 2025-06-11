@@ -13,10 +13,15 @@ import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 interface PartyRepresentationProviderProps {
+  /** The children to be rendered with the provided party-representation data */
   children: JSX.Element | JSX.Element[];
+  /** The uuid of the party which is performing access aministration */
   actingPartyUuid: string;
+  /** The uuid of the party whose accesses is provided */
   fromPartyUuid?: string;
+  /** The uuid of the party that has/is reveiving accesses */
   toPartyUuid?: string;
+  /** On connection error, the user will be provided with a link to this url in order to get them to a page with a valid state */
   returnToUrlOnError?: string;
 }
 
@@ -38,8 +43,10 @@ export const PartyRepresentationContext = createContext<PartyRepresentationConte
 /// involved in the delegation process. The context is then used by other components to access
 /// the party information without having to pass it down through props.
 ///
-/// It is important to note that this context uses the `useGetPartyByUUIDQuery` hook, and thus
-/// must not be used outside of internal applications.
+/// If both `fromPartyUuid` and `toPartyUuid` are not provided, an error is thrown.
+/// If `actingPartyUuid` is not provided, an error is thrown.
+/// If the connection between the parties is invalid, an error alert is displayed
+/// and the children are not rendered. The error alert provides details about the error and a link to return to a valid state if `returnToUrlOnError` is provided.
 export const PartyRepresentationProvider = ({
   children,
   fromPartyUuid,
