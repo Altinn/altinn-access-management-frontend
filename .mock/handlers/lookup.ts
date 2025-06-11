@@ -9,8 +9,7 @@ export const lookupHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
   }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/lookup/party/:id`, ({ params }) => {
     const { id } = params;
-
-    return HttpResponse.json({
+    const defaultReturn = {
       partyId: 51329012,
       partyUuid: id,
       partyTypeName: 2,
@@ -38,7 +37,28 @@ export const lookupHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         unitStatus: 'N',
       },
       childParties: null,
-    });
+    };
+
+    if (id === 'POMPØS_TIGER') {
+      return HttpResponse.json({
+        ...defaultReturn,
+        name: 'SAMLET POMPØS TIGER AS',
+      });
+    }
+    if (id === 'SMISKENDE_TIGER') {
+      return HttpResponse.json({
+        ...defaultReturn,
+        name: 'SUBTIL SMISKENDE TIGER AS',
+      });
+     
+    }
+    if (id === '789') {
+       return HttpResponse.json({
+        ...defaultReturn,
+        name: 'ELASTISK SART ISBJØRN SA',
+      });
+    }
+    return HttpResponse.json(defaultReturn);
   }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/lookup/party`, () => {
     return HttpResponse.json({

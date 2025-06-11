@@ -298,14 +298,28 @@
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
   "delete_user": {
-    "trigger_button": "Slett brukar",
+   "trigger_button": "Slett brukar",
     "heading": "Er du sikker på at du vil slette denne brukaren?",
-    "message": "{{user_name}} vil miste alle fullmaktar dei har for {{reportee_name}}. Denne handlinga kan du ikkje angre.",
+    "message": "<p>{{to_name}} vil miste alle fullmakter dei har for {{from_name}}. <i>Denne handlinga kan ikkje angres.</i></p>",
     "limited_deletion_heading": "Ønskjer du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
-    "limited_deletion_message": "<p>{{user_name}} har fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast fullstendig frå {{reportee_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p> Ønskjer du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angrast.</i></p>",
+    "limited_deletion_message": "<p>{{to_name}} har fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast fullstendig frå {{from_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p>Ønskjer du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angres.</i></p>",
     "deletion_not_allowed_heading": "Brukaren kan ikkje slettast",
-    "deletion_not_allowed_message": "{{user_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{reportee_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.",
-    "yes_button": "Ja, slett"
+    "deletion_not_allowed_message": "<p>{{to_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{from_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p>",
+    "yes_button": "Ja, slett",
+    "yourself_trigger_button": "Slett alle tilgangar",
+    "yourself_heading": "Er du sikker på at du vil slette alle tilgangane dine?",
+    "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikkje lenger ha tilgang til deira innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angres.</i></p>",
+    "yourself_limited_deletion_heading": "Ønskjer du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
+    "yourself_limited_deletion_message": "<p>Rettane dine kan ikkje fjernast heilt frå {{from_name}} i Altinn ettersom dei er knytte til roller i Einingsregisteret. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p>Ønskjer du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angres.</i></p>",
+    "yourself_deletion_not_allowed_heading": "Tilgangane dine kan ikkje slettast",
+    "yourself_deletion_not_allowed_message": "<p>Du har berre fullmakter gjennom dine roller i Einingsregisteret og kan difor ikkje slettast frå {{from_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p>",
+    "reportee_trigger_button": "Slett alle tilgangar",
+    "reportee_heading": "Er du sikker på at du vil slette alle tilgangane dine?",
+    "reportee_message": "<p>{{to_name}} vil miste alle sine fullmakter for {{from_name}}. Dei vil ikkje lenger ha tilgang til deira innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angres.</i></p>",
+    "reportee_limited_deletion_heading": "Ønskjer du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
+    "reportee_limited_deletion_message": "<p>{{to_name}} sine rettar kan ikkje fjernast heilt frå {{from_name}} i Altinn ettersom dei er knytte til roller i Einingsregisteret. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p>Ønskjer du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angres.</i></p>",
+    "reportee_deletion_not_allowed_heading": "Tilgangane dine kan ikkje slettast",
+    "reportee_deletion_not_allowed_message": "<p>{{to_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{from_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p>"
   },
   "reportee_rights_page": {
     "page_title": "Våre tilganger hos andre - Altinn",

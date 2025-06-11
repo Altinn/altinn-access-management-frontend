@@ -16,6 +16,43 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       ],
     });
   }),
+  http.get(
+    `${ACCESSMANAGEMENT_BASE_URL}/user/rightholders?party=:partyId&from=:fromId&to=:toId`,
+    ({ request }) => {
+      const url = new URL(request.url);
+      const fromId = url.searchParams.get('from');
+      const defaultReturn = {
+        partyUuid: '3d8b34c3-df0d-4dcc-be12-e788ce414744',
+        partyType: 'Organization',
+        name: 'DIGITALISERINGSDIREKTORATET',
+        registryRoles: null,
+        roles: ['Rettighetshaver'],
+        organizationNumber: null,
+        unitType: null,
+        inheritingUsers: [],
+      };
+
+      if (fromId === 'mixed_roles') {
+        return HttpResponse.json([
+          {
+            ...defaultReturn,
+            roles: ['Rettighetshaver', 'Tilgangsstyrer'],
+          },
+        ]);
+      }
+
+      if (fromId === 'admin_roles') {
+        return HttpResponse.json([
+          {
+            ...defaultReturn,
+            roles: ['Tilgangsstyrer'],
+          },
+        ]);
+      }
+      
+      return HttpResponse.json([defaultReturn]);
+    },
+  ),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/profile`, () => {
     return HttpResponse.json({
       userId: 20010996,
@@ -25,7 +62,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       party: {
         partyId: 50789533,
         partyUuid: '167536b5-f8ed-4c5a-8f48-0279507e53ae',
-        name: 'SITRONGUL MEDALJONG',
+        name: 'SITRONGUL MEDALJONG (me)',
       },
       userType: 1,
       profileSettingPreference: {
