@@ -36,6 +36,7 @@ export const ReporteeRightsPage = () => {
             fromPartyUuid={reporteeUuid ?? ''}
             toPartyUuid={getCookie('AltinnPartyUuid')}
             actingPartyUuid={getCookie('AltinnPartyUuid')}
+            returnToUrlOnError={`/${amUIPath.Reportees}`}
           >
             <DelegationModalProvider>
               <PageContainer backUrl={`/${amUIPath.Reportees}`}>

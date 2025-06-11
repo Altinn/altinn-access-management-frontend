@@ -39,6 +39,7 @@ export const UserRightsPage = () => {
             actingPartyUuid={getCookie('AltinnPartyUuid')}
             fromPartyUuid={getCookie('AltinnPartyUuid')}
             toPartyUuid={id ?? undefined}
+            returnToUrlOnError={`/${amUIPath.Users}`}
           >
             <DelegationModalProvider>
               <PageContainer

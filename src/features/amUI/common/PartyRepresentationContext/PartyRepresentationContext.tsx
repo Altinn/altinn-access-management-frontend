@@ -3,6 +3,8 @@ import { createContext, useContext } from 'react';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { Link } from 'react-router';
+import { t } from 'i18next';
 
 import { useGetPartyByUUIDQuery, type Party } from '@/rtk/features/lookupApi';
 import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
@@ -12,10 +14,10 @@ import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorPa
 
 interface PartyRepresentationProviderProps {
   children: JSX.Element | JSX.Element[];
+  actingPartyUuid: string;
   fromPartyUuid?: string;
   toPartyUuid?: string;
-  actingPartyUuid?: string;
-  goBackLink?: string;
+  returnToUrlOnError?: string;
 }
 
 export interface PartyRepresentationContextOutput {
@@ -43,6 +45,7 @@ export const PartyRepresentationProvider = ({
   fromPartyUuid,
   toPartyUuid,
   actingPartyUuid,
+  returnToUrlOnError,
 }: PartyRepresentationProviderProps) => {
   if (!toPartyUuid && !fromPartyUuid) {
     throw new Error('PartyRepresentationProvider must be used with at least one party UUID');
@@ -86,7 +89,7 @@ export const PartyRepresentationProvider = ({
         isError: invalidConnection,
       }}
     >
-      {invalidConnection ? connectionErrorAlert(error) : children}
+      {invalidConnection ? connectionErrorAlert(error, returnToUrlOnError) : children}
     </PartyRepresentationContext.Provider>
   );
 };
@@ -99,7 +102,10 @@ export const usePartyRepresentation = (): PartyRepresentationContextOutput => {
   return context;
 };
 
-const connectionErrorAlert = (error: FetchBaseQueryError | SerializedError | undefined) => {
+const connectionErrorAlert = (
+  error: FetchBaseQueryError | SerializedError | undefined,
+  returnToUrl?: string,
+) => {
   if (error) {
     const errorDetails = createErrorDetails(error);
     return (
@@ -114,7 +120,10 @@ const connectionErrorAlert = (error: FetchBaseQueryError | SerializedError | und
 
   return (
     <DsAlert data-color='warning'>
-      <DsParagraph>Ojsann, her var det ingenting å se.</DsParagraph>
+      <DsParagraph>
+        {t('error_page.user_connection_error')}
+        {returnToUrl && <Link to={returnToUrl}>{t('common.go_back')}</Link>}
+      </DsParagraph>
     </DsAlert>
   );
 };
