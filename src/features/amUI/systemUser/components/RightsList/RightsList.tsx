@@ -68,9 +68,10 @@ export const RightsList = ({
                 as: 'button',
                 size: 'md',
                 id: accessPackage.id,
-                title: { children: accessPackage.name, as: 'h3' },
+                ariaLabel: accessPackage.name,
+                title: { as: 'h3', children: accessPackage.name },
                 description: {
-                  as: 'h4',
+                  as: 'div',
                   children:
                     accessPackage.resources.length === 1
                       ? t('systemuser_detailpage.accesspackage_resources_list_singular')
@@ -105,8 +106,9 @@ export const RightsList = ({
               return {
                 id: resource.identifier,
                 as: 'button',
+                ariaLabel: resource.title,
                 title: { as: 'h3', children: resource.title },
-                description: { as: 'h4', children: resource.resourceOwnerName },
+                description: { as: 'div', children: resource.resourceOwnerName },
                 icon: {
                   name: resource.resourceOwnerName,
                   imageUrl: resource.resourceOwnerLogoUrl,

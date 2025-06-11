@@ -118,11 +118,8 @@ describe('SystemUserOverviewPage', () => {
     );
     renderSystemUserOverviewPage();
 
-    const heading = await screen.findByRole('heading', { name: 'SmartCloud', level: 2 });
-    const header = heading.closest('header');
-    const link = header?.querySelector('a');
-    expect(link).toBeInTheDocument();
-    await user.click(link!);
+    const systemUserActionBar = await screen.findByRole('link', { name: 'SmartCloud' });
+    await user.click(systemUserActionBar);
 
     const mockedContent = await screen.findByText(mockedDetailsPageContent);
     expect(mockedContent).toBeInTheDocument();
@@ -156,11 +153,8 @@ describe('SystemUserOverviewPage', () => {
     );
     renderSystemUserOverviewPage();
 
-    const heading = await screen.findByRole('heading', { name: 'Tripletex', level: 2 });
-    const header = heading.closest('header');
-    const link = header?.querySelector('a');
-    expect(link).toBeInTheDocument();
-    await user.click(link!);
+    const systemUserActionBar = await screen.findByRole('link', { name: 'Tripletex' });
+    await user.click(systemUserActionBar);
 
     const mockedContent = await screen.findByText(mockedAgentDetailsPageContent);
     expect(mockedContent).toBeInTheDocument();

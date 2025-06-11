@@ -127,9 +127,9 @@ const SystemUserList = ({ systemUsers, isAgentList }: SystemUserListProps) => {
       items={systemUsers?.map((systemUser) => {
         const isNew = newlyCreatedId === systemUser.id;
         return {
-          title: systemUser.integrationTitle,
-          description: systemUser.system.systemVendorOrgName,
-          titleAs: 'h3',
+          title: { as: 'h3', children: systemUser.integrationTitle },
+          ariaLabel: systemUser.integrationTitle,
+          description: { as: 'div', children: systemUser.system.systemVendorOrgName },
           as: (props) => (
             <Link
               to={

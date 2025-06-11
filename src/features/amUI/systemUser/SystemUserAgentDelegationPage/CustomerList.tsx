@@ -92,13 +92,18 @@ export const CustomerList = ({
         className={classes.customerList}
         items={filteredSearchList.slice(startIndex, endIndex)?.map((customer) => {
           return {
-            title: customer.name,
+            title: { as: 'h3', children: customer.name },
             interactive: false,
             id: customer.id,
-            titleAs: 'h3',
             as: 'div',
-            avatar: { type: 'company', name: customer.name },
-            description: `${t('common.org_nr')} ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`,
+            icon: {
+              type: 'company',
+              name: customer.name,
+            },
+            description: {
+              as: 'div',
+              children: `${t('common.org_nr')} ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`,
+            },
             controls: (
               <ListControls
                 customer={customer}

@@ -47,7 +47,7 @@ export const AccessPackageInfo = ({
           return {
             id: resource.identifier,
             as: 'button',
-            titleAs: 'h3',
+            ariaLabel: resource.title,
             ownerLogoUrl: resource.resourceOwnerLogoUrl,
             ownerLogoUrlAlt: resource.resourceOwnerName ?? '',
             ownerName: resource.resourceOwnerName ?? '',

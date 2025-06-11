@@ -109,12 +109,8 @@ describe('RightsList', () => {
       />,
     );
 
-    const heading = screen.getByRole('heading', { name: accessPackage.name });
-    const listItem = heading.closest('li');
-    expect(listItem).toBeInTheDocument();
-    const button = listItem?.querySelector('button[data-interactive="true"]');
-    expect(button).toBeInTheDocument();
-    await user.click(button!);
+    const accessPackageListItem = screen.getByRole('button', { name: accessPackage.name });
+    await user.click(accessPackageListItem);
 
     const accessPackageDescription = screen.getByText(accessPackage.description);
     expect(accessPackageDescription).toBeInTheDocument();
@@ -129,12 +125,8 @@ describe('RightsList', () => {
       />,
     );
 
-    const heading = screen.getByRole('heading', { name: accessPackage.name });
-    const listItem = heading.closest('li');
-    expect(listItem).toBeInTheDocument();
-    const button = listItem?.querySelector('button[data-interactive="true"]');
-    expect(button).toBeInTheDocument();
-    await user.click(button!);
+    const accessPackageListItem = screen.getByRole('button', { name: accessPackage.name });
+    await user.click(accessPackageListItem);
 
     const resourcesHeader = screen.getByText(
       'systemuser_detailpage.accesspackage_resources_singular',
@@ -151,12 +143,8 @@ describe('RightsList', () => {
       />,
     );
 
-    const heading = screen.getByRole('heading', { name: accessPackage2.name });
-    const listItem = heading.closest('li');
-    expect(listItem).toBeInTheDocument();
-    const button = listItem?.querySelector('button[data-interactive="true"]');
-    expect(button).toBeInTheDocument();
-    await user.click(button!);
+    const accessPackageListItem = screen.getByRole('button', { name: accessPackage2.name });
+    await user.click(accessPackageListItem);
 
     const resourcesHeader = screen.getByText(
       'systemuser_detailpage.accesspackage_resources_plural',
@@ -173,13 +161,8 @@ describe('RightsList', () => {
       />,
     );
 
-    // Find and click the resource item
-    const heading = screen.getByRole('heading', { name: resource2.title });
-    const listItem = heading.closest('li');
-    expect(listItem).toBeInTheDocument();
-    const button = listItem?.querySelector('button[data-interactive="true"]');
-    expect(button).toBeInTheDocument();
-    await user.click(button!);
+    const resourceListItem = screen.getByRole('button', { name: resource2.title });
+    await user.click(resourceListItem);
 
     const resourceDescription = screen.getByText(resource2.description);
     expect(resourceDescription).toBeInTheDocument();
@@ -194,19 +177,11 @@ describe('RightsList', () => {
       />,
     );
 
-    const accessPackageHeading = screen.getByRole('heading', { name: accessPackage.name });
-    const accessPackageItem = accessPackageHeading.closest('li');
-    expect(accessPackageItem).toBeInTheDocument();
-    const accessPackageButton = accessPackageItem?.querySelector('button[data-interactive="true"]');
-    expect(accessPackageButton).toBeInTheDocument();
-    await user.click(accessPackageButton!);
+    const accessPackageListItem = screen.getByRole('button', { name: accessPackage.name });
+    await user.click(accessPackageListItem);
 
-    const resourceHeading = screen.getByRole('heading', { name: resource.title });
-    const resourceItem = resourceHeading.closest('li');
-    expect(resourceItem).toBeInTheDocument();
-    const resourceButton = resourceItem?.querySelector('button[data-interactive="true"]');
-    expect(resourceButton).toBeInTheDocument();
-    await user.click(resourceButton!);
+    const resourceListItem = screen.getByRole('button', { name: resource.title });
+    await user.click(resourceListItem);
 
     const resourceDescription = screen.getByText(resource.description);
     expect(resourceDescription).toBeInTheDocument();
@@ -221,19 +196,11 @@ describe('RightsList', () => {
       />,
     );
 
-    const accessPackageHeading = screen.getByRole('heading', { name: accessPackage.name });
-    const accessPackageItem = accessPackageHeading.closest('li');
-    expect(accessPackageItem).toBeInTheDocument();
-    const accessPackageButton = accessPackageItem?.querySelector('button[data-interactive="true"]');
-    expect(accessPackageButton).toBeInTheDocument();
-    await user.click(accessPackageButton!);
+    const accessPackageListItem = screen.getByRole('button', { name: accessPackage.name });
+    await user.click(accessPackageListItem);
 
-    const resourceHeading = screen.getByRole('heading', { name: resource.title });
-    const resourceItem = resourceHeading.closest('li');
-    expect(resourceItem).toBeInTheDocument();
-    const resourceButton = resourceItem?.querySelector('button[data-interactive="true"]');
-    expect(resourceButton).toBeInTheDocument();
-    await user.click(resourceButton!);
+    const resourceListItem = screen.getByRole('button', { name: resource.title });
+    await user.click(resourceListItem);
 
     const backButton = screen.getByRole('button', { name: 'common.back' });
     await user.click(backButton);
