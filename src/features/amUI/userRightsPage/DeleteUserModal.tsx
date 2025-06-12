@@ -20,6 +20,8 @@ import classes from './DeleteUserModal.module.css';
 const srmLink =
   'https://www.altinn.no/Pages/ServiceEngine/Start/StartService.aspx?ServiceEditionCode=1&ServiceCode=3498&M=SP&DontChooseReportee=true&O=personal';
 
+const RETTIGHETSHAVER_ROLE = 'Rettighetshaver';
+
 export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from' }) => {
   const [deleteUser, { isLoading, isError, error }] = useRemoveRightHolderMutation();
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -41,9 +43,10 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
       ? toParty?.partyUuid === selfParty?.partyUuid
       : fromParty?.partyUuid === selfParty?.partyUuid;
 
+  const reporteeView = direction === 'from';
   const status = useMemo(
-    () => determineUserDeletionStatus(connections, viewingYourself, direction === 'from'),
-    [connections],
+    () => determineUserDeletionStatus(connections, viewingYourself, reporteeView),
+    [connections, viewingYourself, reporteeView],
   );
 
   const onDeleteUser = () => {
@@ -65,6 +68,8 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
   const redirectToUsersPage = () => navigate(`/${amUIPath.Users}`);
 
   const errorDetails = isError ? createErrorDetails(error) : null;
+
+  const isDeletionNotAllowed = String(status).endsWith('DeletionNotAllowed');
 
   return (
     <DsDialog.TriggerContext>
@@ -120,24 +125,20 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
               </DsAlert>
             )}
             <div className={classes.buttons}>
-              {status !== UserDeletionStatus.DeletionNotAllowed &&
-                status !== UserDeletionStatus.Yourself_DeletionNotAllowed &&
-                status !== UserDeletionStatus.Reportee_DeletionNotAllowed && (
-                  <Button
-                    color='danger'
-                    onClick={onDeleteUser}
-                  >
-                    {t('delete_user.yes_button')}
-                  </Button>
-                )}
+              {!isDeletionNotAllowed && (
+                <Button
+                  color='danger'
+                  onClick={onDeleteUser}
+                >
+                  {t('delete_user.yes_button')}
+                </Button>
+              )}
               <Button
                 color='neutral'
                 variant='text'
                 onClick={() => dialogRef.current?.close()}
               >
-                {status === UserDeletionStatus.DeletionNotAllowed
-                  ? t('common.close')
-                  : t('common.cancel')}
+                {t(isDeletionNotAllowed ? 'common.close' : 'common.cancel')}
               </Button>
             </div>
           </div>
@@ -212,46 +213,26 @@ const determineUserDeletionStatus = (
   viewingYourself: boolean,
   reporteeView: boolean,
 ): UserDeletionStatus => {
-  if (connections && connections.length > 0) {
-    const roles =
-      connections.length > 1
-        ? connections.reduce((acc, connection) => {
-            acc.push(...connection.roles);
-            return acc;
-          }, [] as string[])
-        : connections[0].roles;
+  const allRoles: string[] = connections?.flatMap((connection) => connection.roles) ?? [];
 
-    if (roles.every((r) => r === 'Rettighetshaver')) {
-      if (viewingYourself) {
-        return UserDeletionStatus.Yourself_FullDeletionAllowed;
-      }
-      if (reporteeView) {
-        return UserDeletionStatus.Reportee_FullDeletionAllowed;
-      }
-      return UserDeletionStatus.FullDeletionAllowed;
-    }
-    if (roles.some((r) => r === 'Rettighetshaver')) {
-      if (viewingYourself) {
-        return UserDeletionStatus.Yourself_LimitedDeletionOnly;
-      }
-      if (reporteeView) {
-        return UserDeletionStatus.Reportee_LimitedDeletionOnly;
-      }
-      return UserDeletionStatus.LimitedDeletionOnly;
-    }
-    if (viewingYourself) {
-      return UserDeletionStatus.Yourself_DeletionNotAllowed;
-    }
-    if (reporteeView) {
-      return UserDeletionStatus.Reportee_DeletionNotAllowed;
-    }
-    return UserDeletionStatus.DeletionNotAllowed;
+  let baseStatusKeyPart: 'FullDeletionAllowed' | 'LimitedDeletionOnly' | 'DeletionNotAllowed';
+
+  if (allRoles.every((r) => r === RETTIGHETSHAVER_ROLE)) {
+    baseStatusKeyPart = 'FullDeletionAllowed';
+  } else if (allRoles.some((r) => r === RETTIGHETSHAVER_ROLE)) {
+    baseStatusKeyPart = 'LimitedDeletionOnly';
+  } else {
+    // No roles are 'Rettighetshaver', or allRoles is not empty but none are 'Rettighetshaver'.
+    baseStatusKeyPart = 'DeletionNotAllowed';
   }
+
+  let prefix = '';
   if (viewingYourself) {
-    return UserDeletionStatus.Yourself_FullDeletionAllowed;
+    prefix = 'Yourself_';
+  } else if (reporteeView) {
+    prefix = 'Reportee_';
   }
-  if (reporteeView) {
-    return UserDeletionStatus.Reportee_FullDeletionAllowed;
-  }
-  return UserDeletionStatus.FullDeletionAllowed;
+
+  const finalStatusKey = `${prefix}${baseStatusKeyPart}` as keyof typeof UserDeletionStatus;
+  return UserDeletionStatus[finalStatusKey];
 };
