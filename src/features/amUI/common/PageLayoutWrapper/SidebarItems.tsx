@@ -5,7 +5,6 @@ import { t } from 'i18next';
 import { Link } from 'react-router';
 
 import { amUIPath, SystemUserPath } from '@/routes/paths';
-import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 /**
  * Generates a list of sidebar items for the page layout.
@@ -13,9 +12,12 @@ import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
  * @returns {MenuItemProps[]} A list of sidebar items, including a heading,
  *                            and optionally a confetti package if the feature flag is enabled.
  */
-export const SidebarItems = (isSmall: boolean = false, pathname: string = '') => {
+export const SidebarItems = (
+  isSmall: boolean = false,
+  pathname: string = '',
+  isAdmin: boolean | undefined,
+) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
-  const { data: isAdmin } = useGetIsAdminQuery();
   const heading: MenuItemProps = {
     id: '1',
     groupId: 1,
