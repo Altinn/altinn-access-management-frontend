@@ -31,7 +31,7 @@
     "nn": "STA TOM TIGER AS gjer dette oppslaget på vegne av DISKRET NÆR TIGER AS.",
     "en": "STA TOM TIGER AS performs the lookup on behalf of DISKRET NÆR TIGER AS."
   },
-  "partyName": null,
+  "fromPartyName": null,
   "rights": [
     {
       "identifier": "consent-test-resource",

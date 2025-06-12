@@ -53,6 +53,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// <summary>
         /// Party name if request is for an organization
         /// </summary>
-        public string PartyName { get; set; }
+        public string FromPartyName { get; set; }
     }
 }
