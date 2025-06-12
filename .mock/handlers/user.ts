@@ -62,7 +62,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       party: {
         partyId: 50789533,
         partyUuid: '167536b5-f8ed-4c5a-8f48-0279507e53ae',
-        name: 'SITRONGUL MEDALJONG (me)',
+        name: 'SITRONGUL MEDALJONG',
       },
       userType: 1,
       profileSettingPreference: {

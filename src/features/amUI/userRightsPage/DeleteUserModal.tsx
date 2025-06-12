@@ -69,7 +69,10 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
 
   const errorDetails = isError ? createErrorDetails(error) : null;
 
-  const isDeletionNotAllowed = String(status).endsWith('DeletionNotAllowed');
+  const isDeletionNotAllowed =
+    status === UserDeletionStatus.DeletionNotAllowed ||
+    status === UserDeletionStatus.Yourself_DeletionNotAllowed ||
+    status === UserDeletionStatus.Reportee_DeletionNotAllowed;
 
   return (
     <DsDialog.TriggerContext>
