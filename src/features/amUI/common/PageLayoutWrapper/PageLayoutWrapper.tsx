@@ -8,6 +8,7 @@ import { HandshakeIcon, InboxIcon, MenuGridIcon, PersonChatIcon } from '@navikt/
 
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
+  useGetIsAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
   useGetReporteeQuery,
   useGetUserInfoQuery,
@@ -33,6 +34,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery();
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
+
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const onChangeLocale = (event: ChangeEvent<HTMLInputElement>) => {
     const newLocale = event.target.value;
@@ -68,7 +71,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         />
       ),
     },
-    ...(isSm ? SidebarItems(true, pathname) : []),
+    ...(isSm ? SidebarItems(true, pathname, isAdmin) : []),
     {
       id: 'all-services',
       groupId: 10,
@@ -190,7 +193,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         sidebar={{
           menu: {
             groups: {},
-            items: SidebarItems(false, pathname),
+            items: SidebarItems(false, pathname, isAdmin),
           },
         }}
         content={{ color: 'company' }}
