@@ -34,13 +34,14 @@ export const UserRightsPage = () => {
   return (
     <PageWrapper>
       <AlertIfNotAvailableForUserType>
-        <PartyRepresentationProvider
-          actingPartyUuid={getCookie('AltinnPartyUuid')}
-          fromPartyUuid={getCookie('AltinnPartyUuid')}
-          toPartyUuid={id ?? undefined}
-        >
-          <DelegationModalProvider>
-            <PageLayoutWrapper>
+        <PageLayoutWrapper>
+          <PartyRepresentationProvider
+            actingPartyUuid={getCookie('AltinnPartyUuid')}
+            fromPartyUuid={getCookie('AltinnPartyUuid')}
+            toPartyUuid={id ?? undefined}
+            returnToUrlOnError={`/${amUIPath.Users}`}
+          >
+            <DelegationModalProvider>
               <PageContainer
                 backUrl={`/${amUIPath.Users}`}
                 contentActions={<DeleteUserModal direction='to' />}
@@ -55,9 +56,9 @@ export const UserRightsPage = () => {
                   roleAssignmentsPanel={<RoleSection numberOfAccesses={0} />}
                 />
               </PageContainer>
-            </PageLayoutWrapper>
-          </DelegationModalProvider>
-        </PartyRepresentationProvider>
+            </DelegationModalProvider>
+          </PartyRepresentationProvider>
+        </PageLayoutWrapper>
       </AlertIfNotAvailableForUserType>
     </PageWrapper>
   );

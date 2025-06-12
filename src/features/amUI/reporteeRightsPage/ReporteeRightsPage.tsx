@@ -40,7 +40,7 @@ export const ReporteeRightsPage = () => {
           <PageWrapper>
             <PageLayoutWrapper>
               <PageContainer
-                contentActions={<DeleteUserModal direction='to' />}
+                contentActions={<DeleteUserModal direction='from' />}
                 backUrl={`/${amUIPath.Reportees}`}
               >
                 <UserPageHeader

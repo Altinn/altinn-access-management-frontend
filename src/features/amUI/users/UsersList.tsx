@@ -56,7 +56,7 @@ export const UsersList = () => {
   const { data: currentUserAsRightHolder, isLoading: currentUserConnectionLoading } =
     useGetRightHoldersQuery(
       {
-        partyUuid: fromParty?.partyUuid ?? '',
+        partyUuid: currentUser?.uuid ?? '',
         fromUuid: fromParty?.partyUuid ?? '',
         toUuid: currentUser?.uuid ?? '',
       },

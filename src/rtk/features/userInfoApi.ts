@@ -94,6 +94,11 @@ export const userInfoApi = createApi({
           `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
         keepUnusedDataFor: 3,
         providesTags: ['RightHolders'],
+        transformErrorResponse: (response: {
+          status: string | number;
+        }): { status: string | number; data: string } => {
+          return { status: response.status, data: new Date().toISOString() };
+        },
       },
     ),
     removeRightHolder: builder.mutation<void, { toPartyUuid: string; fromPartyUuid: string }>({
