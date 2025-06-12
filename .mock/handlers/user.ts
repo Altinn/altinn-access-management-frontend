@@ -20,9 +20,9 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
     `${ACCESSMANAGEMENT_BASE_URL}/user/rightholders?party=:partyId&from=:fromId&to=:toId`,
     ({ request }) => {
       const url = new URL(request.url);
-      const fromId = url.searchParams.get('from');
+      const id = url.searchParams.get('party');
       const defaultReturn = {
-        partyUuid: '3d8b34c3-df0d-4dcc-be12-e788ce414744',
+        partyUuid: id || '3d8b34c3-df0d-4dcc-be12-e788ce414744',
         partyType: 'Organization',
         name: 'DIGITALISERINGSDIREKTORATET',
         registryRoles: null,
@@ -32,7 +32,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         inheritingUsers: [],
       };
 
-      if (fromId === 'mixed_roles') {
+      if (id?.includes('PARTIALLY_DELEATEABLE')) {
         return HttpResponse.json([
           {
             ...defaultReturn,
@@ -41,7 +41,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         ]);
       }
 
-      if (fromId === 'admin_roles') {
+      if (id?.includes('NOT_DELEATEABLE')) {
         return HttpResponse.json([
           {
             ...defaultReturn,
@@ -49,7 +49,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
           },
         ]);
       }
-      
+
       return HttpResponse.json([defaultReturn]);
     },
   ),

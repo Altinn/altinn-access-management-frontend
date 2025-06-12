@@ -15,13 +15,13 @@ export const lookupHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       partyTypeName: 2,
       orgNumber: '310202398',
       unitType: 'AS',
-      name: 'DISKRET NÆR TIGER AS',
+      name: id || 'DISKRET NÆR TIGER AS',
       isDeleted: false,
       onlyHierarchyElementWithNoAccess: false,
       person: null,
       organization: {
         orgNumber: '310202398',
-        name: 'DISKRET NÆR TIGER AS',
+        name: id || 'DISKRET NÆR TIGER AS',
         unitType: 'AS',
         telephoneNumber: null,
         mobileNumber: null,
@@ -38,26 +38,6 @@ export const lookupHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       },
       childParties: null,
     };
-
-    if (id === 'POMPØS_TIGER') {
-      return HttpResponse.json({
-        ...defaultReturn,
-        name: 'SAMLET POMPØS TIGER AS',
-      });
-    }
-    if (id === 'SMISKENDE_TIGER') {
-      return HttpResponse.json({
-        ...defaultReturn,
-        name: 'SUBTIL SMISKENDE TIGER AS',
-      });
-     
-    }
-    if (id === '789') {
-       return HttpResponse.json({
-        ...defaultReturn,
-        name: 'ELASTISK SART ISBJØRN SA',
-      });
-    }
     return HttpResponse.json(defaultReturn);
   }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/lookup/party`, () => {
