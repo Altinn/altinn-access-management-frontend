@@ -5,6 +5,7 @@
     "close": "Close",
     "open": "Open",
     "back": "Back",
+    "go_back": "Go back",
     "changes_made_msg": "Changes made. Click the save button to apply",
     "status_code": "Status code",
     "maskinporten": "Maskinporten",
@@ -116,7 +117,8 @@
     "find_and_submit_scheme": "Find and submit a new form",
     "unknown_error_header": "Oops! An error seems to have occurred",
     "unknown_error_description": "Please try reloading the page.",
-    "if_persistent_contact_service": "If the error persists, you can go to Altinn's help page or contact support at 75 00 60 00"
+    "if_persistent_contact_service": "If the error persists, you can go to Altinn's help page or contact support at 75 00 60 00",
+    "user_connection_error": "Huh, looks like there's nothing here. "
   },
   "profile": {
     "received": "Received",
@@ -361,7 +363,9 @@
     "organization": "Organization",
     "modal_title": "Add new person or organization",
     "trigger_button": "Add user",
-    "add_button": "Add user"
+    "add_person_button": "Add person",
+    "add_org_button": "Add organization",
+    "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future."
   },
   "a2Alerts": {
     "launchAlertHeading": "We are renewing Altinn",

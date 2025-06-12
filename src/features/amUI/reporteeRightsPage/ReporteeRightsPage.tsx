@@ -2,6 +2,12 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
+import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { amUIPath } from '@/routes/paths';
+import { PageWrapper } from '@/components';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -12,12 +18,6 @@ import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableFor
 
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';
-
-import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { amUIPath } from '@/routes/paths';
-import { PageWrapper } from '@/components';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
@@ -30,14 +30,15 @@ export const ReporteeRightsPage = () => {
   const { displayLimitedPreviewLaunch } = window.featureFlags;
   return (
     <AlertIfNotAvailableForUserType>
-      <PartyRepresentationProvider
-        fromPartyUuid={reporteeUuid ?? ''}
-        toPartyUuid={getCookie('AltinnPartyUuid')}
-        actingPartyUuid={getCookie('AltinnPartyUuid')}
-      >
-        <DelegationModalProvider>
-          <PageWrapper>
-            <PageLayoutWrapper>
+      <PageWrapper>
+        <PageLayoutWrapper>
+          <PartyRepresentationProvider
+            fromPartyUuid={reporteeUuid ?? ''}
+            toPartyUuid={getCookie('AltinnPartyUuid')}
+            actingPartyUuid={getCookie('AltinnPartyUuid')}
+            returnToUrlOnError={`/${amUIPath.Reportees}`}
+          >
+            <DelegationModalProvider>
               <PageContainer backUrl={`/${amUIPath.Reportees}`}>
                 <UserPageHeader
                   direction='from'
@@ -50,10 +51,10 @@ export const ReporteeRightsPage = () => {
                   roleAssignmentsPanel={<ReporteeRoleSection />}
                 />
               </PageContainer>
-            </PageLayoutWrapper>
-          </PageWrapper>
-        </DelegationModalProvider>
-      </PartyRepresentationProvider>
+            </DelegationModalProvider>
+          </PartyRepresentationProvider>
+        </PageLayoutWrapper>
+      </PageWrapper>
     </AlertIfNotAvailableForUserType>
   );
 };
