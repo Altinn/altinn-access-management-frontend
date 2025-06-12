@@ -114,7 +114,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 HandledBy = handledBy != null ? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata) : null,
                 ConsentMessage = request.Value.RequestMessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
                 Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata),
-                PartyName = isFromOrg ? from.Name : null
+                FromPartyName = isFromOrg ? from.Name : null
             };
         }
 
