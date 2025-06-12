@@ -8,3 +8,6 @@
 .expandedListItem {
   padding: var(--ds-size-8) var(--ds-size-15);
 }
+.consentDialog {
+  max-width: 800px;
+}

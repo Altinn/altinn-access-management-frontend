@@ -98,6 +98,36 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        /// Get a consent request by id
+        /// </summary>
+        /// <param name="party">Id of party to get active consents for</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("active/{party}")]
+        public async Task<ActionResult> GetActiveConsents([FromRoute] Guid party, CancellationToken cancellationToken)
+        {
+            Result<List<ConsentListItemFE>> activeConsents = await _consentService.GetActiveConsents(party, cancellationToken);
+
+            if (activeConsents.IsProblem)
+            {
+                return activeConsents.Problem.ToActionResult();
+            }
+
+            return Ok(activeConsents.Value);
+        }
+
+        // GET list of active consents - (paged?)
+        // { id, from, consentedDate }
+
+        // GET single consent
+        // hva skal vises ved consented?
+
+        // GET avtalelogg - (paged?)
+
+        // POST revoke consent
+
+        /// <summary>
         /// Logout after user acccepts or rejects consent
         /// </summary>
         /// <returns></returns>

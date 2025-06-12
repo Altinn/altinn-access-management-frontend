@@ -1,0 +1,60 @@
+[
+  {
+    "id": "7e540335-d82f-41e9-8b8f-619336d792b4",
+    "from": "urn:altinn:organization:identifier-no:310202398",
+    "to": "urn:altinn:organization:identifier-no:313523497",
+    "handledBy": null,
+    "validTo": "2025-05-21T11:11:24.9535551+00:00",
+    "consentRights": [
+      {
+        "action": ["read"],
+        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource-poa" }],
+        "metadata": null
+      }
+    ],
+    "requestMessage": {
+      "nb": "Dette er en melding fra banken",
+      "nn": "Dette er ei melding fra banken",
+      "en": "This is a message from the bank"
+    },
+    "redirectUrl": "https://smartbank.no/poa",
+    "templateId": "poa",
+    "templateVersion": 1
+  },
+  {
+    "id": "0fa3e590-0ab5-442c-ba8d-9410e6a63785",
+    "from": "urn:altinn:organization:identifier-no:310202398",
+    "to": "urn:altinn:organization:identifier-no:313160300",
+    "handledBy": null,
+    "validTo": "2026-11-11T11:11:24.9535551+00:00",
+    "consentRights": [
+      {
+        "action": ["read"],
+        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource" }],
+        "metadata": null
+      }
+    ],
+    "requestMessage": null,
+    "redirectUrl": "https://smartbank.no/consent",
+    "templateId": "sblanesoknad",
+    "templateVersion": 1
+  },
+  {
+    "id": "6c7a60bb-b6a9-4902-92eb-919f8c9c1338",
+    "from": "urn:altinn:organization:identifier-no:310202398",
+    "to": "urn:altinn:organization:identifier-no:313160300",
+    "handledBy": null,
+    "validTo": "2025-12-12T11:11:24.9535551+00:00",
+    "consentRights": [
+      {
+        "action": ["read"],
+        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource" }],
+        "metadata": null
+      }
+    ],
+    "requestMessage": null,
+    "redirectUrl": "https://smartbank.no/consent",
+    "templateId": "sblanesoknad",
+    "templateVersion": 1
+  }
+]

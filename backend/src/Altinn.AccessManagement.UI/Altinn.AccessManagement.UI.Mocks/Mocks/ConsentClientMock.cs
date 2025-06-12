@@ -16,6 +16,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         private readonly Guid PERSON_CONSENT_ID = Guid.Parse("e2071c55-6adf-487b-af05-9198a230ed44");
         private readonly Guid ORG_CONSENT_ID = Guid.Parse("7e540335-d82f-41e9-8b8f-619336d792b4");
+        private readonly Guid PERSON_PARTY_ID = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+        private readonly Guid ORG_PARTY_ID = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ConsentClientMock" /> class
@@ -72,6 +74,22 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
            List<ConsentTemplate> consentTemplates = Util.GetMockData<List<ConsentTemplate>>($"{dataFolder}/Consent/consentTemplates.json");
            return Task.FromResult(consentTemplates);
+        }
+
+        public Task<Result<List<Consent>>> GetActiveConsents(Guid party, CancellationToken cancellationToken)
+        {
+            if (party == ORG_PARTY_ID)
+            {
+                List<Consent> request = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/activeConsents_org.json");
+                return Task.FromResult(new Result<List<Consent>>(request));
+            } 
+            else if (party == PERSON_PARTY_ID)
+            {
+                List<Consent> request = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/activeConsents_person.json");
+                return Task.FromResult(new Result<List<Consent>>(request));
+            }
+            
+            return Task.FromResult(new Result<List<Consent>>([]));
         }
     }
 }

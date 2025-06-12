@@ -20,7 +20,24 @@ export interface ConsentRequest {
   consentMessage: ConsentLanguage;
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
-  partyName?: string;
+  fromPartyName?: string;
+}
+
+export interface ActiveConsentListItem {
+  id: string;
+  toPartyId: string;
+  toPartyName: string;
+}
+
+export interface Consent {
+  id: string;
+  rights: ConsentRight[];
+  isPoa: boolean;
+  serviceIntroAccepted: ConsentLanguage;
+  consentMessage: ConsentLanguage;
+  expiration: ConsentLanguage;
+  handledBy?: ConsentLanguage;
+  toPartyName: string;
 }
 
 export interface ProblemDetail {

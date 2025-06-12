@@ -1,0 +1,8 @@
+.consentRight {
+  display: flex;
+  flex-direction: row;
+  gap: var(--ds-size-4);
+}
+.consentRightIcon {
+  font-size: 1.5rem;
+}

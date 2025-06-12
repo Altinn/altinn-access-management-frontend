@@ -36,7 +36,16 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <summary>
         /// Gets all consent templates
         /// </summary>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Consent templates</returns>
         Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets all active consents
+        /// </summary>
+        /// <param name="party">Id of party to get active consents for</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Consent templates</returns>
+        Task<Result<List<Consent>>> GetActiveConsents(Guid party, CancellationToken cancellationToken);
     }
 }

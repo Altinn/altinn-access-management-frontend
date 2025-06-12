@@ -10,7 +10,6 @@ import {
   Layout,
   RootProvider,
 } from '@altinn/altinn-components';
-import { CheckmarkIcon } from '@navikt/aksel-icons';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import {
@@ -21,8 +20,9 @@ import {
 import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
-import type { ConsentLanguage, ConsentRight, ProblemDetail } from '../types';
-import { getLanguage, transformText } from '../utils';
+import type { ProblemDetail } from '../types';
+import { getLanguage } from '../utils';
+import { ConsentRights } from '../components/ConsentRights/ConsentRights';
 
 import classes from './ConsentRequestPage.module.css';
 import { ConsentRequestError } from './ConsentRequestError';
@@ -115,8 +115,8 @@ export const ConsentRequestPage = () => {
           },
           logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
           currentAccount: {
-            name: request?.partyName ?? (userData?.name || ''),
-            type: request?.partyName ? 'company' : 'person',
+            name: request?.fromPartyName ?? (userData?.name || ''),
+            type: request?.fromPartyName ? 'company' : 'person',
             id: '',
           },
         }}
@@ -128,7 +128,7 @@ export const ConsentRequestPage = () => {
                 level={1}
                 data-size='md'
               >
-                {request?.title?.[language] ?? ''}
+                {request.title[language]}
               </DsHeading>
             </div>
             <div className={classes.consentBlock}>
@@ -142,7 +142,7 @@ export const ConsentRequestPage = () => {
               </DsHeading>
               <div>
                 {request.rights.map((right) => (
-                  <ConsentRight
+                  <ConsentRights
                     key={right.identifier}
                     language={language}
                     right={right}
@@ -200,26 +200,5 @@ export const ConsentRequestPage = () => {
         )}
       </Layout>
     </RootProvider>
-  );
-};
-
-interface ConsentRightProps {
-  right: ConsentRight;
-  language: keyof ConsentLanguage;
-}
-const ConsentRight = ({ right, language }: ConsentRightProps) => {
-  return (
-    <div className={classes.consentRight}>
-      <CheckmarkIcon className={classes.consentRightIcon} />
-      <div>
-        <DsHeading
-          level={2}
-          data-size='2xs'
-        >
-          {right.title[language]}
-        </DsHeading>
-        {transformText(right.consentTextHtml[language])}
-      </div>
-    </div>
   );
 };
