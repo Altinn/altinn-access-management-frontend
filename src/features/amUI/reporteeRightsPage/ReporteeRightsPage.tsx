@@ -31,7 +31,6 @@ export const ReporteeRightsPage = () => {
   const { displayLimitedPreviewLaunch } = window.featureFlags;
   return (
     <AlertIfNotAvailableForUserType>
-
       <PageWrapper>
         <PageLayoutWrapper>
           <PartyRepresentationProvider
@@ -41,8 +40,7 @@ export const ReporteeRightsPage = () => {
             returnToUrlOnError={`/${amUIPath.Reportees}`}
           >
             <DelegationModalProvider>
-               
-              <PageContainer 
+              <PageContainer
                 backUrl={`/${amUIPath.Reportees}`}
                 contentActions={<DeleteUserModal direction='from' />}
               >

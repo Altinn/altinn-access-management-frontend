@@ -32,8 +32,8 @@ export const User_FullDeletionAllowed: StoryObj<DeleteUserModalStoryProps> = {
     <StoryWrapper>
       <PartyRepresentationProvider
         fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'DELEATEABLE_PARTY_1'}
-        actingPartyUuid={'DELEATEABLE_PARTY_1'}
+        toPartyUuid={'DELETABLE_PARTY_1'}
+        actingPartyUuid={'DELETABLE_PARTY_1'}
       >
         <DeleteUserModal {...args} />
       </PartyRepresentationProvider>
@@ -47,8 +47,8 @@ export const User_LimitedDeletionOnly: StoryObj<DeleteUserModalStoryProps> = {
     <StoryWrapper>
       <PartyRepresentationProvider
         fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'PARTIALLY_DELEATEABLE_PARTY_1'}
-        actingPartyUuid={'PARTIALLY_DELEATEABLE_PARTY_1'}
+        toPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
+        actingPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
       >
         <DeleteUserModal {...args} />
       </PartyRepresentationProvider>
@@ -62,8 +62,8 @@ export const User_DeletionNotAllowed: StoryObj<DeleteUserModalStoryProps> = {
     <StoryWrapper>
       <PartyRepresentationProvider
         fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'NOT_DELEATEABLE_PARTY_1'}
-        actingPartyUuid={'NOT_DELEATEABLE_PARTY_1'}
+        toPartyUuid={'NOT_DELETABLE_PARTY_1'}
+        actingPartyUuid={'NOT_DELETABLE_PARTY_1'}
       >
         <DeleteUserModal {...args} />
       </PartyRepresentationProvider>
@@ -77,9 +77,9 @@ export const Yourself_FullDeletionAllowed: StoryObj<DeleteUserModalStoryProps> =
   render: (args) => (
     <StoryWrapper>
       <PartyRepresentationProvider
-        fromPartyUuid={'DELEATEABLE_PARTY_1'}
+        fromPartyUuid={'DELETABLE_PARTY_1'}
         toPartyUuid={'167536b5-f8ed-4c5a-8f48-0279507e53ae'} // Uuid of logged in party
-        actingPartyUuid={'DELEATEABLE_PARTY_1'}
+        actingPartyUuid={'DELETABLE_PARTY_1'}
       >
         <DeleteUserModal {...args} />
       </PartyRepresentationProvider>
@@ -92,9 +92,9 @@ export const Yourself_LimitedDeletionOnly: StoryObj<DeleteUserModalStoryProps> =
   render: (args) => (
     <StoryWrapper>
       <PartyRepresentationProvider
-        fromPartyUuid={'PARTIALLY_DELEATEABLE_PARTY_1'}
+        fromPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
         toPartyUuid={'167536b5-f8ed-4c5a-8f48-0279507e53ae'} // Uuid of logged in party
-        actingPartyUuid={'PARTIALLY_DELEATEABLE_PARTY_1'}
+        actingPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
       >
         <DeleteUserModal {...args} />
       </PartyRepresentationProvider>
@@ -107,9 +107,9 @@ export const Yourself_DeletionNotAllowed: StoryObj<DeleteUserModalStoryProps> = 
   render: (args) => (
     <StoryWrapper>
       <PartyRepresentationProvider
-        fromPartyUuid={'NOT_DELEATEABLE_PARTY_1'}
+        fromPartyUuid={'NOT_DELETABLE_PARTY_1'}
         toPartyUuid={'167536b5-f8ed-4c5a-8f48-0279507e53ae'} // Uuid of logged in party
-        actingPartyUuid={'NOT_DELEATEABLE_PARTY_1'}
+        actingPartyUuid={'NOT_DELETABLE_PARTY_1'}
       >
         <DeleteUserModal {...args} />
       </PartyRepresentationProvider>
@@ -124,8 +124,8 @@ export const Reportee_FullDeletionAllowed: StoryObj<DeleteUserModalStoryProps> =
     <StoryWrapper>
       <PartyRepresentationProvider
         fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'DELEATEABLE_PARTY_1'}
-        actingPartyUuid={'DELEATEABLE_PARTY_1'}
+        toPartyUuid={'DELETABLE_PARTY_1'}
+        actingPartyUuid={'DELETABLE_PARTY_1'}
       >
         <DeleteUserModal
           {...args}
@@ -142,8 +142,8 @@ export const Reportee_LimitedDeletionOnly: StoryObj<DeleteUserModalStoryProps> =
     <StoryWrapper>
       <PartyRepresentationProvider
         fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'PARTIALLY_DELEATEABLE_PARTY_1'}
-        actingPartyUuid={'PARTIALLY_DELEATEABLE_PARTY_1'}
+        toPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
+        actingPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
       >
         <DeleteUserModal
           {...args}
@@ -160,8 +160,8 @@ export const Reportee_DeletionNotAllowed: StoryObj<DeleteUserModalStoryProps> = 
     <StoryWrapper>
       <PartyRepresentationProvider
         fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'NOT_DELEATEABLE_PARTY_1'}
-        actingPartyUuid={'NOT_DELEATEABLE_PARTY_1'}
+        toPartyUuid={'NOT_DELETABLE_PARTY_1'}
+        actingPartyUuid={'NOT_DELETABLE_PARTY_1'}
       >
         <DeleteUserModal
           {...args}

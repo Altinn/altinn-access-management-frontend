@@ -32,7 +32,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         inheritingUsers: [],
       };
 
-      if (id?.includes('PARTIALLY_DELEATEABLE')) {
+      if (id?.includes('PARTIALLY_DELETABLE')) {
         return HttpResponse.json([
           {
             ...defaultReturn,
@@ -41,7 +41,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         ]);
       }
 
-      if (id?.includes('NOT_DELEATEABLE')) {
+      if (id?.includes('NOT_DELETABLE')) {
         return HttpResponse.json([
           {
             ...defaultReturn,

@@ -217,7 +217,9 @@ const determineUserDeletionStatus = (
 
   let baseStatusKeyPart: 'FullDeletionAllowed' | 'LimitedDeletionOnly' | 'DeletionNotAllowed';
 
-  if (allRoles.every((r) => r === RETTIGHETSHAVER_ROLE)) {
+  if (allRoles.length === 0) {
+    baseStatusKeyPart = 'FullDeletionAllowed';
+  } else if (allRoles.every((r) => r === RETTIGHETSHAVER_ROLE)) {
     baseStatusKeyPart = 'FullDeletionAllowed';
   } else if (allRoles.some((r) => r === RETTIGHETSHAVER_ROLE)) {
     baseStatusKeyPart = 'LimitedDeletionOnly';
