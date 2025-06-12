@@ -1,6 +1,6 @@
 import { Button, DsAlert, TextField } from '@altinn/altinn-components';
 import { useState } from 'react';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 import { useValidateNewUserPersonMutation } from '@/rtk/features/userInfoApi';
 
@@ -8,6 +8,7 @@ import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
 
 export const NewPersonContent = () => {
+  const { t } = useTranslation();
   const [ssn, setSsn] = useState('');
   const [lastName, setLastName] = useState('');
   const [errorTime, setErrorTime] = useState<string>('');

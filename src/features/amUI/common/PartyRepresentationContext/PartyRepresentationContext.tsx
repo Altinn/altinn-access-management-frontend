@@ -92,7 +92,8 @@ export const PartyRepresentationProvider = ({
         toParty: invalidConnection ? undefined : toParty,
         actingParty: fromPartyUuid == actingPartyUuid ? fromParty : toParty,
         selfParty: currentUser?.party,
-        isLoading: fromPartyIsLoading || toPartyIsLoading || currentUserIsLoading,
+        isLoading:
+          isConnectionLoading || fromPartyIsLoading || toPartyIsLoading || currentUserIsLoading,
         isError: invalidConnection,
       }}
     >
