@@ -146,9 +146,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return urn.StartsWith("urn:altinn:organization:identifier-no");
         }
 
+        private static string GetUrnValue(string urn)
+        {
+            return urn.Split(':').Last();
+        }
+
         private async Task<Party> GetParty(string urn)
         {
-            string id = urn.Split(':').Last();
+            string id = GetUrnValue(urn);
             Party party = IsOrgUrn(urn) 
                 ? await _registerClient.GetPartyForOrganization(id) 
                 : await _registerClient.GetPartyForPerson(id);
@@ -195,6 +200,32 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return replacedTranslations;
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<List<ConsentListItemFE>>> GetActiveConsents(Guid party, CancellationToken cancellationToken)
+        {
+            Result<List<Consent>> activeConsents = await _consentClient.GetActiveConsents(party, cancellationToken);
+            if (activeConsents.IsProblem)
+            {
+                return activeConsents.Problem;
+            }
+
+            // look up all party names in one call instead of one by one
+            IEnumerable<PartyName> partyNames = await _registerClient.GetPartyNames(activeConsents.Value.Select(consent => GetUrnValue(consent.To)), cancellationToken);
+
+            List<ConsentListItemFE> consentListItems = activeConsents.Value.Select(consent =>
+            {
+                PartyName toPartyName = partyNames.FirstOrDefault(p => p.OrgNo == GetUrnValue(consent.To));
+                return new ConsentListItemFE()
+                {
+                    Id = consent.Id,
+                    ToPartyId = consent.To,
+                    ToPartyName = toPartyName?.Name ?? string.Empty,
+                };
+            }).ToList();
+            
+            return consentListItems;
         }
     }
 }
