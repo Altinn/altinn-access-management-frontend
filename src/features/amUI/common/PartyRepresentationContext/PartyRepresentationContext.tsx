@@ -60,6 +60,9 @@ export const PartyRepresentationProvider = ({
   if (!actingPartyUuid) {
     throw new Error('PartyRepresentationProvider must be used with an acting party UUID');
   }
+  if (actingPartyUuid !== fromPartyUuid && actingPartyUuid !== toPartyUuid) {
+    throw new Error('actingPartyUuid must equal one of the provided party UUIDs');
+  }
 
   const {
     data: connections,
