@@ -31,17 +31,20 @@ export const ReporteeRightsPage = () => {
   const { displayLimitedPreviewLaunch } = window.featureFlags;
   return (
     <AlertIfNotAvailableForUserType>
-      <PartyRepresentationProvider
-        fromPartyUuid={reporteeUuid ?? ''}
-        toPartyUuid={getCookie('AltinnPartyUuid')}
-        actingPartyUuid={getCookie('AltinnPartyUuid')}
-      >
-        <DelegationModalProvider>
-          <PageWrapper>
-            <PageLayoutWrapper>
-              <PageContainer
-                contentActions={<DeleteUserModal direction='from' />}
+
+      <PageWrapper>
+        <PageLayoutWrapper>
+          <PartyRepresentationProvider
+            fromPartyUuid={reporteeUuid ?? ''}
+            toPartyUuid={getCookie('AltinnPartyUuid')}
+            actingPartyUuid={getCookie('AltinnPartyUuid')}
+            returnToUrlOnError={`/${amUIPath.Reportees}`}
+          >
+            <DelegationModalProvider>
+               
+              <PageContainer 
                 backUrl={`/${amUIPath.Reportees}`}
+                contentActions={<DeleteUserModal direction='from' />}
               >
                 <UserPageHeader
                   direction='from'
@@ -54,10 +57,10 @@ export const ReporteeRightsPage = () => {
                   roleAssignmentsPanel={<ReporteeRoleSection />}
                 />
               </PageContainer>
-            </PageLayoutWrapper>
-          </PageWrapper>
-        </DelegationModalProvider>
-      </PartyRepresentationProvider>
+            </DelegationModalProvider>
+          </PartyRepresentationProvider>
+        </PageLayoutWrapper>
+      </PageWrapper>
     </AlertIfNotAvailableForUserType>
   );
 };
