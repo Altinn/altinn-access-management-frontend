@@ -18,8 +18,15 @@
 }
 
 .statusIcon {
-  background-color: green;
   border-radius: 50%;
   width: 0.675rem;
   height: 0.675rem;
+}
+
+.statusIcon.active {
+  background-color: var(--ds-color-success-base-hover);
+}
+
+.statusIcon.revoked {
+  background-color: var(--ds-color-danger-base-default);
 }

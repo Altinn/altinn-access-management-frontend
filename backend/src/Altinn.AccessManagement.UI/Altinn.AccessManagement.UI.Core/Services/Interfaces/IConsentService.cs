@@ -39,7 +39,15 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="party">Id of party to get active consents for</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Boolean value if approve was successful or not</returns>
+        /// <returns>List of active consents</returns>
         Task<Result<List<ConsentListItemFE>>> GetActiveConsents(Guid party, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get a consent
+        /// </summary>
+        /// <param name="consentId">Id of party to consent to get</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>A consent</returns>
+        Task<Result<ConsentFE>> GetConsent(Guid consentId, CancellationToken cancellationToken);
     }
 }

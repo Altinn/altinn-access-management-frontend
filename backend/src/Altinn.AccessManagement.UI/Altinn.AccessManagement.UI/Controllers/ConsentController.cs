@@ -117,11 +117,25 @@ namespace Altinn.AccessManagement.UI.Controllers
             return Ok(activeConsents.Value);
         }
 
-        // GET list of active consents - (paged?)
-        // { id, from, consentedDate }
+        /// <summary>
+        /// Get a consent request by id
+        /// </summary>
+        /// <param name="consentId">Id of consent to get </param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("{consentId}")]
+        public async Task<ActionResult> GetConsent([FromRoute] Guid consentId, CancellationToken cancellationToken)
+        {
+            Result<ConsentFE> consent = await _consentService.GetConsent(consentId, cancellationToken);
 
-        // GET single consent
-        // hva skal vises ved consented?
+            if (consent.IsProblem)
+            {
+                return consent.Problem.ToActionResult();
+            }
+
+            return Ok(consent.Value);
+        }
 
         // GET avtalelogg - (paged?)
 

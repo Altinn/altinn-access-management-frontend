@@ -25,6 +25,7 @@ import { ActiveConsent } from './ActiveConsent';
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
+  const [selectedConsentId, setSelectedConsentId] = useState<string>('');
 
   useDocumentTitle(t('systemuser_request.page_title'));
   const partyUuid = getCookie('AltinnPartyUuid');
@@ -45,7 +46,8 @@ export const ActiveConsentsPage = () => {
     {},
   );
 
-  const showConsentDetails = (): void => {
+  const showConsentDetails = (consentId: string): void => {
+    setSelectedConsentId(consentId);
     modalRef.current?.showModal();
   };
 
@@ -88,6 +90,7 @@ export const ActiveConsentsPage = () => {
                   key={partyId}
                   title={groupedActiveConsents[partyId][0].toPartyName}
                   subItems={groupedActiveConsents[partyId].map((item) => ({
+                    id: item.id,
                     title: item.toPartyName,
                   }))}
                   onClick={showConsentDetails}
@@ -100,46 +103,10 @@ export const ActiveConsentsPage = () => {
           ref={modalRef}
           className={classes.consentDialog}
           closedby='any'
+          onClose={() => setSelectedConsentId('')}
         >
           <div className={classes.consentContainer}>
-            <ActiveConsent
-              consent={{
-                id: '7e540335-d82f-41e9-8b8f-619336d792b4',
-                isPoa: true,
-                serviceIntroAccepted: {
-                  nb: 'Fullmakten gir DISKRET NÆR TIGER AS tilgang til følgende tjenester på dine vegne',
-                  nn: 'Fullmakta gjer DISKRET NÆR TIGER AS tilgang til følgjande tenester på dine vegne',
-                  en: 'The power of attorney gives DISKRET NÆR TIGER AS access to the following services on your behalf',
-                },
-                consentMessage: {
-                  nb: 'Dette er en melding fra banken',
-                  nn: 'Dette er ei melding fra banken',
-                  en: 'This is a message from the bank',
-                },
-                expiration: {
-                  nb: 'Fullmakten gjelder én gangs bruk av tjenestene',
-                  nn: 'Fullmakta gjeld bruk av tenestene éin gong',
-                  en: 'The power of attorney applies for one-time access to the service.',
-                },
-                handledBy: undefined,
-                toPartyName: 'LEPSØY OG TONSTAD',
-                rights: [
-                  {
-                    identifier: 'consent-test-resource-poa',
-                    title: {
-                      en: 'Power of attorney to perform a service',
-                      nb: 'Fullmakt til å utføre en tjeneste',
-                      nn: 'Fullmakt til å utføre ei teneste',
-                    },
-                    consentTextHtml: {
-                      en: '<p>Power of attorney to perform a great service.</p>\n',
-                      nb: '<p>Fullmakt til å utføre en bra tjeneste</p>\n',
-                      nn: '<p>Fullmakt til å utføre ei bra teneste</p>\n',
-                    },
-                  },
-                ],
-              }}
-            />
+            {selectedConsentId && <ActiveConsent consentId={selectedConsentId} />}
           </div>
         </DsDialog>
       </PageLayoutWrapper>
@@ -149,8 +116,8 @@ export const ActiveConsentsPage = () => {
 
 interface ActiveConsentListItemProps {
   title: string;
-  subItems: { title: string }[];
-  onClick: () => void;
+  subItems: { id: string; title: string }[];
+  onClick: (consentId: string) => void;
 }
 const ActiveConsentListItem = ({
   title,
@@ -177,7 +144,7 @@ const ActiveConsentListItem = ({
                 key={index}
                 icon={HandshakeIcon}
                 title={item.title}
-                onClick={onClick}
+                onClick={() => onClick(item.id)}
                 linkIcon
               />
             ))}

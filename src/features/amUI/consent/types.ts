@@ -33,11 +33,11 @@ export interface Consent {
   id: string;
   rights: ConsentRight[];
   isPoa: boolean;
+  titleAccepted: ConsentLanguage;
   serviceIntroAccepted: ConsentLanguage;
   consentMessage: ConsentLanguage;
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
-  toPartyName: string;
 }
 
 export interface ProblemDetail {

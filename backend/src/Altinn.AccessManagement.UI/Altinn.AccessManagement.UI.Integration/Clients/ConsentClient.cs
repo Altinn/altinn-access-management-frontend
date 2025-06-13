@@ -177,5 +177,33 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        /// <inheritdoc/>
+        public async Task<Result<Consent>> GetConsent(Guid consentId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"accessmanagement/api/v1/bff/consent/{consentId}";
+
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<Consent>(responseContent, _jsonSerializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // ConsentClient // GetConsent // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsent // Exception");
+                throw;
+            }
+        }
     }
 }
