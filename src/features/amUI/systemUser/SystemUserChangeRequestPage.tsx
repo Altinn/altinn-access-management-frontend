@@ -162,7 +162,7 @@ export const SystemUserChangeRequestPage = () => {
                 {t('systemuser_change_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck>
+            <CreateSystemUserCheck partyId={partyId}>
               <ButtonRow>
                 <DsButton
                   variant='primary'

@@ -11,17 +11,17 @@ import {
   List,
 } from '@altinn/altinn-components';
 
-import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
-import type { SystemUser } from '../types';
-
-import classes from './SystemUserOverviewPage.module.css';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetAgentSystemUsersQuery, useGetSystemUsersQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
+
+import type { SystemUser } from '../types';
+import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
+
+import classes from './SystemUserOverviewPage.module.css';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
@@ -57,7 +57,7 @@ export const SystemUserOverviewPage = () => {
           >
             {t('systemuser_overviewpage.sub_title_text')}
           </DsParagraph>
-          <CreateSystemUserCheck>
+          <CreateSystemUserCheck partyId={partyId}>
             {isLoadingSystemUsers && isLoadingAgentSystemUsers && (
               <DsSpinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
             )}

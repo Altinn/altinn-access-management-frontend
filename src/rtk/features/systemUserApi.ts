@@ -36,8 +36,8 @@ export const systemUserApi = createApi({
   }),
   tagTypes: [Tags.SystemUsers],
   endpoints: (builder) => ({
-    // system user request reportee
-    getSystemUserRequestReportee: builder.query<ReporteeInfo, string>({
+    // system user reportee
+    getSystemUserReportee: builder.query<ReporteeInfo, string>({
       query: (partyId) => `user/reportee/${partyId}`,
     }),
 
@@ -211,7 +211,7 @@ const apiWithTag = systemUserApi.enhanceEndpoints({
 });
 
 export const {
-  useGetSystemUserRequestReporteeQuery,
+  useGetSystemUserReporteeQuery,
   useCreateSystemUserMutation,
   useDeleteSystemuserMutation,
   useGetSystemUserQuery,

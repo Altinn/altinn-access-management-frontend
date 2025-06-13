@@ -3,15 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
 import { DsHeading, DsParagraph, DsAlert, DsButton, DsCombobox } from '@altinn/altinn-components';
 
+import { useGetRegisteredSystemsQuery } from '@/rtk/features/systemUserApi';
+import { SystemUserPath } from '@/routes/paths';
+import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import type { RegisteredSystem } from '../types';
 import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
 
 import classes from './CreateSystemUser.module.css';
-
-import { useGetRegisteredSystemsQuery } from '@/rtk/features/systemUserApi';
-import { SystemUserPath } from '@/routes/paths';
-import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 
 const isStringMatch = (inputString: string, matchString = ''): boolean => {
   return matchString.toLowerCase().indexOf(inputString.toLowerCase()) >= 0;
@@ -30,6 +31,7 @@ export const SelectRegisteredSystem = ({
 }: SelectRegisteredSystemProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const partyId = getCookie('AltinnPartyId');
 
   const {
     data: registeredSystems,
@@ -52,7 +54,7 @@ export const SelectRegisteredSystem = ({
         >
           {t('systemuser_creationpage.sub_title')}
         </DsHeading>
-        <CreateSystemUserCheck>
+        <CreateSystemUserCheck partyId={partyId}>
           <DsParagraph
             data-size='sm'
             className={classes.systemDescription}
