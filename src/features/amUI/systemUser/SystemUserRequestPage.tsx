@@ -9,7 +9,7 @@ import {
   useGetSystemUserRequestQuery,
   useApproveSystemUserRequestMutation,
   useRejectSystemUserRequestMutation,
-  useGetSystemUserRequestReporteeQuery,
+  useGetSystemUserReporteeQuery,
 } from '@/rtk/features/systemUserApi';
 
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
@@ -37,7 +37,7 @@ export const SystemUserRequestPage = () => {
       skip: !requestId,
     },
   );
-  const { data: reporteeData } = useGetSystemUserRequestReporteeQuery(request?.partyId ?? '', {
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
     skip: !request?.partyId,
   });
 
@@ -164,7 +164,7 @@ export const SystemUserRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck>
+            <CreateSystemUserCheck reporteeData={reporteeData}>
               <ButtonRow>
                 <DsButton
                   variant='primary'
