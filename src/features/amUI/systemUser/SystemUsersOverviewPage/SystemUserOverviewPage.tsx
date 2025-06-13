@@ -11,17 +11,17 @@ import {
   List,
 } from '@altinn/altinn-components';
 
-import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
-import type { SystemUser } from '../types';
-
-import classes from './SystemUserOverviewPage.module.css';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetAgentSystemUsersQuery, useGetSystemUsersQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
+
+import type { SystemUser } from '../types';
+import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
+
+import classes from './SystemUserOverviewPage.module.css';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
@@ -123,13 +123,13 @@ const SystemUserList = ({ systemUsers, isAgentList }: SystemUserListProps) => {
 
   return (
     <List
-      defaultItemSize='lg'
+      size='lg'
       items={systemUsers?.map((systemUser) => {
         const isNew = newlyCreatedId === systemUser.id;
         return {
-          title: systemUser.integrationTitle,
-          description: systemUser.system.systemVendorOrgName,
-          titleAs: 'h3',
+          title: { as: 'h3', children: systemUser.integrationTitle },
+          ariaLabel: systemUser.integrationTitle,
+          description: { as: 'div', children: systemUser.system.systemVendorOrgName },
           as: (props) => (
             <Link
               to={

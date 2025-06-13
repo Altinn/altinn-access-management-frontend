@@ -1,22 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  AccessPackageList,
-  DsButton,
-  DsDialog,
-  DsHeading,
-  ResourceList,
-} from '@altinn/altinn-components';
+import { AccessPackageList, DsButton, DsDialog, DsHeading, List } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
+
+import { getButtonIconSize } from '@/resources/utils';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import type { SystemUserAccessPackage } from '../../types';
 
 import classes from './RightsList.module.css';
 import { AccessPackageInfo } from './AccessPackageInfo';
 import { ResourceDetails } from './ResourceDetails';
-
-import { getButtonIconSize } from '@/resources/utils';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface RightsListProps {
   resources: ServiceResource[];
@@ -72,16 +66,19 @@ export const RightsList = ({
             items={accessPackages.map((accessPackage) => {
               return {
                 as: 'button',
-                titleAs: 'h3',
                 size: 'md',
                 id: accessPackage.id,
-                title: accessPackage.name,
-                description:
-                  accessPackage.resources.length === 1
-                    ? t('systemuser_detailpage.accesspackage_resources_list_singular')
-                    : t('systemuser_detailpage.accesspackage_resources_list_plural', {
-                        resourcesCount: accessPackage.resources.length,
-                      }),
+                ariaLabel: accessPackage.name,
+                title: { as: 'h3', children: accessPackage.name },
+                description: {
+                  as: 'div',
+                  children:
+                    accessPackage.resources.length === 1
+                      ? t('systemuser_detailpage.accesspackage_resources_list_singular')
+                      : t('systemuser_detailpage.accesspackage_resources_list_plural', {
+                          resourcesCount: accessPackage.resources.length,
+                        }),
+                },
                 onClick: () => onSelectAccessPackage(accessPackage),
               };
             })}
@@ -103,17 +100,21 @@ export const RightsList = ({
                   })}
             </DsHeading>
           )}
-          <ResourceList
-            defaultItemSize='md'
+          <List
+            size='md'
             items={resources.map((resource) => {
               return {
                 id: resource.identifier,
                 as: 'button',
-                titleAs: 'h3',
-                ownerLogoUrl: resource.resourceOwnerLogoUrl,
-                ownerLogoUrlAlt: resource.resourceOwnerName ?? '',
-                ownerName: resource.resourceOwnerName ?? '',
-                resourceName: resource.title,
+                ariaLabel: resource.title,
+                title: { as: 'h3', children: resource.title },
+                description: { as: 'div', children: resource.resourceOwnerName },
+                icon: {
+                  name: resource.resourceOwnerName,
+                  imageUrl: resource.resourceOwnerLogoUrl,
+                  imageUrlAlt: resource.resourceOwnerName,
+                  type: 'company',
+                },
                 onClick: () => onSelectResource(resource),
               };
             })}

@@ -133,7 +133,7 @@ export const UsersList = () => {
           userList={userList ?? undefined}
           searchString={searchString}
           isLoading={!userList || loadingRightHolders}
-          listItemTitleAs='h2'
+          listItemTitleAs='h3'
           interactive={isAdmin}
         />
       )}

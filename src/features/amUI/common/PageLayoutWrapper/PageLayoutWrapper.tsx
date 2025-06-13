@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react';
 import React, { useMemo, useState } from 'react';
-import type { AccountMenuItem, MenuGroupProps, MenuItemProps } from '@altinn/altinn-components';
+import type { MenuGroupProps, MenuItemProps } from '@altinn/altinn-components';
 import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
@@ -29,6 +29,7 @@ const getAccountType = (type: string): 'company' | 'person' => {
 
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t, i18n } = useTranslation();
+  const isSm = useIsTabletOrSmaller();
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
   const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery();
@@ -43,10 +44,9 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
 
-  const isSm = useIsTabletOrSmaller();
   const headerLinks: MenuItemProps[] = [
     {
-      groupId: 1,
+      groupId: 'apps',
       id: 'messagebox',
       title: t('header.inbox'),
       size: 'lg',
@@ -59,9 +59,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       ),
     },
     {
-      groupId: 1,
+      groupId: 'apps',
       icon: HandshakeIcon,
       id: 'access_management',
+      active: true,
       size: 'lg',
       title: t('header.access_management'),
       as: (props) => (
@@ -74,7 +75,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     ...(isSm ? SidebarItems(true, pathname, isAdmin) : []),
     {
       id: 'all-services',
-      groupId: 10,
+      groupId: 'apps',
       icon: MenuGridIcon,
       title: t('header.all_services'),
       size: 'lg',
@@ -87,7 +88,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
     {
       id: 'chat',
-      groupId: 10,
+      groupId: 'help',
       icon: PersonChatIcon,
       title: t('header.chat'),
       size: 'lg',
@@ -111,25 +112,37 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
   };
 
-  const accounts: AccountMenuItem[] = useMemo(() => {
+  const accounts = useMemo(() => {
     if (!reporteeList || !userinfo || !reportee) {
       return [];
     }
 
     const accountList = [];
     for (const account of reporteeList ?? []) {
-      const mappedAccount = getAccount(account, userinfo.uuid, reportee.partyUuid);
+      const mappedAccount = getAccount(account, reportee.partyUuid);
       accountList.push(mappedAccount);
 
       if (account.subunits && account.subunits.length > 0) {
         for (const subUnit of account.subunits) {
-          const mappedSubUnit = getAccount(subUnit, userinfo.uuid, reportee.partyUuid);
+          const mappedSubUnit = getAccount(subUnit, reportee.partyUuid, account.partyUuid);
           accountList.push(mappedSubUnit);
         }
       }
     }
-    return accountList.sort((a, b) => (a.groupId > b.groupId ? 1 : -1)) ?? [];
+    return accountList;
+    // return accountList.sort((a, b) => (a.groupId > b.groupId ? 1 : -1)) ?? [];
   }, [reporteeList, userinfo, reportee]);
+
+  const onSelectAccount = (accountId: string) => {
+    const redirectUrl = window.location.pathname.includes('systemuser')
+      ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
+      : window.location.href;
+
+    (window as Window).open(
+      `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
+      '_self',
+    );
+  };
 
   return (
     <RootProvider>
@@ -153,33 +166,49 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             id: reportee?.partyUuid || '',
           },
           menu: {
+            accountMenu: {
+              items: accounts,
+              groups: accountGroups,
+              currentAccount: {
+                name: reportee?.name || '',
+                type: getAccountType(reportee?.type ?? ''),
+                id: reportee?.partyUuid || '',
+              },
+              search: {
+                name: 'account-search',
+                value: searchString,
+                onChange: (event: ChangeEvent<HTMLInputElement>) => {
+                  setSearchString(event.target.value);
+                },
+                placeholder: t('header.search-label'),
+                hidden: false,
+                getResultsLabel: (hits: number) => {
+                  return `${hits} ${t('header.search-hits')}`;
+                },
+              },
+              menuItemsVirtual: {
+                isVirtualized: accounts.length > 20,
+                scrollRefStyles: {
+                  maxHeight: 'calc(90vh - 8rem)',
+                },
+              },
+            },
+            onSelectAccount: (accountId: string) => {
+              onSelectAccount(accountId);
+            },
+            groups: {
+              apps: {
+                defaultIconTheme: 'surface',
+                divider: true,
+              },
+              profile: {
+                defaultItemColor: 'person',
+              },
+            },
+            currentEndUserLabel: `${t('header.current-end-user-label', { currentUser: userinfo?.name ?? '' })}`,
             menuLabel: t('header.menu-label'),
             backLabel: t('header.back-label'),
             changeLabel: t('header.change-label'),
-            accountGroups,
-            accounts,
-            accountSearch: {
-              name: 'account-search',
-              value: searchString,
-              onChange: (event: ChangeEvent<HTMLInputElement>) => {
-                setSearchString(event.target.value);
-              },
-              placeholder: t('header.search-label'),
-              hidden: false,
-              getResultsLabel: (hits: number) => {
-                return `${hits} ${t('header.search-hits')}`;
-              },
-            },
-            isVirtualized: accounts.length > 20,
-            onSelectAccount: (accountId) => {
-              const redirectUrl = window.location.pathname.includes('systemuser')
-                ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
-                : window.location.href;
-              (window as Window).open(
-                `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
-                '_self',
-              );
-            },
             items: headerLinks,
             logoutButton: {
               label: t('header.log_out'),
@@ -226,18 +255,21 @@ const footerLinks = [
   { href: 'https://info.altinn.no/om-altinn/tilgjengelighet/', resourceId: 'footer.accessibility' },
 ];
 
-const getAccount = (reportee: ReporteeInfo, userUuid: string, currentReporteeUuid: string) => {
-  const group = reportee.partyUuid === userUuid ? 'a' : 'b';
+const getAccount = (reportee: ReporteeInfo, currentReporteeUuid: string, parentId?: string) => {
   const accountType = getAccountType(reportee?.type ?? '');
   return {
     id: reportee.partyId,
+    uniqueId: reportee.partyId,
     name:
       accountType == 'person'
         ? reportee.name
         : `${reportee.name}  (${reportee.organizationNumber})`,
-    group: reportee.partyUuid === userUuid ? 'a' : 'b',
-    groupId: group,
+    parentId,
+    icon: {
+      name: reportee.name,
+      type: accountType,
+    },
     type: accountType,
-    selected: reportee.partyUuid === currentReporteeUuid,
+    active: reportee.partyUuid === currentReporteeUuid,
   };
 };

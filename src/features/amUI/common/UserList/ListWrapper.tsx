@@ -1,12 +1,12 @@
 import type { FlexSpacing, ListItemSize } from '@altinn/altinn-components';
-import { ListBase } from '@altinn/altinn-components';
+import { List } from '@altinn/altinn-components';
 import cn from 'classnames';
+
+import type { User } from '@/rtk/features/userInfoApi';
 
 import classes from './UserList.module.css';
 import { UserListItem } from './UserListItem';
 import { SkeletonUserList } from './SkeletonUserList';
-
-import type { User } from '@/rtk/features/userInfoApi';
 
 export interface UserListProps {
   userList: User[];
@@ -29,7 +29,7 @@ export const ListWrapper = ({
 }: UserListProps) => {
   return (
     <div className={cn(indent ? classes.indent : '')}>
-      <ListBase spacing={spacing}>
+      <List spacing={spacing}>
         {isLoading ? (
           <SkeletonUserList />
         ) : (
@@ -43,7 +43,7 @@ export const ListWrapper = ({
             />
           ))
         )}
-      </ListBase>
+      </List>
     </div>
   );
 };

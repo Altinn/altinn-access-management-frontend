@@ -1,4 +1,4 @@
-import { ListItemBase, ListItemHeader } from '@altinn/altinn-components';
+import { ListItem } from '@altinn/altinn-components';
 
 import type { User } from '@/rtk/features/userInfoApi';
 
@@ -19,24 +19,19 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
       {loading ? (
         <CurrentUserSkeleton />
       ) : (
-        <ListItemBase
-          as='div'
-          variant='solid'
-          theme='default'
-          shadow='xs'
-        >
-          <ListItemHeader
-            size='xl'
-            title={currentUser?.name}
-            description={`${description.slice(0, 100)}${description.length > 100 ? '...' : ''}`}
-            avatar={{
-              type: 'person',
-              name: currentUser?.name || '',
-            }}
-            as={as}
-            titleAs={'h2'}
-          />
-        </ListItemBase>
+        <ListItem
+          size='xl'
+          title={{ as: 'h2', children: currentUser?.name, size: 'lg' }}
+          description={{
+            as: 'p',
+            children: `${description.slice(0, 100)}${description.length > 100 ? '...' : ''}`,
+          }}
+          icon={{
+            type: 'person',
+            name: currentUser?.name || '',
+          }}
+          as={as}
+        />
       )}
     </div>
   );
