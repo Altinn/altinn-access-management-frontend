@@ -56,7 +56,6 @@ export const getTextKeysForDeletionStatus = (status: DeletionStatus): DeletionI1
 
   const targetPrefix = `${target}_`;
 
-  // Suffix for keys, which changes based on the deletion level
   let levelSuffix = '';
   if (level === DeletionLevel.Limited) {
     levelSuffix = 'limited_deletion_';
@@ -64,7 +63,6 @@ export const getTextKeysForDeletionStatus = (status: DeletionStatus): DeletionI1
     levelSuffix = 'deletion_not_allowed_';
   }
 
-  // The button key has simpler logic
   const triggerButtonKey = `delete_user.${target}_trigger_button`;
 
   return {
