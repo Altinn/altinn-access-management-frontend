@@ -11,9 +11,9 @@ import { useGetRightHoldersQuery, useRemoveRightHolderMutation } from '@/rtk/fea
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
-} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { LoadingAnimation } from '../common/LoadingAnimation/LoadingAnimation';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+} from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { LoadingAnimation } from '../LoadingAnimation/LoadingAnimation';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './DeleteUserModal.module.css';
 import { getDeletionStatus, getTextKeysForDeletionStatus } from './deletionModalUtils';

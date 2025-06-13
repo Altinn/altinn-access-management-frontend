@@ -15,6 +15,7 @@ export default {
       <PartyRepresentationProvider
         fromPartyUuid={''}
         toPartyUuid={''}
+        actingPartyUuid={''}
       >
         <OldRolesAlert {...args} />
       </PartyRepresentationProvider>

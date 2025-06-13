@@ -4,7 +4,7 @@ import { RootProvider } from '@altinn/altinn-components';
 
 import store from '@/rtk/app/store';
 
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { DeleteUserModal } from './DeleteUserModal';
 
