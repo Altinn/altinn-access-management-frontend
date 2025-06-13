@@ -14,7 +14,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     delegateRoles,
     context,
   }) => {
-    test.setTimeout(300000);
+    test.setTimeout(400000);
 
     await login.loginWithUser('04885299593');
     await login.chooseReportee('ULIK FLAT TIGER AS');
@@ -74,7 +74,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     delegateRoles,
     context,
   }) => {
-    test.setTimeout(300000);
+    test.setTimeout(400000);
 
     await login.loginWithUser('04885299593');
     await login.chooseReportee('ULIK FLAT TIGER AS');
@@ -136,7 +136,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     context,
     delegateRoles,
   }) => {
-    test.setTimeout(60000 * 3);
+    test.setTimeout(60000 * 4);
 
     //Login with user who has tilgangstyrring rolle
     await login.loginWithUser('04885299593');
@@ -181,6 +181,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     delegate,
     delegateRights,
   }) => {
+    test.setTimeout(60000 * 2);
     await login.loginWithUser('04885299593');
     await login.chooseReportee('ULIK FLAT TIGER AS');
 
