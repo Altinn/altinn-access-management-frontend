@@ -1,3 +1,11 @@
+.triggerIcon {
+  font-size: 1.3em;
+}
+
+.largeButton {
+  width: 100%;
+}
+
 .textField {
   max-width: 22rem;
 }
