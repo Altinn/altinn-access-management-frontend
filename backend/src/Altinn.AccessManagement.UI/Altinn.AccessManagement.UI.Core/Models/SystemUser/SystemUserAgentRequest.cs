@@ -21,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// </summary>
         [Required]
         [JsonPropertyName("partyId")]
-        public string PartyId { get; set; }
+        public int PartyId { get; set; }
 
         /// <summary>
         /// PartyUuid of the SystemUser's Party (the customer that delegates rights to the systemuser).
