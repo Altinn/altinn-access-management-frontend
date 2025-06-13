@@ -38,6 +38,7 @@ export const systemUserApi = createApi({
   endpoints: (builder) => ({
     // system user reportee
     getSystemUserReportee: builder.query<ReporteeInfo, string>({
+      keepUnusedDataFor: 300,
       query: (partyId) => `user/reportee/${partyId}`,
     }),
 
