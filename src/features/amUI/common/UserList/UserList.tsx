@@ -29,24 +29,25 @@ export const UserList = ({
     searchString,
   });
 
-  const promptForNoResults = !isLoading && users && users.length === 0;
+  const promptForNoResults = !isLoading && users?.length === 0;
 
   return (
     <>
-      <div role='alert'>
-        {promptForNoResults && (
-          <div className={classes.noResultsContent}>
-            {searchString.length == 0 ? (
-              <DsParagraph data-size='md'>{t('users_page.no_users')}</DsParagraph>
-            ) : (
-              <DsParagraph data-size='md'>
-                {t('users_page.user_no_search_result', { searchTerm: searchString })}
-              </DsParagraph>
-            )}
-            <NewUserButton isLarge />
-          </div>
-        )}
-      </div>
+      {promptForNoResults && (
+        <div
+          role='alert'
+          className={classes.noResultsContent}
+        >
+          {searchString.length === 0 ? (
+            <DsParagraph data-size='md'>{t('users_page.no_users')}</DsParagraph>
+          ) : (
+            <DsParagraph data-size='md'>
+              {t('users_page.user_no_search_result', { searchTerm: searchString })}
+            </DsParagraph>
+          )}
+          <NewUserButton isLarge />
+        </div>
+      )}
       <ListWrapper
         userList={users ?? []}
         spacing={2}
