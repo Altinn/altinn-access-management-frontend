@@ -3,7 +3,7 @@
   "status": "New",
   "systemId": "910493353_fiken_demo_product",
   "partyOrgNo": "51329012",
-  "partyId": "51329012",
+  "partyId": 51329012,
   "partyUuid": "cd35779b-b174-4ecc-bbef-ece13611be7f",
   "redirectUrl": "https://smartcloudaltinn.azurewebsites.net/receipt",
   "rights": [
