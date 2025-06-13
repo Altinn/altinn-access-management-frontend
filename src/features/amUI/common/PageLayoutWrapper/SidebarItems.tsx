@@ -1,10 +1,9 @@
 import React from 'react';
 import type { MenuItemProps, MenuItemSize } from '@altinn/altinn-components';
-import { HandshakeIcon, InboxIcon, PersonGroupIcon, TenancyIcon } from '@navikt/aksel-icons';
+import { InboxIcon, PersonGroupIcon, TenancyIcon } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
 
-import AMicon from '@/assets/AM_icon.svg?react';
 import { amUIPath, SystemUserPath } from '@/routes/paths';
 
 /**
@@ -17,12 +16,17 @@ export const SidebarItems = (
   isSmall: boolean = false,
   pathname: string = '',
   isAdmin: boolean | undefined,
+  accountName: string,
+  accountType: 'company' | 'person',
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const heading: MenuItemProps = {
     id: '1',
     groupId: 1,
-    icon: { svgElement: AMicon, theme: 'base' },
+    avatar: {
+      name: accountName,
+      type: accountType,
+    },
     size: 'lg',
     title: t('sidebar.access_management'),
   };

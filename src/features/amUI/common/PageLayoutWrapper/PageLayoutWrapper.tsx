@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import { HandshakeIcon, InboxIcon, MenuGridIcon, PersonChatIcon } from '@navikt/aksel-icons';
 
-import AMicon from '@/assets/AM_icon.svg?react';
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   useGetIsAdminQuery,
@@ -61,7 +60,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
     {
       groupId: 1,
-      icon: AMicon,
+      icon: HandshakeIcon,
       id: 'access_management',
       size: 'lg',
       title: t('header.access_management'),
@@ -72,7 +71,15 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         />
       ),
     },
-    ...(isSm ? SidebarItems(true, pathname, isAdmin) : []),
+    ...(isSm
+      ? SidebarItems(
+          true,
+          pathname,
+          isAdmin,
+          reportee?.name || '',
+          getAccountType(reportee?.type ?? ''),
+        )
+      : []),
     {
       id: 'all-services',
       groupId: 10,
@@ -194,7 +201,13 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         sidebar={{
           menu: {
             groups: {},
-            items: SidebarItems(false, pathname, isAdmin),
+            items: SidebarItems(
+              false,
+              pathname,
+              isAdmin,
+              reportee?.name || '',
+              getAccountType(reportee?.type ?? ''),
+            ),
           },
         }}
         content={{ color: 'company' }}

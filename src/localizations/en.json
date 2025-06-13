@@ -288,7 +288,8 @@
     "main_page_heading": "Users with power of attorney in {{name}}",
     "user_list_heading": "Other users with power of attorney",
     "user_search_placeholder": "Search for users",
-    "user_no_search_result": "No users found"
+    "no_users": "Nobody but you have access. Do you want to change this?",
+    "user_no_search_result": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?"
   },
   "reportees_page": {
     "page_title": "Our access to other companies - Altinn",
@@ -362,7 +363,8 @@
     "person": "Person",
     "organization": "Organization",
     "modal_title": "Add new person or organization",
-    "trigger_button": "Add user",
+    "trigger_button": "New user",
+    "trigger_button_large": "Give power of attorney to new user",
     "add_person_button": "Add person",
     "add_org_button": "Add organization",
     "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future."

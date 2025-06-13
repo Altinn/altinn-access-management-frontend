@@ -6,6 +6,7 @@ import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
 
 import type { User } from '@/rtk/features/userInfoApi';
+import NewUserModal, { NewUserButton } from '../../users/NewUserModal/NewUserModal';
 
 export interface UserListProps {
   userList?: User[];
@@ -28,14 +29,24 @@ export const UserList = ({
     searchString,
   });
 
+  const promptForNoResults = !isLoading && users && users.length === 0;
+
   return (
     <>
-      <DsParagraph
-        role='alert'
-        data-size='lg'
-      >
-        {!isLoading && users && users.length === 0 ? t('users_page.user_no_search_result') : ''}
-      </DsParagraph>
+      <div role='alert'>
+        {promptForNoResults && (
+          <div className={classes.noResultsContent}>
+            {searchString.length == 0 ? (
+              <DsParagraph data-size='md'>{t('users_page.no_users')}</DsParagraph>
+            ) : (
+              <DsParagraph data-size='md'>
+                {t('users_page.user_no_search_result', { searchTerm: searchString })}
+              </DsParagraph>
+            )}
+            <NewUserButton isLarge />
+          </div>
+        )}
+      </div>
       <ListWrapper
         userList={users ?? []}
         spacing={2}
