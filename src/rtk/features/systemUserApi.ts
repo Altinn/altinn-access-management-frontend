@@ -186,11 +186,8 @@ export const systemUserApi = createApi({
     }),
 
     // agent request
-    getAgentSystemUserRequest: builder.query<
-      SystemUserRequest,
-      { partyId: string; requestId: string }
-    >({
-      query: ({ partyId, requestId }) => `systemuser/agentrequest/${partyId}/${requestId}`,
+    getAgentSystemUserRequest: builder.query<SystemUserRequest, { requestId: string }>({
+      query: ({ requestId }) => `systemuser/agentrequest/${requestId}`,
     }),
     approveAgentSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({

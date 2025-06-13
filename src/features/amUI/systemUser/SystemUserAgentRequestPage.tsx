@@ -7,10 +7,9 @@ import {
   useGetAgentSystemUserRequestQuery,
   useApproveAgentSystemUserRequestMutation,
   useRejectAgentSystemUserRequestMutation,
+  useGetSystemUserRequestReporteeQuery,
 } from '@/rtk/features/systemUserApi';
 import { SystemUserPath } from '@/routes/paths';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
@@ -27,19 +26,20 @@ export const SystemUserAgentRequestPage = () => {
   useDocumentTitle(t('systemuser_agent_request.page_title'));
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
-  const partyId = getCookie('AltinnPartyId');
 
   const {
     data: request,
     isLoading: isLoadingRequest,
     error: loadingRequestError,
   } = useGetAgentSystemUserRequestQuery(
-    { partyId, requestId },
+    { requestId },
     {
       skip: !requestId,
     },
   );
-  const { data: reporteeData } = useGetReporteeQuery();
+  const { data: reporteeData } = useGetSystemUserRequestReporteeQuery(request?.partyId ?? '', {
+    skip: !request?.partyId,
+  });
 
   const [
     postAcceptCreationRequest,
@@ -56,6 +56,7 @@ export const SystemUserAgentRequestPage = () => {
 
   const acceptSystemUser = (): void => {
     if (!isActionButtonDisabled) {
+      const partyId = request.partyId;
       postAcceptCreationRequest({ partyId, requestId: request.id })
         .unwrap()
         .then(() => {
@@ -70,6 +71,7 @@ export const SystemUserAgentRequestPage = () => {
 
   const rejectSystemUser = (): void => {
     if (!isActionButtonDisabled) {
+      const partyId = request.partyId;
       postRejectCreationRequest({ partyId, requestId: request.id })
         .unwrap()
         .then(() => {

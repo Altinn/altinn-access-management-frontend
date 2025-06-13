@@ -29,11 +29,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("{partyId}/{agentRequestId}")]
-        public async Task<ActionResult> GetAgentRequestByPartyIdAndRequestId([FromRoute] int partyId, [FromRoute] Guid agentRequestId, CancellationToken cancellationToken)
+        [HttpGet("{agentRequestId}")]
+        public async Task<ActionResult> GetAgentRequestByPartyIdAndRequestId([FromRoute] Guid agentRequestId, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            Result<SystemUserAgentRequestFE> req = await _systemUserAgentRequestService.GetSystemUserAgentRequest(partyId, agentRequestId, languageCode, cancellationToken);
+            Result<SystemUserAgentRequestFE> req = await _systemUserAgentRequestService.GetSystemUserAgentRequest(agentRequestId, languageCode, cancellationToken);
             if (req.IsProblem)
             {
                 return req.Problem.ToActionResult();
