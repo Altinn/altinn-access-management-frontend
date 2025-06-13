@@ -22,14 +22,11 @@ export const getDeletionStatus = (
   viewingYourself: boolean,
   reporteeView: boolean,
 ): DeletionStatus => {
-  let target: DeletionTarget;
-  if (viewingYourself) {
-    target = DeletionTarget.Yourself;
-  } else if (reporteeView) {
-    target = DeletionTarget.Reportee;
-  } else {
-    target = DeletionTarget.User;
-  }
+  const target = viewingYourself
+    ? DeletionTarget.Yourself
+    : reporteeView
+      ? DeletionTarget.Reportee
+      : DeletionTarget.User;
 
   const allRoles = connections?.flatMap((connection) => connection.roles) ?? [];
   let level: DeletionLevel;
