@@ -4,6 +4,7 @@ import { HandshakeIcon, InboxIcon, PersonGroupIcon, TenancyIcon } from '@navikt/
 import { t } from 'i18next';
 import { Link } from 'react-router';
 
+import AMicon from '@/assets/AM_icon.svg?react';
 import { amUIPath, SystemUserPath } from '@/routes/paths';
 
 /**
@@ -21,7 +22,7 @@ export const SidebarItems = (
   const heading: MenuItemProps = {
     id: '1',
     groupId: 1,
-    icon: { svgElement: HandshakeIcon, theme: 'base' },
+    icon: { svgElement: AMicon, theme: 'base' },
     size: 'lg',
     title: t('sidebar.access_management'),
   };

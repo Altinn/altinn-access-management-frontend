@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import { HandshakeIcon, InboxIcon, MenuGridIcon, PersonChatIcon } from '@navikt/aksel-icons';
 
+import AMicon from '@/assets/AM_icon.svg?react';
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   useGetIsAdminQuery,
@@ -60,7 +61,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
     {
       groupId: 1,
-      icon: HandshakeIcon,
+      icon: AMicon,
       id: 'access_management',
       size: 'lg',
       title: t('header.access_management'),
