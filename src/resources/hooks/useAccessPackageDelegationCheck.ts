@@ -43,7 +43,7 @@ export const useAccessPackageDelegationCheck = (
   const canDelegate = (id: string) =>
     displayLimitedPreviewLaunch
       ? true
-      : !isLoading && data?.find((d) => d.packageId === id)?.canDelegate;
+      : !!(!isLoading && data?.find((d) => d.packageId === id)?.canDelegate);
 
   return { canDelegate, isLoading, isUninitialized };
 };
