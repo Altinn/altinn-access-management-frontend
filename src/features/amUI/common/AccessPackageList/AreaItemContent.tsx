@@ -1,15 +1,13 @@
-import {
-  ListBase,
-  DsAlert,
-  DsHeading,
-  DsParagraph,
-  Button,
-  DsButton,
-} from '@altinn/altinn-components';
+import { ListBase, DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
@@ -19,11 +17,6 @@ import type { ExtendedAccessArea } from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
 import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
-
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
@@ -60,7 +53,7 @@ export const AreaItemContent = ({
     setDelegationCheckError(error);
   };
   const shouldShowDelegationCheck = !!availableActions?.includes(DelegationAction.DELEGATE);
-  const { canDelegate, isLoading, isUninitialized } = useAccessPackageDelegationCheck(
+  const { canDelegate, isLoading } = useAccessPackageDelegationCheck(
     availablePackageIds,
     shouldShowDelegationCheck && showAvailablePackages,
     handleDelegationCheckFailure,
@@ -131,7 +124,7 @@ export const AreaItemContent = ({
               controls={
                 !isSm && (
                   <DelegateAccessPackageActionControl
-                    isLoading={(isLoading || isUninitialized) && shouldShowDelegationCheck}
+                    isLoading={isLoading && shouldShowDelegationCheck}
                     availableActions={availableActions}
                     canDelegate={!!canDelegate(pkg.id)}
                     onDelegate={() => onDelegate(pkg)}
