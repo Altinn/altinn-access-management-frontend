@@ -16,6 +16,43 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       ],
     });
   }),
+  http.get(
+    `${ACCESSMANAGEMENT_BASE_URL}/user/rightholders?party=:partyId&from=:fromId&to=:toId`,
+    ({ request }) => {
+      const url = new URL(request.url);
+      const id = url.searchParams.get('party');
+      const defaultReturn = {
+        partyUuid: id || '3d8b34c3-df0d-4dcc-be12-e788ce414744',
+        partyType: 'Organization',
+        name: 'DIGITALISERINGSDIREKTORATET',
+        registryRoles: null,
+        roles: ['Rettighetshaver'],
+        organizationNumber: null,
+        unitType: null,
+        inheritingUsers: [],
+      };
+
+      if (id?.includes('PARTIALLY_DELETABLE')) {
+        return HttpResponse.json([
+          {
+            ...defaultReturn,
+            roles: ['Rettighetshaver', 'Tilgangsstyrer'],
+          },
+        ]);
+      }
+
+      if (id?.includes('NOT_DELETABLE')) {
+        return HttpResponse.json([
+          {
+            ...defaultReturn,
+            roles: ['Tilgangsstyrer'],
+          },
+        ]);
+      }
+
+      return HttpResponse.json([defaultReturn]);
+    },
+  ),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/profile`, () => {
     return HttpResponse.json({
       userId: 20010996,

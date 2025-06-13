@@ -15,11 +15,11 @@ import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
+import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
 
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
-import { DeleteUserModal } from './DeleteUserModal';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();

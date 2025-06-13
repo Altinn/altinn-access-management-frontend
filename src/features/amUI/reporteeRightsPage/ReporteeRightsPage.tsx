@@ -15,6 +15,7 @@ import { PageContainer } from '../common/PageContainer/PageContainer';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
+import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
 
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';
@@ -39,7 +40,10 @@ export const ReporteeRightsPage = () => {
             returnToUrlOnError={`/${amUIPath.Reportees}`}
           >
             <DelegationModalProvider>
-              <PageContainer backUrl={`/${amUIPath.Reportees}`}>
+              <PageContainer
+                backUrl={`/${amUIPath.Reportees}`}
+                contentActions={<DeleteUserModal direction='from' />}
+              >
                 <UserPageHeader
                   direction='from'
                   displayDirection
