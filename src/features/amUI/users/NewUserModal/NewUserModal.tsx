@@ -51,16 +51,12 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
         data-size='sm'
       >
         <DsTabs.List>
-          {!displayLimitedPreviewLaunch && (
-            <DsTabs.Tab value='person'>{t('new_user_modal.person')}</DsTabs.Tab>
-          )}
+          {<DsTabs.Tab value='person'>{t('new_user_modal.person')}</DsTabs.Tab>}
           <DsTabs.Tab value='org'>{t('new_user_modal.organization')}</DsTabs.Tab>
         </DsTabs.List>
-        {!displayLimitedPreviewLaunch && (
-          <DsTabs.Panel value='person'>
-            <NewPersonContent />
-          </DsTabs.Panel>
-        )}
+        <DsTabs.Panel value='person'>
+          <NewPersonContent />
+        </DsTabs.Panel>
         <DsTabs.Panel value='org'>
           <NewOrgContent />
         </DsTabs.Panel>

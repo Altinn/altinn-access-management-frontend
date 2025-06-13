@@ -5,6 +5,7 @@
     "close": "Lukk",
     "open": "Åpne",
     "back": "Tilbake",
+    "go_back": "Gå tilbake",
     "changes_made_msg": "Endringar gjort. Klikk på lagre-knappen for å gjere dei gjeldande",
     "status_code": "Statuskode",
     "maskinporten": "Maskinporten",
@@ -112,7 +113,8 @@
     "go_to_help": "Gå til hjelpesida",
     "unknown_error_header": "Oi! Det har visst skjedd ein feil",
     "unknown_error_description": "Prøv å laste inn sida på nytt.",
-    "if_persistent_contact_service": "Dersom feilen held fram kan du finne svar på Altinn sine hjelpesider, eller kontakte brukarservice på telefon 75 00 60 00."
+    "if_persistent_contact_service": "Dersom feilen held fram kan du finne svar på Altinn sine hjelpesider, eller kontakte brukarservice på telefon 75 00 60 00.",
+    "user_connection_error": "Ojsann, her var det visst ingenting. "
   },
   "profile": {
     "received": "Mottatt",
@@ -357,7 +359,9 @@
     "organization": "Virksemnd",
     "modal_title": "Legg til ny person eller virksemnd",
     "trigger_button": "Legg til brukar",
-    "add_button": "Legg til brukar"
+    "add_person_button": "Legg til person",
+    "add_org_button": "Legg til virksomheit",
+    "limited_preview_message": "Du kan diverre ikkje legge til personar heilt enda. Dette vil komme seinare."
   },
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyer Altinn",

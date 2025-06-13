@@ -60,6 +60,7 @@ export const userInfoApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['UserInfo', 'RightHolders'],
   endpoints: (builder) => ({
     getUserInfo: builder.query<UserInfo, void>({
       query: () => 'profile',
@@ -91,7 +92,13 @@ export const userInfoApi = createApi({
       {
         query: ({ partyUuid, fromUuid, toUuid }) =>
           `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
-        keepUnusedDataFor: 300,
+        keepUnusedDataFor: 3,
+        providesTags: ['RightHolders'],
+        transformErrorResponse: (response: {
+          status: string | number;
+        }): { status: string | number; data: string } => {
+          return { status: response.status, data: new Date().toISOString() };
+        },
       },
     ),
     removeRightHolder: builder.mutation<void, { toPartyUuid: string; fromPartyUuid: string }>({
