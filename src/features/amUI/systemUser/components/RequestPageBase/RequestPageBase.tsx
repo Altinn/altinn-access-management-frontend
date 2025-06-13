@@ -2,26 +2,27 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
+import AltinnLogo from '@/assets/AltinnTextLogo.svg?react';
+import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+
 import type { RegisteredSystem } from '../../types';
 
 import classes from './RequestPageBase.module.css';
 
-import AltinnLogo from '@/assets/AltinnTextLogo.svg?react';
-import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
-
 interface RequestPageBaseProps {
   system?: RegisteredSystem;
   heading: string;
+  reporteeName?: string;
   children: React.ReactNode | React.ReactNode[];
 }
 
 export const RequestPageBase = ({
   system,
   heading,
+  reporteeName,
   children,
 }: RequestPageBaseProps): React.ReactNode => {
   const { data: userData } = useGetUserInfoQuery();
-  const { data: reporteeData } = useGetReporteeQuery();
 
   const { t } = useTranslation();
 
@@ -33,7 +34,7 @@ export const RequestPageBase = ({
           {userData && (
             <div>
               <div>{userData?.name}</div>
-              <div>for {reporteeData?.name}</div>
+              <div>for {reporteeName}</div>
             </div>
           )}
         </div>

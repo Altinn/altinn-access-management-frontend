@@ -10,6 +10,8 @@ import type {
   AgentDelegation,
 } from '@/features/amUI/systemUser/types';
 
+import type { ReporteeInfo } from './userInfoApi';
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
 enum Tags {
@@ -34,6 +36,11 @@ export const systemUserApi = createApi({
   }),
   tagTypes: [Tags.SystemUsers],
   endpoints: (builder) => ({
+    // system user request reportee
+    getSystemUserRequestReportee: builder.query<ReporteeInfo, string>({
+      query: (partyId) => `user/reportee/${partyId}`,
+    }),
+
     // systemregister
     getRegisteredSystems: builder.query<RegisteredSystem[], void>({
       query: () => `/systemregister`,
@@ -137,8 +144,8 @@ export const systemUserApi = createApi({
     }),
 
     // system user request
-    getSystemUserRequest: builder.query<SystemUserRequest, { partyId: string; requestId: string }>({
-      query: ({ partyId, requestId }) => `systemuser/request/${partyId}/${requestId}`,
+    getSystemUserRequest: builder.query<SystemUserRequest, { requestId: string }>({
+      query: ({ requestId }) => `systemuser/request/${requestId}`,
     }),
     approveSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({
@@ -179,11 +186,8 @@ export const systemUserApi = createApi({
     }),
 
     // agent request
-    getAgentSystemUserRequest: builder.query<
-      SystemUserRequest,
-      { partyId: string; requestId: string }
-    >({
-      query: ({ partyId, requestId }) => `systemuser/agentrequest/${partyId}/${requestId}`,
+    getAgentSystemUserRequest: builder.query<SystemUserRequest, { requestId: string }>({
+      query: ({ requestId }) => `systemuser/agentrequest/${requestId}`,
     }),
     approveAgentSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({
@@ -207,6 +211,7 @@ const apiWithTag = systemUserApi.enhanceEndpoints({
 });
 
 export const {
+  useGetSystemUserRequestReporteeQuery,
   useCreateSystemUserMutation,
   useDeleteSystemuserMutation,
   useGetSystemUserQuery,
