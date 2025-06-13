@@ -6,7 +6,7 @@ import { DsHeading, DsParagraph, DsAlert, DsButton, DsCombobox } from '@altinn/a
 import { useGetRegisteredSystemsQuery } from '@/rtk/features/systemUserApi';
 import { SystemUserPath } from '@/routes/paths';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import type { RegisteredSystem } from '../types';
@@ -31,7 +31,7 @@ export const SelectRegisteredSystem = ({
 }: SelectRegisteredSystemProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const partyId = getCookie('AltinnPartyId');
+  const { data: reporteeData } = useGetReporteeQuery();
 
   const {
     data: registeredSystems,
@@ -54,7 +54,7 @@ export const SelectRegisteredSystem = ({
         >
           {t('systemuser_creationpage.sub_title')}
         </DsHeading>
-        <CreateSystemUserCheck partyId={partyId}>
+        <CreateSystemUserCheck reporteeData={reporteeData}>
           <DsParagraph
             data-size='sm'
             className={classes.systemDescription}

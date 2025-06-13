@@ -17,6 +17,7 @@ import { useGetAgentSystemUsersQuery, useGetSystemUsersQuery } from '@/rtk/featu
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import type { SystemUser } from '../types';
 import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
@@ -28,6 +29,7 @@ export const SystemUserOverviewPage = () => {
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
 
   const partyId = getCookie('AltinnPartyId');
+  const { data: reporteeData } = useGetReporteeQuery();
 
   const {
     data: systemUsers,
@@ -57,7 +59,7 @@ export const SystemUserOverviewPage = () => {
           >
             {t('systemuser_overviewpage.sub_title_text')}
           </DsParagraph>
-          <CreateSystemUserCheck partyId={partyId}>
+          <CreateSystemUserCheck reporteeData={reporteeData}>
             {isLoadingSystemUsers && isLoadingAgentSystemUsers && (
               <DsSpinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
             )}

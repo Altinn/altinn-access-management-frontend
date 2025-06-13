@@ -1,14 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsSpinner, DsParagraph } from '@altinn/altinn-components';
+import { DsParagraph } from '@altinn/altinn-components';
 
 import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
-import { useGetSystemUserReporteeQuery } from '@/rtk/features/systemUserApi';
 
 import classes from './CanCreateSystemUser.module.css';
 
 interface CreateSystemUserCheckProps {
-  partyId: string;
+  reporteeData: ReporteeInfo | undefined;
   children: React.ReactNode;
 }
 
@@ -21,17 +20,13 @@ const canCreateSystemUser = (reporteeInfo: ReporteeInfo): boolean => {
 };
 
 export const CreateSystemUserCheck = ({
-  partyId,
+  reporteeData,
   children,
 }: CreateSystemUserCheckProps): React.ReactNode => {
   const { t } = useTranslation();
 
-  const { data: reporteeData, isLoading: isLoadingReporteeData } =
-    useGetSystemUserReporteeQuery(partyId);
-
   return (
     <>
-      {isLoadingReporteeData && <DsSpinner aria-label='' />}
       {reporteeData && !canCreateSystemUser(reporteeData) && (
         <DsParagraph className={classes.noRightsParagraph}>
           <span className={classes.noRightsParagraphBold}>
