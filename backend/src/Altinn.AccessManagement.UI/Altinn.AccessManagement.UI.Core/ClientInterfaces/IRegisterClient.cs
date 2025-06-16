@@ -1,6 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Enums;
-using Altinn.AccessManagement.UI.Core.Models.Register;
-using Altinn.Platform.Register.Models;
+﻿using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -58,14 +56,5 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// A list of party organisation numbers with corresponding names
                 /// </returns>
                 Task<List<PartyName>> GetPartyNames(IEnumerable<string> orgNumbers, CancellationToken cancellationToken);
-
-                /// <summary>
-                /// Return all customers of a specific type for party
-                /// </summary>
-                /// <param name="partyUuid">The party UUID of the party to retrieve customers from</param>
-                /// <param name="customerType">Customer type to get</param>
-                /// <param name="cancellationToken">Cancellation token</param>
-                /// <returns>List of all party customers</returns>
-                Task<CustomerList> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken);
         }
 }

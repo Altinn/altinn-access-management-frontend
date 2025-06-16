@@ -3,14 +3,6 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
-import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
-import type { ProblemDetail } from './types';
-import { RightsList } from './components/RightsList/RightsList';
-import { ButtonRow } from './components/ButtonRow/ButtonRow';
-import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
-import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
-import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
@@ -20,6 +12,14 @@ import {
   useGetChangeRequestQuery,
   useRejectChangeRequestMutation,
 } from '@/rtk/features/systemUserApi';
+
+import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
+import type { ProblemDetail } from './types';
+import { RightsList } from './components/RightsList/RightsList';
+import { ButtonRow } from './components/ButtonRow/ButtonRow';
+import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
+import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
+import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
@@ -89,6 +89,7 @@ export const SystemUserChangeRequestPage = () => {
   return (
     <RequestPageBase
       system={changeRequest?.system}
+      reporteeName={reporteeData?.name}
       heading={t('systemuser_change_request.banner_title')}
     >
       {!changeRequestId && (
@@ -161,7 +162,7 @@ export const SystemUserChangeRequestPage = () => {
                 {t('systemuser_change_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck>
+            <CreateSystemUserCheck reporteeData={reporteeData}>
               <ButtonRow>
                 <DsButton
                   variant='primary'

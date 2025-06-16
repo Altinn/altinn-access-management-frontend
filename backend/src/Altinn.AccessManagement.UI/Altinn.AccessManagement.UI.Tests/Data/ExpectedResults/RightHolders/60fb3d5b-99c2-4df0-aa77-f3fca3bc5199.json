@@ -1,0 +1,43 @@
+[
+  {
+    "partyUuid": "f77b719a-ee24-4fe9-9d41-278c51432284",
+    "partyType": "Organization",
+    "name": "RAKRYGGET UNG TIGER AS",
+    "registryRoles": null,
+    "roles": ["Har som registreringsenhet BEDR"],
+    "organizationNumber": "311379054",
+    "unitType": null,
+    "inheritingUsers": []
+  },
+  {
+    "partyUuid": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "partyType": "Organization",
+    "name": "DISKRET NÆR TIGER AS",
+    "registryRoles": null,
+    "roles": ["Rettighetshaver"],
+    "organizationNumber": "310202398",
+    "unitType": null,
+    "inheritingUsers": [
+      {
+        "partyUuid": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+        "partyType": "Organization",
+        "name": "DISKRET NÆR TIGER AS",
+        "registryRoles": null,
+        "roles": ["Rettighetshaver"],
+        "organizationNumber": "311312294",
+        "unitType": null,
+        "inheritingUsers": null
+      }
+    ]
+  },
+  {
+    "partyUuid": "ec4a83c6-4aac-437c-ac63-2e365bb00a34",
+    "partyType": "Organization",
+    "name": "UTNYTTENDE STRIDLYNT ISBJØRN SA",
+    "registryRoles": null,
+    "roles": ["Rettighetshaver"],
+    "organizationNumber": "314192834",
+    "unitType": null,
+    "inheritingUsers": []
+  }
+]

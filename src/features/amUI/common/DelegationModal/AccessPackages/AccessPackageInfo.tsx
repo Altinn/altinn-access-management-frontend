@@ -37,7 +37,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     onRevoke,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
-    toUuid: toParty?.partyUuid || '',
     onDelegateSuccess: () => {
       setActionSuccess(true);
       setTimeout(() => setActionSuccess(false), 2000);

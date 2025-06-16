@@ -81,20 +81,36 @@ export const accessPackageApi = createApi({
       },
       providesTags: ['AccessPackages'],
     }),
-    revokeDelegation: builder.mutation<void, { to: string; packageId: string }>({
-      query({ to, packageId }) {
+    revokeDelegation: builder.mutation<
+      void,
+      { to: string; packageId: string; party?: string; from?: string }
+    >({
+      query({
+        to,
+        from = getCookie('AltinnPartyUuid'),
+        packageId,
+        party = getCookie('AltinnPartyUuid'),
+      }) {
         return {
-          url: `${getCookie('AltinnPartyUuid')}/${to}/${packageId}/revoke`,
+          url: `delegations?party=${party}&to=${to}&from=${from}&packageId=${packageId}`,
           method: 'DELETE',
         };
       },
       invalidatesTags: ['AccessPackages'],
     }),
-    delegatePackage: builder.mutation<void, { to: string; packageId: string }>({
+    delegatePackage: builder.mutation<
+      void,
+      { to: string; packageId: string; party?: string; from?: string }
+    >({
       invalidatesTags: ['AccessPackages'],
-      query: (args) => {
+      query: ({
+        to,
+        from = getCookie('AltinnPartyUuid'),
+        packageId,
+        party = getCookie('AltinnPartyUuid'),
+      }) => {
         return {
-          url: `delegate/${getCookie('AltinnPartyId')}/${args.packageId}/${args.to}`,
+          url: `delegations?party=${party}&to=${to}&from=${from}&packageId=${packageId}`,
           method: 'POST',
         };
       },

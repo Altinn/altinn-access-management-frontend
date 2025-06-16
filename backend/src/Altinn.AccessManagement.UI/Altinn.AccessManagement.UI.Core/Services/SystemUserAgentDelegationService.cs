@@ -1,7 +1,5 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Constants;
-using Altinn.AccessManagement.UI.Core.Enums;
-using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -14,54 +12,38 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly ISystemUserAgentDelegationClient _systemUserAgentDelegationClient;
         private readonly ISystemUserClient _systemUserClient;
-        private readonly IRegisterClient _registerClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemUserAgentDelegationService"/> class.
         /// </summary>
         /// <param name="systemUserAgentDelegationClient">The system user client administration client.</param>
         /// <param name="systemUserClient">The system user client</param>
-        /// <param name="registerClient">The register client</param>
         public SystemUserAgentDelegationService(
             ISystemUserAgentDelegationClient systemUserAgentDelegationClient,
-            ISystemUserClient systemUserClient,
-            IRegisterClient registerClient)
+            ISystemUserClient systemUserClient)
         {
             _systemUserAgentDelegationClient = systemUserAgentDelegationClient;
             _systemUserClient = systemUserClient;
-            _registerClient = registerClient;
         }
         
         /// <inheritdoc /> 
         public async Task<Result<List<CustomerPartyFE>>> GetSystemUserCustomers(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
             SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, systemUserGuid, cancellationToken);
-            IEnumerable<string> accessPackageUrns = systemUser.AccessPackages.Select(x => x.Urn);
-            CustomerRoleType customerType;
-
-            List<string> regnskapsforerPackages = ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet", "urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet", "urn:altinn:accesspackage:regnskapsforer-lonn"];
-            List<string> revisorPackages = ["urn:altinn:accesspackage:ansvarlig-revisor", "urn:altinn:accesspackage:revisormedarbeider"];
-            List<string> forretningsforerPackages = ["urn:altinn:accesspackage:forretningsforer-eiendom"];
-            
-            if (accessPackageUrns.Any(x => regnskapsforerPackages.Contains(x))) 
+            if (systemUser is null) 
             {
-                customerType = CustomerRoleType.Regnskapsforer;
-            } 
-            else if (accessPackageUrns.Any(x => revisorPackages.Contains(x))) 
-            {
-                customerType = CustomerRoleType.Revisor;
-            } 
-            else if (accessPackageUrns.Any(x => forretningsforerPackages.Contains(x))) 
-            {
-                customerType = CustomerRoleType.Forretningsforer;
-            } 
-            else 
-            {
-                customerType = CustomerRoleType.None;
+                return new Result<List<CustomerPartyFE>>(Problem.SystemUserNotFound);
             }
 
-            CustomerList customers = await _registerClient.GetPartyCustomers(partyUuid, customerType, cancellationToken);
-            return MapCustomerListToCustomerFE(customers);
+            List<string> accessPackages = systemUser.AccessPackages.Select(x => x.Urn.Split(":").Last()).ToList();
+
+            Result<List<Customer>> customers = await _systemUserClient.GetClients(partyId, partyUuid, accessPackages, cancellationToken);
+            if (customers.IsProblem)
+            {
+                return new Result<List<CustomerPartyFE>>(customers.Problem);
+            }
+
+            return MapCustomerListToCustomerFE(customers.Value);
         }
 
         /// <inheritdoc />
@@ -86,6 +68,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             AgentDelegationRequest delegationRequest = new()
             {
                 CustomerId = delegationRequestFe.CustomerId,
+                Access = delegationRequestFe.Access,
                 FacilitatorId = partyUuid
             };
 
@@ -122,15 +105,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return response.Value;
         }
 
-        private static List<CustomerPartyFE> MapCustomerListToCustomerFE(CustomerList customers)
+        private static List<CustomerPartyFE> MapCustomerListToCustomerFE(List<Customer> customers)
         {
-            return customers.Data.Select(x => 
+            return customers.Select(x => 
             {
                 return new CustomerPartyFE()
                 {
                     Id = x.PartyUuid,
                     Name = x.DisplayName,
-                    OrgNo = x.OrganizationIdentifier
+                    OrgNo = x.OrganizationIdentifier,
+                    Access = x.Access
                 };
             }).ToList();
         }

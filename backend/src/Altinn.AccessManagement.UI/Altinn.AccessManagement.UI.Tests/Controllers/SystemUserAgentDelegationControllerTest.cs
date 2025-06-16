@@ -82,6 +82,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetCustomersForNonExistingSystemUser checks that error message is returned
+        ///     Expected: GetCustomersForNonExistingSystemUser returns error message
+        /// </summary>
+        [Fact]
+        public async Task GetCustomersForNonExistingSystemUser_ReturnsError()
+        {
+            // Arrange
+            string partyId = "51329012";
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string systemUserId = "75722078-b089-459a-bb5a-6bbcb2e18dcf";
+           
+            HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/customers?partyuuid={partyUuid}");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
+
+        /// <summary>
         ///     Test case: GetForretningsforerCustomers checks that customers are returned
         ///     Expected: GetForretningsforerCustomers returns customers
         /// </summary>
@@ -188,7 +209,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             
             AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
-                CustomerId = Guid.Parse(customerId)
+                CustomerId = Guid.Parse(customerId),
+                Access = 
+                [
+                    new ClientRoleAccessPackages()
+                    {
+                        Role = "urn:altinn:external-role:ccr:regnskapsforer",
+                        Packages = ["regnskapsforer-med-signeringsrettighet"]
+                    }
+                ]
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
@@ -223,7 +252,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             
             AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
-                CustomerId = Guid.Parse(customerId)
+                CustomerId = Guid.Parse(customerId),
+                Access = 
+                [
+                    new ClientRoleAccessPackages()
+                    {
+                        Role = "urn:altinn:external-role:ccr:revisor",
+                        Packages = ["ansvarlig-revisor"]
+                    }
+                ]
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
@@ -259,6 +296,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
                 CustomerId = Guid.Parse(customerId),
+                Access = 
+                [
+                    new ClientRoleAccessPackages()
+                    {
+                        Role = "urn:altinn:external-role:ccr:regnskapsforer",
+                        Packages = ["regnskapsforer-med-signeringsrettighet"]
+                    }
+                ]
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");

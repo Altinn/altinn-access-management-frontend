@@ -83,7 +83,7 @@ export class delegateRightsToUser {
     );
 
     await this.page.getByRole('button', { name: 'Legg til' }).first().click();
-    var fullmaktsheader = this.page.getByRole('heading', { name: 'Du kan ikke gi fullmakt til' });
+    const fullmaktsheader = this.page.getByRole('heading', { name: 'Du kan ikke gi fullmakt til' });
     await expect(fullmaktsheader).toBeVisible();
   }
 }
@@ -110,9 +110,14 @@ export class delegateRoleToUser {
     await this.page.locator('span.col', { hasText: roleName1 }).click();
     await this.page.locator('span.col', { hasText: roleName2 }).click();
     await this.page.getByRole('button', { name: 'Jeg forstår. Fullfør' }).click();
-    await this.page.getByPlaceholder('f.eks post@karinordmann.no').click();
-    await this.page.getByPlaceholder('f.eks post@karinordmann.no').fill('test@email.com');
-    await this.page.getByRole('button', { name: 'Fullfør' }).first().click();
+    const emailTextbox = this.page.getByRole('textbox', { name: 'Epost' });
+    if (await emailTextbox.isVisible()) {
+      await emailTextbox.click();
+      await emailTextbox.fill('test123@emailtesforaltinndonotreply.com');
+      await this.page.getByRole('button', { name: 'Fullfør' }).first().click();
+    } else {
+      console.log('Mailid is already registered');
+    }
     await this.page.getByRole('link', { name: 'Ferdig' }).click();
     await this.page.goto(process.env.BASE_URL + '/ui/profile');
   }

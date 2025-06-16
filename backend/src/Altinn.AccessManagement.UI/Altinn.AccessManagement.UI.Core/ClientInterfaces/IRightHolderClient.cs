@@ -1,4 +1,6 @@
-﻿namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
+﻿using Altinn.AccessManagement.UI.Core.Models.User;
+
+namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>
     /// Interface for client to integrate with access package metadata
@@ -20,5 +22,14 @@
         /// <param name="to">The party that is to lose their right holder status</param>
         /// <returns></returns>
         Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to);
+
+        /// <summary>
+        ///   Gets all right holders for a given party.
+        /// </summary>
+        /// <param name="party">The GUID identifying the party for which to retrieve right holders.</param>
+        /// <param name="from">The GUID identifying the party from which to retrieve right holders.</param>
+        /// <param name="to">The GUID identifying the party to which to retrieve right holders.</param>
+        /// <returns> A list of <see cref="Connection"/> objects representing the right holders.</returns>
+        Task<List<Connection>> GetRightHolders(Guid party, Guid? from, Guid? to);
     }
 }

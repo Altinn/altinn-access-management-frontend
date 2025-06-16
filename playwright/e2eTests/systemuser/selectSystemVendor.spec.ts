@@ -23,7 +23,7 @@ test.describe('System Register', async () => {
     const systemUserPage = new SystemUserPage(page);
 
     // Navigate to system user page
-    await page.goto(`${process.env.SYSYEMUSER_URL}`);
+    await page.goto(`${process.env.SYSTEMUSER_URL}`);
 
     // this is assigned as a text in code base, will just add more confusion to import that than hardcoding this here
     await systemUserPage.CREATE_SYSTEM_USER_LINK.click();
@@ -34,7 +34,6 @@ test.describe('System Register', async () => {
 
   test.afterEach(async () => {
     if (system) {
-      console.log('Removing system');
       await TestdataApi.removeSystem(system);
     }
   });

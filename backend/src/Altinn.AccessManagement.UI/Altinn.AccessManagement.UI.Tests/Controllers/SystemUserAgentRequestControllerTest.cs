@@ -38,13 +38,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUserAgentRequest_ReturnsRequest()
         {
             // Arrange
-            int partyId = 51329012;
             string agentRequestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUserAgentRequest.json");
             SystemUserAgentRequestFE expectedResponse = Util.GetMockData<SystemUserAgentRequestFE>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentrequest/{partyId}/{agentRequestId}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentrequest/{agentRequestId}");
             SystemUserAgentRequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<SystemUserAgentRequestFE>();
 
             // Assert
@@ -60,12 +59,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUserAgentRequest_ReturnsError()
         {
             // Arrange
-            int partyId = 51329012;
             string agentRequestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentrequest/{partyId}/{agentRequestId}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentrequest/{agentRequestId}");
             AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
 
             // Assert

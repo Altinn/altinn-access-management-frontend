@@ -1,6 +1,6 @@
 .reporteeListHeading {
-  margin-bottom: 2rem;
-  padding: 0;
+  margin-top: 15px;
+  padding-bottom: 1.05rem;
 }
 
 .reporteeList {
@@ -19,5 +19,5 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding-bottom: 10px;
+  padding-bottom: 11px;
 }

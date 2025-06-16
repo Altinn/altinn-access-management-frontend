@@ -6,35 +6,55 @@ import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
 
 import type { User } from '@/rtk/features/userInfoApi';
+import NewUserModal, { NewUserButton } from '../../users/NewUserModal/NewUserModal';
 
 export interface UserListProps {
-  userList: User[];
+  userList?: User[];
   searchString: string;
   isLoading?: boolean;
   listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  interactive?: boolean;
 }
 
-export const UserList = ({ userList, searchString, isLoading, listItemTitleAs }: UserListProps) => {
+export const UserList = ({
+  userList,
+  searchString,
+  isLoading,
+  listItemTitleAs,
+  interactive,
+}: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
     users: userList,
     searchString,
   });
 
+  const promptForNoResults = !isLoading && users?.length === 0;
+
   return (
     <>
-      <DsParagraph
-        role='alert'
-        data-size='lg'
-      >
-        {users.length === 0 ? t('users_page.user_no_search_result') : ''}
-      </DsParagraph>
+      {promptForNoResults && (
+        <div
+          role='alert'
+          className={classes.noResultsContent}
+        >
+          {searchString.length === 0 ? (
+            <DsParagraph data-size='md'>{t('users_page.no_users')}</DsParagraph>
+          ) : (
+            <DsParagraph data-size='md'>
+              {t('users_page.user_no_search_result', { searchTerm: searchString })}
+            </DsParagraph>
+          )}
+          <NewUserButton isLarge />
+        </div>
+      )}
       <ListWrapper
-        userList={users}
+        userList={users ?? []}
         spacing={2}
         size='md'
         isLoading={isLoading}
         listItemTitleAs={listItemTitleAs}
+        interactive={interactive}
       />
       {hasNextPage && (
         <div className={classes.showMoreButtonContainer}>

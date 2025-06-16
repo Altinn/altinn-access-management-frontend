@@ -1,5 +1,4 @@
-import { ListItem, ListItemBase, ListItemHeader } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
+import { ListItemBase, ListItemHeader } from '@altinn/altinn-components';
 
 import type { User } from '@/rtk/features/userInfoApi';
 
@@ -13,7 +12,8 @@ interface CurrentUserPageHeaderProps {
 }
 
 export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserPageHeaderProps) => {
-  const { t } = useTranslation();
+  const description = currentUser?.roles?.join(', ') ?? '';
+
   return (
     <div className={classes.currentUser}>
       {loading ? (
@@ -28,9 +28,7 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
           <ListItemHeader
             size='xl'
             title={currentUser?.name}
-            description={currentUser?.registryRoles
-              .map((role) => t(`user_role.${role}`))
-              .join(', ')}
+            description={`${description.slice(0, 100)}${description.length > 100 ? '...' : ''}`}
             avatar={{
               type: 'person',
               name: currentUser?.name || '',

@@ -93,15 +93,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string packageId)
+        public Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string packageId)
         {
-            return _accessManagementClient.RevokeAccessPackage(from, to, packageId);
+            return _accessPackageClient.RevokeAccessPackage(from, to, party, packageId);
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> CreateDelegation(string party, Guid to, string packageId, string languageCode)
+        public async Task<HttpResponseMessage> CreateDelegation(Guid party, Guid to, Guid from, string packageId)
         {
-            return await _accessManagementClient.CreateAccessPackageDelegation(party, to, packageId, languageCode);
+            return await _accessPackageClient.CreateAccessPackageDelegation(party, to, from, packageId);
         }
 
         /// <inheritdoc/>

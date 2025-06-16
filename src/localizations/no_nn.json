@@ -5,6 +5,7 @@
     "close": "Lukk",
     "open": "Åpne",
     "back": "Tilbake",
+    "go_back": "Gå tilbake",
     "changes_made_msg": "Endringar gjort. Klikk på lagre-knappen for å gjere dei gjeldande",
     "status_code": "Statuskode",
     "maskinporten": "Maskinporten",
@@ -112,7 +113,8 @@
     "go_to_help": "Gå til hjelpesida",
     "unknown_error_header": "Oi! Det har visst skjedd ein feil",
     "unknown_error_description": "Prøv å laste inn sida på nytt.",
-    "if_persistent_contact_service": "Dersom feilen held fram kan du finne svar på Altinn sine hjelpesider, eller kontakte brukarservice på telefon 75 00 60 00."
+    "if_persistent_contact_service": "Dersom feilen held fram kan du finne svar på Altinn sine hjelpesider, eller kontakte brukarservice på telefon 75 00 60 00.",
+    "user_connection_error": "Ojsann, her var det visst ingenting. "
   },
   "profile": {
     "received": "Mottatt",
@@ -282,11 +284,13 @@
     "main_page_heading": "Brukarar med fullmakter i {{name}}",
     "user_list_heading": "Andre med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller virksomheter",
-    "user_no_search_result": "Inga resultat for søket"
+    "no_users": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
+    "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?"
   },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
-    "main_page_heading": "Fullmakter {{name}} har hos andre"
+    "main_page_heading": "Fullmakter {{name}} har hos andre",
+    "not_admin_alert": "Du har ikkje tilgang til å se denne sida hos {{name}}. Vennligst bytt side eller velg ein annen aktør."
   },
   "user_rights_page": {
     "page_title": "Brukertilgang - Altinn",
@@ -300,6 +304,10 @@
     "trigger_button": "Slett brukar",
     "heading": "Er du sikker på at du vil slette denne brukaren?",
     "message": "{{user_name}} vil miste alle fullmaktar dei har for {{reportee_name}}. Denne handlinga kan du ikkje angre.",
+    "limited_deletion_heading": "Ønskjer du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
+    "limited_deletion_message": "<p>{{user_name}} har fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast fullstendig frå {{reportee_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p> Ønskjer du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angrast.</i></p>",
+    "deletion_not_allowed_heading": "Brukaren kan ikkje slettast",
+    "deletion_not_allowed_message": "{{user_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{reportee_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.",
     "yes_button": "Ja, slett"
   },
   "reportee_rights_page": {
@@ -351,8 +359,11 @@
     "person": "Person",
     "organization": "Virksemnd",
     "modal_title": "Legg til ny person eller virksemnd",
-    "trigger_button": "Legg til brukar",
-    "add_button": "Legg til brukar"
+    "trigger_button": "Ny brukar",
+    "trigger_button_large": "Gi fullmakt til ny brukar",
+    "add_person_button": "Legg til person",
+    "add_org_button": "Legg til virksomheit",
+    "limited_preview_message": "Du kan diverre ikkje legge til personar heilt enda. Dette vil komme seinare."
   },
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyer Altinn",
@@ -566,5 +577,9 @@
     "18_delegation_right_missing_delegation_access": "Delegering av tenester feila: du har ikkje rettar til å direkte delegere tenester.",
     "19_delegation_right_missing_srr_right_access": "Delegering av tenester feila: ei eller fleire tenester nyttar tilgangslister der verksemda ikkje har tilgang.",
     "20_delegation_right_insufficient_authentication_level": "Delegering av tenester feila: ei eller fleire tenester krev eksplisitt tilgangsnivå."
+  },
+  "page_not_available": {
+    "title": "Sida er ikkje tilgjengelig",
+    "text": "Dei nye tilgangsstyringssidene er ikkje klare for privatpersonar heilt enno. Dersom du meinte å sjå på tilgangane til ei verksemd, ver vennleg og byt til denne i menyen."
   }
 }

@@ -1,7 +1,7 @@
 namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
 {
     /// <summary>
-    /// Specific SystemUser frontend model of PartyRecord
+    /// Specific SystemUser frontend model of Customer
     /// </summary>
     public class CustomerPartyFE
     {
@@ -19,5 +19,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// Party organization number
         /// </summary>
         public string OrgNo { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets a collection of all access information for the client 
+        /// </summary>
+        public List<ClientRoleAccessPackages> Access { get; set; } = [];
     }
 }

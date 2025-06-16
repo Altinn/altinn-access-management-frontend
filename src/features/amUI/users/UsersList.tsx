@@ -3,24 +3,29 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
+import type { User } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetRightHoldersQuery,
+  useGetUserInfoQuery,
+} from '@/rtk/features/userInfoApi';
+import { debounce } from '@/resources/utils';
+
 import { UserList } from '../common/UserList/UserList';
 import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 
-import { debounce } from '@/resources/utils';
-import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
-import type { User } from '@/rtk/features/userInfoApi';
-
 const extractFromList = (
   list: User[],
   uuidToRemove: string,
-  onRemove: (removed: User) => void,
+  onRemove?: (removed: User) => void,
 ): User[] => {
   const remainingList = list.reduce<User[]>((acc, item) => {
     if (item.partyUuid === uuidToRemove) {
-      onRemove(item);
+      onRemove?.(item);
     } else {
       acc.push(item);
     }
@@ -31,18 +36,44 @@ const extractFromList = (
 
 export const UsersList = () => {
   const { t } = useTranslation();
+  const { fromParty } = usePartyRepresentation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
-  const { data: rightHolders, isLoading } = useGetRightHoldersQuery();
-  const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
 
-  const [currentUserAsRightHolder, setCurrentUserAsRightHolder] = useState<User>();
+  const { data: isAdmin } = useGetIsAdminQuery();
+
+  const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
+    {
+      partyUuid: fromParty?.partyUuid ?? '',
+      fromUuid: fromParty?.partyUuid ?? '',
+      toUuid: '', // all
+    },
+    {
+      skip: !fromParty?.partyUuid || !isAdmin,
+    },
+  );
+
+  const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
+  const { data: currentUserAsRightHolder, isLoading: currentUserConnectionLoading } =
+    useGetRightHoldersQuery(
+      {
+        partyUuid: currentUser?.uuid ?? '',
+        fromUuid: fromParty?.partyUuid ?? '',
+        toUuid: currentUser?.uuid ?? '',
+      },
+      {
+        skip: !fromParty?.partyUuid || !currentUser?.uuid,
+      },
+    );
+
   const [searchString, setSearchString] = useState<string>('');
 
   const userList = useMemo(() => {
+    if (!rightHolders) {
+      return null;
+    }
     const remainingAfterExtraction = extractFromList(
       rightHolders || [],
       currentUser?.uuid ?? 'loading',
-      setCurrentUserAsRightHolder,
     );
     return remainingAfterExtraction;
   }, [rightHolders, currentUser]);
@@ -56,16 +87,16 @@ export const UsersList = () => {
 
   return (
     <div className={classes.usersList}>
-      {displayLimitedPreviewLaunch && (
+      {!displayLimitedPreviewLaunch && currentUserAsRightHolder && (
         <>
           <CurrentUserPageHeader
-            currentUser={currentUserAsRightHolder}
-            loading={currentUserLoading}
+            currentUser={currentUserAsRightHolder[0]}
+            loading={currentUserLoading || currentUserConnectionLoading}
             as={(props) =>
               currentUserAsRightHolder ? (
                 <Link
                   {...props}
-                  to={`${currentUserAsRightHolder?.partyUuid}`}
+                  to={`${currentUserAsRightHolder[0]?.partyUuid}`}
                 />
               ) : (
                 <div {...props} />
@@ -97,12 +128,15 @@ export const UsersList = () => {
         </DsSearch>
         <NewUserButton />
       </div>
-      <UserList
-        userList={userList || []}
-        searchString={searchString}
-        isLoading={isLoading}
-        listItemTitleAs='h2'
-      />
+      {isAdmin && (
+        <UserList
+          userList={userList ?? undefined}
+          searchString={searchString}
+          isLoading={!userList || loadingRightHolders}
+          listItemTitleAs='h2'
+          interactive={isAdmin}
+        />
+      )}
     </div>
   );
 };

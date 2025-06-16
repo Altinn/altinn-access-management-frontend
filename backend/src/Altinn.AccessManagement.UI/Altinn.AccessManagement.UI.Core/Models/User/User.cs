@@ -29,6 +29,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         public List<RegistryRoleType> RegistryRoles { get; set; }
 
         /// <summary>
+        /// The roles gotten from the Access Management API
+        /// </summary>
+        public List<string> Roles { get; set; }
+
+        /// <summary>
         /// The organization number if the party is an organization
         /// </summary>
         public string OrganizationNumber { get; set; }

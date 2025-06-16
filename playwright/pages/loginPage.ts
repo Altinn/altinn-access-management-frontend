@@ -31,6 +31,7 @@ export class loginWithUser {
 
   async chooseReportee(reportee: string) {
     await this.page.getByRole('searchbox', { name: 'Søk etter aktør' }).fill(reportee);
+    await this.page.keyboard.press('Enter'); //For long lists you need to search
     const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
     await chosenReportee.click();
     await this.page.goto((process.env.BASE_URL as string) + '/ui/profile');
@@ -46,6 +47,25 @@ export class loginWithUser {
     await expect(profileHeader).toBeVisible();
   }
 }
+
+export async function loginAs(page: Page, pid: string, orgnummer: string) {
+  await page.goto(process.env.BASE_URL as string);
+  await page.click("'Logg inn/Min profil'");
+  await page.getByText('TestID Lag din egen').click();
+  await page.locator("input[name='pid']").fill(pid);
+  await page.click("'Autentiser'");
+
+  // Wait for "Velg aktør" heading to appear
+  await expect(page.getByRole('heading', { level: 1, name: 'Velg aktør' })).toBeVisible();
+
+  // Always search for aktør
+  await page.getByRole('searchbox', { name: 'Søk etter aktør' }).fill(orgnummer);
+  await page.keyboard.press('Enter');
+
+  const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`; // e.g. "314 239"
+  await page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) }).click();
+}
+
 export class logoutWithUser {
   constructor(public page: Page) {}
 

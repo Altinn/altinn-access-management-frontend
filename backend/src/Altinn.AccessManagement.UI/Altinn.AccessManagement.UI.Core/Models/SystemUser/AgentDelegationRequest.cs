@@ -14,5 +14,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// PartyUuid of party which owns the agent system user
         /// </summary>
         public Guid FacilitatorId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a collection of all access information for the client 
+        /// </summary>
+        public List<ClientRoleAccessPackages> Access { get; set; } = [];
     }
 }

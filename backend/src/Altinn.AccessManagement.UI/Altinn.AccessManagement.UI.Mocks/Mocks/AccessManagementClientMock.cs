@@ -206,38 +206,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         //// Access packages
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string resourceId)
-        {
-            string dataPath = Path.Combine(dataFolder, "AccessPackage", "RevokeDelegation");
-
-            var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
-            if (mockResponse.IsSuccessStatusCode)
-            {
-                return mockResponse;
-            }
-            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
-        }
-
-        /// <inheritdoc />
-        public Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode)
-        {
-            ThrowExceptionIfTriggerParty(party);
-
-            if (packageId == string.Empty)
-            {
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
-            }
-            else if (packageId == "5eb07bdc-5c3c-4c85-add3-5405b214b8a3") // Package is Renovasjon
-            {
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
-            }
-            else
-            {
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Created));
-            }
-        }
-
-        /// <inheritdoc />
         public Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest)
         {
             var res = new List<AccessPackageDelegationCheckResponse>();

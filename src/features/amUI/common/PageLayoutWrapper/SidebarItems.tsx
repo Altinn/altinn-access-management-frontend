@@ -1,6 +1,6 @@
 import React from 'react';
-import type { MenuItemProps } from '@altinn/altinn-components';
-import { HandshakeIcon, InboxIcon, PersonGroupIcon, TenancyIcon } from '@navikt/aksel-icons';
+import type { MenuItemProps, MenuItemSize } from '@altinn/altinn-components';
+import { InboxIcon, PersonGroupIcon, TenancyIcon } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
 
@@ -12,13 +12,21 @@ import { amUIPath, SystemUserPath } from '@/routes/paths';
  * @returns {MenuItemProps[]} A list of sidebar items, including a heading,
  *                            and optionally a confetti package if the feature flag is enabled.
  */
-
-export const SidebarItems = (isSmall = false, pathname = '') => {
+export const SidebarItems = (
+  isSmall: boolean = false,
+  pathname: string = '',
+  isAdmin: boolean | undefined,
+  accountName: string,
+  accountType: 'company' | 'person',
+) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const heading: MenuItemProps = {
     id: '1',
     groupId: 1,
-    icon: { svgElement: HandshakeIcon, theme: 'base' },
+    avatar: {
+      name: accountName,
+      type: accountType,
+    },
     size: 'lg',
     title: t('sidebar.access_management'),
   };
@@ -27,7 +35,7 @@ export const SidebarItems = (isSmall = false, pathname = '') => {
     {
       groupId: 2,
       id: '2',
-      size: 'md',
+      size: 'md' as MenuItemSize,
       title: t('sidebar.users'),
       selected: pathname?.includes(`/${amUIPath.Users}`),
       icon: PersonGroupIcon,
@@ -41,7 +49,7 @@ export const SidebarItems = (isSmall = false, pathname = '') => {
     {
       groupId: 3,
       id: '3',
-      size: 'md',
+      size: 'md' as MenuItemSize,
       title: t('sidebar.reportees'),
       selected: pathname?.includes(`/${amUIPath.Reportees}`),
       icon: InboxIcon,
@@ -52,7 +60,7 @@ export const SidebarItems = (isSmall = false, pathname = '') => {
         />
       ),
     },
-  ];
+  ].slice(0, isAdmin ? 2 : 1);
 
   const systemUserPath = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
   const systemUser: MenuItemProps = {

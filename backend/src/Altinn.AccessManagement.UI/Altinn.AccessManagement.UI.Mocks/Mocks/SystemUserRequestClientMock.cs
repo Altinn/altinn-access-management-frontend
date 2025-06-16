@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<Result<SystemUserRequest>> GetSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public Task<Result<SystemUserRequest>> GetSystemUserRequest(Guid requestId, CancellationToken cancellationToken)
         {
             SystemUserRequest systemUserRequest = Util.GetMockData<SystemUserRequest>($"{dataFolder}/SystemUser/systemUserRequest.json");
             if (requestId != systemUserRequest.Id)

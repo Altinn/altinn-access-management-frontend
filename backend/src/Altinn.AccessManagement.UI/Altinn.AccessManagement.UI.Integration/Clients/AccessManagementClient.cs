@@ -221,33 +221,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         //// Access packages
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string packageId)
+        public async Task<List<AccessPackageAccess>> GetAccessPackageAccesses(string to, string from, string languageCode)
         {
-            string endpointUrl = $"todo/enduser/access/accesspackages/{packageId}?to={to}&from={from}"; // TODO: Switch with actual backend endpoint when available
+            string endpointUrl = $"/accessmanagement/api/v1/enduser/access/accesspackages?to={to}&from={from}"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return response;
-            }
-
-            _logger.LogError("Revoke resource delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
-            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode)
-        {
-            string endpointUrl = $"http://localhost:5117/accessmanagement/api/v1/accessmanagement/api/v1/enduser/access/accesspackages/{packageId}?to={to}"; // TODO: Switch with actual backend endpoint when available
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointUrl);
-            request.Headers.Add("Authorization", $"Bearer {token}");
-            request.Headers.Add("party", "{party}");
-
-            HttpResponseMessage response = await _client.SendAsync(request);
-
-            return response;
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<AccessPackageAccess>>(response);
         }
 
         /// <inheritdoc />

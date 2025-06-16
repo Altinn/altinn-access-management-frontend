@@ -1,9 +1,8 @@
 import type { ListItemProps } from '@altinn/altinn-components';
 import { ListItem } from '@altinn/altinn-components';
-import { ElementType, useEffect, useState } from 'react';
-import cn from 'classnames';
+import type { ElementType } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { useTranslation } from 'react-i18next';
 
 import { ListWrapper } from './ListWrapper';
 import type { ExtendedUser } from './useFilteredUsers';
@@ -27,28 +26,37 @@ const userHeadingLevelForMapper = (level?: ElementType) => {
   }
 };
 
-export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListItemProps) => {
-  const { t } = useTranslation();
+export const UserListItem = ({
+  user,
+  size = 'lg',
+  titleAs,
+  interactive = false,
+  ...props
+}: UserListItemProps) => {
   const hasInheritingUsers = user.inheritingUsers?.length > 0;
   const [isExpanded, setExpanded] = useState(false);
+
   useEffect(
     () => setExpanded((user.matchInInheritingUsers && hasInheritingUsers) ?? false),
     [user.matchInInheritingUsers, hasInheritingUsers],
   );
+
+  const description = user.roles?.join(', ') ?? '';
 
   return (
     <>
       <ListItem
         {...props}
         size={size}
-        title={user.name}
-        description={user.registryRoles.map((role) => t(`user_role.${role}`)).join(', ')}
+        title={`${user.name} ${user.organizationNumber && !hasInheritingUsers ? `(${user.organizationNumber})` : ''}`}
+        description={`${description.slice(0, 100)}${description.length > 100 ? '...' : ''}`}
         avatar={{
           name: user.name,
           type: user.partyType.toString() === 'Organization' ? 'company' : 'person',
         }}
         expanded={isExpanded}
         collapsible={hasInheritingUsers}
+        interactive={interactive}
         linkIcon={!hasInheritingUsers}
         onClick={() => {
           if (hasInheritingUsers) setExpanded(!isExpanded);
@@ -72,6 +80,7 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
           spacing={1}
           indent
           listItemTitleAs={userHeadingLevelForMapper(titleAs)}
+          interactive={interactive}
         />
       )}
     </>

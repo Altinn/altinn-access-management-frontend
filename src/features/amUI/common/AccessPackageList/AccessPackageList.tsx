@@ -69,7 +69,6 @@ export const AccessPackageList = ({
   });
 
   const { onDelegate, onRevoke, onRequest } = useAccessPackageActions({
-    toUuid: toParty?.partyUuid || '',
     onDelegateSuccess,
     onDelegateError,
     onRevokeSuccess,

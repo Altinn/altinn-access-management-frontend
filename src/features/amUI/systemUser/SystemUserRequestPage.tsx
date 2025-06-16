@@ -3,6 +3,15 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { SystemUserPath } from '@/routes/paths';
+import {
+  useGetSystemUserRequestQuery,
+  useApproveSystemUserRequestMutation,
+  useRejectSystemUserRequestMutation,
+  useGetSystemUserReporteeQuery,
+} from '@/rtk/features/systemUserApi';
+
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
 import { RightsList } from './components/RightsList/RightsList';
@@ -11,35 +20,26 @@ import { DelegationCheckError } from './components/DelegationCheckError/Delegati
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
 
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { SystemUserPath } from '@/routes/paths';
-import {
-  useGetSystemUserRequestQuery,
-  useApproveSystemUserRequestMutation,
-  useRejectSystemUserRequestMutation,
-} from '@/rtk/features/systemUserApi';
-
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   useDocumentTitle(t('systemuser_request.page_title'));
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
-  const partyId = getCookie('AltinnPartyId');
 
   const {
     data: request,
     isLoading: isLoadingRequest,
     error: loadingRequestError,
   } = useGetSystemUserRequestQuery(
-    { partyId, requestId },
+    { requestId },
     {
       skip: !requestId,
     },
   );
-  const { data: reporteeData } = useGetReporteeQuery();
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
+    skip: !request?.partyId,
+  });
 
   const [
     postAcceptCreationRequest,
@@ -56,6 +56,7 @@ export const SystemUserRequestPage = () => {
 
   const acceptSystemUser = (): void => {
     if (!isActionButtonDisabled) {
+      const partyId = request.partyId;
       postAcceptCreationRequest({ partyId, requestId: request.id })
         .unwrap()
         .then(() => {
@@ -70,6 +71,7 @@ export const SystemUserRequestPage = () => {
 
   const rejectSystemUser = (): void => {
     if (!isActionButtonDisabled) {
+      const partyId = request.partyId;
       postRejectCreationRequest({ partyId, requestId: request.id })
         .unwrap()
         .then(() => {
@@ -89,6 +91,7 @@ export const SystemUserRequestPage = () => {
   return (
     <RequestPageBase
       system={request?.system}
+      reporteeName={reporteeData?.name}
       heading={t('systemuser_request.banner_title')}
     >
       {!requestId && (
@@ -161,7 +164,7 @@ export const SystemUserRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck>
+            <CreateSystemUserCheck reporteeData={reporteeData}>
               <ButtonRow>
                 <DsButton
                   variant='primary'

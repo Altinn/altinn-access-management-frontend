@@ -2,11 +2,11 @@ import type { FlexSpacing, ListItemSize } from '@altinn/altinn-components';
 import { ListBase } from '@altinn/altinn-components';
 import cn from 'classnames';
 
-import type { User } from '@/rtk/features/userInfoApi';
-
 import classes from './UserList.module.css';
 import { UserListItem } from './UserListItem';
 import { SkeletonUserList } from './SkeletonUserList';
+
+import type { User } from '@/rtk/features/userInfoApi';
 
 export interface UserListProps {
   userList: User[];
@@ -15,6 +15,7 @@ export interface UserListProps {
   indent?: boolean;
   isLoading?: boolean;
   listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  interactive?: boolean;
 }
 
 export const ListWrapper = ({
@@ -24,6 +25,7 @@ export const ListWrapper = ({
   isLoading,
   indent,
   listItemTitleAs,
+  interactive,
 }: UserListProps) => {
   return (
     <div className={cn(indent ? classes.indent : '')}>
@@ -37,6 +39,7 @@ export const ListWrapper = ({
               key={user.partyUuid}
               user={user}
               titleAs={listItemTitleAs}
+              interactive={interactive}
             />
           ))
         )}

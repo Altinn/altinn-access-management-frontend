@@ -22,20 +22,21 @@ export interface ReporteeInfo {
   partyUuid: string;
   partyId: string;
   authorizedRoles: string[];
+  subunits?: ReporteeInfo[];
 }
 
 export enum PartyType {
-  None = 0,
   Person = 1,
   Organization = 2,
   SelfIdentified = 3,
+  SubUnit = 4,
 }
 
 export interface User {
   partyUuid: string;
   partyType: PartyType;
   name: string;
-  registryRoles: string[];
+  roles: string[];
   organizationNumber?: string;
   unitType?: string;
   inheritingUsers: User[];
@@ -59,6 +60,7 @@ export const userInfoApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['UserInfo', 'RightHolders'],
   endpoints: (builder) => ({
     getUserInfo: builder.query<UserInfo, void>({
       query: () => 'profile',
@@ -71,10 +73,10 @@ export const userInfoApi = createApi({
       query: () => `reportee/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
     }),
-    getRightHolders: builder.query<User[], void>({
-      query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
-      keepUnusedDataFor: 300,
-    }),
+    // getRightHolders: builder.query<User[], void>({
+    //   query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
+    //   keepUnusedDataFor: 300,
+    // }),
     addRightHolder: builder.mutation<void, string>({
       query: (partyUuidToBeAdded) => ({
         url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder?rightholderPartyUuid=${partyUuidToBeAdded}`,
@@ -86,9 +88,22 @@ export const userInfoApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
     }),
-    removeRightHolder: builder.mutation<void, string>({
-      query: (partyUuidToBeRemoved) => ({
-        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder?rightholderPartyUuid=${partyUuidToBeRemoved}`,
+    getRightHolders: builder.query<User[], { partyUuid: string; fromUuid: string; toUuid: string }>(
+      {
+        query: ({ partyUuid, fromUuid, toUuid }) =>
+          `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
+        keepUnusedDataFor: 3,
+        providesTags: ['RightHolders'],
+        transformErrorResponse: (response: {
+          status: string | number;
+        }): { status: string | number; data: string } => {
+          return { status: response.status, data: new Date().toISOString() };
+        },
+      },
+    ),
+    removeRightHolder: builder.mutation<void, { toPartyUuid: string; fromPartyUuid: string }>({
+      query: ({ toPartyUuid, fromPartyUuid }) => ({
+        url: `reportee/${fromPartyUuid}/rightholder?rightholderPartyUuid=${toPartyUuid}`,
         method: 'DELETE',
       }),
       transformErrorResponse: (response: {
@@ -113,6 +128,9 @@ export const userInfoApi = createApi({
     getUserAccesses: builder.query<UserAccesses, { from: string; to: string }>({
       query: ({ from, to }) => `from/${from}/to/${to}/accesses`,
       keepUnusedDataFor: 300,
+    }),
+    getIsAdmin: builder.query<boolean, void>({
+      query: () => `isAdmin?party=${getCookie('AltinnPartyUuid')}`,
     }),
     validateNewUserPerson: builder.mutation<string, { ssn: string; lastName: string }>({
       query: ({ ssn, lastName }) => ({
@@ -139,6 +157,7 @@ export const {
   useValidateNewUserPersonMutation,
   useGetReporteeListForPartyQuery,
   useGetReporteeListForAuthorizedUserQuery,
+  useGetIsAdminQuery,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;

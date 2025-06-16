@@ -5,11 +5,11 @@ import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPac
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+
 interface useAccessPackageActionsProps {
-  toUuid: string;
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
   onDelegateError?: (accessPackage: AccessPackage, errorInfo: ActionError) => void;
   onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
@@ -17,7 +17,6 @@ interface useAccessPackageActionsProps {
 }
 
 export const useAccessPackageActions = ({
-  toUuid,
   onDelegateSuccess,
   onDelegateError,
   onRevokeSuccess,
@@ -28,7 +27,7 @@ export const useAccessPackageActions = ({
   const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
-  const { data: toParty } = useGetPartyByUUIDQuery(toUuid ?? '');
+  const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
 
   const handleDelegateSuccess = (accessPackage: AccessPackage, toParty: Party) => {
@@ -96,11 +95,13 @@ export const useAccessPackageActions = ({
   };
 
   const onDelegate = async (accessPackage: AccessPackage) => {
-    if (!toParty) {
+    if (!toParty || !fromParty || !actingParty) {
       return;
     }
     delegatePackage(
       toParty,
+      fromParty,
+      actingParty,
       accessPackage,
       () => {
         handleDelegateSuccess(accessPackage, toParty);
@@ -117,11 +118,13 @@ export const useAccessPackageActions = ({
   };
 
   const onRevoke = async (accessPackage: AccessPackage) => {
-    if (!toParty) {
+    if (!toParty || !fromParty || !actingParty) {
       return;
     }
     revokePackage(
       toParty,
+      fromParty,
+      actingParty,
       accessPackage,
       () => {
         handleRevokeSuccess(accessPackage, toParty);

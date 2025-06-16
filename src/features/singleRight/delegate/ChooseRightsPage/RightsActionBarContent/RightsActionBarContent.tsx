@@ -150,7 +150,7 @@ export const RightsActionBarContent = ({
           {t('single_rights.one_or_more_rights_is_undelegable', {
             reason: t(`${getErrorCodeTextKey(errorList[0])}`, {
               you: t('common.you_lowercase'),
-              resourceowner: serviceOwner,
+              serviceowner: serviceOwner,
               reporteeorg: reportee,
             }),
           })}

@@ -8,7 +8,7 @@
   box-shadow: var(--ds-shadow-md);
   width: 307px;
   margin-top: 10px;
-  background-color: var(--ds-color-neutral-background-subtle);
+  background-color: var(--ds-color-neutral-background-tinted);
   border-radius: 20px;
 }
 
@@ -27,7 +27,7 @@
   width: 100%;
   top: 0%;
   bottom: 0;
-  background-color: var(--ds-color-neutral-background-subtle);
+  background-color: var(--ds-color-neutral-background-tinted);
 }
 
 .modal.open {

@@ -10,6 +10,7 @@ using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessMgmt.Core.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 
 
@@ -57,6 +58,38 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
             }
+        }
+
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> CreateAccessPackageDelegation(Guid party, Guid to, Guid from, string packageId)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+
+            if (packageId == string.Empty || packageId == null)
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            }
+            else if (packageId == "5eb07bdc-5c3c-4c85-add3-5405b214b8a3") // Package is Renovasjon
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            }
+            else
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Created));
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string resourceId)
+        {
+            string dataPath = Path.Combine(dataFolder, "AccessPackage", "RevokeDelegation");
+
+            var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
+            if (mockResponse.IsSuccessStatusCode)
+            {
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
+            }
+            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
         }
     }
 }
