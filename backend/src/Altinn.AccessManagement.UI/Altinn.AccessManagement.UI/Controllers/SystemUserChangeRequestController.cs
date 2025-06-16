@@ -30,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("{changeRequestId}")]
-        public async Task<ActionResult> GetChangeRequestByPartyIdAndRequestId([FromRoute] Guid changeRequestId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetChangeRequestByRequestId([FromRoute] Guid changeRequestId, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             Result<SystemUserChangeRequestFE> req = await _systemUserChangeRequestService.GetSystemUserChangeRequest(changeRequestId, languageCode, cancellationToken);
