@@ -20,7 +20,10 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
     `${ACCESSMANAGEMENT_BASE_URL}/user/rightholders?party=:partyId&from=:fromId&to=:toId`,
     ({ request }) => {
       const url = new URL(request.url);
+      const fromId = url.searchParams.get('from');
+      const toId = url.searchParams.get('to');
       const id = url.searchParams.get('party');
+
       const defaultReturn = {
         partyUuid: id || '3d8b34c3-df0d-4dcc-be12-e788ce414744',
         partyType: 'Organization',
@@ -32,7 +35,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         inheritingUsers: [],
       };
 
-      if (id?.includes('PARTIALLY_DELETABLE')) {
+      if (fromId?.includes('PARTIALLY_DELETABLE') || toId?.includes('PARTIALLY_DELETABLE')) {
         return HttpResponse.json([
           {
             ...defaultReturn,
@@ -41,7 +44,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         ]);
       }
 
-      if (id?.includes('NOT_DELETABLE')) {
+      if (fromId?.includes('NOT_DELETABLE') || toId?.includes('NOT_DELETABLE')) {
         return HttpResponse.json([
           {
             ...defaultReturn,

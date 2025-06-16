@@ -33,7 +33,7 @@ export const User_FullDeletionAllowed: StoryObj<DeleteUserModalStoryProps> = {
       <PartyRepresentationProvider
         fromPartyUuid={'PARTY_1'}
         toPartyUuid={'DELETABLE_PARTY_1'}
-        actingPartyUuid={'DELETABLE_PARTY_1'}
+        actingPartyUuid={'PARTY_1'}
       >
         <DeleteUserModal {...args} />
       </PartyRepresentationProvider>
@@ -48,7 +48,7 @@ export const User_LimitedDeletionOnly: StoryObj<DeleteUserModalStoryProps> = {
       <PartyRepresentationProvider
         fromPartyUuid={'PARTY_1'}
         toPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
-        actingPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
+        actingPartyUuid={'PARTY_1'}
       >
         <DeleteUserModal {...args} />
       </PartyRepresentationProvider>
@@ -63,7 +63,7 @@ export const User_DeletionNotAllowed: StoryObj<DeleteUserModalStoryProps> = {
       <PartyRepresentationProvider
         fromPartyUuid={'PARTY_1'}
         toPartyUuid={'NOT_DELETABLE_PARTY_1'}
-        actingPartyUuid={'NOT_DELETABLE_PARTY_1'}
+        actingPartyUuid={'PARTY_1'}
       >
         <DeleteUserModal {...args} />
       </PartyRepresentationProvider>
