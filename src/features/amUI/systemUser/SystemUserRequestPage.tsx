@@ -37,7 +37,11 @@ export const SystemUserRequestPage = () => {
       skip: !requestId,
     },
   );
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
+  const {
+    data: reporteeData,
+    isLoading: isLoadingReportee,
+    error: loadReporteeError,
+  } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
     skip: !request?.partyId,
   });
 
@@ -97,6 +101,9 @@ export const SystemUserRequestPage = () => {
       {!requestId && (
         <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
       )}
+      {loadReporteeError && (
+        <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
+      )}
       {(loadingRequestError || (request && !request.system)) && (
         <DsAlert data-color='danger'>
           {(loadingRequestError as { data: ProblemDetail }).data.status === 404
@@ -104,10 +111,10 @@ export const SystemUserRequestPage = () => {
             : t('systemuser_request.load_creation_request_error')}
         </DsAlert>
       )}
-      {isLoadingRequest && (
+      {(isLoadingRequest || isLoadingReportee) && (
         <DsSpinner aria-label={t('systemuser_request.loading_creation_request')} />
       )}
-      {request?.system && (
+      {request?.system && reporteeData && (
         <>
           {request.status === 'Accepted' && (
             <DsAlert data-color='info'>{t('systemuser_request.request_accepted')}</DsAlert>

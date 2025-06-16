@@ -37,7 +37,11 @@ export const SystemUserChangeRequestPage = () => {
       skip: !changeRequestId,
     },
   );
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(changeRequest?.partyId ?? '', {
+  const {
+    data: reporteeData,
+    isLoading: isLoadingReportee,
+    error: loadReporteeError,
+  } = useGetSystemUserReporteeQuery(changeRequest?.partyId ?? '', {
     skip: !changeRequest?.partyId,
   });
 
@@ -97,6 +101,9 @@ export const SystemUserChangeRequestPage = () => {
       {!changeRequestId && (
         <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
       )}
+      {loadReporteeError && (
+        <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
+      )}
       {(loadingChangeRequestError || (changeRequest && !changeRequest.system)) && (
         <DsAlert data-color='danger'>
           {(loadingChangeRequestError as { data: ProblemDetail }).data.status === 404
@@ -104,10 +111,10 @@ export const SystemUserChangeRequestPage = () => {
             : t('systemuser_change_request.load_change_request_error')}
         </DsAlert>
       )}
-      {isLoadingChangeRequest && (
+      {(isLoadingChangeRequest || isLoadingReportee) && (
         <DsSpinner aria-label={t('systemuser_change_request.loading_change_request')} />
       )}
-      {changeRequest?.system && (
+      {changeRequest?.system && reporteeData && (
         <>
           {changeRequest.status === 'Accepted' && (
             <DsAlert data-color='info'>{t('systemuser_change_request.request_accepted')}</DsAlert>
