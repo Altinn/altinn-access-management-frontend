@@ -19,7 +19,8 @@
     },
     "redirectUrl": "https://smartbank.no/poa",
     "templateId": "poa",
-    "templateVersion": 1
+    "templateVersion": 1,
+    "status": "Accepted"
   },
   {
     "id": "0fa3e590-0ab5-442c-ba8d-9410e6a63785",
@@ -37,7 +38,8 @@
     "requestMessage": null,
     "redirectUrl": "https://smartbank.no/consent",
     "templateId": "sblanesoknad",
-    "templateVersion": 1
+    "templateVersion": 1,
+    "status": "Accepted"
   },
   {
     "id": "6c7a60bb-b6a9-4902-92eb-919f8c9c1338",
@@ -55,6 +57,7 @@
     "requestMessage": null,
     "redirectUrl": "https://smartbank.no/consent",
     "templateId": "sblanesoknad",
-    "templateVersion": 1
+    "templateVersion": 1,
+    "status": "Revoked"
   }
 ]

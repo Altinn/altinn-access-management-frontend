@@ -56,5 +56,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// The version of the consent template.
         /// </summary>
         public required int TemplateVersion { get; set; }
+
+        /// <summary>
+        /// Consent status
+        /// </summary>
+        public string Status { get; set; } = string.Empty;
     }
 }

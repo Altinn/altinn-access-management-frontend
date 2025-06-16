@@ -310,7 +310,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ServiceIntroAccepted = enrichedConsentTemplate.Value.ServiceIntroAccepted,
                 HandledBy = enrichedConsentTemplate.Value.HandledBy,
                 ConsentMessage = enrichedConsentTemplate.Value.ConsentMessage,
-                Expiration = enrichedConsentTemplate.Value.Expiration
+                Expiration = enrichedConsentTemplate.Value.Expiration,
+                Status = consent.Value.Status,
             };
         }
     }

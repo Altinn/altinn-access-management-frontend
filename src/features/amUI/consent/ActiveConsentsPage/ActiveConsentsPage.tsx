@@ -6,6 +6,7 @@ import {
   DsDialog,
   DsHeading,
   DsLink,
+  DsSpinner,
   ListBase,
   ListItem,
 } from '@altinn/altinn-components';
@@ -30,8 +31,12 @@ export const ActiveConsentsPage = () => {
   useDocumentTitle(t('systemuser_request.page_title'));
   const partyUuid = getCookie('AltinnPartyUuid');
 
-  const { data: activeConsents } = useGetActiveConsentsQuery({
-    partyId: partyUuid, // Replace with actual party ID or fetch dynamically
+  const {
+    data: activeConsents,
+    isLoading: isLoadingActiveConsents,
+    error: loadActiveConsentsError,
+  } = useGetActiveConsentsQuery({
+    partyId: partyUuid,
   });
 
   const groupedActiveConsents = activeConsents?.reduce(
@@ -59,7 +64,7 @@ export const ActiveConsentsPage = () => {
             level={1}
             data-size='md'
           >
-            Samtykker og fullmakter
+            {t('active_consents.heading')}
           </DsHeading>
         </div>
         <div className={classes.activeConsentsHeading}>
@@ -67,7 +72,7 @@ export const ActiveConsentsPage = () => {
             level={2}
             data-size='sm'
           >
-            Aktive avtaler
+            {t('active_consents.sub_heading')}
           </DsHeading>
           <DsLink
             asChild
@@ -75,13 +80,19 @@ export const ActiveConsentsPage = () => {
           >
             <Link to={'/consent/log'}>
               <FolderFileIcon />
-              Se avtalelogg
+              {t('active_consents.consent_log')}
             </Link>
           </DsLink>
         </div>
         <div>
+          {isLoadingActiveConsents && (
+            <DsSpinner aria-label={t('active_consents.loading_consents')} />
+          )}
+          {loadActiveConsentsError && (
+            <DsAlert data-color='danger'>{t('active_consents.load_consents_error')}</DsAlert>
+          )}
           {activeConsents && activeConsents.length === 0 && (
-            <DsAlert data-color='info'>Ingen aktive avtaler</DsAlert>
+            <DsAlert data-color='info'>{t('active_consents.no_active_consents')}</DsAlert>
           )}
           {groupedActiveConsents && (
             <ListBase>
@@ -124,11 +135,17 @@ const ActiveConsentListItem = ({
   subItems,
   onClick,
 }: ActiveConsentListItemProps): React.ReactNode => {
+  const { t } = useTranslation();
+
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   return (
     <ListItem
       title={title}
-      icon={HandshakeIcon}
+      icon={{
+        svgElement: HandshakeIcon,
+        theme: 'surface',
+      }}
+      size='lg'
       collapsible
       expanded={isExpanded}
       badge={{
@@ -145,6 +162,12 @@ const ActiveConsentListItem = ({
                 icon={HandshakeIcon}
                 title={item.title}
                 onClick={() => onClick(item.id)}
+                badge={{
+                  label: t('active_consents.see_consent'),
+                  theme: 'transparent',
+                  //@ts-expect-error size 'md' is not in type, but can be used
+                  size: 'md',
+                }}
                 linkIcon
               />
             ))}

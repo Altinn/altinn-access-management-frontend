@@ -44,5 +44,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// Consent expiration text
         /// </summary>
         public Dictionary<string, string> Expiration { get; set; }
+
+        /// <summary>
+        /// Consent status
+        /// </summary>
+        public string Status { get; set; }
     }
 }

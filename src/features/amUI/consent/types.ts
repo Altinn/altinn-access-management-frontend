@@ -29,6 +29,7 @@ export interface ActiveConsentListItem {
   toPartyName: string;
 }
 
+export type ConsentStatus = 'Created' | 'Rejected' | 'Accepted' | 'Revoked' | 'Deleted';
 export interface Consent {
   id: string;
   rights: ConsentRight[];
@@ -38,6 +39,7 @@ export interface Consent {
   consentMessage: ConsentLanguage;
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
+  status: ConsentStatus;
 }
 
 export interface ProblemDetail {

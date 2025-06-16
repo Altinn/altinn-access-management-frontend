@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsButton, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 import { EraserIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 
@@ -8,6 +8,7 @@ import { useGetConsentQuery } from '@/rtk/features/consentApi';
 
 import { getLanguage } from '../utils';
 import { ConsentRights } from '../components/ConsentRights/ConsentRights';
+import type { ConsentStatus } from '../types';
 
 import classes from './ActiveConsent.module.css';
 
@@ -15,7 +16,7 @@ interface ActiveConsentProps {
   consentId: string;
 }
 export const ActiveConsent = ({ consentId }: ActiveConsentProps) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const language = getLanguage(i18n.language);
 
@@ -27,14 +28,16 @@ export const ActiveConsent = ({ consentId }: ActiveConsentProps) => {
 
   return (
     <div className={classes.consentContainer}>
-      {isLoadingConsent && <div>Laster samtykke...</div>}
-      {loadConsentError && <div>Kunne ikke laste samtykke</div>}
+      {isLoadingConsent && <DsSpinner aria-label={t('active_consents.loading_consent')} />}
+      {loadConsentError && (
+        <DsAlert data-color='danger'>{t('active_consents.load_consent_error')}</DsAlert>
+      )}
       {consent && (
         <>
-          <ConsentStatus status={consent.isPoa ? 'Aktivt' : 'Trukket'} />
+          <ConsentStatus status={consent.status} />
           <DsButton variant='tertiary'>
             <EraserIcon />
-            {consent.isPoa ? 'Trekk fullmakt' : 'Trekk samtykke'}
+            {consent.isPoa ? t('active_consents.revoke_poa') : t('active_consents.revoke_consent')}
           </DsButton>
           <DsHeading
             level={1}
@@ -67,15 +70,28 @@ export const ActiveConsent = ({ consentId }: ActiveConsentProps) => {
 };
 
 interface ConsentStatusProps {
-  status: string;
+  status: ConsentStatus;
 }
 
 const ConsentStatus = ({ status }: ConsentStatusProps) => {
-  const statusClass = status === 'Aktivt' ? classes.active : classes.revoked;
+  const { t } = useTranslation();
+
+  let statusClass = '';
+  let statusText = '';
+  if (status === 'Accepted') {
+    statusClass = classes.active;
+    statusText = t('active_consents.status_active');
+  } else if (status === 'Revoked') {
+    statusClass = classes.revoked;
+    statusText = t('active_consents.status_revoked');
+  }
+  // Trenger vi egen status for expired??
   return (
     <div className={classes.statusContainer}>
       <div className={cn(classes.statusIcon, statusClass)} />
-      <div>Status: {status}</div>
+      <div>
+        {t('active_consents.status')}: {statusText}
+      </div>
     </div>
   );
 };
