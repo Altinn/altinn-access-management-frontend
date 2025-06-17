@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { ExtendedUser } from '@/features/amUI/common/UserList/useFilteredUsers';
 
 import type { Party } from './lookupApi';
 
@@ -9,6 +8,12 @@ interface UserKeyValues {
   OrganizationIdentifier?: string;
   PartyId?: string;
   DateOfBirth?: string;
+}
+
+export interface ExtendedUser extends Omit<User, 'children'> {
+  roles: RoleInfo[];
+  children: (ExtendedUser | User)[];
+  matchInChildren?: boolean;
 }
 
 export interface User {
@@ -114,7 +119,7 @@ export const userInfoApi = createApi({
     >({
       query: ({ partyUuid, fromUuid, toUuid }) =>
         `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
-      keepUnusedDataFor: 3,
+      keepUnusedDataFor: 300,
       providesTags: ['RightHolders'],
       transformErrorResponse: (response: {
         status: string | number;

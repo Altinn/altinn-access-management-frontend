@@ -51,6 +51,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         /// - PartyId
         /// </summary>
         [JsonConverter(typeof(AllowedKeysDictionaryConverter))]
-        public Dictionary<string, string> KeyValues { get; set; }
+        public Dictionary<string, string> KeyValues { get; set; } = new();
     }
 }

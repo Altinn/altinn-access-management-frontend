@@ -96,7 +96,7 @@ export const UsersList = () => {
               currentUserAsRightHolder ? (
                 <Link
                   {...props}
-                  to={`${currentUserAsRightHolder[0]?.party.id}`}
+                  to={`/users/${currentUserAsRightHolder[0]?.party.id}`}
                 />
               ) : (
                 <div {...props} />

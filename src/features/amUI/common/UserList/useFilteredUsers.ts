@@ -1,18 +1,12 @@
 import { useMemo, useState, useEffect } from 'react';
 
-import type { Connection, RoleInfo, User } from '@/rtk/features/userInfoApi';
+import type { Connection, ExtendedUser, User } from '@/rtk/features/userInfoApi';
 
 const PAGE_SIZE = 10;
 
 interface useFilteredUsersProps {
   connections?: Connection[];
   searchString: string;
-}
-
-export interface ExtendedUser extends Omit<User, 'children'> {
-  roles: RoleInfo[];
-  children: (ExtendedUser | User)[];
-  matchInChildren?: boolean;
 }
 
 const mapToExtendedUsers = (connections: Connection[]): ExtendedUser[] => {

@@ -18,5 +18,5 @@ public class RoleInfo
     /// <summary>
     /// Children
     /// </summary>
-    public List<RoleInfo> Children { get; set; }
+    public List<RoleInfo> Children { get; set; } = new();
 }

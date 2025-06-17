@@ -130,9 +130,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<Connection>> GetRightHolders(Guid party, Guid? from, Guid? to)
+        public async Task<List<Connection>> GetRightHolders(Guid partyUuid, Guid? from, Guid? to)
         {
-            return await _rightHolderClient.GetRightHolders(party, from, to);
+            try
+            {
+                return await _rightHolderClient.GetRightHolders(partyUuid, from, to);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed fetching rightholders for {PartyUuid}", partyUuid);
+                throw;
+            }
         }
     }
 }

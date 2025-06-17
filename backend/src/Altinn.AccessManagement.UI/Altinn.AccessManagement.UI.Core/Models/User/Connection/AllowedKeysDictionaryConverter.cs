@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.User // Or a more general names
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AllowedKeysDictionaryConverter"/> class.
-        /// The allowed keys are hardcoded to "organizationIdentifier" and "partyId".
+        /// The allowed keys are hardcoded to "OrganizationIdentifier", "DateOfBirth" and "PartyId".
         /// </summary>
         public AllowedKeysDictionaryConverter()
         {
