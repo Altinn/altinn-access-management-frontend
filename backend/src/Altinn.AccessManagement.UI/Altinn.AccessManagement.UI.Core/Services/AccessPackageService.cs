@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<Dictionary<Guid, List<PackagePermission>>> GetDelegations(Guid party, Guid to, Guid from, string languageCode)
+        public async Task<Dictionary<Guid, List<PackagePermission>>> GetDelegations(Guid party, Guid? to, Guid? from, string languageCode)
         {
             PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
             IEnumerable<PackagePermission> accesses = paginatedAccesses.Items;

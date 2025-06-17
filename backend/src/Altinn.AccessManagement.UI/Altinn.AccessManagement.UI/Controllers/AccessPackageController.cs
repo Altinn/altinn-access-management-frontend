@@ -68,8 +68,19 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegations/")]
-        public async Task<ActionResult<Dictionary<Guid, List<PackagePermission>>>> GetDelegations([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to)
+        public async Task<ActionResult<Dictionary<Guid, List<PackagePermission>>>> GetDelegations([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!from.HasValue && !to.HasValue)
+            {
+                return BadRequest("Either 'from' or 'to' query parameter must be provided.");
+            }
+
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {

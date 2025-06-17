@@ -25,7 +25,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// <param name="from">The uuid of the party whose accesses have been delegated (or empty, if delegations from all parties are to be returned)</param>
                 /// <param name="languageCode">The code of the language on which texts are to be returned</param>
                 /// <returns>A list of all access package delegations</returns>
-                Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid to, Guid from, string languageCode);
+                Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, string languageCode);
 
                 /// <summary>
                 ///    Creates a new delegation of an access package

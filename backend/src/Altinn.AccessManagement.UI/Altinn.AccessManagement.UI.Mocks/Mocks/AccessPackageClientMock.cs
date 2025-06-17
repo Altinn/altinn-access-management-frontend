@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid to, Guid from, string languageCode)
+        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, string languageCode)
         {
             Util.ThrowExceptionIfTriggerParty(from.ToString());
 
