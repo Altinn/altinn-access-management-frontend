@@ -29,11 +29,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         public string Variant { get; set; }
 
         /// <summary>
-        /// Gets or sets refId.
-        /// </summary>
-        public string RefId { get; set; }
-
-        /// <summary>
         /// Gets or sets parent.
         /// </summary>
         public Entity Parent { get; set; }

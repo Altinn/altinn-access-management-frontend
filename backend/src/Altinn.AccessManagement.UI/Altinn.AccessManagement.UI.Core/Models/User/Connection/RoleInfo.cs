@@ -14,9 +14,4 @@ public class RoleInfo
     /// Code
     /// </summary>
     public string Code { get; set; }
-
-    /// <summary>
-    /// Children
-    /// </summary>
-    public List<RoleInfo> Children { get; set; } = new();
 }

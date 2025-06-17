@@ -19,18 +19,15 @@ export interface ExtendedUser extends Omit<User, 'children'> {
 export interface User {
   id: string;
   name: string;
-  type: string;
-  variant: string;
-  refId: string;
-  parent: User | null;
+  type?: string;
+  variant?: string;
   children: (User | ExtendedUser)[] | null;
   keyValues: UserKeyValues | null;
 }
 
 export interface RoleInfo {
   id: string;
-  code: string;
-  children: RoleInfo[] | null;
+  code?: string;
 }
 
 export interface Connection {
