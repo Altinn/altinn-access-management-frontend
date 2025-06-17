@@ -460,7 +460,7 @@
     "content_text1": "If you are unsure about which vendor system to choose, we recommend that you contact the provider of the vendor system. Altinn has not made any assessment of the quality and safety of the vendor systems in the list.",
     "pull_down_menu_label": "Choose vendor system",
     "confirm_button": "Proceed",
-    "choose": "Chosse ...",
+    "choose": "Choose ...",
     "load_vendors_error": "Could not load system providers",
     "loading_systems": "Loading vendors and systems..."
   },
