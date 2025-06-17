@@ -121,7 +121,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            Dictionary<Guid, List<AccessPackageDelegation>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<AccessPackageDelegation>>>(await response.Content.ReadAsStringAsync(), options);
+            Dictionary<Guid, List<PackagePermission>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermission>>>(await response.Content.ReadAsStringAsync(), options);
             Assert.Empty(actualResult.Keys);
         }
 

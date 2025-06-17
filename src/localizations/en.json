@@ -265,6 +265,7 @@
     "package_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{accessPackage}}.",
     "delegated_packages_count_badge": "{{delegated}} of {{total}}",
     "package_number_of_resources": "{{count}} services",
+    "info_alert_text": "Access packages will eventually replace roles in Altinn's access management solution. They may be a bit empty now, but they will soon be filled with services.",
     "delegation_check": {
       "delegation_check_error_heading": "Technical error",
       "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",

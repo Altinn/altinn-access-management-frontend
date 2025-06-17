@@ -264,6 +264,7 @@
     "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
     "package_number_of_resources": "{{count}} tjenester",
+    "info_alert_text": "Tilgangspakker vil etterhvert erstatte roller i Altinns tilgangstyringsløsning. De er kanskje litt tomme nå, men de vil snart bli fylt opp med tjenester.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer.",
