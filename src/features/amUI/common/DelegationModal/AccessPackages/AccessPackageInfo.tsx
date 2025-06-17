@@ -20,6 +20,7 @@ import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../StatusSection';
+import { isInherited } from '../../AccessPackageList/useAreaPackageList';
 
 import classes from './AccessPackageInfo.module.css';
 
@@ -61,14 +62,17 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
       return (
         Object.values(activeDelegations)
           .flat()
-          .find((delegation) => delegation.accessPackageId) ?? null
+          .find((delegation) => delegation.package.id === accessPackage.id) ?? null
       );
     }
     return null;
   }, [activeDelegations, isFetching, accessPackage.id]);
 
   const userHasPackage = delegationAccess !== null;
-  const accessIsInherited = delegationAccess?.inherited ?? false;
+  const accessIsInherited =
+    (delegationAccess &&
+      isInherited(delegationAccess, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? '')) ||
+    false;
 
   const [delegationCheckError, setDelegationCheckError] = useState<ActionError | null>(null);
 
@@ -174,7 +178,10 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             userHasAccess={userHasPackage}
             showMissingRightsMessage={showMissingRightsMessage}
             inheritedFrom={
-              delegationAccess?.inherited ? delegationAccess.inheritedFrom?.name : undefined
+              accessIsInherited
+                ? (delegationAccess?.permissions[0].via?.name ??
+                  delegationAccess?.permissions[0].to.name)
+                : undefined
             }
           />
 

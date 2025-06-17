@@ -253,7 +253,7 @@
     "available_packages_title": "Tilgjengelege tilgangspakker",
     "other_available": "Andre tilgjengelege",
     "current_access_packages_title": "{{count}} tilgangspakker",
-    "give_new_button": "Gi fullmakt til ny tilgangspakke",
+    "give_new_button": "Gi fullmakt",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",

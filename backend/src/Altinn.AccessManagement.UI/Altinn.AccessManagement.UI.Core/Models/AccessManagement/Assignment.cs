@@ -1,6 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.Role;
-
-namespace Altinn.AccessMgmt.Core.Models;
+﻿namespace Altinn.AccessManagement.UI.Core.Models.Common;
 
 /// <summary>
 /// Assignment
@@ -38,7 +36,7 @@ public class Assignment
     public Guid ToId { get; set; }
 }
 
-/// <summary>
+/* /// <summary>
 /// Extended Assignment
 /// </summary>
 public class ExtAssignment : Assignment
@@ -58,3 +56,4 @@ public class ExtAssignment : Assignment
     /// </summary>
     public Entity To { get; set; }
 }
+*/

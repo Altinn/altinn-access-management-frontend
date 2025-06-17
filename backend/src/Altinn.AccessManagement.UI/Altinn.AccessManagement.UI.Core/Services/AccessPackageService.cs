@@ -60,32 +60,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<Dictionary<string, List<AccessPackageDelegation>>> GetDelegations(Guid party, Guid to, Guid from, string languageCode)
+        public async Task<Dictionary<Guid, List<PackagePermission>>> GetDelegations(Guid party, Guid to, Guid from, string languageCode)
         {
-            List<ConnectionPackage> accessesFromAM = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
+            PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
+            IEnumerable<PackagePermission> accesses = paginatedAccesses.Items;
 
-            Dictionary<string, List<AccessPackageDelegation>> sortedAccesses = new Dictionary<string, List<AccessPackageDelegation>>();
-            IEnumerable<SearchObject<AccessPackage>> allPackages = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, null);
+            var sortedAccesses = new Dictionary<Guid, List<PackagePermission>>();
 
-            foreach (ConnectionPackage access in accessesFromAM)
+            foreach (PackagePermission access in accesses)
             {
-                AccessPackageDelegation delegation = new AccessPackageDelegation(access);
-                if (delegation.Inherited)
-                {
-                    Guid inheritedFromGuid = access.FacilitatorId ?? access.FromId;
-                    var inheritedFrom = await _lookupService.GetPartyByUUID(inheritedFromGuid);
-                    delegation.InheritedFrom = inheritedFrom;
-                }
-
-                string areaId = allPackages.FirstOrDefault(x => x.Object.Id == access.PackageId)?.Object.Area.Id;
+                Guid areaId = access.Package.AreaId;
 
                 if (!sortedAccesses.ContainsKey(areaId))
                 {
-                    sortedAccesses.Add(areaId, new List<AccessPackageDelegation> { delegation });
+                    sortedAccesses.Add(areaId, new List<PackagePermission> { access });
                 }
                 else
                 {
-                    sortedAccesses[areaId].Add(delegation);
+                    sortedAccesses[areaId].Add(access);
                 }
             }
 

@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -61,13 +62,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Get all access packages delegated to a single right holder from a single party
+        ///     Get all access package accesses granted to or from someone (one or more of the two must be specified)
         /// </summary>
         /// <returns>A dictionary of lists (sorted by access area-id) containing all access package delegations that the right holder has on behalf of the specified right owner</returns>
         [HttpGet]
         [Authorize]
         [Route("delegations/")]
-        public async Task<ActionResult<Dictionary<string, List<AccessPackageDelegation>>>> GetDelegations([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to)
+        public async Task<ActionResult<Dictionary<Guid, List<PackagePermission>>>> GetDelegations([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try

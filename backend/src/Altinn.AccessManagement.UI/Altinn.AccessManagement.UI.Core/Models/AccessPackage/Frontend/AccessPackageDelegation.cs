@@ -27,16 +27,5 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         /// The party from which the access was inherited
         /// </summary>
         public PartyFE InheritedFrom { get; set; }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="packageConnection">The package connection data as received from backend</param>
-        public AccessPackageDelegation(ConnectionPackage packageConnection)
-        {
-            AccessPackageId = packageConnection.PackageId;
-            DelegationDetails = new AccessDetails(packageConnection.FromId, packageConnection.ToId);
-            Inherited = packageConnection.IsKeyRole || packageConnection.IsParent || packageConnection.IsRoleMap || packageConnection.PackageSource == "ROLE";
-        }
     }
 }

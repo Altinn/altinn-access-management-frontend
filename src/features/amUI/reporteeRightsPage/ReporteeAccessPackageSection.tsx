@@ -8,7 +8,7 @@ import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
-import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
+import { AccessPackageInfoAlert } from '../userRightsPage/AccessPackageSection/AccessPackageInfoAlert';
 
 interface ReporteeAccessPackageSectionProps {
   numberOfAccesses?: number;
@@ -30,7 +30,7 @@ export const ReporteeAccessPackageSection = ({
 
   return (
     <>
-      <OldRolesAlert />
+      <AccessPackageInfoAlert />
       <DsHeading
         level={2}
         data-size='2xs'

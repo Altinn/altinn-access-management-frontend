@@ -6,6 +6,8 @@ import type {
   AccessPackageDelegation,
 } from '@/rtk/features/accessPackageApi';
 
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+
 export interface ExtendedAccessArea extends AccessArea {
   packages: {
     assigned: AccessPackage[];
@@ -27,12 +29,14 @@ export const useAreaPackageList = ({
   showAllPackages,
 }: useAreaPackagesProps) => {
   const accessAreas = useMemo(() => {
-    if (!allPackageAreas) {
+    if (!allPackageAreas || activeDelegations === undefined) {
       return {
         assignedAreas: [],
         availableAreas: [],
       };
     }
+
+    const { toParty, fromParty } = usePartyRepresentation();
 
     return allPackageAreas.reduce(
       (acc, area) => {
@@ -43,12 +47,15 @@ export const useAreaPackageList = ({
         if (activeDelegationArea) {
           const pkgs = area.accessPackages.reduce(
             (pkgAcc, pkg) => {
-              const pkgAccess = activeDelegationArea.find((d) => d.accessPackageId === pkg.id);
+              const pkgAccess = activeDelegationArea.find((d) => d.package.id === pkg.id);
               if (pkgAccess !== undefined) {
                 const aquiredPkg = {
                   ...pkg,
-                  inherited: pkgAccess.inherited,
-                  inheritedFrom: pkgAccess.inheritedFrom,
+                  inherited: isInherited(
+                    pkgAccess,
+                    toParty?.partyUuid ?? '',
+                    fromParty?.partyUuid ?? '',
+                  ),
                 };
                 pkgAcc.assigned.push(aquiredPkg);
               } else if (showAllPackages) {
@@ -67,11 +74,10 @@ export const useAreaPackageList = ({
         } else if (showAllAreas) {
           acc.availableAreas.push({
             ...area,
-            packages: showAllPackages
-              ? { assigned: [], available: area.accessPackages }
-              : { assigned: [], available: [] },
+            packages: { assigned: [], available: area.accessPackages },
           });
         }
+
         return acc;
       },
       {
@@ -82,4 +88,19 @@ export const useAreaPackageList = ({
   }, [allPackageAreas, activeDelegations, showAllAreas, showAllPackages]);
 
   return accessAreas;
+};
+
+export const isInherited = (
+  pkgDeleg: AccessPackageDelegation,
+  toPartyUuid: string,
+  fromPartyUuid: string,
+) => {
+  return pkgDeleg.permissions.some(
+    (p) =>
+      !(
+        toPartyUuid === p.to.id &&
+        fromPartyUuid === p.from.id &&
+        p.role?.code === 'rettighetshaver'
+      ),
+  );
 };

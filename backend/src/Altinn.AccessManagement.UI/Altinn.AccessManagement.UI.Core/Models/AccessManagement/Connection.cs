@@ -63,6 +63,7 @@ public class Connection
     public bool IsKeyRole { get; set; }
 }
 
+/*
 /// <summary>
 /// Extended Connection
 /// </summary>
@@ -100,3 +101,4 @@ public class ExtConnection : Connection
     /// </summary>
     public Role FacilitatorRole { get; set; }
 }
+*/

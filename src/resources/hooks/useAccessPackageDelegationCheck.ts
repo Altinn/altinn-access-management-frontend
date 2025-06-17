@@ -1,6 +1,8 @@
-import { useDelegationCheckMutation } from '@/rtk/features/accessPackageApi';
 import { useEffect } from 'react';
-import { ActionError } from './useActionError';
+
+import { useDelegationCheckMutation } from '@/rtk/features/accessPackageApi';
+
+import type { ActionError } from './useActionError';
 
 /**
  * Custom hook to check delegation status for access packages.

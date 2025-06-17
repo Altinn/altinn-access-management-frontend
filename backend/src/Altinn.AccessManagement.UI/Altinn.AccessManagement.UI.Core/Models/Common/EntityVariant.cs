@@ -1,6 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.Common;
-
-namespace Altinn.AccessMgmt.Core.Models;
+﻿namespace Altinn.AccessManagement.UI.Core.Models.Common;
 
 /// <summary>
 /// EntityVariant

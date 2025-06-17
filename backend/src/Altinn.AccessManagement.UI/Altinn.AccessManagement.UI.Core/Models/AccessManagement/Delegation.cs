@@ -1,4 +1,4 @@
-﻿namespace Altinn.AccessMgmt.Core.Models;
+﻿namespace Altinn.AccessManagement.UI.Core.Models.Common;
 
 /// <summary>
 /// Delegation between two assignments

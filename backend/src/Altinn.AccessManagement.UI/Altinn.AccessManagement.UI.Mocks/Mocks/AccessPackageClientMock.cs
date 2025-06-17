@@ -45,14 +45,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<List<ConnectionPackage>> GetAccessPackageAccesses(Guid party, Guid to, Guid from, string languageCode)
+        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid to, Guid from, string languageCode)
         {
             Util.ThrowExceptionIfTriggerParty(from.ToString());
 
             try
             {
                 string dataPath = Path.Combine(dataFolder, "AccessPackage", "GetDelegations", $"{from}_{to}.json");
-                return await Task.FromResult(Util.GetMockData<List<ConnectionPackage>>(dataPath));
+                return await Task.FromResult(Util.GetMockData<PaginatedResult<PackagePermission>>(dataPath));
             }
             catch
             {
