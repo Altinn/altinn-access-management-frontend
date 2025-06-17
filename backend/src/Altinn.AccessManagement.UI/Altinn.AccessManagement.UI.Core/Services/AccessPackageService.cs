@@ -97,7 +97,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<ActionResult<List<AccessPackageDelegationCheckResponse>>> DelegationCheck(DelegationCheckRequest delegationCheckRequest)
+        public async Task<List<AccessPackageDelegationCheckResponse>> DelegationCheck(DelegationCheckRequest delegationCheckRequest)
         {
             return await _accessManagementClient.AccessPackageDelegationCheck(delegationCheckRequest);
         }

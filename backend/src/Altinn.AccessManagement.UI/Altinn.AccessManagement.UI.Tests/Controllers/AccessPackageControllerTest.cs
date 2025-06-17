@@ -96,7 +96,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Dictionary<Guid, List<PackagePermission>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermission>>>(await response.Content.ReadAsStringAsync(), options);
 
-            AssertionUtil.AssertCollections(expectedResult.Keys, actualResult.Keys, Assert.Equal);
+            Assert.True(new HashSet<Guid>(expectedResult.Keys).SetEquals(actualResult.Keys));
             foreach (Guid key in actualResult.Keys)
             {
                 AssertionUtil.AssertCollections(expectedResult[key], actualResult[key], AssertionUtil.AssertEqual);

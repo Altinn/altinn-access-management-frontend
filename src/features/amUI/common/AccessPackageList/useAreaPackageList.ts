@@ -28,6 +28,8 @@ export const useAreaPackageList = ({
   showAllAreas,
   showAllPackages,
 }: useAreaPackagesProps) => {
+  const { toParty, fromParty } = usePartyRepresentation();
+
   const accessAreas = useMemo(() => {
     if (!allPackageAreas || activeDelegations === undefined) {
       return {
@@ -35,9 +37,6 @@ export const useAreaPackageList = ({
         availableAreas: [],
       };
     }
-
-    const { toParty, fromParty } = usePartyRepresentation();
-
     return allPackageAreas.reduce(
       (acc, area) => {
         const activeDelegationArea: AccessPackageDelegation[] | null = activeDelegations
