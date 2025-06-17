@@ -4,7 +4,6 @@
 // !!!!! END NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
 /// <summary>
 /// Entity
 /// </summary>
@@ -97,9 +96,9 @@ public class CompactEntity
     /// </summary>
     public List<CompactEntity> Children { get; set; }
 
-    /// <summary>
-    /// Values from entityLoookup
-    /// </summary>
+    // <summary>
+    // Values from entityLoookup
+    // </summary>
     // public Dictionary<string, string> KeyValues { get; set; }
 }
 

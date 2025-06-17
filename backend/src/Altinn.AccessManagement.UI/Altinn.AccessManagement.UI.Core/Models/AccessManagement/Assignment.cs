@@ -5,8 +5,6 @@
 /// </summary>
 public class Assignment
 {
-    private Guid _id;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Assignment"/> class.
     /// </summary>
