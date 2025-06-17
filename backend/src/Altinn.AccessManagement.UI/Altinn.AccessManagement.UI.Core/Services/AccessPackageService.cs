@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.AccessMgmt.Core.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {

@@ -1,6 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
-using Altinn.AccessMgmt.Core.Models;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {

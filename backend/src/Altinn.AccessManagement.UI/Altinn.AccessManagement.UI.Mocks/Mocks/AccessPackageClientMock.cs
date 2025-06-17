@@ -8,7 +8,6 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Utils;
-using Altinn.AccessMgmt.Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
