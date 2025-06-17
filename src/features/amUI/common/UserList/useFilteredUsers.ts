@@ -1,72 +1,117 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
-import type { User } from '@/rtk/features/userInfoApi';
-
-const isSearchMatch = (searchString: string, rightHolder: User): boolean => {
-  const isNameMatch = rightHolder.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
-  const isOrgNrMatch = rightHolder.organizationNumber === searchString;
-  return isNameMatch || isOrgNrMatch;
-};
-
-export interface ExtendedUser extends User {
-  matchInInheritingUsers?: boolean;
-}
-
-interface useFilteredUsersProps {
-  users?: User[];
-  searchString: string;
-}
+import type { Connection, RoleInfo, User } from '@/rtk/features/userInfoApi';
 
 const PAGE_SIZE = 10;
 
-const sortUsers = (users: User[]): User[] => {
-  return [...users].sort((a, b) => a.name.localeCompare(b.name));
+interface useFilteredUsersProps {
+  connections?: Connection[];
+  searchString: string;
+}
+
+export interface ExtendedUser extends Omit<User, 'children'> {
+  roles: RoleInfo[];
+  children: (ExtendedUser | User)[];
+  matchInChildren?: boolean;
+}
+
+const mapToExtendedUsers = (connections: Connection[]): ExtendedUser[] => {
+  return connections.map((connection): ExtendedUser => {
+    const children: (ExtendedUser | User)[] = connection.connections?.length
+      ? mapToExtendedUsers(connection.connections)
+      : (connection.party.children ?? []);
+
+    return {
+      ...connection.party,
+      roles: connection.roles,
+      children,
+    };
+  });
 };
 
-const sortInheritingUsers = (user: User): User => {
-  if (user.inheritingUsers) {
+const partyMatchesSearchTerm = (party: User | ExtendedUser, searchString: string): boolean => {
+  const lowerCaseSearchTerm = searchString.toLocaleLowerCase();
+  const nameMatch = party.name.toLowerCase().includes(lowerCaseSearchTerm);
+  const orgNumberMatch = party.keyValues?.OrganizationIdentifier
+    ? party.keyValues.OrganizationIdentifier?.includes(lowerCaseSearchTerm)
+    : false;
+  return nameMatch || orgNumberMatch;
+};
+
+const filterUserNode = (
+  userNode: ExtendedUser,
+  lowerCaseSearchString: string,
+): ExtendedUser | null => {
+  const isMatchSelf = partyMatchesSearchTerm(userNode, lowerCaseSearchString);
+
+  if (isMatchSelf) {
+    return { ...userNode, matchInChildren: false };
+  }
+
+  const filteredChildren =
+    userNode.children?.filter((child) => partyMatchesSearchTerm(child, lowerCaseSearchString)) ??
+    [];
+
+  if (filteredChildren.length > 0) {
     return {
-      ...user,
-      inheritingUsers: sortUsers(user.inheritingUsers),
+      ...userNode,
+      children: filteredChildren,
+      matchInChildren: true,
     };
   }
-  return user;
+  return null;
 };
 
-const sortUserList = (list: User[]): User[] => {
-  const sortedList = sortUsers(list);
-  return sortedList.map(sortInheritingUsers);
+const filterUsers = (users: ExtendedUser[], searchString: string): ExtendedUser[] => {
+  if (!searchString || searchString === '') return users;
+  return users
+    .map((user) => filterUserNode(user, searchString))
+    .filter((user) => user !== null) as ExtendedUser[];
 };
 
-export const useFilteredUsers = ({ users, searchString }: useFilteredUsersProps) => {
+const sortUsers = (users: (ExtendedUser | User)[]): (ExtendedUser | User)[] => {
+  const processedUsers = users.map((user) => {
+    const userCopy = { ...user };
+    if (Array.isArray(userCopy.children) && userCopy.children.length > 0) {
+      userCopy.children = sortUsers(userCopy.children);
+    }
+    return userCopy;
+  });
+  return processedUsers.sort((a, b) => a.name.localeCompare(b.name));
+};
+
+export const useFilteredUsers = ({ connections, searchString }: useFilteredUsersProps) => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filtered = useMemo(() => {
-    if (!users) return [];
+  useEffect(() => {
     setCurrentPage(1);
-    const sorted = sortUserList(users);
-    return sorted.reduce((acc, user) => {
-      if (isSearchMatch(searchString, user)) {
-        acc.push(user);
-      } else if (user.inheritingUsers?.length > 0) {
-        const matchingInheritingItems = user.inheritingUsers.filter((inheritUser) =>
-          isSearchMatch(searchString, inheritUser),
-        );
-        if (matchingInheritingItems.length > 0) {
-          acc.push({
-            ...user,
-            matchInInheritingUsers: true,
-            inheritingUsers: matchingInheritingItems,
-          });
-        }
-      }
-      return acc;
-    }, [] as ExtendedUser[]);
-  }, [users, searchString]);
+  }, [connections, searchString]);
+
+  const processedUsers = useMemo(() => {
+    if (!connections || connections.length === 0) return [];
+
+    const extendedUsers = mapToExtendedUsers(connections);
+    const filtered = filterUsers(extendedUsers, searchString);
+    const sorted = sortUsers(filtered);
+    return sorted;
+  }, [connections, searchString]);
+
+  const paginatedUsers = useMemo(() => {
+    return processedUsers.slice(0, PAGE_SIZE * currentPage);
+  }, [processedUsers, currentPage]);
+
+  const hasNextPage = processedUsers.length > PAGE_SIZE * currentPage;
+
+  const goNextPage = () => {
+    if (hasNextPage) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
 
   return {
-    users: filtered.slice(0, PAGE_SIZE * currentPage),
-    hasNextPage: filtered.length > PAGE_SIZE * currentPage,
-    goNextPage: () => setCurrentPage(currentPage + 1),
+    users: paginatedUsers,
+    hasNextPage,
+    goNextPage,
+    totalFilteredCount: processedUsers.length,
   };
 };

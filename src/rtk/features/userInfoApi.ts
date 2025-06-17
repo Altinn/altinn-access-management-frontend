@@ -1,8 +1,38 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { ExtendedUser } from '@/features/amUI/common/UserList/useFilteredUsers';
 
 import type { Party } from './lookupApi';
+
+interface UserKeyValues {
+  OrganizationIdentifier?: string;
+  PartyId?: string;
+  DateOfBirth?: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  type: string;
+  variant: string;
+  refId: string;
+  parent: User | null;
+  children: (User | ExtendedUser)[] | null;
+  keyValues: UserKeyValues | null;
+}
+
+export interface RoleInfo {
+  id: string;
+  code: string;
+  children: RoleInfo[] | null;
+}
+
+export interface Connection {
+  party: User;
+  roles: RoleInfo[];
+  connections: Connection[];
+}
 
 interface UserInfoApiResponse {
   party: Party;
@@ -26,20 +56,10 @@ export interface ReporteeInfo {
 }
 
 export enum PartyType {
-  Person = 1,
-  Organization = 2,
-  SelfIdentified = 3,
-  SubUnit = 4,
-}
-
-export interface User {
-  partyUuid: string;
-  partyType: PartyType;
-  name: string;
-  roles: string[];
-  organizationNumber?: string;
-  unitType?: string;
-  inheritingUsers: User[];
+  Person = 'Person',
+  Organization = 'Organization',
+  SelfIdentified = 'SelfIdentified',
+  SubUnit = 'SubUnit',
 }
 
 export interface UserAccesses {
@@ -88,19 +108,23 @@ export const userInfoApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
     }),
-    getRightHolders: builder.query<User[], { partyUuid: string; fromUuid: string; toUuid: string }>(
-      {
-        query: ({ partyUuid, fromUuid, toUuid }) =>
-          `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
-        keepUnusedDataFor: 3,
-        providesTags: ['RightHolders'],
-        transformErrorResponse: (response: {
-          status: string | number;
-        }): { status: string | number; data: string } => {
-          return { status: response.status, data: new Date().toISOString() };
-        },
+    getRightHolders: builder.query<
+      Connection[],
+      { partyUuid: string; fromUuid: string; toUuid: string }
+    >({
+      query: ({ partyUuid, fromUuid, toUuid }) =>
+        `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
+      keepUnusedDataFor: 3,
+      providesTags: ['RightHolders'],
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
       },
-    ),
+      transformResponse: (response: Connection[]) => {
+        return response;
+      },
+    }),
     removeRightHolder: builder.mutation<void, { toPartyUuid: string; fromPartyUuid: string }>({
       query: ({ toPartyUuid, fromPartyUuid }) => ({
         url: `reportee/${fromPartyUuid}/rightholder?rightholderPartyUuid=${toPartyUuid}`,

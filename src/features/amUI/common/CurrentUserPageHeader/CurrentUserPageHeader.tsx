@@ -1,18 +1,22 @@
 import { ListItemBase, ListItemHeader } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
 
-import type { User } from '@/rtk/features/userInfoApi';
+import type { Connection } from '@/rtk/features/userInfoApi';
+
+import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
 import classes from './CurrentUserPageHeader.module.css';
 import { CurrentUserSkeleton } from './CurrentUserSkeleton';
 
 interface CurrentUserPageHeaderProps {
-  currentUser?: User;
+  currentUser?: Connection;
   as: React.ElementType;
   loading: boolean;
 }
 
 export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserPageHeaderProps) => {
-  const description = currentUser?.roles?.join(', ') ?? '';
+  const { t } = useTranslation();
+  const roles = currentUser?.roles ? getRoleCodesForKeyRoles(currentUser.roles) : [];
 
   return (
     <div className={classes.currentUser}>
@@ -27,11 +31,11 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
         >
           <ListItemHeader
             size='xl'
-            title={currentUser?.name}
-            description={`${description.slice(0, 100)}${description.length > 100 ? '...' : ''}`}
+            title={currentUser?.party.name}
+            description={roles.map((r) => t(`${r}`)).join(', ')}
             avatar={{
               type: 'person',
-              name: currentUser?.name || '',
+              name: currentUser?.party.name || '',
             }}
             as={as}
             titleAs={'h2'}

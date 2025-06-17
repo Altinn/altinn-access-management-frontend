@@ -1,56 +1,63 @@
 import { describe, it, expect } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 
-import { useFilteredUsers } from './useFilteredUsers';
-
-import type { User } from '@/rtk/features/userInfoApi';
+import type { Connection } from '@/rtk/features/userInfoApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
-const mockUsers: User[] = [
+import { useFilteredUsers } from './useFilteredUsers';
+
+const mockUsers: Connection[] = [
   {
-    partyUuid: '1',
-    name: 'Alice',
-    inheritingUsers: [],
-    partyType: PartyType.Person,
+    party: {
+      id: '1',
+      name: 'Alice',
+      children: [],
+      variant: PartyType.Person,
+      refId: '123456789',
+      parent: null,
+      keyValues: null,
+      type: '',
+    },
     roles: [],
+    connections: [],
   },
   {
-    partyUuid: '2',
+    id: '2',
     name: 'Bob',
-    inheritingUsers: [],
-    partyType: PartyType.Person,
+    children: [],
+    type: PartyType.Person,
     roles: [],
   },
   {
-    partyUuid: '2.5',
+    id: '2.5',
     name: 'Ipsum AS',
-    organizationNumber: '456',
-    inheritingUsers: [
+    refId: '456',
+    children: [
       {
-        partyUuid: '1',
+        id: '1',
         name: 'InheritBob',
-        inheritingUsers: [],
-        partyType: PartyType.Person,
+        children: [],
+        type: PartyType.Person,
         roles: [],
       },
     ],
-    partyType: PartyType.Organization,
+    type: PartyType.Organization,
     roles: [],
   },
   {
-    partyUuid: '3',
+    id: '3',
     name: 'Lorem AS',
-    organizationNumber: '789',
-    inheritingUsers: [
+    refId: '789',
+    children: [
       {
-        partyUuid: '1',
+        id: '1',
         name: 'InheritAlice',
-        inheritingUsers: [],
-        partyType: PartyType.Person,
+        children: [],
+        type: PartyType.Person,
         roles: [],
       },
     ],
-    partyType: PartyType.Organization,
+    type: PartyType.Organization,
     roles: [],
   },
 ];
@@ -125,7 +132,7 @@ describe('useFilteredUsers', () => {
 
     expect(result.current.users).toHaveLength(1);
     expect(result.current.users[0].matchInInheritingUsers).toBe(true);
-    expect(result.current.users[0].inheritingUsers).toHaveLength(1);
-    expect(result.current.users[0].inheritingUsers[0].name).toBe('InheritAlice');
+    expect(result.current.users[0].children).toHaveLength(1);
+    expect(result.current.users[0].children[0].name).toBe('InheritAlice');
   });
 });
