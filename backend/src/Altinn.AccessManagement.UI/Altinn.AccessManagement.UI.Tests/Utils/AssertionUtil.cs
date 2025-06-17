@@ -218,7 +218,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <param name="actual">The instance to verify.</param>
         public static void AssertEqual(List<ResourceReference> expected, List<ResourceReference> actual)
         {
-            if (actual == null) {
+            if (actual == null)
+            {
                 Assert.Null(expected);
                 return;
             }
@@ -479,12 +480,12 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
-            
+
             Assert.Equal(expected.Code, actual.Code);
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
         }
-        
+
         public static void AssertEqual(SystemUserRequestFE expected, SystemUserRequestFE actual)
         {
             Assert.NotNull(actual);
@@ -516,7 +517,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
-        
+
         public static void AssertEqual(SystemUserAgentRequestFE expected, SystemUserAgentRequestFE actual)
         {
             Assert.NotNull(actual);
@@ -530,14 +531,14 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
             Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
-        }        
-        
+        }
+
         public static void AssertEqual(AccessPackageDelegationCheckResponse expected, AccessPackageDelegationCheckResponse actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
-            Assert.Equal(expected.CanDelegate , actual.CanDelegate);
+            Assert.Equal(expected.CanDelegate, actual.CanDelegate);
             Assert.Equal(expected.DetailCode, actual.DetailCode);
             Assert.Equal(expected.PackageId, actual.PackageId);
         }
@@ -558,6 +559,16 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.CustomerId, actual.CustomerId);
+        }
+
+        public static void AssertEqual(Connection expected, Connection actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Party, actual.Party);
+            Assert.Equal(expected.Roles, actual.Roles);
+            Assert.Equal(expected.Connections, actual.Connections);
         }
     }
 }
