@@ -70,7 +70,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("delegations/")]
         public async Task<ActionResult<Dictionary<Guid, List<PackagePermission>>>> GetDelegations([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
         {
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
