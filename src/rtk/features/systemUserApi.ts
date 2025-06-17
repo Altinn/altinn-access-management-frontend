@@ -164,12 +164,8 @@ export const systemUserApi = createApi({
     }),
 
     // change request
-    getChangeRequest: builder.query<
-      SystemUserRequest,
-      { partyId: string; changeRequestId: string }
-    >({
-      query: ({ partyId, changeRequestId }) =>
-        `systemuser/changerequest/${partyId}/${changeRequestId}`,
+    getChangeRequest: builder.query<SystemUserRequest, { changeRequestId: string }>({
+      query: ({ changeRequestId }) => `systemuser/changerequest/${changeRequestId}`,
     }),
     approveChangeRequest: builder.mutation<void, { partyId: string; changeRequestId: string }>({
       query: ({ partyId, changeRequestId }) => ({
