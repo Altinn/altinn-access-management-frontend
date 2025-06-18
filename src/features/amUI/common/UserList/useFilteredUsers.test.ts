@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 
-import type { Connection } from '@/rtk/features/userInfoApi';
+import type { Connection, ExtendedUser } from '@/rtk/features/userInfoApi';
 
 import { useFilteredUsers } from './useFilteredUsers';
 
@@ -182,8 +182,9 @@ describe('useFilteredUsers', () => {
     );
 
     expect(result.current.users).toHaveLength(1);
-    // expect(result.current.users[0].mathinchildren).toBe(true);
+    expect((result.current.users[0] as ExtendedUser).matchInChildren).toBe(true);
     expect(result.current.users[0].children).toHaveLength(1);
-    // expect(result?.current?.users[0]?.children[0]?.name).toBe('InheritAlice');
+    expect(result.current.users[0]?.name).toBe('Lorem AS');
+    expect(result?.current?.users?.[0]?.children?.[0]?.name).toBe('InheritAlice');
   });
 });
