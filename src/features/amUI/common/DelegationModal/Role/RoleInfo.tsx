@@ -2,6 +2,14 @@ import { Avatar, DsAlert, DsParagraph, DsHeading } from '@altinn/altinn-componen
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import {
+  useDelegationCheckQuery,
+  useGetRolesForUserQuery,
+  type Role,
+} from '@/rtk/features/roleApi';
+
 import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
 import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
 import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
@@ -12,14 +20,6 @@ import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { StatusSection } from '../StatusSection';
 
 import classes from './RoleInfo.module.css';
-
-import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import {
-  useDelegationCheckQuery,
-  useGetRolesForUserQuery,
-  type Role,
-} from '@/rtk/features/roleApi';
 
 export interface PackageInfoProps {
   role: Role;

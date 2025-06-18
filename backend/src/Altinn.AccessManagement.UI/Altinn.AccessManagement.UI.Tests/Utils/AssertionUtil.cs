@@ -580,8 +580,37 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
-
             Assert.Equal(expected.CustomerId, actual.CustomerId);
+        }
+
+        public static void AssertEqual(Altinn.AccessManagement.UI.Core.Models.User.Entity expected, Altinn.AccessManagement.UI.Core.Models.User.Entity actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+            Assert.Equal(actual.Name, expected.Name);
+            Assert.Equal(actual.Children, expected.Children);
+            Assert.Equal(actual.Id, expected.Id);
+            Assert.Equal(actual.Type, expected.Type);
+            AssertCollections(expected.KeyValues, actual.KeyValues, Assert.Equal);
+            AssertCollections(expected.Children, actual.Children, AssertEqual);
+        }
+
+
+        public static void AssertEqual(RoleInfo expected, RoleInfo actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+            Assert.Equal(actual.Code, expected.Code);
+        }
+
+
+        public static void AssertEqual(Connection expected, Connection actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+            AssertEqual(actual.Party, expected.Party);
+            AssertCollections(actual.Roles, expected.Roles, AssertEqual);
+            AssertCollections(expected.Connections, actual.Connections, AssertEqual);
         }
     }
 }

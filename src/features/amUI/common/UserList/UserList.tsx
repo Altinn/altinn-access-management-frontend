@@ -1,16 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph } from '@altinn/altinn-components';
 
-import type { User } from '@/rtk/features/userInfoApi';
+import type { Connection } from '@/rtk/features/userInfoApi';
 
-import NewUserModal, { NewUserButton } from '../../users/NewUserModal/NewUserModal';
+import { NewUserButton } from '../../users/NewUserModal/NewUserModal';
 
 import { ListWrapper } from './ListWrapper';
 import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
 
 export interface UserListProps {
-  userList?: User[];
+  connections?: Connection[];
   searchString: string;
   isLoading?: boolean;
   listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -19,7 +19,7 @@ export interface UserListProps {
 }
 
 export const UserList = ({
-  userList,
+  connections,
   searchString,
   isLoading,
   listItemTitleAs,
@@ -28,7 +28,7 @@ export const UserList = ({
 }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
-    users: userList,
+    connections: connections,
     searchString,
   });
 
@@ -52,7 +52,7 @@ export const UserList = ({
         </div>
       )}
       <ListWrapper
-        userList={users ?? []}
+        users={users ?? []}
         spacing={2}
         size='md'
         isLoading={isLoading}

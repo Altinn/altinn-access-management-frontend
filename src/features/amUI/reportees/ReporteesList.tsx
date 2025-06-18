@@ -51,7 +51,7 @@ export const ReporteesList = () => {
         </DsSearch>
       </div>
       <UserList
-        userList={rightHolders || []}
+        connections={rightHolders || []}
         searchString={searchString}
         isLoading={isLoading}
         listItemTitleAs='h2'

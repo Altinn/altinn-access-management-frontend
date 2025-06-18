@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
-import type { User } from '@/rtk/features/userInfoApi';
+import type { Connection } from '@/rtk/features/userInfoApi';
 import {
   useGetIsAdminQuery,
   useGetRightHoldersQuery,
@@ -19,12 +19,12 @@ import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 
 const extractFromList = (
-  list: User[],
+  list: Connection[],
   uuidToRemove: string,
-  onRemove?: (removed: User) => void,
-): User[] => {
-  const remainingList = list.reduce<User[]>((acc, item) => {
-    if (item.partyUuid === uuidToRemove) {
+  onRemove?: (removed: Connection) => void,
+): Connection[] => {
+  const remainingList = list.reduce<Connection[]>((acc, item) => {
+    if (item.party.id === uuidToRemove) {
       onRemove?.(item);
     } else {
       acc.push(item);
@@ -96,7 +96,7 @@ export const UsersList = () => {
               currentUserAsRightHolder ? (
                 <Link
                   {...props}
-                  to={`${currentUserAsRightHolder[0]?.partyUuid}`}
+                  to={`/users/${currentUserAsRightHolder[0]?.party.id}`}
                 />
               ) : (
                 <div {...props} />
@@ -130,7 +130,7 @@ export const UsersList = () => {
       </div>
       {isAdmin && (
         <UserList
-          userList={userList ?? undefined}
+          connections={userList ?? undefined}
           searchString={searchString}
           isLoading={!userList || loadingRightHolders}
           listItemTitleAs='h2'

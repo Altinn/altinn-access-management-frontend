@@ -437,7 +437,20 @@
     "FUSJ": "Skal fusjoneres med",
     "FISJ": "Skal fisjoneres med",
     "ETDL": "Allocator of electronic signing rights",
-    "ADOS": "Administrative unit - public sector"
+    "ADOS": "Administrative unit - public sector",
+
+    "innehaver": "Owner",
+    "styreleder": "Chairman of the board",
+    "varamedlem": "Deputy board member(s)",
+    "regnskapsforer": "Accountant",
+    "daglig-leder": "General manager",
+    "deltaker-delt-ansvar": "Partner with shared liability",
+    "deltaker-fullt-ansvar": "Partner with full liability",
+    "komplementar": "General partner",
+    "bestyrende-reder": "Managing shipowner",
+    "bostyrer": "Official receiver",
+    "revisor": "Auditor",
+    "hovedadministrator": "Main administrator"
   },
   "systemuser_overviewpage": {
     "page_title": "System access - Altinn",

@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Method that returns the user information about the user that is logged in
+        /// Method that returns the user information about the user that is logged in.
         /// </summary>
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -72,7 +72,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for reportees the authenticated user can act on behalf of
+        /// Endpoint for reportees the authenticated user can act on behalf of.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -101,10 +101,10 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving party if party exists in the authenticated users reporteelist
+        /// Endpoint for retrieving party if party exists in the authenticated users reporteelist.
         /// </summary>
-        /// <param name="partyId">The partyId for the reportee to look up</param>
-        /// <returns>Reportee if party is in authenticated users reporteelist</returns>
+        /// <param name="partyId">The partyId for the reportee to look up.</param>
+        /// <returns>Reportee if party is in authenticated users reporteelist.</returns>
         [HttpGet]
         [Authorize]
         [Route("reportee/{partyId}")]
@@ -239,7 +239,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return StatusCode(404, "Feature not available");
             }
-            
+
             try
             {
                 Guid? partyUuid = await _userService.ValidatePerson(validationInput.Ssn, validationInput.LastName);
@@ -315,7 +315,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             try
             {
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
@@ -350,7 +350,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             if (!from.HasValue && !to.HasValue)
             {
                 return BadRequest("Either 'from' or 'to' query parameter must be provided.");
@@ -378,12 +378,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("isAdmin")]
         public ActionResult<bool> IsAdmin()
         {
-            if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) && 
+            if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) &&
                 hasPermissionObj is bool hasPermission)
             {
                 return Ok(hasPermission);
             }
-            
+
             return Ok(false);
         }
     }

@@ -436,7 +436,20 @@
     "FUSJ": "Skal fusjoneres med",
     "FISJ": "Skal fisjoneres med",
     "ETDL": "Tildeler av elektronisk signeringsrett",
-    "ADOS": "Administrativ enhet - offentlig sektor"
+    "ADOS": "Administrativ enhet - offentlig sektor",
+
+    "innehaver": "Innehaver",
+    "styreleder": "Styrets leder",
+    "varamedlem": "Varamedlem",
+    "regnskapsforer": "Regnskapsfører",
+    "daglig-leder": "Daglig leder",
+    "deltaker-delt-ansvar": "Deltaker delt ansvar",
+    "deltaker-fullt-ansvar": "Deltaker fullt ansvar",
+    "komplementar": "Komplementar",
+    "bestyrende-reder": "Bestyrende reder",
+    "bostyrer": "Bobestyrer",
+    "revisor": "Revisor",
+    "hovedadministrator": "Hovedadministrator"
   },
   "systemuser_overviewpage": {
     "page_title": "Systemtilgang - Altinn",
