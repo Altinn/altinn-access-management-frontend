@@ -1,4 +1,5 @@
 import { DsParagraph, ListBase } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
@@ -45,6 +46,7 @@ export const AccessPackageList = ({
   onRevokeError,
   searchString,
 }: AccessPackageListProps) => {
+  const { t } = useTranslation();
   const { data: allPackageAreas, isLoading: loadingPackageAreas } = useSearchQuery(
     searchString ?? '',
   );
@@ -98,7 +100,7 @@ export const AccessPackageList = ({
     <div className={classes.accessAreaList}>
       {displayAreas.length === 0 ? (
         <DsParagraph className={classes.noAccessPackages}>
-          Denne brukeren har ingen tilgangspakker.
+          {t('access_packages.user_has_no_packages')}
         </DsParagraph>
       ) : (
         <ListBase>

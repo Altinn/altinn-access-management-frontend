@@ -261,6 +261,7 @@
     "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
     "package_number_of_resources": "{{count}} tenester",
+    "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
     "info_alert_text": "Tilgangspakkar vil etter kvart erstatte roller i Altinn si tilgangsstyringsløysing. Dei er kanskje litt tomme nå, men vil snart bli fylte opp med tenester.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
