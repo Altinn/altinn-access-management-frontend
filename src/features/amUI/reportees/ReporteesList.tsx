@@ -56,6 +56,7 @@ export const ReporteesList = () => {
         isLoading={isLoading}
         listItemTitleAs='h2'
         interactive
+        canAdd={false} // Cannot add new reportees
       />
     </div>
   );
