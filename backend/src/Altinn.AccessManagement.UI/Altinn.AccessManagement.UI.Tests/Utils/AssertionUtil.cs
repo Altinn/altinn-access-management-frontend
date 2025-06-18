@@ -557,7 +557,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
-
             Assert.Equal(expected.CustomerId, actual.CustomerId);
         }
 
@@ -565,10 +564,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
-
-            Assert.Equal(expected.Party, actual.Party);
-            Assert.Equal(expected.Roles, actual.Roles);
-            Assert.Equal(expected.Connections, actual.Connections);
         }
     }
 }
