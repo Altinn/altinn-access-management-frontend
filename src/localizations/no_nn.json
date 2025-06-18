@@ -253,7 +253,7 @@
     "available_packages_title": "Tilgjengelege tilgangspakker",
     "other_available": "Andre tilgjengelege",
     "current_access_packages_title": "{{count}} tilgangspakker",
-    "give_new_button": "Gi fullmakt til ny tilgangspakke",
+    "give_new_button": "Gi fullmakt",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",
@@ -261,6 +261,8 @@
     "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
     "package_number_of_resources": "{{count}} tenester",
+    "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
+    "info_alert_text": "Tilgangspakkar vil etter kvart erstatte roller i Altinn si tilgangsstyringsløysing. Dei er kanskje litt tomme nå, men vil snart bli fylte opp med tenester.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Ver venleg å kontakte Altinn brukarteneste om problemet held fram.",

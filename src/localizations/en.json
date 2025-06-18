@@ -257,7 +257,7 @@
     "available_packages_title": "Available access packages",
     "other_available": "Other available",
     "current_access_packages_title": "{{count}} access packages",
-    "give_new_button": "Give power of attorney to new access package",
+    "give_new_button": "Give new power of attorney",
     "other_packages_in_area_title": "Other available packages in this area:",
     "package_delegation_success": "{{name}} has been successfully granted power of attorney over {{accessPackage}}.",
     "package_delegation_error": "Failed to grant power of attorney over {{accessPackage}} to {{name}}.",
@@ -265,6 +265,8 @@
     "package_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{accessPackage}}.",
     "delegated_packages_count_badge": "{{delegated}} of {{total}}",
     "package_number_of_resources": "{{count}} services",
+    "user_has_no_packages": "This user has no access packages.",
+    "info_alert_text": "Access packages will eventually replace roles in Altinn's access management solution. They may be a bit empty now, but they will soon be filled with services.",
     "delegation_check": {
       "delegation_check_error_heading": "Technical error",
       "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",
