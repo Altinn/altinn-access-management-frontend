@@ -115,6 +115,7 @@ export const systemUserApi = createApi({
     >({
       query: ({ partyId, systemUserId, partyUuid }) =>
         `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation?partyuuid=${partyUuid}`,
+      keepUnusedDataFor: 0,
     }),
     assignCustomer: builder.mutation<
       AgentDelegation,
