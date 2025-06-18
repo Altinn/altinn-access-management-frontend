@@ -560,7 +560,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.CustomerId, actual.CustomerId);
         }
 
-        public static void AssertEqual(Entity expected, Entity actual)
+        public static void AssertEqual(Altinn.AccessManagement.UI.Core.Models.User.Entity expected, Altinn.AccessManagement.UI.Core.Models.User.Entity actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
