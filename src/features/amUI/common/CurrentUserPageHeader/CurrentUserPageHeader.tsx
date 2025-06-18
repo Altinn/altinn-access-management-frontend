@@ -31,11 +31,11 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
         >
           <ListItemHeader
             size='xl'
-            title={currentUser?.party.name}
+            title={currentUser?.party?.name || ''}
             description={roles.map((r) => t(`${r}`)).join(', ')}
             avatar={{
               type: 'person',
-              name: currentUser?.party.name || '',
+              name: currentUser?.party?.name || '',
             }}
             as={as}
             titleAs={'h2'}
