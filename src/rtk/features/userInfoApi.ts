@@ -12,7 +12,7 @@ interface UserKeyValues {
 
 export interface ExtendedUser extends Omit<User, 'children'> {
   roles: RoleInfo[];
-  children: (ExtendedUser | User)[];
+  children: (ExtendedUser | User)[] | null;
   matchInChildren?: boolean;
 }
 
@@ -95,10 +95,6 @@ export const userInfoApi = createApi({
       query: () => `reportee/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
     }),
-    // getRightHolders: builder.query<User[], void>({
-    //   query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
-    //   keepUnusedDataFor: 300,
-    // }),
     addRightHolder: builder.mutation<void, string>({
       query: (partyUuidToBeAdded) => ({
         url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder?rightholderPartyUuid=${partyUuidToBeAdded}`,
@@ -112,7 +108,7 @@ export const userInfoApi = createApi({
     }),
     getRightHolders: builder.query<
       Connection[],
-      { partyUuid: string; fromUuid: string; toUuid: string }
+      { partyUuid: string; fromUuid?: string; toUuid?: string }
     >({
       query: ({ partyUuid, fromUuid, toUuid }) =>
         `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
@@ -122,9 +118,6 @@ export const userInfoApi = createApi({
         status: string | number;
       }): { status: string | number; data: string } => {
         return { status: response.status, data: new Date().toISOString() };
-      },
-      transformResponse: (response: Connection[]) => {
-        return response;
       },
     }),
     removeRightHolder: builder.mutation<void, { toPartyUuid: string; fromPartyUuid: string }>({

@@ -5,12 +5,11 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-import type { User } from '@/rtk/features/userInfoApi';
+import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
 
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
 import { ListWrapper } from './ListWrapper';
-import type { ExtendedUser } from './useFilteredUsers';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
@@ -65,7 +64,7 @@ export const UserListItem = ({
         description={roles.map((r) => t(`${r}`)).join(', ')}
         avatar={{
           name: user.name,
-          type: user.type.toString() === 'Organisasjon' ? 'company' : 'person',
+          type: user.type && user.type.toString() === 'Organisasjon' ? 'company' : 'person',
         }}
         expanded={isExpanded}
         collapsible={!!hasInheritingUsers}
