@@ -58,10 +58,10 @@ export interface ReporteeInfo {
 }
 
 export enum PartyType {
-  Person = 'Person',
-  Organization = 'Organization',
-  SelfIdentified = 'SelfIdentified',
-  SubUnit = 'SubUnit',
+  Person = 1,
+  Organization = 2,
+  SelfIdentified = 3,
+  SubUnit = 4,
 }
 
 export interface UserAccesses {
