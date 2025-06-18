@@ -568,7 +568,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(actual.Children, expected.Children);
             Assert.Equal(actual.Id, expected.Id);
             Assert.Equal(actual.Type, expected.Type);
-            Assert.Equal(actual.KeyValues, expected.KeyValues);
+            AssertCollections(expected.KeyValues, actual.KeyValues, Assert.Equal);
+            AssertCollections(expected.Children, actual.Children, AssertEqual);
         }
 
 
@@ -586,6 +587,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
             AssertEqual(actual.Party, expected.Party);
             AssertCollections(actual.Roles, expected.Roles, AssertEqual);
+            AssertCollections(expected.Connections, actual.Connections, AssertEqual);
         }
     }
 }
