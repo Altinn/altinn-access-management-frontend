@@ -17,10 +17,12 @@ export const useAccessPackageDelegationCheck = (
   shouldShowDelegationCheck: boolean,
   handleDelegationCheckFailure: (error: ActionError) => void,
 ) => {
+  const { displayLimitedPreviewLaunch } = window.featureFlags;
+
   const [delegationCheck, { isLoading, data, isUninitialized }] = useDelegationCheckMutation();
 
   useEffect(() => {
-    if (accessPackageIds.length > 0 && shouldShowDelegationCheck) {
+    if (accessPackageIds.length > 0 && shouldShowDelegationCheck && !displayLimitedPreviewLaunch) {
       delegationCheck({ packageIds: accessPackageIds })
         .unwrap()
         .catch((response) => {
@@ -39,7 +41,9 @@ export const useAccessPackageDelegationCheck = (
    * @returns {boolean} - True if the package can be delegated, false otherwise.
    */
   const canDelegate = (id: string) =>
-    !isLoading && data?.find((d) => d.packageId === id)?.canDelegate;
+    displayLimitedPreviewLaunch
+      ? true
+      : !!(!isLoading && data?.find((d) => d.packageId === id)?.canDelegate);
 
   return { canDelegate, isLoading, isUninitialized };
 };
