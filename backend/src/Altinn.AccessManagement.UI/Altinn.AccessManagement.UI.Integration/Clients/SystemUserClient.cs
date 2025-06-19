@@ -144,7 +144,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserClient // GetSystemUsersForParty // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return new List<SystemUser>();
+                return null;
             }
             catch (Exception ex)
             {
@@ -164,7 +164,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
-                if (response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
                 {
                     return JsonSerializer.Deserialize<SystemUser>(responseContent, _jsonSerializerOptions);
                 }
@@ -196,7 +196,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserClient // GetAgentSystemUsersForParty // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return new List<SystemUser>();
+                return null;
             }
             catch (Exception ex)
             {
