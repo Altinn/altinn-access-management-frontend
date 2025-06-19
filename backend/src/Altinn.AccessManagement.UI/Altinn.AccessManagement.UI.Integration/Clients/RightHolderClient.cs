@@ -67,9 +67,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to)
+        public async Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid? from, Guid? to)
         {
-            string endpointUrl = $"enduser/connections?party={party}&from={party}&to={to}&cascade=true";
+            string endpointUrl = $"enduser/connections?party={party}&from={from}&to={to}&cascade=true";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             var httpResponse = await _client.DeleteAsync(token, endpointUrl);

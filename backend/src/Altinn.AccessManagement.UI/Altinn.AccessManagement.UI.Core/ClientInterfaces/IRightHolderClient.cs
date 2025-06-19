@@ -21,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The uuid pf the reportee party, from which the right holder is have their rights revoked</param>
         /// <param name="to">The party that is to lose their right holder status</param>
         /// <returns></returns>
-        Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to);
+        Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid? from, Guid? to);
 
         /// <summary>
         ///   Gets all right holders for a given party.

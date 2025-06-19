@@ -56,7 +56,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
       console.error('Missing party information');
       return;
     }
-    deleteUser({ toPartyUuid: toParty.partyUuid, fromPartyUuid: fromParty.partyUuid })
+    deleteUser({ to: toParty.partyUuid, from: fromParty.partyUuid, party: actingParty?.partyUuid })
       .unwrap()
       .then(() => {
         setIsSuccess(true);

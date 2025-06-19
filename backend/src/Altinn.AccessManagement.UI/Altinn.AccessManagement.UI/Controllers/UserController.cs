@@ -164,8 +164,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpDelete]
         [Authorize]
-        [Route("reportee/{partyUuid}/rightholder")]
-        public async Task<ActionResult> RevokeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid rightholderPartyUuid)
+        [Route("reportee")]
+        public async Task<ActionResult> RevokeRightHolder([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to)
         {
             if (!ModelState.IsValid)
             {
@@ -174,7 +174,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                await _userService.RevokeRightHolder(partyUuid, rightholderPartyUuid);
+                await _userService.RevokeRightHolder(party, from, to);
                 return NoContent();
             }
             catch (HttpStatusException ex)
