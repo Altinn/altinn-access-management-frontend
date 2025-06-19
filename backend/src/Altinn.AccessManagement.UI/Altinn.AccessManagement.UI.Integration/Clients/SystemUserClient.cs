@@ -164,7 +164,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
-                if (!response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     return JsonSerializer.Deserialize<SystemUser>(responseContent, _jsonSerializerOptions);
                 }
