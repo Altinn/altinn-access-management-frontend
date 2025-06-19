@@ -3,12 +3,20 @@ import { ListItem } from '@altinn/altinn-components';
 import type { ElementType } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
+
+import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
+
+import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
 import { ListWrapper } from './ListWrapper';
-import type { ExtendedUser } from './useFilteredUsers';
+
+function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
+  return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
+}
 
 interface UserListItemProps extends ListItemProps {
-  user: ExtendedUser;
+  user: ExtendedUser | User;
 }
 
 const userHeadingLevelForMapper = (level?: ElementType) => {
@@ -33,29 +41,33 @@ export const UserListItem = ({
   interactive = false,
   ...props
 }: UserListItemProps) => {
-  const hasInheritingUsers = user.inheritingUsers?.length > 0;
+  const hasInheritingUsers = user.children && user.children.length > 0;
   const [isExpanded, setExpanded] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(
-    () => setExpanded((user.matchInInheritingUsers && hasInheritingUsers) ?? false),
-    [user.matchInInheritingUsers, hasInheritingUsers],
+    () =>
+      setExpanded(
+        (user.children && hasInheritingUsers && isExtendedUser(user) && user.matchInChildren) ??
+          false,
+      ),
+    [user, hasInheritingUsers],
   );
-
-  const description = user.roles?.join(', ') ?? '';
+  const roles = isExtendedUser(user) && user.roles ? getRoleCodesForKeyRoles(user.roles) : [];
 
   return (
     <>
       <ListItem
         {...props}
         size={size}
-        title={`${user.name} ${user.organizationNumber && !hasInheritingUsers ? `(${user.organizationNumber})` : ''}`}
-        description={`${description.slice(0, 100)}${description.length > 100 ? '...' : ''}`}
+        title={`${user.name} ${user.keyValues?.OrganizationIdentifier && !hasInheritingUsers ? `(${user.keyValues?.OrganizationIdentifier})` : ''}`}
+        description={roles.map((r) => t(`${r}`)).join(', ')}
         avatar={{
           name: user.name,
-          type: user.partyType.toString() === 'Organization' ? 'company' : 'person',
+          type: user.type && user.type.toString() === 'Organisasjon' ? 'company' : 'person',
         }}
         expanded={isExpanded}
-        collapsible={hasInheritingUsers}
+        collapsible={!!hasInheritingUsers}
         interactive={interactive}
         linkIcon={!hasInheritingUsers}
         onClick={() => {
@@ -67,7 +79,7 @@ export const UserListItem = ({
             : (props) => (
                 <Link
                   {...props}
-                  to={user.partyUuid}
+                  to={user.id}
                 />
               )
         }
@@ -75,7 +87,7 @@ export const UserListItem = ({
       />
       {hasInheritingUsers && isExpanded && (
         <ListWrapper
-          userList={[{ ...user, inheritingUsers: [] }, ...user.inheritingUsers]}
+          users={[{ ...user, children: [] }, ...(user.children ? user.children : [])]}
           size='sm'
           spacing={1}
           indent

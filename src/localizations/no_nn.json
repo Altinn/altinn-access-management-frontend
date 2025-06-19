@@ -253,7 +253,7 @@
     "available_packages_title": "Tilgjengelege tilgangspakker",
     "other_available": "Andre tilgjengelege",
     "current_access_packages_title": "{{count}} tilgangspakker",
-    "give_new_button": "Gi fullmakt til ny tilgangspakke",
+    "give_new_button": "Gi fullmakt",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",
@@ -261,6 +261,8 @@
     "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
     "package_number_of_resources": "{{count}} tenester",
+    "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
+    "info_alert_text": "Tilgangspakkar vil etter kvart erstatte roller i Altinn si tilgangsstyringsløysing. Dei er kanskje litt tomme nå, men vil snart bli fylte opp med tenester.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Ver venleg å kontakte Altinn brukarteneste om problemet held fram.",
@@ -284,7 +286,8 @@
     "main_page_heading": "Brukarar med fullmakter i {{name}}",
     "user_list_heading": "Andre med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller virksomheter",
-    "user_no_search_result": "Inga resultat for søket"
+    "no_users": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
+    "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?"
   },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
@@ -358,7 +361,8 @@
     "person": "Person",
     "organization": "Virksemnd",
     "modal_title": "Legg til ny person eller virksemnd",
-    "trigger_button": "Legg til brukar",
+    "trigger_button": "Ny brukar",
+    "trigger_button_large": "Gi fullmakt til ny brukar",
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til virksomheit",
     "limited_preview_message": "Du kan diverre ikkje legge til personar heilt enda. Dette vil komme seinare."
@@ -429,7 +433,20 @@
     "FUSJ": "Skal fusjoneres med",
     "FISJ": "Skal fisjoneres med",
     "ETDL": "Tildeler av elektronisk signeringsrett",
-    "ADOS": "Administrativ eining - offentleg sektor"
+    "ADOS": "Administrativ eining - offentleg sektor",
+
+    "innehaver": "Innehavar",
+    "styreleder": "Styreleiar",
+    "varamedlem": "Varamedlem",
+    "regnskapsforer": "Rekneskapsførar",
+    "daglig-leder": "Dagleg leiar",
+    "deltaker-delt-ansvar": "Deltakar med delt ansvar",
+    "deltaker-fullt-ansvar": "Deltakar med fullt ansvar",
+    "komplementar": "Komplementar",
+    "bestyrende-reder": "Styrande reiar",
+    "bostyrer": "Bustyrar",
+    "revisor": "Revisor",
+    "hovedadministrator": "Hovudadministrator"
   },
   "systemuser_overviewpage": {
     "page_title": "Systemtilgang - Altinn",

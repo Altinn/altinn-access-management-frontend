@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
 
+import store from '@/rtk/app/store';
+
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { OldRolesAlert } from './OldRolesAlert';
-
-import store from '@/rtk/app/store';
 
 export default {
   title: 'Features/AMUI/OldRolesAlert',
@@ -15,6 +15,7 @@ export default {
       <PartyRepresentationProvider
         fromPartyUuid={''}
         toPartyUuid={''}
+        actingPartyUuid={''}
       >
         <OldRolesAlert {...args} />
       </PartyRepresentationProvider>

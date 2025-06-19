@@ -71,7 +71,15 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         />
       ),
     },
-    ...(isSm ? SidebarItems(true, pathname, isAdmin) : []),
+    ...(isSm
+      ? SidebarItems(
+          true,
+          pathname,
+          isAdmin,
+          reportee?.name || '',
+          getAccountType(reportee?.type ?? ''),
+        )
+      : []),
     {
       id: 'all-services',
       groupId: 10,
@@ -193,7 +201,13 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         sidebar={{
           menu: {
             groups: {},
-            items: SidebarItems(false, pathname, isAdmin),
+            items: SidebarItems(
+              false,
+              pathname,
+              isAdmin,
+              reportee?.name || '',
+              getAccountType(reportee?.type ?? ''),
+            ),
           },
         }}
         content={{ color: 'company' }}

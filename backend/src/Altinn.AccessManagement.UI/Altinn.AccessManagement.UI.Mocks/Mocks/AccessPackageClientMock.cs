@@ -44,6 +44,22 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
+        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, string languageCode)
+        {
+            Util.ThrowExceptionIfTriggerParty(from.ToString());
+
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "AccessPackage", "GetDelegations", $"{from}_{to}.json");
+                return await Task.FromResult(Util.GetMockData<PaginatedResult<PackagePermission>>(dataPath));
+            }
+            catch
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
+        }
+
+        /// <inheritdoc />
         public Task<HttpResponseMessage> CreateAccessPackageDelegation(Guid party, Guid to, Guid from, string packageId)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());

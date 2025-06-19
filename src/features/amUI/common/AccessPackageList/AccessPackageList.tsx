@@ -1,4 +1,5 @@
-import { ListBase } from '@altinn/altinn-components';
+import { DsParagraph, ListBase } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
@@ -45,14 +46,20 @@ export const AccessPackageList = ({
   onRevokeError,
   searchString,
 }: AccessPackageListProps) => {
+  const { t } = useTranslation();
   const { data: allPackageAreas, isLoading: loadingPackageAreas } = useSearchQuery(
     searchString ?? '',
   );
   const { fromParty, toParty } = usePartyRepresentation();
-  const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery({
-    from: fromParty?.partyUuid ?? '',
-    to: toParty?.partyUuid ?? '',
-  });
+  const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery(
+    {
+      from: fromParty?.partyUuid ?? '',
+      to: toParty?.partyUuid ?? '',
+    },
+    {
+      skip: !toParty?.partyUuid || !fromParty?.partyUuid,
+    },
+  );
 
   const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
 
@@ -63,7 +70,12 @@ export const AccessPackageList = ({
     showAllPackages,
   });
 
-  const { onDelegate, onRevoke, onRequest } = useAccessPackageActions({
+  const {
+    onDelegate,
+    onRevoke,
+    onRequest,
+    isLoading: isActionLoading,
+  } = useAccessPackageActions({
     onDelegateSuccess,
     onDelegateError,
     onRevokeSuccess,
@@ -76,10 +88,20 @@ export const AccessPackageList = ({
     ? combinedAreas
     : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
 
+  if (loadingDelegations || loadingPackageAreas || isLoading) {
+    return (
+      <div className={classes.accessAreaList}>
+        <SkeletonAccessPackageList />
+      </div>
+    );
+  }
+
   return (
     <div className={classes.accessAreaList}>
-      {loadingDelegations || loadingPackageAreas || isLoading ? (
-        <SkeletonAccessPackageList />
+      {displayAreas.length === 0 ? (
+        <DsParagraph className={classes.noAccessPackages}>
+          {t('access_packages.user_has_no_packages')}
+        </DsParagraph>
       ) : (
         <ListBase>
           {displayAreas.map((area) => {
@@ -100,6 +122,7 @@ export const AccessPackageList = ({
                   onDelegate={onDelegate}
                   onRevoke={onRevoke}
                   onRequest={onRequest}
+                  isActionLoading={isActionLoading}
                   useDeleteConfirm={useDeleteConfirm}
                   showAvailablePackages={!minimizeAvailablePackages}
                 />

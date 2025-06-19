@@ -6,6 +6,8 @@ import type {
   AccessPackageDelegation,
 } from '@/rtk/features/accessPackageApi';
 
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+
 export interface ExtendedAccessArea extends AccessArea {
   packages: {
     assigned: AccessPackage[];
@@ -26,14 +28,15 @@ export const useAreaPackageList = ({
   showAllAreas,
   showAllPackages,
 }: useAreaPackagesProps) => {
+  const { toParty, fromParty } = usePartyRepresentation();
+
   const accessAreas = useMemo(() => {
-    if (!allPackageAreas) {
+    if (!allPackageAreas || activeDelegations === undefined) {
       return {
         assignedAreas: [],
         availableAreas: [],
       };
     }
-
     return allPackageAreas.reduce(
       (acc, area) => {
         const activeDelegationArea: AccessPackageDelegation[] | null = activeDelegations
@@ -43,10 +46,17 @@ export const useAreaPackageList = ({
         if (activeDelegationArea) {
           const pkgs = area.accessPackages.reduce(
             (pkgAcc, pkg) => {
-              const hasAccess = activeDelegationArea.some((d) => d.accessPackageId === pkg.id);
-
-              if (hasAccess) {
-                pkgAcc.assigned.push(pkg);
+              const pkgAccess = activeDelegationArea.find((d) => d.package.id === pkg.id);
+              if (pkgAccess !== undefined) {
+                const aquiredPkg = {
+                  ...pkg,
+                  inherited: isInherited(
+                    pkgAccess,
+                    toParty?.partyUuid ?? '',
+                    fromParty?.partyUuid ?? '',
+                  ),
+                };
+                pkgAcc.assigned.push(aquiredPkg);
               } else if (showAllPackages) {
                 pkgAcc.available.push(pkg);
               }
@@ -63,11 +73,10 @@ export const useAreaPackageList = ({
         } else if (showAllAreas) {
           acc.availableAreas.push({
             ...area,
-            packages: showAllPackages
-              ? { assigned: [], available: area.accessPackages }
-              : { assigned: [], available: [] },
+            packages: { assigned: [], available: area.accessPackages },
           });
         }
+
         return acc;
       },
       {
@@ -78,4 +87,19 @@ export const useAreaPackageList = ({
   }, [allPackageAreas, activeDelegations, showAllAreas, showAllPackages]);
 
   return accessAreas;
+};
+
+export const isInherited = (
+  pkgDeleg: AccessPackageDelegation,
+  toPartyUuid: string,
+  fromPartyUuid: string,
+) => {
+  return pkgDeleg.permissions.some(
+    (p) =>
+      !(
+        toPartyUuid === p.to.id &&
+        fromPartyUuid === p.from.id &&
+        p.role?.code === 'rettighetshaver'
+      ),
+  );
 };

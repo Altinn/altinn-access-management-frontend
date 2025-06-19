@@ -1,4 +1,11 @@
-import { ListBase, DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import {
+  ListBase,
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsButton,
+  DsSpinner,
+} from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
@@ -25,6 +32,7 @@ interface AreaItemContentProps {
   onDelegate: (accessPackage: AccessPackage) => void;
   onRevoke: (accessPackage: AccessPackage) => void;
   onRequest: (accessPackage: AccessPackage) => void;
+  isActionLoading?: boolean;
   showAvailablePackages?: boolean;
   useDeleteConfirm?: boolean;
 }
@@ -36,6 +44,7 @@ export const AreaItemContent = ({
   onDelegate,
   onRevoke,
   onRequest,
+  isActionLoading = false,
   showAvailablePackages: showAvailablePackagesExternal = false,
   useDeleteConfirm,
 }: AreaItemContentProps) => {
@@ -52,13 +61,36 @@ export const AreaItemContent = ({
   const handleDelegationCheckFailure = (error: ActionError) => {
     setDelegationCheckError(error);
   };
-  const shouldShowDelegationCheck = !!availableActions?.includes(DelegationAction.DELEGATE);
-  const { canDelegate, isLoading } = useAccessPackageDelegationCheck(
+  const { displayLimitedPreviewLaunch } = window.featureFlags;
+  const shouldShowDelegationCheck =
+    !!availableActions?.includes(DelegationAction.DELEGATE) && !displayLimitedPreviewLaunch;
+  const { canDelegate, isUninitialized, isLoading } = useAccessPackageDelegationCheck(
     availablePackageIds,
     shouldShowDelegationCheck && showAvailablePackages,
     handleDelegationCheckFailure,
   );
   const isSm = useIsMobileOrSmaller();
+
+  const revokeActionControl = (pkg: AccessPackage) => {
+    if (isActionLoading) {
+      return (
+        <DsSpinner
+          aria-label={t('common.loading')}
+          data-size='xs'
+        />
+      );
+    }
+    return (
+      <RevokeAccessPackageActionControl
+        availableActions={availableActions}
+        onRevoke={() => onRevoke(pkg)}
+        pkg={pkg}
+        useDeleteConfirm={useDeleteConfirm}
+        isLoading={isActionLoading}
+      />
+    );
+  };
+
   return (
     <div className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}>
       <DsParagraph>{area.description}</DsParagraph>
@@ -70,16 +102,7 @@ export const AreaItemContent = ({
               pkg={pkg}
               onSelect={onSelect}
               hasAccess
-              controls={
-                !isSm && (
-                  <RevokeAccessPackageActionControl
-                    availableActions={availableActions}
-                    onRevoke={() => onRevoke(pkg)}
-                    pkg={pkg}
-                    useDeleteConfirm={useDeleteConfirm}
-                  />
-                )
-              }
+              controls={!isSm && !pkg.inherited && revokeActionControl(pkg)}
             />
           ))}
         </ListBase>
@@ -124,9 +147,11 @@ export const AreaItemContent = ({
               controls={
                 !isSm && (
                   <DelegateAccessPackageActionControl
-                    isLoading={isLoading && shouldShowDelegationCheck}
+                    isLoading={(isUninitialized && shouldShowDelegationCheck) || isActionLoading}
                     availableActions={availableActions}
-                    canDelegate={!!canDelegate(pkg.id)}
+                    canDelegate={
+                      !shouldShowDelegationCheck || isLoading ? true : !!canDelegate(pkg.id)
+                    } // Default to true to avoid blips in UI
                     onDelegate={() => onDelegate(pkg)}
                     onRequest={() => onRequest(pkg)}
                     onSelect={() => onSelect?.(pkg)}

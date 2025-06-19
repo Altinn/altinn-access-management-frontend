@@ -218,7 +218,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <param name="actual">The instance to verify.</param>
         public static void AssertEqual(List<ResourceReference> expected, List<ResourceReference> actual)
         {
-            if (actual == null) {
+            if (actual == null)
+            {
                 Assert.Null(expected);
                 return;
             }
@@ -406,25 +407,48 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
         }
 
-        public static void AssertEqual(AccessPackageDelegation expected, AccessPackageDelegation actual)
+        public static void AssertEqual(PackagePermission expected, PackagePermission actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
-            Assert.Equal(expected.AccessPackageId, actual.AccessPackageId);
-            AssertEqual(expected.DelegationDetails, actual.DelegationDetails);
+            AssertEqual(expected.Package, actual.Package);
+            AssertCollections(expected.Permissions?.ToList(), actual.Permissions?.ToList(), AssertEqual);
+        }
+
+        public static void AssertEqual(CompactPackage expected, CompactPackage actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.AreaId, actual.AreaId);
+            Assert.Equal(expected.Urn, actual.Urn);
+        }
+
+        public static void AssertEqual(Permission expected, Permission actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            AssertEqual(expected.To, actual.To);
+            AssertEqual(expected.From, actual.From);
+            AssertEqual(expected.Via, actual.Via);
+            AssertEqual(expected.Role, actual.Role);
+            AssertEqual(expected.ViaRole, actual.ViaRole);
 
         }
 
-        public static void AssertEqual(AccessDetails expected, AccessDetails actual)
+        public static void AssertEqual(CompactEntity expected, CompactEntity actual)
         {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
+            Assert.Equal(expected?.Id, actual?.Id);
+            Assert.Equal(expected?.Name, actual?.Name);
+        }
 
-            Assert.Equal(expected.DelegatedFrom, actual.DelegatedFrom);
-            Assert.Equal(expected.DelegatedTo, actual.DelegatedTo);
-            Assert.Equal(expected.LastChangedOn, actual.LastChangedOn);
-
+        public static void AssertEqual(CompactRole expected, CompactRole actual)
+        {
+            Assert.Equal(expected?.Id, actual?.Id);
+            Assert.Equal(expected?.Code, actual?.Code);
         }
 
         public static void AssertEqual(RegisteredSystemFE expected, RegisteredSystemFE actual)
@@ -475,22 +499,24 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertEqual(expected.Role, actual.Role);
         }
 
-        static void AssertEqual(Role expected, Role actual)
+        static void AssertEqual(Altinn.AccessManagement.UI.Core.Models.Role.Role expected, Altinn.AccessManagement.UI.Core.Models.Role.Role actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
-            
+
             Assert.Equal(expected.Code, actual.Code);
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
         }
-        
+
         public static void AssertEqual(SystemUserRequestFE expected, SystemUserRequestFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.PartyId, actual.PartyId);
+            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
@@ -505,6 +531,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.PartyId, actual.PartyId);
+            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
@@ -512,26 +540,28 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
-        
+
         public static void AssertEqual(SystemUserAgentRequestFE expected, SystemUserAgentRequestFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.PartyId, actual.PartyId);
+            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
             Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
-        }        
-        
+        }
+
         public static void AssertEqual(AccessPackageDelegationCheckResponse expected, AccessPackageDelegationCheckResponse actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
-            Assert.Equal(expected.CanDelegate , actual.CanDelegate);
+            Assert.Equal(expected.CanDelegate, actual.CanDelegate);
             Assert.Equal(expected.DetailCode, actual.DetailCode);
             Assert.Equal(expected.PackageId, actual.PackageId);
         }
@@ -550,8 +580,37 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
-
             Assert.Equal(expected.CustomerId, actual.CustomerId);
+        }
+
+        public static void AssertEqual(Altinn.AccessManagement.UI.Core.Models.User.Entity expected, Altinn.AccessManagement.UI.Core.Models.User.Entity actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+            Assert.Equal(actual.Name, expected.Name);
+            Assert.Equal(actual.Children, expected.Children);
+            Assert.Equal(actual.Id, expected.Id);
+            Assert.Equal(actual.Type, expected.Type);
+            AssertCollections(expected.KeyValues, actual.KeyValues, Assert.Equal);
+            AssertCollections(expected.Children, actual.Children, AssertEqual);
+        }
+
+
+        public static void AssertEqual(RoleInfo expected, RoleInfo actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+            Assert.Equal(actual.Code, expected.Code);
+        }
+
+
+        public static void AssertEqual(Connection expected, Connection actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+            AssertEqual(actual.Party, expected.Party);
+            AssertCollections(actual.Roles, expected.Roles, AssertEqual);
+            AssertCollections(expected.Connections, actual.Connections, AssertEqual);
         }
     }
 }
