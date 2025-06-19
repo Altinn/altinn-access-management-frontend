@@ -530,7 +530,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync(
-                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={rightHolderPartyUuid}");
+                $"accessmanagement/api/v1/user/reportee?party={reporteePartyUuid}&from={rightHolderPartyUuid}&to={reporteePartyUuid}");
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, httpResponse.StatusCode);
@@ -552,7 +552,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync(
-                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={invalidRightHolderUuid}");
+                $"accessmanagement/api/v1/user/reportee?party={invalidRightHolderUuid}&from={invalidRightHolderUuid}&to={invalidRightHolderUuid}");
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
@@ -575,7 +575,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync(
-                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={rightHolderPartyUuid}");
+                $"accessmanagement/api/v1/user/reportee?party={reporteePartyUuid}&from={rightHolderPartyUuid}&to={reporteePartyUuid}");
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
