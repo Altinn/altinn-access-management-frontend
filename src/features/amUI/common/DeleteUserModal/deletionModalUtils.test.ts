@@ -55,7 +55,7 @@ describe('getDeletionStatus', () => {
     {
       description:
         'viewing yourself, connection with empty roles, should target Yourself and allow Full deletion',
-      connections: mockConneciton([]),
+      connections: mockConnection([]),
       viewingYourself: true,
       reporteeView: false,
       expected: { target: DeletionTarget.Yourself, level: DeletionLevel.Full },
@@ -63,7 +63,7 @@ describe('getDeletionStatus', () => {
     {
       description:
         'viewing yourself, connection with empty roles, should target Yourself and allow Full deletion',
-      connections: mockConneciton(null),
+      connections: mockConnection(null),
       viewingYourself: true,
       reporteeView: false,
       expected: { target: DeletionTarget.Yourself, level: DeletionLevel.Full },
@@ -71,7 +71,7 @@ describe('getDeletionStatus', () => {
     {
       description:
         'viewing yourself, only Rightholder roles, should target Yourself and allow Full deletion',
-      connections: mockConneciton([RIGHTHOLDER_ROLE]),
+      connections: mockConnection([RIGHTHOLDER_ROLE]),
       viewingYourself: true,
       reporteeView: false,
       expected: { target: DeletionTarget.Yourself, level: DeletionLevel.Full },
@@ -79,7 +79,7 @@ describe('getDeletionStatus', () => {
     {
       description:
         'viewing yourself, mixed roles (Rightholder and other), should target Yourself and allow Limited deletion',
-      connections: mockConneciton([RIGHTHOLDER_ROLE, 'dagl']),
+      connections: mockConnection([RIGHTHOLDER_ROLE, 'dagl']),
       viewingYourself: true,
       reporteeView: false,
       expected: { target: DeletionTarget.Yourself, level: DeletionLevel.Limited },
@@ -87,7 +87,7 @@ describe('getDeletionStatus', () => {
     {
       description:
         'viewing yourself, only other roles (no Rightholder), should target Yourself and allow No deletion',
-      connections: mockConneciton(['dagl']),
+      connections: mockConnection(['dagl']),
       viewingYourself: true,
       reporteeView: false,
       expected: { target: DeletionTarget.Yourself, level: DeletionLevel.None },
@@ -104,21 +104,21 @@ describe('getDeletionStatus', () => {
     {
       description:
         'reportee view, only Rightholder roles, should target Reportee and allow Full deletion',
-      connections: mockConneciton([RIGHTHOLDER_ROLE]),
+      connections: mockConnection([RIGHTHOLDER_ROLE]),
       viewingYourself: false,
       reporteeView: true,
       expected: { target: DeletionTarget.Reportee, level: DeletionLevel.Full },
     },
     {
       description: 'reportee view, mixed roles, should target Reportee and allow Limited deletion',
-      connections: mockConneciton([RIGHTHOLDER_ROLE, 'dagl']),
+      connections: mockConnection([RIGHTHOLDER_ROLE, 'dagl']),
       viewingYourself: false,
       reporteeView: true,
       expected: { target: DeletionTarget.Reportee, level: DeletionLevel.Limited },
     },
     {
       description: 'reportee view, only other roles, should target Reportee and allow No deletion',
-      connections: mockConneciton(['dagl']),
+      connections: mockConnection(['dagl']),
       viewingYourself: false,
       reporteeView: true,
       expected: { target: DeletionTarget.Reportee, level: DeletionLevel.None },
@@ -134,21 +134,21 @@ describe('getDeletionStatus', () => {
     },
     {
       description: 'user view, only Rightholder roles, should target User and allow Full deletion',
-      connections: mockConneciton([RIGHTHOLDER_ROLE]),
+      connections: mockConnection([RIGHTHOLDER_ROLE]),
       viewingYourself: false,
       reporteeView: false,
       expected: { target: DeletionTarget.User, level: DeletionLevel.Full },
     },
     {
       description: 'user view, mixed roles, should target User and allow Limited deletion',
-      connections: mockConneciton([RIGHTHOLDER_ROLE, 'dagl']),
+      connections: mockConnection([RIGHTHOLDER_ROLE, 'dagl']),
       viewingYourself: false,
       reporteeView: false,
       expected: { target: DeletionTarget.User, level: DeletionLevel.Limited },
     },
     {
       description: 'user view, only other roles, should target User and allow No deletion',
-      connections: mockConneciton(['dagl']),
+      connections: mockConnection(['dagl']),
       viewingYourself: false,
       reporteeView: false,
       expected: { target: DeletionTarget.User, level: DeletionLevel.None },
@@ -156,7 +156,7 @@ describe('getDeletionStatus', () => {
     {
       description:
         'all roles are Rightholder across multiple connections, should allow Full deletion (user view)',
-      connections: [...mockConneciton([RIGHTHOLDER_ROLE]), ...mockConneciton([RIGHTHOLDER_ROLE])],
+      connections: [...mockConnection([RIGHTHOLDER_ROLE]), ...mockConnection([RIGHTHOLDER_ROLE])],
       viewingYourself: false,
       reporteeView: false,
       expected: { target: DeletionTarget.User, level: DeletionLevel.Full },
@@ -164,7 +164,7 @@ describe('getDeletionStatus', () => {
     {
       description:
         'some roles are Rightholder, some are not, across multiple connections, should allow Limited deletion (user view)',
-      connections: [...mockConneciton([RIGHTHOLDER_ROLE]), ...mockConneciton(['dagl'])],
+      connections: [...mockConnection([RIGHTHOLDER_ROLE]), ...mockConnection(['dagl'])],
       viewingYourself: false,
       reporteeView: false,
       expected: { target: DeletionTarget.User, level: DeletionLevel.Limited },
