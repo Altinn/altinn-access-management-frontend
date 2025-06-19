@@ -12,7 +12,7 @@ import {
   type DeletionI18nKeys,
 } from './deletionModalUtils';
 
-const mockConneciton = (roleCodes: string[] | null): Connection[] => {
+const mockConnection = (roleCodes: string[] | null): Connection[] => {
   return [
     {
       roles: roleCodes?.map((c: string) => ({ id: '123', code: c })) ?? [],
