@@ -6,6 +6,7 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
 
 import { amUIPath } from '@/routes/paths';
+import type { Connection } from '@/rtk/features/userInfoApi';
 import { useGetRightHoldersQuery, useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
 
 import {
@@ -161,22 +162,20 @@ const i18nKeysByStatus = {
   },
 };
 
-const determineUserDeletionStatus = (
-  connections: { roles: string[] }[] | undefined,
-): UserDeletionStatus => {
+const determineUserDeletionStatus = (connections: Connection[] | undefined): UserDeletionStatus => {
   if (connections && connections.length > 0) {
     const roles =
       connections.length > 1
         ? connections.reduce((acc, connection) => {
-            acc.push(...connection.roles);
+            acc.push(...connection.roles.map((role) => role.code ?? ''));
             return acc;
           }, [] as string[])
-        : connections[0].roles;
+        : connections[0].roles.map((role) => role.code ?? '');
 
-    if (roles.every((r) => r === 'Rettighetshaver')) {
+    if (roles.every((r) => r === 'rettighetshaver')) {
       return UserDeletionStatus.FullDeletionAllowed;
     }
-    if (roles.some((r) => r === 'Rettighetshaver')) {
+    if (roles.some((r) => r === 'rettighetshaver')) {
       return UserDeletionStatus.LimitedDeletionOnly;
     }
     return UserDeletionStatus.DeletionNotAllowed;

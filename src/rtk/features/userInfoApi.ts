@@ -112,7 +112,7 @@ export const userInfoApi = createApi({
     >({
       query: ({ partyUuid, fromUuid, toUuid }) =>
         `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
-      keepUnusedDataFor: 300,
+      keepUnusedDataFor: 3,
       providesTags: ['RightHolders'],
       transformErrorResponse: (response: {
         status: string | number;
