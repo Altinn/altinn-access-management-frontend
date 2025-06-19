@@ -24,7 +24,6 @@ export const getDeletionStatus = (
   viewingYourself: boolean,
   reporteeView: boolean,
 ): DeletionStatus => {
-  console.debug('🪵 ~ connections:', connections);
   const target = viewingYourself
     ? DeletionTarget.Yourself
     : reporteeView
@@ -34,11 +33,11 @@ export const getDeletionStatus = (
   const allRoles =
     connections && connections?.length > 1
       ? connections.reduce((acc, connection) => {
-          acc.push(...connection.roles.map((role) => role.code ?? ''));
+          if (connection.roles && connection.roles.length > 0)
+            acc.push(...connection.roles.map((role) => role.code ?? ''));
           return acc;
         }, [] as string[])
-      : (connections?.[0].roles.map((role) => role.code ?? '') ?? []);
-  console.debug('🪵 ~ allRoles:', allRoles);
+      : (connections?.[0]?.roles?.map((role) => role.code ?? '') ?? []);
 
   let level: DeletionLevel;
 
