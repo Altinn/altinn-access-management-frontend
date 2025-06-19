@@ -3,6 +3,15 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { SystemUserPath } from '@/routes/paths';
+import {
+  useApproveChangeRequestMutation,
+  useGetChangeRequestQuery,
+  useGetSystemUserReporteeQuery,
+  useRejectChangeRequestMutation,
+} from '@/rtk/features/systemUserApi';
+
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
 import { RightsList } from './components/RightsList/RightsList';
@@ -11,35 +20,30 @@ import { DelegationCheckError } from './components/DelegationCheckError/Delegati
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
 
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { SystemUserPath } from '@/routes/paths';
-import {
-  useApproveChangeRequestMutation,
-  useGetChangeRequestQuery,
-  useRejectChangeRequestMutation,
-} from '@/rtk/features/systemUserApi';
-
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   useDocumentTitle(t('systemuser_change_request.page_title'));
   const [searchParams] = useSearchParams();
   const changeRequestId = searchParams.get('id') ?? '';
-  const partyId = getCookie('AltinnPartyId');
 
   const {
     data: changeRequest,
     isLoading: isLoadingChangeRequest,
     error: loadingChangeRequestError,
   } = useGetChangeRequestQuery(
-    { partyId, changeRequestId },
+    { changeRequestId },
     {
       skip: !changeRequestId,
     },
   );
-  const { data: reporteeData } = useGetReporteeQuery();
+  const {
+    data: reporteeData,
+    isLoading: isLoadingReportee,
+    error: loadReporteeError,
+  } = useGetSystemUserReporteeQuery(changeRequest?.partyId ?? '', {
+    skip: !changeRequest?.partyId,
+  });
 
   const [
     postAcceptChangeRequest,
@@ -56,6 +60,7 @@ export const SystemUserChangeRequestPage = () => {
 
   const acceptChangeRequest = (): void => {
     if (!isActionButtonDisabled) {
+      const partyId = changeRequest.partyId;
       postAcceptChangeRequest({ partyId, changeRequestId: changeRequest.id })
         .unwrap()
         .then(() => {
@@ -70,6 +75,7 @@ export const SystemUserChangeRequestPage = () => {
 
   const rejectChangeRequest = (): void => {
     if (!isActionButtonDisabled) {
+      const partyId = changeRequest.partyId;
       postRejectChangeRequest({ partyId, changeRequestId: changeRequest.id })
         .unwrap()
         .then(() => {
@@ -89,10 +95,14 @@ export const SystemUserChangeRequestPage = () => {
   return (
     <RequestPageBase
       system={changeRequest?.system}
+      reporteeName={reporteeData?.name}
       heading={t('systemuser_change_request.banner_title')}
     >
       {!changeRequestId && (
         <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
+      )}
+      {loadReporteeError && (
+        <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
       )}
       {(loadingChangeRequestError || (changeRequest && !changeRequest.system)) && (
         <DsAlert data-color='danger'>
@@ -101,10 +111,10 @@ export const SystemUserChangeRequestPage = () => {
             : t('systemuser_change_request.load_change_request_error')}
         </DsAlert>
       )}
-      {isLoadingChangeRequest && (
+      {(isLoadingChangeRequest || isLoadingReportee) && (
         <DsSpinner aria-label={t('systemuser_change_request.loading_change_request')} />
       )}
-      {changeRequest?.system && (
+      {changeRequest?.system && reporteeData && (
         <>
           {changeRequest.status === 'Accepted' && (
             <DsAlert data-color='info'>{t('systemuser_change_request.request_accepted')}</DsAlert>
@@ -161,7 +171,7 @@ export const SystemUserChangeRequestPage = () => {
                 {t('systemuser_change_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck>
+            <CreateSystemUserCheck reporteeData={reporteeData}>
               <ButtonRow>
                 <DsButton
                   variant='primary'

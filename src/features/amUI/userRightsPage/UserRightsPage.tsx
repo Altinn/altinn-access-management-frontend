@@ -51,7 +51,7 @@ export const UserRightsPage = () => {
                   displayRoles={!displayLimitedPreviewLaunch}
                 />
                 <RightsTabs
-                  packagesPanel={<AccessPackageSection numberOfAccesses={0} />}
+                  packagesPanel={<AccessPackageSection />}
                   singleRightsPanel={<SingleRightsSection />}
                   roleAssignmentsPanel={<RoleSection numberOfAccesses={0} />}
                 />

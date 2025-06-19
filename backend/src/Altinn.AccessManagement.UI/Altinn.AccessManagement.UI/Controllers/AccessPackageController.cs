@@ -3,9 +3,11 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,18 +62,28 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Get all access packages delegated to a single right holder from a single party
+        ///     Get all access package accesses granted to or from someone (one or more of the two must be specified)
         /// </summary>
         /// <returns>A dictionary of lists (sorted by access area-id) containing all access package delegations that the right holder has on behalf of the specified right owner</returns>
         [HttpGet]
         [Authorize]
-        [Route("delegations/{from}/{to}")]
-        public async Task<ActionResult<Dictionary<string, List<AccessPackageDelegation>>>> GetDelegationsToRightHolder([FromRoute] Guid from, [FromRoute] Guid to)
+        [Route("delegations/")]
+        public async Task<ActionResult<Dictionary<Guid, List<PackagePermission>>>> GetDelegations([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!from.HasValue && !to.HasValue)
+            {
+                return BadRequest("Either 'from' or 'to' query parameter must be provided.");
+            }
+
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
-                return await _accessPackageService.GetDelegationsToRightHolder(to, from, languageCode);
+                return await _accessPackageService.GetDelegations(party, to, from, languageCode);
             }
             catch (HttpStatusException ex)
             {

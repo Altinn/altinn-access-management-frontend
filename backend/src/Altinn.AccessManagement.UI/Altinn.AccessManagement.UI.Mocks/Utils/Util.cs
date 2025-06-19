@@ -65,6 +65,5 @@ namespace Altinn.AccessManagement.UI.Mocks.Utils
                 throw new Exception();
             }
         }
-
     }
 }

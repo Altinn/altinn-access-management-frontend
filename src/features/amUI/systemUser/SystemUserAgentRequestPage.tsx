@@ -3,6 +3,15 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
+import {
+  useGetAgentSystemUserRequestQuery,
+  useApproveAgentSystemUserRequestMutation,
+  useRejectAgentSystemUserRequestMutation,
+  useGetSystemUserReporteeQuery,
+} from '@/rtk/features/systemUserApi';
+import { SystemUserPath } from '@/routes/paths';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
@@ -11,35 +20,30 @@ import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
 import { RightsList } from './components/RightsList/RightsList';
 
-import {
-  useGetAgentSystemUserRequestQuery,
-  useApproveAgentSystemUserRequestMutation,
-  useRejectAgentSystemUserRequestMutation,
-} from '@/rtk/features/systemUserApi';
-import { SystemUserPath } from '@/routes/paths';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   useDocumentTitle(t('systemuser_agent_request.page_title'));
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
-  const partyId = getCookie('AltinnPartyId');
 
   const {
     data: request,
     isLoading: isLoadingRequest,
     error: loadingRequestError,
   } = useGetAgentSystemUserRequestQuery(
-    { partyId, requestId },
+    { requestId },
     {
       skip: !requestId,
     },
   );
-  const { data: reporteeData } = useGetReporteeQuery();
+  const {
+    data: reporteeData,
+    isLoading: isLoadingReportee,
+    error: loadReporteeError,
+  } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
+    skip: !request?.partyId,
+  });
 
   const [
     postAcceptCreationRequest,
@@ -56,6 +60,7 @@ export const SystemUserAgentRequestPage = () => {
 
   const acceptSystemUser = (): void => {
     if (!isActionButtonDisabled) {
+      const partyId = request.partyId;
       postAcceptCreationRequest({ partyId, requestId: request.id })
         .unwrap()
         .then(() => {
@@ -70,6 +75,7 @@ export const SystemUserAgentRequestPage = () => {
 
   const rejectSystemUser = (): void => {
     if (!isActionButtonDisabled) {
+      const partyId = request.partyId;
       postRejectCreationRequest({ partyId, requestId: request.id })
         .unwrap()
         .then(() => {
@@ -89,10 +95,14 @@ export const SystemUserAgentRequestPage = () => {
   return (
     <RequestPageBase
       system={request?.system}
+      reporteeName={reporteeData?.name}
       heading={t('systemuser_agent_request.banner_title')}
     >
       {!requestId && (
         <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
+      )}
+      {loadReporteeError && (
+        <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
       )}
       {(loadingRequestError || (request && !request.system)) && (
         <DsAlert data-color='danger'>
@@ -101,10 +111,10 @@ export const SystemUserAgentRequestPage = () => {
             : t('systemuser_request.load_creation_request_error')}
         </DsAlert>
       )}
-      {isLoadingRequest && (
+      {(isLoadingRequest || isLoadingReportee) && (
         <DsSpinner aria-label={t('systemuser_request.loading_creation_request')} />
       )}
-      {request?.system && (
+      {request?.system && reporteeData && (
         <>
           {request.status === 'Accepted' && (
             <DsAlert data-color='info'>{t('systemuser_request.request_accepted')}</DsAlert>
@@ -160,7 +170,7 @@ export const SystemUserAgentRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck>
+            <CreateSystemUserCheck reporteeData={reporteeData}>
               <ButtonRow>
                 <DsButton
                   variant='primary'
