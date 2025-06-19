@@ -69,7 +69,7 @@ export const PartyRepresentationProvider = ({
     isLoading: isConnectionLoading,
     error,
   } = useGetRightHoldersQuery(
-    { fromUuid: fromPartyUuid ?? '', toUuid: toPartyUuid ?? '', partyUuid: fromPartyUuid ?? '' },
+    { fromUuid: fromPartyUuid ?? '', toUuid: toPartyUuid ?? '', partyUuid: actingPartyUuid ?? '' },
     { skip: !fromPartyUuid || !toPartyUuid },
   );
 
