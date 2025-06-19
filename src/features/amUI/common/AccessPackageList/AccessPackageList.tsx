@@ -50,14 +50,15 @@ export const AccessPackageList = ({
   const { data: allPackageAreas, isLoading: loadingPackageAreas } = useSearchQuery(
     searchString ?? '',
   );
-  const { fromParty, toParty } = usePartyRepresentation();
+  const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery(
     {
       from: fromParty?.partyUuid ?? '',
       to: toParty?.partyUuid ?? '',
+      party: actingParty?.partyUuid ?? '',
     },
     {
-      skip: !toParty?.partyUuid || !fromParty?.partyUuid,
+      skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid,
     },
   );
 

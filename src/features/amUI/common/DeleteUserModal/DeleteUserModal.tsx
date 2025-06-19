@@ -52,7 +52,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
   const textKeys = getTextKeysForDeletionStatus(status);
 
   const onDeleteUser = () => {
-    if (!toParty || !fromParty) {
+    if (!toParty || !fromParty || !actingParty) {
       console.error('Missing party information');
       return;
     }

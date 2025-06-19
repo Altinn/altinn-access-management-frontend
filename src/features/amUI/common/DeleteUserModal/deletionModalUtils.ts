@@ -1,4 +1,6 @@
-export const RIGHTHOLDER_ROLE = 'Rettighetshaver';
+import type { Connection } from '@/rtk/features/userInfoApi';
+
+export const RIGHTHOLDER_ROLE = 'rettighetshaver';
 
 export enum DeletionTarget {
   Yourself = 'yourself',
@@ -18,17 +20,26 @@ export interface DeletionStatus {
 }
 
 export const getDeletionStatus = (
-  connections: { roles: string[] }[] | undefined,
+  connections: Connection[] | undefined,
   viewingYourself: boolean,
   reporteeView: boolean,
 ): DeletionStatus => {
+  console.debug('🪵 ~ connections:', connections);
   const target = viewingYourself
     ? DeletionTarget.Yourself
     : reporteeView
       ? DeletionTarget.Reportee
       : DeletionTarget.User;
 
-  const allRoles = connections?.flatMap((connection) => connection.roles) ?? [];
+  const allRoles =
+    connections && connections?.length > 1
+      ? connections.reduce((acc, connection) => {
+          acc.push(...connection.roles.map((role) => role.code ?? ''));
+          return acc;
+        }, [] as string[])
+      : (connections?.[0].roles.map((role) => role.code ?? '') ?? []);
+  console.debug('🪵 ~ allRoles:', allRoles);
+
   let level: DeletionLevel;
 
   if (allRoles.length === 0 || allRoles.every((r) => r === RIGHTHOLDER_ROLE)) {

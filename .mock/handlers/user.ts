@@ -24,22 +24,25 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       const toId = url.searchParams.get('to');
       const id = url.searchParams.get('party');
 
+      const daglRole = { id: '123', code: 'daglig-leder' };
+      const rhRole = { id: '456', code: 'rettighetshaver' };
+
       const defaultReturn = {
-        partyUuid: id || '3d8b34c3-df0d-4dcc-be12-e788ce414744',
-        partyType: 'Organization',
-        name: 'DIGITALISERINGSDIREKTORATET',
-        registryRoles: null,
-        roles: ['Rettighetshaver'],
-        organizationNumber: null,
-        unitType: null,
-        inheritingUsers: [],
+        party: {
+          id: id || '3d8b34c3-df0d-4dcc-be12-e788ce414744',
+          type: 'Organisasjon',
+          name: 'DIGITALISERINGSDIREKTORATET',
+          children: null,
+          keyValues: { PartyId: '50365521', DateOfBirth: '1984-04-03' },
+        },
+        roles: [rhRole],
       };
 
       if (fromId?.includes('PARTIALLY_DELETABLE') || toId?.includes('PARTIALLY_DELETABLE')) {
         return HttpResponse.json([
           {
             ...defaultReturn,
-            roles: ['Rettighetshaver', 'Tilgangsstyrer'],
+            roles: [daglRole, rhRole],
           },
         ]);
       }
@@ -48,7 +51,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         return HttpResponse.json([
           {
             ...defaultReturn,
-            roles: ['Tilgangsstyrer'],
+            roles: [daglRole],
           },
         ]);
       }
