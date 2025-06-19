@@ -158,14 +158,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         ///     Endpoint for revoking all rights associated with a right holder by revoking their status as a right holder for another party.
         /// </summary>
-        /// <param name="partyUuid">The uuid of the reportee party, from which the right holder is to have their rights revoked</param>
-        /// <param name="rightholderPartyUuid">The uuid of the party that is to lose their right holder status</param>
+        /// <param name="party">The uuid identifying the party the authenticated user is acting on behalf of.</param>
+        /// <param name="from">The uuid identifying the party the authenticated user is acting for.</param>
+        /// <param name="to">The uuid identifying the target party to which the assignment should be deleted.</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete]
         [Authorize]
-        [Route("reportee/{partyUuid}/rightholder")]
-        public async Task<ActionResult> RevokeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid rightholderPartyUuid)
+        [Route("reportee")]
+        public async Task<ActionResult> RevokeRightHolder([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to)
         {
             if (!ModelState.IsValid)
             {
@@ -174,7 +175,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                await _userService.RevokeRightHolder(partyUuid, rightholderPartyUuid);
+                await _userService.RevokeRightHolder(party, from, to);
                 return NoContent();
             }
             catch (HttpStatusException ex)

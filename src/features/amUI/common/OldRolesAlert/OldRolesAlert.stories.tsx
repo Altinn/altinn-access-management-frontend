@@ -13,9 +13,9 @@ export default {
   render: (args) => (
     <Provider store={store}>
       <PartyRepresentationProvider
-        fromPartyUuid={''}
-        toPartyUuid={''}
-        actingPartyUuid={''}
+        fromPartyUuid={'123'}
+        toPartyUuid={'456'}
+        actingPartyUuid={'456'}
       >
         <OldRolesAlert {...args} />
       </PartyRepresentationProvider>

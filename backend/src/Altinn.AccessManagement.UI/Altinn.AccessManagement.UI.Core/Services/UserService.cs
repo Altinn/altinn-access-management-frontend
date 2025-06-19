@@ -117,9 +117,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> RevokeRightHolder(Guid partyUuid, Guid rightHolderPartyUuid)
+        public async Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid? from, Guid? to)
         {
-            HttpResponseMessage response = await _rightHolderClient.RevokeRightHolder(partyUuid, rightHolderPartyUuid);
+            HttpResponseMessage response = await _rightHolderClient.RevokeRightHolder(party, from, to);
             return response;
         }
 

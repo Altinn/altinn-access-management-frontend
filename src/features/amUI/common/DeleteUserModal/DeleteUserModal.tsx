@@ -6,17 +6,17 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
 
 import { amUIPath } from '@/routes/paths';
-import type { Connection } from '@/rtk/features/userInfoApi';
 import { useGetRightHoldersQuery, useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
 
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
-} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { LoadingAnimation } from '../common/LoadingAnimation/LoadingAnimation';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+} from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { LoadingAnimation } from '../LoadingAnimation/LoadingAnimation';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './DeleteUserModal.module.css';
+import { getDeletionStatus, getTextKeysForDeletionStatus } from './deletionModalUtils';
 
 const srmLink =
   'https://www.altinn.no/Pages/ServiceEngine/Start/StartService.aspx?ServiceEditionCode=1&ServiceCode=3498&M=SP&DontChooseReportee=true&O=personal';
@@ -27,7 +27,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
 
-  const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  const { fromParty, toParty, actingParty, selfParty } = usePartyRepresentation();
   const { data: connections, isLoading: isConnectionLoading } = useGetRightHoldersQuery(
     {
       fromUuid: fromParty?.partyUuid ?? '',
@@ -37,14 +37,26 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
     { skip: !fromParty?.partyUuid || !toParty?.partyUuid || !actingParty?.partyUuid },
   );
 
-  const status = useMemo(() => determineUserDeletionStatus(connections), [connections]);
+  const viewingYourself =
+    direction === 'to'
+      ? toParty?.partyUuid === selfParty?.partyUuid
+      : fromParty?.partyUuid === selfParty?.partyUuid;
+
+  const reporteeView = direction === 'from';
+
+  const status = useMemo(
+    () => getDeletionStatus(connections, viewingYourself, reporteeView),
+    [connections, viewingYourself, reporteeView],
+  );
+
+  const textKeys = getTextKeysForDeletionStatus(status);
 
   const onDeleteUser = () => {
-    if (!toParty || !fromParty) {
+    if (!toParty || !fromParty || !actingParty) {
       console.error('Missing party information');
       return;
     }
-    deleteUser({ toPartyUuid: toParty.partyUuid, fromPartyUuid: fromParty.partyUuid })
+    deleteUser({ to: toParty.partyUuid, from: fromParty.partyUuid, party: actingParty?.partyUuid })
       .unwrap()
       .then(() => {
         setIsSuccess(true);
@@ -55,12 +67,11 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
       });
   };
 
-  const userName = direction === 'to' ? toParty?.name : fromParty?.name;
-  const reporteeName = direction === 'to' ? fromParty?.name : toParty?.name;
-
   const redirectToUsersPage = () => navigate(`/${amUIPath.Users}`);
 
   const errorDetails = isError ? createErrorDetails(error) : null;
+
+  const isDeletionNotAllowed = status.level === 'none';
 
   return (
     <DsDialog.TriggerContext>
@@ -68,7 +79,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
         data-size='sm'
         variant='tertiary'
       >
-        {t('delete_user.trigger_button')}
+        {t(textKeys.triggerButtonKey)}
         <TrashIcon style={{ fontSize: '1.4rem' }} />
       </DsDialog.Trigger>
       <DsDialog
@@ -85,12 +96,12 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
           />
         ) : (
           <div className={classes.modalContent}>
-            <DsHeading>{t(i18nKeysByStatus[status].headingKey)}</DsHeading>
+            <DsHeading>{t(textKeys.headingKey)}</DsHeading>
             <Trans
-              i18nKey={i18nKeysByStatus[status].messageKey}
+              i18nKey={textKeys.messageKey}
               values={{
-                user_name: userName,
-                reportee_name: reporteeName,
+                to_name: toParty?.name,
+                from_name: fromParty?.name,
               }}
               components={{
                 p: <DsParagraph data-size='sm'></DsParagraph>,
@@ -116,7 +127,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
               </DsAlert>
             )}
             <div className={classes.buttons}>
-              {status !== UserDeletionStatus.DeletionNotAllowed && (
+              {!isDeletionNotAllowed && (
                 <Button
                   color='danger'
                   onClick={onDeleteUser}
@@ -129,9 +140,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
                 variant='text'
                 onClick={() => dialogRef.current?.close()}
               >
-                {status === UserDeletionStatus.DeletionNotAllowed
-                  ? t('common.close')
-                  : t('common.cancel')}
+                {t(isDeletionNotAllowed ? 'common.close' : 'common.cancel')}
               </Button>
             </div>
           </div>
@@ -139,46 +148,4 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
       </DsDialog>
     </DsDialog.TriggerContext>
   );
-};
-
-enum UserDeletionStatus {
-  FullDeletionAllowed = 'FullDeletionAllowed',
-  LimitedDeletionOnly = 'LimitedDeletionOnly',
-  DeletionNotAllowed = 'DeletionNotAllowed',
-}
-
-const i18nKeysByStatus = {
-  [UserDeletionStatus.FullDeletionAllowed]: {
-    headingKey: 'delete_user.heading',
-    messageKey: 'delete_user.message',
-  },
-  [UserDeletionStatus.LimitedDeletionOnly]: {
-    headingKey: 'delete_user.limited_deletion_heading',
-    messageKey: 'delete_user.limited_deletion_message',
-  },
-  [UserDeletionStatus.DeletionNotAllowed]: {
-    headingKey: 'delete_user.deletion_not_allowed_heading',
-    messageKey: 'delete_user.deletion_not_allowed_message',
-  },
-};
-
-const determineUserDeletionStatus = (connections: Connection[] | undefined): UserDeletionStatus => {
-  if (connections && connections.length > 0) {
-    const roles =
-      connections.length > 1
-        ? connections.reduce((acc, connection) => {
-            acc.push(...connection.roles.map((role) => role.code ?? ''));
-            return acc;
-          }, [] as string[])
-        : connections[0].roles.map((role) => role.code ?? '');
-
-    if (roles.every((r) => r === 'rettighetshaver')) {
-      return UserDeletionStatus.FullDeletionAllowed;
-    }
-    if (roles.some((r) => r === 'rettighetshaver')) {
-      return UserDeletionStatus.LimitedDeletionOnly;
-    }
-    return UserDeletionStatus.DeletionNotAllowed;
-  }
-  return UserDeletionStatus.FullDeletionAllowed;
 };

@@ -120,9 +120,9 @@ export const userInfoApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
     }),
-    removeRightHolder: builder.mutation<void, { toPartyUuid: string; fromPartyUuid: string }>({
-      query: ({ toPartyUuid, fromPartyUuid }) => ({
-        url: `reportee/${fromPartyUuid}/rightholder?rightholderPartyUuid=${toPartyUuid}`,
+    removeRightHolder: builder.mutation<void, { party: string; to: string; from: string }>({
+      query: ({ party, to, from }) => ({
+        url: `reportee?party=${party}&to=${to}&from=${from}`,
         method: 'DELETE',
       }),
       transformErrorResponse: (response: {
