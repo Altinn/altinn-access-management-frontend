@@ -77,6 +77,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, string languageCode)
+        {
+            string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<PackagePermission>>(response);
+        }
+
+        /// <inheritdoc />
         public async Task<HttpResponseMessage> CreateAccessPackageDelegation(Guid party, Guid to, Guid from, string packageId)
         {
             string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}&packageId={packageId}";

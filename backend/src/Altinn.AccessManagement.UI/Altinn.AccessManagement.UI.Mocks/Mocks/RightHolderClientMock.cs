@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
 
         /// <inheritdoc/>
-        public Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid to)
+        public Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid? from, Guid? to)
         {
 
             if (party == Guid.Empty)

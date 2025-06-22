@@ -117,9 +117,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> RevokeRightHolder(Guid partyUuid, Guid rightHolderPartyUuid)
+        public async Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid? from, Guid? to)
         {
-            HttpResponseMessage response = await _rightHolderClient.RevokeRightHolder(partyUuid, rightHolderPartyUuid);
+            HttpResponseMessage response = await _rightHolderClient.RevokeRightHolder(party, from, to);
             return response;
         }
 
@@ -130,23 +130,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<User>> GetRightHolders(Guid party, Guid? from, Guid? to)
+        public async Task<List<Connection>> GetRightHolders(Guid partyUuid, Guid? from, Guid? to)
         {
-            List<Connection> res = await _rightHolderClient.GetRightHolders(party, from, to);
             try
             {
-                // Map the response to the frontend model for either right holders or reportees
-                // depending on the presence of the 'from' parameter
-                var users = from.HasValue
-                    ? ConnectionMapper.MapToRightholders(res)
-                    : ConnectionMapper.MapToReportees(res);
-                return users;
+                return await _rightHolderClient.GetRightHolders(partyUuid, from, to);
             }
-            catch (JsonException ex)
+            catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to deserialize RightHolders response from backend.");
-
-                throw new ApplicationException("Failed to parse response from backend.", ex);
+                _logger.LogError(ex, "Failed fetching rightholders for {PartyUuid}", partyUuid);
+                throw;
             }
         }
     }

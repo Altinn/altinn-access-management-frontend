@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
-import { Button, DsDialog, DsHeading, DsTabs } from '@altinn/altinn-components';
+import { DsButton, DsDialog, DsHeading, DsTabs } from '@altinn/altinn-components';
 import { t } from 'i18next';
+import { PlusIcon } from '@navikt/aksel-icons';
 
 import { NewPersonContent } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
@@ -10,17 +11,24 @@ import { NewOrgContent } from './NewOrgContent';
  * NewUserButton component renders a button that, when clicked, opens a modal to add a new user.
  * @component
  */
-export const NewUserButton: React.FC = () => {
+interface NewUserButtonProps {
+  /*** Render a larger version of the trigger button */
+  isLarge?: boolean;
+}
+
+export const NewUserButton: React.FC<NewUserButtonProps> = ({ isLarge }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   return (
     <>
-      <Button
-        variant='outline'
+      <DsButton
+        variant={isLarge ? 'primary' : 'secondary'}
         onClick={() => modalRef.current?.showModal()}
+        className={isLarge ? classes.largeButton : undefined}
       >
-        {t('new_user_modal.trigger_button')}
-      </Button>
+        <PlusIcon aria-label={t('common.add')} />
+        {isLarge ? t('new_user_modal.trigger_button_large') : t('new_user_modal.trigger_button')}
+      </DsButton>
       <NewUserModal modalRef={modalRef} />
     </>
   );
@@ -51,16 +59,12 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
         data-size='sm'
       >
         <DsTabs.List>
-          {!displayLimitedPreviewLaunch && (
-            <DsTabs.Tab value='person'>{t('new_user_modal.person')}</DsTabs.Tab>
-          )}
+          {<DsTabs.Tab value='person'>{t('new_user_modal.person')}</DsTabs.Tab>}
           <DsTabs.Tab value='org'>{t('new_user_modal.organization')}</DsTabs.Tab>
         </DsTabs.List>
-        {!displayLimitedPreviewLaunch && (
-          <DsTabs.Panel value='person'>
-            <NewPersonContent />
-          </DsTabs.Panel>
-        )}
+        <DsTabs.Panel value='person'>
+          <NewPersonContent />
+        </DsTabs.Panel>
         <DsTabs.Panel value='org'>
           <NewOrgContent />
         </DsTabs.Panel>

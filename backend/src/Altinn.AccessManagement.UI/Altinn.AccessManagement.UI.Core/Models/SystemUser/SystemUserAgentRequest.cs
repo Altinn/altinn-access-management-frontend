@@ -17,6 +17,20 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         public Guid Id { get; set; }
 
         /// <summary>
+        /// PartyId of the SystemUser's Party (the customer that delegates rights to the systemuser).
+        /// </summary>
+        [Required]
+        [JsonPropertyName("partyId")]
+        public int PartyId { get; set; }
+
+        /// <summary>
+        /// PartyUuid of the SystemUser's Party (the customer that delegates rights to the systemuser).
+        /// </summary>
+        [Required]
+        [JsonPropertyName("partyUuid")]
+        public Guid PartyUuid { get; set; }
+
+        /// <summary>
         /// Either just the Orgno for the customer, or a TenantId or other form of disambiguation Id the Vendor needs.
         /// Is one of the three parts of the External Request Id.
         /// A blank ExternalRef will be overwritten as a copy of the Cutomer's OrgNo
