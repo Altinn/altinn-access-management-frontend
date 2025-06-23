@@ -314,7 +314,7 @@
     "user_deletion_not_allowed_heading": "Brukeren kan ikke slettes",
     "user_deletion_not_allowed_message": "<p>{{to_name}} har kun fullmakter gjennom sine roller i Enhetsregisteret og kan derfor ikke slettes fra {{from_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjøre det via <erLink>Samordnet registermelding</erLink>.</p>",
     "yes_button": "Ja, slett",
-    
+
     "yourself_trigger_button": "Slett alle tilganger",
     "yourself_heading": "Er du sikker på at du vil slette alle dine tilganger?",
     "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke angres.</i></p>",
@@ -361,6 +361,9 @@
     "general_error": {
       "revoke_heading": "Kunne ikke slette fullmakt",
       "delegate_heading": "Kunne ikke gi fullmakt"
+    },
+    "validation_error": {
+      "AM.VLD-00002": "Du mangler tilgang til å gi denne fullmakten."
     },
     "service_error": {
       "general_heading": "Du kan ikke gi fullmakt til denne tjenesten",

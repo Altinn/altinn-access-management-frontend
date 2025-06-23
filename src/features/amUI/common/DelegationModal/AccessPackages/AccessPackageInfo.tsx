@@ -68,6 +68,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     return null;
   }, [activeDelegations, isFetching, accessPackage.id]);
 
+  const { displayLimitedPreviewLaunch } = window.featureFlags;
   const userHasPackage = delegationAccess !== null;
   const accessIsInherited =
     (delegationAccess &&
@@ -80,7 +81,8 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     setDelegationCheckError(error);
   };
 
-  const shouldShowDelegationCheck = availableActions.includes(DelegationAction.DELEGATE);
+  const shouldShowDelegationCheck =
+    availableActions.includes(DelegationAction.DELEGATE) && !displayLimitedPreviewLaunch;
 
   // memorize this to prevent unnecessary re-renders
   const accessPackageIds = React.useMemo(() => {
@@ -169,6 +171,11 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 size='xs'
                 status={actionError.httpStatus}
                 time={actionError.timestamp}
+                message={
+                  actionError.details?.detail
+                    ? t(`delegation_modal.validation_error.${actionError.details?.detail}`)
+                    : undefined
+                }
               />
             </DsAlert>
           )}

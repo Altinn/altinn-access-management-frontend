@@ -357,6 +357,9 @@
       "revoke_heading": "Kunne ikkje slette fullmakt",
       "delegate_heading": "Kunne ikkje gi fullmakt"
     },
+    "validation_error": {
+      "AM.VLD-00002": "Du manglar tilgang til å gje denne fullmakta."
+    },
     "service_error": {
       "general_heading": "Du kan ikkje gi fullmakt til denne tenesta",
       "technical_error_heading": "Noko gjekk gale",
