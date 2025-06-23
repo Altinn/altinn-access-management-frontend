@@ -33,13 +33,8 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// Map error codes from AM to AMUI error codes
         /// </summary>
         public static AltinnValidationError MapToAmUiError(string errorCode)
-            => errorCode switch
-            {
-                // existing case mappings…
-                _ => null
-            };
         {
-            return amErrorCode switch
+            return errorCode switch
             {
                 // We only handle "Resource must be valid" for now
                 // Add more cases here when available
