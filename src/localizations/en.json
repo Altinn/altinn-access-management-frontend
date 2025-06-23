@@ -281,6 +281,7 @@
     "role_deletion_success": "Power of attorney over {{role}} has been successfully revoked for {{name}}.",
     "role_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{role}}.",
     "inherited_role_message": "<b>{{user_name}}</b> has access to this through their role {{role_name}}. Therefore, it cannot be deleted.",
+    "cannot_delegate_here": "Access to this package cannot be granted here.",
     "activeRolesLabel": "List of roles the user has been granted",
     "availableRolesLabel": "List of roles available for the user",
     "cant_delegate_generic": "You can't delegate this role"
