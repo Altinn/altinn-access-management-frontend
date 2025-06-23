@@ -26,7 +26,7 @@
         public string Description { get; set; }
 
         /// <summary>
-        /// Indicates if the package can be used for delegation
+        /// Indicates if the package can be assigned directly
         /// </summary>
         public bool IsAssignable { get; set; }
 
