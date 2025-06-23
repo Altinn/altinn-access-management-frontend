@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
@@ -71,6 +72,26 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             else if (packageId == "5eb07bdc-5c3c-4c85-add3-5405b214b8a3") // Package is Renovasjon
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            }
+            if (packageId == Guid.Empty.ToString()) // Validation error from backend
+            {
+                var problemDetailsJson = @"
+                {
+                    ""status"": 400,
+                    ""title"": ""One or more validation errors occurred."",
+                    ""detail"": ""The provided data is invalid."",
+                    ""instance"": ""urn:altinn:error:instance:12345"",
+                    ""validationErrors"": [
+                        {
+                            ""code"": ""AM.VLD-00002"",
+                            ""description"": ""The value for 'field' is not valid.""
+                        }
+                    ]
+                }";
+                
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest) { 
+                    Content = new StringContent(problemDetailsJson) 
+                 });
             }
             else
             {
