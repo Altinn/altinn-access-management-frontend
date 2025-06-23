@@ -277,7 +277,6 @@
     "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",
     "role_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{role}} fra {{name}}.",
     "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle <b>{{role_name}}</b>. Den kan derfor ikke slettes.",
-    "cannot_delegate_here": "Tilgang til denne pakken kan ikkje gis/fjernes her.",
     "activeRolesLabel": "Liste over roller som er tildelt brukeren",
     "availableRolesLabel": "Liste over roller som kan tildeles brukeren",
     "cant_delegate_generic": "Du kan ikkje delegere denne rollen"
@@ -343,6 +342,7 @@
     "package_services": "Gir tilgang til {{count}} tenester",
     "has_package_message": "{{user_name}} har denne fullmakta.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
+    "cannot_delegate_here": "Tilgang til denne pakken kan ikkje gis/fjernes her.",
     "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta fordi du manglar den selv.",
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
