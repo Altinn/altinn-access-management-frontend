@@ -68,8 +68,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     return null;
   }, [activeDelegations, isFetching, accessPackage.id]);
 
-- const { displayLimitedPreviewLaunch } = window.featureFlags;
-+ const { displayLimitedPreviewLaunch } = window.featureFlags || {};
+  const { displayLimitedPreviewLaunch } = window.featureFlags || {};
   const userHasPackage = delegationAccess !== null;
   const accessIsInherited =
     (delegationAccess &&
