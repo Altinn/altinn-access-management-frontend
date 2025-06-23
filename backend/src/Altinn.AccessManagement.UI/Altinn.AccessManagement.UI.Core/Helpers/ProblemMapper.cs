@@ -32,7 +32,12 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <summary>
         /// Map error codes from AM to AMUI error codes
         /// </summary>
-        public static AltinnValidationError MapToAmUiError(string amErrorCode)
+        public static AltinnValidationError MapToAmUiError(string errorCode)
+            => errorCode switch
+            {
+                // existing case mappings…
+                _ => null
+            };
         {
             return amErrorCode switch
             {
