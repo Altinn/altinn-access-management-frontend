@@ -10,7 +10,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// <inheritdoc/>
     public class EncryptionService(IKeyVaultService keyVaultService, IOptions<ClientSettings> clientSettings, IOptions<KeyVaultSettings> keyVaultSettings) : IEncryptionService
     {
-        private IKeyVaultService _keyVaultService = keyVaultService;
+        private readonly IKeyVaultService _keyVaultService = keyVaultService;
         private readonly ClientSettings _clientSettings = clientSettings.Value;
         private readonly KeyVaultSettings _keyVaultSettings = keyVaultSettings.Value;
 
