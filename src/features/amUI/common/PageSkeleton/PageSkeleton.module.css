@@ -1,7 +1,11 @@
 .skeletonContainer {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.8rem;
+}
+
+.skeletonHeader {
+  margin-bottom: 1.5rem;
 }
 
 .skeletonFilters {

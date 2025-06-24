@@ -10,7 +10,6 @@ const skeletonListItems = [
     size: 'md',
     loading: true,
     title: 'xxx xxxx xxxxx',
-    description: 'xxxxxx xxxxxxx xxxxxxx xx',
     icon: { iconUrl: '...', type: 'company' },
   },
   {
@@ -18,7 +17,6 @@ const skeletonListItems = [
     size: 'md',
     loading: true,
     title: 'xxx xxxx xxxxx xxxx xxxxx',
-    description: 'xxxxxxx xx',
     icon: { iconUrl: '...', type: 'company' },
   },
   {
@@ -26,7 +24,6 @@ const skeletonListItems = [
     size: 'md',
     loading: true,
     title: 'xxx xxxxx',
-    description: 'xxxxxx xxxxxxx xx',
     icon: { iconUrl: '...', type: 'company' },
   },
 ] as ListItemProps[];
@@ -37,11 +34,12 @@ export const RightsTabsSkeleton = () => {
   const { displayLimitedPreviewLaunch, displayResourceDelegation } = window.featureFlags;
 
   return (
-    <>
-      <div className='skeletonTabs'>
+    <div className={classes.skeletonContainer}>
+      <div className={classes.skeletonTabs}>
         <Button
           variant='text'
           disabled
+          size='lg'
         >
           <DsSkeleton>{t('user_rights_page.access_packages_title')}</DsSkeleton>
         </Button>
@@ -49,6 +47,7 @@ export const RightsTabsSkeleton = () => {
           <Button
             variant='text'
             disabled
+            size='lg'
           >
             <DsSkeleton>{t('user_rights_page.single_rights_title')}</DsSkeleton>
           </Button>
@@ -57,17 +56,18 @@ export const RightsTabsSkeleton = () => {
           <Button
             variant='text'
             disabled
+            size='lg'
           >
             <DsSkeleton>{t('user_rights_page.roles_title')}</DsSkeleton>
           </Button>
         )}
       </div>
-      <div className={classes.tabContent}>
-        <Heading size='lg'>
-          <DsSkeleton>xxxxx xxx xxxxxxxx</DsSkeleton>
-        </Heading>
+      <Heading size='lg'>
+        <DsSkeleton>xxxxx xxx xxxxxxxx</DsSkeleton>
+      </Heading>
+      <div>
         <List items={skeletonListItems} />
       </div>
-    </>
+    </div>
   );
 };
