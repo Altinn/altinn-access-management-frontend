@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 namespace Altinn.AccessManagement.UI.Core.Services
 {
     /// <inheritdoc/>
-    public class EncryptionService(IKeyVaultService keyVaultService, IOptions<ClientSettings> clientSettings, IOptions<KeyVaultSettings> keyVaultSettings): IEncryptionService
+    public class EncryptionService(IKeyVaultService keyVaultService, IOptions<ClientSettings> clientSettings, IOptions<KeyVaultSettings> keyVaultSettings) : IEncryptionService
     {
         private IKeyVaultService _keyVaultService = keyVaultService;
         private readonly ClientSettings _clientSettings = clientSettings.Value;
@@ -18,8 +18,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<string> EncryptText(string clearText)
         {
             string certBase64 = await _keyVaultService.GetCertificateAsync(_keyVaultSettings.SecretUri, _clientSettings.CertificateName);
-            X509Certificate2 x509Certificate2 = X509CertificateLoader.LoadPkcs12(Convert.FromBase64String(certBase64), (string)null, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
-            return Encrypt(clearText, x509Certificate2);
+            using (X509Certificate2 x509Certificate2 = X509CertificateLoader.LoadPkcs12(Convert.FromBase64String(certBase64), (string)null, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable))
+            {
+                return Encrypt(clearText, x509Certificate2);
+            }
         }
 
         /// <inheritdoc/>
