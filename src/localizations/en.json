@@ -348,6 +348,7 @@
     "package_services": "Grants access to {{count}} services",
     "has_package_message": "{{user_name}} has this power of attorney.",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
+    "cannot_delegate_here": "Access to this package cannot be granted here.",
     "delegation_check_not_delegable": "You cannot grant this access because you lack it yourself.",
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",

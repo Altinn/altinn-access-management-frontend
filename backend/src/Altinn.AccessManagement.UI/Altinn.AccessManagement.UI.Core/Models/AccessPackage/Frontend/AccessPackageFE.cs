@@ -23,6 +23,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         public string Name { get; set; }
 
         /// <summary>
+        /// Indicates if the package can be used for delegation
+        /// </summary>
+        public bool IsAssignable { get; set; }
+
+        /// <summary>
         /// Description
         /// </summary>
         public string Description { get; set; }

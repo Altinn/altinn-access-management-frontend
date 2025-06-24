@@ -11,6 +11,7 @@ interface DelegateAccessPackageActionControlsProps {
   onSelect: () => void;
   onRequest: () => void;
   canDelegate: boolean;
+  disabled?: boolean;
 }
 
 export const DelegateAccessPackageActionControl = ({
@@ -20,6 +21,7 @@ export const DelegateAccessPackageActionControl = ({
   onRequest,
   onSelect,
   onDelegate,
+  disabled = false,
 }: DelegateAccessPackageActionControlsProps) => {
   const { t } = useTranslation();
 
@@ -41,6 +43,7 @@ export const DelegateAccessPackageActionControl = ({
           variant='text'
           aria-label={t('delegation_modal.delegation_check_not_delegable')}
           size='sm'
+          disabled={disabled}
         >
           <ExclamationmarkTriangleIcon
             aria-hidden='true'
@@ -55,6 +58,7 @@ export const DelegateAccessPackageActionControl = ({
         variant='text'
         size='sm'
         onClick={onDelegate}
+        disabled={disabled}
       >
         {t('common.give_poa')}
       </Button>
