@@ -24,6 +24,11 @@
   margin-right: 0.3rem;
 }
 
+.dangerIcon {
+  color: var(--ds-color-danger-base-default);
+  margin-right: 0.3rem;
+}
+
 .hasPackageInfoIcon {
   color: var(--ds-color-success-base-default);
   margin-right: 0.3rem;
