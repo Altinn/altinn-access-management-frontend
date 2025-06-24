@@ -80,8 +80,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             byte[] aesKey = rsa.Decrypt(encryptedKey, RSAEncryptionPadding.OaepSHA256);
 
             // Read IV
-            int ivLen = br.ReadInt32();
-            byte[] iv = br.ReadBytes(ivLen);
+            int ivlen = br.ReadInt32();
+            byte[] iv = br.ReadBytes(ivlen);
 
             // Remaining is cipherText
             byte[] cipherText = br.ReadBytes((int)(ms.Length - ms.Position));
