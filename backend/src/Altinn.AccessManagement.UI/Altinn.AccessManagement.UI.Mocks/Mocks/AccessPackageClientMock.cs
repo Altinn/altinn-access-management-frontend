@@ -73,7 +73,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
             }
-            if (packageId == Guid.Empty.ToString()) // Validation error from backend
+            if (packageId == "fails_with_validation_error_00002") // Validation error from backend
             {
                 var problemDetailsJson = @"
                 {
@@ -88,10 +88,32 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                         }
                     ]
                 }";
-                
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest) { 
-                    Content = new StringContent(problemDetailsJson) 
-                 });
+
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(problemDetailsJson)
+                });
+            }
+            if (packageId == "fails_with_validation_error_00003") // Validation error from backend
+            {
+                var problemDetailsJson = @"
+                {
+                    ""status"": 400,
+                    ""title"": ""One or more validation errors occurred."",
+                    ""detail"": ""The provided data is invalid."",
+                    ""instance"": ""urn:altinn:error:instance:12345"",
+                    ""validationErrors"": [
+                        {
+                            ""code"": ""unhandled_validation_error"",
+                            ""description"": "".""
+                        }
+                    ]
+                }";
+
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(problemDetailsJson)
+                });
             }
             else
             {
