@@ -11,6 +11,7 @@ const skeletonListItems = [
     loading: true,
     title: 'xxx xxxx xxxxx',
     icon: { iconUrl: '...', type: 'company' },
+    interactive: false,
   },
   {
     id: '2',
@@ -18,6 +19,7 @@ const skeletonListItems = [
     loading: true,
     title: 'xxx xxxx xxxxx xxxx xxxxx',
     icon: { iconUrl: '...', type: 'company' },
+    interactive: false,
   },
   {
     id: '3',
@@ -25,42 +27,26 @@ const skeletonListItems = [
     loading: true,
     title: 'xxx xxxxx',
     icon: { iconUrl: '...', type: 'company' },
+    interactive: false,
   },
 ] as ListItemProps[];
 
 export const RightsTabsSkeleton = () => {
   const { t } = useTranslation();
 
-  const { displayLimitedPreviewLaunch, displayResourceDelegation } = window.featureFlags;
-
   return (
     <div className={classes.skeletonContainer}>
       <div className={classes.skeletonTabs}>
-        <Button
-          variant='text'
-          disabled
-          size='lg'
-        >
+        <Heading size='lg'>
           <DsSkeleton>{t('user_rights_page.access_packages_title')}</DsSkeleton>
-        </Button>
-        {displayResourceDelegation && (
-          <Button
-            variant='text'
-            disabled
-            size='lg'
-          >
-            <DsSkeleton>{t('user_rights_page.single_rights_title')}</DsSkeleton>
-          </Button>
-        )}
-        {!displayLimitedPreviewLaunch && (
-          <Button
-            variant='text'
-            disabled
-            size='lg'
-          >
-            <DsSkeleton>{t('user_rights_page.roles_title')}</DsSkeleton>
-          </Button>
-        )}
+        </Heading>
+        <Heading size='lg'>
+          <DsSkeleton>{t('user_rights_page.single_rights_title')}</DsSkeleton>
+        </Heading>
+
+        <Heading size='lg'>
+          <DsSkeleton>{t('user_rights_page.roles_title')}</DsSkeleton>
+        </Heading>
       </div>
       <Heading size='lg'>
         <DsSkeleton>xxxxx xxx xxxxxxxx</DsSkeleton>

@@ -13,9 +13,7 @@ export const PageSkeleton = ({ template }: { template: 'listPage' | 'detailsPage
     return (
       <PageContainer>
         <div className={classes.skeletonContainer}>
-          {/* <div className={classes.skeletonHeader}> */}
           <UserPageHeaderSkeleton />
-          {/* </div> */}
           <RightsTabsSkeleton />
         </div>
       </PageContainer>
