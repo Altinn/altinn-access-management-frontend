@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using System.Net.Http.Json;
+using System.Security;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -7,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Authorization.ProblemDetails;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -128,21 +131,31 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return Ok(await response.Content.ReadAsStringAsync());
                 }
 
-                if (response.StatusCode == HttpStatusCode.BadRequest)
+                var content = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>();
+
+                if (content?.Extensions is { } extensions &&
+                    extensions.TryGetValue("validationErrors", out var validationErrorsObj) &&
+                    validationErrorsObj is JsonElement { ValueKind: JsonValueKind.Array } validationErrors)
                 {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Bad request", detail: responseContent));
+                    var errorCode = validationErrors.EnumerateArray()
+                        .Select(error => error.TryGetProperty("code", out var codeElement) ? codeElement.GetString() : null)
+                        .FirstOrDefault(code => code != null);
+
+                    if (errorCode != null)
+                    {
+                        var problem = ProblemMapper.MapToAmUiError(errorCode);
+                        if (problem != null)
+                        {
+                            return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, $"Validation error ({problem.Detail})", detail: errorCode));
+                        }
+                    }
                 }
-                else
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-                }
+
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected exception occurred during access package delegation"));
             }
-            catch (Exception ex)
+            catch
             {
-                _logger.LogError(ex, "Unexpected exception occurred during delegation of resource:" + ex.Message);
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, 500, "Unexpected exception occurred during access package delegation"));
             }
         }
 
@@ -212,7 +225,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             try
             {
                 return await _accessPackageService.DelegationCheck(delegationCheckRequest);

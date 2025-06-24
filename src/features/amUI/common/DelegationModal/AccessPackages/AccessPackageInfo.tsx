@@ -21,6 +21,7 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../StatusSection';
 import { isInherited } from '../../AccessPackageList/useAreaPackageList';
+import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 
 import classes from './AccessPackageInfo.module.css';
 
@@ -68,6 +69,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     return null;
   }, [activeDelegations, isFetching, accessPackage.id]);
 
+  const { displayLimitedPreviewLaunch } = window.featureFlags || {};
   const userHasPackage = delegationAccess !== null;
   const accessIsInherited =
     (delegationAccess &&
@@ -80,7 +82,8 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     setDelegationCheckError(error);
   };
 
-  const shouldShowDelegationCheck = availableActions.includes(DelegationAction.DELEGATE);
+  const shouldShowDelegationCheck =
+    availableActions.includes(DelegationAction.DELEGATE) && !displayLimitedPreviewLaunch;
 
   // memorize this to prevent unnecessary re-renders
   const accessPackageIds = React.useMemo(() => {
@@ -165,11 +168,15 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                   {t('delegation_modal.general_error.delegate_heading')}
                 </DsHeading>
               )}
-              <TechnicalErrorParagraphs
-                size='xs'
-                status={actionError.httpStatus}
-                time={actionError.timestamp}
-              />
+              {actionError.details?.detail ? (
+                <ValidationErrorMessage errorCode={actionError.details?.detail} />
+              ) : (
+                <TechnicalErrorParagraphs
+                  size='xs'
+                  status={actionError.httpStatus}
+                  time={actionError.timestamp}
+                />
+              )}
             </DsAlert>
           )}
 
