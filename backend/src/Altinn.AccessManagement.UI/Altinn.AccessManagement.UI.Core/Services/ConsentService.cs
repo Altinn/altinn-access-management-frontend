@@ -130,6 +130,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _consentClient.ApproveConsentRequest(consentRequestId, context, cancellationToken);
         }
 
+        /// <inheritdoc />
+        public async Task<Result<string>> GetConsentRequestRedirectUrl(Guid consentRequestId, CancellationToken cancellationToken)
+        {
+            Result<ConsentRequestDetails> request = await _consentClient.GetConsentRequest(consentRequestId, cancellationToken);
+            if (request.IsProblem)
+            {
+                return request.Problem;
+            }
+            
+            return request.Value.RedirectUrl;
+        }
+
         private static Dictionary<string, string> GetStaticMetadata(Party to, Party from, Party handledBy, DateTimeOffset requestValidTo)
         {
             return new()
