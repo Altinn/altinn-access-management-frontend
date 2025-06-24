@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -303,6 +304,60 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.False(response.IsSuccessStatusCode);
         }
+
+
+        /// <summary>
+        ///    Test case: Create a new access package delegation that fails validation in backend
+        ///    Expected: Returns a not validation error code
+        /// </summary>
+        [Fact]
+        public async Task CreateAccessPackageDelegation_ValidationErrorFromBackend()
+        {
+            // Arrange
+            var party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            var packageId = "fails_with_validation_error_00002";
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&packageId={packageId}", null);
+
+            // Assert
+            var result = await response.Content.ReadAsStringAsync();
+            AltinnProblemDetails problemDetails = JsonSerializer.Deserialize<AltinnProblemDetails>(result, options);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal(400, problemDetails.Status);
+            Assert.Equal("AM.VLD-00002", problemDetails.Detail);
+        }
+
+        /// <summary>
+        ///    Test case: Create a new access package delegation that fails validation in backend
+        ///    Expected: Returns a not validation error code
+        /// </summary>
+        [Fact]
+        public async Task CreateAccessPackageDelegation_UnhandledValidationErrorFromBackend()
+        {
+            // Arrange
+            var party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            var packageId = "fails_with_validation_error_00003";
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&packageId={packageId}", null);
+
+            // Assert
+            var result = await response.Content.ReadAsStringAsync();
+            AltinnProblemDetails problemDetails = JsonSerializer.Deserialize<AltinnProblemDetails>(result, options);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal(400, problemDetails.Status);
+            Assert.Null(problemDetails.Detail);
+        }
+
 
         /// <summary>
         ///    Test case: Create a new access package delegation that throws exception in backend

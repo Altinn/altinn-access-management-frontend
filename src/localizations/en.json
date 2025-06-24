@@ -306,7 +306,7 @@
     "resource_type_text": "Single right",
     "delete_confirm_message": "Are you sure you want to delete this?"
   },
- "delete_user": {
+  "delete_user": {
     "user_trigger_button": "Delete user",
     "user_heading": "Are you sure you want to delete this user?",
     "user_message": "<p>{{to_name}} will lose all authorizations they have for {{from_name}}. <i>This action cannot be undone.</i></p>",
@@ -315,7 +315,7 @@
     "user_deletion_not_allowed_heading": "The user cannot be deleted",
     "user_deletion_not_allowed_message": "<p>{{to_name}} only has authorizations through their roles in the Central Coordinating Register for Legal Entities and therefore cannot be deleted from {{from_name}} in Altinn. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p>",
     "yes_button": "Yes, delete",
-    
+
     "yourself_trigger_button": "Delete all permissions",
     "yourself_heading": "Are you sure you want to delete all your permissions?",
     "yourself_message": "<p>You will lose all authorizations you have for {{from_name}} and will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
@@ -323,7 +323,7 @@
     "yourself_limited_deletion_message": "<p>Your rights cannot be completely removed from {{from_name}} in Altinn as they are linked to roles in the Central Coordinating Register for Legal Entities. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p><p>Do you want to delete all permissions not linked to the Central Coordinating Register for Legal Entities? <i>This action cannot be undone.</i></p>",
     "yourself_deletion_not_allowed_heading": "Your permissions cannot be deleted",
     "yourself_deletion_not_allowed_message": "<p>You only have authorizations through your roles in the Central Coordinating Register for Legal Entities and therefore cannot be deleted from {{from_name}} in Altinn. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p>",
-    
+
     "reportee_trigger_button": "Delete all permissions",
     "reportee_heading": "Are you sure you want to delete all their permissions?",
     "reportee_message": "<p>{{to_name}} will lose all their authorizations for {{from_name}}. They will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
@@ -363,6 +363,10 @@
     "general_error": {
       "revoke_heading": "Could not delete power of attorney",
       "delegate_heading": "Could not give power of attorney"
+    },
+    "validation_error": {
+      "AM.VLD-00002": "You do not have permission to grant this authorization.",
+      "default": "Could not grant power of attorney"
     },
     "service_error": {
       "general_heading": "You cannot give access to this service",
