@@ -11,6 +11,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
+import { PageSkeleton } from '../common/PageSkeleton/PageSkeleton';
 
 import { UsersList } from './UsersList';
 import classes from './UsersList.module.css';
@@ -25,7 +26,7 @@ export const UsersPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <AlertIfNotAvailableForUserType>
+        <AlertIfNotAvailableForUserType loadingIndicator={<PageSkeleton template={'listPage'} />}>
           <PartyRepresentationProvider
             fromPartyUuid={getCookie('AltinnPartyUuid')}
             actingPartyUuid={getCookie('AltinnPartyUuid')}

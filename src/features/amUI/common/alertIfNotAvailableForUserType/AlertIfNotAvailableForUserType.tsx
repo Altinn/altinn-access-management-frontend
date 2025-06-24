@@ -6,14 +6,16 @@ import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 interface AlertIfNotAvailableForUserTypeProps {
   children: React.ReactNode;
+  loadingIndicator?: React.ReactNode;
 }
 
 export const AlertIfNotAvailableForUserType = ({
   children,
+  loadingIndicator,
 }: AlertIfNotAvailableForUserTypeProps) => {
   const { data: reportee, isLoading } = useGetReporteeQuery();
 
-  if (isLoading) return <DsSpinner aria-label={t('loading')} />;
+  if (isLoading) return loadingIndicator ?? <DsSpinner aria-label={t('loading')} />;
 
   if (availableForUserTypeCheck(reportee?.type)) {
     return children;

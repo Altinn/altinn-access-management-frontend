@@ -1,0 +1,12 @@
+.skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skeletonFilters {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}

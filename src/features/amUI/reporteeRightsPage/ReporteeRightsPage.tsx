@@ -16,6 +16,7 @@ import { DelegationModalProvider } from '../common/DelegationModal/DelegationMod
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
 import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
+import { PageSkeleton } from '../common/PageSkeleton/PageSkeleton';
 
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';
@@ -30,9 +31,11 @@ export const ReporteeRightsPage = () => {
 
   const { displayLimitedPreviewLaunch } = window.featureFlags;
   return (
-    <AlertIfNotAvailableForUserType>
-      <PageWrapper>
-        <PageLayoutWrapper>
+    <PageWrapper>
+      <PageLayoutWrapper>
+        <AlertIfNotAvailableForUserType
+          loadingIndicator={<PageSkeleton template={'detailsPage'} />}
+        >
           <PartyRepresentationProvider
             fromPartyUuid={reporteeUuid ?? ''}
             toPartyUuid={getCookie('AltinnPartyUuid')}
@@ -57,8 +60,8 @@ export const ReporteeRightsPage = () => {
               </PageContainer>
             </DelegationModalProvider>
           </PartyRepresentationProvider>
-        </PageLayoutWrapper>
-      </PageWrapper>
-    </AlertIfNotAvailableForUserType>
+        </AlertIfNotAvailableForUserType>
+      </PageLayoutWrapper>
+    </PageWrapper>
   );
 };

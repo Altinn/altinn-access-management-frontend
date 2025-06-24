@@ -10,6 +10,7 @@ import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
+import { PageSkeleton } from '../common/PageSkeleton/PageSkeleton';
 
 import classes from './ReporteePage.module.css';
 import { ReporteesList } from './ReporteesList';
@@ -24,7 +25,9 @@ export const ReporteesPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <AlertIfNotAvailableForUserType>
+        <AlertIfNotAvailableForUserType
+          loadingIndicator={<PageSkeleton template={'detailsPage'} />}
+        >
           {!isLoading && !isAdmin ? (
             <DsAlert data-color='warning'>
               {t('reportees_page.not_admin_alert', { name: party?.name || '' })}
