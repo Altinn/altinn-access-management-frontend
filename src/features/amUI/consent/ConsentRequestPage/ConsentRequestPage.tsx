@@ -127,73 +127,76 @@ export const ConsentRequestPage = () => {
               <DsHeading
                 level={1}
                 data-size='md'
+                className={classes.topHeader}
               >
                 {request.title[language]}
               </DsHeading>
             </div>
             <div className={classes.consentBlock}>
-              <DsParagraph>{request.heading[language]}</DsParagraph>
-              <DsParagraph>{request.consentMessage[language]}</DsParagraph>
-              <DsHeading
-                level={2}
-                data-size='2xs'
-              >
-                {request.serviceIntro[language]}
-              </DsHeading>
-              <div>
-                {request.rights.map((right) => (
-                  <ConsentRights
-                    key={right.identifier}
-                    language={language}
-                    right={right}
+              <div className={classes.consentContent}>
+                <DsParagraph className={classes.boldText}>{request.heading[language]}</DsParagraph>
+                <DsParagraph>{request.consentMessage[language]}</DsParagraph>
+                <DsHeading
+                  level={2}
+                  data-size='2xs'
+                >
+                  {request.serviceIntro[language]}
+                </DsHeading>
+                <div>
+                  {request.rights.map((right) => (
+                    <ConsentRights
+                      key={right.identifier}
+                      language={language}
+                      right={right}
+                    />
+                  ))}
+                </div>
+                <DsParagraph className={classes.expiration}>
+                  {request.expiration[language]}
+                </DsParagraph>
+                {request.handledBy && <DsParagraph>{request.handledBy[language]}</DsParagraph>}
+                {approveConsentError && (
+                  <ConsentRequestError
+                    error={approveConsentError as { data: ProblemDetail }}
+                    defaultError={
+                      request.isPoa
+                        ? t('consent_request.approve_error_poa')
+                        : t('consent_request.approve_error')
+                    }
                   />
-                ))}
-              </div>
-              <DsParagraph className={classes.expiration}>
-                {request.expiration[language]}
-              </DsParagraph>
-              {request.handledBy && <DsParagraph>{request.handledBy[language]}</DsParagraph>}
-              {approveConsentError && (
-                <ConsentRequestError
-                  error={approveConsentError as { data: ProblemDetail }}
-                  defaultError={
-                    request.isPoa
-                      ? t('consent_request.approve_error_poa')
-                      : t('consent_request.approve_error')
-                  }
-                />
-              )}
-              {rejectConsentError && (
-                <ConsentRequestError
-                  error={rejectConsentError as { data: ProblemDetail }}
-                  defaultError={
-                    request.isPoa
-                      ? t('consent_request.reject_error_poa')
-                      : t('consent_request.reject_error')
-                  }
-                />
-              )}
-              <div className={classes.buttonRow}>
-                <DsButton
-                  variant='primary'
-                  aria-disabled={isActionButtonDisabled}
-                  loading={isApprovingConsent}
-                  onClick={approveConsent}
-                >
-                  {request.isPoa
-                    ? t('consent_request.approve_poa')
-                    : t('consent_request.approve_consent')}
-                </DsButton>
-                <DsButton
-                  variant='tertiary'
-                  aria-disabled={isActionButtonDisabled}
-                  loading={isRejectingConsent}
-                  onClick={rejectConsent}
-                >
-                  {request.isPoa
-                    ? t('consent_request.reject_poa')
-                    : t('consent_request.reject_consent')}
-                </DsButton>
+                )}
+                {rejectConsentError && (
+                  <ConsentRequestError
+                    error={rejectConsentError as { data: ProblemDetail }}
+                    defaultError={
+                      request.isPoa
+                        ? t('consent_request.reject_error_poa')
+                        : t('consent_request.reject_error')
+                    }
+                  />
+                )}
+                <div className={classes.buttonRow}>
+                  <DsButton
+                    variant='primary'
+                    aria-disabled={isActionButtonDisabled}
+                    loading={isApprovingConsent}
+                    onClick={approveConsent}
+                  >
+                    {request.isPoa
+                      ? t('consent_request.approve_poa')
+                      : t('consent_request.approve_consent')}
+                  </DsButton>
+                  <DsButton
+                    variant='tertiary'
+                    aria-disabled={isActionButtonDisabled}
+                    loading={isRejectingConsent}
+                    onClick={rejectConsent}
+                  >
+                    {request.isPoa
+                      ? t('consent_request.reject_poa')
+                      : t('consent_request.reject_consent')}
+                  </DsButton>
+                </div>
               </div>
             </div>
           </>

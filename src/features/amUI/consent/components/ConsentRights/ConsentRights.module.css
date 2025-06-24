@@ -3,6 +3,9 @@
   flex-direction: row;
   gap: var(--ds-size-4);
 }
+.consentRightContent {
+  flex: 1;
+}
 .consentRightIcon {
-  font-size: 1.5rem;
+  font-size: var(--ds-size-7);
 }
