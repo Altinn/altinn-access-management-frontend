@@ -364,7 +364,8 @@
       "delegate_heading": "Could not give power of attorney"
     },
     "validation_error": {
-      "AM.VLD-00002": "You do not have permission to grant this authorization."
+      "AM.VLD-00002": "You do not have permission to grant this authorization.",
+      "default": "Could not grant power of attorney"
     },
     "service_error": {
       "general_heading": "You cannot give access to this service",

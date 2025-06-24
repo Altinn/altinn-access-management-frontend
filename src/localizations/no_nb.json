@@ -363,7 +363,8 @@
       "delegate_heading": "Kunne ikke gi fullmakt"
     },
     "validation_error": {
-      "AM.VLD-00002": "Du mangler tilgang til å gi denne fullmakten."
+      "AM.VLD-00002": "Du mangler tilgang til å gi denne fullmakten.",
+      "default": "Kunne ikke gi fullmakt"
     },
     "service_error": {
       "general_heading": "Du kan ikke gi fullmakt til denne tjenesten",

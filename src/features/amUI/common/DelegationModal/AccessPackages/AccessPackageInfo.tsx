@@ -21,6 +21,7 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../StatusSection';
 import { isInherited } from '../../AccessPackageList/useAreaPackageList';
+import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 
 import classes from './AccessPackageInfo.module.css';
 
@@ -167,16 +168,15 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                   {t('delegation_modal.general_error.delegate_heading')}
                 </DsHeading>
               )}
-              <TechnicalErrorParagraphs
-                size='xs'
-                status={actionError.httpStatus}
-                time={actionError.timestamp}
-                message={
-                  actionError.details?.detail
-                    ? t(`delegation_modal.validation_error.${actionError.details?.detail}`)
-                    : undefined
-                }
-              />
+              {actionError.details?.detail ? (
+                <ValidationErrorMessage errorCode={actionError.details?.detail} />
+              ) : (
+                <TechnicalErrorParagraphs
+                  size='xs'
+                  status={actionError.httpStatus}
+                  time={actionError.timestamp}
+                />
+              )}
             </DsAlert>
           )}
 
