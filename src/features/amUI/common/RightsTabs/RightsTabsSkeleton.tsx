@@ -1,6 +1,5 @@
-import { useTranslation } from 'react-i18next';
 import type { ListItemProps } from '@altinn/altinn-components';
-import { Button, DsSkeleton, Heading, List } from '@altinn/altinn-components';
+import { DsSkeleton, List } from '@altinn/altinn-components';
 
 import classes from './RightsTabs.module.css';
 
@@ -32,25 +31,26 @@ const skeletonListItems = [
 ] as ListItemProps[];
 
 export const RightsTabsSkeleton = () => {
-  const { t } = useTranslation();
-
   return (
     <div className={classes.skeletonContainer}>
       <div className={classes.skeletonTabs}>
-        <Heading size='lg'>
-          <DsSkeleton>{t('user_rights_page.access_packages_title')}</DsSkeleton>
-        </Heading>
-        <Heading size='lg'>
-          <DsSkeleton>{t('user_rights_page.single_rights_title')}</DsSkeleton>
-        </Heading>
-
-        <Heading size='lg'>
-          <DsSkeleton>{t('user_rights_page.roles_title')}</DsSkeleton>
-        </Heading>
+        <DsSkeleton
+          width={200}
+          height={30}
+        />
+        <DsSkeleton
+          width={100}
+          height={30}
+        />
+        <DsSkeleton
+          width={150}
+          height={30}
+        />
       </div>
-      <Heading size='lg'>
-        <DsSkeleton>xxxxx xxx xxxxxxxx</DsSkeleton>
-      </Heading>
+      <DsSkeleton
+        width={200}
+        height={40}
+      />
       <div>
         <List items={skeletonListItems} />
       </div>

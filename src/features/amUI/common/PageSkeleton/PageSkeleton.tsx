@@ -1,4 +1,4 @@
-import { DsHeading, DsSkeleton } from '@altinn/altinn-components';
+import { DsSkeleton } from '@altinn/altinn-components';
 
 import { PageContainer } from '../PageContainer/PageContainer';
 import { UserPageHeaderSkeleton } from '../UserPageHeader/UserPageHeaderSkeleton';
@@ -21,21 +21,27 @@ export const PageSkeleton = ({ template }: { template: 'listPage' | 'detailsPage
   }
   return (
     <div className={classes.skeletonContainer}>
-      <DsHeading data-size='lg'>
-        <DsSkeleton>xxxxx xxx xxxxxxxxxxxxx xxx xxxxxxxx</DsSkeleton>
-      </DsHeading>
+      <DsSkeleton
+        width={400}
+        height={40}
+      />
       <div className={classes.skeletonHeader}>
         <CurrentUserSkeleton />
       </div>
-      <DsHeading data-size='sm'>
-        <DsSkeleton>xxxxx xxx xxxxxxxx</DsSkeleton>
-      </DsHeading>
-      <DsHeading data-size='md'>
-        <div className={classes.skeletonFilters}>
-          <DsSkeleton>xxxxx xxx xxxxxxxx</DsSkeleton>
-          <DsSkeleton>xxxxx xxx</DsSkeleton>
-        </div>
-      </DsHeading>
+      <DsSkeleton
+        width={150}
+        height={30}
+      />
+      <div className={classes.skeletonFilters}>
+        <DsSkeleton
+          width={200}
+          height={40}
+        />
+        <DsSkeleton
+          width={100}
+          height={40}
+        />
+      </div>
       <SkeletonUserList />
     </div>
   );
