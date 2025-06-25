@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-
-import type { Party } from './lookupApi';
+import type { CompactPackage, Permissions } from '@/dataObjects/dtos/accessPackage';
 
 export interface AccessArea {
   id: string;
@@ -30,22 +29,14 @@ export interface AccessPackage {
   name: string;
   description: string;
   resources: PackageResource[];
+  isAssignable: boolean;
   area: AccessArea;
   inherited?: boolean;
-  inheritedFrom?: Party;
 }
 
 export interface AccessPackageDelegation {
-  accessPackageId: string;
-  delegationDetails: DelegationDetails;
-  inherited: boolean;
-  inheritedFrom?: Party;
-}
-
-export interface DelegationDetails {
-  delegatedFrom: string;
-  delegatedTo: string;
-  lastChangedOn: Date;
+  package: CompactPackage;
+  permissions: Permissions[];
 }
 
 export interface DelegationCheckResponse {
@@ -74,12 +65,13 @@ export const accessPackageApi = createApi({
     }),
     getUserDelegations: builder.query<
       { [key: string]: AccessPackageDelegation[] },
-      { from: string; to: string }
+      { from: string; to: string; party?: string }
     >({
-      query: ({ from, to }) => {
-        return `delegations/${from}/${to}`;
+      query: ({ from, to, party = getCookie('AltinnPartyUuid') }) => {
+        return `delegations?from=${from}&to=${to}&party=${party}`;
       },
       providesTags: ['AccessPackages'],
+      keepUnusedDataFor: 3, // seconds
     }),
     revokeDelegation: builder.mutation<
       void,

@@ -20,6 +20,8 @@ import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../StatusSection';
+import { isInherited } from '../../AccessPackageList/useAreaPackageList';
+import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 
 import classes from './AccessPackageInfo.module.css';
 
@@ -56,14 +58,23 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     from: fromParty?.partyUuid ?? '',
   });
 
-  const userHasPackage = React.useMemo(() => {
+  const delegationAccess = React.useMemo(() => {
     if (activeDelegations && !isFetching) {
-      return Object.values(activeDelegations)
-        .flat()
-        .some((delegation) => delegation.accessPackageId === accessPackage.id);
+      return (
+        Object.values(activeDelegations)
+          .flat()
+          .find((delegation) => delegation.package.id === accessPackage.id) ?? null
+      );
     }
-    return false;
+    return null;
   }, [activeDelegations, isFetching, accessPackage.id]);
+
+  const { displayLimitedPreviewLaunch } = window.featureFlags || {};
+  const userHasPackage = delegationAccess !== null;
+  const accessIsInherited =
+    (delegationAccess &&
+      isInherited(delegationAccess, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? '')) ||
+    false;
 
   const [delegationCheckError, setDelegationCheckError] = useState<ActionError | null>(null);
 
@@ -71,7 +82,8 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     setDelegationCheckError(error);
   };
 
-  const shouldShowDelegationCheck = availableActions.includes(DelegationAction.DELEGATE);
+  const shouldShowDelegationCheck =
+    availableActions.includes(DelegationAction.DELEGATE) && !displayLimitedPreviewLaunch;
 
   // memorize this to prevent unnecessary re-renders
   const accessPackageIds = React.useMemo(() => {
@@ -82,7 +94,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     setDelegationCheckError(null);
   }, [accessPackage]);
 
-  const { canDelegate, isLoading, isUninitialized } = useAccessPackageDelegationCheck(
+  const { canDelegate, isLoading } = useAccessPackageDelegationCheck(
     accessPackageIds,
     shouldShowDelegationCheck,
     handleDelegationCheckFailure,
@@ -92,8 +104,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     shouldShowDelegationCheck &&
     !delegationCheckError &&
     !canDelegate(accessPackage.id) &&
-    !isLoading &&
-    !isUninitialized;
+    !isLoading;
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
 
@@ -157,18 +168,28 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                   {t('delegation_modal.general_error.delegate_heading')}
                 </DsHeading>
               )}
-              <TechnicalErrorParagraphs
-                size='xs'
-                status={actionError.httpStatus}
-                time={actionError.timestamp}
-              />
+              {actionError.details?.detail ? (
+                <ValidationErrorMessage errorCode={actionError.details?.detail} />
+              ) : (
+                <TechnicalErrorParagraphs
+                  size='xs'
+                  status={actionError.httpStatus}
+                  time={actionError.timestamp}
+                />
+              )}
             </DsAlert>
           )}
 
           <StatusSection
             userHasAccess={userHasPackage}
             showMissingRightsMessage={showMissingRightsMessage}
-            inheritedFrom={accessPackage.inherited ? accessPackage.inheritedFrom?.name : undefined}
+            cannotDelegateHere={accessPackage.isAssignable === false}
+            inheritedFrom={
+              accessIsInherited
+                ? (delegationAccess?.permissions[0].via?.name ??
+                  delegationAccess?.permissions[0].from.name)
+                : undefined
+            }
           />
 
           <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
@@ -193,11 +214,16 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
           <div className={classes.actions}>
             {userHasPackage && availableActions.includes(DelegationAction.REVOKE) && (
-              <Button onClick={() => onRevoke(accessPackage)}>{t('common.delete_poa')}</Button>
+              <Button
+                disabled={accessIsInherited || accessPackage.isAssignable === false}
+                onClick={() => onRevoke(accessPackage)}
+              >
+                {t('common.delete_poa')}
+              </Button>
             )}
             {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
               <Button
-                disabled={!canDelegate(accessPackage.id)}
+                disabled={!canDelegate(accessPackage.id) || accessPackage.isAssignable === false}
                 onClick={() => onDelegate(accessPackage)}
               >
                 {t('common.give_poa')}

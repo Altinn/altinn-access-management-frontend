@@ -9,20 +9,19 @@ export const lookupHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
   }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/lookup/party/:id`, ({ params }) => {
     const { id } = params;
-
-    return HttpResponse.json({
+    const defaultReturn = {
       partyId: 51329012,
       partyUuid: id,
       partyTypeName: 2,
       orgNumber: '310202398',
       unitType: 'AS',
-      name: 'DISKRET NÆR TIGER AS',
+      name: id || 'DISKRET NÆR TIGER AS',
       isDeleted: false,
       onlyHierarchyElementWithNoAccess: false,
       person: null,
       organization: {
         orgNumber: '310202398',
-        name: 'DISKRET NÆR TIGER AS',
+        name: id || 'DISKRET NÆR TIGER AS',
         unitType: 'AS',
         telephoneNumber: null,
         mobileNumber: null,
@@ -38,7 +37,8 @@ export const lookupHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         unitStatus: 'N',
       },
       childParties: null,
-    });
+    };
+    return HttpResponse.json(defaultReturn);
   }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/lookup/party`, () => {
     return HttpResponse.json({

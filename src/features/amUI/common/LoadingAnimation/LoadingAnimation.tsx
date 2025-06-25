@@ -2,9 +2,9 @@ import Lottie from 'lottie-react';
 import { t } from 'i18next';
 import { DsSpinner } from '@altinn/altinn-components';
 
-import classes from './LoadingAnimation.module.css';
-
 import checkMarkAnimation from '@/assets/AltinnCheckmarkAnimation.json';
+
+import classes from './LoadingAnimation.module.css';
 
 export const LoadingAnimation = ({
   isLoading,

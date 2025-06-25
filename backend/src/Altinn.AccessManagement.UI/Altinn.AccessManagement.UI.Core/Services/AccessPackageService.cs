@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -59,29 +57,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<Dictionary<string, List<AccessPackageDelegation>>> GetDelegationsToRightHolder(Guid rightHolderUuid, Guid rightOwnerUuid, string languageCode)
+        public async Task<Dictionary<Guid, List<PackagePermission>>> GetDelegations(Guid party, Guid? to, Guid? from, string languageCode)
         {
-            List<AccessPackageAccess> accessesFromAM = await _accessManagementClient.GetAccessPackageAccesses(rightHolderUuid.ToString(), rightOwnerUuid.ToString(), languageCode);
+            PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
+            IEnumerable<PackagePermission> accesses = paginatedAccesses.Items;
 
-            Dictionary<string, List<AccessPackageDelegation>> sortedAccesses = new Dictionary<string, List<AccessPackageDelegation>>();
-            
-            foreach (AccessPackageAccess access in accessesFromAM)
+            var sortedAccesses = new Dictionary<Guid, List<PackagePermission>>();
+
+            foreach (PackagePermission access in accesses)
             {
-                var isInherited = access.AccessDetails.DelegatedTo != rightHolderUuid; 
-                AccessPackageDelegation delegation = new AccessPackageDelegation(access.AccessPackage.Id.ToString(), access.AccessDetails, isInherited, null);
-                if (isInherited)
+                Guid areaId = access.Package.AreaId;
+
+                if (!sortedAccesses.ContainsKey(areaId))
                 {
-                    var inheritedFrom = await _lookupService.GetPartyByUUID(access.AccessDetails.DelegatedTo);
-                    delegation.InheritedFrom = inheritedFrom;
-                }
-                
-                if (!sortedAccesses.ContainsKey(access.AccessPackage.Area.Id))
-                {
-                    sortedAccesses.Add(access.AccessPackage.Area.Id, new List<AccessPackageDelegation> { delegation });
+                    sortedAccesses.Add(areaId, new List<PackagePermission> { access });
                 }
                 else
                 {
-                    sortedAccesses[access.AccessPackage.Area.Id].Add(delegation);
+                    sortedAccesses[areaId].Add(access);
                 }
             }
 
@@ -101,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<ActionResult<List<AccessPackageDelegationCheckResponse>>> DelegationCheck(DelegationCheckRequest delegationCheckRequest)
+        public async Task<List<AccessPackageDelegationCheckResponse>> DelegationCheck(DelegationCheckRequest delegationCheckRequest)
         {
             return await _accessManagementClient.AccessPackageDelegationCheck(delegationCheckRequest);
         }

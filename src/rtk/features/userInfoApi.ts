@@ -4,6 +4,38 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
 
+interface UserKeyValues {
+  OrganizationIdentifier?: string;
+  PartyId?: string;
+  DateOfBirth?: string;
+}
+
+export interface ExtendedUser extends Omit<User, 'children'> {
+  roles: RoleInfo[];
+  children: (ExtendedUser | User)[] | null;
+  matchInChildren?: boolean;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  type?: string;
+  variant?: string;
+  children: (User | ExtendedUser)[] | null;
+  keyValues: UserKeyValues | null;
+}
+
+export interface RoleInfo {
+  id: string;
+  code?: string;
+}
+
+export interface Connection {
+  party: User;
+  roles: RoleInfo[];
+  connections: Connection[];
+}
+
 interface UserInfoApiResponse {
   party: Party;
   userUuid: string;
@@ -30,16 +62,6 @@ export enum PartyType {
   Organization = 2,
   SelfIdentified = 3,
   SubUnit = 4,
-}
-
-export interface User {
-  partyUuid: string;
-  partyType: PartyType;
-  name: string;
-  roles: string[];
-  organizationNumber?: string;
-  unitType?: string;
-  inheritingUsers: User[];
 }
 
 export interface UserAccesses {
@@ -73,10 +95,6 @@ export const userInfoApi = createApi({
       query: () => `reportee/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
     }),
-    // getRightHolders: builder.query<User[], void>({
-    //   query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
-    //   keepUnusedDataFor: 300,
-    // }),
     addRightHolder: builder.mutation<void, string>({
       query: (partyUuidToBeAdded) => ({
         url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder?rightholderPartyUuid=${partyUuidToBeAdded}`,
@@ -88,17 +106,23 @@ export const userInfoApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
     }),
-    getRightHolders: builder.query<User[], { partyUuid: string; fromUuid: string; toUuid: string }>(
-      {
-        query: ({ partyUuid, fromUuid, toUuid }) =>
-          `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
-        keepUnusedDataFor: 3,
-        providesTags: ['RightHolders'],
+    getRightHolders: builder.query<
+      Connection[],
+      { partyUuid: string; fromUuid?: string; toUuid?: string }
+    >({
+      query: ({ partyUuid, fromUuid, toUuid }) =>
+        `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
+      keepUnusedDataFor: 3,
+      providesTags: ['RightHolders'],
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
       },
-    ),
-    removeRightHolder: builder.mutation<void, { toPartyUuid: string; fromPartyUuid: string }>({
-      query: ({ toPartyUuid, fromPartyUuid }) => ({
-        url: `reportee/${fromPartyUuid}/rightholder?rightholderPartyUuid=${toPartyUuid}`,
+    }),
+    removeRightHolder: builder.mutation<void, { party: string; to: string; from: string }>({
+      query: ({ party, to, from }) => ({
+        url: `reportee?party=${party}&to=${to}&from=${from}`,
         method: 'DELETE',
       }),
       transformErrorResponse: (response: {

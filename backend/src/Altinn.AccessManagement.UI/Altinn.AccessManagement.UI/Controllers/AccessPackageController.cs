@@ -1,11 +1,16 @@
 ﻿using System.Net;
+using System.Net.Http.Json;
+using System.Security;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Authorization.ProblemDetails;
+using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,18 +65,28 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Get all access packages delegated to a single right holder from a single party
+        ///     Get all access package accesses granted to or from someone (one or more of the two must be specified)
         /// </summary>
         /// <returns>A dictionary of lists (sorted by access area-id) containing all access package delegations that the right holder has on behalf of the specified right owner</returns>
         [HttpGet]
         [Authorize]
-        [Route("delegations/{from}/{to}")]
-        public async Task<ActionResult<Dictionary<string, List<AccessPackageDelegation>>>> GetDelegationsToRightHolder([FromRoute] Guid from, [FromRoute] Guid to)
+        [Route("delegations/")]
+        public async Task<ActionResult<Dictionary<Guid, List<PackagePermission>>>> GetDelegations([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!from.HasValue && !to.HasValue)
+            {
+                return BadRequest("Either 'from' or 'to' query parameter must be provided.");
+            }
+
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
-                return await _accessPackageService.GetDelegationsToRightHolder(to, from, languageCode);
+                return await _accessPackageService.GetDelegations(party, to, from, languageCode);
             }
             catch (HttpStatusException ex)
             {
@@ -116,21 +131,31 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return Ok(await response.Content.ReadAsStringAsync());
                 }
 
-                if (response.StatusCode == HttpStatusCode.BadRequest)
+                var content = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>();
+
+                if (content?.Extensions is { } extensions &&
+                    extensions.TryGetValue("validationErrors", out var validationErrorsObj) &&
+                    validationErrorsObj is JsonElement { ValueKind: JsonValueKind.Array } validationErrors)
                 {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Bad request", detail: responseContent));
+                    var errorCode = validationErrors.EnumerateArray()
+                        .Select(error => error.TryGetProperty("code", out var codeElement) ? codeElement.GetString() : null)
+                        .FirstOrDefault(code => code != null);
+
+                    if (errorCode != null)
+                    {
+                        var problem = ProblemMapper.MapToAmUiError(errorCode);
+                        if (problem != null)
+                        {
+                            return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, $"Validation error ({problem.Detail})", detail: errorCode));
+                        }
+                    }
                 }
-                else
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-                }
+
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected exception occurred during access package delegation"));
             }
-            catch (Exception ex)
+            catch
             {
-                _logger.LogError(ex, "Unexpected exception occurred during delegation of resource:" + ex.Message);
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, 500, "Unexpected exception occurred during access package delegation"));
             }
         }
 
@@ -200,7 +225,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             try
             {
                 return await _accessPackageService.DelegationCheck(delegationCheckRequest);

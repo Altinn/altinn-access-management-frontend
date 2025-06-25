@@ -1,87 +1,71 @@
-[
-  {
-    "AccessPackage": {
-      "provider": {
-        "id": "73dfe32a-8f21-465c-9242-40d82e61f320",
-        "name": "Digdir",
-        "refId": null
+{
+  "links": { "next": null },
+  "data": [
+    {
+      "package": {
+        "id": "1dba50d6-f604-48e9-bd41-82321b13e85c",
+        "urn": "urn:altinn:accesspackage:skatt-naering",
+        "areaId": "7d32591d-34b7-4afc-8afa-013722f8c05d"
       },
-      "entityType": {
-        "id": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
-        "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
-        "name": "Organisasjon"
-      },
-      "area": {
-        "id": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
-        "name": "Miljø, ulykke og sikkerhet",
-        "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til miljø, ulykke og sikkerhet.",
-        "IconUrl": "https://www.svgrepo.com/show/522869/hand-heart.svg",
-        "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145"
-      },
-      "id": "bacc9294-56fd-457f-930e-59ee4a7a3894",
-      "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
-      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
-      "areaId": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
-      "name": "Bærekraft",
-      "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til tiltak og rapportering på bærekraft. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
-      "isDelegable": true,
-      "Resources": [
+      "permissions": [
+        {
+          "from": {
+            "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+            "name": "DISKRET NÆR TIGER AS",
+            "type": "Organisasjon",
+            "variant": "AS",
+            "parent": null,
+            "children": [
+              {
+                "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+                "name": "DISKRET NÆR TIGER AS",
+                "type": "Organisasjon",
+                "variant": "BEDR",
+                "parent": {
+                  "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+                  "name": "DISKRET NÆR TIGER AS",
+                  "type": "Organisasjon",
+                  "variant": "AS",
+                  "parent": null,
+                  "children": null,
+                  "keyValues": {
+                    "PartyId": "51329012",
+                    "OrganizationIdentifier": "310202398"
+                  }
+                },
+                "children": null,
+                "keyValues": {
+                  "PartyId": "51433301",
+                  "OrganizationIdentifier": "311312294"
+                }
+              }
+            ],
+            "keyValues": {
+              "PartyId": "51329012",
+              "OrganizationIdentifier": "310202398"
+            }
+          },
+          "to": {
+            "id": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+            "name": "Sitrongul Medaljong",
+            "type": "Organisasjon",
+            "variant": "ORGL",
+            "parent": null,
+            "children": null,
+            "keyValues": {
+              "PartyId": "50088610",
+              "OrganizationIdentifier": "991825827"
+            }
+          },
+          "via": null,
+          "role": {
+            "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+            "code": "rettighetshaver",
+            "children": null
+          },
+          "viaRole": null
+        }
       ]
-    },
-    "To": {
-      "Name": "Intelligent Albatross",
-      "Uuid": "5c0656db-cf51-43a4-bd64-6a91c8caacfb"
-    },
-    "From": {
-      "Name": "DISKRET NÆR TIGER AS",
-      "Uuid": "cd35779b-b174-4ecc-bbef-ece13611be7f"
-    },
-    "AccessDetails": {
-      "DelegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-      "DelegatedTo": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
-      "LastChangedOn": "2024-11-22T14:57:39.2568955+01:00"
     }
-  },
-  {
-    "AccessPackage": {
-      "provider": {
-        "id": "73dfe32a-8f21-465c-9242-40d82e61f320",
-        "name": "Digdir",
-        "refId": null
-      },
-      "entityType": {
-        "id": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
-        "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
-        "name": "Organisasjon"
-      },
-     "area": {
-        "id": "6e152c10-0f63-4060-9b14-66808e7ac320",
-        "name": "Energi, vann,avløp og avfall",
-        "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til energi, vann,avløp og avfall.",
-        "iconUrl": "https://www.svgrepo.com/show/358402/water-glass.svg"
-      },
-      "id": "fef4aac0-d227-4ef6-834b-cc2eb4b942ed",
-      "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
-      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
-      "areaId": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
-      "name": "Samle opp og behandle avløpsvann",
-      "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til samle opp og behandle avløpsvann. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.  ",
-      "isDelegable": true,
-      "Resources": [
-      ]
-    },
-    "To": {
-      "Name": "Intelligent Albatross",
-      "Uuid": "5c0656db-cf51-43a4-bd64-6a91c8caacfb"
-    },
-    "From": {
-      "Name": "DISKRET NÆR TIGER AS",
-      "Uuid": "cd35779b-b174-4ecc-bbef-ece13611be7f"
-    },
-    "AccessDetails": {
-      "DelegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-      "DelegatedTo": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
-      "LastChangedOn": "2024-11-22T14:57:39.2568955+01:00"
-    }
-  }
-]
+  ]
+}

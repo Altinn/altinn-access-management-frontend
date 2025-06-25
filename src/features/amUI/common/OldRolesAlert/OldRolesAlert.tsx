@@ -3,13 +3,13 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Link } from 'react-router';
 import { DsAlert, DsParagraph, DsLink, DsHeading } from '@altinn/altinn-components';
 
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-
-import styles from './OldRolesAlert.module.css';
-
 import { getRedirectToServicesAvailableForUserUrl } from '@/resources/utils';
 import { useFetchRecipientInfo } from '@/resources/hooks/useFetchRecipientInfo';
 import { getHostUrl } from '@/resources/utils/pathUtils';
+
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+
+import styles from './OldRolesAlert.module.css';
 
 export const OldRolesAlert = () => {
   const { t } = useTranslation();

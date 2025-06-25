@@ -530,7 +530,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync(
-                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={rightHolderPartyUuid}");
+                $"accessmanagement/api/v1/user/reportee?party={reporteePartyUuid}&from={rightHolderPartyUuid}&to={reporteePartyUuid}");
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, httpResponse.StatusCode);
@@ -552,7 +552,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync(
-                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={invalidRightHolderUuid}");
+                $"accessmanagement/api/v1/user/reportee?party={invalidRightHolderUuid}&from={invalidRightHolderUuid}&to={invalidRightHolderUuid}");
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
@@ -575,7 +575,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync(
-                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={rightHolderPartyUuid}");
+                $"accessmanagement/api/v1/user/reportee?party={reporteePartyUuid}&from={rightHolderPartyUuid}&to={reporteePartyUuid}");
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
@@ -718,19 +718,18 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         [Theory]
         [InlineData("cd35779b-b174-4ecc-bbef-ece13611be7f", "cd35779b-b174-4ecc-bbef-ece13611be7f", "")]
-        [InlineData("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199", "", "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199")]
         public async Task GetRightholders_ReturnsRightholdersList(string party, string from, string to)
         {
             /// Arrange
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{party}.json");
-            List<User> expectedResponse = Util.GetMockData<List<User>>(path);
+            List<Connection> expectedResponse = Util.GetMockData<List<Connection>>(path);
 
             // Act
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={party}&from={from}&to={to}");
             var resJson = await response.Content.ReadAsStringAsync();
-            List<User> actualResponse = await response.Content.ReadFromJsonAsync<List<User>>();
+            List<Connection> actualResponse = await response.Content.ReadFromJsonAsync<List<Connection>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -798,10 +797,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            
+
             // Act
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/isAdmin?party={invalid_party}");
-            
+
             // Assert
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         }

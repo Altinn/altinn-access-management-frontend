@@ -62,10 +62,11 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         ///     Revokes all rights associated with a right holder by revoking their status as a right holder for another party.
         /// </summary>
-        /// <param name="partyUuid">The uuid of the reportee party, from which the right holder is to have their rights revoked</param>
-        /// <param name="rightHolderPartyUuid">The party that is to lose their right holder status</param>
+        /// <param name="party">The GUID identifying the party for which to revoke right holders.</param>
+        /// <param name="from">The GUID identifying the party from which to revoke right holders.</param>
+        /// <param name="to">The GUID identifying the party to which to revoke right holders.</param>
         /// <returns>HttpResponseMessage indicating whether the action was successful.</returns>
-        Task<HttpResponseMessage> RevokeRightHolder(Guid partyUuid, Guid rightHolderPartyUuid);
+        Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid? from, Guid? to);
 
         /// <summary>
         /// Endpoint for adding a new party as a right holder to reportee party.
@@ -74,7 +75,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder</param>
         /// <returns>The result of the adding</returns>
         Task<HttpResponseMessage> AddReporteeRightHolder(Guid partyUuid, Guid rightholderPartyUuid);
-        
+
         /// <summary>
         /// Endpoint for getting all right holders for a given party, from a given party to a given party.
         /// </summary>
@@ -82,6 +83,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="from">The uuid of the party from which to get right holders</param>
         /// <param name="to">The uuid of the party to which to get right holders</param>
         /// <returns> A list of RightHolderInfo </returns>
-        Task<List<User>> GetRightHolders(Guid party, Guid? from, Guid? to);
+        Task<List<Connection>> GetRightHolders(Guid party, Guid? from, Guid? to);
     }
 }

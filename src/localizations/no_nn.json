@@ -5,6 +5,7 @@
     "close": "Lukk",
     "open": "Åpne",
     "back": "Tilbake",
+    "go_back": "Gå tilbake",
     "changes_made_msg": "Endringar gjort. Klikk på lagre-knappen for å gjere dei gjeldande",
     "status_code": "Statuskode",
     "maskinporten": "Maskinporten",
@@ -112,7 +113,8 @@
     "go_to_help": "Gå til hjelpesida",
     "unknown_error_header": "Oi! Det har visst skjedd ein feil",
     "unknown_error_description": "Prøv å laste inn sida på nytt.",
-    "if_persistent_contact_service": "Dersom feilen held fram kan du finne svar på Altinn sine hjelpesider, eller kontakte brukarservice på telefon 75 00 60 00."
+    "if_persistent_contact_service": "Dersom feilen held fram kan du finne svar på Altinn sine hjelpesider, eller kontakte brukarservice på telefon 75 00 60 00.",
+    "user_connection_error": "Ojsann, her var det visst ingenting. "
   },
   "profile": {
     "received": "Mottatt",
@@ -251,7 +253,7 @@
     "available_packages_title": "Tilgjengelege tilgangspakker",
     "other_available": "Andre tilgjengelege",
     "current_access_packages_title": "{{count}} tilgangspakker",
-    "give_new_button": "Gi fullmakt til ny tilgangspakke",
+    "give_new_button": "Gi fullmakt",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",
@@ -259,6 +261,8 @@
     "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
     "package_number_of_resources": "{{count}} tenester",
+    "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
+    "info_alert_text": "Tilgangspakkar vil etter kvart erstatte roller i Altinn si tilgangsstyringsløysing. Dei er kanskje litt tomme nå, men vil snart bli fylte opp med tenester.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Ver venleg å kontakte Altinn brukarteneste om problemet held fram.",
@@ -282,7 +286,8 @@
     "main_page_heading": "Brukarar med fullmakter i {{name}}",
     "user_list_heading": "Andre med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller virksomheter",
-    "user_no_search_result": "Inga resultat for søket"
+    "no_users": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
+    "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?"
   },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
@@ -298,14 +303,28 @@
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
   "delete_user": {
-    "trigger_button": "Slett brukar",
-    "heading": "Er du sikker på at du vil slette denne brukaren?",
-    "message": "{{user_name}} vil miste alle fullmaktar dei har for {{reportee_name}}. Denne handlinga kan du ikkje angre.",
-    "limited_deletion_heading": "Ønskjer du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
-    "limited_deletion_message": "<p>{{user_name}} har fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast fullstendig frå {{reportee_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p> Ønskjer du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angrast.</i></p>",
-    "deletion_not_allowed_heading": "Brukaren kan ikkje slettast",
-    "deletion_not_allowed_message": "{{user_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{reportee_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.",
-    "yes_button": "Ja, slett"
+    "user_trigger_button": "Slett brukar",
+    "user_heading": "Er du sikker på at du vil slette denne brukaren?",
+    "user_message": "<p>{{to_name}} vil miste alle fullmakter dei har for {{from_name}}. <i>Denne handlinga kan ikkje angres.</i></p>",
+    "user_limited_deletion_heading": "Ønskjer du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
+    "user_limited_deletion_message": "<p>{{to_name}} har fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast fullstendig frå {{from_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p>Ønskjer du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angres.</i></p>",
+    "user_deletion_not_allowed_heading": "Brukaren kan ikkje slettast",
+    "user_deletion_not_allowed_message": "<p>{{to_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{from_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p>",
+    "yes_button": "Ja, slett",
+    "yourself_trigger_button": "Slett alle tilgangar",
+    "yourself_heading": "Er du sikker på at du vil slette alle tilgangane dine?",
+    "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikkje lenger ha tilgang til deira innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angres.</i></p>",
+    "yourself_limited_deletion_heading": "Ønskjer du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
+    "yourself_limited_deletion_message": "<p>Rettane dine kan ikkje fjernast heilt frå {{from_name}} i Altinn ettersom dei er knytte til roller i Einingsregisteret. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p>Ønskjer du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angres.</i></p>",
+    "yourself_deletion_not_allowed_heading": "Tilgangane dine kan ikkje slettast",
+    "yourself_deletion_not_allowed_message": "<p>Du har berre fullmakter gjennom dine roller i Einingsregisteret og kan difor ikkje slettast frå {{from_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p>",
+    "reportee_trigger_button": "Slett alle tilgangar",
+    "reportee_heading": "Er du sikker på at du vil slette alle deira tilgangar?",
+    "reportee_message": "<p>{{to_name}} vil miste alle sine fullmakter for {{from_name}}. Dei vil ikkje lenger ha tilgang til deira innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angres.</i></p>",
+    "reportee_limited_deletion_heading": "Ønskjer du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
+    "reportee_limited_deletion_message": "<p>{{to_name}} sine rettar kan ikkje fjernast heilt frå {{from_name}} i Altinn ettersom dei er knytte til roller i Einingsregisteret. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p>Ønskjer du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angres.</i></p>",
+    "reportee_deletion_not_allowed_heading": "Tilgangane deira kan ikkje slettast",
+    "reportee_deletion_not_allowed_message": "<p>{{to_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{from_name}} i Altinn. Dersom du ønskjer å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p>"
   },
   "reportee_rights_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
@@ -323,6 +342,7 @@
     "package_services": "Gir tilgang til {{count}} tenester",
     "has_package_message": "{{user_name}} har denne fullmakta.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
+    "cannot_delegate_here": "Tilgang til denne pakken kan ikkje gis/fjernes her.",
     "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta fordi du manglar den selv.",
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
@@ -337,6 +357,10 @@
     "general_error": {
       "revoke_heading": "Kunne ikkje slette fullmakt",
       "delegate_heading": "Kunne ikkje gi fullmakt"
+    },
+    "validation_error": {
+      "AM.VLD-00002": "Du manglar tilgang til å gje denne fullmakta.",
+      "default": "Kunne ikkje gje fullmakta"
     },
     "service_error": {
       "general_heading": "Du kan ikkje gi fullmakt til denne tenesta",
@@ -356,8 +380,11 @@
     "person": "Person",
     "organization": "Virksemnd",
     "modal_title": "Legg til ny person eller virksemnd",
-    "trigger_button": "Legg til brukar",
-    "add_button": "Legg til brukar"
+    "trigger_button": "Ny brukar",
+    "trigger_button_large": "Gi fullmakt til ny brukar",
+    "add_person_button": "Legg til person",
+    "add_org_button": "Legg til virksomheit",
+    "limited_preview_message": "Du kan diverre ikkje legge til personar heilt enda. Dette vil komme seinare."
   },
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyer Altinn",
@@ -425,7 +452,20 @@
     "FUSJ": "Skal fusjoneres med",
     "FISJ": "Skal fisjoneres med",
     "ETDL": "Tildeler av elektronisk signeringsrett",
-    "ADOS": "Administrativ eining - offentleg sektor"
+    "ADOS": "Administrativ eining - offentleg sektor",
+
+    "innehaver": "Innehavar",
+    "styreleder": "Styreleiar",
+    "varamedlem": "Varamedlem",
+    "regnskapsforer": "Rekneskapsførar",
+    "daglig-leder": "Dagleg leiar",
+    "deltaker-delt-ansvar": "Deltakar med delt ansvar",
+    "deltaker-fullt-ansvar": "Deltakar med fullt ansvar",
+    "komplementar": "Komplementar",
+    "bestyrende-reder": "Styrande reiar",
+    "bostyrer": "Bustyrar",
+    "revisor": "Revisor",
+    "hovedadministrator": "Hovudadministrator"
   },
   "systemuser_overviewpage": {
     "page_title": "Systemtilgang - Altinn",

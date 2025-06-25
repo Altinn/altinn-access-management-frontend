@@ -10,6 +10,8 @@ import type {
   AgentDelegation,
 } from '@/features/amUI/systemUser/types';
 
+import type { ReporteeInfo } from './userInfoApi';
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
 enum Tags {
@@ -34,6 +36,12 @@ export const systemUserApi = createApi({
   }),
   tagTypes: [Tags.SystemUsers],
   endpoints: (builder) => ({
+    // system user reportee
+    getSystemUserReportee: builder.query<ReporteeInfo, string>({
+      keepUnusedDataFor: 300,
+      query: (partyId) => `user/reportee/${partyId}`,
+    }),
+
     // systemregister
     getRegisteredSystems: builder.query<RegisteredSystem[], void>({
       query: () => `/systemregister`,
@@ -107,6 +115,7 @@ export const systemUserApi = createApi({
     >({
       query: ({ partyId, systemUserId, partyUuid }) =>
         `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation?partyuuid=${partyUuid}`,
+      keepUnusedDataFor: 0,
     }),
     assignCustomer: builder.mutation<
       AgentDelegation,
@@ -137,8 +146,8 @@ export const systemUserApi = createApi({
     }),
 
     // system user request
-    getSystemUserRequest: builder.query<SystemUserRequest, { partyId: string; requestId: string }>({
-      query: ({ partyId, requestId }) => `systemuser/request/${partyId}/${requestId}`,
+    getSystemUserRequest: builder.query<SystemUserRequest, { requestId: string }>({
+      query: ({ requestId }) => `systemuser/request/${requestId}`,
     }),
     approveSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({
@@ -156,12 +165,8 @@ export const systemUserApi = createApi({
     }),
 
     // change request
-    getChangeRequest: builder.query<
-      SystemUserRequest,
-      { partyId: string; changeRequestId: string }
-    >({
-      query: ({ partyId, changeRequestId }) =>
-        `systemuser/changerequest/${partyId}/${changeRequestId}`,
+    getChangeRequest: builder.query<SystemUserRequest, { changeRequestId: string }>({
+      query: ({ changeRequestId }) => `systemuser/changerequest/${changeRequestId}`,
     }),
     approveChangeRequest: builder.mutation<void, { partyId: string; changeRequestId: string }>({
       query: ({ partyId, changeRequestId }) => ({
@@ -179,11 +184,8 @@ export const systemUserApi = createApi({
     }),
 
     // agent request
-    getAgentSystemUserRequest: builder.query<
-      SystemUserRequest,
-      { partyId: string; requestId: string }
-    >({
-      query: ({ partyId, requestId }) => `systemuser/agentrequest/${partyId}/${requestId}`,
+    getAgentSystemUserRequest: builder.query<SystemUserRequest, { requestId: string }>({
+      query: ({ requestId }) => `systemuser/agentrequest/${requestId}`,
     }),
     approveAgentSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({
@@ -207,6 +209,7 @@ const apiWithTag = systemUserApi.enhanceEndpoints({
 });
 
 export const {
+  useGetSystemUserReporteeQuery,
   useCreateSystemUserMutation,
   useDeleteSystemuserMutation,
   useGetSystemUserQuery,
