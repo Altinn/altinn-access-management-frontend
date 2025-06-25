@@ -23,7 +23,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IConsentService _consentService;
         private readonly IOptions<PlatformSettings> _platformSettings;
         private readonly IOptions<GeneralSettings> _generalSettings;
-        private readonly EncryptionService _encryptionService;
+        private readonly IEncryptionService _encryptionService;
 
         /// <summary>
         /// Constructor for <see cref="ConsentController"/>
@@ -32,7 +32,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             IConsentService consentService,        
             IOptions<PlatformSettings> platformSettings, 
             IOptions<GeneralSettings> generalSettings,
-            EncryptionService encryptionService)
+            IEncryptionService encryptionService)
         {
             _consentService = consentService;
             _platformSettings = platformSettings;

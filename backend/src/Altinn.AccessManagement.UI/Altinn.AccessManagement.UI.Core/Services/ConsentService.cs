@@ -160,7 +160,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<Party> GetParty(string urn)
         {
-            string id = urn.Split(':').Last();
+            string[] parts = urn?.Split(':');
+            if (parts == null || parts.Length < 2)
+            {
+                throw new ArgumentException($"Invalid URN format: {urn}");
+            }
+
+            string id = parts.Last();
             Party party = IsOrgUrn(urn) 
                 ? await _registerClient.GetPartyForOrganization(id) 
                 : await _registerClient.GetPartyForPerson(id);
