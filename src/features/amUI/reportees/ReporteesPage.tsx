@@ -25,9 +25,7 @@ export const ReporteesPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <AlertIfNotAvailableForUserType
-          loadingIndicator={<PageSkeleton template={'detailsPage'} />}
-        >
+        <AlertIfNotAvailableForUserType loadingIndicator={<PageSkeleton template={'listPage'} />}>
           {!isLoading && !isAdmin ? (
             <DsAlert data-color='warning'>
               {t('reportees_page.not_admin_alert', { name: party?.name || '' })}
