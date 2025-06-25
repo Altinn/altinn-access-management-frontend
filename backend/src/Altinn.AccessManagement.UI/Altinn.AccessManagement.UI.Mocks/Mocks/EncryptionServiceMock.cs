@@ -5,7 +5,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     public class EncryptionServiceMock : IEncryptionService
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="EncryptionService" /> class
+        ///     Initializes a new instance of the <see cref="EncryptionServiceMock" /> class
         /// </summary>
         public EncryptionServiceMock()
         {

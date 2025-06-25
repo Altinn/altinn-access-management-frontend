@@ -326,6 +326,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
+                    services.AddTransient<IEncryptionService, EncryptionServiceMock>();
                     services.AddTransient<IConsentClient, ConsentClientMock>();
                     services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<IRegisterClient, RegisterClientMock>();
@@ -334,8 +335,12 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
             });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
             factory.Server.AllowSynchronousIO = true;
-            return factory.CreateClient();
+            return factory.CreateClient(opts);
         }
 
         /// <summary>
@@ -350,11 +355,14 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IEncryptionService, EncryptionServiceMock>();
-                    
                 });
             });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
             factory.Server.AllowSynchronousIO = true;
-            return factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+            return factory.CreateClient(opts);
         }
 
         /// <summary>

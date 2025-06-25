@@ -27,8 +27,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetConsentRequest checks that consent request with expected texts is returned
-        ///     Expected: GetConsentRequest returns the consent request
+        ///     Test case: LogoutRedirect redirects to default URL when no cookie is present
+        ///     Expected: Returns redirect response to default URL
         /// </summary>
         [Fact]
         public async Task LogoutRedirect_RedirectToDefaultUrl()
@@ -45,8 +45,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
          /// <summary>
-        ///     Test case: GetConsentRequest checks that consent request with expected texts is returned
-        ///     Expected: GetConsentRequest returns the consent request
+        ///     Test case: LogoutRedirect redirects to URL from encrypted cookie
+        ///     Expected: Returns redirect response to URL decrypted from cookie
         /// </summary>
         [Fact]
         public async Task LogoutRedirect_RedirectToRequestRedirectUrl()
