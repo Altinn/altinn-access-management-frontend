@@ -124,7 +124,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 // store encrypted redirect url in cookie
                 string encryptedUrl = await _encryptionService.EncryptText(redirectUrlResponse.Value);
-                HttpContext.Response.Cookies.Append("AltinnLogoutInfo", $"amSafeRedirectUrl={encryptedUrl}", cookieOptions);
+                HttpContext.Response.Cookies.Append(_platformSettings.Value.AltinnLogoutInfoCookieName, $"amSafeRedirectUrl={encryptedUrl}", cookieOptions);
             }
             
             string logoutUrl = $"{_platformSettings.Value.ApiAuthenticationEndpoint}logout";
