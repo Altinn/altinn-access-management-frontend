@@ -9,7 +9,7 @@ const skeletonListItems = [
     size: 'md',
     loading: true,
     title: 'xxx xxxx xxxxx',
-    icon: { iconUrl: '...', type: 'company' },
+    icon: { iconUrl: '', type: 'company' },
     interactive: false,
   },
   {
@@ -17,7 +17,7 @@ const skeletonListItems = [
     size: 'md',
     loading: true,
     title: 'xxx xxxx xxxxx xxxx xxxxx',
-    icon: { iconUrl: '...', type: 'company' },
+    icon: { iconUrl: '', type: 'company' },
     interactive: false,
   },
   {
@@ -25,7 +25,7 @@ const skeletonListItems = [
     size: 'md',
     loading: true,
     title: 'xxx xxxxx',
-    icon: { iconUrl: '...', type: 'company' },
+    icon: { iconUrl: '', type: 'company' },
     interactive: false,
   },
 ] as ListItemProps[];
