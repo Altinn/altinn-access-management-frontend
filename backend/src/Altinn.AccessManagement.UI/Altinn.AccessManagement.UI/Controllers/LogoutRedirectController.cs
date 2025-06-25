@@ -29,15 +29,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult> RedirectAfterLogout()
         {
             string logoutInfoCookie = Request.Cookies[platformSettings.Value.AltinnLogoutInfoCookieName];
-            if (!string.IsNullOrEmpty(logoutInfoCookie))
+            if (!string.IsNullOrEmpty(logoutInfoCookie) && logoutInfoCookie.Contains("amSafeRedirectUrl"))
             {
-                Dictionary<string, string> cookieValues = logoutInfoCookie?.Split('&')
-                    .Select(x => x.Split('='))
-                    .Where(x => x.Length == 2)
-                    .ToDictionary(x => x[0], x => x[1]);
+                string[] values = logoutInfoCookie.Split("amSafeRedirectUrl=");
 
-                if (cookieValues.TryGetValue("amSafeRedirectUrl", out string redirectUrl))
+                if (values.Length == 2)
                 {
+                    string redirectUrl = values[1];
                     string decryptedCookieValue = await encryptionService.DecryptText(redirectUrl);
                     if (Uri.IsWellFormedUriString(decryptedCookieValue, UriKind.Absolute))
                     {

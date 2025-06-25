@@ -1,6 +1,7 @@
 ﻿using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
@@ -335,6 +336,25 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             });
             factory.Server.AllowSynchronousIO = true;
             return factory.CreateClient();
+        }
+
+        /// <summary>
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for ConsentController tests</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<LogoutRedirectController> customFactory)
+        {
+            WebApplicationFactory<LogoutRedirectController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<IEncryptionService, EncryptionServiceMock>();
+                    
+                });
+            });
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
         }
 
         /// <summary>
