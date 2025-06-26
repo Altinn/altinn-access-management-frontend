@@ -93,7 +93,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                         Urn = accessPackage.Urn,
                         Description = accessPackage.Description,
                         Name = accessPackage.Name,
-                        Resources = await EnrichResources(accessPackage.Resources.Select(x => x.Id.ToString()), languageCode)
+                        Resources = [] // TODO: fix mapping to correct type
                     });
                 }
             }
