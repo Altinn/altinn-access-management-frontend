@@ -566,6 +566,9 @@
             "id": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
             "name": "Digitaliseringsdirektoratet",
             "logoUrl": "https://profilveileder.digdir.no/sites/leikanger/files/styles/xxxs/public/2022-04/Ikon_Emblem-blaasvart.png?itok=QU5K_ApH"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -579,6 +582,9 @@
             "id": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
             "name": "Direktoratet for samfunnssikkerhet og beredskap",
             "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -592,6 +598,9 @@
             "id": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
             "name": "Arbeidstilsynet",
             "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg/1200px-Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg.png"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -605,6 +614,9 @@
             "id": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
             "name": "Næringslivets sikkerhetsråd",
             "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -618,6 +630,9 @@
             "id": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
             "name": "Direktoratet for samfunnssikkerhet og beredskap",
             "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -631,6 +646,9 @@
             "id": "c7c7c7c7-c7c7-c7c7-c7c7-c7c7c7c7c7c7",
             "name": "Datatilsynet",
             "logoUrl": "https://www.datatilsynet.no/globalassets/global/bilder/logoer/pvo_logo?width=756&height=710&quality=80&h=4c22bcfb2f8f388c55db321994144cb6d8fcba42"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -644,6 +662,9 @@
             "id": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
             "name": "Næringslivets sikkerhetsråd",
             "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         }
       ]
