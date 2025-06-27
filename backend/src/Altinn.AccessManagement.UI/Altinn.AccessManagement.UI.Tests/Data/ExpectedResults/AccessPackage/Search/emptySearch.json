@@ -473,7 +473,9 @@
               "refId": null,
               "logoUrl": "https://profilveileder.digdir.no/sites/leikanger/files/styles/xxxs/public/2022-04/Ikon_Emblem-blaasvart.png?itok=QU5K_ApH"
             },
-            "type": 0
+            "type": {
+              "name": "GenericAccessResource"
+            }
           },
           {
             "id": "b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2",
@@ -488,7 +490,9 @@
               "refId": null,
               "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
             },
-            "type": 0
+            "type": {
+              "name": "GenericAccessResource"
+            }
           },
           {
             "id": "b3b3b3b3-b3b3-b3b3-b3b3-b3b3b3b3b3b3",
@@ -503,7 +507,9 @@
               "refId": null,
               "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg/1200px-Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg.png"
             },
-            "type": 0
+            "type": {
+              "name": "GenericAccessResource"
+            }
           },
           {
             "id": "b4b4b4b4-b4b4-b4b4-b4b4-b4b4b4b4b4b4",
@@ -518,7 +524,9 @@
               "refId": null,
               "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
             },
-            "type": 0
+            "type": {
+              "name": "GenericAccessResource"
+            }
           },
           {
             "id": "b5b5b5b5-b5b5-b5b5-b5b5-b5b5b5b5b5b5",
@@ -533,7 +541,9 @@
               "refId": null,
               "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
             },
-            "type": 0
+            "type": {
+              "name": "GenericAccessResource"
+            }
           },
           {
             "id": "b6b6b6b6-b6b6-b6b6-b6b6-b6b6b6b6b6b6",
@@ -548,7 +558,9 @@
               "refId": null,
               "logoUrl": "https://www.datatilsynet.no/globalassets/global/bilder/logoer/pvo_logo?width=756&height=710&quality=80&h=4c22bcfb2f8f388c55db321994144cb6d8fcba42"
             },
-            "type": 0
+            "type": {
+              "name": "GenericAccessResource"
+            }
           },
           {
             "id": "b7b7b7b7-b7b7-b7b7-b7b7-b7b7b7b7b7b7",
@@ -563,7 +575,9 @@
               "refId": null,
               "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
             },
-            "type": 0
+            "type": {
+              "name": "GenericAccessResource"
+            }
           }
         ]
       },
