@@ -16,6 +16,7 @@ import { DelegationModalProvider } from '../common/DelegationModal/DelegationMod
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
 import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
+import { PageSkeleton } from '../common/PageSkeleton/PageSkeleton';
 
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
@@ -33,8 +34,10 @@ export const UserRightsPage = () => {
 
   return (
     <PageWrapper>
-      <AlertIfNotAvailableForUserType>
-        <PageLayoutWrapper>
+      <PageLayoutWrapper>
+        <AlertIfNotAvailableForUserType
+          loadingIndicator={<PageSkeleton template={'detailsPage'} />}
+        >
           <PartyRepresentationProvider
             actingPartyUuid={getCookie('AltinnPartyUuid')}
             fromPartyUuid={getCookie('AltinnPartyUuid')}
@@ -58,8 +61,8 @@ export const UserRightsPage = () => {
               </PageContainer>
             </DelegationModalProvider>
           </PartyRepresentationProvider>
-        </PageLayoutWrapper>
-      </AlertIfNotAvailableForUserType>
+        </AlertIfNotAvailableForUserType>
+      </PageLayoutWrapper>
     </PageWrapper>
   );
 };
