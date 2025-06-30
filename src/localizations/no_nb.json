@@ -347,7 +347,6 @@
     "package_services": "Gir tilgang til {{count}} tjenester",
     "has_package_message": "{{user_name}} har denne fullmakten.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
-    "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
     "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten fordi du mangler den selv.",
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",

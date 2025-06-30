@@ -2,7 +2,6 @@ import {
   CheckmarkCircleFillIcon,
   ExclamationmarkTriangleFillIcon,
   InformationSquareFillIcon,
-  XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
 import { t } from 'i18next';
@@ -17,17 +16,15 @@ export const StatusSection = ({
   showMissingRightsMessage,
   inheritedFrom,
   delegationCheckText,
-  cannotDelegateHere = false,
 }: {
   userHasAccess: boolean;
   showMissingRightsMessage: boolean;
   inheritedFrom?: string;
   delegationCheckText?: string;
-  cannotDelegateHere?: boolean;
 }) => {
   const { fromParty, toParty } = usePartyRepresentation();
 
-  if (!userHasAccess && !showMissingRightsMessage && !inheritedFrom && !cannotDelegateHere) {
+  if (!userHasAccess && !showMissingRightsMessage && !inheritedFrom) {
     return null;
   }
 
@@ -64,22 +61,6 @@ export const StatusSection = ({
               values={{
                 user_name: toParty?.name,
                 org_name: inheritedFrom ?? fromParty?.name,
-              }}
-            />
-          </DsParagraph>
-        </div>
-      )}
-      {cannotDelegateHere && (
-        <div className={classes.infoLine}>
-          <XMarkOctagonFillIcon
-            fontSize='1.5rem'
-            className={classes.dangerIcon}
-          />
-          <DsParagraph data-size='xs'>
-            <Trans
-              i18nKey='delegation_modal.cannot_delegate_here'
-              values={{
-                user_name: toParty?.name,
               }}
             />
           </DsParagraph>

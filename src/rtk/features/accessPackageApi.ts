@@ -29,7 +29,6 @@ export interface AccessPackage {
   name: string;
   description: string;
   resources: PackageResource[];
-  isAssignable: boolean;
   area: AccessArea;
   inherited?: boolean;
 }
@@ -71,7 +70,6 @@ export const accessPackageApi = createApi({
         return `delegations?from=${from}&to=${to}&party=${party}`;
       },
       providesTags: ['AccessPackages'],
-      keepUnusedDataFor: 3, // seconds
     }),
     revokeDelegation: builder.mutation<
       void,
