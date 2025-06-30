@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useRef, useState } from 'react';
-import { DsHeading } from '@altinn/altinn-components';
+import { DsHeading, Skeleton } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 
@@ -39,15 +39,17 @@ export const ReporteeAccessPackageSection = () => {
   return (
     <>
       <AccessPackageInfoAlert />
-      <DsHeading
-        level={2}
-        data-size='2xs'
-        id='access_packages_title'
-      >
-        {t('access_packages.current_access_packages_title', {
-          count: numberOfAccesses ?? 0,
-        })}
-      </DsHeading>
+      <Skeleton loading={isLoadingAccesses || isLoadingParty}>
+        <DsHeading
+          level={2}
+          data-size='2xs'
+          id='access_packages_title'
+        >
+          {t('access_packages.current_access_packages_title', {
+            count: numberOfAccesses ?? 0,
+          })}
+        </DsHeading>
+      </Skeleton>
       <AccessPackageList
         isLoading={isLoadingAccesses || isLoadingParty}
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
