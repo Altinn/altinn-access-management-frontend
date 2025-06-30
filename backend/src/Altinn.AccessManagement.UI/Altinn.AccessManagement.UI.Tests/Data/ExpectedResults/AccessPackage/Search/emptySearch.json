@@ -468,7 +468,7 @@
             "description": "Dokumentasjon relatert til helse, miljø og sikkerhet.",
             "refId": "HMS-DOC-001",
             "provider": {
-              "id": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
+              "code": "digdir",
               "name": "Digitaliseringsdirektoratet",
               "refId": null,
               "logoUrl": "https://profilveileder.digdir.no/sites/leikanger/files/styles/xxxs/public/2022-04/Ikon_Emblem-blaasvart.png?itok=QU5K_ApH"
@@ -485,7 +485,7 @@
             "description": "Verktøy for gjennomføring og dokumentasjon av risikovurderinger.",
             "refId": "RISK-TOOL-001",
             "provider": {
-              "id": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
+              "code": "dsb",
               "name": "Direktoratet for samfunnssikkerhet og beredskap",
               "refId": null,
               "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
@@ -502,7 +502,7 @@
             "description": "System for dokumentasjon og gjennomføring av internkontroll.",
             "refId": "INT-SYS-002",
             "provider": {
-              "id": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
+              "code": "dat",
               "name": "Arbeidstilsynet",
               "refId": null,
               "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg/1200px-Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg.png"
@@ -519,7 +519,7 @@
             "description": "Dokumentasjon av beredskapsplan for krisesituasjoner.",
             "refId": "EMG-PLAN-003",
             "provider": {
-              "id": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
+              "code": "digdir",
               "name": "Næringslivets sikkerhetsråd",
               "refId": null,
               "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
@@ -536,7 +536,7 @@
             "description": "System for rapportering og håndtering av avvik.",
             "refId": "DEV-REP-001",
             "provider": {
-              "id": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
+              "code": "dsb",
               "name": "Direktoratet for samfunnssikkerhet og beredskap",
               "refId": null,
               "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
@@ -553,7 +553,7 @@
             "description": "Verktøy for å sikre etterlevelse av personvernforordningen.",
             "refId": "GDPR-COMP-001",
             "provider": {
-              "id": "c7c7c7c7-c7c7-c7c7-c7c7-c7c7c7c7c7c7",
+              "code": "dpa",
               "name": "Datatilsynet",
               "refId": null,
               "logoUrl": "https://www.datatilsynet.no/globalassets/global/bilder/logoer/pvo_logo?width=756&height=710&quality=80&h=4c22bcfb2f8f388c55db321994144cb6d8fcba42"
@@ -570,7 +570,7 @@
             "description": "System for håndtering av sikkerhetstiltak og sikkerhetsrevisjon.",
             "refId": "SEC-MGT-002",
             "provider": {
-              "id": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
+              "code": "digdir",
               "name": "Næringslivets sikkerhetsråd",
               "refId": null,
               "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
@@ -2803,7 +2803,24 @@
             "urn": null
           }
         },
-        "resources": []
+        "resources": [
+          {
+            "id": "39c943cf-872a-451d-af8d-bfbc9f0d2f65",
+            "providerId": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
+            "typeId": "d5d5d5d5-d5d5-d5d5-d5d5-d5d5d5d5d5d5",
+            "name": "Innrapportering A-melding",
+            "description": "A-meldingen er en månedlig melding til NAV, SSB og Skatteetaten om inntekt, arbeidsforhold og forskuddstrekk, samt arbeidsgiveravgift og finansskatt for virksomheten.",
+            "refId": "ske-innrapportering-amelding",
+            "provider": {
+              "code": "skd",
+              "name": "Skatteetaten",
+              "logoUrl": "https://altinncdn.no/orgs/skd/skd.png"
+            },
+            "type": {
+              "name": "GenericAccessResource"
+            }
+          }
+        ]
       },
       {
         "id": "a5f7f72a-9b89-445d-85bb-06f678a3d4d1",
