@@ -17,7 +17,7 @@ export const ReporteeAccessPackageSection = () => {
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
 
-  const { toParty, fromParty, actingParty } = usePartyRepresentation();
+  const { toParty, fromParty, actingParty, isLoading: isLoadingParty } = usePartyRepresentation();
 
   useEffect(() => {
     const handleClose = () => setModalItem(undefined);
@@ -25,7 +25,7 @@ export const ReporteeAccessPackageSection = () => {
     return () => modalRef.current?.removeEventListener('close', handleClose);
   }, []);
 
-  const { data: accesses } = useGetUserDelegationsQuery(
+  const { data: accesses, isLoading: isLoadingAccesses } = useGetUserDelegationsQuery(
     {
       from: fromParty?.partyUuid ?? '',
       to: toParty?.partyUuid ?? '',
@@ -49,6 +49,7 @@ export const ReporteeAccessPackageSection = () => {
         })}
       </DsHeading>
       <AccessPackageList
+        isLoading={isLoadingAccesses || isLoadingParty}
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         useDeleteConfirm
         showAllPackages
