@@ -1,5 +1,5 @@
 # Building accessmanagement frontend
-FROM node:22-slim@sha256:2f3571619daafc6b53232ebf2fcc0817c1e64795e92de317c1684a915d13f1a5 AS generate-accessmanagement-frontend
+FROM node:22-slim@sha256:b2fa526a10dad3c5ab4b3779eca81607ed05a96160ef5497c36cd4ebed68803d AS generate-accessmanagement-frontend
 
 WORKDIR /build
 COPY . .
@@ -8,7 +8,7 @@ RUN corepack enable && \
     yarn build
 
 # Building the backend
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine@sha256:2244f80ac7179b0feaf83ffca8fe82d31fbced5b7e353755bf9515a420eba711 AS generate-accessmanagement-backend
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine@sha256:cec8f5d4537ff29112274379401142fa73d97fcc9f174dc1c623c29dcaef24c1 AS generate-accessmanagement-backend
 
 WORKDIR /build
 COPY backend .

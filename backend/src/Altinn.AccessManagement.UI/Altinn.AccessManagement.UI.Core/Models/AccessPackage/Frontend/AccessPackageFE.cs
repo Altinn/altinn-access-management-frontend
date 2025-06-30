@@ -1,5 +1,3 @@
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-
 namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
 {
     /// <summary>
@@ -35,6 +33,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         /// <summary>
         /// Resources
         /// </summary>
-        public List<ServiceResourceFE> Resources { get; set; }
+        public List<AccessPackageResourceFE> Resources { get; set; }
     }
 }
