@@ -556,6 +556,7 @@
       },
       "resources": [
         {
+          "id": "b1b1b1b1-b1b1-b1b1-b1b1-b1b1b1b1b1b1",
           "providerId": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
           "typeId": "d5d5d5d5-d5d5-d5d5-d5d5-d5d5d5d5d5d5",
           "name": "HMS-dokumentasjon",
@@ -572,6 +573,7 @@
           }
         },
         {
+          "id": "b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2",
           "providerId": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
           "typeId": "d6d6d6d6-d6d6-d6d6-d6d6-d6d6d6d6d6d6",
           "name": "Risikovurdering",
@@ -588,6 +590,7 @@
           }
         },
         {
+          "id": "b3b3b3b3-b3b3-b3b3-b3b3-b3b3b3b3b3b3",
           "providerId": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
           "typeId": "d7d7d7d7-d7d7-d7d7-d7d7-d7d7d7d7d7d7",
           "name": "Internkontroll-system",
@@ -604,6 +607,7 @@
           }
         },
         {
+          "id": "b4b4b4b4-b4b4-b4b4-b4b4-b4b4b4b4b4b4",
           "providerId": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
           "typeId": "d5d5d5d5-d5d5-d5d5-d5d5-d5d5d5d5d5d5",
           "name": "Beredskapsplan",
@@ -620,6 +624,7 @@
           }
         },
         {
+          "id": "b5b5b5b5-b5b5-b5b5-b5b5-b5b5b5b5b5b5",
           "providerId": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
           "typeId": "d6d6d6d6-d6d6-d6d6-d6d6-d6d6d6d6d6d6",
           "name": "Avviksrapportering",
@@ -636,6 +641,7 @@
           }
         },
         {
+          "id": "b6b6b6b6-b6b6-b6b6-b6b6-b6b6b6b6b6b6",
           "providerId": "c7c7c7c7-c7c7-c7c7-c7c7-c7c7c7c7c7c7",
           "typeId": "d8d8d8d8-d8d8-d8d8-d8d8-d8d8d8d8d8d8",
           "name": "GDPR-samsvar",
@@ -652,6 +658,7 @@
           }
         },
         {
+          "id": "b7b7b7b7-b7b7-b7b7-b7b7-b7b7b7b7b7b7",
           "providerId": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
           "typeId": "d7d7d7d7-d7d7-d7d7-d7d7-d7d7d7d7d7d7",
           "name": "Sikkerhetsstyring",
@@ -3357,6 +3364,7 @@
       },
       "resources": [
         {
+          "id": "39c943cf-872a-451d-af8d-bfbc9f0d2f65",
           "providerId": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
           "typeId": "d5d5d5d5-d5d5-d5d5-d5d5-d5d5d5d5d5d5",
           "name": "Innrapportering A-melding",
