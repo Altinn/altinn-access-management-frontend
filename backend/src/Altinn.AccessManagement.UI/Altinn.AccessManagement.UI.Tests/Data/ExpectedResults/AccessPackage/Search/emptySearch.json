@@ -2803,7 +2803,23 @@
             "urn": null
           }
         },
-        "resources": []
+        "resources": [
+          {
+            "providerId": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
+            "typeId": "d5d5d5d5-d5d5-d5d5-d5d5-d5d5d5d5d5d5",
+            "name": "Innrapportering A-melding",
+            "description": "A-meldingen er en månedlig melding til NAV, SSB og Skatteetaten om inntekt, arbeidsforhold og forskuddstrekk, samt arbeidsgiveravgift og finansskatt for virksomheten.",
+            "refId": "ske-innrapportering-amelding",
+            "provider": {
+              "code": "skd",
+              "name": "Skatteetaten",
+              "logoUrl": "https://altinncdn.no/orgs/skd/skd.png"
+            },
+            "type": {
+              "name": "GenericAccessResource"
+            }
+          }
+        ]
       },
       {
         "id": "a5f7f72a-9b89-445d-85bb-06f678a3d4d1",
