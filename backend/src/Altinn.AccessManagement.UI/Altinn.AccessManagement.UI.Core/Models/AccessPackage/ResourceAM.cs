@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using Altinn.AccessManagement.UI.Core.Enums;
+﻿using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 
 namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage
@@ -47,18 +46,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage
         /// <summary>
         /// Type
         /// </summary>
-        public AccessPackageResourceType Type { get; set; }
-    }
-
-    /// <summary>
-    /// AccessPackageResourceType
-    /// </summary>
-    public class AccessPackageResourceType
-    {
-        /// <summary>
-        /// Name
-        /// </summary>
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public ResourceType Name { get; set; }
+        public ResourceType Type { get; set; }
     }
 }

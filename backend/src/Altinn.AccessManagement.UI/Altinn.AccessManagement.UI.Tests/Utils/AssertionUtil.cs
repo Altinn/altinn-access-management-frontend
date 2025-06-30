@@ -205,7 +205,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
             Assert.Equal(expected.ProviderId, actual.ProviderId);
-            Assert.Equal(expected.Type.Name, actual.Type.Name);
+            Assert.Equal(expected.Type, actual.Type);
             Assert.NotNull(expected.Provider);
             Assert.NotNull(actual.Provider);
             Assert.Equal(expected.Provider.Name, actual.Provider.Name);
