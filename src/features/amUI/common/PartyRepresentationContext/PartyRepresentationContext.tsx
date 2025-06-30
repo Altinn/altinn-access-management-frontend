@@ -103,7 +103,7 @@ export const PartyRepresentationProvider = ({
     toPartyIsLoading ||
     currentUserIsLoading ||
     reporteeIsLoading;
-  const isError = invalidConnection || availableForUserType;
+  const isError = invalidConnection || !availableForUserType;
 
   return (
     <PartyRepresentationContext.Provider
@@ -118,7 +118,7 @@ export const PartyRepresentationProvider = ({
     >
       {!isLoading && invalidConnection && connectionErrorAlert(error, returnToUrlOnError)}
       {!isLoading && !availableForUserType && <NotAvailableForUserTypeAlert />}
-      {children}
+      {(!isError || isLoading) && children}
     </PartyRepresentationContext.Provider>
   );
 };

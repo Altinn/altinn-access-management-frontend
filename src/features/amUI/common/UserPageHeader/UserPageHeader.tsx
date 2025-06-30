@@ -71,7 +71,7 @@ export const UserPageHeader = ({
   };
 
   return loadingPartyRepresentation ? (
-    <UserPageHeaderSkeleton displayRoles={displayRoles} />
+    <UserPageHeaderSkeleton />
   ) : (
     <div className={classes.headingContainer}>
       {avatar()}
