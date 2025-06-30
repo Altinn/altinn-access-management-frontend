@@ -1,16 +1,26 @@
-import { ListItemHeader } from '@altinn/altinn-components';
+// import { ListItemHeader } from '@altinn/altinn-components';
+
+import { DsSkeleton } from '@altinn/altinn-components';
+
+import classes from './UserPageHeader.module.css';
 
 export const UserPageHeaderSkeleton = () => {
   return (
-    <ListItemHeader
-      loading
-      size='xl'
-      avatar={{
-        name: 'XXX',
-        type: 'company',
-      }}
-      title={'Xxxxxxx Xxxxxxxx'}
-      description='Xxxxxxx Xxxxxxxx Xxxxxxx Xxxxxxxx'
-    />
+    <div className={classes.headingContainer}>
+      <DsSkeleton
+        width={40}
+        height={40}
+        className={classes.avatar}
+      />
+      <DsSkeleton
+        width={400}
+        height={40}
+      />
+      <DsSkeleton
+        width={150}
+        height={20}
+        className={classes.subheading}
+      />
+    </div>
   );
 };

@@ -14,9 +14,7 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
 import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
-import { PageSkeleton } from '../common/PageSkeleton/PageSkeleton';
 
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';
@@ -33,34 +31,30 @@ export const ReporteeRightsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <AlertIfNotAvailableForUserType
-          loadingIndicator={<PageSkeleton template={'detailsPage'} />}
+        <PartyRepresentationProvider
+          fromPartyUuid={reporteeUuid ?? ''}
+          toPartyUuid={getCookie('AltinnPartyUuid')}
+          actingPartyUuid={getCookie('AltinnPartyUuid')}
+          returnToUrlOnError={`/${amUIPath.Reportees}`}
         >
-          <PartyRepresentationProvider
-            fromPartyUuid={reporteeUuid ?? ''}
-            toPartyUuid={getCookie('AltinnPartyUuid')}
-            actingPartyUuid={getCookie('AltinnPartyUuid')}
-            returnToUrlOnError={`/${amUIPath.Reportees}`}
-          >
-            <DelegationModalProvider>
-              <PageContainer
-                backUrl={`/${amUIPath.Reportees}`}
-                contentActions={<DeleteUserModal direction='from' />}
-              >
-                <UserPageHeader
-                  direction='from'
-                  displayDirection
-                  displayRoles={!displayLimitedPreviewLaunch}
-                />
-                <RightsTabs
-                  packagesPanel={<ReporteeAccessPackageSection />}
-                  singleRightsPanel={<div>SingleRightsSection</div>}
-                  roleAssignmentsPanel={<ReporteeRoleSection />}
-                />
-              </PageContainer>
-            </DelegationModalProvider>
-          </PartyRepresentationProvider>
-        </AlertIfNotAvailableForUserType>
+          <DelegationModalProvider>
+            <PageContainer
+              backUrl={`/${amUIPath.Reportees}`}
+              contentActions={<DeleteUserModal direction='from' />}
+            >
+              <UserPageHeader
+                direction='from'
+                displayDirection
+                displayRoles={!displayLimitedPreviewLaunch}
+              />
+              <RightsTabs
+                packagesPanel={<ReporteeAccessPackageSection />}
+                singleRightsPanel={<div>SingleRightsSection</div>}
+                roleAssignmentsPanel={<ReporteeRoleSection />}
+              />
+            </PageContainer>
+          </DelegationModalProvider>
+        </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>
   );

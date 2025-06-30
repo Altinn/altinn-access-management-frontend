@@ -10,8 +10,6 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
-import { PageSkeleton } from '../common/PageSkeleton/PageSkeleton';
 
 import { UsersList } from './UsersList';
 import classes from './UsersList.module.css';
@@ -26,21 +24,19 @@ export const UsersPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <AlertIfNotAvailableForUserType loadingIndicator={<PageSkeleton template={'listPage'} />}>
-          <PartyRepresentationProvider
-            fromPartyUuid={getCookie('AltinnPartyUuid')}
-            actingPartyUuid={getCookie('AltinnPartyUuid')}
+        <PartyRepresentationProvider
+          fromPartyUuid={getCookie('AltinnPartyUuid')}
+          actingPartyUuid={getCookie('AltinnPartyUuid')}
+        >
+          <DsHeading
+            level={1}
+            data-size='md'
+            className={classes.usersListHeading}
           >
-            <DsHeading
-              level={1}
-              data-size='md'
-              className={classes.usersListHeading}
-            >
-              {t('users_page.main_page_heading', { name: reportee?.name || '' })}
-            </DsHeading>
-            <UsersList />
-          </PartyRepresentationProvider>
-        </AlertIfNotAvailableForUserType>
+            {t('users_page.main_page_heading', { name: reportee?.name || '' })}
+          </DsHeading>
+          <UsersList />
+        </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>
   );
