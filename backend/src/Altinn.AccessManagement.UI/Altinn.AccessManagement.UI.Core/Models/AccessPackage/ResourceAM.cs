@@ -10,11 +10,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage
     public class ResourceAM
     {
         /// <summary>
-        /// Id
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
         /// ProviderId
         /// </summary>
         public Guid ProviderId { get; set; }

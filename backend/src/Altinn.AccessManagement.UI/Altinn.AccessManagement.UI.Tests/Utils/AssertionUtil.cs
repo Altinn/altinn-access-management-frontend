@@ -217,7 +217,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
-            Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
             Assert.Equal(expected.ProviderId, actual.ProviderId);
