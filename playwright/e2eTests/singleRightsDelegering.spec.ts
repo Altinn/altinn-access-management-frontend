@@ -32,7 +32,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
       'SKYFRI GATE',
     );
     await delegateRights.delegateRightsToSSN('Ressurs for enkeltrettigheter testing');
-    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app');
+    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app-2');
     await delegateRights.delegateRightsToSSN('Altinn2 reporting service for authorization tests');
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
     // await context1.close();
@@ -51,7 +51,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     //To delegate rights
     // WHEN user delegates to KLIPPFISK
     await delegate.delegateToSSN('04880748144', 'KLIPPFISK');
-    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app');
+    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app-2');
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
     await context.clearCookies();
 
@@ -93,7 +93,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
       'GJESTFRI RESERVERT HUND DA',
     );
     await delegateRights.delegateRightsToSSN('Ressurs for enkeltrettigheter testing');
-    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app');
+    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app-2');
     await delegateRights.delegateRightsToSSN('Altinn2 reporting service for authorization tests');
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
     // await context1.close();
@@ -114,7 +114,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
 
     //Delegate to another org
     await delegate.delegateToOrg('313948579', 'UNDERFUNDIG TROFAST TIGER AS');
-    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app');
+    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app-2');
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
     await context.clearCookies();
 
