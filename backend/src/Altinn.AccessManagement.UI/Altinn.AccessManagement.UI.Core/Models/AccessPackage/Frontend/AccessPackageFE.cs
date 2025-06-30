@@ -1,5 +1,3 @@
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-
 namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
 {
     /// <summary>
@@ -23,6 +21,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         public string Name { get; set; }
 
         /// <summary>
+        /// Indicates if the package can be used for delegation
+        /// </summary>
+        public bool IsAssignable { get; set; }
+
+        /// <summary>
         /// Description
         /// </summary>
         public string Description { get; set; }
@@ -30,6 +33,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         /// <summary>
         /// Resources
         /// </summary>
-        public List<ServiceResourceFE> Resources { get; set; }
+        public List<AccessPackageResourceFE> Resources { get; set; }
     }
 }

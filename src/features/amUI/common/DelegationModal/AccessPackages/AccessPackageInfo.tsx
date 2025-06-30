@@ -183,10 +183,11 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
           <StatusSection
             userHasAccess={userHasPackage}
             showMissingRightsMessage={showMissingRightsMessage}
+            cannotDelegateHere={accessPackage.isAssignable === false}
             inheritedFrom={
               accessIsInherited
                 ? (delegationAccess?.permissions[0].via?.name ??
-                  delegationAccess?.permissions[0].to.name)
+                  delegationAccess?.permissions[0].from.name)
                 : undefined
             }
           />
@@ -214,7 +215,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
           <div className={classes.actions}>
             {userHasPackage && availableActions.includes(DelegationAction.REVOKE) && (
               <Button
-                disabled={accessIsInherited}
+                disabled={accessIsInherited || accessPackage.isAssignable === false}
                 onClick={() => onRevoke(accessPackage)}
               >
                 {t('common.delete_poa')}
@@ -222,7 +223,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             )}
             {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
               <Button
-                disabled={!canDelegate(accessPackage.id)}
+                disabled={!canDelegate(accessPackage.id) || accessPackage.isAssignable === false}
                 onClick={() => onDelegate(accessPackage)}
               >
                 {t('common.give_poa')}
