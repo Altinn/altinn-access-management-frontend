@@ -186,7 +186,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             inheritedFrom={
               accessIsInherited
                 ? (delegationAccess?.permissions[0].via?.name ??
-                  delegationAccess?.permissions[0].from.name)
+                  delegationAccess?.permissions[0].to.name)
                 : undefined
             }
           />

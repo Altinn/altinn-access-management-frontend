@@ -4,6 +4,10 @@
   gap: 0.2rem;
 }
 
+.inherited {
+  display: flex;
+}
+
 .inheritedInfoIcon {
   color: var(--ds-color-info-base-default);
   margin-right: 0.3rem;

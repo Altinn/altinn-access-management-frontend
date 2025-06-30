@@ -50,7 +50,7 @@ export const StatusSection = ({
         </div>
       )}
       {inheritedFrom !== undefined && inheritedFrom.length > 0 && (
-        <div className={classes.infoLine}>
+        <div className={classes.inherited}>
           <InformationSquareFillIcon
             fontSize='1.5rem'
             className={classes.inheritedInfoIcon}
