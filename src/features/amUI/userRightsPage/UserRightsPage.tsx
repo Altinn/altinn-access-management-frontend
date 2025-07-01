@@ -14,7 +14,6 @@ import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
 import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
 
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
@@ -33,33 +32,31 @@ export const UserRightsPage = () => {
 
   return (
     <PageWrapper>
-      <AlertIfNotAvailableForUserType>
-        <PageLayoutWrapper>
-          <PartyRepresentationProvider
-            actingPartyUuid={getCookie('AltinnPartyUuid')}
-            fromPartyUuid={getCookie('AltinnPartyUuid')}
-            toPartyUuid={id ?? undefined}
-            returnToUrlOnError={`/${amUIPath.Users}`}
-          >
-            <DelegationModalProvider>
-              <PageContainer
-                backUrl={`/${amUIPath.Users}`}
-                contentActions={<DeleteUserModal direction='to' />}
-              >
-                <UserPageHeader
-                  direction='to'
-                  displayRoles={!displayLimitedPreviewLaunch}
-                />
-                <RightsTabs
-                  packagesPanel={<AccessPackageSection />}
-                  singleRightsPanel={<SingleRightsSection />}
-                  roleAssignmentsPanel={<RoleSection numberOfAccesses={0} />}
-                />
-              </PageContainer>
-            </DelegationModalProvider>
-          </PartyRepresentationProvider>
-        </PageLayoutWrapper>
-      </AlertIfNotAvailableForUserType>
+      <PageLayoutWrapper>
+        <PartyRepresentationProvider
+          actingPartyUuid={getCookie('AltinnPartyUuid')}
+          fromPartyUuid={getCookie('AltinnPartyUuid')}
+          toPartyUuid={id ?? undefined}
+          returnToUrlOnError={`/${amUIPath.Users}`}
+        >
+          <DelegationModalProvider>
+            <PageContainer
+              backUrl={`/${amUIPath.Users}`}
+              contentActions={<DeleteUserModal direction='to' />}
+            >
+              <UserPageHeader
+                direction='to'
+                displayRoles={!displayLimitedPreviewLaunch}
+              />
+              <RightsTabs
+                packagesPanel={<AccessPackageSection />}
+                singleRightsPanel={<SingleRightsSection />}
+                roleAssignmentsPanel={<RoleSection numberOfAccesses={0} />}
+              />
+            </PageContainer>
+          </DelegationModalProvider>
+        </PartyRepresentationProvider>
+      </PageLayoutWrapper>
     </PageWrapper>
   );
 };
