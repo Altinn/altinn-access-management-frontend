@@ -2,6 +2,7 @@
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.Platform.Models.Register;
 using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
@@ -41,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc/>
         public Task<List<Party>> GetPartyList(List<Guid> uuidList)
         {
-            string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Parties", "parties.json");
+            string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Parties", "partiesOld.json");
             if (File.Exists(testDataPath))
             {
                 string content = File.ReadAllText(testDataPath);
@@ -50,6 +51,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             return Task.FromResult(new List<Party> { });
+        }
+
+        /// <inheritdoc/>
+        public Task<PartyR> GetParty(Guid uuid)
+        {
+            string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Parties", "parties.json");
+            if (File.Exists(testDataPath))
+            {
+                string content = File.ReadAllText(testDataPath);
+                List<PartyR> partyList = JsonSerializer.Deserialize<List<PartyR>>(content, _options);
+                return Task.FromResult(partyList?.FirstOrDefault(p => p.Uuid == uuid));
+            }
+
+            throw new HttpStatusException("Status Error", "Party not found", HttpStatusCode.NotFound, null);
         }
 
         /// <inheritdoc/>

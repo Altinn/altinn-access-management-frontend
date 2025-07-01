@@ -1,4 +1,5 @@
-﻿using Altinn.Platform.Register.Enums;
+﻿using Altinn.Platform.Models.Register;
+using Altinn.Platform.Register.Enums;
 using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Models
@@ -44,6 +45,11 @@ namespace Altinn.AccessManagement.UI.Core.Models
         public bool IsDeleted { get; set; }
 
         /// <summary>
+        /// Gets or sets the PersonDateOfBirth
+        /// </summary>
+        public string PersonDateOfBirth { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether if the reportee in the list is only there for showing the hierarchy (a parent unit with no access)
         /// </summary>
         public bool OnlyHierarchyElementWithNoAccess { get; set; }
@@ -80,6 +86,22 @@ namespace Altinn.AccessManagement.UI.Core.Models
             Person = party.Person == null ? null : new PersonFE(party.Person);
             Organization = party.Organization;
             ChildParties = party.ChildParties == null ? null : MakeChildPartyFEList(party.ChildParties);
+        }
+
+        /// <summary>
+        /// Creates a PartyFE object from a PartyR object
+        /// </summary>
+        /// <param name="party">A PartyR object</param>
+        public PartyFE(PartyR party)
+        {
+            PartyId = (int) party.PartyId;
+            PartyUuid = party.Uuid;
+            PartyTypeName = (PartyType)(party.Type.IsWellKnown ? party.Type : PartyType.Person);
+            Name = (string)party.DisplayName;
+            IsDeleted = party.IsDeleted;
+            OrgNumber = party.OrganizationIdentifier;
+            UnitType = party.UnitType;
+            PersonDateOfBirth = party.PersonDateOfBirth;
         }
 
         /// <summary>

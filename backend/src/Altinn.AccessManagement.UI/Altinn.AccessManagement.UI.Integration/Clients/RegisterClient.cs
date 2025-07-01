@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
+using Altinn.Platform.Models.Register;
 using Altinn.Platform.Register.Models;
 using AltinnCore.Authentication.Utils;
 using Microsoft.AspNetCore.Http;
@@ -118,6 +119,33 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyForOrganization // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyForOrganization // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<PartyR> GetParty(Guid uuid)
+        {
+            try
+            {
+                string endpointUrl = $"access-management/parties/{uuid}?fields=party,person.date-of-birth,org.type";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return JsonSerializer.Deserialize<PartyR>(responseContent, _serializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyByUuid // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return null;
             }
             catch (Exception ex)
