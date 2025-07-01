@@ -1,10 +1,9 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useSearchParams, useNavigate } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { SystemUserPath } from '@/routes/paths';
 import {
   useGetSystemUserRequestQuery,
   useApproveSystemUserRequestMutation,
@@ -22,7 +21,6 @@ import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreat
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   useDocumentTitle(t('systemuser_request.page_title'));
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
@@ -63,13 +61,7 @@ export const SystemUserRequestPage = () => {
       const partyId = request.partyId;
       postAcceptCreationRequest({ partyId, requestId: request.id })
         .unwrap()
-        .then(() => {
-          if (request.redirectUrl) {
-            logoutAndRedirectToVendor();
-          } else {
-            navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
-          }
-        });
+        .then(onRejectOrApprove);
     }
   };
 
@@ -78,18 +70,15 @@ export const SystemUserRequestPage = () => {
       const partyId = request.partyId;
       postRejectCreationRequest({ partyId, requestId: request.id })
         .unwrap()
-        .then(() => {
-          if (request.redirectUrl) {
-            logoutAndRedirectToVendor();
-          } else {
-            window.location.assign(getLogoutUrl());
-          }
-        });
+        .then(onRejectOrApprove);
     }
   };
 
-  const logoutAndRedirectToVendor = (): void => {
-    window.location.assign(`${getApiBaseUrl()}/request/${request?.id}/logout`);
+  const onRejectOrApprove = (): void => {
+    const url = request?.redirectUrl
+      ? `${getApiBaseUrl()}/request/${request?.id}/logout`
+      : getLogoutUrl();
+    window.location.assign(url);
   };
 
   return (
