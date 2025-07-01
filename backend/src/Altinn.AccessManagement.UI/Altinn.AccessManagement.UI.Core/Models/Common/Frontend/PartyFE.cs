@@ -94,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// <param name="party">A PartyR object</param>
         public PartyFE(PartyR party)
         {
-            PartyId = (int) party.PartyId;
+            PartyId = (int)party.PartyId;
             PartyUuid = party.Uuid;
             PartyTypeName = (PartyType)(party.Type.IsWellKnown ? party.Type : PartyType.Person);
             Name = (string)party.DisplayName;

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using System.Text.Json.Serialization;
 using Altinn.Authorization.ModelUtils;
 using Altinn.Platform.Register.Enums;
@@ -13,9 +12,6 @@ namespace Altinn.Platform.Models.Register;
 /// </summary>
 public record PartyR
 {
-    [JsonExtensionData]
-    private readonly JsonElement _extensionData;
-
     private readonly Guid _uuid;
 
     /// <summary>
