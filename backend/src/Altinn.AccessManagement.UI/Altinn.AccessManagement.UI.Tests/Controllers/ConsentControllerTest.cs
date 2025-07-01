@@ -111,7 +111,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
 
-         /// <summary>
+        /// <summary>
         ///     Test case: RejectConsentRequest checks that error is returned when consent cannot be rejected
         ///     Expected: RejectConsentRequest returns error
         /// </summary>
@@ -152,7 +152,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
 
-         /// <summary>
+        /// <summary>
         ///     Test case: ApproveConsentRequest checks that error is returned when consent cannot be rejected
         ///     Expected: ApproveConsentRequest returns error
         /// </summary>
@@ -174,6 +174,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: RedirectAfterApprove checks that redirect is done to logout url
+        ///     Expected: RedirectAfterApprove redirects to logout url
+        /// </summary>
+        [Fact]
+        public async Task LogoutAfterApprove_RedirectsToLogoutUrl()
+        {
+            // Arrange
+            string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
+            string requestId = PERSON_CONSENT_ID;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{requestId}/logout");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Found, httpResponse.StatusCode);
+            Assert.Equal(expectedRedirectUrl, httpResponse.Headers.Location.OriginalString);
         }
     }
 }

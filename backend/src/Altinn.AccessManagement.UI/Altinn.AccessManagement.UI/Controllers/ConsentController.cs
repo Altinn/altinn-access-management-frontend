@@ -1,6 +1,7 @@
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -22,6 +23,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IConsentService _consentService;
         private readonly IOptions<PlatformSettings> _platformSettings;
         private readonly IOptions<GeneralSettings> _generalSettings;
+        private readonly IEncryptionService _encryptionService;
 
         /// <summary>
         /// Constructor for <see cref="ConsentController"/>
@@ -29,11 +31,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         public ConsentController(
             IConsentService consentService,        
             IOptions<PlatformSettings> platformSettings, 
-            IOptions<GeneralSettings> generalSettings)
+            IOptions<GeneralSettings> generalSettings,
+            IEncryptionService encryptionService)
         {
             _consentService = consentService;
             _platformSettings = platformSettings;
             _generalSettings = generalSettings;
+            _encryptionService = encryptionService;
         }
         
         /// <summary>
@@ -147,7 +151,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("request/{consentRequestId}/logout")]
-        public IActionResult Logout(Guid consentRequestId)
+        public async Task<IActionResult> Logout(Guid consentRequestId, CancellationToken cancellationToken)
         {
             CookieOptions cookieOptions = new()
             {
@@ -158,8 +162,14 @@ namespace Altinn.AccessManagement.UI.Controllers
                 SameSite = SameSiteMode.Lax
             };
 
-            // store cookie value for redirect
-            HttpContext.Response.Cookies.Append("AltinnLogoutInfo", $"ConsentRequestId={consentRequestId}", cookieOptions);
+            Result<string> redirectUrlResponse = await _consentService.GetConsentRequestRedirectUrl(consentRequestId, cancellationToken);
+
+            if (redirectUrlResponse.IsSuccess)
+            {
+                // store encrypted redirect url in cookie
+                string encryptedUrl = await _encryptionService.EncryptText(redirectUrlResponse.Value);
+                HttpContext.Response.Cookies.Append(_platformSettings.Value.AltinnLogoutInfoCookieName, $"amSafeRedirectUrl={encryptedUrl}", cookieOptions);
+            }
             
             string logoutUrl = $"{_platformSettings.Value.ApiAuthenticationEndpoint}logout";
             return Redirect(logoutUrl);

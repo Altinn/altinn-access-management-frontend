@@ -89,6 +89,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _consentClient.ApproveConsentRequest(consentRequestId, context, cancellationToken);
         }
 
+        /// <inheritdoc />
+        public async Task<Result<string>> GetConsentRequestRedirectUrl(Guid consentRequestId, CancellationToken cancellationToken)
+        {
+            Result<ConsentRequestDetails> request = await _consentClient.GetConsentRequest(consentRequestId, cancellationToken);
+            if (request.IsProblem)
+            {
+                return request.Problem;
+            }
+            
+            return request.Value.RedirectUrl;
+        }
+
         private static Dictionary<string, string> GetStaticMetadata(Party to, Party from, Party handledBy, DateTimeOffset requestValidTo)
         {
             return new()
@@ -107,7 +119,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private static string GetUrnValue(string urn)
         {
-            return urn.Split(':').Last();
+            string[] parts = urn?.Split(':');
+            if (parts == null || parts.Length < 2)
+            {
+                throw new ArgumentException($"Invalid URN format: {urn}");
+            }
+
+            return parts.Last();
         }
 
         private async Task<Party> GetParty(string urn)

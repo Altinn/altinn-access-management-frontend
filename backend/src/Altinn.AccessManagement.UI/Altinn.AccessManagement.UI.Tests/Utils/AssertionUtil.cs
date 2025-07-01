@@ -193,6 +193,22 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
+        ///     Assert that two <see cref="AccessPackageResourceFE" /> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(AccessPackageResourceFE expected, AccessPackageResourceFE actual)
+        {
+            Assert.Equal(expected.Identifier, actual.Identifier);
+            Assert.Equal(expected.Title, actual.Title);
+            Assert.Equal(expected.Description, actual.Description);
+            Assert.Equal(expected.ResourceOwnerName, actual.ResourceOwnerName);
+            Assert.Equal(expected.ResourceOwnerLogoUrl, actual.ResourceOwnerLogoUrl);
+            Assert.Equal(expected.ResourceOwnerOrgcode, actual.ResourceOwnerOrgcode);
+            Assert.Equal(expected.ResourceType, actual.ResourceType);
+        }
+
+        /// <summary>
         ///     Assert that two <see cref="ResourceAM" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
@@ -206,7 +222,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
             Assert.Equal(expected.ProviderId, actual.ProviderId);
-            Assert.Equal(expected.Type, actual.Type);
+            Assert.Equal(expected.Type.Name, actual.Type.Name);
             Assert.NotNull(expected.Provider);
             Assert.NotNull(actual.Provider);
             Assert.Equal(expected.Provider.Name, actual.Provider.Name);
@@ -614,6 +630,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Identifier, actual.Identifier);
             Assert.Equal(expected.Title, actual.Title);
             Assert.Equal(expected.ConsentTextHtml, actual.ConsentTextHtml);
+        }
+
         public static void AssertEqual(Altinn.AccessManagement.UI.Core.Models.User.Entity expected, Altinn.AccessManagement.UI.Core.Models.User.Entity actual)
         {
             Assert.NotNull(actual);
