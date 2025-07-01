@@ -174,8 +174,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             string handledByUrnValue = handledByUrn != null ? GetUrnValue(handledByUrn) : null;
 
             IEnumerable<string> urnValues = [toUrnValue, fromUrnValue, handledByUrnValue];
-            IEnumerable<Guid> partyGuidsToLoopup = urnValues.Where(urn => urn != null).Select(urn => Guid.Parse(urn));
-            List<Party> parties = await _registerClient.GetPartyList(partyGuidsToLoopup.ToList());
+            IEnumerable<Guid> partyGuidsToLookup = urnValues.Where(urn => urn != null)
+                .Select(urn => Guid.TryParse(urn, out var guid) ? guid : (Guid?)null)
+                .Where(guid => guid.HasValue)
+                .Select(guid => guid.Value);
+            List<Party> parties = await _registerClient.GetPartyList(partyGuidsToLookup.ToList());
 
             Party toParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == toUrnValue);
             Party fromParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == fromUrnValue);
