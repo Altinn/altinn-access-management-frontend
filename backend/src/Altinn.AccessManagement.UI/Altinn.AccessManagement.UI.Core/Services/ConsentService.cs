@@ -203,10 +203,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<ConsentRightFE> rights = [];
             foreach (ConsentRight right in consentRights)
             {
-                string resourceId = right.Resource.Find(x => x.Type == "urn:altinn:resource")?.Value;
-
                 try 
                 {
+                    string resourceId = right.Resource.Find(x => x.Type == "urn:altinn:resource")?.Value;
                     ServiceResource resource = await _resourceRegistryClient.GetResource(resourceId);
                     isOneTimeConsent = resource.IsOneTimeConsent;
 
