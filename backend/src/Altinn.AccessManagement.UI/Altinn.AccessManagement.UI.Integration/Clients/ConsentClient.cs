@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"accessmanagement/api/v1/bff/consentrequests/{consentRequestId}";
+                string endpointUrl = $"bff/consentrequests/{consentRequestId}";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -81,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"accessmanagement/api/v1/bff/consentrequests/{consentRequestId}/reject";
+                string endpointUrl = $"bff/consentrequests/{consentRequestId}/reject";
 
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, null);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -109,7 +109,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"accessmanagement/api/v1/bff/consentrequests/{consentRequestId}/accept";
+                string endpointUrl = $"bff/consentrequests/{consentRequestId}/accept";
                 var content = JsonContent.Create(context);
                 
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
@@ -138,7 +138,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             List<ConsentTemplate> consentTemplates = new List<ConsentTemplate>();
 
             // Get consent templates from altinn-studio-docs. Will be moved to resource registry later.
-            string endpointUrl = "https://raw.githubusercontent.com/Altinn/altinn-studio-docs/consent-templates/content/authorization/architecture/resourceregistry/consent_templates.json";
+            string endpointUrl = "https://raw.githubusercontent.com/Altinn/altinn-studio-docs/master/content/authorization/architecture/resourceregistry/consent_templates.json";
 
             HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl, cancellationToken);
             if (response.StatusCode == HttpStatusCode.OK)

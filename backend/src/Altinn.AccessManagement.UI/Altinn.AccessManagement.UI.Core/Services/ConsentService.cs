@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
+using Altinn.Platform.Register.Enums;
 using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -112,11 +113,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             };
         }
 
-        private static bool IsOrgUrn(string urn)
-        {
-            return urn.StartsWith("urn:altinn:organization:identifier-no");
-        }
-
         private static string GetUrnValue(string urn)
         {
             string[] parts = urn?.Split(':');
@@ -126,15 +122,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return parts.Last();
-        }
-
-        private async Task<Party> GetParty(string urn)
-        {
-            string id = GetUrnValue(urn);
-            Party party = IsOrgUrn(urn) 
-                ? await _registerClient.GetPartyForOrganization(id) 
-                : await _registerClient.GetPartyForPerson(id);
-            return party;
         }
 
         private static Dictionary<string, string> ReplaceMetadataInTranslationsDict(Dictionary<string, string> translations, Dictionary<string, string> metadata)
@@ -179,6 +166,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return replacedTranslations;
         }
 
+        private async Task<(Party To, Party From, Party HandledBy)> GetConsentParties(string toUrn, string fromUrn, string handledByUrn)
+        {
+            // map urns ("urn:altinn:party:uuid:167536b5-f8ed-4c5a-8f48-0279507e53ae") to named party objects
+            string toUrnValue = GetUrnValue(toUrn);
+            string fromUrnValue = GetUrnValue(fromUrn);
+            string handledByUrnValue = handledByUrn != null ? GetUrnValue(handledByUrn) : null;
+
+            IEnumerable<string> urnValues = [toUrnValue, fromUrnValue, handledByUrnValue];
+            IEnumerable<Guid> partyGuidsToLoopup = urnValues.Where(urn => urn != null).Select(urn => Guid.Parse(urn));
+            List<Party> parties = await _registerClient.GetPartyList(partyGuidsToLoopup.ToList());
+
+            Party toParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == toUrnValue);
+            Party fromParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == fromUrnValue);
+            Party handledByParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == handledByUrnValue);
+
+            return (To: toParty, From: fromParty, HandledBy: handledByParty);
+        }
+
         private async Task<Result<EnrichedConsentTemplate>> EnrichConsentTemplate(
             IEnumerable<ConsentRight> consentRights, 
             string fromUrn,
@@ -214,7 +219,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     return ConsentProblem.ConsentResourceNotFound;
                 }
             }
-            
+
             // GET metadata template used in resource
             List<ConsentTemplate> consentTemplates = await _consentClient.GetConsentTemplates(cancellationToken);
             ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) => template.Id == templateId && template.Version == templateVersion);
@@ -222,20 +227,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 return ConsentProblem.ConsentTemplateNotFound;
             }
-            
+
             var expirationText = isOneTimeConsent ? consentTemplate.Texts.ExpirationOneTime : consentTemplate.Texts.Expiration;
-            
-            Party to = await GetParty(toUrn);
-            Party from = await GetParty(fromUrn);
-            Party handledBy = handledByUrn != null ? await GetParty(handledByUrn) : null;
-            Dictionary<string, string> staticMetadata = GetStaticMetadata(to, from, handledBy, validTo);
-            
+
+            var (toParty, fromParty, handledByParty) = await GetConsentParties(toUrn, fromUrn, handledByUrn);
+
+            Dictionary<string, string> staticMetadata = GetStaticMetadata(toParty, fromParty, handledByParty, validTo);
             Dictionary<string, string> title;
             Dictionary<string, string> heading;
             Dictionary<string, string> serviceIntro;
             Dictionary<string, string> serviceIntroAccepted;
 
-            bool isFromOrg = IsOrgUrn(fromUrn);
+            bool isFromOrg = fromParty.PartyTypeName == PartyType.Organisation || fromParty.PartyTypeName == PartyType.SubUnit;
             if (isFromOrg)
             {
                 title = consentTemplate.Texts.Title.Org;
@@ -250,7 +253,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 serviceIntro = consentTemplate.Texts.ServiceIntro.Person;
                 serviceIntroAccepted = consentTemplate.Texts.ServiceIntroAccepted.Person;
             }
-            
+
             return new EnrichedConsentTemplate()
             {
                 Rights = rights,
@@ -260,10 +263,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ServiceIntro = ReplaceMetadataInTranslationsDict(serviceIntro, staticMetadata),
                 ServiceIntroAccepted = ReplaceMetadataInTranslationsDict(serviceIntroAccepted, staticMetadata),
                 TitleAccepted = ReplaceMetadataInTranslationsDict(consentTemplate.Texts.TitleAccepted, staticMetadata),
-                HandledBy = handledBy != null ? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata) : null,
+                HandledBy = handledByParty != null ? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata) : null,
                 ConsentMessage = requestMessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
                 Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata),
-                FromPartyName = isFromOrg ? from.Name : null
+                FromPartyName = isFromOrg ? fromParty.Name : null
             };
         }
 

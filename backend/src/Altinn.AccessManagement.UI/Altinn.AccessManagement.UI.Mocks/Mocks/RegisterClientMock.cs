@@ -46,7 +46,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 string content = File.ReadAllText(testDataPath);
                 List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, _options);
-                return Task.FromResult(new List<Party>() { partyList?.FirstOrDefault(p => p.PartyUuid == uuidList[0]) });
+                IEnumerable<Party> returnParties = uuidList.Select(uuid => partyList.FirstOrDefault(party => party.PartyUuid == uuid));
+                return Task.FromResult(returnParties.ToList());
             }
 
             return Task.FromResult(new List<Party> { });
