@@ -36,6 +36,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         public Dictionary<string, string> ExpirationOneTime { get; set; }
 
         /// <summary>
+        /// Consent text for accepted title in history
+        /// </summary>
+        public Dictionary<string, string> TitleAccepted { get; set; }
+
+        /// <summary>
         /// Consent text for accepted consent in history
         /// </summary>
         public ConsentTemplateTypeText ServiceIntroAccepted { get; set; }

@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
+using Altinn.Platform.Register.Enums;
 using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -46,75 +47,34 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return request.Problem;
             }
 
-            // GET all resources in request
-            bool isOneTimeConsent = false;
-            List<ConsentRightFE> rights = [];
-            foreach (ConsentRight right in request.Value.ConsentRights)
-            {
-                string resourceId = right.Resource.Find(x => x.Type == "urn:altinn:resource")?.Value;
+            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(
+                request.Value.ConsentRights,
+                request.Value.From,
+                request.Value.To,
+                request.Value.HandledBy,
+                request.Value.ValidTo,
+                request.Value.TemplateId,
+                request.Value.TemplateVersion,
+                request.Value.RequestMessage,
+                cancellationToken);
 
-                try 
-                {
-                    ServiceResource resource = await _resourceRegistryClient.GetResource(resourceId);
-                    isOneTimeConsent = resource.IsOneTimeConsent;
-
-                    rights.Add(new()
-                    {
-                        Identifier = resource.Identifier,
-                        Title = resource.Title,
-                        ConsentTextHtml = ReplaceMarkdownInText(ReplaceMetadataInTranslationsDict(resource.ConsentText, right.MetaData)),
-                    });
-                }
-                catch
-                {
-                    return ConsentProblem.ConsentResourceNotFound;
-                }
-            }
-            
-            // GET metadata template used in resource
-            List<ConsentTemplate> consentTemplates = await _consentClient.GetConsentTemplates(cancellationToken);
-            ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) => template.Id == request.Value.TemplateId && template.Version == request.Value.TemplateVersion);
-            if (consentTemplate == null)
+            if (enrichedConsentTemplate.IsProblem)
             {
-                return ConsentProblem.ConsentTemplateNotFound;
+                return enrichedConsentTemplate.Problem;
             }
 
-            Dictionary<string, string> title;
-            Dictionary<string, string> heading;
-            Dictionary<string, string> serviceIntro;
-            
-            bool isFromOrg = IsOrgUrn(request.Value.From);
-            if (isFromOrg)
-            {
-                title = consentTemplate.Texts.Title.Org;
-                heading = consentTemplate.Texts.Heading.Org;
-                serviceIntro = consentTemplate.Texts.ServiceIntro.Org;
-            }
-            else 
-            {
-                title = consentTemplate.Texts.Title.Person;
-                heading = consentTemplate.Texts.Heading.Person;
-                serviceIntro = consentTemplate.Texts.ServiceIntro.Person;
-            }
-
-            var expirationText = isOneTimeConsent ? consentTemplate.Texts.ExpirationOneTime : consentTemplate.Texts.Expiration;
-            
-            Party to = await GetParty(request.Value.To);
-            Party from = await GetParty(request.Value.From);
-            Party handledBy = request.Value.HandledBy != null ? await GetParty(request.Value.HandledBy) : null;
-            Dictionary<string, string> staticMetadata = GetStaticMetadata(to, from, handledBy, request.Value.ValidTo);
             return new ConsentRequestFE()
             {
                 Id = request.Value.Id,
-                Rights = rights,
-                IsPoa = consentTemplate.IsPoa,
-                Title = ReplaceMetadataInTranslationsDict(title, staticMetadata),
-                Heading = ReplaceMetadataInTranslationsDict(heading, staticMetadata),
-                ServiceIntro = ReplaceMetadataInTranslationsDict(serviceIntro, staticMetadata),
-                HandledBy = handledBy != null ? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata) : null,
-                ConsentMessage = request.Value.RequestMessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
-                Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata),
-                FromPartyName = isFromOrg ? from.Name : null
+                Rights = enrichedConsentTemplate.Value.Rights,
+                IsPoa = enrichedConsentTemplate.Value.IsPoa,
+                Title = enrichedConsentTemplate.Value.Title,
+                Heading = enrichedConsentTemplate.Value.Heading,
+                ServiceIntro = enrichedConsentTemplate.Value.ServiceIntro,
+                HandledBy = enrichedConsentTemplate.Value.HandledBy,
+                ConsentMessage = enrichedConsentTemplate.Value.ConsentMessage,
+                Expiration = enrichedConsentTemplate.Value.Expiration,
+                FromPartyName = enrichedConsentTemplate.Value.FromPartyName,
             };
         }
 
@@ -153,12 +113,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             };
         }
 
-        private static bool IsOrgUrn(string urn)
-        {
-            return urn.StartsWith("urn:altinn:organization:identifier-no");
-        }
-
-        private async Task<Party> GetParty(string urn)
+        private static string GetUrnValue(string urn)
         {
             string[] parts = urn?.Split(':');
             if (parts == null || parts.Length < 2)
@@ -166,11 +121,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 throw new ArgumentException($"Invalid URN format: {urn}");
             }
 
-            string id = parts.Last();
-            Party party = IsOrgUrn(urn) 
-                ? await _registerClient.GetPartyForOrganization(id) 
-                : await _registerClient.GetPartyForPerson(id);
-            return party;
+            return parts.Last();
         }
 
         private static Dictionary<string, string> ReplaceMetadataInTranslationsDict(Dictionary<string, string> translations, Dictionary<string, string> metadata)
@@ -213,6 +164,110 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return replacedTranslations;
+        }
+
+        private async Task<(Party To, Party From, Party HandledBy)> GetConsentParties(string toUrn, string fromUrn, string handledByUrn)
+        {
+            // map urns ("urn:altinn:party:uuid:167536b5-f8ed-4c5a-8f48-0279507e53ae") to named party objects
+            string toUrnValue = GetUrnValue(toUrn);
+            string fromUrnValue = GetUrnValue(fromUrn);
+            string handledByUrnValue = handledByUrn != null ? GetUrnValue(handledByUrn) : null;
+
+            IEnumerable<string> urnValues = [toUrnValue, fromUrnValue, handledByUrnValue];
+            IEnumerable<Guid> partyGuidsToLoopup = urnValues.Where(urn => urn != null).Select(urn => Guid.Parse(urn));
+            List<Party> parties = await _registerClient.GetPartyList(partyGuidsToLoopup.ToList());
+
+            Party toParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == toUrnValue);
+            Party fromParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == fromUrnValue);
+            Party handledByParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == handledByUrnValue);
+
+            return (To: toParty, From: fromParty, HandledBy: handledByParty);
+        }
+
+        private async Task<Result<EnrichedConsentTemplate>> EnrichConsentTemplate(
+            IEnumerable<ConsentRight> consentRights, 
+            string fromUrn,
+            string toUrn,
+            string handledByUrn,
+            DateTimeOffset validTo,
+            string templateId,
+            int templateVersion,
+            Dictionary<string, string> requestMessage,
+            CancellationToken cancellationToken)
+        {
+            // GET all resources in request
+            bool isOneTimeConsent = false;
+            List<ConsentRightFE> rights = [];
+            foreach (ConsentRight right in consentRights)
+            {
+                string resourceId = right.Resource.Find(x => x.Type == "urn:altinn:resource")?.Value;
+
+                try 
+                {
+                    ServiceResource resource = await _resourceRegistryClient.GetResource(resourceId);
+                    isOneTimeConsent = resource.IsOneTimeConsent;
+
+                    rights.Add(new()
+                    {
+                        Identifier = resource.Identifier,
+                        Title = resource.Title,
+                        ConsentTextHtml = ReplaceMarkdownInText(ReplaceMetadataInTranslationsDict(resource.ConsentText, right.MetaData)),
+                    });
+                }
+                catch
+                {
+                    return ConsentProblem.ConsentResourceNotFound;
+                }
+            }
+
+            // GET metadata template used in resource
+            List<ConsentTemplate> consentTemplates = await _consentClient.GetConsentTemplates(cancellationToken);
+            ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) => template.Id == templateId && template.Version == templateVersion);
+            if (consentTemplate == null)
+            {
+                return ConsentProblem.ConsentTemplateNotFound;
+            }
+
+            var expirationText = isOneTimeConsent ? consentTemplate.Texts.ExpirationOneTime : consentTemplate.Texts.Expiration;
+
+            var (toParty, fromParty, handledByParty) = await GetConsentParties(toUrn, fromUrn, handledByUrn);
+
+            Dictionary<string, string> staticMetadata = GetStaticMetadata(toParty, fromParty, handledByParty, validTo);
+            Dictionary<string, string> title;
+            Dictionary<string, string> heading;
+            Dictionary<string, string> serviceIntro;
+            Dictionary<string, string> serviceIntroAccepted;
+
+            bool isFromOrg = fromParty.PartyTypeName == PartyType.Organisation || fromParty.PartyTypeName == PartyType.SubUnit;
+            if (isFromOrg)
+            {
+                title = consentTemplate.Texts.Title.Org;
+                heading = consentTemplate.Texts.Heading.Org;
+                serviceIntro = consentTemplate.Texts.ServiceIntro.Org;
+                serviceIntroAccepted = consentTemplate.Texts.ServiceIntroAccepted.Org;
+            }
+            else 
+            {
+                title = consentTemplate.Texts.Title.Person;
+                heading = consentTemplate.Texts.Heading.Person;
+                serviceIntro = consentTemplate.Texts.ServiceIntro.Person;
+                serviceIntroAccepted = consentTemplate.Texts.ServiceIntroAccepted.Person;
+            }
+
+            return new EnrichedConsentTemplate()
+            {
+                Rights = rights,
+                IsPoa = consentTemplate.IsPoa,
+                Title = ReplaceMetadataInTranslationsDict(title, staticMetadata),
+                Heading = ReplaceMetadataInTranslationsDict(heading, staticMetadata),
+                ServiceIntro = ReplaceMetadataInTranslationsDict(serviceIntro, staticMetadata),
+                ServiceIntroAccepted = ReplaceMetadataInTranslationsDict(serviceIntroAccepted, staticMetadata),
+                TitleAccepted = ReplaceMetadataInTranslationsDict(consentTemplate.Texts.TitleAccepted, staticMetadata),
+                HandledBy = handledByParty != null ? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata) : null,
+                ConsentMessage = requestMessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
+                Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata),
+                FromPartyName = isFromOrg ? fromParty.Name : null
+            };
         }
     }
 }

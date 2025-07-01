@@ -600,6 +600,11 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.CustomerId, actual.CustomerId);
         }
 
+        /// <summary>
+        ///     Assert that two <see cref="ConsentRequestFE" /> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
         public static void AssertEqual(ConsentRequestFE expected, ConsentRequestFE actual)
         {
             Assert.NotNull(actual);

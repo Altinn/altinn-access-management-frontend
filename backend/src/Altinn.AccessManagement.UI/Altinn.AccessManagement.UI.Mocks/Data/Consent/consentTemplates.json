@@ -54,6 +54,11 @@
         "nn": "Samtykket gjeld ein gongs utlevering av opplysningane.",
         "en": "The consent applies for one-time disclosure of information."
       },
+      "titleAccepted": {
+        "nb": "Samtykke gitt til {CoveredBy}",
+        "nn": "Samtykke gitt til {CoveredBy}",
+        "en": "Consent given to {CoveredBy}"
+      },
       "serviceIntroAccepted": {
         "person": {
           "nb": "Samtykket gir {CoveredBy} tilgang til følgende opplysninger om deg",
@@ -137,6 +142,11 @@
         "nb": "Samtykket gjelder én gangs utlevering av opplysningene.",
         "nn": "Samtykket gjeld ein gongs utlevering av opplysningane.",
         "en": "The consent applies for one-time disclosure of information."
+      },
+      "titleAccepted": {
+        "nb": "Samtykke gitt til {CoveredBy}",
+        "nn": "Samtykke gitt til {CoveredBy}",
+        "en": "Consent given to {CoveredBy}"
       },
       "serviceIntroAccepted": {
         "person": {
@@ -226,6 +236,11 @@
         "nn": "Samtykket gjeld ein gongs utlevering av opplysningane.",
         "en": "The consent applies for one-time disclosure of information."
       },
+      "titleAccepted": {
+        "nb": "Samtykke gitt til {CoveredBy}",
+        "nn": "Samtykke gitt til {CoveredBy}",
+        "en": "Consent given to {CoveredBy}"
+      },
       "serviceIntroAccepted": {
         "person": {
           "nb": "Samtykket gir {CoveredBy} tilgang til følgende opplysninger om deg",
@@ -310,6 +325,11 @@
         "nn": "Fullmakta gjeld bruk av tenestene éin gong",
         "en": "The power of attorney applies for one-time access to the service."
       },
+      "titleAccepted": {
+        "nb": "Fullmakt gitt til {CoveredBy}",
+        "nn": "Fullmakt gitt til {CoveredBy}",
+        "en": "Power of attorney given to {CoveredBy}"
+      },
       "serviceIntroAccepted": {
         "person": {
           "nb": "Fullmakten gir {CoveredBy} tilgang til følgende tjenester på dine vegne",
@@ -393,6 +413,11 @@
         "nb": "Samtykket gjelder én gangs bruk.",
         "nn": "Samtykket gjeld ein gongs bruk.",
         "en": "The consent applies for one-time usage."
+      },
+      "titleAccepted": {
+        "nb": "Samtykke gitt til {CoveredBy}",
+        "nn": "Samtykke gitt til {CoveredBy}",
+        "en": "Consent given to {CoveredBy}"
       },
       "serviceIntroAccepted": {
         "person": {
