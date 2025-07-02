@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
@@ -92,7 +93,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                         Urn = accessPackage.Urn,
                         Description = accessPackage.Description,
                         Name = accessPackage.Name,
-                        Resources = ResourceUtils.MapToAccessPackageResourceFE(accessPackage.Resources)
+                        Resources = [] // TODO: fix mapping to correct type
                     });
                 }
             }
