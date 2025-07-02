@@ -4,6 +4,7 @@ import { ListItem } from '@altinn/altinn-components';
 export const SkeletonUserList = () => {
   const userSkeletons = [
     {
+      interactive: false,
       id: '2',
       size: 'lg',
       title: 'xxxxxxxx xxxxxxxxxx',
@@ -13,6 +14,7 @@ export const SkeletonUserList = () => {
       },
     },
     {
+      interactive: false,
       id: '3',
       size: 'lg',
       title: 'xx xxxxxxxx xxx xx',
@@ -23,6 +25,7 @@ export const SkeletonUserList = () => {
       },
     },
     {
+      interactive: false,
       id: '4',
       size: 'lg',
       title: 'xxxxx xxxxxxxxx',
@@ -32,6 +35,7 @@ export const SkeletonUserList = () => {
       },
     },
     {
+      interactive: false,
       id: '4.5',
       size: 'lg',
       title: 'xxxxxxxx xxxxxxxx xxxxxx xx',
@@ -42,6 +46,7 @@ export const SkeletonUserList = () => {
       },
     },
     {
+      interactive: false,
       id: '5',
       size: 'lg',
       title: 'xxxxx xx xxxxxxx',
