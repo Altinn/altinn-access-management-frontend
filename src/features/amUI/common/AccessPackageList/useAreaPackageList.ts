@@ -48,6 +48,7 @@ export const useAreaPackageList = ({
             (pkgAcc, pkg) => {
               const pkgAccess = activeDelegationArea.filter((d) => d.package.id === pkg.id);
               if (pkgAccess.length > 0) {
+                // Currently using permissions from the first one only
                 const inherited = pkgAccess.filter((access) =>
                   isInherited(access, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
                 );
