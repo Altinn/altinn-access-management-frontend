@@ -182,8 +182,10 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             cannotDelegateHere={accessPackage.isAssignable === false}
             inheritedFrom={
               accessIsInherited
-                ? (accessPackage?.permissions?.[0]?.via?.name ??
-                  accessPackage.permissions?.[0]?.from.name)
+                ? accessPackage?.permissions && accessPackage?.permissions?.length > 0
+                  ? (accessPackage?.permissions?.[0]?.via?.name ??
+                    accessPackage.permissions?.[0]?.from.name)
+                  : undefined
                 : undefined
             }
           />
