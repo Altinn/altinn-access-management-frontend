@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 
-import type { Party } from '@/rtk/features/lookupApi';
 import type { Role } from '@/rtk/features/roleApi';
-import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
