@@ -634,7 +634,9 @@
     "reject_error": "Could not reject consent",
     "reject_error_poa": "Could not reject power of attorney",
     "already_consented": "This consent is already given",
-    "already_consented_poa": "This power of attorney is already given"
+    "already_consented_poa": "This power of attorney is already given",
+    "already_rejected": "This consent is already rejected",
+    "already_rejected_poa": "This power of attorney is already rejected"
   },
   "active_consents": {
     "heading": "Consents and powers of attorney",

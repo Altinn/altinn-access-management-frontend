@@ -20,14 +20,14 @@ export const consentApi = createApi({
     getConsentRequest: builder.query<ConsentRequest, { requestId: string }>({
       query: ({ requestId }) => `consent/request/${requestId}`,
     }),
-    approveConsentRequest: builder.mutation<void, { requestId: string; language: string }>({
+    approveConsentRequest: builder.mutation<boolean, { requestId: string; language: string }>({
       query: ({ requestId, language }) => ({
         url: `consent/request/${requestId}/approve`,
         method: 'POST',
         body: { language },
       }),
     }),
-    rejectConsentRequest: builder.mutation<void, { requestId: string }>({
+    rejectConsentRequest: builder.mutation<boolean, { requestId: string }>({
       query: ({ requestId }) => ({
         url: `consent/request/${requestId}/reject`,
         method: 'POST',

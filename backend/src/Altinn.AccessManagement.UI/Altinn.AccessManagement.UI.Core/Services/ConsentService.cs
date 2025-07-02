@@ -77,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ConsentMessage = enrichedConsentTemplate.Value.ConsentMessage,
                 Expiration = enrichedConsentTemplate.Value.Expiration,
                 FromPartyName = enrichedConsentTemplate.Value.FromPartyName,
-                ConsentedDate = request.Value.Consented,
+                ConsentRequestEvents = request.Value.ConsentRequestEvents
             };
         }
 

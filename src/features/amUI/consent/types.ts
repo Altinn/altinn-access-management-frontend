@@ -21,7 +21,13 @@ export interface ConsentRequest {
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
   fromPartyName?: string;
-  consentedDate?: Date;
+  consentRequestEvents: {
+    consentEventID: string;
+    created: Date;
+    performedBy: string;
+    eventType: string;
+    consentRequestID: string;
+  }[];
 }
 
 export interface ActiveConsentListItem {

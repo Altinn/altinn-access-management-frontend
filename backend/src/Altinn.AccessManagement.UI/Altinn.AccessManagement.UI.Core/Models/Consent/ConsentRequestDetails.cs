@@ -58,8 +58,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         public required int TemplateVersion { get; set; }
 
         /// <summary>
-        /// Defines when the consent was given.
+        /// List all events related to consent request
         /// </summary>
-        public DateTimeOffset? Consented { get; set; }
+        public required List<ConsentRequestEventDto> ConsentRequestEvents { get; set; }
     }
 }
