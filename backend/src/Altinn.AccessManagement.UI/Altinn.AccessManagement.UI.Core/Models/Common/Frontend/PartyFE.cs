@@ -1,5 +1,5 @@
-﻿using Altinn.Platform.Models.Register;
-using Altinn.Platform.Register.Enums;
+﻿using Altinn.AccessManagement.UI.Core.Models.Register;
+using Altinn.Platform.Models.Register;
 using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Models
@@ -77,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
         {
             PartyId = party.PartyId;
             PartyUuid = party.PartyUuid;
-            PartyTypeName = party.PartyTypeName;
+            PartyTypeName = (PartyType)party.PartyTypeName;
             Name = party.Name;
             IsDeleted = party.IsDeleted;
             OrgNumber = party.OrgNumber;

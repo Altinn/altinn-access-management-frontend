@@ -1,8 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.Authorization.ModelUtils;
-using Altinn.Platform.Register.Enums;
-using Altinn.Platform.Register.Models;
 using CommunityToolkit.Diagnostics;
 
 namespace Altinn.Platform.Models.Register;
