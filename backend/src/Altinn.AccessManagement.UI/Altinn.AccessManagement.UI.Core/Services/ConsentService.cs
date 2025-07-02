@@ -268,7 +268,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             };
         }
         
-        private class ConsentTemplateParams
+        private sealed class ConsentTemplateParams
         {
             public IEnumerable<ConsentRight> ConsentRights { get; set; }
 
