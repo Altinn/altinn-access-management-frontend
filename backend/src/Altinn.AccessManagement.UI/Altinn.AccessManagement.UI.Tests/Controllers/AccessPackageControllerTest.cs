@@ -105,6 +105,35 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: Get all access packages for a valid right holder on behalf of a valid party 
+        ///     Expected: Returns the right holders active access package delegations, sorted into the areas they belong to
+        /// </summary>
+        [Fact]
+        public async Task GetDelegationsToRightHolder_MultipleAccessToPackage()
+        {
+
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
+            string to = "21cc8752-4801-490d-a6ab-ab3266a0f748"; // Valid user that has both inherited and delegated rights to a package
+            string party = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid party, same as reportee
+            Dictionary<Guid, List<PackagePermission>> expectedResult = Util.GetMockData<Dictionary<Guid, List<PackagePermission>>>(_expectedDataPath + $"/AccessPackage/GetDelegations/{to}.json");
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegations?to={to}&from={from}&party={party}");
+
+            var resJson = await response.Content.ReadAsStringAsync();
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Dictionary<Guid, List<PackagePermission>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermission>>>(await response.Content.ReadAsStringAsync(), options);
+
+            Assert.True(new HashSet<Guid>(expectedResult.Keys).SetEquals(actualResult.Keys));
+            foreach (Guid key in actualResult.Keys)
+            {
+                AssertionUtil.AssertCollections(expectedResult[key], actualResult[key], AssertionUtil.AssertEqual);
+            }
+        }
+
+        /// <summary>
         ///     Test case: The right owned is valid but has no access packages for the reportee party
         ///     Expected: Returns an empty Dictionary
         /// </summary>
@@ -135,7 +164,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
-            string to = "26ca8b02-c455-4dc0-96be-f92864800000"; // This right holder has no relationship to the party
+            string to = "21cc8752-4801-490d-a6ab-ab3266a0f748"; // This right holder has no relationship to the party
             string party = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid party, same as reportee
 
             // Act

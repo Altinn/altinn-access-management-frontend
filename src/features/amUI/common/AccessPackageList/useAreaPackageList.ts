@@ -46,17 +46,26 @@ export const useAreaPackageList = ({
         if (activeDelegationArea) {
           const pkgs = area.accessPackages.reduce(
             (pkgAcc, pkg) => {
-              const pkgAccess = activeDelegationArea.find((d) => d.package.id === pkg.id);
-              if (pkgAccess !== undefined) {
-                const aquiredPkg = {
-                  ...pkg,
-                  inherited: isInherited(
-                    pkgAccess,
-                    toParty?.partyUuid ?? '',
-                    fromParty?.partyUuid ?? '',
-                  ),
-                };
-                pkgAcc.assigned.push(aquiredPkg);
+              const pkgAccess = activeDelegationArea.filter((d) => d.package.id === pkg.id);
+              if (pkgAccess.length > 0) {
+                const inherited = pkgAccess.filter((access) =>
+                  isInherited(access, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
+                );
+                if (inherited?.length > 0) {
+                  pkgAcc.assigned.push({
+                    ...pkg,
+                    inherited: true,
+                    permissions: inherited[0].permissions,
+                  });
+                }
+
+                const delegated = pkgAccess.some(
+                  (access) =>
+                    !isInherited(access, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
+                );
+                if (delegated) {
+                  pkgAcc.assigned.push({ ...pkg, inherited: false });
+                }
               } else if (showAllPackages) {
                 pkgAcc.available.push(pkg);
               }

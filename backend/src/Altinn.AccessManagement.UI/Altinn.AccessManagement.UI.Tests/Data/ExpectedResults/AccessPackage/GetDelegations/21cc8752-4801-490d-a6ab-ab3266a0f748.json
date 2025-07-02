@@ -1,0 +1,120 @@
+{
+  "536b317c-ef85-45d4-9b48-6511578e1952": [
+    {
+      "package": {
+        "id": "0195efb8-7c80-7642-b9b8-c748ee4fecd4",
+        "urn": "urn:altinn:accesspackage:tinglysing-eiendom",
+        "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+      },
+      "permissions": [
+        {
+          "from": {
+            "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+            "name": "DISKRET NÆR TIGER AS",
+            "type": "Organisasjon",
+            "variant": "AS",
+            "parent": null,
+            "children": [
+              {
+                "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+                "name": "DISKRET NÆR TIGER AS",
+                "type": "Organisasjon",
+                "variant": "BEDR",
+                "parent": {
+                  "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+                  "name": "DISKRET NÆR TIGER AS",
+                  "type": "Organisasjon",
+                  "variant": "AS",
+                  "parent": null,
+                  "children": null
+                },
+                "children": null
+              }
+            ]
+          },
+          "to": {
+            "id": "21cc8752-4801-490d-a6ab-ab3266a0f748",
+            "name": "ALVORLIG INKLUDERENDE LØVE SAMEIE",
+            "type": "Person",
+            "variant": "Person",
+            "parent": null,
+            "children": null
+          },
+          "via": null,
+          "role": {
+            "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+            "code": "styreleder",
+            "children": null
+          },
+          "viaRole": null
+        }
+      ]
+    },
+    {
+      "package": {
+        "id": "0195efb8-7c80-7642-b9b8-c748ee4fecd4",
+        "urn": "urn:altinn:accesspackage:tinglysing-eiendom",
+        "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+      },
+      "permissions": [
+        {
+          "from": {
+            "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+            "name": "DISKRET NÆR TIGER AS",
+            "type": "Organisasjon",
+            "variant": "AS",
+            "parent": null,
+            "children": [
+              {
+                "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+                "name": "DISKRET NÆR TIGER AS",
+                "type": "Organisasjon",
+                "variant": "BEDR",
+                "parent": {
+                  "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+                  "name": "DISKRET NÆR TIGER AS",
+                  "type": "Organisasjon",
+                  "variant": "AS",
+                  "parent": null,
+                  "children": null
+                },
+                "children": null
+              }
+            ]
+          },
+          "to": {
+            "id": "21cc8752-4801-490d-a6ab-ab3266a0f748",
+            "name": "ALVORLIG INKLUDERENDE LØVE SAMEIE",
+            "type": "Organisasjon",
+            "variant": "ESEK",
+            "parent": null,
+            "children": [
+              {
+                "id": "0470f9ac-9dc5-4c72-9b66-280df000ee5e",
+                "name": "ALVORLIG INKLUDERENDE LØVE SAMEIE",
+                "type": "Organisasjon",
+                "variant": "AAFY",
+                "parent": {
+                  "id": "21cc8752-4801-490d-a6ab-ab3266a0f748",
+                  "name": "ALVORLIG INKLUDERENDE LØVE SAMEIE",
+                  "type": "Organisasjon",
+                  "variant": "ESEK",
+                  "parent": null,
+                  "children": null
+                },
+                "children": null
+              }
+            ]
+          },
+          "via": null,
+          "role": {
+            "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+            "code": "rettighetshaver",
+            "children": null
+          },
+          "viaRole": null
+        }
+      ]
+    }
+  ]
+}

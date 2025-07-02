@@ -98,7 +98,7 @@ export const AreaItemContent = ({
         <ListBase aria-label={t('access_packages.given_packages_title')}>
           {packages.assigned.map((pkg) => (
             <PackageItem
-              key={pkg.id}
+              key={`${pkg.id}${pkg.inherited && '_i'}`}
               pkg={pkg}
               onSelect={onSelect}
               hasAccess
@@ -141,7 +141,7 @@ export const AreaItemContent = ({
         <ListBase aria-label={t('access_packages.available_packages_title')}>
           {packages.available.map((pkg) => (
             <PackageItem
-              key={pkg.id}
+              key={`${pkg.id}`}
               pkg={pkg}
               onSelect={onSelect}
               controls={
