@@ -180,14 +180,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             userHasAccess={userHasPackage}
             showMissingRightsMessage={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
-            inheritedFrom={
-              accessIsInherited
-                ? accessPackage?.permissions && accessPackage?.permissions?.length > 0
-                  ? (accessPackage?.permissions?.[0]?.via?.name ??
-                    accessPackage.permissions?.[0]?.from.name)
-                  : undefined
-                : undefined
-            }
+            inheritedFrom={getInheritedFromName(accessPackage)}
           />
 
           <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
@@ -236,6 +229,14 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
       )}
     </div>
   );
+};
+
+const getInheritedFromName = (accessPackage: AccessPackage): string | undefined => {
+  if (!accessPackage.inherited || !accessPackage.permissions?.length) {
+    return undefined;
+  }
+  const firstPermission = accessPackage.permissions[0];
+  return firstPermission.via?.name ?? firstPermission.from.name;
 };
 
 const MINIMIZED_LIST_SIZE = 5;

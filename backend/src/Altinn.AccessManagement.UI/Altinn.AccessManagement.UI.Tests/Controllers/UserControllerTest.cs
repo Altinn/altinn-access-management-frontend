@@ -728,7 +728,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={party}&from={from}&to={to}");
-            var resJson = await response.Content.ReadAsStringAsync();
             List<Connection> actualResponse = await response.Content.ReadFromJsonAsync<List<Connection>>();
 
             // Assert
