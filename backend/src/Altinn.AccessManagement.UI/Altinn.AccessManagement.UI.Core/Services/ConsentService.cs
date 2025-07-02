@@ -47,16 +47,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return request.Problem;
             }
 
-            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(
-                request.Value.ConsentRights,
-                request.Value.From,
-                request.Value.To,
-                request.Value.HandledBy,
-                request.Value.ValidTo,
-                request.Value.TemplateId,
-                request.Value.TemplateVersion,
-                request.Value.RequestMessage,
-                cancellationToken);
+            ConsentTemplateParams templateParams = new()
+            {
+                ConsentRights = request.Value.ConsentRights,
+                FromUrn = request.Value.From,
+                ToUrn = request.Value.To,
+                HandledByUrn = request.Value.HandledBy,
+                ValidTo = request.Value.ValidTo,
+                TemplateId = request.Value.TemplateId,
+                TemplateVersion = request.Value.TemplateVersion,
+                RequestMessage = request.Value.RequestMessage,
+            };
+            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(templateParams, cancellationToken);
 
             if (enrichedConsentTemplate.IsProblem)
             {
@@ -98,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 return request.Problem;
             }
-            
+
             return request.Value.RedirectUrl;
         }
 
@@ -130,7 +132,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 return translations;
             }
-            
+
             Dictionary<string, string> replacedTranslations = new();
 
             foreach (var (key, value) in translations)
@@ -145,7 +147,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static string ReplaceMetadataInText(string text, Dictionary<string, string> metadata)
         {
             StringBuilder sb = new StringBuilder(text);
-            
+
             foreach (var (key, valueString) in metadata)
             {
                 sb.Replace($"{{{key}}}", valueString ?? string.Empty);
@@ -187,23 +189,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return (To: toParty, From: fromParty, HandledBy: handledByParty);
         }
 
-        private async Task<Result<EnrichedConsentTemplate>> EnrichConsentTemplate(
-            IEnumerable<ConsentRight> consentRights, 
-            string fromUrn,
-            string toUrn,
-            string handledByUrn,
-            DateTimeOffset validTo,
-            string templateId,
-            int templateVersion,
-            Dictionary<string, string> requestMessage,
-            CancellationToken cancellationToken)
+        private async Task<Result<EnrichedConsentTemplate>> EnrichConsentTemplate(ConsentTemplateParams templateParams, CancellationToken cancellationToken)
         {
             // GET all resources in request
             bool isOneTimeConsent = false;
             List<ConsentRightFE> rights = [];
-            foreach (ConsentRight right in consentRights)
+            foreach (ConsentRight right in templateParams.ConsentRights)
             {
-                try 
+                try
                 {
                     string resourceId = right.Resource.Find(x => x.Type == "urn:altinn:resource")?.Value;
                     ServiceResource resource = await _resourceRegistryClient.GetResource(resourceId);
@@ -224,7 +217,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             // GET metadata template used in resource
             List<ConsentTemplate> consentTemplates = await _consentClient.GetConsentTemplates(cancellationToken);
-            ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) => template.Id == templateId && template.Version == templateVersion);
+            ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) =>
+                template.Id == templateParams.TemplateId &&
+                template.Version == templateParams.TemplateVersion);
+
             if (consentTemplate == null)
             {
                 return ConsentProblem.ConsentTemplateNotFound;
@@ -232,9 +228,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             var expirationText = isOneTimeConsent ? consentTemplate.Texts.ExpirationOneTime : consentTemplate.Texts.Expiration;
 
-            var (toParty, fromParty, handledByParty) = await GetConsentParties(toUrn, fromUrn, handledByUrn);
+            var (toParty, fromParty, handledByParty) = await GetConsentParties(templateParams.ToUrn, templateParams.FromUrn, templateParams.HandledByUrn);
 
-            Dictionary<string, string> staticMetadata = GetStaticMetadata(toParty, fromParty, handledByParty, validTo);
+            Dictionary<string, string> staticMetadata = GetStaticMetadata(toParty, fromParty, handledByParty, templateParams.ValidTo);
             Dictionary<string, string> title;
             Dictionary<string, string> heading;
             Dictionary<string, string> serviceIntro;
@@ -248,7 +244,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 serviceIntro = consentTemplate.Texts.ServiceIntro.Org;
                 serviceIntroAccepted = consentTemplate.Texts.ServiceIntroAccepted.Org;
             }
-            else 
+            else
             {
                 title = consentTemplate.Texts.Title.Person;
                 heading = consentTemplate.Texts.Heading.Person;
@@ -266,10 +262,29 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ServiceIntroAccepted = ReplaceMetadataInTranslationsDict(serviceIntroAccepted, staticMetadata),
                 TitleAccepted = ReplaceMetadataInTranslationsDict(consentTemplate.Texts.TitleAccepted, staticMetadata),
                 HandledBy = handledByParty != null ? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata) : null,
-                ConsentMessage = requestMessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
+                ConsentMessage = templateParams.RequestMessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
                 Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata),
                 FromPartyName = isFromOrg ? fromParty.Name : null
             };
+        }
+        
+        private class ConsentTemplateParams
+        {
+            public IEnumerable<ConsentRight> ConsentRights { get; set; }
+
+            public string FromUrn { get; set; }
+
+            public string ToUrn { get; set; }
+
+            public string HandledByUrn { get; set; }
+
+            public DateTimeOffset ValidTo { get; set; }
+
+            public string TemplateId { get; set; }
+
+            public int TemplateVersion { get; set; }
+
+            public Dictionary<string, string> RequestMessage { get; set; }
         }
     }
 }
