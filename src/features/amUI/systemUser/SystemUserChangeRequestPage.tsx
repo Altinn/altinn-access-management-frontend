@@ -1,9 +1,10 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useSearchParams } from 'react-router';
+import { useSearchParams, useNavigate } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { SystemUserPath } from '@/routes/paths';
 import {
   useApproveChangeRequestMutation,
   useGetChangeRequestQuery,
@@ -21,6 +22,7 @@ import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreat
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   useDocumentTitle(t('systemuser_change_request.page_title'));
   const [searchParams] = useSearchParams();
   const changeRequestId = searchParams.get('id') ?? '';
@@ -61,7 +63,13 @@ export const SystemUserChangeRequestPage = () => {
       const partyId = changeRequest.partyId;
       postAcceptChangeRequest({ partyId, changeRequestId: changeRequest.id })
         .unwrap()
-        .then(onRejectOrApprove);
+        .then(() => {
+          if (changeRequest.redirectUrl) {
+            logoutAndRedirectToVendor();
+          } else {
+            navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+          }
+        });
     }
   };
 
@@ -70,15 +78,18 @@ export const SystemUserChangeRequestPage = () => {
       const partyId = changeRequest.partyId;
       postRejectChangeRequest({ partyId, changeRequestId: changeRequest.id })
         .unwrap()
-        .then(onRejectOrApprove);
+        .then(() => {
+          if (changeRequest.redirectUrl) {
+            logoutAndRedirectToVendor();
+          } else {
+            window.location.assign(getLogoutUrl());
+          }
+        });
     }
   };
 
-  const onRejectOrApprove = (): void => {
-    const url = changeRequest?.redirectUrl
-      ? `${getApiBaseUrl()}/changerequest/${changeRequest?.id}/logout`
-      : getLogoutUrl();
-    window.location.assign(url);
+  const logoutAndRedirectToVendor = (): void => {
+    window.location.assign(`${getApiBaseUrl()}/changerequest/${changeRequest?.id}/logout`);
   };
 
   return (
