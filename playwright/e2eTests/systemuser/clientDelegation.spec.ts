@@ -3,12 +3,12 @@ import { test, expect } from '@playwright/test';
 
 import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../util/loadFacilitators';
 import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
-import { loginAs } from '../../pages/loginPage';
+import { loginAs, loginNotChoosingActor } from '../../pages/loginPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
-test.describe.configure({ timeout: 30000 });
+test.describe.configure({ timeout: 10000 });
 
-test.describe.skip('Klientdelegering', () => {
+test.describe('Klientdelegering', () => {
   let api: ApiRequests;
   test.slow();
 
@@ -56,7 +56,6 @@ test.describe.skip('Klientdelegering', () => {
   }) {
     const user = loadFacilitator(role);
     const customers = loadCustomers(role);
-    await loginAs(page, user.pid, user.org);
 
     const name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
     const systemId = await api.createSystemInSystemregisterWithAccessPackages(name);
@@ -70,9 +69,20 @@ test.describe.skip('Klientdelegering', () => {
 
     //Navigate to approve system user request URL returned by API
     await page.goto(response.confirmUrl);
+    await loginNotChoosingActor(page, user.pid);
 
     //Approve system user and click it
     await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
+
+    // Navigate to system user login page
+    await loginAs(page, user.pid, user.org);
+
+    //Go to system user overview page
+    if (!process.env.SYSTEMUSER_URL) {
+      throw new Error('Environment variable SYSTEMUSER_URL is not defined.');
+    }
+    await page.goto(process.env.SYSTEMUSER_URL);
+
     await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
     await clientDelegationPage.systemUserLink(name).click();
 
