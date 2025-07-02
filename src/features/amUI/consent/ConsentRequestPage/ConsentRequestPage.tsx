@@ -58,17 +58,13 @@ export const ConsentRequestPage = () => {
 
   const approveConsent = (): void => {
     if (!isActionButtonDisabled && request) {
-      postApproveConsent({ requestId: request.id, language })
-        .unwrap()
-        .then(() => logoutAndRedirect());
+      postApproveConsent({ requestId: request.id, language }).unwrap().then(logoutAndRedirect);
     }
   };
 
   const rejectConsent = (): void => {
     if (!isActionButtonDisabled && request) {
-      postRejectConsent({ requestId: request.id })
-        .unwrap()
-        .then(() => logoutAndRedirect());
+      postRejectConsent({ requestId: request.id }).unwrap().then(logoutAndRedirect);
     }
   };
 
@@ -82,23 +78,10 @@ export const ConsentRequestPage = () => {
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
 
-  if (isLoadingRequest) {
-    return <DsSpinner aria-label={t('consent_request.loading_consent')} />;
-  }
-
-  if (loadRequestError) {
-    return (
-      <ConsentRequestError
-        error={loadRequestError as { data: ProblemDetail }}
-        defaultError='consent_request.load_consent_error'
-      />
-    );
-  }
-
   return (
     <RootProvider>
       <Layout
-        color={'neutral'}
+        color='neutral'
         theme='subtle'
         header={{
           menu: {
@@ -113,7 +96,10 @@ export const ConsentRequestPage = () => {
             ],
             onChange: onChangeLocale,
           },
-          logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
+          logo: {
+            href: getAltinnStartPageUrl(),
+            title: 'Altinn',
+          },
           currentAccount: {
             name: request?.fromPartyName ?? (userData?.name || ''),
             type: request?.fromPartyName ? 'company' : 'person',
@@ -121,6 +107,20 @@ export const ConsentRequestPage = () => {
           },
         }}
       >
+        <div className={classes.centerBlock}>
+          {isLoadingRequest && (
+            <DsSpinner
+              aria-label={t('consent_request.loading_consent')}
+              data-size='xl'
+            />
+          )}
+          {loadRequestError && (
+            <ConsentRequestError
+              error={loadRequestError as { data: ProblemDetail }}
+              defaultError='consent_request.load_consent_error'
+            />
+          )}
+        </div>
         {request && (
           <>
             <div className={classes.consentBlock}>

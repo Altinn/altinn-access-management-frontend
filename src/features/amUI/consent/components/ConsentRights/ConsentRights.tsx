@@ -18,16 +18,14 @@ export const ConsentRights = ({ right, language }: ConsentRightsProps) => {
   return (
     <div className={classes.consentRight}>
       <CheckmarkIcon className={classes.consentRightIcon} />
-      <div>
+      <div className={classes.consentRightContent}>
         <DsHeading
           level={3}
           data-size='2xs'
         >
           {right.title[language]}
         </DsHeading>
-        <div className={classes.consentRightContent}>
-          {transformText(right.consentTextHtml[language])}
-        </div>
+        <div>{transformText(right.consentTextHtml[language])}</div>
       </div>
     </div>
   );
