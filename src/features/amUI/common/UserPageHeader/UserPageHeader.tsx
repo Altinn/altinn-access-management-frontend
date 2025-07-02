@@ -8,7 +8,6 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 import { UserRoles } from '../UserRoles/UserRoles';
 
 import classes from './UserPageHeader.module.css';
-import { UserPageHeaderSkeleton } from './UserPageHeaderSkeleton';
 
 interface UserPageHeaderProps {
   direction: 'to' | 'from';
@@ -21,9 +20,9 @@ export const UserPageHeader = ({
   displayDirection = false,
   displayRoles = true,
 }: UserPageHeaderProps) => {
-  const { toParty, fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
+  const { toParty, fromParty } = usePartyRepresentation();
 
-  if (!toParty && !fromParty && !loadingPartyRepresentation) {
+  if (!toParty && !fromParty) {
     return null;
   }
 
@@ -70,9 +69,7 @@ export const UserPageHeader = ({
     );
   };
 
-  return loadingPartyRepresentation ? (
-    <UserPageHeaderSkeleton />
-  ) : (
+  return (
     <div className={classes.headingContainer}>
       {avatar()}
       <DsHeading

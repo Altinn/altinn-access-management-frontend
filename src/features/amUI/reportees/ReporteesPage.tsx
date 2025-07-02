@@ -1,6 +1,5 @@
 import { DsAlert, DsHeading } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import React from 'react';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -10,6 +9,7 @@ import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { AlertIfNotAvailableForUserType } from '../common/alertIfNotAvailableForUserType/AlertIfNotAvailableForUserType';
 
 import classes from './ReporteePage.module.css';
 import { ReporteesList } from './ReporteesList';
@@ -24,26 +24,28 @@ export const ReporteesPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        {!isLoading && !isAdmin ? (
-          <DsAlert data-color='warning'>
-            {t('reportees_page.not_admin_alert', { name: party?.name || '' })}
-          </DsAlert>
-        ) : (
-          <PartyRepresentationProvider
-            fromPartyUuid={getCookie('AltinnPartyUuid')}
-            actingPartyUuid={getCookie('AltinnPartyUuid')}
-          >
-            <div className={classes.reporteeListHeading}>
-              <DsHeading
-                level={1}
-                data-size='md'
-              >
-                {t('reportees_page.main_page_heading', { name: party?.name || '' })}
-              </DsHeading>
-            </div>
-            <ReporteesList />
-          </PartyRepresentationProvider>
-        )}
+        <AlertIfNotAvailableForUserType>
+          {!isLoading && !isAdmin ? (
+            <DsAlert data-color='warning'>
+              {t('reportees_page.not_admin_alert', { name: party?.name || '' })}
+            </DsAlert>
+          ) : (
+            <PartyRepresentationProvider
+              fromPartyUuid={getCookie('AltinnPartyUuid')}
+              actingPartyUuid={getCookie('AltinnPartyUuid')}
+            >
+              <div className={classes.reporteeListHeading}>
+                <DsHeading
+                  level={1}
+                  data-size='md'
+                >
+                  {t('reportees_page.main_page_heading', { name: party?.name || '' })}
+                </DsHeading>
+              </div>
+              <ReporteesList />
+            </PartyRepresentationProvider>
+          )}
+        </AlertIfNotAvailableForUserType>
       </PageLayoutWrapper>
     </PageWrapper>
   );

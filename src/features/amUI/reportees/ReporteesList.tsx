@@ -12,9 +12,9 @@ import classes from './ReporteePage.module.css';
 
 export const ReporteesList = () => {
   const { t } = useTranslation();
-  const { fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
+  const { fromParty } = usePartyRepresentation();
 
-  const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
+  const { data: rightHolders, isLoading } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
       fromUuid: '', // all
@@ -53,7 +53,7 @@ export const ReporteesList = () => {
       <UserList
         connections={rightHolders || []}
         searchString={searchString}
-        isLoading={loadingRightHolders || loadingPartyRepresentation}
+        isLoading={isLoading}
         listItemTitleAs='h2'
         interactive
         canAdd={false} // Cannot add new reportees

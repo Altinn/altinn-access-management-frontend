@@ -1,11 +1,4 @@
-import {
-  Button,
-  DsAlert,
-  DsDialog,
-  DsHeading,
-  DsParagraph,
-  DsSkeleton,
-} from '@altinn/altinn-components';
+import { Button, DsAlert, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { t } from 'i18next';
 import { useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
@@ -34,13 +27,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
 
-  const {
-    fromParty,
-    toParty,
-    actingParty,
-    selfParty,
-    isLoading: loadingPartyRepresentation,
-  } = usePartyRepresentation();
+  const { fromParty, toParty, actingParty, selfParty } = usePartyRepresentation();
   const { data: connections, isLoading: isConnectionLoading } = useGetRightHoldersQuery(
     {
       fromUuid: fromParty?.partyUuid ?? '',
@@ -91,7 +78,6 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
       <DsDialog.Trigger
         data-size='sm'
         variant='tertiary'
-        disabled={loadingPartyRepresentation}
       >
         {t(textKeys.triggerButtonKey)}
         <TrashIcon style={{ fontSize: '1.4rem' }} />
@@ -107,11 +93,6 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
             isLoading={isLoading}
             displaySuccess={isSuccess}
             onAnimationEnd={redirectToUsersPage}
-          />
-        ) : loadingPartyRepresentation ? (
-          <DsSkeleton
-            variant='text'
-            width='180'
           />
         ) : (
           <div className={classes.modalContent}>
@@ -150,7 +131,6 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
                 <Button
                   color='danger'
                   onClick={onDeleteUser}
-                  disabled={isLoading || isConnectionLoading || loadingPartyRepresentation}
                 >
                   {t('delete_user.yes_button')}
                 </Button>

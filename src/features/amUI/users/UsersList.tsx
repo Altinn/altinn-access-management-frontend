@@ -36,7 +36,7 @@ const extractFromList = (
 
 export const UsersList = () => {
   const { t } = useTranslation();
-  const { fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
+  const { fromParty } = usePartyRepresentation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
 
   const { data: isAdmin } = useGetIsAdminQuery();
@@ -87,13 +87,11 @@ export const UsersList = () => {
 
   return (
     <div className={classes.usersList}>
-      {!displayLimitedPreviewLaunch && (
+      {!displayLimitedPreviewLaunch && currentUserAsRightHolder && (
         <>
           <CurrentUserPageHeader
-            currentUser={currentUserAsRightHolder && currentUserAsRightHolder[0]}
-            loading={
-              !!(currentUserLoading || currentUserConnectionLoading || loadingPartyRepresentation)
-            }
+            currentUser={currentUserAsRightHolder[0]}
+            loading={currentUserLoading || currentUserConnectionLoading}
             as={(props) =>
               currentUserAsRightHolder ? (
                 <Link
@@ -134,7 +132,7 @@ export const UsersList = () => {
         <UserList
           connections={userList ?? undefined}
           searchString={searchString}
-          isLoading={!userList || loadingRightHolders || loadingPartyRepresentation}
+          isLoading={!userList || loadingRightHolders}
           listItemTitleAs='h2'
           interactive={isAdmin}
         />

@@ -7,16 +7,10 @@ import { Link } from 'react-router';
 import { t } from 'i18next';
 
 import { useGetPartyByUUIDQuery, type Party } from '@/rtk/features/lookupApi';
-import {
-  useGetReporteeQuery,
-  useGetRightHoldersQuery,
-  useGetUserInfoQuery,
-} from '@/rtk/features/userInfoApi';
-import { availableForUserTypeCheck } from '@/resources/utils/featureFlagUtils';
+import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { NotAvailableForUserTypeAlert } from '../NotAvailableForUserTypeAlert/NotAvailableForUserTypeAlert';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -93,17 +87,6 @@ export const PartyRepresentationProvider = ({
   const { data: toParty, isLoading: toPartyIsLoading } = useGetPartyByUUIDQuery(toPartyUuid ?? '', {
     skip: isConnectionLoading || invalidConnection || (!!fromPartyUuid && !connections),
   });
-  const { data: reportee, isLoading: reporteeIsLoading } = useGetReporteeQuery();
-
-  const availableForUserType = reporteeIsLoading || availableForUserTypeCheck(reportee?.type);
-
-  const isLoading =
-    isConnectionLoading ||
-    fromPartyIsLoading ||
-    toPartyIsLoading ||
-    currentUserIsLoading ||
-    reporteeIsLoading;
-  const isError = invalidConnection || !availableForUserType;
 
   return (
     <PartyRepresentationContext.Provider
@@ -112,13 +95,12 @@ export const PartyRepresentationProvider = ({
         toParty: invalidConnection ? undefined : toParty,
         actingParty: fromPartyUuid == actingPartyUuid ? fromParty : toParty,
         selfParty: currentUser?.party,
-        isLoading: isLoading,
-        isError: isError,
+        isLoading:
+          isConnectionLoading || fromPartyIsLoading || toPartyIsLoading || currentUserIsLoading,
+        isError: invalidConnection,
       }}
     >
-      {!isLoading && invalidConnection && connectionErrorAlert(error, returnToUrlOnError)}
-      {!isLoading && !availableForUserType && <NotAvailableForUserTypeAlert />}
-      {(!isError || isLoading) && children}
+      {invalidConnection ? connectionErrorAlert(error, returnToUrlOnError) : children}
     </PartyRepresentationContext.Provider>
   );
 };
