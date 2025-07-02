@@ -21,6 +21,7 @@ export interface ConsentRequest {
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
   fromPartyName?: string;
+  consentedDate?: Date;
 }
 
 export interface ActiveConsentListItem {

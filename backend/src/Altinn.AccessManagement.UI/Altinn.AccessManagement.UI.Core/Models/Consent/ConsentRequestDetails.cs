@@ -56,5 +56,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// The version of the consent template.
         /// </summary>
         public required int TemplateVersion { get; set; }
+
+        /// <summary>
+        /// Defines when the consent was given.
+        /// </summary>
+        public DateTimeOffset? Consented { get; set; }
     }
 }

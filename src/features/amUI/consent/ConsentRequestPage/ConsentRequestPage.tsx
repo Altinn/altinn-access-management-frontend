@@ -3,6 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import {
+  DsAlert,
   DsButton,
   DsHeading,
   DsParagraph,
@@ -175,28 +176,36 @@ export const ConsentRequestPage = () => {
                     }
                   />
                 )}
-                <div className={classes.buttonRow}>
-                  <DsButton
-                    variant='primary'
-                    aria-disabled={isActionButtonDisabled}
-                    loading={isApprovingConsent}
-                    onClick={approveConsent}
-                  >
+                {request.consentedDate ? (
+                  <DsAlert data-color='info'>
                     {request.isPoa
-                      ? t('consent_request.approve_poa')
-                      : t('consent_request.approve_consent')}
-                  </DsButton>
-                  <DsButton
-                    variant='tertiary'
-                    aria-disabled={isActionButtonDisabled}
-                    loading={isRejectingConsent}
-                    onClick={rejectConsent}
-                  >
-                    {request.isPoa
-                      ? t('consent_request.reject_poa')
-                      : t('consent_request.reject_consent')}
-                  </DsButton>
-                </div>
+                      ? t('consent_request.already_consented_poa')
+                      : t('consent_request.already_consented')}
+                  </DsAlert>
+                ) : (
+                  <div className={classes.buttonRow}>
+                    <DsButton
+                      variant='primary'
+                      aria-disabled={isActionButtonDisabled}
+                      loading={isApprovingConsent}
+                      onClick={approveConsent}
+                    >
+                      {request.isPoa
+                        ? t('consent_request.approve_poa')
+                        : t('consent_request.approve_consent')}
+                    </DsButton>
+                    <DsButton
+                      variant='tertiary'
+                      aria-disabled={isActionButtonDisabled}
+                      loading={isRejectingConsent}
+                      onClick={rejectConsent}
+                    >
+                      {request.isPoa
+                        ? t('consent_request.reject_poa')
+                        : t('consent_request.reject_consent')}
+                    </DsButton>
+                  </div>
+                )}
               </div>
             </div>
           </>

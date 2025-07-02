@@ -630,7 +630,9 @@
     "approve_error": "Kunne ikke gi samtykke",
     "approve_error_poa": "Kunne ikke gi fullmakt",
     "reject_error": "Kunne ikke avvise samtykke",
-    "reject_error_poa": "Kunne ikke avvise fullmakt"
+    "reject_error_poa": "Kunne ikke avvise fullmakt",
+    "already_consented": "Dette samtykket er allerede gitt",
+    "already_consented_poa": "Denne fullmakten er allerede gitt"
   },
   "active_consents": {
     "heading": "Samtykker og fullmakter",

@@ -632,7 +632,9 @@
     "approve_error": "Could not give consent",
     "approve_error_poa": "Could not grant power of attorney",
     "reject_error": "Could not reject consent",
-    "reject_error_poa": "Could not reject power of attorney"
+    "reject_error_poa": "Could not reject power of attorney",
+    "already_consented": "This consent is already given",
+    "already_consented_poa": "This power of attorney is already given"
   },
   "active_consents": {
     "heading": "Consents and powers of attorney",

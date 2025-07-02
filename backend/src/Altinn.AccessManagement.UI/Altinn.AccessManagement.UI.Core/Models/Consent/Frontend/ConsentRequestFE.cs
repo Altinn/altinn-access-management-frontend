@@ -54,5 +54,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// Party name if request is for an organization
         /// </summary>
         public string FromPartyName { get; set; }
+
+        /// <summary>
+        /// Date consentend (or null if not consented yet)
+        /// </summary>
+        public DateTimeOffset? ConsentedDate { get; set; }
     }
 }
