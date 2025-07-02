@@ -118,12 +118,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return JsonSerializer.Deserialize<List<Party>>(responseContent, _serializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyForOrganization // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyList // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyForOrganization // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyList // Exception");
                 throw;
             }
         }
@@ -150,7 +150,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyForOrganization // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyByUuid // Exception");
                 throw;
             }
         }
