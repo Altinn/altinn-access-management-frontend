@@ -3,9 +3,9 @@
   "data": [
     {
       "package": {
-        "id": "0195efb8-7c80-7642-b9b8-c748ee4fecd4",
-        "urn": "urn:altinn:accesspackage:tinglysing-eiendom",
-        "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+        "id": "91cf61ae-69ab-49d5-b51a-80591c91f255",
+        "urn": "urn:altinn:accesspackage:ordinaer-post-til-virksomheten",
+        "areaId": "6f938de8-34f2-4bab-a0c6-3a3eb64aad3b"
       },
       "permissions": [
         {
@@ -60,9 +60,9 @@
     },
     {
       "package": {
-        "id": "0195efb8-7c80-7642-b9b8-c748ee4fecd4",
-        "urn": "urn:altinn:accesspackage:tinglysing-eiendom",
-        "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+        "id": "91cf61ae-69ab-49d5-b51a-80591c91f255",
+        "urn": "urn:altinn:accesspackage:ordinaer-post-til-virksomheten",
+        "areaId": "6f938de8-34f2-4bab-a0c6-3a3eb64aad3b"
       },
       "permissions": [
         {

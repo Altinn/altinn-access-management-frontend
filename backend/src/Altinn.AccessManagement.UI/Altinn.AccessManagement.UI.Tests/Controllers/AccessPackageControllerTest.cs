@@ -121,11 +121,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegations?to={to}&from={from}&party={party}");
 
-            var resJson = await response.Content.ReadAsStringAsync();
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Dictionary<Guid, List<PackagePermission>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermission>>>(await response.Content.ReadAsStringAsync(), options);
-
+            
             Assert.True(new HashSet<Guid>(expectedResult.Keys).SetEquals(actualResult.Keys));
             foreach (Guid key in actualResult.Keys)
             {
