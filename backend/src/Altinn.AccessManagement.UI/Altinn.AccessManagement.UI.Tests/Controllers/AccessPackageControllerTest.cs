@@ -114,7 +114,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Arrange
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
-            string to = "21cc8752-4801-490d-a6ab-ab3266a0f748"; // Valid user that has both inherited and delegated rights to a package
+            string to = "21cc8752-4801-490d-a6ab-ab3266a0f748"; // Valid user that has both inherited and delegated rights to a single package
             string party = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid party, same as reportee
             Dictionary<Guid, List<PackagePermission>> expectedResult = Util.GetMockData<Dictionary<Guid, List<PackagePermission>>>(_expectedDataPath + $"/AccessPackage/GetDelegations/{to}.json");
 
@@ -163,7 +163,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
-            string to = "21cc8752-4801-490d-a6ab-ab3266a0f748"; // This right holder has no relationship to the party
+            string to = "26ca8b02-c455-4dc0-96be-f92864800000"; // This right holder has no relationship to the party
             string party = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid party, same as reportee
 
             // Act
