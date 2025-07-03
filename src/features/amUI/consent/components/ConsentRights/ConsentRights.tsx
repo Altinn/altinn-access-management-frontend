@@ -10,23 +10,30 @@ import type { ConsentLanguage, ConsentRight } from '../../types';
 import classes from './ConsentRights.module.css';
 
 interface ConsentRightsProps {
-  right: ConsentRight;
+  rights: ConsentRight[];
   language: keyof ConsentLanguage;
 }
 
-export const ConsentRights = ({ right, language }: ConsentRightsProps) => {
+export const ConsentRights = ({ rights, language }: ConsentRightsProps) => {
   return (
-    <div className={classes.consentRight}>
-      <CheckmarkIcon className={classes.consentRightIcon} />
-      <div className={classes.consentRightContent}>
-        <DsHeading
-          level={3}
-          data-size='2xs'
+    <div className={classes.consentRights}>
+      {rights.map((right) => (
+        <div
+          key={right.identifier}
+          className={classes.consentRight}
         >
-          {right.title[language]}
-        </DsHeading>
-        <div>{transformText(right.consentTextHtml[language])}</div>
-      </div>
+          <CheckmarkIcon className={classes.consentRightIcon} />
+          <div className={classes.consentRightContent}>
+            <DsHeading
+              level={3}
+              data-size='2xs'
+            >
+              {right.title[language]}
+            </DsHeading>
+            <div>{transformText(right.consentTextHtml[language])}</div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

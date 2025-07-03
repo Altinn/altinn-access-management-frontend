@@ -157,15 +157,10 @@ export const ConsentRequestPage = () => {
                 >
                   {request.serviceIntro[language]}
                 </DsHeading>
-                <div>
-                  {request.rights.map((right) => (
-                    <ConsentRights
-                      key={right.identifier}
-                      language={language}
-                      right={right}
-                    />
-                  ))}
-                </div>
+                <ConsentRights
+                  rights={request.rights}
+                  language={language}
+                />
                 <DsParagraph className={classes.expiration}>
                   {request.expiration[language]}
                 </DsParagraph>

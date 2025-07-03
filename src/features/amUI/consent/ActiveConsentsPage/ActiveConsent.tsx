@@ -52,15 +52,10 @@ export const ActiveConsent = ({ consentId }: ActiveConsentProps) => {
           >
             {consent.serviceIntroAccepted[language]}
           </DsHeading>
-          <div>
-            {consent.rights.map((right) => (
-              <ConsentRights
-                key={right.identifier}
-                language={language}
-                right={right}
-              />
-            ))}
-          </div>
+          <ConsentRights
+            rights={consent.rights}
+            language={language}
+          />
           <DsParagraph className={classes.expiration}>{consent.expiration[language]}</DsParagraph>
           {consent.handledBy && <DsParagraph>{consent.handledBy[language]}</DsParagraph>}
         </>
