@@ -107,12 +107,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private static Dictionary<string, string> GetStaticMetadata(Party to, Party from, Party handledBy, DateTimeOffset requestValidTo)
         {
+            TimeZoneInfo norwayTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+         
             return new()
             {
                 { "CoveredBy", to.Name },
                 { "OfferedBy", from.Name },
                 { "HandledBy", handledBy?.Name },
-                { "Expiration", requestValidTo.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) }
+                { "Expiration", TimeZoneInfo.ConvertTime(requestValidTo, norwayTimeZone).ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) }
             };
         }
 
