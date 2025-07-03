@@ -171,25 +171,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return replacedTranslations;
         }
 
-        private async Task<(Party To, Party From, Party HandledBy)> GetConsentParties(string toUrn, string fromUrn, string handledByUrn)
+        private async Task<IEnumerable<Party>> GetConsentParties(IEnumerable<string> partyUuids)
         {
-            // map urns ("urn:altinn:party:uuid:167536b5-f8ed-4c5a-8f48-0279507e53ae") to named party objects
-            string toUrnValue = GetUrnValue(toUrn);
-            string fromUrnValue = GetUrnValue(fromUrn);
-            string handledByUrnValue = handledByUrn != null ? GetUrnValue(handledByUrn) : null;
-
-            IEnumerable<string> urnValues = [toUrnValue, fromUrnValue, handledByUrnValue];
-            IEnumerable<Guid> partyGuidsToLookup = urnValues.Where(urn => urn != null)
+            IEnumerable<Guid> partyGuidsToLookup = partyUuids.Where(urn => urn != null)
                 .Select(urn => Guid.TryParse(urn, out var guid) ? guid : (Guid?)null)
                 .Where(guid => guid.HasValue)
                 .Select(guid => guid.Value);
+
             List<Party> parties = await _registerClient.GetPartyList(partyGuidsToLookup.ToList());
 
-            Party toParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == toUrnValue);
-            Party fromParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == fromUrnValue);
-            Party handledByParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == handledByUrnValue);
-
-            return (To: toParty, From: fromParty, HandledBy: handledByParty);
+            return parties;
         }
 
         private async Task<Result<EnrichedConsentTemplate>> EnrichConsentTemplate(ConsentTemplateParams templateParams, CancellationToken cancellationToken)
@@ -231,7 +222,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             var expirationText = isOneTimeConsent ? consentTemplate.Texts.ExpirationOneTime : consentTemplate.Texts.Expiration;
 
-            var (toParty, fromParty, handledByParty) = await GetConsentParties(templateParams.ToUrn, templateParams.FromUrn, templateParams.HandledByUrn);
+            string toPartyUuid = GetUrnValue(templateParams.ToUrn);
+            string fromPartyUuid = GetUrnValue(templateParams.FromUrn);
+            string handledByPartyUuid = templateParams.HandledByUrn != null ? GetUrnValue(templateParams.HandledByUrn) : null;
+            
+            IEnumerable<Party> parties = await GetConsentParties([toPartyUuid, fromPartyUuid, handledByPartyUuid]);
+            Party toParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == toPartyUuid);
+            Party fromParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == fromPartyUuid);
+            Party handledByParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == handledByPartyUuid);
 
             Dictionary<string, string> staticMetadata = GetStaticMetadata(toParty, fromParty, handledByParty, templateParams.ValidTo);
             Dictionary<string, string> title;
@@ -281,16 +279,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             // look up all party names in one call instead of one by one
-            IEnumerable<PartyName> partyNames = await _registerClient.GetPartyNames(activeConsents.Value.Select(consent => GetUrnValue(consent.To)), cancellationToken);
+            IEnumerable<string> partyUuids = activeConsents.Value.Select(consent => GetUrnValue(consent.To));
+            IEnumerable<Party> parties = await GetConsentParties(partyUuids);
 
             List<ConsentListItemFE> consentListItems = activeConsents.Value.Select(consent =>
             {
-                PartyName toPartyName = partyNames.FirstOrDefault(p => p.OrgNo == GetUrnValue(consent.To));
+                Party toParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.To));
                 return new ConsentListItemFE()
                 {
                     Id = consent.Id,
                     ToPartyId = consent.To,
-                    ToPartyName = toPartyName?.Name ?? string.Empty,
+                    ToPartyName = toParty?.Name ?? string.Empty,
                 };
             }).ToList();
             
