@@ -4,22 +4,6 @@
   gap: var(--ds-size-8);
 }
 
-.status {
-  background-color: rgb(12, 101, 54);
-  height: 12px;
-  width: 12px;
-  display: inline-block;
-  border-radius: 50%;
-  margin-right: 0.5rem;
-}
-
 .consentDialog {
   max-width: 50rem;
-}
-
-.consentContainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-size-8);
-  align-items: flex-start;
 }

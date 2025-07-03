@@ -103,9 +103,7 @@ export const ConsentLogPage = () => {
           closedby='any'
           onClose={() => setSelectedConsentId('')}
         >
-          <div className={classes.consentContainer}>
-            {selectedConsentId && <ActiveConsent consentId={selectedConsentId} />}
-          </div>
+          {selectedConsentId && <ActiveConsent consentId={selectedConsentId} />}
         </DsDialog>
       </PageLayoutWrapper>
     </PageWrapper>
