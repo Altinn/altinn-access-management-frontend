@@ -2,15 +2,15 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useCallback, useState } from 'react';
 import { DsSearch, DsHeading } from '@altinn/altinn-components';
 
-import type { DelegationAction } from '../EditModal';
-import { useDelegationModalContext } from '../DelegationModalContext';
-
-import classes from './PackageSearch.module.css';
-
 import { debounce } from '@/resources/utils';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
+
+import { useDelegationModalContext } from '../DelegationModalContext';
+import type { DelegationAction } from '../EditModal';
+
+import classes from './PackageSearch.module.css';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
@@ -56,8 +56,8 @@ export const PackageSearch = ({
             <div className={classes.searchField}>
               <DsSearch data-size='sm'>
                 <DsSearch.Input
-                  aria-label={t('single_rights.search_label')}
-                  placeholder={t('single_rights.search_label')}
+                  aria-label={t('access_packages.search_label')}
+                  placeholder={t('access_packages.search_label')}
                   value={searchString}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     debouncedSearch(event.target.value);

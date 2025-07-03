@@ -62,7 +62,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                return new List<SearchObject<AccessPackage>>();
+            }
+            else if (response.StatusCode == HttpStatusCode.OK)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<IEnumerable<SearchObject<AccessPackage>>>(responseContent, _serializerOptions);

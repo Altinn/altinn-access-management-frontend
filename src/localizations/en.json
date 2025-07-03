@@ -258,6 +258,7 @@
     "other_available": "Other available",
     "current_access_packages_title": "{{count}} access packages",
     "give_new_button": "Give new power of attorney",
+    "search_label": "Search for access packages",
     "other_packages_in_area_title": "Other available packages in this area:",
     "package_delegation_success": "{{name}} has been successfully granted power of attorney over {{accessPackage}}.",
     "package_delegation_error": "Failed to grant power of attorney over {{accessPackage}} to {{name}}.",
@@ -266,6 +267,7 @@
     "delegated_packages_count_badge": "{{delegated}} of {{total}}",
     "package_number_of_resources": "{{count}} services",
     "user_has_no_packages": "This user has no access packages.",
+    "no_matching_search": "No matches for your search",
     "info_alert_text": "Access packages will eventually replace roles in Altinn's access management solution. They may be a bit empty now, but they will soon be filled with services.",
     "delegation_check": {
       "delegation_check_error_heading": "Technical error",
