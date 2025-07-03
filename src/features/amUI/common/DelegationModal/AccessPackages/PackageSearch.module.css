@@ -5,10 +5,6 @@
   padding-bottom: 5px;
 }
 
-.searchField {
-  min-width: 400px;
-}
-
 .searchResults {
   margin: 0 -0.5rem;
   display: flex;
@@ -69,5 +65,9 @@
 @media only screen and (min-width: 769px) {
   .filter {
     padding-bottom: 10px;
+  }
+
+  .searchField {
+    min-width: 400px;
   }
 }
