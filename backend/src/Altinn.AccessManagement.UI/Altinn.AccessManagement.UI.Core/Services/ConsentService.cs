@@ -108,7 +108,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static Dictionary<string, string> GetStaticMetadata(Party to, Party from, Party handledBy, DateTimeOffset requestValidTo)
         {
             TimeZoneInfo norwayTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-         
+
             return new()
             {
                 { "CoveredBy", to.Name },
@@ -339,7 +339,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             };
         }
         
-        private class ConsentTemplateParams
+        private sealed class ConsentTemplateParams
         {
             public IEnumerable<ConsentRight> ConsentRights { get; set; }
 
