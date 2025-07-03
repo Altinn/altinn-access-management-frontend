@@ -19,9 +19,9 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 import type { ActiveConsentListItem } from '../types';
+import { ActiveConsent } from '../components/ActiveConsent/ActiveConsent';
 
 import classes from './ActiveConsentsPage.module.css';
-import { ActiveConsent } from './ActiveConsent';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();

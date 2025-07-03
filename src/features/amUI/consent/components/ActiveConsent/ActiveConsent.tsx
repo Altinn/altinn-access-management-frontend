@@ -6,9 +6,9 @@ import cn from 'classnames';
 
 import { useGetConsentQuery } from '@/rtk/features/consentApi';
 
-import { getLanguage } from '../utils';
-import { ConsentRights } from '../components/ConsentRights/ConsentRights';
-import type { ConsentStatus } from '../types';
+import { getLanguage } from '../../utils';
+import { ConsentRights } from '../ConsentRights/ConsentRights';
+import type { ConsentStatus } from '../../types';
 
 import classes from './ActiveConsent.module.css';
 
