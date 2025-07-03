@@ -54,5 +54,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// Party name if request is for an organization
         /// </summary>
         public string FromPartyName { get; set; }
+
+        /// <summary>
+        /// List all events related to consent request
+        /// </summary>
+        public List<ConsentRequestEventDto> ConsentRequestEvents { get; set; } = [];
     }
 }

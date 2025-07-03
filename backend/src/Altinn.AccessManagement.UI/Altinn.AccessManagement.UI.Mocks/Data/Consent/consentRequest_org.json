@@ -16,6 +16,15 @@
     "nn": "Dette er ei melding fra banken",
     "en": "This is a message from the bank"
   },
+  "consentRequestEvents": [
+    {
+      "consentEventID": "0197cbaf-4fd2-70e5-9866-f13262afd85d",
+      "created": "2025-07-02T15:09:13.526811+00:00",
+      "performedBy": "urn:altinn:organization:identifier-no:991825827",
+      "eventType": "Created",
+      "consentRequestID": "b4f13aea-c996-437d-bb32-e2b81ccfb919"
+    }
+  ],
   "redirectUrl": "https://smartbank.no/poa",
   "templateId": "poa",
   "templateVersion": 1
