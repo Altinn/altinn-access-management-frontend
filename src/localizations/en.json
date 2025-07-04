@@ -622,7 +622,7 @@
     "text": "The new access management pages are not quite ready for private individuals yet. If you meant to view the accesses for an organization, please switch to it in the menu."
   },
   "consent_request": {
-    "page_title": "Aprovve consent/power of attorney - Altinn",
+    "page_title": "Approve consent/power of attorney - Altinn",
     "loading_consent": "Loading request...",
     "load_consent_error": "Could not load consent/power of attorney",
     "approve_consent": "Yes, I give consent",
