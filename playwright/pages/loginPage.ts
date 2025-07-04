@@ -67,6 +67,8 @@ export async function loginAs(page: Page, pid: string, orgnummer: string) {
 }
 
 export async function loginNotChoosingActor(page: Page, pid: string) {
+  // Ensure we're on a page where login elements are available
+  await page.waitForSelector("text='TestID Lag din egen'", { timeout: 5000 });
   await page.getByText('TestID Lag din egen').click();
   await page.locator("input[name='pid']").fill(pid);
   await page.click("'Autentiser'");
