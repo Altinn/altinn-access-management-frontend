@@ -52,7 +52,7 @@ export const AccessPackageSection = () => {
           >
             {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
           </DsHeading>
-          {toParty?.partyTypeName === PartyType.Person && !displayLimitedPreviewLaunch && (
+          {(toParty?.partyTypeName === PartyType.Organization || !displayLimitedPreviewLaunch) && (
             <DelegationModal
               delegationType={DelegationType.AccessPackage}
               availableActions={[
