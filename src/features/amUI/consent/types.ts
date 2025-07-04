@@ -23,7 +23,7 @@ export interface ConsentRequest {
   fromPartyName?: string;
   consentRequestEvents: {
     consentEventID: string;
-    created: Date;
+    created: string;
     performedBy: string;
     eventType: string;
     consentRequestID: string;
