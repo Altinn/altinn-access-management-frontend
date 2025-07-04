@@ -69,15 +69,25 @@ export const ConsentRequestPage = () => {
     (event) => event.eventType === 'Rejected',
   );
 
-  const approveConsent = (): void => {
+  const approveConsent = async (): Promise<void> => {
     if (!isActionButtonDisabled && request) {
-      postApproveConsent({ requestId: request.id, language }).unwrap().then(logoutAndRedirect);
+      try {
+        await postApproveConsent({ requestId: request.id, language }).unwrap();
+        logoutAndRedirect();
+      } catch {
+        // Error is already tracked via approveConsentError
+      }
     }
   };
 
-  const rejectConsent = (): void => {
+  const rejectConsent = async (): Promise<void> => {
     if (!isActionButtonDisabled && request) {
-      postRejectConsent({ requestId: request.id }).unwrap().then(logoutAndRedirect);
+      try {
+        await postRejectConsent({ requestId: request.id }).unwrap();
+        logoutAndRedirect();
+      } catch {
+        // Error is already tracked via rejectConsentError
+      }
     }
   };
 
