@@ -48,7 +48,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, string languageCode)
         {
             Util.ThrowExceptionIfTriggerParty(from.ToString());
-
             try
             {
                 string dataPath = Path.Combine(dataFolder, "AccessPackage", "GetDelegations", $"{from}_{to}.json");

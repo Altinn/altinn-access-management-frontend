@@ -1,8 +1,10 @@
 import { AccessAreaListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { ExtendedAccessArea } from './useAreaPackageList';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+
+import type { ExtendedAccessArea } from './useAreaPackageList';
 
 interface AreaItemProps {
   area: ExtendedAccessArea;
@@ -21,11 +23,21 @@ export const AreaItem = ({
 }: AreaItemProps) => {
   const { t } = useTranslation();
   const isSm = useIsMobileOrSmaller();
+
+  const getUniqueIdCount = (packages: AccessPackage[]) =>
+    new Set(packages.map((pkg) => pkg.id)).size;
+
+  const uniqueDelegatedCount = getUniqueIdCount(area.packages.assigned);
+  const totalUniqueCount = getUniqueIdCount([
+    ...area.packages.assigned,
+    ...area.packages.available,
+  ]);
+
   const badgeText =
     !isSm && showBadge
       ? t('access_packages.delegated_packages_count_badge', {
-          delegated: area.packages.assigned.length,
-          total: area.packages.assigned.length + area.packages.available.length,
+          delegated: uniqueDelegatedCount,
+          total: totalUniqueCount,
         })
       : undefined;
 

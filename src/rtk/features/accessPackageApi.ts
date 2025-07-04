@@ -32,6 +32,7 @@ export interface AccessPackage {
   isAssignable: boolean;
   area: AccessArea;
   inherited?: boolean;
+  permissions?: Permissions[];
 }
 
 export interface AccessPackageDelegation {

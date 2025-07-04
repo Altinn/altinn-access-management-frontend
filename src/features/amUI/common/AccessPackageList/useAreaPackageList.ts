@@ -5,6 +5,7 @@ import type {
   AccessPackage,
   AccessPackageDelegation,
 } from '@/rtk/features/accessPackageApi';
+import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -47,16 +48,25 @@ export const useAreaPackageList = ({
           const pkgs = area.accessPackages.reduce(
             (pkgAcc, pkg) => {
               const pkgAccess = activeDelegationArea.find((d) => d.package.id === pkg.id);
-              if (pkgAccess !== undefined) {
-                const aquiredPkg = {
-                  ...pkg,
-                  inherited: isInherited(
-                    pkgAccess,
-                    toParty?.partyUuid ?? '',
-                    fromParty?.partyUuid ?? '',
-                  ),
-                };
-                pkgAcc.assigned.push(aquiredPkg);
+              if (pkgAccess?.permissions && pkgAccess?.permissions?.length > 0) {
+                const inherited = pkgAccess.permissions.filter((permission) =>
+                  isInherited(permission, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
+                );
+                if (inherited?.length > 0) {
+                  pkgAcc.assigned.push({
+                    ...pkg,
+                    inherited: true,
+                    permissions: inherited,
+                  });
+                }
+
+                const delegated = pkgAccess.permissions.filter(
+                  (permission) =>
+                    !isInherited(permission, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
+                );
+                if (delegated) {
+                  pkgAcc.assigned.push({ ...pkg, inherited: false });
+                }
               } else if (showAllPackages) {
                 pkgAcc.available.push(pkg);
               }
@@ -90,16 +100,13 @@ export const useAreaPackageList = ({
 };
 
 export const isInherited = (
-  pkgDeleg: AccessPackageDelegation,
+  permission: Permissions,
   toPartyUuid: string,
   fromPartyUuid: string,
 ) => {
-  return pkgDeleg.permissions.some(
-    (p) =>
-      !(
-        toPartyUuid === p.to.id &&
-        fromPartyUuid === p.from.id &&
-        p.role?.code === 'rettighetshaver'
-      ),
+  return (
+    toPartyUuid === permission.to.id &&
+    fromPartyUuid === permission.from.id &&
+    permission.role?.code === 'rettighetshaver'
   );
 };

@@ -20,7 +20,6 @@ import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../StatusSection';
-import { isInherited } from '../../AccessPackageList/useAreaPackageList';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 
 import classes from './AccessPackageInfo.module.css';
@@ -71,10 +70,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
   const { displayLimitedPreviewLaunch } = window.featureFlags || {};
   const userHasPackage = delegationAccess !== null;
-  const accessIsInherited =
-    (delegationAccess &&
-      isInherited(delegationAccess, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? '')) ||
-    false;
+  const accessIsInherited = accessPackage.inherited;
 
   const [delegationCheckError, setDelegationCheckError] = useState<ActionError | null>(null);
 
@@ -184,12 +180,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             userHasAccess={userHasPackage}
             showMissingRightsMessage={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
-            inheritedFrom={
-              accessIsInherited
-                ? (delegationAccess?.permissions[0].via?.name ??
-                  delegationAccess?.permissions[0].from.name)
-                : undefined
-            }
+            inheritedFrom={getInheritedFromName(accessPackage)}
           />
 
           <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
@@ -238,6 +229,14 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
       )}
     </div>
   );
+};
+
+const getInheritedFromName = (accessPackage: AccessPackage): string | undefined => {
+  if (!accessPackage.inherited || !accessPackage.permissions?.length) {
+    return undefined;
+  }
+  const firstPermission = accessPackage.permissions[0];
+  return firstPermission.via?.name ?? firstPermission.from.name;
 };
 
 const MINIMIZED_LIST_SIZE = 5;
