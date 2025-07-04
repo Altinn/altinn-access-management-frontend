@@ -11,9 +11,11 @@ import { useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 
 import { amUIPath } from '@/routes/paths';
 import { useGetRightHoldersQuery, useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
+import { accessPackageApi } from '@/rtk/features/accessPackageApi';
 
 import {
   createErrorDetails,
@@ -33,6 +35,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const {
     fromParty,
@@ -73,6 +76,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
       .unwrap()
       .then(() => {
         setIsSuccess(true);
+        dispatch(accessPackageApi.util.invalidateTags(['AccessPackages'])); // Invalidate access packages cache
       })
       .catch((err) => {
         // Error is already captured by RTK Query's isError and error states

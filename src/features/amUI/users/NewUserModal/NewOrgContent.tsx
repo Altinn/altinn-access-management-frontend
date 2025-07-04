@@ -51,7 +51,7 @@ export const NewOrgContent = () => {
         size='sm'
         onChange={(e) => setOrgNumber((e.target as HTMLInputElement).value.replace(/ /g, ''))}
       />
-      {orgData && (
+      {!isGetOrgError && !isLoading && orgData && orgData.orgNumber === orgNumber && (
         <div className={classes.searchResult}>
           <DsParagraph>
             <strong>{orgData.name}</strong>
@@ -66,7 +66,7 @@ export const NewOrgContent = () => {
 
       <div className={classes.validationButton}>
         <Button
-          disabled={orgNumber.length !== 9 || isLoading || !orgData || isGetOrgError}
+          disabled={isGetOrgError || isLoading || !orgData || orgData.orgNumber !== orgNumber}
           loading={isLoading}
           onClick={onAdd}
         >

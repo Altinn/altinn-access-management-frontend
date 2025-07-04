@@ -71,7 +71,7 @@ export const accessPackageApi = createApi({
         return `delegations?from=${from}&to=${to}&party=${party}`;
       },
       providesTags: ['AccessPackages'],
-      keepUnusedDataFor: 3, // seconds
+      keepUnusedDataFor: 10, // seconds
     }),
     revokeDelegation: builder.mutation<
       void,

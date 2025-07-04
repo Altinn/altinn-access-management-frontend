@@ -16,3 +16,11 @@
 .showAvailablePackagesButton {
   width: fit-content;
 }
+
+.noAccessPackages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70%;
+  margin: auto;
+}

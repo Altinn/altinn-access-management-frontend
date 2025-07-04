@@ -1,4 +1,4 @@
-import { DsParagraph, ListBase } from '@altinn/altinn-components';
+import { DsParagraph, DsSpinner, ListBase } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -47,9 +47,11 @@ export const AccessPackageList = ({
   searchString,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
-  const { data: allPackageAreas, isLoading: loadingPackageAreas } = useSearchQuery(
-    searchString ?? '',
-  );
+  const {
+    data: allPackageAreas,
+    isLoading: loadingPackageAreas,
+    isFetching: fetchingSearch,
+  } = useSearchQuery(searchString ?? '');
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery(
     {
@@ -93,6 +95,31 @@ export const AccessPackageList = ({
     return (
       <div className={classes.accessAreaList}>
         <SkeletonAccessPackageList />
+      </div>
+    );
+  }
+
+  if (fetchingSearch && searchString && searchString.length > 0) {
+    return (
+      <div className={classes.accessAreaList}>
+        <DsSpinner
+          aria-label={t('common.loading')}
+          className={classes.noAccessPackages}
+        />
+      </div>
+    );
+  }
+
+  if (
+    searchString &&
+    searchString?.length > 0 &&
+    (allPackageAreas === undefined || allPackageAreas.length === 0)
+  ) {
+    return (
+      <div className={classes.accessAreaList}>
+        <DsParagraph className={classes.noAccessPackages}>
+          {t('access_packages.no_matching_search')}
+        </DsParagraph>
       </div>
     );
   }

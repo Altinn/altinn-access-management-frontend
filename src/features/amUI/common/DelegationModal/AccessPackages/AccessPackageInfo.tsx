@@ -248,6 +248,7 @@ const mapResourceToListItem = (resource: PackageResource): ListItemProps => ({
   icon: { iconUrl: resource.provider.logoUrl },
   as: 'div' as React.ElementType,
   size: 'xs',
+  interactive: false,
 });
 
 const useMinimizableResourceList = (list: PackageResource[]) => {
