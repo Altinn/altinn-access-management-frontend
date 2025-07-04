@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import { DsHeading } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
@@ -24,6 +25,7 @@ export const AccessPackageSection = () => {
     isLoading: loadingPartyRepresentation,
   } = usePartyRepresentation();
   const isCurrentUser = selfParty?.partyUuid === id;
+  const displayLimitedPreviewLaunch = window.featureFlags.displayLimitedPreviewLaunch;
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
     {
@@ -50,13 +52,15 @@ export const AccessPackageSection = () => {
           >
             {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
           </DsHeading>
-          <DelegationModal
-            delegationType={DelegationType.AccessPackage}
-            availableActions={[
-              DelegationAction.REVOKE,
-              isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
-            ]}
-          />
+          {toParty?.partyTypeName === PartyType.Person && !displayLimitedPreviewLaunch && (
+            <DelegationModal
+              delegationType={DelegationType.AccessPackage}
+              availableActions={[
+                DelegationAction.REVOKE,
+                isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
+              ]}
+            />
+          )}
           <ActiveDelegations />
         </>
       )}
