@@ -33,15 +33,18 @@ export const ListWrapper = ({
         {isLoading ? (
           <SkeletonUserList />
         ) : (
-          users?.map((user) => (
-            <UserListItem
-              size={size}
-              key={user.id}
-              user={user}
-              titleAs={listItemTitleAs}
-              interactive={interactive}
-            />
-          ))
+          users?.map(
+            (user) =>
+              user.type !== 'Systembruker' && (
+                <UserListItem
+                  size={size}
+                  key={user.id}
+                  user={user}
+                  titleAs={listItemTitleAs}
+                  interactive={interactive}
+                />
+              ),
+          )
         )}
       </ListBase>
     </div>

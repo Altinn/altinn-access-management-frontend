@@ -1,0 +1,50 @@
+{
+  "id": "e2071c55-6adf-487b-af05-9198a230ed44",
+  "isPoa": false,
+  "title": {
+    "nb": "Samtykke til bruk av dine data",
+    "nn": "Samtykke til bruk av dine data",
+    "en": "Consent to use of your data"
+  },
+  "heading": {
+    "nb": "DISKRET NÆR TIGER AS ønsker å hente opplysninger om deg",
+    "nn": "DISKRET NÆR TIGER AS ønskjer å hente opplysningar om deg",
+    "en": "DISKRET NÆR TIGER AS requests information about you"
+  },
+  "serviceIntro": {
+    "nb": "Ved at du samtykker, får DISKRET NÆR TIGER AS tilgang til følgende opplysninger om deg",
+    "nn": "Ved at du samtykker, får DISKRET NÆR TIGER AS tilgang til følgjande opplysningar om deg",
+    "en": "By giving consent, DISKRET NÆR TIGER AS gets access to the following information about you"
+  },
+  "consentMessage": {
+    "nb": "Ved å samtykke, gir du Skatteetaten rett til å utlevere opplysninger om deg direkte til DISKRET NÆR TIGER AS. Banken får opplysningene for å behandle søknaden din om finansiering",
+    "nn": "Ved å samtykka, gir du Skatteetaten rett til å utlevera opplysningar om deg direkte til DISKRET NÆR TIGER AS. Banken får opplysningane for å behandla søknaden din om finansiering.",
+    "en": "By consenting you grant the The Norwegian Tax Administration the right to disclose information about you directly to DISKRET NÆR TIGER AS. The bank receives the information to process your application for financing"
+  },
+  "expiration": {
+    "nb": "Samtykket er tidsavgrenset og vil gå ut 21.05.2025 13:11",
+    "nn": "Samtykket er tidsavgrensa og vil gå ut 21.05.2025 13:11",
+    "en": "The consent is time-limited, and will expire 21.05.2025 13:11"
+  },
+  "handledBy": {
+    "nb": "STA TOM TIGER AS foretar dette oppslaget på vegne av DISKRET NÆR TIGER AS.",
+    "nn": "STA TOM TIGER AS gjer dette oppslaget på vegne av DISKRET NÆR TIGER AS.",
+    "en": "STA TOM TIGER AS performs the lookup on behalf of DISKRET NÆR TIGER AS."
+  },
+  "fromPartyName": null,
+  "rights": [
+    {
+      "identifier": "consent-test-resource",
+      "title": {
+        "en": "Income information",
+        "nb": "Inntektsopplysninger",
+        "nn": "Inntektsopplysningar"
+      },
+      "consentTextHtml": {
+        "en": "<p>Information reported in connection with the tax return (self-declaration) 2023:</p>\n<ul>\n<li>Income</li>\n<li>Tax deductions</li>\n<li>Assets (incl. housing, car and other assets)</li>\n<li>Debt</li>\n</ul>\n<p>You can see for yourself what information the Tax Administration has about you on the <a href=\"https://www.skatteetaten.no\">A-melding</a>.</p>\n",
+        "nb": "<p>Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) 2023:</p>\n<ul>\n<li>Inntekt</li>\n<li>Skattefradrag</li>\n<li>Formue (inkl. bolig, bil og andre verdier)</li>\n<li>Gjeld</li>\n</ul>\n<p>Du kan selv se hvilke opplysninger Skatteetaten har om deg på innsyn <a href=\"https://www.skatteetaten.no\">A-melding</a>.</p>\n",
+        "nn": "<p>Opplysningar rapportert i forbindelse med skattemeldinga (sjølvmeldinga) 2023:</p>\n<ul>\n<li>Inntekt</li>\n<li>Skattefradrag</li>\n<li>Formue (inkl. bustad, bil og andre verdiar)</li>\n<li>Gjeld</li>\n</ul>\n<p>Du kan sjølv sjå kva opplysningar Skatteetaten har om deg på innsyn <a href=\"https://www.skatteetaten.no\">A-melding</a>.</p>\n"
+      }
+    }
+  ]
+}

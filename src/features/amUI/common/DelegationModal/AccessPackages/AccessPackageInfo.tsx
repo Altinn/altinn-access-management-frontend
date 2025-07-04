@@ -229,10 +229,10 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 {t('common.give_poa')}
               </Button>
             )}
-            {!userHasPackage && availableActions.includes(DelegationAction.REQUEST) && (
+            {!userHasPackage &&
+              availableActions.includes(DelegationAction.REQUEST) &&
               // Todo: Implement request access package
-              <Button disabled>{t('common.request_poa')}</Button>
-            )}
+              !displayLimitedPreviewLaunch && <Button disabled>{t('common.request_poa')}</Button>}
           </div>
         </>
       )}

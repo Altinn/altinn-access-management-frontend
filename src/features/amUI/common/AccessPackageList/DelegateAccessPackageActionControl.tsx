@@ -24,6 +24,7 @@ export const DelegateAccessPackageActionControl = ({
   disabled = false,
 }: DelegateAccessPackageActionControlsProps) => {
   const { t } = useTranslation();
+  const displayLimitedPreviewLaunch = window.featureFlags.displayLimitedPreviewLaunch;
 
   if (isLoading) {
     return (
@@ -64,7 +65,7 @@ export const DelegateAccessPackageActionControl = ({
       </Button>
     );
   }
-  if (availableActions?.includes(DelegationAction.REQUEST)) {
+  if (availableActions?.includes(DelegationAction.REQUEST) && !displayLimitedPreviewLaunch) {
     return (
       <Button
         icon={PlusCircleIcon}
