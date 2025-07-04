@@ -1,0 +1,17 @@
+.consentRights {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-4);
+}
+
+.consentRight {
+  display: flex;
+  flex-direction: row;
+  gap: var(--ds-size-4);
+}
+.consentRightContent {
+  flex: 1;
+}
+.consentRightIcon {
+  font-size: var(--ds-size-7);
+}

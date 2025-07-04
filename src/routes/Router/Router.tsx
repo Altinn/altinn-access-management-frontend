@@ -22,6 +22,7 @@ import { ReporteesPage } from '@/features/amUI/reportees/ReporteesPage';
 import { ReporteeRightsPage } from '@/features/amUI/reporteeRightsPage/ReporteeRightsPage';
 import { SystemUserAgentRequestPage } from '@/features/amUI/systemUser/SystemUserAgentRequestPage';
 import { SystemUserAgentDelegationPage } from '@/features/amUI/systemUser/SystemUserAgentDelegationPage/SystemUserAgentDelegationPage';
+import { ConsentRequestPage } from '@/features/amUI/consent/ConsentRequestPage/ConsentRequestPage';
 
 import {
   GeneralPath,
@@ -29,6 +30,7 @@ import {
   ApiDelegationPath,
   amUIPath,
   SystemUserPath,
+  ConsentPath,
 } from '../paths';
 
 export const Router = createBrowserRouter(
@@ -140,6 +142,15 @@ export const Router = createBrowserRouter(
         <Route
           path={SystemUserPath.AgentRequest}
           element={<SystemUserAgentRequestPage />}
+        />
+      </Route>
+      <Route
+        path={ConsentPath.Consent}
+        errorElement={<ErrorPage />}
+      >
+        <Route
+          path={ConsentPath.Request}
+          element={<ConsentRequestPage />}
         />
       </Route>
     </Route>,
