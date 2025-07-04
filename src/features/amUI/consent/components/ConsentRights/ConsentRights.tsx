@@ -41,9 +41,13 @@ export const ConsentRights = ({ rights, language }: ConsentRightsProps) => {
 const parserOptions: HTMLReactParserOptions = {
   replace: (domNode) => {
     if (domNode.type === 'tag' && domNode.name === 'a') {
+      const href = domNode.attribs?.href;
+      if (!href) {
+        return null;
+      }
       return React.createElement(
         Link,
-        { href: domNode.attribs.href },
+        { href },
         domToReact(domNode.children as DOMNode[], parserOptions),
       );
     }
