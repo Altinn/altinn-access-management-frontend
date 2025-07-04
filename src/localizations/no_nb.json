@@ -636,22 +636,6 @@
     "already_rejected": "Dette samtykket er allerede avvist",
     "already_rejected_poa": "Denne fullmakten er allerede avvist"
   },
-  "active_consents": {
-    "heading": "Samtykker og fullmakter",
-    "sub_heading": "Aktive avtaler",
-    "loading_consents": "Laster aktive avtaler...",
-    "load_consents_error": "Kunne ikke laste aktive avtaler",
-    "consent_log": "Se avtalelogg",
-    "no_active_consents": "Ingen aktive avtaler",
-    "see_consent": "Se/trekk avtale",
-    "loading_consent": "Laster avtale",
-    "load_consent_error": "Kunne ikke laste samtykke/fullmakt",
-    "revoke_consent": "Trekk samtykke",
-    "revoke_poa": "Trekk fullmakt",
-    "status_active": "Aktivt",
-    "status_revoked": "Inaktivt/ikke aktivt",
-    "status": "Status"
-  },
   "consent_errors": {
     "not_authorized_for_consent": "Bruker er ikke autorisert for å gi samtykke/fullmakt",
     "consent_not_found": "Samtykket/fullmakten finnes ikke",

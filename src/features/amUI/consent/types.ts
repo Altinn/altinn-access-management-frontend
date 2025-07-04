@@ -1,8 +1,5 @@
-export type ConsentLanguage = {
-  nb: string;
-  nn: string;
-  en: string;
-};
+export type ConsentLocale = 'nb' | 'nn' | 'en';
+export type ConsentLanguage = Record<ConsentLocale, string>;
 
 export interface ConsentRight {
   identifier: string;

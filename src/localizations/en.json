@@ -638,22 +638,6 @@
     "already_rejected": "This consent is already rejected",
     "already_rejected_poa": "This power of attorney is already rejected"
   },
-  "active_consents": {
-    "heading": "Consents and powers of attorney",
-    "sub_heading": "Active agreements",
-    "loading_consents": "Loading active agreements...",
-    "load_consents_error": "Could not load active agreements",
-    "consent_log": "See agreement log",
-    "no_active_consents": "No active agreements",
-    "see_consent": "See/revoke agreement",
-    "loading_consent": "Loading agreements",
-    "load_consent_error": "Could not load consent/power of attorney",
-    "revoke_consent": "Revoke agreement",
-    "revoke_poa": "Revoke power of attorney",
-    "status_active": "Active",
-    "status_revoked": "Inactive/not active",
-    "status": "Status"
-  },
   "consent_errors": {
     "not_authorized_for_consent": "User is not authorized to give consent/power of attorney",
     "consent_not_found": "Consent/power of attorney does not exist",
