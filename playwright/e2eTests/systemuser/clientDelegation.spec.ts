@@ -6,7 +6,7 @@ import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
 import { loginAs, loginNotChoosingActor } from '../../pages/loginPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
-test.describe.configure({ timeout: 10000 });
+test.describe.configure({ timeout: 20000 });
 
 test.describe('Klientdelegering', () => {
   let api: ApiRequests;
@@ -73,6 +73,9 @@ test.describe('Klientdelegering', () => {
 
     //Approve system user and click it
     await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
+
+    // Make sure you're logged out
+    await page.getByRole('button', { name: 'Logg inn Logg inn/Min profil' }).waitFor();
 
     // Navigate to system user login page
     await loginAs(page, user.pid, user.org);
