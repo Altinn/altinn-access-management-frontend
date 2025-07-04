@@ -41,7 +41,7 @@ export const ActiveConsentsPage = () => {
 
   const groupedActiveConsents = activeConsents?.reduce(
     (acc: { [key: string]: ActiveConsentListItem[] }, consent) => {
-      const key = consent.toPartyName;
+      const key = consent.toPartyId;
       if (!acc[key]) {
         acc[key] = [];
       }

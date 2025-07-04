@@ -35,10 +35,14 @@ export const ActiveConsent = ({ consentId }: ActiveConsentProps) => {
       {consent && (
         <>
           <ConsentStatus status={consent.status} />
-          <DsButton variant='tertiary'>
-            <EraserIcon />
-            {consent.isPoa ? t('active_consents.revoke_poa') : t('active_consents.revoke_consent')}
-          </DsButton>
+          {consent.status === 'Accepted' && (
+            <DsButton variant='tertiary'>
+              <EraserIcon />
+              {consent.isPoa
+                ? t('active_consents.revoke_poa')
+                : t('active_consents.revoke_consent')}
+            </DsButton>
+          )}
           <DsHeading
             level={1}
             data-size='md'

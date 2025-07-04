@@ -19,8 +19,8 @@
 
 .statusIcon {
   border-radius: 50%;
-  width: 0.675rem;
-  height: 0.675rem;
+  width: 0.75rem;
+  height: 0.75rem;
 }
 
 .statusIcon.active {
