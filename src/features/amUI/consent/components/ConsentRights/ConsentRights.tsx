@@ -38,11 +38,6 @@ export const ConsentRights = ({ rights, language }: ConsentRightsProps) => {
   );
 };
 
-DOMPurify.addHook('afterSanitizeAttributes', (node) => {
-  if (!(node instanceof Element)) {
-    return;
-  }
-});
 const parserOptions: HTMLReactParserOptions = {
   replace: (domNode) => {
     if (domNode.type === 'tag' && domNode.name === 'a') {
