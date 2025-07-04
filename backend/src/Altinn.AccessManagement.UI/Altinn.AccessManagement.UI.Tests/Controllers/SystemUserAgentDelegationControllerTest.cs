@@ -205,7 +205,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyId = "51329012";
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _regnskapsforerSystemUserId;
-            string customerId = "6b0574ae-f569-4c0d-a8d4-8ad56f427890";
+            string customerId = "3d8b34c3-df0d-4dcc-be12-e788ce414744";
             
             AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {

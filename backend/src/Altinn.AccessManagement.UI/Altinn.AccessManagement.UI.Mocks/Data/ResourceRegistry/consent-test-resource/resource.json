@@ -1,0 +1,61 @@
+{
+  "identifier": "consent-test-resource",
+  "version": "1",
+  "title": {
+    "en": "Income information",
+    "nb": "Inntektsopplysninger",
+    "nn": "Inntektsopplysningar"
+  },
+  "description": {
+    "en": "Income information",
+    "nb": "Inntektsopplysninger",
+    "nn": "Inntektsopplysningar"
+  },
+  "rightDescription": {
+    "en": "Income information",
+    "nb": "Inntektsopplysninger",
+    "nn": "Inntektsopplysningar"
+  },
+  "status": "Completed",
+  "contactPoints": [
+    {
+      "category": "Innrapportering",
+      "email": "",
+      "telephone": "",
+      "contactPage": "www.skatteetaten.no"
+    }
+  ],
+  "delegable": true,
+  "visible": true,
+  "hasCompetentAuthority": {
+    "name": {
+      "en": "Norwegian Tax Administration",
+      "nb": "Skatteetaten",
+      "nn": "Skatteetaten"
+    },
+    "organization": "974761076",
+    "orgcode": "skd"
+  },
+  "keywords": [],
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": true,
+  "resourceType": "Consent",
+  "consentTemplate": "sblanesoknad",
+  "consentText": {
+    "en": "Information reported in connection with the tax return (self-declaration) 2023: \n- Income\n- Tax deductions\n- Assets (incl. housing, car and other assets)\n- Debt \n\n You can see for yourself what information the Tax Administration has about you on the [A-melding](https://www.skatteetaten.no).",
+    "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) 2023: \n- Inntekt\n- Skattefradrag\n- Formue (inkl. bolig, bil og andre verdier)\n- Gjeld \n\n Du kan selv se hvilke opplysninger Skatteetaten har om deg på innsyn [A-melding](https://www.skatteetaten.no).",
+    "nn": "Opplysningar rapportert i forbindelse med skattemeldinga (sjølvmeldinga) 2023: \n- Inntekt\n- Skattefradrag\n- Formue (inkl. bustad, bil og andre verdiar)\n- Gjeld \n\n Du kan sjølv sjå kva opplysningar Skatteetaten har om deg på innsyn [A-melding](https://www.skatteetaten.no)."
+  },
+  "consentMetadata": {
+    "inntektsaar": { "optional": false }
+  },
+  "isOneTimeConsent": false,
+  "availableForType": ["LegalEntityEnterprise"],
+  "authorizationReference": [
+    {
+      "id": "urn:altinn:resource",
+      "value": "consent-test-resource"
+    }
+  ]
+}

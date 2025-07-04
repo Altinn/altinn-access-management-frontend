@@ -1,6 +1,6 @@
 export const getLogoutUrl = (): string => {
   const hostUrl = window.location.hostname.replace('am.ui.', '');
-  return `https://${hostUrl}/ui/systemuserication/Logout`;
+  return `https://${hostUrl}/ui/Authentication/Logout`;
 };
 
 export const getApiBaseUrl = (): string => {

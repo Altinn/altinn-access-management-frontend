@@ -1,5 +1,4 @@
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
 import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';

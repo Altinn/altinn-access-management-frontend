@@ -38,13 +38,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUserChangeRequest_ReturnsRequest()
         {
             // Arrange
-            int partyId = 51329012;
             string changeRequestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUserChangeRequest.json");
             SystemUserChangeRequestFE expectedResponse = Util.GetMockData<SystemUserChangeRequestFE>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/changerequest/{partyId}/{changeRequestId}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/changerequest/{changeRequestId}");
             SystemUserChangeRequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<SystemUserChangeRequestFE>();
 
             // Assert
@@ -60,12 +59,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUserChangeRequest_ReturnsError()
         {
             // Arrange
-            int partyId = 51329012;
             string changeRequestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/changerequest/{partyId}/{changeRequestId}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/changerequest/{changeRequestId}");
             AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
 
             // Assert

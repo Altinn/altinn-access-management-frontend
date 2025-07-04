@@ -35,9 +35,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<SystemUserAgentRequestFE>> GetSystemUserAgentRequest(int partyId, Guid agentRequestId, string languageCode, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserAgentRequestFE>> GetSystemUserAgentRequest(Guid agentRequestId, string languageCode, CancellationToken cancellationToken)
         {
-            Result<SystemUserAgentRequest> agentRequest = await _systemUserAgentRequestClient.GetSystemUserAgentRequest(partyId, agentRequestId, cancellationToken);
+            Result<SystemUserAgentRequest> agentRequest = await _systemUserAgentRequestClient.GetSystemUserAgentRequest(agentRequestId, cancellationToken);
             
             if (agentRequest.IsProblem)
             {
@@ -55,6 +55,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return new SystemUserAgentRequestFE() 
             {
                 Id = agentRequest.Value.Id,
+                PartyId = agentRequest.Value.PartyId,
+                PartyUuid = agentRequest.Value.PartyUuid,
                 Status = agentRequest.Value.Status,
                 RedirectUrl = agentRequest.Value.RedirectUrl,
                 AccessPackages = enrichedRights.AccessPackages,

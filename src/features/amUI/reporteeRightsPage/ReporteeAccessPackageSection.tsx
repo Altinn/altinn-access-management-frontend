@@ -1,26 +1,23 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useRef, useState } from 'react';
-import { DsHeading } from '@altinn/altinn-components';
+import { DsHeading, Skeleton } from '@altinn/altinn-components';
 
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
-import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
+import { AccessPackageInfoAlert } from '../userRightsPage/AccessPackageSection/AccessPackageInfoAlert';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
-interface ReporteeAccessPackageSectionProps {
-  numberOfAccesses?: number;
-}
-
-export const ReporteeAccessPackageSection = ({
-  numberOfAccesses,
-}: ReporteeAccessPackageSectionProps) => {
+export const ReporteeAccessPackageSection = () => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
+
+  const { toParty, fromParty, actingParty, isLoading: isLoadingParty } = usePartyRepresentation();
 
   useEffect(() => {
     const handleClose = () => setModalItem(undefined);
@@ -28,19 +25,33 @@ export const ReporteeAccessPackageSection = ({
     return () => modalRef.current?.removeEventListener('close', handleClose);
   }, []);
 
+  const { data: accesses, isLoading: isLoadingAccesses } = useGetUserDelegationsQuery(
+    {
+      from: fromParty?.partyUuid ?? '',
+      to: toParty?.partyUuid ?? '',
+      party: actingParty?.partyUuid ?? '',
+    },
+    { skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid },
+  );
+
+  const numberOfAccesses = accesses ? Object.values(accesses).flat().length : 0;
+
   return (
     <>
-      <OldRolesAlert />
-      <DsHeading
-        level={2}
-        data-size='2xs'
-        id='access_packages_title'
-      >
-        {t('access_packages.current_access_packages_title', {
-          count: numberOfAccesses ?? 0,
-        })}
-      </DsHeading>
+      <AccessPackageInfoAlert />
+      <Skeleton loading={isLoadingAccesses || isLoadingParty}>
+        <DsHeading
+          level={2}
+          data-size='2xs'
+          id='access_packages_title'
+        >
+          {t('access_packages.current_access_packages_title', {
+            count: numberOfAccesses ?? 0,
+          })}
+        </DsHeading>
+      </Skeleton>
       <AccessPackageList
+        isLoading={isLoadingAccesses || isLoadingParty}
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         useDeleteConfirm
         showAllPackages

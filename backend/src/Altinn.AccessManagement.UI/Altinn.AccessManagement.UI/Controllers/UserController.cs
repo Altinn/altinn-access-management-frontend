@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Method that returns the user information about the user that is logged in
+        /// Method that returns the user information about the user that is logged in.
         /// </summary>
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -72,7 +72,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for reportees the authenticated user can act on behalf of
+        /// Endpoint for reportees the authenticated user can act on behalf of.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -101,10 +101,10 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving party if party exists in the authenticated users reporteelist
+        /// Endpoint for retrieving party if party exists in the authenticated users reporteelist.
         /// </summary>
-        /// <param name="partyId">The partyId for the reportee to look up</param>
-        /// <returns>Reportee if party is in authenticated users reporteelist</returns>
+        /// <param name="partyId">The partyId for the reportee to look up.</param>
+        /// <returns>Reportee if party is in authenticated users reporteelist.</returns>
         [HttpGet]
         [Authorize]
         [Route("reportee/{partyId}")]
@@ -158,14 +158,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         ///     Endpoint for revoking all rights associated with a right holder by revoking their status as a right holder for another party.
         /// </summary>
-        /// <param name="partyUuid">The uuid of the reportee party, from which the right holder is to have their rights revoked</param>
-        /// <param name="rightholderPartyUuid">The uuid of the party that is to lose their right holder status</param>
+        /// <param name="party">The uuid identifying the party the authenticated user is acting on behalf of.</param>
+        /// <param name="from">The uuid identifying the party the authenticated user is acting for.</param>
+        /// <param name="to">The uuid identifying the target party to which the assignment should be deleted.</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete]
         [Authorize]
-        [Route("reportee/{partyUuid}/rightholder")]
-        public async Task<ActionResult> RevokeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid rightholderPartyUuid)
+        [Route("reportee")]
+        public async Task<ActionResult> RevokeRightHolder([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to)
         {
             if (!ModelState.IsValid)
             {
@@ -174,7 +175,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                await _userService.RevokeRightHolder(partyUuid, rightholderPartyUuid);
+                await _userService.RevokeRightHolder(party, from, to);
                 return NoContent();
             }
             catch (HttpStatusException ex)
@@ -239,7 +240,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return StatusCode(404, "Feature not available");
             }
-            
+
             try
             {
                 Guid? partyUuid = await _userService.ValidatePerson(validationInput.Ssn, validationInput.LastName);
@@ -315,7 +316,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             try
             {
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
@@ -350,7 +351,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             if (!from.HasValue && !to.HasValue)
             {
                 return BadRequest("Either 'from' or 'to' query parameter must be provided.");
@@ -378,12 +379,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("isAdmin")]
         public ActionResult<bool> IsAdmin()
         {
-            if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) && 
+            if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) &&
                 hasPermissionObj is bool hasPermission)
             {
                 return Ok(hasPermission);
             }
-            
+
             return Ok(false);
         }
     }

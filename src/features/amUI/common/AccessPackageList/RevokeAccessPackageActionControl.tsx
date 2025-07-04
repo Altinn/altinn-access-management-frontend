@@ -1,4 +1,4 @@
-import { Button } from '@altinn/altinn-components';
+import { Button, DsSpinner } from '@altinn/altinn-components';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
@@ -13,6 +13,7 @@ interface RevokeAccessPackageActionControlsProps {
   onRevoke: () => void;
   pkg: AccessPackage;
   useDeleteConfirm?: boolean;
+  isLoading?: boolean;
 }
 
 export const RevokeAccessPackageActionControl = ({
@@ -20,6 +21,7 @@ export const RevokeAccessPackageActionControl = ({
   onRevoke,
   pkg,
   useDeleteConfirm = false,
+  isLoading = false,
 }: RevokeAccessPackageActionControlsProps) => {
   const { t } = useTranslation();
 
@@ -50,10 +52,16 @@ export const RevokeAccessPackageActionControl = ({
         icon={MinusCircleIcon}
         variant='text'
         size='sm'
-        disabled={pkg.inherited}
         onClick={onRevoke}
       >
-        {t('common.delete_poa')}
+        {isLoading ? (
+          <DsSpinner
+            aria-label={t('common.loading')}
+            data-size='sm'
+          />
+        ) : (
+          t('common.delete_poa')
+        )}
       </Button>
     );
   }

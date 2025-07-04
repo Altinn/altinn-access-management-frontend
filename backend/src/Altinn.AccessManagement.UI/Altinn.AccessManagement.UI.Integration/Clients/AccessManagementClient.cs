@@ -221,16 +221,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         //// Access packages
 
         /// <inheritdoc />
-        public async Task<List<AccessPackageAccess>> GetAccessPackageAccesses(string to, string from, string languageCode)
-        {
-            string endpointUrl = $"/accessmanagement/api/v1/enduser/access/accesspackages?to={to}&from={from}"; // TODO: Switch with actual backend endpoint when available
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
-
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<AccessPackageAccess>>(response);
-        }
-
-        /// <inheritdoc />
         public Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest)
         {
             throw new NotImplementedException();

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
+import type { DelegationErrorDetails } from '@/resources/hooks/useDelegateAccessPackage';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -48,8 +49,9 @@ export const useAccessPackageActions = ({
     toParty: Party,
     httpStatus: string,
     timestamp: string,
+    details?: DelegationErrorDetails,
   ) => {
-    if (onDelegateError) onDelegateError(accessPackage, { httpStatus, timestamp });
+    if (onDelegateError) onDelegateError(accessPackage, { httpStatus, timestamp, details });
     else {
       openSnackbar({
         message: t('access_packages.package_delegation_error', {
@@ -106,12 +108,13 @@ export const useAccessPackageActions = ({
       () => {
         handleDelegateSuccess(accessPackage, toParty);
       },
-      (httpStatus) => {
+      (httpStatus, details) => {
         handleDelegateError(
           accessPackage,
           toParty,
           httpStatus.toString(),
           new Date().toISOString(),
+          details,
         );
       },
     );

@@ -44,5 +44,10 @@
         /// Correspondence service resource type
         /// </summary>
         CorrespondenceService = 1 << 6,
+
+        /// <summary>
+        /// Consent resource type
+        /// </summary>
+        Consent = 1 << 7,
     }
 }

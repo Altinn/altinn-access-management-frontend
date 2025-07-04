@@ -48,12 +48,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<SystemUserAgentRequest>> GetSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserAgentRequest>> GetSystemUserAgentRequest(Guid agentRequestId, CancellationToken cancellationToken)
         {        
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/request/agent/{partyId}/{agentRequestId}";
+                string endpoint = $"systemuser/request/agent/{agentRequestId}";
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
                 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)

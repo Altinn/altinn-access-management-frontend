@@ -11,12 +11,11 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Get a system user agent delegation request
         /// </summary>
-        /// <param name="partyId">Used to identify the party the system user request is for.</param>
         /// <param name="agentRequestId">The id of the system user agent request</param>
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The system user request</returns>
-        Task<Result<SystemUserAgentRequestFE>> GetSystemUserAgentRequest(int partyId, Guid agentRequestId, string languageCode, CancellationToken cancellationToken);
+        Task<Result<SystemUserAgentRequestFE>> GetSystemUserAgentRequest(Guid agentRequestId, string languageCode, CancellationToken cancellationToken);
         
         /// <summary>
         /// Approve an agent delegation user request to create a new system user

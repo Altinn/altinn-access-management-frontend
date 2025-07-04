@@ -35,9 +35,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<SystemUserChangeRequestFE>> GetSystemUserChangeRequest(int partyId, Guid changeRequestId, string languageCode, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserChangeRequestFE>> GetSystemUserChangeRequest(Guid changeRequestId, string languageCode, CancellationToken cancellationToken)
         {
-            Result<SystemUserChangeRequest> changeRequest = await _systemUserChangeRequestClient.GetSystemUserChangeRequest(partyId, changeRequestId, cancellationToken);
+            Result<SystemUserChangeRequest> changeRequest = await _systemUserChangeRequestClient.GetSystemUserChangeRequest(changeRequestId, cancellationToken);
             
             if (changeRequest.IsProblem)
             {
@@ -54,6 +54,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return new SystemUserChangeRequestFE() 
             {
                 Id = changeRequest.Value.Id,
+                PartyId = changeRequest.Value.PartyId,
+                PartyUuid = changeRequest.Value.PartyUuid,
                 Status = changeRequest.Value.Status,
                 RedirectUrl = changeRequest.Value.RedirectUrl,
                 Resources = enrichedRights.Resources,

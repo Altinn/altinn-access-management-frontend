@@ -48,12 +48,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<SystemUserChangeRequest>> GetSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserChangeRequest>> GetSystemUserChangeRequest(Guid changeRequestId, CancellationToken cancellationToken)
         {        
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/changerequest/{partyId}/{changeRequestId}";
+                string endpoint = $"systemuser/changerequest/{changeRequestId}";
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)

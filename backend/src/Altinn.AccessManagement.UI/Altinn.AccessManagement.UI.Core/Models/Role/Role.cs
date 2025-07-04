@@ -47,4 +47,9 @@ public class Role
     /// IsDelegable
     /// </summary>
     public bool IsDelegable { get; set; }
+
+    /// <summary>
+    /// Defines the role as a KeyRole
+    /// </summary>
+    public bool IsKeyRole { get; set; }
 }

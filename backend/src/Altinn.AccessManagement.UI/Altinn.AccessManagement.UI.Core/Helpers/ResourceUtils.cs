@@ -1,4 +1,6 @@
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
@@ -39,6 +41,28 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     spatial: resource.Spatial,
                     authorizationReference: resource.AuthorizationReference,
                     resourceOwnerLogoUrl: org?.Logo);
+            }).ToList();
+        }
+
+        /// <summary>
+        /// Map a list of resources in access packages to frontend resource objects
+        /// </summary>
+        /// <param name="resources">List of resources to map to frontend resource objects</param>
+        /// <returns>Output result</returns>
+        public static List<AccessPackageResourceFE> MapToAccessPackageResourceFE(IEnumerable<ResourceAM> resources)
+        {
+            return resources.Select(resource =>
+            {
+                return new AccessPackageResourceFE()
+                {
+                    Identifier = resource.RefId,
+                    Title = resource.Name,
+                    Description = resource.Description,
+                    ResourceOwnerName = resource.Provider.Name,
+                    ResourceOwnerLogoUrl = resource.Provider.LogoUrl,
+                    ResourceOwnerOrgcode = resource.Provider.Code,
+                    ResourceType = resource.Type.Name
+                };
             }).ToList();
         }
 

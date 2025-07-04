@@ -62,7 +62,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                return new List<SearchObject<AccessPackage>>();
+            }
+            else if (response.StatusCode == HttpStatusCode.OK)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<IEnumerable<SearchObject<AccessPackage>>>(responseContent, _serializerOptions);
@@ -74,6 +78,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 throw error;
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, string languageCode)
+        {
+            string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<PackagePermission>>(response);
         }
 
         /// <inheritdoc />

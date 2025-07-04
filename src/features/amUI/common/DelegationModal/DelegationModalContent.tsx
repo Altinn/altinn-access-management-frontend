@@ -5,6 +5,9 @@ import type { JSX } from 'react';
 import { useEffect, useRef } from 'react';
 import { Button, DsDialog } from '@altinn/altinn-components';
 
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
 
@@ -16,9 +19,6 @@ import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import type { DelegationAction } from './EditModal';
-
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export interface DelegationModalProps {
   delegationType: DelegationType;
@@ -114,10 +114,11 @@ export const DelegationModalContent = ({
     <DsDialog.TriggerContext>
       <DsDialog.Trigger
         data-size='sm'
-        variant='primary'
+        variant='secondary'
         className={classes.triggerButton}
       >
-        {triggerButtonText} <PlusIcon />
+        {triggerButtonText}
+        <PlusIcon />
       </DsDialog.Trigger>
       <DsDialog
         className={classes.modalDialog}

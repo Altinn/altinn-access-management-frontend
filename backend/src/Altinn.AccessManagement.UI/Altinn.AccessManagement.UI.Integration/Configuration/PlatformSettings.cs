@@ -46,6 +46,11 @@
         public string JwtCookieName { get; set; }
 
         /// <summary>
+        /// Logout cookie name
+        /// </summary>
+        public string AltinnLogoutInfoCookieName { get; set; }
+
+        /// <summary>
         /// Open Id Connect Well known endpoint
         /// </summary>
         public string OpenIdWellKnownEndpoint { get; set; }

@@ -3,11 +3,11 @@ import { DsHeading, DsParagraph, ResourceList } from '@altinn/altinn-components'
 import { PackageIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
 import type { SystemUserAccessPackage } from '../../types';
 
 import classes from './RightsList.module.css';
-
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface AccessPackageInfoProps {
   accessPackage: SystemUserAccessPackage;

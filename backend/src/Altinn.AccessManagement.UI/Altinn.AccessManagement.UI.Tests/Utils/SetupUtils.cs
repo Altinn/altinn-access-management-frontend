@@ -1,6 +1,7 @@
 ﻿using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
@@ -304,6 +305,56 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
+        }
+
+        /// <summary>
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for ConsentController tests</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<ConsentController> customFactory)
+        {
+            WebApplicationFactory<ConsentController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<IEncryptionService, EncryptionServiceMock>();
+                    services.AddTransient<IConsentClient, ConsentClientMock>();
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<IRegisterClient, RegisterClientMock>();
+                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
+        }
+
+        /// <summary>
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for ConsentController tests</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<LogoutRedirectController> customFactory)
+        {
+            WebApplicationFactory<LogoutRedirectController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<IEncryptionService, EncryptionServiceMock>();
                 });
             });
             WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions

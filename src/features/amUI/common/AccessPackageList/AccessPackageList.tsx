@@ -1,4 +1,5 @@
-import { ListBase } from '@altinn/altinn-components';
+import { DsParagraph, DsSpinner, ListBase } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
@@ -45,14 +46,23 @@ export const AccessPackageList = ({
   onRevokeError,
   searchString,
 }: AccessPackageListProps) => {
-  const { data: allPackageAreas, isLoading: loadingPackageAreas } = useSearchQuery(
-    searchString ?? '',
+  const { t } = useTranslation();
+  const {
+    data: allPackageAreas,
+    isLoading: loadingPackageAreas,
+    isFetching: fetchingSearch,
+  } = useSearchQuery(searchString ?? '');
+  const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery(
+    {
+      from: fromParty?.partyUuid ?? '',
+      to: toParty?.partyUuid ?? '',
+      party: actingParty?.partyUuid ?? '',
+    },
+    {
+      skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid,
+    },
   );
-  const { fromParty, toParty } = usePartyRepresentation();
-  const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery({
-    from: fromParty?.partyUuid ?? '',
-    to: toParty?.partyUuid ?? '',
-  });
 
   const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
 
@@ -63,7 +73,12 @@ export const AccessPackageList = ({
     showAllPackages,
   });
 
-  const { onDelegate, onRevoke, onRequest } = useAccessPackageActions({
+  const {
+    onDelegate,
+    onRevoke,
+    onRequest,
+    isLoading: isActionLoading,
+  } = useAccessPackageActions({
     onDelegateSuccess,
     onDelegateError,
     onRevokeSuccess,
@@ -76,10 +91,45 @@ export const AccessPackageList = ({
     ? combinedAreas
     : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
 
+  if (loadingDelegations || loadingPackageAreas || isLoading) {
+    return (
+      <div className={classes.accessAreaList}>
+        <SkeletonAccessPackageList />
+      </div>
+    );
+  }
+
+  if (fetchingSearch && searchString && searchString.length > 0) {
+    return (
+      <div className={classes.accessAreaList}>
+        <DsSpinner
+          aria-label={t('common.loading')}
+          className={classes.noAccessPackages}
+        />
+      </div>
+    );
+  }
+
+  if (
+    searchString &&
+    searchString?.length > 0 &&
+    (allPackageAreas === undefined || allPackageAreas.length === 0)
+  ) {
+    return (
+      <div className={classes.accessAreaList}>
+        <DsParagraph className={classes.noAccessPackages}>
+          {t('access_packages.no_matching_search')}
+        </DsParagraph>
+      </div>
+    );
+  }
+
   return (
     <div className={classes.accessAreaList}>
-      {loadingDelegations || loadingPackageAreas || isLoading ? (
-        <SkeletonAccessPackageList />
+      {displayAreas.length === 0 ? (
+        <DsParagraph className={classes.noAccessPackages}>
+          {t('access_packages.user_has_no_packages')}
+        </DsParagraph>
       ) : (
         <ListBase>
           {displayAreas.map((area) => {
@@ -100,6 +150,7 @@ export const AccessPackageList = ({
                   onDelegate={onDelegate}
                   onRevoke={onRevoke}
                   onRequest={onRequest}
+                  isActionLoading={isActionLoading}
                   useDeleteConfirm={useDeleteConfirm}
                   showAvailablePackages={!minimizeAvailablePackages}
                 />

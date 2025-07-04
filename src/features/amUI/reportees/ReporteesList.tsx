@@ -2,19 +2,19 @@ import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsSearch } from '@altinn/altinn-components';
 
+import { debounce } from '@/resources/utils';
+import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
+
 import { UserList } from '../common/UserList/UserList';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './ReporteePage.module.css';
 
-import { debounce } from '@/resources/utils';
-import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
-
 export const ReporteesList = () => {
   const { t } = useTranslation();
-  const { fromParty } = usePartyRepresentation();
+  const { fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
 
-  const { data: rightHolders, isLoading } = useGetRightHoldersQuery(
+  const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
       fromUuid: '', // all
@@ -51,11 +51,12 @@ export const ReporteesList = () => {
         </DsSearch>
       </div>
       <UserList
-        userList={rightHolders || []}
+        connections={rightHolders || []}
         searchString={searchString}
-        isLoading={isLoading}
+        isLoading={loadingRightHolders || loadingPartyRepresentation}
         listItemTitleAs='h2'
         interactive
+        canAdd={false} // Cannot add new reportees
       />
     </div>
   );

@@ -1,8 +1,9 @@
 import * as React from 'react';
 
+import { AreaExpandedStateProvider } from '../AccessPackageList/AccessPackageExpandedContext';
+
 import { DelegationModalContent } from './DelegationModalContent';
 import type { DelegationAction } from './EditModal';
-import { AreaExpandedStateProvider } from '../AccessPackageList/AccessPackageExpandedContext';
 
 export enum DelegationType {
   SingleRights = 'SingleRights',

@@ -41,7 +41,7 @@ export const DelegationCheckError = ({
         return t('systemuser_delegation_errors.19_delegation_right_missing_srr_right_access');
       case 'AMUI-00020':
         return t(
-          'systemuser_delegation_errors.20_delegation_right_insufficient_systemuserication_level',
+          'systemuser_delegation_errors.20_delegation_right_insufficient_authentication_level',
         );
       default:
         return t(defaultError);

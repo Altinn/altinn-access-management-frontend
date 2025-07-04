@@ -4,6 +4,14 @@
   margin-bottom: 0.5rem;
 }
 
+.noResultsContent {
+  display: flex;
+  gap: 0.3rem;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 1rem;
+}
+
 .showMoreButtonContainer {
   display: flex;
   justify-content: center;

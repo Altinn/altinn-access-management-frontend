@@ -564,8 +564,12 @@
           "refId": "HMS-DOC-001",
           "provider": {
             "id": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
+            "code": "digdir",
             "name": "Digitaliseringsdirektoratet",
             "logoUrl": "https://profilveileder.digdir.no/sites/leikanger/files/styles/xxxs/public/2022-04/Ikon_Emblem-blaasvart.png?itok=QU5K_ApH"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -577,8 +581,12 @@
           "refId": "RISK-TOOL-001",
           "provider": {
             "id": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
+            "code": "dsb",
             "name": "Direktoratet for samfunnssikkerhet og beredskap",
             "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -590,8 +598,12 @@
           "refId": "INT-SYS-002",
           "provider": {
             "id": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
+            "code": "dat",
             "name": "Arbeidstilsynet",
             "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg/1200px-Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg.png"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -603,8 +615,12 @@
           "refId": "EMG-PLAN-003",
           "provider": {
             "id": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
+            "code": "digdir",
             "name": "Næringslivets sikkerhetsråd",
             "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -616,8 +632,12 @@
           "refId": "DEV-REP-001",
           "provider": {
             "id": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
+            "code": "dsb",
             "name": "Direktoratet for samfunnssikkerhet og beredskap",
             "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -629,8 +649,12 @@
           "refId": "GDPR-COMP-001",
           "provider": {
             "id": "c7c7c7c7-c7c7-c7c7-c7c7-c7c7c7c7c7c7",
+            "code": "dat",
             "name": "Datatilsynet",
             "logoUrl": "https://www.datatilsynet.no/globalassets/global/bilder/logoer/pvo_logo?width=756&height=710&quality=80&h=4c22bcfb2f8f388c55db321994144cb6d8fcba42"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         },
         {
@@ -642,8 +666,12 @@
           "refId": "SEC-MGT-002",
           "provider": {
             "id": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
+            "code": "digdir",
             "name": "Næringslivets sikkerhetsråd",
             "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
+          },
+          "type": {
+            "name": "GenericAccessResource"
           }
         }
       ]
@@ -3334,7 +3362,24 @@
         "groupId": "554f0321-53b8-4d97-be12-6a585c507159",
         "urn": "accesspackage:area:fullmakter_for_regnskapsforer"
       },
-      "resources": []
+      "resources": [
+        {
+          "id": "39c943cf-872a-451d-af8d-bfbc9f0d2f65",
+          "providerId": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
+          "typeId": "d5d5d5d5-d5d5-d5d5-d5d5-d5d5d5d5d5d5",
+          "name": "Innrapportering A-melding",
+          "description": "A-meldingen er en månedlig melding til NAV, SSB og Skatteetaten om inntekt, arbeidsforhold og forskuddstrekk, samt arbeidsgiveravgift og finansskatt for virksomheten.",
+          "refId": "ske-innrapportering-amelding",
+          "provider": {
+            "code": "skd",
+            "name": "Skatteetaten",
+            "logoUrl": "https://altinncdn.no/orgs/skd/skd.png"
+          },
+          "type": {
+            "name": "GenericAccessResource"
+          }
+        }
+      ]
     },
     "score": 0,
     "fields": []

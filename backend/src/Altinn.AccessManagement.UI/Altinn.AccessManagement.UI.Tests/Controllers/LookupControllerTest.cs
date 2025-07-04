@@ -4,9 +4,9 @@ using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
-using Altinn.Platform.Register.Enums;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
             Assert.Equal(lookupOrgNo, actualParty.OrgNumber);
             Assert.Equal(50004222, actualParty.PartyId);
-            Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
+            Assert.Equal(PartyType.Organization, actualParty.PartyTypeName);
             Assert.Equal("KARLSTAD OG ULOYBUKT", actualParty.Name);
         }
 
@@ -92,10 +92,30 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Assert that an authenticated user is able to lookup a party based on uuid
+        /// Assert that an authenticated user is able to lookup a party based on uuid, using the old Register data
         /// </summary>
         [Fact]
-        public async Task GetPartyByUUID_Success()
+        public async Task GetPartyByUUID_OldRegistry_Success()
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
+            Guid lookupUUID = new Guid("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}?useOldRegistry={true}");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
+            Assert.Equal(lookupUUID, actualParty.PartyUuid);
+            Assert.Equal(51317934, actualParty.PartyId);
+            Assert.Equal(PartyType.Organization, actualParty.PartyTypeName);
+            Assert.Equal("RAKRYGGET UNG TIGER AS", actualParty.Name);
+        }
+
+        /// <summary>
+        /// Assert that an authenticated user is able to lookup an org party based on uuid
+        /// </summary>
+        [Fact]
+        public async Task GetPartyByUUID_Org_Success()
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
             Guid lookupUUID = new Guid("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
@@ -106,9 +126,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
             Assert.Equal(lookupUUID, actualParty.PartyUuid);
-            Assert.Equal(51317934, actualParty.PartyId);
-            Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
+            Assert.Equal(51442738, actualParty.PartyId);
+            Assert.Equal(PartyType.Organization, actualParty.PartyTypeName);
             Assert.Equal("RAKRYGGET UNG TIGER AS", actualParty.Name);
+        }
+
+        /// <summary>
+        /// Assert that an authenticated user is able to lookup a person party based on uuid
+        /// </summary>
+        [Fact]
+        public async Task GetPartyByUUID_Person_Success()
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
+            Guid lookupUUID = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
+            Assert.Equal(lookupUUID, actualParty.PartyUuid);
+            Assert.Equal(50789533, actualParty.PartyId);
+            Assert.Equal(PartyType.Person, actualParty.PartyTypeName);
+            Assert.Equal("SITRONGUL MEDALJONG", actualParty.Name);
         }
 
         /// <summary>
