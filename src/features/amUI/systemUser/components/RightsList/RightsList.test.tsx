@@ -36,6 +36,7 @@ const accessPackage = {
   description:
     'Denne fullmakten gir tilgang til tjenester knyttet til skipsarbeidstakere og fartøy til sjøs. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.',
   resources: [resource],
+  isAssignable: true,
   area: {
     name: 'Transport',
     id: '4321',
@@ -52,6 +53,7 @@ const accessPackage2 = {
   name: 'Lufttransport',
   description:
     'Denne fullmakten gir tilgang til tjenester knyttet til luftfartøy og romfartøy. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.',
+  isAssignable: true,
   resources: [resource, resource2],
 };
 
