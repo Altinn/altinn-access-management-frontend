@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -597,6 +598,38 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(actual);
             Assert.NotNull(expected);
             Assert.Equal(expected.CustomerId, actual.CustomerId);
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="ConsentRequestFE" /> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(ConsentRequestFE expected, ConsentRequestFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Title, actual.Title);
+            Assert.Equal(expected.Heading, actual.Heading);
+            Assert.Equal(expected.ConsentMessage, actual.ConsentMessage);
+            Assert.Equal(expected.Expiration, actual.Expiration);
+            Assert.Equal(expected.ServiceIntro, actual.ServiceIntro);
+            Assert.Equal(expected.HandledBy, actual.HandledBy);
+            Assert.Equal(expected.IsPoa, actual.IsPoa);
+            Assert.Equal(expected.FromPartyName, actual.FromPartyName);
+            AssertCollections(expected.Rights, actual.Rights, AssertEqual);
+        }
+
+        public static void AssertEqual(ConsentRightFE expected, ConsentRightFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Identifier, actual.Identifier);
+            Assert.Equal(expected.Title, actual.Title);
+            Assert.Equal(expected.ConsentTextHtml, actual.ConsentTextHtml);
         }
 
         public static void AssertEqual(Altinn.AccessManagement.UI.Core.Models.User.Entity expected, Altinn.AccessManagement.UI.Core.Models.User.Entity actual)
