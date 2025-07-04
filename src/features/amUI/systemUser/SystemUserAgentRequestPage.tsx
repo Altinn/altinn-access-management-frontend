@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useSearchParams, useNavigate } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import {
@@ -9,7 +9,6 @@ import {
   useRejectAgentSystemUserRequestMutation,
   useGetSystemUserReporteeQuery,
 } from '@/rtk/features/systemUserApi';
-import { SystemUserPath } from '@/routes/paths';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
@@ -22,7 +21,6 @@ import { RightsList } from './components/RightsList/RightsList';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   useDocumentTitle(t('systemuser_agent_request.page_title'));
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
@@ -63,13 +61,7 @@ export const SystemUserAgentRequestPage = () => {
       const partyId = request.partyId;
       postAcceptCreationRequest({ partyId, requestId: request.id })
         .unwrap()
-        .then(() => {
-          if (request.redirectUrl) {
-            logoutAndRedirectToVendor();
-          } else {
-            navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
-          }
-        });
+        .then(onRejectOrApprove);
     }
   };
 
@@ -78,18 +70,15 @@ export const SystemUserAgentRequestPage = () => {
       const partyId = request.partyId;
       postRejectCreationRequest({ partyId, requestId: request.id })
         .unwrap()
-        .then(() => {
-          if (request.redirectUrl) {
-            logoutAndRedirectToVendor();
-          } else {
-            window.location.assign(getLogoutUrl());
-          }
-        });
+        .then(onRejectOrApprove);
     }
   };
 
-  const logoutAndRedirectToVendor = (): void => {
-    window.location.assign(`${getApiBaseUrl()}/agentrequest/${request?.id}/logout`);
+  const onRejectOrApprove = (): void => {
+    const url = request?.redirectUrl
+      ? `${getApiBaseUrl()}/agentrequest/${request?.id}/logout`
+      : getLogoutUrl();
+    window.location.assign(url);
   };
 
   return (
