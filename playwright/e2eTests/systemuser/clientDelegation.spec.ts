@@ -75,7 +75,7 @@ test.describe('Klientdelegering', () => {
     await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
 
     // Verify logout by checking for login page elements
-    await expect(page.getByText('TestID Lag din egen')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('button', { name: 'Logg inn Logg inn/Min profil' })).toBeVisible();
 
     // Navigate to system user login page
     await loginAs(page, user.pid, user.org);

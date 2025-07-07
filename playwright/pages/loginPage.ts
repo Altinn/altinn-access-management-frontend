@@ -58,9 +58,19 @@ export async function loginAs(page: Page, pid: string, orgnummer: string) {
   // Wait for "Velg aktør" heading to appear
   await expect(page.getByRole('heading', { level: 1, name: 'Velg aktør' })).toBeVisible();
 
-  // Always search for aktør
-  await page.getByRole('searchbox', { name: 'Søk etter aktør' }).fill(orgnummer);
-  await page.keyboard.press('Enter');
+  // searching for actor doesn't work headless - sadface
+  const lastFlereButton = page.getByRole('button', { name: 'Last flere' });
+
+  while (await lastFlereButton.isVisible()) {
+    if (await lastFlereButton.isEnabled()) {
+      await lastFlereButton.click();
+      await page.waitForTimeout(200); // wait 1 second before checking again
+    } else {
+      break;
+    }
+  }
+  // await page.getByRole('searchbox', { name: 'Søk etter aktør' }).fill(orgnummer);
+  // await page.keyboard.press('Enter');
 
   const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`; // e.g. "314 239"
   await page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) }).click();
@@ -68,8 +78,7 @@ export async function loginAs(page: Page, pid: string, orgnummer: string) {
 
 export async function loginNotChoosingActor(page: Page, pid: string) {
   // Ensure we're on a page where login elements are available
-  await page.waitForSelector("text='TestID Lag din egen'", { timeout: 5000 });
-  await page.getByText('TestID Lag din egen').click();
+  await page.getByRole('link', { name: 'TestID Lag din egen' }).click();
   await page.locator("input[name='pid']").fill(pid);
   await page.click("'Autentiser'");
 }
