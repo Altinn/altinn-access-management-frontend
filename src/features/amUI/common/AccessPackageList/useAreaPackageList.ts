@@ -64,7 +64,7 @@ export const useAreaPackageList = ({
                   (permission) =>
                     !isInherited(permission, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
                 );
-                if (delegated) {
+                if (delegated.length > 0) {
                   pkgAcc.assigned.push({ ...pkg, inherited: false });
                 }
               } else if (showAllPackages) {
@@ -107,6 +107,6 @@ export const isInherited = (
   return (
     toPartyUuid === permission.to.id &&
     fromPartyUuid === permission.from.id &&
-    permission.role?.code === 'rettighetshaver'
+    permission.role?.code !== 'rettighetshaver'
   );
 };
