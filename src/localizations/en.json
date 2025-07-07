@@ -622,5 +622,32 @@
   "page_not_available": {
     "title": "This page is not available",
     "text": "The new access management pages are not quite ready for private individuals yet. If you meant to view the accesses for an organization, please switch to it in the menu."
+  },
+  "consent_request": {
+    "page_title": "Approve consent/power of attorney - Altinn",
+    "loading_consent": "Loading request...",
+    "load_consent_error": "Could not load consent/power of attorney",
+    "approve_consent": "Yes, I give consent",
+    "reject_consent": "No, I do not give consent",
+    "approve_poa": "Yes, I give power of attorney",
+    "reject_poa": "No, I do not give power of attorney",
+    "approve_error": "Could not give consent",
+    "approve_error_poa": "Could not grant power of attorney",
+    "reject_error": "Could not reject consent",
+    "reject_error_poa": "Could not reject power of attorney",
+    "already_approved": "This consent is already given",
+    "already_approved_poa": "This power of attorney is already given",
+    "already_rejected": "This consent is already rejected",
+    "already_rejected_poa": "This power of attorney is already rejected"
+  },
+  "consent_errors": {
+    "not_authorized_for_consent": "User is not authorized to give consent/power of attorney",
+    "consent_not_found": "Consent/power of attorney does not exist",
+    "wrong_consent_status": "Consent/power of attorney has wrong status to be able to consent/grant power of attorney",
+    "wrong_revoke_status": "Consent/power of attorney has wrong status to be revoked",
+    "wrong_reject_status": "Consent/power of attorney has wrong status to be rejected",
+    "consent_is_revoked": "Consent/power of attorney is revoked",
+    "consent_is_expired": "Consent/power of attorney has expired",
+    "consent_is_not_accepted": "Consent/power of attorney is not approved"
   }
 }

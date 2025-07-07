@@ -29,6 +29,8 @@
     "classnames": "^2.5.1",
     "cross-env": "^7.0.3",
     "cypress-real-events": "^1.14.0",
+    "dompurify": "^3.2.6",
+    "html-react-parser": "^5.2.5",
     "i18next": "^24.0.0",
     "i18next-browser-languagedetector": "^8.0.0",
     "lottie-react": "2.4.1",
