@@ -58,8 +58,11 @@ const Link = (props: { href: string; children?: React.ReactNode }) => {
 };
 
 export const transformText = (text: string): string | React.JSX.Element | React.JSX.Element[] => {
+  const allowedTags = ['p', 'span', 'ul', 'ol', 'li', 'a', 'b', 'strong', 'em', 'i'];
   const dirty = text;
-  const clean = DOMPurify.sanitize(dirty);
+  const clean = DOMPurify.sanitize(dirty, {
+    ALLOWED_TAGS: allowedTags,
+  });
 
   // Parse the sanitized HTML to React elements
   const returnVal = parseHtmlToReact(clean.toString().trim(), parserOptions);
