@@ -217,7 +217,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     string resourceId = right.Resource.Find(x => x.Type == "urn:altinn:resource")?.Value;
                     ServiceResource resource = await _resourceRegistryClient.GetResource(resourceId);
-                    isOneTimeConsent = resource.IsOneTimeConsent;
+                    if (isOneTimeConsent == false && resource.IsOneTimeConsent)
+                    {
+                        // If one of the resources is one-time consent, the whole consent is one-time consent
+                        isOneTimeConsent = resource.IsOneTimeConsent;
+                    }
 
                     rights.Add(new()
                     {
