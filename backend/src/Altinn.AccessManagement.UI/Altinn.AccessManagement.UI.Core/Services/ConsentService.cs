@@ -30,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="registerClient">The register client.</param>
         /// <param name="resourceRegistryClient">Resources client to load resources</param>
         public ConsentService(
-            ILogger<IConsentService> logger,
+            ILogger<ConsentService> logger,
             IConsentClient consentClient,
             IRegisterClient registerClient,
             IResourceRegistryClient resourceRegistryClient)
@@ -120,7 +120,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             catch (TimeZoneNotFoundException e)
             {
-                _logger.LogWarning($"Could not find timezone Europe/Oslo. Defaulting to UTC. {e.Message}");
+                _logger.LogWarning(e, "Could not find timezone Europe/Oslo. Defaulting to UTC {Message}.", e.Message);
             }
 
             return new()
