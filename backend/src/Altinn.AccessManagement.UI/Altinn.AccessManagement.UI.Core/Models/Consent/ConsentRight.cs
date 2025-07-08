@@ -22,5 +22,5 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// Keys are case insensitive.
         /// </summary>
         public Dictionary<string, string>? MetaData { get; set; }
-     }
+    }
 }

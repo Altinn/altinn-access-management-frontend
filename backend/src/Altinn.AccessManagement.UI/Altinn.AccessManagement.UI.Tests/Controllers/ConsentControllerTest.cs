@@ -22,6 +22,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         private readonly string PERSON_CONSENT_ID = "e2071c55-6adf-487b-af05-9198a230ed44";
         private readonly string ORG_CONSENT_ID = "7e540335-d82f-41e9-8b8f-619336d792b4";
+        private readonly string ORG_CONSENT_WITHOUT_MESSAGE_ID = "1a04a7fa-24c1-4e06-9217-8aee89239a9f";
 
         /// <summary>
         ///     Constructor setting up factory, test client and dependencies
@@ -66,6 +67,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string requestId = ORG_CONSENT_ID;
             string path = Path.Combine(_expectedDataPath, "Consent", "consentRequest_org.json");
+            ConsentRequestFE expectedResponse = Util.GetMockData<ConsentRequestFE>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{requestId}");       
+            ConsentRequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<ConsentRequestFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: GetConsentRequest checks that consent request with expected texts is returned
+        ///     Expected: GetConsentRequest returns the consent request
+        /// </summary>
+        [Fact]
+        public async Task GetConsentRequest_ReturnsConsentRequestForOrgWithoutMessage()
+        {
+            // Arrange
+            string requestId = ORG_CONSENT_WITHOUT_MESSAGE_ID;
+            string path = Path.Combine(_expectedDataPath, "Consent", "consentRequest_org_without_message.json");
             ConsentRequestFE expectedResponse = Util.GetMockData<ConsentRequestFE>(path);
 
             // Act

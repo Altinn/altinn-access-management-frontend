@@ -201,7 +201,7 @@ const ConsentRequestContent = ({
       <div className={classes.consentBlock}>
         <div className={classes.consentContent}>
           <DsParagraph className={classes.boldText}>{request.heading[language]}</DsParagraph>
-          <DsParagraph>{request.consentMessage[language]}</DsParagraph>
+          {request.consentMessage && <DsParagraph>{request.consentMessage[language]}</DsParagraph>}
           <DsHeading
             level={2}
             data-size='2xs'

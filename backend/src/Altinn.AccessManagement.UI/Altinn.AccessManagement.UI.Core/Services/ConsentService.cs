@@ -145,7 +145,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private static Dictionary<string, string> ReplaceMetadataInTranslationsDict(Dictionary<string, string> translations, Dictionary<string, string> metadata)
         {
-            if (metadata == null)
+            if (metadata == null || translations == null)
             {
                 return translations;
             }

@@ -14,7 +14,7 @@ export interface ConsentRequest {
   title: ConsentLanguage;
   heading: ConsentLanguage;
   serviceIntro: ConsentLanguage;
-  consentMessage: ConsentLanguage;
+  consentMessage?: ConsentLanguage;
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
   fromPartyName?: string;
