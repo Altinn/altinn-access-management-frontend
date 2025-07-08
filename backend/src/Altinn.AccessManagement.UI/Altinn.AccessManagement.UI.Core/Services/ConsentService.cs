@@ -10,12 +10,14 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
 using Altinn.Platform.Register.Enums;
 using Altinn.Platform.Register.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
     /// <inheritdoc />
     public class ConsentService : IConsentService
     {
+        private readonly ILogger<IConsentService> _logger;
         private readonly IConsentClient _consentClient;
         private readonly IRegisterClient _registerClient;
         private readonly IResourceRegistryClient _resourceRegistryClient;
@@ -23,14 +25,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsentService"/> class.
         /// </summary>
+        /// <param name="logger">Logger instance.</param>
         /// <param name="consentClient">The consent client.</param>
         /// <param name="registerClient">The register client.</param>
         /// <param name="resourceRegistryClient">Resources client to load resources</param>
         public ConsentService(
+            ILogger<IConsentService> logger,
             IConsentClient consentClient,
             IRegisterClient registerClient,
             IResourceRegistryClient resourceRegistryClient)
         {
+            _logger = logger;
             _consentClient = consentClient;
             _registerClient = registerClient;
             _resourceRegistryClient = resourceRegistryClient;
@@ -105,16 +110,25 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return request.Value.RedirectUrl;
         }
 
-        private static Dictionary<string, string> GetStaticMetadata(Party to, Party from, Party handledBy, DateTimeOffset requestValidTo)
+        private Dictionary<string, string> GetStaticMetadata(Party to, Party from, Party handledBy, DateTimeOffset requestValidTo)
         {
-            TimeZoneInfo norwayTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+            TimeZoneInfo timeZone = TimeZoneInfo.Utc;
+            try
+            {
+                // attempt to set timezone to norwegian
+                timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo");
+            }
+            catch (TimeZoneNotFoundException e)
+            {
+                _logger.LogWarning($"Could not find timezone Europe/Oslo. Defaulting to UTC. {e.Message}");
+            }
 
             return new()
             {
                 { "CoveredBy", to.Name },
                 { "OfferedBy", from.Name },
                 { "HandledBy", handledBy?.Name },
-                { "Expiration", TimeZoneInfo.ConvertTime(requestValidTo, norwayTimeZone).ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) }
+                { "Expiration", TimeZoneInfo.ConvertTime(requestValidTo, timeZone).ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) }
             };
         }
 
