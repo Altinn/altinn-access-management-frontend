@@ -45,6 +45,9 @@ use(LanguageDetector)
     fallbackLng: getConfig('defaultLocale'),
     keySeparator: '.',
     returnNull: false,
+    interpolation: {
+      escapeValue: false, // React already escapes values
+    },
   });
 
 // Configure react-query
