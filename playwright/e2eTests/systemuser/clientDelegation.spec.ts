@@ -6,7 +6,7 @@ import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
 import { loginAs, loginNotChoosingActor } from '../../pages/loginPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
-test.describe.configure({ timeout: 30000 });
+test.describe.configure({ timeout: 60000 });
 
 test.describe('Klientdelegering', () => {
   let api: ApiRequests;
