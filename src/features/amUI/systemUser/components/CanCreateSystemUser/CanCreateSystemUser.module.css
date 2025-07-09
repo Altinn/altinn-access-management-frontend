@@ -1,8 +1,8 @@
-.noRightsParagraph {
+.noRightsAlert {
   margin: 2rem 0;
   font-style: italic;
   max-width: 40rem;
 }
-.noRightsParagraphBold {
+.noRightsAlertBold {
   font-weight: 600;
 }

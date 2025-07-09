@@ -30,9 +30,9 @@ export const CreateSystemUserCheck = ({
       {reporteeData && !canCreateSystemUser(reporteeData) && (
         <DsAlert
           data-color='warning'
-          className={classes.noRightsParagraph}
+          className={classes.noRightsAlert}
         >
-          <span className={classes.noRightsParagraphBold}>
+          <span className={classes.noRightsAlertBold}>
             {t('systemuser_overviewpage.no_key_role1')}{' '}
           </span>
           {t('systemuser_overviewpage.no_key_role2')}
