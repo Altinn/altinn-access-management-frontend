@@ -31,7 +31,6 @@ export interface AccessPackage {
   resources: PackageResource[];
   isAssignable: boolean;
   area: AccessArea;
-  inherited?: boolean;
 }
 
 export interface AccessPackageDelegation {

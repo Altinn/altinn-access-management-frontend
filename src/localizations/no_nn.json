@@ -364,6 +364,11 @@
       "AM.VLD-00002": "Du manglar tilgang til å gje denne fullmakta.",
       "default": "Kunne ikkje gje fullmakta"
     },
+    "partial_deletion_message": {
+      "heading": "Ønskjer du å slette tilgangen som ikkje er knytt til Einingsregisteret?",
+      "body": "<p>{{ to_name }} har fått denne fullmakta både direkte og gjennom rollene sine i Einingsregisteret.</p><p>Sjølv om du slettar den direkte tilgangen, vil brukaren framleis ha fullmakta gjennom Einingsregisteret.</p>"
+    },
+
     "service_error": {
       "general_heading": "Du kan ikkje gi fullmakt til denne tenesta",
       "technical_error_heading": "Noko gjekk gale",

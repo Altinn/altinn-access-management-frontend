@@ -2,12 +2,10 @@ import { DsParagraph, DsSpinner, ListBase } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
-import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
 import type { DelegationAction } from '../DelegationModal/EditModal';
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './AccessPackageList.module.css';
 import { useAreaPackageList } from './useAreaPackageList';
@@ -47,30 +45,20 @@ export const AccessPackageList = ({
   searchString,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
-  const {
-    data: allPackageAreas,
-    isLoading: loadingPackageAreas,
-    isFetching: fetchingSearch,
-  } = useSearchQuery(searchString ?? '');
-  const { fromParty, toParty, actingParty } = usePartyRepresentation();
-  const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery(
-    {
-      from: fromParty?.partyUuid ?? '',
-      to: toParty?.partyUuid ?? '',
-      party: actingParty?.partyUuid ?? '',
-    },
-    {
-      skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid,
-    },
-  );
 
   const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
 
-  const { assignedAreas, availableAreas } = useAreaPackageList({
+  const {
+    loadingPackageAreas,
+    fetchingSearch,
+    loadingDelegations,
+    assignedAreas,
+    availableAreas,
     allPackageAreas,
-    activeDelegations,
+  } = useAreaPackageList({
     showAllAreas,
     showAllPackages,
+    searchString,
   });
 
   const {
