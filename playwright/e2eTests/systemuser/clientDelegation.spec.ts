@@ -3,17 +3,21 @@ import { test, expect } from '@playwright/test';
 
 import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../util/loadFacilitators';
 import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
-import { loginAs, loginNotChoosingActor, loginWithUser } from '../../pages/loginPage';
+import { loginAs, loginNotChoosingActor } from '../../pages/loginPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
 test.describe.configure({ timeout: 30000 });
 
 test.describe('Klientdelegering', () => {
   let api: ApiRequests;
-  let LoginWithUser: loginWithUser;
 
   test.beforeEach(() => {
     api = new ApiRequests();
+  });
+
+  test('Test innlogging', async ({ page }) => {
+    const user = loadFacilitator(FacilitatorRole.Forretningsfoerer);
+    await loginAs(page, user.pid, user.org);
   });
 
   test('Ansvarlig revisor', async ({ page }) => {
