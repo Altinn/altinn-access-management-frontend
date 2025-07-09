@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsParagraph } from '@altinn/altinn-components';
+import { DsAlert } from '@altinn/altinn-components';
 
 import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
 
@@ -28,12 +28,15 @@ export const CreateSystemUserCheck = ({
   return (
     <>
       {reporteeData && !canCreateSystemUser(reporteeData) && (
-        <DsParagraph className={classes.noRightsParagraph}>
+        <DsAlert
+          data-color='warning'
+          className={classes.noRightsParagraph}
+        >
           <span className={classes.noRightsParagraphBold}>
             {t('systemuser_overviewpage.no_key_role1')}{' '}
           </span>
           {t('systemuser_overviewpage.no_key_role2')}
-        </DsParagraph>
+        </DsAlert>
       )}
       {reporteeData && canCreateSystemUser(reporteeData) && children}
     </>
