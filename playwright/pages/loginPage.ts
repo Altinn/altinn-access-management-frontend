@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type Page, expect } from '@playwright/test';
+import { type Page, expect, Locator } from '@playwright/test';
 
 export class loginWithUser {
-  constructor(public page: Page) {}
+  readonly searchBox: Locator;
+
+  constructor(public page: Page) {
+    this.searchBox = this.page.getByRole('searchbox', { name: 'Søk etter aktør' });
+  }
 
   async loginWithUser(testUser: string) {
     for (let attempt = 1; attempt <= 3; attempt++) {
@@ -31,7 +35,10 @@ export class loginWithUser {
 
   async chooseReportee(reportee: string) {
     await this.page.getByRole('searchbox', { name: 'Søk etter aktør' }).fill(reportee);
-    await this.page.keyboard.press('Enter'); //For long lists you need to search
+    let searchbox = this.page.getByRole('searchbox', { name: 'Søk etter aktør' });
+    await searchbox.click();
+    await searchbox.type(reportee, { delay: 10 }); // delay in milliseconds between key presses, otherwise it won't render content
+
     const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
     await chosenReportee.click();
     await this.page.goto((process.env.BASE_URL as string) + '/ui/profile');
@@ -46,34 +53,6 @@ export class loginWithUser {
     });
     await expect(profileHeader).toBeVisible();
   }
-}
-
-export async function loginAs(page: Page, pid: string, orgnummer: string) {
-  await page.goto(process.env.BASE_URL as string);
-  await page.click("'Logg inn/Min profil'");
-  await page.getByText('TestID Lag din egen').click();
-  await page.locator("input[name='pid']").fill(pid);
-  await page.click("'Autentiser'");
-
-  // Wait for "Velg aktør" heading to appear
-  await expect(page.getByRole('heading', { level: 1, name: 'Velg aktør' })).toBeVisible();
-
-  // searching for actor doesn't work headless - sadface
-  const lastFlereButton = page.getByRole('button', { name: 'Last flere' });
-
-  while (await lastFlereButton.isVisible()) {
-    if (await lastFlereButton.isEnabled()) {
-      await lastFlereButton.click();
-      await page.waitForTimeout(200); // wait 1 second before checking again
-    } else {
-      break;
-    }
-  }
-  // await page.getByRole('searchbox', { name: 'Søk etter aktør' }).fill(orgnummer);
-  // await page.keyboard.press('Enter');
-
-  const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`; // e.g. "314 239"
-  await page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) }).click();
 }
 
 export async function loginNotChoosingActor(page: Page, pid: string) {
@@ -94,4 +73,22 @@ export class logoutWithUser {
     await this.page.getByRole('button', { name: logoutReportee }).click();
     await this.page.getByRole('link', { name: 'Logg ut' }).click();
   }
+}
+
+export async function loginAs(page: Page, pid: string, orgnummer: string) {
+  await page.goto(process.env.BASE_URL as string);
+  await page.click("'Logg inn/Min profil'");
+  await page.getByText('TestID Lag din egen').click();
+  await page.locator("input[name='pid']").fill(pid);
+  await page.click("'Autentiser'");
+
+  // Wait for "Velg aktør" heading to appear
+  await expect(page.getByRole('heading', { level: 1, name: 'Velg aktør' })).toBeVisible();
+
+  let searchbox = page.getByRole('searchbox', { name: 'Søk etter aktør' });
+  await searchbox.click();
+  await searchbox.type(orgnummer, { delay: 10 }); // delay in milliseconds between key presses, otherwise it won't render content
+
+  const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`; // e.g. "314 239"
+  await page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) }).click();
 }

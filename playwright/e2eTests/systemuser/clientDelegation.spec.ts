@@ -3,14 +3,14 @@ import { test, expect } from '@playwright/test';
 
 import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../util/loadFacilitators';
 import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
-import { loginAs, loginNotChoosingActor } from '../../pages/loginPage';
+import { loginAs, loginNotChoosingActor, loginWithUser } from '../../pages/loginPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
-test.describe.configure({ timeout: 20000 });
+test.describe.configure({ timeout: 30000 });
 
 test.describe('Klientdelegering', () => {
   let api: ApiRequests;
-  test.slow();
+  let LoginWithUser: loginWithUser;
 
   test.beforeEach(() => {
     api = new ApiRequests();
