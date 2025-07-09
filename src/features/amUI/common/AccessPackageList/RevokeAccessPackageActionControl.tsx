@@ -25,7 +25,6 @@ export const RevokeAccessPackageActionControl = ({
   isLoading = false,
 }: RevokeAccessPackageActionControlsProps) => {
   const { t } = useTranslation();
-
   if (availableActions?.includes(DelegationAction.REVOKE)) {
     if (pkg.deletableStatus === DeletableStatus.PartiallyDeletable) {
       return (
