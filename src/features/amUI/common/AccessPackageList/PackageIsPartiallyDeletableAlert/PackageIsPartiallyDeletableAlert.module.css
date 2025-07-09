@@ -1,5 +1,5 @@
 .modalContent {
-  white-space: wrap;
+  white-space: normal;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
