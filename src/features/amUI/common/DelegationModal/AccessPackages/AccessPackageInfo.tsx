@@ -118,6 +118,13 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
         : null,
     [delegationAccess, toParty, fromParty],
   );
+
+  const onlyPermissionTroughInheritance =
+    delegationAccess &&
+    delegationAccess.permissions.every((p) =>
+      isInherited(p, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
+    );
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -195,7 +202,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             showMissingRightsMessage={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
             inheritedFrom={
-              deletableStatus === DeletableStatus.NotDeletable
+              onlyPermissionTroughInheritance
                 ? (delegationAccess?.permissions[0].via?.name ??
                   delegationAccess?.permissions[0].from.name)
                 : undefined
