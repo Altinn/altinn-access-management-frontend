@@ -111,9 +111,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetDelegationsToRightHolder_MultipleAccessToPackage()
         {
+
             // Arrange
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
-            string to = "21cc8752-4801-490d-a6ab-ab3266a0f748"; // Valid user that has both inherited and delegated rights to a single package
+            string to = "21cc8752-4801-490d-a6ab-ab3266a0f748"; // Valid user that has both inherited and delegated rights to a package
             string party = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid party, same as reportee
             Dictionary<Guid, List<PackagePermission>> expectedResult = Util.GetMockData<Dictionary<Guid, List<PackagePermission>>>(_expectedDataPath + $"/AccessPackage/GetDelegations/{to}.json");
 
