@@ -369,6 +369,10 @@
       "AM.VLD-00002": "Du mangler tilgang til å gi denne fullmakten.",
       "default": "Kunne ikke gi fullmakt"
     },
+    "partial_deletion_message": {
+      "heading": "Ønsker du å slette tilgangen som ikke er knyttet til Enhetsregisteret?",
+      "body": "<p>{{ to_name }} har fått denne fullmakten både direkte og gjennom sine roller i Enhetsregisteret.</p><p>Selv om du sletter denne fullmakten som er gitt direkte vil fortsatt brukeren ha fullmakten gjennom Enhetsregisteret.</p>"
+    },
     "service_error": {
       "general_heading": "Du kan ikke gi fullmakt til denne tjenesten",
       "technical_error_heading": "Noe gikk galt",

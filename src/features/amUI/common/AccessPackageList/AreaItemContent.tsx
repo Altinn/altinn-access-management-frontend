@@ -20,7 +20,7 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 
 import classes from './AccessPackageList.module.css';
-import type { ExtendedAccessArea } from './useAreaPackageList';
+import { DeletableStatus, type ExtendedAccessArea } from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
 import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
@@ -102,7 +102,11 @@ export const AreaItemContent = ({
               pkg={pkg}
               onSelect={onSelect}
               hasAccess
-              controls={!isSm && !pkg.inherited && revokeActionControl(pkg)}
+              controls={
+                !isSm &&
+                pkg.deletableStatus !== DeletableStatus.NotDeletable &&
+                revokeActionControl(pkg)
+              }
             />
           ))}
         </ListBase>
