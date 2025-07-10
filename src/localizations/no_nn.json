@@ -365,10 +365,9 @@
       "default": "Kunne ikkje gje fullmakta"
     },
     "partial_deletion_message": {
-      "heading": "Ønskjer du å slette tilgangen som ikkje er knytt til Einingsregisteret?",
-      "body": "<p>{{ to_name }} har fått denne fullmakta både direkte og gjennom rollene sine i Einingsregisteret.</p><p>Sjølv om du slettar den direkte tilgangen, vil brukaren framleis ha fullmakta gjennom Einingsregisteret.</p>"
+      "heading": "Vil du slette tilgangen som ikkje er knytt til Enhetsregisteret?",
+      "body": "<p>{{ to_name }} har fått denne fullmakta både direkte og gjennom rollene sine i Enhetsregisteret.</p><p>Sjølv om du slettar denne fullmakta som er gjeven direkte, vil brukaren framleis ha fullmakta gjennom Enhetsregisteret.</p>"
     },
-
     "service_error": {
       "general_heading": "Du kan ikkje gi fullmakt til denne tenesta",
       "technical_error_heading": "Noko gjekk gale",

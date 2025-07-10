@@ -17,7 +17,7 @@ export const PackageIsPartiallyDeletableAlert = ({
   confirmAction,
   triggerButtonProps,
 }: PackageIsPartiallyDeletableAlertProps) => {
-  const { fromParty, toParty } = usePartyRepresentation();
+  const { toParty } = usePartyRepresentation();
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -40,7 +40,6 @@ export const PackageIsPartiallyDeletableAlert = ({
               i18nKey={'delegation_modal.partial_deletion_message.body'}
               values={{
                 to_name: toParty?.name,
-                from_name: fromParty?.name,
               }}
               components={{
                 p: <DsParagraph data-size='sm'></DsParagraph>,

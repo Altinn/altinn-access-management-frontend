@@ -372,7 +372,7 @@
     },
     "partial_deletion_message": {
       "heading": "Do you want to delete the access not linked to the Central Coordinating Register for Legal Entities?",
-      "body": "<p>{{ to_name }} has received this authorization both directly and through their roles in the Central Coordinating Register for Legal Entities.</p><p>Even if you delete the direct access, the user will still have the authorization through the Central Coordinating Register for Legal Entities.</p>"
+      "body": "<p>{{ to_name }} has been granted this authorization both directly and through their roles in the Central Coordinating Register for Legal Entities.</p><p>Even if you delete this directly granted authorization, the user will still have the authorization through the Central Coordinating Register for Legal Entities.</p>"
     },
     "service_error": {
       "general_heading": "You cannot give access to this service",
