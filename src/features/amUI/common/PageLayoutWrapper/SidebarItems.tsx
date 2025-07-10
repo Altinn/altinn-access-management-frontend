@@ -16,6 +16,7 @@ export const SidebarItems = (
   isSmall: boolean = false,
   pathname: string = '',
   isAdmin: boolean | undefined,
+  shouldDisplaySystemuser: boolean,
   accountName: string,
   accountType: 'company' | 'person',
 ) => {
@@ -78,14 +79,14 @@ export const SidebarItems = (
     ),
   };
 
+  const returnArray = isSmall ? [] : [heading];
+
   if (displayConfettiPackage) {
-    if (isSmall) {
-      return [...confettiPackage, systemUser];
-    }
-    return [heading, ...confettiPackage, systemUser];
+    returnArray.push(...confettiPackage);
   }
-  if (isSmall) {
-    return [systemUser];
+  if (shouldDisplaySystemuser) {
+    returnArray.push(systemUser);
   }
-  return [heading, systemUser];
+
+  return returnArray;
 };

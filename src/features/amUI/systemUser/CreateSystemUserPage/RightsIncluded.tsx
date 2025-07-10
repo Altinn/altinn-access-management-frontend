@@ -3,6 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
 import { DsSpinner, DsAlert, DsButton } from '@altinn/altinn-components';
 
+import {
+  useCreateSystemUserMutation,
+  useGetRegisteredSystemRightsQuery,
+  useGetSystemUserReporteeQuery,
+} from '@/rtk/features/systemUserApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { SystemUserPath } from '@/routes/paths';
+import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
+
 import type { ProblemDetail, RegisteredSystem } from '../types';
 import { RightsList } from '../components/RightsList/RightsList';
 import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
@@ -10,15 +19,6 @@ import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 
 import classes from './CreateSystemUser.module.css';
-
-import {
-  useCreateSystemUserMutation,
-  useGetRegisteredSystemRightsQuery,
-} from '@/rtk/features/systemUserApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { SystemUserPath } from '@/routes/paths';
-import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 interface RightsIncludedProps {
   selectedSystem: RegisteredSystem;
@@ -29,7 +29,8 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
   const { t } = useTranslation();
   const navigate = useNavigate();
   const partyId = getCookie('AltinnPartyId');
-  const { data: reporteeData } = useGetReporteeQuery();
+  const partyUuid = getCookie('AltinnPartyUuid');
+  const { data: reporteeData } = useGetSystemUserReporteeQuery({ partyId, partyUuid });
 
   const {
     data: rights,
@@ -75,7 +76,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
                 : 'systemuser_includedrightspage.header',
               {
                 integrationTitle: selectedSystem.name,
-                companyName: reporteeData?.name,
+                companyName: reporteeData?.party.name,
               },
             )}
           />

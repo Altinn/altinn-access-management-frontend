@@ -36,10 +36,17 @@ export const systemUserApi = createApi({
   }),
   tagTypes: [Tags.SystemUsers],
   endpoints: (builder) => ({
-    // system user reportee
-    getSystemUserReportee: builder.query<ReporteeInfo, string>({
+    // system user permissions
+    getSystemUserReportee: builder.query<
+      {
+        party: ReporteeInfo;
+        hasCreateSystemuserPermission: boolean;
+        hasClientAdministrationPermission: boolean;
+      },
+      { partyId: string; partyUuid: string }
+    >({
       keepUnusedDataFor: 300,
-      query: (partyId) => `user/reportee/${partyId}`,
+      query: ({ partyId, partyUuid }) => `user/systemuserreportee/${partyId}?party=${partyUuid}`,
     }),
 
     // systemregister

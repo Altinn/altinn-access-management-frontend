@@ -1,9 +1,11 @@
 ﻿using System.Net;
 using Altinn.AccessManagement.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -386,6 +388,34 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
 
             return Ok(false);
+        }
+
+        /// <summary>
+        /// Endpoint for checking which system user permissions the authenticated user has.
+        /// </summary>
+        [HttpGet]
+        [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_CLIENT_ADMINISTRATION_READ_WITH_PASS_THROUGH)]
+        [Route("systemuserreportee/{partyId}")]
+        public async Task<ActionResult<SystemUserReporteeFE>> GetSystemUserReportee([FromRoute] int partyId, [FromQuery] string partyUuid)
+        {
+            SystemUserReporteeFE systemUserReportee = new SystemUserReporteeFE();
+            _httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj);
+            systemUserReportee.HasClientAdministrationPermission = hasPermissionObj is bool hasPermission && hasPermission;
+
+            try
+            {
+                AuthorizedParty party = await _userService.GetPartyFromReporteeListIfExists(partyId);
+                systemUserReportee.Party = party;
+                systemUserReportee.HasCreateSystemuserPermission =
+                    party.AuthorizedRoles.Any((role) => role == "DAGL" || role == "HADM" || role == "ADMAI") &&
+                    party.Type == AuthorizedPartyType.Organization;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetReportee failed to fetch reportee information");
+            }
+
+            return systemUserReportee;
         }
     }
 }

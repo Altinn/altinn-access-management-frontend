@@ -16,6 +16,8 @@ import {
 import { amUIPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useGetSystemUserReporteeQuery } from '@/rtk/features/systemUserApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { SidebarItems } from './SidebarItems';
 
@@ -29,8 +31,12 @@ const getAccountType = (type: string): 'company' | 'person' => {
 
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t, i18n } = useTranslation();
+
+  const partyId = getCookie('AltinnPartyId') || '';
+  const partyUuid = getCookie('AltinnPartyUuid') || '';
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
+  const { data: systemUserReportee } = useGetSystemUserReporteeQuery({ partyId, partyUuid });
   const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery();
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
@@ -43,6 +49,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
 
+  const shouldDisplaySystemuser =
+    systemUserReportee?.hasClientAdministrationPermission ||
+    systemUserReportee?.hasCreateSystemuserPermission ||
+    false;
   const isSm = useIsTabletOrSmaller();
   const headerLinks: MenuItemProps[] = [
     {
@@ -76,6 +86,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           true,
           pathname,
           isAdmin,
+          shouldDisplaySystemuser,
           reportee?.name || '',
           getAccountType(reportee?.type ?? ''),
         )
@@ -205,6 +216,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               false,
               pathname,
               isAdmin,
+              shouldDisplaySystemuser,
               reportee?.name || '',
               getAccountType(reportee?.type ?? ''),
             ),

@@ -3,20 +3,23 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { DsSpinner, DsAlert, DsParagraph } from '@altinn/altinn-components';
 
-import { RightsList } from '../components/RightsList/RightsList';
-import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
-
-import classes from './SystemUserDetailsPage.module.css';
-
-import { useDeleteSystemuserMutation, useGetSystemUserQuery } from '@/rtk/features/systemUserApi';
+import {
+  useDeleteSystemuserMutation,
+  useGetSystemUserQuery,
+  useGetSystemUserReporteeQuery,
+} from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 import { PageWrapper } from '@/components';
 import { SystemUserPath } from '@/routes/paths';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
+import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+import { RightsList } from '../components/RightsList/RightsList';
+
+import classes from './SystemUserDetailsPage.module.css';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
@@ -24,8 +27,9 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   const navigate = useNavigate();
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
   const partyId = getCookie('AltinnPartyId');
+  const partyUuid = getCookie('AltinnPartyUuid');
 
-  const { data: reporteeData } = useGetReporteeQuery();
+  const { data: reporteeData } = useGetSystemUserReporteeQuery({ partyId, partyUuid });
 
   const {
     data: systemUser,
@@ -54,6 +58,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
         <PageContainer
           onNavigateBack={handleNavigateBack}
           pageActions={
+            reporteeData?.hasCreateSystemuserPermission &&
             systemUser && (
               <DeleteSystemUserPopover
                 integrationTitle={systemUser?.integrationTitle ?? ''}
@@ -76,7 +81,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
             <div className={classes.systemUserDetails}>
               <SystemUserHeader
                 title={systemUser.integrationTitle}
-                subTitle={reporteeData?.name}
+                subTitle={reporteeData?.party.name}
               />
               <RightsList
                 resources={systemUser.resources}

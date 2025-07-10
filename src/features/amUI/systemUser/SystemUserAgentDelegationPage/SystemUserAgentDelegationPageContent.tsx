@@ -11,12 +11,12 @@ import {
   useSnackbar,
 } from '@altinn/altinn-components';
 
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { SystemUserPath } from '@/routes/paths';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import {
   useAssignCustomerMutation,
   useDeleteAgentSystemuserMutation,
+  useGetSystemUserReporteeQuery,
   useRemoveCustomerMutation,
 } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -63,7 +63,7 @@ export const SystemUserAgentDelegationPageContent = ({
   );
   const { openSnackbar, dismissSnackbar } = useSnackbar();
 
-  const { data: reporteeData } = useGetReporteeQuery();
+  const { data: reporteeData } = useGetSystemUserReporteeQuery({ partyId, partyUuid });
 
   const [deleteAgentSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
     useDeleteAgentSystemuserMutation();
@@ -156,7 +156,8 @@ export const SystemUserAgentDelegationPageContent = ({
     <PageContainer
       onNavigateBack={handleNavigateBack}
       pageActions={
-        systemUser && (
+        systemUser &&
+        reporteeData?.hasCreateSystemuserPermission && (
           <DeleteSystemUserPopover
             integrationTitle={systemUser.integrationTitle}
             isDeleteError={isDeleteError}
@@ -202,7 +203,7 @@ export const SystemUserAgentDelegationPageContent = ({
         <div className={classes.flexContainer}>
           <SystemUserHeader
             title={systemUser.integrationTitle}
-            subTitle={reporteeData?.name}
+            subTitle={reporteeData?.party.name}
           />
           <DsHeading
             level={2}
@@ -229,25 +230,29 @@ export const SystemUserAgentDelegationPageContent = ({
           {assignedCustomers.length === 0 ? (
             <>
               <DsParagraph>{t('systemuser_agent_delegation.no_assigned_customers')}</DsParagraph>
-              <div>
+              {reporteeData?.hasClientAdministrationPermission && (
+                <div>
+                  <DsButton
+                    variant='secondary'
+                    onClick={enableAddCustomers}
+                  >
+                    <PlusIcon />
+                    {t('systemuser_agent_delegation.add_customers')}
+                  </DsButton>
+                </div>
+              )}
+            </>
+          ) : (
+            <CustomerList list={assignedCustomers}>
+              {reporteeData?.hasClientAdministrationPermission && (
                 <DsButton
                   variant='secondary'
                   onClick={enableAddCustomers}
                 >
-                  <PlusIcon />
-                  {t('systemuser_agent_delegation.add_customers')}
+                  <PencilIcon />
+                  {t('systemuser_agent_delegation.edit_customers')}
                 </DsButton>
-              </div>
-            </>
-          ) : (
-            <CustomerList list={assignedCustomers}>
-              <DsButton
-                variant='secondary'
-                onClick={enableAddCustomers}
-              >
-                <PencilIcon />
-                {t('systemuser_agent_delegation.edit_customers')}
-              </DsButton>
+              )}
             </CustomerList>
           )}
           <DsParagraph

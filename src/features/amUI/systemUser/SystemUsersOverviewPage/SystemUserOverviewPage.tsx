@@ -13,14 +13,16 @@ import {
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
-import { useGetAgentSystemUsersQuery, useGetSystemUsersQuery } from '@/rtk/features/systemUserApi';
+import {
+  useGetAgentSystemUsersQuery,
+  useGetSystemUserReporteeQuery,
+  useGetSystemUsersQuery,
+} from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import type { SystemUser } from '../types';
-import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
 
 import classes from './SystemUserOverviewPage.module.css';
 
@@ -29,7 +31,9 @@ export const SystemUserOverviewPage = () => {
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
 
   const partyId = getCookie('AltinnPartyId');
-  const { data: reporteeData } = useGetReporteeQuery();
+  const partyUuid = getCookie('AltinnPartyUuid');
+
+  const { data: reporteeData } = useGetSystemUserReporteeQuery({ partyId, partyUuid });
 
   const {
     data: systemUsers,
@@ -59,54 +63,54 @@ export const SystemUserOverviewPage = () => {
           >
             {t('systemuser_overviewpage.sub_title_text')}
           </DsParagraph>
-          <CreateSystemUserCheck reporteeData={reporteeData}>
-            {isLoadingSystemUsers && isLoadingAgentSystemUsers && (
-              <DsSpinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
-            )}
-            {systemUsers && systemUsers.length > 0 && (
-              <>
-                <div className={classes.listHeader}>
-                  <DsHeading
-                    level={2}
-                    data-size='xs'
-                    className={classes.systemUserHeader}
-                  >
-                    {t('systemuser_overviewpage.existing_system_users_title')}
-                  </DsHeading>
-                  <CreateSystemUserButton />
-                </div>
-                <SystemUserList systemUsers={systemUsers} />
-              </>
-            )}
-            {systemUsers && systemUsers.length === 0 && <CreateSystemUserButton />}
-            {isLoadSystemUsersError && (
-              <DsAlert data-color='danger'>
-                {t('systemuser_overviewpage.systemusers_load_error')}
-              </DsAlert>
-            )}
-            {agentSystemUsers && agentSystemUsers.length > 0 && (
-              <>
-                <div className={classes.listHeader}>
-                  <DsHeading
-                    level={2}
-                    data-size='xs'
-                    className={classes.systemUserHeader}
-                  >
-                    {t('systemuser_overviewpage.agent_delegation_systemusers_title')}
-                  </DsHeading>
-                </div>
-                <SystemUserList
-                  systemUsers={agentSystemUsers}
-                  isAgentList
-                />
-              </>
-            )}
-            {isLoadAgentSystemUsersError && (
-              <DsAlert data-color='danger'>
-                {t('systemuser_overviewpage.agent_delegation_systemusers_load_error')}
-              </DsAlert>
-            )}
-          </CreateSystemUserCheck>
+          {isLoadingSystemUsers && isLoadingAgentSystemUsers && (
+            <DsSpinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
+          )}
+          {systemUsers && systemUsers.length > 0 && (
+            <>
+              <div className={classes.listHeader}>
+                <DsHeading
+                  level={2}
+                  data-size='xs'
+                  className={classes.systemUserHeader}
+                >
+                  {t('systemuser_overviewpage.existing_system_users_title')}
+                </DsHeading>
+                {reporteeData?.hasCreateSystemuserPermission && <CreateSystemUserButton />}
+              </div>
+              <SystemUserList systemUsers={systemUsers} />
+            </>
+          )}
+          {systemUsers &&
+            systemUsers.length === 0 &&
+            reporteeData?.hasCreateSystemuserPermission && <CreateSystemUserButton />}
+          {isLoadSystemUsersError && (
+            <DsAlert data-color='danger'>
+              {t('systemuser_overviewpage.systemusers_load_error')}
+            </DsAlert>
+          )}
+          {agentSystemUsers && agentSystemUsers.length > 0 && (
+            <>
+              <div className={classes.listHeader}>
+                <DsHeading
+                  level={2}
+                  data-size='xs'
+                  className={classes.systemUserHeader}
+                >
+                  {t('systemuser_overviewpage.agent_delegation_systemusers_title')}
+                </DsHeading>
+              </div>
+              <SystemUserList
+                systemUsers={agentSystemUsers}
+                isAgentList
+              />
+            </>
+          )}
+          {isLoadAgentSystemUsersError && (
+            <DsAlert data-color='danger'>
+              {t('systemuser_overviewpage.agent_delegation_systemusers_load_error')}
+            </DsAlert>
+          )}
         </div>
       </PageLayoutWrapper>
     </PageWrapper>
