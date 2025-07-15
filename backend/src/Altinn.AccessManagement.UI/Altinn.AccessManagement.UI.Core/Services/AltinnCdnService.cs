@@ -24,12 +24,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ILogger<AltinnCdnService> _logger;
         private readonly IAltinnCdnClient _altinnCdnClient;
 
-        private const string CacheKey = "OrgLogoMap";
+        private const string CacheKey = "CdnOrgDataDictionary";
         private readonly TimeSpan cacheDuration = TimeSpan.FromHours(1);
         private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OrgLogoService"/> class.
+        /// Initializes a new instance of the <see cref="AltinnCdnService"/> class.
         /// </summary>
         /// <param name="altinnCdnClient">The client used to fetch organization data from Altinn CDN.</param>
         /// <param name="httpClient">The HTTP client used to fetch organization logo data.</param>
