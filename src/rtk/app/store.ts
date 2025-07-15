@@ -14,6 +14,7 @@ import { userInfoApi } from '../features/userInfoApi';
 import { roleApi } from '../features/roleApi';
 import { systemUserApi } from '../features/systemUserApi';
 import { consentApi } from '../features/consentApi';
+import { altinnCdnApi } from '../features/altinnCdnApi';
 
 const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ const store = configureStore({
     [roleApi.reducerPath]: roleApi.reducer,
     [systemUserApi.reducerPath]: systemUserApi.reducer,
     [consentApi.reducerPath]: consentApi.reducer,
+    [altinnCdnApi.reducerPath]: altinnCdnApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -43,6 +45,7 @@ const store = configureStore({
       roleApi.middleware,
       systemUserApi.middleware,
       consentApi.middleware,
+      altinnCdnApi.middleware,
     ),
 });
 

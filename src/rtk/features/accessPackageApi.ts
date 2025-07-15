@@ -21,7 +21,10 @@ export interface PackageResource {
 export interface ResourceProvider {
   id: string;
   name: string;
+  refId: string;
   logoUrl: string;
+  code: string;
+  typeId: string;
 }
 
 export interface AccessPackage {
