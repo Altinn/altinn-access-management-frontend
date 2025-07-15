@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../util/loadFacilitators';
 import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
-import { loginAs, loginNotChoosingActor } from '../../pages/loginPage';
+import { LoginPage } from '../../pages/loginPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
 test.describe.configure({ timeout: 60000 });
@@ -53,6 +53,7 @@ test.describe('Klientdelegering', () => {
     accessPackageApiName: string;
     accessPackageDisplayName: string;
   }) {
+    const loginPage = new LoginPage(page);
     const user = loadFacilitator(role);
     const customers = loadCustomers(role);
 
@@ -68,7 +69,7 @@ test.describe('Klientdelegering', () => {
 
     //Navigate to approve system user request URL returned by API
     await page.goto(response.confirmUrl);
-    await loginNotChoosingActor(page, user.pid);
+    await loginPage.loginNotChoosingActor(page, user.pid);
 
     //Approve system user and click it
     await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
@@ -77,7 +78,7 @@ test.describe('Klientdelegering', () => {
     await expect(page.getByRole('button', { name: 'Logg inn Logg inn/Min profil' })).toBeVisible();
 
     // Navigate to system user login page
-    await loginAs(page, user.pid, user.org);
+    await loginPage.loginAs(page, user.pid, user.org);
 
     //Go to system user overview page
     if (!process.env.SYSTEMUSER_URL) {
