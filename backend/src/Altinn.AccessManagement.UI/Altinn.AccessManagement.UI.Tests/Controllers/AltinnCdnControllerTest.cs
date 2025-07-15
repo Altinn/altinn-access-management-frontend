@@ -87,9 +87,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Contains("An error occurred while retrieving organization data", content);
         }
 
-
-
-
         /// <summary>
         /// Test that verifies data is cached after first request and subsequent requests use cached data
         /// </summary>
