@@ -26,8 +26,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     public class AltinnCdnControllerTest : IClassFixture<CustomWebApplicationFactory<AltinnCdnController>>
     {
         private readonly CustomWebApplicationFactory<AltinnCdnController> _factory;
-        private readonly Mock<IAltinnCdnService> _mockAltinnCdnService;
-        private readonly Mock<ILogger<AltinnCdnController>> _mockLogger;
+        
+        private readonly HttpClient _client;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AltinnCdnControllerTest"/> class.
@@ -36,8 +36,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public AltinnCdnControllerTest(CustomWebApplicationFactory<AltinnCdnController> factory)
         {
             _factory = factory;
-            _mockAltinnCdnService = new Mock<IAltinnCdnService>();
-            _mockLogger = new Mock<ILogger<AltinnCdnController>>();
+            _client = SetupUtils.GetTestClient(new CustomWebApplicationFactory<UserController>(), null);
+
+            string token = PrincipalUtil.GetAccessToken("accessmanagement.api");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         /// <summary>
@@ -51,11 +54,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "AltinnCdn", "orgData.json");
             Dictionary<string, OrgData> expectedOrgData = Util.GetMockData<Dictionary<string, OrgData>>(path);
 
-            var client = GetTestClient(expectedOrgData);
-            // No authentication header needed since this is public data
 
             // Act
-            var response = await client.GetAsync("accessmanagement/api/v1/cdn/orgdata");
+            var response = await _client.GetAsync("accessmanagement/api/v1/cdn/orgdata");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -70,11 +71,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetOrgData_ServiceReturnsEmptyData_ReturnsEmptyDictionary()
         {
-            // Arrange
-            var client = GetTestClient(new Dictionary<string, OrgData>());
 
             // Act
-            var response = await client.GetAsync("accessmanagement/api/v1/cdn/orgdata");
+            var response = await _client.GetAsync("accessmanagement/api/v1/cdn/orgdata");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
