@@ -26,7 +26,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private const string CacheKey = "CdnOrgDataDictionary";
         private readonly TimeSpan cacheDuration = TimeSpan.FromHours(1);
-        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AltinnCdnService"/> class.
