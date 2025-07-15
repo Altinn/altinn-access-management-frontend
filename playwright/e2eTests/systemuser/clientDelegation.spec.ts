@@ -106,7 +106,7 @@ test.describe('Klientdelegering', () => {
       await clientDelegationPage.removeCustomer(customer.confirmation);
     }
 
-    //Cleanup: All clients need to be removed (api validatoin) to delete system user
+    //Cleanup: All clients need to be removed (api validation) to delete system user
     await clientDelegationPage.deleteSystemUser(name);
   }
 });
