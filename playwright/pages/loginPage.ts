@@ -1,49 +1,49 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { type Page, expect, Locator } from '@playwright/test';
 
 export class loginWithUser {
+  readonly page: Page;
   readonly searchBox: Locator;
+  readonly pidInput: Locator;
+  readonly testIdLink: Locator;
+  readonly loginButton: Locator;
+  readonly profileLink: Locator;
+  readonly velgAktoerHeading: Locator;
 
-  constructor(public page: Page) {
+  constructor(page: Page) {
+    this.page = page;
     this.searchBox = this.page.getByRole('searchbox', { name: 'Søk etter aktør' });
+    this.pidInput = this.page.locator("input[name='pid']");
+    this.testIdLink = this.page.getByRole('link', { name: 'TestID Lag din egen' });
+    this.loginButton = this.page.getByText("'Logg inn/Min profil'");
+    this.profileLink = this.page.getByRole('link', { name: 'profil' });
+    this.velgAktoerHeading = this.page.getByRole('heading', { level: 1, name: 'Velg aktør' });
   }
 
   async loginWithUser(testUser: string) {
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
-        await this.page.goto(process.env.BASE_URL as string);
-        await this.page.click("'Logg inn/Min profil'");
-        await this.page.getByText('TestID Lag din egen').click();
-        await this.page.locator("input[name='pid']").fill(testUser);
-        await this.page.click("'Autentiser'");
-
-        //Verify you're actually logged in
-        await expect(
-          this.page.getByRole('heading', { level: 1, name: 'Velg aktør' }),
-        ).toBeVisible();
-
-        return; // Exit function if login is successful
+        await this.navigateToLoginPage();
+        await this.authenticateUser(testUser);
+        await this.verifyLoginSuccess();
+        return;
       } catch (error) {
         if (attempt === 3) {
           throw new Error('Login failed after 3 retries');
         }
-
         await this.page.waitForTimeout(2000 * attempt);
       }
     }
   }
 
   async chooseReportee(reportee: string) {
-    let searchbox = this.page.getByRole('searchbox', { name: 'Søk etter aktør' });
-    await searchbox.click();
-    await searchbox.type(reportee, { delay: 20 }); // delay in milliseconds between key presses, otherwise it won't render content
+    await this.retrySearchBoxTyping(this.searchBox, reportee);
 
     const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
     await chosenReportee.click();
-    await this.page.goto((process.env.BASE_URL as string) + '/ui/profile');
-    await this.page.click("'profil'");
 
-    //Some names are in reverse order, so we need to support that when verifying the profile header
+    await this.page.goto(`${process.env.BASE_URL}/ui/profile`);
+    await this.profileLink.click();
+
     const profileHeader = this.page.getByRole('heading', {
       name: new RegExp(
         `Profil for (.*${reportee}.*|.*${reportee.split(' ').reverse().join(' ')}.*)`,
@@ -52,12 +52,45 @@ export class loginWithUser {
     });
     await expect(profileHeader).toBeVisible();
   }
+
+  private async navigateToLoginPage() {
+    await this.page.goto(process.env.BASE_URL as string);
+    await this.loginButton.click();
+    await this.testIdLink.click();
+  }
+
+  private async authenticateUser(pid: string) {
+    await this.pidInput.fill(pid);
+    await this.page.click("'Autentiser'");
+  }
+
+  private async verifyLoginSuccess() {
+    await expect(this.velgAktoerHeading).toBeVisible();
+  }
+
+  private async retrySearchBoxTyping(input: Locator, text: string) {
+    try {
+      await expect(input).toBeVisible();
+      await expect(input).toBeEnabled();
+      await input.click();
+      await input.type(text, { delay: 0 });
+    } catch (error) {
+      console.log(`Retrying input after reload due to: ${error}`);
+      await this.page.reload({ waitUntil: 'domcontentloaded' });
+      await expect(input).toBeVisible();
+      await expect(input).toBeEnabled();
+      await input.click();
+      await input.type(text, { delay: 0 });
+    }
+  }
 }
 
 export async function loginNotChoosingActor(page: Page, pid: string) {
-  // Ensure we're on a page where login elements are available
-  await page.getByRole('link', { name: 'TestID Lag din egen' }).click();
-  await page.locator("input[name='pid']").fill(pid);
+  const testIdLink = page.getByRole('link', { name: 'TestID Lag din egen' });
+  const pidInput = page.locator("input[name='pid']");
+
+  await testIdLink.click();
+  await pidInput.fill(pid);
   await page.click("'Autentiser'");
 }
 
@@ -65,29 +98,50 @@ export class logoutWithUser {
   constructor(public page: Page) {}
 
   async gotoLogoutPage(logoutReportee: string) {
-    await this.page.goto(process.env.BASE_URL + '/ui/profile');
+    await this.page.goto(`${process.env.BASE_URL}/ui/profile`);
+
     if (await this.page.getByText('Oida, denne siden kjenner vi ikke til...').isVisible()) {
-      await this.page.click("'profil'");
+      await this.page.getByRole('link', { name: 'profil' }).click();
     }
+
     await this.page.getByRole('button', { name: logoutReportee }).click();
     await this.page.getByRole('link', { name: 'Logg ut' }).click();
   }
 }
 
 export async function loginAs(page: Page, pid: string, orgnummer: string) {
-  await page.goto(process.env.BASE_URL as string);
+  const baseUrl = process.env.BASE_URL as string;
+  await page.goto(baseUrl);
   await page.click("'Logg inn/Min profil'");
   await page.getByText('TestID Lag din egen').click();
   await page.locator("input[name='pid']").fill(pid);
   await page.click("'Autentiser'");
 
-  // Wait for "Velg aktør" heading to appear
   await expect(page.getByRole('heading', { level: 1, name: 'Velg aktør' })).toBeVisible();
 
-  let searchbox = page.getByRole('searchbox', { name: 'Søk etter aktør' });
-  await searchbox.click();
-  await searchbox.type(orgnummer, { delay: 20 }); // delay in milliseconds between key presses, otherwise it won't render content
+  const searchbox = page.getByRole('searchbox', { name: 'Søk etter aktør' });
+  await retrySearchBoxTyping(searchbox, orgnummer);
 
-  const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`; // e.g. "314 239"
+  const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`;
   await page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) }).click();
+}
+
+// Shared function reused by both loginAs and class above
+async function retrySearchBoxTyping(input: Locator, text: string) {
+  const page = input.page();
+
+  try {
+    await tryTypingInSearchbox(input, text);
+  } catch (error) {
+    console.log(`Retrying input after reload due to: ${error}`);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await tryTypingInSearchbox(input, text);
+  }
+}
+
+async function tryTypingInSearchbox(input: Locator, text: string) {
+  await expect(input).toBeVisible();
+  await expect(input).toBeEnabled();
+  await input.click();
+  await input.type(text, { delay: 0 });
 }
