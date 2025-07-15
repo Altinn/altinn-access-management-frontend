@@ -23,17 +23,8 @@ export interface ServiceResource {
   authorizationReference: IdValuePair[];
   resourceType: string;
   delegable: boolean;
-  provider?: Provider;
 }
 
-export interface Provider {
-  id: string;
-  name: string;
-  refId: string;
-  logoUrl: string;
-  code: string;
-  typeId: string;
-}
 export interface ResourceDelegation {
   resource: ServiceResource;
   delegation: DelegationResult;
