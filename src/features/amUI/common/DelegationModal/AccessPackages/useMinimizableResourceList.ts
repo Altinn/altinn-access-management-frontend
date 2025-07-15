@@ -17,7 +17,7 @@ export const useMinimizableResourceList = (list: PackageResource[]) => {
     if (!orgData || orgDataIsLoading) {
       return undefined;
     }
-    const org = orgData[orgCode ?? ''];
+    const org = orgCode ? orgData[orgCode] : undefined;
     return org?.emblem ?? org?.logo ?? undefined;
   };
 
