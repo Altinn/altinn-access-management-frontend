@@ -3,7 +3,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export interface OrgData {
-  orgs: OrgData | Promise<OrgData>;
   name: Record<string, string> | null;
   logo: string | null;
   emblem: string | null;

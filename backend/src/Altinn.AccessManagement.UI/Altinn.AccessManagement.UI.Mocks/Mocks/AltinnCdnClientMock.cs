@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <returns>The path to the altinn-orgs.json test data file</returns>
         private static string GetDataPath()
         {
-            string folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath) ?? string.Empty;
+            string folder = Path.GetDirectoryName(new Uri(typeof(AltinnCdnClientMock).Assembly.Location).LocalPath) ?? string.Empty;
             return Path.Combine(folder, "Data", "AltinnCdn", "altinn-orgs.json");
         }
     }
