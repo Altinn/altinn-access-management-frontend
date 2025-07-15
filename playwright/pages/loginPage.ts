@@ -36,7 +36,7 @@ export class loginWithUser {
   async chooseReportee(reportee: string) {
     let searchbox = this.page.getByRole('searchbox', { name: 'Søk etter aktør' });
     await searchbox.click();
-    await searchbox.type(reportee, { delay: 30 }); // delay in milliseconds between key presses, otherwise it won't render content
+    await searchbox.type(reportee, { delay: 20 }); // delay in milliseconds between key presses, otherwise it won't render content
 
     const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
     await chosenReportee.click();
@@ -86,7 +86,7 @@ export async function loginAs(page: Page, pid: string, orgnummer: string) {
 
   let searchbox = page.getByRole('searchbox', { name: 'Søk etter aktør' });
   await searchbox.click();
-  await searchbox.type(orgnummer, { delay: 0 }); // delay in milliseconds between key presses, otherwise it won't render content
+  await searchbox.type(orgnummer, { delay: 20 }); // delay in milliseconds between key presses, otherwise it won't render content
 
   const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`; // e.g. "314 239"
   await page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) }).click();

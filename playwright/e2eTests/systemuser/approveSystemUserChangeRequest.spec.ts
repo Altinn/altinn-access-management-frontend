@@ -5,8 +5,6 @@ import { loginWithUser } from 'playwright/pages/loginPage';
 
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
-test.describe.configure({ timeout: 30000 }); // Set timeout for all tests in this file
-
 test.describe('Godkjenn og avvis Systembruker endringsforespørsel', () => {
   let api: ApiRequests;
 
