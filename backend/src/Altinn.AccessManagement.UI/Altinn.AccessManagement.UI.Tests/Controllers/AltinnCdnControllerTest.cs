@@ -11,14 +11,10 @@ using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
@@ -40,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public AltinnCdnControllerTest(CustomWebApplicationFactory<AltinnCdnController> factory)
         {
             _factory = factory;
-            _client = SetupUtils.GetTestClient(new CustomWebApplicationFactory<UserController>(), null);
+            _client = SetupUtils.GetTestClient(factory, null);
 
             string token = PrincipalUtil.GetAccessToken("accessmanagement.api");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -111,27 +107,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Contains("An error occurred while retrieving organization data", content);
         }
 
-        private HttpClient GetTestClient(Dictionary<string, OrgData> orgDataToReturn)
-        {
-            var mockService = new Mock<IAltinnCdnService>();
-            mockService.Setup(s => s.GetOrgData()).ReturnsAsync(orgDataToReturn);
 
-            var httpClient = _factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddSingleton(mockService.Object);
-                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
-                });
-            }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
-
-            string token = PrincipalUtil.GetAccessToken("accessmanagement.api");
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            return httpClient;
-        }
 
 
         /// <summary>
@@ -201,6 +177,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             mockCdnClient.Verify(c => c.GetOrgData(), Times.Once);
         }
 
+
+
         private HttpClient GetTestClientWithExceptionService(IAltinnCdnService mockService)
         {
             var httpClient = _factory.WithWebHostBuilder(builder =>
@@ -208,6 +186,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton(mockService);
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+
+            string token = PrincipalUtil.GetAccessToken("accessmanagement.api");
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            return httpClient;
+        }
+        
+        private HttpClient GetTestClient(Dictionary<string, OrgData> orgDataToReturn)
+        {
+            var mockService = new Mock<IAltinnCdnService>();
+            mockService.Setup(s => s.GetOrgData()).ReturnsAsync(orgDataToReturn);
+
+            var httpClient = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddSingleton(mockService.Object);
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
