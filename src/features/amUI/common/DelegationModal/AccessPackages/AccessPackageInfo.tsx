@@ -1,16 +1,14 @@
 import * as React from 'react';
-import type { ListItemProps } from '@altinn/altinn-components';
 import { List, Button, Icon, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { MenuElipsisHorizontalIcon, PackageIcon } from '@navikt/aksel-icons';
+import { PackageIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 
 import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
-import { useGetUserDelegationsQuery, type PackageResource } from '@/rtk/features/accessPackageApi';
+import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
-import { useGetOrgDataQuery } from '@/rtk/features/altinnCdnApi';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
@@ -26,6 +24,7 @@ import {
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
+import { useMinimizableResourceList } from './useMinimizableResourceList';
 import classes from './AccessPackageInfo.module.css';
 
 export interface PackageInfoProps {
@@ -265,51 +264,4 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
       )}
     </div>
   );
-};
-
-const MINIMIZED_LIST_SIZE = 5;
-
-const useMinimizableResourceList = (list: PackageResource[]) => {
-  const { t } = useTranslation();
-  const [showAll, setShowAll] = React.useState(false);
-  const { data: orgData, isLoading: orgDataIsLoading } = useGetOrgDataQuery();
-
-  const getProviderLogoUrl = (orgCode: string | null): string | undefined => {
-    if (!orgData || orgDataIsLoading) {
-      return undefined;
-    }
-    const org = orgData[orgCode ?? ''];
-    return org?.emblem ?? org?.logo ?? undefined;
-  };
-
-  const mapResourceToListItem = (resource: PackageResource): ListItemProps => {
-    const logo = getProviderLogoUrl(resource.provider?.code ?? '');
-    return {
-      loading: orgDataIsLoading,
-      title: resource.name,
-      description: resource.provider.name,
-      icon: { iconUrl: logo ?? resource.provider.logoUrl },
-      as: 'div' as React.ElementType,
-      size: 'xs',
-      interactive: false,
-    };
-  };
-
-  if (list.length <= MINIMIZED_LIST_SIZE) {
-    return {
-      listItems: list.map(mapResourceToListItem),
-    };
-  }
-  const showMoreListItem: ListItemProps = {
-    title: t('common.show_more'),
-    description: '',
-    onClick: () => setShowAll(!showAll),
-    icon: MenuElipsisHorizontalIcon,
-    as: 'button' as React.ElementType,
-    size: 'xs',
-  };
-  const minimizedList = list
-    .slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE)
-    .map(mapResourceToListItem);
-  return { listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem] };
 };
