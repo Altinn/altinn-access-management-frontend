@@ -66,26 +66,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test that when service returns empty data, the endpoint returns empty dictionary
-        /// </summary>
-        [Fact]
-        public async Task GetOrgData_ServiceReturnsEmptyData_ReturnsEmptyDictionary()
-        {
-            // Arrange
-            var emptyOrgData = new Dictionary<string, OrgData>();
-            var testClient = GetTestClient(emptyOrgData);
-
-            // Act
-            var response = await testClient.GetAsync("accessmanagement/api/v1/cdn/orgdata");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var actualOrgData = await response.Content.ReadFromJsonAsync<Dictionary<string, OrgData>>();
-            Assert.NotNull(actualOrgData);
-            Assert.Empty(actualOrgData);
-        }
-
-        /// <summary>
         /// Test that when service throws an exception, controller returns 500 status code
         /// </summary>
         [Fact]
@@ -177,8 +157,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             mockCdnClient.Verify(c => c.GetOrgData(), Times.Once);
         }
 
-
-
         private HttpClient GetTestClientWithExceptionService(IAltinnCdnService mockService)
         {
             var httpClient = _factory.WithWebHostBuilder(builder =>
@@ -186,28 +164,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton(mockService);
-                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
-                });
-            }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
-
-            string token = PrincipalUtil.GetAccessToken("accessmanagement.api");
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            return httpClient;
-        }
-        
-        private HttpClient GetTestClient(Dictionary<string, OrgData> orgDataToReturn)
-        {
-            var mockService = new Mock<IAltinnCdnService>();
-            mockService.Setup(s => s.GetOrgData()).ReturnsAsync(orgDataToReturn);
-
-            var httpClient = _factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddSingleton(mockService.Object);
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });

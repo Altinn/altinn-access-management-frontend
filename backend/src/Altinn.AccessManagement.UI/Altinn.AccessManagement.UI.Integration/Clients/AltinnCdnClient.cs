@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
     /// <summary>
-    /// client that integrates with the platform profile api
+    /// client that retrieves organization data from the Altinn CDN.
     /// </summary>
     public class AltinnCdnClient : IAltinnCdnClient
     {
