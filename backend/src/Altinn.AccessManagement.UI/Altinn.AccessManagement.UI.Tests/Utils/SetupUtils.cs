@@ -427,7 +427,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <param name="customFactory">Web app factory to configure test services for AltinnCdnController tests</param>
         /// <param name="value">An object to be used in the setup, can be null</param>
         /// <returns>HttpClient</returns>
-        internal static HttpClient GetTestClient(CustomWebApplicationFactory<AltinnCdnController> customFactory, object value)
+        internal static HttpClient GetTestClient(CustomWebApplicationFactory<AltinnCdnController> customFactory)
         {
             WebApplicationFactory<AltinnCdnController> factory = customFactory.WithWebHostBuilder(builder =>
             {

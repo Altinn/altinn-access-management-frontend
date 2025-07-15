@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public AltinnCdnControllerTest(CustomWebApplicationFactory<AltinnCdnController> factory)
         {
             _factory = factory;
-            _client = SetupUtils.GetTestClient(factory, null);
+            _client = SetupUtils.GetTestClient(factory);
 
             string token = PrincipalUtil.GetAccessToken("accessmanagement.api");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
