@@ -69,6 +69,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Set to run ConsentClient locally during runtime
         /// </summary>
         public bool Consent { get; set; }
+        public bool AltinnCdn { get; set; }
 
         /// <summary>
         /// Default constructor

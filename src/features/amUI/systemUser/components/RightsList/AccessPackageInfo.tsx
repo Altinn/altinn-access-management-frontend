@@ -4,6 +4,7 @@ import { PackageIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { useGetOrgDataQuery } from '@/rtk/features/altinnCdnApi';
 
 import type { SystemUserAccessPackage } from '../../types';
 
@@ -18,6 +19,16 @@ export const AccessPackageInfo = ({
   onSelectResource,
 }: AccessPackageInfoProps): React.ReactElement => {
   const { t } = useTranslation();
+
+  const { data: orgData, isLoading } = useGetOrgDataQuery();
+
+  const getProviderLogoUrl = (orgCode: string | null): string | undefined => {
+    if (!orgData || isLoading) {
+      return undefined;
+    }
+    const org = orgData[orgCode ?? ''];
+    return org?.emblem ?? org?.logo ?? undefined;
+  };
 
   return (
     <div className={classes.accessPackages}>
@@ -48,7 +59,8 @@ export const AccessPackageInfo = ({
             id: resource.identifier,
             as: 'button',
             titleAs: 'h3',
-            ownerLogoUrl: resource.resourceOwnerLogoUrl,
+            ownerLogoUrl:
+              getProviderLogoUrl(resource.provider?.code ?? '') ?? resource.resourceOwnerLogoUrl,
             ownerLogoUrlAlt: resource.resourceOwnerName ?? '',
             ownerName: resource.resourceOwnerName ?? '',
             resourceName: resource.title,

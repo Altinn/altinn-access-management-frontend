@@ -1,0 +1,41 @@
+{
+  "digdir": {
+    "name": {
+      "en": "Norwegian Digitalisation Agency",
+      "nb": "Digitaliseringsdirektoratet",
+      "nn": "Digitaliseringsdirektoratet"
+    },
+    "logo": "https://altinncdn.no/orgs/digdir/digdir.png",
+    "emblem": "https://altinncdn.no/orgs/digdir/digdir.svg",
+    "orgnr": "991825827",
+    "homepage": "https://www.digdir.no",
+    "environments": [
+      "tt02",
+      "production"
+    ],
+    "contact": {
+      "phone": "+4722451000",
+      "url": "https://www.digdir.no/digdir/kontakt-oss/943"
+    }
+  },
+  "skd": {
+    "name": {
+      "en": "Norwegian Tax Administration",
+      "nb": "Skatteetaten",
+      "nn": "Skatteetaten"
+    },
+    "logo": "https://altinncdn.no/orgs/skd/skd.png",
+    "emblem": "https://altinncdn.no/orgs/skd/skd.svg",
+    "orgnr": "974761076",
+    "homepage": "https://www.skatteetaten.no",
+    "environments": [
+      "tt02",
+      "yt01",
+      "production"
+    ],
+    "contact": {
+      "phone": "+4780080000",
+      "url": "https://www.skatteetaten.no/kontakt"
+    }
+  }
+}

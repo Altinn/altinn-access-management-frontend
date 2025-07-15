@@ -10,6 +10,7 @@ import type { ActionError } from '@/resources/hooks/useActionError';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
 import { useGetUserDelegationsQuery, type PackageResource } from '@/rtk/features/accessPackageApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
+import { useGetOrgDataQuery } from '@/rtk/features/altinnCdnApi';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
@@ -268,20 +269,36 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
 const MINIMIZED_LIST_SIZE = 5;
 
-const mapResourceToListItem = (resource: PackageResource): ListItemProps => ({
-  title: resource.name,
-  description: resource.provider.name,
-  icon: { iconUrl: resource.provider.logoUrl },
-  as: 'div' as React.ElementType,
-  size: 'xs',
-  interactive: false,
-});
-
 const useMinimizableResourceList = (list: PackageResource[]) => {
   const { t } = useTranslation();
   const [showAll, setShowAll] = React.useState(false);
+  const { data: orgData, isLoading: orgDataIsLoading } = useGetOrgDataQuery();
+
+  const getProviderLogoUrl = (orgCode: string | null): string | undefined => {
+    if (!orgData || orgDataIsLoading) {
+      return undefined;
+    }
+    const org = orgData[orgCode ?? ''];
+    return org?.emblem ?? org?.logo ?? undefined;
+  };
+
+  const mapResourceToListItem = (resource: PackageResource): ListItemProps => {
+    const logo = getProviderLogoUrl(resource.provider?.code ?? '');
+    return {
+      loading: orgDataIsLoading,
+      title: resource.name,
+      description: resource.provider.name,
+      icon: { iconUrl: logo ?? resource.provider.logoUrl },
+      as: 'div' as React.ElementType,
+      size: 'xs',
+      interactive: false,
+    };
+  };
+
   if (list.length <= MINIMIZED_LIST_SIZE) {
-    return { listItems: list.map(mapResourceToListItem) };
+    return {
+      listItems: list.map(mapResourceToListItem),
+    };
   }
   const showMoreListItem: ListItemProps = {
     title: t('common.show_more'),

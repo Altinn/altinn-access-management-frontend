@@ -1,0 +1,128 @@
+{
+  "orgs": {
+    "digdir": {
+      "name": {
+        "en": "Norwegian Digitalisation Agency",
+        "nb": "Digitaliseringsdirektoratet",
+        "nn": "Digitaliseringsdirektoratet"
+      },
+      "logo": "https://altinncdn.no/orgs/digdir/digdir.png",
+      "emblem": "https://altinncdn.no/orgs/digdir/digdir.svg",
+      "orgnr": "991825827",
+      "homepage": "https://www.digdir.no",
+      "environments": [
+        "tt02",
+        "production"
+      ],
+      "contact": {
+        "phone": "+4722451000",
+        "url": "https://www.digdir.no/digdir/kontakt-oss/943"
+      }
+    },
+    "skd": {
+      "name": {
+        "en": "Norwegian Tax Administration",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      },
+      "logo": "https://altinncdn.no/orgs/skd/skd.png",
+      "emblem": "https://altinncdn.no/orgs/skd/skd.svg",
+      "orgnr": "974761076",
+      "homepage": "https://www.skatteetaten.no",
+      "environments": [
+        "tt02",
+        "yt01",
+        "production"
+      ],
+      "contact": {
+        "phone": "+4780080000",
+        "url": "https://www.skatteetaten.no/kontakt"
+      }
+    },
+    "brg": {
+      "name": {
+        "en": "Brønnøysund Register Centre",
+        "nb": "Brønnøysundregistrene",
+        "nn": "Brønnøysundregistera"
+      },
+      "logo": "https://altinncdn.no/orgs/brg/brreg.png",
+      "emblem": null,
+      "orgnr": "974760673",
+      "homepage": "https://www.brreg.no",
+      "environments": [
+        "tt02",
+        "production"
+      ],
+      "contact": null
+    },
+    "nav": {
+      "name": {
+        "en": "Norwegian Labour and Welfare Administration (NAV)",
+        "nb": "Arbeids- og velferdsetaten (NAV)",
+        "nn": "Arbeids- og velferdsetaten (NAV)"
+      },
+      "logo": "https://altinncdn.no/orgs/nav/nav.png",
+      "emblem": "https://altinncdn.no/orgs/nav/nav.svg",
+      "orgnr": "889640782",
+      "homepage": "https://www.nav.no",
+      "environments": [
+        "tt02"
+      ],
+      "contact": {
+        "phone": "+4755553333",
+        "url": "https://www.nav.no/kontaktoss"
+      }
+    },
+    "ttd": {
+      "name": {
+        "en": "Test Ministry",
+        "nb": "Testdepartementet",
+        "nn": "Testdepartementet"
+      },
+      "logo": "https://altinncdn.no/orgs/ttd/ttd.png",
+      "emblem": "https://altinncdn.no/orgs/ttd/ttd.svg",
+      "orgnr": "",
+      "homepage": "",
+      "environments": [
+        "at22",
+        "at23",
+        "at24",
+        "tt02",
+        "yt01",
+        "production"
+      ],
+      "contact": {
+        "phone": "+4722451000",
+        "url": "https://altinn.studio/info/contact"
+      }
+    },
+    "mat": {
+      "name": {
+        "en": "Norwegian Food Safety Authority",
+        "nb": "Mattilsynet",
+        "nn": "Mattilsynet"
+      },
+      "logo": "https://altinncdn.no/orgs/mat/mat.png",
+      "emblem": null,
+      "orgnr": "985399077",
+      "homepage": "https://www.mattilsynet.no/",
+      "environments": [
+        "tt02",
+        "production"
+      ],
+      "contact": null
+    },
+    "testorg": {
+      "name": {
+        "nb": "Minimal Test Org",
+        "en": "Minimal Test Org"
+      },
+      "logo": null,
+      "emblem": null,
+      "orgnr": "999000111",
+      "homepage": null,
+      "environments": ["test"],
+      "contact": null
+    }
+  }
+}
