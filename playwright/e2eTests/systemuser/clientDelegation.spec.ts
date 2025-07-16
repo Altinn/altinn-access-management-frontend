@@ -69,13 +69,13 @@ test.describe('Klientdelegering', () => {
 
     //Navigate to approve system user request URL returned by API
     await page.goto(response.confirmUrl);
-    await loginPage.loginNotChoosingActor(page, user.pid);
+    await loginPage.loginNotChoosingActor(user.pid);
 
     //Approve system user and click it
     await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
 
     // Verify logout by checking for login page elements
-    await expect(page.getByRole('button', { name: 'Logg inn Logg inn/Min profil' })).toBeVisible();
+    await expect(loginPage.loginButton).toBeVisible();
 
     // Navigate to system user login page
     await loginPage.loginAs(page, user.pid, user.org);

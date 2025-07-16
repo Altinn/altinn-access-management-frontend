@@ -8,6 +8,7 @@ export class LoginPage {
   readonly loginButton: Locator;
   readonly profileLink: Locator;
   readonly velgAktoerHeading: Locator;
+  readonly autentiserButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -17,6 +18,7 @@ export class LoginPage {
     this.loginButton = this.page.getByRole('button', { name: 'Logg inn', exact: true });
     this.profileLink = this.page.getByRole('link', { name: 'profil' });
     this.velgAktoerHeading = this.page.getByRole('heading', { level: 1, name: 'Velg aktør' });
+    this.autentiserButton = this.page.getByRole('button', { name: 'Autentiser' });
   }
 
   async loginWithUser(testUser: string) {
@@ -35,27 +37,23 @@ export class LoginPage {
     }
   }
 
-  async loginNotChoosingActor(page: Page, pid: string) {
-    const testIdLink = page.getByRole('link', { name: 'TestID Lag din egen' });
-    const pidInput = page.locator("input[name='pid']");
-
-    await testIdLink.click();
-    await pidInput.fill(pid);
-    await page.click("'Autentiser'");
+  async loginNotChoosingActor(pid: string) {
+    await this.testIdLink.click();
+    await this.pidInput.fill(pid);
+    await this.autentiserButton.click();
   }
 
   async loginAs(page: Page, pid: string, orgnummer: string) {
     const baseUrl = process.env.BASE_URL as string;
     await page.goto(baseUrl);
-    await page.click("'Logg inn/Min profil'");
-    await page.getByText('TestID Lag din egen').click();
-    await page.locator("input[name='pid']").fill(pid);
-    await page.click("'Autentiser'");
+    await this.loginButton.click();
+    await this.testIdLink.click();
+    await this.pidInput.fill(pid);
+    await this.autentiserButton.click();
 
-    await expect(page.getByRole('heading', { level: 1, name: 'Velg aktør' })).toBeVisible();
+    await expect(this.velgAktoerHeading).toBeVisible();
 
-    const searchbox = page.getByRole('searchbox', { name: 'Søk etter aktør' });
-    await retrySearchBoxTyping(searchbox, orgnummer);
+    await retrySearchBoxTyping(this.searchBox, orgnummer);
 
     const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`;
     await page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) }).click();
@@ -87,7 +85,7 @@ export class LoginPage {
 
   private async authenticateUser(pid: string) {
     await this.pidInput.fill(pid);
-    await this.page.click("'Autentiser'");
+    await this.autentiserButton.click();
   }
 
   private async verifyLoginSuccess() {
@@ -126,5 +124,5 @@ async function tryTypingInSearchbox(input: Locator, text: string) {
   await expect(input).toBeVisible();
   await expect(input).toBeEnabled();
   await input.click();
-  await input.type(text, { delay: 0 });
+  await input.pressSequentially(text);
 }
