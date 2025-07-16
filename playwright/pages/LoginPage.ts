@@ -1,4 +1,7 @@
-import { type Page, expect, Locator } from '@playwright/test';
+import { fail } from 'assert';
+
+import type { Locator, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 
 export class LoginPage {
   readonly page: Page;
@@ -29,6 +32,7 @@ export class LoginPage {
         await this.verifyLoginSuccess();
         return;
       } catch (error) {
+        console.log(`Login attempt ${attempt} failed with error: ${error}`);
         if (attempt === 3) {
           throw new Error('Login failed after 3 retries');
         }
@@ -52,18 +56,10 @@ export class LoginPage {
     await this.autentiserButton.click();
 
     await expect(this.velgAktoerHeading).toBeVisible();
-
-    await retrySearchBoxTyping(this.searchBox, orgnummer);
-
-    const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`;
-    await this.page
-      .getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) })
-      .click();
+    await this.selectActor(this.searchBox, orgnummer);
   }
 
   async chooseReportee(reportee: string) {
-    await retrySearchBoxTyping(this.searchBox, reportee);
-
     const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
     await chosenReportee.click();
 
@@ -93,6 +89,30 @@ export class LoginPage {
   private async verifyLoginSuccess() {
     await expect(this.velgAktoerHeading).toBeVisible();
   }
+
+  async selectActor(input: Locator, orgnummer: string) {
+    const page = input.page();
+    const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`;
+    const button = page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) });
+
+    try {
+      await this.tryTypingInSearchbox(input, orgnummer);
+      await expect(button).toBeVisible({ timeout: 2000 }); // No need to wait long to figure out if this failed
+    } catch (error: unknown) {
+      console.log(`Retrying input after reload due to: ${error}`);
+      await this.tryTypingInSearchbox(input, orgnummer);
+    }
+
+    await button.click();
+  }
+
+  async tryTypingInSearchbox(input: Locator, party: string) {
+    await expect(input).toBeVisible();
+    await expect(input).toBeEnabled();
+    await input.click();
+    await input.clear();
+    await input.pressSequentially(party);
+  }
 }
 
 export class logoutWithUser {
@@ -108,23 +128,4 @@ export class logoutWithUser {
     await this.page.getByRole('button', { name: logoutReportee }).click();
     await this.page.getByRole('link', { name: 'Logg ut' }).click();
   }
-}
-
-async function retrySearchBoxTyping(input: Locator, text: string) {
-  const page = input.page();
-
-  try {
-    await tryTypingInSearchbox(input, text);
-  } catch (error) {
-    console.log(`Retrying input after reload due to: ${error}`);
-    await page.reload({ waitUntil: 'domcontentloaded' });
-    await tryTypingInSearchbox(input, text);
-  }
-}
-
-async function tryTypingInSearchbox(input: Locator, text: string) {
-  await expect(input).toBeVisible();
-  await expect(input).toBeEnabled();
-  await input.click();
-  await input.pressSequentially(text);
 }

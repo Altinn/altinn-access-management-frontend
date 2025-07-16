@@ -15,6 +15,12 @@ test.describe('Klientdelegering', () => {
     api = new ApiRequests();
   });
 
+  test('Test login', async ({ page }) => {
+    const test = new LoginPage(page);
+    const user = loadFacilitator(FacilitatorRole.Forretningsfoerer);
+    await test.loginAs(user.pid, user.org);
+  });
+
   test('Ansvarlig revisor', async ({ page }) => {
     await runDelegationTest({
       page,
