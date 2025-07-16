@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
-import { loginWithUser } from 'playwright/pages/loginPage';
+import { LoginPage } from 'playwright/pages/loginPage';
 
 import { SystemUserPage } from '../../pages/systemuser/SystemUserPage';
 
@@ -14,7 +14,7 @@ test.describe('System Register', async () => {
   test.beforeEach(async ({ page }) => {
     const api = new ApiRequests();
     system = await api.createSystemSystemRegister(); // Create system before each test
-    const login = new loginWithUser(page);
+    const login = new LoginPage(page);
     await login.loginWithUser('14824497789');
     await login.chooseReportee('AKTVERDIG RETORISK APE');
   });
