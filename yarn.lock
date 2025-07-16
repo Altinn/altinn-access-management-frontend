@@ -21,7 +21,7 @@ __metadata:
 
 "@altinn/altinn-components@file:../altinn-components::locator=access-management%40workspace%3A.":
   version: 0.34.0
-  resolution: "@altinn/altinn-components@file:../altinn-components#../altinn-components::hash=89b174&locator=access-management%40workspace%3A."
+  resolution: "@altinn/altinn-components@file:../altinn-components#../altinn-components::hash=8683f2&locator=access-management%40workspace%3A."
   dependencies:
     "@digdir/designsystemet-css": "npm:^1.0.6"
     "@digdir/designsystemet-react": "npm:^1.0.6"
@@ -34,7 +34,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/b4539addee0e4a8f5f1d34a88bc3cdf1cd403e7380335b4a3e428e1fada97d1b609828a542140135426e408f535335b1c7ff2e98ec9fd01f9534cd4b34fbeeba
+  checksum: 10/d2006966f522da1b37d87c5ad3371348bfadd68dd31a3e53f4deec086085293250a75050e151e24afcda6820f8f6aedd74588b93bd981cbce5a63544f95eab76
   languageName: node
   linkType: hard
 

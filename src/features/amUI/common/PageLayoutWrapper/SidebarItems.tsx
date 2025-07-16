@@ -23,7 +23,7 @@ export const SidebarItems = (
   const heading: MenuItemProps = {
     id: '1',
     groupId: 1,
-    avatar: {
+    icon: {
       name: accountName,
       type: accountType,
     },
