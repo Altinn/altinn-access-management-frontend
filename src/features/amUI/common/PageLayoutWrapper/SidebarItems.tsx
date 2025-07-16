@@ -100,7 +100,7 @@ export const SidebarItems = (
 
   const items: MenuItemProps[] = [];
 
-  if (!isSmall && displayConfettiPackage) {
+  if (!isSmall) {
     items.push(heading);
   }
 
@@ -118,10 +118,6 @@ export const SidebarItems = (
   }
 
   items.push(systemUser);
-
-  if (!displayConfettiPackage && !isSmall) {
-    items.unshift(heading);
-  }
 
   return items;
 };
