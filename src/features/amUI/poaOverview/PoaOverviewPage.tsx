@@ -6,6 +6,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { rerouteIfNotLimitedPreview } from '@/resources/utils/featureFlagUtils';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -13,8 +14,9 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
-
   useDocumentTitle(t('poa_overview_page.page_title'));
+
+  rerouteIfNotLimitedPreview();
 
   return (
     <PageWrapper>
