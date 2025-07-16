@@ -19,8 +19,8 @@ export const SidebarItems = (
   accountName: string,
   accountType: 'company' | 'person',
 ) => {
-  const displayConfettiPackage = window.featureFlags.displayConfettiPackage;
-  const displayLimitedPreviewLaunch = window.featureFlags.displayLimitedPreviewLaunch;
+  const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
+  const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
 
   const heading: MenuItemProps = {
     id: '1',
