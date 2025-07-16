@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { BorderedList } from './BorderedList';
 import { BorderedListItem } from './BorderedListItem/BorderedListItem';

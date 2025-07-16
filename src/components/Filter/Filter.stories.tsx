@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FilterIcon } from '@navikt/aksel-icons';
 
 import type { FilterProps } from './Filter';
