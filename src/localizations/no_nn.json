@@ -101,7 +101,8 @@
     "access_management": "Tilgangsstyring",
     "users": "Brukere",
     "reportees": "Våre tilganger hos andre",
-    "systemaccess": "API- og systemtilganger"
+    "systemaccess": "API- og systemtilganger",
+    "poa_overview": "Fullmakter"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -648,5 +649,9 @@
     "consent_is_revoked": "Samtykket/fullmakten er trukket",
     "consent_is_expired": "Samtykket/fullmakten har utløpt",
     "consent_is_not_accepted": "Samtykket/fullmakten er ikkje godkjent"
+  },
+  "poa_overview_page": {
+    "page_title": "Fullmaktsoversikt",
+    "heading": "Fullmaktsoversikt for {{fromparty}}"
   }
 }

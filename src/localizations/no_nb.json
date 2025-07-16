@@ -117,7 +117,8 @@
     "access_management": "Tilgangsstyring",
     "users": "Brukere",
     "reportees": "Våre tilganger hos andre",
-    "systemaccess": "API- og systemtilganger"
+    "systemaccess": "API- og systemtilganger",
+    "poa_overview": "Fullmakter"
   },
   "profile": {
     "received": "Mottatte",
@@ -651,5 +652,9 @@
     "consent_is_revoked": "Samtykket/fullmakten er trukket",
     "consent_is_expired": "Samtykket/fullmakten har utløpt",
     "consent_is_not_accepted": "Samtykket/fullmakten er ikke godkjent"
+  },
+  "poa_overview_page": {
+    "page_title": "Fullmaktsoversikt",
+    "heading": "Fullmaktsoversikt for {{fromparty}}"
   }
 }
