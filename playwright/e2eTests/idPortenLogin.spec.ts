@@ -2,7 +2,7 @@
 /* eslint-disable import/no-named-as-default-member */
 import { test } from '@playwright/test';
 
-import { LoginPage } from 'playwright/pages/loginPage';
+import { LoginPage } from 'playwright/pages/LoginPage';
 
 test('Login with TestID', async ({ page }) => {
   const login = new LoginPage(page);

@@ -1,7 +1,7 @@
 import test, { expect } from '@playwright/test';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { LoginPage } from 'playwright/pages/loginPage';
+import { LoginPage } from '../../pages/LoginPage';
 
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
