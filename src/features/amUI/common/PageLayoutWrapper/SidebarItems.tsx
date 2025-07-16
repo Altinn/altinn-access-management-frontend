@@ -111,7 +111,7 @@ export const SidebarItems = (
     }
   }
 
-  if (displayLimitedPreviewLaunch) {
+  if (!displayLimitedPreviewLaunch) {
     if (isAdmin) {
       items.push(poaOverview);
     }
