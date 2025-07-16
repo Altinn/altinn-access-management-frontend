@@ -23,6 +23,7 @@ import { ReporteeRightsPage } from '@/features/amUI/reporteeRightsPage/ReporteeR
 import { SystemUserAgentRequestPage } from '@/features/amUI/systemUser/SystemUserAgentRequestPage';
 import { SystemUserAgentDelegationPage } from '@/features/amUI/systemUser/SystemUserAgentDelegationPage/SystemUserAgentDelegationPage';
 import { ConsentRequestPage } from '@/features/amUI/consent/ConsentRequestPage/ConsentRequestPage';
+import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
 
 import {
   GeneralPath,
@@ -110,6 +111,10 @@ export const Router = createBrowserRouter(
       <Route
         path={amUIPath.ReporteeRights}
         element={<ReporteeRightsPage />}
+      />
+      <Route
+        path={amUIPath.PoaOverview}
+        element={<PoaOverviewPage />}
       />
       <Route
         path={SystemUserPath.SystemUser}

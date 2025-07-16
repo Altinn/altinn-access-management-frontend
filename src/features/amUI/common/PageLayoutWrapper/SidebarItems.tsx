@@ -1,6 +1,6 @@
 import React from 'react';
 import type { MenuItemProps, MenuItemSize } from '@altinn/altinn-components';
-import { InboxIcon, PersonGroupIcon, TenancyIcon } from '@navikt/aksel-icons';
+import { InboxIcon, PersonGroupIcon, TenancyIcon, PadlockUnlockedIcon } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
 
@@ -19,7 +19,8 @@ export const SidebarItems = (
   accountName: string,
   accountType: 'company' | 'person',
 ) => {
-  const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
+  const { displayConfettiPackage, displayLimitedPreviewLaunch } = window.featureFlags;
+
   const heading: MenuItemProps = {
     id: '1',
     groupId: 1,
@@ -31,46 +32,64 @@ export const SidebarItems = (
     title: t('sidebar.access_management'),
   };
 
-  const confettiPackage: MenuItemProps[] = [
-    {
-      groupId: 2,
-      id: '2',
-      size: 'md' as MenuItemSize,
-      title: t('sidebar.users'),
-      selected: pathname?.includes(`/${amUIPath.Users}`),
-      icon: PersonGroupIcon,
-      as: (props) => (
-        <Link
-          to={`/${amUIPath.Users}`}
-          {...props}
-        />
-      ),
-    },
-    {
-      groupId: 3,
-      id: '3',
-      size: 'md' as MenuItemSize,
-      title: t('sidebar.reportees'),
-      selected: pathname?.includes(`/${amUIPath.Reportees}`),
-      icon: InboxIcon,
-      as: (props) => (
-        <Link
-          to={`/${amUIPath.Reportees}`}
-          {...props}
-        />
-      ),
-    },
-  ].slice(0, isAdmin ? 2 : 1);
+  const users: MenuItemProps = {
+    groupId: 2,
+    id: '2',
+    size: 'md' as MenuItemSize,
+    title: t('sidebar.users'),
+    selected: pathname?.includes(`/${amUIPath.Users}`),
+    icon: PersonGroupIcon,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
+      <Link
+        to={`/${amUIPath.Users}`}
+        {...props}
+      />
+    ),
+  };
+
+  const poaOverview: MenuItemProps = {
+    groupId: 2,
+    id: '2.1',
+    size: 'md',
+    title: t('sidebar.poa_overview'),
+    icon: PadlockUnlockedIcon,
+    selected: pathname?.includes(`/${amUIPath.PoaOverview}`),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
+      <Link
+        to={`/${amUIPath.PoaOverview}`}
+        {...props}
+      />
+    ),
+  };
+
+  const reportees: MenuItemProps = {
+    groupId: 4,
+    id: '4',
+    size: 'md' as MenuItemSize,
+    title: t('sidebar.reportees'),
+    selected: pathname?.includes(`/${amUIPath.Reportees}`),
+    icon: InboxIcon,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
+      <Link
+        to={`/${amUIPath.Reportees}`}
+        {...props}
+      />
+    ),
+  };
 
   const systemUserPath = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
   const systemUser: MenuItemProps = {
-    groupId: 4,
-    id: '4',
+    groupId: 5,
+    id: '5',
     size: 'md',
     title: t('sidebar.systemaccess'),
     icon: TenancyIcon,
     selected: pathname?.includes(systemUserPath),
-    as: (props) => (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
       <Link
         to={systemUserPath}
         {...props}
@@ -78,14 +97,30 @@ export const SidebarItems = (
     ),
   };
 
+  const items: MenuItemProps[] = [];
+
+  if (!isSmall && displayConfettiPackage) {
+    items.push(heading);
+  }
+
   if (displayConfettiPackage) {
-    if (isSmall) {
-      return [...confettiPackage, systemUser];
+    items.push(users);
+    if (isAdmin) {
+      items.push(reportees);
     }
-    return [heading, ...confettiPackage, systemUser];
   }
-  if (isSmall) {
-    return [systemUser];
+
+  if (displayLimitedPreviewLaunch) {
+    if (isAdmin) {
+      items.push(poaOverview);
+    }
   }
-  return [heading, systemUser];
+
+  items.push(systemUser);
+
+  if (!displayConfettiPackage && !isSmall) {
+    items.unshift(heading);
+  }
+
+  return items;
 };

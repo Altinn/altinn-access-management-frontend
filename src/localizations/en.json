@@ -104,7 +104,8 @@
     "access_management": "Access management",
     "users": "Users",
     "reportees": "Our access to other companies",
-    "systemaccess": "API- and system access"
+    "systemaccess": "API- and system access",
+    "poa_overview": "Power of attorney"
   },
   "error_page": {
     "not_found_site_type": "Error 404",
@@ -653,5 +654,9 @@
     "consent_is_revoked": "Consent/power of attorney is revoked",
     "consent_is_expired": "Consent/power of attorney has expired",
     "consent_is_not_accepted": "Consent/power of attorney is not approved"
+  },
+  "poa_overview_page": {
+    "page_title": "Power of attorney overview",
+    "heading": "Power of attorney overview for {{fromparty}}"
   }
 }
