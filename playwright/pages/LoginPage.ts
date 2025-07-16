@@ -43,9 +43,9 @@ export class LoginPage {
     await this.autentiserButton.click();
   }
 
-  async loginAs(page: Page, pid: string, orgnummer: string) {
+  async loginAs(pid: string, orgnummer: string) {
     const baseUrl = process.env.BASE_URL as string;
-    await page.goto(baseUrl);
+    await this.page.goto(baseUrl);
     await this.loginButton.click();
     await this.testIdLink.click();
     await this.pidInput.fill(pid);
@@ -56,7 +56,9 @@ export class LoginPage {
     await retrySearchBoxTyping(this.searchBox, orgnummer);
 
     const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`;
-    await page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) }).click();
+    await this.page
+      .getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) })
+      .click();
   }
 
   async chooseReportee(reportee: string) {
