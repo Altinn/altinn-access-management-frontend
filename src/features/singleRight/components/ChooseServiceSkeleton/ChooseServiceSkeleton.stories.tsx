@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MugIcon } from '@navikt/aksel-icons';
 
 import { Page, PageContent, PageHeader } from '@/components';
