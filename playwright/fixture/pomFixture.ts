@@ -1,6 +1,6 @@
 import { test as baseTest } from '@playwright/test';
 
-import { LoginPage, logoutWithUser } from 'playwright/pages/loginPage';
+import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
 import { apiDelegation } from 'playwright/pages/profile/apidelegeringPage';
 import {
   delegateRightsToUser,
