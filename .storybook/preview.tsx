@@ -4,6 +4,19 @@ import '@/resources/css/Common.module.css';
 
 import '@altinn/altinn-components/dist/global.css';
 
+// Extend Window interface for feature flags
+declare global {
+  interface Window {
+    featureFlags?: {
+      displayPopularSingleRightsServices: boolean;
+      displayConfettiPackage: boolean;
+      displayLimitedPreviewLaunch: boolean;
+      displayResourceDelegation: boolean;
+      restrictPrivUse: boolean;
+    };
+  }
+}
+
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
@@ -21,6 +34,15 @@ worker.start();
 document.cookie = 'AltinnPartyUuid=mocked-party-uuid; path=/; SameSite=Lax';
 document.cookie = 'AltinnPartyId=mocked-party-id; path=/; SameSite=Lax';
 document.cookie = 'XSRF-TOKEN=mocked-xsrf-token; path=/; SameSite=Lax';
+
+// Set feature flags for Storybook
+window.featureFlags = {
+  displayPopularSingleRightsServices: false,
+  displayConfettiPackage: true,
+  displayLimitedPreviewLaunch: false,
+  displayResourceDelegation: true,
+  restrictPrivUse: false,
+};
 
 // Initialise i18next;
 i18n
