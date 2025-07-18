@@ -194,7 +194,7 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
                 : t('consent_request.already_rejected')}
             </DsAlert>
           )}
-          {isPastValidTo && isApproved && isRejected && (
+          {isPastValidTo && !isApproved && !isRejected && (
             <DsAlert data-color='warning'>
               {request.isPoa
                 ? t('consent_request.past_validto_poa')
