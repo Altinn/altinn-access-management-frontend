@@ -56,6 +56,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         public string FromPartyName { get; set; }
 
         /// <summary>
+        /// Consent request expiration date
+        /// </summary>
+        public DateTimeOffset ValidTo { get; set; }
+
+        /// <summary>
         /// List all events related to consent request
         /// </summary>
         public List<ConsentRequestEventDto> ConsentRequestEvents { get; set; } = [];
