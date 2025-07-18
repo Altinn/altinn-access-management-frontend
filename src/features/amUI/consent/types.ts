@@ -18,6 +18,7 @@ export interface ConsentRequest {
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
   fromPartyName?: string;
+  validTo: string;
   consentRequestEvents: {
     consentEventID: string;
     created: string;

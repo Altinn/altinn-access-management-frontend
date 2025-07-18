@@ -641,7 +641,9 @@
     "already_approved": "Dette samtykket er allerede gitt",
     "already_approved_poa": "Denne fullmakten er allerede gitt",
     "already_rejected": "Dette samtykket er allerede avvist",
-    "already_rejected_poa": "Denne fullmakten er allerede avvist"
+    "already_rejected_poa": "Denne fullmakten er allerede avvist",
+    "past_validto": "Dette samtykket er utløpt",
+    "past_validto_poa": "Denne fullmakten er utløpt"
   },
   "consent_errors": {
     "not_authorized_for_consent": "Bruker er ikke autorisert for å gi samtykke/fullmakt",
