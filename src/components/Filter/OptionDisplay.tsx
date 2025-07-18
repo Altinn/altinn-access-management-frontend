@@ -3,12 +3,12 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsCheckbox, DsParagraph, DsSearch } from '@altinn/altinn-components';
 
+import { arraysEqual } from '@/resources/utils';
+import { usePrevious } from '@/resources/hooks';
+
 import { optionSearch } from './utils';
 import type { FilterOption } from './utils';
 import classes from './OptionDisplay.module.css';
-
-import { arraysEqual } from '@/resources/utils';
-import { usePrevious } from '@/resources/hooks';
 
 export interface OptionDisplayProps {
   options: FilterOption[];

@@ -5,14 +5,6 @@ import { useNavigate } from 'react-router';
 import cn from 'classnames';
 import { DsHeading, DsSearch, DsSpinner, DsButton } from '@altinn/altinn-components';
 
-import { DelegationType } from '../../components/DelegationType';
-
-import classes from './ChooseOrgPage.module.css';
-import { DelegableOrgItems } from './DelegableOrgItems';
-import { ChosenItems } from './ChosenItems';
-import { ChooseOrgInfoPanel } from './ChooseOrgInfoPanel';
-import { mapOverviewOrgToOrganization, useOrgSearch } from './useOrgSearch';
-
 import { Page, PageHeader, PageContent, PageContainer, RestartPrompter } from '@/components';
 import { removeOrg } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
@@ -25,6 +17,14 @@ import { useFetchOverviewOrgsQuery } from '@/rtk/features/apiDelegation/overview
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import type { Organization } from '@/rtk/features/lookupApi';
+
+import { DelegationType } from '../../components/DelegationType';
+
+import { mapOverviewOrgToOrganization, useOrgSearch } from './useOrgSearch';
+import { ChooseOrgInfoPanel } from './ChooseOrgInfoPanel';
+import { ChosenItems } from './ChosenItems';
+import classes from './ChooseOrgPage.module.css';
+import { DelegableOrgItems } from './DelegableOrgItems';
 
 export const ChooseOrgPage = () => {
   const partyId = getCookie('AltinnPartyId');

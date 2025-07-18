@@ -4,12 +4,6 @@ import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { DsParagraph } from '@altinn/altinn-components';
 
-import { SearchSection } from '../../components/SearchSection';
-import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
-import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
-
-import classes from './ChooseServicePage.module.css';
-
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { Page, PageHeader, PageContent, PageContainer } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
@@ -23,6 +17,12 @@ import {
 import { GeneralPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetUserInfoQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
+import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
+import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
+import { SearchSection } from '../../components/SearchSection';
+
+import classes from './ChooseServicePage.module.css';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation();

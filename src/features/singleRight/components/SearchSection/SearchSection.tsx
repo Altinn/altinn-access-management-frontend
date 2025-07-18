@@ -13,10 +13,6 @@ import {
   DsChip,
 } from '@altinn/altinn-components';
 
-import { ResourceActionBar } from '../ResourceActionBar';
-
-import classes from './SearchSection.module.css';
-
 import { Filter } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
@@ -33,6 +29,10 @@ import {
 import { arraysEqual, debounce } from '@/resources/utils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { AmPagination } from '@/components/Paginering';
+
+import { ResourceActionBar } from '../ResourceActionBar';
+
+import classes from './SearchSection.module.css';
 
 export interface SearchSectionParams {
   /** The callback function to be called when a service is selected. */

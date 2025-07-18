@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph, DsLink } from '@altinn/altinn-components';
 
-import classes from './ChooseOrgPage.module.css';
-
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
+import classes from './ChooseOrgPage.module.css';
 
 interface InfoPanelProps {
   searchString: string;

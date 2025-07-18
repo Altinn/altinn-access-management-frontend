@@ -1,22 +1,23 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  AccessPackageList,
+  AccessPackageListItem,
   DsButton,
   DsDialog,
   DsHeading,
-  ResourceList,
+  ResourceListItem,
+  List,
 } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
+
+import { getButtonIconSize } from '@/resources/utils';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import type { SystemUserAccessPackage } from '../../types';
 
 import classes from './RightsList.module.css';
 import { AccessPackageInfo } from './AccessPackageInfo';
 import { ResourceDetails } from './ResourceDetails';
-
-import { getButtonIconSize } from '@/resources/utils';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface RightsListProps {
   resources: ServiceResource[];
@@ -68,24 +69,26 @@ export const RightsList = ({
                   })}
             </DsHeading>
           )}
-          <AccessPackageList
-            items={accessPackages.map((accessPackage) => {
-              return {
-                as: 'button',
-                titleAs: 'h3',
-                size: 'md',
-                id: accessPackage.id,
-                title: accessPackage.name,
-                description:
+          <List>
+            {accessPackages.map((accessPackage) => (
+              <AccessPackageListItem
+                key={accessPackage.id}
+                id={accessPackage.id}
+                as='button'
+                titleAs='h3'
+                size='md'
+                name={accessPackage.name}
+                description={
                   accessPackage.resources.length === 1
                     ? t('systemuser_detailpage.accesspackage_resources_list_singular')
                     : t('systemuser_detailpage.accesspackage_resources_list_plural', {
                         resourcesCount: accessPackage.resources.length,
-                      }),
-                onClick: () => onSelectAccessPackage(accessPackage),
-              };
-            })}
-          />
+                      })
+                }
+                onClick={() => onSelectAccessPackage(accessPackage)}
+              />
+            ))}
+          </List>
         </div>
       )}
       {resources.length > 0 && (
@@ -103,21 +106,22 @@ export const RightsList = ({
                   })}
             </DsHeading>
           )}
-          <ResourceList
-            defaultItemSize='md'
-            items={resources.map((resource) => {
-              return {
-                id: resource.identifier,
-                as: 'button',
-                titleAs: 'h3',
-                ownerLogoUrl: resource.resourceOwnerLogoUrl,
-                ownerLogoUrlAlt: resource.resourceOwnerName ?? '',
-                ownerName: resource.resourceOwnerName ?? '',
-                resourceName: resource.title,
-                onClick: () => onSelectResource(resource),
-              };
-            })}
-          />
+          <List>
+            {resources.map((resource) => (
+              <ResourceListItem
+                key={resource.identifier}
+                id={resource.identifier}
+                as='button'
+                titleAs='h3'
+                size='md'
+                ownerLogoUrl={resource.resourceOwnerLogoUrl}
+                ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
+                ownerName={resource.resourceOwnerName ?? ''}
+                resourceName={resource.title}
+                onClick={() => onSelectResource(resource)}
+              />
+            ))}
+          </List>
         </div>
       )}
       <DsDialog

@@ -29,7 +29,7 @@ const SingleRightItem: FC<SingleRightItemProps> = ({ resource, toParty }) => {
           ownerName={resource.resourceOwnerName ?? ''}
           ownerLogoUrl={resource.resourceOwnerLogoUrl}
           id={resource.identifier}
-          size='lg'
+          size='md'
           as='button'
           onClick={() => modalRef.current?.showModal()}
           controls={

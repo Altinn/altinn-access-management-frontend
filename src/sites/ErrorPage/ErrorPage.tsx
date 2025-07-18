@@ -4,11 +4,11 @@ import { useRouteError } from 'react-router';
 import * as React from 'react';
 import { DsParagraph } from '@altinn/altinn-components';
 
+import { Page, PageContent, PageContainer } from '@/components';
+
 import { PageNotFound } from './contents/PageNotFound';
 import { UnknownError } from './contents/UnknownError';
 import classes from './ErrorPage.module.css';
-
-import { Page, PageContent, PageContainer } from '@/components';
 
 export const ErrorPage = () => {
   const { t } = useTranslation();

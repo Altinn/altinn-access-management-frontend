@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { DsButton } from '@altinn/altinn-components';
 
+import { getRedirectToProfileUrl } from '@/resources/utils';
+
 import { UserInfoBar } from '../UserInfoBar/UserInfoBar';
 
 import classes from './PageContainer.module.css';
-
-import { getRedirectToProfileUrl } from '@/resources/utils';
 
 export interface PageContainerProps {
   children: React.ReactNode;

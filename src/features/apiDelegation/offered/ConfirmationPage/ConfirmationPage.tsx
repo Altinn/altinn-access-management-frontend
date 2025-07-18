@@ -4,9 +4,6 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { DsHeading, DsParagraph, DsButton, DsSpinner, DsAlert } from '@altinn/altinn-components';
 
-import classes from './ConfirmationPage.module.css';
-import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegationLists';
-
 import { useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
@@ -17,6 +14,9 @@ import { usePostApiDelegationMutation } from '@/rtk/features/apiDelegation/apiDe
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
 import { overviewOrgApi } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
+
+import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegationLists';
+import classes from './ConfirmationPage.module.css';
 
 export const ConfirmationPage = () => {
   const dispatch = useDispatch();

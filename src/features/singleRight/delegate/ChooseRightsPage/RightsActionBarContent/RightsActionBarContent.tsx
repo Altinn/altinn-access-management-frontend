@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { DsAlert, DsChip, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
-import classes from './RightsActionBarContent.module.css';
-
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { ErrorCode, getErrorCodeTextKey, prioritizeErrors } from '@/resources/utils/errorCodeUtils';
 import { type Details } from '@/rtk/features/singleRights/singleRightsSlice';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
+
+import classes from './RightsActionBarContent.module.css';
 
 export type ChipRight = {
   action: string;

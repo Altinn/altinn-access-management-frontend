@@ -6,12 +6,6 @@ import { PlusIcon, PencilIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { useDispatch } from 'react-redux';
 import { DsSpinner, DsButton, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
-import { DelegationType } from '../DelegationType';
-
-import { OrgDelegationActionBar } from './OrgDelegationActionBar';
-import classes from './OverviewPageContent.module.css';
-import { useSoftDeleteApi } from './useSoftDeleteApi';
-
 import { useMediaQuery } from '@/resources/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import { ErrorPanel } from '@/components';
@@ -25,6 +19,12 @@ import {
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { resetState } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import { resetChosenApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+
+import { DelegationType } from '../DelegationType';
+
+import { useSoftDeleteApi } from './useSoftDeleteApi';
+import { OrgDelegationActionBar } from './OrgDelegationActionBar';
+import classes from './OverviewPageContent.module.css';
 
 export interface OverviewPageContentInterface {
   delegationType: DelegationType;

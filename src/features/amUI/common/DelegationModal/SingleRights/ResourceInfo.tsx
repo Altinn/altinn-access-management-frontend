@@ -14,12 +14,6 @@ import {
   useSnackbar,
 } from '@altinn/altinn-components';
 
-import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-
-import classes from './ResourceInfo.module.css';
-import { ResourceAlert } from './ResourceAlert';
-
 import type {
   DelegationCheckedRight,
   ServiceResource,
@@ -39,6 +33,12 @@ import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
+
+import classes from './ResourceInfo.module.css';
+import { ResourceAlert } from './ResourceAlert';
 
 export type ChipRight = {
   action: string;
@@ -197,7 +197,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
         () =>
           openSnackbar({
             message: t('delegation_modal.error_message', { name: toParty?.name }),
-            color: 'alert',
+            color: 'danger',
             duration: SnackbarDuration.infinite,
           }),
       );

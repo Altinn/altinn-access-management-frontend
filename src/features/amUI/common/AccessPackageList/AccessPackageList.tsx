@@ -1,4 +1,4 @@
-import { DsParagraph, DsSpinner, ListBase } from '@altinn/altinn-components';
+import { DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -119,7 +119,7 @@ export const AccessPackageList = ({
           {t('access_packages.user_has_no_packages')}
         </DsParagraph>
       ) : (
-        <ListBase>
+        <List>
           {displayAreas.map((area) => {
             const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
 
@@ -145,7 +145,7 @@ export const AccessPackageList = ({
               </AreaItem>
             );
           })}
-        </ListBase>
+        </List>
       )}
     </div>
   );
