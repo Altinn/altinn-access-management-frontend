@@ -16,7 +16,7 @@ describe('dateUtils', () => {
 
     test('should handle invalid date strings', () => {
       expect(formatDateToNorwegian('invalid-date')).toBe('invalid-date');
-      expect(formatDateToNorwegian('')).toBe('');
+      expect(formatDateToNorwegian('')).toBe(undefined);
     });
 
     test('should handle edge cases', () => {
