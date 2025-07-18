@@ -251,10 +251,12 @@ const getAccount = (reportee: ReporteeInfo, userUuid: string, currentReporteeUui
   const accountType = getAccountType(reportee?.type ?? '');
   return {
     id: reportee.partyId,
-    name:
-      accountType == 'person'
-        ? reportee.name
-        : `${reportee.name}  (${reportee.organizationNumber})`,
+    icon: {
+      name: reportee.name,
+      type: reportee.type === 'Organization' ? 'company' : 'person',
+    },
+    name: reportee.name,
+    description: reportee.type === 'Organization' ? reportee.organizationNumber : undefined,
     group: reportee.partyUuid === userUuid ? 'a' : 'b',
     groupId: group,
     type: accountType,
