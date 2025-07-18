@@ -3,12 +3,12 @@ import { Provider } from 'react-redux';
 import React from 'react';
 import { DsHeading } from '@altinn/altinn-components';
 
+import store from '@/rtk/app/store';
+import { PageContainer, PageContent, PageHeader } from '@/components';
+
 import { DelegationType } from '../DelegationType';
 
 import { OverviewPageContent } from './OverviewPageContent';
-
-import store from '@/rtk/app/store';
-import { PageContainer, PageContent, PageHeader } from '@/components';
 
 type OverviewPageContentPropsAndCustomArgs = React.ComponentProps<typeof OverviewPageContent>;
 

@@ -25,6 +25,7 @@ export const PackageItem = ({ pkg, onSelect, controls, hasAccess }: PackageItemP
       onClick={() => onSelect?.(pkg)}
       controls={controls}
       color={hasAccess ? 'company' : 'neutral'}
+      size='xs'
     />
   );
 };

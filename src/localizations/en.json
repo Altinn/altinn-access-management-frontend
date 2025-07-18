@@ -77,7 +77,8 @@
     "last_name": "Last name",
     "subunit": "Subunit",
     "unauthorized_for_party_title": "Missing delegation access",
-    "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators."
+    "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
+    "date_of_birth": "Born"
   },
   "header": {
     "access_management": "Access Management",
@@ -317,7 +318,6 @@
     "user_deletion_not_allowed_heading": "The user cannot be deleted",
     "user_deletion_not_allowed_message": "<p>{{to_name}} only has authorizations through their roles in the Central Coordinating Register for Legal Entities and therefore cannot be deleted from {{from_name}} in Altinn. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p>",
     "yes_button": "Yes, delete",
-
     "yourself_trigger_button": "Delete all permissions",
     "yourself_heading": "Are you sure you want to delete all your permissions?",
     "yourself_message": "<p>You will lose all authorizations you have for {{from_name}} and will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
@@ -325,7 +325,6 @@
     "yourself_limited_deletion_message": "<p>Your rights cannot be completely removed from {{from_name}} in Altinn as they are linked to roles in the Central Coordinating Register for Legal Entities. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p><p>Do you want to delete all permissions not linked to the Central Coordinating Register for Legal Entities? <i>This action cannot be undone.</i></p>",
     "yourself_deletion_not_allowed_heading": "Your permissions cannot be deleted",
     "yourself_deletion_not_allowed_message": "<p>You only have authorizations through your roles in the Central Coordinating Register for Legal Entities and therefore cannot be deleted from {{from_name}} in Altinn. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p>",
-
     "reportee_trigger_button": "Delete all permissions",
     "reportee_heading": "Are you sure you want to delete all their permissions?",
     "reportee_message": "<p>{{to_name}} will lose all their authorizations for {{from_name}}. They will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
@@ -465,7 +464,6 @@
     "FISJ": "Skal fisjoneres med",
     "ETDL": "Allocator of electronic signing rights",
     "ADOS": "Administrative unit - public sector",
-
     "innehaver": "Owner",
     "styreleder": "Chairman of the board",
     "varamedlem": "Deputy board member(s)",

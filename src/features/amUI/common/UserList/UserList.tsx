@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next';
-import { Button, DsParagraph } from '@altinn/altinn-components';
+import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
 import type { Connection } from '@/rtk/features/userInfoApi';
 
 import { NewUserButton } from '../../users/NewUserModal/NewUserModal';
 
-import { ListWrapper } from './ListWrapper';
+import { UserItem } from './UserItem';
 import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
+import { SkeletonUserList } from './SkeletonUserList';
 
 export interface UserListProps {
   connections?: Connection[];
@@ -34,6 +35,14 @@ export const UserList = ({
 
   const promptForNoResults = !isLoading && users?.length === 0 && canAdd;
 
+  if (isLoading) {
+    return (
+      <List spacing={2}>
+        <SkeletonUserList />
+      </List>
+    );
+  }
+
   return (
     <>
       {promptForNoResults && (
@@ -51,14 +60,17 @@ export const UserList = ({
           <NewUserButton isLarge />
         </div>
       )}
-      <ListWrapper
-        users={users ?? []}
-        spacing={2}
-        size='md'
-        isLoading={isLoading}
-        listItemTitleAs={listItemTitleAs}
-        interactive={interactive}
-      />
+      <List spacing={2}>
+        {users?.map((user) => (
+          <UserItem
+            key={user.id}
+            user={user}
+            size='md'
+            titleAs={listItemTitleAs}
+            interactive={interactive}
+          />
+        ))}
+      </List>
       {hasNextPage && (
         <div className={classes.showMoreButtonContainer}>
           <Button

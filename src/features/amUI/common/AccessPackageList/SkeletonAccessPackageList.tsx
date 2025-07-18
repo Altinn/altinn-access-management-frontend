@@ -23,6 +23,8 @@ export const SkeletonAccessPackageList = () => {
           key={id}
           id={id}
           badgeText='xxx'
+          border='solid'
+          size='lg'
           {...props}
         />
       ))}

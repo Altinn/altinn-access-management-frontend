@@ -2,6 +2,7 @@ import { UserListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Connection } from '@/rtk/features/userInfoApi';
+import { formatDateToNorwegian } from '@/resources/utils';
 
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
@@ -22,12 +23,15 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
       <UserListItem
         id={currentUser?.party?.id || ''}
         name={currentUser?.party?.name || ''}
-        description={currentUser?.party?.keyValues?.DateOfBirth || ''}
+        description={
+          t('common.date_of_birth') +
+          ` ${formatDateToNorwegian(currentUser?.party?.keyValues?.DateOfBirth)}`
+        }
         roleNames={roles.map((r) => t(`${r}`))}
         type='person'
         as={as}
         titleAs='h2'
-        shadow='lg'
+        size='xl'
         loading={loading}
       />
     </div>

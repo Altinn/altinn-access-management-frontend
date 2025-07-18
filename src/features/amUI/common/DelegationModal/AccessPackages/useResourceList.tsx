@@ -29,6 +29,7 @@ export const useResourceList = (list: PackageResource[]) => {
         as='div'
         size='xs'
         interactive={false}
+        shadow='none'
       />
     );
   });

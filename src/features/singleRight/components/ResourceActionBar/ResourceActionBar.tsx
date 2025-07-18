@@ -5,13 +5,13 @@ import { PlusCircleIcon, ExclamationmarkTriangleIcon, ArrowUndoIcon } from '@nav
 import { useTranslation } from 'react-i18next';
 import { DsButton, DsParagraph, DsSpinner, DsValidationMessage } from '@altinn/altinn-components';
 
-import classes from './ResourceActionBar.module.css';
-
 import { ActionBar, type ActionBarProps } from '@/components';
 import { useUpdate } from '@/resources/hooks/useUpdate';
 import { usePrevious } from '@/resources/hooks';
 import { ServiceStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { getButtonIconSize } from '@/resources/utils';
+
+import classes from './ResourceActionBar.module.css';
 
 export interface ResourceActionBarProps
   extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children'> {

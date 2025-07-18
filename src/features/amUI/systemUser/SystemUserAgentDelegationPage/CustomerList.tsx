@@ -5,6 +5,7 @@ import {
   DsSpinner,
   List,
   DsValidationMessage,
+  ListItem,
 } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
@@ -87,19 +88,19 @@ export const CustomerList = ({
         </DsSearch>
         {children}
       </div>
-      <List
-        defaultItemSize='sm'
-        className={classes.customerList}
-        items={filteredSearchList.slice(startIndex, endIndex)?.map((customer) => {
-          return {
-            title: customer.name,
-            interactive: false,
-            id: customer.id,
-            titleAs: 'h3',
-            as: 'div',
-            avatar: { type: 'company', name: customer.name },
-            description: `${t('common.org_nr')} ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`,
-            controls: (
+      <List>
+        {filteredSearchList.slice(startIndex, endIndex)?.map((customer) => (
+          <ListItem
+            key={customer.id}
+            id={customer.id}
+            icon={{ type: 'company', name: customer.name }}
+            as='div'
+            title={{ children: customer.name, as: 'h3' }}
+            description={`${t('common.org_nr')} ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`}
+            interactive={false}
+            ariaLabel={customer.name}
+            size='sm'
+            controls={
               <ListControls
                 customer={customer}
                 delegation={delegations?.find((x) => x.customerId === customer.id)}
@@ -108,10 +109,10 @@ export const CustomerList = ({
                 onRemoveCustomer={onRemoveCustomer}
                 onAddCustomer={onAddCustomer}
               />
-            ),
-          };
-        })}
-      />
+            }
+          />
+        ))}
+      </List>
       <AmPagination
         totalPages={totalPages}
         showPages={showPages}

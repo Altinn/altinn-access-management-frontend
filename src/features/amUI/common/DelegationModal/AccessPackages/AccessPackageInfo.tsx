@@ -221,7 +221,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               })}
             </DsHeading>
             <div className={classes.service_list}>
-              <List spacing='xs'>{resourceListItems}</List>
+              <List spacing='0'>{resourceListItems}</List>
             </div>
           </div>
 

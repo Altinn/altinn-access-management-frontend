@@ -5,15 +5,15 @@ import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import { DsSpinner } from '@altinn/altinn-components';
 
-import { ApiActionBar } from '../../components/ApiActionBar';
-
-import classes from './ChooseApiPage.module.css';
-
 import common from '@/resources/css/Common.module.css';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { ErrorPanel } from '@/components';
 import type { CustomError } from '@/dataObjects';
+
+import { ApiActionBar } from '../../components/ApiActionBar';
+
+import classes from './ChooseApiPage.module.css';
 
 interface ApiSearchResultsProps {
   error?: FetchBaseQueryError | SerializedError | CustomError;

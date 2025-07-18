@@ -41,6 +41,8 @@ export const AreaItem = ({
       expanded={expanded}
       titleAs='h3'
       onClick={() => toggleExpandedArea(area.id)}
+      size='lg'
+      border='solid'
     >
       {children}
     </AccessAreaListItem>

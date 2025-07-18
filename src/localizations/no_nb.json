@@ -76,7 +76,8 @@
     "last_name": "Etternavn",
     "org_number": "Organisasjonsnummer",
     "org_name": "Organisasjonsnavn",
-    "subunit": "Underenhet"
+    "subunit": "Underenhet",
+    "date_of_birth": "Født"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -316,7 +317,6 @@
     "user_deletion_not_allowed_heading": "Brukeren kan ikke slettes",
     "user_deletion_not_allowed_message": "<p>{{to_name}} har kun fullmakter gjennom sine roller i Enhetsregisteret og kan derfor ikke slettes fra {{from_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjøre det via <erLink>Samordnet registermelding</erLink>.</p>",
     "yes_button": "Ja, slett",
-
     "yourself_trigger_button": "Slett alle tilganger",
     "yourself_heading": "Er du sikker på at du vil slette alle dine tilganger?",
     "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke angres.</i></p>",
@@ -324,7 +324,6 @@
     "yourself_limited_deletion_message": "<p>Dine rettigheter kan ikke fjernes helt fra {{from_name}} i Altinn ettersom de er knyttet til roller i Enhetsregisteret. Dersom du ønsker å endre dette, kan du gjøre det via <erLink>Samordnet registermelding</erLink>.</p><p>Ønsker du å slette alle tilganger som ikke er knyttet til Enhetsregisteret? <i>Denne handlingen kan ikke angres.</i></p>",
     "yourself_deletion_not_allowed_heading": "Dine tilganger kan ikke slettes",
     "yourself_deletion_not_allowed_message": "<p>Du har kun fullmakter gjennom dine roller i Enhetsregisteret og kan derfor ikke slettes fra {{from_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjøre det via <erLink>Samordnet registermelding</erLink>.</p>",
-
     "reportee_trigger_button": "Slett alle tilganger",
     "reportee_heading": "Er du sikker på at du vil slette alle deres tilganger?",
     "reportee_message": "<p>{{to_name}} vil miste alle sine fullmakter for {{from_name}}. De vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke angres.</i></p>",
@@ -464,7 +463,6 @@
     "FISJ": "Skal fisjoneres med",
     "ETDL": "Tildeler av elektronisk signeringsrett",
     "ADOS": "Administrativ enhet - offentlig sektor",
-
     "innehaver": "Innehaver",
     "styreleder": "Styrets leder",
     "varamedlem": "Varamedlem",
