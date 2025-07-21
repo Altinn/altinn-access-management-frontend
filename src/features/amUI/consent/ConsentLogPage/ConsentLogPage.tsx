@@ -17,7 +17,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 
 import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
-import { ActiveConsent } from '../components/ActiveConsent/ActiveConsent';
+import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
 
 import classes from './ConsentLogPage.module.css';
 
@@ -103,7 +103,7 @@ export const ConsentLogPage = () => {
           closedby='any'
           onClose={() => setSelectedConsentId('')}
         >
-          {selectedConsentId && <ActiveConsent consentId={selectedConsentId} />}
+          {selectedConsentId && <ConsentDetails consentId={selectedConsentId} />}
         </DsDialog>
       </PageLayoutWrapper>
     </PageWrapper>

@@ -19,7 +19,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 import type { ActiveConsentListItem } from '../types';
-import { ActiveConsent } from '../components/ActiveConsent/ActiveConsent';
+import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
 
 import classes from './ActiveConsentsPage.module.css';
 
@@ -28,7 +28,7 @@ export const ActiveConsentsPage = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedConsentId, setSelectedConsentId] = useState<string>('');
 
-  useDocumentTitle(t('systemuser_request.page_title'));
+  useDocumentTitle(t('active_consents.page_title'));
   const partyUuid = getCookie('AltinnPartyUuid');
 
   const {
@@ -59,14 +59,12 @@ export const ActiveConsentsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <div>
-          <DsHeading
-            level={1}
-            data-size='md'
-          >
-            {t('active_consents.heading')}
-          </DsHeading>
-        </div>
+        <DsHeading
+          level={1}
+          data-size='md'
+        >
+          {t('active_consents.heading')}
+        </DsHeading>
         <div className={classes.activeConsentsHeading}>
           <DsHeading
             level={2}
@@ -116,7 +114,7 @@ export const ActiveConsentsPage = () => {
           closedby='any'
           onClose={() => setSelectedConsentId('')}
         >
-          {selectedConsentId && <ActiveConsent consentId={selectedConsentId} />}
+          {selectedConsentId && <ConsentDetails consentId={selectedConsentId} />}
         </DsDialog>
       </PageLayoutWrapper>
     </PageWrapper>
@@ -143,6 +141,8 @@ const ActiveConsentListItem = ({
         svgElement: HandshakeIcon,
         theme: 'surface',
       }}
+      titleAs='h3'
+      as='button'
       size='lg'
       collapsible
       expanded={isExpanded}
@@ -159,6 +159,8 @@ const ActiveConsentListItem = ({
                 key={index}
                 icon={HandshakeIcon}
                 title={item.title}
+                titleAs='h4'
+                as='button'
                 onClick={() => onClick(item.id)}
                 badge={{
                   label: t('active_consents.see_consent'),

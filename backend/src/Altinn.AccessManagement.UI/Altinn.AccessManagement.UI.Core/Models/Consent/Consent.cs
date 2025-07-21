@@ -58,8 +58,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         public required int TemplateVersion { get; set; }
 
         /// <summary>
-        /// Consent status
+        /// List all events related to consent
         /// </summary>
-        public string Status { get; set; } = string.Empty;
+        public required List<ConsentRequestEventDto> ConsentRequestEvents { get; set; }
     }
 }

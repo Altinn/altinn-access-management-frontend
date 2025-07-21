@@ -641,6 +641,7 @@
     "already_rejected_poa": "Denne fullmakten er allereie avvist"
   },
   "active_consents": {
+    "page_title": "Aktive samtykker og fullmakter - Altinn",
     "heading": "Samtykker og fullmakter",
     "sub_heading": "Aktive avtalar",
     "loading_consents": "Laster aktive avtalar...",

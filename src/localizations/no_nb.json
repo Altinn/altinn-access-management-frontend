@@ -646,6 +646,7 @@
     "past_validto_poa": "Denne fullmakten er utløpt"
   },
   "active_consents": {
+    "page_title": "Aktive samtykker og fullmakter - Altinn",
     "heading": "Samtykker og fullmakter",
     "sub_heading": "Aktive avtaler",
     "loading_consents": "Laster aktive avtaler...",

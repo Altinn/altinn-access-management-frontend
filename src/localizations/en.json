@@ -646,6 +646,7 @@
     "already_rejected_poa": "This power of attorney is already rejected"
   },
   "active_consents": {
+    "page_title": "Active consents and powers of attorney - Altinn",
     "heading": "Consents and powers of attorney",
     "sub_heading": "Active agreements",
     "loading_consents": "Loading active agreements...",
