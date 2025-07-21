@@ -35,7 +35,6 @@ import {
   SystemUserPath,
   ConsentPath,
 } from '../paths';
-import { ConsentPath } from '../paths/consentPath';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
