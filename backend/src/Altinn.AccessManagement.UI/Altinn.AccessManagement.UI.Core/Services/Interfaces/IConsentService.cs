@@ -50,6 +50,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <returns>A consent</returns>
         Task<Result<ConsentFE>> GetConsent(Guid consentId, CancellationToken cancellationToken);
         
+        /// <summary>
         /// Get consent request redirect url
         /// </summary>
         /// <param name="consentRequestId">The consent id to approve</param>

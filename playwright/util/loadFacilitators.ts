@@ -17,7 +17,7 @@ export interface CustomerData {
 
 export enum FacilitatorRole {
   Revisor = 'revisor',
-  Forretningsfoerer = 'Forretningsfoerer',
+  Forretningsfoerer = 'forretningsfoerer',
   Regnskapsfoerer = 'regnskapsfoerer',
 }
 

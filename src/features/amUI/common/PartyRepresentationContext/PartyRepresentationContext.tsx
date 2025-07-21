@@ -87,12 +87,15 @@ export const PartyRepresentationProvider = ({
 
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetUserInfoQuery();
   const { data: fromParty, isLoading: fromPartyIsLoading } = useGetPartyByUUIDQuery(
-    fromPartyUuid ?? '',
+    { partyUuid: fromPartyUuid ?? '' },
     { skip: isConnectionLoading || invalidConnection || (!!toPartyUuid && !connections) },
   );
-  const { data: toParty, isLoading: toPartyIsLoading } = useGetPartyByUUIDQuery(toPartyUuid ?? '', {
-    skip: isConnectionLoading || invalidConnection || (!!fromPartyUuid && !connections),
-  });
+  const { data: toParty, isLoading: toPartyIsLoading } = useGetPartyByUUIDQuery(
+    { partyUuid: toPartyUuid ?? '' },
+    {
+      skip: isConnectionLoading || invalidConnection || (!!fromPartyUuid && !connections),
+    },
+  );
   const { data: reportee, isLoading: reporteeIsLoading } = useGetReporteeQuery();
 
   const availableForUserType = reporteeIsLoading || availableForUserTypeCheck(reportee?.type);

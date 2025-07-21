@@ -20,6 +20,9 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine@sha256:ea72850bd81ba5c95ba88641a
 WORKDIR /app
 EXPOSE 80
 
+# Installing package for time zone functionality
+RUN apk add --no-cache tzdata
+
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV ASPNETCORE_HTTP_PORTS=80
 

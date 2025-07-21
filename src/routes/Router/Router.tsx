@@ -25,6 +25,7 @@ import { SystemUserAgentDelegationPage } from '@/features/amUI/systemUser/System
 import { ConsentRequestPage } from '@/features/amUI/consent/ConsentRequestPage/ConsentRequestPage';
 import { ActiveConsentsPage } from '@/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPage';
 import { ConsentLogPage } from '@/features/amUI/consent/ConsentLogPage/ConsentLogPage';
+import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
 
 import {
   GeneralPath,
@@ -32,6 +33,7 @@ import {
   ApiDelegationPath,
   amUIPath,
   SystemUserPath,
+  ConsentPath,
 } from '../paths';
 import { ConsentPath } from '../paths/consentPath';
 
@@ -112,6 +114,10 @@ export const Router = createBrowserRouter(
       <Route
         path={amUIPath.ReporteeRights}
         element={<ReporteeRightsPage />}
+      />
+      <Route
+        path={amUIPath.PoaOverview}
+        element={<PoaOverviewPage />}
       />
       <Route
         path={SystemUserPath.SystemUser}

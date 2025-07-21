@@ -117,7 +117,8 @@
     "access_management": "Tilgangsstyring",
     "users": "Brukere",
     "reportees": "Våre tilganger hos andre",
-    "systemaccess": "API- og systemtilganger"
+    "systemaccess": "API- og systemtilganger",
+    "poa_overview": "Fullmakter"
   },
   "profile": {
     "received": "Mottatte",
@@ -257,6 +258,7 @@
     "other_available": "Andre tilgjengelige",
     "current_access_packages_title": "{{count}} tilgangspakker",
     "give_new_button": "Gi fullmakt",
+    "search_label": "Søk etter tilgangspakker",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
     "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{accessPackage}}.",
@@ -265,6 +267,7 @@
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
     "package_number_of_resources": "{{count}} tjenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
+    "no_matching_search": "Ingen treff på søket",
     "info_alert_text": "Tilgangspakker vil etterhvert erstatte roller i Altinns tilgangstyringsløsning. De er kanskje litt tomme nå, men de vil snart bli fylt opp med tjenester.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
@@ -366,6 +369,10 @@
     "validation_error": {
       "AM.VLD-00002": "Du mangler tilgang til å gi denne fullmakten.",
       "default": "Kunne ikke gi fullmakt"
+    },
+    "partial_deletion_message": {
+      "heading": "Ønsker du å slette tilgangen som ikke er knyttet til Enhetsregisteret?",
+      "body": "<p>{{ to_name }} har fått denne fullmakten både direkte og gjennom sine roller i Enhetsregisteret.</p><p>Selv om du sletter denne fullmakten som er gitt direkte vil fortsatt brukeren ha fullmakten gjennom Enhetsregisteret.</p>"
     },
     "service_error": {
       "general_heading": "Du kan ikke gi fullmakt til denne tjenesten",
@@ -634,7 +641,9 @@
     "already_approved": "Dette samtykket er allerede gitt",
     "already_approved_poa": "Denne fullmakten er allerede gitt",
     "already_rejected": "Dette samtykket er allerede avvist",
-    "already_rejected_poa": "Denne fullmakten er allerede avvist"
+    "already_rejected_poa": "Denne fullmakten er allerede avvist",
+    "past_validto": "Dette samtykket er utløpt",
+    "past_validto_poa": "Denne fullmakten er utløpt"
   },
   "active_consents": {
     "heading": "Samtykker og fullmakter",
@@ -661,5 +670,9 @@
     "consent_is_revoked": "Samtykket/fullmakten er trukket",
     "consent_is_expired": "Samtykket/fullmakten har utløpt",
     "consent_is_not_accepted": "Samtykket/fullmakten er ikke godkjent"
+  },
+  "poa_overview_page": {
+    "page_title": "Fullmaktsoversikt",
+    "heading": "Fullmaktsoversikt for {{fromparty}}"
   }
 }

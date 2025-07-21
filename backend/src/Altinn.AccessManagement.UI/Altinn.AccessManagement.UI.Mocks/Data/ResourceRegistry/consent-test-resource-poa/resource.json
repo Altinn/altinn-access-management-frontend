@@ -43,9 +43,9 @@
   "resourceType": "Consent",
   "consentTemplate": "poa",
   "consentText": {
-    "en": "Power of attorney to perform a great service.",
-    "nb": "Fullmakt til å utføre en bra tjeneste",
-    "nn": "Fullmakt til å utføre ei bra teneste"
+    "en": "Power of attorney to perform a great service.<h1>heading</h1>",
+    "nb": "Fullmakt til å utføre en bra tjeneste.<h1>heading</h1>",
+    "nn": "Fullmakt til å utføre ei bra teneste.<h1>heading</h1>"
   },
   "consentMetadata": null,
   "isOneTimeConsent": true,

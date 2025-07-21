@@ -38,17 +38,16 @@ export const ConsentRights = ({ rights, language }: ConsentRightsProps) => {
   );
 };
 
-DOMPurify.addHook('afterSanitizeAttributes', (node) => {
-  if (!(node instanceof Element)) {
-    return;
-  }
-});
 const parserOptions: HTMLReactParserOptions = {
   replace: (domNode) => {
     if (domNode.type === 'tag' && domNode.name === 'a') {
+      const href = domNode.attribs?.href;
+      if (!href) {
+        return null;
+      }
       return React.createElement(
         Link,
-        { href: domNode.attribs.href },
+        { href },
         domToReact(domNode.children as DOMNode[], parserOptions),
       );
     }
@@ -59,8 +58,11 @@ const Link = (props: { href: string; children?: React.ReactNode }) => {
 };
 
 export const transformText = (text: string): string | React.JSX.Element | React.JSX.Element[] => {
+  const allowedTags = ['p', 'span', 'ul', 'ol', 'li', 'a', 'b', 'strong', 'em', 'i'];
   const dirty = text;
-  const clean = DOMPurify.sanitize(dirty);
+  const clean = DOMPurify.sanitize(dirty, {
+    ALLOWED_TAGS: allowedTags,
+  });
 
   // Parse the sanitized HTML to React elements
   const returnVal = parseHtmlToReact(clean.toString().trim(), parserOptions);

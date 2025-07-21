@@ -41,7 +41,8 @@ export const UserListItem = ({
   interactive = false,
   ...props
 }: UserListItemProps) => {
-  const hasInheritingUsers = user.children && user.children.length > 0;
+  const limitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const hasInheritingUsers = user.children && user.children.length > 0 && !limitedPreviewLaunch;
   const [isExpanded, setExpanded] = useState(false);
   const { t } = useTranslation();
 

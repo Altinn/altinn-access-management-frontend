@@ -24,6 +24,6 @@
 .searchAndAddUser {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  justify-content: space-between;
   padding-bottom: 10px;
 }

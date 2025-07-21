@@ -37,9 +37,9 @@
         "nn": "Fullmakt til å utføre ei teneste"
       },
       "consentTextHtml": {
-        "en": "<p>Power of attorney to perform a great service.</p>\n",
-        "nb": "<p>Fullmakt til å utføre en bra tjeneste</p>\n",
-        "nn": "<p>Fullmakt til å utføre ei bra teneste</p>\n"
+        "en": "<p>Power of attorney to perform a great service.<h1>heading</h1></p>\n",
+        "nb": "<p>Fullmakt til å utføre en bra tjeneste.<h1>heading</h1></p>\n",
+        "nn": "<p>Fullmakt til å utføre ei bra teneste.<h1>heading</h1></p>\n"
       }
     }
   ]

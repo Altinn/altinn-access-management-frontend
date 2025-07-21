@@ -31,15 +31,17 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: var(--ds-size-4);
-  margin-top: var(--ds-size-15);
+  margin-top: var(--ds-size-8);
 }
 
 @media only screen and (max-width: 769px) {
   .topHeader {
+    padding: var(--ds-size-1) 0;
     font-size: var(--ds-heading-2xs-font-size);
   }
   .consentBlock {
     padding: var(--ds-size-5);
+    margin-bottom: 6px;
   }
   .expiration,
   .buttonRow {

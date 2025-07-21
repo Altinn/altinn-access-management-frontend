@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { loginWithUser } from 'playwright/pages/loginPage';
+import { LoginPage } from 'playwright/pages/LoginPage';
 
 import { SystemUserPage } from '../../pages/systemuser/SystemUserPage';
 
@@ -14,7 +14,7 @@ test.describe('System user deletion', () => {
 
   test.beforeEach(async ({ page }) => {
     api = new ApiRequests();
-    const login = new loginWithUser(page);
+    const login = new LoginPage(page);
     await login.loginWithUser('14824497789');
     await login.chooseReportee('AKTVERDIG RETORISK APE');
 

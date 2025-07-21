@@ -104,7 +104,8 @@
     "access_management": "Access management",
     "users": "Users",
     "reportees": "Our access to other companies",
-    "systemaccess": "API- and system access"
+    "systemaccess": "API- and system access",
+    "poa_overview": "Power of attorney"
   },
   "error_page": {
     "not_found_site_type": "Error 404",
@@ -258,6 +259,7 @@
     "other_available": "Other available",
     "current_access_packages_title": "{{count}} access packages",
     "give_new_button": "Give new power of attorney",
+    "search_label": "Search for access packages",
     "other_packages_in_area_title": "Other available packages in this area:",
     "package_delegation_success": "{{name}} has been successfully granted power of attorney over {{accessPackage}}.",
     "package_delegation_error": "Failed to grant power of attorney over {{accessPackage}} to {{name}}.",
@@ -266,6 +268,7 @@
     "delegated_packages_count_badge": "{{delegated}} of {{total}}",
     "package_number_of_resources": "{{count}} services",
     "user_has_no_packages": "This user has no access packages.",
+    "no_matching_search": "No matches for your search",
     "info_alert_text": "Access packages will eventually replace roles in Altinn's access management solution. They may be a bit empty now, but they will soon be filled with services.",
     "delegation_check": {
       "delegation_check_error_heading": "Technical error",
@@ -367,6 +370,10 @@
     "validation_error": {
       "AM.VLD-00002": "You do not have permission to grant this authorization.",
       "default": "Could not grant power of attorney"
+    },
+    "partial_deletion_message": {
+      "heading": "Do you want to delete the access not linked to the Central Coordinating Register for Legal Entities?",
+      "body": "<p>{{ to_name }} has been granted this authorization both directly and through their roles in the Central Coordinating Register for Legal Entities.</p><p>Even if you delete this directly granted authorization, the user will still have the authorization through the Central Coordinating Register for Legal Entities.</p>"
     },
     "service_error": {
       "general_heading": "You cannot give access to this service",
@@ -622,7 +629,7 @@
     "text": "The new access management pages are not quite ready for private individuals yet. If you meant to view the accesses for an organization, please switch to it in the menu."
   },
   "consent_request": {
-    "page_title": "Aprovve consent/power of attorney - Altinn",
+    "page_title": "Approve consent/power of attorney - Altinn",
     "loading_consent": "Loading request...",
     "load_consent_error": "Could not load consent/power of attorney",
     "approve_consent": "Yes, I give consent",
@@ -633,8 +640,8 @@
     "approve_error_poa": "Could not grant power of attorney",
     "reject_error": "Could not reject consent",
     "reject_error_poa": "Could not reject power of attorney",
-    "already_consented": "This consent is already given",
-    "already_consented_poa": "This power of attorney is already given",
+    "already_approved": "This consent is already given",
+    "already_approved_poa": "This power of attorney is already given",
     "already_rejected": "This consent is already rejected",
     "already_rejected_poa": "This power of attorney is already rejected"
   },
@@ -663,5 +670,9 @@
     "consent_is_revoked": "Consent/power of attorney is revoked",
     "consent_is_expired": "Consent/power of attorney has expired",
     "consent_is_not_accepted": "Consent/power of attorney is not approved"
+  },
+  "poa_overview_page": {
+    "page_title": "Power of attorney overview",
+    "heading": "Power of attorney overview for {{fromparty}}"
   }
 }

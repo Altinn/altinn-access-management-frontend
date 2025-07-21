@@ -1,18 +1,13 @@
 import * as React from 'react';
-import type { ListItemProps } from '@altinn/altinn-components';
 import { List, Button, Icon, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { MenuElipsisHorizontalIcon, PackageIcon } from '@navikt/aksel-icons';
+import { PackageIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 
 import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
-import {
-  useGetUserDelegationsQuery,
-  type PackageResource,
-  type AccessPackage,
-} from '@/rtk/features/accessPackageApi';
+import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -20,13 +15,20 @@ import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../StatusSection';
-import { isInherited } from '../../AccessPackageList/useAreaPackageList';
+import type { ExtendedAccessPackage } from '../../AccessPackageList/useAreaPackageList';
+import {
+  DeletableStatus,
+  getDeletableStatus,
+  isInherited,
+} from '../../AccessPackageList/useAreaPackageList';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
+import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
+import { useMinimizableResourceList } from './useMinimizableResourceList';
 import classes from './AccessPackageInfo.module.css';
 
 export interface PackageInfoProps {
-  accessPackage: AccessPackage;
+  accessPackage: ExtendedAccessPackage;
   availableActions?: DelegationAction[];
 }
 
@@ -73,7 +75,9 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const userHasPackage = delegationAccess !== null;
   const accessIsInherited =
     (delegationAccess &&
-      isInherited(delegationAccess, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? '')) ||
+      delegationAccess.permissions.some((p) =>
+        isInherited(p, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
+      )) ||
     false;
 
   const [delegationCheckError, setDelegationCheckError] = useState<ActionError | null>(null);
@@ -107,6 +111,19 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     !isLoading;
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
+  const deletableStatus = React.useMemo(
+    () =>
+      delegationAccess
+        ? getDeletableStatus(delegationAccess, toParty?.partyUuid, fromParty?.partyUuid)
+        : null,
+    [delegationAccess, toParty, fromParty],
+  );
+
+  const onlyPermissionTroughInheritance =
+    delegationAccess &&
+    delegationAccess.permissions.every((p) =>
+      isInherited(p, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
+    );
 
   return (
     <div className={classes.container}>
@@ -185,7 +202,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             showMissingRightsMessage={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
             inheritedFrom={
-              accessIsInherited
+              onlyPermissionTroughInheritance
                 ? (delegationAccess?.permissions[0].via?.name ??
                   delegationAccess?.permissions[0].from.name)
                 : undefined
@@ -213,14 +230,23 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
           </div>
 
           <div className={classes.actions}>
-            {userHasPackage && availableActions.includes(DelegationAction.REVOKE) && (
-              <Button
-                disabled={accessIsInherited || accessPackage.isAssignable === false}
-                onClick={() => onRevoke(accessPackage)}
-              >
-                {t('common.delete_poa')}
-              </Button>
-            )}
+            {userHasPackage && availableActions.includes(DelegationAction.REVOKE) ? (
+              deletableStatus !== DeletableStatus.PartiallyDeletable ? (
+                <Button
+                  disabled={accessIsInherited || accessPackage.isAssignable === false}
+                  onClick={() => onRevoke(accessPackage)}
+                >
+                  {t('common.delete_poa')}
+                </Button>
+              ) : (
+                <PackageIsPartiallyDeletableAlert
+                  confirmAction={() => onRevoke(accessPackage)}
+                  triggerButtonProps={{
+                    variant: 'solid',
+                  }}
+                />
+              )
+            ) : null}
             {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
               <Button
                 disabled={!canDelegate(accessPackage.id) || accessPackage.isAssignable === false}
@@ -229,43 +255,13 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 {t('common.give_poa')}
               </Button>
             )}
-            {!userHasPackage && availableActions.includes(DelegationAction.REQUEST) && (
+            {!userHasPackage &&
+              availableActions.includes(DelegationAction.REQUEST) &&
               // Todo: Implement request access package
-              <Button disabled>{t('common.request_poa')}</Button>
-            )}
+              !displayLimitedPreviewLaunch && <Button disabled>{t('common.request_poa')}</Button>}
           </div>
         </>
       )}
     </div>
   );
-};
-
-const MINIMIZED_LIST_SIZE = 5;
-
-const mapResourceToListItem = (resource: PackageResource): ListItemProps => ({
-  title: resource.name,
-  description: resource.provider.name,
-  icon: { iconUrl: resource.provider.logoUrl },
-  as: 'div' as React.ElementType,
-  size: 'xs',
-});
-
-const useMinimizableResourceList = (list: PackageResource[]) => {
-  const { t } = useTranslation();
-  const [showAll, setShowAll] = React.useState(false);
-  if (list.length <= MINIMIZED_LIST_SIZE) {
-    return { listItems: list.map(mapResourceToListItem) };
-  }
-  const showMoreListItem: ListItemProps = {
-    title: t('common.show_more'),
-    description: '',
-    onClick: () => setShowAll(!showAll),
-    icon: MenuElipsisHorizontalIcon,
-    as: 'button' as React.ElementType,
-    size: 'xs',
-  };
-  const minimizedList = list
-    .slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE)
-    .map(mapResourceToListItem);
-  return { listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem] };
 };

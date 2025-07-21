@@ -1,18 +1,16 @@
 import test, { expect } from '@playwright/test';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { loginWithUser } from 'playwright/pages/loginPage';
+import { LoginPage } from '../../pages/LoginPage';
 
 import { ApiRequests } from '../../api-requests/ApiRequests';
-
-test.describe.configure({ timeout: 30000 }); // Set timeout for all tests in this file
 
 test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   let api: ApiRequests;
 
   test.beforeEach(async ({ page }) => {
     api = new ApiRequests();
-    const login = new loginWithUser(page);
+    const login = new LoginPage(page);
     await login.loginWithUser('14824497789');
     await login.chooseReportee('AKTVERDIG RETORISK APE');
   });

@@ -2,9 +2,9 @@
 /* eslint-disable import/no-named-as-default-member */
 import { test } from '@playwright/test';
 
-import { loginWithUser } from 'playwright/pages/loginPage';
+import { LoginPage } from 'playwright/pages/LoginPage';
 
 test('Login with TestID', async ({ page }) => {
-  const login = new loginWithUser(page);
+  const login = new LoginPage(page);
   await login.loginWithUser('02828698497');
 });

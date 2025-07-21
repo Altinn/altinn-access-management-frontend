@@ -3,15 +3,16 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
 
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-
 import { ButtonWithConfirmPopup } from '../ButtonWithConfirmPopup/ButtonWithConfirmPopup';
 import { DelegationAction } from '../DelegationModal/EditModal';
+
+import { DeletableStatus, type ExtendedAccessPackage } from './useAreaPackageList';
+import { PackageIsPartiallyDeletableAlert } from './PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
 interface RevokeAccessPackageActionControlsProps {
   availableActions?: DelegationAction[];
   onRevoke: () => void;
-  pkg: AccessPackage;
+  pkg: ExtendedAccessPackage;
   useDeleteConfirm?: boolean;
   isLoading?: boolean;
 }
@@ -24,8 +25,19 @@ export const RevokeAccessPackageActionControl = ({
   isLoading = false,
 }: RevokeAccessPackageActionControlsProps) => {
   const { t } = useTranslation();
-
   if (availableActions?.includes(DelegationAction.REVOKE)) {
+    if (pkg.deletableStatus === DeletableStatus.PartiallyDeletable) {
+      return (
+        <PackageIsPartiallyDeletableAlert
+          confirmAction={onRevoke}
+          triggerButtonProps={{
+            size: 'sm',
+            variant: 'text',
+            icon: MinusCircleIcon,
+          }}
+        />
+      );
+    }
     if (useDeleteConfirm) {
       return (
         <ButtonWithConfirmPopup

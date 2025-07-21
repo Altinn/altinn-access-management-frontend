@@ -1,0 +1,38 @@
+{
+  "digdir": {
+    "name": {
+      "en": "Norwegian Digitalisation Agency",
+      "nb": "Digitaliseringsdirektoratet",
+      "nn": "Digitaliseringsdirektoratet"
+    },
+    "logo": "/orgs/digdir/digdir.png",
+    "emblem": "/orgs/digdir/digdir.svg",
+    "orgnr": "991825827",
+    "homepage": "",
+    "environments": [
+      "tt02"
+    ],
+    "contact": {
+      "phone": "+47123456",
+      "url": "/digdir/kontakt-oss/943"
+    }
+  },
+  "skd": {
+    "name": {
+      "en": "Norwegian Tax Administration",
+      "nb": "Skatteetaten",
+      "nn": "Skatteetaten"
+    },
+    "logo": "/orgs/skd/skd.png",
+    "emblem": "/orgs/skd/skd.svg",
+    "orgnr": "974761076",
+    "homepage": "",
+    "environments": [
+      "tt02"
+    ],
+    "contact": {
+      "phone": "+47123456",
+      "url": "/kontakt"
+    }
+  }
+}

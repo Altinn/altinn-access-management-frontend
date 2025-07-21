@@ -21,7 +21,10 @@ export interface PackageResource {
 export interface ResourceProvider {
   id: string;
   name: string;
+  refId: string;
   logoUrl: string;
+  code: string;
+  typeId: string;
 }
 
 export interface AccessPackage {
@@ -31,7 +34,6 @@ export interface AccessPackage {
   resources: PackageResource[];
   isAssignable: boolean;
   area: AccessArea;
-  inherited?: boolean;
 }
 
 export interface AccessPackageDelegation {
@@ -71,7 +73,7 @@ export const accessPackageApi = createApi({
         return `delegations?from=${from}&to=${to}&party=${party}`;
       },
       providesTags: ['AccessPackages'],
-      keepUnusedDataFor: 3, // seconds
+      keepUnusedDataFor: 10, // seconds
     }),
     revokeDelegation: builder.mutation<
       void,

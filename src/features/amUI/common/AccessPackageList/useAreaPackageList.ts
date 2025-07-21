@@ -1,36 +1,65 @@
 import { useMemo } from 'react';
 
-import type {
-  AccessArea,
-  AccessPackage,
-  AccessPackageDelegation,
+import type { Permissions } from '@/dataObjects/dtos/accessPackage';
+import {
+  useGetUserDelegationsQuery,
+  useSearchQuery,
+  type AccessArea,
+  type AccessPackage,
+  type AccessPackageDelegation,
 } from '@/rtk/features/accessPackageApi';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface ExtendedAccessArea extends AccessArea {
   packages: {
-    assigned: AccessPackage[];
-    available: AccessPackage[];
+    assigned: ExtendedAccessPackage[];
+    available: ExtendedAccessPackage[];
   };
 }
 
+export interface ExtendedAccessPackage extends AccessPackage {
+  deletableStatus?: DeletableStatus;
+  inherited?: boolean;
+}
+
 interface useAreaPackagesProps {
-  allPackageAreas?: AccessArea[];
-  activeDelegations?: { [key: string]: AccessPackageDelegation[] };
   showAllAreas?: boolean;
   showAllPackages?: boolean;
+  searchString?: string;
+}
+
+export enum DeletableStatus {
+  NotDeletable = 'NotDeletable',
+  PartiallyDeletable = 'PartiallyDeletable',
+  FullyDeletable = 'FullyDeletable',
 }
 
 export const useAreaPackageList = ({
-  allPackageAreas,
-  activeDelegations,
+  searchString,
   showAllAreas,
   showAllPackages,
 }: useAreaPackagesProps) => {
-  const { toParty, fromParty } = usePartyRepresentation();
+  const { fromParty, toParty, actingParty } = usePartyRepresentation();
 
-  const accessAreas = useMemo(() => {
+  const {
+    data: allPackageAreas,
+    isLoading: loadingPackageAreas,
+    isFetching: fetchingSearch,
+  } = useSearchQuery(searchString ?? '');
+
+  const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery(
+    {
+      from: fromParty?.partyUuid ?? '',
+      to: toParty?.partyUuid ?? '',
+      party: actingParty?.partyUuid ?? '',
+    },
+    {
+      skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid,
+    },
+  );
+
+  const { assignedAreas, availableAreas } = useMemo(() => {
     if (!allPackageAreas || activeDelegations === undefined) {
       return {
         assignedAreas: [],
@@ -48,15 +77,17 @@ export const useAreaPackageList = ({
             (pkgAcc, pkg) => {
               const pkgAccess = activeDelegationArea.find((d) => d.package.id === pkg.id);
               if (pkgAccess !== undefined) {
-                const aquiredPkg = {
+                const deletableStatus = getDeletableStatus(
+                  pkgAccess,
+                  toParty?.partyUuid,
+                  fromParty?.partyUuid,
+                );
+                const acquiredPkg = {
                   ...pkg,
-                  inherited: isInherited(
-                    pkgAccess,
-                    toParty?.partyUuid ?? '',
-                    fromParty?.partyUuid ?? '',
-                  ),
+                  deletableStatus,
+                  inherited: deletableStatus !== DeletableStatus.FullyDeletable,
                 };
-                pkgAcc.assigned.push(aquiredPkg);
+                pkgAcc.assigned.push(acquiredPkg);
               } else if (showAllPackages) {
                 pkgAcc.available.push(pkg);
               }
@@ -64,8 +95,8 @@ export const useAreaPackageList = ({
               return pkgAcc;
             },
             {
-              assigned: [] as AccessPackage[],
-              available: [] as AccessPackage[],
+              assigned: [] as ExtendedAccessPackage[],
+              available: [] as ExtendedAccessPackage[],
             },
           );
 
@@ -86,20 +117,31 @@ export const useAreaPackageList = ({
     );
   }, [allPackageAreas, activeDelegations, showAllAreas, showAllPackages]);
 
-  return accessAreas;
+  return {
+    loadingPackageAreas,
+    fetchingSearch,
+    loadingDelegations,
+    assignedAreas,
+    availableAreas,
+    allPackageAreas,
+    activeDelegations,
+  };
 };
 
-export const isInherited = (
-  pkgDeleg: AccessPackageDelegation,
-  toPartyUuid: string,
-  fromPartyUuid: string,
-) => {
-  return pkgDeleg.permissions.some(
-    (p) =>
-      !(
-        toPartyUuid === p.to.id &&
-        fromPartyUuid === p.from.id &&
-        p.role?.code === 'rettighetshaver'
-      ),
-  );
+export const isInherited = (p: Permissions, toPartyUuid: string, fromPartyUuid: string) =>
+  !(toPartyUuid === p.to.id && fromPartyUuid === p.from.id && p.role?.code === 'rettighetshaver');
+
+export const getDeletableStatus = (
+  pkg: AccessPackageDelegation,
+  toPartyUuid?: string,
+  fromPartyUuid?: string,
+): DeletableStatus => {
+  if (pkg.permissions.every((p) => isInherited(p, toPartyUuid || '', fromPartyUuid || ''))) {
+    return DeletableStatus.NotDeletable;
+  }
+  if (pkg.permissions.some((p) => isInherited(p, toPartyUuid || '', fromPartyUuid || ''))) {
+    return DeletableStatus.PartiallyDeletable;
+  }
+
+  return DeletableStatus.FullyDeletable;
 };

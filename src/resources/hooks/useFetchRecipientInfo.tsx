@@ -30,7 +30,10 @@ export const useFetchRecipientInfo = (
     data: party,
     error: getPartyError,
     isLoading: getPartyIsLoading,
-  } = useGetPartyByUUIDQuery(partyUUID ?? '', { skip: partyUUID === null || userUUID !== null });
+  } = useGetPartyByUUIDQuery(
+    { partyUuid: partyUUID ?? '', useOldRegistry: true },
+    { skip: partyUUID === null || userUUID !== null },
+  );
 
   const isLoading = getUserIsLoading || getPartyIsLoading;
 

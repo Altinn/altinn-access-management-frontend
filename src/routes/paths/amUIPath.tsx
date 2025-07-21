@@ -3,4 +3,5 @@ export enum amUIPath {
   UserRights = 'users/:id',
   Reportees = 'received-from',
   ReporteeRights = 'received-from/:id',
+  PoaOverview = 'poa-overview',
 }

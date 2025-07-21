@@ -1,8 +1,5 @@
-export type ConsentLanguage = {
-  nb: string;
-  nn: string;
-  en: string;
-};
+export type ConsentLocale = 'nb' | 'nn' | 'en';
+export type ConsentLanguage = Record<ConsentLocale, string>;
 
 export interface ConsentRight {
   identifier: string;
@@ -17,13 +14,14 @@ export interface ConsentRequest {
   title: ConsentLanguage;
   heading: ConsentLanguage;
   serviceIntro: ConsentLanguage;
-  consentMessage: ConsentLanguage;
+  consentMessage?: ConsentLanguage;
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
   fromPartyName?: string;
+  validTo: string;
   consentRequestEvents: {
     consentEventID: string;
-    created: Date;
+    created: string;
     performedBy: string;
     eventType: string;
     consentRequestID: string;

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { DsButton } from '@altinn/altinn-components';
 

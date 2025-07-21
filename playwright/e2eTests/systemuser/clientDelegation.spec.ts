@@ -3,14 +3,13 @@ import { test, expect } from '@playwright/test';
 
 import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../util/loadFacilitators';
 import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
-import { loginAs } from '../../pages/loginPage';
+import { LoginPage } from '../../pages/LoginPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
-test.describe.configure({ timeout: 30000 });
+test.describe.configure({ timeout: 60000 });
 
-test.describe.skip('Klientdelegering', () => {
+test.describe('Klientdelegering', () => {
   let api: ApiRequests;
-  test.slow();
 
   test.beforeEach(() => {
     api = new ApiRequests();
@@ -54,9 +53,9 @@ test.describe.skip('Klientdelegering', () => {
     accessPackageApiName: string;
     accessPackageDisplayName: string;
   }) {
+    const loginPage = new LoginPage(page);
     const user = loadFacilitator(role);
     const customers = loadCustomers(role);
-    await loginAs(page, user.pid, user.org);
 
     const name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
     const systemId = await api.createSystemInSystemregisterWithAccessPackages(name);
@@ -70,9 +69,23 @@ test.describe.skip('Klientdelegering', () => {
 
     //Navigate to approve system user request URL returned by API
     await page.goto(response.confirmUrl);
+    await loginPage.loginNotChoosingActor(user.pid);
 
     //Approve system user and click it
     await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
+
+    // Verify logout by checking for login page elements
+    await expect(loginPage.loginButton).toBeVisible();
+
+    // Navigate to system user login page
+    await loginPage.loginAs(user.pid, user.org);
+
+    //Go to system user overview page
+    if (!process.env.SYSTEMUSER_URL) {
+      throw new Error('Environment variable SYSTEMUSER_URL is not defined.');
+    }
+    await page.goto(process.env.SYSTEMUSER_URL);
+
     await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
     await clientDelegationPage.systemUserLink(name).click();
 
@@ -89,7 +102,7 @@ test.describe.skip('Klientdelegering', () => {
       await clientDelegationPage.removeCustomer(customer.confirmation);
     }
 
-    //Cleanup: All clients need to be removed (api validatoin) to delete system user
+    //Cleanup: All clients need to be removed (api validation) to delete system user
     await clientDelegationPage.deleteSystemUser(name);
   }
 });

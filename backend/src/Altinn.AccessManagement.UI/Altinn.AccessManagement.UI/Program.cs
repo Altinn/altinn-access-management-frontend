@@ -231,6 +231,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IRoleService, RoleService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
     services.AddTransient<ResourceHelper, ResourceHelper>();
+    services.AddTransient<IAltinnCdnService, AltinnCdnService>();
 
     PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();
     services.AddAuthentication(JwtCookieDefaults.AuthenticationScheme)
@@ -389,6 +390,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddSingleton<ISystemRegisterClient, SystemRegisterClient>();
+    }
+
+    if (mockSettings.AltinnCdn)
+    {
+        services.AddSingleton<IAltinnCdnClient, AltinnCdnClientMock>();
+    }
+    else
+    {
+        services.AddSingleton<IAltinnCdnClient, AltinnCdnClient>();
     }
 
     if (mockSettings.SystemUser)
