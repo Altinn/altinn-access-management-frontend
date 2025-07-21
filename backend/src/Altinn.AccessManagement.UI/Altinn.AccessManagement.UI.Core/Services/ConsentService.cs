@@ -299,7 +299,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             IEnumerable<string> partyUuids = activeConsents.Value.Select(consent => GetUrnValue(consent.To));
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
 
-            List<ConsentListItemFE> consentListItems = activeConsents.Value.Select(consent =>
+            IEnumerable<ConsentListItemFE> consentListItems = activeConsents.Value.Select(consent =>
             {
                 Party toParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.To));
                 return new ConsentListItemFE()
@@ -308,9 +308,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     ToPartyId = consent.To,
                     ToPartyName = toParty?.Name ?? string.Empty,
                 };
-            }).ToList();
+            });
             
-            return consentListItems;
+            return consentListItems.ToList();
         }
 
         /// <inheritdoc />
