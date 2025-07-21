@@ -74,7 +74,8 @@
     "error_status": "HttpStatus: {{status}}",
     "ssn": "Fødselsnummer",
     "last_name": "Etternavn",
-    "subunit": "Underenhet"
+    "subunit": "Underenhet",
+    "date_of_birth": "Født"
   },
   "header": {
     "access_management": "Tilgangsstyring",
@@ -460,7 +461,6 @@
     "FISJ": "Skal fisjoneres med",
     "ETDL": "Tildeler av elektronisk signeringsrett",
     "ADOS": "Administrativ eining - offentleg sektor",
-
     "innehaver": "Innehavar",
     "styreleder": "Styreleiar",
     "varamedlem": "Varamedlem",

@@ -4,14 +4,14 @@ import * as React from 'react';
 import { MinusCircleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import { DsButton } from '@altinn/altinn-components';
 
+import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
+import { useMediaQuery } from '@/resources/hooks';
+import { getButtonIconSize } from '@/resources/utils';
+
 import { BorderedList } from '../BorderedList';
 import ScopeList from '../ScopeList/ScopeList';
 
 import classes from './DeletableListItem.module.css';
-
-import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
-import { useMediaQuery } from '@/resources/hooks';
-import { getButtonIconSize } from '@/resources/utils';
 
 export interface DeletableListItemProps {
   softDeleteCallback: () => void;

@@ -5,8 +5,6 @@ import * as React from 'react';
 import { MinusCircleIcon, ArrowUndoIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { DsButton } from '@altinn/altinn-components';
 
-import classes from './OrgDelegationActionBar.module.css';
-
 import type {
   DeletionDto,
   OverviewOrg,
@@ -14,6 +12,8 @@ import type {
 import { DeletableListItem, ActionBar, BorderedList } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import { getButtonIconSize } from '@/resources/utils';
+
+import classes from './OrgDelegationActionBar.module.css';
 
 export interface OrgDelegationActionBarProps {
   organization: OverviewOrg;

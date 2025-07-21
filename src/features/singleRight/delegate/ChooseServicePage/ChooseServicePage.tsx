@@ -6,14 +6,6 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { useLayoutEffect } from 'react';
 import { DsParagraph } from '@altinn/altinn-components';
 
-import { SearchSection } from '../../components/SearchSection';
-import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
-import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
-import { ChooseServiceSkeleton } from '../../components/ChooseServiceSkeleton/ChooseServiceSkeleton';
-import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
-
-import classes from './ChooseServicePage.module.css';
-
 import { Page, PageHeader, PageContent, PageContainer } from '@/components';
 import { useMediaQuery, useFetchRecipientInfo } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -28,6 +20,14 @@ import {
 import { SingleRightPath } from '@/routes/paths';
 import { redirectToSevicesAvailableForUser } from '@/resources/utils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+
+import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
+import { ChooseServiceSkeleton } from '../../components/ChooseServiceSkeleton/ChooseServiceSkeleton';
+import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
+import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
+import { SearchSection } from '../../components/SearchSection';
+
+import classes from './ChooseServicePage.module.css';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation();

@@ -4,12 +4,12 @@ import * as React from 'react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { DsButton } from '@altinn/altinn-components';
 
-import classes from './ChooseOrgPage.module.css';
-
 import { ActionBar } from '@/components';
 import type { Organization } from '@/rtk/features/lookupApi';
 import common from '@/resources/css/Common.module.css';
 import { getButtonIconSize } from '@/resources/utils';
+
+import classes from './ChooseOrgPage.module.css';
 
 interface ChosenItemsProps {
   chosenOrgs: Organization[];

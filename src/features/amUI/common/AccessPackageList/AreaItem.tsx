@@ -1,8 +1,9 @@
 import { AccessAreaListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { ExtendedAccessArea } from './useAreaPackageList';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
+import type { ExtendedAccessArea } from './useAreaPackageList';
 
 interface AreaItemProps {
   area: ExtendedAccessArea;
@@ -40,6 +41,8 @@ export const AreaItem = ({
       expanded={expanded}
       titleAs='h3'
       onClick={() => toggleExpandedArea(area.id)}
+      size='lg'
+      border='solid'
     >
       {children}
     </AccessAreaListItem>

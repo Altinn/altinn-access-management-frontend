@@ -6,9 +6,9 @@ export const SkeletonUserList = () => {
     {
       interactive: false,
       id: '2',
-      size: 'lg',
+      size: 'md',
       title: 'xxxxxxxx xxxxxxxxxx',
-      avatar: {
+      icon: {
         name: 'xxxxxxxx xxxxxxxxxx',
         type: 'person',
       },
@@ -16,10 +16,10 @@ export const SkeletonUserList = () => {
     {
       interactive: false,
       id: '3',
-      size: 'lg',
+      size: 'md',
       title: 'xx xxxxxxxx xxx xx',
       description: 'xxxxxxxxx',
-      avatar: {
+      icon: {
         name: 'xx xxxxxxxx xxx xx',
         type: 'company',
       },
@@ -27,9 +27,9 @@ export const SkeletonUserList = () => {
     {
       interactive: false,
       id: '4',
-      size: 'lg',
+      size: 'md',
       title: 'xxxxx xxxxxxxxx',
-      avatar: {
+      icon: {
         name: 'xxxxx xxxxxxxxx',
         type: 'person',
       },
@@ -37,10 +37,10 @@ export const SkeletonUserList = () => {
     {
       interactive: false,
       id: '4.5',
-      size: 'lg',
+      size: 'md',
       title: 'xxxxxxxx xxxxxxxx xxxxxx xx',
       description: 'xxxxxxxxx',
-      avatar: {
+      icon: {
         name: 'xxxxxxxx xxxxxxxx xxxxxx xx',
         type: 'company',
       },
@@ -48,10 +48,10 @@ export const SkeletonUserList = () => {
     {
       interactive: false,
       id: '5',
-      size: 'lg',
+      size: 'md',
       title: 'xxxxx xx xxxxxxx',
       description: 'xxxxxxxxx',
-      avatar: {
+      icon: {
         name: 'xxxxx xx xxxxxxx',
         type: 'company',
       },

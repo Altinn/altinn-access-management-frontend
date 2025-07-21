@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { DsHeading, DsParagraph, DsLink } from '@altinn/altinn-components';
 
-import classes from '../ErrorPage.module.css';
-
 import SeagullIcon from '@/assets/Seagull.svg?react';
+
+import classes from '../ErrorPage.module.css';
 
 export const UnknownError = () => {
   const { t } = useTranslation();

@@ -5,10 +5,6 @@ import { useState, useEffect } from 'react';
 import cn from 'classnames';
 import { DsParagraph, DsValidationMessage } from '@altinn/altinn-components';
 
-import { ReceiptActionBarContent } from '../ReceiptActionBarContent/ReceiptActionBarContent';
-
-import classes from './ActionBarSection.module.css';
-
 import { useAppSelector } from '@/rtk/app/hooks';
 import type { Right, ProcessedDelegation } from '@/rtk/features/singleRights/singleRightsSlice';
 import {
@@ -16,6 +12,10 @@ import {
   ReduxStatusResponse,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { ActionBar } from '@/components';
+
+import { ReceiptActionBarContent } from '../ReceiptActionBarContent/ReceiptActionBarContent';
+
+import classes from './ActionBarSection.module.css';
 
 type ActionBarSectionProps = {
   recipientName: string;

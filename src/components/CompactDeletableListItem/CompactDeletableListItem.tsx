@@ -5,12 +5,12 @@ import * as React from 'react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { DsButton } from '@altinn/altinn-components';
 
+import { useMediaQuery } from '@/resources/hooks';
+import { getButtonIconSize } from '@/resources/utils';
+
 import { BorderedList } from '../BorderedList';
 
 import classes from './CompactDeletableListItem.module.css';
-
-import { useMediaQuery } from '@/resources/hooks';
-import { getButtonIconSize } from '@/resources/utils';
 
 export enum ListTextColor {
   primary = 'primary',

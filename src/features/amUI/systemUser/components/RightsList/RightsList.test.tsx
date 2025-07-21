@@ -180,7 +180,7 @@ describe('RightsList', () => {
     const accessPackageListItem = screen.getByRole('button', { name: accessPackage.name });
     await user.click(accessPackageListItem);
 
-    const resourceListItem = screen.getByRole('button', { name: resource.title });
+    const resourceListItem = screen.getByText(resource.title);
     await user.click(resourceListItem);
 
     const resourceDescription = screen.getByText(resource.description);
@@ -199,7 +199,7 @@ describe('RightsList', () => {
     const accessPackageListItem = screen.getByRole('button', { name: accessPackage.name });
     await user.click(accessPackageListItem);
 
-    const resourceListItem = screen.getByRole('button', { name: resource.title });
+    const resourceListItem = screen.getByText(resource.title);
     await user.click(resourceListItem);
 
     const backButton = screen.getByRole('button', { name: 'common.back' });

@@ -5,9 +5,6 @@ import { PersonIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
 import { DsButton } from '@altinn/altinn-components';
 
-import classes from './ReceiptPage.module.css';
-import { ActionBarSection } from './ActionBarSection/ActionBarSection';
-
 import { SingleRightPath } from '@/routes/paths';
 import { Page, PageContainer, PageContent, PageHeader, RestartPrompter } from '@/components';
 import { useFetchRecipientInfo, useMediaQuery } from '@/resources/hooks';
@@ -15,6 +12,9 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { redirectToSevicesAvailableForUser } from '@/resources/utils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+
+import { ActionBarSection } from './ActionBarSection/ActionBarSection';
+import classes from './ReceiptPage.module.css';
 
 export const ReceiptPage = () => {
   const { t } = useTranslation();

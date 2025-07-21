@@ -12,8 +12,6 @@ import {
   DsListItem,
 } from '@altinn/altinn-components';
 
-import classes from './ApiActionBar.module.css';
-
 import { ActionBar, type ActionBarProps } from '@/components';
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 import { type DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
@@ -25,6 +23,8 @@ import type {
 } from '@/dataObjects/dtos/resourceDelegation';
 import ScopeList from '@/components/ScopeList/ScopeList';
 import { getButtonIconSize } from '@/resources/utils';
+
+import classes from './ApiActionBar.module.css';
 
 export interface ApiActionBarProps extends Pick<ActionBarProps, 'color'> {
   /** Defines the functionality and behaviour of the actionbar, whether it is used to add a new api or to remove one that was previously added */

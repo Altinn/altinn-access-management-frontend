@@ -1,5 +1,5 @@
 import React from 'react';
-import { DsHeading, DsParagraph, ResourceList } from '@altinn/altinn-components';
+import { DsHeading, DsParagraph, ResourceListItem, List } from '@altinn/altinn-components';
 import { PackageIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -41,21 +41,22 @@ export const AccessPackageInfo = ({
               resourcesCount: accessPackage.resources.length,
             })}
       </DsHeading>
-      <ResourceList
-        defaultItemSize='sm'
-        items={accessPackage.resources.map((resource) => {
-          return {
-            id: resource.identifier,
-            as: 'button',
-            titleAs: 'h3',
-            ownerLogoUrl: resource.resourceOwnerLogoUrl,
-            ownerLogoUrlAlt: resource.resourceOwnerName ?? '',
-            ownerName: resource.resourceOwnerName ?? '',
-            resourceName: resource.title,
-            onClick: () => onSelectResource(resource),
-          };
-        })}
-      />
+      <List>
+        {accessPackage.resources.map((resource) => (
+          <ResourceListItem
+            key={resource.identifier}
+            id={resource.identifier}
+            as='button'
+            titleAs='h3'
+            size='xs'
+            ownerLogoUrl={resource.resourceOwnerLogoUrl}
+            ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
+            ownerName={resource.resourceOwnerName ?? ''}
+            resourceName={resource.title}
+            onClick={() => onSelectResource(resource)}
+          />
+        ))}
+      </List>
     </div>
   );
 };
