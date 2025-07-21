@@ -74,7 +74,6 @@ export const RightsList = ({
               <AccessPackageListItem
                 key={accessPackage.id}
                 id={accessPackage.id}
-                as='button'
                 titleAs='h3'
                 size='md'
                 name={accessPackage.name}

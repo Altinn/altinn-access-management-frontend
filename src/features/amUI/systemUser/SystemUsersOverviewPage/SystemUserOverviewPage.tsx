@@ -129,6 +129,7 @@ const SystemUserList = ({ systemUsers, isAgentList }: SystemUserListProps) => {
       {systemUsers?.map((systemUser) => (
         <ListItem
           key={systemUser.id}
+          size='lg'
           title={{ children: systemUser.integrationTitle, as: 'h3' }}
           description={systemUser.system.systemVendorOrgName}
           as={(props) => (

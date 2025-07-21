@@ -94,7 +94,6 @@ export const CustomerList = ({
             key={customer.id}
             id={customer.id}
             icon={{ type: 'company', name: customer.name }}
-            as='div'
             title={{ children: customer.name, as: 'h3' }}
             description={`${t('common.org_nr')} ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`}
             interactive={false}
