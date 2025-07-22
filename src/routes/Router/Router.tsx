@@ -24,7 +24,6 @@ import { SystemUserAgentRequestPage } from '@/features/amUI/systemUser/SystemUse
 import { SystemUserAgentDelegationPage } from '@/features/amUI/systemUser/SystemUserAgentDelegationPage/SystemUserAgentDelegationPage';
 import { ConsentRequestPage } from '@/features/amUI/consent/ConsentRequestPage/ConsentRequestPage';
 import { ActiveConsentsPage } from '@/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPage';
-import { ConsentLogPage } from '@/features/amUI/consent/ConsentLogPage/ConsentLogPage';
 import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
 
 import {
@@ -162,10 +161,6 @@ export const Router = createBrowserRouter(
         <Route
           path={ConsentPath.Active}
           element={<ActiveConsentsPage />}
-        />
-        <Route
-          path={ConsentPath.Log}
-          element={<ConsentLogPage />}
         />
       </Route>
     </Route>,

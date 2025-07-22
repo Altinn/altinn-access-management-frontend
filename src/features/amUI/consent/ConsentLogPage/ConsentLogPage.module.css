@@ -1,9 +1,0 @@
-.consentLogPage {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-size-8);
-}
-
-.consentDialog {
-  max-width: 50rem;
-}
