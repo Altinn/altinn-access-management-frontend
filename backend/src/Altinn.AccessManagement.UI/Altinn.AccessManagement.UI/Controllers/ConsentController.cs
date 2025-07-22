@@ -1,7 +1,6 @@
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
-using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -140,8 +139,6 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return Ok(consent.Value);
         }
-
-        // GET avtalelogg - (paged?)
 
         /// <summary>
         /// Revoke consent
