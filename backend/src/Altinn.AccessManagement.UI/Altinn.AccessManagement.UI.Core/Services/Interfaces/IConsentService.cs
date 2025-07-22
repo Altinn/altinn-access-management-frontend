@@ -51,6 +51,14 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<Result<ConsentFE>> GetConsent(Guid consentId, CancellationToken cancellationToken);
         
         /// <summary>
+        /// Revoke a consent
+        /// </summary>
+        /// <param name="consentId">The consent id to revoke</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Boolean value if revoke was successful or not</returns>
+        Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Get consent request redirect url
         /// </summary>
         /// <param name="consentRequestId">The consent id to approve</param>

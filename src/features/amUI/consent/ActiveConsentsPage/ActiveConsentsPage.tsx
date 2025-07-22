@@ -7,7 +7,7 @@ import {
   DsHeading,
   DsLink,
   DsSpinner,
-  ListBase,
+  List,
   ListItem,
 } from '@altinn/altinn-components';
 import { FolderFileIcon, HandshakeIcon } from '@navikt/aksel-icons';
@@ -93,7 +93,7 @@ export const ActiveConsentsPage = () => {
             <DsAlert data-color='info'>{t('active_consents.no_active_consents')}</DsAlert>
           )}
           {groupedActiveConsents && (
-            <ListBase>
+            <List>
               {Object.keys(groupedActiveConsents).map((partyId) => (
                 <ActiveConsentListItem
                   key={partyId}
@@ -105,7 +105,7 @@ export const ActiveConsentsPage = () => {
                   onClick={showConsentDetails}
                 />
               ))}
-            </ListBase>
+            </List>
           )}
         </div>
         <DsDialog
@@ -136,42 +136,35 @@ const ActiveConsentListItem = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   return (
     <ListItem
-      title={title}
-      icon={{
-        svgElement: HandshakeIcon,
-        theme: 'surface',
-      }}
-      titleAs='h3'
+      title={{ as: 'h3', children: title }}
+      icon={{ svgElement: HandshakeIcon, theme: 'surface' }}
       as='button'
-      size='lg'
+      size='md'
       collapsible
       expanded={isExpanded}
-      badge={{
-        label: subItems.length,
-      }}
+      badge={{ label: subItems.length }}
       onClick={() => setIsExpanded((old) => !old)}
     >
       {isExpanded && (
         <div className={classes.expandedListItem}>
-          <ListBase>
+          <List>
             {subItems.map((item, index) => (
               <ListItem
                 key={index}
                 icon={HandshakeIcon}
-                title={item.title}
-                titleAs='h4'
+                title={{ as: 'h4', children: item.title }}
                 as='button'
                 onClick={() => onClick(item.id)}
                 badge={{
+                  className: classes.consentBadge,
+                  variant: 'text',
                   label: t('active_consents.see_consent'),
                   theme: 'transparent',
-                  //@ts-expect-error size 'md' is not in type, but can be used
-                  size: 'md',
                 }}
                 linkIcon
               />
             ))}
-          </ListBase>
+          </List>
         </div>
       )}
     </ListItem>

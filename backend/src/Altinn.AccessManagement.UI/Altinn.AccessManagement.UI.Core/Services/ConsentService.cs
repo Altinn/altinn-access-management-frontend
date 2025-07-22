@@ -355,7 +355,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ValidTo = consent.Value.ValidTo,
             };
         }
-        
+
+        /// <inheritdoc />
+        public async Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken)
+        {
+            return await _consentClient.RevokeConsent(consentId, cancellationToken);
+        }
+
         private sealed class ConsentTemplateParams
         {
             public IEnumerable<ConsentRight> ConsentRights { get; set; }

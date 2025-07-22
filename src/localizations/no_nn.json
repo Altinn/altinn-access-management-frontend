@@ -655,7 +655,14 @@
     "revoke_poa": "Trekk fullmakt",
     "status_active": "Aktivt",
     "status_revoked": "Inaktivt/ikkje aktivt",
-    "status": "Status"
+    "status": "Status",
+    "revoking_consent": "Trekker...",
+    "revoke_consent_error": "Kunne ikke trekke samtykke",
+    "revoke_poa_error": "Kunne ikke trekke fullmakt",
+    "revoke_consent_text": "Er du sikker på at du vil trekke dette samtykket?",
+    "revoke_poa_text": "Er du sikker på at du vil trekke denne fullmakten?",
+    "confirm_revoke_consent": "Ja, trekk samtykke",
+    "confirm_revoke_poa": "Ja, trekk fullmakt"
   },
   "consent_errors": {
     "not_authorized_for_consent": "Bruker er ikkje autorisert for å gi samtykke/fullmakt",

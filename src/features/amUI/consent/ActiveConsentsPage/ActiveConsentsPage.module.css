@@ -12,3 +12,13 @@
 .consentDialog {
   max-width: 800px;
 }
+
+@media only screen and (max-width: 769px) {
+  .expandedListItem {
+    padding: 0;
+  }
+
+  .consentBadge {
+    display: none;
+  }
+}

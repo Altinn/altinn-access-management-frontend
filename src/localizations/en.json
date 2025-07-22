@@ -656,11 +656,18 @@
     "see_consent": "See/revoke agreement",
     "loading_consent": "Loading agreements",
     "load_consent_error": "Could not load consent/power of attorney",
-    "revoke_consent": "Revoke agreement",
+    "revoke_consent": "Revoke consent",
     "revoke_poa": "Revoke power of attorney",
     "status_active": "Active",
     "status_revoked": "Inactive/not active",
-    "status": "Status"
+    "status": "Status",
+    "revoking_consent": "Revoking...",
+    "revoke_consent_error": "Could not revoke consent",
+    "revoke_poa_error": "Could not revoke power of attorney",
+    "revoke_consent_text": "Are you certain you want to revoke this consent?",
+    "revoke_poa_text": "Are you certain you want to revoke this power of attorney?",
+    "confirm_revoke_consent": "Yes, revoke consent",
+    "confirm_revoke_poa": "Yes, revoke power of attorney"
   },
   "consent_errors": {
     "not_authorized_for_consent": "User is not authorized to give consent/power of attorney",

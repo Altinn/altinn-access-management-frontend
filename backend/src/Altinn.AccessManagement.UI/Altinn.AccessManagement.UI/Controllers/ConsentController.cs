@@ -143,7 +143,25 @@ namespace Altinn.AccessManagement.UI.Controllers
 
         // GET avtalelogg - (paged?)
 
-        // POST revoke consent
+        /// <summary>
+        /// Revoke consent
+        /// </summary>
+        /// <param name="consentId">Consent to revoke</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("{consentId}/revoke")]
+        public async Task<ActionResult> RevokeConsent([FromRoute] Guid consentId, CancellationToken cancellationToken)
+        {
+            Result<bool> revokeResponse = await _consentService.RevokeConsent(consentId, cancellationToken);
+
+            if (revokeResponse.IsProblem)
+            {
+                return revokeResponse.Problem.ToActionResult();
+            }
+
+            return Ok(revokeResponse.Value);
+        }
 
         /// <summary>
         /// Logout after user acccepts or rejects consent

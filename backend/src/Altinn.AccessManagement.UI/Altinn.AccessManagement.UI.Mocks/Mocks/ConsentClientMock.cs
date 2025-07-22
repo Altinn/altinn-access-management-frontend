@@ -97,7 +97,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             return Task.FromResult(new Result<List<Consent>>([]));
         }
-        
+
         public Task<Result<Consent>> GetConsent(Guid consentId, CancellationToken cancellationToken)
         {
             List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/activeConsents_org.json");
@@ -107,6 +107,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return Task.FromResult(new Result<Consent>(ConsentProblem.ConsentNotFound));
             }
             return Task.FromResult(new Result<Consent>(consent));
+        }
+
+        public Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken)
+        {
+            List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/activeConsents_org.json");
+            consentList.AddRange(Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/activeConsents_person.json"));
+
+            Consent consent = consentList.FirstOrDefault(c => c.Id == consentId);
+            if (consent == null)
+            {
+                return Task.FromResult(new Result<bool>(ConsentProblem.ConsentNotFound));
+            }
+
+            return Task.FromResult(new Result<bool>(true));
         }
     }
 }

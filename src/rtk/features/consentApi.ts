@@ -41,6 +41,12 @@ export const consentApi = createApi({
     getConsent: builder.query<Consent, { consentId: string }>({
       query: ({ consentId }) => `consent/${consentId}`,
     }),
+    revokeConsent: builder.mutation<boolean, { consentId: string }>({
+      query: ({ consentId }) => ({
+        url: `consent/${consentId}/revoke`,
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
@@ -50,6 +56,7 @@ export const {
   useRejectConsentRequestMutation,
   useGetActiveConsentsQuery,
   useGetConsentQuery,
+  useRevokeConsentMutation,
 } = consentApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = consentApi;
