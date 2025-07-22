@@ -1,4 +1,3 @@
-using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
@@ -95,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return Task.FromResult(new Result<List<Consent>>(consentList));
             }
 
-            return Task.FromResult(new Result<List<Consent>>([]));
+            return Task.FromResult(new Result<List<Consent>>(ConsentProblem.ConsentNotFound));
         }
 
         public Task<Result<Consent>> GetConsent(Guid consentId, CancellationToken cancellationToken)
