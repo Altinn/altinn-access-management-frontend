@@ -324,6 +324,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             Party fromParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == fromPartyUuid);
             Party handledByParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == handledByPartyUuid);
 
+            if (toParty == null || fromParty == null)
+            {
+                return ConsentProblem.ConsentPartyNotFound;
+            }
+
             Dictionary<string, string> staticMetadata = GetStaticMetadata(toParty, fromParty, handledByParty, templateParams.ValidTo);
             Dictionary<string, string> title;
             Dictionary<string, string> heading;
