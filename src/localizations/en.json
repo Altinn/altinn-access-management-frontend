@@ -660,6 +660,8 @@
     "revoke_poa": "Revoke power of attorney",
     "status_active": "Active",
     "status_revoked": "Inactive/not active",
+    "status_rejected": "Rejected",
+    "status_expired": "Expired",
     "status": "Status",
     "revoking_consent": "Revoking...",
     "revoke_consent_error": "Could not revoke consent",

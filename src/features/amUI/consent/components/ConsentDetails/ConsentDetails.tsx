@@ -164,23 +164,23 @@ const ConsentStatus = ({ events, validTo }: ConsentStatusProps) => {
   let statusClass = '';
   let statusText = '';
 
-  const isAccepted = events.some((event) => event.eventType === 'Accepted');
-  const isRevoked = events.some((event) => event.eventType === 'Revoked');
-  const isRejected = events.some((event) => event.eventType === 'Rejected');
+  const hasAcceptEvent = events.some((event) => event.eventType === 'Accepted');
+  const hasRevokeEvent = events.some((event) => event.eventType === 'Revoked');
+  const hasRejectEvent = events.some((event) => event.eventType === 'Rejected');
   const isPastValidTo = new Date(validTo) < new Date();
 
-  if (isAccepted && !isRevoked) {
+  if (hasAcceptEvent && !hasRevokeEvent) {
     statusClass = classes.active;
     statusText = t('active_consents.status_active');
-  } else if (isAccepted && isRevoked) {
-    statusClass = classes.revoked;
+  } else if (hasAcceptEvent && hasRevokeEvent) {
+    statusClass = classes.inactive;
     statusText = t('active_consents.status_revoked');
-  } else if (isRejected) {
-    statusClass = classes.revoked;
-    statusText = 'Avvist'; // trenger vi denne?
+  } else if (hasRejectEvent) {
+    statusClass = classes.inactive;
+    statusText = t('active_consents.status_rejected'); // trenger vi denne?
   } else if (isPastValidTo) {
-    statusClass = classes.revoked;
-    statusText = 'Utløpt'; // trenger vi denne?
+    statusClass = classes.inactive;
+    statusText = t('active_consents.status_expired'); // trenger vi denne?
   }
 
   return (

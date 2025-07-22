@@ -660,6 +660,8 @@
     "revoke_poa": "Trekk fullmakt",
     "status_active": "Aktivt",
     "status_revoked": "Inaktivt/ikke aktivt",
+    "status_rejected": "Avvist",
+    "status_expired": "Utløpt",
     "status": "Status",
     "revoking_consent": "Trekker...",
     "revoke_consent_error": "Kunne ikke trekke samtykke",
