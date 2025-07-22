@@ -1,0 +1,43 @@
+.consentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--ds-size-4);
+  gap: var(--ds-size-8);
+}
+
+.consentDetailsSpinner {
+  display: block;
+  margin: var(--ds-size-6) auto;
+}
+
+.expiration {
+  font-weight: 500;
+  margin-top: var(--ds-size-4);
+}
+
+.popoverButtonRow {
+  display: flex;
+  gap: var(--ds-size-4);
+  margin-top: var(--ds-size-4);
+}
+
+.statusContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-size-4);
+}
+
+.statusIcon {
+  border-radius: 50%;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.statusIcon.active {
+  background-color: var(--ds-color-success-base-hover);
+}
+
+.statusIcon.inactive {
+  background-color: var(--ds-color-danger-base-default);
+}
