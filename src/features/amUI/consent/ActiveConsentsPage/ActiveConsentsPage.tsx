@@ -95,7 +95,7 @@ export const ActiveConsentsPage = () => {
           {groupedActiveConsents && (
             <List>
               {Object.keys(groupedActiveConsents).map((partyId) => (
-                <ActiveConsentListItem
+                <ConsentListItem
                   key={partyId}
                   title={groupedActiveConsents[partyId][0].toPartyName}
                   subItems={groupedActiveConsents[partyId].map((item) => ({
@@ -121,16 +121,12 @@ export const ActiveConsentsPage = () => {
   );
 };
 
-interface ActiveConsentListItemProps {
+interface ConsentListItemProps {
   title: string;
   subItems: { id: string; title: string }[];
   onClick: (consentId: string) => void;
 }
-const ActiveConsentListItem = ({
-  title,
-  subItems,
-  onClick,
-}: ActiveConsentListItemProps): React.ReactNode => {
+const ConsentListItem = ({ title, subItems, onClick }: ConsentListItemProps): React.ReactNode => {
   const { t } = useTranslation();
 
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
@@ -148,9 +144,9 @@ const ActiveConsentListItem = ({
       {isExpanded && (
         <div className={classes.expandedListItem}>
           <List>
-            {subItems.map((item, index) => (
+            {subItems.map((item) => (
               <ListItem
-                key={index}
+                key={item.id}
                 icon={HandshakeIcon}
                 title={{ as: 'h4', children: item.title }}
                 as='button'

@@ -11,7 +11,7 @@ export interface ConsentRequestEvents {
   consentEventID: string;
   created: string;
   performedBy: string;
-  eventType: string;
+  eventType: 'Created' | 'Rejected' | 'Accepted' | 'Revoked' | 'Deleted';
   consentRequestID: string;
 }
 
@@ -35,8 +35,6 @@ export interface ActiveConsentListItem {
   toPartyId: string;
   toPartyName: string;
 }
-
-export type ConsentStatus = 'Created' | 'Rejected' | 'Accepted' | 'Revoked' | 'Deleted';
 export interface Consent {
   id: string;
   rights: ConsentRight[];

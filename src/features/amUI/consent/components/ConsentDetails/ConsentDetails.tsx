@@ -15,7 +15,7 @@ import { useGetConsentQuery, useRevokeConsentMutation } from '@/rtk/features/con
 
 import { getLanguage } from '../../utils';
 import { ConsentRights } from '../ConsentRights/ConsentRights';
-import type { ConsentRequestEvents, ConsentStatus } from '../../types';
+import type { ConsentRequestEvents } from '../../types';
 
 import classes from './ConsentDetails.module.css';
 
