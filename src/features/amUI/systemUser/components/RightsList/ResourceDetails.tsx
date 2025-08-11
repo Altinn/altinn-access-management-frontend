@@ -1,9 +1,9 @@
 import React from 'react';
 import { Avatar, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
-import classes from './RightsList.module.css';
-
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
+import classes from './RightsList.module.css';
 
 interface ResourceDetailsProps {
   resource: ServiceResource;

@@ -24,7 +24,7 @@ import {
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
-import { useMinimizableResourceList } from './useMinimizableResourceList';
+import { useResourceList } from './useResourceList';
 import classes from './AccessPackageInfo.module.css';
 
 export interface PackageInfoProps {
@@ -110,7 +110,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     !canDelegate(accessPackage.id) &&
     !isLoading;
 
-  const { listItems } = useMinimizableResourceList(accessPackage.resources);
+  const resourceListItems = useResourceList(accessPackage.resources);
   const deletableStatus = React.useMemo(
     () =>
       delegationAccess
@@ -221,11 +221,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               })}
             </DsHeading>
             <div className={classes.service_list}>
-              <List
-                items={listItems}
-                spacing='xs'
-                defaultItemSize='xs'
-              />
+              <List spacing='0'>{resourceListItems}</List>
             </div>
           </div>
 

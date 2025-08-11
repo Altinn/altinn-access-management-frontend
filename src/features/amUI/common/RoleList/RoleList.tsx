@@ -1,14 +1,13 @@
 import { useMemo } from 'react';
-import { ListBase } from '@altinn/altinn-components';
+import { List } from '@altinn/altinn-components';
 
-import {
-  type ExtendedRole,
-  Role,
-  useGetRolesForUserQuery,
-  useGetRolesQuery,
-} from '@/rtk/features/roleApi';
+import type { Role, ExtendedRole } from '@/rtk/features/roleApi';
+import { useGetRolesForUserQuery, useGetRolesQuery } from '@/rtk/features/roleApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
@@ -16,9 +15,6 @@ import { SkeletonRoleList } from './SkeletonRoleList';
 import { RevokeRoleButton } from './RevokeRoleButton';
 import { DelegateRoleButton } from './DelegateRoleButton';
 import { RequestRoleButton } from './RequestRoleButton';
-import { ActionError } from '@/resources/hooks/useActionError';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 interface RoleListProps {
   onSelect: (role: ExtendedRole) => void;
@@ -39,6 +35,7 @@ export const RoleList = ({
     from: fromParty?.partyUuid ?? '',
     to: toParty?.partyUuid ?? '',
   });
+
 
   const isSm = useIsMobileOrSmaller();
 
@@ -72,7 +69,7 @@ export const RoleList = ({
   return (
     <div className={classes.roleLists}>
       {groupedRoles && groupedRoles.activeRoles.length > 0 && (
-        <ListBase>
+        <List>
           {groupedRoles.activeRoles.map((role) => (
             <RoleListItem
               key={role.id}
@@ -97,10 +94,10 @@ export const RoleList = ({
               }
             />
           ))}
-        </ListBase>
+        </List>
       )}
       {groupedRoles && groupedRoles.availableRoles.length > 0 && (
-        <ListBase>
+        <List>
           {groupedRoles.availableRoles.map((role) => (
             <RoleListItem
               key={role.id}
@@ -129,7 +126,7 @@ export const RoleList = ({
               }
             />
           ))}
-        </ListBase>
+        </List>
       )}
     </div>
   );

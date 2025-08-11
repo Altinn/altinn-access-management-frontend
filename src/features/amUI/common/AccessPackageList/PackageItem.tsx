@@ -17,7 +17,7 @@ export const PackageItem = ({ pkg, onSelect, controls, hasAccess }: PackageItemP
     <AccessPackageListItem
       key={pkg.id}
       id={pkg.id}
-      title={pkg.name}
+      name={pkg.name}
       titleAs='h4'
       description={t('access_packages.package_number_of_resources', {
         count: pkg.resources.length,
@@ -25,6 +25,7 @@ export const PackageItem = ({ pkg, onSelect, controls, hasAccess }: PackageItemP
       onClick={() => onSelect?.(pkg)}
       controls={controls}
       color={hasAccess ? 'company' : 'neutral'}
+      size='xs'
     />
   );
 };
