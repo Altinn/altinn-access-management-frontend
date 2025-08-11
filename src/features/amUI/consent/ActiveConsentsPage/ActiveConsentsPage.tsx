@@ -141,28 +141,24 @@ const ConsentListItem = ({ title, subItems, onClick }: ConsentListItemProps): Re
       badge={{ label: subItems.length }}
       onClick={() => setIsExpanded((old) => !old)}
     >
-      {isExpanded && (
-        <div className={classes.expandedListItem}>
-          <List>
-            {subItems.map((item) => (
-              <ListItem
-                key={item.id}
-                icon={HandshakeIcon}
-                title={{ as: 'h4', children: item.title }}
-                as='button'
-                onClick={() => onClick(item.id)}
-                badge={{
-                  className: classes.consentBadge,
-                  variant: 'text',
-                  label: t('active_consents.see_consent'),
-                  theme: 'transparent',
-                }}
-                linkIcon
-              />
-            ))}
-          </List>
-        </div>
-      )}
+      <List className={classes.expandedListItem}>
+        {subItems.map((item) => (
+          <ListItem
+            key={item.id}
+            icon={HandshakeIcon}
+            title={{ as: 'h4', children: item.title }}
+            as='button'
+            onClick={() => onClick(item.id)}
+            badge={{
+              className: classes.consentBadge,
+              variant: 'text',
+              label: t('active_consents.see_consent'),
+              theme: 'transparent',
+            }}
+            linkIcon
+          />
+        ))}
+      </List>
     </ListItem>
   );
 };
