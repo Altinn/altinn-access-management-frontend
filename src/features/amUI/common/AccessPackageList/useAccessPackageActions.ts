@@ -58,7 +58,7 @@ export const useAccessPackageActions = ({
           name: toParty.name,
           accessPackage: accessPackage.name,
         }),
-        color: 'alert',
+        color: 'danger',
         duration: SnackbarDuration.infinite,
       });
     }
@@ -90,7 +90,7 @@ export const useAccessPackageActions = ({
           name: toParty.name,
           accessPackage: accessPackage.name,
         }),
-        color: 'alert',
+        color: 'danger',
         duration: SnackbarDuration.infinite,
       });
     }

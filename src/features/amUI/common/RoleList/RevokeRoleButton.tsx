@@ -3,13 +3,13 @@ import type { ButtonProps } from '@altinn/altinn-components';
 import { Button, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import type { Role } from '@/rtk/features/roleApi';
 import { useRevokeMutation } from '@/rtk/features/roleApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
+
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 interface RevokeRoleButtonProps extends Omit<ButtonProps, 'icon'> {
   accessRole: Role;
@@ -63,7 +63,7 @@ export const RevokeRoleButton = ({
           name: toParty?.name,
           accessPackage: role.name,
         }),
-        color: 'alert',
+        color: 'danger',
         duration: SnackbarDuration.infinite,
       });
     }

@@ -5,11 +5,6 @@ import * as React from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { DsSkeleton, DsSearch, DsButton } from '@altinn/altinn-components';
 
-import { ApiActionBar } from '../../components/ApiActionBar';
-
-import classes from './ChooseApiPage.module.css';
-import { ApiSearchResults } from './ApiSearchResult';
-
 import { Page, PageHeader, PageContent, PageContainer } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -35,6 +30,11 @@ import type { ResourceOwner } from '@/rtk/features/resourceApi';
 import { ResourceType, useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+
+import { ApiActionBar } from '../../components/ApiActionBar';
+
+import classes from './ChooseApiPage.module.css';
+import { ApiSearchResults } from './ApiSearchResult';
 
 export const ChooseApiPage = () => {
   const [searchString, setSearchString] = useState('');
