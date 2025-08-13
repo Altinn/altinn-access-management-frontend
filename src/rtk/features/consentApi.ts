@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { ConsentRequest } from '@/features/amUI/consent/types';
+import type { ActiveConsentListItem, Consent, ConsentRequest } from '@/features/amUI/consent/types';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
@@ -33,6 +33,20 @@ export const consentApi = createApi({
         method: 'POST',
       }),
     }),
+
+    // active consents
+    getActiveConsents: builder.query<ActiveConsentListItem[], { partyId: string }>({
+      query: ({ partyId }) => `consent/active/${partyId}`,
+    }),
+    getConsent: builder.query<Consent, { consentId: string }>({
+      query: ({ consentId }) => `consent/${consentId}`,
+    }),
+    revokeConsent: builder.mutation<boolean, { consentId: string }>({
+      query: ({ consentId }) => ({
+        url: `consent/${consentId}/revoke`,
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
@@ -40,6 +54,9 @@ export const {
   useGetConsentRequestQuery,
   useApproveConsentRequestMutation,
   useRejectConsentRequestMutation,
+  useGetActiveConsentsQuery,
+  useGetConsentQuery,
+  useRevokeConsentMutation,
 } = consentApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = consentApi;

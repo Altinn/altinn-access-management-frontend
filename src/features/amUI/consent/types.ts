@@ -7,6 +7,14 @@ export interface ConsentRight {
   consentTextHtml: ConsentLanguage;
 }
 
+export interface ConsentRequestEvents {
+  consentEventID: string;
+  created: string;
+  performedBy: string;
+  eventType: 'Created' | 'Rejected' | 'Accepted' | 'Revoked' | 'Deleted';
+  consentRequestID: string;
+}
+
 export interface ConsentRequest {
   id: string;
   rights: ConsentRight[];
@@ -19,13 +27,25 @@ export interface ConsentRequest {
   handledBy?: ConsentLanguage;
   fromPartyName?: string;
   validTo: string;
-  consentRequestEvents: {
-    consentEventID: string;
-    created: string;
-    performedBy: string;
-    eventType: string;
-    consentRequestID: string;
-  }[];
+  consentRequestEvents: ConsentRequestEvents[];
+}
+
+export interface ActiveConsentListItem {
+  id: string;
+  toPartyId: string;
+  toPartyName: string;
+}
+export interface Consent {
+  id: string;
+  rights: ConsentRight[];
+  isPoa: boolean;
+  titleAccepted: ConsentLanguage;
+  serviceIntroAccepted: ConsentLanguage;
+  consentMessage: ConsentLanguage;
+  expiration: ConsentLanguage;
+  handledBy?: ConsentLanguage;
+  validTo: string;
+  consentRequestEvents: ConsentRequestEvents[];
 }
 
 export interface ProblemDetail {

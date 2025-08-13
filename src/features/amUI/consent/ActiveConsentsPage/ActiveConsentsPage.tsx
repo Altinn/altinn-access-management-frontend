@@ -1,0 +1,164 @@
+import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
+import {
+  DsAlert,
+  DsDialog,
+  DsHeading,
+  DsLink,
+  DsSpinner,
+  List,
+  ListItem,
+} from '@altinn/altinn-components';
+import { FolderFileIcon, HandshakeIcon } from '@navikt/aksel-icons';
+
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
+import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+
+import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
+import type { ActiveConsentListItem } from '../types';
+import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
+
+import classes from './ActiveConsentsPage.module.css';
+
+export const ActiveConsentsPage = () => {
+  const { t } = useTranslation();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [selectedConsentId, setSelectedConsentId] = useState<string>('');
+
+  useDocumentTitle(t('active_consents.page_title'));
+  const partyUuid = getCookie('AltinnPartyUuid');
+
+  const {
+    data: activeConsents,
+    isLoading: isLoadingActiveConsents,
+    error: loadActiveConsentsError,
+  } = useGetActiveConsentsQuery({
+    partyId: partyUuid,
+  });
+
+  const groupedActiveConsents = activeConsents?.reduce(
+    (acc: { [key: string]: ActiveConsentListItem[] }, consent) => {
+      const key = consent.toPartyId;
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key] = [...acc[key], consent];
+      return acc;
+    },
+    {},
+  );
+
+  const showConsentDetails = (consentId: string): void => {
+    setSelectedConsentId(consentId);
+    modalRef.current?.showModal();
+  };
+
+  return (
+    <PageWrapper>
+      <PageLayoutWrapper>
+        <DsHeading
+          level={1}
+          data-size='md'
+        >
+          {t('active_consents.heading')}
+        </DsHeading>
+        <div className={classes.activeConsentsHeading}>
+          <DsHeading
+            level={2}
+            data-size='sm'
+          >
+            {t('active_consents.sub_heading')}
+          </DsHeading>
+          <DsLink
+            asChild
+            data-size='lg'
+          >
+            <Link to={'/consent/log'}>
+              <FolderFileIcon />
+              {t('active_consents.consent_log')}
+            </Link>
+          </DsLink>
+        </div>
+        <div>
+          {isLoadingActiveConsents && (
+            <DsSpinner aria-label={t('active_consents.loading_consents')} />
+          )}
+          {loadActiveConsentsError && (
+            <DsAlert data-color='danger'>{t('active_consents.load_consents_error')}</DsAlert>
+          )}
+          {activeConsents && activeConsents.length === 0 && (
+            <DsAlert data-color='info'>{t('active_consents.no_active_consents')}</DsAlert>
+          )}
+          {groupedActiveConsents && (
+            <List>
+              {Object.keys(groupedActiveConsents).map((partyId) => (
+                <ConsentListItem
+                  key={partyId}
+                  title={groupedActiveConsents[partyId][0].toPartyName}
+                  subItems={groupedActiveConsents[partyId].map((item) => ({
+                    id: item.id,
+                    title: item.toPartyName,
+                  }))}
+                  onClick={showConsentDetails}
+                />
+              ))}
+            </List>
+          )}
+        </div>
+        <DsDialog
+          ref={modalRef}
+          className={classes.consentDialog}
+          closedby='any'
+          onClose={() => setSelectedConsentId('')}
+        >
+          {selectedConsentId && <ConsentDetails consentId={selectedConsentId} />}
+        </DsDialog>
+      </PageLayoutWrapper>
+    </PageWrapper>
+  );
+};
+
+interface ConsentListItemProps {
+  title: string;
+  subItems: { id: string; title: string }[];
+  onClick: (consentId: string) => void;
+}
+const ConsentListItem = ({ title, subItems, onClick }: ConsentListItemProps): React.ReactNode => {
+  const { t } = useTranslation();
+
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  return (
+    <ListItem
+      title={{ as: 'h3', children: title }}
+      icon={{ svgElement: HandshakeIcon, theme: 'surface' }}
+      as='button'
+      size='md'
+      collapsible
+      expanded={isExpanded}
+      badge={{ label: subItems.length }}
+      onClick={() => setIsExpanded((old) => !old)}
+    >
+      <List className={classes.expandedListItem}>
+        {subItems.map((item) => (
+          <ListItem
+            key={item.id}
+            icon={HandshakeIcon}
+            title={{ as: 'h4', children: item.title }}
+            as='button'
+            onClick={() => onClick(item.id)}
+            badge={{
+              className: classes.consentBadge,
+              variant: 'text',
+              label: t('active_consents.see_consent'),
+              theme: 'transparent',
+            }}
+            linkIcon
+          />
+        ))}
+      </List>
+    </ListItem>
+  );
+};
