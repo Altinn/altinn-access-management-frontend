@@ -41,7 +41,9 @@ export const AccessPackageSection = () => {
   return (
     <>
       <AccessPackageInfoAlert />
-      <DsAlert data-color='warning'>{t('access_packages.person_info_alert')}</DsAlert>
+      {toParty?.partyTypeName === PartyType.Person && (
+        <DsAlert data-color='warning'>{t('access_packages.person_info_alert')}</DsAlert>
+      )}
       {loadingPartyRepresentation || loadingAccesses ? (
         <TabContentSkeleton />
       ) : (
