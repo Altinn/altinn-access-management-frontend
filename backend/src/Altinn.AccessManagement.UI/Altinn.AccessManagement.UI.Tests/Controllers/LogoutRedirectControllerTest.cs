@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task LogoutRedirect_RedirectToDefaultUrl()
         {
             // Arrange
-            string expectedUrl = "localhost";
+            string expectedUrl = "https://localhost";
            
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/logoutredirect");

@@ -29,6 +29,10 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult> RedirectAfterLogout()
         {
             string logoutInfoCookie = Request.Cookies[platformSettings.Value.AltinnLogoutInfoCookieName];
+
+            CookieOptions opt = new CookieOptions() { Domain = generalSettings.Value.Hostname, Secure = true, HttpOnly = true };
+            Response.Cookies.Delete(platformSettings.Value.AltinnLogoutInfoCookieName, opt);
+
             if (!string.IsNullOrEmpty(logoutInfoCookie) && logoutInfoCookie.Contains("amSafeRedirectUrl"))
             {
                 string[] values = logoutInfoCookie.Split("amSafeRedirectUrl=");
@@ -44,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 }
             }
 
-            return Redirect(generalSettings.Value.Hostname);
+            return Redirect($"https://{generalSettings.Value.Hostname}");
         }
     }
 }
