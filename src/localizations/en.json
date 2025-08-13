@@ -80,11 +80,15 @@
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
     "date_of_birth": "Born"
   },
+  "beta_banner": {
+    "info": "This is a beta version of the new access management pages in Altinn.",
+    "link": "Click here to go back to today's Altinn."
+  },
   "header": {
     "access_management": "Access Management",
     "inbox": "Inbox",
-    "account_you": "Deg selv",
-    "account_others": "Andre kontoer",
+    "account_you": "You",
+    "account_others": "Other accounts",
     "menu-label": "Menu",
     "change-label": "Change",
     "search-label": "Find user",

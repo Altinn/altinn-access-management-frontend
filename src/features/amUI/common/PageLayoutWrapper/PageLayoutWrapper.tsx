@@ -5,7 +5,14 @@ import type {
   MenuGroupProps,
   MenuItemProps,
 } from '@altinn/altinn-components';
-import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
+import {
+  Banner,
+  DsLink,
+  DsParagraph,
+  Layout,
+  RootProvider,
+  Snackbar,
+} from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import { HandshakeIcon, InboxIcon, MenuGridIcon, PersonChatIcon } from '@navikt/aksel-icons';
@@ -145,6 +152,17 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   return (
     <RootProvider>
+      <Banner
+        text={
+          <>
+            {t('beta_banner.info')}{' '}
+            <DsLink href={getHostUrl() + 'ui/profile'}>{t('beta_banner.link')}</DsLink>
+          </>
+        }
+        color='warning'
+        sticky={false}
+      />
+
       <Layout
         color={'company'}
         theme='subtle'
@@ -162,7 +180,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           currentAccount: {
             name: reportee?.name || '',
             type: getAccountType(reportee?.type ?? ''),
-            id: reportee?.partyUuid || '',
+            id: reportee?.partyId || '',
           },
           menu: {
             menuLabel: t('header.menu-label'),
@@ -184,15 +202,15 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
                 },
               },
               menuItemsVirtual: { isVirtualized: accounts.length > 20 },
-              onSelectAccount: (accountId) => {
-                const redirectUrl = window.location.pathname.includes('systemuser')
-                  ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
-                  : window.location.href;
-                (window as Window).open(
-                  `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
-                  '_self',
-                );
-              },
+            },
+            onSelectAccount: (accountId) => {
+              const redirectUrl = window.location.pathname.includes('systemuser')
+                ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
+                : window.location.href;
+              (window as Window).open(
+                `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
+                '_self',
+              );
             },
             logoutButton: {
               label: t('header.log_out'),
