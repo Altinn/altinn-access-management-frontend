@@ -184,15 +184,15 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
                 },
               },
               menuItemsVirtual: { isVirtualized: accounts.length > 20 },
-              onSelectAccount: (accountId) => {
-                const redirectUrl = window.location.pathname.includes('systemuser')
-                  ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
-                  : window.location.href;
-                (window as Window).open(
-                  `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
-                  '_self',
-                );
-              },
+            },
+            onSelectAccount: (accountId) => {
+              const redirectUrl = window.location.pathname.includes('systemuser')
+                ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
+                : window.location.href;
+              (window as Window).open(
+                `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
+                '_self',
+              );
             },
             logoutButton: {
               label: t('header.log_out'),
