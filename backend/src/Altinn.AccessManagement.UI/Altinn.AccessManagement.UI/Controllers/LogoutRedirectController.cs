@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 }
             }
 
-            return Redirect(generalSettings.Value.Hostname);
+            return Redirect($"https://{generalSettings.Value.Hostname}");
         }
     }
 }
