@@ -79,6 +79,10 @@
     "subunit": "Underenhet",
     "date_of_birth": "Født"
   },
+  "beta_banner": {
+    "info": "Du ser nå på en betaversjon av de nye sidene for tilgangsstyring i Altinn.",
+    "link": "Klikk her for å gå tilbake til dagens Altinn."
+  },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
     "not_found_site_header": "Oi! Du har prøvd å komme til en side vi ikke vet om",

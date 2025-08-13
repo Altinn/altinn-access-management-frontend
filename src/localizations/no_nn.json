@@ -77,6 +77,10 @@
     "subunit": "Underenhet",
     "date_of_birth": "Født"
   },
+  "beta_banner": {
+    "info": "Du ser no på ein betaversjon av dei nye sidene for tilgangsstyring i Altinn.",
+    "link": "Klikk her for å gå tilbake til dagens Altinn."
+  },
   "header": {
     "access_management": "Tilgangsstyring",
     "inbox": "Innboks",
