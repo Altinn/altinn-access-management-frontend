@@ -48,6 +48,7 @@ html {
   --ds-color-neutral-surface-default: #fff;
   --ds-body-md-font-size: 1rem;
   --ds-color-text-subtle: #10204a;
+  --ds-link-color-visited: inherit;
 }
 
 /* Overide ds tokens for mobile screens */

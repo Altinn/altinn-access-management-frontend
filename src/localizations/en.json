@@ -97,7 +97,8 @@
     "all_services": "All services",
     "chat": "Get help on chat",
     "log_out": "Log out",
-    "locale_title": "Choose language"
+    "locale_title": "Choose language",
+    "logged_in_as_name": "Logged in as {{name}}"
   },
   "footer": {
     "about_altinn": "About Altinn",
@@ -275,6 +276,7 @@
     "user_has_no_packages": "This user has no access packages.",
     "no_matching_search": "No matches for your search",
     "info_alert_text": "Access packages will eventually replace roles in Altinn's access management solution. They may be a bit empty now, but they will soon be filled with services.",
+    "person_info_alert": "Giving powers of attorney to individuals is currently not supported. This will come later.",
     "delegation_check": {
       "delegation_check_error_heading": "Technical error",
       "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",
