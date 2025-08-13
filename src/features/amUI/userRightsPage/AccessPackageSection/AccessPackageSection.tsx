@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsHeading } from '@altinn/altinn-components';
+import { DsAlert, DsHeading } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -41,6 +41,9 @@ export const AccessPackageSection = () => {
   return (
     <>
       <AccessPackageInfoAlert />
+      {toParty?.partyTypeName === PartyType.Person && (
+        <DsAlert data-color='warning'>{t('access_packages.person_info_alert')}</DsAlert>
+      )}
       {loadingPartyRepresentation || loadingAccesses ? (
         <TabContentSkeleton />
       ) : (

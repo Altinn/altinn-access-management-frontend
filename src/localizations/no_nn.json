@@ -94,7 +94,8 @@
     "all_services": "Alle tjenester",
     "chat": "Få hjelp på chat",
     "log_out": "Logg ut",
-    "locale_title": "Vel språk"
+    "locale_title": "Vel språk",
+    "logged_in_as_name": "Logga inn som {{name}}"
   },
   "footer": {
     "about_altinn": "Om Altinn",
@@ -271,6 +272,7 @@
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
     "no_matching_search": "Ingen treff på søket",
     "info_alert_text": "Tilgangspakkar vil etter kvart erstatte roller i Altinn si tilgangsstyringsløysing. Dei er kanskje litt tomme nå, men vil snart bli fylte opp med tenester.",
+    "person_info_alert": "Det er ikkje mogleg å gi og fjerne fullmakter til personar heilt enno. Dette vil komme seinare.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Ver venleg å kontakte Altinn brukarteneste om problemet held fram.",

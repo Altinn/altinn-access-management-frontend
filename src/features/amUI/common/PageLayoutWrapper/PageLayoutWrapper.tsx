@@ -186,6 +186,9 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             menuLabel: t('header.menu-label'),
             backLabel: t('header.back-label'),
             changeLabel: t('header.change-label'),
+            currentEndUserLabel: t('header.logged_in_as_name', {
+              name: userinfo?.name || '',
+            }),
             accountMenu: {
               items: accounts,
               groups: accountGroups,
