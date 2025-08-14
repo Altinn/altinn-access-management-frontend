@@ -55,10 +55,10 @@ export const useAreaPackageList = ({
       party: actingParty?.partyUuid ?? '',
     },
     {
-      skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid,
+      skip: (!toParty?.partyUuid && !fromParty?.partyUuid) || !actingParty?.partyUuid,
     },
   );
-
+  
   const { assignedAreas, availableAreas } = useMemo(() => {
     if (!allPackageAreas || activeDelegations === undefined) {
       return {
@@ -86,6 +86,7 @@ export const useAreaPackageList = ({
                   ...pkg,
                   deletableStatus,
                   inherited: deletableStatus !== DeletableStatus.FullyDeletable,
+                  permissions: pkgAccess.permissions,
                 };
                 pkgAcc.assigned.push(acquiredPkg);
               } else if (showAllPackages) {

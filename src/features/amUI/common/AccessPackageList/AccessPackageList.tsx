@@ -1,4 +1,4 @@
-import { DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
+import { DsParagraph, DsSpinner } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -9,11 +9,9 @@ import type { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AccessPackageList.module.css';
 import { useAreaPackageList } from './useAreaPackageList';
-import { AreaItem } from './AreaItem';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
-import { AreaItemContent } from './AreaItemContent';
-import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
+import { AccessPackageListBase } from './AccessPackageListBase';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -21,8 +19,11 @@ interface AccessPackageListProps {
   minimizeAvailablePackages?: boolean;
   isLoading?: boolean;
   availableActions?: DelegationAction[];
+  showAvailableToggle?: boolean;
   searchString?: string;
   useDeleteConfirm?: boolean;
+  showPermissions?: boolean;
+  showPackagesCount?: boolean;
   onSelect?: (accessPackage: AccessPackage) => void;
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
   onDelegateError?: (accessPackage: AccessPackage, error: ActionError) => void;
@@ -36,6 +37,7 @@ export const AccessPackageList = ({
   minimizeAvailablePackages,
   isLoading,
   availableActions,
+  showAvailableToggle,
   onSelect,
   useDeleteConfirm,
   onDelegateSuccess,
@@ -43,10 +45,10 @@ export const AccessPackageList = ({
   onRevokeSuccess,
   onRevokeError,
   searchString,
+  showPermissions,
+  showPackagesCount,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
-
-  const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
 
   const {
     loadingPackageAreas,
@@ -74,10 +76,6 @@ export const AccessPackageList = ({
   });
 
   const combinedAreas = [...assignedAreas, ...availableAreas];
-
-  const displayAreas = searchString
-    ? combinedAreas
-    : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
 
   if (loadingDelegations || loadingPackageAreas || isLoading) {
     return (
@@ -129,7 +127,8 @@ export const AccessPackageList = ({
                 area={area}
                 expanded={expanded}
                 toggleExpandedArea={toggleExpandedArea}
-                showBadge={showAllPackages}
+                showPackagesCount={showPackagesCount}
+                showPermissions={showPermissions}
               >
                 <AreaItemContent
                   area={area}
@@ -141,6 +140,8 @@ export const AccessPackageList = ({
                   isActionLoading={isActionLoading}
                   useDeleteConfirm={useDeleteConfirm}
                   showAvailablePackages={!minimizeAvailablePackages}
+                  showAvailableToggle={showAvailableToggle}
+                  showPermissions={showPermissions}
                 />
               </AreaItem>
             );
