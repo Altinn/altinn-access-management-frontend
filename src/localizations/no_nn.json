@@ -75,6 +75,8 @@
     "ssn": "Fødselsnummer",
     "last_name": "Etternavn",
     "subunit": "Underenhet",
+    "subunit_lowercase": "underenhet",
+    "mainunit_lowercase": "hovedenhet",
     "date_of_birth": "Født"
   },
   "beta_banner": {

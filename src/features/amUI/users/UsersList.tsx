@@ -26,7 +26,7 @@ const extractFromList = (
   const remainingList = list.reduce<Connection[]>((acc, item) => {
     if (item.party.id === uuidToRemove) {
       onRemove?.(item);
-    } else {
+    } else if (item.party.type !== 'Systembruker') {
       acc.push(item);
     }
     return acc;

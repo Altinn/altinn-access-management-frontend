@@ -17,6 +17,7 @@ export interface UserListProps {
   listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   interactive?: boolean;
   canAdd?: boolean;
+  showRoles?: boolean;
 }
 
 export const UserList = ({
@@ -26,6 +27,7 @@ export const UserList = ({
   listItemTitleAs,
   interactive,
   canAdd = true,
+  showRoles = true,
 }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
@@ -68,6 +70,7 @@ export const UserList = ({
             size='md'
             titleAs={listItemTitleAs}
             interactive={interactive}
+            showRoles={showRoles}
           />
         ))}
       </List>

@@ -11,6 +11,7 @@ import { formatDateToNorwegian } from '@/resources/utils';
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
 import classes from './UserList.module.css';
+import { is } from 'cypress/types/bluebird';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
@@ -19,6 +20,7 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
 interface UserItemProps
   extends Pick<UserListItemProps, 'size' | 'titleAs' | 'subUnit' | 'interactive'> {
   user: ExtendedUser | User;
+  showRoles?: boolean;
 }
 
 const userHeadingLevelForMapper = (level?: ElementType) => {
@@ -41,6 +43,7 @@ export const UserItem = ({
   size = 'lg',
   titleAs,
   interactive = false,
+  showRoles = true,
   ...props
 }: UserItemProps) => {
   const limitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
@@ -57,12 +60,21 @@ export const UserItem = ({
     [user, hasInheritingUsers],
   );
   const roleCodes = isExtendedUser(user) && user.roles ? getRoleCodesForKeyRoles(user.roles) : [];
+  const isSubUnit =
+    isExtendedUser(user) &&
+    user.type === 'Organisasjon' &&
+    user.roles?.some((role) => role.code === 'hovedenhet');
   const description = (user: ExtendedUser | User) => {
     if (user.type === 'Person') {
       const formattedDate = formatDateToNorwegian(user.keyValues?.DateOfBirth);
       return formattedDate ? t('common.date_of_birth') + ' ' + formattedDate : undefined;
     } else if (user.type === 'Organisasjon') {
-      return t('common.org_nr') + ' ' + user.keyValues?.OrganizationIdentifier;
+      return (
+        t('common.org_nr') +
+        ' ' +
+        user.keyValues?.OrganizationIdentifier +
+        (isSubUnit ? ` (${t('common.subunit_lowercase')})` : '')
+      );
     }
     return undefined;
   };
@@ -77,7 +89,7 @@ export const UserItem = ({
       id={user.id}
       name={user.name}
       description={description(user)}
-      roleNames={roleCodes.map((r) => t(`${r}`))}
+      roleNames={showRoles ? roleCodes.map((r) => t(`${r}`)) : undefined}
       type={type}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}
@@ -97,6 +109,7 @@ export const UserItem = ({
             )
       }
       titleAs={titleAs}
+      subUnit={isSubUnit}
     >
       {hasInheritingUsers && isExpanded && (
         <List className={classes.inheritingUsers}>
