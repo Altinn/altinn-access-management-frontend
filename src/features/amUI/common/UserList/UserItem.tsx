@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import { ConnectionUserType, type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
 import { formatDateToNorwegian } from '@/resources/utils';
 
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
@@ -65,7 +65,7 @@ export const UserItem = ({
 
   const isSubOrMainUnit =
     isExtendedUser(user) &&
-    user.type === 'Organisasjon' &&
+    user.type === ConnectionUserType.Organization &&
     user.roles?.some((role) => role.code === 'hovedenhet');
   const hasSubUnitRole = isSubOrMainUnit && roleDirection === 'fromUser';
 
@@ -73,7 +73,7 @@ export const UserItem = ({
     if (user.type === 'Person') {
       const formattedDate = formatDateToNorwegian(user.keyValues?.DateOfBirth);
       return formattedDate ? t('common.date_of_birth') + ' ' + formattedDate : undefined;
-    } else if (user.type === 'Organisasjon') {
+    } else if (user.type === ConnectionUserType.Organization) {
       return (
         t('common.org_nr') +
         ' ' +
@@ -87,7 +87,11 @@ export const UserItem = ({
   };
 
   const type =
-    user.type === 'Person' ? 'person' : user.type === 'Organisasjon' ? 'company' : 'system';
+    user.type === ConnectionUserType.Person
+      ? 'person'
+      : user.type === ConnectionUserType.Organization
+        ? 'company'
+        : 'system';
 
   return (
     <UserListItem
@@ -127,6 +131,8 @@ export const UserItem = ({
               size='sm'
               titleAs={userHeadingLevelForMapper(titleAs)}
               subUnit={child.type === 'Organization'}
+              roleDirection={roleDirection}
+              showRoles={showRoles}
             />
           ))}
         </List>
