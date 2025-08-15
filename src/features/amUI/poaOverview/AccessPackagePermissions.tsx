@@ -3,10 +3,10 @@ import { debounce } from '@/resources/utils';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import classes from './PoaOverviewList.module.css';
+import classes from './PoaOverviewPage.module.css';
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
 
-export const PoaOverviewList = () => {
+export const AccessPackagePermissions = () => {
   const { t } = useTranslation();
 
   const [searchString, setSearchString] = useState('');

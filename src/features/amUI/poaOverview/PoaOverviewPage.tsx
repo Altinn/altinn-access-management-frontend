@@ -11,14 +11,15 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
-import { PoaOverviewList } from './PoaOverviewList';
+import { AccessPackagePermissions } from './AccessPackagePermissions';
+import { rerouteIfNotLimitedPreview } from '@/resources/utils/featureFlagUtils';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
   useDocumentTitle(t('poa_overview_page.page_title'));
 
-  // rerouteIfNotLimitedPreview();
+  rerouteIfNotLimitedPreview();
 
   return (
     <PageWrapper>
@@ -34,9 +35,9 @@ export const PoaOverviewPage = () => {
             {t('poa_overview_page.heading', { fromparty: reportee?.name || '' })}
           </DsHeading>
           <RightsTabs
-            packagesPanel={<PoaOverviewList />}
-            singleRightsPanel={'Kommer snart'}
-            roleAssignmentsPanel={'Kommer snart'}
+            packagesPanel={<AccessPackagePermissions />}
+            singleRightsPanel={''}
+            roleAssignmentsPanel={''}
           />
         </PartyRepresentationProvider>
       </PageLayoutWrapper>
