@@ -78,6 +78,7 @@ export const PackageSearch = ({
             <AccessPackageList
               showAllAreas={true}
               showAllPackages={true}
+              showPackagesCount={true}
               onSelect={onSelection}
               searchString={debouncedSearchString}
               availableActions={availableActions}

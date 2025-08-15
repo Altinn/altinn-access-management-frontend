@@ -20,6 +20,7 @@ export const ActiveDelegations = () => {
     <>
       <AccessPackageList
         isLoading={isLoading}
+        showPackagesCount
         showAllPackages
         minimizeAvailablePackages
         onSelect={(accessPackage) => {

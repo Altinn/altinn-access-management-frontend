@@ -22,7 +22,7 @@ export const SkeletonAccessPackageList = () => {
           loading
           key={id}
           id={id}
-          badgeText='xxx'
+          badge='xxx'
           border='solid'
           size='lg'
           {...props}
