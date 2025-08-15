@@ -7,9 +7,9 @@ export const rerouteIfNotConfetti = () => {
   }
 };
 
-export const rerouteIfNotLimitedPreview = () => {
+export const rerouteIfLimitedPreview = () => {
   const navigate = useNavigate();
-  if (window.featureFlags.displayLimitedPreviewLaunch === false) {
+  if (window.featureFlags.displayLimitedPreviewLaunch === true) {
     navigate('/not-found');
   }
 };

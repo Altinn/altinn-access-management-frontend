@@ -12,14 +12,14 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { AccessPackagePermissions } from './AccessPackagePermissions';
-import { rerouteIfNotLimitedPreview } from '@/resources/utils/featureFlagUtils';
+import { rerouteIfLimitedPreview } from '@/resources/utils/featureFlagUtils';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
   useDocumentTitle(t('poa_overview_page.page_title'));
 
-  rerouteIfNotLimitedPreview();
+  rerouteIfLimitedPreview();
 
   return (
     <PageWrapper>
