@@ -25,6 +25,7 @@ import { PackageItem } from './PackageItem';
 import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
 import { PermissionBadge } from './PermissionBadge';
+import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
 
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
@@ -119,7 +120,13 @@ export const AreaItemContent = ({
                 pkg.deletableStatus !== DeletableStatus.NotDeletable &&
                 revokeActionControl(pkg)
               }
-              badge={showPermissions && <PermissionBadge permissions={pkg.permissions} />}
+              badge={
+                <>
+                  {showPermissions && pkg.permissions && (
+                    <PermissionBadge permissions={pkg.permissions} />
+                  )}
+                </>
+              }
             />
           ))}
         </List>
@@ -162,6 +169,13 @@ export const AreaItemContent = ({
                 key={pkg.id}
                 pkg={pkg}
                 onSelect={onSelect}
+                badge={
+                  <>
+                    {showPermissions && isCriticalAndUndelegated(pkg) && (
+                      <UndelegatedPackageWarning />
+                    )}
+                  </>
+                }
                 controls={
                   enableActions &&
                   !isSm && (

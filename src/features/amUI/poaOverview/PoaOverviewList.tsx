@@ -1,17 +1,13 @@
-import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DsSearch } from '@altinn/altinn-components';
 import { debounce } from '@/resources/utils';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ExtendedAccessArea } from '../common/AccessPackageList/useAreaPackageList';
 
 import classes from './PoaOverviewList.module.css';
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
 
 export const PoaOverviewList = () => {
   const { t } = useTranslation();
-
 
   const [searchString, setSearchString] = useState('');
 
@@ -21,7 +17,6 @@ export const PoaOverviewList = () => {
     }, 300),
     [],
   );
-
 
   return (
     <>
@@ -45,11 +40,11 @@ export const PoaOverviewList = () => {
         searchString={searchString}
         minimizeAvailablePackages={false}
         showAvailableToggle={false}
-        showPermissions={true}
-        showAllPackages={true}
-        showAllAreas={true}
+        showPermissions
+        showAllPackages
+        showAllAreas
         showPackagesCount={false}
       />
-  </>
+    </>
   );
 };

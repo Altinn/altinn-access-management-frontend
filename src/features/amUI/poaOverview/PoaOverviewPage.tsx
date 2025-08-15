@@ -6,12 +6,12 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { rerouteIfNotLimitedPreview } from '@/resources/utils/featureFlagUtils';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
+
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
+import { PoaOverviewList } from './PoaOverviewList';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
@@ -34,15 +34,7 @@ export const PoaOverviewPage = () => {
             {t('poa_overview_page.heading', { fromparty: reportee?.name || '' })}
           </DsHeading>
           <RightsTabs
-            packagesPanel={
-              <AccessPackageList
-                showAllAreas
-                showAvailableToggle={false}
-                showAllPackages
-                showPermissions
-                showPackagesCount={false}
-              />
-            }
+            packagesPanel={<PoaOverviewList />}
             singleRightsPanel={'Kommer snart'}
             roleAssignmentsPanel={'Kommer snart'}
           />

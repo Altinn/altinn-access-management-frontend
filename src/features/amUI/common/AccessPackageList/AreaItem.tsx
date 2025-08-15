@@ -5,6 +5,7 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import type { ExtendedAccessArea } from './useAreaPackageList';
 import { PermissionBadge } from './PermissionBadge';
+import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
 
 interface AreaItemProps {
   area: ExtendedAccessArea;
@@ -44,6 +45,11 @@ export const AreaItem = ({
   const permissionsBadge =
     !isSm && showPermissions ? <PermissionBadge permissions={permissions} /> : null;
 
+  const showUndelegatedPackageWarning =
+    !isSm &&
+    showPermissions &&
+    area.packages.available.some((pkg) => isCriticalAndUndelegated(pkg));
+
   return (
     <AccessAreaListItem
       key={area.id}
@@ -52,10 +58,11 @@ export const AreaItem = ({
       colorTheme='company'
       iconUrl={area.iconUrl}
       badge={
-        packagesCountBadge || permissionsBadge ? (
+        packagesCountBadge || permissionsBadge || showUndelegatedPackageWarning ? (
           <>
             {packagesCountBadge}
             {permissionsBadge}
+            {showUndelegatedPackageWarning && <UndelegatedPackageWarning />}
           </>
         ) : undefined
       }
