@@ -21,6 +21,7 @@ export interface ExtendedAccessArea extends AccessArea {
 export interface ExtendedAccessPackage extends AccessPackage {
   deletableStatus?: DeletableStatus;
   inherited?: boolean;
+  permissions?: Permissions[];
 }
 
 interface useAreaPackagesProps {
@@ -58,7 +59,7 @@ export const useAreaPackageList = ({
       skip: (!toParty?.partyUuid && !fromParty?.partyUuid) || !actingParty?.partyUuid,
     },
   );
-  
+
   const { assignedAreas, availableAreas } = useMemo(() => {
     if (!allPackageAreas || activeDelegations === undefined) {
       return {
