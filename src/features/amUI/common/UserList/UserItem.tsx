@@ -11,6 +11,7 @@ import { formatDateToNorwegian } from '@/resources/utils';
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
 import classes from './UserList.module.css';
+
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
 }
@@ -70,7 +71,7 @@ export const UserItem = ({
   const hasSubUnitRole = isSubOrMainUnit && roleDirection === 'fromUser';
 
   const description = (user: ExtendedUser | User) => {
-    if (user.type === 'Person') {
+    if (user.type === ConnectionUserType.Person) {
       const formattedDate = formatDateToNorwegian(user.keyValues?.DateOfBirth);
       return formattedDate ? t('common.date_of_birth') + ' ' + formattedDate : undefined;
     } else if (user.type === ConnectionUserType.Organization) {
@@ -130,7 +131,7 @@ export const UserItem = ({
               user={child}
               size='sm'
               titleAs={userHeadingLevelForMapper(titleAs)}
-              subUnit={child.type === 'Organization'}
+              subUnit={child.type === ConnectionUserType.Organization}
               roleDirection={roleDirection}
               showRoles={showRoles}
             />
