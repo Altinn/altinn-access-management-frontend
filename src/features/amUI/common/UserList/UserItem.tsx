@@ -11,8 +11,6 @@ import { formatDateToNorwegian } from '@/resources/utils';
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
 import classes from './UserList.module.css';
-import { is } from 'cypress/types/bluebird';
-
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
 }
@@ -21,6 +19,7 @@ interface UserItemProps
   extends Pick<UserListItemProps, 'size' | 'titleAs' | 'subUnit' | 'interactive'> {
   user: ExtendedUser | User;
   showRoles?: boolean;
+  roleDirection?: 'toUser' | 'fromUser';
 }
 
 const userHeadingLevelForMapper = (level?: ElementType) => {
@@ -44,6 +43,7 @@ export const UserItem = ({
   titleAs,
   interactive = false,
   showRoles = true,
+  roleDirection = 'toUser',
   ...props
 }: UserItemProps) => {
   const limitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
@@ -59,11 +59,15 @@ export const UserItem = ({
       ),
     [user, hasInheritingUsers],
   );
+
   const roleCodes = isExtendedUser(user) && user.roles ? getRoleCodesForKeyRoles(user.roles) : [];
-  const isSubUnit =
+
+  const isSubOrMainUnit =
     isExtendedUser(user) &&
     user.type === 'Organisasjon' &&
     user.roles?.some((role) => role.code === 'hovedenhet');
+  const isSubUnit = isSubOrMainUnit && roleDirection === 'fromUser';
+
   const description = (user: ExtendedUser | User) => {
     if (user.type === 'Person') {
       const formattedDate = formatDateToNorwegian(user.keyValues?.DateOfBirth);
@@ -73,7 +77,9 @@ export const UserItem = ({
         t('common.org_nr') +
         ' ' +
         user.keyValues?.OrganizationIdentifier +
-        (isSubUnit ? ` (${t('common.subunit_lowercase')})` : '')
+        (isSubOrMainUnit
+          ? ` (${t(isSubUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
+          : '')
       );
     }
     return undefined;

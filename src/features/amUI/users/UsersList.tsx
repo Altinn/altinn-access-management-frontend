@@ -5,6 +5,7 @@ import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
 import type { Connection } from '@/rtk/features/userInfoApi';
 import {
+  SYSTEM_USER_TYPE,
   useGetIsAdminQuery,
   useGetRightHoldersQuery,
   useGetUserInfoQuery,
@@ -26,7 +27,7 @@ const extractFromList = (
   const remainingList = list.reduce<Connection[]>((acc, item) => {
     if (item.party.id === uuidToRemove) {
       onRemove?.(item);
-    } else if (item.party.type !== 'Systembruker') {
+    } else if (item.party.type !== SYSTEM_USER_TYPE) {
       acc.push(item);
     }
     return acc;

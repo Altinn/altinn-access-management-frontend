@@ -5,7 +5,6 @@ import React from 'react';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -20,7 +19,7 @@ export const ReporteesPage = () => {
   const { data: reportee } = useGetReporteeQuery();
   const name = reportee?.name || '';
   const orgNumber = reportee?.organizationNumber || '';
-  const isMainUnit = reportee?.subunits?.length && reportee.subunits.length > 0;
+  const isMainUnit = (reportee?.subunits?.length ?? 0) > 0;
 
   useDocumentTitle(t('reportees_page.page_title'));
 

@@ -20,7 +20,7 @@ export const UsersPage = () => {
   const { data: reportee } = useGetReporteeQuery();
   const name = reportee?.name || '';
   const orgNumber = reportee?.organizationNumber || '';
-  const isMainUnit = reportee?.subunits?.length && reportee.subunits.length > 0;
+  const isMainUnit = (reportee?.subunits?.length ?? 0) > 0;
 
   rerouteIfNotConfetti();
 

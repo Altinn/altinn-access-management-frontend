@@ -58,6 +58,7 @@ export const ReporteesList = () => {
         interactive
         canAdd={false} // Cannot add new reportees
         showRoles={false} // Roles are not shown for reportees
+        roleDirection='fromUser' // Roles are from the User
       />
     </div>
   );

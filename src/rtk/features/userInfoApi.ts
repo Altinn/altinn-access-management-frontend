@@ -4,6 +4,8 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
 
+export const SYSTEM_USER_TYPE = 'Systembruker' as const;
+
 interface UserKeyValues {
   OrganizationIdentifier?: string;
   PartyId?: string;
