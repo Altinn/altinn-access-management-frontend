@@ -1,4 +1,4 @@
-import { DsParagraph, DsSpinner } from '@altinn/altinn-components';
+import { DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -11,7 +11,9 @@ import classes from './AccessPackageList.module.css';
 import { useAreaPackageList } from './useAreaPackageList';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
-import { AccessPackageListBase } from './AccessPackageListBase';
+import { AreaItem } from './AreaItem';
+import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
+import { AreaItemContent } from './AreaItemContent';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -76,6 +78,7 @@ export const AccessPackageList = ({
   });
 
   const combinedAreas = [...assignedAreas, ...availableAreas];
+  const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
 
   if (loadingDelegations || loadingPackageAreas || isLoading) {
     return (
@@ -109,6 +112,10 @@ export const AccessPackageList = ({
       </div>
     );
   }
+
+  const displayAreas = searchString
+    ? combinedAreas
+    : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className={classes.accessAreaList}>

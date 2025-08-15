@@ -10,29 +10,44 @@ import { rerouteIfNotLimitedPreview } from '@/resources/utils/featureFlagUtils';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
+import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
   useDocumentTitle(t('poa_overview_page.page_title'));
 
-  rerouteIfNotLimitedPreview();
+  // rerouteIfNotLimitedPreview();
 
   return (
     <PageWrapper>
-      <PartyRepresentationProvider
-        fromPartyUuid={getCookie('AltinnPartyUuid')}
-        actingPartyUuid={getCookie('AltinnPartyUuid')}
-      >
-        <PageLayoutWrapper>
+      <PageLayoutWrapper>
+        <PartyRepresentationProvider
+          fromPartyUuid={getCookie('AltinnPartyUuid')}
+          actingPartyUuid={getCookie('AltinnPartyUuid')}
+        >
           <DsHeading
             level={1}
             data-size='lg'
           >
             {t('poa_overview_page.heading', { fromparty: reportee?.name || '' })}
           </DsHeading>
-        </PageLayoutWrapper>
-      </PartyRepresentationProvider>
+          <RightsTabs
+            packagesPanel={
+              <AccessPackageList
+                showAllAreas
+                showAvailableToggle={false}
+                showAllPackages
+                showPermissions
+                showPackagesCount={false}
+              />
+            }
+            singleRightsPanel={'Kommer snart'}
+            roleAssignmentsPanel={'Kommer snart'}
+          />
+        </PartyRepresentationProvider>
+      </PageLayoutWrapper>
     </PageWrapper>
   );
 };
