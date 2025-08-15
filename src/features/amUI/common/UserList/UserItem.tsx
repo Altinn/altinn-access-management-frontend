@@ -44,6 +44,7 @@ export const UserItem = ({
   interactive = false,
   showRoles = true,
   roleDirection = 'toUser',
+  subUnit = false,
   ...props
 }: UserItemProps) => {
   const limitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
@@ -66,7 +67,7 @@ export const UserItem = ({
     isExtendedUser(user) &&
     user.type === 'Organisasjon' &&
     user.roles?.some((role) => role.code === 'hovedenhet');
-  const isSubUnit = isSubOrMainUnit && roleDirection === 'fromUser';
+  const hasSubUnitRole = isSubOrMainUnit && roleDirection === 'fromUser';
 
   const description = (user: ExtendedUser | User) => {
     if (user.type === 'Person') {
@@ -78,7 +79,7 @@ export const UserItem = ({
         ' ' +
         user.keyValues?.OrganizationIdentifier +
         (isSubOrMainUnit
-          ? ` (${t(isSubUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
+          ? ` (${t(hasSubUnitRole ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
           : '')
       );
     }
@@ -115,7 +116,7 @@ export const UserItem = ({
             )
       }
       titleAs={titleAs}
-      subUnit={isSubUnit}
+      subUnit={subUnit || hasSubUnitRole}
     >
       {hasInheritingUsers && isExpanded && (
         <List className={classes.inheritingUsers}>
