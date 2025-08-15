@@ -5,8 +5,7 @@ import React from 'react';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
-import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -16,8 +15,11 @@ import { ReporteesList } from './ReporteesList';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();
-  const { data: party } = useGetReporteePartyQuery();
   const { data: isAdmin, isLoading } = useGetIsAdminQuery();
+  const { data: reportee } = useGetReporteeQuery();
+  const name = reportee?.name || '';
+  const orgNumber = reportee?.organizationNumber || '';
+  const isMainUnit = (reportee?.subunits?.length ?? 0) > 0;
 
   useDocumentTitle(t('reportees_page.page_title'));
 
@@ -26,7 +28,7 @@ export const ReporteesPage = () => {
       <PageLayoutWrapper>
         {!isLoading && !isAdmin ? (
           <DsAlert data-color='warning'>
-            {t('reportees_page.not_admin_alert', { name: party?.name || '' })}
+            {t('reportees_page.not_admin_alert', { name: name || '' })}
           </DsAlert>
         ) : (
           <PartyRepresentationProvider
@@ -36,9 +38,12 @@ export const ReporteesPage = () => {
             <div className={classes.reporteeListHeading}>
               <DsHeading
                 level={1}
-                data-size='md'
+                data-size='sm'
               >
-                {t('reportees_page.main_page_heading', { name: party?.name || '' })}
+                {t('reportees_page.main_page_heading', { name: name || '' })}
+                <br />
+                {t('users_page.sub_heading', { org_number: orgNumber || '' })}{' '}
+                {isMainUnit ? `(${t('common.mainunit_lowercase')})` : ''}
               </DsHeading>
             </div>
             <ReporteesList />

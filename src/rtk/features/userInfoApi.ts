@@ -4,6 +4,12 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
 
+export enum ConnectionUserType {
+  Person = 'Person',
+  Organization = 'Organisasjon',
+  Systemuser = 'Systembruker',
+}
+
 interface UserKeyValues {
   OrganizationIdentifier?: string;
   PartyId?: string;

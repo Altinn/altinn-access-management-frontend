@@ -76,6 +76,8 @@
     "ssn": "National identity number",
     "last_name": "Last name",
     "subunit": "Subunit",
+    "subunit_lowercase": "subunit",
+    "mainunit_lowercase": "main unit",
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
     "date_of_birth": "Born"
@@ -298,6 +300,7 @@
   "users_page": {
     "page_title": "Users and groups - Altinn",
     "main_page_heading": "Users with power of attorney in {{name}}",
+    "sub_heading": "org.nr. {{org_number}}",
     "user_list_heading": "Other users with power of attorney",
     "user_search_placeholder": "Search for users",
     "no_users": "Nobody but you have access. Do you want to change this?",
