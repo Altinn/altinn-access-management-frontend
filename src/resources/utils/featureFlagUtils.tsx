@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 export const rerouteIfNotConfetti = () => {
   const navigate = useNavigate();
   if (window.featureFlags.displayConfettiPackage === false) {
-    navigate('/not-found');
+    navigate('/not-found', { replace: true });
   }
 };
 
@@ -12,7 +12,7 @@ export const useRerouteIfLimitedPreview = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (window.featureFlags?.displayLimitedPreviewLaunch === true) {
-      navigate('/not-found');
+      navigate('/not-found', { replace: true });
     }
   }, [navigate]);
 };
