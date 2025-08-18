@@ -16,7 +16,6 @@ export const PackageItem = ({ pkg, onSelect, controls, hasAccess, badge }: Packa
 
   return (
     <AccessPackageListItem
-      key={pkg.id}
       id={pkg.id}
       name={pkg.name}
       titleAs='h4'

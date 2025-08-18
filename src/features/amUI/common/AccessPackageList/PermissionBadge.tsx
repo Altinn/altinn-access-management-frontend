@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 
 interface PermissionBadgeProps {
-  permissions: Permissions[];
+  permissions?: Permissions[];
 }
 
 export const PermissionBadge = ({ permissions }: PermissionBadgeProps) => {
@@ -11,11 +11,11 @@ export const PermissionBadge = ({ permissions }: PermissionBadgeProps) => {
     if (!permissions || permissions.length === 0) return [];
     const seen = new Set<string>();
     const result: AvatarProps[] = [];
-    
+
     for (const perm of permissions) {
       const to = perm?.to as { id?: string; name: string; type: string } | undefined;
       const id = to?.id;
-      if (!to || !id) continue; 
+      if (!to || !id) continue;
       if (seen.has(id)) continue;
       seen.add(id);
       result.push({

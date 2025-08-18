@@ -31,20 +31,8 @@ export const AreaItem = ({
     .flatMap((pkg) => pkg.permissions)
     .filter((p) => p !== undefined);
 
-  const packagesCountBadge =
-    !isSm && showPackagesCount ? (
-      <Badge
-        label={t('access_packages.delegated_packages_count_badge', {
-          delegated: area.packages.assigned.length,
-          total: area.packages.assigned.length + area.packages.available.length,
-        })}
-        color='company'
-      />
-    ) : null;
-
-  const permissionsBadge =
-    !isSm && showPermissions ? <PermissionBadge permissions={permissions} /> : null;
-
+  const showPackagesCountBadge = !isSm && showPackagesCount;
+  const showPermissionsBadge = !isSm && showPermissions;
   const showUndelegatedPackageWarning =
     !isSm &&
     showPermissions &&
@@ -58,10 +46,18 @@ export const AreaItem = ({
       colorTheme='company'
       iconUrl={area.iconUrl}
       badge={
-        packagesCountBadge || permissionsBadge || showUndelegatedPackageWarning ? (
+        showPackagesCountBadge || showPermissionsBadge || showUndelegatedPackageWarning ? (
           <>
-            {packagesCountBadge}
-            {permissionsBadge}
+            {showPackagesCountBadge && (
+              <Badge
+                label={t('access_packages.delegated_packages_count_badge', {
+                  delegated: area.packages.assigned.length,
+                  total: area.packages.assigned.length + area.packages.available.length,
+                })}
+                color='company'
+              />
+            )}
+            {showPermissionsBadge && <PermissionBadge permissions={permissions} />}
             {showUndelegatedPackageWarning && <UndelegatedPackageWarning />}
           </>
         ) : undefined

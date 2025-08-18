@@ -87,7 +87,7 @@ export const useAreaPackageList = ({
                   ...pkg,
                   deletableStatus,
                   inherited: deletableStatus !== DeletableStatus.FullyDeletable,
-                  permissions: pkgAccess.permissions,
+                  permissions: pkgAccess.permissions ?? [],
                 };
                 pkgAcc.assigned.push(acquiredPkg);
               } else if (showAllPackages) {
