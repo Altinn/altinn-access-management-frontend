@@ -18,6 +18,7 @@ export const PoaOverviewPage = () => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
   useDocumentTitle(t('poa_overview_page.page_title'));
+  const partyUuid = getCookie('AltinnPartyUuid') || undefined;
 
   useRerouteIfLimitedPreview();
 
@@ -25,8 +26,8 @@ export const PoaOverviewPage = () => {
     <PageWrapper>
       <PageLayoutWrapper>
         <PartyRepresentationProvider
-          fromPartyUuid={getCookie('AltinnPartyUuid')}
-          actingPartyUuid={getCookie('AltinnPartyUuid')}
+          fromPartyUuid={partyUuid}
+          actingPartyUuid={partyUuid ?? ''}
         >
           <DsHeading
             level={1}
@@ -36,8 +37,8 @@ export const PoaOverviewPage = () => {
           </DsHeading>
           <RightsTabs
             packagesPanel={<AccessPackagePermissions />}
-            singleRightsPanel={''}
-            roleAssignmentsPanel={''}
+            singleRightsPanel={null}
+            roleAssignmentsPanel={null}
           />
         </PartyRepresentationProvider>
       </PageLayoutWrapper>
