@@ -75,6 +75,8 @@
     "ssn": "Fødselsnummer",
     "last_name": "Etternavn",
     "subunit": "Underenhet",
+    "subunit_lowercase": "underenhet",
+    "mainunit_lowercase": "hovedenhet",
     "date_of_birth": "Født"
   },
   "beta_banner": {
@@ -295,6 +297,7 @@
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
     "main_page_heading": "Brukarar med fullmakter i {{name}}",
+    "sub_heading": "org.nr. {{org_number}}",
     "user_list_heading": "Andre med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller virksomheter",
     "no_users": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import { ConnectionUserType, type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
 import { formatDateToNorwegian } from '@/resources/utils';
 
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
@@ -19,6 +19,8 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
 interface UserItemProps
   extends Pick<UserListItemProps, 'size' | 'titleAs' | 'subUnit' | 'interactive'> {
   user: ExtendedUser | User;
+  showRoles?: boolean;
+  roleDirection?: 'toUser' | 'fromUser';
 }
 
 const userHeadingLevelForMapper = (level?: ElementType) => {
@@ -41,6 +43,9 @@ export const UserItem = ({
   size = 'lg',
   titleAs,
   interactive = false,
+  showRoles = true,
+  roleDirection = 'toUser',
+  subUnit = false,
   ...props
 }: UserItemProps) => {
   const limitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
@@ -56,19 +61,38 @@ export const UserItem = ({
       ),
     [user, hasInheritingUsers],
   );
+
   const roleCodes = isExtendedUser(user) && user.roles ? getRoleCodesForKeyRoles(user.roles) : [];
+
+  const isSubOrMainUnit =
+    isExtendedUser(user) &&
+    user.type === ConnectionUserType.Organization &&
+    user.roles?.some((role) => role.code === 'hovedenhet');
+  const hasSubUnitRole = isSubOrMainUnit && roleDirection === 'fromUser';
+
   const description = (user: ExtendedUser | User) => {
-    if (user.type === 'Person') {
+    if (user.type === ConnectionUserType.Person) {
       const formattedDate = formatDateToNorwegian(user.keyValues?.DateOfBirth);
       return formattedDate ? t('common.date_of_birth') + ' ' + formattedDate : undefined;
-    } else if (user.type === 'Organisasjon') {
-      return t('common.org_nr') + ' ' + user.keyValues?.OrganizationIdentifier;
+    } else if (user.type === ConnectionUserType.Organization) {
+      return (
+        t('common.org_nr') +
+        ' ' +
+        user.keyValues?.OrganizationIdentifier +
+        (isSubOrMainUnit
+          ? ` (${t(hasSubUnitRole ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
+          : '')
+      );
     }
     return undefined;
   };
 
   const type =
-    user.type === 'Person' ? 'person' : user.type === 'Organisasjon' ? 'company' : 'system';
+    user.type === ConnectionUserType.Person
+      ? 'person'
+      : user.type === ConnectionUserType.Organization
+        ? 'company'
+        : 'system';
 
   return (
     <UserListItem
@@ -77,7 +101,7 @@ export const UserItem = ({
       id={user.id}
       name={user.name}
       description={description(user)}
-      roleNames={roleCodes.map((r) => t(`${r}`))}
+      roleNames={showRoles ? roleCodes.map((r) => t(`${r}`)) : undefined}
       type={type}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}
@@ -97,6 +121,7 @@ export const UserItem = ({
             )
       }
       titleAs={titleAs}
+      subUnit={subUnit || hasSubUnitRole}
     >
       {hasInheritingUsers && isExpanded && (
         <List className={classes.inheritingUsers}>
@@ -106,7 +131,9 @@ export const UserItem = ({
               user={child}
               size='sm'
               titleAs={userHeadingLevelForMapper(titleAs)}
-              subUnit={child.type === 'Organization'}
+              subUnit={child.type === ConnectionUserType.Organization}
+              roleDirection={roleDirection}
+              showRoles={showRoles}
             />
           ))}
         </List>
