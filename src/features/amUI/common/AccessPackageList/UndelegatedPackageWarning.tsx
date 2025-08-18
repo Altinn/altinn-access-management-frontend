@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { ExtendedAccessPackage } from './useAreaPackageList';
 import classes from './UndelegatedPackageWarning.module.css';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 const CRITICAL_URN_SUBSTRING = 'post-til-virksomheten-med-taushetsbelagt-innhold';
 
@@ -13,14 +14,16 @@ export const isCriticalAndUndelegated = (pkg: ExtendedAccessPackage) => {
 
 export const UndelegatedPackageWarning = () => {
   const { t } = useTranslation();
+  const isSmall = useIsMobileOrSmaller();
+
   return (
     <Typography
       size='sm'
       data-color='danger'
       className={classes.criticalAndUndelegatedBadge}
     >
-      <ExclamationmarkTriangleIcon aria-hidden='true' />
-      {t('access_packages.no_permissions')}
+      <ExclamationmarkTriangleIcon title={isSmall ? t('access_packages.no_permissions') : ''} />
+      {!isSmall && t('access_packages.no_permissions')}
     </Typography>
   );
 };

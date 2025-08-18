@@ -32,11 +32,9 @@ export const AreaItem = ({
     .filter((p) => p !== undefined);
 
   const showPackagesCountBadge = !isSm && showPackagesCount;
-  const showPermissionsBadge = !isSm && showPermissions;
+  const showPermissionsBadge = showPermissions;
   const showUndelegatedPackageWarning =
-    !isSm &&
-    showPermissions &&
-    area.packages.available.some((pkg) => isCriticalAndUndelegated(pkg));
+    showPermissions && area.packages.available.some((pkg) => isCriticalAndUndelegated(pkg));
 
   return (
     <AccessAreaListItem
