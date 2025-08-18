@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 export const rerouteIfNotConfetti = () => {
@@ -7,11 +8,13 @@ export const rerouteIfNotConfetti = () => {
   }
 };
 
-export const rerouteIfLimitedPreview = () => {
+export const useRerouteIfLimitedPreview = () => {
   const navigate = useNavigate();
-  if (window.featureFlags.displayLimitedPreviewLaunch === true) {
-    navigate('/not-found');
-  }
+  useEffect(() => {
+    if (window.featureFlags?.displayLimitedPreviewLaunch === true) {
+      navigate('/not-found');
+    }
+  }, [navigate]);
 };
 
 export const availableForUserTypeCheck = (userType?: string) => {
