@@ -37,8 +37,6 @@ interface AreaItemContentProps {
   isActionLoading?: boolean;
   showAvailablePackages?: boolean;
   useDeleteConfirm?: boolean;
-  enableActions?: boolean;
-  enableDelegationCheck?: boolean;
   showAvailableToggle?: boolean;
   showPermissions?: boolean;
 }
@@ -53,8 +51,6 @@ export const AreaItemContent = ({
   isActionLoading = false,
   showAvailablePackages: showAvailablePackagesExternal = false,
   useDeleteConfirm,
-  enableActions = true,
-  enableDelegationCheck = true,
   showAvailableToggle = true,
   showPermissions = false,
 }: AreaItemContentProps) => {
@@ -73,9 +69,7 @@ export const AreaItemContent = ({
   };
   const { displayLimitedPreviewLaunch } = window.featureFlags;
   const shouldShowDelegationCheck =
-    enableDelegationCheck &&
-    !!availableActions?.includes(DelegationAction.DELEGATE) &&
-    !displayLimitedPreviewLaunch;
+    !!availableActions?.includes(DelegationAction.DELEGATE) && !displayLimitedPreviewLaunch;
   const { canDelegate, isUninitialized, isLoading } = useAccessPackageDelegationCheck(
     availablePackageIds,
     shouldShowDelegationCheck && showAvailablePackages,
@@ -115,7 +109,6 @@ export const AreaItemContent = ({
               onSelect={onSelect}
               hasAccess
               controls={
-                enableActions &&
                 !isSm &&
                 pkg.deletableStatus !== DeletableStatus.NotDeletable &&
                 revokeActionControl(pkg)
@@ -177,7 +170,6 @@ export const AreaItemContent = ({
                   </>
                 }
                 controls={
-                  enableActions &&
                   !isSm && (
                     <DelegateAccessPackageActionControl
                       isLoading={(isUninitialized && shouldShowDelegationCheck) || isActionLoading}
