@@ -34,6 +34,7 @@ export interface AccessPackage {
   resources: PackageResource[];
   isAssignable: boolean;
   area: AccessArea;
+  urn?: string;
 }
 
 export interface AccessPackageDelegation {

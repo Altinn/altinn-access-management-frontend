@@ -21,6 +21,7 @@ export interface ExtendedAccessArea extends AccessArea {
 export interface ExtendedAccessPackage extends AccessPackage {
   deletableStatus?: DeletableStatus;
   inherited?: boolean;
+  permissions?: Permissions[];
 }
 
 interface useAreaPackagesProps {
@@ -55,7 +56,7 @@ export const useAreaPackageList = ({
       party: actingParty?.partyUuid ?? '',
     },
     {
-      skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid,
+      skip: (!toParty?.partyUuid && !fromParty?.partyUuid) || !actingParty?.partyUuid,
     },
   );
 
@@ -86,6 +87,7 @@ export const useAreaPackageList = ({
                   ...pkg,
                   deletableStatus,
                   inherited: deletableStatus !== DeletableStatus.FullyDeletable,
+                  permissions: pkgAccess.permissions ?? [],
                 };
                 pkgAcc.assigned.push(acquiredPkg);
               } else if (showAllPackages) {

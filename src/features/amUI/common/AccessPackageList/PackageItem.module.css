@@ -1,0 +1,10 @@
+.noPermissions {
+  color: var(--ds-color-danger-base-default);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.warningIcon {
+  font-size: 1.3rem;
+}
