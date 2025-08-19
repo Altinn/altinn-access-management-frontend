@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { CompactPackage, Permissions } from '@/dataObjects/dtos/accessPackage';
+import { getPackageDetails } from 'storybook/internal/common';
 
 export interface AccessArea {
   id: string;
@@ -14,8 +15,13 @@ export interface AccessArea {
 export interface PackageResource {
   id: string;
   name: string;
+  title: string;
   description: string;
   provider: ResourceProvider;
+  resourceOwnerName: string;
+  resourceOwnerLogoUrl: string;
+  resourceOwnerOrgNumber: string;
+  resourceOwnerType: string;
 }
 
 export interface ResourceProvider {
@@ -35,6 +41,7 @@ export interface AccessPackage {
   isAssignable: boolean;
   area: AccessArea;
   urn?: string;
+  permissions?: Permissions[];
 }
 
 export interface AccessPackageDelegation {
@@ -72,6 +79,16 @@ export const accessPackageApi = createApi({
     >({
       query: ({ from, to, party = getCookie('AltinnPartyUuid') }) => {
         return `delegations?from=${from}&to=${to}&party=${party}`;
+      },
+      providesTags: ['AccessPackages'],
+      keepUnusedDataFor: 10, // seconds
+    }),
+    getPackagePermissionDetails: builder.query<
+      AccessPackage,
+      { from?: string; to?: string; party?: string; packageId: string }
+    >({
+      query: ({ from, to, party = getCookie('AltinnPartyUuid'), packageId }) => {
+        return `permission/${packageId}?from=${from ?? ''}&to=${to ?? ''}&party=${party}`;
       },
       providesTags: ['AccessPackages'],
       keepUnusedDataFor: 10, // seconds
@@ -129,6 +146,7 @@ export const accessPackageApi = createApi({
 export const {
   useSearchQuery,
   useGetUserDelegationsQuery,
+  useGetPackagePermissionDetailsQuery,
   useRevokeDelegationMutation,
   useDelegatePackageMutation,
   useDelegationCheckMutation,

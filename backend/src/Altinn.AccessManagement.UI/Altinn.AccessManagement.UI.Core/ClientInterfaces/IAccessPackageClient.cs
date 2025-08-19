@@ -44,5 +44,13 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// <param name="packageId">The access package which the right holder is to lose access to on behalf of the given party (from)</param>
                 /// <returns>A HttpResponseMessage denoting whether or not the action was successful.</returns>
                 Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string packageId);
+
+                /// <summary>
+                /// Fetch a single access package by id
+                /// </summary>
+                /// <param name="languageCode">the language to use in texts returned</param>
+                /// <param name="packageId">the id of the package</param>
+                /// <returns>The access package</returns>
+                Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId);
         }
 }

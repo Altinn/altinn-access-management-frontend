@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
@@ -59,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>
         public async Task<Dictionary<Guid, List<PackagePermission>>> GetDelegations(Guid party, Guid? to, Guid? from, string languageCode)
         {
-            PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
+            PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, null, languageCode);
             IEnumerable<PackagePermission> accesses = paginatedAccesses.Items;
 
             var sortedAccesses = new Dictionary<Guid, List<PackagePermission>>();
@@ -79,6 +80,35 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return sortedAccesses;
+        }
+        
+        /// <inheritdoc />
+        public async Task<AccessPackageFE> GetSinglePackagePermission(Guid party, Guid? to, Guid? from, Guid packageId, string languageCode)
+        {
+            PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, packageId, languageCode);
+            var package = await GetAccessPackageById(languageCode, packageId);
+            var permission = paginatedAccesses.Items.FirstOrDefault();
+            if (package != null && permission != null)
+            {
+                return new AccessPackageFE
+                {
+                    Id = package.Id.ToString(),
+                    Urn = package.Urn,
+                    Name = package.Name,
+                    IsAssignable = package.IsAssignable,
+                    Description = package.Description,
+                    Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources),
+                    Permissions = permission.Permissions.ToList()
+                };
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc />
+        public async Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
+        {
+            return await _accessPackageClient.GetAccessPackageById(languageCode, packageId);
         }
 
         /// <inheritdoc />

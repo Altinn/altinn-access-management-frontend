@@ -663,5 +663,15 @@
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt",
     "heading": "Fullmaktsoversikt for {{fromparty}}"
+  },
+  "package_poa_details_page": {
+    "page_title": "Fullmaktsdetaljar",
+    "heading": "Detaljar for {{package}}",
+    "users_tab_title": "Brukarar",
+    "services_tab_title": "Tenester",
+    "users-tab": {
+      "title": "Brukarar med tilgang",
+      "description": "desse brukarane har fullmakt til alle tenestene i tilgangspakken på vegner av {{fromparty}}"
+    }
   }
 }

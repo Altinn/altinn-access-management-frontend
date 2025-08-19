@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, string languageCode)
+        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, Guid? packageId, string languageCode)
         {
             Util.ThrowExceptionIfTriggerParty(from.ToString());
 
@@ -132,6 +132,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return new HttpResponseMessage(HttpStatusCode.NoContent);
             }
             throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
+        }
+
+        public Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

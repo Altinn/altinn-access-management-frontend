@@ -55,6 +55,31 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
+        {
+            string endpointUrl = $"meta/info/accesspackages/package/{packageId}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                return null;
+            }
+            else if (response.StatusCode == HttpStatusCode.OK)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<AccessPackage>(responseContent, _serializerOptions);
+            }
+            else
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
+                throw error;
+            }
+        }
+
+        /// <inheritdoc />
         public async Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString)
         {
             string endpointUrl = $"meta/info/accesspackages/search/?term={searchString}";
@@ -81,9 +106,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, string languageCode)
+        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, Guid? packageId, string languageCode)
         {
-            string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}";
+            string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}&packageId={packageId}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
 

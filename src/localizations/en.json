@@ -666,5 +666,15 @@
   "poa_overview_page": {
     "page_title": "Power of attorney overview",
     "heading": "Power of attorney overview for {{fromparty}}"
+  },
+  "package_poa_details_page": {
+    "page_title": "Power of attorney details",
+    "heading": "Details for {{package}}",
+    "users_tab_title": "Users",
+    "services_tab_title": "Services",
+    "users-tab": {
+      "title": "Users with access",
+      "description": "These users have power of attorney for all the services in the access package on behalf of {{fromparty}}"
+    }
   }
 }

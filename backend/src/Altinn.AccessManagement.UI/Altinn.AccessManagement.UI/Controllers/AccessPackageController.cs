@@ -65,6 +65,42 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        ///     Get a single access package by id
+        /// </summary>
+        /// <param name="id">The id of the package</param>
+        /// <returns>The access package</returns>
+        [HttpGet("package/{id}")]
+        [Authorize]
+        public async Task<ActionResult<AccessPackage>> GetPackageById([FromRoute] Guid id)
+        {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            try
+            {
+                var result = await _accessPackageService.GetAccessPackageById(languageCode, id);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, 500, "Unexpected exception occurred during fetching of access package"));
+            }
+        }
+
+        /// <summary>
         ///     Get all access package accesses granted to or from someone (one or more of the two must be specified)
         /// </summary>
         /// <returns>A dictionary of lists (sorted by access area-id) containing all access package delegations that the right holder has on behalf of the specified right owner</returns>
@@ -101,6 +137,52 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch
             {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, 500, "Unexpected exception occurred during fetching of access package delegations"));
+            }
+        }
+
+        /// <summary>
+        ///     Get a single access package and its permissions
+        /// </summary>
+        /// <returns>The package and its permissions</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("permission/{packageId}")]
+        public async Task<ActionResult<AccessPackageFE>> GetSinglePackagePermission([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to, [FromRoute] Guid packageId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!from.HasValue && !to.HasValue)
+            {
+                return BadRequest("Either 'from' or 'to' query parameter must be provided.");
+            }
+
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            try
+            {
+                var result = await _accessPackageService.GetSinglePackagePermission(party, to, from, packageId, languageCode);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                
+                return Ok(result);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+                
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, 500, "Unexpected exception occurred during fetching of access package permission"));
             }
         }
 
