@@ -48,12 +48,13 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
     }
   };
 
-  const canConsentBeRevoked = consent?.consentRequestEvents.every(
-    (event) =>
-      event.eventType !== 'Rejected' &&
-      event.eventType !== 'Revoked' &&
-      event.eventType !== 'Deleted',
-  );
+  const canConsentBeRevoked =
+    consent?.consentRequestEvents.every(
+      (event) =>
+        event.eventType !== 'Rejected' &&
+        event.eventType !== 'Revoked' &&
+        event.eventType !== 'Deleted',
+    ) && new Date(consent.validTo) > new Date();
 
   if (isLoadingConsent) {
     return (
@@ -169,7 +170,10 @@ const ConsentStatus = ({ events, validTo }: ConsentStatusProps) => {
   const hasRejectEvent = events.some((event) => event.eventType === 'Rejected');
   const isPastValidTo = new Date(validTo) < new Date();
 
-  if (hasAcceptEvent && !hasRevokeEvent) {
+  if (isPastValidTo) {
+    statusClass = classes.inactive;
+    statusText = t('active_consents.status_expired');
+  } else if (hasAcceptEvent && !hasRevokeEvent) {
     statusClass = classes.active;
     statusText = t('active_consents.status_active');
   } else if (hasAcceptEvent && hasRevokeEvent) {
@@ -178,9 +182,6 @@ const ConsentStatus = ({ events, validTo }: ConsentStatusProps) => {
   } else if (hasRejectEvent) {
     statusClass = classes.inactive;
     statusText = t('active_consents.status_rejected'); // trenger vi denne?
-  } else if (isPastValidTo) {
-    statusClass = classes.inactive;
-    statusText = t('active_consents.status_expired'); // trenger vi denne?
   }
 
   return (
