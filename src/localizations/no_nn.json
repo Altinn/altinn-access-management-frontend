@@ -258,6 +258,8 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
   },
   "access_packages": {
+    "helptext_button": "Kva er tilgangspakker?",
+    "helptext_content": "Tilgangspakkar er ei samling av skjema og tenester som handlar om same tema. Desse skal erstatte altinn-roller og vil bli fylte med fleire tenester etter kvart.",
     "given_packages_title": "Mottatte tilgangspakker",
     "available_packages_title": "Tilgjengelege tilgangspakker",
     "other_available": "Andre tilgjengelege",

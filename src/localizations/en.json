@@ -262,6 +262,8 @@
     "delete_singleRight_error_message": "Failed to delete access to "
   },
   "access_packages": {
+    "helptext_button": "What are access packages?",
+    "helptext_content": "Access packages are a collection of forms and services that deal with the same topic. These will replace Altinn roles and will be filled with more services over time.",
     "given_packages_title": "Currently held access packages",
     "available_packages_title": "Available access packages",
     "other_available": "Other available",
