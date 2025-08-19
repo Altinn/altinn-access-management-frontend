@@ -121,17 +121,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             // look up all party names in one call instead of one by one
-            IEnumerable<string> partyUuids = activeConsents.Value.Select(consent => GetUrnValue(consent.To));
+            IEnumerable<string> partyUuids = activeConsents.Value.Aggregate(new List<string> { }, (acc, consent) => [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From)]).Distinct();
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
 
             IEnumerable<ConsentListItemFE> consentListItems = activeConsents.Value.Select(consent =>
             {
                 Party toParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.To));
+                Party fromParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.From));
                 return new ConsentListItemFE()
                 {
                     Id = consent.Id,
+                    IsPoa = consent.TemplateId == "poa", // TODO, bedre sjekk, event vurder om vi må vite hva som er poa og samtykke
                     ToPartyId = consent.To,
                     ToPartyName = toParty?.Name ?? string.Empty,
+                    FromPartyId = consent.From,
+                    FromPartyName = fromParty?.Name ?? string.Empty,
+                    ValidTo = consent.ValidTo,
+                    ConsentRequestEvents = consent.ConsentRequestEvents,
                 };
             });
             

@@ -673,6 +673,24 @@
     "confirm_revoke_consent": "Yes, revoke consent",
     "confirm_revoke_poa": "Yes, revoke power of attorney"
   },
+  "consent_log": {
+    "page_title": "Agreement log - Altinn",
+    "heading": "Agreement log",
+    "loading_consent_log": "Loading agreement log...",
+    "loading_consent_log_error": "Could not load agreement log",
+    "search_log": "Search agreement log",
+    "view_consent": "View consent",
+    "view_poa": "View power of attorney",
+    "expires": "Expires {{expires}}",
+    "consent_expired": "{{to}}: consent expired",
+    "poa_expired": "{{to}}: power of attorney expired",
+    "consent_revoked": "{{to}}: consent revoked",
+    "poa_revoked": "{{to}}: consent revoked",
+    "consent_accepted": "{{to}}: was granted consent from {{from}}",
+    "poa_accepted": "{{to}}: was granted power of attorney from {{from}}",
+    "no_results": "No consent or power of attorney was found for this search",
+    "no_active_consents": "There area no agreements in agreement log yet"
+  },
   "consent_errors": {
     "not_authorized_for_consent": "User is not authorized to give consent/power of attorney",
     "consent_not_found": "Consent/power of attorney does not exist",

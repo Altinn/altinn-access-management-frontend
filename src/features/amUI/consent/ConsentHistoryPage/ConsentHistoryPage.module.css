@@ -1,0 +1,14 @@
+.consentHistoryPage {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-size-8);
+}
+
+.consentSearchField {
+  max-width: 20rem;
+}
+
+.consentDialog {
+  max-width: 50rem;
+}

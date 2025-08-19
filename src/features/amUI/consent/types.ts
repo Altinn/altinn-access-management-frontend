@@ -32,8 +32,13 @@ export interface ConsentRequest {
 
 export interface ActiveConsentListItem {
   id: string;
+  isPoa: boolean;
   toPartyId: string;
   toPartyName: string;
+  fromPartyId: string;
+  fromPartyName: string;
+  validTo: string;
+  consentRequestEvents: ConsentRequestEvents[];
 }
 export interface Consent {
   id: string;
