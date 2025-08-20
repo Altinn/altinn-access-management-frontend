@@ -76,6 +76,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
           <ConsentStatus
             events={consent.consentRequestEvents}
             validTo={consent.validTo}
+            isPoa={consent.isPoa}
           />
           {canConsentBeRevoked && (
             <DsPopover.TriggerContext>
@@ -157,9 +158,10 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
 interface ConsentStatusProps {
   events: ConsentRequestEvents[];
   validTo: string;
+  isPoa?: boolean;
 }
 
-const ConsentStatus = ({ events, validTo }: ConsentStatusProps) => {
+const ConsentStatus = ({ events, validTo, isPoa }: ConsentStatusProps) => {
   const { t } = useTranslation();
 
   let statusClass = '';
@@ -167,29 +169,24 @@ const ConsentStatus = ({ events, validTo }: ConsentStatusProps) => {
 
   const hasAcceptEvent = events.some((event) => event.eventType === 'Accepted');
   const hasRevokeEvent = events.some((event) => event.eventType === 'Revoked');
-  const hasRejectEvent = events.some((event) => event.eventType === 'Rejected');
   const isPastValidTo = new Date(validTo) < new Date();
 
   if (isPastValidTo) {
-    statusClass = classes.inactive;
-    statusText = t('active_consents.status_expired');
+    statusClass = classes.statusInactive;
+    statusText = isPoa
+      ? t('active_consents.status_poa_expired')
+      : t('active_consents.status_consent_expired');
   } else if (hasAcceptEvent && !hasRevokeEvent) {
-    statusClass = classes.active;
-    statusText = t('active_consents.status_active');
+    statusClass = classes.statusActive;
+    statusText = isPoa
+      ? t('active_consents.status_poa_active')
+      : t('active_consents.status_consent_active');
   } else if (hasAcceptEvent && hasRevokeEvent) {
-    statusClass = classes.inactive;
-    statusText = t('active_consents.status_revoked');
-  } else if (hasRejectEvent) {
-    statusClass = classes.inactive;
-    statusText = t('active_consents.status_rejected'); // trenger vi denne?
+    statusClass = classes.statusInactive;
+    statusText = isPoa
+      ? t('active_consents.status_poa_revoked')
+      : t('active_consents.status_consent_revoked');
   }
 
-  return (
-    <div className={classes.statusContainer}>
-      <div className={cn(classes.statusIcon, statusClass)} />
-      <div>
-        {t('active_consents.status')}: {statusText}
-      </div>
-    </div>
-  );
+  return <div className={cn(classes.statusContainer, statusClass)}>{statusText}</div>;
 };

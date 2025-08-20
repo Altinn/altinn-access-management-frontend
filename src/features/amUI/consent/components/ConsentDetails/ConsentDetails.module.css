@@ -23,21 +23,15 @@
 }
 
 .statusContainer {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-size-4);
+  border-radius: 9999px;
+  padding: 0 var(--ds-size-3);
+  color: var(--ds-color-base-contrast-default);
 }
 
-.statusIcon {
-  border-radius: 50%;
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.statusIcon.active {
+.statusActive {
   background-color: var(--ds-color-success-base-hover);
 }
 
-.statusIcon.inactive {
+.statusInactive {
   background-color: var(--ds-color-danger-base-default);
 }
