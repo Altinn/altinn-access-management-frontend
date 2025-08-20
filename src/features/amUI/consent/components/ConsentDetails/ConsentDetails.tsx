@@ -31,6 +31,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
   const {
     data: consent,
     isLoading: isLoadingConsent,
+    isFetching: isFetchingConsent,
     error: loadConsentError,
     refetch: refetchConsent,
   } = useGetConsentQuery({ consentId });
@@ -41,8 +42,8 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
   const handleRevokeConsent = async (): Promise<void> => {
     try {
       await revokeConsent({ consentId }).unwrap();
+      await refetchConsent();
       setIsPopoverOpen(false);
-      refetchConsent();
     } catch {
       // Error is already tracked via revokeConsentError
     }
@@ -55,6 +56,8 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
         event.eventType !== 'Revoked' &&
         event.eventType !== 'Deleted',
     ) && new Date(consent.validTo) > new Date();
+
+  const isRevoking = isRevokingConsent || isFetchingConsent;
 
   if (isLoadingConsent) {
     return (
@@ -82,7 +85,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
             <DsPopover.TriggerContext>
               <DsPopover.Trigger
                 variant='tertiary'
-                disabled={isRevokingConsent}
+                disabled={isRevoking}
                 onClick={() => setIsPopoverOpen(true)}
               >
                 <EraserIcon />
@@ -92,10 +95,12 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
               </DsPopover.Trigger>
               <DsPopover
                 open={isPopoverOpen}
+                placement='bottom'
+                className={classes.revokePopover}
                 data-color='danger'
                 onClose={() => setIsPopoverOpen(false)}
               >
-                <DsParagraph>
+                <DsParagraph className={classes.popoverText}>
                   {consent.isPoa
                     ? t('active_consents.revoke_poa_text')
                     : t('active_consents.revoke_consent_text')}
@@ -103,12 +108,10 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
                 <div className={classes.popoverButtonRow}>
                   <DsButton
                     data-color='danger'
-                    disabled={isRevokingConsent}
+                    disabled={isRevoking}
                     onClick={handleRevokeConsent}
                   >
-                    {isRevokingConsent && (
-                      <DsSpinner aria-label={t('active_consents.revoking_consent')} />
-                    )}
+                    {isRevoking && <DsSpinner aria-label={t('active_consents.revoking_consent')} />}
                     {consent.isPoa
                       ? t('active_consents.confirm_revoke_poa')
                       : t('active_consents.confirm_revoke_consent')}

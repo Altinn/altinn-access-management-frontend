@@ -16,10 +16,17 @@
   margin-top: var(--ds-size-4);
 }
 
+.revokePopover {
+  max-width: none;
+}
 .popoverButtonRow {
   display: flex;
   gap: var(--ds-size-4);
   margin-top: var(--ds-size-4);
+  padding-right: var(--ds-size-12);
+}
+.popoverText {
+  max-width: 15rem;
 }
 
 .statusContainer {
@@ -27,11 +34,9 @@
   padding: 0 var(--ds-size-3);
   color: var(--ds-color-base-contrast-default);
 }
-
 .statusActive {
   background-color: var(--ds-color-success-base-hover);
 }
-
 .statusInactive {
   background-color: var(--ds-color-danger-base-default);
 }
