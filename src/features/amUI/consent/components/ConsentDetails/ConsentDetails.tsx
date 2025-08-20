@@ -46,6 +46,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
       setIsPopoverOpen(false);
     } catch {
       // Error is already tracked via revokeConsentError
+      setIsPopoverOpen(false);
     }
   };
 
