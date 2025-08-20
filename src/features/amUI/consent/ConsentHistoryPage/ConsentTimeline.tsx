@@ -58,17 +58,24 @@ export const ConsentTimeline = ({ activeConsents, showConsentDetails }: ConsentT
               key={item.consentEventId}
             >
               <TimelineActivity byline={item.bylineText}>
-                <div>{item.timelineText}</div>
-                {item.validToText && <DsParagraph data-size='xs'>{item.validToText}</DsParagraph>}
-                <span>
-                  <Button
-                    size='xs'
-                    variant='text'
-                    onClick={() => showConsentDetails(item.consentId)}
+                <div>
+                  <DsParagraph
+                    data-size='md'
+                    className={classes.timelineTitle}
                   >
-                    {item.isPoa ? t('consent_log.view_poa') : t('consent_log.view_consent')}
-                  </Button>
-                </span>
+                    {item.timelineText}
+                  </DsParagraph>
+                  {item.validToText && <DsParagraph data-size='xs'>{item.validToText}</DsParagraph>}
+                  <span>
+                    <Button
+                      size='xs'
+                      variant='dotted'
+                      onClick={() => showConsentDetails(item.consentId)}
+                    >
+                      {item.isPoa ? t('consent_log.view_poa') : t('consent_log.view_consent')}
+                    </Button>
+                  </span>
+                </div>
               </TimelineActivity>
             </TimelineSegment>
           );
