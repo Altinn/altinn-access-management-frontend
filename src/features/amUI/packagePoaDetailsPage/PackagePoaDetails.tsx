@@ -5,19 +5,22 @@ import {
   DsParagraph,
   DsTabs,
   List,
-  ListItem,
   ResourceListItem,
   Skeleton,
   UserListItem,
 } from '@altinn/altinn-components';
-import { t } from 'i18next';
 import { useParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
-import { useResourceList } from '../common/DelegationModal/AccessPackages/useResourceList';
+import { useTranslation } from 'react-i18next';
+import {
+  getRoleCodesForKeyRoleCodes,
+  getRoleCodesForKeyRoles,
+} from '../common/UserRoles/roleUtils';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
   const { data: accessPackage, isLoading } = useGetPackagePermissionDetailsQuery(
     {
@@ -60,10 +63,8 @@ export const PackagePoaDetails = () => {
                 key={permission.to.id}
                 name={permission.to.name}
                 type={permission.to.type === 'Organisasjon' ? 'company' : 'person'}
-                description={permission.role?.code}
-                // roleNames={permission.role?.code}
+                roleNames={getRoleCodesForKeyRoleCodes(permission.roleCodes).map((r) => t(`${r}`))}
                 titleAs={'h3'}
-                // subUnit={permission.to.subUnit}
                 loading={isLoading}
                 id={permission.to.id}
               />

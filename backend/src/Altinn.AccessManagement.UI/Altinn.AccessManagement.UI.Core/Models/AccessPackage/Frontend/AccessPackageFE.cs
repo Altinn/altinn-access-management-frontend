@@ -40,6 +40,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         /// <summary>
         /// Permissions
         /// </summary>
-        public List<Permission> Permissions { get; set; }
+        public List<PermissionFE> Permissions { get; set; }
     }
 }

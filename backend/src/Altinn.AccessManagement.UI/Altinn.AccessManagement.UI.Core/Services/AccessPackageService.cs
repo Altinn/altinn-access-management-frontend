@@ -81,14 +81,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return sortedAccesses;
         }
-        
+
         /// <inheritdoc />
         public async Task<AccessPackageFE> GetSinglePackagePermission(Guid party, Guid? to, Guid? from, Guid packageId, string languageCode)
         {
             PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, packageId, languageCode);
             var package = await GetAccessPackageById(languageCode, packageId);
-            var permission = paginatedAccesses.Items.FirstOrDefault();
-            if (package != null && permission != null)
+            var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
+            if (package != null && packagePermissions != null)
             {
                 return new AccessPackageFE
                 {
@@ -98,11 +98,29 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     IsAssignable = package.IsAssignable,
                     Description = package.Description,
                     Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources),
-                    Permissions = permission.Permissions.ToList()
+                    Permissions = ConvertToPermissionFE(packagePermissions.Permissions)
                 };
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Converts a list of Permission objects to a list of PermissionFE objects, grouping by To.Id and collecting role codes.
+        /// </summary>
+        /// <param name="permissions">The list of Permission objects to convert.</param>
+        /// <returns>A list of PermissionFE objects.</returns>
+        public static List<PermissionFE> ConvertToPermissionFE(IEnumerable<Permission> permissions)
+        {
+            return permissions
+                .GroupBy(p => p.To.Id)
+                .Select(g => new PermissionFE
+                {
+                    From = g.First().From, // Take From from first permission in group
+                    To = g.First().To,
+                    RoleCodes = g.Select(p => p.Role?.Code).Where(code => !string.IsNullOrEmpty(code)).Distinct().ToList()
+                })
+                .ToList();
         }
 
         /// <inheritdoc />
