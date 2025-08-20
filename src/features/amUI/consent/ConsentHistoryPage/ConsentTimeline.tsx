@@ -9,7 +9,7 @@ import {
   TimelineSegment,
 } from '@altinn/altinn-components';
 import classes from './ConsentHistoryPage.module.css';
-import { ActiveConsentListItem, ConsentRequestEvents } from '../types';
+import { ActiveConsentListItem, ConsentRequestEventType } from '../types';
 import { TFunction } from 'i18next';
 
 interface ConsentTimelineProps {
@@ -105,15 +105,18 @@ const getTimeLineItems = (
 ): TimelineItem[] => {
   const getTimeLineText = (
     consent: ActiveConsentListItem,
-    event: ConsentRequestEvents,
+    eventType: ConsentRequestEventType | 'Expired',
     t: TFunction<'translation', undefined>,
   ): string => {
-    let textKey = `Ukjent hendelse ${event.eventType}`;
-    if (event.eventType === 'Accepted') {
+    let textKey = `Ukjent hendelse ${eventType}`;
+    if (eventType === 'Accepted') {
       textKey = consent.isPoa ? 'consent_log.poa_accepted' : 'consent_log.consent_accepted';
     }
-    if (event.eventType === 'Revoked') {
+    if (eventType === 'Revoked') {
       textKey = consent.isPoa ? 'consent_log.poa_revoked' : 'consent_log.consent_revoked';
+    }
+    if (eventType === 'Expired') {
+      textKey = consent.isPoa ? 'consent_log.poa_expired' : 'consent_log.consent_expired';
     }
 
     return t(textKey, { to: consent.toPartyName, from: consent.fromPartyName });
@@ -127,7 +130,7 @@ const getTimeLineItems = (
           return {
             consentEventId: event.consentEventID,
             bylineText: toTimeStamp(event.created, true),
-            timelineText: getTimeLineText(consent, event, t),
+            timelineText: getTimeLineText(consent, event.eventType, t),
             validToText:
               event.eventType === 'Accepted'
                 ? t('consent_log.expires', { expires: toTimeStamp(consent.validTo) })
@@ -144,10 +147,7 @@ const getTimeLineItems = (
         consentTimelineItems.push({
           consentEventId: Math.random().toString(36).substring(2, 15), // Generate a unique ID for the expired event
           bylineText: toTimeStamp(consent.validTo, true),
-          timelineText: t(
-            consent.isPoa ? 'consent_log.poa_expired' : 'consent_log.consent_expired',
-            { to: consent.toPartyName },
-          ),
+          timelineText: getTimeLineText(consent, 'Expired', t),
           validToText: '',
           created: consent.validTo,
           fromPartyName: consent.fromPartyName,
