@@ -13,5 +13,10 @@
     "id": "6c7a60bb-b6a9-4902-92eb-919f8c9c1338",
     "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
     "toPartyName": "STA TOM TIGER AS"
+  },
+  {
+    "id": "9d466fd8-8d51-4a49-8269-8daddf4adad2",
+    "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "toPartyName": "STA TOM TIGER AS"
   }
 ]
