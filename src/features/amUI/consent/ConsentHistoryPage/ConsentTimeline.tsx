@@ -58,7 +58,7 @@ export const ConsentTimeline = ({ activeConsents, showConsentDetails }: ConsentT
               key={item.consentEventId}
             >
               <TimelineActivity byline={item.bylineText}>
-                <div>
+                <div className={classes.timelineContent}>
                   <DsParagraph
                     data-size='md'
                     className={classes.timelineTitle}
