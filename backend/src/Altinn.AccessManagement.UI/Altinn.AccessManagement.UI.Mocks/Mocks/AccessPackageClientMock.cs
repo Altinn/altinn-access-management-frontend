@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using System.Linq;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -138,23 +139,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             try
             {
-                // Reuse existing mock data used for search and pick the requested package
                 string dataPath = Path.Combine(dataFolder, "AccessPackage", "packages.json");
                 IEnumerable<SearchObject<AccessPackage>> searchResults =
                     Util.GetMockData<IEnumerable<SearchObject<AccessPackage>>>(dataPath);
 
-                AccessPackage result = null;
-                if (searchResults != null)
-                {
-                    foreach (var sr in searchResults)
-                    {
-                        if (sr?.Object?.Id == packageId)
-                        {
-                            result = sr.Object;
-                            break;
-                        }
-                    }
-                }
+                AccessPackage result = searchResults?.FirstOrDefault(sr => sr?.Object?.Id == packageId)?.Object;
 
                 return Task.FromResult(result);
             }

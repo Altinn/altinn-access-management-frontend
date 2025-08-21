@@ -190,7 +190,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+            AssertCollections(expected.Permissions, actual.Permissions, AssertEqual);
         }
+
+
 
         /// <summary>
         ///     Assert that two <see cref="AccessPackageResourceFE" /> have the same property in the same positions.
@@ -453,6 +456,17 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertEqual(expected.Via, actual.Via);
             AssertEqual(expected.Role, actual.Role);
             AssertEqual(expected.ViaRole, actual.ViaRole);
+
+        }
+
+        public static void AssertEqual(PermissionFE expected, PermissionFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            AssertEqual(expected.To, actual.To);
+            AssertEqual(expected.From, actual.From);
+            AssertCollections(expected.RoleCodes, actual.RoleCodes);
 
         }
 

@@ -65,55 +65,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Get an access package by its ID
-        /// </summary>
-        /// <returns>The access package with the specified ID, or NotFound if it doesn't exist.</returns>
-        [HttpGet("package/{id}")]
-        [Authorize]
-        public async Task<ActionResult<AccessPackage>> GetPackageById([FromRoute] Guid id)
-        {
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            try
-            {
-                var result = await _accessPackageService.GetAccessPackageById(languageCode, id);
-                if (result == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(result);
-            }
-            catch (HttpStatusException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return NotFound();
-                }
-                if (ex.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
-
-                string responseContent = ex.Message;
-                return new ObjectResult(
-                    ProblemDetailsFactory.CreateProblemDetails(
-                        HttpContext,
-                        (int?)ex.StatusCode,
-                        "Unexpected HttpStatus response",
-                        detail: responseContent));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected exception in GetPackageById for {PackageId}", id);
-                return new ObjectResult(
-                    ProblemDetailsFactory.CreateProblemDetails(
-                        HttpContext,
-                        500,
-                        "Unexpected exception occurred during fetching of access package"));
-            }
-        }
-
-        /// <summary>
         ///     Get all access package accesses granted to or from someone (one or more of the two must be specified)
         /// </summary>
         /// <returns>A dictionary of lists (sorted by access area-id) containing all access package delegations that the right holder has on behalf of the specified right owner</returns>
@@ -192,10 +143,6 @@ namespace Altinn.AccessManagement.UI.Controllers
 
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
-            catch
-            {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, 500, "Unexpected exception occurred during fetching of access package permission"));
             }
         }
 

@@ -124,7 +124,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Dictionary<Guid, List<PackagePermission>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermission>>>(await response.Content.ReadAsStringAsync(), options);
-            
+
             Assert.True(new HashSet<Guid>(expectedResult.Keys).SetEquals(actualResult.Keys));
             foreach (Guid key in actualResult.Keys)
             {
@@ -193,6 +193,73 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
+        }
+
+        /// <summary>
+        ///    Test case: Get single package permission for a valid package
+        ///    Expected: Returns OK and some content
+        /// </summary>
+        [Fact]
+        public async Task GetSinglePackagePermission_ReturnsOk_OnValidInput()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            // string to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string party = from;
+            string packageId = "1dba50d6-f604-48e9-bd41-82321b13e85c";
+            var expectedResult = Util.GetMockData<PackagePermission>(_expectedDataPath + $"/AccessPackage/GetSinglePackagePermission/{from}.json");
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/permission/{packageId}?party={party}&from={from}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var result = JsonSerializer.Deserialize<PackagePermission>(await response.Content.ReadAsStringAsync(), options);
+            Assert.NotEmpty(await response.Content.ReadAsStringAsync());
+            AssertionUtil.AssertEqual(expectedResult, result);
+        }
+
+        /// <summary>
+        ///    Test case: Get single package permission for a non-existent package
+        ///    Expected: Returns NotFound
+        /// </summary>
+        [Fact]
+        public async Task GetSinglePackagePermission_ReturnsNotFound_When_PackageNotFound()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string party = from;
+            string packageId = "00000000-0000-0000-0000-000000000000";
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/permission/{packageId}?party={party}&from={from}&to={to}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: Missing from and to query parameters
+        ///    Expected: Returns BadRequest with explanatory message
+        /// </summary>
+        [Fact]
+        public async Task GetSinglePackagePermission_MissingFromAndTo_ReturnsBadRequest()
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string party = "b0a79f3d-4cef-430a-9774-301b754e0f6f";
+            string packageId = "9d2ec6e9-5148-4f47-9ae4-4536f6c9c1cb";
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/permission/{packageId}?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("\"Either 'from' or 'to' query parameter must be provided.\"", await response.Content.ReadAsStringAsync());
         }
 
         [Theory]
