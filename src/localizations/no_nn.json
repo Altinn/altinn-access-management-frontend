@@ -107,6 +107,7 @@
     "users": "Brukere",
     "reportees": "Våre tilganger hos andre",
     "systemaccess": "API- og systemtilganger",
+    "consent": "Samtykker og fullmakter",
     "poa_overview": "Fullmakter"
   },
   "error_page": {
