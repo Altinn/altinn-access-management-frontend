@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { CompactPackage, Permissions } from '@/dataObjects/dtos/accessPackage';
-import { getPackageDetails } from 'storybook/internal/common';
 
 export interface AccessArea {
   id: string;
@@ -91,7 +90,7 @@ export const accessPackageApi = createApi({
         return `permission/${packageId}?from=${from ?? ''}&to=${to ?? ''}&party=${party}`;
       },
       providesTags: ['AccessPackages'],
-      keepUnusedDataFor: 10, // seconds
+      keepUnusedDataFor: 100, // seconds
     }),
     revokeDelegation: builder.mutation<
       void,

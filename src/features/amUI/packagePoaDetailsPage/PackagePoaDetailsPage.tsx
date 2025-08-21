@@ -15,6 +15,7 @@ import { useRerouteIfLimitedPreview } from '@/resources/utils/featureFlagUtils';
 
 import { PackagePoaDetails } from './PackagePoaDetails';
 import { amUIPath } from '@/routes/paths/amUIPath';
+import { Navigate } from 'react-router';
 
 export const PackagePoaDetailsPage = () => {
   const { t } = useTranslation();
@@ -25,13 +26,24 @@ export const PackagePoaDetailsPage = () => {
 
   useRerouteIfLimitedPreview();
 
+  // Redirect to overview if cookie is missing to satisfy provider invariants
+  if (!partyUuid) {
+    return (
+      <Navigate
+        to={`/${amUIPath.PoaOverview}`}
+        replace
+      />
+    );
+  }
+
   return (
     <PageWrapper>
       <PageLayoutWrapper>
         <PageContainer backUrl={`/${amUIPath.PoaOverview}`}>
           <PartyRepresentationProvider
             fromPartyUuid={partyUuid}
-            actingPartyUuid={partyUuid ?? ''}
+            actingPartyUuid={partyUuid}
+            returnToUrlOnError={`/${amUIPath.PoaOverview}`}
           >
             <PackagePoaDetails />
           </PartyRepresentationProvider>

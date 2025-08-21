@@ -65,10 +65,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Get a single access package by id
+        /// Get an access package by its ID
         /// </summary>
-        /// <param name="id">The id of the package</param>
-        /// <returns>The access package</returns>
+        /// <returns>The access package with the specified ID, or NotFound if it doesn't exist.</returns>
         [HttpGet("package/{id}")]
         [Authorize]
         public async Task<ActionResult<AccessPackage>> GetPackageById([FromRoute] Guid id)
@@ -86,17 +85,31 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (HttpStatusException ex)
             {
+                if (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return NotFound();
+                }
                 if (ex.StatusCode == HttpStatusCode.NoContent)
                 {
                     return NoContent();
                 }
 
                 string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                return new ObjectResult(
+                    ProblemDetailsFactory.CreateProblemDetails(
+                        HttpContext,
+                        (int?)ex.StatusCode,
+                        "Unexpected HttpStatus response",
+                        detail: responseContent));
             }
-            catch
+            catch (Exception ex)
             {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, 500, "Unexpected exception occurred during fetching of access package"));
+                _logger.LogError(ex, "Unexpected exception in GetPackageById for {PackageId}", id);
+                return new ObjectResult(
+                    ProblemDetailsFactory.CreateProblemDetails(
+                        HttpContext,
+                        500,
+                        "Unexpected exception occurred during fetching of access package"));
             }
         }
 
@@ -167,7 +180,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     return NotFound();
                 }
-                
+
                 return Ok(result);
             }
             catch (HttpStatusException ex)
@@ -176,7 +189,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     return NoContent();
                 }
-                
+
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }

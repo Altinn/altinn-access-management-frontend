@@ -136,7 +136,36 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // Reuse existing mock data used for search and pick the requested package
+                string dataPath = Path.Combine(dataFolder, "AccessPackage", "packages.json");
+                IEnumerable<SearchObject<AccessPackage>> searchResults =
+                    Util.GetMockData<IEnumerable<SearchObject<AccessPackage>>>(dataPath);
+
+                AccessPackage result = null;
+                if (searchResults != null)
+                {
+                    foreach (var sr in searchResults)
+                    {
+                        if (sr?.Object?.Id == packageId)
+                        {
+                            result = sr.Object;
+                            break;
+                        }
+                    }
+                }
+
+                return Task.FromResult(result);
+            }
+            catch
+            {
+                throw new HttpStatusException(
+                    "StatusError",
+                    "Unexpected mockResponse status from Access Management",
+                    HttpStatusCode.BadRequest,
+                    "");
+            }
         }
     }
 }

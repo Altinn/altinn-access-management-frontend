@@ -13,10 +13,7 @@ import { useParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { useTranslation } from 'react-i18next';
-import {
-  getRoleCodesForKeyRoleCodes,
-  getRoleCodesForKeyRoles,
-} from '../common/UserRoles/roleUtils';
+import { getRoleCodesForKeyRoleCodes } from '../common/UserRoles/roleUtils';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();

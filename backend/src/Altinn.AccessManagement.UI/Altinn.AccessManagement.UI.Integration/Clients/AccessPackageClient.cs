@@ -74,8 +74,23 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             else
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
-                throw error;
+                HttpStatusException? error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
+                if (error is not null)
+                {
+                    throw error;
+                }
+
+                _logger.LogError(
+                    "Unexpected response from Access Management for {Endpoint} with status {StatusCode}. Body: {Body}",
+                    endpointUrl,
+                    response.StatusCode,
+                    responseContent);
+
+                throw new HttpStatusException(
+                    "StatusError",
+                    "Unexpected response status from Access Management",
+                    response.StatusCode,
+                    Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
             }
         }
 
