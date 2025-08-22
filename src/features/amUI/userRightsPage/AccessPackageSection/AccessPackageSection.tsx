@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsAlert, DsHeading } from '@altinn/altinn-components';
+import { Button, DsAlert, DsButton, DsHeading, DsPopover } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -13,6 +13,9 @@ import { TabContentSkeleton } from '../../common/RightsTabs/TabContentSkeleton';
 
 import { ActiveDelegations } from './ActiveDelegations';
 import { AccessPackageInfoAlert } from './AccessPackageInfoAlert';
+import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
+
+import classes from './AccessPackageSection.module.css';
 
 export const AccessPackageSection = () => {
   const { t } = useTranslation();
@@ -48,13 +51,25 @@ export const AccessPackageSection = () => {
         <TabContentSkeleton />
       ) : (
         <>
-          <DsHeading
-            level={2}
-            data-size='2xs'
-            id='access_packages_title'
-          >
-            {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
-          </DsHeading>
+          <div className={classes.headerSection}>
+            <DsHeading
+              level={2}
+              data-size='2xs'
+              id='access_packages_title'
+            >
+              {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
+            </DsHeading>
+            <DsPopover.TriggerContext>
+              <DsPopover.Trigger
+                icon
+                variant='tertiary'
+                aria-label={t('access_packages.helptext_button')}
+              >
+                <QuestionmarkCircleIcon />
+              </DsPopover.Trigger>
+              <DsPopover>{t('access_packages.helptext_content')}</DsPopover>
+            </DsPopover.TriggerContext>
+          </div>
           {(toParty?.partyTypeName === PartyType.Organization || !displayLimitedPreviewLaunch) && (
             <DelegationModal
               delegationType={DelegationType.AccessPackage}

@@ -156,7 +156,12 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         text={
           <>
             {t('beta_banner.info')}{' '}
-            <DsLink href={getHostUrl() + 'ui/profile'}>{t('beta_banner.link')}</DsLink>
+            <DsLink
+              data-color='neutral'
+              href={getHostUrl() + 'ui/profile'}
+            >
+              {t('beta_banner.link')}
+            </DsLink>
           </>
         }
         color='warning'

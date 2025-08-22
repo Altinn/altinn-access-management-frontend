@@ -83,7 +83,7 @@ export const UserList = ({
             className={classes.showMoreButton}
             onClick={goNextPage}
             disabled={!hasNextPage}
-            variant='text'
+            variant='outline'
             size='md'
           >
             {t('common.show_more')}

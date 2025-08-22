@@ -159,13 +159,15 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
                   {t('delete_user.yes_button')}
                 </Button>
               )}
-              <Button
-                color='neutral'
-                variant='text'
-                onClick={() => dialogRef.current?.close()}
-              >
-                {t(isDeletionNotAllowed ? 'common.close' : 'common.cancel')}
-              </Button>
+              {!isDeletionNotAllowed && (
+                <Button
+                  color='neutral'
+                  variant='text'
+                  onClick={() => dialogRef.current?.close()}
+                >
+                  {t('common.cancel')}
+                </Button>
+              )}
             </div>
           </div>
         )}

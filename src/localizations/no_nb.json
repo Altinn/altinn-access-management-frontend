@@ -261,6 +261,8 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
   },
   "access_packages": {
+    "helptext_button": "Hva er tilgangspakker?",
+    "helptext_content": "Tilgangspakker er en samling av skjema og tjenester som handler om samme tema. Disse skal erstatte Altinn-roller og vil fylles med flere tjenester etter hvert.",
     "given_packages_title": "Mottatte tilgangspakker",
     "available_packages_title": "Tilgjengelige tilgangspakker",
     "other_available": "Andre tilgjengelige",
@@ -277,7 +279,7 @@
     "package_number_of_resources": "{{count}} tjenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
     "no_matching_search": "Ingen treff på søket",
-    "info_alert_text": "Tilgangspakker vil etterhvert erstatte roller i Altinns tilgangstyringsløsning. De er kanskje litt tomme nå, men de vil snart bli fylt opp med tjenester.",
+    "info_alert_text": "Tilgangspakker vil etter hvert erstatte de tradisjonelle Altinn-rollene. De er kanskje litt tomme nå, men de vil snart bli fylt opp med tjenester.",
     "person_info_alert": "Det er ikke mulig å gi og fjerne fullmakter til personer helt enda. Dette vil komme senere.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
