@@ -101,6 +101,7 @@ export const ActiveConsentsPage = () => {
                   subItems={groupedActiveConsents[partyId].map((item) => ({
                     id: item.id,
                     title: item.toPartyName,
+                    isPoa: item.isPoa,
                   }))}
                   onClick={showConsentDetails}
                 />
@@ -123,7 +124,7 @@ export const ActiveConsentsPage = () => {
 
 interface ConsentListItemProps {
   title: string;
-  subItems: { id: string; title: string }[];
+  subItems: { id: string; title: string; isPoa: boolean }[];
   onClick: (consentId: string) => void;
 }
 const ConsentListItem = ({ title, subItems, onClick }: ConsentListItemProps): React.ReactNode => {
@@ -152,7 +153,7 @@ const ConsentListItem = ({ title, subItems, onClick }: ConsentListItemProps): Re
             badge={{
               className: classes.consentBadge,
               variant: 'text',
-              label: t('active_consents.see_consent'),
+              label: item.isPoa ? t('active_consents.see_poa') : t('active_consents.see_consent'),
               theme: 'transparent',
             }}
             linkIcon
