@@ -60,11 +60,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>
         public async Task<Dictionary<Guid, List<PackagePermission>>> GetDelegations(Guid party, Guid? to, Guid? from, string languageCode)
         {
-            PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, null, languageCode);
+            PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
             IEnumerable<PackagePermission> accesses = paginatedAccesses.Items;
 
             var sortedAccesses = new Dictionary<Guid, List<PackagePermission>>();
-
             foreach (PackagePermission access in accesses)
             {
                 Guid areaId = access.Package.AreaId;
@@ -85,8 +84,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<AccessPackageFE> GetSinglePackagePermission(Guid party, Guid? to, Guid? from, Guid packageId, string languageCode)
         {
-            PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, packageId, languageCode);
             var package = await GetAccessPackageById(languageCode, packageId);
+
+            // The package-id filter of the GetAccessPackageAccesses method is 
+            // currently not implemented on the backend so we have to do a 
+            // manual filter until it is fixed
+            PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
             var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
             if (package != null && packagePermissions != null)
             {

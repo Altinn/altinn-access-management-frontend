@@ -74,23 +74,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             else
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                HttpStatusException? error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
-                if (error is not null)
-                {
-                    throw error;
-                }
-
-                _logger.LogError(
-                    "Unexpected response from Access Management for {Endpoint} with status {StatusCode}. Body: {Body}",
-                    endpointUrl,
-                    response.StatusCode,
-                    responseContent);
-
-                throw new HttpStatusException(
-                    "StatusError",
-                    "Unexpected response status from Access Management",
-                    response.StatusCode,
-                    Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
+                HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
+                throw error;
             }
         }
 
@@ -121,9 +106,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, Guid? packageId, string languageCode)
+        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, string languageCode)
         {
-            string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}&packageId={packageId}";
+            string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
 
