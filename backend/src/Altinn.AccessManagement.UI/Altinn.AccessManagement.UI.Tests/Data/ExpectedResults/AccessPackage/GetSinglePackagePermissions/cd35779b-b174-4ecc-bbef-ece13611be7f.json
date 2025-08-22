@@ -39,7 +39,13 @@
         "parent": null,
         "children": null
       },
-      "roleCodes": ["rettighetshaver"]
+      "via": null,
+      "role": {
+        "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+        "code": "rettighetshaver",
+        "children": null
+      },
+      "viaRole": null
     }
   ]
 }
