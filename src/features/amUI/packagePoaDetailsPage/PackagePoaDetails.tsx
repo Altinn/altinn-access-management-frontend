@@ -1,24 +1,35 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import classes from './PackagePoaDetailsPage.module.css';
 import {
   DsHeading,
   DsParagraph,
+  DsSearch,
   DsTabs,
   List,
   ResourceListItem,
   Skeleton,
-  UserListItem,
 } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { useTranslation } from 'react-i18next';
-import { getRoleCodesForKeyRoleCodes } from '../common/UserRoles/roleUtils';
+import type { Connection, User } from '@/rtk/features/userInfoApi';
+import { UserList } from '../common/UserList/UserList';
+import { debounce } from '@/resources/utils/debounce';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
+  const [searchString, setSearchString] = useState<string>('');
+
+  const onSearch = useCallback(
+    debounce((newSearchString: string) => {
+      setSearchString(newSearchString);
+    }, 300),
+    [],
+  );
+
   const { data: accessPackage, isLoading } = useGetPackagePermissionDetailsQuery(
     {
       from: fromParty?.partyUuid ?? '',
@@ -26,7 +37,33 @@ export const PackagePoaDetails = () => {
     },
     { skip: !id },
   );
+
+  const connections: Connection[] = useMemo(() => {
+    const group: Record<string, Connection> = {};
+    for (const { to, role, viaRole } of accessPackage?.permissions ?? []) {
+      if (!group[to.id]) {
+        const party: User = {
+          id: to.id,
+          name: to.name,
+          type: to.type,
+          variant: to.variant,
+          children: null,
+          keyValues: null,
+        };
+        group[to.id] = { party, roles: [], connections: [] };
+      }
+      const entry = group[to.id];
+      [role].forEach((r) => {
+        if (r && !entry.roles.some((er) => er.code === r.code)) {
+          entry.roles.push({ id: r.id, code: r.code });
+        }
+      });
+    }
+    return Object.values(group);
+  }, [accessPackage?.permissions]);
+
   const [chosenTab, setChosenTab] = useState('users');
+
   return (
     <div>
       <Skeleton loading={isLoading}>
@@ -54,19 +91,30 @@ export const PackagePoaDetails = () => {
           className={classes.tabContent}
           value='users'
         >
-          <List>
-            {accessPackage?.permissions?.map((permission) => (
-              <UserListItem
-                key={permission.to.id}
-                name={permission.to.name}
-                type={permission.to.type === 'Organisasjon' ? 'company' : 'person'}
-                roleNames={getRoleCodesForKeyRoleCodes(permission.roleCodes).map((r) => t(`${r}`))}
-                titleAs={'h3'}
-                loading={isLoading}
-                id={permission.to.id}
-              />
-            ))}
-          </List>
+          <DsSearch className={classes.searchBar}>
+            <DsSearch.Input
+              aria-label={t('users_page.user_search_placeholder')}
+              placeholder={t('users_page.user_search_placeholder')}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                onSearch(event.target.value)
+              }
+            />
+            <DsSearch.Clear
+              onClick={() => {
+                setSearchString('');
+              }}
+            />
+          </DsSearch>
+
+          <UserList
+            connections={connections}
+            searchString={searchString}
+            showRoles
+            listItemTitleAs='h3'
+            isLoading={isLoading}
+            interactive={false}
+            disableLinks
+          />
         </DsTabs.Panel>
         <DsTabs.Panel
           className={classes.tabContent}
@@ -84,6 +132,7 @@ export const PackagePoaDetails = () => {
                 ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
                 ownerName={resource.resourceOwnerName ?? ''}
                 resourceName={resource.title ?? ''}
+                interactive={false}
               />
             ))}
           </List>

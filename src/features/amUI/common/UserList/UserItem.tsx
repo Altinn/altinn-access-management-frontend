@@ -21,6 +21,7 @@ interface UserItemProps
   user: ExtendedUser | User;
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
+  disableLinks?: boolean;
 }
 
 const userHeadingLevelForMapper = (level?: ElementType) => {
@@ -46,6 +47,7 @@ export const UserItem = ({
   showRoles = true,
   roleDirection = 'toUser',
   subUnit = false,
+  disableLinks = false,
   ...props
 }: UserItemProps) => {
   const limitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
@@ -106,19 +108,22 @@ export const UserItem = ({
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}
       interactive={interactive}
-      linkIcon={!hasInheritingUsers}
+      linkIcon={!hasInheritingUsers && !disableLinks}
       onClick={() => {
         if (hasInheritingUsers) setExpanded(!isExpanded);
       }}
       as={
         hasInheritingUsers
           ? 'button'
-          : (props) => (
-              <Link
-                {...props}
-                to={user.id}
-              />
-            )
+          : (props) =>
+              disableLinks ? (
+                <div {...props} />
+              ) : (
+                <Link
+                  {...props}
+                  to={user.id}
+                />
+              )
       }
       titleAs={titleAs}
       subUnit={subUnit || hasSubUnitRole}
@@ -134,6 +139,8 @@ export const UserItem = ({
               subUnit={child.type === ConnectionUserType.Organization}
               roleDirection={roleDirection}
               showRoles={showRoles}
+              interactive={interactive}
+              disableLinks={disableLinks}
             />
           ))}
         </List>

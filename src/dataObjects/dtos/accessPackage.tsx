@@ -6,7 +6,6 @@ export interface Permissions {
   via: Entity;
   role: CompactRole | null;
   viaRole: CompactRole | null;
-  roleCodes: string[];
 }
 
 export interface CompactPackage {

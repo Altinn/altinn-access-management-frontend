@@ -98,29 +98,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     IsAssignable = package.IsAssignable,
                     Description = package.Description,
                     Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources),
-                    Permissions = ConvertToPermissionFE(packagePermissions.Permissions)
+                    Permissions = packagePermissions.Permissions.ToList()
                 };
             }
-
+            
             return null;
-        }
-
-        /// <summary>
-        /// Converts a list of Permission objects to a list of PermissionFE objects, grouping by To.Id and collecting role codes.
-        /// </summary>
-        /// <param name="permissions">The list of Permission objects to convert.</param>
-        /// <returns>A list of PermissionFE objects.</returns>
-        public static List<PermissionFE> ConvertToPermissionFE(IEnumerable<Permission> permissions)
-        {
-            return permissions
-                .GroupBy(p => p.To.Id)
-                .Select(g => new PermissionFE
-                {
-                    From = g.First().From, // Take From from first permission in group
-                    To = g.First().To,
-                    RoleCodes = g.Select(p => p.Role?.Code).Where(code => !string.IsNullOrEmpty(code)).Distinct().ToList()
-                })
-                .ToList();
         }
 
         /// <inheritdoc />

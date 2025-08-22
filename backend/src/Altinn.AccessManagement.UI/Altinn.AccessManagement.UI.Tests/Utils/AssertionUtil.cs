@@ -459,17 +459,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         }
 
-        public static void AssertEqual(PermissionFE expected, PermissionFE actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            AssertEqual(expected.To, actual.To);
-            AssertEqual(expected.From, actual.From);
-            AssertCollections(expected.RoleCodes, actual.RoleCodes);
-
-        }
-
         public static void AssertEqual(CompactEntity expected, CompactEntity actual)
         {
             Assert.Equal(expected?.Id, actual?.Id);
