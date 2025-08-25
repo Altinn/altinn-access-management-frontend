@@ -19,6 +19,7 @@ export interface PackageResource {
   provider: ResourceProvider;
   resourceOwnerName: string;
   resourceOwnerLogoUrl: string;
+  resourceOwnerOrgcode: string;
   resourceOwnerOrgNumber: string;
   resourceOwnerType: string;
 }

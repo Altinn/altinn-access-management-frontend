@@ -10,12 +10,12 @@ import { type Connection, type User } from '@/rtk/features/userInfoApi';
 import { UserList } from '../common/UserList/UserList';
 import { debounce } from '@/resources/utils/debounce';
 import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
+import { useResourceList } from '../common/DelegationModal/AccessPackages/useResourceList';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const { fromParty, actingParty } = usePartyRepresentation();
-  console.log('🪵 ~ PackagePoaDetails ~ actingParty:', actingParty);
   const [searchString, setSearchString] = useState<string>('');
 
   const onSearch = useCallback(
@@ -123,22 +123,7 @@ export const PackagePoaDetails = () => {
           className={pageClasses.tabContent}
           value='services'
         >
-          <List>
-            {accessPackage?.resources.map((resource) => (
-              <ResourceListItem
-                key={resource.id}
-                id={resource.id}
-                as='button'
-                titleAs='h3'
-                size='md'
-                ownerLogoUrl={resource.resourceOwnerLogoUrl}
-                ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
-                ownerName={resource.resourceOwnerName ?? ''}
-                resourceName={resource.title ?? ''}
-                interactive={false}
-              />
-            ))}
-          </List>
+          {resourceList}
         </DsTabs.Panel>
       </DsTabs>
     </>
