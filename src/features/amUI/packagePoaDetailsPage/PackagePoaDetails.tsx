@@ -4,6 +4,7 @@ import {
   DsHeading,
   DsParagraph,
   DsSearch,
+  DsSkeleton,
   DsTabs,
   List,
   ResourceListItem,
@@ -71,14 +72,32 @@ export const PackagePoaDetails = () => {
   const [chosenTab, setChosenTab] = useState('users');
 
   return (
-    <div>
-      <DsHeading
-        level={1}
-        data-size='lg'
-      >
-        {t('package_poa_details_page.heading', { package: accessPackage?.name || '' })}
-      </DsHeading>
-      <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
+    <>
+      <div className={classes.headingContainer}>
+        {isLoading ? (
+          <>
+            <DsSkeleton
+              variant='rectangle'
+              width={550}
+              height={50}
+            />
+            <DsSkeleton
+              variant='text'
+              width={250}
+            />
+          </>
+        ) : (
+          <>
+            <DsHeading
+              level={1}
+              data-size='lg'
+            >
+              {t('package_poa_details_page.heading', { package: accessPackage?.name || '' })}
+            </DsHeading>
+            <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
+          </>
+        )}
+      </div>
       <DsTabs
         defaultValue='users'
         data-size='sm'
@@ -144,6 +163,6 @@ export const PackagePoaDetails = () => {
           </List>
         </DsTabs.Panel>
       </DsTabs>
-    </div>
+    </>
   );
 };
