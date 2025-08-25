@@ -49,8 +49,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("{partyId}")]
         public async Task<ActionResult> GetSystemUserListForLoggedInUser([FromRoute] int partyId, CancellationToken cancellationToken)
         {
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            Result<List<SystemUserFE>> list = await _systemUserService.GetAllSystemUsersForParty(partyId, languageCode, cancellationToken);
+            Result<List<SystemUserFE>> list = await _systemUserService.GetAllSystemUsersForParty(partyId, cancellationToken);
 
             if (list.IsProblem)
             {
@@ -93,8 +92,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("agent/{partyId}")]
         public async Task<ActionResult> GetAgentSystemUsersForParty([FromRoute] int partyId, CancellationToken cancellationToken)
         {
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            Result<List<SystemUserFE>> list = await _systemUserService.GetAgentSystemUsersForParty(partyId, languageCode, cancellationToken);
+            Result<List<SystemUserFE>> list = await _systemUserService.GetAgentSystemUsersForParty(partyId, cancellationToken);
 
             if (list.IsProblem)
             {

@@ -43,42 +43,42 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<SystemUserFE>>> GetAllSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken)
+        public async Task<Result<List<SystemUserFE>>> GetAllSystemUsersForParty(int partyId, CancellationToken cancellationToken)
         {
             List<SystemUser> lista = await _systemUserClient.GetSystemUsersForParty(partyId, cancellationToken);
 
-            return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
+            return await MapToSystemUsersFE(lista, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task<SystemUserFE> GetSpecificSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken)
         {
             SystemUser systemUser = await _systemUserClient.GetSpecificSystemUser(partyId, id, cancellationToken);
-            
+
             if (systemUser != null)
             {
-                return (await MapToSystemUsersFE([systemUser], languageCode, true, cancellationToken))[0] ?? null;
+                return await MapSingleStandardSystemUser(systemUser, languageCode, cancellationToken);
             }
 
             return null;
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken)
+        public async Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(int partyId, CancellationToken cancellationToken)
         {
             List<SystemUser> lista = await _systemUserClient.GetAgentSystemUsersForParty(partyId, cancellationToken);
 
-            return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
+            return await MapToSystemUsersFE(lista, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task<SystemUserFE> GetAgentSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken)
         {
             SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, id, cancellationToken);
-            
+
             if (systemUser != null)
             {
-                return (await MapToSystemUsersFE([systemUser], languageCode, true, cancellationToken))[0] ?? null;
+                return await MapSingleAgentSystemUser(systemUser, languageCode, cancellationToken);
             }
 
             return null;
@@ -98,20 +98,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return createdSystemUser;
         }
 
-        private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, string languageCode, bool includeRights, CancellationToken cancellationToken)
+        private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, CancellationToken cancellationToken)
         {
             List<PartyName> partyNames = await _registerClient.GetPartyNames(systemUsers.Select(x => x.SupplierOrgNo), cancellationToken);
             List<SystemUserFE> lista = new List<SystemUserFE>();
             foreach (SystemUser systemUser in systemUsers)
             {
-                RegisteredSystemRightsFE enrichedRights = new();
-                if (includeRights)
-                {
-                    // TODO: get rights from systemuser when API to look up actual rights is implmented
-                    RegisteredSystem system = await _systemRegisterClient.GetSystem(systemUser.SystemId, cancellationToken);
-                    enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(system.Rights, systemUser.AccessPackages, languageCode);
-                }
-
                 RegisteredSystemFE systemFE = new RegisteredSystemFE
                 {
                     SystemId = systemUser.SystemId,
@@ -128,13 +120,39 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Created = systemUser.Created,
                     System = systemFE,
                     SystemUserType = systemUser.SystemUserType,
-                    Resources = enrichedRights.Resources,
-                    AccessPackages = enrichedRights.AccessPackages
                 });
             }
-            
+
             List<SystemUserFE> sortedList = [.. lista.OrderByDescending(systemUser => systemUser.Created)];
             return sortedList;
+        }
+
+        private async Task<SystemUserFE> MapSingleStandardSystemUser(SystemUser systemUser, string languageCode, CancellationToken cancellationToken)
+        {
+            // map system user
+            SystemUserFE systemUserFE = (await MapToSystemUsersFE([systemUser], cancellationToken))[0];
+
+            // get access packages and rights
+            StandardSystemUserDelegations delegations = await _systemUserClient.GetListOfDelegationsForStandardSystemUser(systemUser.PartyId, systemUser.Id, cancellationToken);
+            RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(delegations.Rights, delegations.AccessPackages, languageCode);
+            systemUserFE.AccessPackages = enrichedRights.AccessPackages;
+            systemUserFE.Resources = enrichedRights.Resources;
+            return systemUserFE;
+        }
+
+        private async Task<SystemUserFE> MapSingleAgentSystemUser(SystemUser systemUser, string languageCode, CancellationToken cancellationToken)
+        {
+            // map system user
+            SystemUserFE systemUserFE = (await MapToSystemUsersFE([systemUser], cancellationToken))[0];
+
+            // TODO: get rights from systemuser when API to look up actual rights is implemented
+            RegisteredSystem system = await _systemRegisterClient.GetSystem(systemUser.SystemId, cancellationToken);
+
+            // get access packages and rights
+            RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(system.Rights, systemUser.AccessPackages, languageCode);
+            systemUserFE.AccessPackages = enrichedRights.AccessPackages;
+            systemUserFE.Resources = enrichedRights.Resources;
+            return systemUserFE;
         }
     }
 }

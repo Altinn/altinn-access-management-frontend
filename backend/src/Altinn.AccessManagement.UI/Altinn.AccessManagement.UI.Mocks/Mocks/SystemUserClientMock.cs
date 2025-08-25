@@ -132,6 +132,25 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new Result<List<Customer>>(customers));
         }
 
+        public Task<StandardSystemUserDelegations> GetListOfDelegationsForStandardSystemUser(string partyId, string systemuserId, CancellationToken cancellationToken)
+        {
+            List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
+            SystemUser systemUser = systemUsers.Find(s => s.Id == systemuserId.ToString() && s.PartyId == partyId.ToString());
+
+            // set single rights to rights of system
+            List<RegisteredSystem> systems = Util.GetMockData<List<RegisteredSystem>>($"{dataFolder}/SystemRegister/systems.json");
+            RegisteredSystem system = systems.Find(s => s.SystemId == systemUser.SystemId);
+            
+            StandardSystemUserDelegations delegations = new()
+            {
+                SystemUserId = Guid.Parse(systemuserId),
+                AccessPackages = systemUser.AccessPackages,
+                Rights = system.Rights
+            };
+
+            return Task.FromResult(delegations);
+        }
+
         internal static class TestErrors
         {
             private static readonly ProblemDescriptorFactory _factory

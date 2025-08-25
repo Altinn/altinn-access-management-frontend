@@ -259,5 +259,31 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        /// <inheritdoc/>
+        public async Task<StandardSystemUserDelegations> GetListOfDelegationsForStandardSystemUser(string partyId, string systemuserId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/{partyId}/${systemuserId}/delegations";
+
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<StandardSystemUserDelegations>(responseContent, _jsonSerializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserClient // GetListOfDelegationsForStandardSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetListOfDelegationsForStandardSystemUser // Exception");
+                throw;
+            }
+        }
     }
 }
