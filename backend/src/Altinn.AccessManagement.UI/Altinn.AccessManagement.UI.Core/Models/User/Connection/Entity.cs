@@ -43,6 +43,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         /// Gets or sets values from entityLoookup.
         /// Allowed keys: 
         /// - OrganizationIdentifier
+        /// - DateOfBirth
         /// - PartyId
         /// </summary>
         [JsonConverter(typeof(AllowedKeysDictionaryConverter))]

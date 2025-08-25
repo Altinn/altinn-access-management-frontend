@@ -39,7 +39,7 @@ export const UserList = ({
     searchString,
   });
 
-  const promptForNoResults = !isLoading && users?.length === 0 && canAdd;
+  const promptForNoResults = !isLoading && users?.length === 0;
 
   if (isLoading) {
     return (
@@ -59,11 +59,23 @@ export const UserList = ({
           {searchString.length === 0 ? (
             <DsParagraph data-size='md'>{t('users_page.no_users')}</DsParagraph>
           ) : (
-            <DsParagraph data-size='md'>
-              {t('users_page.user_no_search_result', { searchTerm: searchString })}
-            </DsParagraph>
+            <>
+              {canAdd ? (
+                <>
+                  <DsParagraph data-size='md'>
+                    {t('users_page.user_no_search_result_with_add_suggestion', {
+                      searchTerm: searchString,
+                    })}
+                  </DsParagraph>
+                  <NewUserButton isLarge />
+                </>
+              ) : (
+                <DsParagraph data-size='md'>
+                  {t('users_page.user_no_search_result', { searchTerm: searchString })}
+                </DsParagraph>
+              )}
+            </>
           )}
-          <NewUserButton isLarge />
         </div>
       )}
       <List spacing={2}>

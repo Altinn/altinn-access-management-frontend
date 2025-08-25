@@ -304,7 +304,8 @@
     "user_list_heading": "Andre med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
     "no_users": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
-    "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?"
+    "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
+    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?"
   },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",

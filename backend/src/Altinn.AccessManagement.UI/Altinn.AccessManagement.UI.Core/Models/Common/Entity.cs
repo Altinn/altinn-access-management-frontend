@@ -1,4 +1,7 @@
-﻿namespace Altinn.AccessManagement.UI.Core.Models.Common;
+﻿using Altinn.AccessManagement.UI.Core.Models.User;
+using Newtonsoft.Json;
+
+namespace Altinn.AccessManagement.UI.Core.Models.Common;
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!! END NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -99,7 +102,13 @@ public class CompactEntity
     // <summary>
     // Values from entityLoookup
     // </summary>
-    // public Dictionary<string, string> KeyValues { get; set; }
+    /// Allowed keys: 
+    /// - OrganizationIdentifier
+    /// - PartyId
+    /// - DateOfBirth
+    /// </summary>
+    [JsonConverter(typeof(AllowedKeysDictionaryConverter))]
+    public Dictionary<string, string> KeyValues { get; set; }
 }
 
 //// NOTE: Removing key values for now, to avoid person number

@@ -14,7 +14,6 @@ import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';
 import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
 import { AreaItemContent } from './AreaItemContent';
-import { JSX } from 'react';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;

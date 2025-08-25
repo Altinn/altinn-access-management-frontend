@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect, RefCallback } from 'react';
 import classes from './PackagePoaDetailsPage.module.css';
 import {
   DsHeading,
@@ -30,17 +30,23 @@ export const PackagePoaDetails = () => {
     [],
   );
 
+  useEffect(() => {
+    return () => {
+      (onSearch as any).cancel?.();
+    };
+  }, [onSearch]);
+
   const { data: accessPackage, isLoading } = useGetPackagePermissionDetailsQuery(
     {
       from: fromParty?.partyUuid ?? '',
       packageId: id || '',
     },
-    { skip: !id },
+    { skip: !id || !fromParty?.partyUuid },
   );
 
   const connections: Connection[] = useMemo(() => {
     const group: Record<string, Connection> = {};
-    for (const { to, role, viaRole } of accessPackage?.permissions ?? []) {
+    for (const { to, role } of accessPackage?.permissions ?? []) {
       if (!group[to.id]) {
         const party: User = {
           id: to.id,
@@ -48,7 +54,7 @@ export const PackagePoaDetails = () => {
           type: to.type,
           variant: to.variant,
           children: null,
-          keyValues: null,
+          keyValues: to.keyValues,
         };
         group[to.id] = { party, roles: [], connections: [] };
       }
@@ -66,15 +72,13 @@ export const PackagePoaDetails = () => {
 
   return (
     <div>
-      <Skeleton loading={isLoading}>
-        <DsHeading
-          level={1}
-          data-size='lg'
-        >
-          {t('package_poa_details_page.heading', { package: accessPackage?.name || '' })}
-        </DsHeading>
-        <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
-      </Skeleton>
+      <DsHeading
+        level={1}
+        data-size='lg'
+      >
+        {t('package_poa_details_page.heading', { package: accessPackage?.name || '' })}
+      </DsHeading>
+      <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
       <DsTabs
         defaultValue='users'
         data-size='sm'
@@ -101,6 +105,7 @@ export const PackagePoaDetails = () => {
             />
             <DsSearch.Clear
               onClick={() => {
+                onSearch.cancel?.();
                 setSearchString('');
               }}
             />
@@ -114,6 +119,7 @@ export const PackagePoaDetails = () => {
             isLoading={isLoading}
             interactive={false}
             disableLinks
+            canAdd={false}
           />
         </DsTabs.Panel>
         <DsTabs.Panel
