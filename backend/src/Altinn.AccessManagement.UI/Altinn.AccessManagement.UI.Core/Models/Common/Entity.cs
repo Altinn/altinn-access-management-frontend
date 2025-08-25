@@ -1,4 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.User;
+﻿﻿using Altinn.AccessManagement.UI.Core.Models.User;
 using Newtonsoft.Json;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Common;
@@ -102,7 +102,8 @@ public class CompactEntity
     // <summary>
     // Values from entityLoookup
     // </summary>
-    /// Allowed keys: 
+    /// <summary>
+    /// Values from entityLookup. Allowed keys:
     /// - OrganizationIdentifier
     /// - PartyId
     /// - DateOfBirth
@@ -110,5 +111,3 @@ public class CompactEntity
     [JsonConverter(typeof(AllowedKeysDictionaryConverter))]
     public Dictionary<string, string> KeyValues { get; set; }
 }
-
-//// NOTE: Removing key values for now, to avoid person number

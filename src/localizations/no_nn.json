@@ -667,7 +667,6 @@
   },
   "package_poa_details_page": {
     "page_title": "Fullmaktsdetaljar",
-    "heading": "Detaljar for {{package}}",
     "users_tab_title": "Brukarar",
     "services_tab_title": "Tenester",
     "users-tab": {

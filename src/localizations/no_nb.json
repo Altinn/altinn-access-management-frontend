@@ -670,7 +670,6 @@
   },
   "package_poa_details_page": {
     "page_title": "Fullmaktsdetaljer",
-    "heading": "Detaljer for {{package}}",
     "users_tab_title": "Brukere",
     "services_tab_title": "Tjenester",
     "users-tab": {

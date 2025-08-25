@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import type { Connection, User } from '@/rtk/features/userInfoApi';
 import { UserList } from '../common/UserList/UserList';
 import { debounce } from '@/resources/utils/debounce';
+import { PackageIcon } from '@navikt/aksel-icons';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -76,25 +77,35 @@ export const PackagePoaDetails = () => {
       <div className={classes.headingContainer}>
         {isLoading ? (
           <>
+            <PackageIcon className={classes.packageIcon} />
             <DsSkeleton
+              className={classes.pageHeading}
               variant='rectangle'
               width={550}
               height={50}
             />
             <DsSkeleton
+              className={classes.pageDescription}
               variant='text'
               width={250}
             />
           </>
         ) : (
           <>
+            <PackageIcon className={classes.packageIcon} />
             <DsHeading
               level={1}
               data-size='lg'
+              className={classes.pageHeading}
             >
-              {t('package_poa_details_page.heading', { package: accessPackage?.name || '' })}
+              {accessPackage?.name || ''}
             </DsHeading>
-            <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
+            <DsParagraph
+              variant='long'
+              className={classes.pageDescription}
+            >
+              {accessPackage?.description}
+            </DsParagraph>
           </>
         )}
       </div>

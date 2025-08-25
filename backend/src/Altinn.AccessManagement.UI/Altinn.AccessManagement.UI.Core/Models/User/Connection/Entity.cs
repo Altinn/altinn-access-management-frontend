@@ -40,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         public List<Entity> Children { get; set; }
 
         /// <summary>
-        /// Gets or sets values from entityLoookup.
+        /// Gets or sets values from entityLookup.
         /// Allowed keys: 
         /// - OrganizationIdentifier
         /// - DateOfBirth

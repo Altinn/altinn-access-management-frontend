@@ -670,7 +670,6 @@
   },
   "package_poa_details_page": {
     "page_title": "Power of attorney details",
-    "heading": "Details for {{package}}",
     "users_tab_title": "Users",
     "services_tab_title": "Services",
     "users-tab": {
