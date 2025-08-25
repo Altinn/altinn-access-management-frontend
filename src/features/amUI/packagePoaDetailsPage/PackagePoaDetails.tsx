@@ -65,6 +65,8 @@ export const PackagePoaDetails = () => {
 
   const [chosenTab, setChosenTab] = useState('users');
 
+  const resourceList = useResourceList(accessPackage?.resources ?? []);
+
   return (
     <>
       <div className={headerClasses.headingContainer}>
