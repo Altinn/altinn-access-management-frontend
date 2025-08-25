@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.User;
+﻿using System.Text.Json.Serialization;
+using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Common
 {
