@@ -48,8 +48,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   const { data: isAdmin } = useGetIsAdminQuery();
 
-  const onChangeLocale = (event: ChangeEvent<HTMLInputElement>) => {
-    const newLocale = event.target.value;
+  const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
@@ -179,7 +178,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
               { label: 'English', value: 'en', checked: i18n.language === 'en' },
             ],
-            onChange: onChangeLocale,
+            onSelect: onChangeLocale,
           },
           logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
           currentAccount: {
