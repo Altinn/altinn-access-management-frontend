@@ -102,6 +102,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common
         /// - DateOfBirth
         /// </summary>
         [JsonConverter(typeof(AllowedKeysDictionaryConverter))]
-        public Dictionary<string, string> KeyValues { get; set; }
+        public Dictionary<string, string> KeyValues { get; set; } = new();
     }
 }
