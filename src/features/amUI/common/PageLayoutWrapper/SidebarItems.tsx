@@ -1,10 +1,16 @@
 import React from 'react';
 import type { MenuItemProps, MenuItemSize } from '@altinn/altinn-components';
-import { InboxIcon, PersonGroupIcon, TenancyIcon, PadlockUnlockedIcon } from '@navikt/aksel-icons';
+import {
+  InboxIcon,
+  PersonGroupIcon,
+  TenancyIcon,
+  PadlockUnlockedIcon,
+  HandshakeIcon,
+} from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
 
-import { amUIPath, SystemUserPath } from '@/routes/paths';
+import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 
 /**
  * Generates a list of sidebar items for the page layout.
@@ -81,18 +87,33 @@ export const SidebarItems = (
     ),
   };
 
-  const systemUserPath = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
-  const systemUser: MenuItemProps = {
+  const consent: MenuItemProps = {
     groupId: 5,
     id: '5',
     size: 'md',
-    title: t('sidebar.systemaccess'),
-    icon: TenancyIcon,
-    selected: pathname?.includes(systemUserPath),
+    title: t('sidebar.consent'),
+    icon: HandshakeIcon,
+    selected: pathname?.includes(`/${ConsentPath.Consent}/`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     as: (props: any) => (
       <Link
-        to={systemUserPath}
+        to={`/${ConsentPath.Consent}/${ConsentPath.Active}`}
+        {...props}
+      />
+    ),
+  };
+
+  const systemUser: MenuItemProps = {
+    groupId: 6,
+    id: '6',
+    size: 'md',
+    title: t('sidebar.systemaccess'),
+    icon: TenancyIcon,
+    selected: pathname?.includes(`/${SystemUserPath.SystemUser}/`),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
+      <Link
+        to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}
         {...props}
       />
     ),
@@ -117,7 +138,7 @@ export const SidebarItems = (
     }
   }
 
-  items.push(systemUser);
+  items.push(consent, systemUser);
 
   return items;
 };
