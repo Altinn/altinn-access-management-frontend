@@ -1,5 +1,6 @@
 import type { ChangeEvent, ReactElement } from 'react';
 import React from 'react';
+import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import {
@@ -169,11 +170,10 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
 
   return (
     <>
-      <div className={classes.consentBlock}>
+      <div className={cn(classes.consentBlock, classes.headerBlock)}>
         <DsHeading
           level={1}
           data-size='md'
-          className={classes.topHeader}
         >
           {request.title[language]}
         </DsHeading>
@@ -201,20 +201,23 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
                 : t('consent_request.past_validto')}
             </DsAlert>
           )}
-          <DsParagraph className={classes.boldText}>{request.heading[language]}</DsParagraph>
-          {request.consentMessage && <DsParagraph>{request.consentMessage[language]}</DsParagraph>}
-          <DsHeading
-            level={2}
-            data-size='2xs'
-          >
+          <DsParagraph className={classes.heading}>{request.heading[language]}</DsParagraph>
+          {request.consentMessage && (
+            <DsParagraph className={classes.consentMessage}>
+              {request.consentMessage[language]}
+            </DsParagraph>
+          )}
+          <DsParagraph className={classes.serviceIntro}>
             {request.serviceIntro[language]}
-          </DsHeading>
+          </DsParagraph>
           <ConsentRights
             rights={request.rights}
             language={language}
           />
           <DsParagraph className={classes.expiration}>{request.expiration[language]}</DsParagraph>
-          {request.handledBy && <DsParagraph>{request.handledBy[language]}</DsParagraph>}
+          {request.handledBy && (
+            <DsParagraph className={classes.handledBy}>{request.handledBy[language]}</DsParagraph>
+          )}
           {approveConsentError && (
             <ConsentRequestError
               error={approveConsentError as { data: ProblemDetail }}

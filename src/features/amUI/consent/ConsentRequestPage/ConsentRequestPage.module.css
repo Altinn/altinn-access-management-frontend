@@ -7,23 +7,42 @@
 
 .consentBlock {
   background-color: var(--ds-color-accent-background-default);
-  padding: var(--vendor-container-padding);
+  padding: var(--ds-size-9) var(--ds-size-15);
+  margin-bottom: var(--ds-size-12);
+}
+.headerBlock {
+  padding-top: var(--ds-size-14);
   margin-bottom: 3px;
 }
 
 .consentContent {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-size-8);
   max-width: 55rem;
 }
 
-.expiration {
-  margin-top: var(--ds-size-4);
-  font-weight: 500;
+.heading {
+  font-weight: var(--ds-font-weight-semibold);
+  font-size: 1.125rem; /* should be --ds-body-md-font-size, but that is overridden to 1rem in Common.module.css */
+  margin-bottom: var(--ds-size-8);
 }
-.boldText {
-  font-weight: 500;
+
+.consentMessage {
+  margin-bottom: var(--ds-size-13);
+}
+
+.serviceIntro {
+  font-weight: var(--ds-font-weight-medium);
+  font-size: 1.125rem; /* should be --ds-body-md-font-size, but that is overridden to 1rem in Common.module.css */
+  margin-bottom: var(--ds-size-8);
+}
+
+.handledBy {
+  margin-top: var(--ds-size-5);
+}
+
+.expiration {
+  font-weight: var(--ds-font-weight-semibold);
 }
 
 .buttonRow {
@@ -31,20 +50,14 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: var(--ds-size-4);
-  margin-top: var(--ds-size-8);
+  margin-top: var(--ds-size-13);
+  margin-bottom: var(--ds-size-6);
 }
 
 @media only screen and (max-width: 769px) {
-  .topHeader {
-    padding: var(--ds-size-1) 0;
-    font-size: var(--ds-heading-2xs-font-size);
-  }
   .consentBlock {
-    padding: var(--ds-size-5);
+    padding-left: var(--ds-size-6);
+    padding-right: var(--ds-size-6);
     margin-bottom: 6px;
-  }
-  .expiration,
-  .buttonRow {
-    margin-top: 0;
   }
 }
