@@ -1,6 +1,5 @@
-﻿﻿using Altinn.AccessManagement.UI.Core.Models.User;
+﻿using Altinn.AccessManagement.UI.Core.Models.User;
 using Newtonsoft.Json;
-
 namespace Altinn.AccessManagement.UI.Core.Models.Common;
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -99,9 +98,6 @@ public class CompactEntity
     /// </summary>
     public List<CompactEntity> Children { get; set; }
 
-    // <summary>
-    // Values from entityLoookup
-    // </summary>
     /// <summary>
     /// Values from entityLookup. Allowed keys:
     /// - OrganizationIdentifier
