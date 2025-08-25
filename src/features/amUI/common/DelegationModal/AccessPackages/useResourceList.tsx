@@ -16,16 +16,18 @@ export const useResourceList = (list: PackageResource[]) => {
   };
 
   const resourceListItems = list.map((resource) => {
-    const emblem = getProviderLogoUrl(resource.provider?.code ?? '');
+    const emblem = getProviderLogoUrl(
+      resource.provider?.code ?? resource.resourceOwnerOrgcode ?? '',
+    );
     return (
       <ResourceListItem
         key={resource.id}
         id={resource.id}
         loading={orgDataIsLoading}
-        resourceName={resource.name}
-        ownerName={resource.provider.name}
-        ownerLogoUrl={emblem ?? resource.provider.logoUrl}
-        ownerLogoUrlAlt={resource.provider.name}
+        resourceName={resource.name || resource.title}
+        ownerName={resource.provider?.name}
+        ownerLogoUrl={emblem ?? resource.provider?.logoUrl}
+        ownerLogoUrlAlt={resource.provider?.name}
         as='div'
         size='xs'
         interactive={false}

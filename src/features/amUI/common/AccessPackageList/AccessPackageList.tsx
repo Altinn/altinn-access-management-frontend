@@ -31,6 +31,7 @@ interface AccessPackageListProps {
   onDelegateError?: (accessPackage: AccessPackage, error: ActionError) => void;
   onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
   onRevokeError?: (accessPackage: AccessPackage, error: ActionError) => void;
+  packageAs?: React.ElementType;
 }
 
 export const AccessPackageList = ({
@@ -49,6 +50,7 @@ export const AccessPackageList = ({
   searchString,
   showPermissions,
   showPackagesCount,
+  packageAs,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
 
@@ -149,6 +151,7 @@ export const AccessPackageList = ({
                   showAvailablePackages={!minimizeAvailablePackages}
                   showAvailableToggle={showAvailableToggle}
                   showPermissions={showPermissions}
+                  packageAs={packageAs}
                 />
               </AreaItem>
             );

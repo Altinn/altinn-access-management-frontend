@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using System.Linq;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -132,6 +133,28 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return new HttpResponseMessage(HttpStatusCode.NoContent);
             }
             throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
+        }
+
+        public Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
+        {
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "AccessPackage", "packages.json");
+                IEnumerable<SearchObject<AccessPackage>> searchResults =
+                    Util.GetMockData<IEnumerable<SearchObject<AccessPackage>>>(dataPath);
+
+                AccessPackage result = searchResults?.FirstOrDefault(sr => sr?.Object?.Id == packageId)?.Object;
+
+                return Task.FromResult(result);
+            }
+            catch
+            {
+                throw new HttpStatusException(
+                    "StatusError",
+                    "Unexpected mockResponse status from Access Management",
+                    HttpStatusCode.BadRequest,
+                    "");
+            }
         }
     }
 }

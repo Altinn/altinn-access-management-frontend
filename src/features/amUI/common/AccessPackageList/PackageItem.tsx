@@ -2,6 +2,7 @@ import { AccessPackageListItem, Typography } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { JSX } from 'react';
 
 interface PackageItemProps {
   pkg: AccessPackage;
@@ -9,9 +10,17 @@ interface PackageItemProps {
   controls?: React.ReactNode;
   hasAccess?: boolean;
   badge?: React.ReactNode;
+  as?: React.ElementType;
 }
 
-export const PackageItem = ({ pkg, onSelect, controls, hasAccess, badge }: PackageItemProps) => {
+export const PackageItem = ({
+  pkg,
+  onSelect,
+  controls,
+  hasAccess,
+  badge,
+  as,
+}: PackageItemProps) => {
   const { t } = useTranslation();
 
   return (
@@ -27,6 +36,7 @@ export const PackageItem = ({ pkg, onSelect, controls, hasAccess, badge }: Packa
       color={hasAccess ? 'company' : 'neutral'}
       size='xs'
       badge={badge}
+      as={as}
     />
   );
 };
