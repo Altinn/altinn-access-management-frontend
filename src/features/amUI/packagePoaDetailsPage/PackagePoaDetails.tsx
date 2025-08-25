@@ -1,28 +1,21 @@
-import { useCallback, useMemo, useState, useEffect, RefCallback } from 'react';
-import classes from './PackagePoaDetailsPage.module.css';
-import {
-  DsHeading,
-  DsParagraph,
-  DsSearch,
-  DsSkeleton,
-  DsTabs,
-  List,
-  ResourceListItem,
-  Skeleton,
-} from '@altinn/altinn-components';
+import { useCallback, useMemo, useState, useEffect } from 'react';
+import pageClasses from './PackagePoaDetailsPage.module.css';
+import headerClasses from './PackagePoaDetailsHeader.module.css';
+import { DsSearch, DsTabs, List, ResourceListItem } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { useTranslation } from 'react-i18next';
-import type { Connection, User } from '@/rtk/features/userInfoApi';
+import { type Connection, type User } from '@/rtk/features/userInfoApi';
 import { UserList } from '../common/UserList/UserList';
 import { debounce } from '@/resources/utils/debounce';
-import { PackageIcon } from '@navikt/aksel-icons';
+import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
-  const { fromParty } = usePartyRepresentation();
+  const { fromParty, actingParty } = usePartyRepresentation();
+  console.log('🪵 ~ PackagePoaDetails ~ actingParty:', actingParty);
   const [searchString, setSearchString] = useState<string>('');
 
   const onSearch = useCallback(
@@ -74,40 +67,14 @@ export const PackagePoaDetails = () => {
 
   return (
     <>
-      <div className={classes.headingContainer}>
-        {isLoading ? (
-          <>
-            <PackageIcon className={classes.packageIcon} />
-            <DsSkeleton
-              className={classes.pageHeading}
-              variant='rectangle'
-              width={550}
-              height={50}
-            />
-            <DsSkeleton
-              className={classes.pageDescription}
-              variant='text'
-              width={250}
-            />
-          </>
-        ) : (
-          <>
-            <PackageIcon className={classes.packageIcon} />
-            <DsHeading
-              level={1}
-              data-size='lg'
-              className={classes.pageHeading}
-            >
-              {accessPackage?.name || ''}
-            </DsHeading>
-            <DsParagraph
-              variant='long'
-              className={classes.pageDescription}
-            >
-              {accessPackage?.description}
-            </DsParagraph>
-          </>
-        )}
+      <div className={headerClasses.headingContainer}>
+        <PackagePoaDetailsHeader
+          isLoading={isLoading}
+          packageName={accessPackage?.name}
+          packageDescription={accessPackage?.description}
+          fromPartyName={fromParty?.name}
+          fromPartyTypeName={fromParty?.partyTypeName}
+        />
       </div>
       <DsTabs
         defaultValue='users'
@@ -122,10 +89,10 @@ export const PackagePoaDetails = () => {
           </DsTabs.Tab>
         </DsTabs.List>
         <DsTabs.Panel
-          className={classes.tabContent}
+          className={pageClasses.tabContent}
           value='users'
         >
-          <DsSearch className={classes.searchBar}>
+          <DsSearch className={pageClasses.searchBar}>
             <DsSearch.Input
               aria-label={t('users_page.user_search_placeholder')}
               placeholder={t('users_page.user_search_placeholder')}
@@ -153,7 +120,7 @@ export const PackagePoaDetails = () => {
           />
         </DsTabs.Panel>
         <DsTabs.Panel
-          className={classes.tabContent}
+          className={pageClasses.tabContent}
           value='services'
         >
           <List>

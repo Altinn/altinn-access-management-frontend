@@ -1,28 +1,3 @@
-.headingContainer {
-  display: grid;
-  grid-template-areas:
-    'icon heading'
-    'description description';
-  grid-template-columns: auto 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  align-items: center;
-}
-
-.packageIcon {
-  grid-area: icon;
-  height: 2.25rem;
-  width: 2.25rem;
-}
-
-.pageHeading {
-  grid-area: heading;
-}
-
-.pageDescription {
-  grid-area: description;
-}
-
 .searchBar {
   max-width: 27rem;
 }
