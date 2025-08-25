@@ -646,7 +646,9 @@
     "already_approved": "This consent is already given",
     "already_approved_poa": "This power of attorney is already given",
     "already_rejected": "This consent is already rejected",
-    "already_rejected_poa": "This power of attorney is already rejected"
+    "already_rejected_poa": "This power of attorney is already rejected",
+    "past_validto": "This consent has expired",
+    "past_validto_poa": "This power of attorney has expired"
   },
   "active_consents": {
     "page_title": "Active consents and powers of attorney - Altinn",

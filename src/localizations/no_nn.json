@@ -643,7 +643,9 @@
     "already_approved": "Dette samtykket er allereie gitt",
     "already_approved_poa": "Denne fullmakten er allereie gitt",
     "already_rejected": "Dette samtykket er allereie avvist",
-    "already_rejected_poa": "Denne fullmakten er allereie avvist"
+    "already_rejected_poa": "Denne fullmakten er allereie avvist",
+    "past_validto": "Dette samtykket er utløpt",
+    "past_validto_poa": "Denne fullmakten er utløpt"
   },
   "active_consents": {
     "page_title": "Aktive samtykker og fullmakter - Altinn",
