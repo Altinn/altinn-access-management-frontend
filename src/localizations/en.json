@@ -262,6 +262,8 @@
     "delete_singleRight_error_message": "Failed to delete access to "
   },
   "access_packages": {
+    "helptext_button": "What are access packages?",
+    "helptext_content": "Access packages are a collection of forms and services that deal with the same topic. These will replace Altinn roles and will be filled with more services over time.",
     "given_packages_title": "Currently held access packages",
     "available_packages_title": "Available access packages",
     "other_available": "Other available",
@@ -278,7 +280,7 @@
     "package_number_of_resources": "{{count}} services",
     "user_has_no_packages": "This user has no access packages.",
     "no_matching_search": "No matches for your search",
-    "info_alert_text": "Access packages will eventually replace roles in Altinn's access management solution. They may be a bit empty now, but they will soon be filled with services.",
+    "info_alert_text": "Access packages will eventually replace the traditional Altinn roles. They may be a bit empty now, but they will soon be filled with services.",
     "person_info_alert": "Giving powers of attorney to individuals is currently not supported. This will come later.",
     "delegation_check": {
       "delegation_check_error_heading": "Technical error",
