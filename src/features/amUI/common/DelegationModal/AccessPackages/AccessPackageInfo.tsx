@@ -122,23 +122,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
         />
       ) : (
         <>
-          {/* {!!delegationCheckError && (
-            <DsAlert
-              data-color='danger'
-              data-size='sm'
-            >
-              <DsHeading level={2}>
-                {t('access_packages.delegation_check.delegation_check_error_heading')}
-              </DsHeading>
-              <TechnicalErrorParagraphs
-                message={t(
-                  'access_packages.delegation_check.delegation_check_error_message_singular',
-                )}
-                status={delegationCheckError.httpStatus}
-                time={delegationCheckError.timestamp}
-              />
-            </DsAlert>
-          )} */}
           {!!actionError && (
             <DsAlert
               data-color='danger'
