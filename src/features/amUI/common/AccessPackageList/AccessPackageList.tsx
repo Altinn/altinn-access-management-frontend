@@ -14,6 +14,7 @@ import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';
 import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
 import { AreaItemContent } from './AreaItemContent';
+import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -117,6 +118,12 @@ export const AccessPackageList = ({
     ? combinedAreas
     : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
 
+  // Collect all relevant package ids for delegation check (assigned + available)
+  const packageIds = displayAreas.flatMap((a) => [
+    ...a.packages.assigned.map((p) => p.id),
+    ...a.packages.available.map((p) => p.id),
+  ]);
+
   return (
     <div className={classes.accessAreaList}>
       {displayAreas.length === 0 ? (
@@ -124,36 +131,38 @@ export const AccessPackageList = ({
           {t('access_packages.user_has_no_packages')}
         </DsParagraph>
       ) : (
-        <List>
-          {displayAreas.map((area) => {
-            const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
+        <AccessPackageDelegationCheckProvider packageIds={packageIds}>
+          <List>
+            {displayAreas.map((area) => {
+              const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
 
-            return (
-              <AreaItem
-                key={area.id}
-                area={area}
-                expanded={expanded}
-                toggleExpandedArea={toggleExpandedArea}
-                showPackagesCount={showPackagesCount}
-                showPermissions={showPermissions}
-              >
-                <AreaItemContent
+              return (
+                <AreaItem
+                  key={area.id}
                   area={area}
-                  availableActions={availableActions}
-                  onSelect={onSelect}
-                  onDelegate={onDelegate}
-                  onRevoke={onRevoke}
-                  onRequest={onRequest}
-                  isActionLoading={isActionLoading}
-                  useDeleteConfirm={useDeleteConfirm}
-                  showAvailablePackages={!minimizeAvailablePackages}
-                  showAvailableToggle={showAvailableToggle}
+                  expanded={expanded}
+                  toggleExpandedArea={toggleExpandedArea}
+                  showPackagesCount={showPackagesCount}
                   showPermissions={showPermissions}
-                />
-              </AreaItem>
-            );
-          })}
-        </List>
+                >
+                  <AreaItemContent
+                    area={area}
+                    availableActions={availableActions}
+                    onSelect={onSelect}
+                    onDelegate={onDelegate}
+                    onRevoke={onRevoke}
+                    onRequest={onRequest}
+                    isActionLoading={isActionLoading}
+                    useDeleteConfirm={useDeleteConfirm}
+                    showAvailablePackages={!minimizeAvailablePackages}
+                    showAvailableToggle={showAvailableToggle}
+                    showPermissions={showPermissions}
+                  />
+                </AreaItem>
+              );
+            })}
+          </List>
+        </AccessPackageDelegationCheckProvider>
       )}
     </div>
   );

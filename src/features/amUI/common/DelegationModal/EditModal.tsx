@@ -12,6 +12,7 @@ import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
+import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 
 export enum DelegationAction {
   DELEGATE = 'DELEGATE',
@@ -87,10 +88,12 @@ const renderModalContent = (
   }
   if (accessPackage) {
     return (
-      <AccessPackageInfo
-        accessPackage={accessPackage}
-        availableActions={availableActions}
-      />
+      <AccessPackageDelegationCheckProvider packageIds={[accessPackage.id]}>
+        <AccessPackageInfo
+          accessPackage={accessPackage}
+          availableActions={availableActions}
+        />
+      </AccessPackageDelegationCheckProvider>
     );
   }
   if (role) {

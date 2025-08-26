@@ -19,6 +19,7 @@ import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import type { DelegationAction } from './EditModal';
+import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 
 export interface DelegationModalProps {
   delegationType: DelegationType;
@@ -92,10 +93,12 @@ export const DelegationModalContent = ({
         />
       );
       infoViewContent = packageToView && (
-        <AccessPackageInfo
-          accessPackage={packageToView}
-          availableActions={availableActions}
-        />
+        <AccessPackageDelegationCheckProvider packageIds={[packageToView.id]}>
+          <AccessPackageInfo
+            accessPackage={packageToView}
+            availableActions={availableActions}
+          />
+        </AccessPackageDelegationCheckProvider>
       );
       triggerButtonText = t('access_packages.give_new_button');
       break;
