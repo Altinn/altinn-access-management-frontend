@@ -67,14 +67,18 @@ export const AreaItemContent = ({
   const handleDelegationCheckFailure = (error: ActionError) => {
     setDelegationCheckError(error);
   };
-  const { displayLimitedPreviewLaunch } = window.featureFlags;
+
   const shouldShowDelegationCheck =
-    !!availableActions?.includes(DelegationAction.DELEGATE) && !displayLimitedPreviewLaunch;
+    !!availableActions?.includes(DelegationAction.DELEGATE) &&
+    showAvailablePackages &&
+    availablePackageIds.length > 0;
+
   const { canDelegate, isUninitialized, isLoading } = useAccessPackageDelegationCheck(
     availablePackageIds,
-    shouldShowDelegationCheck && showAvailablePackages,
+    shouldShowDelegationCheck,
     handleDelegationCheckFailure,
   );
+
   const isSm = useIsMobileOrSmaller();
 
   const revokeActionControl = (pkg: AccessPackage) => {

@@ -110,16 +110,15 @@ export const accessPackageApi = createApi({
         };
       },
     }),
-    delegationCheck: builder.mutation<DelegationCheckResponse[], { packageIds: string[] }>({
-      query: ({ packageIds }) => {
-        const delegationCheckRequest = {
-          packageIds: packageIds,
-          reporteeUuid: getCookie('AltinnPartyUuid'),
-        };
+    delegationCheck: builder.query<
+      DelegationCheckResponse[],
+      { packageIds: string[]; party?: string }
+    >({
+      query: ({ packageIds, party = getCookie('AltinnPartyUuid') }) => {
+        const queryParams = packageIds.map((id) => `packageIds=${id}`).join('&');
         return {
-          url: `delegationcheck`,
-          method: 'POST',
-          body: JSON.stringify(delegationCheckRequest),
+          url: `delegationcheck?party=${party}&${queryParams}`,
+          method: 'GET',
         };
       },
     }),
@@ -131,7 +130,7 @@ export const {
   useGetUserDelegationsQuery,
   useRevokeDelegationMutation,
   useDelegatePackageMutation,
-  useDelegationCheckMutation,
+  useDelegationCheckQuery,
 } = accessPackageApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = accessPackageApi;

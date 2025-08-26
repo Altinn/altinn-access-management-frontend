@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 
-import { useDelegationCheckMutation } from '@/rtk/features/accessPackageApi';
+import { useDelegationCheckQuery } from '@/rtk/features/accessPackageApi';
 
 import type { ActionError } from './useActionError';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 /**
  * Custom hook to check delegation status for access packages.
@@ -19,20 +20,19 @@ export const useAccessPackageDelegationCheck = (
 ) => {
   const { displayLimitedPreviewLaunch } = window.featureFlags;
 
-  const [delegationCheck, { isLoading, data, isUninitialized }] = useDelegationCheckMutation();
-
+  const { isLoading, data, isUninitialized, error } = useDelegationCheckQuery(
+    { packageIds: accessPackageIds },
+    { skip: accessPackageIds.length > 0 && shouldShowDelegationCheck },
+  );
   useEffect(() => {
-    if (accessPackageIds.length > 0 && shouldShowDelegationCheck && !displayLimitedPreviewLaunch) {
-      delegationCheck({ packageIds: accessPackageIds })
-        .unwrap()
-        .catch((response) => {
-          handleDelegationCheckFailure({
-            httpStatus: response.status,
-            timestamp: new Date().toISOString(),
-          });
-        });
+    if (error) {
+      handleDelegationCheckFailure({
+        httpStatus: (error as FetchBaseQueryError)?.status?.toString() ?? '500',
+        details: (error as FetchBaseQueryError)?.data ?? {},
+        timestamp: new Date().toISOString(),
+      });
     }
-  }, [accessPackageIds, shouldShowDelegationCheck]);
+  }, [error]);
 
   /**
    * Function to check if a specific package ID can be delegated.

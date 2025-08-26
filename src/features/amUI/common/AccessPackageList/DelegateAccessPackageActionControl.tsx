@@ -35,6 +35,8 @@ export const DelegateAccessPackageActionControl = ({
     );
   }
 
+  console.log('🪵 ~ DelegateAccessPackageActionControl ~ canDelegate:', canDelegate);
+
   if (availableActions?.includes(DelegationAction.DELEGATE)) {
     if (canDelegate === false) {
       return (
