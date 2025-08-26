@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+﻿using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -44,5 +45,12 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// <param name="packageId">The access package which the right holder is to lose access to on behalf of the given party (from)</param>
                 /// <returns>A HttpResponseMessage denoting whether or not the action was successful.</returns>
                 Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string packageId);
+
+                /// <summary>
+                ///   Gets delegation check status for all access packages on behalf of the specified party.
+                /// </summary>
+                /// <param name="party">The party to check delegation for (reportee)</param>
+                /// <returns>Paginated delegation check results for all packages</returns>
+                Task<PaginatedResult<DelegationCheck>> AccessPackageDelegationCheck(Guid party);
         }
 }

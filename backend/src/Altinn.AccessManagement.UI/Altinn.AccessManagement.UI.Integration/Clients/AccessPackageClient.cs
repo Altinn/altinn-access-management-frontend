@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
@@ -115,6 +116,24 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             _logger.LogError("Revoke resource delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
+        }
+
+        /// <inheritdoc />
+        public async Task<PaginatedResult<DelegationCheck>> AccessPackageDelegationCheck(Guid party)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"enduser/connections/accesspackages/delegationcheck?party={party}";
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+                var resString = await response.Content.ReadAsStringAsync();
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<DelegationCheck>>(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // AccessPackageClient // AccessPackageDelegationCheck // Exception");
+                throw;
+            }
         }
     }
 }

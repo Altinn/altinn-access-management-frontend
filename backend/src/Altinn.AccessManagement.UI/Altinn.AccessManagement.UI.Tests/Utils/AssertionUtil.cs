@@ -573,14 +573,12 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
         }
 
-        public static void AssertEqual(AccessPackageDelegationCheckResponse expected, AccessPackageDelegationCheckResponse actual)
+        public static void AssertEqual(DelegationCheck expected, DelegationCheck actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
-
-            Assert.Equal(expected.CanDelegate, actual.CanDelegate);
-            Assert.Equal(expected.DetailCode, actual.DetailCode);
-            Assert.Equal(expected.PackageId, actual.PackageId);
+            Assert.Equal(expected.Result, actual.Result);
+            Assert.Equal(expected.Package?.Id, actual.Package?.Id);
         }
 
         public static void AssertEqual(CustomerPartyFE expected, CustomerPartyFE actual)

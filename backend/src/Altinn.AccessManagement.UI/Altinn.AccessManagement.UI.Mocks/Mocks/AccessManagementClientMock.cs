@@ -203,36 +203,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
         }
 
-        //// Access packages
-
-        /// <inheritdoc />
-        public Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest)
-        {
-            var res = new List<AccessPackageDelegationCheckResponse>();
-            foreach (var packageId in delegationCheckRequest.PackageIds)
-            {
-                if (packageId.ToString() == "fa84bffc-ac17-40cd-af9c-61c89f92e44c")
-                {
-                    throw new Exception("Package id is not valid");
-                }
-                try
-                {
-                    var check = Util.GetMockData<AccessPackageDelegationCheckResponse>($"{dataFolder}/AccessPackage/DelegationCheck/{packageId}.json");
-                    res.Add(check);
-                }
-                catch
-                {
-                    res.Add(new AccessPackageDelegationCheckResponse()
-                    {
-                        CanDelegate = true,
-                        DetailCode = DetailCode.DelegationAccess,
-                        PackageId = packageId
-                    });
-                }
-            }
-            return Task.FromResult(res);
-        }
-
         //// Roles
 
         public Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString)
@@ -303,7 +273,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             try
             {
-                DelegationCheckResponse res = Util.GetMockData<DelegationCheckResponse>($"{dataFolder}/Roles/DelegationCheck/{roleId}.json");
+                DelegationCheckResponse res = Util.GetMockData<DelegationCheckResponse>($"{dataFolder}/Roles/DelegationCheck/DelegationCheck.json");
                 return Task.FromResult(res);
             }
             catch
