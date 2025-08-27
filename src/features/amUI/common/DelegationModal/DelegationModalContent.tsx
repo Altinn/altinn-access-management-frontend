@@ -93,12 +93,12 @@ export const DelegationModalContent = ({
         />
       );
       infoViewContent = packageToView && (
-        <AccessPackageDelegationCheckProvider packageIds={[packageToView.id]}>
-          <AccessPackageInfo
-            accessPackage={packageToView}
-            availableActions={availableActions}
-          />
-        </AccessPackageDelegationCheckProvider>
+        // <AccessPackageDelegationCheckProvider>
+        <AccessPackageInfo
+          accessPackage={packageToView}
+          availableActions={availableActions}
+        />
+        // </AccessPackageDelegationCheckProvider>
       );
       triggerButtonText = t('access_packages.give_new_button');
       break;

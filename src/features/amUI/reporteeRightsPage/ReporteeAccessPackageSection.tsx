@@ -10,6 +10,7 @@ import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/A
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { AccessPackageInfoAlert } from '../userRightsPage/AccessPackageSection/AccessPackageInfoAlert';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { AccessPackageDelegationCheckProvider } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
 
 export const ReporteeAccessPackageSection = () => {
   const { t } = useTranslation();
@@ -50,32 +51,34 @@ export const ReporteeAccessPackageSection = () => {
           })}
         </DsHeading>
       </Skeleton>
-      <AccessPackageList
-        isLoading={isLoadingAccesses || isLoadingParty}
-        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
-        useDeleteConfirm
-        showAllPackages
-        minimizeAvailablePackages
-        onSelect={(accessPackage) => {
-          setModalItem(accessPackage);
-          modalRef.current?.showModal();
-        }}
-        onDelegateError={(accessPackage, errorInfo) => {
-          setActionError(errorInfo);
-          setModalItem(accessPackage);
-          modalRef.current?.showModal();
-        }}
-        onRevokeError={(accessPackage, errorInfo) => {
-          setActionError(errorInfo);
-          setModalItem(accessPackage);
-          modalRef.current?.showModal();
-        }}
-      />
-      <AccessPackageInfoModal
-        modalRef={modalRef}
-        modalItem={modalItem}
-        modalActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
-      />
+      <AccessPackageDelegationCheckProvider>
+        <AccessPackageList
+          isLoading={isLoadingAccesses || isLoadingParty}
+          availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+          useDeleteConfirm
+          showAllPackages
+          minimizeAvailablePackages
+          onSelect={(accessPackage) => {
+            setModalItem(accessPackage);
+            modalRef.current?.showModal();
+          }}
+          onDelegateError={(accessPackage, errorInfo) => {
+            setActionError(errorInfo);
+            setModalItem(accessPackage);
+            modalRef.current?.showModal();
+          }}
+          onRevokeError={(accessPackage, errorInfo) => {
+            setActionError(errorInfo);
+            setModalItem(accessPackage);
+            modalRef.current?.showModal();
+          }}
+        />
+        <AccessPackageInfoModal
+          modalRef={modalRef}
+          modalItem={modalItem}
+          modalActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+        />
+      </AccessPackageDelegationCheckProvider>
     </>
   );
 };

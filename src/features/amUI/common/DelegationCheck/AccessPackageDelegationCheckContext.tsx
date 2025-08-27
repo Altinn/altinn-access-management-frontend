@@ -15,7 +15,6 @@ const AccessPackageDelegationCheckContext =
   createContext<AccessPackageDelegationCheckContextProps | null>(null);
 
 export interface AccessPackageDelegationCheckProviderProps {
-  packageIds: string[];
   children: React.ReactNode;
 }
 
@@ -24,18 +23,14 @@ export interface AccessPackageDelegationCheckProviderProps {
  * Executes once per actingParty or packageIds change.
  */
 export const AccessPackageDelegationCheckProvider = ({
-  packageIds,
   children,
 }: AccessPackageDelegationCheckProviderProps) => {
-  const uniquePackageIds = useMemo(
-    () => Array.from(new Set(packageIds.filter(Boolean))),
-    [packageIds],
-  );
+
   const { actingParty } = usePartyRepresentation();
 
   const { data, isLoading, error } = useDelegationCheckQuery(
-    { packageIds: uniquePackageIds, party: actingParty?.partyUuid },
-    { skip: uniquePackageIds.length === 0 || !actingParty?.partyUuid },
+    { party: actingParty?.partyUuid },
+    { skip: !actingParty?.partyUuid },
   );
 
   const resultMap = useMemo(() => {

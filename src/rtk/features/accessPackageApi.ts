@@ -110,14 +110,10 @@ export const accessPackageApi = createApi({
         };
       },
     }),
-    delegationCheck: builder.query<
-      DelegationCheckResponse[],
-      { packageIds: string[]; party?: string }
-    >({
-      query: ({ packageIds, party = getCookie('AltinnPartyUuid') }) => {
-        const queryParams = packageIds.map((id) => `packageIds=${id}`).join('&');
+    delegationCheck: builder.query<DelegationCheckResponse[], { party?: string }>({
+      query: ({ party = getCookie('AltinnPartyUuid') }) => {
         return {
-          url: `delegationcheck?party=${party}&${queryParams}`,
+          url: `delegationcheck?party=${party}`,
           method: 'GET',
         };
       },

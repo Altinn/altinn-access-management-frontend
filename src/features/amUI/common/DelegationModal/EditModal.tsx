@@ -88,12 +88,12 @@ const renderModalContent = (
   }
   if (accessPackage) {
     return (
-      <AccessPackageDelegationCheckProvider packageIds={[accessPackage.id]}>
+      // <AccessPackageDelegationCheckProvider>
         <AccessPackageInfo
           accessPackage={accessPackage}
           availableActions={availableActions}
         />
-      </AccessPackageDelegationCheckProvider>
+      // </AccessPackageDelegationCheckProvider>
     );
   }
   if (role) {

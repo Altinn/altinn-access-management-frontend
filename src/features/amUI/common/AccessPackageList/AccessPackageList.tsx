@@ -131,38 +131,36 @@ export const AccessPackageList = ({
           {t('access_packages.user_has_no_packages')}
         </DsParagraph>
       ) : (
-        <AccessPackageDelegationCheckProvider packageIds={packageIds}>
-          <List>
-            {displayAreas.map((area) => {
-              const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
+        <List>
+          {displayAreas.map((area) => {
+            const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
 
-              return (
-                <AreaItem
-                  key={area.id}
+            return (
+              <AreaItem
+                key={area.id}
+                area={area}
+                expanded={expanded}
+                toggleExpandedArea={toggleExpandedArea}
+                showPackagesCount={showPackagesCount}
+                showPermissions={showPermissions}
+              >
+                <AreaItemContent
                   area={area}
-                  expanded={expanded}
-                  toggleExpandedArea={toggleExpandedArea}
-                  showPackagesCount={showPackagesCount}
+                  availableActions={availableActions}
+                  onSelect={onSelect}
+                  onDelegate={onDelegate}
+                  onRevoke={onRevoke}
+                  onRequest={onRequest}
+                  isActionLoading={isActionLoading}
+                  useDeleteConfirm={useDeleteConfirm}
+                  showAvailablePackages={!minimizeAvailablePackages}
+                  showAvailableToggle={showAvailableToggle}
                   showPermissions={showPermissions}
-                >
-                  <AreaItemContent
-                    area={area}
-                    availableActions={availableActions}
-                    onSelect={onSelect}
-                    onDelegate={onDelegate}
-                    onRevoke={onRevoke}
-                    onRequest={onRequest}
-                    isActionLoading={isActionLoading}
-                    useDeleteConfirm={useDeleteConfirm}
-                    showAvailablePackages={!minimizeAvailablePackages}
-                    showAvailableToggle={showAvailableToggle}
-                    showPermissions={showPermissions}
-                  />
-                </AreaItem>
-              );
-            })}
-          </List>
-        </AccessPackageDelegationCheckProvider>
+                />
+              </AreaItem>
+            );
+          })}
+        </List>
       )}
     </div>
   );
