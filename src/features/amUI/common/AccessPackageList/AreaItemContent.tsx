@@ -110,7 +110,7 @@ export const AreaItemContent = ({
               <PackageItem
                 as={(props) => (
                   <Component
-                    id={pkg.id}
+                    packageId={pkg.id}
                     {...props}
                   />
                 )}
@@ -173,7 +173,7 @@ export const AreaItemContent = ({
               <PackageItem
                 as={(props) => (
                   <Component
-                    id={pkg.id}
+                    packageId={pkg.id}
                     {...props}
                   />
                 )}

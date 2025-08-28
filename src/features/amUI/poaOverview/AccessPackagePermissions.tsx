@@ -50,7 +50,7 @@ export const AccessPackagePermissions = () => {
         showPackagesCount={false}
         packageAs={(props) => (
           <Link
-            to={`/poa-overview/access-package/${props.id}`}
+            to={`/poa-overview/access-package/${props.packageId}`}
             {...props}
           />
         )}
