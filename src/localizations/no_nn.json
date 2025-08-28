@@ -1,5 +1,6 @@
 {
   "common": {
+    "beta": "Beta",
     "error": "Feil",
     "restart": "Start på nytt",
     "close": "Lukk",
@@ -97,7 +98,8 @@
     "chat": "Få hjelp på chat",
     "log_out": "Logg ut",
     "locale_title": "Vel språk",
-    "logged_in_as_name": "Logga inn som {{name}}"
+    "logged_in_as_name": "Logga inn som {{name}}",
+    "shortcuts": "Snarveier"
   },
   "footer": {
     "about_altinn": "Om Altinn",
@@ -405,6 +407,26 @@
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til virksomheit",
     "limited_preview_message": "Du kan diverre ikkje legge til personar heilt enda. Dette vil komme seinare."
+  },
+  "info_page": {
+    "page_title": "Om nye Altinn",
+    "main_title": "Om Tilgangstyring",
+    "paragraph_1": "Nye Altinn - enklare, tryggare og meir moderne. <br /> Altinn har vore ein viktig digital portal for innbyggjarar og verksemder i over 20 år. Den teknologiske utviklinga går raskare enn nokon gong. Difor byggjer vi no ein Altinn-plattform som gir endå betre sikkerheit, meir moderne løysingar og er enklare å bruke. <br /> <br /> Her ser du på eit forenkla brukargrensesnitt for tilgangsstyring (Tilgangsstyring Beta). I denne vil du kunne gi tilgangspakkar frå ei verksemd til ei anna verksemd, sjå kva fullmakter verksemda di har hos andre og opprette systemtilgang mot fagsystem. I dette brukargrensesnittet vil det komme meir og meir innhald og funksjonalitet etter kvart.",
+    "title_2": "Tilgangspakkar",
+    "paragraph_2": "Tilgangspakkar vil erstatte dagens Altinn-roller. Dei nye tilgangspakkane vil vere fleire, men innehalde færre skjema og tenester. Dei vil også liggje under kategoriar som høyrer til spesifikke tema. No i byrjinga vil du sjå at tilgangspakkane kan innehalde svært få tenester, men dei vil bli fylte opp etter kvart.",
+    "title_3": "Hvem kan bruke Tilgangstyring Beta?",
+    "paragraph_3": "I tilgangstyring Beta som vi kaller “forenklet brukerflate” er det kun virksomhetsdelegering som kan gjennomføres. Det vil si at det kun kan gis tilgangspakker fra en virksomhet til en annen virksomhet. I hovedsak så vil dette gjelde virksomheter som har revisor, regnskapsfører eller forretningsfører.",
+    "title_4": "Systemtilgang",
+    "paragraph_4": "En systemtilgang er en ny type upersonlig bruker i Altinn som opprettes for at et datasystem (f.eks regnskapssystem eller lønnssystem) skal få fullmakt til å løse oppgaver på vegne av egen virksomhet eller for kundene til virksomheten.",
+    "title_5": "Hva er forskjellen på vanlig systemtilgang og systemtilgang for kunder?",
+    "paragraph_5": "Med en vanlig systemtilgang handler du på vegne av deg selv. F.eks om du eier en liten virksomhet og fører regnskapet ditt selv i Fiken. Da kan du opprette systemtilgang som en del av Fiken sin flyt, eller du kan gå inn på altinn.no og opprette den selv ved å trykke på “Lag ny systemtilgang”.<br /><br /> Er du regnskapsfører eller revisor kan du opprette systemtilgang som kan tildeles fullmakter for kundene dine. Da vil systemet kunne sende inn og hente ut data på vegne av kundene. Denne systemtilgangen kan kun opprettets via en flyt i det fagsystemet du vil bruke. Når du har opprettet den, går du til altinn.no for å legge til kundene som er relevante for den systemtilgangen. <br /><br />Vi gleder oss til å vise deg det nye Altinn og setter stor pris på tålmodigheten din mens vi bygger om. Har du spørsmål eller tilbakemeldinger, kontakt oss på brukerservice@altinn.no"
+  },
+  "info_modal": {
+    "title": "Prøv den nye tilgangsstyringsløsningen",
+    "info": "Vi pusser opp tilgangstyring og du får sniktitte på en tidlig versjon! Den er fortsatt under utvikling, så noen funksjoner mangler. Vi håper likevel du vil prøve.",
+    "close_button": "Prøv ny tilgangstyring",
+    "back_button": "Gå tilbake til dagens Altinn",
+    "info_link": "Hvorfor oppdaterer vi Altinn?"
   },
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyer Altinn",

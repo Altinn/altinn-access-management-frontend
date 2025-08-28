@@ -1,0 +1,21 @@
+.infoModalButton {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 10;
+  border-radius: 50%;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 5px 0;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
