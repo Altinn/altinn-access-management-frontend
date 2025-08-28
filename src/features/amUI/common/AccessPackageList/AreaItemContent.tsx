@@ -105,7 +105,6 @@ export const AreaItemContent = ({
       {packages.assigned.length > 0 && (
         <List aria-label={t('access_packages.given_packages_title')}>
           {packages.assigned.map((pkg) => {
-            console.log('🪵 ~ pkg:', pkg);
             const Component = packageAs || 'button';
             return (
               <PackageItem
