@@ -87,6 +87,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="systemuserId">Id of systemuser</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Object with lists of rights and access packages</returns>
-        Task<StandardSystemUserDelegations> GetListOfDelegationsForStandardSystemUser(string partyId, string systemuserId, CancellationToken cancellationToken);
+        Task<Result<StandardSystemUserDelegations>> GetListOfDelegationsForStandardSystemUser(string partyId, string systemuserId, CancellationToken cancellationToken);
     }
 }

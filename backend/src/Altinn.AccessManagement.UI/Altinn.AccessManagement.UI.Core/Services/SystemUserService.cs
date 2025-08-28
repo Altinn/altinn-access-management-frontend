@@ -51,16 +51,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<SystemUserFE> GetSpecificSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserFE>> GetSpecificSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken)
         {
             SystemUser systemUser = await _systemUserClient.GetSpecificSystemUser(partyId, id, cancellationToken);
 
-            if (systemUser != null)
+            if (systemUser is null)
             {
-                return await MapSingleStandardSystemUser(systemUser, languageCode, cancellationToken);
+                return Problem.SystemUserNotFound;
             }
 
-            return null;
+            return await MapSingleStandardSystemUser(systemUser, languageCode, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -127,14 +127,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return sortedList;
         }
 
-        private async Task<SystemUserFE> MapSingleStandardSystemUser(SystemUser systemUser, string languageCode, CancellationToken cancellationToken)
+        private async Task<Result<SystemUserFE>> MapSingleStandardSystemUser(SystemUser systemUser, string languageCode, CancellationToken cancellationToken)
         {
             // map system user
             SystemUserFE systemUserFE = (await MapToSystemUsersFE([systemUser], cancellationToken))[0];
 
             // get access packages and rights
-            StandardSystemUserDelegations delegations = await _systemUserClient.GetListOfDelegationsForStandardSystemUser(systemUser.PartyId, systemUser.Id, cancellationToken);
-            RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(delegations.Rights, delegations.AccessPackages, languageCode);
+            Result<StandardSystemUserDelegations> delegations = await _systemUserClient.GetListOfDelegationsForStandardSystemUser(systemUser.PartyId, systemUser.Id, cancellationToken);
+            if (delegations.IsProblem)
+            {
+                return delegations.Problem;
+            }
+
+            RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(delegations.Value.Rights, delegations.Value.AccessPackages, languageCode);
             systemUserFE.AccessPackages = enrichedRights.AccessPackages;
             systemUserFE.Resources = enrichedRights.Resources;
             return systemUserFE;

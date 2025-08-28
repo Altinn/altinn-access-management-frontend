@@ -71,14 +71,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult> GetSystemUserDetailsById([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            SystemUserFE details = await _systemUserService.GetSpecificSystemUser(partyId, systemUserGuid, languageCode, cancellationToken);
+            Result<SystemUserFE> details = await _systemUserService.GetSpecificSystemUser(partyId, systemUserGuid, languageCode, cancellationToken);
             
-            if (details == null)
+            if (details.IsProblem)
             {
-                return NotFound();
+                return details.Problem.ToActionResult();
             }
 
-            return Ok(details);
+            return Ok(details.Value);
         }
         
         /// <summary>

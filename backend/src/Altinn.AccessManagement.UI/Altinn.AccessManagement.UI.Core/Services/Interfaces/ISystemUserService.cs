@@ -25,7 +25,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Requested system user</returns>
-        Task<SystemUserFE> GetSpecificSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken);
+        Task<Result<SystemUserFE>> GetSpecificSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken);
 
         /// <summary>
         /// Return all agent system users created for a given party
