@@ -96,8 +96,8 @@ export const PackagePoaDetails = () => {
         >
           <DsSearch className={pageClasses.searchBar}>
             <DsSearch.Input
-              aria-label={t('users_page.user_search_placeholder')}
-              placeholder={t('users_page.user_search_placeholder')}
+              aria-label={t('package_poa_details_page.users_tab.user_search_placeholder')}
+              placeholder={t('package_poa_details_page.users_tab.user_search_placeholder')}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                 onSearch(event.target.value)
               }
@@ -119,6 +119,9 @@ export const PackagePoaDetails = () => {
             interactive={false}
             disableLinks
             canAdd={false}
+            noUsersMessage={t('package_poa_details_page.users_tab.no_users', {
+              fromparty: fromParty?.name,
+            })}
           />
         </DsTabs.Panel>
         <DsTabs.Panel

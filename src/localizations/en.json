@@ -674,9 +674,11 @@
     "page_title": "Power of attorney details",
     "users_tab_title": "Users",
     "services_tab_title": "Services",
-    "users-tab": {
+    "users_tab": {
       "title": "Users with access",
-      "description": "These users have power of attorney for all the services in the access package on behalf of {{fromparty}}"
+      "description": "These users have power of attorney for all the services in the access package on behalf of {{fromparty}}",
+      "user_search_placeholder": "Search for person or organization",
+      "no_users": "No users have power of attorney for this package on behalf of {{fromparty}}."
     }
   }
 }

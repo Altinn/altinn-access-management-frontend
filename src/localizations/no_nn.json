@@ -671,9 +671,11 @@
     "page_title": "Fullmaktsdetaljar",
     "users_tab_title": "Brukarar",
     "services_tab_title": "Tenester",
-    "users-tab": {
+    "users_tab": {
       "title": "Brukarar med tilgang",
-      "description": "desse brukarane har fullmakt til alle tenestene i tilgangspakken på vegner av {{fromparty}}"
+      "description": "desse brukarane har fullmakt til alle tenestene i tilgangspakken på vegner av {{fromparty}}",
+      "user_search_placeholder": "Søk etter person eller virksomhet",
+      "no_users": "Ingen har fullmakt til denne pakken på vegne av {{fromparty}}."
     }
   }
 }

@@ -91,7 +91,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             // manual filter until it is fixed
             PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
             var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
-            if (package != null && packagePermissions != null)
+            if (package != null)
             {
                 return new AccessPackageFE
                 {
@@ -101,10 +101,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     IsAssignable = package.IsAssignable,
                     Description = package.Description,
                     Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources),
-                    Permissions = packagePermissions.Permissions.ToList()
+                    Permissions = packagePermissions?.Permissions?.ToList() ?? new List<Permission>()
                 };
             }
-            
+
             return null;
         }
 
