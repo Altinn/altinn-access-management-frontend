@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
@@ -90,22 +91,26 @@ namespace Altinn.AccessManagement.UI.Core.Services
             // currently not implemented on the backend so we have to do a 
             // manual filter until it is fixed
             PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
-            var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
-            if (package != null)
+            if (package == null)
             {
-                return new AccessPackageFE
-                {
-                    Id = package.Id.ToString(),
-                    Urn = package.Urn,
-                    Name = package.Name,
-                    IsAssignable = package.IsAssignable,
-                    Description = package.Description,
-                    Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources),
-                    Permissions = packagePermissions?.Permissions?.ToList() ?? new List<Permission>()
-                };
+                return null;
             }
-
-            return null;
+            else
+            {
+                var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
+                {
+                    return new AccessPackageFE
+                    {
+                        Id = package.Id.ToString(),
+                        Urn = package.Urn,
+                        Name = package.Name,
+                        IsAssignable = package.IsAssignable,
+                        Description = package.Description,
+                        Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources),
+                        Permissions = packagePermissions?.Permissions?.ToList() ?? new List<Permission>()
+                    };
+                }
+            }
         }
 
         /// <inheritdoc />

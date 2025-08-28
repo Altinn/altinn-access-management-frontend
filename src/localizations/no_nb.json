@@ -674,6 +674,8 @@
     "page_title": "Fullmaktsdetaljer",
     "users_tab_title": "Brukere",
     "services_tab_title": "Tjenester",
+    "load_error": "Oi! Noe gikk galt.",
+    "back_to_overview_link": "Gå tilbake til oversikten",
     "users_tab": {
       "title": "Brukere med tilgang",
       "description": "disse brukerne har fullmakt til alle tjenestene i tilgangspakken på vegne av {{fromparty}}.",

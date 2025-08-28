@@ -141,6 +141,11 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return NoContent();
                 }
 
+                if (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return NotFound();
+                }
+
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }

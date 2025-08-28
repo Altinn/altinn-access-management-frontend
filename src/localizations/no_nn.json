@@ -671,6 +671,8 @@
     "page_title": "Fullmaktsdetaljar",
     "users_tab_title": "Brukarar",
     "services_tab_title": "Tenester",
+    "load_error": "Oi! Noko gjekk gale.",
+    "back_to_overview_link": "Gå tilbake til oversikta",
     "users_tab": {
       "title": "Brukarar med tilgang",
       "description": "desse brukarane har fullmakt til alle tenestene i tilgangspakken på vegner av {{fromparty}}",

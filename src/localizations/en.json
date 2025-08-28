@@ -674,6 +674,8 @@
     "page_title": "Power of attorney details",
     "users_tab_title": "Users",
     "services_tab_title": "Services",
+    "load_error": "Oops! Something went wrong.",
+    "back_to_overview_link": "Go back to the overview",
     "users_tab": {
       "title": "Users with access",
       "description": "These users have power of attorney for all the services in the access package on behalf of {{fromparty}}",

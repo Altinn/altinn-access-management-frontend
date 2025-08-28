@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import headerClasses from './PackagePoaDetailsHeader.module.css';
-import { DsSearch, DsTabs, List, ResourceListItem } from '@altinn/altinn-components';
-import { useParams } from 'react-router';
+import { DsAlert, DsSearch, DsTabs, List, ResourceListItem } from '@altinn/altinn-components';
+import { Link, Navigate, redirect, useParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import { UserList } from '../common/UserList/UserList';
 import { debounce } from '@/resources/utils/debounce';
 import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
 import { useResourceList } from '../common/DelegationModal/AccessPackages/useResourceList';
+import { amUIPath } from '@/routes/paths/amUIPath';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,7 +32,11 @@ export const PackagePoaDetails = () => {
     };
   }, [onSearch]);
 
-  const { data: accessPackage, isLoading } = useGetPackagePermissionDetailsQuery(
+  const {
+    data: accessPackage,
+    isLoading,
+    error,
+  } = useGetPackagePermissionDetailsQuery(
     {
       from: fromParty?.partyUuid ?? '',
       packageId: id || '',
@@ -66,6 +71,18 @@ export const PackagePoaDetails = () => {
   const [chosenTab, setChosenTab] = useState('users');
 
   const resourceList = useResourceList(accessPackage?.resources ?? []);
+
+  // Show error alert with link back to overview if error fetching the Package
+  if (error) {
+    return (
+      <DsAlert data-color='danger'>
+        {t('package_poa_details_page.load_error')}{' '}
+        <Link to={`/${amUIPath.PoaOverview}`}>
+          {t('package_poa_details_page.back_to_overview_link')}
+        </Link>
+      </DsAlert>
+    );
+  }
 
   return (
     <>
