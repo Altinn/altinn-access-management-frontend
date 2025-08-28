@@ -46,15 +46,15 @@
             }
           },
           "to": {
-            "id": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+            "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
             "name": "Sitrongul Medaljong",
-            "type": "Organisasjon",
+            "type": "Person",
             "variant": "ORGL",
             "parent": null,
             "children": null,
             "keyValues": {
               "PartyId": "50088610",
-              "OrganizationIdentifier": "991825827"
+              "PersonId": "20838198385"
             }
           },
           "via": null,
