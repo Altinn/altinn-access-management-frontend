@@ -100,16 +100,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, CancellationToken cancellationToken)
         {
-            List<PartyName> partyNames = await _registerClient.GetPartyNames(systemUsers.Select(x => x.SupplierOrgNo), cancellationToken);
-            List<SystemUserFE> lista = new List<SystemUserFE>();
+            List<PartyName> partyNames = await _registerClient.GetPartyNames(systemUsers.Select(x => x.SupplierOrgNo).Distinct(), cancellationToken);
+            Dictionary<string, string> nameByOrgNo = partyNames.ToDictionary(p => p.OrgNo, p => p.Name);
+
+            List<SystemUserFE> lista = [];
             foreach (SystemUser systemUser in systemUsers)
             {
-                RegisteredSystemFE systemFE = new RegisteredSystemFE
+                nameByOrgNo.TryGetValue(systemUser.SupplierOrgNo, out var vendorName);
+                RegisteredSystemFE systemFE = new()
                 {
                     SystemId = systemUser.SystemId,
                     Name = "N/A", // not set since frontend does not use this (and we don't want to look up the system)
                     SystemVendorOrgNumber = systemUser.SupplierOrgNo,
-                    SystemVendorOrgName = partyNames.Find(x => x.OrgNo == systemUser.SupplierOrgNo)?.Name ?? "N/A",
+                    SystemVendorOrgName = vendorName ?? "N/A",
                 };
 
                 lista.Add(new SystemUserFE
