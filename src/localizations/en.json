@@ -497,7 +497,7 @@
     "systemusers_load_error": "Failed to load system accesses",
     "agent_delegation_systemusers_load_error": "Failed to load system accesses for customers",
     "new_system_user_button": "Create new system access",
-    "existing_system_users_title": "Our system accesses",
+    "existing_system_users_title": "Own system accesses",
     "agent_delegation_systemusers_title": "System accesses for customers",
     "edit_system_user": "Edit system access",
     "loading_systemusers": "Loading system accesses",

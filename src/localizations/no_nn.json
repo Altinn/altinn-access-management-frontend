@@ -493,7 +493,7 @@
     "systemusers_load_error": "Kunne ikkje laste systemtilgangar",
     "agent_delegation_systemusers_load_error": "Kunne ikkje laste systemtilganger for kunder",
     "new_system_user_button": "Lag ny systemtilgang",
-    "existing_system_users_title": "Våre systemtilgangar",
+    "existing_system_users_title": "Egne systemtilgangar",
     "agent_delegation_systemusers_title": "Systemtilganger for kunder",
     "edit_system_user": "Rediger systemtilgang",
     "loading_systemusers": "Laster systemtilgangar",
