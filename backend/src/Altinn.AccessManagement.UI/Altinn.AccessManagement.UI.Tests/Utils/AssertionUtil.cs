@@ -631,6 +631,31 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Title, actual.Title);
             Assert.Equal(expected.ConsentTextHtml, actual.ConsentTextHtml);
         }
+        
+        public static void AssertEqual(ConsentListItemFE expected, ConsentListItemFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.ToPartyId, actual.ToPartyId);
+            Assert.Equal(expected.ToPartyName, actual.ToPartyName);
+        }
+
+        public static void AssertEqual(ConsentFE expected, ConsentFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.TitleAccepted, actual.TitleAccepted);
+            Assert.Equal(expected.ConsentMessage, actual.ConsentMessage);
+            Assert.Equal(expected.Expiration, actual.Expiration);
+            Assert.Equal(expected.ServiceIntroAccepted, actual.ServiceIntroAccepted);
+            Assert.Equal(expected.HandledBy, actual.HandledBy);
+            Assert.Equal(expected.IsPoa, actual.IsPoa);
+            AssertCollections(expected.Rights, actual.Rights, AssertEqual);
+        }
 
         public static void AssertEqual(Altinn.AccessManagement.UI.Core.Models.User.Entity expected, Altinn.AccessManagement.UI.Core.Models.User.Entity actual)
         {

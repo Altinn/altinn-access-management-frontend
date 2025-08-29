@@ -1,0 +1,88 @@
+import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
+import { DsAlert, DsDialog, DsHeading, DsLink, DsSpinner } from '@altinn/altinn-components';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
+
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
+
+import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
+import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
+
+import classes from './ConsentHistoryPage.module.css';
+import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { ConsentTimeline } from './ConsentTimeline';
+
+export const ConsentHistoryPage = () => {
+  const { t } = useTranslation();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [selectedConsentId, setSelectedConsentId] = useState<string>('');
+
+  useDocumentTitle(t('consent_log.page_title'));
+  const partyUuid = getCookie('AltinnPartyUuid');
+
+  const {
+    data: activeConsents,
+    isLoading: isLoadingActiveConsents,
+    error: loadActiveConsentsError,
+  } = useGetActiveConsentsQuery({
+    partyId: partyUuid,
+  });
+
+  const showConsentDetails = (consentId: string): void => {
+    setSelectedConsentId(consentId);
+    modalRef.current?.showModal();
+  };
+
+  return (
+    <PageWrapper>
+      <PageLayoutWrapper>
+        <div className={classes.consentHistoryPage}>
+          <DsLink
+            asChild={true}
+            data-size='md'
+            data-color='neutral'
+          >
+            <Link to={'/consent/active'}>
+              <ArrowLeftIcon
+                aria-hidden={true}
+                fontSize='1.3rem'
+              />
+              {t('common.back')}
+            </Link>
+          </DsLink>
+          <div>
+            <DsHeading
+              level={1}
+              data-size='md'
+            >
+              {t('consent_log.heading')}
+            </DsHeading>
+          </div>
+          {isLoadingActiveConsents && (
+            <DsSpinner aria-label={t('consent_log.loading_consent_log')} />
+          )}
+          {loadActiveConsentsError && (
+            <DsAlert data-color='danger'>{t('consent_log.loading_consent_log_error')}</DsAlert>
+          )}
+          {activeConsents && (
+            <ConsentTimeline
+              activeConsents={activeConsents}
+              showConsentDetails={showConsentDetails}
+            />
+          )}
+        </div>
+        <DsDialog
+          ref={modalRef}
+          className={classes.consentDialog}
+          closedby='any'
+          onClose={() => setSelectedConsentId('')}
+        >
+          {selectedConsentId && <ConsentDetails consentId={selectedConsentId} />}
+        </DsDialog>
+      </PageLayoutWrapper>
+    </PageWrapper>
+  );
+};

@@ -111,6 +111,88 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return request.Value.RedirectUrl;
         }
 
+        /// <inheritdoc />
+        public async Task<Result<List<ConsentListItemFE>>> GetActiveConsents(Guid party, CancellationToken cancellationToken)
+        {
+            Result<List<Consent>> activeConsents = await _consentClient.GetActiveConsents(party, cancellationToken);
+            if (activeConsents.IsProblem)
+            {
+                return activeConsents.Problem;
+            }
+
+            // look up all party names in one call instead of one by one
+            IEnumerable<string> partyUuids = activeConsents.Value.Aggregate(new List<string> { }, (acc, consent) => [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From)]).Distinct();
+            IEnumerable<Party> parties = await GetConsentParties(partyUuids);
+
+            IEnumerable<ConsentListItemFE> consentListItems = activeConsents.Value.Select(consent =>
+            {
+                Party toParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.To));
+                Party fromParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.From));
+                return new ConsentListItemFE()
+                {
+                    Id = consent.Id,
+                    IsPoa = consent.TemplateId == "poa", // TODO, bedre sjekk, event vurder om vi må vite hva som er poa og samtykke
+                    ToPartyId = consent.To,
+                    ToPartyName = toParty?.Name ?? string.Empty,
+                    FromPartyId = consent.From,
+                    FromPartyName = fromParty?.Name ?? string.Empty,
+                    ValidTo = consent.ValidTo,
+                    ConsentRequestEvents = consent.ConsentRequestEvents,
+                };
+            });
+            
+            return consentListItems.ToList();
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<ConsentFE>> GetConsent(Guid consentId, CancellationToken cancellationToken)
+        {
+            Result<Consent> consent = await _consentClient.GetConsent(consentId, cancellationToken);
+
+            if (consent.IsProblem)
+            {
+                return consent.Problem;
+            }
+
+            ConsentTemplateParams templateParams = new()
+            {
+                ConsentRights = consent.Value.ConsentRights,
+                FromUrn = consent.Value.From,
+                ToUrn = consent.Value.To,
+                HandledByUrn = consent.Value.HandledBy,
+                ValidTo = consent.Value.ValidTo,
+                TemplateId = consent.Value.TemplateId,
+                TemplateVersion = consent.Value.TemplateVersion,
+                RequestMessage = consent.Value.RequestMessage, // usikker på om vi trenger denne i ConsentFE
+            };
+            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(templateParams, cancellationToken);
+
+            if (enrichedConsentTemplate.IsProblem)
+            {
+                return enrichedConsentTemplate.Problem;
+            }
+
+            return new ConsentFE()
+            {
+                Id = consent.Value.Id,
+                Rights = enrichedConsentTemplate.Value.Rights,
+                IsPoa = enrichedConsentTemplate.Value.IsPoa,
+                TitleAccepted = enrichedConsentTemplate.Value.TitleAccepted,
+                ServiceIntroAccepted = enrichedConsentTemplate.Value.ServiceIntroAccepted,
+                HandledBy = enrichedConsentTemplate.Value.HandledBy,
+                ConsentMessage = enrichedConsentTemplate.Value.ConsentMessage,
+                Expiration = enrichedConsentTemplate.Value.Expiration,
+                ConsentRequestEvents = consent.Value.ConsentRequestEvents,
+                ValidTo = consent.Value.ValidTo,
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken)
+        {
+            return await _consentClient.RevokeConsent(consentId, cancellationToken);
+        }
+
         private Dictionary<string, string> GetStaticMetadata(Party to, Party from, Party handledBy, DateTimeOffset requestValidTo)
         {
             TimeZoneInfo timeZone = TimeZoneInfo.Utc;
@@ -186,25 +268,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return replacedTranslations;
         }
 
-        private async Task<(Party To, Party From, Party HandledBy)> GetConsentParties(string toUrn, string fromUrn, string handledByUrn)
+        private async Task<IEnumerable<Party>> GetConsentParties(IEnumerable<string> partyUuids)
         {
-            // map urns ("urn:altinn:party:uuid:167536b5-f8ed-4c5a-8f48-0279507e53ae") to named party objects
-            string toUrnValue = GetUrnValue(toUrn);
-            string fromUrnValue = GetUrnValue(fromUrn);
-            string handledByUrnValue = handledByUrn != null ? GetUrnValue(handledByUrn) : null;
-
-            IEnumerable<string> urnValues = [toUrnValue, fromUrnValue, handledByUrnValue];
-            IEnumerable<Guid> partyGuidsToLookup = urnValues.Where(urn => urn != null)
+            IEnumerable<Guid> partyGuidsToLookup = partyUuids.Where(urn => urn != null)
                 .Select(urn => Guid.TryParse(urn, out var guid) ? guid : (Guid?)null)
                 .Where(guid => guid.HasValue)
                 .Select(guid => guid.Value);
+
             List<Party> parties = await _registerClient.GetPartyList(partyGuidsToLookup.ToList());
 
-            Party toParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == toUrnValue);
-            Party fromParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == fromUrnValue);
-            Party handledByParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == handledByUrnValue);
-
-            return (To: toParty, From: fromParty, HandledBy: handledByParty);
+            return parties;
         }
 
         private async Task<Result<EnrichedConsentTemplate>> EnrichConsentTemplate(ConsentTemplateParams templateParams, CancellationToken cancellationToken)
@@ -248,7 +321,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             var expirationText = isOneTimeConsent ? consentTemplate.Texts.ExpirationOneTime : consentTemplate.Texts.Expiration;
 
-            var (toParty, fromParty, handledByParty) = await GetConsentParties(templateParams.ToUrn, templateParams.FromUrn, templateParams.HandledByUrn);
+            string toPartyUuid = GetUrnValue(templateParams.ToUrn);
+            string fromPartyUuid = GetUrnValue(templateParams.FromUrn);
+            string handledByPartyUuid = templateParams.HandledByUrn != null ? GetUrnValue(templateParams.HandledByUrn) : null;
+            
+            IEnumerable<Party> parties = await GetConsentParties([toPartyUuid, fromPartyUuid, handledByPartyUuid]);
+            Party toParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == toPartyUuid);
+            Party fromParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == fromPartyUuid);
+            Party handledByParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == handledByPartyUuid);
+
+            if (toParty == null || fromParty == null)
+            {
+                return ConsentProblem.ConsentPartyNotFound;
+            }
 
             Dictionary<string, string> staticMetadata = GetStaticMetadata(toParty, fromParty, handledByParty, templateParams.ValidTo);
             Dictionary<string, string> title;
@@ -287,7 +372,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 FromPartyName = isFromOrg ? fromParty.Name : null
             };
         }
-        
+
         private sealed class ConsentTemplateParams
         {
             public IEnumerable<ConsentRight> ConsentRights { get; set; }
