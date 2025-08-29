@@ -4,7 +4,7 @@ import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
-import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
+import { useRerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
@@ -14,7 +14,7 @@ export const InfoPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('info_page.page_title'));
 
-  rerouteIfNotConfetti();
+  useRerouteIfNotConfetti();
 
   return (
     <PageWrapper>

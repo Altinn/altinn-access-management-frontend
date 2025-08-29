@@ -432,7 +432,8 @@
     "info": "We are renovating access management and you get a sneak peek at an early version! It is still under development, so some functions are missing. We still hope you will try.",
     "close_button": "Try new access management",
     "back_button": "Go back to today's Altinn",
-    "info_link": "Why are we updating Altinn?"
+    "info_link": "Why are we updating Altinn?",
+    "info_button": "Information about the new solution"
   },
   "a2Alerts": {
     "launchAlertHeading": "We are renewing Altinn",
