@@ -57,7 +57,7 @@ export const InfoModal = () => {
               <a
                 href={getHostUrl() + 'ui/profile'}
                 target='_blank'
-                rel='noreferrer'
+                rel='noopener noreferrer'
               >
                 {t('info_modal.back_button')}
               </a>
