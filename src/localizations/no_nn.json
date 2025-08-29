@@ -675,8 +675,8 @@
     "back_to_overview_link": "Gå tilbake til oversikta",
     "users_tab": {
       "title": "Brukarar med tilgang",
-      "description": "desse brukarane har fullmakt til alle tenestene i tilgangspakken på vegner av {{fromparty}}",
-      "user_search_placeholder": "Søk etter person eller virksomhet",
+      "description": "Desse brukarane har fullmakt til alle tenestene i tilgangspakken på vegner av {{fromparty}}",
+      "user_search_placeholder": "Søk etter person eller verksemd",
       "no_users": "Ingen har fullmakt til denne pakken på vegne av {{fromparty}}."
     }
   }
