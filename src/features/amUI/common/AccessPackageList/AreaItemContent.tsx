@@ -39,6 +39,7 @@ interface AreaItemContentProps {
   useDeleteConfirm?: boolean;
   showAvailableToggle?: boolean;
   showPermissions?: boolean;
+  packageAs?: React.ElementType;
 }
 
 export const AreaItemContent = ({
@@ -53,6 +54,7 @@ export const AreaItemContent = ({
   useDeleteConfirm,
   showAvailableToggle = true,
   showPermissions = false,
+  packageAs,
 }: AreaItemContentProps) => {
   const { packages } = area;
   const { t } = useTranslation();
@@ -102,26 +104,35 @@ export const AreaItemContent = ({
       <DsParagraph>{area.description}</DsParagraph>
       {packages.assigned.length > 0 && (
         <List aria-label={t('access_packages.given_packages_title')}>
-          {packages.assigned.map((pkg) => (
-            <PackageItem
-              key={pkg.id}
-              pkg={pkg}
-              onSelect={onSelect}
-              hasAccess
-              controls={
-                !isSm &&
-                pkg.deletableStatus !== DeletableStatus.NotDeletable &&
-                revokeActionControl(pkg)
-              }
-              badge={
-                <>
-                  {showPermissions && pkg.permissions && (
-                    <PermissionBadge permissions={pkg.permissions} />
-                  )}
-                </>
-              }
-            />
-          ))}
+          {packages.assigned.map((pkg) => {
+            const Component = packageAs || 'button';
+            return (
+              <PackageItem
+                as={(props) => (
+                  <Component
+                    packageId={pkg.id}
+                    {...props}
+                  />
+                )}
+                key={pkg.id}
+                pkg={pkg}
+                onSelect={onSelect}
+                hasAccess
+                controls={
+                  !isSm &&
+                  pkg.deletableStatus !== DeletableStatus.NotDeletable &&
+                  revokeActionControl(pkg)
+                }
+                badge={
+                  <>
+                    {showPermissions && pkg.permissions && (
+                      <PermissionBadge permissions={pkg.permissions} />
+                    )}
+                  </>
+                }
+              />
+            );
+          })}
         </List>
       )}
 
@@ -157,8 +168,15 @@ export const AreaItemContent = ({
       {packages.available.length > 0 && showAvailablePackages && (
         <List aria-label={t('access_packages.available_packages_title')}>
           {packages.available.map((pkg) => {
+            const Component = packageAs || 'button';
             return (
               <PackageItem
+                as={(props) => (
+                  <Component
+                    packageId={pkg.id}
+                    {...props}
+                  />
+                )}
                 key={pkg.id}
                 pkg={pkg}
                 onSelect={onSelect}

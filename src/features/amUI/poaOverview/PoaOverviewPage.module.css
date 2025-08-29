@@ -1,3 +1,7 @@
+.pageHeading {
+  margin-block-end: 1rem;
+}
+
 .searchInput {
   width: 50%;
 }

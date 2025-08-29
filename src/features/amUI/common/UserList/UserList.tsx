@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
+import type { ReactNode } from 'react';
 
 import type { Connection } from '@/rtk/features/userInfoApi';
 
@@ -19,6 +20,8 @@ export interface UserListProps {
   canAdd?: boolean;
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
+  disableLinks?: boolean;
+  noUsersMessage?: string;
 }
 
 export const UserList = ({
@@ -30,6 +33,8 @@ export const UserList = ({
   canAdd = true,
   showRoles = true,
   roleDirection = 'toUser',
+  disableLinks = false,
+  noUsersMessage,
 }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
@@ -37,7 +42,7 @@ export const UserList = ({
     searchString,
   });
 
-  const promptForNoResults = !isLoading && users?.length === 0 && canAdd;
+  const promptForNoResults = !isLoading && users?.length === 0;
 
   if (isLoading) {
     return (
@@ -55,13 +60,25 @@ export const UserList = ({
           className={classes.noResultsContent}
         >
           {searchString.length === 0 ? (
-            <DsParagraph data-size='md'>{t('users_page.no_users')}</DsParagraph>
+            <DsParagraph data-size='md'>{noUsersMessage ?? t('users_page.no_users')}</DsParagraph>
           ) : (
-            <DsParagraph data-size='md'>
-              {t('users_page.user_no_search_result', { searchTerm: searchString })}
-            </DsParagraph>
+            <>
+              {canAdd ? (
+                <>
+                  <DsParagraph data-size='md'>
+                    {t('users_page.user_no_search_result_with_add_suggestion', {
+                      searchTerm: searchString,
+                    })}
+                  </DsParagraph>
+                  <NewUserButton isLarge />
+                </>
+              ) : (
+                <DsParagraph data-size='md'>
+                  {t('users_page.user_no_search_result', { searchTerm: searchString })}
+                </DsParagraph>
+              )}
+            </>
           )}
-          <NewUserButton isLarge />
         </div>
       )}
       <List spacing={2}>
@@ -74,6 +91,7 @@ export const UserList = ({
             interactive={interactive}
             showRoles={showRoles}
             roleDirection={roleDirection}
+            disableLinks={disableLinks}
           />
         ))}
       </List>

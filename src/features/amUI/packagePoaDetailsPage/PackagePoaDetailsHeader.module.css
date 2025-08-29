@@ -1,0 +1,45 @@
+.headingContainer {
+  display: grid;
+  grid-template-areas:
+    'icon heading'
+    'description description';
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.packageIconContainer {
+  grid-area: icon;
+  position: relative;
+}
+
+@media screen and (max-width: 768px) {
+}
+
+.packageIcon {
+  height: 2.35rem;
+  width: 2.35rem;
+  margin: auto;
+}
+
+.packageAvatar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 1rem;
+  width: 1rem;
+  z-index: 100;
+}
+
+.pageHeading {
+  grid-area: heading;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.pageDescription {
+  grid-area: description;
+  max-width: 100%;
+  word-break: break-word;
+}

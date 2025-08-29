@@ -1,0 +1,50 @@
+{
+  "id": "1dba50d6-f604-48e9-bd41-82321b13e85c",
+  "urn": "urn:altinn:accesspackage:skatt-naering",
+  "name": "Skatt næring",
+  "isAssignable": false,
+  "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til skatt for næringer. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+  "resources": [],
+  "permissions": [
+    {
+      "from": {
+        "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+        "name": "DISKRET NÆR TIGER AS",
+        "type": "Organisasjon",
+        "variant": "AS",
+        "parent": null,
+        "children": [
+          {
+            "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+            "name": "DISKRET NÆR TIGER AS",
+            "type": "Organisasjon",
+            "variant": "BEDR",
+            "parent": {
+              "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+              "name": "DISKRET NÆR TIGER AS",
+              "type": "Organisasjon",
+              "variant": "AS",
+              "parent": null,
+              "children": null
+            },
+            "children": null
+          }
+        ]
+      },
+      "to": {
+        "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+        "name": "Sitrongul Medaljong",
+        "type": "Person",
+        "parent": null,
+        "children": null
+      },
+      "via": null,
+      "role": {
+        "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+        "code": "rettighetshaver",
+        "children": null
+      },
+      "viaRole": null
+    }
+  ]
+}
