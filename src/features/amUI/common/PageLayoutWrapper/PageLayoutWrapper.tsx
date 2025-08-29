@@ -4,6 +4,8 @@ import type {
   AccountMenuItemProps,
   MenuGroupProps,
   MenuItemProps,
+  MenuItemSize,
+  MenuItemTheme,
 } from '@altinn/altinn-components';
 import {
   Banner,
@@ -15,7 +17,14 @@ import {
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
-import { HandshakeIcon, InboxIcon, MenuGridIcon, PersonChatIcon } from '@navikt/aksel-icons';
+import {
+  HandshakeIcon,
+  InboxIcon,
+  InformationSquareIcon,
+  LeaveIcon,
+  MenuGridIcon,
+  PersonChatIcon,
+} from '@navikt/aksel-icons';
 
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
@@ -29,6 +38,7 @@ import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { SidebarItems } from './SidebarItems';
+import { InfoModal } from './InfoModal';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -53,33 +63,34 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
 
+  const menuGroups = {
+    shortcuts: {
+      divider: false,
+      title: t('header.shortcuts'),
+      defaultIconTheme: 'transparent' as MenuItemTheme,
+      defaultItemSize: 'sm' as MenuItemSize,
+    },
+    global: {
+      divider: false,
+    },
+  };
+
   const isSm = useIsTabletOrSmaller();
   const headerLinks: MenuItemProps[] = [
-    {
-      groupId: 1,
-      id: 'messagebox',
-      title: t('header.inbox'),
-      size: 'lg',
-      icon: InboxIcon,
-      as: (props) => (
-        <Link
-          to={`${getHostUrl()}ui/messagebox`}
-          {...props}
-        />
-      ),
-    },
     {
       groupId: 1,
       icon: HandshakeIcon,
       id: 'access_management',
       size: 'lg',
       title: t('header.access_management'),
+      selected: true,
       as: (props) => (
         <Link
           to={`/${amUIPath.Users}`}
           {...props}
         />
       ),
+      badge: { label: t('common.beta') },
     },
     ...(isSm
       ? SidebarItems(
@@ -90,28 +101,29 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           getAccountType(reportee?.type ?? ''),
         )
       : []),
+
     {
-      id: 'all-services',
+      id: 'info',
       groupId: 10,
-      icon: MenuGridIcon,
-      title: t('header.all_services'),
+      icon: InformationSquareIcon,
+      title: t('header.new_altinn_info'),
       size: 'lg',
       as: (props) => (
         <Link
-          to='https://info.altinn.no/skjemaoversikt'
+          to={`/${amUIPath.Info}`}
           {...props}
         />
       ),
     },
     {
-      id: 'chat',
+      id: 'leave_beta',
       groupId: 10,
-      icon: PersonChatIcon,
-      title: t('header.chat'),
+      icon: LeaveIcon,
+      title: t('header.leave_beta'),
       size: 'lg',
       as: (props) => (
         <Link
-          to='https://info.altinn.no/hjelp/'
+          to={getHostUrl() + 'ui/profile'}
           {...props}
         />
       ),
@@ -151,22 +163,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   return (
     <RootProvider>
-      <Banner
-        text={
-          <>
-            {t('beta_banner.info')}{' '}
-            <DsLink
-              data-color='neutral'
-              href={getHostUrl() + 'ui/profile'}
-            >
-              {t('beta_banner.link')}
-            </DsLink>
-          </>
-        }
-        color='warning'
-        sticky={false}
-      />
-
       <Layout
         color={'company'}
         theme='subtle'
@@ -231,7 +227,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         }}
         sidebar={{
           menu: {
-            groups: {},
+            groups: menuGroups,
             items: SidebarItems(
               false,
               pathname,
@@ -254,6 +250,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           },
         }}
       >
+        <InfoModal />
         {children}
       </Layout>
       <Snackbar />

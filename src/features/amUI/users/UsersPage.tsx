@@ -5,7 +5,7 @@ import { DsHeading } from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
+import { useRerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -22,7 +22,7 @@ export const UsersPage = () => {
   const orgNumber = reportee?.organizationNumber || '';
   const isMainUnit = (reportee?.subunits?.length ?? 0) > 0;
 
-  rerouteIfNotConfetti();
+  useRerouteIfNotConfetti();
 
   return (
     <PageWrapper>
