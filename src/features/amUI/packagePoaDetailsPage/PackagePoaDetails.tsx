@@ -1,7 +1,16 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import headerClasses from './PackagePoaDetailsHeader.module.css';
-import { DsAlert, DsSearch, DsTabs, List, ResourceListItem } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsParagraph,
+  DsSearch,
+  DsTabs,
+  Header,
+  Heading,
+  List,
+  ResourceListItem,
+} from '@altinn/altinn-components';
 import { Link, Navigate, redirect, useParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
@@ -111,35 +120,54 @@ export const PackagePoaDetails = () => {
           className={pageClasses.tabContent}
           value='users'
         >
-          <DsSearch className={pageClasses.searchBar}>
-            <DsSearch.Input
-              aria-label={t('package_poa_details_page.users_tab.user_search_placeholder')}
-              placeholder={t('package_poa_details_page.users_tab.user_search_placeholder')}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                onSearch(event.target.value)
-              }
-            />
-            <DsSearch.Clear
-              onClick={() => {
-                onSearch.cancel?.();
-                setSearchString('');
-              }}
-            />
-          </DsSearch>
+          <Heading as='h3'>{t('package_poa_details_page.users_tab.title')}</Heading>
+          {connections.length === 0 && !isLoading ? (
+            <DsParagraph
+              data-size='md'
+              className={pageClasses.tabDescription}
+            >
+              {t('package_poa_details_page.users_tab.no_users', {
+                fromparty: fromParty?.name,
+              })}
+            </DsParagraph>
+          ) : (
+            <>
+              <DsParagraph
+                data-size='md'
+                className={pageClasses.tabDescription}
+              >
+                {t('package_poa_details_page.users_tab.description', {
+                  fromparty: fromParty?.name,
+                })}
+              </DsParagraph>
+              <DsSearch className={pageClasses.searchBar}>
+                <DsSearch.Input
+                  aria-label={t('package_poa_details_page.users_tab.user_search_placeholder')}
+                  placeholder={t('package_poa_details_page.users_tab.user_search_placeholder')}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                    onSearch(event.target.value)
+                  }
+                />
+                <DsSearch.Clear
+                  onClick={() => {
+                    onSearch.cancel?.();
+                    setSearchString('');
+                  }}
+                />
+              </DsSearch>
 
-          <UserList
-            connections={connections}
-            searchString={searchString}
-            showRoles
-            listItemTitleAs='h3'
-            isLoading={isLoading}
-            interactive={false}
-            disableLinks
-            canAdd={false}
-            noUsersMessage={t('package_poa_details_page.users_tab.no_users', {
-              fromparty: fromParty?.name,
-            })}
-          />
+              <UserList
+                connections={connections}
+                searchString={searchString}
+                showRoles
+                listItemTitleAs='h3'
+                isLoading={isLoading}
+                interactive={false}
+                disableLinks
+                canAdd={false}
+              />
+            </>
+          )}
         </DsTabs.Panel>
         <DsTabs.Panel
           className={pageClasses.tabContent}

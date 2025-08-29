@@ -21,7 +21,6 @@ export interface UserListProps {
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
-  noUsersMessage?: string;
 }
 
 export const UserList = ({
@@ -34,7 +33,6 @@ export const UserList = ({
   showRoles = true,
   roleDirection = 'toUser',
   disableLinks = false,
-  noUsersMessage,
 }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
@@ -60,7 +58,7 @@ export const UserList = ({
           className={classes.noResultsContent}
         >
           {searchString.length === 0 ? (
-            <DsParagraph data-size='md'>{noUsersMessage ?? t('users_page.no_users')}</DsParagraph>
+            <DsParagraph data-size='md'>{t('users_page.no_users')}</DsParagraph>
           ) : (
             <>
               {canAdd ? (
