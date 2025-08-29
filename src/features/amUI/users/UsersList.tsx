@@ -129,7 +129,7 @@ export const UsersList = () => {
             }}
           />
         </DsSearch>
-        <NewUserButton />
+        {isAdmin && <NewUserButton />}
       </div>
       {isAdmin && (
         <UserList

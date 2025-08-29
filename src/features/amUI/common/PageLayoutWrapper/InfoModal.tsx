@@ -30,6 +30,7 @@ export const InfoModal = () => {
         className={classes.infoModalButton}
         icon
         data-size='lg'
+        aria-label={t('info_modal.info_button')}
       >
         <InformationSquareIcon title='Info' />
       </DsButton>
@@ -37,9 +38,15 @@ export const InfoModal = () => {
         open={isOpen}
         onClose={() => setIsOpen(false)}
         closeButton={false}
+        aria-labelledby='info_modal-title'
       >
         <div className={classes.modalContent}>
-          <DsHeading data-size='sm'>{t('info_modal.title')}</DsHeading>
+          <DsHeading
+            id='info_modal-title'
+            data-size='sm'
+          >
+            {t('info_modal.title')}
+          </DsHeading>
           <DsParagraph>{t('info_modal.info')}</DsParagraph>
           <div className={classes.modalActions}>
             <DsButton onClick={() => setIsOpen(false)}>{t('info_modal.close_button')}</DsButton>

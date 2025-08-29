@@ -1,9 +1,13 @@
 .infoModalButton {
   position: fixed;
-  bottom: 16px;
-  right: 16px;
+  /* Respect device safe-areas */
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  right: calc(16px + env(safe-area-inset-right));
   z-index: 10;
   border-radius: 50%;
+  /* Ensure accessible touch target */
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .modalContent {
