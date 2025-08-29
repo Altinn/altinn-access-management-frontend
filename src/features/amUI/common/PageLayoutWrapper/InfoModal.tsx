@@ -54,13 +54,7 @@ export const InfoModal = () => {
               variant='secondary'
               asChild
             >
-              <a
-                href={getHostUrl() + 'ui/profile'}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                {t('info_modal.back_button')}
-              </a>
+              <a href={getHostUrl() + 'ui/profile'}>{t('info_modal.back_button')}</a>
             </DsButton>
           </div>
           <DsLink asChild>

@@ -74,7 +74,7 @@ export const UsersList = () => {
     }
     const remainingAfterExtraction = extractFromList(
       rightHolders || [],
-      currentUser?.uuid ?? 'loading',
+      displayLimitedPreviewLaunch ? 'nobody' : (currentUser?.uuid ?? 'loading'),
     );
     return remainingAfterExtraction;
   }, [rightHolders, currentUser]);
