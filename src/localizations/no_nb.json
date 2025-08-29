@@ -496,7 +496,7 @@
     "systemusers_load_error": "Kunne ikke laste systemtilganger",
     "agent_delegation_systemusers_load_error": "Kunne ikke laste systemtilganger for kunder",
     "new_system_user_button": "Lag ny systemtilgang",
-    "existing_system_users_title": "Våre systemtilganger",
+    "existing_system_users_title": "Egne systemtilganger",
     "agent_delegation_systemusers_title": "Systemtilganger for kunder",
     "edit_system_user": "Rediger systemtilgang",
     "loading_systemusers": "Laster systemtilganger",
