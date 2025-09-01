@@ -34,6 +34,7 @@ import {
   SystemUserPath,
   ConsentPath,
 } from '../paths';
+import { PackagePoaDetailsPage } from '@/features/amUI/packagePoaDetailsPage/PackagePoaDetailsPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -116,6 +117,10 @@ export const Router = createBrowserRouter(
       <Route
         path={amUIPath.PoaOverview}
         element={<PoaOverviewPage />}
+      />
+      <Route
+        path={amUIPath.PackagePoaDetails}
+        element={<PackagePoaDetailsPage />}
       />
       <Route
         path={SystemUserPath.SystemUser}

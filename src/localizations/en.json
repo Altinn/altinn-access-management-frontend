@@ -311,7 +311,8 @@
     "user_list_heading": "Other users with power of attorney",
     "user_search_placeholder": "Search for users",
     "no_users": "Nobody but you have access. Do you want to change this?",
-    "user_no_search_result": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?"
+    "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
+    "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?"
   },
   "reportees_page": {
     "page_title": "Our access to other companies - Altinn",
@@ -693,5 +694,17 @@
   "poa_overview_page": {
     "page_title": "Power of attorney overview",
     "heading": "Power of attorney overview for {{fromparty}}"
+  },
+  "package_poa_details_page": {
+    "page_title": "Power of attorney details",
+    "users_tab_title": "Users",
+    "services_tab_title": "Services",
+    "load_error": "Oops! Something went wrong.",
+    "back_to_overview_link": "Go back to the overview",
+    "users_tab": {
+      "description": "These users have power of attorney for all the services in the access package on behalf of {{fromparty}}",
+      "user_search_placeholder": "Search for person or organization",
+      "no_users": "No users have power of attorney for this package on behalf of {{fromparty}}."
+    }
   }
 }

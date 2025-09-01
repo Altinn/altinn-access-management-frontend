@@ -14,6 +14,8 @@ import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { AccessPackagePermissions } from './AccessPackagePermissions';
 import { useRerouteIfLimitedPreview } from '@/resources/utils/featureFlagUtils';
 
+import classes from './PoaOverviewPage.module.css';
+
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
@@ -32,6 +34,7 @@ export const PoaOverviewPage = () => {
           <DsHeading
             level={1}
             data-size='lg'
+            className={classes.pageHeading}
           >
             {t('poa_overview_page.heading', { fromparty: reportee?.name || '' })}
           </DsHeading>
