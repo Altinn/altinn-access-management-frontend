@@ -103,6 +103,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 return rightHolders.Items.ToList();
             }
+            catch (HttpStatusException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while getting right holders");

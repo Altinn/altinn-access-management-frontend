@@ -62,7 +62,7 @@ export const UsersList = () => {
         toUuid: currentUser?.uuid ?? '',
       },
       {
-        skip: !fromParty?.partyUuid || !currentUser?.uuid,
+        skip: !fromParty?.partyUuid || !currentUser?.uuid || displayLimitedPreviewLaunch,
       },
     );
 
