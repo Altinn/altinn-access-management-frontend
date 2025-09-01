@@ -241,8 +241,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
 
         /// <summary>
-        ///    Test case: Get single package permission for a non-existent package
-        ///    Expected: Returns NoContent
+        ///    Test case: Get single package permission handles internal error
+        ///    Expected: Returns InternalServerError
         /// </summary>
         [Fact]
         public async Task GetSinglePackagePermission_Handles_Error_Cases()
