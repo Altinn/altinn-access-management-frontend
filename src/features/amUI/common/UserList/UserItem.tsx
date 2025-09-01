@@ -115,15 +115,17 @@ export const UserItem = ({
       as={
         hasInheritingUsers
           ? 'button'
-          : (props) =>
-              disableLinks ? (
-                <div {...props} />
-              ) : (
-                <Link
-                  {...props}
-                  to={user.id}
-                />
-              )
+          : !interactive
+            ? 'div'
+            : (props) =>
+                !interactive ? (
+                  'div'
+                ) : (
+                  <Link
+                    {...props}
+                    to={user.id}
+                  />
+                )
       }
       titleAs={titleAs}
       subUnit={subUnit || hasSubUnitRole}
