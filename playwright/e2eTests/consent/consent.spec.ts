@@ -6,6 +6,17 @@ import { ApiRequests } from '../../api-requests/ApiRequests';
 
 test.describe.configure({ timeout: 30000 });
 
+const redirectUrl = 'https://example.com/';
+let loginPage: LoginPage;
+let consentUrl: string;
+let api: ApiRequests;
+let validToTimestamp: string;
+const samtykkeButtonStandard = { name: 'Ja, jeg gir samtykke' };
+const samtykkeButtonStandardNei = { name: 'Nei, jeg gir ikke samtykke' };
+
+const samtykkeButtonFullmakt = { name: 'Ja, jeg gir fullmakt' };
+const samtykkeButtonFullmaktNei = { name: 'Nei, jeg gir ikke fullmakt' };
+
 test.describe('Consent', () => {
   const fromPersons = ['19873348707', '27897699724']; // Add more as needed
   const toOrgs = ['312285967', '312119358', '310155837', '311517678']; // Add more as needed
@@ -13,15 +24,13 @@ test.describe('Consent', () => {
   function pickRandom(arr: string[]) {
     return arr[Math.floor(Math.random() * arr.length)];
   }
-  const redirectUrl = 'https://example.com/';
-  let loginPage: LoginPage;
-  let consentUrl: string;
-  const samtykkeButtonStandard = { name: 'Ja, jeg gir samtykke' };
+
+  test.beforeEach(async () => {
+    api = new ApiRequests();
+    validToTimestamp = addTimeToNowUtc({ years: 1 });
+  });
 
   test('Godta forespørsel - Standard samtykke', async ({ page }) => {
-    const api = new ApiRequests();
-    const validToTimestamp = addTimeToNowUtc({ years: 1 });
-
     const fromPerson = pickRandom(fromPersons);
     const toOrg = pickRandom(toOrgs);
     process.env.ORG = toOrg;
@@ -32,16 +41,36 @@ test.describe('Consent', () => {
       validToIsoUtc: validToTimestamp,
       resourceValue: 'standard-samtykke-for-dele-data',
       redirectUrl,
-      metaData: { inntektsaar: '2035' },
+      metaData: { inntektsaar: '2028' },
     });
 
     await LoginUser({ page, consentResponse, fromPerson });
+
+    await expect(
+      page.getByRole('heading', { name: 'Samtykke til bruk av dine data' }),
+    ).toBeVisible();
+    await expect(page.getByText(/ønsker å hente opplysninger om deg/i)).toBeVisible();
+    await expect(page.getByText('Playwright integrasjonstest')).toBeVisible();
+    await expect(
+      page.getByText(/Ved at du samtykker, får .* tilgang til følgende opplysninger om deg/),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        'Du samtykker til at vi kan hente og bruke dine inntektsopplysninger fra Skatteetaten',
+      ),
+    ).toBeVisible();
+    await expect(page.getByText('Samtykket er tidsavgrenset og')).toBeVisible();
+
+    const expectedDateTime = formatUiDateTime(validToTimestamp);
+
+    await expect(
+      page.getByText(new RegExp(`Samtykket er tidsavgrenset og vil gå ut ${expectedDateTime}`)),
+    ).toBeVisible();
+
     await ConsentSayYes(page);
   });
 
   test('Godta samtykke - krav-template', async ({ page }) => {
-    const api = new ApiRequests();
-    const validToTimestamp = addTimeToNowUtc({ years: 1 });
     const fromPerson = pickRandom(fromPersons);
     const toOrg = pickRandom(toOrgs);
     process.env.ORG = toOrg;
@@ -60,8 +89,6 @@ test.describe('Consent', () => {
   });
 
   test('Godta samtykke - Fullmakt utføre tjeneste', async ({ page }) => {
-    const api = new ApiRequests();
-    const validToTimestamp = addTimeToNowUtc({ years: 1 });
     const fromPerson = pickRandom(fromPersons);
     const toOrg = pickRandom(toOrgs);
     process.env.ORG = toOrg;
@@ -76,13 +103,11 @@ test.describe('Consent', () => {
     });
 
     await LoginUser({ page, consentResponse, fromPerson });
-    await page.getByRole('button', samtykkeButtonStandard).click();
+    await page.getByRole('button', samtykkeButtonFullmakt).click();
     await waitForRedirects(page, [/login\.test\.idporten\.no\/logout\/success/i, /example\.com/i]);
   });
 
   test('Approve consent: Lånesøknad', async ({ page }) => {
-    const api = new ApiRequests();
-    const validToTimestamp = addTimeToNowUtc({ years: 1 });
     const fromPerson = pickRandom(fromPersons);
     const toOrg = pickRandom(toOrgs);
     process.env.ORG = toOrg;
@@ -201,4 +226,24 @@ function addTimeToNowUtc(opts: {
   if (opts.years) now.setUTCFullYear(now.getUTCFullYear() + opts.years);
 
   return now.toISOString(); // "YYYY-MM-DDTHH:mm:ss.sssZ"
+}
+
+function formatUiDateTime(isoString: string): string {
+  const date = new Date(isoString);
+
+  const datePart = date.toLocaleDateString('no-NO', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'Europe/Oslo',
+  });
+
+  const timePart = date.toLocaleTimeString('no-NO', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Europe/Oslo',
+  });
+
+  return `${datePart} ${timePart}`;
 }
