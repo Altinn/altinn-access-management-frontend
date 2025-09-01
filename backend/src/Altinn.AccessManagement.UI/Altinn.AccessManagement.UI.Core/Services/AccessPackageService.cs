@@ -86,17 +86,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<AccessPackageFE> GetSinglePackagePermission(Guid party, Guid? to, Guid? from, Guid packageId, string languageCode)
         {
             var package = await GetAccessPackageById(languageCode, packageId);
-
-            // The package-id filter of the GetAccessPackageAccesses method is 
-            // currently not implemented on the backend so we have to do a 
-            // manual filter until it is fixed
-            PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
             if (package == null)
             {
                 return null;
             }
             else
             {
+                // The package-id filter of the GetAccessPackageAccesses method is 
+                // currently not implemented on the backend so we have to do a 
+                // manual filter until it is fixed
+                PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
                 var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
                 {
                     return new AccessPackageFE

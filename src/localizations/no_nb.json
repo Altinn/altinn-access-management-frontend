@@ -677,7 +677,6 @@
     "load_error": "Oi! Noe gikk galt.",
     "back_to_overview_link": "Gå tilbake til oversikten",
     "users_tab": {
-      "title": "Brukere med tilgang",
       "description": "Disse brukerne har fullmakt til alle tjenestene i tilgangspakken på vegne av {{fromparty}}.",
       "user_search_placeholder": "Søk etter person eller virksomhet",
       "no_users": "Ingen har fullmakt til denne pakken på vegne av {{fromparty}}."

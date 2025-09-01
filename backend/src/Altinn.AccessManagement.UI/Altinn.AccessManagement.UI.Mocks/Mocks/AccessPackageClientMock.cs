@@ -137,6 +137,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
         {
+            // Trigger internal server error
+            if (packageId.Equals(new Guid("d98ac728-d127-4a4c-96e1-738f856e5332")))
+            {
+                throw new HttpStatusException(
+                    "InternalServerError",
+                    "InternalServerError",
+                    HttpStatusCode.InternalServerError,
+                    "");
+            }
             try
             {
                 string dataPath = Path.Combine(dataFolder, "AccessPackage", "packages.json");
@@ -149,10 +158,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             catch
             {
+
                 throw new HttpStatusException(
-                    "StatusError",
-                    "Unexpected mockResponse status from Access Management",
-                    HttpStatusCode.BadRequest,
+                    "Not found",
+                    "Not found",
+                    HttpStatusCode.NotFound,
                     "");
             }
         }

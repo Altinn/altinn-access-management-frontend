@@ -677,7 +677,6 @@
     "load_error": "Oops! Something went wrong.",
     "back_to_overview_link": "Go back to the overview",
     "users_tab": {
-      "title": "Users with access",
       "description": "These users have power of attorney for all the services in the access package on behalf of {{fromparty}}",
       "user_search_placeholder": "Search for person or organization",
       "no_users": "No users have power of attorney for this package on behalf of {{fromparty}}."

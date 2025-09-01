@@ -136,11 +136,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (HttpStatusException ex)
             {
-                if (ex.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
-
                 if (ex.StatusCode == HttpStatusCode.NotFound)
                 {
                     return NotFound();

@@ -1,17 +1,8 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import headerClasses from './PackagePoaDetailsHeader.module.css';
-import {
-  DsAlert,
-  DsParagraph,
-  DsSearch,
-  DsTabs,
-  Header,
-  Heading,
-  List,
-  ResourceListItem,
-} from '@altinn/altinn-components';
-import { Link, Navigate, redirect, useParams } from 'react-router';
+import { DsAlert, DsParagraph, DsSearch, DsTabs, Heading } from '@altinn/altinn-components';
+import { Link, useParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +16,7 @@ import { amUIPath } from '@/routes/paths/amUIPath';
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
-  const { fromParty, actingParty } = usePartyRepresentation();
+  const { fromParty } = usePartyRepresentation();
   const [searchString, setSearchString] = useState<string>('');
 
   const onSearch = useCallback(
@@ -120,7 +111,6 @@ export const PackagePoaDetails = () => {
           className={pageClasses.tabContent}
           value='users'
         >
-          <Heading as='h3'>{t('package_poa_details_page.users_tab.title')}</Heading>
           {connections.length === 0 && !isLoading ? (
             <DsParagraph
               data-size='md'
@@ -132,14 +122,16 @@ export const PackagePoaDetails = () => {
             </DsParagraph>
           ) : (
             <>
-              <DsParagraph
-                data-size='md'
-                className={pageClasses.tabDescription}
-              >
-                {t('package_poa_details_page.users_tab.description', {
-                  fromparty: fromParty?.name,
-                })}
-              </DsParagraph>
+              {!isLoading && (
+                <DsParagraph
+                  data-size='md'
+                  className={pageClasses.tabDescription}
+                >
+                  {t('package_poa_details_page.users_tab.description', {
+                    fromparty: fromParty?.name,
+                  })}
+                </DsParagraph>
+              )}
               <DsSearch className={pageClasses.searchBar}>
                 <DsSearch.Input
                   aria-label={t('package_poa_details_page.users_tab.user_search_placeholder')}

@@ -221,16 +221,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///    Test case: Get single package permission for a non-existent package
-        ///    Expected: Returns NotFound
+        ///    Expected: Returns NoContent
         /// </summary>
         [Fact]
-        public async Task GetSinglePackagePermission_ReturnsNotFound_When_PackageNotFound()
+        public async Task GetSinglePackagePermission_ReturnsNoContent_When_PackageNoContent()
         {
             // Arrange
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string party = from;
-            string packageId = "00000000-0000-0000-0000-000000000000";
+            string packageId = "1dba50d6-f604-48e9-bd41-82321b13e857";
 
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/permission/{packageId}?party={party}&from={from}&to={to}");
@@ -238,6 +238,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
+
+
+        /// <summary>
+        ///    Test case: Get single package permission for a non-existent package
+        ///    Expected: Returns NoContent
+        /// </summary>
+        [Fact]
+        public async Task GetSinglePackagePermission_Handles_Error_Cases()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string party = from;
+            string packageId = "d98ac728-d127-4a4c-96e1-738f856e5332"; // Triggers internal server error
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/permission/{packageId}?party={party}&from={from}&to={to}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
 
         /// <summary>
         ///    Test case: Missing from and to query parameters
