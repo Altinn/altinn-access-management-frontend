@@ -138,7 +138,7 @@ const connectionErrorAlert = (
   error: FetchBaseQueryError | SerializedError | undefined,
   returnToUrl?: string,
 ) => {
-  if (error) {
+  if (error && 'status' in error && error.status !== 403) {
     const errorDetails = createErrorDetails(error);
     return (
       <DsAlert data-color='danger'>
