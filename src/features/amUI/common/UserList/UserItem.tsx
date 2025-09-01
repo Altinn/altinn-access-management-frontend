@@ -117,10 +117,7 @@ export const UserItem = ({
           ? 'button'
           : !interactive
             ? 'div'
-            : (props) =>
-                !interactive ? (
-                  'div'
-                ) : (
+            : (props) => (
                   <Link
                     {...props}
                     to={user.id}
