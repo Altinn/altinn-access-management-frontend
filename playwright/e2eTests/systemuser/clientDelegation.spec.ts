@@ -78,7 +78,7 @@ test.describe('Klientdelegering', () => {
     await expect(loginPage.loginButton).toBeVisible();
 
     // Navigate to system user login page
-    await loginPage.loginAs(user.pid, user.org);
+    await loginPage.loginAcActorOrg(user.pid, user.org);
 
     //Go to system user overview page
     if (!process.env.SYSTEMUSER_URL) {

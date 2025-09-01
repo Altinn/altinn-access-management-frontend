@@ -1,12 +1,18 @@
 import { TestdataApi } from 'playwright/util/TestdataApi';
-
 import { Token } from './Token';
+import { randomUUID } from 'crypto'; // Node >= 14.17
 
 export class ApiRequests {
   private tokenClass: Token;
 
   constructor() {
     this.tokenClass = new Token();
+  }
+
+  public async postConsentRequestRaw(payload: any): Promise<{ viewUri: string }> {
+    const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
+    const scopes = 'altinn:consentrequests.write';
+    return this.sendPostRequest<typeof payload, { viewUri: string }>(payload, endpoint, scopes);
   }
 
   public async createSystemInSystemregisterWithAccessPackages(name: string): Promise<string> {
@@ -57,8 +63,8 @@ export class ApiRequests {
   }
 
   public async getSystemUsers(): Promise<string> {
-    const endpoint = `v1/systemuser/${process.env.ALTINN_PARTY_ID}`;
-    const url = `${process.env.API_BASE_URL}${endpoint}`;
+    const endpoint = `/v1/systemuser/${process.env.ALTINN_PARTY_ID}`;
+    const url = `${process.env.API_BASE_URL}/authentication/api/${endpoint}`;
     const token = await this.tokenClass.getPersonalAltinnToken();
 
     try {
@@ -93,7 +99,7 @@ export class ApiRequests {
     const scopes =
       'altinn:authentication/systemuser.request.write altinn:authentication/systemregister.write altinn:authentication/systemuser.request.read';
     const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
-    const url = `${process.env.API_BASE_URL}${endpoint}`;
+    const url = `${process.env.API_BASE_URL}/authentication/api/${endpoint}`;
 
     try {
       const response = await fetch(url, {
@@ -117,7 +123,7 @@ export class ApiRequests {
 
   public async deleteSystemUser(token: string, systemUserId: string): Promise<void> {
     const endpoint = `v1/systemuser/${process.env.ALTINN_PARTY_ID}/${systemUserId}`;
-    const url = `${process.env.API_BASE_URL}${endpoint}`;
+    const url = `${process.env.API_BASE_URL}/authentication/api/${endpoint}`;
 
     try {
       const response = await fetch(url, {
@@ -196,7 +202,7 @@ export class ApiRequests {
 
   public async approveSystemuserRequest(requestId: string) {
     const endpoint = `v1/systemuser/request/${process.env.ALTINN_PARTY_ID}/${requestId}/approve`;
-    const url = `${process.env.API_BASE_URL}${endpoint}`;
+    const url = `${process.env.API_BASE_URL}/authentication/api/${endpoint}`;
     const userToken = await this.tokenClass.getPersonalAltinnToken();
 
     try {
@@ -314,7 +320,7 @@ export class ApiRequests {
     const scopes =
       'altinn:authentication/systemuser.request.read altinn:authentication/systemuser.request.write';
     const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
-    const url = `${process.env.API_BASE_URL}${endpoint}`;
+    const url = `${process.env.API_BASE_URL}/authentication/api/${endpoint}`;
 
     const response = await fetch(url, {
       method: 'GET',
@@ -334,9 +340,20 @@ export class ApiRequests {
     payload: TPayload,
     endpoint: string,
     scopes: string,
+    apiPrefix: string = 'authentication/api',
   ): Promise<TResponse> {
-    const url = `${process.env.API_BASE_URL}${endpoint}`;
+    const baseUrl = process.env.API_BASE_URL?.replace(/\/+$/, '') ?? '';
+    let url = '';
+    if (endpoint.startsWith('/')) {
+      // Treat endpoint as full path after host
+      url = `${baseUrl}${endpoint}`;
+    } else {
+      const cleanApiPrefix = apiPrefix.replace(/\/+$/, '');
+      const cleanEndpoint = endpoint.replace(/^\/+/, '');
+      url = `${baseUrl}/${cleanApiPrefix}/${cleanEndpoint}`;
+    }
     const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
+    console.log('DEBUG ' + url);
 
     const response = await fetch(url, {
       method: 'POST',
@@ -355,4 +372,75 @@ export class ApiRequests {
 
     return (await response.json()) as TResponse;
   }
+
+  //Todo - move this to a separate setup class
+  /**
+   * Generalized consent request supporting both person and org as 'from'.
+   * @param fromType 'person' or 'org'
+   * @param fromId FNR for person, OrgNo for org
+   * @param toType Only 'org' currently supported
+   * @param toId OrgNo for recipient
+   * @param validToIsoUtc ISO UTC string for validity
+   * @param opts Optional resourceValue, redirectUrl, metaData
+   */
+  public async createConsentRequest({
+    from,
+    to,
+    validToIsoUtc,
+    resourceValue = 'enkelt-samtykke',
+    redirectUrl = 'https://vg.no',
+    metaData = { simpletag: 'playwright-e2e-metadata' },
+  }: CreateConsentRequestParams): Promise<{ viewUri: string }> {
+    const requestId = randomUUID();
+
+    const urnPrefix: Record<FromParty['type'] | ToParty['type'], string> = {
+      person: 'urn:altinn:person:identifier-no:',
+      org: 'urn:altinn:organization:identifier-no:',
+    };
+
+    const fromUrn = `${urnPrefix[from.type]}${from.id}`;
+    const toUrn = `${urnPrefix[to.type]}${to.id}`; // to.type er 'org' per type-def
+
+    const payload = {
+      id: requestId,
+      from: fromUrn,
+      to: toUrn,
+      validTo: validToIsoUtc,
+      consentRights: [
+        {
+          action: ['consent'],
+          resource: [
+            {
+              type: 'urn:altinn:resource',
+              value: resourceValue,
+            },
+          ],
+          metaData,
+        },
+      ],
+      redirectUrl,
+      requestMessage: {
+        en: `Playwright E2E test run at ${new Date().toISOString()}`,
+        nb: 'Playwright integrasjonstest',
+        nn: 'Playwright ende-til-ende test',
+      },
+    };
+
+    const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
+    const scopes = 'altinn:consentrequests.write';
+
+    return this.sendPostRequest<typeof payload, { viewUri: string }>(payload, endpoint, scopes);
+  }
 }
+
+interface CreateConsentRequestParams {
+  from: FromParty;
+  to: ToParty;
+  validToIsoUtc: string;
+  resourceValue?: string;
+  redirectUrl?: string;
+  metaData?: Record<string, string>;
+}
+
+type FromParty = { type: 'person' | 'org'; id: string };
+type ToParty = { type: 'org'; id: string };
