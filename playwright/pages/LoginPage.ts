@@ -45,7 +45,7 @@ export class LoginPage {
     await this.autentiserButton.click();
   }
 
-  async loginAs(pid: string, orgnummer: string) {
+  async loginAcActorOrg(pid: string, orgnummer: string) {
     const baseUrl = process.env.BASE_URL as string;
     await this.page.goto(baseUrl);
     await this.loginButton.click();
@@ -55,6 +55,12 @@ export class LoginPage {
 
     await expect(this.velgAktoerHeading).toBeVisible();
     await this.selectActor(this.searchBox, orgnummer);
+  }
+
+  async loginAsActorPid(pid: string) {
+    await this.testIdLink.click();
+    await this.pidInput.fill(pid);
+    await this.autentiserButton.click();
   }
 
   async chooseReportee(reportee: string) {

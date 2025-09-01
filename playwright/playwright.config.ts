@@ -53,7 +53,8 @@ const config: PlaywrightTestConfig = {
       },
       use: {
         browserName: 'chromium',
-        headless: false,
+        headless:
+          process.env.headless !== undefined ? process.env.headless.toLowerCase() === 'true' : true,
       },
     },
     {
