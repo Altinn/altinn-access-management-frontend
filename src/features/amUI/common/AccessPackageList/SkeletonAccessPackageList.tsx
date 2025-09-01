@@ -19,8 +19,8 @@ export const SkeletonAccessPackageList = () => {
     <List>
       {areaSkeletons.map(({ id, ...props }) => (
         <AccessAreaListItem
-          interactive={false}
           as='div'
+          interactive={false}
           loading
           key={id}
           id={id}
