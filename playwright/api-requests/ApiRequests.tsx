@@ -353,7 +353,6 @@ export class ApiRequests {
       url = `${baseUrl}/${cleanApiPrefix}/${cleanEndpoint}`;
     }
     const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
-    console.log('DEBUG ' + url);
 
     const response = await fetch(url, {
       method: 'POST',
