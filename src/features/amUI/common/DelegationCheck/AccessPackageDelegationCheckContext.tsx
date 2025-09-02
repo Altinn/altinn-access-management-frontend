@@ -43,8 +43,6 @@ export const AccessPackageDelegationCheckProvider = ({
     [data],
   );
 
-  console.log('🪵 ~ AccessPackageDelegationCheckProvider ~ resultMap:', resultMap);
-
   const canDelegatePackage = (packageId: string) => {
     if (packageId in resultMap) return resultMap[packageId];
     return undefined;
