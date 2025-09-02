@@ -1,7 +1,6 @@
 import { Button, DsSpinner } from '@altinn/altinn-components';
-import { ExclamationmarkTriangleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import classes from './AccessPackageList.module.css';
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 interface DelegateAccessPackageActionControlsProps {
@@ -33,16 +32,7 @@ export const DelegateAccessPackageActionControl = ({
     );
   }
 
-  if (availableActions?.includes(DelegationAction.DELEGATE)) {
-    if (canDelegate === false) {
-      return (
-        <ExclamationmarkTriangleIcon
-          title={t('delegation_modal.delegation_check_not_delegable')}
-          aria-hidden='true'
-          className={classes.warningIcon}
-        />
-      );
-    }
+  if (availableActions?.includes(DelegationAction.DELEGATE) && canDelegate) {
     return (
       <Button
         icon={PlusCircleIcon}
