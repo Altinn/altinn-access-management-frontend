@@ -8,30 +8,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -44,30 +24,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -80,17 +40,7 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       }
     ]
   },
@@ -103,30 +53,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -139,30 +69,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -175,30 +85,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -211,30 +101,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -247,30 +117,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -283,30 +133,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -319,30 +149,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -355,30 +165,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -391,30 +181,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -427,30 +197,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -463,30 +213,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -499,30 +229,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -535,30 +245,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -571,30 +261,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -607,30 +277,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -643,30 +293,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -679,30 +309,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -715,30 +325,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -751,30 +341,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -787,30 +357,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -823,30 +373,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -859,30 +389,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -895,30 +405,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -931,30 +421,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -967,30 +437,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1003,30 +453,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1039,30 +469,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1075,30 +485,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1111,30 +501,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1147,30 +517,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1183,30 +533,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1219,30 +549,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1255,30 +565,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1291,30 +581,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1327,30 +597,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1363,30 +613,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1399,30 +629,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1435,30 +645,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1471,30 +661,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1507,30 +677,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1543,30 +693,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1579,30 +709,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1615,30 +725,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1651,30 +741,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1687,30 +757,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1723,30 +773,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1759,30 +789,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1795,30 +805,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1831,30 +821,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1867,30 +837,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1903,30 +853,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1939,30 +869,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -1975,30 +885,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2011,30 +901,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2047,30 +917,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2083,30 +933,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2119,30 +949,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2155,30 +965,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2191,30 +981,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2227,30 +997,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2263,30 +1013,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2299,30 +1029,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2335,30 +1045,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2371,30 +1061,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2407,30 +1077,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2443,30 +1093,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2479,30 +1109,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2515,30 +1125,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2551,30 +1141,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2587,30 +1157,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2623,30 +1173,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2659,30 +1189,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2695,30 +1205,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2731,30 +1221,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2767,30 +1237,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2803,30 +1253,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2839,30 +1269,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2875,30 +1285,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2911,30 +1301,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2947,30 +1317,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -2983,30 +1333,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3019,30 +1349,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3055,30 +1365,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3091,30 +1381,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3127,30 +1397,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3163,30 +1413,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3199,30 +1429,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3235,30 +1445,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3271,30 +1461,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3307,30 +1477,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3343,30 +1493,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3379,30 +1509,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3415,30 +1525,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3451,30 +1541,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3487,30 +1557,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3523,30 +1573,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3559,30 +1589,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3595,30 +1605,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3631,30 +1621,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3667,30 +1637,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3703,30 +1653,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3739,30 +1669,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3775,30 +1685,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3811,30 +1701,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3847,30 +1717,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3883,30 +1733,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3919,30 +1749,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3955,30 +1765,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -3991,30 +1781,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -4027,30 +1797,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -4063,30 +1813,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -4099,30 +1829,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -4135,30 +1845,10 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage"
       },
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -4171,17 +1861,7 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -4194,17 +1874,7 @@
     "result": true,
     "reasons": [
       {
-        "description": "Direct-RolePackage-HovedAdmin",
-        "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-        "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "fromName": "DISKRET NÆR TIGER AS",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "toName": "SITRONGUL MEDALJONG",
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "Direct-RolePackage-HovedAdmin"
       }
     ]
   },
@@ -4217,17 +1887,7 @@
     "result": false,
     "reasons": [
       {
-        "description": "NoAccess",
-        "roleId": null,
-        "roleUrn": null,
-        "fromId": null,
-        "fromName": null,
-        "toId": null,
-        "toName": null,
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "NoAccess"
       }
     ]
   },
@@ -4240,17 +1900,7 @@
     "result": false,
     "reasons": [
       {
-        "description": "NoAccess",
-        "roleId": null,
-        "roleUrn": null,
-        "fromId": null,
-        "fromName": null,
-        "toId": null,
-        "toName": null,
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "NoAccess"
       }
     ]
   },
@@ -4263,17 +1913,7 @@
     "result": false,
     "reasons": [
       {
-        "description": "NoAccess",
-        "roleId": null,
-        "roleUrn": null,
-        "fromId": null,
-        "fromName": null,
-        "toId": null,
-        "toName": null,
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "NoAccess"
       }
     ]
   },
@@ -4286,17 +1926,7 @@
     "result": false,
     "reasons": [
       {
-        "description": "NoAccess",
-        "roleId": null,
-        "roleUrn": null,
-        "fromId": null,
-        "fromName": null,
-        "toId": null,
-        "toName": null,
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "NoAccess"
       }
     ]
   },
@@ -4309,17 +1939,7 @@
     "result": false,
     "reasons": [
       {
-        "description": "NoAccess",
-        "roleId": null,
-        "roleUrn": null,
-        "fromId": null,
-        "fromName": null,
-        "toId": null,
-        "toName": null,
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "NoAccess"
       }
     ]
   },
@@ -4332,17 +1952,7 @@
     "result": false,
     "reasons": [
       {
-        "description": "NoAccess",
-        "roleId": null,
-        "roleUrn": null,
-        "fromId": null,
-        "fromName": null,
-        "toId": null,
-        "toName": null,
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "NoAccess"
       }
     ]
   },
@@ -4355,17 +1965,7 @@
     "result": false,
     "reasons": [
       {
-        "description": "NoAccess",
-        "roleId": null,
-        "roleUrn": null,
-        "fromId": null,
-        "fromName": null,
-        "toId": null,
-        "toName": null,
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "NoAccess"
       }
     ]
   },
@@ -4378,17 +1978,7 @@
     "result": false,
     "reasons": [
       {
-        "description": "NoAccess",
-        "roleId": null,
-        "roleUrn": null,
-        "fromId": null,
-        "fromName": null,
-        "toId": null,
-        "toName": null,
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "NoAccess"
       }
     ]
   },
@@ -4401,17 +1991,7 @@
     "result": false,
     "reasons": [
       {
-        "description": "NoAccess",
-        "roleId": null,
-        "roleUrn": null,
-        "fromId": null,
-        "fromName": null,
-        "toId": null,
-        "toName": null,
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "NoAccess"
       }
     ]
   },
@@ -4424,17 +2004,7 @@
     "result": false,
     "reasons": [
       {
-        "description": "NoAccess",
-        "roleId": null,
-        "roleUrn": null,
-        "fromId": null,
-        "fromName": null,
-        "toId": null,
-        "toName": null,
-        "viaId": null,
-        "viaName": null,
-        "viaRoleId": null,
-        "viaRoleUrn": null
+        "description": "NoAccess"
       }
     ]
   }
