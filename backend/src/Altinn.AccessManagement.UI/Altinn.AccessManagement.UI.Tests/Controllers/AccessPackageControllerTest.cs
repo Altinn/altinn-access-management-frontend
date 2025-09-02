@@ -533,5 +533,24 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
+
+        /// <summary>
+        ///    Test case: Delegation check with invalid GUID for party
+        ///    Expected: Returns 400 BadRequest with model state errors (BadRequest(ModelState))
+        /// </summary>
+        [Fact]
+        public async Task PackageDelegationCheck_InvalidGuid_ReturnsBadRequest()
+        {
+            // Arrange: invalid GUID value triggers model binding error
+            string reporteeUuid = "not-a-guid";
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegationcheck?party={reporteeUuid}");
+            string content = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Contains("not-a-guid", content);
+        }
     }
 }
