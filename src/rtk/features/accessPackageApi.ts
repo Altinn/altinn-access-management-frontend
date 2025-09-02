@@ -52,7 +52,11 @@ export interface AccessPackageDelegation {
 export interface DelegationCheckResponse {
   package: AccessPackage;
   result: boolean;
-  reasons: Record<string, string>;
+  reasons: Reason[];
+}
+
+export interface Reason {
+  description: string;
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/accesspackage`;
