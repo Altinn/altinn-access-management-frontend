@@ -155,5 +155,38 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return await Task.FromResult(fallback);
             }
         }
+        
+        /// <inheritdoc />
+        public Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
+        {
+            // Trigger internal server error
+            if (packageId.Equals(new Guid("d98ac728-d127-4a4c-96e1-738f856e5332")))
+            {
+                throw new HttpStatusException(
+                    "InternalServerError",
+                    "InternalServerError",
+                    HttpStatusCode.InternalServerError,
+                    "");
+            }
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "AccessPackage", "packages.json");
+                IEnumerable<SearchObject<AccessPackage>> searchResults =
+                    Util.GetMockData<IEnumerable<SearchObject<AccessPackage>>>(dataPath);
+
+                AccessPackage result = searchResults?.FirstOrDefault(sr => sr?.Object?.Id == packageId)?.Object;
+
+                return Task.FromResult(result);
+            }
+            catch
+            {
+
+                throw new HttpStatusException(
+                    "Not found",
+                    "Not found",
+                    HttpStatusCode.NotFound,
+                    "");
+            }
+        }
     }
 }

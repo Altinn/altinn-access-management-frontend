@@ -14,8 +14,14 @@ export interface AccessArea {
 export interface PackageResource {
   id: string;
   name: string;
+  title: string;
   description: string;
   provider: ResourceProvider;
+  resourceOwnerName: string;
+  resourceOwnerLogoUrl: string;
+  resourceOwnerOrgcode: string;
+  resourceOwnerOrgNumber: string;
+  resourceOwnerType: string;
 }
 
 export interface ResourceProvider {
@@ -35,6 +41,7 @@ export interface AccessPackage {
   isAssignable: boolean;
   area: AccessArea;
   urn?: string;
+  permissions?: Permissions[];
 }
 
 export interface AccessPackageDelegation {
@@ -75,6 +82,16 @@ export const accessPackageApi = createApi({
       },
       providesTags: ['AccessPackages'],
       keepUnusedDataFor: 10, // seconds
+    }),
+    getPackagePermissionDetails: builder.query<
+      AccessPackage,
+      { from?: string; to?: string; party?: string; packageId: string }
+    >({
+      query: ({ from, to, party = getCookie('AltinnPartyUuid'), packageId }) => {
+        return `permission/${packageId}?from=${from ?? ''}&to=${to ?? ''}&party=${party}`;
+      },
+      providesTags: ['AccessPackages'],
+      keepUnusedDataFor: 100, // seconds
     }),
     revokeDelegation: builder.mutation<
       void,
@@ -124,6 +141,7 @@ export const accessPackageApi = createApi({
 export const {
   useSearchQuery,
   useGetUserDelegationsQuery,
+  useGetPackagePermissionDetailsQuery,
   useRevokeDelegationMutation,
   useDelegatePackageMutation,
   useDelegationCheckQuery,

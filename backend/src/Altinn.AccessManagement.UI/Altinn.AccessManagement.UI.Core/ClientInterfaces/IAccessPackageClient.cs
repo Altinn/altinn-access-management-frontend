@@ -47,7 +47,14 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string packageId);
 
                 /// <summary>
-                ///   Gets delegation check status for all access packages on behalf of the specified party.
+                /// Fetch a single access package by id
+                /// </summary>
+                /// <param name="languageCode">the language to use in texts returned</param>
+                /// <param name="packageId">the id of the package</param>
+                /// <returns>The access package</returns>
+                Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId);
+
+                /// Gets delegation check status for all access packages on behalf of the specified party.
                 /// </summary>
                 /// <param name="party">The party to check delegation for (reportee)</param>
                 /// <returns>Paginated delegation check results for all packages</returns>

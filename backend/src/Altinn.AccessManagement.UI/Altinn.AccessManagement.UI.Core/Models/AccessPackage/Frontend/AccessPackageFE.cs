@@ -1,3 +1,5 @@
+using Altinn.AccessManagement.UI.Core.Models.Common;
+
 namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
 {
     /// <summary>
@@ -34,5 +36,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         /// Resources
         /// </summary>
         public List<AccessPackageResourceFE> Resources { get; set; }
+
+        /// <summary>
+        /// Permissions
+        /// </summary>
+        public List<Permission> Permissions { get; set; }
     }
 }
