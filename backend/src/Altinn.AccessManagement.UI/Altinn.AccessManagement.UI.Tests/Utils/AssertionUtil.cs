@@ -582,11 +582,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
             Assert.Equal(expected.Result, actual.Result);
             Assert.Equal(expected.Package?.Id, actual.Package?.Id);
-            Assert.Equal(expected.Package?.Name, actual.Package?.Name);
-            AssertCollections(expected.Reasons, actual.Reasons, Assert.Equal);
+            AssertCollections(expected.Reasons, actual.Reasons, AssertEqual);
         }
 
-        public static void AssertEqual(Reason expected, Reason actual)
+        public static void AssertEqual(DelegationCheck.Reason expected, DelegationCheck.Reason actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

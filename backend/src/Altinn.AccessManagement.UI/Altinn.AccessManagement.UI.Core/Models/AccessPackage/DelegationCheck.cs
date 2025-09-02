@@ -18,7 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage
         /// <summary>
         /// Reason objects explaining the result.
         /// </summary>
-        public IEnumerable<Reason> Reasons { get; set; } = Array.Empty<Reason>();
+        public List<Reason> Reasons { get; set; }
 
         /// <summary>
         /// Reason describing why the user can or cannot delegate.
