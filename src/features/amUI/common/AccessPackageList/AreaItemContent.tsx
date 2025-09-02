@@ -133,6 +133,7 @@ export const AreaItemContent = ({
       {packages.available.length > 0 && showAvailablePackages && (
         <List aria-label={t('access_packages.available_packages_title')}>
           {packages.available.map((pkg) => {
+            const canDelegate = canDelegatePackage(pkg.id);
             const Component = packageAs || 'button';
             return (
               <PackageItem
@@ -158,10 +159,9 @@ export const AreaItemContent = ({
                       isLoading={isActionLoading}
                       availableActions={availableActions}
                       disabled={pkg.isAssignable === false}
-                      canDelegate={canDelegate ?? true /* allow attempt if unknown */}
+                      canDelegate={canDelegate?.result ?? true /* allow attempt if unknown */}
                       onDelegate={() => onDelegate?.(pkg)}
                       onRequest={() => onRequest?.(pkg)}
-                      onSelect={() => onSelect?.(pkg)}
                     />
                   )
                 }

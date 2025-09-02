@@ -3,9 +3,11 @@ import React, { createContext, useContext, useMemo } from 'react';
 import { useDelegationCheckQuery } from '@/rtk/features/accessPackageApi';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
+type reasonsMap = Record<string, string>;
+
 interface AccessPackageDelegationCheckContextProps {
-  canDelegatePackage: (packageId: string) => boolean | undefined;
-  resultMap: Record<string, boolean>;
+  canDelegatePackage: (packageId: string) => { result: boolean; reasons: reasonsMap } | undefined;
+  resultMap: Record<string, { result: boolean; reasons: reasonsMap }>;
   isLoading: boolean;
   error?: unknown;
   reload: () => void; // placeholder for potential future manual refetch logic
@@ -25,7 +27,6 @@ export interface AccessPackageDelegationCheckProviderProps {
 export const AccessPackageDelegationCheckProvider = ({
   children,
 }: AccessPackageDelegationCheckProviderProps) => {
-
   const { actingParty } = usePartyRepresentation();
 
   const { data, isLoading, error } = useDelegationCheckQuery(
@@ -33,13 +34,16 @@ export const AccessPackageDelegationCheckProvider = ({
     { skip: !actingParty?.partyUuid },
   );
 
-  const resultMap = useMemo(() => {
-    if (!data) return {};
-    return data.reduce<Record<string, boolean>>((acc, cur) => {
-      acc[cur.packageId] = cur.canDelegate;
-      return acc;
-    }, {});
-  }, [data]);
+  const resultMap = useMemo(
+    () =>
+      (data ?? []).reduce<Record<string, { result: boolean; reasons: reasonsMap }>>((acc, cur) => {
+        acc[cur.package.id] = { result: cur.result, reasons: cur.reasons };
+        return acc;
+      }, {}),
+    [data],
+  );
+
+  console.log('🪵 ~ AccessPackageDelegationCheckProvider ~ resultMap:', resultMap);
 
   const canDelegatePackage = (packageId: string) => {
     if (packageId in resultMap) return resultMap[packageId];

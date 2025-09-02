@@ -97,7 +97,10 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     );
 
   const canDelegate = canDelegatePackage(accessPackage.id);
-  const showMissingRightsMessage = !userHasPackage && canDelegate === false;
+  const showMissingRightsMessage =
+    !userHasPackage &&
+    canDelegate?.result === false &&
+    availableActions.includes(DelegationAction.DELEGATE);
 
   return (
     <div className={classes.container}>
@@ -202,7 +205,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             ) : null}
             {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
               <Button
-                disabled={accessPackage.isAssignable === false}
+                disabled={accessPackage.isAssignable === false || canDelegate?.result === false}
                 onClick={() => onDelegate(accessPackage)}
               >
                 {t('common.give_poa')}

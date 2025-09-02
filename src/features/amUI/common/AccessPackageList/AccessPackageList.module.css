@@ -24,3 +24,8 @@
   height: 70%;
   margin: auto;
 }
+
+.warningIcon {
+  font-size: 1.5rem;
+  vertical-align: middle;
+}

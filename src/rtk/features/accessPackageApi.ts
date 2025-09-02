@@ -50,8 +50,9 @@ export interface AccessPackageDelegation {
 }
 
 export interface DelegationCheckResponse {
-  packageId: string;
-  canDelegate: boolean;
+  package: AccessPackage;
+  result: boolean;
+  reasons: Record<string, string>;
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/accesspackage`;
