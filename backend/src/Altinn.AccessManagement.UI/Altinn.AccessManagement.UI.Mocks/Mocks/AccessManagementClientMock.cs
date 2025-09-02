@@ -265,27 +265,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
-        public Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId)
-        {
-            if (rightOwner == Guid.Empty)
-            {
-                throw new Exception("Right holder uuid is not valid");
-            }
-            try
-            {
-                DelegationCheckResponse res = Util.GetMockData<DelegationCheckResponse>($"{dataFolder}/Roles/DelegationCheck/DelegationCheck.json");
-                return Task.FromResult(res);
-            }
-            catch
-            {
-                return Task.FromResult(new DelegationCheckResponse()
-                {
-                    CanDelegate = false,
-                    DetailCode = DetailCode.Unknown
-                });
-            }
-        }
-
         // A helper for testing handling of exceptions in client
         private static void ThrowExceptionIfTriggerParty(string id)
         {

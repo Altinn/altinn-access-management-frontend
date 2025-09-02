@@ -219,7 +219,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
 
-    //// Roles
+        //// Roles
 
         /// <inheritdoc />
         public async Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString)
@@ -316,13 +316,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(e, "AccessManagement.UI // RoleClient // GetRolesForUser // Exception");
                 return null;
             }
-        }
-
-        /// <inheritdoc />
-        public Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId)
-        {
-            // TODO: Implement this method when the API is ready
-            throw new NotImplementedException();
         }
     }
 }

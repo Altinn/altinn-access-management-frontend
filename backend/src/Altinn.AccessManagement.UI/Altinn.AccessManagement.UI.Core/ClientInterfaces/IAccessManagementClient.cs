@@ -130,10 +130,5 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// <param name="assignmentId">the assignment id of the role delegation to delete</param>
                 /// <returns></returns>
                 Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId);
-
-                /// <summary>
-                /// Check if a user has the right to delegate a role
-                /// </summary>
-                Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId);
         }
 }
