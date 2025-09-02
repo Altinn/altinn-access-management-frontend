@@ -1,16 +1,16 @@
 import React, { createContext, useContext, useMemo } from 'react';
 
-import { useDelegationCheckQuery } from '@/rtk/features/accessPackageApi';
+import { Reason, useDelegationCheckQuery } from '@/rtk/features/accessPackageApi';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-
-type reasonsMap = Record<string, string>;
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { SerializedError } from '@reduxjs/toolkit';
 
 interface AccessPackageDelegationCheckContextProps {
-  canDelegatePackage: (packageId: string) => { result: boolean; reasons: reasonsMap } | undefined;
-  resultMap: Record<string, { result: boolean; reasons: reasonsMap }>;
+  canDelegatePackage: (packageId: string) => { result: boolean; reasons: Reason[] } | undefined;
+  resultMap: Record<string, { result: boolean; reasons: Reason[] }>;
   isLoading: boolean;
-  error?: unknown;
-  reload: () => void; // placeholder for potential future manual refetch logic
+  isError: boolean;
+  error: FetchBaseQueryError | SerializedError | undefined;
 }
 
 const AccessPackageDelegationCheckContext =
@@ -29,14 +29,14 @@ export const AccessPackageDelegationCheckProvider = ({
 }: AccessPackageDelegationCheckProviderProps) => {
   const { actingParty } = usePartyRepresentation();
 
-  const { data, isLoading, error } = useDelegationCheckQuery(
+  const { data, isLoading, error, isError } = useDelegationCheckQuery(
     { party: actingParty?.partyUuid },
     { skip: !actingParty?.partyUuid },
   );
 
   const resultMap = useMemo(
     () =>
-      (data ?? []).reduce<Record<string, { result: boolean; reasons: reasonsMap }>>((acc, cur) => {
+      (data ?? []).reduce<Record<string, { result: boolean; reasons: Reason[] }>>((acc, cur) => {
         acc[cur.package.id] = { result: cur.result, reasons: cur.reasons };
         return acc;
       }, {}),
@@ -44,6 +44,7 @@ export const AccessPackageDelegationCheckProvider = ({
   );
 
   const canDelegatePackage = (packageId: string) => {
+    if (isError) return { result: true, reasons: [] }; // allow try if error on delegationCheck
     if (packageId in resultMap) return resultMap[packageId];
     return undefined;
   };
@@ -54,8 +55,8 @@ export const AccessPackageDelegationCheckProvider = ({
         canDelegatePackage,
         resultMap,
         isLoading,
+        isError,
         error,
-        reload: () => {},
       }}
     >
       {children}
