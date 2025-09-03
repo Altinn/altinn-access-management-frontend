@@ -1,0 +1,25 @@
+.infoModalButton {
+  position: fixed;
+  /* Respect device safe-areas */
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  right: calc(16px + env(safe-area-inset-right));
+  z-index: 10;
+  border-radius: 50%;
+  /* Ensure accessible touch target */
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 5px 0;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}

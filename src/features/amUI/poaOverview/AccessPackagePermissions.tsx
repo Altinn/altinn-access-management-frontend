@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import classes from './PoaOverviewPage.module.css';
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
+import { Link } from 'react-router';
 
 export const AccessPackagePermissions = () => {
   const { t } = useTranslation();
@@ -47,6 +48,12 @@ export const AccessPackagePermissions = () => {
         showAllPackages
         showAllAreas
         showPackagesCount={false}
+        packageAs={(props) => (
+          <Link
+            to={`/poa-overview/access-package/${props.packageId}`}
+            {...props}
+          />
+        )}
       />
     </>
   );

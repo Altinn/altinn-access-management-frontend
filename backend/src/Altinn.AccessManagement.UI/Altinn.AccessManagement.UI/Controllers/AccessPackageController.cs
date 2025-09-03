@@ -105,6 +105,48 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        ///     Get a single access package and its permissions
+        /// </summary>
+        /// <returns>The package and its permissions</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("permission/{packageId}")]
+        public async Task<ActionResult<AccessPackageFE>> GetSinglePackagePermission([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to, [FromRoute] Guid packageId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!from.HasValue && !to.HasValue)
+            {
+                return BadRequest("Either 'from' or 'to' query parameter must be provided.");
+            }
+
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            try
+            {
+                var result = await _accessPackageService.GetSinglePackagePermission(party, to, from, packageId, languageCode);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return NotFound();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+        }
+
+        /// <summary>
         ///     Endpoint for delegating a accesspackage from the reportee party to a third party
         /// </summary>
         /// <param name="party">The uuid of the party that is performing the access delegation</param>

@@ -62,7 +62,7 @@ export const UsersList = () => {
         toUuid: currentUser?.uuid ?? '',
       },
       {
-        skip: !fromParty?.partyUuid || !currentUser?.uuid,
+        skip: !fromParty?.partyUuid || !currentUser?.uuid || displayLimitedPreviewLaunch,
       },
     );
 
@@ -74,7 +74,7 @@ export const UsersList = () => {
     }
     const remainingAfterExtraction = extractFromList(
       rightHolders || [],
-      currentUser?.uuid ?? 'loading',
+      displayLimitedPreviewLaunch ? 'nobody' : (currentUser?.uuid ?? 'loading'),
     );
     return remainingAfterExtraction;
   }, [rightHolders, currentUser]);
@@ -129,7 +129,7 @@ export const UsersList = () => {
             }}
           />
         </DsSearch>
-        <NewUserButton />
+        {isAdmin && <NewUserButton />}
       </div>
       {isAdmin && (
         <UserList

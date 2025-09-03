@@ -86,6 +86,9 @@ test.describe('Klientdelegering', () => {
     }
     await page.goto(process.env.SYSTEMUSER_URL);
 
+    // Intro to "new brukerflate"
+    await page.getByRole('button', { name: 'Prøv ny tilgangsstyring' }).click();
+
     await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
     await clientDelegationPage.systemUserLink(name).click();
 

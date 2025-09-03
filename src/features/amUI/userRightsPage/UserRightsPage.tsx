@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
+import { useRerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { amUIPath } from '@/routes/paths';
 import { PageWrapper } from '@/components';
@@ -26,7 +26,7 @@ export const UserRightsPage = () => {
 
   useDocumentTitle(t('user_rights_page.page_title'));
 
-  rerouteIfNotConfetti();
+  useRerouteIfNotConfetti();
 
   const { displayLimitedPreviewLaunch } = window.featureFlags;
 

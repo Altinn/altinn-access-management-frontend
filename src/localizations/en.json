@@ -1,5 +1,6 @@
 {
   "common": {
+    "beta": "Beta",
     "error": "Error",
     "restart": "Restart",
     "close": "Close",
@@ -100,7 +101,10 @@
     "chat": "Get help on chat",
     "log_out": "Log out",
     "locale_title": "Choose language",
-    "logged_in_as_name": "Logged in as {{name}}"
+    "logged_in_as_name": "Logged in as {{name}}",
+    "new_altinn_info": "About new Altinn",
+    "leave_beta": "Back to today's Altinn",
+    "shortcuts": "Shortcuts"
   },
   "footer": {
     "about_altinn": "About Altinn",
@@ -307,7 +311,8 @@
     "user_list_heading": "Other users with power of attorney",
     "user_search_placeholder": "Search for users",
     "no_users": "Nobody but you have access. Do you want to change this?",
-    "user_no_search_result": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?"
+    "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
+    "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?"
   },
   "reportees_page": {
     "page_title": "Our access to other companies - Altinn",
@@ -410,6 +415,27 @@
     "add_org_button": "Add organization",
     "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future."
   },
+  "info_page": {
+    "page_title": "About new Altinn",
+    "main_title": "About Access Management",
+    "paragraph_1": "This is a simplified user interface for access management (Access Management Beta). Here, you will be able to give access packages from one organization to another, see what accesses your organization has with others, and create system access for professional systems. In this user interface, there will be more and more content and functionality over time.",
+    "title_2": "Access packages",
+    "paragraph_2": "Access packages will replace today's Altinn roles. The new access packages will be more numerous, but contain fewer forms and services. They will also be under categories that belong to specific topics. Initially, you will see that the access packages may contain very few services, but they will be filled up over time.",
+    "title_3": "Who can use Access Management Beta?",
+    "paragraph_3": "In Access Management Beta, which we call the \"simplified user interface\", only organization-to-organization delegation can be performed. This means that access packages can only be given from one organization to another. Mainly, this will apply to organizations that have auditors, accountants, or business managers, and who have been told to do this.",
+    "title_4": "System access",
+    "paragraph_4": "A system access is a new type of impersonal user in Altinn that is created so that a professional system (e.g. accounting system or payroll system) can get power of attorney to solve tasks on behalf of its own organization or for the organization's customers.",
+    "title_5": "What is the difference between regular system access and system access for customers?",
+    "paragraph_5": "With a regular system access, you act on behalf of yourself. For example, if you own a small business and keep your own accounting in Fiken, you can create system access as part of Fiken's flow, or you can go to altinn.no and create it yourself by clicking \"Create new system access\".<br /><br /> If you are an accountant or auditor, you can create system access that can be assigned powers of attorney on behalf of your customers. The system will then be able to submit and retrieve customer data. This system access can only be created by approving the system access in the professional system you want to use. When you have approved it, you go to altinn.no to add the customers that are relevant for that system access. <br /><br />We look forward to showing you the new Altinn and greatly appreciate your patience while we rebuild. If you have questions or feedback, contact us at support@altinn.no."
+  },
+  "info_modal": {
+    "title": "Try the new access management solution",
+    "info": "We are renovating access management and you get a sneak peek at an early version! It is still under development, so some functions are missing. We still hope you will try.",
+    "close_button": "Try new access management",
+    "back_button": "Go back to today's Altinn",
+    "info_link": "Why are we updating Altinn?",
+    "info_button": "Information about the new solution"
+  },
   "a2Alerts": {
     "launchAlertHeading": "We are renewing Altinn",
     "launchAlertContent": "This user may also have authorizations from the previous Altinn.",
@@ -497,7 +523,7 @@
     "systemusers_load_error": "Failed to load system accesses",
     "agent_delegation_systemusers_load_error": "Failed to load system accesses for customers",
     "new_system_user_button": "Create new system access",
-    "existing_system_users_title": "Our system accesses",
+    "existing_system_users_title": "Own system accesses",
     "agent_delegation_systemusers_title": "System accesses for customers",
     "edit_system_user": "Edit system access",
     "loading_systemusers": "Loading system accesses",
@@ -668,5 +694,17 @@
   "poa_overview_page": {
     "page_title": "Power of attorney overview",
     "heading": "Power of attorney overview for {{fromparty}}"
+  },
+  "package_poa_details_page": {
+    "page_title": "Power of attorney details",
+    "users_tab_title": "Users",
+    "services_tab_title": "Services",
+    "load_error": "Oops! Something went wrong.",
+    "back_to_overview_link": "Go back to the overview",
+    "users_tab": {
+      "description": "These users have power of attorney for all the services in the access package on behalf of {{fromparty}}",
+      "user_search_placeholder": "Search for person or organization",
+      "no_users": "No users have power of attorney for this package on behalf of {{fromparty}}."
+    }
   }
 }
