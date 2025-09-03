@@ -7,24 +7,10 @@ import type {
   MenuItemSize,
   MenuItemTheme,
 } from '@altinn/altinn-components';
-import {
-  Banner,
-  DsLink,
-  DsParagraph,
-  Layout,
-  RootProvider,
-  Snackbar,
-} from '@altinn/altinn-components';
+import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
-import {
-  HandshakeIcon,
-  InboxIcon,
-  InformationSquareIcon,
-  LeaveIcon,
-  MenuGridIcon,
-  PersonChatIcon,
-} from '@navikt/aksel-icons';
+import { HandshakeIcon, InformationSquareIcon, LeaveIcon } from '@navikt/aksel-icons';
 
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
@@ -161,6 +147,60 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     return accountList.sort((a, b) => (a.groupId > b.groupId ? 1 : -1)) ?? [];
   }, [reporteeList, userinfo, reportee]);
 
+  const globalMenu = {
+    accountMenu: {
+      items: accounts,
+      groups: accountGroups,
+      search: {
+        name: 'account-search',
+        value: searchString,
+        onChange: (event: ChangeEvent<HTMLInputElement>) => {
+          setSearchString(event.target.value);
+        },
+        placeholder: t('header.search-label'),
+        hidden: false,
+        getResultsLabel: (hits: number) => {
+          return `${hits} ${t('header.search-hits')}`;
+        },
+      },
+      menuItemsVirtual: { isVirtualized: accounts.length > 20 },
+    },
+    onSelectAccount: (accountId) => {
+      const redirectUrl = window.location.pathname.includes('systemuser')
+        ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
+        : window.location.href;
+      (window as Window).open(
+        `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
+        '_self',
+      );
+    },
+    logoutButton: {
+      label: t('header.log_out'),
+      onClick: () => {
+        (window as Window).location = `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
+      },
+    },
+    menuLabel: t('header.menu-label'),
+    backLabel: t('header.back-label'),
+    changeLabel: t('header.change-label'),
+    currentEndUserLabel: t('header.logged_in_as_name', {
+      name: userinfo?.name || '',
+    }),
+    currentAccount: {
+      name: reportee?.name || '',
+      type: getAccountType(reportee?.type ?? ''),
+      id: reportee?.partyId || '',
+    },
+  };
+
+  const desktopMenu = {
+    items: headerLinks,
+  };
+
+  const mobileMenu = {
+    items: headerLinks,
+  };
+
   return (
     <RootProvider>
       <Layout
@@ -182,48 +222,9 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             type: getAccountType(reportee?.type ?? ''),
             id: reportee?.partyId || '',
           },
-          menu: {
-            menuLabel: t('header.menu-label'),
-            backLabel: t('header.back-label'),
-            changeLabel: t('header.change-label'),
-            currentEndUserLabel: t('header.logged_in_as_name', {
-              name: userinfo?.name || '',
-            }),
-            accountMenu: {
-              items: accounts,
-              groups: accountGroups,
-              search: {
-                name: 'account-search',
-                value: searchString,
-                onChange: (event: ChangeEvent<HTMLInputElement>) => {
-                  setSearchString(event.target.value);
-                },
-                placeholder: t('header.search-label'),
-                hidden: false,
-                getResultsLabel: (hits: number) => {
-                  return `${hits} ${t('header.search-hits')}`;
-                },
-              },
-              menuItemsVirtual: { isVirtualized: accounts.length > 20 },
-            },
-            onSelectAccount: (accountId) => {
-              const redirectUrl = window.location.pathname.includes('systemuser')
-                ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
-                : window.location.href;
-              (window as Window).open(
-                `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
-                '_self',
-              );
-            },
-            logoutButton: {
-              label: t('header.log_out'),
-              onClick: () => {
-                (window as Window).location =
-                  `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
-              },
-            },
-            items: headerLinks,
-          },
+          globalMenu: globalMenu,
+          desktopMenu: desktopMenu,
+          mobileMenu: mobileMenu,
         }}
         sidebar={{
           menu: {
