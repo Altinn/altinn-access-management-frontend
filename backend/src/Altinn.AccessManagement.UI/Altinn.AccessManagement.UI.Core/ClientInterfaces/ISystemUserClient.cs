@@ -79,5 +79,14 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of customers associated with the specified access packages</returns>
         Task<Result<List<Customer>>> GetClients(int partyId, Guid facilitatorId, List<string> accessPackages, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Returns rights and access packages for standard system user
+        /// </summary>
+        /// <param name="partyId">The party Id of the party to retrieve</param>
+        /// <param name="systemuserId">Id of systemuser</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Object with lists of rights and access packages</returns>
+        Task<Result<StandardSystemUserDelegations>> GetListOfDelegationsForStandardSystemUser(string partyId, string systemuserId, CancellationToken cancellationToken);
     }
 }

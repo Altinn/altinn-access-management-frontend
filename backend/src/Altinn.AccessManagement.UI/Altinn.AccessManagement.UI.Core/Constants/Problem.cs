@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// </summary>
         public static ProblemDescriptor SystemIdNotFound { get; }
             = _factory.Create(11, HttpStatusCode.NotFound, "The Id does not refer to a Registered System.");
-            
+
         /// <summary>
         /// Gets a <see cref="ProblemDescriptor"/>.
         /// </summary>
@@ -118,5 +118,11 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// </summary>
         public static ProblemDescriptor AgentSystemUser_FailedToGetClients { get; }
             = _factory.Create(45, HttpStatusCode.BadRequest, "Failed to get clients");
+            
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AccessPackage_FailedToGetDelegatedPackages { get; }
+            = _factory.Create(54, HttpStatusCode.BadRequest, "Unable to get delegated access packages");
     }
 }
