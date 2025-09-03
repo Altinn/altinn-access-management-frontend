@@ -23,7 +23,6 @@ export class ConsentApiRequests {
     let url = baseUrl + endpoint;
 
     const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
-    console.log(url);
 
     const response = await fetch(url, {
       method: 'POST',

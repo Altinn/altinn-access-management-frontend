@@ -10,10 +10,14 @@ export class ConsentPage {
   readonly btnReject: Locator;
   readonly btnFullmaktApprove: Locator;
   readonly btnFullmaktReject: Locator;
+  readonly languagePicker: Locator;
+  readonly norwegian: Locator;
 
   constructor(page: Page) {
     this.page = page;
 
+    this.languagePicker = page.getByRole('button', { name: 'Open language-switcher' });
+    this.norwegian = page.locator('a').filter({ hasText: 'Norsk (bokmål)' });
     this.linkAltinn = page.getByRole('link', { name: 'Altinn.no' });
     this.btnApprove = page.getByRole('button', { name: 'Ja, jeg gir samtykke' });
     this.btnReject = page.getByRole('button', { name: 'Nei, jeg gir ikke samtykke' });
