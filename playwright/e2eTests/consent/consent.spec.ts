@@ -11,17 +11,18 @@ const redirectUrl = 'https://example.com/';
 let api: ConsentApiRequests;
 let validToTimestamp: string;
 
-test.beforeEach(async () => {
+test.beforeEach(async (page) => {
   api = new ConsentApiRequests();
   validToTimestamp = addTimeToNowUtc({ years: 1 });
 });
 
-test.describe('Consent', () => {
+test.describe('Consent - Norwegian template', () => {
   const pickRandom = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
 
   test('Godta forespørsel - Standard samtykke', async ({ page }) => {
     const consentPage = new ConsentPage(page);
     const fromPerson = pickRandom(fromPersons);
+
     const toOrg = pickRandom(toOrgs);
     process.env.ORG = toOrg;
 
@@ -35,6 +36,9 @@ test.describe('Consent', () => {
     });
 
     await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
+
+    await consentPage.languagePicker.click();
+    await consentPage.norwegian.click();
 
     await consentPage.expectStandardIntro();
     await expect(
@@ -67,6 +71,9 @@ test.describe('Consent', () => {
 
     await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
 
+    await consentPage.languagePicker.click();
+    await consentPage.norwegian.click();
+
     await consentPage.expectKravIntro();
     await expect(page.getByText('Samtykket er tidsavgrenset og')).toBeVisible();
 
@@ -91,7 +98,12 @@ test.describe('Consent', () => {
       metaData: { tiltak: '2024' },
     });
 
+    // Go to consent to approve or reject
     await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
+
+    // Pick language
+    await consentPage.languagePicker.click();
+    await consentPage.norwegian.click();
 
     await consentPage.expectFullmaktIntro();
     await expect(page.getByText('Samtykke fullmakt utføre tjeneste')).toBeVisible();
@@ -122,6 +134,9 @@ test.describe('Consent', () => {
     });
 
     await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
+
+    await consentPage.languagePicker.click();
+    await consentPage.norwegian.click();
 
     await consentPage.expectStandardIntro();
     await expect(
@@ -154,6 +169,9 @@ test.describe('Consent', () => {
 
     await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
 
+    await consentPage.languagePicker.click();
+    await consentPage.norwegian.click();
+
     await consentPage.expectEnkeltIntro();
     await expect(
       page.getByText('Du samtykker til at dine data kan brukes i denne tjenesten'),
@@ -181,6 +199,9 @@ test.describe('Consent', () => {
     });
 
     await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
+
+    await consentPage.languagePicker.click();
+    await consentPage.norwegian.click();
 
     await expect(consentPage.heading('Forespørsel om samtykke')).toBeVisible();
     await consentPage.rejectStandardAndWaitLogout();
