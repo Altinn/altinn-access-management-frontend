@@ -655,7 +655,11 @@
     "16_delegation_right_missing_role_access": "Delegering av tenester feila: rolla di har ikkje rettar til å delegere tenester til systemtilgang.",
     "18_delegation_right_missing_delegation_access": "Delegering av tenester feila: du har ikkje rettar til å direkte delegere tenester.",
     "19_delegation_right_missing_srr_right_access": "Delegering av tenester feila: ei eller fleire tenester nyttar tilgangslister der verksemda ikkje har tilgang.",
-    "20_delegation_right_insufficient_authentication_level": "Delegering av tenester feila: ei eller fleire tenester krev eksplisitt tilgangsnivå."
+    "20_delegation_right_insufficient_authentication_level": "Delegering av tenester feila: ei eller fleire tenester krev eksplisitt tilgangsnivå.",
+    "50_accesspackage_delegation_failed": "Delegering av tilgangspakkar til systembrukeren feila.",
+    "52_accesspackage_delegation_missing_required_access": "Du har ikkje tilstrekkeleg tilgong for å delegere desse tilgangspakkane.",
+    "54_accesspackage_failed_to_get_delegated_packages": "Kunne ikkje hente delegerte tilgangspakkar.",
+    "56_systemuser_failed_to_delete_accesspackage": "Kunne ikkje fjerne tilgangspakke-delegering for systembruker."
   },
   "page_not_available": {
     "title": "Sida er ikkje tilgjengelig",
