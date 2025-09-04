@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// </summary>
         public static ProblemDescriptor SystemIdNotFound { get; }
             = _factory.Create(11, HttpStatusCode.NotFound, "The Id does not refer to a Registered System.");
-            
+
         /// <summary>
         /// Gets a <see cref="ProblemDescriptor"/>.
         /// </summary>
@@ -118,5 +118,35 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// </summary>
         public static ProblemDescriptor AgentSystemUser_FailedToGetClients { get; }
             = _factory.Create(45, HttpStatusCode.BadRequest, "Failed to get clients");
-    }
+
+        /// <summary>
+        /// gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AccessPackage_DelegationCheckFailed { get; }
+            = _factory.Create(49, HttpStatusCode.BadRequest, "The delegation check failed for access packages");
+
+        /// <summary>
+        /// gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AccessPackage_DelegationFailed { get; }
+            = _factory.Create(50, HttpStatusCode.BadRequest, "The delegation of access package to the system user failed");
+
+        /// <summary>
+        /// gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AccessPackage_Delegation_MissingRequiredAccess { get; }
+            = _factory.Create(52, HttpStatusCode.BadRequest, "The user does not have enough access to delegate the requested access packages");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor AccessPackage_FailedToGetDelegatedPackages { get; }
+            = _factory.Create(54, HttpStatusCode.BadRequest, "Unable to get delegated access packages");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor SystemUser_FailedToDeleteAccessPackage { get; }
+            = _factory.Create(56, HttpStatusCode.BadRequest, "Failed to delete access package delegation for system user");
+        }
 }

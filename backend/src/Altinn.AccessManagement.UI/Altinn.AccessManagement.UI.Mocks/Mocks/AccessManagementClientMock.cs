@@ -203,36 +203,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
         }
 
-        //// Access packages
-
-        /// <inheritdoc />
-        public Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest)
-        {
-            var res = new List<AccessPackageDelegationCheckResponse>();
-            foreach (var packageId in delegationCheckRequest.PackageIds)
-            {
-                if (packageId.ToString() == "fa84bffc-ac17-40cd-af9c-61c89f92e44c")
-                {
-                    throw new Exception("Package id is not valid");
-                }
-                try
-                {
-                    var check = Util.GetMockData<AccessPackageDelegationCheckResponse>($"{dataFolder}/AccessPackage/DelegationCheck/{packageId}.json");
-                    res.Add(check);
-                }
-                catch
-                {
-                    res.Add(new AccessPackageDelegationCheckResponse()
-                    {
-                        CanDelegate = true,
-                        DetailCode = DetailCode.DelegationAccess,
-                        PackageId = packageId
-                    });
-                }
-            }
-            return Task.FromResult(res);
-        }
-
         //// Roles
 
         public Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString)
@@ -293,27 +263,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
-        }
-
-        public Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId)
-        {
-            if (rightOwner == Guid.Empty)
-            {
-                throw new Exception("Right holder uuid is not valid");
-            }
-            try
-            {
-                DelegationCheckResponse res = Util.GetMockData<DelegationCheckResponse>($"{dataFolder}/Roles/DelegationCheck/{roleId}.json");
-                return Task.FromResult(res);
-            }
-            catch
-            {
-                return Task.FromResult(new DelegationCheckResponse()
-                {
-                    CanDelegate = false,
-                    DetailCode = DetailCode.Unknown
-                });
-            }
         }
 
         // A helper for testing handling of exceptions in client

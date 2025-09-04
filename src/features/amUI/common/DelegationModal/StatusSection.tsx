@@ -85,7 +85,7 @@ export const StatusSection = ({
           </DsParagraph>
         </div>
       )}
-      {showMissingRightsMessage && (
+      {!cannotDelegateHere && showMissingRightsMessage && (
         <div className={classes.infoLine}>
           <ExclamationmarkTriangleFillIcon
             fontSize='1.5rem'

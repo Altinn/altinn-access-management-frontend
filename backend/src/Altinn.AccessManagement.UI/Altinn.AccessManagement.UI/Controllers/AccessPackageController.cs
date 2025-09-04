@@ -255,22 +255,22 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Check if a set of packages can be delegated
+        ///     Check if packages can be delegated on behalf of a party
         /// </summary>
-        /// <returns>If the packages can be delegated and the DetailCode for why</returns>
-        [HttpPost]
+        /// <returns>Delegation capability for all packages</returns>
+        [HttpGet]
         [Authorize]
         [Route("delegationcheck")]
-        public async Task<ActionResult<List<AccessPackageDelegationCheckResponse>>> DelegationCheck([FromBody] DelegationCheckRequest delegationCheckRequest)
+        public async Task<ActionResult<List<DelegationCheck>>> DelegationCheck([FromQuery] Guid party)
         {
-            if (!ModelState.IsValid || delegationCheckRequest.PackageIds == null || delegationCheckRequest.PackageIds.Length == 0)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
             try
             {
-                return await _accessPackageService.DelegationCheck(delegationCheckRequest);
+                return await _accessPackageService.DelegationCheck(party);
             }
             catch (HttpStatusException ex)
             {

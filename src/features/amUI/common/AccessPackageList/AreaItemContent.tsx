@@ -1,23 +1,13 @@
-import {
-  List,
-  DsAlert,
-  DsHeading,
-  DsParagraph,
-  DsButton,
-  DsSpinner,
-} from '@altinn/altinn-components';
+import { List, DsParagraph, DsButton, DsSpinner } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
-import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 
 import classes from './AccessPackageList.module.css';
 import { DeletableStatus, type ExtendedAccessArea } from './useAreaPackageList';
@@ -26,6 +16,7 @@ import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionCon
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
 import { PermissionBadge } from './PermissionBadge';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
+import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
@@ -61,23 +52,10 @@ export const AreaItemContent = ({
   const [showAvailablePackages, setShowAvailablePackages] = useState(
     showAvailablePackagesExternal ?? false,
   );
-  const [delegationCheckError, setDelegationCheckError] = useState<ActionError | null>(null);
-  const availablePackageIds = useMemo(
-    () => packages.available.map((pkg) => pkg.id),
-    [packages.available],
-  );
-  const handleDelegationCheckFailure = (error: ActionError) => {
-    setDelegationCheckError(error);
-  };
-  const { displayLimitedPreviewLaunch } = window.featureFlags;
-  const shouldShowDelegationCheck =
-    !!availableActions?.includes(DelegationAction.DELEGATE) && !displayLimitedPreviewLaunch;
-  const { canDelegate, isUninitialized, isLoading } = useAccessPackageDelegationCheck(
-    availablePackageIds,
-    shouldShowDelegationCheck && showAvailablePackages,
-    handleDelegationCheckFailure,
-  );
+
   const isSm = useIsMobileOrSmaller();
+
+  const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
   const revokeActionControl = (pkg: AccessPackage) => {
     if (isActionLoading) {
@@ -151,23 +129,11 @@ export const AreaItemContent = ({
           )}
         </DsButton>
       )}
-      {showAvailablePackages && delegationCheckError && (
-        <DsAlert data-color='danger'>
-          <DsHeading level={3}>
-            {t('access_packages.delegation_check.delegation_check_error_heading')}
-          </DsHeading>
-          <TechnicalErrorParagraphs
-            message={t('access_packages.delegation_check.delegation_check_error_message_plural', {
-              count: 2,
-            })}
-            status={delegationCheckError.httpStatus}
-            time={delegationCheckError.timestamp}
-          />
-        </DsAlert>
-      )}
+
       {packages.available.length > 0 && showAvailablePackages && (
         <List aria-label={t('access_packages.available_packages_title')}>
           {packages.available.map((pkg) => {
+            const canDelegate = canDelegatePackage(pkg.id);
             const Component = packageAs || 'button';
             return (
               <PackageItem
@@ -190,16 +156,13 @@ export const AreaItemContent = ({
                 controls={
                   !isSm && (
                     <DelegateAccessPackageActionControl
-                      isLoading={(isUninitialized && shouldShowDelegationCheck) || isActionLoading}
+                      isLoading={isActionLoading}
                       availableActions={availableActions}
                       disabled={pkg.isAssignable === false}
                       accessPackageName={pkg.name}
-                      canDelegate={
-                        !shouldShowDelegationCheck || isLoading ? true : !!canDelegate(pkg.id)
-                      } // Default to true to avoid blips in UI
+                      canDelegate={canDelegate?.result ?? true /* allow attempt if unknown */}
                       onDelegate={() => onDelegate?.(pkg)}
                       onRequest={() => onRequest?.(pkg)}
-                      onSelect={() => onSelect?.(pkg)}
                     />
                   )
                 }

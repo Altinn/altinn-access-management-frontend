@@ -50,8 +50,13 @@ export interface AccessPackageDelegation {
 }
 
 export interface DelegationCheckResponse {
-  packageId: string;
-  canDelegate: boolean;
+  package: AccessPackage;
+  result: boolean;
+  reasons: Reason[];
+}
+
+export interface Reason {
+  description: string;
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/accesspackage`;
@@ -127,16 +132,11 @@ export const accessPackageApi = createApi({
         };
       },
     }),
-    delegationCheck: builder.mutation<DelegationCheckResponse[], { packageIds: string[] }>({
-      query: ({ packageIds }) => {
-        const delegationCheckRequest = {
-          packageIds: packageIds,
-          reporteeUuid: getCookie('AltinnPartyUuid'),
-        };
+    delegationCheck: builder.query<DelegationCheckResponse[], { party?: string }>({
+      query: ({ party = getCookie('AltinnPartyUuid') }) => {
         return {
-          url: `delegationcheck`,
-          method: 'POST',
-          body: JSON.stringify(delegationCheckRequest),
+          url: `delegationcheck?party=${party}`,
+          method: 'GET',
         };
       },
     }),
@@ -149,7 +149,7 @@ export const {
   useGetPackagePermissionDetailsQuery,
   useRevokeDelegationMutation,
   useDelegatePackageMutation,
-  useDelegationCheckMutation,
+  useDelegationCheckQuery,
 } = accessPackageApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = accessPackageApi;
