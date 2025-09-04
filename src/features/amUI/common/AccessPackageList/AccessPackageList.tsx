@@ -9,11 +9,11 @@ import type { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AccessPackageList.module.css';
 import { useAreaPackageList } from './useAreaPackageList';
-import { AreaItem } from './AreaItem';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
-import { AreaItemContent } from './AreaItemContent';
+import { AreaItem } from './AreaItem';
 import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
+import { AreaItemContent } from './AreaItemContent';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -21,13 +21,17 @@ interface AccessPackageListProps {
   minimizeAvailablePackages?: boolean;
   isLoading?: boolean;
   availableActions?: DelegationAction[];
+  showAvailableToggle?: boolean;
   searchString?: string;
   useDeleteConfirm?: boolean;
+  showPermissions?: boolean;
+  showPackagesCount?: boolean;
   onSelect?: (accessPackage: AccessPackage) => void;
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
   onDelegateError?: (accessPackage: AccessPackage, error: ActionError) => void;
   onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
   onRevokeError?: (accessPackage: AccessPackage, error: ActionError) => void;
+  packageAs?: React.ElementType;
 }
 
 export const AccessPackageList = ({
@@ -36,6 +40,7 @@ export const AccessPackageList = ({
   minimizeAvailablePackages,
   isLoading,
   availableActions,
+  showAvailableToggle,
   onSelect,
   useDeleteConfirm,
   onDelegateSuccess,
@@ -43,10 +48,11 @@ export const AccessPackageList = ({
   onRevokeSuccess,
   onRevokeError,
   searchString,
+  showPermissions,
+  showPackagesCount,
+  packageAs,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
-
-  const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
 
   const {
     loadingPackageAreas,
@@ -74,10 +80,7 @@ export const AccessPackageList = ({
   });
 
   const combinedAreas = [...assignedAreas, ...availableAreas];
-
-  const displayAreas = searchString
-    ? combinedAreas
-    : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
+  const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
 
   if (loadingDelegations || loadingPackageAreas || isLoading) {
     return (
@@ -112,6 +115,16 @@ export const AccessPackageList = ({
     );
   }
 
+  const displayAreas = searchString
+    ? combinedAreas
+    : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
+
+  // Collect all relevant package ids for delegation check (assigned + available)
+  const packageIds = displayAreas.flatMap((a) => [
+    ...a.packages.assigned.map((p) => p.id),
+    ...a.packages.available.map((p) => p.id),
+  ]);
+
   return (
     <div className={classes.accessAreaList}>
       {displayAreas.length === 0 ? (
@@ -129,7 +142,8 @@ export const AccessPackageList = ({
                 area={area}
                 expanded={expanded}
                 toggleExpandedArea={toggleExpandedArea}
-                showBadge={showAllPackages}
+                showPackagesCount={showPackagesCount}
+                showPermissions={showPermissions}
               >
                 <AreaItemContent
                   area={area}
@@ -141,6 +155,9 @@ export const AccessPackageList = ({
                   isActionLoading={isActionLoading}
                   useDeleteConfirm={useDeleteConfirm}
                   showAvailablePackages={!minimizeAvailablePackages}
+                  showAvailableToggle={showAvailableToggle}
+                  showPermissions={showPermissions}
+                  packageAs={packageAs}
                 />
               </AreaItem>
             );

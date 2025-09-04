@@ -25,6 +25,9 @@ test.describe('System Register', async () => {
     // Navigate to system user page
     await page.goto(`${process.env.SYSTEMUSER_URL}`);
 
+    // Intro to "new brukerflate"
+    await page.getByRole('button', { name: 'Prøv ny tilgangsstyring' }).click();
+
     // this is assigned as a text in code base, will just add more confusion to import that than hardcoding this here
     await systemUserPage.CREATE_SYSTEM_USER_LINK.click();
     await systemUserPage.selectSystem(system);

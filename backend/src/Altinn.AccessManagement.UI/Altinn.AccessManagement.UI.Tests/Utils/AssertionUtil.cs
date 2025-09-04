@@ -190,7 +190,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+            AssertCollections(expected.Permissions, actual.Permissions, AssertEqual);
         }
+
+
 
         /// <summary>
         ///     Assert that two <see cref="AccessPackageResourceFE" /> have the same property in the same positions.
@@ -573,14 +576,20 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
         }
 
-        public static void AssertEqual(AccessPackageDelegationCheckResponse expected, AccessPackageDelegationCheckResponse actual)
+        public static void AssertEqual(DelegationCheck expected, DelegationCheck actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
+            Assert.Equal(expected.Result, actual.Result);
+            Assert.Equal(expected.Package?.Id, actual.Package?.Id);
+            AssertCollections(expected.Reasons, actual.Reasons, AssertEqual);
+        }
 
-            Assert.Equal(expected.CanDelegate, actual.CanDelegate);
-            Assert.Equal(expected.DetailCode, actual.DetailCode);
-            Assert.Equal(expected.PackageId, actual.PackageId);
+        public static void AssertEqual(DelegationCheck.Reason expected, DelegationCheck.Reason actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+            Assert.Equal(expected.Description, actual.Description);
         }
 
         public static void AssertEqual(CustomerPartyFE expected, CustomerPartyFE actual)

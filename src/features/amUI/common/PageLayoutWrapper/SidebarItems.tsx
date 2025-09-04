@@ -1,21 +1,24 @@
 import React from 'react';
 import type { MenuItemProps, MenuItemSize } from '@altinn/altinn-components';
 import {
-  InboxIcon,
   PersonGroupIcon,
   TenancyIcon,
   PadlockUnlockedIcon,
   HandshakeIcon,
+  InformationSquareIcon,
+  LeaveIcon,
+  LinkIcon,
 } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
 
 import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
+import { getHostUrl } from '@/resources/utils/pathUtils';
 
 /**
  * Generates a list of sidebar items for the page layout.
  *
- * @returns {MenuItemProps[]} A list of sidebar items, including a heading,
+ * @returns {MenuItemProps[], } A list of sidebar items, including a heading,
  *                            and optionally a confetti package if the feature flag is enabled.
  */
 export const SidebarItems = (
@@ -37,6 +40,8 @@ export const SidebarItems = (
     },
     size: 'lg',
     title: t('sidebar.access_management'),
+    badge: { label: t('common.beta') },
+    interactive: false,
   };
 
   const users: MenuItemProps = {
@@ -77,7 +82,7 @@ export const SidebarItems = (
     size: 'md' as MenuItemSize,
     title: t('sidebar.reportees'),
     selected: pathname?.includes(`/${amUIPath.Reportees}`),
-    icon: InboxIcon,
+    icon: LinkIcon,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     as: (props: any) => (
       <Link
@@ -119,6 +124,39 @@ export const SidebarItems = (
     ),
   };
 
+  const shortcuts: MenuItemProps[] = [
+    {
+      groupId: 'shortcuts',
+      id: 'beta-about',
+      size: 'md',
+      title: t('header.new_altinn_info'),
+      icon: InformationSquareIcon,
+      selected: pathname?.includes(`/${amUIPath.Info}`),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      as: (props: any) => (
+        <Link
+          to={`/${amUIPath.Info}`}
+          {...props}
+        />
+      ),
+    },
+    {
+      groupId: 'shortcuts',
+      id: 'beta-leave',
+      size: 'md',
+      title: t('header.leave_beta'),
+      icon: LeaveIcon,
+      selected: false,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      as: (props: any) => (
+        <Link
+          to={getHostUrl() + 'ui/profile'}
+          {...props}
+        />
+      ),
+    },
+  ];
+
   const items: MenuItemProps[] = [];
 
   if (!isSmall) {
@@ -139,6 +177,10 @@ export const SidebarItems = (
   }
 
   items.push(consent, systemUser);
+
+  if (displayConfettiPackage) {
+    shortcuts.map((shortcutItem) => items.push(shortcutItem));
+  }
 
   return items;
 };

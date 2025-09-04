@@ -95,14 +95,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// <returns></returns>
                 Task<HttpResponseMessage> DelegateResourceRights(string from, string to, string resourceId, List<string> rightKeys);
 
-                //// Access packages
-
-                /// <summary>
-                ///   Checks if the user can delegate access packages on behalf of the specified reportee
-                /// </summary>
-                /// <param name="delegationCheckRequest">The request containing the packages to check and the reportee to check on behalf of</param>
-                /// <returns>The response containing whether or not the user can delegate the packages</returns>
-                Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest);
+                //// Access packages (handled by IAccessPackageClient)
 
                 //// Roles 
 
@@ -137,10 +130,5 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// <param name="assignmentId">the assignment id of the role delegation to delete</param>
                 /// <returns></returns>
                 Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId);
-
-                /// <summary>
-                /// Check if a user has the right to delegate a role
-                /// </summary>
-                Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId);
         }
 }

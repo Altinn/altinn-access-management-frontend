@@ -13,10 +13,9 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Return all system users created for a given party
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
-        /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all system users for specified party</returns>
-        Task<Result<List<SystemUserFE>>> GetAllSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken);
+        Task<Result<List<SystemUserFE>>> GetAllSystemUsersForParty(int partyId, CancellationToken cancellationToken);
         
         /// <summary>
         /// Return a specific system user
@@ -26,16 +25,15 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Requested system user</returns>
-        Task<SystemUserFE> GetSpecificSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken);
+        Task<Result<SystemUserFE>> GetSpecificSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken);
 
         /// <summary>
         /// Return all agent system users created for a given party
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
-        /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all agent system users for specified party</returns>
-        Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken);
+        Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(int partyId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Return a specific agent system user

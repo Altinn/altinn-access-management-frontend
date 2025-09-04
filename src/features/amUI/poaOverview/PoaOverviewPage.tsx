@@ -6,33 +6,45 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { rerouteIfNotLimitedPreview } from '@/resources/utils/featureFlagUtils';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import { RightsTabs } from '../common/RightsTabs/RightsTabs';
+import { AccessPackagePermissions } from './AccessPackagePermissions';
+import { useRerouteIfLimitedPreview } from '@/resources/utils/featureFlagUtils';
+
+import classes from './PoaOverviewPage.module.css';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
   useDocumentTitle(t('poa_overview_page.page_title'));
+  const partyUuid = getCookie('AltinnPartyUuid') || undefined;
 
-  rerouteIfNotLimitedPreview();
+  useRerouteIfLimitedPreview();
 
   return (
     <PageWrapper>
-      <PartyRepresentationProvider
-        fromPartyUuid={getCookie('AltinnPartyUuid')}
-        actingPartyUuid={getCookie('AltinnPartyUuid')}
-      >
-        <PageLayoutWrapper>
+      <PageLayoutWrapper>
+        <PartyRepresentationProvider
+          fromPartyUuid={partyUuid}
+          actingPartyUuid={partyUuid ?? ''}
+        >
           <DsHeading
             level={1}
             data-size='lg'
+            className={classes.pageHeading}
           >
             {t('poa_overview_page.heading', { fromparty: reportee?.name || '' })}
           </DsHeading>
-        </PageLayoutWrapper>
-      </PartyRepresentationProvider>
+          <RightsTabs
+            packagesPanel={<AccessPackagePermissions />}
+            singleRightsPanel={null}
+            roleAssignmentsPanel={null}
+          />
+        </PartyRepresentationProvider>
+      </PageLayoutWrapper>
     </PageWrapper>
   );
 };

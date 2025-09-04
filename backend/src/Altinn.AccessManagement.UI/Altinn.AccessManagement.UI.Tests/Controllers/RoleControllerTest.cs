@@ -231,44 +231,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         }
 
-        [Fact]
-        public async Task RoleDelegationCheck_CanDelegate()
-        {
-            // uuid for Intelligent Albatross
-            string rightOwnerUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            // roleId for Tilgangsstyring
-            var roleUuid = "4691c710-e0ad-4152-9783-9d1e787f02d3";
-
-            var res = await _client.GetAsync($"accessmanagement/api/v1/role/delegationcheck/{rightOwnerUuid}/{roleUuid}");
-
-            DelegationCheckResponse responseData = JsonSerializer.Deserialize<DelegationCheckResponse>(await res.Content.ReadAsStringAsync(), options);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, res.StatusCode);
-            Assert.True(responseData.CanDelegate);
-            Assert.Equal(DetailCode.RoleAccess, responseData.DetailCode);
-
-        }
-
-        [Fact]
-        public async Task RoleDelegationCheck_MissingRoleAccess()
-        {
-            // uuid for Intelligent Albatross
-            string rightOwnerUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            // roleId for Programmeringsgrensesnitt (API)
-            var roleUuid = "37d2ba7f-187f-45f5-9a96-2f23cf328dab";
-
-            var res = await _client.GetAsync($"accessmanagement/api/v1/role/delegationcheck/{rightOwnerUuid}/{roleUuid}");
-
-            DelegationCheckResponse responseData = JsonSerializer.Deserialize<DelegationCheckResponse>(await res.Content.ReadAsStringAsync(), options);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, res.StatusCode);
-            Assert.False(responseData.CanDelegate);
-            Assert.Equal(DetailCode.MissingRoleAccess, responseData.DetailCode);
-
-        }
-
         /// <summary>
         ///   Test case: Role delegation check when feature toggle is off
         ///   Expected: Returns NotFound

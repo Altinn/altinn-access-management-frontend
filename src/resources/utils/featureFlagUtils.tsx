@@ -1,17 +1,22 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
-export const rerouteIfNotConfetti = () => {
+export const useRerouteIfNotConfetti = () => {
   const navigate = useNavigate();
-  if (window.featureFlags.displayConfettiPackage === false) {
-    navigate('/not-found');
-  }
+  useEffect(() => {
+    if (window.featureFlags?.displayConfettiPackage === false) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [navigate]);
 };
 
-export const rerouteIfNotLimitedPreview = () => {
+export const useRerouteIfLimitedPreview = () => {
   const navigate = useNavigate();
-  if (window.featureFlags.displayLimitedPreviewLaunch === false) {
-    navigate('/not-found');
-  }
+  useEffect(() => {
+    if (window.featureFlags?.displayLimitedPreviewLaunch === true) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [navigate]);
 };
 
 export const availableForUserTypeCheck = (userType?: string) => {

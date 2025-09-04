@@ -1,5 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
@@ -63,7 +65,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             IEnumerable<PackagePermission> accesses = paginatedAccesses.Items;
 
             var sortedAccesses = new Dictionary<Guid, List<PackagePermission>>();
-
             foreach (PackagePermission access in accesses)
             {
                 Guid areaId = access.Package.AreaId;
@@ -82,6 +83,42 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
+        public async Task<AccessPackageFE> GetSinglePackagePermission(Guid party, Guid? to, Guid? from, Guid packageId, string languageCode)
+        {
+            var package = await GetAccessPackageById(languageCode, packageId);
+            if (package == null)
+            {
+                return null;
+            }
+            else
+            {
+                // The package-id filter of the GetAccessPackageAccesses method is 
+                // currently not implemented on the backend so we have to do a 
+                // manual filter until it is fixed
+                PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
+                var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
+                {
+                    return new AccessPackageFE
+                    {
+                        Id = package.Id.ToString(),
+                        Urn = package.Urn,
+                        Name = package.Name,
+                        IsAssignable = package.IsAssignable,
+                        Description = package.Description,
+                        Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources),
+                        Permissions = packagePermissions?.Permissions?.ToList() ?? new List<Permission>()
+                    };
+                }
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
+        {
+            return await _accessPackageClient.GetAccessPackageById(languageCode, packageId);
+        }
+
+        /// <inheritdoc />
         public Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string packageId)
         {
             return _accessPackageClient.RevokeAccessPackage(from, to, party, packageId);
@@ -94,9 +131,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<AccessPackageDelegationCheckResponse>> DelegationCheck(DelegationCheckRequest delegationCheckRequest)
+        public async Task<List<DelegationCheck>> DelegationCheck(Guid party)
         {
-            return await _accessManagementClient.AccessPackageDelegationCheck(delegationCheckRequest);
+            var checksPaginated = await _accessPackageClient.AccessPackageDelegationCheck(party);
+            return checksPaginated.Items?.ToList() ?? new List<DelegationCheck>();
         }
     }
 }

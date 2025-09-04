@@ -19,10 +19,12 @@ export const SkeletonAccessPackageList = () => {
     <List>
       {areaSkeletons.map(({ id, ...props }) => (
         <AccessAreaListItem
+          as='div'
+          interactive={false}
           loading
           key={id}
           id={id}
-          badgeText='xxx'
+          badge='xxx'
           border='solid'
           size='lg'
           {...props}

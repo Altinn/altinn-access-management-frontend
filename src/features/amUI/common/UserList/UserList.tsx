@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
+import type { ReactNode } from 'react';
 
 import type { Connection } from '@/rtk/features/userInfoApi';
 
@@ -17,6 +18,9 @@ export interface UserListProps {
   listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   interactive?: boolean;
   canAdd?: boolean;
+  showRoles?: boolean;
+  roleDirection?: 'toUser' | 'fromUser';
+  disableLinks?: boolean;
 }
 
 export const UserList = ({
@@ -26,6 +30,9 @@ export const UserList = ({
   listItemTitleAs,
   interactive,
   canAdd = true,
+  showRoles = true,
+  roleDirection = 'toUser',
+  disableLinks = false,
 }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
@@ -33,7 +40,7 @@ export const UserList = ({
     searchString,
   });
 
-  const promptForNoResults = !isLoading && users?.length === 0 && canAdd;
+  const promptForNoResults = !isLoading && users?.length === 0;
 
   if (isLoading) {
     return (
@@ -53,11 +60,23 @@ export const UserList = ({
           {searchString.length === 0 ? (
             <DsParagraph data-size='md'>{t('users_page.no_users')}</DsParagraph>
           ) : (
-            <DsParagraph data-size='md'>
-              {t('users_page.user_no_search_result', { searchTerm: searchString })}
-            </DsParagraph>
+            <>
+              {canAdd ? (
+                <>
+                  <DsParagraph data-size='md'>
+                    {t('users_page.user_no_search_result_with_add_suggestion', {
+                      searchTerm: searchString,
+                    })}
+                  </DsParagraph>
+                  <NewUserButton isLarge />
+                </>
+              ) : (
+                <DsParagraph data-size='md'>
+                  {t('users_page.user_no_search_result', { searchTerm: searchString })}
+                </DsParagraph>
+              )}
+            </>
           )}
-          <NewUserButton isLarge />
         </div>
       )}
       <List spacing={2}>
@@ -68,6 +87,9 @@ export const UserList = ({
             size='md'
             titleAs={listItemTitleAs}
             interactive={interactive}
+            showRoles={showRoles}
+            roleDirection={roleDirection}
+            disableLinks={disableLinks}
           />
         ))}
       </List>
@@ -77,7 +99,7 @@ export const UserList = ({
             className={classes.showMoreButton}
             onClick={goNextPage}
             disabled={!hasNextPage}
-            variant='text'
+            variant='outline'
             size='md'
           >
             {t('common.show_more')}
