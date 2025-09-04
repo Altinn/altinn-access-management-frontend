@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+﻿using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -52,5 +53,12 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// <param name="packageId">the id of the package</param>
                 /// <returns>The access package</returns>
                 Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId);
+                
+                /// <summary>
+                /// Gets delegation check status for all access packages on behalf of the specified party.
+                /// </summary>
+                /// <param name="party">The party to check delegation for (reportee)</param>
+                /// <returns>Paginated delegation check results for all packages</returns>
+                Task<PaginatedResult<DelegationCheck>> AccessPackageDelegationCheck(Guid party);
         }
 }

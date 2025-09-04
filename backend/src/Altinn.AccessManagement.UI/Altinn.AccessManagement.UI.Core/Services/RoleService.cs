@@ -72,11 +72,5 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return sortedAreas;
         }
-
-        /// <inheritdoc />
-        public async Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId)
-        {
-            return await _accessManagementClient.RoleDelegationCheck(rightOwner, roleId);
-        }
     }
 }

@@ -119,6 +119,12 @@ export const AccessPackageList = ({
     ? combinedAreas
     : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
 
+  // Collect all relevant package ids for delegation check (assigned + available)
+  const packageIds = displayAreas.flatMap((a) => [
+    ...a.packages.assigned.map((p) => p.id),
+    ...a.packages.available.map((p) => p.id),
+  ]);
+
   return (
     <div className={classes.accessAreaList}>
       {displayAreas.length === 0 ? (

@@ -131,9 +131,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<AccessPackageDelegationCheckResponse>> DelegationCheck(DelegationCheckRequest delegationCheckRequest)
+        public async Task<List<DelegationCheck>> DelegationCheck(Guid party)
         {
-            return await _accessManagementClient.AccessPackageDelegationCheck(delegationCheckRequest);
+            var checksPaginated = await _accessPackageClient.AccessPackageDelegationCheck(party);
+            return checksPaginated.Items?.ToList() ?? new List<DelegationCheck>();
         }
     }
 }
