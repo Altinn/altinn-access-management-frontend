@@ -12,6 +12,7 @@ interface DelegateAccessPackageActionControlsProps {
   onRequest: () => void;
   canDelegate: boolean;
   disabled?: boolean;
+  accessPackageName?: string;
 }
 
 export const DelegateAccessPackageActionControl = ({
@@ -21,6 +22,7 @@ export const DelegateAccessPackageActionControl = ({
   onRequest,
   onSelect,
   onDelegate,
+  accessPackageName,
   disabled = false,
 }: DelegateAccessPackageActionControlsProps) => {
   const { t } = useTranslation();
@@ -60,6 +62,7 @@ export const DelegateAccessPackageActionControl = ({
         size='sm'
         onClick={onDelegate}
         disabled={disabled}
+        aria-label={t('common.give_poa_for', { poa_object: accessPackageName })}
       >
         {t('common.give_poa')}
       </Button>
@@ -71,8 +74,9 @@ export const DelegateAccessPackageActionControl = ({
         icon={PlusCircleIcon}
         variant='text'
         size='sm'
-        disabled
+        disabled={disabled}
         onClick={onRequest}
+        aria-label={t('common.request_poa_for', { poa_object: accessPackageName })}
       >
         {t('common.request_poa')}
       </Button>

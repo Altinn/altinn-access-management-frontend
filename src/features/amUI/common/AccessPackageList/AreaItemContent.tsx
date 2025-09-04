@@ -193,6 +193,7 @@ export const AreaItemContent = ({
                       isLoading={(isUninitialized && shouldShowDelegationCheck) || isActionLoading}
                       availableActions={availableActions}
                       disabled={pkg.isAssignable === false}
+                      accessPackageName={pkg.name}
                       canDelegate={
                         !shouldShowDelegationCheck || isLoading ? true : !!canDelegate(pkg.id)
                       } // Default to true to avoid blips in UI
