@@ -159,6 +159,7 @@ export const AreaItemContent = ({
                       isLoading={isActionLoading}
                       availableActions={availableActions}
                       disabled={pkg.isAssignable === false}
+                      accessPackageName={pkg.name}
                       canDelegate={canDelegate?.result ?? true /* allow attempt if unknown */}
                       onDelegate={() => onDelegate?.(pkg)}
                       onRequest={() => onRequest?.(pkg)}
