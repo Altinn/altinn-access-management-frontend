@@ -1,7 +1,6 @@
-import { Badge } from '@altinn/altinn-components';
-import cn from 'classnames';
+import { Badge, DsChip } from '@altinn/altinn-components';
 
-import { useGetRolesForUserQuery } from '@/rtk/features/roleApi';
+import cn from 'classnames';
 
 import classes from './userRoles.module.css';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
@@ -48,13 +47,7 @@ export const UserRoles = ({
       {...props}
     >
       {roleTextKeys?.map((roleTextKey) => {
-        return (
-          <Badge
-            color={'company'}
-            label={t(roleTextKey)}
-            key={roleTextKey}
-          />
-        );
+        return <DsChip.Button key={roleTextKey}>{t(roleTextKey)}</DsChip.Button>;
       })}
     </div>
   );
