@@ -91,8 +91,6 @@ export const PackagePoaDetails = () => {
           isLoading={isLoading}
           packageName={accessPackage?.name}
           packageDescription={accessPackage?.description}
-          fromPartyName={fromParty?.name}
-          fromPartyTypeName={fromParty?.partyTypeName}
         />
       </div>
       <DsTabs
