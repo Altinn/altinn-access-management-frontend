@@ -112,23 +112,56 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<ConsentListItemFE>>> GetActiveConsents(Guid party, CancellationToken cancellationToken)
+        public async Task<Result<List<ActiveConsentItemFE>>> GetActiveConsents(Guid party, CancellationToken cancellationToken)
         {
-            Result<List<Consent>> activeConsents = await _consentClient.GetActiveConsents(party, cancellationToken);
-            if (activeConsents.IsProblem)
+            Result<List<Consent>> consents = await _consentClient.GetConsentList(party, cancellationToken);
+            if (consents.IsProblem)
             {
-                return activeConsents.Problem;
+                return consents.Problem;
+            }
+
+            string[] excludedStatuses = ["rejected", "revoked", "deleted", "expired"];
+
+            // filter consents to return only active consents
+            IEnumerable<Consent> activeConsents = consents.Value.Where((consent) => consent.ConsentRequestEvents.All((e) => !excludedStatuses.Contains(e.EventType.ToLower())));
+
+            // look up all party names in one call instead of one by one
+            IEnumerable<string> partyUuids = activeConsents.Aggregate(new List<string> { }, (acc, consent) => [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From)]).Distinct();
+            IEnumerable<Party> parties = await GetConsentParties(partyUuids);
+
+            IEnumerable<ActiveConsentItemFE> activeConsentsFE = activeConsents.Select(consent =>
+            {
+                Party toParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.To));
+                return new ActiveConsentItemFE()
+                {
+                    Id = consent.Id,
+                    IsPoa = consent.TemplateId == "poa", // TODO, bedre sjekk, event vurder om vi må vite hva som er poa og samtykke
+                    ToPartyId = consent.To,
+                    ToPartyName = toParty?.Name ?? string.Empty,
+                };
+            });
+            
+            return activeConsentsFE.ToList();
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<List<ConsentLogItemFE>>> GetConsentLog(Guid party, CancellationToken cancellationToken)
+        {
+            Result<List<Consent>> consents = await _consentClient.GetConsentList(party, cancellationToken);
+            if (consents.IsProblem)
+            {
+                return consents.Problem;
             }
 
             // look up all party names in one call instead of one by one
-            IEnumerable<string> partyUuids = activeConsents.Value.Aggregate(new List<string> { }, (acc, consent) => [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From)]).Distinct();
+            IEnumerable<string> partyUuids = consents.Value.Aggregate(new List<string> { }, (acc, consent) => [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From)]).Distinct();
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
 
-            IEnumerable<ConsentListItemFE> consentListItems = activeConsents.Value.Select(consent =>
+            IEnumerable<ConsentLogItemFE> consentListItems = consents.Value.Select(consent =>
             {
                 Party toParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.To));
                 Party fromParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.From));
-                return new ConsentListItemFE()
+                return new ConsentLogItemFE()
                 {
                     Id = consent.Id,
                     IsPoa = consent.TemplateId == "poa", // TODO, bedre sjekk, event vurder om vi må vite hva som er poa og samtykke

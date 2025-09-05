@@ -151,7 +151,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<List<Consent>>> GetActiveConsents(Guid party, CancellationToken cancellationToken)
+        public async Task<Result<List<Consent>>> GetConsentList(Guid party, CancellationToken cancellationToken)
         {
             try
             {

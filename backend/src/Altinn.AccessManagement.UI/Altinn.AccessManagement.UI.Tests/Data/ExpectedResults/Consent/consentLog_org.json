@@ -1,25 +1,12 @@
 [
   {
     "id": "75af4b32-231b-4317-b31a-5e0c71a0bb64",
-    "from": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "to": "urn:altinn:organization:identifier-no:60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
-    "handledBy": null,
+    "isPoa": true,
+    "toPartyId": "urn:altinn:organization:identifier-no:60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+    "toPartyName": "RAKRYGGET UNG TIGER AS",
+    "fromPartyId": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "fromPartyName": "DISKRET NÆR TIGER AS",
     "validTo": "2075-05-21T11:11:24.9535551+00:00",
-    "consentRights": [
-      {
-        "action": ["read"],
-        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource-poa" }],
-        "metadata": null
-      }
-    ],
-    "requestMessage": {
-      "nb": "Dette er en melding fra banken",
-      "nn": "Dette er ei melding fra banken",
-      "en": "This is a message from the bank"
-    },
-    "redirectUrl": "https://smartbank.no/poa",
-    "templateId": "poa",
-    "templateVersion": 1,
     "consentRequestEvents": [
       {
         "consentEventID": "0197cbaf-4fd2-70e5-9866-f13262afd85d",
@@ -39,21 +26,12 @@
   },
   {
     "id": "0fa3e590-0ab5-442c-ba8d-9410e6a63785",
-    "from": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "to": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
-    "handledBy": null,
+    "isPoa": false,
+    "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "toPartyName": "STA TOM TIGER AS",
+    "fromPartyId": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "fromPartyName": "DISKRET NÆR TIGER AS",
     "validTo": "2096-11-11T11:11:24.9535551+00:00",
-    "consentRights": [
-      {
-        "action": ["read"],
-        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource" }],
-        "metadata": null
-      }
-    ],
-    "requestMessage": null,
-    "redirectUrl": "https://smartbank.no/consent",
-    "templateId": "sblanesoknad",
-    "templateVersion": 1,
     "consentRequestEvents": [
       {
         "consentEventID": "71f42f80-876c-4b7a-ad8c-662998631878",
@@ -73,21 +51,12 @@
   },
   {
     "id": "6c7a60bb-b6a9-4902-92eb-919f8c9c1338",
-    "from": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "to": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
-    "handledBy": null,
+    "isPoa": false,
+    "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "toPartyName": "STA TOM TIGER AS",
+    "fromPartyId": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "fromPartyName": "DISKRET NÆR TIGER AS",
     "validTo": "2074-12-12T13:00:24.9535551+00:00",
-    "consentRights": [
-      {
-        "action": ["read"],
-        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource" }],
-        "metadata": null
-      }
-    ],
-    "requestMessage": null,
-    "redirectUrl": "https://smartbank.no/consent",
-    "templateId": "sblanesoknad",
-    "templateVersion": 1,
     "consentRequestEvents": [
       {
         "consentEventID": "0c793f2b-e787-4827-ae0a-dc0bffe47b03",
@@ -114,21 +83,12 @@
   },
   {
     "id": "9d466fd8-8d51-4a49-8269-8daddf4adad2",
-    "from": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "to": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
-    "handledBy": null,
+    "isPoa": false,
+    "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "toPartyName": "STA TOM TIGER AS",
+    "fromPartyId": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "fromPartyName": "DISKRET NÆR TIGER AS",
     "validTo": "2024-12-12T13:00:24.9535551+00:00",
-    "consentRights": [
-      {
-        "action": ["read"],
-        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource" }],
-        "metadata": null
-      }
-    ],
-    "requestMessage": null,
-    "redirectUrl": "https://smartbank.no/consent",
-    "templateId": "sblanesoknad",
-    "templateVersion": 1,
     "consentRequestEvents": [
       {
         "consentEventID": "6c693255-7d86-4420-adcd-a1b38af09481",
@@ -142,6 +102,13 @@
         "created": "2023-10-14T13:13:13.526811+00:00",
         "performedBy": "urn:altinn:organization:identifier-no:991825827",
         "eventType": "Accepted",
+        "consentRequestID": "9d466fd8-8d51-4a49-8269-8daddf4adad2"
+      },
+      {
+        "consentEventID": "cac86f5d-c217-4923-8e99-1532f009e83e",
+        "created": "2024-12-12T13:00:24.9535551+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Expired",
         "consentRequestID": "9d466fd8-8d51-4a49-8269-8daddf4adad2"
       }
     ]

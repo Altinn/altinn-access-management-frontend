@@ -81,16 +81,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(consentTemplates);
         }
 
-        public Task<Result<List<Consent>>> GetActiveConsents(Guid party, CancellationToken cancellationToken)
+        public Task<Result<List<Consent>>> GetConsentList(Guid party, CancellationToken cancellationToken)
         {
             if (party == ORG_PARTY_ID)
             {
-                List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/activeConsents_org.json");
+                List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/consents_org.json");
                 return Task.FromResult(new Result<List<Consent>>(consentList));
             }
             else if (party == PERSON_PARTY_ID)
             {
-                List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/activeConsents_person.json");
+                List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/consents_person.json");
                 return Task.FromResult(new Result<List<Consent>>(consentList));
             }
 
@@ -99,7 +99,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<Result<Consent>> GetConsent(Guid consentId, CancellationToken cancellationToken)
         {
-            List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/activeConsents_org.json");
+            List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/consents_org.json");
             Consent consent = consentList.FirstOrDefault(c => c.Id == consentId);
             if (consent == null)
             {
@@ -110,8 +110,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken)
         {
-            List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/activeConsents_org.json");
-            consentList.AddRange(Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/activeConsents_person.json"));
+            List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/consents_org.json");
+            consentList.AddRange(Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/consents_person.json"));
 
             Consent consent = consentList.FirstOrDefault(c => c.Id == consentId);
             if (consent == null)

@@ -36,11 +36,19 @@ export interface ActiveConsentListItem {
   isPoa: boolean;
   toPartyId: string;
   toPartyName: string;
+}
+
+export interface ConsentHistoryItem {
+  id: string;
+  isPoa: boolean;
+  toPartyId: string;
+  toPartyName: string;
   fromPartyId: string;
   fromPartyName: string;
   validTo: string;
   consentRequestEvents: ConsentRequestEvents[];
 }
+
 export interface Consent {
   id: string;
   rights: ConsentRight[];

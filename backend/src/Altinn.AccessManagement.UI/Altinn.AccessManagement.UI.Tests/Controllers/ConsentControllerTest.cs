@@ -227,11 +227,31 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string path = Path.Combine(_expectedDataPath, "Consent", "activeConsents_org.json");
-            List<ConsentListItemFE> expectedResponse = Util.GetMockData<List<ConsentListItemFE>>(path);
+            List<ActiveConsentItemFE> expectedResponse = Util.GetMockData<List<ActiveConsentItemFE>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/active/{party}");
-            List<ConsentListItemFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ConsentListItemFE>>();
+            List<ActiveConsentItemFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ActiveConsentItemFE>>();
+
+            // Assert
+            AssertionUtil.AssertCollections(actualResponse, expectedResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetConsentLog checks that consent log is returned
+        ///     Expected: GetConsentLog returns consent log
+        /// </summary>
+        [Fact]
+        public async Task GetConsentLog_ReturnsConsents()
+        {
+            // Arrange
+            string party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string path = Path.Combine(_expectedDataPath, "Consent", "consentLog_org.json");
+            List<ConsentLogItemFE> expectedResponse = Util.GetMockData<List<ConsentLogItemFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/log/{party}");
+            List<ConsentLogItemFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ConsentLogItemFE>>();
 
             // Assert
             AssertionUtil.AssertCollections(actualResponse, expectedResponse, AssertionUtil.AssertEqual);

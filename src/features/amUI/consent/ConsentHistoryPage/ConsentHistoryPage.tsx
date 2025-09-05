@@ -11,7 +11,7 @@ import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
 
 import classes from './ConsentHistoryPage.module.css';
-import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
+import { useGetConsentLogQuery } from '@/rtk/features/consentApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ConsentTimeline } from './ConsentTimeline';
 
@@ -27,7 +27,7 @@ export const ConsentHistoryPage = () => {
     data: activeConsents,
     isLoading: isLoadingActiveConsents,
     error: loadActiveConsentsError,
-  } = useGetActiveConsentsQuery({
+  } = useGetConsentLogQuery({
     partyId: partyUuid,
   });
 

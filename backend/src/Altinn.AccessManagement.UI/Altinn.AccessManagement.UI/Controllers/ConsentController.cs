@@ -101,7 +101,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Get a consent request by id
+        /// Get active consents
         /// </summary>
         /// <param name="party">Id of party to get active consents for</param>
         /// <param name="cancellationToken">Cancellation token</param>
@@ -110,7 +110,27 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("active/{party}")]
         public async Task<ActionResult> GetActiveConsents([FromRoute] Guid party, CancellationToken cancellationToken)
         {
-            Result<List<ConsentListItemFE>> activeConsents = await _consentService.GetActiveConsents(party, cancellationToken);
+            Result<List<ActiveConsentItemFE>> activeConsents = await _consentService.GetActiveConsents(party, cancellationToken);
+
+            if (activeConsents.IsProblem)
+            {
+                return activeConsents.Problem.ToActionResult();
+            }
+
+            return Ok(activeConsents.Value);
+        }
+
+        /// <summary>
+        /// Gets consent history
+        /// </summary>
+        /// <param name="party">Id of party to get consent history for</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("log/{party}")]
+        public async Task<ActionResult> GetConsentLog([FromRoute] Guid party, CancellationToken cancellationToken)
+        {
+            Result<List<ConsentLogItemFE>> activeConsents = await _consentService.GetConsentLog(party, cancellationToken);
 
             if (activeConsents.IsProblem)
             {

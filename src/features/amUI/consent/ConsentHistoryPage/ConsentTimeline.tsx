@@ -9,11 +9,11 @@ import {
   TimelineSegment,
 } from '@altinn/altinn-components';
 import classes from './ConsentHistoryPage.module.css';
-import { ActiveConsentListItem, ConsentRequestEventType } from '../types';
+import { ConsentHistoryItem, ConsentRequestEventType } from '../types';
 import { TFunction } from 'i18next';
 
 interface ConsentTimelineProps {
-  activeConsents: ActiveConsentListItem[];
+  activeConsents: ConsentHistoryItem[];
   showConsentDetails: (consentId: string) => void;
 }
 
@@ -107,11 +107,11 @@ interface TimelineItem {
   consentId: string;
 }
 const getTimeLineItems = (
-  activeConsents: ActiveConsentListItem[],
+  activeConsents: ConsentHistoryItem[],
   t: TFunction<'translation', undefined>,
 ): TimelineItem[] => {
   const getTimeLineText = (
-    consent: ActiveConsentListItem,
+    consent: ConsentHistoryItem,
     eventType: ConsentRequestEventType | 'Expired',
     t: TFunction<'translation', undefined>,
   ): string => {

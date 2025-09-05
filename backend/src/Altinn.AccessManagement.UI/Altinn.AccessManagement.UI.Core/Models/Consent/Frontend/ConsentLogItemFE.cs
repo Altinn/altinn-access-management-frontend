@@ -1,9 +1,9 @@
 namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
 {
     /// <summary>
-    /// Consent model for list of active consents
+    /// Consent model for log item
     /// </summary>
-    public class ConsentListItemFE
+    public class ConsentLogItemFE
     {
         /// <summary>
         /// Consent Id
