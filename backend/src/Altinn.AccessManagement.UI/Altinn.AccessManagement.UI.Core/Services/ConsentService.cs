@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
@@ -10,7 +11,9 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
 using Altinn.Platform.Register.Enums;
 using Altinn.Platform.Register.Models;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -21,6 +24,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IConsentClient _consentClient;
         private readonly IRegisterClient _registerClient;
         private readonly IResourceRegistryClient _resourceRegistryClient;
+        private readonly CacheConfig _cacheConfig;
+        private readonly IMemoryCache _memoryCache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsentService"/> class.
@@ -29,16 +34,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="consentClient">The consent client.</param>
         /// <param name="registerClient">The register client.</param>
         /// <param name="resourceRegistryClient">Resources client to load resources</param>
+        /// <param name="memoryCache">the handler for cache</param>
+        /// <param name="cacheConfig">the handler for cache configuration</param>
         public ConsentService(
             ILogger<ConsentService> logger,
             IConsentClient consentClient,
             IRegisterClient registerClient,
-            IResourceRegistryClient resourceRegistryClient)
+            IResourceRegistryClient resourceRegistryClient,
+            IMemoryCache memoryCache,
+            IOptions<CacheConfig> cacheConfig)
         {
             _logger = logger;
             _consentClient = consentClient;
             _registerClient = registerClient;
             _resourceRegistryClient = resourceRegistryClient;
+            _memoryCache = memoryCache;
+            _cacheConfig = cacheConfig.Value;
         }
 
         /// <inheritdoc />
@@ -128,14 +139,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
             // look up all party names in one call instead of one by one
             IEnumerable<string> partyUuids = activeConsents.Aggregate(new List<string> { }, (acc, consent) => [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From)]).Distinct();
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
-
+            IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
+            
             IEnumerable<ActiveConsentItemFE> activeConsentsFE = activeConsents.Select(consent =>
             {
                 Party toParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.To));
                 return new ActiveConsentItemFE()
                 {
                     Id = consent.Id,
-                    IsPoa = consent.TemplateId == "poa", // TODO, bedre sjekk, event vurder om vi må vite hva som er poa og samtykke
+                    IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
                     ToPartyId = consent.To,
                     ToPartyName = toParty?.Name ?? string.Empty,
                 };
@@ -156,6 +168,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             // look up all party names in one call instead of one by one
             IEnumerable<string> partyUuids = consents.Value.Aggregate(new List<string> { }, (acc, consent) => [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From)]).Distinct();
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
+            IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
 
             IEnumerable<ConsentLogItemFE> consentListItems = consents.Value.Select(consent =>
             {
@@ -164,7 +177,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return new ConsentLogItemFE()
                 {
                     Id = consent.Id,
-                    IsPoa = consent.TemplateId == "poa", // TODO, bedre sjekk, event vurder om vi må vite hva som er poa og samtykke
+                    IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
                     ToPartyId = consent.To,
                     ToPartyName = toParty?.Name ?? string.Empty,
                     FromPartyId = consent.From,
@@ -342,7 +355,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             // GET metadata template used in resource
-            List<ConsentTemplate> consentTemplates = await _consentClient.GetConsentTemplates(cancellationToken);
+            IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
             ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) =>
                 template.Id == templateParams.TemplateId &&
                 template.Version == templateParams.TemplateVersion);
@@ -404,6 +417,29 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata),
                 FromPartyName = isFromOrg ? fromParty.Name : null
             };
+        }
+
+        private async Task<IEnumerable<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken)
+        {
+            string cacheKey = "consenttemplates";
+
+            if (!_memoryCache.TryGetValue(cacheKey, out IEnumerable<ConsentTemplate> consentTemplates))
+            {
+                consentTemplates = await _consentClient.GetConsentTemplates(cancellationToken);
+
+                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetPriority(CacheItemPriority.High)
+                    .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
+
+                _memoryCache.Set(cacheKey, consentTemplates, cacheEntryOptions);
+            }
+
+            return consentTemplates;
+        }
+
+        private static bool IsPoaTemplate(IEnumerable<ConsentTemplate> consentTemplates, string templateId)
+        {
+            return consentTemplates.Any((template) => template.Id.Equals(templateId) && template.IsPoa);
         }
 
         private sealed class ConsentTemplateParams
