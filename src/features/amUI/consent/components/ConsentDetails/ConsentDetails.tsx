@@ -50,13 +50,9 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
     }
   };
 
-  const canConsentBeRevoked =
-    consent?.consentRequestEvents.every(
-      (event) =>
-        event.eventType !== 'Rejected' &&
-        event.eventType !== 'Revoked' &&
-        event.eventType !== 'Deleted',
-    ) && new Date(consent.validTo) > new Date();
+  const canConsentBeRevoked = consent?.consentRequestEvents.every(
+    (event) => !['Rejected', 'Revoked', 'Deleted', 'Expired'].includes(event.eventType),
+  );
 
   const isRevoking = isRevokingConsent || isFetchingConsent;
 
@@ -173,9 +169,9 @@ const ConsentStatus = ({ events, validTo, isPoa }: ConsentStatusProps) => {
 
   const hasAcceptEvent = events.some((event) => event.eventType === 'Accepted');
   const hasRevokeEvent = events.some((event) => event.eventType === 'Revoked');
-  const isPastValidTo = new Date(validTo) < new Date();
+  const hasExpiredEvent = events.some((event) => event.eventType === 'Expired');
 
-  if (isPastValidTo) {
+  if (hasExpiredEvent) {
     statusClass = classes.statusInactive;
     statusText = isPoa
       ? t('active_consents.status_poa_expired')

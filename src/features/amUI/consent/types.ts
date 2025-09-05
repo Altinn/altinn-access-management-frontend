@@ -7,7 +7,13 @@ export interface ConsentRight {
   consentTextHtml: ConsentLanguage;
 }
 
-export type ConsentRequestEventType = 'Created' | 'Rejected' | 'Accepted' | 'Revoked' | 'Deleted';
+export type ConsentRequestEventType =
+  | 'Created'
+  | 'Rejected'
+  | 'Accepted'
+  | 'Revoked'
+  | 'Deleted'
+  | 'Expired';
 export interface ConsentRequestEvents {
   consentEventID: string;
   created: string;

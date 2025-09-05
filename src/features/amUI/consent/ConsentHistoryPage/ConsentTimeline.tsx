@@ -132,7 +132,7 @@ const getTimeLineItems = (
   return activeConsents
     .reduce((acc: TimelineItem[], consent) => {
       const consentTimelineItems = consent.consentRequestEvents
-        .filter((event) => event.eventType === 'Accepted' || event.eventType === 'Revoked')
+        .filter((event) => ['Accepted', 'Revoked', 'Expired'].includes(event.eventType))
         .map((event) => {
           return {
             consentEventId: event.consentEventID,
@@ -149,20 +149,6 @@ const getTimeLineItems = (
             consentId: consent.id,
           };
         });
-
-      if (new Date(consent.validTo) < new Date()) {
-        consentTimelineItems.push({
-          consentEventId: Math.random().toString(36).substring(2, 15), // Generate a unique ID for the expired event
-          bylineText: toTimeStamp(consent.validTo, true),
-          timelineText: getTimeLineText(consent, 'Expired', t),
-          validToText: '',
-          created: consent.validTo,
-          fromPartyName: consent.fromPartyName,
-          toPartyName: consent.toPartyName,
-          isPoa: consent.isPoa,
-          consentId: consent.id,
-        });
-      }
 
       return [...acc, ...consentTimelineItems];
     }, [])
