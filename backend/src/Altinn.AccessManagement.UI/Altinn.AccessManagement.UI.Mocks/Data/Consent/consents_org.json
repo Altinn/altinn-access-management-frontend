@@ -1,0 +1,156 @@
+[
+  {
+    "id": "75af4b32-231b-4317-b31a-5e0c71a0bb64",
+    "from": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "to": "urn:altinn:organization:identifier-no:60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+    "handledBy": null,
+    "validTo": "2075-05-21T11:11:24.9535551+00:00",
+    "consentRights": [
+      {
+        "action": ["read"],
+        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource-poa" }],
+        "metadata": null
+      }
+    ],
+    "requestMessage": {
+      "nb": "Dette er en melding fra banken",
+      "nn": "Dette er ei melding fra banken",
+      "en": "This is a message from the bank"
+    },
+    "redirectUrl": "https://smartbank.no/poa",
+    "templateId": "poa",
+    "templateVersion": 1,
+    "consentRequestEvents": [
+      {
+        "consentEventID": "0197cbaf-4fd2-70e5-9866-f13262afd85d",
+        "created": "2025-07-02T15:09:13.526811+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Created",
+        "consentRequestID": "75af4b32-231b-4317-b31a-5e0c71a0bb64"
+      },
+      {
+        "consentEventID": "d2f730c7-38e7-4849-bb49-b7fa21c1c7c0",
+        "created": "2025-07-03T15:09:13.526811+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Accepted",
+        "consentRequestID": "75af4b32-231b-4317-b31a-5e0c71a0bb64"
+      }
+    ]
+  },
+  {
+    "id": "0fa3e590-0ab5-442c-ba8d-9410e6a63785",
+    "from": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "to": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "handledBy": null,
+    "validTo": "2096-11-11T11:11:24.9535551+00:00",
+    "consentRights": [
+      {
+        "action": ["read"],
+        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource" }],
+        "metadata": null
+      }
+    ],
+    "requestMessage": null,
+    "redirectUrl": "https://smartbank.no/consent",
+    "templateId": "sblanesoknad",
+    "templateVersion": 1,
+    "consentRequestEvents": [
+      {
+        "consentEventID": "71f42f80-876c-4b7a-ad8c-662998631878",
+        "created": "2025-06-02T15:09:13.526811+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Created",
+        "consentRequestID": "0fa3e590-0ab5-442c-ba8d-9410e6a63785"
+      },
+      {
+        "consentEventID": "46b54082-a01e-44ee-a8b1-96b87afa3b29",
+        "created": "2025-06-03T15:11:22.526811+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Accepted",
+        "consentRequestID": "0fa3e590-0ab5-442c-ba8d-9410e6a63785"
+      }
+    ]
+  },
+  {
+    "id": "6c7a60bb-b6a9-4902-92eb-919f8c9c1338",
+    "from": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "to": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "handledBy": null,
+    "validTo": "2074-12-12T13:00:24.9535551+00:00",
+    "consentRights": [
+      {
+        "action": ["read"],
+        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource" }],
+        "metadata": null
+      }
+    ],
+    "requestMessage": null,
+    "redirectUrl": "https://smartbank.no/consent",
+    "templateId": "sblanesoknad",
+    "templateVersion": 1,
+    "consentRequestEvents": [
+      {
+        "consentEventID": "0c793f2b-e787-4827-ae0a-dc0bffe47b03",
+        "created": "2025-01-02T15:09:13.526811+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Created",
+        "consentRequestID": "6c7a60bb-b6a9-4902-92eb-919f8c9c1338"
+      },
+      {
+        "consentEventID": "2a61ac0b-3eda-46ea-ad90-2787de223396",
+        "created": "2025-01-03T17:33:13.526811+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Accepted",
+        "consentRequestID": "6c7a60bb-b6a9-4902-92eb-919f8c9c1338"
+      },
+      {
+        "consentEventID": "f18c916d-1675-415f-b182-a70e1f40abaa",
+        "created": "2025-02-04T07:11:13.526811+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Revoked",
+        "consentRequestID": "6c7a60bb-b6a9-4902-92eb-919f8c9c1338"
+      }
+    ]
+  },
+  {
+    "id": "9d466fd8-8d51-4a49-8269-8daddf4adad2",
+    "from": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "to": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "handledBy": null,
+    "validTo": "2024-12-12T13:00:24.9535551+00:00",
+    "consentRights": [
+      {
+        "action": ["read"],
+        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource" }],
+        "metadata": null
+      }
+    ],
+    "requestMessage": null,
+    "redirectUrl": "https://smartbank.no/consent",
+    "templateId": "sblanesoknad",
+    "templateVersion": 1,
+    "consentRequestEvents": [
+      {
+        "consentEventID": "6c693255-7d86-4420-adcd-a1b38af09481",
+        "created": "2023-10-13T18:29:13.526811+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Created",
+        "consentRequestID": "9d466fd8-8d51-4a49-8269-8daddf4adad2"
+      },
+      {
+        "consentEventID": "ef2eee6a-7de4-4125-bba5-cb5a59b42bdd",
+        "created": "2023-10-14T13:13:13.526811+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Accepted",
+        "consentRequestID": "9d466fd8-8d51-4a49-8269-8daddf4adad2"
+      },
+      {
+        "consentEventID": "cac86f5d-c217-4923-8e99-1532f009e83e",
+        "created": "2024-12-12T13:00:24.9535551+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Expired",
+        "consentRequestID": "9d466fd8-8d51-4a49-8269-8daddf4adad2"
+      }
+    ]
+  }
+]

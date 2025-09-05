@@ -118,11 +118,11 @@ export const UserItem = ({
           : !interactive
             ? 'div'
             : (props) => (
-                  <Link
-                    {...props}
-                    to={user.id}
-                  />
-                )
+                <Link
+                  {...props}
+                  to={user.id}
+                />
+              )
       }
       titleAs={titleAs}
       subUnit={subUnit || hasSubUnitRole}

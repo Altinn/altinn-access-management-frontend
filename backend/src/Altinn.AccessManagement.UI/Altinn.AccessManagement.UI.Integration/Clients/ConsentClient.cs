@@ -34,12 +34,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="httpContextAccessor">The HTTP context accessor instance.</param>
         /// <param name="platformSettings">The platform settings.</param>
         public ConsentClient(
-            ILogger<ConsentClient> logger, 
-            HttpClient httpClient, 
-            IHttpContextAccessor httpContextAccessor, 
+            ILogger<ConsentClient> logger,
+            HttpClient httpClient,
+            IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings)
         {
-            _logger = logger;        
+            _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _platformSettings = platformSettings.Value;
             httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint);
@@ -63,8 +63,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return JsonSerializer.Deserialize<ConsentRequestDetails>(responseContent, _jsonSerializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // ConsentClient // GetConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                
+                _logger.LogError("AccessManagement.UI // ConsentClient // GetConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
             }
@@ -91,8 +91,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return true;
                 }
 
-                _logger.LogError("AccessManagement.UI // ConsentClient // RejectConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                
+                _logger.LogError("AccessManagement.UI // ConsentClient // RejectConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
             }
@@ -111,7 +111,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"bff/consentrequests/{consentRequestId}/accept";
                 var content = JsonContent.Create(context);
-                
+
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
@@ -120,8 +120,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return true;
                 }
 
-                _logger.LogError("AccessManagement.UI // ConsentClient // ApproveConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                
+                _logger.LogError("AccessManagement.UI // ConsentClient // ApproveConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
             }
@@ -148,6 +148,90 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             return consentTemplates;
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<List<Consent>>> GetConsentList(Guid party, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"accessmanagement/api/v1/bff/activeconsents/{party}";
+
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<List<Consent>>(responseContent, _jsonSerializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // ConsentClient // GetActiveConsents // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetActiveConsents // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<Consent>> GetConsent(Guid consentId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"accessmanagement/api/v1/bff/consent/{consentId}";
+
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<Consent>(responseContent, _jsonSerializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // ConsentClient // GetConsent // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsent // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"bff/consents/{consentId}/revoke";
+
+                HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, null);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // ConsentClient // RevokeConsent // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // RevokeConsent // Exception");
+                throw;
+            }
         }
     }
 }

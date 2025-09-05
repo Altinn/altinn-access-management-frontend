@@ -4,6 +4,7 @@ import {
   PersonGroupIcon,
   TenancyIcon,
   PadlockUnlockedIcon,
+  HandshakeIcon,
   InformationSquareIcon,
   LeaveIcon,
   LinkIcon,
@@ -11,7 +12,7 @@ import {
 import { t } from 'i18next';
 import { Link } from 'react-router';
 
-import { amUIPath, SystemUserPath } from '@/routes/paths';
+import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 import { getHostUrl } from '@/resources/utils/pathUtils';
 
 /**
@@ -91,18 +92,33 @@ export const SidebarItems = (
     ),
   };
 
-  const systemUserPath = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
-  const systemUser: MenuItemProps = {
+  const consent: MenuItemProps = {
     groupId: 5,
     id: '5',
     size: 'md',
-    title: t('sidebar.systemaccess'),
-    icon: TenancyIcon,
-    selected: pathname?.includes(systemUserPath),
+    title: t('sidebar.consent'),
+    icon: HandshakeIcon,
+    selected: pathname?.includes(`/${ConsentPath.Consent}/`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     as: (props: any) => (
       <Link
-        to={systemUserPath}
+        to={`/${ConsentPath.Consent}/${ConsentPath.Active}`}
+        {...props}
+      />
+    ),
+  };
+
+  const systemUser: MenuItemProps = {
+    groupId: 6,
+    id: '6',
+    size: 'md',
+    title: t('sidebar.systemaccess'),
+    icon: TenancyIcon,
+    selected: pathname?.includes(`/${SystemUserPath.SystemUser}/`),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
+      <Link
+        to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}
         {...props}
       />
     ),
@@ -160,7 +176,7 @@ export const SidebarItems = (
     }
   }
 
-  items.push(systemUser);
+  items.push(consent, systemUser);
 
   if (displayConfettiPackage && !isSmall) {
     shortcuts.map((shortcutItem) => items.push(shortcutItem));
