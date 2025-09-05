@@ -1,8 +1,7 @@
 import { DsParagraph, DsHeading, MenuItemIcon, Avatar } from '@altinn/altinn-components';
-import { ArrowRightIcon } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 
-import { PartyType, useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { UserRoles } from '../UserRoles/UserRoles';
@@ -21,12 +20,7 @@ export const UserPageHeader = ({
   displayDirection = false,
   displayRoles = true,
 }: UserPageHeaderProps) => {
-  const {
-    toParty,
-    fromParty,
-    actingParty,
-    isLoading: loadingPartyRepresentation,
-  } = usePartyRepresentation();
+  const { toParty, fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
 
   if (!toParty && !fromParty && !loadingPartyRepresentation) {
     return null;

@@ -6,7 +6,7 @@ import classes from './userRoles.module.css';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
 import { useMemo } from 'react';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { getRoleCodesForKeyRoles } from './roleUtils';
 
 interface UserRulesProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -26,6 +26,7 @@ export const UserRoles = ({
     actingParty,
     isLoading: loadingPartyRepresentation,
   } = usePartyRepresentation();
+  const { t } = useTranslation();
   const { data: connectionData, isLoading: isConnectionLoading } = useGetRightHoldersQuery(
     {
       partyUuid: actingParty?.partyUuid ?? '',
@@ -35,7 +36,7 @@ export const UserRoles = ({
     { skip: !actingParty || (!toParty && !fromParty) },
   );
   const roleTextKeys = useMemo(() => {
-    if (isConnectionLoading || loadingPartyRepresentation || connectionData === undefined) {
+    if (isConnectionLoading || loadingPartyRepresentation || !connectionData?.length) {
       return [];
     }
     return getRoleCodesForKeyRoles(connectionData[0].roles) ?? [];
