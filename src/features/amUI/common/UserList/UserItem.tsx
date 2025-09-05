@@ -17,7 +17,7 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
 }
 
 interface UserItemProps
-  extends Pick<UserListItemProps, 'size' | 'titleAs' | 'subUnit' | 'interactive'> {
+  extends Pick<UserListItemProps, 'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'> {
   user: ExtendedUser | User;
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
@@ -48,6 +48,7 @@ export const UserItem = ({
   roleDirection = 'toUser',
   subUnit = false,
   disableLinks = false,
+  shadow,
   ...props
 }: UserItemProps) => {
   const limitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
@@ -81,8 +82,8 @@ export const UserItem = ({
         t('common.org_nr') +
         ' ' +
         user.keyValues?.OrganizationIdentifier +
-        (isSubOrMainUnit
-          ? ` (${t(hasSubUnitRole ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
+        (isSubOrMainUnit || subUnit
+          ? ` (${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
           : '')
       );
     }
@@ -96,18 +97,21 @@ export const UserItem = ({
         ? 'company'
         : 'system';
 
+  const subUsers = hasInheritingUsers ? [user as User, ...(user.children ?? [])] : [];
+
   return (
     <UserListItem
       {...props}
       size={size}
       id={user.id}
       name={user.name}
-      description={description(user)}
+      description={!isExpanded ? description(user) : undefined}
       roleNames={showRoles ? roleCodes.map((r) => t(`${r}`)) : undefined}
       type={type}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}
       interactive={interactive}
+      shadow={shadow}
       linkIcon={!hasInheritingUsers && !disableLinks}
       onClick={() => {
         if (hasInheritingUsers) setExpanded(!isExpanded);
@@ -118,31 +122,37 @@ export const UserItem = ({
           : !interactive
             ? 'div'
             : (props) => (
-                  <Link
-                    {...props}
-                    to={user.id}
-                  />
-                )
+                <Link
+                  {...props}
+                  to={user.id}
+                />
+              )
       }
       titleAs={titleAs}
       subUnit={subUnit || hasSubUnitRole}
     >
       {hasInheritingUsers && isExpanded && (
-        <List className={classes.inheritingUsers}>
-          {user.children?.map((child) => (
-            <UserItem
-              key={child.id}
-              user={child}
-              size='sm'
-              titleAs={userHeadingLevelForMapper(titleAs)}
-              subUnit={child.type === ConnectionUserType.Organization}
-              roleDirection={roleDirection}
-              showRoles={showRoles}
-              interactive={interactive}
-              disableLinks={disableLinks}
-            />
-          ))}
-        </List>
+        <div className={classes.inheritingUsersContainer}>
+          <List
+            spacing={'sm'}
+            className={classes.inheritingUsers}
+          >
+            {subUsers.map((child, index) => (
+              <UserItem
+                key={child.id}
+                user={{ ...child, children: null }} // do not allow further expansion of inheriting users
+                size='xs'
+                titleAs={userHeadingLevelForMapper(titleAs)}
+                subUnit={index !== 0 && child.type === ConnectionUserType.Organization}
+                roleDirection={roleDirection}
+                showRoles={showRoles}
+                interactive={interactive}
+                disableLinks={disableLinks}
+                shadow='none'
+              />
+            ))}
+          </List>
+        </div>
       )}
     </UserListItem>
   );

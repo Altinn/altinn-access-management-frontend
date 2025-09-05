@@ -22,3 +22,7 @@
 .showMoreButton {
   width: 100%;
 }
+
+.inheritingUsersContainer {
+  padding: 0.5rem 1rem;
+}

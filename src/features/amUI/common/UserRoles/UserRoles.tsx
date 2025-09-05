@@ -8,6 +8,7 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
 import { useMemo } from 'react';
 import { t } from 'i18next';
+import { getRoleCodesForKeyRoles } from './roleUtils';
 
 interface UserRulesProps extends React.HTMLAttributes<HTMLDivElement> {
   rightOwnerUuid: string;
@@ -34,11 +35,11 @@ export const UserRoles = ({
     },
     { skip: !actingParty || (!toParty && !fromParty) },
   );
-  const roles = useMemo(() => {
+  const roleTextKeys = useMemo(() => {
     if (isConnectionLoading || loadingPartyRepresentation || connectionData === undefined) {
       return [];
     }
-    return connectionData[0].roles.map((role) => role.code) ?? [];
+    return getRoleCodesForKeyRoles(connectionData[0].roles) ?? [];
   }, [connectionData, isConnectionLoading, loadingPartyRepresentation]);
 
   return (
@@ -46,12 +47,12 @@ export const UserRoles = ({
       className={cn(classes.userRoles, className)}
       {...props}
     >
-      {roles?.map((role) => {
+      {roleTextKeys?.map((roleTextKey) => {
         return (
           <Badge
             color={'company'}
-            label={t(`user_role.${role}`)}
-            key={role}
+            label={t(roleTextKey)}
+            key={roleTextKey}
           />
         );
       })}

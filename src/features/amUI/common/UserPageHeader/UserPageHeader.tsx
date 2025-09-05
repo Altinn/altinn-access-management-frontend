@@ -1,4 +1,4 @@
-import { DsParagraph, DsHeading, MenuItemIcon } from '@altinn/altinn-components';
+import { DsParagraph, DsHeading, MenuItemIcon, Avatar } from '@altinn/altinn-components';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 
@@ -58,13 +58,11 @@ export const UserPageHeader = ({
             }}
             size={'lg'}
           />
-          <ArrowRightIcon style={{ fontSize: '1.5rem' }} />
-          <MenuItemIcon
-            icon={{
-              name: secondaryParty?.name ?? '',
-              type: secondaryParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-            }}
+          <Avatar
+            name={secondaryParty?.name ?? ''}
+            type={secondaryParty?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
             size={'lg'}
+            className={classes.secondaryAvatar}
           />
         </div>
       );

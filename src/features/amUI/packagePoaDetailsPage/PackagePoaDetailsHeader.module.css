@@ -9,27 +9,14 @@
   align-items: center;
 }
 
-.packageIconContainer {
-  grid-area: icon;
-  position: relative;
-}
-
 @media screen and (max-width: 768px) {
 }
 
 .packageIcon {
-  height: 2.35rem;
-  width: 2.35rem;
+  grid-area: icon;
+  height: 2.6rem;
+  width: 2.6rem;
   margin: auto;
-}
-
-.packageAvatar {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  height: 1rem;
-  width: 1rem;
-  z-index: 100;
 }
 
 .pageHeading {
