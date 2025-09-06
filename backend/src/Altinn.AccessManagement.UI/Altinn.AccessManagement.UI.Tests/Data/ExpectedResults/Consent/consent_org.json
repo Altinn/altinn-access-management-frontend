@@ -44,14 +44,14 @@
       "created": "2025-07-02T15:09:13.526811+00:00",
       "performedBy": "urn:altinn:organization:identifier-no:991825827",
       "eventType": "Created",
-      "consentRequestID": "b4f13aea-c996-437d-bb32-e2b81ccfb919"
+      "consentRequestID": "75af4b32-231b-4317-b31a-5e0c71a0bb64"
     },
     {
-      "consentEventID": "772fc55b-5bba-454e-bb92-7ddaa3169ae3",
+      "consentEventID": "d2f730c7-38e7-4849-bb49-b7fa21c1c7c0",
       "created": "2025-07-03T15:09:13.526811+00:00",
       "performedBy": "urn:altinn:organization:identifier-no:991825827",
       "eventType": "Accepted",
-      "consentRequestID": "b4f13aea-c996-437d-bb32-e2b81ccfb919"
+      "consentRequestID": "75af4b32-231b-4317-b31a-5e0c71a0bb64"
     }
   ]
 }
