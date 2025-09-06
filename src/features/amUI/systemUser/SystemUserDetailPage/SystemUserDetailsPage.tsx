@@ -21,6 +21,12 @@ import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserDetailsPage.module.css';
 
+import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+import { RightsList } from '../components/RightsList/RightsList';
+
+import classes from './SystemUserDetailsPage.module.css';
+
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
   const { id } = useParams();

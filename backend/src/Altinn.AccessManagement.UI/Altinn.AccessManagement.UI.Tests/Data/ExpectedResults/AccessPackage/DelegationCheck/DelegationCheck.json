@@ -1,0 +1,2011 @@
+[
+  {
+    "package": {
+      "id": "0195efb8-7c80-7e82-9b4f-7d63e773bbca",
+      "urn": "urn:altinn:accesspackage:klientadministrator",
+      "areaId": "e4ae823f-41db-46ed-873f-8a5d1378fff8"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "0195efb8-7c80-7a95-ad36-900c3d8ad300",
+      "urn": "urn:altinn:accesspackage:tilgangsstyrer",
+      "areaId": "e4ae823f-41db-46ed-873f-8a5d1378fff8"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "0195efb8-7c80-7e16-ab0c-36dc8ab1a29d",
+      "urn": "urn:altinn:accesspackage:hovedadministrator",
+      "areaId": "e4ae823f-41db-46ed-873f-8a5d1378fff8"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "0195efb8-7c80-7b30-a84d-f37fed9fb89c",
+      "urn": "urn:altinn:accesspackage:maskinporten-administrator",
+      "areaId": "e4ae823f-41db-46ed-873f-8a5d1378fff8"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "9cc8b401-b4cb-473d-a3fa-96171aeb1389",
+      "urn": "urn:altinn:accesspackage:transport-i-ror",
+      "areaId": "6ff90072-566b-4acd-baac-ec477534e712"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "1dba50d6-f604-48e9-bd41-82321b13e85c",
+      "urn": "urn:altinn:accesspackage:skatt-naering",
+      "areaId": "7d32591d-34b7-4afc-8afa-013722f8c05d"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "4c859601-9b2b-4662-af39-846f4117ad7a",
+      "urn": "urn:altinn:accesspackage:skattegrunnlag",
+      "areaId": "7d32591d-34b7-4afc-8afa-013722f8c05d"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "9a61b136-7810-4939-ab6d-84938e9a12c6",
+      "urn": "urn:altinn:accesspackage:merverdiavgift",
+      "areaId": "7d32591d-34b7-4afc-8afa-013722f8c05d"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "4f4d4567-2384-49fa-b34b-84b4b77139d8",
+      "urn": "urn:altinn:accesspackage:motorvognavgift",
+      "areaId": "7d32591d-34b7-4afc-8afa-013722f8c05d"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "b4e69b54-895e-42c5-bf0d-861a571cd282",
+      "urn": "urn:altinn:accesspackage:regnskap-okonomi-rapport",
+      "areaId": "7d32591d-34b7-4afc-8afa-013722f8c05d"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "a02fc602-872a-4671-b338-8b86a64b534a",
+      "urn": "urn:altinn:accesspackage:krav-og-utlegg",
+      "areaId": "7d32591d-34b7-4afc-8afa-013722f8c05d"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "1886712b-e077-445a-ab3f-8c8bdebccc67",
+      "urn": "urn:altinn:accesspackage:reviorattesterer",
+      "areaId": "7d32591d-34b7-4afc-8afa-013722f8c05d"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "74c1dcf6-a760-4065-83f0-8edc6dec5dba",
+      "urn": "urn:altinn:accesspackage:saeravgifter",
+      "areaId": "7d32591d-34b7-4afc-8afa-013722f8c05d"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "eb9006a6-dbd5-4155-9174-91e182a56715",
+      "urn": "urn:altinn:accesspackage:kreditt-og-oppgjoer",
+      "areaId": "7d32591d-34b7-4afc-8afa-013722f8c05d"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "deb7f8ae-8427-469d-b824-937c146c0489",
+      "urn": "urn:altinn:accesspackage:toll",
+      "areaId": "7d32591d-34b7-4afc-8afa-013722f8c05d"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "cf575d42-72be-4d14-b0d2-77352221df4f",
+      "urn": "urn:altinn:accesspackage:ansettelsesforhold",
+      "areaId": "6f7f3b02-8b5a-4823-9468-0f4646d3a790"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "fb0aa257-e7dc-4b7b-9528-77dfb749461c",
+      "urn": "urn:altinn:accesspackage:lonn",
+      "areaId": "6f7f3b02-8b5a-4823-9468-0f4646d3a790"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "4af2d44d-f9f8-4585-b679-7875bb1828ea",
+      "urn": "urn:altinn:accesspackage:a-ordning",
+      "areaId": "6f7f3b02-8b5a-4823-9468-0f4646d3a790"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "ae41bf08-c7ef-4bfe-b2b9-7bf6deb7798f",
+      "urn": "urn:altinn:accesspackage:pensjon",
+      "areaId": "6f7f3b02-8b5a-4823-9468-0f4646d3a790"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "08ec673d-9126-4ed0-ae75-7ceec8633c77",
+      "urn": "urn:altinn:accesspackage:sykefravaer",
+      "areaId": "6f7f3b02-8b5a-4823-9468-0f4646d3a790"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "71a2bd47-e885-49c7-8a58-7ef4bd936f41",
+      "urn": "urn:altinn:accesspackage:permisjon",
+      "areaId": "6f7f3b02-8b5a-4823-9468-0f4646d3a790"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "5eb07bdc-5c3c-4c85-add3-5405b214b8a3",
+      "urn": "urn:altinn:accesspackage:renovasjon",
+      "areaId": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "04c5a001-5249-4765-ae8e-58617c404223",
+      "urn": "urn:altinn:accesspackage:miljorydding-miljorensing-og-lignende",
+      "areaId": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "bacc9294-56fd-457f-930e-59ee4a7a3894",
+      "urn": "urn:altinn:accesspackage:baerekraft",
+      "areaId": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "cfe074fa-0a66-4a4b-974a-5d1db8eb94e6",
+      "urn": "urn:altinn:accesspackage:sikkerhet-og-internkontroll",
+      "areaId": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "a03af7d5-74b9-4f18-aead-5d47edc36be5",
+      "urn": "urn:altinn:accesspackage:ulykke",
+      "areaId": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "fa84bffc-ac17-40cd-af9c-61c89f92e44c",
+      "urn": "urn:altinn:accesspackage:yrkesskade",
+      "areaId": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "91cf61ae-69ab-49d5-b51a-80591c91f255",
+      "urn": "urn:altinn:accesspackage:ordinaer-post-til-virksomheten",
+      "areaId": "6f938de8-34f2-4bab-a0c6-3a3eb64aad3b"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "06c13400-8683-4985-9802-cef13e247f24",
+      "urn": "urn:altinn:accesspackage:generelle-helfotjenester",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "2ee6e972-2423-4f3a-bd3c-d4871fcc9876",
+      "urn": "urn:altinn:accesspackage:helfo-saerlig-kategori",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "956cfcf0-ab4c-44d8-98a2-d68c4d59321b",
+      "urn": "urn:altinn:accesspackage:starte-drive-endre-avikle-virksomhet",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "7dfc669b-70e4-4974-9e11-d6dca4803aaa",
+      "urn": "urn:altinn:accesspackage:aksjer-og-eierforhold",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "4717e6e0-1ec2-4354-b825-d9a9e2588fb1",
+      "urn": "urn:altinn:accesspackage:attester",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "df13707e-5252-496a-bc00-daffeed1e4b2",
+      "urn": "urn:altinn:accesspackage:dokumentbasert-tilsyn",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "75978efe-2437-421e-8c77-dd61925c7ba4",
+      "urn": "urn:altinn:accesspackage:infrastruktur",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "250568e6-ed9f-4bdc-b9e3-df08be7181ba",
+      "urn": "urn:altinn:accesspackage:patent-varemerke-design",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "d3ba7bba-195b-4b69-ae68-df20ecd57097",
+      "urn": "urn:altinn:accesspackage:tilskudd-stotte-erstatning",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "600bf1be-61f6-423c-9a13-df93ee3214a5",
+      "urn": "urn:altinn:accesspackage:mine-sider-kommune",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "55e73960-09e5-473e-aa40-deaf97cf9bf2",
+      "urn": "urn:altinn:accesspackage:politi-og-domstol",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "ac54a5ca-16d2-4132-ae0d-e5aa8bd1ff6e",
+      "urn": "urn:altinn:accesspackage:rapportering-statistikk",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "594a2c4b-47a1-48c6-a01c-ed44ec4c05a4",
+      "urn": "urn:altinn:accesspackage:forskning",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "5b51658e-f716-401c-9fc2-fe70bbe70f48",
+      "urn": "urn:altinn:accesspackage:folkeregister",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "27f488d7-d1f6-4aee-ae81-2bb42d62c446",
+      "urn": "urn:altinn:accesspackage:maskinporten-scopes",
+      "areaId": "892e98c6-1696-46e7-9bb1-59c08761ec64"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "66bd8101-fbd8-491b-b1f5-2f53a9476ffd",
+      "urn": "urn:altinn:accesspackage:maskinlesbare-hendelser",
+      "areaId": "892e98c6-1696-46e7-9bb1-59c08761ec64"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "c5bbbc3f-605a-4dcb-a587-32124d7bb76d",
+      "urn": "urn:altinn:accesspackage:jordbruk",
+      "areaId": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "7b8a3aaa-c8ed-4ac4-923a-335f4f9eb45a",
+      "urn": "urn:altinn:accesspackage:dyrehold",
+      "areaId": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "0bb5963e-df17-4f35-b913-3ce10a34b866",
+      "urn": "urn:altinn:accesspackage:reindrift",
+      "areaId": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "906aec0d-ad1f-496b-a0bb-40f81b3303cb",
+      "urn": "urn:altinn:accesspackage:jakt-og-viltstell",
+      "areaId": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "f7e02568-90b6-477d-8abb-44984ddeb1f9",
+      "urn": "urn:altinn:accesspackage:skogbruk",
+      "areaId": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "9d2ec6e9-5148-4f47-9ae4-4536f6c9c1cb",
+      "urn": "urn:altinn:accesspackage:fiske",
+      "areaId": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "78c21107-7d2d-4e85-af82-47ea0e47ceca",
+      "urn": "urn:altinn:accesspackage:akvakultur",
+      "areaId": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "1e40697b-e178-4920-8fbd-af5164b4d147",
+      "urn": "urn:altinn:accesspackage:byggesoknad",
+      "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "482eee1e-ec79-45bb-8bd0-af8459cbb9f0",
+      "urn": "urn:altinn:accesspackage:plansak",
+      "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "1e1e8bf9-096f-4de2-9db7-b176db55db09",
+      "urn": "urn:altinn:accesspackage:motta-nabo-og-planvarsel",
+      "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "ac655a2f-be29-4888-9a6c-b21e524fa90e",
+      "urn": "urn:altinn:accesspackage:oppforing-bygg-anlegg",
+      "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "b98ec05d-1ac5-4ced-8250-b6d75b83502b",
+      "urn": "urn:altinn:accesspackage:kjop-og-salg-eiendom",
+      "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "565a3110-3d51-4e72-ae4c-b89308e5c96e",
+      "urn": "urn:altinn:accesspackage:utleie-eiendom",
+      "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "79329c4a-d856-4491-965e-bcc4ed5a7453",
+      "urn": "urn:altinn:accesspackage:eiendomsmegler",
+      "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "36c245db-3207-449e-92b1-94cb0a0f3031",
+      "urn": "urn:altinn:accesspackage:veitransport",
+      "areaId": "6ff90072-566b-4acd-baac-ec477534e712"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "9603dd83-be41-4190-b0a7-97490f4a601d",
+      "urn": "urn:altinn:accesspackage:sjofart",
+      "areaId": "6ff90072-566b-4acd-baac-ec477534e712"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "3b3bc323-207b-4d56-a21f-97b6875ccc28",
+      "urn": "urn:altinn:accesspackage:lufttransport",
+      "areaId": "6ff90072-566b-4acd-baac-ec477534e712"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "dfcd3923-cb66-45f7-9535-999b6c0c496d",
+      "urn": "urn:altinn:accesspackage:jernbanetransport",
+      "areaId": "6ff90072-566b-4acd-baac-ec477534e712"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "86a8ff87-3a3d-4f32-a4ef-99c43494bc6e",
+      "urn": "urn:altinn:accesspackage:lagring-og-andre-tjenester-tilknyttet-transport",
+      "areaId": "6ff90072-566b-4acd-baac-ec477534e712"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "03404270-aa2d-498f-9e6a-103043d41f1f",
+      "urn": "urn:altinn:accesspackage:kommuneoverlege",
+      "areaId": "eab59b26-833f-40ca-9e27-72107e8f1908"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "5a642040-46cf-4466-b671-115a022e3048",
+      "urn": "urn:altinn:accesspackage:helsetjenester-personopplysinger-saerlig-kategori",
+      "areaId": "eab59b26-833f-40ca-9e27-72107e8f1908"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "4fa0fbbc-3841-4405-9d94-12731a8fdb81",
+      "urn": "urn:altinn:accesspackage:helsetjenester",
+      "areaId": "eab59b26-833f-40ca-9e27-72107e8f1908"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "4d71e7b8-c6eb-4e33-9a64-1279a509a53b",
+      "urn": "urn:altinn:accesspackage:pleie-omsorgstjenester-i-institusjon",
+      "areaId": "eab59b26-833f-40ca-9e27-72107e8f1908"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "70831546-6bfa-45a0-bdad-14e9db265847",
+      "urn": "urn:altinn:accesspackage:sosiale-omsorgstjenester-uten-botilbud-og-flyktningemottak",
+      "areaId": "eab59b26-833f-40ca-9e27-72107e8f1908"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "98c404f4-5350-42cd-86d0-15fd38f178c4",
+      "urn": "urn:altinn:accesspackage:familievern",
+      "areaId": "eab59b26-833f-40ca-9e27-72107e8f1908"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "83ff0734-0de5-4c2a-939b-18a9452c00bc",
+      "urn": "urn:altinn:accesspackage:barnevern",
+      "areaId": "eab59b26-833f-40ca-9e27-72107e8f1908"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "8cf4ec08-90dc-47d0-93f8-64a50c9b38b0",
+      "urn": "urn:altinn:accesspackage:godkjenning-av-personell",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "b56d2614-3f9d-4d93-8a8e-64d80b654ad7",
+      "urn": "urn:altinn:accesspackage:godkjenning-av-utdanningsvirksomhet",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "93f37a3d-f799-47b3-bc8e-675b5813abf4",
+      "urn": "urn:altinn:accesspackage:hoyere-utdanning-og-hoyere-yrkesfaglig-utdanning",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "219ea5f7-eb30-424f-a958-67d3c7e7a4c2",
+      "urn": "urn:altinn:accesspackage:sfo-leder",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "4cd69693-aff0-4e88-8b64-6b5620672468",
+      "urn": "urn:altinn:accesspackage:ppt-leder",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "40397a93-b047-4011-a6b8-6b8af16b6324",
+      "urn": "urn:altinn:accesspackage:opplaeringskontorleder",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "499d0e1c-18d7-4f21-b110-723e3d13003a",
+      "urn": "urn:altinn:accesspackage:skoleleder",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "32bfd131-1570-4b0c-888b-733cbb72d0cb",
+      "urn": "urn:altinn:accesspackage:skoleeier",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "c1242df4-6af1-4e0b-b022-73c1099f5297",
+      "urn": "urn:altinn:accesspackage:statsforvalter-skole-og-opplearing",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "7e6d8dd4-35a3-49d6-a2c5-73cd35018646",
+      "urn": "urn:altinn:accesspackage:statsforvalter-barnehage",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "0ecc481a-691c-496d-a3f2-748b8c450ed9",
+      "urn": "urn:altinn:accesspackage:barnehagemyndighet",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "dcb57f3e-0e5b-4ef7-a10c-74c53bc5a90d",
+      "urn": "urn:altinn:accesspackage:barnehageleder",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "9a14f2c1-f0bc-4965-97c0-76a4e191bbe1",
+      "urn": "urn:altinn:accesspackage:barnehageeier",
+      "areaId": "7326614f-cf7c-492e-8e7f-d74e6e4a8970"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "f56bdb15-686b-46f8-9343-bde5d7c17648",
+      "urn": "urn:altinn:accesspackage:elektrisitet-produsere-overfore-distrubere",
+      "areaId": "6e152c10-0f63-4060-9b14-66808e7ac320"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "27afe398-b25b-4287-b0fa-c1d03d6c9fa9",
+      "urn": "urn:altinn:accesspackage:damp-varmtvann",
+      "areaId": "6e152c10-0f63-4060-9b14-66808e7ac320"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "e7cda008-f265-4452-b03c-c21b8b51dfe1",
+      "urn": "urn:altinn:accesspackage:vann-kilde-rense-distrubere",
+      "areaId": "6e152c10-0f63-4060-9b14-66808e7ac320"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "fef4aac0-d227-4ef6-834b-cc2eb4b942ed",
+      "urn": "urn:altinn:accesspackage:samle-behandle-avlopsvann",
+      "areaId": "6e152c10-0f63-4060-9b14-66808e7ac320"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "6dcffdde-cc5c-4b57-a5a2-cc5ae6ad44fc",
+      "urn": "urn:altinn:accesspackage:avfall-behandle-gjenvinne",
+      "areaId": "6e152c10-0f63-4060-9b14-66808e7ac320"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "ab656cf2-1e65-4b5a-a1e3-cd5bd4cb804c",
+      "urn": "urn:altinn:accesspackage:miljorydding-rensing",
+      "areaId": "6e152c10-0f63-4060-9b14-66808e7ac320"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "452bd15d-2cd2-4279-9470-cd97ba8ef1c7",
+      "urn": "urn:altinn:accesspackage:utvinning-raaolje-naturgass-kull",
+      "areaId": "6e152c10-0f63-4060-9b14-66808e7ac320"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "65c7bbe7-aeb4-4f18-b0b0-1b1b83bd24d1",
+      "urn": "urn:altinn:accesspackage:naeringsmidler-drikkevarer-og-tobakk",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "c6231d60-5373-4179-b98b-1e7eb83da474",
+      "urn": "urn:altinn:accesspackage:tekstiler-klaer-laervarer",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "deb1618f-395c-4a14-9a70-20e90e5f9a76",
+      "urn": "urn:altinn:accesspackage:trelast-trevarer-papirvarer",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "965f9aca-48f5-4a16-b5e3-228806ad4fa7",
+      "urn": "urn:altinn:accesspackage:trykkerier-reproduksjon-opptak",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "79203df9-d71b-460b-a828-22b0bf79f335",
+      "urn": "urn:altinn:accesspackage:oljeraffinering-kjemisk-farmasoytisk-industri",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "573be5d2-3ddd-4862-9711-2350147a1b25",
+      "urn": "urn:altinn:accesspackage:gummi-plast-og-ikkemetallholdige-mineralprodukter",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "84e744a0-e93f-4caf-bb3f-24387f045d2d",
+      "urn": "urn:altinn:accesspackage:metaller-og-mineraler",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "2857fd90-dad2-4cc3-9947-282c22f5d2dc",
+      "urn": "urn:altinn:accesspackage:metallvarer-elektrisk-utstyr-og-maskiner",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "c37aabdf-a78a-4f59-999a-298a83e9e113",
+      "urn": "urn:altinn:accesspackage:verft-og-andre-transportmidler",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "07bfd8a5-5b13-4937-84b9-2bd6ac726ea1",
+      "urn": "urn:altinn:accesspackage:mobler-og-annen-industri",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "ec492675-3a48-4ad9-b864-2d6865020642",
+      "urn": "urn:altinn:accesspackage:reparasjon-og-installasjon-av-maskiner-og-utstyr",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "8c700369-8fff-40f1-b4ce-2f116416d804",
+      "urn": "urn:altinn:accesspackage:bergverk",
+      "areaId": "10c2dd29-5ab3-4a26-900e-8e2326150353"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "75fa5863-3368-4ac6-9a4b-48f595e483ad",
+      "urn": "urn:altinn:accesspackage:kunst-og-underholdning",
+      "areaId": "5996ba37-6db0-4391-8918-b1b0bd4b394b"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "73418c0c-d4db-4e26-8581-4ccf1384aad7",
+      "urn": "urn:altinn:accesspackage:biblioteker-museer-arkiver-og-annen-kultur",
+      "areaId": "5996ba37-6db0-4391-8918-b1b0bd4b394b"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "cc5ccdec-6c67-4462-ab51-4d5eaafd64c1",
+      "urn": "urn:altinn:accesspackage:lotteri-og-spill",
+      "areaId": "5996ba37-6db0-4391-8918-b1b0bd4b394b"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "d2d00311-cc33-47ad-b33b-4eb15cce8d1d",
+      "urn": "urn:altinn:accesspackage:sport-og-fritid",
+      "areaId": "5996ba37-6db0-4391-8918-b1b0bd4b394b"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "c82ab275-dad6-461a-bf0c-50be46b25ec9",
+      "urn": "urn:altinn:accesspackage:fornoyelser",
+      "areaId": "5996ba37-6db0-4391-8918-b1b0bd4b394b"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "f05153b5-4784-46f0-805a-525ed31fde3b",
+      "urn": "urn:altinn:accesspackage:politikk",
+      "areaId": "5996ba37-6db0-4391-8918-b1b0bd4b394b"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "a6d704b7-d56b-4517-be79-0acd5b55b35e",
+      "urn": "urn:altinn:accesspackage:varehandel",
+      "areaId": "3797e9f0-dd83-404c-9897-e356c32ef600"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "77cdd23a-dddf-43e6-b5c2-0d8299b0888c",
+      "urn": "urn:altinn:accesspackage:overnatting",
+      "areaId": "3797e9f0-dd83-404c-9897-e356c32ef600"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "6710a7a0-78f9-47e3-bfa6-0d875869befd",
+      "urn": "urn:altinn:accesspackage:servering",
+      "areaId": "3797e9f0-dd83-404c-9897-e356c32ef600"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "a736c33b-c15a-43ac-85be-a684630e1e59",
+      "urn": "urn:altinn:accesspackage:post-og-telekommunikasjon",
+      "areaId": "e31169f6-d4c7-4e45-93c7-f90bc285b639"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "413d79fb-a419-4e74-98f7-aa91389deb81",
+      "urn": "urn:altinn:accesspackage:informasjon-og-kommunikasjon",
+      "areaId": "e31169f6-d4c7-4e45-93c7-f90bc285b639"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "8f977b5f-a2f9-4712-88e2-ab1a51a6b26f",
+      "urn": "urn:altinn:accesspackage:finansiering-og-forsikring",
+      "areaId": "e31169f6-d4c7-4e45-93c7-f90bc285b639"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "a8b18888-2216-4eaa-972d-ae96da04b1ac",
+      "urn": "urn:altinn:accesspackage:annen-tjenesteyting",
+      "areaId": "e31169f6-d4c7-4e45-93c7-f90bc285b639"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "0195efb8-7c80-7642-b9b8-c748ee4fecd4",
+      "urn": "urn:altinn:accesspackage:tinglysing-eiendom",
+      "areaId": "536b317c-ef85-45d4-9b48-6511578e1952"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage"
+      },
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "bb0569a6-2268-49b5-9d38-8158b26124c3",
+      "urn": "urn:altinn:accesspackage:post-til-virksomheten-med-taushetsbelagt-innhold",
+      "areaId": "6f938de8-34f2-4bab-a0c6-3a3eb64aad3b"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "5dad616e-5538-4e3f-b15a-bae33f06c99f",
+      "urn": "urn:altinn:accesspackage:maskinporten-scopes-nuf",
+      "areaId": "892e98c6-1696-46e7-9bb1-59c08761ec64"
+    },
+    "result": true,
+    "reasons": [
+      {
+        "description": "Direct-RolePackage-HovedAdmin"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "955d5779-3e2b-4098-b11d-0431dc41ddbe",
+      "urn": "urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet",
+      "areaId": "64cbcdc8-01c9-448c-b3d2-eb9582beb3c2"
+    },
+    "result": false,
+    "reasons": [
+      {
+        "description": "NoAccess"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "5ef836c7-69cc-4ea8-84d6-fb933cc4fc5c",
+      "urn": "urn:altinn:accesspackage:konkursbo-lesetilgang",
+      "areaId": "f3daddb7-6e21-455e-b6d2-65a281375b6b"
+    },
+    "result": false,
+    "reasons": [
+      {
+        "description": "NoAccess"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "a5f7f72a-9b89-445d-85bb-06f678a3d4d1",
+      "urn": "urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet",
+      "areaId": "64cbcdc8-01c9-448c-b3d2-eb9582beb3c2"
+    },
+    "result": false,
+    "reasons": [
+      {
+        "description": "NoAccess"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "2f176732-b1e9-449b-9918-090d1fa986f6",
+      "urn": "urn:altinn:accesspackage:ansvarlig-revisor",
+      "areaId": "7df15290-f43c-4831-a1b4-3edfa43e526d"
+    },
+    "result": false,
+    "reasons": [
+      {
+        "description": "NoAccess"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "96120c32-389d-46eb-8212-0a6540540c25",
+      "urn": "urn:altinn:accesspackage:revisormedarbeider",
+      "areaId": "7df15290-f43c-4831-a1b4-3edfa43e526d"
+    },
+    "result": false,
+    "reasons": [
+      {
+        "description": "NoAccess"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "c0eb20c1-2268-48f5-88c5-f26cb47a6b1f",
+      "urn": "urn:altinn:accesspackage:eksplisitt",
+      "areaId": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1"
+    },
+    "result": false,
+    "reasons": [
+      {
+        "description": "NoAccess"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "0195efb8-7c80-7e9c-95c1-48937e23960a",
+      "urn": "urn:altinn:accesspackage:konkursbo-tilgangsstyrer",
+      "areaId": "e4ae823f-41db-46ed-873f-8a5d1378fff8"
+    },
+    "result": false,
+    "reasons": [
+      {
+        "description": "NoAccess"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "0e219609-02c6-44e6-9c80-fe2c1997940e",
+      "urn": "urn:altinn:accesspackage:konkursbo-skrivetilgang",
+      "areaId": "f3daddb7-6e21-455e-b6d2-65a281375b6b"
+    },
+    "result": false,
+    "reasons": [
+      {
+        "description": "NoAccess"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "0195efb8-7c80-7cf2-bcc8-720a3fb39d44",
+      "urn": "urn:altinn:accesspackage:forretningsforer-eiendom",
+      "areaId": "0195efb8-7c80-76b3-bb86-ae9dfd74bca2"
+    },
+    "result": false,
+    "reasons": [
+      {
+        "description": "NoAccess"
+      }
+    ]
+  },
+  {
+    "package": {
+      "id": "43becc6a-8c6c-4e9e-bb2f-08fe588ada21",
+      "urn": "urn:altinn:accesspackage:regnskapsforer-lonn",
+      "areaId": "64cbcdc8-01c9-448c-b3d2-eb9582beb3c2"
+    },
+    "result": false,
+    "reasons": [
+      {
+        "description": "NoAccess"
+      }
+    ]
+  }
+]

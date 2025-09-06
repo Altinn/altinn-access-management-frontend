@@ -9,6 +9,7 @@ import {
   DsParagraph,
   DsSpinner,
   List,
+  ListItem,
 } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -128,15 +129,14 @@ const SystemUserList = ({ systemUsers, isAgentList }: SystemUserListProps) => {
   const newlyCreatedId = routerLocation?.state?.createdId;
 
   return (
-    <List
-      defaultItemSize='lg'
-      items={systemUsers?.map((systemUser) => {
-        const isNew = newlyCreatedId === systemUser.id;
-        return {
-          title: systemUser.integrationTitle,
-          description: systemUser.system.systemVendorOrgName,
-          titleAs: 'h3',
-          as: (props) => (
+    <List>
+      {systemUsers?.map((systemUser) => (
+        <ListItem
+          key={systemUser.id}
+          size='lg'
+          title={{ children: systemUser.integrationTitle, as: 'h3' }}
+          description={systemUser.system.systemVendorOrgName}
+          as={(props) => (
             <Link
               to={
                 isAgentList
@@ -145,15 +145,17 @@ const SystemUserList = ({ systemUsers, isAgentList }: SystemUserListProps) => {
               }
               {...props}
             />
-          ),
-          icon: TenancyIcon,
-          linkIcon: true,
-          badge: isNew
-            ? { label: t('systemuser_overviewpage.new_system_user'), color: 'info' }
-            : undefined,
-        };
-      })}
-    />
+          )}
+          icon={TenancyIcon}
+          linkIcon
+          badge={
+            newlyCreatedId === systemUser.id
+              ? { label: t('systemuser_overviewpage.new_system_user'), color: 'info' }
+              : undefined
+          }
+        />
+      ))}
+    </List>
   );
 };
 

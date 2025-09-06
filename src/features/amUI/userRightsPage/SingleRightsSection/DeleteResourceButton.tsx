@@ -22,7 +22,7 @@ export const DeleteResourceButton = ({ resource, fullText = false }: DeleteResou
   const revoke = useRevokeResource();
 
   const snackbar = (isSuccessful: boolean) => {
-    const color: 'success' | 'alert' = isSuccessful ? 'success' : 'alert';
+    const color: 'success' | 'danger' = isSuccessful ? 'success' : 'danger';
     const snackbarData = {
       message:
         t(

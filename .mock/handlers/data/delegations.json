@@ -1,0 +1,27 @@
+{
+  "e4ae823f-41db-46ed-873f-8a5d1378fff8": [
+    {
+      "package": {
+        "id": "0195efb8-7c80-7e82-9b4f-7d63e773bbca",
+        "urn": "urn:altinn:accesspackage:klientadministrator",
+        "areaId": "e4ae823f-41db-46ed-873f-8a5d1378fff8"
+      },
+      "permissions": [
+        {
+          "from": {
+            "id": "123"
+          },
+          "to": {
+            "id": "456"
+          },
+          "via": null,
+          "role": {
+            "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+            "code": "rettighetshaver"
+          },
+          "viaRole": null
+        }
+      ]
+    }
+  ]
+}

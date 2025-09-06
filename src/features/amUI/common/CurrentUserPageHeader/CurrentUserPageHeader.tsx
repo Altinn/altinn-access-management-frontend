@@ -1,12 +1,12 @@
-import { ListItemBase, ListItemHeader } from '@altinn/altinn-components';
+import { UserListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Connection } from '@/rtk/features/userInfoApi';
+import { formatDateToNorwegian } from '@/resources/utils';
 
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
 import classes from './CurrentUserPageHeader.module.css';
-import { CurrentUserSkeleton } from './CurrentUserSkeleton';
 
 interface CurrentUserPageHeaderProps {
   currentUser?: Connection;
@@ -17,31 +17,23 @@ interface CurrentUserPageHeaderProps {
 export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserPageHeaderProps) => {
   const { t } = useTranslation();
   const roles = currentUser?.roles ? getRoleCodesForKeyRoles(currentUser.roles) : [];
+  const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.keyValues?.DateOfBirth);
 
   return (
     <div className={classes.currentUser}>
-      {loading ? (
-        <CurrentUserSkeleton />
-      ) : (
-        <ListItemBase
-          as='div'
-          variant='solid'
-          theme='default'
-          shadow='xs'
-        >
-          <ListItemHeader
-            size='xl'
-            title={currentUser?.party?.name || ''}
-            description={roles.map((r) => t(`${r}`)).join(', ')}
-            avatar={{
-              type: 'person',
-              name: currentUser?.party?.name || '',
-            }}
-            as={as}
-            titleAs={'h2'}
-          />
-        </ListItemBase>
-      )}
+      <UserListItem
+        id={currentUser?.party?.id || ''}
+        name={currentUser?.party?.name || ''}
+        description={
+          formattedBirthDate ? t('common.date_of_birth') + ` ${formattedBirthDate}` : undefined
+        }
+        roleNames={roles.map((r) => t(`${r}`))}
+        type='person'
+        as={as}
+        titleAs='h2'
+        size='xl'
+        loading={loading}
+      />
     </div>
   );
 };

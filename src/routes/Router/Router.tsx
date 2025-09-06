@@ -23,6 +23,8 @@ import { ReporteeRightsPage } from '@/features/amUI/reporteeRightsPage/ReporteeR
 import { SystemUserAgentRequestPage } from '@/features/amUI/systemUser/SystemUserAgentRequestPage';
 import { SystemUserAgentDelegationPage } from '@/features/amUI/systemUser/SystemUserAgentDelegationPage/SystemUserAgentDelegationPage';
 import { ConsentRequestPage } from '@/features/amUI/consent/ConsentRequestPage/ConsentRequestPage';
+import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
+import { InfoPage } from '@/features/amUI/infoPage/InfoPage';
 
 import {
   GeneralPath,
@@ -32,6 +34,7 @@ import {
   SystemUserPath,
   ConsentPath,
 } from '../paths';
+import { PackagePoaDetailsPage } from '@/features/amUI/packagePoaDetailsPage/PackagePoaDetailsPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -112,6 +115,14 @@ export const Router = createBrowserRouter(
         element={<ReporteeRightsPage />}
       />
       <Route
+        path={amUIPath.PoaOverview}
+        element={<PoaOverviewPage />}
+      />
+      <Route
+        path={amUIPath.PackagePoaDetails}
+        element={<PackagePoaDetailsPage />}
+      />
+      <Route
         path={SystemUserPath.SystemUser}
         errorElement={<ErrorPage />}
       >
@@ -153,6 +164,10 @@ export const Router = createBrowserRouter(
           element={<ConsentRequestPage />}
         />
       </Route>
+      <Route
+        path={amUIPath.Info}
+        element={<InfoPage />}
+      />
     </Route>,
   ),
   { basename: GeneralPath.BasePath },

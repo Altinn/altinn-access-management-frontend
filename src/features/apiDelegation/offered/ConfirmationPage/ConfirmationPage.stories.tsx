@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 

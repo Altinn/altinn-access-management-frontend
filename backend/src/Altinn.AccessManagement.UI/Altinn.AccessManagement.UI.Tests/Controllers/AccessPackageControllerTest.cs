@@ -105,6 +105,34 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: Get all access packages for a valid right holder on behalf of a valid party 
+        ///     Expected: Returns the right holders active access package delegations, sorted into the areas they belong to
+        /// </summary>
+        [Fact]
+        public async Task GetDelegationsToRightHolder_MultipleAccessToPackage()
+        {
+
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
+            string to = "21cc8752-4801-490d-a6ab-ab3266a0f748"; // Valid user that has both inherited and delegated rights to a package
+            string party = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid party, same as reportee
+            Dictionary<Guid, List<PackagePermission>> expectedResult = Util.GetMockData<Dictionary<Guid, List<PackagePermission>>>(_expectedDataPath + $"/AccessPackage/GetDelegations/{to}.json");
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegations?to={to}&from={from}&party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Dictionary<Guid, List<PackagePermission>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermission>>>(await response.Content.ReadAsStringAsync(), options);
+
+            Assert.True(new HashSet<Guid>(expectedResult.Keys).SetEquals(actualResult.Keys));
+            foreach (Guid key in actualResult.Keys)
+            {
+                AssertionUtil.AssertCollections(expectedResult[key], actualResult[key], AssertionUtil.AssertEqual);
+            }
+        }
+
+        /// <summary>
         ///     Test case: The right owned is valid but has no access packages for the reportee party
         ///     Expected: Returns an empty Dictionary
         /// </summary>
@@ -165,6 +193,94 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
+        }
+
+        /// <summary>
+        ///    Test case: Get single package permission for a valid package
+        ///    Expected: Returns OK and some content
+        /// </summary>
+        [Fact]
+        public async Task GetSinglePackagePermission_ReturnsOk_OnValidInput()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string party = from;
+            string packageId = "1dba50d6-f604-48e9-bd41-82321b13e85c";
+            
+            var expectedResult = Util.GetMockData<AccessPackageFE>(_expectedDataPath + $"/AccessPackage/GetSinglePackagePermissions/{from}.json");
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/permission/{packageId}?party={party}&from={from}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            
+            var result = JsonSerializer.Deserialize<AccessPackageFE>(await response.Content.ReadAsStringAsync(), options);
+            AssertionUtil.AssertEqual(expectedResult, result);
+        }
+
+        /// <summary>
+        ///    Test case: Get single package permission for a non-existent package
+        ///    Expected: Returns NoContent
+        /// </summary>
+        [Fact]
+        public async Task GetSinglePackagePermission_ReturnsNoContent_When_PackageNoContent()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string party = from;
+            string packageId = "1dba50d6-f604-48e9-bd41-82321b13e857";
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/permission/{packageId}?party={party}&from={from}&to={to}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+
+        /// <summary>
+        ///    Test case: Get single package permission handles internal error
+        ///    Expected: Returns InternalServerError
+        /// </summary>
+        [Fact]
+        public async Task GetSinglePackagePermission_Handles_Error_Cases()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string party = from;
+            string packageId = "d98ac728-d127-4a4c-96e1-738f856e5332"; // Triggers internal server error
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/permission/{packageId}?party={party}&from={from}&to={to}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+
+        /// <summary>
+        ///    Test case: Missing from and to query parameters
+        ///    Expected: Returns BadRequest with explanatory message
+        /// </summary>
+        [Fact]
+        public async Task GetSinglePackagePermission_MissingFromAndTo_ReturnsBadRequest()
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string party = "b0a79f3d-4cef-430a-9774-301b754e0f6f";
+            string packageId = "9d2ec6e9-5148-4f47-9ae4-4536f6c9c1cb";
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/permission/{packageId}?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("\"Either 'from' or 'to' query parameter must be provided.\"", await response.Content.ReadAsStringAsync());
         }
 
         [Theory]
@@ -381,101 +497,60 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///    Test case: Checks if the user can delegate a a list of Roles
-        ///    Expected: Returns a list of AccessPackageDelegationCheckResponse
-        ///    with the result of the delegation check
+        ///    Test case: Delegation check returns list
+        ///    Expected: Returns 200 OK and non-empty list with mixed results
         /// </summary>
         [Fact]
-        public async Task PackageDelegationCheck_handles_list()
+        public async Task PackageDelegationCheck_ReturnsList()
         {
             // Arrange
             string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
-            var packageIds = new List<string>
-            {
-                "0bb5963e-df17-4f35-b913-3ce10a34b866",
-                "04c5a001-5249-4765-ae8e-58617c404223",
-                "5eb07bdc-5c3c-4c85-add3-5405b214b8a3",
-                "9d2ec6e9-5148-4f47-9ae4-4536f6c9c1cb",
-                "78c21107-7d2d-4e85-af82-47ea0e47ceca",
-                "906aec0d-ad1f-496b-a0bb-40f81b3303cb",
-                "a03af7d5-74b9-4f18-aead-5d47edc36be5",
-                "cfe074fa-0a66-4a4b-974a-5d1db8eb94e6",
-                "f7e02568-90b6-477d-8abb-44984ddeb1f9"
-            };
-            List<AccessPackageDelegationCheckResponse> expectedResult = Util.GetMockData<List<AccessPackageDelegationCheckResponse>>(_expectedDataPath + "/AccessPackage/PackageDelegationCheck_returns_list.json");
-
+            var expectedResult = Util.GetMockData<List<DelegationCheck>>(_expectedDataPath + "/AccessPackage/DelegationCheck/DelegationCheck.json");
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync(
-                $"accessmanagement/api/v1/accesspackage/delegationcheck",
-                new StringContent(
-                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }),
-                        System.Text.Encoding.UTF8, "application/json"
-                    )
-                );
-
-            var content = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegationcheck?party={reporteeUuid}");
+            var resString = await response.Content.ReadAsStringAsync();
+            List<DelegationCheck> actualResult = JsonSerializer.Deserialize<List<DelegationCheck>>(resString, options);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.NotNull(response.Content);
-
-            List<AccessPackageDelegationCheckResponse> actual = JsonSerializer.Deserialize<List<AccessPackageDelegationCheckResponse>>(await response.Content.ReadAsStringAsync(), options);
-            AssertionUtil.AssertCollections(actual, expectedResult, AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedResult, actualResult, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
-        ///    Test case: Handles empty list of packageIds
-        ///    Expected: Returns a bad request status code
+        ///    Test case: Delegation check backend error
+        ///    Expected: Returns 500 from controller
         /// </summary>
         [Fact]
-        public async Task PackageDelegationCheck_BadRequest()
+        public async Task PackageDelegationCheck_BackendError()
         {
-            // Arrange
-            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
-            var packageIds = new List<string>();
+            // Arrange: special party triggers error in mock
+            string reporteeUuid = "00000000-0000-0000-0000-00000000DEAD";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync(
-                $"accessmanagement/api/v1/accesspackage/delegationcheck",
-                new StringContent(
-                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }),
-                        System.Text.Encoding.UTF8, "application/json"
-                    )
-                );
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: Handles unexpected error
-        ///    Expected: Returns internal server error
-        /// </summary>
-        [Fact]
-        public async Task PackageDelegationCheck_UnexpectedError()
-        {
-            // Arrange
-            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
-            var packageIds = new List<string>
-            {
-                "fa84bffc-ac17-40cd-af9c-61c89f92e44c"  // valid package id that will trigger an unexpected exception in mock client
-            };
-
-            // Act
-            HttpResponseMessage response = await _client.PostAsync(
-                $"accessmanagement/api/v1/accesspackage/delegationcheck",
-                new StringContent(
-                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }),
-                        System.Text.Encoding.UTF8, "application/json"
-                    )
-                );
-
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegationcheck?party={reporteeUuid}");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: Delegation check with invalid GUID for party
+        ///    Expected: Returns 400 BadRequest with model state errors (BadRequest(ModelState))
+        /// </summary>
+        [Fact]
+        public async Task PackageDelegationCheck_InvalidGuid_ReturnsBadRequest()
+        {
+            // Arrange: invalid GUID value triggers model binding error
+            string reporteeUuid = "not-a-guid";
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegationcheck?party={reporteeUuid}");
+            string content = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Contains("not-a-guid", content);
         }
     }
 }

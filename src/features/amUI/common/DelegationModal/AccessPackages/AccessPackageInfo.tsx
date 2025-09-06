@@ -1,18 +1,13 @@
 import * as React from 'react';
-import type { ListItemProps } from '@altinn/altinn-components';
 import { List, Button, Icon, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { MenuElipsisHorizontalIcon, PackageIcon } from '@navikt/aksel-icons';
+import { PackageIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
+import { useAccessPackageDelegationCheck } from '../../DelegationCheck/AccessPackageDelegationCheckContext';
 
-import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
-import {
-  useGetUserDelegationsQuery,
-  type PackageResource,
-  type AccessPackage,
-} from '@/rtk/features/accessPackageApi';
+import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -20,19 +15,27 @@ import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../StatusSection';
-import { isInherited } from '../../AccessPackageList/useAreaPackageList';
+import type { ExtendedAccessPackage } from '../../AccessPackageList/useAreaPackageList';
+import {
+  DeletableStatus,
+  getDeletableStatus,
+  isInherited,
+} from '../../AccessPackageList/useAreaPackageList';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
+import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
+import { useResourceList } from './useResourceList';
 import classes from './AccessPackageInfo.module.css';
 
 export interface PackageInfoProps {
-  accessPackage: AccessPackage;
+  accessPackage: ExtendedAccessPackage;
   availableActions?: DelegationAction[];
 }
 
 export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
+  const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
   const {
     onDelegate,
@@ -73,40 +76,31 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const userHasPackage = delegationAccess !== null;
   const accessIsInherited =
     (delegationAccess &&
-      isInherited(delegationAccess, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? '')) ||
+      delegationAccess.permissions.some((p) =>
+        isInherited(p, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
+      )) ||
     false;
 
-  const [delegationCheckError, setDelegationCheckError] = useState<ActionError | null>(null);
-
-  const handleDelegationCheckFailure = (error: ActionError) => {
-    setDelegationCheckError(error);
-  };
-
-  const shouldShowDelegationCheck =
-    availableActions.includes(DelegationAction.DELEGATE) && !displayLimitedPreviewLaunch;
-
-  // memorize this to prevent unnecessary re-renders
-  const accessPackageIds = React.useMemo(() => {
-    return accessPackage ? [accessPackage.id] : [];
-  }, [accessPackage]);
-
-  React.useEffect(() => {
-    setDelegationCheckError(null);
-  }, [accessPackage]);
-
-  const { canDelegate, isLoading } = useAccessPackageDelegationCheck(
-    accessPackageIds,
-    shouldShowDelegationCheck,
-    handleDelegationCheckFailure,
+  const resourceListItems = useResourceList(accessPackage.resources);
+  const deletableStatus = React.useMemo(
+    () =>
+      delegationAccess
+        ? getDeletableStatus(delegationAccess, toParty?.partyUuid, fromParty?.partyUuid)
+        : null,
+    [delegationAccess, toParty, fromParty],
   );
 
-  const showMissingRightsMessage =
-    shouldShowDelegationCheck &&
-    !delegationCheckError &&
-    !canDelegate(accessPackage.id) &&
-    !isLoading;
+  const onlyPermissionTroughInheritance =
+    delegationAccess &&
+    delegationAccess.permissions.every((p) =>
+      isInherited(p, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
+    );
 
-  const { listItems } = useMinimizableResourceList(accessPackage.resources);
+  const canDelegate = canDelegatePackage(accessPackage.id);
+  const showMissingRightsMessage =
+    !userHasPackage &&
+    canDelegate?.result === false &&
+    availableActions.includes(DelegationAction.DELEGATE);
 
   return (
     <div className={classes.container}>
@@ -131,23 +125,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
         />
       ) : (
         <>
-          {!!delegationCheckError && (
-            <DsAlert
-              data-color='danger'
-              data-size='sm'
-            >
-              <DsHeading level={2}>
-                {t('access_packages.delegation_check.delegation_check_error_heading')}
-              </DsHeading>
-              <TechnicalErrorParagraphs
-                message={t(
-                  'access_packages.delegation_check.delegation_check_error_message_singular',
-                )}
-                status={delegationCheckError.httpStatus}
-                time={delegationCheckError.timestamp}
-              />
-            </DsAlert>
-          )}
           {!!actionError && (
             <DsAlert
               data-color='danger'
@@ -185,7 +162,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             showMissingRightsMessage={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
             inheritedFrom={
-              accessIsInherited
+              onlyPermissionTroughInheritance
                 ? (delegationAccess?.permissions[0].via?.name ??
                   delegationAccess?.permissions[0].from.name)
                 : undefined
@@ -204,26 +181,31 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               })}
             </DsHeading>
             <div className={classes.service_list}>
-              <List
-                items={listItems}
-                spacing='xs'
-                defaultItemSize='xs'
-              />
+              <List>{resourceListItems}</List>
             </div>
           </div>
 
           <div className={classes.actions}>
-            {userHasPackage && availableActions.includes(DelegationAction.REVOKE) && (
-              <Button
-                disabled={accessIsInherited || accessPackage.isAssignable === false}
-                onClick={() => onRevoke(accessPackage)}
-              >
-                {t('common.delete_poa')}
-              </Button>
-            )}
+            {userHasPackage && availableActions.includes(DelegationAction.REVOKE) ? (
+              deletableStatus !== DeletableStatus.PartiallyDeletable ? (
+                <Button
+                  disabled={accessIsInherited || accessPackage.isAssignable === false}
+                  onClick={() => onRevoke(accessPackage)}
+                >
+                  {t('common.delete_poa')}
+                </Button>
+              ) : (
+                <PackageIsPartiallyDeletableAlert
+                  confirmAction={() => onRevoke(accessPackage)}
+                  triggerButtonProps={{
+                    variant: 'solid',
+                  }}
+                />
+              )
+            ) : null}
             {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
               <Button
-                disabled={!canDelegate(accessPackage.id) || accessPackage.isAssignable === false}
+                disabled={accessPackage.isAssignable === false || canDelegate?.result === false}
                 onClick={() => onDelegate(accessPackage)}
               >
                 {t('common.give_poa')}
@@ -238,35 +220,4 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
       )}
     </div>
   );
-};
-
-const MINIMIZED_LIST_SIZE = 5;
-
-const mapResourceToListItem = (resource: PackageResource): ListItemProps => ({
-  title: resource.name,
-  description: resource.provider.name,
-  icon: { iconUrl: resource.provider.logoUrl },
-  as: 'div' as React.ElementType,
-  size: 'xs',
-  interactive: false,
-});
-
-const useMinimizableResourceList = (list: PackageResource[]) => {
-  const { t } = useTranslation();
-  const [showAll, setShowAll] = React.useState(false);
-  if (list.length <= MINIMIZED_LIST_SIZE) {
-    return { listItems: list.map(mapResourceToListItem) };
-  }
-  const showMoreListItem: ListItemProps = {
-    title: t('common.show_more'),
-    description: '',
-    onClick: () => setShowAll(!showAll),
-    icon: MenuElipsisHorizontalIcon,
-    as: 'button' as React.ElementType,
-    size: 'xs',
-  };
-  const minimizedList = list
-    .slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE)
-    .map(mapResourceToListItem);
-  return { listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem] };
 };

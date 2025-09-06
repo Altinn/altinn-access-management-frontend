@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { SnackbarProvider, DsSpinner, DsAlert } from '@altinn/altinn-components';
 
-import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
-
 import {
   useGetAssignedCustomersQuery,
   useGetAgentSystemUserQuery,
@@ -14,6 +12,8 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageWrapper } from '@/components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
+
+import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
 
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();

@@ -2,10 +2,10 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
-import classes from './ReceiptActionBarContent.module.css';
-
 import type { Right } from '@/rtk/features/singleRights/singleRightsSlice';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
+
+import classes from './ReceiptActionBarContent.module.css';
 
 export interface ReceiptActionBarContent {
   /** List of failed delegations */

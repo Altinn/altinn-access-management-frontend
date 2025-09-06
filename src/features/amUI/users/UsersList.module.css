@@ -15,6 +15,7 @@
 
 .usersListHeading {
   margin-top: 15px;
+  padding-bottom: 1rem;
 }
 
 .searchBar {
@@ -25,5 +26,5 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
 }

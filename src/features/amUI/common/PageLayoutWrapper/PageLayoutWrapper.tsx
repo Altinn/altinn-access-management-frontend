@@ -1,10 +1,16 @@
 import type { ChangeEvent } from 'react';
 import React, { useMemo, useState } from 'react';
-import type { AccountMenuItem, MenuGroupProps, MenuItemProps } from '@altinn/altinn-components';
+import type {
+  AccountMenuItemProps,
+  MenuGroupProps,
+  MenuItemProps,
+  MenuItemSize,
+  MenuItemTheme,
+} from '@altinn/altinn-components';
 import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
-import { HandshakeIcon, InboxIcon, MenuGridIcon, PersonChatIcon } from '@navikt/aksel-icons';
+import { HandshakeIcon, InformationSquareIcon, LeaveIcon } from '@navikt/aksel-icons';
 
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
@@ -20,6 +26,7 @@ import { useGetSystemUserReporteeQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { SidebarItems } from './SidebarItems';
+import { InfoModal } from './InfoModal';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -43,8 +50,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   const { data: isAdmin } = useGetIsAdminQuery();
 
-  const onChangeLocale = (event: ChangeEvent<HTMLInputElement>) => {
-    const newLocale = event.target.value;
+  const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
@@ -53,33 +59,35 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     systemUserReportee?.hasClientAdministrationPermission ||
     systemUserReportee?.hasCreateSystemuserPermission ||
     false;
+
+  const menuGroups = {
+    shortcuts: {
+      divider: false,
+      title: t('header.shortcuts'),
+      defaultIconTheme: 'transparent' as MenuItemTheme,
+      defaultItemSize: 'sm' as MenuItemSize,
+    },
+    global: {
+      divider: false,
+    },
+  };
+
   const isSm = useIsTabletOrSmaller();
   const headerLinks: MenuItemProps[] = [
-    {
-      groupId: 1,
-      id: 'messagebox',
-      title: t('header.inbox'),
-      size: 'lg',
-      icon: InboxIcon,
-      as: (props) => (
-        <Link
-          to={`${getHostUrl()}ui/messagebox`}
-          {...props}
-        />
-      ),
-    },
     {
       groupId: 1,
       icon: HandshakeIcon,
       id: 'access_management',
       size: 'lg',
       title: t('header.access_management'),
+      selected: true,
       as: (props) => (
         <Link
           to={`/${amUIPath.Users}`}
           {...props}
         />
       ),
+      badge: { label: t('common.beta') },
     },
     ...(isSm
       ? SidebarItems(
@@ -91,28 +99,29 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           getAccountType(reportee?.type ?? ''),
         )
       : []),
+
     {
-      id: 'all-services',
+      id: 'info',
       groupId: 10,
-      icon: MenuGridIcon,
-      title: t('header.all_services'),
+      icon: InformationSquareIcon,
+      title: t('header.new_altinn_info'),
       size: 'lg',
       as: (props) => (
         <Link
-          to='https://info.altinn.no/skjemaoversikt'
+          to={`/${amUIPath.Info}`}
           {...props}
         />
       ),
     },
     {
-      id: 'chat',
+      id: 'leave_beta',
       groupId: 10,
-      icon: PersonChatIcon,
-      title: t('header.chat'),
+      icon: LeaveIcon,
+      title: t('header.leave_beta'),
       size: 'lg',
       as: (props) => (
         <Link
-          to='https://info.altinn.no/hjelp/'
+          to={getHostUrl() + 'ui/profile'}
           {...props}
         />
       ),
@@ -130,7 +139,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
   };
 
-  const accounts: AccountMenuItem[] = useMemo(() => {
+  const accounts: AccountMenuItemProps[] = useMemo(() => {
     if (!reporteeList || !userinfo || !reportee) {
       return [];
     }
@@ -150,6 +159,60 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     return accountList.sort((a, b) => (a.groupId > b.groupId ? 1 : -1)) ?? [];
   }, [reporteeList, userinfo, reportee]);
 
+  const globalMenu = {
+    accountMenu: {
+      items: accounts,
+      groups: accountGroups,
+      search: {
+        name: 'account-search',
+        value: searchString,
+        onChange: (event: ChangeEvent<HTMLInputElement>) => {
+          setSearchString(event.target.value);
+        },
+        placeholder: t('header.search-label'),
+        hidden: false,
+        getResultsLabel: (hits: number) => {
+          return `${hits} ${t('header.search-hits')}`;
+        },
+      },
+      menuItemsVirtual: { isVirtualized: accounts.length > 20 },
+    },
+    onSelectAccount: (accountId) => {
+      const redirectUrl = window.location.pathname.includes('systemuser')
+        ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
+        : window.location.href;
+      (window as Window).open(
+        `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
+        '_self',
+      );
+    },
+    logoutButton: {
+      label: t('header.log_out'),
+      onClick: () => {
+        (window as Window).location = `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
+      },
+    },
+    menuLabel: t('header.menu-label'),
+    backLabel: t('header.back-label'),
+    changeLabel: t('header.change-label'),
+    currentEndUserLabel: t('header.logged_in_as_name', {
+      name: userinfo?.name || '',
+    }),
+    currentAccount: {
+      name: reportee?.name || '',
+      type: getAccountType(reportee?.type ?? ''),
+      id: reportee?.partyId || '',
+    },
+  };
+
+  const desktopMenu = {
+    items: headerLinks,
+  };
+
+  const mobileMenu = {
+    items: headerLinks,
+  };
+
   return (
     <RootProvider>
       <Layout
@@ -163,55 +226,21 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
               { label: 'English', value: 'en', checked: i18n.language === 'en' },
             ],
-            onChange: onChangeLocale,
+            onSelect: onChangeLocale,
           },
           logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
           currentAccount: {
             name: reportee?.name || '',
             type: getAccountType(reportee?.type ?? ''),
-            id: reportee?.partyUuid || '',
+            id: reportee?.partyId || '',
           },
-          menu: {
-            menuLabel: t('header.menu-label'),
-            backLabel: t('header.back-label'),
-            changeLabel: t('header.change-label'),
-            accountGroups,
-            accounts,
-            accountSearch: {
-              name: 'account-search',
-              value: searchString,
-              onChange: (event: ChangeEvent<HTMLInputElement>) => {
-                setSearchString(event.target.value);
-              },
-              placeholder: t('header.search-label'),
-              hidden: false,
-              getResultsLabel: (hits: number) => {
-                return `${hits} ${t('header.search-hits')}`;
-              },
-            },
-            isVirtualized: accounts.length > 20,
-            onSelectAccount: (accountId) => {
-              const redirectUrl = window.location.pathname.includes('systemuser')
-                ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
-                : window.location.href;
-              (window as Window).open(
-                `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
-                '_self',
-              );
-            },
-            items: headerLinks,
-            logoutButton: {
-              label: t('header.log_out'),
-              onClick: () => {
-                (window as Window).location =
-                  `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
-              },
-            },
-          },
+          globalMenu: globalMenu,
+          desktopMenu: desktopMenu,
+          mobileMenu: mobileMenu,
         }}
         sidebar={{
           menu: {
-            groups: {},
+            groups: menuGroups,
             items: SidebarItems(
               false,
               pathname,
@@ -235,6 +264,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           },
         }}
       >
+        <InfoModal />
         {children}
       </Layout>
       <Snackbar />
@@ -257,10 +287,12 @@ const getAccount = (reportee: ReporteeInfo, userUuid: string, currentReporteeUui
   const accountType = getAccountType(reportee?.type ?? '');
   return {
     id: reportee.partyId,
-    name:
-      accountType == 'person'
-        ? reportee.name
-        : `${reportee.name}  (${reportee.organizationNumber})`,
+    icon: {
+      name: reportee.name,
+      type: reportee.type === 'Organization' ? 'company' : 'person',
+    },
+    name: reportee.name,
+    description: reportee.type === 'Organization' ? reportee.organizationNumber : undefined,
     group: reportee.partyUuid === userUuid ? 'a' : 'b',
     groupId: group,
     type: accountType,

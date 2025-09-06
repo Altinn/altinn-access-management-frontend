@@ -6,13 +6,6 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import { DsPopover, DsParagraph, DsButton } from '@altinn/altinn-components';
 
-import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
-
-import { RightsActionBar } from './RightsActionBar/RightsActionBar';
-import type { ChipRight } from './RightsActionBarContent/RightsActionBarContent';
-import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';
-import classes from './ChooseRightsPage.module.css';
-
 import {
   Page,
   PageContainer,
@@ -41,6 +34,13 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
+import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
+
+import classes from './ChooseRightsPage.module.css';
+import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';
+import { RightsActionBar } from './RightsActionBar/RightsActionBar';
+import type { ChipRight } from './RightsActionBarContent/RightsActionBarContent';
 
 type Service = {
   serviceIdentifier: string;

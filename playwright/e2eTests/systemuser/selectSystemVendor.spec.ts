@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
-import { loginWithUser } from 'playwright/pages/loginPage';
+import { LoginPage } from 'playwright/pages/LoginPage';
 
 import { SystemUserPage } from '../../pages/systemuser/SystemUserPage';
 
@@ -14,7 +14,7 @@ test.describe('System Register', async () => {
   test.beforeEach(async ({ page }) => {
     const api = new ApiRequests();
     system = await api.createSystemSystemRegister(); // Create system before each test
-    const login = new loginWithUser(page);
+    const login = new LoginPage(page);
     await login.loginWithUser('14824497789');
     await login.chooseReportee('AKTVERDIG RETORISK APE');
   });
@@ -24,6 +24,9 @@ test.describe('System Register', async () => {
 
     // Navigate to system user page
     await page.goto(`${process.env.SYSTEMUSER_URL}`);
+
+    // Intro to "new brukerflate"
+    await page.getByRole('button', { name: 'Prøv ny tilgangsstyring' }).click();
 
     // this is assigned as a text in code base, will just add more confusion to import that than hardcoding this here
     await systemUserPage.CREATE_SYSTEM_USER_LINK.click();

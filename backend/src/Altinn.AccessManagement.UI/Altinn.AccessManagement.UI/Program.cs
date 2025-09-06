@@ -61,7 +61,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthorizationBuilder()
-    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_enduser_access_management", true)));
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_access_management", true)));
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_CLIENT_ADMINISTRATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_client_administration", true)));
@@ -234,6 +234,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IRoleService, RoleService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
     services.AddTransient<ResourceHelper, ResourceHelper>();
+    services.AddTransient<IAltinnCdnService, AltinnCdnService>();
 
     PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();
     services.AddAuthentication(JwtCookieDefaults.AuthenticationScheme)
@@ -392,6 +393,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddSingleton<ISystemRegisterClient, SystemRegisterClient>();
+    }
+
+    if (mockSettings.AltinnCdn)
+    {
+        services.AddSingleton<IAltinnCdnClient, AltinnCdnClientMock>();
+    }
+    else
+    {
+        services.AddSingleton<IAltinnCdnClient, AltinnCdnClient>();
     }
 
     if (mockSettings.SystemUser)

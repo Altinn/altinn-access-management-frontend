@@ -190,7 +190,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+            AssertCollections(expected.Permissions, actual.Permissions, AssertEqual);
         }
+
+
 
         /// <summary>
         ///     Assert that two <see cref="AccessPackageResourceFE" /> have the same property in the same positions.
@@ -573,14 +576,20 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
         }
 
-        public static void AssertEqual(AccessPackageDelegationCheckResponse expected, AccessPackageDelegationCheckResponse actual)
+        public static void AssertEqual(DelegationCheck expected, DelegationCheck actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
+            Assert.Equal(expected.Result, actual.Result);
+            Assert.Equal(expected.Package?.Id, actual.Package?.Id);
+            AssertCollections(expected.Reasons, actual.Reasons, AssertEqual);
+        }
 
-            Assert.Equal(expected.CanDelegate, actual.CanDelegate);
-            Assert.Equal(expected.DetailCode, actual.DetailCode);
-            Assert.Equal(expected.PackageId, actual.PackageId);
+        public static void AssertEqual(DelegationCheck.Reason expected, DelegationCheck.Reason actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+            Assert.Equal(expected.Description, actual.Description);
         }
 
         public static void AssertEqual(CustomerPartyFE expected, CustomerPartyFE actual)
@@ -660,6 +669,100 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertEqual(actual.Party, expected.Party);
             AssertCollections(actual.Roles, expected.Roles, AssertEqual);
             AssertCollections(expected.Connections, actual.Connections, AssertEqual);
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="OrgData" /> have the same property values.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(OrgData expected, OrgData actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected?.Orgnr, actual.Orgnr);
+            Assert.Equal(expected?.Logo, actual.Logo);
+            Assert.Equal(expected?.Emblem, actual.Emblem);
+            Assert.Equal(expected?.Homepage, actual.Homepage);
+
+            // Assert Name dictionary
+            if (expected?.Name == null)
+            {
+                Assert.Null(actual.Name);
+            }
+            else
+            {
+                Assert.NotNull(actual.Name);
+                Assert.Equal(expected.Name.Count, actual.Name.Count);
+                foreach (var kvp in expected.Name)
+                {
+                    Assert.True(actual.Name.ContainsKey(kvp.Key));
+                    Assert.Equal(kvp.Value, actual.Name[kvp.Key]);
+                }
+            }
+
+            // Assert Environments list
+            if (expected?.Environments == null)
+            {
+                Assert.Null(actual.Environments);
+            }
+            else
+            {
+                Assert.NotNull(actual.Environments);
+                Assert.Equal(expected.Environments.Count, actual.Environments.Count);
+                for (int i = 0; i < expected.Environments.Count; i++)
+                {
+                    Assert.Equal(expected.Environments[i], actual.Environments[i]);
+                }
+            }
+
+            // Assert Contact
+            if (expected?.Contact == null)
+            {
+                Assert.Null(actual.Contact);
+            }
+            else
+            {
+                AssertEqual(expected.Contact, actual.Contact);
+            }
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="OrgContact" /> have the same property values.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(OrgContact expected, OrgContact actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected?.Phone, actual.Phone);
+            Assert.Equal(expected?.Url, actual.Url);
+        }
+
+        /// <summary>
+        ///     Assert that two dictionaries of <see cref="OrgData" /> have the same property values.
+        /// </summary>
+        /// <param name="expected">A dictionary with the expected values.</param>
+        /// <param name="actual">The dictionary to verify.</param>
+        public static void AssertEqual(Dictionary<string, OrgData> expected, Dictionary<string, OrgData> actual)
+        {
+            if (expected == null)
+            {
+                Assert.Null(actual);
+                return;
+            }
+
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Count, actual.Count);
+
+            foreach (var kvp in expected)
+            {
+                Assert.True(actual.ContainsKey(kvp.Key), $"Expected key '{kvp.Key}' not found in actual dictionary");
+                AssertEqual(kvp.Value, actual[kvp.Key]);
+            }
         }
     }
 }

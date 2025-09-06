@@ -3,7 +3,7 @@
   "from": "urn:altinn:person:identifier-no:167536b5-f8ed-4c5a-8f48-0279507e53ae",
   "to": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
   "handledBy": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
-  "validTo": "2025-05-21T11:11:24.9535551+00:00",
+  "validTo": "2075-05-21T11:11:24.9535551+00:00",
   "consentRights": [
     {
       "action": ["read"],

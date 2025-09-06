@@ -1,4 +1,4 @@
-import { Avatar, DsParagraph, DsHeading } from '@altinn/altinn-components';
+import { DsParagraph, DsHeading, MenuItemIcon } from '@altinn/altinn-components';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 
@@ -46,27 +46,34 @@ export const UserPageHeader = ({
     if (displayDirection) {
       return (
         <div className={classes.avatar}>
-          <Avatar
-            name={user?.name ?? ''}
+          <MenuItemIcon
+            icon={{
+              name: user?.name ?? '',
+              type: user?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+            }}
             size={'lg'}
-            type={user?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
           />
           <ArrowRightIcon style={{ fontSize: '1.5rem' }} />
-          <Avatar
-            name={secondaryParty?.name ?? ''}
+          <MenuItemIcon
+            icon={{
+              name: secondaryParty?.name ?? '',
+              type: secondaryParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+            }}
             size={'lg'}
-            type={secondaryParty?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
           />
         </div>
       );
     }
     return (
-      <Avatar
-        className={classes.avatar}
-        name={user?.name || ''}
-        size={'lg'}
-        type={user?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
-      />
+      <div className={classes.avatar}>
+        <MenuItemIcon
+          icon={{
+            name: user?.name ?? '',
+            type: user?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+          }}
+          size={'lg'}
+        />
+      </div>
     );
   };
 

@@ -132,6 +132,33 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new Result<List<Customer>>(customers));
         }
 
+        public Task<Result<StandardSystemUserDelegations>> GetListOfDelegationsForStandardSystemUser(string partyId, string systemuserId, CancellationToken cancellationToken)
+        {
+            List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
+            SystemUser systemUser = systemUsers.Find(s => s.Id == systemuserId.ToString() && s.PartyId == partyId.ToString());
+            if (systemUser is null)
+            {
+                return Task.FromResult(new Result<StandardSystemUserDelegations>(TestErrors.SystemUserNotFound));
+            }
+
+            // set single rights to rights of system
+            List<RegisteredSystem> systems = Util.GetMockData<List<RegisteredSystem>>($"{dataFolder}/SystemRegister/systems.json");
+            RegisteredSystem system = systems.Find(s => s.SystemId == systemUser.SystemId);
+            if (system is null)
+            {
+                return Task.FromResult(new Result<StandardSystemUserDelegations>(TestErrors.SystemNotFound));
+            }
+
+            StandardSystemUserDelegations delegations = new()
+            {
+                SystemUserId = Guid.Parse(systemuserId),
+                AccessPackages = systemUser.AccessPackages,
+                Rights = system.Rights
+            };
+
+            return Task.FromResult(new Result<StandardSystemUserDelegations>(delegations));
+        }
+
         internal static class TestErrors
         {
             private static readonly ProblemDescriptorFactory _factory
@@ -139,6 +166,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             public static ProblemDescriptor SystemNotFound { get; }
                 = _factory.Create(11, HttpStatusCode.NotFound, "System not found");
+
+        public static ProblemDescriptor SystemUserNotFound { get; }
+            = _factory.Create(15, HttpStatusCode.NotFound, "The SystemUser was not found.");
 
             public static ProblemDescriptor AgentSystemUser_FailedToGetClients { get; }
             = _factory.Create(45, HttpStatusCode.BadRequest, "Failed to get clients");

@@ -17,12 +17,12 @@
   "license": "ISC",
   "devDependencies": {
     "@azure/microsoft-playwright-testing": "^1.0.0-beta.7",
-    "@playwright/test": "^1.43.3",
-    "@types/node": "^22.0.0",
-    "dotenv": "^16.4.5"
+    "@playwright/test": "^1.55.0",
+    "@types/node": "^22.18.0",
+    "dotenv": "^16.6.1"
   },
   "dependencies": {
-    "axios": "^1.6.8",
+    "axios": "^1.11.0",
     "cross-env": "^7.0.3",
     "csv-parse": "^5.6.0"
   }

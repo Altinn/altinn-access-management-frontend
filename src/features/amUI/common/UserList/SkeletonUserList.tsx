@@ -4,54 +4,49 @@ import { ListItem } from '@altinn/altinn-components';
 export const SkeletonUserList = () => {
   const userSkeletons = [
     {
-      interactive: false,
       id: '2',
-      size: 'lg',
+      size: 'md',
       title: 'xxxxxxxx xxxxxxxxxx',
-      avatar: {
+      icon: {
         name: 'xxxxxxxx xxxxxxxxxx',
         type: 'person',
       },
     },
     {
-      interactive: false,
       id: '3',
-      size: 'lg',
+      size: 'md',
       title: 'xx xxxxxxxx xxx xx',
       description: 'xxxxxxxxx',
-      avatar: {
+      icon: {
         name: 'xx xxxxxxxx xxx xx',
         type: 'company',
       },
     },
     {
-      interactive: false,
       id: '4',
-      size: 'lg',
+      size: 'md',
       title: 'xxxxx xxxxxxxxx',
-      avatar: {
+      icon: {
         name: 'xxxxx xxxxxxxxx',
         type: 'person',
       },
     },
     {
-      interactive: false,
       id: '4.5',
-      size: 'lg',
+      size: 'md',
       title: 'xxxxxxxx xxxxxxxx xxxxxx xx',
       description: 'xxxxxxxxx',
-      avatar: {
+      icon: {
         name: 'xxxxxxxx xxxxxxxx xxxxxx xx',
         type: 'company',
       },
     },
     {
-      interactive: false,
       id: '5',
-      size: 'lg',
+      size: 'md',
       title: 'xxxxx xx xxxxxxx',
       description: 'xxxxxxxxx',
-      avatar: {
+      icon: {
         name: 'xxxxx xx xxxxxxx',
         type: 'company',
       },
@@ -62,6 +57,8 @@ export const SkeletonUserList = () => {
       {userSkeletons.map((props: ListItemProps) => (
         <ListItem
           loading
+          as='div'
+          interactive={false}
           key={props.id}
           {...props}
         />

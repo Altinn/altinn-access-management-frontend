@@ -1,5 +1,6 @@
 import type { ChangeEvent, ReactElement } from 'react';
 import React from 'react';
+import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import {
@@ -11,8 +12,6 @@ import {
   Layout,
   RootProvider,
 } from '@altinn/altinn-components';
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import type { SerializedError } from '@reduxjs/toolkit';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import {
@@ -50,47 +49,6 @@ export const ConsentRequestPage = () => {
       skip: !requestId,
     },
   );
-
-  const [
-    postApproveConsent,
-    { data: approveResponse, error: approveConsentError, isLoading: isApprovingConsent },
-  ] = useApproveConsentRequestMutation();
-
-  const [
-    postRejectConsent,
-    { data: rejectResponse, error: rejectConsentError, isLoading: isRejectingConsent },
-  ] = useRejectConsentRequestMutation();
-
-  const isActionButtonDisabled =
-    isApprovingConsent || isRejectingConsent || approveResponse || rejectResponse;
-
-  const approveConsent = async (): Promise<void> => {
-    if (!isActionButtonDisabled && request) {
-      try {
-        await postApproveConsent({ requestId: request.id, language }).unwrap();
-        logoutAndRedirect();
-      } catch {
-        // Error is already tracked via approveConsentError
-      }
-    }
-  };
-
-  const rejectConsent = async (): Promise<void> => {
-    if (!isActionButtonDisabled && request) {
-      try {
-        await postRejectConsent({ requestId: request.id }).unwrap();
-        logoutAndRedirect();
-      } catch {
-        // Error is already tracked via rejectConsentError
-      }
-    }
-  };
-
-  const logoutAndRedirect = (): void => {
-    window.location.assign(
-      `${import.meta.env.BASE_URL}accessmanagement/api/v1/consent/request/${request?.id}/logout`,
-    );
-  };
 
   const onChangeLocale = (event: ChangeEvent<HTMLInputElement>) => {
     const newLocale = event.target.value;
@@ -145,12 +103,6 @@ export const ConsentRequestPage = () => {
           <ConsentRequestContent
             request={request}
             language={language}
-            approveConsentError={approveConsentError}
-            rejectConsentError={rejectConsentError}
-            approveConsent={approveConsent}
-            rejectConsent={rejectConsent}
-            isApprovingConsent={isApprovingConsent || !!approveResponse}
-            isRejectingConsent={isRejectingConsent || !!rejectResponse}
           />
         )}
       </Layout>
@@ -161,59 +113,111 @@ export const ConsentRequestPage = () => {
 interface ConsentRequestContentProps {
   request: ConsentRequest;
   language: keyof ConsentLanguage;
-  approveConsentError: FetchBaseQueryError | SerializedError | undefined;
-  rejectConsentError: FetchBaseQueryError | SerializedError | undefined;
-  approveConsent: () => void;
-  rejectConsent: () => void;
-  isApprovingConsent: boolean;
-  isRejectingConsent: boolean;
 }
-const ConsentRequestContent = ({
-  request,
-  language,
-  approveConsentError,
-  rejectConsentError,
-  approveConsent,
-  rejectConsent,
-  isApprovingConsent,
-  isRejectingConsent,
-}: ConsentRequestContentProps): ReactElement => {
+const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps): ReactElement => {
   const { t } = useTranslation();
 
-  const isRequestApproved = request?.consentRequestEvents.some(
-    (event) => event.eventType === 'Accepted',
-  );
-  const isRequestRejected = request?.consentRequestEvents.some(
-    (event) => event.eventType === 'Rejected',
-  );
+  const [
+    postApproveConsent,
+    { data: approveResponse, error: approveConsentError, isLoading: isApprovingConsent },
+  ] = useApproveConsentRequestMutation();
+
+  const [
+    postRejectConsent,
+    { data: rejectResponse, error: rejectConsentError, isLoading: isRejectingConsent },
+  ] = useRejectConsentRequestMutation();
+
+  const isApproved = request.consentRequestEvents.some((event) => event.eventType === 'Accepted');
+  const isRejected = request.consentRequestEvents.some((event) => event.eventType === 'Rejected');
+  const isPastValidTo = new Date(request.validTo) < new Date();
+
+  const isActionButtonDisabled =
+    isApprovingConsent ||
+    isRejectingConsent ||
+    approveResponse ||
+    rejectResponse ||
+    isApproved ||
+    isRejected ||
+    isPastValidTo;
+
+  const approveConsent = async (): Promise<void> => {
+    if (!isActionButtonDisabled && request) {
+      try {
+        await postApproveConsent({ requestId: request.id, language }).unwrap();
+        logoutAndRedirect();
+      } catch {
+        // Error is already tracked via approveConsentError
+      }
+    }
+  };
+
+  const rejectConsent = async (): Promise<void> => {
+    if (!isActionButtonDisabled && request) {
+      try {
+        await postRejectConsent({ requestId: request.id }).unwrap();
+        logoutAndRedirect();
+      } catch {
+        // Error is already tracked via rejectConsentError
+      }
+    }
+  };
+
+  const logoutAndRedirect = (): void => {
+    window.location.assign(
+      `${import.meta.env.BASE_URL}accessmanagement/api/v1/consent/request/${request?.id}/logout`,
+    );
+  };
 
   return (
     <>
-      <div className={classes.consentBlock}>
+      <div className={cn(classes.consentBlock, classes.headerBlock)}>
         <DsHeading
           level={1}
           data-size='md'
-          className={classes.topHeader}
         >
           {request.title[language]}
         </DsHeading>
       </div>
       <div className={classes.consentBlock}>
         <div className={classes.consentContent}>
-          <DsParagraph className={classes.boldText}>{request.heading[language]}</DsParagraph>
-          {request.consentMessage && <DsParagraph>{request.consentMessage[language]}</DsParagraph>}
-          <DsHeading
-            level={2}
-            data-size='2xs'
-          >
+          {isApproved && (
+            <DsAlert data-color='warning'>
+              {request.isPoa
+                ? t('consent_request.already_approved_poa')
+                : t('consent_request.already_approved')}
+            </DsAlert>
+          )}
+          {isRejected && (
+            <DsAlert data-color='warning'>
+              {request.isPoa
+                ? t('consent_request.already_rejected_poa')
+                : t('consent_request.already_rejected')}
+            </DsAlert>
+          )}
+          {isPastValidTo && !isApproved && !isRejected && (
+            <DsAlert data-color='warning'>
+              {request.isPoa
+                ? t('consent_request.past_validto_poa')
+                : t('consent_request.past_validto')}
+            </DsAlert>
+          )}
+          <DsParagraph className={classes.heading}>{request.heading[language]}</DsParagraph>
+          {request.consentMessage && (
+            <DsParagraph className={classes.consentMessage}>
+              {request.consentMessage[language]}
+            </DsParagraph>
+          )}
+          <DsParagraph className={classes.serviceIntro}>
             {request.serviceIntro[language]}
-          </DsHeading>
+          </DsParagraph>
           <ConsentRights
             rights={request.rights}
             language={language}
           />
           <DsParagraph className={classes.expiration}>{request.expiration[language]}</DsParagraph>
-          {request.handledBy && <DsParagraph>{request.handledBy[language]}</DsParagraph>}
+          {request.handledBy && (
+            <DsParagraph className={classes.handledBy}>{request.handledBy[language]}</DsParagraph>
+          )}
           {approveConsentError && (
             <ConsentRequestError
               error={approveConsentError as { data: ProblemDetail }}
@@ -234,44 +238,28 @@ const ConsentRequestContent = ({
               }
             />
           )}
-          {isRequestApproved && (
-            <DsAlert data-color='info'>
+          <div className={classes.buttonRow}>
+            <DsButton
+              variant='primary'
+              aria-disabled={isActionButtonDisabled}
+              loading={isApprovingConsent}
+              onClick={approveConsent}
+            >
               {request.isPoa
-                ? t('consent_request.already_approved_poa')
-                : t('consent_request.already_approved')}
-            </DsAlert>
-          )}
-          {isRequestRejected && (
-            <DsAlert data-color='info'>
+                ? t('consent_request.approve_poa')
+                : t('consent_request.approve_consent')}
+            </DsButton>
+            <DsButton
+              variant='tertiary'
+              aria-disabled={isActionButtonDisabled}
+              loading={isRejectingConsent}
+              onClick={rejectConsent}
+            >
               {request.isPoa
-                ? t('consent_request.already_rejected_poa')
-                : t('consent_request.already_rejected')}
-            </DsAlert>
-          )}
-          {!isRequestApproved && !isRequestRejected && (
-            <div className={classes.buttonRow}>
-              <DsButton
-                variant='primary'
-                aria-disabled={isApprovingConsent || isRejectingConsent}
-                loading={isApprovingConsent}
-                onClick={approveConsent}
-              >
-                {request.isPoa
-                  ? t('consent_request.approve_poa')
-                  : t('consent_request.approve_consent')}
-              </DsButton>
-              <DsButton
-                variant='tertiary'
-                aria-disabled={isApprovingConsent || isRejectingConsent}
-                loading={isRejectingConsent}
-                onClick={rejectConsent}
-              >
-                {request.isPoa
-                  ? t('consent_request.reject_poa')
-                  : t('consent_request.reject_consent')}
-              </DsButton>
-            </div>
-          )}
+                ? t('consent_request.reject_poa')
+                : t('consent_request.reject_consent')}
+            </DsButton>
+          </div>
         </div>
       </div>
     </>

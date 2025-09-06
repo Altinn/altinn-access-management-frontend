@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
@@ -218,14 +219,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
 
-        //// Access packages
-
-        /// <inheritdoc />
-        public Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest)
-        {
-            throw new NotImplementedException();
-        }
-
         //// Roles
 
         /// <inheritdoc />
@@ -251,7 +244,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string responseContent = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    return JsonSerializer.Deserialize<List<RoleAssignment>>(responseContent, _serializerOptions);
+                    return JsonSerializer.Deserialize<List<RoleAssignment>>(responseContent, _serializerOptions)!;
                 }
                 else
                 {
@@ -323,13 +316,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(e, "AccessManagement.UI // RoleClient // GetRolesForUser // Exception");
                 return null;
             }
-        }
-
-        /// <inheritdoc />
-        public Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId)
-        {
-            // TODO: Implement this method when the API is ready
-            throw new NotImplementedException();
         }
     }
 }

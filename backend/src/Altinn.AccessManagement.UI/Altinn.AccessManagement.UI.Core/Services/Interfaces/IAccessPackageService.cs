@@ -11,6 +11,14 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
     public interface IAccessPackageService
     {
         /// <summary>
+        /// Fetch a single access package by id
+        /// </summary>
+        /// <param name="languageCode">language code</param>
+        /// <param name="packageId">package id</param>
+        /// <returns>The access package</returns>
+        Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId);
+        
+        /// <summary>
         ///     Performs a search for access packages based on the provided parameters and sorts them into a list of areas for frontend to display
         /// </summary>
         /// <param name="languageCode">languageCode.</param>
@@ -27,6 +35,17 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">The code of the language on which texts are to be returned</param>
         /// <returns>A dictionary of lists (sorted by access area) containing all access package delegations that have been granted from one (or more) party to another (or several others)</returns>
         Task<Dictionary<Guid, List<PackagePermission>>> GetDelegations(Guid party, Guid? to, Guid? from, string languageCode);
+
+        /// <summary>
+        ///     Gets a single access package and its permissions (not grouped by area)
+        /// </summary>
+        /// <param name="party">The uuid of the party who is asking for the package</param>
+        /// <param name="to">The uuid of the party who has received the delegated access package</param>
+        /// <param name="from">The uuid of the party whose accesses have been delegated</param>
+        /// <param name="packageId">The uuid of the access package to filter by</param>
+        /// <param name="languageCode">The code of the language on which texts are to be returned</param>
+        /// <returns>The package and its permissions, or null if not found</returns>
+        Task<AccessPackageFE> GetSinglePackagePermission(Guid party, Guid? to, Guid? from, Guid packageId, string languageCode);
 
         /// <summary>
         ///     Revokes access to a given package for a right holder (to) on behalf of a party (from)
@@ -49,10 +68,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<HttpResponseMessage> CreateDelegation(Guid party, Guid to, Guid from, string packageId);
 
         /// <summary>
-        ///    Checks if the user can delegate access packages on behalf of the specified reportee
+        ///    Retrieves delegation capability (can delegate or not) for all access packages on behalf of the specified party
         /// </summary>
-        /// <param name="delegationCheckRequest">The request containing the packages to check and the reportee to check on behalf of</param>
-        /// <returns>The response containing whether or not the user can delegate the packages</returns>
-        Task<List<AccessPackageDelegationCheckResponse>> DelegationCheck(DelegationCheckRequest delegationCheckRequest);
+        /// <param name="party">The party to check delegation for (reportee)</param>
+        /// <returns>List with delegation check results for all packages</returns>
+        Task<List<DelegationCheck>> DelegationCheck(Guid party);
     }
 }
