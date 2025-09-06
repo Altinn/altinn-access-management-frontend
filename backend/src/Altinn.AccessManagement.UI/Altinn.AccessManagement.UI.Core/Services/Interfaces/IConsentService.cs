@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Gets consent history for party
         /// </summary>
-        /// <param name="party">Id of party to get active consents for</param>
+        /// <param name="party">Id of party to get consent log for</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of consent log items</returns>
         Task<Result<List<ConsentLogItemFE>>> GetConsentLog(Guid party, CancellationToken cancellationToken);
@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Get a consent
         /// </summary>
-        /// <param name="consentId">Id of party to consent to get</param>
+        /// <param name="consentId">Id of consent to get</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A consent</returns>
         Task<Result<ConsentFE>> GetConsent(Guid consentId, CancellationToken cancellationToken);

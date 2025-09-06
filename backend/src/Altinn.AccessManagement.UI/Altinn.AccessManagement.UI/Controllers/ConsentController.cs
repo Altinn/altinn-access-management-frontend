@@ -130,14 +130,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("log/{party}")]
         public async Task<ActionResult> GetConsentLog([FromRoute] Guid party, CancellationToken cancellationToken)
         {
-            Result<List<ConsentLogItemFE>> activeConsents = await _consentService.GetConsentLog(party, cancellationToken);
+            Result<List<ConsentLogItemFE>> consentLog = await _consentService.GetConsentLog(party, cancellationToken);
 
-            if (activeConsents.IsProblem)
+            if (consentLog.IsProblem)
             {
-                return activeConsents.Problem.ToActionResult();
+                return consentLog.Problem.ToActionResult();
             }
 
-            return Ok(activeConsents.Value);
+            return Ok(consentLog.Value);
         }
 
         /// <summary>

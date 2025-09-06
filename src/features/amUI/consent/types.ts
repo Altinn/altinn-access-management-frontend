@@ -14,7 +14,7 @@ export type ConsentRequestEventType =
   | 'Revoked'
   | 'Deleted'
   | 'Expired';
-export interface ConsentRequestEvents {
+export interface ConsentRequestEvent {
   consentEventID: string;
   created: string;
   performedBy: string;
@@ -34,7 +34,7 @@ export interface ConsentRequest {
   handledBy?: ConsentLanguage;
   fromPartyName?: string;
   validTo: string;
-  consentRequestEvents: ConsentRequestEvents[];
+  consentRequestEvents: ConsentRequestEvent[];
 }
 
 export interface ActiveConsentListItem {
@@ -52,7 +52,7 @@ export interface ConsentHistoryItem {
   fromPartyId: string;
   fromPartyName: string;
   validTo: string;
-  consentRequestEvents: ConsentRequestEvents[];
+  consentRequestEvents: ConsentRequestEvent[];
 }
 
 export interface Consent {
@@ -65,7 +65,7 @@ export interface Consent {
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
   validTo: string;
-  consentRequestEvents: ConsentRequestEvents[];
+  consentRequestEvents: ConsentRequestEvent[];
 }
 
 export interface ProblemDetail {

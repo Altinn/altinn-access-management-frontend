@@ -3,7 +3,7 @@
 namespace Altinn.AccessManagement.UI.Core.Models.Consent
 {
     /// <summary>
-    /// Describes a concent
+    /// Describes a consent
     /// </summary>
     public class Consent
     {
@@ -33,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         public DateTimeOffset Consented { get; set; }
 
         /// <summary>
-        /// Defines how long the concent is valid
+        /// Defines how long the consent is valid
         /// </summary>
         public DateTimeOffset ValidTo { get; set; }
 

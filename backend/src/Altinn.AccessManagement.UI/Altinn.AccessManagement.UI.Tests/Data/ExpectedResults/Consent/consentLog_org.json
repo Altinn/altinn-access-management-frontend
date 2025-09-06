@@ -112,5 +112,23 @@
         "consentRequestID": "9d466fd8-8d51-4a49-8269-8daddf4adad2"
       }
     ]
+  },
+  {
+    "id": "10fded43-fcd4-4f32-b31c-725fdaba6139",
+    "isPoa": false,
+    "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "toPartyName": "STA TOM TIGER AS",
+    "fromPartyId": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "fromPartyName": "DISKRET NÆR TIGER AS",
+    "validTo": "2095-01-01T11:11:24.9535551+00:00",
+    "consentRequestEvents": [
+      {
+        "consentEventID": "f39d05e1-efd7-4758-891b-265d72014395",
+        "created": "2025-06-02T15:09:13.526811+00:00",
+        "performedBy": "urn:altinn:organization:identifier-no:991825827",
+        "eventType": "Created",
+        "consentRequestID": "10fded43-fcd4-4f32-b31c-725fdaba6139"
+      }
+    ]
   }
 ]

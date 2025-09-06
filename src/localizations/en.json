@@ -731,11 +731,11 @@
     "consent_expired": "{{to}}: consent expired",
     "poa_expired": "{{to}}: power of attorney expired",
     "consent_revoked": "{{to}}: consent revoked",
-    "poa_revoked": "{{to}}: consent revoked",
+    "poa_revoked": "{{to}}: power of attorney revoked",
     "consent_accepted": "{{to}}: was granted consent from {{from}}",
     "poa_accepted": "{{to}}: was granted power of attorney from {{from}}",
     "no_results": "No consent or power of attorney was found for this search",
-    "no_active_consents": "There area no agreements in agreement log yet"
+    "no_active_consents": "There area no entries in agreement log yet"
   },
   "consent_errors": {
     "not_authorized_for_consent": "User is not authorized to give consent/power of attorney",

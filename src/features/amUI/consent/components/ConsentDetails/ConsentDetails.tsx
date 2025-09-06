@@ -15,7 +15,7 @@ import { useGetConsentQuery, useRevokeConsentMutation } from '@/rtk/features/con
 
 import { getLanguage } from '../../utils';
 import { ConsentRights } from '../ConsentRights/ConsentRights';
-import type { ConsentRequestEvents } from '../../types';
+import type { ConsentRequestEvent } from '../../types';
 
 import classes from './ConsentDetails.module.css';
 
@@ -50,9 +50,11 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
     }
   };
 
-  const canConsentBeRevoked = consent?.consentRequestEvents.every(
-    (event) => !['Rejected', 'Revoked', 'Deleted', 'Expired'].includes(event.eventType),
+  const hasAccepted = consent?.consentRequestEvents.some((e) => e.eventType === 'Accepted');
+  const hasTerminal = consent?.consentRequestEvents.some((e) =>
+    ['Rejected', 'Revoked', 'Deleted', 'Expired'].includes(e.eventType),
   );
+  const canConsentBeRevoked = hasAccepted && !hasTerminal;
 
   const isRevoking = isRevokingConsent || isFetchingConsent;
 
@@ -156,7 +158,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
 };
 
 interface ConsentStatusProps {
-  events: ConsentRequestEvents[];
+  events: ConsentRequestEvent[];
   validTo: string;
   isPoa?: boolean;
 }

@@ -13,11 +13,11 @@ import { ConsentHistoryItem, ConsentRequestEventType } from '../types';
 import { TFunction } from 'i18next';
 
 interface ConsentTimelineProps {
-  activeConsents: ConsentHistoryItem[];
+  consentLog: ConsentHistoryItem[];
   showConsentDetails: (consentId: string) => void;
 }
 
-export const ConsentTimeline = ({ activeConsents, showConsentDetails }: ConsentTimelineProps) => {
+export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimelineProps) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState<string>('');
 
@@ -25,12 +25,9 @@ export const ConsentTimeline = ({ activeConsents, showConsentDetails }: ConsentT
     setSearchValue(event.target.value);
   };
 
-  const timelineItems = getTimeLineItems(activeConsents, t).filter((item) => {
-    const searchLower = searchValue.toLowerCase();
-    return (
-      item.fromPartyName?.toLowerCase().includes(searchLower) ||
-      item.toPartyName?.toLowerCase().includes(searchLower)
-    );
+  const timelineItems = getTimeLineItems(consentLog, t).filter((item) => {
+    const q = searchValue.toLowerCase();
+    return [item.fromPartyName, item.toPartyName].some((name) => name?.toLowerCase().includes(q));
   });
 
   return (
@@ -45,7 +42,7 @@ export const ConsentTimeline = ({ activeConsents, showConsentDetails }: ConsentT
         <DsSearch.Clear />
       </DsSearch>
       <Timeline>
-        {activeConsents.length === 0 && (
+        {consentLog.length === 0 && (
           <DsParagraph data-color='info'>{t('consent_log.no_active_consents')}</DsParagraph>
         )}
         {searchValue && timelineItems.length === 0 && (
@@ -86,7 +83,7 @@ export const ConsentTimeline = ({ activeConsents, showConsentDetails }: ConsentT
 };
 
 const toTimeStamp = (dateString: string, useFullMonthName?: boolean): string => {
-  return new Date(dateString).toLocaleDateString('no-NO', {
+  return new Date(dateString).toLocaleString('no-NO', {
     day: '2-digit',
     month: useFullMonthName ? 'long' : '2-digit',
     year: 'numeric',
@@ -107,7 +104,7 @@ interface TimelineItem {
   consentId: string;
 }
 const getTimeLineItems = (
-  activeConsents: ConsentHistoryItem[],
+  consentLog: ConsentHistoryItem[],
   t: TFunction<'translation', undefined>,
 ): TimelineItem[] => {
   const getTimeLineText = (
@@ -129,7 +126,7 @@ const getTimeLineItems = (
     return t(textKey, { to: consent.toPartyName, from: consent.fromPartyName });
   };
 
-  return activeConsents
+  return consentLog
     .reduce((acc: TimelineItem[], consent) => {
       const consentTimelineItems = consent.consentRequestEvents
         .filter((event) => ['Accepted', 'Revoked', 'Expired'].includes(event.eventType))

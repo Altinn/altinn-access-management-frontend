@@ -22,6 +22,7 @@ import type { ActiveConsentListItem } from '../types';
 import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
 
 import classes from './ActiveConsentsPage.module.css';
+import { ConsentPath } from '@/routes/paths';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -35,9 +36,7 @@ export const ActiveConsentsPage = () => {
     data: activeConsents,
     isLoading: isLoadingActiveConsents,
     error: loadActiveConsentsError,
-  } = useGetActiveConsentsQuery({
-    partyId: partyUuid,
-  });
+  } = useGetActiveConsentsQuery({ partyId: partyUuid }, { skip: !partyUuid });
 
   const groupedActiveConsents = activeConsents?.reduce(
     (acc: { [key: string]: ActiveConsentListItem[] }, consent) => {
@@ -76,7 +75,7 @@ export const ActiveConsentsPage = () => {
             asChild
             data-size='lg'
           >
-            <Link to={'/consent/log'}>
+            <Link to={`/${ConsentPath.Consent}/${ConsentPath.Log}`}>
               <FolderFileIcon />
               {t('active_consents.consent_log')}
             </Link>

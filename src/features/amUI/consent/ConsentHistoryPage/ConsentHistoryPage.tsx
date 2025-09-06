@@ -24,12 +24,10 @@ export const ConsentHistoryPage = () => {
   const partyUuid = getCookie('AltinnPartyUuid');
 
   const {
-    data: activeConsents,
-    isLoading: isLoadingActiveConsents,
-    error: loadActiveConsentsError,
-  } = useGetConsentLogQuery({
-    partyId: partyUuid,
-  });
+    data: consentLog,
+    isLoading: isLoadingConsentLog,
+    error: loadConsentLogError,
+  } = useGetConsentLogQuery({ partyId: partyUuid }, { skip: !partyUuid });
 
   const showConsentDetails = (consentId: string): void => {
     setSelectedConsentId(consentId);
@@ -61,15 +59,13 @@ export const ConsentHistoryPage = () => {
               {t('consent_log.heading')}
             </DsHeading>
           </div>
-          {isLoadingActiveConsents && (
-            <DsSpinner aria-label={t('consent_log.loading_consent_log')} />
-          )}
-          {loadActiveConsentsError && (
+          {isLoadingConsentLog && <DsSpinner aria-label={t('consent_log.loading_consent_log')} />}
+          {loadConsentLogError && (
             <DsAlert data-color='danger'>{t('consent_log.loading_consent_log_error')}</DsAlert>
           )}
-          {activeConsents && (
+          {consentLog && (
             <ConsentTimeline
-              activeConsents={activeConsents}
+              consentLog={consentLog}
               showConsentDetails={showConsentDetails}
             />
           )}

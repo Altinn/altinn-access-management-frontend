@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// <inheritdoc />
     public class ConsentService : IConsentService
     {
-        private readonly ILogger<IConsentService> _logger;
+        private readonly ILogger<ConsentService> _logger;
         private readonly IConsentClient _consentClient;
         private readonly IRegisterClient _registerClient;
         private readonly IResourceRegistryClient _resourceRegistryClient;
@@ -131,13 +131,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return consents.Problem;
             }
 
-            string[] excludedStatuses = ["rejected", "revoked", "deleted", "expired"];
+            HashSet<string> excludedStatuses = new(StringComparer.OrdinalIgnoreCase) { "rejected", "revoked", "deleted", "expired" };
 
             // filter consents to return only active consents
-            IEnumerable<Consent> activeConsents = consents.Value.Where((consent) => consent.ConsentRequestEvents.All((e) => !excludedStatuses.Contains(e.EventType.ToLower())));
+            IEnumerable<Consent> activeConsents = consents.Value.Where(consent =>
+                !consent.ConsentRequestEvents.Any(e => excludedStatuses.Contains(e.EventType))
+                && consent.ConsentRequestEvents.Exists(e => e.EventType.Equals("accepted", StringComparison.OrdinalIgnoreCase)));
 
             // look up all party names in one call instead of one by one
-            IEnumerable<string> partyUuids = activeConsents.Aggregate(new List<string> { }, (acc, consent) => [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From)]).Distinct();
+            IEnumerable<string> partyUuids = activeConsents
+                .SelectMany(c => new[] { GetUrnValue(c.To), GetUrnValue(c.From) })
+                .Where(u => !string.IsNullOrWhiteSpace(u))
+                .Distinct(StringComparer.OrdinalIgnoreCase);
+
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
             IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
             
@@ -316,10 +322,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<IEnumerable<Party>> GetConsentParties(IEnumerable<string> partyUuids)
         {
-            IEnumerable<Guid> partyGuidsToLookup = partyUuids.Where(urn => urn != null)
+            IEnumerable<Guid> partyGuidsToLookup = partyUuids
+                .Where(urn => urn != null)
                 .Select(urn => Guid.TryParse(urn, out var guid) ? guid : (Guid?)null)
                 .Where(guid => guid.HasValue)
-                .Select(guid => guid.Value);
+                .Select(guid => guid.Value)
+                .Distinct();
 
             List<Party> parties = await _registerClient.GetPartyList(partyGuidsToLookup.ToList());
 
@@ -427,11 +435,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 consentTemplates = await _consentClient.GetConsentTemplates(cancellationToken);
 
-                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetPriority(CacheItemPriority.High)
-                    .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
+                if (consentTemplates is not null)
+                {
+                    MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                        .SetPriority(CacheItemPriority.High)
+                        .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
 
-                _memoryCache.Set(cacheKey, consentTemplates, cacheEntryOptions);
+                    _memoryCache.Set(cacheKey, consentTemplates, cacheEntryOptions);
+                }
             }
 
             return consentTemplates;

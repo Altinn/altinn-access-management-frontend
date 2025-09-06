@@ -135,8 +135,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc/>
         public async Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken)
         {
-            List<ConsentTemplate> consentTemplates = new List<ConsentTemplate>();
-
             // Get consent templates from altinn-studio-docs. Will be moved to resource registry later.
             string endpointUrl = "https://raw.githubusercontent.com/Altinn/altinn-studio-docs/master/content/authorization/architecture/resourceregistry/consent_templates.json";
 
@@ -144,19 +142,19 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 string content = await response.Content.ReadAsStringAsync(cancellationToken);
-                consentTemplates = JsonSerializer.Deserialize<List<ConsentTemplate>>(content, _jsonSerializerOptions);
+                return JsonSerializer.Deserialize<List<ConsentTemplate>>(content, _jsonSerializerOptions);
             }
 
-            return consentTemplates;
+            return null;
         }
 
         /// <inheritdoc/>
-        public async Task<Result<List<Consent>>> GetConsentList(Guid party, CancellationToken cancellationToken)
+        public async Task<Result<List<Consent>>> GetConsentList(Guid partyId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"accessmanagement/api/v1/bff/activeconsents/{party}";
+                string endpointUrl = $"bff/activeconsents/{partyId}";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -184,7 +182,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"accessmanagement/api/v1/bff/consent/{consentId}";
+                string endpointUrl = $"bff/consents/{consentId}";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
