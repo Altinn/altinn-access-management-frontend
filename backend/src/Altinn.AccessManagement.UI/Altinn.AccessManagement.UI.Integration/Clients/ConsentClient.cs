@@ -164,14 +164,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return JsonSerializer.Deserialize<List<Consent>>(responseContent, _jsonSerializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // ConsentClient // GetActiveConsents // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // ConsentClient // GetConsentList // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetActiveConsents // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsentList // Exception");
                 throw;
             }
         }
