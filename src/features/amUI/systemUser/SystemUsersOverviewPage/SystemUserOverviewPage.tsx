@@ -67,6 +67,12 @@ export const SystemUserOverviewPage = () => {
           {isLoadingSystemUsers && isLoadingAgentSystemUsers && (
             <DsSpinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
           )}
+          {reporteeData?.hasClientAdministrationPermission === false &&
+            reporteeData?.hasCreateSystemuserPermission === false && (
+              <DsAlert data-color='warning'>
+                {t('systemuser_overviewpage.no_permissions_warning')}
+              </DsAlert>
+            )}
           {systemUsers && systemUsers.length > 0 && (
             <>
               <div className={classes.listHeader}>
@@ -82,9 +88,9 @@ export const SystemUserOverviewPage = () => {
               <SystemUserList systemUsers={systemUsers} />
             </>
           )}
-          {systemUsers &&
-            systemUsers.length === 0 &&
-            reporteeData?.hasCreateSystemuserPermission && <CreateSystemUserButton />}
+          {systemUsers?.length === 0 && reporteeData?.hasCreateSystemuserPermission && (
+            <CreateSystemUserButton />
+          )}
           {isLoadSystemUsersError && (
             <DsAlert data-color='danger'>
               {t('systemuser_overviewpage.systemusers_load_error')}

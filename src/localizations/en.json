@@ -530,6 +530,7 @@
     "agent_delegation_systemusers_title": "System accesses for customers",
     "edit_system_user": "Edit system access",
     "loading_systemusers": "Loading system accesses",
+    "no_permissions_warning": "You do not have sufficient rights to create system access or manage customer for system accesses.",
     "no_key_role1": "You do not have sufficient rights.",
     "no_key_role2": "To create a system access you need the role Access controller, Main administrator or General manager",
     "new_system_user": "NEW",

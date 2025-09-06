@@ -529,6 +529,7 @@
     "agent_delegation_systemusers_title": "Systemtilganger for kunder",
     "edit_system_user": "Rediger systemtilgang",
     "loading_systemusers": "Laster systemtilganger",
+    "no_permissions_warning": "Du mangler fullmakter for å kunne opprette systemtilgang eller administrere kunder på systemtilganger.",
     "no_key_role1": "Du mangler nødvendige fullmakter.",
     "no_key_role2": "For å lage en systemtilgang trenger du rollen Tilgangsstyrer, Hovedadministrator eller Daglig leder.",
     "new_system_user": "NY",
