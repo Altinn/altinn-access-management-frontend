@@ -713,5 +713,10 @@
       "user_search_placeholder": "Søk etter person eller virksomhet",
       "no_users": "Ingen har fullmakt til denne pakken på vegne av {{fromparty}}."
     }
+  },
+  "package_resource_list": {
+    "resource_search_placeholder": "Søk etter tjenester",
+    "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
+    "no_resources": "Ingen tjenester er tilgjengelige."
   }
 }

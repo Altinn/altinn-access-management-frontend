@@ -10,8 +10,8 @@ import { type Connection, type User } from '@/rtk/features/userInfoApi';
 import { UserList } from '../common/UserList/UserList';
 import { debounce } from '@/resources/utils/debounce';
 import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
-import { useResourceList } from '../common/DelegationModal/AccessPackages/useResourceList';
 import { amUIPath } from '@/routes/paths/amUIPath';
+import { PackageResourceList } from '../common/ResourceList/PackageResourceList';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -70,7 +70,7 @@ export const PackagePoaDetails = () => {
 
   const [chosenTab, setChosenTab] = useState('users');
 
-  const resourceList = useResourceList(accessPackage?.resources ?? []);
+  // Pass resources to new PackageResourceList component
 
   // Show error alert with link back to overview if error fetching the Package
   if (error) {
@@ -165,7 +165,7 @@ export const PackagePoaDetails = () => {
           className={pageClasses.tabContent}
           value='services'
         >
-          {resourceList}
+          <PackageResourceList resources={accessPackage?.resources ?? []} />
         </DsTabs.Panel>
       </DsTabs>
     </>

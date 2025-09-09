@@ -710,5 +710,10 @@
       "user_search_placeholder": "Søk etter person eller verksemd",
       "no_users": "Ingen har fullmakt til denne pakken på vegne av {{fromparty}}."
     }
+  },
+  "package_resource_list": {
+    "resource_search_placeholder": "Søk etter tenester",
+    "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
+    "no_resources": "Ingen tenester i denne pakken."
   }
 }
