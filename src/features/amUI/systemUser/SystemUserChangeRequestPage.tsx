@@ -12,12 +12,13 @@ import {
 } from '@/rtk/features/systemUserApi';
 
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
-import type { ProblemDetail } from './types';
+import type { ProblemDetail, SystemUserAccessPackage } from './types';
 import { RightsList } from './components/RightsList/RightsList';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
+import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
@@ -136,13 +137,17 @@ export const SystemUserChangeRequestPage = () => {
             level={3}
             data-size='xs'
           >
-            {changeRequest.resources.length + changeRequest.accessPackages.length === 1
-              ? t('systemuser_change_request.rights_list_header_single')
-              : t('systemuser_change_request.rights_list_header')}
+            {t('systemuser_change_request.rights_list_header')}
           </DsHeading>
-          <RightsList
-            resources={changeRequest.resources}
-            accessPackages={changeRequest.accessPackages}
+          <ChangeList accessPackages={changeRequest.requiredAccessPackages} />
+          <ChangeList
+            accessPackages={changeRequest.unwantedAccessPackages}
+            isRemove
+          />
+          <ChangeList resources={changeRequest.requiredRights} />
+          <ChangeList
+            resources={changeRequest.unwantedRights}
+            isRemove
           />
           <DsParagraph>{t('systemuser_request.withdraw_consent_info')}</DsParagraph>
           <div>
@@ -188,5 +193,56 @@ export const SystemUserChangeRequestPage = () => {
         </>
       )}
     </RequestPageBase>
+  );
+};
+
+interface ChangeListProps {
+  resources?: ServiceResource[];
+  accessPackages?: SystemUserAccessPackage[];
+  isRemove?: boolean;
+}
+export const ChangeList = ({ resources, accessPackages, isRemove }: ChangeListProps) => {
+  const { t } = useTranslation();
+
+  let text = '';
+  if (accessPackages?.length === 1) {
+    text = isRemove
+      ? t('systemuser_change_request.remove_accesspackage_single')
+      : t('systemuser_change_request.add_accesspackage_single');
+  }
+  if ((accessPackages?.length ?? 0) > 1) {
+    text = isRemove
+      ? t('systemuser_change_request.remove_accesspackages')
+      : t('systemuser_change_request.add_accesspackages');
+  }
+  if (resources?.length === 1) {
+    text = isRemove
+      ? t('systemuser_change_request.remove_right_single')
+      : t('systemuser_change_request.add_right_single');
+  }
+  if ((resources?.length ?? 0) > 1) {
+    text = isRemove
+      ? t('systemuser_change_request.remove_rights')
+      : t('systemuser_change_request.add_rights');
+  }
+
+  if (!text) {
+    return null;
+  }
+
+  return (
+    <div>
+      <DsHeading
+        level={4}
+        data-size='2xs'
+      >
+        {text}
+      </DsHeading>
+      <RightsList
+        hideHeadings
+        resources={resources ?? []}
+        accessPackages={accessPackages ?? []}
+      />
+    </div>
   );
 };

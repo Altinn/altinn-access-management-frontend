@@ -23,12 +23,14 @@ interface RightsListProps {
   resources: ServiceResource[];
   accessPackages: SystemUserAccessPackage[];
   hideHeadings?: boolean;
+  headingLevel?: 2 | 3 | 4;
 }
 
 export const RightsList = ({
   resources,
   accessPackages,
   hideHeadings,
+  headingLevel,
 }: RightsListProps): React.ReactNode => {
   const { t } = useTranslation();
   const modalRef = React.useRef<HTMLDialogElement>(null);
@@ -53,14 +55,13 @@ export const RightsList = ({
   };
 
   return (
-    <div className={classes.rightsList}>
+    <div className={classes.rightsListWrapper}>
       {accessPackages.length > 0 && (
         <div>
           {!hideHeadings && (
             <DsHeading
               data-size='2xs'
-              level={2}
-              className={classes.rightHeading}
+              level={headingLevel ?? 2}
             >
               {accessPackages.length === 1
                 ? t('systemuser_detailpage.right_accesspackage_singular')
@@ -69,7 +70,7 @@ export const RightsList = ({
                   })}
             </DsHeading>
           )}
-          <List>
+          <List className={classes.rightsList}>
             {accessPackages.map((accessPackage) => (
               <AccessPackageListItem
                 key={accessPackage.id}
@@ -95,8 +96,7 @@ export const RightsList = ({
           {!hideHeadings && (
             <DsHeading
               data-size='2xs'
-              level={2}
-              className={classes.rightHeading}
+              level={headingLevel ?? 2}
             >
               {resources.length === 1
                 ? t('systemuser_detailpage.right_resource_singular')
@@ -105,7 +105,7 @@ export const RightsList = ({
                   })}
             </DsHeading>
           )}
-          <List>
+          <List className={classes.rightsList}>
             {resources.map((resource) => (
               <ResourceListItem
                 key={resource.identifier}
