@@ -70,8 +70,6 @@ export const PackagePoaDetails = () => {
 
   const [chosenTab, setChosenTab] = useState('users');
 
-  // Pass resources to new PackageResourceList component
-
   // Show error alert with link back to overview if error fetching the Package
   if (error) {
     return (
