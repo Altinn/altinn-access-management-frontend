@@ -138,11 +138,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             // Get consent templates from altinn-studio-docs. Will be moved to resource registry later.
             string endpointUrl = "https://raw.githubusercontent.com/Altinn/altinn-studio-docs/master/content/authorization/architecture/resourceregistry/consent_templates.json";
 
-            HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl, cancellationToken);
-            if (response.StatusCode == HttpStatusCode.OK)
+            // use new client so subscription key is not sent to github
+            using (HttpClient onetimeClient = new())
             {
-                string content = await response.Content.ReadAsStringAsync(cancellationToken);
-                return JsonSerializer.Deserialize<List<ConsentTemplate>>(content, _jsonSerializerOptions);
+                HttpResponseMessage response = await onetimeClient.GetAsync(endpointUrl, cancellationToken);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string content = await response.Content.ReadAsStringAsync(cancellationToken);
+                    return JsonSerializer.Deserialize<List<ConsentTemplate>>(content, _jsonSerializerOptions);
+                }
             }
 
             return null;
