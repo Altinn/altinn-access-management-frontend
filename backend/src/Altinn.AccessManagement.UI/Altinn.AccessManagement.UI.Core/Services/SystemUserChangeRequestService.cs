@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             // GET resources & access packages
             RegisteredSystemRightsFE enrichedRequired = await _resourceHelper.MapRightsToFrontendObjects(changeRequest.Value.RequiredRights, changeRequest.Value.RequiredAccessPackages, languageCode);
-            RegisteredSystemRightsFE enrichUnwanted = await _resourceHelper.MapRightsToFrontendObjects(changeRequest.Value.UnwantedRights, changeRequest.Value.UnwantedAccessPackages, languageCode);
+            RegisteredSystemRightsFE enrichedUnwanted = await _resourceHelper.MapRightsToFrontendObjects(changeRequest.Value.UnwantedRights, changeRequest.Value.UnwantedAccessPackages, languageCode);
 
             RegisteredSystem system = await _systemRegisterClient.GetSystem(changeRequest.Value.SystemId, cancellationToken);
             var orgNames = await _registerClient.GetPartyNames([system.SystemVendorOrgNumber], cancellationToken);
@@ -60,9 +60,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Status = changeRequest.Value.Status,
                 RedirectUrl = changeRequest.Value.RedirectUrl,
                 RequiredRights = enrichedRequired.Resources,
-                UnwantedRights = enrichUnwanted.Resources,
+                UnwantedRights = enrichedUnwanted.Resources,
                 RequiredAccessPackages = enrichedRequired.AccessPackages,
-                UnwantedAccessPackages = enrichUnwanted.AccessPackages,
+                UnwantedAccessPackages = enrichedUnwanted.AccessPackages,
                 System = systemFE
             };
         }

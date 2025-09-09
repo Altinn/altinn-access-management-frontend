@@ -18,7 +18,7 @@ import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
@@ -209,18 +209,15 @@ export const ChangeList = ({ resources, accessPackages, isRemove }: ChangeListPr
     text = isRemove
       ? t('systemuser_change_request.remove_accesspackage_single')
       : t('systemuser_change_request.add_accesspackage_single');
-  }
-  if ((accessPackages?.length ?? 0) > 1) {
+  } else if ((accessPackages?.length ?? 0) > 1) {
     text = isRemove
       ? t('systemuser_change_request.remove_accesspackages')
       : t('systemuser_change_request.add_accesspackages');
-  }
-  if (resources?.length === 1) {
+  } else if (resources?.length === 1) {
     text = isRemove
       ? t('systemuser_change_request.remove_right_single')
       : t('systemuser_change_request.add_right_single');
-  }
-  if ((resources?.length ?? 0) > 1) {
+  } else if ((resources?.length ?? 0) > 1) {
     text = isRemove
       ? t('systemuser_change_request.remove_rights')
       : t('systemuser_change_request.add_rights');
@@ -239,6 +236,7 @@ export const ChangeList = ({ resources, accessPackages, isRemove }: ChangeListPr
         {text}
       </DsHeading>
       <RightsList
+        headingLevel={4}
         hideHeadings
         resources={resources ?? []}
         accessPackages={accessPackages ?? []}

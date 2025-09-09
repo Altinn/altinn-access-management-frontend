@@ -54,6 +54,8 @@ export const RightsList = ({
     modalRef.current?.close();
   };
 
+  const listItemHeadingLevel = `h${Math.min(6, (headingLevel ?? 2) + 1)}` as 'h3' | 'h4' | 'h5';
+
   return (
     <div className={classes.rightsListWrapper}>
       {accessPackages.length > 0 && (
@@ -75,7 +77,7 @@ export const RightsList = ({
               <AccessPackageListItem
                 key={accessPackage.id}
                 id={accessPackage.id}
-                titleAs='h3'
+                titleAs={listItemHeadingLevel}
                 size='md'
                 name={accessPackage.name}
                 description={
@@ -111,7 +113,7 @@ export const RightsList = ({
                 key={resource.identifier}
                 id={resource.identifier}
                 as='button'
-                titleAs='h3'
+                titleAs={listItemHeadingLevel}
                 size='md'
                 ownerLogoUrl={resource.resourceOwnerLogoUrl}
                 ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
