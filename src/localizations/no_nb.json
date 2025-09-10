@@ -286,7 +286,7 @@
     "package_number_of_resources": "{{count}} tjenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
     "no_matching_search": "Ingen treff på søket",
-    "info_alert_text": "Tilgangspakker skal erstatte dagens altinn-roller. De vil fylles med flere tjenester etterhvert. Les mer om dette på våre hjelpesider: <link>altinn.no/hjelpesider</link>.",
+  "info_alert_text": "Tilgangspakker skal erstatte dagens Altinn-roller. De vil fylles med flere tjenester etter hvert. Les mer om dette på <a>hjelpesiden om tilgangspakker</a>.",
     "person_info_alert": "Det er ikke mulig å gi og fjerne fullmakter til personer helt enda. Dette vil komme senere.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",

@@ -11,7 +11,7 @@ export const AccessPackageInfoAlert = () => {
         <Trans
           i18nKey='access_packages.info_alert_text'
           components={{
-            link: (
+            a: (
               <a
                 href='https://info.altinn.no/hjelp/profil/tilgangspakker/'
                 target='_blank'

@@ -283,7 +283,7 @@
     "package_number_of_resources": "{{count}} tenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakkar.",
     "no_matching_search": "Ingen treff på søket",
-    "info_alert_text": "Tilgangspakkar skal erstatte dagens Altinn-roller. Dei vil bli fylt med fleire tenester etter kvart. Les meir om dette på hjelpesidene våre: <link>altinn.no/hjelpesider</link>.",
+    "info_alert_text": "Tilgangspakkar skal erstatte dagens Altinn-roller. Dei vil bli fylt med fleire tenester etter kvart. Les meir om dette på <a>hjelpesida om tilgangspakkar</a>.",
     "person_info_alert": "Det er ikkje mogleg å gi og fjerne fullmakter til personar heilt enno. Dette vil komme seinare.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
