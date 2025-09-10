@@ -11,10 +11,14 @@ import { useFilteredResources } from './useFilteredResources';
 interface PackageResourceListProps {
   resources: PackageResource[];
   noResourcesText?: string;
-  loading?: boolean;
+  isLoading?: boolean;
 }
 
-export const ResourceList = ({ resources, noResourcesText, loading }: PackageResourceListProps) => {
+export const ResourceList = ({
+  resources,
+  noResourcesText,
+  isLoading,
+}: PackageResourceListProps) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
   const [selected, setSelected] = React.useState<PackageResource | null>(null);
@@ -53,7 +57,7 @@ export const ResourceList = ({ resources, noResourcesText, loading }: PackageRes
         />
         {search && <DsSearch.Clear onClick={() => setSearch('')} />}
       </DsSearch>
-      {orgLoading || loading ? (
+      {orgLoading || isLoading ? (
         <SkeletonResourceList />
       ) : (
         <>

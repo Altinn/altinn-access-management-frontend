@@ -164,6 +164,7 @@ export const PackagePoaDetails = () => {
           value='services'
         >
           <ResourceList
+            isLoading={isLoading}
             resources={accessPackage?.resources ?? []}
             noResourcesText={t('package_poa_details_page.services_tab.no_resources')}
           />
