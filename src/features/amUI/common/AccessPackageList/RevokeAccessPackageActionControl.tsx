@@ -65,6 +65,7 @@ export const RevokeAccessPackageActionControl = ({
         variant='text'
         size='sm'
         onClick={onRevoke}
+        aria-label={t('common.delete_poa_for', { poa_object: pkg.name })}
       >
         {isLoading ? (
           <DsSpinner

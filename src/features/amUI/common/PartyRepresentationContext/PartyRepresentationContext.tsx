@@ -17,6 +17,7 @@ import { availableForUserTypeCheck } from '@/resources/utils/featureFlagUtils';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { NotAvailableForUserTypeAlert } from '../NotAvailableForUserTypeAlert/NotAvailableForUserTypeAlert';
+import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -121,7 +122,9 @@ export const PartyRepresentationProvider = ({
     >
       {!isLoading && invalidConnection && connectionErrorAlert(error, returnToUrlOnError)}
       {!isLoading && !availableForUserType && <NotAvailableForUserTypeAlert />}
-      {(!isError || isLoading) && children}
+      <AccessPackageDelegationCheckProvider>
+        {(!isError || isLoading) && children}
+      </AccessPackageDelegationCheckProvider>
     </PartyRepresentationContext.Provider>
   );
 };

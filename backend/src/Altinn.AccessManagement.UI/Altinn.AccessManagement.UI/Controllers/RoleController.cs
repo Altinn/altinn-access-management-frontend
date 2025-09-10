@@ -30,9 +30,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Initializes a new instance of the <see cref="RoleController"/> class
         /// </summary>
         public RoleController(
-            IHttpContextAccessor httpContextAccessor, 
-            ILogger<RoleController> logger, 
-            IRoleService roleService, 
+            IHttpContextAccessor httpContextAccessor,
+            ILogger<RoleController> logger,
+            IRoleService roleService,
             IOptions<FeatureFlags> featureFlags)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -74,41 +74,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Check if a role can be delegated 
-        /// </summary>
-        /// <returns>If the role can be delegated and the DetailCode for why</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("delegationcheck/{rightOwner}/{roleId}")]
-        public async Task<ActionResult<DelegationCheckResponse>> RoleDelegationCheck([FromRoute] Guid rightOwner, [FromRoute]Guid roleId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
-            {
-                return StatusCode(404, "Feature not available");
-            }
-            
-            try
-            {
-                return await _roleService.RoleDelegationCheck(rightOwner, roleId);
-            }
-            catch (HttpStatusException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
-
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
-        }
-
-        /// <summary>
         ///     Get roles for user
         /// </summary>
         /// <returns></returns>
@@ -126,7 +91,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return StatusCode(404, "Feature not available");
             }
-            
+
             try
             {
                 var httpContext = _httpContextAccessor.HttpContext;
@@ -153,12 +118,12 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             if (!_featureFlags.DisplayLimitedPreviewLaunch)
             {
                 return StatusCode(404, "Feature not available");
             }
-            
+
             try
             {
                 var response = await _roleService.CreateRoleDelegation(from, to, roleId);
@@ -184,12 +149,12 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             if (!_featureFlags.DisplayLimitedPreviewLaunch)
             {
                 return StatusCode(404, "Feature not available");
             }
-            
+
             try
             {
                 var response = await _roleService.DeleteRoleDelegation(assignmentId);

@@ -3,8 +3,8 @@ import { List, Button, Icon, DsAlert, DsHeading, DsParagraph } from '@altinn/alt
 import { useTranslation } from 'react-i18next';
 import { PackageIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
+import { useAccessPackageDelegationCheck } from '../../DelegationCheck/AccessPackageDelegationCheckContext';
 
-import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
@@ -35,6 +35,7 @@ export interface PackageInfoProps {
 export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
+  const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
   const {
     onDelegate,
@@ -80,36 +81,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
       )) ||
     false;
 
-  const [delegationCheckError, setDelegationCheckError] = useState<ActionError | null>(null);
-
-  const handleDelegationCheckFailure = (error: ActionError) => {
-    setDelegationCheckError(error);
-  };
-
-  const shouldShowDelegationCheck =
-    availableActions.includes(DelegationAction.DELEGATE) && !displayLimitedPreviewLaunch;
-
-  // memorize this to prevent unnecessary re-renders
-  const accessPackageIds = React.useMemo(() => {
-    return accessPackage ? [accessPackage.id] : [];
-  }, [accessPackage]);
-
-  React.useEffect(() => {
-    setDelegationCheckError(null);
-  }, [accessPackage]);
-
-  const { canDelegate, isLoading } = useAccessPackageDelegationCheck(
-    accessPackageIds,
-    shouldShowDelegationCheck,
-    handleDelegationCheckFailure,
-  );
-
-  const showMissingRightsMessage =
-    shouldShowDelegationCheck &&
-    !delegationCheckError &&
-    !canDelegate(accessPackage.id) &&
-    !isLoading;
-
   const resourceListItems = useResourceList(accessPackage.resources);
   const deletableStatus = React.useMemo(
     () =>
@@ -124,6 +95,12 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     delegationAccess.permissions.every((p) =>
       isInherited(p, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
     );
+
+  const canDelegate = canDelegatePackage(accessPackage.id);
+  const showMissingRightsMessage =
+    !userHasPackage &&
+    canDelegate?.result === false &&
+    availableActions.includes(DelegationAction.DELEGATE);
 
   return (
     <div className={classes.container}>
@@ -148,23 +125,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
         />
       ) : (
         <>
-          {!!delegationCheckError && (
-            <DsAlert
-              data-color='danger'
-              data-size='sm'
-            >
-              <DsHeading level={2}>
-                {t('access_packages.delegation_check.delegation_check_error_heading')}
-              </DsHeading>
-              <TechnicalErrorParagraphs
-                message={t(
-                  'access_packages.delegation_check.delegation_check_error_message_singular',
-                )}
-                status={delegationCheckError.httpStatus}
-                time={delegationCheckError.timestamp}
-              />
-            </DsAlert>
-          )}
           {!!actionError && (
             <DsAlert
               data-color='danger'
@@ -221,7 +181,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               })}
             </DsHeading>
             <div className={classes.service_list}>
-              <List spacing='0'>{resourceListItems}</List>
+              <List>{resourceListItems}</List>
             </div>
           </div>
 
@@ -245,7 +205,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             ) : null}
             {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
               <Button
-                disabled={!canDelegate(accessPackage.id) || accessPackage.isAssignable === false}
+                disabled={accessPackage.isAssignable === false || canDelegate?.result === false}
                 onClick={() => onDelegate(accessPackage)}
               >
                 {t('common.give_poa')}

@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Text.Json;
-using System.Linq;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -135,6 +134,29 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
         }
 
+        /// <inheritdoc />
+        public async Task<PaginatedResult<DelegationCheck>> AccessPackageDelegationCheck(Guid party)
+        {
+            // Special GUID triggers backend style error for tests
+            if (party == Guid.Parse("00000000-0000-0000-0000-00000000DEAD"))
+            {
+                throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", HttpStatusCode.InternalServerError, string.Empty);
+            }
+            string dataPath = Path.Combine(dataFolder, "AccessPackage", "DelegationCheck", "DelegationCheck.json");
+            try
+            {
+                var mock = Util.GetMockData<PaginatedResult<DelegationCheck>>(dataPath);
+                return await Task.FromResult(mock);
+            }
+            catch
+            {
+                // Fallback to in-memory defaults if file not found
+                var fallback = PaginatedResult.Create(Array.Empty<DelegationCheck>(), null);
+                return await Task.FromResult(fallback);
+            }
+        }
+        
+        /// <inheritdoc />
         public Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
         {
             // Trigger internal server error

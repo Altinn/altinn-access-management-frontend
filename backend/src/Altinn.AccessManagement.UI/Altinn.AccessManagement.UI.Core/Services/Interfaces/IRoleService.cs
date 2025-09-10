@@ -17,14 +17,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
                 Task<List<RoleAreaFE>> GetSearch(string languageCode, string searchString);
 
                 /// <summary>
-                /// Check if a user has the right to delegate a role
-                /// </summary>
-                /// <param name="rightOwner">the right owner to check</param>
-                /// <param name="roleId">the role to check</param>
-                /// <returns></returns>
-                Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId);
-
-                /// <summary>
                 ///     Gets the roles for a user
                 /// </summary>
                 /// <param name="languageCode">languageCode.</param>

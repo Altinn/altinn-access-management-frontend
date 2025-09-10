@@ -1,12 +1,12 @@
 import React from 'react';
-import type { MenuItemProps, MenuItemSize, MenuItemTheme } from '@altinn/altinn-components';
+import type { MenuItemProps, MenuItemSize } from '@altinn/altinn-components';
 import {
-  InboxIcon,
   PersonGroupIcon,
   TenancyIcon,
   PadlockUnlockedIcon,
   InformationSquareIcon,
   LeaveIcon,
+  LinkIcon,
 } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
@@ -81,7 +81,7 @@ export const SidebarItems = (
     size: 'md' as MenuItemSize,
     title: t('sidebar.reportees'),
     selected: pathname?.includes(`/${amUIPath.Reportees}`),
-    icon: InboxIcon,
+    icon: LinkIcon,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     as: (props: any) => (
       <Link
@@ -162,7 +162,7 @@ export const SidebarItems = (
 
   items.push(systemUser);
 
-  if (displayConfettiPackage) {
+  if (displayConfettiPackage && !isSmall) {
     shortcuts.map((shortcutItem) => items.push(shortcutItem));
   }
 

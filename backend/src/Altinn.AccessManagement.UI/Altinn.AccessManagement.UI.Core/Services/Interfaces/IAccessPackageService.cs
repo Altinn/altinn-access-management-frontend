@@ -68,10 +68,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<HttpResponseMessage> CreateDelegation(Guid party, Guid to, Guid from, string packageId);
 
         /// <summary>
-        ///    Checks if the user can delegate access packages on behalf of the specified reportee
+        ///    Retrieves delegation capability (can delegate or not) for all access packages on behalf of the specified party
         /// </summary>
-        /// <param name="delegationCheckRequest">The request containing the packages to check and the reportee to check on behalf of</param>
-        /// <returns>The response containing whether or not the user can delegate the packages</returns>
-        Task<List<AccessPackageDelegationCheckResponse>> DelegationCheck(DelegationCheckRequest delegationCheckRequest);
+        /// <param name="party">The party to check delegation for (reportee)</param>
+        /// <returns>List with delegation check results for all packages</returns>
+        Task<List<DelegationCheck>> DelegationCheck(Guid party);
     }
 }
