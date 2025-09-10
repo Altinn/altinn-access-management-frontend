@@ -1,18 +1,20 @@
 import React from 'react';
-import { List, ResourceListItem, DsSearch, DsParagraph } from '@altinn/altinn-components';
+import { List, ResourceListItem, DsSearch, DsParagraph, Button } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { useGetOrgDataQuery } from '@/rtk/features/altinnCdnApi';
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import { ResourceDetails } from './ResourceDetails';
 import classes from './ResourceList.module.css';
 import { SkeletonResourceList } from './SkeletonResourceList';
+import { useFilteredResources } from './useFilteredResources';
 
 interface PackageResourceListProps {
   resources: PackageResource[];
   noResourcesText?: string;
+  loading?: boolean;
 }
 
-export const ResourceList = ({ resources, noResourcesText }: PackageResourceListProps) => {
+export const ResourceList = ({ resources, noResourcesText, loading }: PackageResourceListProps) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
   const [selected, setSelected] = React.useState<PackageResource | null>(null);
@@ -24,21 +26,14 @@ export const ResourceList = ({ resources, noResourcesText }: PackageResourceList
 
   const onClose = () => setSelected(null);
 
-  const normalizedSearch = search.trim().toLowerCase();
-
-  const filtered = React.useMemo(() => {
-    if (!normalizedSearch) return resources;
-    return resources.filter((r) => {
-      const title = (r.title || '').toLowerCase();
-      const serviceOwnerName = (r.provider?.name || r.resourceOwnerName || '').toLowerCase();
-      const description = (r.description || '').toLowerCase();
-      return (
-        title.includes(normalizedSearch) ||
-        serviceOwnerName.includes(normalizedSearch) ||
-        description.includes(normalizedSearch)
-      );
-    });
-  }, [resources, normalizedSearch]);
+  const {
+    resources: filtered,
+    hasNextPage,
+    goNextPage,
+  } = useFilteredResources({
+    resources,
+    searchString: search,
+  });
 
   const getProviderLogoUrl = (orgCode: string | null): string | undefined => {
     if (!orgData || orgLoading) return undefined;
@@ -58,7 +53,7 @@ export const ResourceList = ({ resources, noResourcesText }: PackageResourceList
         />
         {search && <DsSearch.Clear onClick={() => setSearch('')} />}
       </DsSearch>
-      {orgLoading ? (
+      {orgLoading || loading ? (
         <SkeletonResourceList />
       ) : (
         <>
@@ -96,6 +91,19 @@ export const ResourceList = ({ resources, noResourcesText }: PackageResourceList
                 );
               })}
             </List>
+          )}
+          {hasNextPage && (
+            <div className={classes.showMoreButtonContainer}>
+              <Button
+                className={classes.showMoreButton}
+                onClick={goNextPage}
+                disabled={!hasNextPage}
+                variant='outline'
+                size='md'
+              >
+                {t('common.show_more')}
+              </Button>
+            </div>
           )}
         </>
       )}

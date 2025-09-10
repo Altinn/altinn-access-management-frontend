@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 
@@ -8,6 +8,8 @@ interface UseFilteredResourcesProps {
 }
 
 export const useFilteredResources = ({ resources, searchString }: UseFilteredResourcesProps) => {
+  const PAGE_SIZE = 10;
+  const [currentPage, setCurrentPage] = useState(1);
   const normalizedSearch = searchString.trim().toLowerCase();
 
   const filteredResources = useMemo(() => {
@@ -25,5 +27,26 @@ export const useFilteredResources = ({ resources, searchString }: UseFilteredRes
     });
   }, [resources, normalizedSearch]);
 
-  return { resources: filteredResources };
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [resources, searchString]);
+
+  const paginatedResources = useMemo(() => {
+    return filteredResources.slice(0, PAGE_SIZE * currentPage);
+  }, [filteredResources, currentPage]);
+
+  const hasNextPage = filteredResources.length > PAGE_SIZE * currentPage;
+
+  const goNextPage = () => {
+    if (hasNextPage) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  return {
+    resources: paginatedResources,
+    hasNextPage,
+    goNextPage,
+    totalFilteredCount: filteredResources.length,
+  };
 };
