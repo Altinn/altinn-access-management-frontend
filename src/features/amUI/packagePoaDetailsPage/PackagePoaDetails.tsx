@@ -163,7 +163,10 @@ export const PackagePoaDetails = () => {
           className={pageClasses.tabContent}
           value='services'
         >
-          <ResourceList resources={accessPackage?.resources ?? []} />
+          <ResourceList
+            resources={accessPackage?.resources ?? []}
+            noResourcesText={t('package_poa_details_page.services_tab.no_resources')}
+          />
         </DsTabs.Panel>
       </DsTabs>
     </>
