@@ -24,7 +24,6 @@ export const SidebarItems = (
   isSmall: boolean = false,
   pathname: string = '',
   isAdmin: boolean | undefined,
-  shouldDisplaySystemuser: boolean,
   accountName: string,
   accountType: 'company' | 'person',
 ) => {
@@ -161,9 +160,7 @@ export const SidebarItems = (
     }
   }
 
-  if (shouldDisplaySystemuser) {
-    items.push(systemUser);
-  }
+  items.push(systemUser);
 
   if (displayConfettiPackage && !isSmall) {
     shortcuts.map((shortcutItem) => items.push(shortcutItem));
