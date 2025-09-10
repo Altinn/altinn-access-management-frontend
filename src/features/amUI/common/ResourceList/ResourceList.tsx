@@ -101,7 +101,6 @@ export const ResourceList = ({
               <Button
                 className={classes.showMoreButton}
                 onClick={goNextPage}
-                disabled={!hasNextPage}
                 variant='outline'
                 size='md'
               >
