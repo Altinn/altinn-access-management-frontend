@@ -395,27 +395,16 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         [HttpGet]
         [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_CLIENT_ADMINISTRATION_READ_WITH_PASS_THROUGH)]
-        [Route("systemuserreportee/{partyId}")]
-        public async Task<ActionResult<SystemUserReporteeFE>> GetSystemUserReportee([FromRoute] int partyId, [FromQuery] string partyUuid)
+        [Route("isClientAdmin")]
+        public ActionResult<bool> IsClientAdmin()
         {
-            SystemUserReporteeFE systemUserReportee = new SystemUserReporteeFE();
-            _httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj);
-            systemUserReportee.HasClientAdministrationPermission = hasPermissionObj is bool hasPermission && hasPermission;
-
-            try
+            if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) &&
+                hasPermissionObj is bool hasPermission)
             {
-                AuthorizedParty party = await _userService.GetPartyFromReporteeListIfExists(partyId);
-                systemUserReportee.Party = party;
-                systemUserReportee.HasCreateSystemuserPermission =
-                    party.AuthorizedRoles.Any((role) => role == "DAGL" || role == "HADM" || role == "ADMAI") &&
-                    party.Type == AuthorizedPartyType.Organization;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "GetReportee failed to fetch reportee information");
+                return Ok(hasPermission);
             }
 
-            return systemUserReportee;
+            return Ok(false);
         }
     }
 }

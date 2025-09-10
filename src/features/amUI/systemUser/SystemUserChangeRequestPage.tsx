@@ -39,12 +39,9 @@ export const SystemUserChangeRequestPage = () => {
     data: reporteeData,
     isLoading: isLoadingReportee,
     error: loadReporteeError,
-  } = useGetSystemUserReporteeQuery(
-    { partyId: changeRequest?.partyId || '', partyUuid: changeRequest?.partyUuid || '' },
-    {
-      skip: !changeRequest?.partyId,
-    },
-  );
+  } = useGetSystemUserReporteeQuery(changeRequest?.partyId ?? '', {
+    skip: !changeRequest?.partyId,
+  });
 
   const [
     postAcceptChangeRequest,
@@ -87,7 +84,7 @@ export const SystemUserChangeRequestPage = () => {
   return (
     <RequestPageBase
       system={changeRequest?.system}
-      reporteeName={reporteeData?.party.name}
+      reporteeName={reporteeData?.name}
       heading={t('systemuser_change_request.banner_title')}
     >
       {!changeRequestId && (
@@ -130,7 +127,7 @@ export const SystemUserChangeRequestPage = () => {
               i18nKey={'systemuser_request.system_description'}
               values={{
                 systemName: changeRequest.system.name,
-                partyName: reporteeData?.party.name,
+                partyName: reporteeData?.name,
               }}
             ></Trans>
           </DsParagraph>
@@ -163,7 +160,7 @@ export const SystemUserChangeRequestPage = () => {
                 {t('systemuser_change_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck canCreateSystemUser={reporteeData.hasCreateSystemuserPermission}>
+            <CreateSystemUserCheck reporteeData={reporteeData}>
               <ButtonRow>
                 <DsButton
                   variant='primary'

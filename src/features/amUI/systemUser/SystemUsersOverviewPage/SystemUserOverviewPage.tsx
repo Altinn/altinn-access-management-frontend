@@ -16,6 +16,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import {
   useGetAgentSystemUsersQuery,
+  useGetIsClientAdminQuery,
   useGetSystemUserReporteeQuery,
   useGetSystemUsersQuery,
 } from '@/rtk/features/systemUserApi';
@@ -26,6 +27,7 @@ import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 import type { SystemUser } from '../types';
 
 import classes from './SystemUserOverviewPage.module.css';
+import { canCreateSystemUser } from '../permissionUtils';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
@@ -34,7 +36,8 @@ export const SystemUserOverviewPage = () => {
   const partyId = getCookie('AltinnPartyId');
   const partyUuid = getCookie('AltinnPartyUuid');
 
-  const { data: reporteeData } = useGetSystemUserReporteeQuery({ partyId, partyUuid });
+  const { data: isClientAdmin } = useGetIsClientAdminQuery(partyUuid);
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
 
   const {
     data: systemUsers,
@@ -67,12 +70,11 @@ export const SystemUserOverviewPage = () => {
           {isLoadingSystemUsers && isLoadingAgentSystemUsers && (
             <DsSpinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
           )}
-          {reporteeData?.hasClientAdministrationPermission === false &&
-            reporteeData?.hasCreateSystemuserPermission === false && (
-              <DsAlert data-color='warning'>
-                {t('systemuser_overviewpage.no_permissions_warning')}
-              </DsAlert>
-            )}
+          {isClientAdmin === false && canCreateSystemUser(reporteeData) === false && (
+            <DsAlert data-color='warning'>
+              {t('systemuser_overviewpage.no_permissions_warning')}
+            </DsAlert>
+          )}
           {systemUsers && systemUsers.length > 0 && (
             <>
               <div className={classes.listHeader}>
@@ -83,12 +85,12 @@ export const SystemUserOverviewPage = () => {
                 >
                   {t('systemuser_overviewpage.existing_system_users_title')}
                 </DsHeading>
-                {reporteeData?.hasCreateSystemuserPermission && <CreateSystemUserButton />}
+                {canCreateSystemUser(reporteeData) && <CreateSystemUserButton />}
               </div>
               <SystemUserList systemUsers={systemUsers} />
             </>
           )}
-          {systemUsers?.length === 0 && reporteeData?.hasCreateSystemuserPermission && (
+          {systemUsers?.length === 0 && canCreateSystemUser(reporteeData) && (
             <CreateSystemUserButton />
           )}
           {isLoadSystemUsersError && (

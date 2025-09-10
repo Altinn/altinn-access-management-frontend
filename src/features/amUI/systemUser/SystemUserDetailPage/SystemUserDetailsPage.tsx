@@ -20,12 +20,7 @@ import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeade
 import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserDetailsPage.module.css';
-
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
-import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import { RightsList } from '../components/RightsList/RightsList';
-
-import classes from './SystemUserDetailsPage.module.css';
+import { canCreateSystemUser } from '../permissionUtils';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
@@ -35,7 +30,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   const partyId = getCookie('AltinnPartyId');
   const partyUuid = getCookie('AltinnPartyUuid');
 
-  const { data: reporteeData } = useGetSystemUserReporteeQuery({ partyId, partyUuid });
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
 
   const {
     data: systemUser,
@@ -64,7 +59,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
         <PageContainer
           onNavigateBack={handleNavigateBack}
           pageActions={
-            reporteeData?.hasCreateSystemuserPermission &&
+            canCreateSystemUser(reporteeData) &&
             systemUser && (
               <DeleteSystemUserPopover
                 integrationTitle={systemUser?.integrationTitle ?? ''}
@@ -87,7 +82,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
             <div className={classes.systemUserDetails}>
               <SystemUserHeader
                 title={systemUser.integrationTitle}
-                subTitle={reporteeData?.party.name}
+                subTitle={reporteeData?.name}
               />
               <RightsList
                 resources={systemUser.resources}

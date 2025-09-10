@@ -36,7 +36,7 @@ export const SelectRegisteredSystem = ({
   const navigate = useNavigate();
   const partyId = getCookie('AltinnPartyId');
   const partyUuid = getCookie('AltinnPartyUuid');
-  const { data: reporteeData } = useGetSystemUserReporteeQuery({ partyId, partyUuid });
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
 
   const {
     data: registeredSystems,
@@ -60,7 +60,7 @@ export const SelectRegisteredSystem = ({
           >
             {t('systemuser_creationpage.sub_title')}
           </DsHeading>
-          <CreateSystemUserCheck canCreateSystemUser={reporteeData.hasCreateSystemuserPermission}>
+          <CreateSystemUserCheck reporteeData={reporteeData}>
             <DsParagraph
               data-size='sm'
               className={classes.systemDescription}

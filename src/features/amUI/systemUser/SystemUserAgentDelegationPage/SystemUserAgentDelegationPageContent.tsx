@@ -16,6 +16,7 @@ import { PageContainer } from '@/features/amUI/common/PageContainer/PageContaine
 import {
   useAssignCustomerMutation,
   useDeleteAgentSystemuserMutation,
+  useGetIsClientAdminQuery,
   useGetSystemUserReporteeQuery,
   useRemoveCustomerMutation,
 } from '@/rtk/features/systemUserApi';
@@ -28,6 +29,7 @@ import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
+import { canCreateSystemUser } from '../permissionUtils';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -63,7 +65,8 @@ export const SystemUserAgentDelegationPageContent = ({
   );
   const { openSnackbar, dismissSnackbar } = useSnackbar();
 
-  const { data: reporteeData } = useGetSystemUserReporteeQuery({ partyId, partyUuid });
+  const { data: isClientAdmin } = useGetIsClientAdminQuery(partyUuid);
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
 
   const [deleteAgentSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
     useDeleteAgentSystemuserMutation();
@@ -157,7 +160,7 @@ export const SystemUserAgentDelegationPageContent = ({
       onNavigateBack={handleNavigateBack}
       pageActions={
         systemUser &&
-        reporteeData?.hasCreateSystemuserPermission && (
+        canCreateSystemUser(reporteeData) && (
           <DeleteSystemUserPopover
             integrationTitle={systemUser.integrationTitle}
             isDeleteError={isDeleteError}
@@ -203,7 +206,7 @@ export const SystemUserAgentDelegationPageContent = ({
         <div className={classes.flexContainer}>
           <SystemUserHeader
             title={systemUser.integrationTitle}
-            subTitle={reporteeData?.party.name}
+            subTitle={reporteeData?.name}
           />
           <DsHeading
             level={2}
@@ -230,7 +233,7 @@ export const SystemUserAgentDelegationPageContent = ({
           {assignedCustomers.length === 0 ? (
             <>
               <DsParagraph>{t('systemuser_agent_delegation.no_assigned_customers')}</DsParagraph>
-              {reporteeData?.hasClientAdministrationPermission && (
+              {isClientAdmin && (
                 <div>
                   <DsButton
                     variant='secondary'
@@ -244,7 +247,7 @@ export const SystemUserAgentDelegationPageContent = ({
             </>
           ) : (
             <CustomerList list={assignedCustomers}>
-              {reporteeData?.hasClientAdministrationPermission && (
+              {isClientAdmin && (
                 <DsButton
                   variant='secondary'
                   onClick={enableAddCustomers}

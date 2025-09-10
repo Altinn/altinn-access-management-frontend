@@ -39,12 +39,9 @@ export const SystemUserRequestPage = () => {
     data: reporteeData,
     isLoading: isLoadingReportee,
     error: loadReporteeError,
-  } = useGetSystemUserReporteeQuery(
-    { partyId: request?.partyId || '', partyUuid: request?.partyUuid || '' },
-    {
-      skip: !request?.partyId,
-    },
-  );
+  } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
+    skip: !request?.partyId,
+  });
 
   const [
     postAcceptCreationRequest,
@@ -87,7 +84,7 @@ export const SystemUserRequestPage = () => {
   return (
     <RequestPageBase
       system={request?.system}
-      reporteeName={reporteeData?.party.name}
+      reporteeName={reporteeData?.name}
       heading={t('systemuser_request.banner_title')}
     >
       {!requestId && (
@@ -130,7 +127,7 @@ export const SystemUserRequestPage = () => {
               i18nKey={'systemuser_request.system_description'}
               values={{
                 systemName: request.system.name,
-                partyName: reporteeData?.party.name,
+                partyName: reporteeData?.name,
               }}
             ></Trans>
           </DsParagraph>
@@ -163,7 +160,7 @@ export const SystemUserRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck canCreateSystemUser={reporteeData.hasCreateSystemuserPermission}>
+            <CreateSystemUserCheck reporteeData={reporteeData}>
               <ButtonRow>
                 <DsButton
                   variant='primary'

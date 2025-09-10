@@ -3,20 +3,22 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert } from '@altinn/altinn-components';
 
 import classes from './CanCreateSystemUser.module.css';
+import { ReporteeInfo } from '@/rtk/features/userInfoApi';
+import { canCreateSystemUser } from '../../permissionUtils';
 
 interface CreateSystemUserCheckProps {
-  canCreateSystemUser?: boolean;
+  reporteeData: ReporteeInfo | undefined;
   children: React.ReactNode;
 }
 export const CreateSystemUserCheck = ({
-  canCreateSystemUser,
+  reporteeData,
   children,
 }: CreateSystemUserCheckProps): React.ReactNode => {
   const { t } = useTranslation();
 
   return (
     <>
-      {!canCreateSystemUser && (
+      {reporteeData && canCreateSystemUser(reporteeData) === false && (
         <DsAlert
           data-color='warning'
           className={classes.noRightsAlert}
@@ -27,7 +29,7 @@ export const CreateSystemUserCheck = ({
           {t('systemuser_overviewpage.no_key_role2')}
         </DsAlert>
       )}
-      {canCreateSystemUser && children}
+      {reporteeData && canCreateSystemUser(reporteeData) && children}
     </>
   );
 };

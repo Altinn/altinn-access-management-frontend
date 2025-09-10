@@ -30,7 +30,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
   const navigate = useNavigate();
   const partyId = getCookie('AltinnPartyId');
   const partyUuid = getCookie('AltinnPartyUuid');
-  const { data: reporteeData } = useGetSystemUserReporteeQuery({ partyId, partyUuid });
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
 
   const {
     data: rights,
@@ -76,7 +76,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
                 : 'systemuser_includedrightspage.header',
               {
                 integrationTitle: selectedSystem.name,
-                companyName: reporteeData?.party.name,
+                companyName: reporteeData?.name,
               },
             )}
           />
