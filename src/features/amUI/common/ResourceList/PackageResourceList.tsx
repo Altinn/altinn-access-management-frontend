@@ -28,8 +28,9 @@ export const PackageResourceList = ({ resources }: PackageResourceListProps) => 
   const filtered = React.useMemo(() => {
     if (!normalizedSearch) return resources;
     return resources.filter((r) => {
-      const title = (r.title || r.name || '').toLowerCase();
-      return title.includes(normalizedSearch);
+      const title = (r.title || '').toLowerCase();
+      const name = (r.name || '').toLowerCase();
+      return title.includes(normalizedSearch) || name.includes(normalizedSearch);
     });
   }, [resources, normalizedSearch]);
 

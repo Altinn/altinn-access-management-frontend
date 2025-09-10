@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, DsHeading, DsParagraph, DsDialog, DsButton } from '@altinn/altinn-components';
+import { Avatar, DsHeading, DsParagraph, DsDialog } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import classes from './PackageResourceDetails.module.css';
@@ -47,7 +47,7 @@ export const PackageResourceDetails = ({
               />
               <div>
                 <DsHeading
-                  level={1}
+                  level={2}
                   data-size='xs'
                 >
                   {resource.title || resource.name}

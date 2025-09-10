@@ -2,29 +2,17 @@ import React from 'react';
 import { List, ResourceListItem, ResourceListItemProps } from '@altinn/altinn-components';
 
 export const SkeletonResourceList = ({ count = 5 }: { count?: number }) => {
-  const resourceSkeletons = [
-    {
-      id: '1',
-      ownerName: 'xxxxxxxxxxxxxxxxxxxx',
-      resourceName: 'xxxxxxxxxxxxxxxxxxxx',
-      ownerLogoUrl: '',
-      badge: 'xxxxxxxxxxxxxxxxxxxx',
-    },
-    {
-      id: '2',
-      ownerName: 'xxxxxxxxxxxxxxxxxxxx',
-      resourceName: 'xxxxxxxxxxxxxxxxxxxx',
-      ownerLogoUrl: '',
-      badge: undefined,
-    },
-    {
-      id: '3',
-      ownerName: 'xxxxxxxxxxxxxxxxxxxx',
-      resourceName: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-      ownerLogoUrl: 'xxxxxxxxxxxxxxxxxxxx',
-      badge: undefined,
-    },
-  ] as ResourceListItemProps[];
+  const resourceSkeletons: ResourceListItemProps[] = React.useMemo(
+    () =>
+      Array.from({ length: count }, (_, i) => ({
+        id: String(i + 1),
+        ownerName: 'xxxxxxxxxxxxxxxxxxxx',
+        resourceName: 'xxxxxxxxxxxxxxxxxxxx',
+        ownerLogoUrl: '',
+        badge: undefined,
+      })),
+    [count],
+  );
 
   const items = resourceSkeletons.map((item) => (
     <ResourceListItem
