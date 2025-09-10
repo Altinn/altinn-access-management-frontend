@@ -30,7 +30,6 @@ export const DeleteSystemUserPopover = ({
       <DsPopover.TriggerContext>
         <DsPopover.Trigger
           variant='tertiary'
-          data-color='danger'
           onClick={() => setIsPopoverOpen(true)}
         >
           <TrashIcon aria-hidden />
