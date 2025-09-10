@@ -1,15 +1,13 @@
 import React from 'react';
 import { List, ResourceListItem, ResourceListItemProps } from '@altinn/altinn-components';
 
-export const SkeletonResourceList = ({ count = 5 }: { count?: number }) => {
+export const SkeletonResourceList = ({ count = 3 }: { count?: number }) => {
   const resourceSkeletons: ResourceListItemProps[] = React.useMemo(
     () =>
       Array.from({ length: count }, (_, i) => ({
         id: String(i + 1),
-        ownerName: 'xxxxxxxxxxxxxxxxxxxx',
+        ownerName: 'xxxxxxxxx xxxxxxxxxxx',
         resourceName: 'xxxxxxxxxxxxxxxxxxxx',
-        ownerLogoUrl: '',
-        badge: undefined,
       })),
     [count],
   );
@@ -21,7 +19,6 @@ export const SkeletonResourceList = ({ count = 5 }: { count?: number }) => {
       as='div'
       interactive={false}
       shadow='none'
-      ownerLogoUrlAlt=''
       {...item}
     />
   ));

@@ -16,11 +16,11 @@ export const useFilteredResources = ({ resources, searchString }: UseFilteredRes
     const list = resources ?? [];
     if (!normalizedSearch) return list;
     return list.filter((r) => {
-      const title = (r.title || '').toLowerCase();
+      const nameOrTitle = (r.name || r.title || '').toLowerCase();
       const ownerName = (r.provider?.name || r.resourceOwnerName || '').toLowerCase();
       const description = (r.description || '').toLowerCase();
       return (
-        title.includes(normalizedSearch) ||
+        nameOrTitle.includes(normalizedSearch) ||
         ownerName.includes(normalizedSearch) ||
         description.includes(normalizedSearch)
       );
