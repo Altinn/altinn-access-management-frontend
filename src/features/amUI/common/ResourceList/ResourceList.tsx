@@ -3,15 +3,16 @@ import { List, ResourceListItem, DsSearch, DsParagraph } from '@altinn/altinn-co
 import { useTranslation } from 'react-i18next';
 import { useGetOrgDataQuery } from '@/rtk/features/altinnCdnApi';
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
-import { PackageResourceDetails } from './PackageResourceDetails';
-import classes from './PackageResourceList.module.css';
+import { ResourceDetails } from './ResourceDetails';
+import classes from './ResourceList.module.css';
 import { SkeletonResourceList } from './SkeletonResourceList';
 
 interface PackageResourceListProps {
   resources: PackageResource[];
+  noResourcesText?: string;
 }
 
-export const PackageResourceList = ({ resources }: PackageResourceListProps) => {
+export const ResourceList = ({ resources, noResourcesText }: PackageResourceListProps) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
   const [selected, setSelected] = React.useState<PackageResource | null>(null);
@@ -29,8 +30,13 @@ export const PackageResourceList = ({ resources }: PackageResourceListProps) => 
     if (!normalizedSearch) return resources;
     return resources.filter((r) => {
       const title = (r.title || '').toLowerCase();
-      const name = (r.name || '').toLowerCase();
-      return title.includes(normalizedSearch) || name.includes(normalizedSearch);
+      const serviceOwnerName = (r.provider?.name || r.resourceOwnerName || '').toLowerCase();
+      const description = (r.description || '').toLowerCase();
+      return (
+        title.includes(normalizedSearch) ||
+        serviceOwnerName.includes(normalizedSearch) ||
+        description.includes(normalizedSearch)
+      );
     });
   }, [resources, normalizedSearch]);
 
@@ -57,7 +63,9 @@ export const PackageResourceList = ({ resources }: PackageResourceListProps) => 
       ) : (
         <>
           {resources.length === 0 && (
-            <DsParagraph data-size='md'>{t('package_resource_list.no_resources')}</DsParagraph>
+            <DsParagraph data-size='md'>
+              {noResourcesText || t('package_resource_list.no_resources')}
+            </DsParagraph>
           )}
           {resources.length > 0 && filtered.length === 0 && (
             <DsParagraph data-size='md'>
@@ -91,7 +99,7 @@ export const PackageResourceList = ({ resources }: PackageResourceListProps) => 
           )}
         </>
       )}
-      <PackageResourceDetails
+      <ResourceDetails
         resource={selected}
         onClose={onClose}
         providerLogoUrl={getProviderLogoUrl(

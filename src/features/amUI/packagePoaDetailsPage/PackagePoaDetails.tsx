@@ -11,7 +11,7 @@ import { UserList } from '../common/UserList/UserList';
 import { debounce } from '@/resources/utils/debounce';
 import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
 import { amUIPath } from '@/routes/paths/amUIPath';
-import { PackageResourceList } from '../common/ResourceList/PackageResourceList';
+import { ResourceList } from '../common/ResourceList/ResourceList';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -163,7 +163,7 @@ export const PackagePoaDetails = () => {
           className={pageClasses.tabContent}
           value='services'
         >
-          <PackageResourceList resources={accessPackage?.resources ?? []} />
+          <ResourceList resources={accessPackage?.resources ?? []} />
         </DsTabs.Panel>
       </DsTabs>
     </>

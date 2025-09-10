@@ -1,22 +1,16 @@
 import React from 'react';
 import { Avatar, DsHeading, DsParagraph, DsDialog } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
-import classes from './PackageResourceDetails.module.css';
+import classes from './ResourceDetails.module.css';
 
-interface PackageResourceDetailsProps {
+interface ResourceDetailsProps {
   resource: PackageResource | null;
   onClose: () => void;
   providerLogoUrl?: string;
 }
 
-export const PackageResourceDetails = ({
-  resource,
-  onClose,
-  providerLogoUrl,
-}: PackageResourceDetailsProps) => {
+export const ResourceDetails = ({ resource, onClose, providerLogoUrl }: ResourceDetailsProps) => {
   const dialogRef = React.useRef<HTMLDialogElement>(null);
-  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (resource) {
