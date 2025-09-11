@@ -23,7 +23,6 @@ interface AccessPackageListProps {
   availableActions?: DelegationAction[];
   showAvailableToggle?: boolean;
   searchString?: string;
-  useDeleteConfirm?: boolean;
   showPermissions?: boolean;
   showPackagesCount?: boolean;
   onSelect?: (accessPackage: AccessPackage) => void;
@@ -42,7 +41,6 @@ export const AccessPackageList = ({
   availableActions,
   showAvailableToggle,
   onSelect,
-  useDeleteConfirm,
   onDelegateSuccess,
   onDelegateError,
   onRevokeSuccess,
@@ -153,7 +151,6 @@ export const AccessPackageList = ({
                   onRevoke={onRevoke}
                   onRequest={onRequest}
                   isActionLoading={isActionLoading}
-                  useDeleteConfirm={useDeleteConfirm}
                   showAvailablePackages={!minimizeAvailablePackages}
                   showAvailableToggle={showAvailableToggle}
                   showPermissions={showPermissions}

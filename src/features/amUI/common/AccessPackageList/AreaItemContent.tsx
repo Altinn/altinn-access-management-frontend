@@ -27,7 +27,6 @@ interface AreaItemContentProps {
   onRequest?: (accessPackage: AccessPackage) => void;
   isActionLoading?: boolean;
   showAvailablePackages?: boolean;
-  useDeleteConfirm?: boolean;
   showAvailableToggle?: boolean;
   showPermissions?: boolean;
   packageAs?: React.ElementType;
@@ -42,7 +41,6 @@ export const AreaItemContent = ({
   onRequest,
   isActionLoading = false,
   showAvailablePackages: showAvailablePackagesExternal = false,
-  useDeleteConfirm,
   showAvailableToggle = true,
   showPermissions = false,
   packageAs,
@@ -71,7 +69,6 @@ export const AreaItemContent = ({
         availableActions={availableActions}
         onRevoke={() => onRevoke?.(pkg)}
         pkg={pkg}
-        useDeleteConfirm={useDeleteConfirm}
         isLoading={isActionLoading}
       />
     );

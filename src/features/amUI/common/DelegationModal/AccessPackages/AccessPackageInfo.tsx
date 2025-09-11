@@ -191,6 +191,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 <Button
                   disabled={accessIsInherited || accessPackage.isAssignable === false}
                   onClick={() => onRevoke(accessPackage)}
+                  color='danger'
                 >
                   {t('common.delete_poa')}
                 </Button>

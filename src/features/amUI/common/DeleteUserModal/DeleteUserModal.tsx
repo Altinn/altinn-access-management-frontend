@@ -97,8 +97,8 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
         variant='tertiary'
         disabled={loadingPartyRepresentation}
       >
-        {t(textKeys.triggerButtonKey)}
         <TrashIcon style={{ fontSize: '1.4rem' }} />
+        {t(textKeys.triggerButtonKey)}
       </DsDialog.Trigger>
       <DsDialog
         ref={dialogRef}
