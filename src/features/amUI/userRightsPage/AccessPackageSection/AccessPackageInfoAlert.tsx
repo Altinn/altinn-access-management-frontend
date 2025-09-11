@@ -1,7 +1,18 @@
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const AccessPackageInfoAlert = () => {
+  const { i18n } = useTranslation();
+
+  // Resolve locale-specific link target
+  const lang = i18n.resolvedLanguage || i18n.language;
+  const linkMap: Record<string, string> = {
+    en: 'https://info.altinn.no/en/help/profile/access-packages/',
+    no_nb: 'https://info.altinn.no/hjelp/profil/tilgangspakker/',
+    no_nn: 'https://info.altinn.no/nn/hjelp/profil/tilgangspakker/',
+  };
+  const href = linkMap[lang] ?? linkMap.no_nb;
+
   return (
     <DsAlert
       data-color='info'
@@ -13,7 +24,7 @@ export const AccessPackageInfoAlert = () => {
           components={{
             a: (
               <a
-                href='https://info.altinn.no/hjelp/profil/tilgangspakker/'
+                href={href}
                 target='_blank'
                 rel='noopener noreferrer'
               />
