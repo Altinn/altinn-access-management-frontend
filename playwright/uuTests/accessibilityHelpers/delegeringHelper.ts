@@ -1,11 +1,11 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 export class runAccessibilityTests {
   static brukerflateEnkelttjenesteDelegeringUU: any;
   constructor(public page: Page) {}
 
-  async brukerflateEnkelttjenesteDelegering(expect: any) {
+  async brukerflateEnkelttjenesteDelegering() {
     await this.page.goto(process.env.BRUKER_FLATE_URL as string);
 
     //run accessibility tests test on page
