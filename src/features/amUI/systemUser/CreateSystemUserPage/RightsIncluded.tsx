@@ -29,7 +29,6 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
   const { t } = useTranslation();
   const navigate = useNavigate();
   const partyId = getCookie('AltinnPartyId');
-  const partyUuid = getCookie('AltinnPartyUuid');
   const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
 
   const {
