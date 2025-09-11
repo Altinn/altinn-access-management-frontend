@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, ResourceListItem, DsSearch, DsParagraph, Button } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { useGetOrgDataQuery } from '@/rtk/features/altinnCdnApi';
+import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import { ResourceDetails } from './ResourceDetails';
 import classes from './ResourceList.module.css';
@@ -22,7 +22,7 @@ export const ResourceList = ({
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
   const [selected, setSelected] = React.useState<PackageResource | null>(null);
-  const { data: orgData, isLoading: orgLoading } = useGetOrgDataQuery();
+  const { getProviderLogoUrl, isLoading: orgLoading } = useProviderLogoUrl();
 
   const onSelect = (res: PackageResource) => {
     setSelected(res);
@@ -33,17 +33,11 @@ export const ResourceList = ({
   const {
     resources: filtered,
     hasNextPage,
-    goNextPage,
+    loadNextPage,
   } = useFilteredResources({
     resources,
     searchString: search,
   });
-
-  const getProviderLogoUrl = (orgCode: string | null): string | undefined => {
-    if (!orgData || orgLoading) return undefined;
-    const org = orgCode ? orgData[orgCode] : undefined;
-    return org?.emblem ?? org?.logo ?? undefined;
-  };
 
   return (
     <div className={classes.container}>
@@ -100,7 +94,7 @@ export const ResourceList = ({
             <div className={classes.showMoreButtonContainer}>
               <Button
                 className={classes.showMoreButton}
-                onClick={goNextPage}
+                onClick={loadNextPage}
                 variant='outline'
                 size='md'
               >

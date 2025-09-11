@@ -37,7 +37,7 @@ export const useFilteredResources = ({ resources, searchString }: UseFilteredRes
 
   const hasNextPage = filteredResources.length > PAGE_SIZE * currentPage;
 
-  const goNextPage = () => {
+  const loadNextPage = () => {
     if (hasNextPage) {
       setCurrentPage((prev) => prev + 1);
     }
@@ -46,7 +46,7 @@ export const useFilteredResources = ({ resources, searchString }: UseFilteredRes
   return {
     resources: paginatedResources,
     hasNextPage,
-    goNextPage,
+    loadNextPage,
     totalFilteredCount: filteredResources.length,
   };
 };
