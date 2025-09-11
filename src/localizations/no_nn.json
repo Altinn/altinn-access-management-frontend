@@ -710,6 +710,14 @@
       "description": "Desse brukarane har fullmakt til alle tenestene i tilgangspakken på vegner av {{fromparty}}",
       "user_search_placeholder": "Søk etter person eller verksemd",
       "no_users": "Ingen har fullmakt til denne pakken på vegne av {{fromparty}}."
+    },
+    "services_tab": {
+      "no_resources": "Denne pakken inkluderer ingen tenester"
     }
+  },
+  "package_resource_list": {
+    "resource_search_placeholder": "Søk etter tenester",
+    "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
+    "no_resources": "Ingen tenester tilgjengelege."
   }
 }

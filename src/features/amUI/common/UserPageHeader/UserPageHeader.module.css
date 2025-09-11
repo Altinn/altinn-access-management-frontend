@@ -9,7 +9,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
+
+.secondaryAvatar {
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  z-index: 1;
+}
+
 .name {
   grid-area: name;
 }

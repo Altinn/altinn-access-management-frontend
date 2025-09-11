@@ -2,18 +2,10 @@ import * as React from 'react';
 import { ResourceListItem } from '@altinn/altinn-components';
 
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
-import { useGetOrgDataQuery } from '@/rtk/features/altinnCdnApi';
+import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 export const useResourceList = (list: PackageResource[]) => {
-  const { data: orgData, isLoading: orgDataIsLoading } = useGetOrgDataQuery();
-
-  const getProviderLogoUrl = (orgCode: string | null): string | undefined => {
-    if (!orgData || orgDataIsLoading) {
-      return undefined;
-    }
-    const org = orgCode ? orgData[orgCode] : undefined;
-    return org?.emblem ?? org?.logo ?? undefined;
-  };
+  const { getProviderLogoUrl, isLoading } = useProviderLogoUrl();
 
   const resourceListItems = list.map((resource) => {
     const emblem = getProviderLogoUrl(
@@ -23,7 +15,7 @@ export const useResourceList = (list: PackageResource[]) => {
       <ResourceListItem
         key={resource.id}
         id={resource.id}
-        loading={orgDataIsLoading}
+        loading={isLoading}
         resourceName={resource.name || resource.title}
         ownerName={resource.provider?.name}
         ownerLogoUrl={emblem ?? resource.provider?.logoUrl}

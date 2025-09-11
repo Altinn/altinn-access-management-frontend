@@ -10,8 +10,8 @@ import { type Connection, type User } from '@/rtk/features/userInfoApi';
 import { UserList } from '../common/UserList/UserList';
 import { debounce } from '@/resources/utils/debounce';
 import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
-import { useResourceList } from '../common/DelegationModal/AccessPackages/useResourceList';
 import { amUIPath } from '@/routes/paths/amUIPath';
+import { ResourceList } from '../common/ResourceList/ResourceList';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -70,8 +70,6 @@ export const PackagePoaDetails = () => {
 
   const [chosenTab, setChosenTab] = useState('users');
 
-  const resourceList = useResourceList(accessPackage?.resources ?? []);
-
   // Show error alert with link back to overview if error fetching the Package
   if (error) {
     return (
@@ -91,8 +89,6 @@ export const PackagePoaDetails = () => {
           isLoading={isLoading}
           packageName={accessPackage?.name}
           packageDescription={accessPackage?.description}
-          fromPartyName={fromParty?.name}
-          fromPartyTypeName={fromParty?.partyTypeName}
         />
       </div>
       <DsTabs
@@ -165,7 +161,11 @@ export const PackagePoaDetails = () => {
           className={pageClasses.tabContent}
           value='services'
         >
-          {resourceList}
+          <ResourceList
+            isLoading={isLoading}
+            resources={accessPackage?.resources ?? []}
+            noResourcesText={t('package_poa_details_page.services_tab.no_resources')}
+          />
         </DsTabs.Panel>
       </DsTabs>
     </>
