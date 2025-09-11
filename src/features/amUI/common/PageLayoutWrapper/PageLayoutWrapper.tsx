@@ -36,7 +36,6 @@ const getAccountType = (type: string): 'company' | 'person' => {
 
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t, i18n } = useTranslation();
-
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
   const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery();

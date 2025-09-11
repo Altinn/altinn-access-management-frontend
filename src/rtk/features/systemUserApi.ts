@@ -42,7 +42,7 @@ export const systemUserApi = createApi({
       query: (partyId) => `user/reportee/${partyId}`,
     }),
     getIsClientAdmin: builder.query<boolean, string>({
-      query: (partyUuid) => `isClientAdmin?party=${partyUuid}`,
+      query: (partyUuid) => `user/isClientAdmin?party=${partyUuid}`,
     }),
 
     // systemregister
