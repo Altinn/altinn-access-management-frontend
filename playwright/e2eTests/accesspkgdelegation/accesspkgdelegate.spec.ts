@@ -12,17 +12,35 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     // Step 3: Add new user
     await delegation.addUser();
 
-    // Step 4: Add organization using tenor/test data
+    // Step 4: Add organization
     await delegation.addOrganization('310021199');
 
-    // Step 5: Grant access to multiple items
-    await delegation.grantAccessPkgName('Transport og lagring', 'Veitransport');
+    // Step 5: Grant access to multiple packages
+    await delegation.grantAccessPkgNameDirect(
+      'Transport og lagring',
+      'Veitransport',
+      'LYKKELIG RAKRYGGET PUMA BBL',
+    );
     await delegation.grantAccessPkgName('Bygg, anlegg og eiendom', 'Byggesøknad');
-    await delegation.grantAccessPkgName('Oppvekst og utdanning', 'Godkjenning av personell');
+    await delegation.grantAccessPkgNameDirect(
+      'Oppvekst og utdanning',
+      'Godkjenning av personell',
+      'LYKKELIG RAKRYGGET PUMA BBL',
+    );
 
     await delegation.closeAccessModal();
 
-    // Optional: verify delegation success
-    // await expect(delegation.successMessage('Delegation successful')).toBeVisible();
+    //verify delegation success
+    //await expect(delegation.successMessage('Delegation successful')).toBeVisible();
+
+    //Step5 : Delete delegated pacakge directly from area list
+    await delegation.deleteDelegatedPackage('Transport og lagring', 'Veitransport');
+    await delegation.deleteDelegatedPackage('Oppvekst og utdanning', 'Godkjenning av personell');
+
+    //Delete package by opening the package first
+    await delegation.deletePackageInside('Bygg, anlegg og eiendom', 'Byggesøknad');
+
+    //Delete user from rettighetshaver list
+    await delegation.deleteDelegatedUser();
   });
 });

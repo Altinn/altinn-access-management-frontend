@@ -1,8 +1,7 @@
 import { test as baseTest } from '@playwright/test';
-
-import { LoginPage, logoutWithUser } from '../pages/LoginPage';
-import { DelegationPage } from '../pages/profile/accessPkgDelegationPage';
-import { apiDelegation } from '../pages/profile/apidelegeringPage';
+import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
+import { DelegationPage } from 'playwright/pages/profile/accessPkgDelegationPage';
+import { apiDelegation } from 'playwright/pages/profile/apidelegeringPage';
 import {
   delegateRightsToUser,
   delegateToUser,
@@ -10,7 +9,8 @@ import {
   coverebyUserRights,
   delegateRoleToUser,
   instantiateResource,
-} from '../pages/profile/delegationPage';
+} from 'playwright/pages/profile/delegationPage';
+import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/delegeringHelper';
 
 // Define the fixtures
 const test = baseTest.extend<{
@@ -23,6 +23,7 @@ const test = baseTest.extend<{
   delegateRoles: delegateRoleToUser;
   apiDelegations: apiDelegation;
   instantiateResources: instantiateResource;
+  runAccessibilityTest: runAccessibilityTests;
   delegation: DelegationPage;
 }>({
   login: async ({ page }, use) => {
@@ -52,6 +53,10 @@ const test = baseTest.extend<{
 
   apiDelegations: async ({ page }, use) => {
     await use(new apiDelegation(page));
+  },
+
+  runAccessibilityTest: async ({ page }, use) => {
+    await use(new runAccessibilityTests(page));
   },
 
   delegation: async ({ page }, use) => {
