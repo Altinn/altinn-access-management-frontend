@@ -7,12 +7,28 @@ export class DelegationPage {
   readonly accessRightsLink: Locator;
   readonly newBrukerflateLink: Locator;
   readonly tryNewAccessBtn: Locator;
+  readonly addUserBtn: Locator;
+  readonly addOrgBtn: Locator;
+  readonly grantAccessBtn: Locator;
+  readonly deleteAccessBtn: Locator;
+  readonly deleteUserBtn: Locator;
+  readonly confirmDeleteBtn: Locator;
+  readonly closeModalBtn: Locator;
+  readonly backBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.accessRightsLink = page.getByRole('link', { name: 'Andre med rettigheter til' });
     this.newBrukerflateLink = page.getByRole('link', { name: 'Klikk her' });
     this.tryNewAccessBtn = page.getByRole('button', { name: 'Prøv ny tilgangsstyring' });
+    this.addUserBtn = page.getByRole('button', { name: 'Legg til Ny bruker' });
+    this.addOrgBtn = page.getByRole('button', { name: 'Legg til virksomhet' });
+    this.grantAccessBtn = page.getByRole('button', { name: 'Gi fullmakt' });
+    this.deleteAccessBtn = page.getByRole('button', { name: 'Slett fullmakt' });
+    this.deleteUserBtn = page.getByRole('button', { name: 'Slett bruker' });
+    this.confirmDeleteBtn = page.getByRole('button', { name: 'Ja, slett' });
+    this.closeModalBtn = page.getByRole('button', { name: 'Lukk' });
+    this.backBtn = page.getByRole('button', { name: 'Tilbake' });
   }
 
   async openDelegationFlow() {
