@@ -32,15 +32,16 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
 
     //verify delegation success
     //await expect(delegation.successMessage('Delegation successful')).toBeVisible();
+    try {
+      //Step5 : Delete delegated pacakge directly from area list
+      await delegation.deleteDelegatedPackage('Transport og lagring', 'Veitransport');
+      await delegation.deleteDelegatedPackage('Oppvekst og utdanning', 'Godkjenning av personell');
 
-    //Step5 : Delete delegated pacakge directly from area list
-    await delegation.deleteDelegatedPackage('Transport og lagring', 'Veitransport');
-    await delegation.deleteDelegatedPackage('Oppvekst og utdanning', 'Godkjenning av personell');
-
-    //Delete package by opening the package first
-    await delegation.deletePackageInside('Bygg, anlegg og eiendom', 'Byggesøknad');
-
-    //Delete user from rettighetshaver list
-    await delegation.deleteDelegatedUser();
+      //Delete package by opening the package first
+      await delegation.deletePackageInside('Bygg, anlegg og eiendom', 'Byggesøknad');
+    } finally {
+      //Delete user from rettighetshaver list
+      await delegation.deleteDelegatedUser();
+    }
   });
 });

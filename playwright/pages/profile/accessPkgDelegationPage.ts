@@ -111,8 +111,11 @@ export class DelegationPage {
     await expect(packageRow).toBeVisible({ timeout: 10000 });
     await packageRow.click();
 
+    const modal = this.page.locator('dialog[open]');
+    await expect(modal).toBeVisible({ timeout: 10000 });
+
     // Click the "Slett fullmakt" button inside that specific package row
-    const deleteButton = this.page.getByRole('button', { name: 'Slett fullmakt', exact: true });
+    const deleteButton = modal.getByRole('button', { name: 'Slett fullmakt', exact: true });
     await expect(deleteButton).toBeVisible({ timeout: 10000 });
     await deleteButton.click();
 
