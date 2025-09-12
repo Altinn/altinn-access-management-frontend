@@ -143,6 +143,7 @@ export const SystemUserRequestPage = () => {
           <RightsList
             resources={request.resources}
             accessPackages={request.accessPackages}
+            headingLevel={4}
           />
           <DsParagraph>{t('systemuser_request.withdraw_consent_info')}</DsParagraph>
           <div>
