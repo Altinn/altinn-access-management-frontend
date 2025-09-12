@@ -3171,10 +3171,10 @@ __metadata:
     react-i18next: "npm:^15.7.2"
     react-redux: "npm:^9.2.0"
     react-router: "npm:^7.8.2"
-    storybook: "npm:9.1.3"
+    storybook: "npm:9.1.5"
     typescript: "npm:5.9.2"
     typescript-plugin-css-modules: "npm:^5.2.0"
-    vite: "npm:^6.3.5"
+    vite: "npm:^6.3.6"
     vite-plugin-svgr: "npm:^4.5.0"
     vitest: "npm:^3.2.4"
   languageName: unknown
@@ -9884,9 +9884,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook@npm:9.1.3":
-  version: 9.1.3
-  resolution: "storybook@npm:9.1.3"
+"storybook@npm:9.1.5":
+  version: 9.1.5
+  resolution: "storybook@npm:9.1.5"
   dependencies:
     "@storybook/global": "npm:^5.0.0"
     "@testing-library/jest-dom": "npm:^6.6.3"
@@ -9907,7 +9907,7 @@ __metadata:
       optional: true
   bin:
     storybook: ./bin/index.cjs
-  checksum: 10/cb9d426ce9a9c4ed8a0be9eeb0dd9fa0ac32001a4b05bf574222ba31264721c42b5ad3f3a37177971f40454944658b2126264f8db93d2f55cb92cb8d4e06264c
+  checksum: 10/bf205e9daacbb3570484480a8c3ad0ef36e5cbbecde50126a579678b79194ececd598823e5747ee8a77f6a71ff82a4994f7540ed4d15adae30d66f13928f118c
   languageName: node
   linkType: hard
 
@@ -10363,9 +10363,9 @@ __metadata:
   linkType: hard
 
 "tmp@npm:~0.2.3":
-  version: 0.2.3
-  resolution: "tmp@npm:0.2.3"
-  checksum: 10/7b13696787f159c9754793a83aa79a24f1522d47b87462ddb57c18ee93ff26c74cbb2b8d9138f571d2e0e765c728fb2739863a672b280528512c6d83d511c6fa
+  version: 0.2.5
+  resolution: "tmp@npm:0.2.5"
+  checksum: 10/dd4b78b32385eab4899d3ae296007b34482b035b6d73e1201c4a9aede40860e90997a1452c65a2d21aee73d53e93cd167d741c3db4015d90e63b6d568a93d7ec
   languageName: node
   linkType: hard
 
@@ -10948,9 +10948,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^6.3.5":
-  version: 6.3.5
-  resolution: "vite@npm:6.3.5"
+"vite@npm:^6.3.6":
+  version: 6.3.6
+  resolution: "vite@npm:6.3.6"
   dependencies:
     esbuild: "npm:^0.25.0"
     fdir: "npm:^6.4.4"
@@ -10999,7 +10999,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/7bc3a1c5ef79413ad70daeeaf69b76cd1218d16aa18ed8ee08d74648ef17284f4a17c11f5cf42b573b6dc5e3d5f115110b67b1d23c2c699cfe404757764a634a
+  checksum: 10/8b8b6fe12318ca457396bf2053df7056cf4810f1d4a43b36b6afe59860e32b749c0685a290fe8a973b0d3da179ceec4c30cebbd3c91d0c47fbcf6436b17bdeef
   languageName: node
   linkType: hard
 

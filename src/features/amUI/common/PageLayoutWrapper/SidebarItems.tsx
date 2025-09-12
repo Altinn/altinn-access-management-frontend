@@ -178,7 +178,7 @@ export const SidebarItems = (
 
   items.push(consent, systemUser);
 
-  if (displayConfettiPackage) {
+  if (displayConfettiPackage && !isSmall) {
     shortcuts.map((shortcutItem) => items.push(shortcutItem));
   }
 

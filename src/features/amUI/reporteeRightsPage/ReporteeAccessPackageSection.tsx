@@ -53,7 +53,6 @@ export const ReporteeAccessPackageSection = () => {
       <AccessPackageList
         isLoading={isLoadingAccesses || isLoadingParty}
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
-        useDeleteConfirm
         showAllPackages
         minimizeAvailablePackages
         onSelect={(accessPackage) => {
