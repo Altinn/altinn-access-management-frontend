@@ -27,7 +27,6 @@ export const ActiveDelegations = () => {
           setModalItem(accessPackage);
           modalRef.current?.showModal();
         }}
-        useDeleteConfirm={isCurrentUser}
         availableActions={[
           DelegationAction.REVOKE,
           isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
