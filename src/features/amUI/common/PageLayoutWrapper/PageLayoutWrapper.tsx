@@ -170,15 +170,19 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       let redirectUrl = window.location.href;
       const isPersonAccount = accounts.find((a) => a.id === accountId)?.type === 'person';
       if (isPersonAccount) {
-        redirectUrl = `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`;
-      } else if (window.location.pathname.includes('systemuser')) {
-        redirectUrl = `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
+        redirectUrl = new URL(
+          `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
+        ).toString();
+      } else if (window.location.pathname.includes(SystemUserPath.SystemUser)) {
+        redirectUrl = new URL(
+          `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
+        ).toString();
       }
 
-      (window as Window).open(
-        `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
-        '_self',
-      );
+      const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
+      changeUrl.searchParams.set('R', accountId);
+      changeUrl.searchParams.set('goTo', redirectUrl);
+      (window as Window).open(changeUrl.toString(), '_self');
     },
     logoutButton: {
       label: t('header.log_out'),
