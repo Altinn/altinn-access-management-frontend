@@ -163,6 +163,10 @@ export const SidebarItems = (
     items.push(heading);
   }
 
+  if (accountType === 'person') {
+    return [...items, consent];
+  }
+
   if (displayConfettiPackage) {
     items.push(users);
     if (isAdmin) {
