@@ -81,20 +81,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(consentTemplates);
         }
 
-        public Task<Result<List<Consent>>> GetConsentList(Guid partyId, CancellationToken cancellationToken)
+        public Task<Result<List<ConsentRequestDetails>>> GetConsentList(Guid partyId, CancellationToken cancellationToken)
         {
             if (partyId == ORG_PARTY_ID)
             {
-                List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/consents_org.json");
-                return Task.FromResult(new Result<List<Consent>>(consentList));
+                List<ConsentRequestDetails> consentList = Util.GetMockData<List<ConsentRequestDetails>>($"{dataFolder}/Consent/consents_org.json");
+                return Task.FromResult(new Result<List<ConsentRequestDetails>>(consentList));
             }
             else if (partyId == PERSON_PARTY_ID)
             {
-                List<Consent> consentList = Util.GetMockData<List<Consent>>($"{dataFolder}/Consent/consents_person.json");
-                return Task.FromResult(new Result<List<Consent>>(consentList));
+                List<ConsentRequestDetails> consentList = Util.GetMockData<List<ConsentRequestDetails>>($"{dataFolder}/Consent/consents_person.json");
+                return Task.FromResult(new Result<List<ConsentRequestDetails>>(consentList));
             }
 
-            return Task.FromResult(new Result<List<Consent>>(ConsentProblem.ConsentNotFound));
+            return Task.FromResult(new Result<List<ConsentRequestDetails>>(ConsentProblem.ConsentNotFound));
         }
 
         public Task<Result<Consent>> GetConsent(Guid consentId, CancellationToken cancellationToken)

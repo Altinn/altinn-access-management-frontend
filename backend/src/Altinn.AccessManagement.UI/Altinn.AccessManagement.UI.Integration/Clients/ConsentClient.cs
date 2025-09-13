@@ -157,19 +157,19 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<List<Consent>>> GetConsentList(Guid partyId, CancellationToken cancellationToken)
+        public async Task<Result<List<ConsentRequestDetails>>> GetConsentList(Guid partyId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"bff/activeconsents/{partyId}";
+                string endpointUrl = $"bff/consentrequests/list/{partyId}";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonSerializer.Deserialize<List<Consent>>(responseContent, _jsonSerializerOptions);
+                    return JsonSerializer.Deserialize<List<ConsentRequestDetails>>(responseContent, _jsonSerializerOptions);
                 }
 
                 _logger.LogError("AccessManagement.UI // ConsentClient // GetConsentList // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);

@@ -125,7 +125,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<List<ActiveConsentItemFE>>> GetActiveConsents(Guid party, CancellationToken cancellationToken)
         {
-            Result<List<Consent>> consents = await _consentClient.GetConsentList(party, cancellationToken);
+            Result<List<ConsentRequestDetails>> consents = await _consentClient.GetConsentList(party, cancellationToken);
             if (consents.IsProblem)
             {
                 return consents.Problem;
@@ -134,7 +134,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             HashSet<string> excludedStatuses = new(StringComparer.OrdinalIgnoreCase) { "rejected", "revoked", "deleted", "expired" };
 
             // filter consents to return only active consents
-            IEnumerable<Consent> activeConsents = consents.Value.Where(consent =>
+            IEnumerable<ConsentRequestDetails> activeConsents = consents.Value.Where(consent =>
                 !consent.ConsentRequestEvents.Any(e => excludedStatuses.Contains(e.EventType))
                 && consent.ConsentRequestEvents.Exists(e => e.EventType.Equals("accepted", StringComparison.OrdinalIgnoreCase)));
 
@@ -165,7 +165,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<List<ConsentLogItemFE>>> GetConsentLog(Guid party, CancellationToken cancellationToken)
         {
-            Result<List<Consent>> consents = await _consentClient.GetConsentList(party, cancellationToken);
+            Result<List<ConsentRequestDetails>> consents = await _consentClient.GetConsentList(party, cancellationToken);
             if (consents.IsProblem)
             {
                 return consents.Problem;

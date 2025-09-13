@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="partyId">Id of party to get active consents for</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Active consents</returns>
-        Task<Result<List<Consent>>> GetConsentList(Guid partyId, CancellationToken cancellationToken);
+        Task<Result<List<ConsentRequestDetails>>> GetConsentList(Guid partyId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets a single consent by id
