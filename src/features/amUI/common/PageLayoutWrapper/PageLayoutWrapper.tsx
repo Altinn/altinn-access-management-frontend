@@ -19,7 +19,7 @@ import {
   useGetReporteeQuery,
   useGetUserInfoQuery,
 } from '@/rtk/features/userInfoApi';
-import { amUIPath } from '@/routes/paths';
+import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
@@ -165,14 +165,24 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       },
       menuItemsVirtual: { isVirtualized: accounts.length > 20 },
     },
-    onSelectAccount: (accountId) => {
-      const redirectUrl = window.location.pathname.includes('systemuser')
-        ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
-        : window.location.href;
-      (window as Window).open(
-        `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
-        '_self',
-      );
+    onSelectAccount: (accountId: string) => {
+      // check if this is a person; then redirect to consents page
+      let redirectUrl = window.location.href;
+      const isPersonAccount = accounts.find((a) => a.id === accountId)?.type === 'person';
+      if (isPersonAccount) {
+        redirectUrl = new URL(
+          `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
+        ).toString();
+      } else if (window.location.pathname.includes(SystemUserPath.SystemUser)) {
+        redirectUrl = new URL(
+          `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
+        ).toString();
+      }
+
+      const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
+      changeUrl.searchParams.set('R', accountId);
+      changeUrl.searchParams.set('goTo', redirectUrl);
+      (window as Window).open(changeUrl.toString(), '_self');
     },
     logoutButton: {
       label: t('header.log_out'),

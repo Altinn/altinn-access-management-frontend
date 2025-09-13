@@ -129,7 +129,7 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
 
   const isApproved = request.consentRequestEvents.some((event) => event.eventType === 'Accepted');
   const isRejected = request.consentRequestEvents.some((event) => event.eventType === 'Rejected');
-  const isPastValidTo = new Date(request.validTo) < new Date();
+  const isExpired = request.consentRequestEvents.some((event) => event.eventType === 'Expired');
 
   const isActionButtonDisabled =
     isApprovingConsent ||
@@ -138,7 +138,7 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
     rejectResponse ||
     isApproved ||
     isRejected ||
-    isPastValidTo;
+    isExpired;
 
   const approveConsent = async (): Promise<void> => {
     if (!isActionButtonDisabled && request) {
@@ -194,7 +194,7 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
                 : t('consent_request.already_rejected')}
             </DsAlert>
           )}
-          {isPastValidTo && !isApproved && !isRejected && (
+          {isExpired && !isApproved && !isRejected && (
             <DsAlert data-color='warning'>
               {request.isPoa
                 ? t('consent_request.past_validto_poa')
