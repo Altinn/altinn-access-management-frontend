@@ -12,16 +12,17 @@ import { SystemUserPath } from '@/routes/paths';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
-import type { ProblemDetail, RegisteredSystem } from '../types';
+import type { ProblemDetail } from '../types';
 import { RightsList } from '../components/RightsList/RightsList';
 import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 
 import classes from './CreateSystemUser.module.css';
+import { SuggestionItem } from '@digdir/designsystemet-react';
 
 interface RightsIncludedProps {
-  selectedSystem: RegisteredSystem;
+  selectedSystem: SuggestionItem;
   onNavigateBack: () => void;
 }
 
@@ -35,7 +36,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
     data: rights,
     isLoading: isLoadingRights,
     isError: isLoadRightsError,
-  } = useGetRegisteredSystemRightsQuery(selectedSystem.systemId);
+  } = useGetRegisteredSystemRightsQuery(selectedSystem.value);
 
   const [postNewSystemUser, { error: createSystemUserError, isLoading: isCreatingSystemUser }] =
     useCreateSystemUserMutation();
@@ -43,8 +44,8 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
   const handleConfirmSystemUser = () => {
     if (selectedSystem) {
       const postObjekt = {
-        integrationTitle: selectedSystem.name,
-        systemId: selectedSystem.systemId,
+        integrationTitle: selectedSystem.label,
+        systemId: selectedSystem.value,
         partyId: partyId,
       };
 
@@ -74,7 +75,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
                 ? 'systemuser_includedrightspage.header_single'
                 : 'systemuser_includedrightspage.header',
               {
-                integrationTitle: selectedSystem.name,
+                integrationTitle: selectedSystem.label,
                 companyName: reporteeData?.name,
               },
             )}
