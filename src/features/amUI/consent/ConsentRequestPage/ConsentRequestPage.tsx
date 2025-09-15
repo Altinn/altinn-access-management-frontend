@@ -1,4 +1,4 @@
-import type { ChangeEvent, ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import React from 'react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,7 @@ import {
   useGetConsentRequestQuery,
   useRejectConsentRequestMutation,
 } from '@/rtk/features/consentApi';
-import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
+import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import type { ConsentLanguage, ConsentRequest, ProblemDetail } from '../types';
@@ -50,8 +50,7 @@ export const ConsentRequestPage = () => {
     },
   );
 
-  const onChangeLocale = (event: ChangeEvent<HTMLInputElement>) => {
-    const newLocale = event.target.value;
+  const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
@@ -62,9 +61,6 @@ export const ConsentRequestPage = () => {
         color='neutral'
         theme='subtle'
         header={{
-          menu: {
-            items: [],
-          },
           locale: {
             title: t('header.locale_title'),
             options: [
@@ -72,7 +68,7 @@ export const ConsentRequestPage = () => {
               { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
               { label: 'English', value: 'en', checked: i18n.language === 'en' },
             ],
-            onChange: onChangeLocale,
+            onSelect: onChangeLocale,
           },
           logo: {
             href: getAltinnStartPageUrl(),
@@ -82,6 +78,21 @@ export const ConsentRequestPage = () => {
             name: request?.fromPartyName ?? (userData?.name || ''),
             type: request?.fromPartyName ? 'company' : 'person',
             id: '',
+          },
+          globalMenu: {
+            logoutButton: {
+              label: t('header.log_out'),
+              onClick: () => {
+                (window as Window).location =
+                  `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
+              },
+            },
+            menuLabel: t('header.menu-label'),
+            backLabel: t('header.back-label'),
+            changeLabel: t('header.change-label'),
+            currentEndUserLabel: t('header.logged_in_as_name', {
+              name: userData?.name || '',
+            }),
           },
         }}
       >
