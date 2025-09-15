@@ -2,7 +2,7 @@ import { test, expect, Page } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
 import { ConsentApiRequests } from '../../api-requests/ConsentApiRequests';
 import { ConsentPage } from '../../pages/consent/ConsentPage';
-import { fromPersons, toOrgs } from '../consent/consentTestdata';
+import { fromPersons, toOrgs } from './consentTestdata';
 
 test.describe.configure({ timeout: 30000 });
 
@@ -10,22 +10,23 @@ const redirectUrl = 'https://example.com/';
 
 let api: ConsentApiRequests;
 let validToTimestamp: string;
+let consentPage: ConsentPage;
+let fromPerson: string;
+let toOrg: string;
 
-test.beforeEach(async (page) => {
+test.beforeEach(async ({ page }) => {
   api = new ConsentApiRequests();
   validToTimestamp = addTimeToNowUtc({ years: 1 });
+
+  const pickRandom = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+  consentPage = new ConsentPage(page);
+  fromPerson = pickRandom(fromPersons);
+  toOrg = pickRandom(toOrgs);
+  process.env.ORG = toOrg;
 });
 
 test.describe('Consent - Norwegian template', () => {
-  const pickRandom = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
-
   test('Godta forespørsel - Standard samtykke', async ({ page }) => {
-    const consentPage = new ConsentPage(page);
-    const fromPerson = pickRandom(fromPersons);
-
-    const toOrg = pickRandom(toOrgs);
-    process.env.ORG = toOrg;
-
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -51,15 +52,10 @@ test.describe('Consent - Norwegian template', () => {
     const expected = formatUiDateTime(validToTimestamp);
     await consentPage.expectExpiry('Samtykket er', expected);
 
-    await consentPage.approveStandardAndWaitLogout();
+    await consentPage.approveStandardAndWaitLogout(redirectUrl);
   });
 
   test('Godta samtykke - krav-template', async ({ page }) => {
-    const consentPage = new ConsentPage(page);
-    const fromPerson = pickRandom(fromPersons);
-    const toOrg = pickRandom(toOrgs);
-    process.env.ORG = toOrg;
-
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -80,15 +76,10 @@ test.describe('Consent - Norwegian template', () => {
     const expected = formatUiDateTime(validToTimestamp);
     await consentPage.expectExpiry('Samtykket er', expected);
 
-    await consentPage.approveStandardAndWaitLogout();
+    await consentPage.approveStandardAndWaitLogout(redirectUrl);
   });
 
   test('Godta samtykke - Fullmakt utføre tjeneste', async ({ page }) => {
-    const consentPage = new ConsentPage(page);
-    const fromPerson = pickRandom(fromPersons);
-    const toOrg = pickRandom(toOrgs);
-    process.env.ORG = toOrg;
-
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -115,15 +106,10 @@ test.describe('Consent - Norwegian template', () => {
     const expected = formatUiDateTime(validToTimestamp);
     await consentPage.expectExpiry('Fullmakten er', expected);
 
-    await consentPage.approveFullmaktAndWaitLogout();
+    await consentPage.approveFullmaktAndWaitLogout(redirectUrl);
   });
 
   test('Approve consent: Lånesøknad', async ({ page }) => {
-    const consentPage = new ConsentPage(page);
-    const fromPerson = pickRandom(fromPersons);
-    const toOrg = pickRandom(toOrgs);
-    process.env.ORG = toOrg;
-
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -149,15 +135,10 @@ test.describe('Consent - Norwegian template', () => {
       page.getByText('Samtykket gjelder én gangs utlevering av opplysningene'),
     ).toBeVisible();
 
-    await consentPage.approveStandardAndWaitLogout();
+    await consentPage.approveStandardAndWaitLogout(redirectUrl);
   });
 
   test('Approve consent for template: Enkelt samtykke', async ({ page }) => {
-    const consentPage = new ConsentPage(page);
-    const fromPerson = pickRandom(fromPersons);
-    const toOrg = pickRandom(toOrgs);
-    process.env.ORG = toOrg;
-
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -180,15 +161,10 @@ test.describe('Consent - Norwegian template', () => {
     await expect(page.getByText('metadata: E2E Playwright metadata for simpletag')).toBeVisible();
 
     await expect(page.getByText('Samtykket gjelder én gangs bruk')).toBeVisible();
-    await consentPage.approveStandardAndWaitLogout();
+    await consentPage.approveStandardAndWaitLogout(redirectUrl);
   });
 
   test('Reject consent', async ({ page }) => {
-    const consentPage = new ConsentPage(page);
-    const fromPerson = pickRandom(fromPersons);
-    const toOrg = pickRandom(toOrgs);
-    process.env.ORG = toOrg;
-
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -204,7 +180,7 @@ test.describe('Consent - Norwegian template', () => {
     await consentPage.norwegian.click();
 
     await expect(consentPage.heading('Forespørsel om samtykke')).toBeVisible();
-    await consentPage.rejectStandardAndWaitLogout();
+    await consentPage.rejectStandardAndWaitLogout(redirectUrl);
   });
 });
 
