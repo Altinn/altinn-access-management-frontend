@@ -736,26 +736,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-react@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "@digdir/designsystemet-react@npm:1.5.0"
-  dependencies:
-    "@floating-ui/dom": "npm:^1.7.4"
-    "@floating-ui/react": "npm:0.26.23"
-    "@navikt/aksel-icons": "npm:^7.29.1"
-    "@radix-ui/react-slot": "npm:^1.2.3"
-    "@tanstack/react-virtual": "npm:^3.13.12"
-    "@u-elements/u-combobox": "npm:^1.0.1"
-    "@u-elements/u-datalist": "npm:^1.0.14"
-    "@u-elements/u-details": "npm:^0.1.5"
-    clsx: "npm:^2.1.1"
-  peerDependencies:
-    react: ">=18.3.1 || ^19.0.0"
-    react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/75f72ae9463a89a706cba95c3ad81f1962177161d25882ba15c864b3db85108cced4c0c570738b479534fff144969cd77d3937483f3d387d6361ab85ce69fd96
-  languageName: node
-  linkType: hard
-
 "@digdir/designsystemet-theme@npm:^1.0.6":
   version: 1.1.4
   resolution: "@digdir/designsystemet-theme@npm:1.1.4"
@@ -1077,15 +1057,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^1.7.3":
-  version: 1.7.3
-  resolution: "@floating-ui/core@npm:1.7.3"
-  dependencies:
-    "@floating-ui/utils": "npm:^0.2.10"
-  checksum: 10/a8952ff2673ddf28f12feeb86d90c54949e45bcb1af5758b7672850ac0dadb36d4bd61aa45dad1b6a35ba40d4756d3573afac6610b90502639d7266b91e0864e
-  languageName: node
-  linkType: hard
-
 "@floating-ui/dom@npm:^1.0.0":
   version: 1.7.1
   resolution: "@floating-ui/dom@npm:1.7.1"
@@ -1103,16 +1074,6 @@ __metadata:
     "@floating-ui/core": "npm:^1.7.2"
     "@floating-ui/utils": "npm:^0.2.10"
   checksum: 10/2d581459973b66024c47f039cabdc059b39c72abca93a4a0a8110e0a90b79d3fb84e49099afb73e13b3e7f17096070422220d996b206a5f0120c92bd7c48b98b
-  languageName: node
-  linkType: hard
-
-"@floating-ui/dom@npm:^1.7.4":
-  version: 1.7.4
-  resolution: "@floating-ui/dom@npm:1.7.4"
-  dependencies:
-    "@floating-ui/core": "npm:^1.7.3"
-    "@floating-ui/utils": "npm:^0.2.10"
-  checksum: 10/d3d6a23e7b9804ba56338c7c666590258683af14b6026270d32afc1202f72b5b82cca359004bdc7830bf2463a045da6c7bd4e7d5351218cf270ff94206197971
   languageName: node
   linkType: hard
 
@@ -1406,13 +1367,6 @@ __metadata:
   version: 7.25.1
   resolution: "@navikt/aksel-icons@npm:7.25.1"
   checksum: 10/dc7e6b6f2f146f49b1fa7fcf016203dd2d46bf9ede88f5e8f4f50646ca92bccddcd902c1c7d3fe4bcdd91863c3b7ffc10ac582b7960cfe04b41bfadfe1ae1d64
-  languageName: node
-  linkType: hard
-
-"@navikt/aksel-icons@npm:^7.29.1":
-  version: 7.30.1
-  resolution: "@navikt/aksel-icons@npm:7.30.1"
-  checksum: 10/529f0e78c75f90d0e3e4b315275510ef672bb0dba901395afc258bd43a167f6af569f4e57d33f7d456e6239da2193e5cc3d267f6669fe872a8d24d00827b2d54
   languageName: node
   linkType: hard
 
@@ -2826,13 +2780,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@u-elements/u-combobox@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@u-elements/u-combobox@npm:1.0.1"
-  checksum: 10/389eb0a49a583e73736cc3dddba1428cb92c7bed63046063e212b57740f3fa812e4e71ec9b912fd25e7cf26c1ae9c31f3a5a8bb86af4fd2d90b1f45adb541112
-  languageName: node
-  linkType: hard
-
 "@u-elements/u-datalist@npm:^1.0.10":
   version: 1.0.10
   resolution: "@u-elements/u-datalist@npm:1.0.10"
@@ -2840,24 +2787,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@u-elements/u-datalist@npm:^1.0.14":
-  version: 1.0.14
-  resolution: "@u-elements/u-datalist@npm:1.0.14"
-  checksum: 10/07ba68a730a7750f82d21510a2c8600664a97e48c8873cba7a67a4b1e92a5520caf0a8664c3c1e4db9e2aa28591955865544b92c3e1f6e08f7ce1dcbc4b4e491
-  languageName: node
-  linkType: hard
-
 "@u-elements/u-details@npm:^0.1.1":
   version: 0.1.1
   resolution: "@u-elements/u-details@npm:0.1.1"
   checksum: 10/7034ef96e46daa1cd6ceb159f395c60c071ead5ec7d46c042ced87217a633244e6bef164594b0d0588cf7c113938a15ebaf62d50dbcfe14f690f855dba8d5a1b
-  languageName: node
-  linkType: hard
-
-"@u-elements/u-details@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "@u-elements/u-details@npm:0.1.5"
-  checksum: 10/b001fda29f63f69fe7c55f812e5077a371447678a4e56c59d99479229de17894e0c1ae04b66ed273dbc35d5fbea48324ecb92537d03dbc0aa2fc5dbdc643ac78
   languageName: node
   linkType: hard
 
@@ -3185,7 +3118,6 @@ __metadata:
   dependencies:
     "@altinn/altinn-components": "npm:0.38.11"
     "@axe-core/playwright": "npm:^4.10.2"
-    "@digdir/designsystemet-react": "npm:^1.5.0"
     "@navikt/aksel-icons": "npm:^7.12.2"
     "@playwright/test": "npm:^1.55.0"
     "@reduxjs/toolkit": "npm:^2.8.2"
