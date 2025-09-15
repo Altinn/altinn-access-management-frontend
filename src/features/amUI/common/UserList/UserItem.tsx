@@ -1,5 +1,5 @@
 import type { UserListItemProps } from '@altinn/altinn-components';
-import { List, UserListItem } from '@altinn/altinn-components';
+import { Button, List, UserListItem } from '@altinn/altinn-components';
 import type { ElementType } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
@@ -17,7 +17,10 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
 }
 
 interface UserItemProps
-  extends Pick<UserListItemProps, 'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'> {
+  extends Pick<
+    UserListItemProps,
+    'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow' | 'controls'
+  > {
   user: ExtendedUser | User;
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
@@ -148,6 +151,7 @@ export const UserItem = ({
               interactive={interactive}
               disableLinks={disableLinks}
               shadow='none'
+              controls={<Button> {t('users_page.view_user')} </Button>}
             />
           ))}
         </List>

@@ -6,6 +6,7 @@ const PAGE_SIZE = 10;
 
 interface useFilteredUsersProps {
   connections?: Connection[];
+  indirectConnections?: Connection[];
   searchString: string;
 }
 
@@ -74,7 +75,11 @@ const sortUsers = (users: (ExtendedUser | User)[]): (ExtendedUser | User)[] => {
   return processedUsers.sort((a, b) => a.name.localeCompare(b.name));
 };
 
-export const useFilteredUsers = ({ connections, searchString }: useFilteredUsersProps) => {
+export const useFilteredUsers = ({
+  connections,
+  indirectConnections,
+  searchString,
+}: useFilteredUsersProps) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -96,6 +101,19 @@ export const useFilteredUsers = ({ connections, searchString }: useFilteredUsers
 
   const hasNextPage = processedUsers.length > PAGE_SIZE * currentPage;
 
+  const indirectUsers = useMemo(() => {
+    if (!indirectConnections) return undefined;
+    const connectedUserIds = new Set(processedUsers.map((user) => user.id));
+    const remainingUsers = indirectConnections.filter(
+      (user) => !connectedUserIds.has(user.party.id),
+    );
+
+    const mappedUsers = mapToExtendedUsers(remainingUsers);
+    const filtered = filterUsers(mappedUsers, searchString);
+    const sortedUsers = sortUsers(filtered);
+    return sortedUsers;
+  }, [indirectConnections, processedUsers]);
+
   const goNextPage = () => {
     if (hasNextPage) {
       setCurrentPage((prevPage) => prevPage + 1);
@@ -104,6 +122,7 @@ export const useFilteredUsers = ({ connections, searchString }: useFilteredUsers
 
   return {
     users: paginatedUsers,
+    indirectUsers,
     hasNextPage,
     goNextPage,
     totalFilteredCount: processedUsers.length,

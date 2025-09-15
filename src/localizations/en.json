@@ -312,10 +312,12 @@
     "main_page_heading": "Users with power of attorney in {{name}}",
     "sub_heading": "org.nr. {{org_number}}",
     "user_list_heading": "Other users with power of attorney",
+  "direct_connections": "Users with power of attorney",
     "user_search_placeholder": "Search for users",
     "no_users": "Nobody but you have access. Do you want to change this?",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
-    "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?"
+    "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
+    "indirect_connections": "Users without power of attorney"
   },
   "reportees_page": {
     "page_title": "Our access to other companies - Altinn",
