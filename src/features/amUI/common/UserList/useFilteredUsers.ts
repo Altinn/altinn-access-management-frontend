@@ -81,6 +81,7 @@ export const useFilteredUsers = ({
   searchString,
 }: useFilteredUsersProps) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [indirectUserPage, setIndirectUserPage] = useState(1);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -114,17 +115,32 @@ export const useFilteredUsers = ({
     return sortedUsers;
   }, [indirectConnections, processedUsers]);
 
+  const indirectPaginatedUsers = useMemo(() => {
+    if (!indirectUsers) return [];
+    return indirectUsers.slice(0, PAGE_SIZE * indirectUserPage);
+  }, [indirectUsers, indirectUserPage]);
+
+  const hasNextIndirectPage = indirectUsers && indirectUsers.length > PAGE_SIZE * indirectUserPage;
+
   const goNextPage = () => {
     if (hasNextPage) {
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
 
+  const goNextIndirectPage = () => {
+    if (hasNextIndirectPage) {
+      setIndirectUserPage((prevPage) => prevPage + 1);
+    }
+  };
+
   return {
     users: paginatedUsers,
-    indirectUsers,
+    indirectUsers: indirectPaginatedUsers,
     hasNextPage,
+    hasNextIndirectPage,
     goNextPage,
+    goNextIndirectPage,
     totalFilteredCount: processedUsers.length,
   };
 };

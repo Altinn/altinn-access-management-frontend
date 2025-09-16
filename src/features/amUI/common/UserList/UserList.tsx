@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
-import type { ReactNode } from 'react';
 
 import type { Connection } from '@/rtk/features/userInfoApi';
 
@@ -10,6 +9,8 @@ import { UserItem } from './UserItem';
 import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
 import { SkeletonUserList } from './SkeletonUserList';
+import { DelegationAction } from '../DelegationModal/EditModal';
+import { UserListActions } from './UserListActions';
 
 export interface UserListProps {
   connections?: Connection[];
@@ -21,7 +22,9 @@ export interface UserListProps {
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
-  controls?: ReactNode;
+  availableAction?: DelegationAction;
+  onDelegate?: (userId: string) => void;
+  onRevoke?: (userId: string) => void;
 }
 
 export const UserList = ({
@@ -34,7 +37,9 @@ export const UserList = ({
   showRoles = true,
   roleDirection = 'toUser',
   disableLinks = false,
-  controls,
+  availableAction,
+  onDelegate,
+  onRevoke,
 }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
@@ -92,7 +97,15 @@ export const UserList = ({
             showRoles={showRoles}
             roleDirection={roleDirection}
             disableLinks={disableLinks}
-            controls={controls}
+            controls={
+              <UserListActions
+                userId={user.id}
+                userName={user.name}
+                availableAction={availableAction}
+                onDelegate={onDelegate}
+                onRevoke={onRevoke}
+              />
+            }
           />
         ))}
       </List>

@@ -95,6 +95,14 @@ export const PackagePoaDetails = () => {
     );
   }
 
+  const onDelegate = (userId: string) => {
+    // Delegate access to the user
+  };
+
+  const onRevoke = (userId: string) => {
+    // Revoke access from the user
+  };
+
   return (
     <>
       <div className={headerClasses.headingContainer}>
@@ -145,34 +153,10 @@ export const PackagePoaDetails = () => {
                 connections={connections}
                 indirectConnections={indirectConnections}
                 accessPackage={accessPackage}
-              />
-              {/* <DsSearch className={pageClasses.searchBar}>
-                <DsSearch.Input
-                  aria-label={t('package_poa_details_page.users_tab.user_search_placeholder')}
-                  placeholder={t('package_poa_details_page.users_tab.user_search_placeholder')}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                    onSearch(event.target.value)
-                  }
-                />
-                <DsSearch.Clear
-                  onClick={() => {
-                    onSearch.cancel?.();
-                    setSearchString('');
-                  }}
-                />
-              </DsSearch> */}
-
-              {/* <UserList
-                indirectConnections={indirectConnections}
-                connections={connections}
-                searchString={searchString}
-                showRoles
-                listItemTitleAs='h3'
                 isLoading={isLoading || loadingIndirectConnections}
-                interactive={false}
-                disableLinks
-                canAdd={false}
-              /> */}
+                onDelegate={(userId) => onDelegate?.(userId)}
+                onRevoke={(userId) => onRevoke?.(userId)}
+              />
             </>
           )}
         </DsTabs.Panel>
