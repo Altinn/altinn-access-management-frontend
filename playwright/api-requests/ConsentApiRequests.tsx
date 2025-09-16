@@ -7,13 +7,6 @@ export class ConsentApiRequests {
   constructor() {
     this.tokenClass = new Token();
   }
-
-  public async postConsentRequestRaw(payload: any): Promise<{ viewUri: string }> {
-    const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
-    const scopes = 'altinn:consentrequests.write';
-    return this.sendPostRequest<typeof payload, { viewUri: string }>(payload, endpoint, scopes);
-  }
-
   private async sendPostRequest<TPayload, TResponse>(
     payload: TPayload,
     endpoint: string,
@@ -46,11 +39,7 @@ export class ConsentApiRequests {
   /**
    * Generalized consent request supporting both person and org as 'from'.
    * @param fromType 'person' or 'org'
-   * @param fromId FNR for person, OrgNo for org
-   * @param toType Only 'org' currently supported
-   * @param toId OrgNo for recipient
    * @param validToIsoUtc ISO UTC string for validity
-   * @param opts Optional resourceValue, redirectUrl, metaData
    */
   public async createConsentRequest({
     from,
