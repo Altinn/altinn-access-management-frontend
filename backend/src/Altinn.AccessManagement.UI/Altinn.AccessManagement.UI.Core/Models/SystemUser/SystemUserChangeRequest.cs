@@ -59,28 +59,28 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// </summary>
         [Required]
         [JsonPropertyName("requiredRights")]
-        public List<Right> RequiredRights { get; set; }
+        public List<Right> RequiredRights { get; set; } = [];
 
         /// <summary>
         /// The set of Rights to be ensured are not delegeted to this system user.
         /// </summary>
         [Required]
         [JsonPropertyName("unwantedRights")]
-        public List<Right> UnwantedRights { get; set; }
+        public List<Right> UnwantedRights { get; set; } = [];
 
         /// <summary>
         ///  The set of Access Packages requested as Required for this system user. 
         /// </summary>
         [Required]
         [JsonPropertyName("requiredAccessPackages")]
-        public List<RegisteredSystemAccessPackage> RequiredAccessPackages { get; set; }
+        public List<RegisteredSystemAccessPackage> RequiredAccessPackages { get; set; } = [];
 
         /// <summary>
         /// The set of Access Packages to be ensured are not delegeted to this system user.
         /// </summary>
         [Required]
         [JsonPropertyName("unwantedAccessPackages")]
-        public List<RegisteredSystemAccessPackage> UnwantedAccessPackages { get; set; }
+        public List<RegisteredSystemAccessPackage> UnwantedAccessPackages { get; set; } = [];
 
         /// <summary>
         /// Initially the request is "new", 

@@ -8,6 +8,7 @@ import type {
   RegisteredSystemRights,
   AgentDelegationCustomer,
   AgentDelegation,
+  SystemUserChangeRequest,
 } from '@/features/amUI/systemUser/types';
 
 import type { ReporteeInfo } from './userInfoApi';
@@ -165,7 +166,7 @@ export const systemUserApi = createApi({
     }),
 
     // change request
-    getChangeRequest: builder.query<SystemUserRequest, { changeRequestId: string }>({
+    getChangeRequest: builder.query<SystemUserChangeRequest, { changeRequestId: string }>({
       query: ({ changeRequestId }) => `systemuser/changerequest/${changeRequestId}`,
     }),
     approveChangeRequest: builder.mutation<void, { partyId: string; changeRequestId: string }>({
