@@ -286,7 +286,7 @@ const getAccount = (reportee: ReporteeInfo, userUuid: string, currentReporteeUui
     id: reportee.partyId,
     icon: {
       name: reportee.name,
-      type: reportee.type === 'Organization' ? 'company' : 'person',
+      type: accountType,
     },
     name: reportee.name,
     description: reportee.type === 'Organization' ? reportee.organizationNumber : undefined,
