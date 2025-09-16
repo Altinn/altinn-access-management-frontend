@@ -6,12 +6,13 @@ import { Link, useParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { useTranslation } from 'react-i18next';
-import { type Connection, type User } from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery, type Connection, type User } from '@/rtk/features/userInfoApi';
 import { UserList } from '../common/UserList/UserList';
 import { debounce } from '@/resources/utils/debounce';
 import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { ResourceList } from '../common/ResourceList/ResourceList';
+import AdvancedUserSearch from '../common/AdvancedUserSearch/AdvancedUserSearch';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,6 +44,18 @@ export const PackagePoaDetails = () => {
     },
     { skip: !id || !fromParty?.partyUuid },
   );
+
+  const { data: indirectConnections, isLoading: loadingIndirectConnections } =
+    useGetRightHoldersQuery(
+      {
+        partyUuid: fromParty?.partyUuid ?? '',
+        fromUuid: fromParty?.partyUuid ?? '',
+        toUuid: '', // all
+      },
+      {
+        skip: !fromParty?.partyUuid,
+      },
+    );
 
   const connections: Connection[] = useMemo(() => {
     const group: Record<string, Connection> = {};
@@ -128,7 +141,12 @@ export const PackagePoaDetails = () => {
                   })}
                 </DsParagraph>
               )}
-              <DsSearch className={pageClasses.searchBar}>
+              <AdvancedUserSearch
+                connections={connections}
+                indirectConnections={indirectConnections}
+                accessPackage={accessPackage}
+              />
+              {/* <DsSearch className={pageClasses.searchBar}>
                 <DsSearch.Input
                   aria-label={t('package_poa_details_page.users_tab.user_search_placeholder')}
                   placeholder={t('package_poa_details_page.users_tab.user_search_placeholder')}
@@ -142,18 +160,19 @@ export const PackagePoaDetails = () => {
                     setSearchString('');
                   }}
                 />
-              </DsSearch>
+              </DsSearch> */}
 
-              <UserList
+              {/* <UserList
+                indirectConnections={indirectConnections}
                 connections={connections}
                 searchString={searchString}
                 showRoles
                 listItemTitleAs='h3'
-                isLoading={isLoading}
+                isLoading={isLoading || loadingIndirectConnections}
                 interactive={false}
                 disableLinks
                 canAdd={false}
-              />
+              /> */}
             </>
           )}
         </DsTabs.Panel>

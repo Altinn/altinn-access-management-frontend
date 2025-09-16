@@ -7,8 +7,6 @@ import type { Connection, ExtendedUser, User } from '@/rtk/features/userInfoApi'
 import { Provider } from 'react-redux';
 import store from '@/rtk/app/store';
 import { ExtendedAccessPackage } from '../AccessPackageList/useAreaPackageList';
-import { DelegationAction } from '../DelegationModal/EditModal';
-// No PartyRepresentationProvider or Redux store to keep the story isolated
 
 const mockAllConnections: Connection[] = [
   {
@@ -143,7 +141,6 @@ export const EmptySearchShowsAdd: StoryObj<typeof meta> = {
   render: (args: React.ComponentProps<typeof AdvancedUserSearch>) => (
     <Provider store={store}>
       <div style={{ padding: 24, maxWidth: 800 }}>
-        <p style={{ marginBottom: 12 }}>Try typing: "NoSuchUser" to see the add new state.</p>
         <AdvancedUserSearch {...args} />
       </div>
     </Provider>

@@ -52,6 +52,7 @@ export const UserItem = ({
   subUnit = false,
   disableLinks = false,
   shadow,
+  controls,
   ...props
 }: UserItemProps) => {
   const limitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
@@ -131,6 +132,7 @@ export const UserItem = ({
                 />
               )
       }
+      controls={!hasInheritingUsers && controls}
       titleAs={titleAs}
       subUnit={subUnit || hasSubUnitRole}
     >
@@ -151,7 +153,7 @@ export const UserItem = ({
               interactive={interactive}
               disableLinks={disableLinks}
               shadow='none'
-              controls={<Button> {t('users_page.view_user')} </Button>}
+              controls={controls}
             />
           ))}
         </List>

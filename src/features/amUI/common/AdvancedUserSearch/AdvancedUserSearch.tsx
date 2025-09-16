@@ -15,6 +15,7 @@ import { ExtendedAccessPackage } from '../AccessPackageList/useAreaPackageList';
 import { RevokeRoleButton } from '../RoleList/RevokeRoleButton';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { M } from 'vitest/dist/chunks/reporters.d.BFLkQcL6';
+import { UserList } from '../UserList/UserList';
 
 export interface AdvancedUserSearchProps {
   connections?: Connection[];
@@ -54,7 +55,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   return (
     <div className={classes.container}>
       <div className={classes.controls}>
-        <DsSearch>
+        <DsSearch className={classes.searchBar}>
           <DsSearch.Input
             aria-label={t('common.search')}
             placeholder={t('common.search')}
@@ -69,7 +70,26 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
         {users?.length > 0 && (
           <>
             <h3 className={classes.subHeader}>{t('users_page.direct_connections')}</h3>
-            <List spacing={2}>
+            <UserList
+              connections={connections}
+              searchString={query}
+              showRoles
+              listItemTitleAs='h3'
+              isLoading={false}
+              interactive={false}
+              disableLinks
+              canAdd={true}
+              controls={
+                <Button
+                  variant='text'
+                  onClick={() => onRevoke?.('')}
+                  icon={<MinusCircleIcon />}
+                >
+                  {t('common.delete_poa')}
+                </Button>
+              }
+            />
+            {/* <List spacing={2}>
               {users?.map((user) => (
                 <UserItem
                   key={user.id}
@@ -92,13 +112,32 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
                   }
                 />
               ))}
-            </List>
+            </List> */}
           </>
         )}
         {indirectUsers && indirectUsers.length > 0 && (
           <>
             <h3 className={classes.subHeader}>{t('users_page.indirect_connections')}</h3>
-            <List spacing={2}>
+            <UserList
+              connections={indirectConnections}
+              searchString={query}
+              showRoles
+              listItemTitleAs='h3'
+              isLoading={false}
+              interactive={false}
+              disableLinks
+              canAdd={true}
+              controls={
+                <Button
+                  variant='text'
+                  onClick={() => onDelegate?.('')}
+                  icon={<PlusCircleIcon />}
+                >
+                  {t('common.give_poa')}
+                </Button>
+              }
+            />
+            {/* <List spacing={2}>
               {indirectUsers.map((user) => (
                 <UserItem
                   key={user.id}
@@ -122,7 +161,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
                   }
                 />
               ))}
-            </List>
+            </List> */}
           </>
         )}
         {users?.length === 0 && (!indirectUsers || indirectUsers?.length === 0) && (

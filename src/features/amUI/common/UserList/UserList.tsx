@@ -21,6 +21,7 @@ export interface UserListProps {
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
+  controls?: ReactNode;
 }
 
 export const UserList = ({
@@ -33,6 +34,7 @@ export const UserList = ({
   showRoles = true,
   roleDirection = 'toUser',
   disableLinks = false,
+  controls,
 }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
@@ -90,6 +92,7 @@ export const UserList = ({
             showRoles={showRoles}
             roleDirection={roleDirection}
             disableLinks={disableLinks}
+            controls={controls}
           />
         ))}
       </List>
