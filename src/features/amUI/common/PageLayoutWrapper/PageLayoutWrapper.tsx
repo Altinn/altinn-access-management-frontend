@@ -5,7 +5,7 @@ import type {
   MenuGroupProps,
   MenuItemProps,
   MenuItemSize,
-  MenuItemTheme,
+  IconTheme,
 } from '@altinn/altinn-components';
 import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +31,7 @@ interface PageLayoutWrapperProps {
 }
 
 const getAccountType = (type: string): 'company' | 'person' => {
-  return type === 'Organization' ? 'company' : 'person';
+  return type === 'Person' ? 'person' : 'company';
 };
 
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
@@ -53,7 +53,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     shortcuts: {
       divider: false,
       title: t('header.shortcuts'),
-      defaultIconTheme: 'transparent' as MenuItemTheme,
+      defaultIconTheme: 'transparent' as IconTheme,
       defaultItemSize: 'sm' as MenuItemSize,
     },
     global: {
@@ -214,7 +214,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   return (
     <RootProvider>
       <Layout
-        color={'company'}
+        color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
         theme='subtle'
         header={{
           locale: {
@@ -248,7 +248,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             ),
           },
         }}
-        content={{ color: 'company' }}
+        content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
         footer={{
           address: 'Postboks 1382 Vika, 0114 Oslo.',
           address2: 'Org.nr. 991 825 827',

@@ -76,7 +76,7 @@ export const ActiveConsentsPage = () => {
             data-size='lg'
           >
             <Link to={`/${ConsentPath.Consent}/${ConsentPath.Log}`}>
-              <FolderFileIcon />
+              <FolderFileIcon fontSize={28} />
               {t('active_consents.consent_log')}
             </Link>
           </DsLink>

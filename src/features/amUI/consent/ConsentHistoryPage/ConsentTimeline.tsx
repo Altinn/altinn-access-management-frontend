@@ -11,6 +11,7 @@ import {
 import classes from './ConsentHistoryPage.module.css';
 import { ConsentHistoryItem, ConsentRequestEventType } from '../types';
 import { TFunction } from 'i18next';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 interface ConsentTimelineProps {
   consentLog: ConsentHistoryItem[];
@@ -20,6 +21,7 @@ interface ConsentTimelineProps {
 export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimelineProps) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState<string>('');
+  const { data: reportee } = useGetReporteeQuery();
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
@@ -51,7 +53,7 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
         {timelineItems.map((item) => {
           return (
             <TimelineSegment
-              data-color='company'
+              data-color={reportee?.type === 'Person' ? 'person' : 'company'}
               key={item.consentEventId}
             >
               <TimelineActivity byline={item.bylineText}>

@@ -30,6 +30,7 @@ export const SidebarItems = (
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const isLoading = !accountName;
 
   const heading: MenuItemProps = {
     id: '1',
@@ -39,6 +40,7 @@ export const SidebarItems = (
       type: accountType,
     },
     size: 'lg',
+    loading: isLoading,
     title: t('sidebar.access_management'),
     badge: { label: t('common.beta') },
     interactive: false,
@@ -49,6 +51,7 @@ export const SidebarItems = (
     id: '2',
     size: 'md' as MenuItemSize,
     title: t('sidebar.users'),
+    loading: isLoading,
     selected: pathname?.includes(`/${amUIPath.Users}`),
     icon: PersonGroupIcon,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -65,6 +68,7 @@ export const SidebarItems = (
     id: '2.1',
     size: 'md',
     title: t('sidebar.poa_overview'),
+    loading: isLoading,
     icon: PadlockUnlockedIcon,
     selected: pathname?.includes(`/${amUIPath.PoaOverview}`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -81,6 +85,7 @@ export const SidebarItems = (
     id: '4',
     size: 'md' as MenuItemSize,
     title: t('sidebar.reportees'),
+    loading: isLoading,
     selected: pathname?.includes(`/${amUIPath.Reportees}`),
     icon: LinkIcon,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -97,6 +102,7 @@ export const SidebarItems = (
     id: '5',
     size: 'md',
     title: t('sidebar.consent'),
+    loading: isLoading,
     icon: HandshakeIcon,
     selected: pathname?.includes(`/${ConsentPath.Consent}/`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -113,6 +119,7 @@ export const SidebarItems = (
     id: '6',
     size: 'md',
     title: t('sidebar.systemaccess'),
+    loading: isLoading,
     icon: TenancyIcon,
     selected: pathname?.includes(`/${SystemUserPath.SystemUser}/`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -130,6 +137,7 @@ export const SidebarItems = (
       id: 'beta-about',
       size: 'md',
       title: t('header.new_altinn_info'),
+      loading: isLoading,
       icon: InformationSquareIcon,
       selected: pathname?.includes(`/${amUIPath.Info}`),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -145,6 +153,7 @@ export const SidebarItems = (
       id: 'beta-leave',
       size: 'md',
       title: t('header.leave_beta'),
+      loading: isLoading,
       icon: LeaveIcon,
       selected: false,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -164,7 +173,7 @@ export const SidebarItems = (
   }
 
   if (accountType === 'person') {
-    return [...items, consent];
+    return [...items, consent, ...shortcuts];
   }
 
   if (displayConfettiPackage) {
