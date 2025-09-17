@@ -1,5 +1,4 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
@@ -7,7 +6,6 @@ using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
 using Altinn.Platform.Register.Models;
-using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -18,7 +16,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ISystemRegisterClient _systemRegisterClient;
         private readonly IRegisterClient _registerClient;
         private readonly ResourceHelper _resourceHelper;
-        private readonly IOptions<FeatureFlags> _featureFlags;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemUserService"/> class.
@@ -27,19 +24,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="systemRegisterClient">The system register client.</param>
         /// <param name="registerClient">The register client.</param>
         /// <param name="resourceHelper">Resources helper to enrich resources</param>
-        /// <param name="featureFlags">Feature flags</param>
         public SystemUserService(
             ISystemUserClient systemUserClient,
             ISystemRegisterClient systemRegisterClient,
             IRegisterClient registerClient,
-            ResourceHelper resourceHelper,
-            IOptions<FeatureFlags> featureFlags)
+            ResourceHelper resourceHelper)
         {
             _systemUserClient = systemUserClient;
             _systemRegisterClient = systemRegisterClient;
             _registerClient = registerClient;
             _resourceHelper = resourceHelper;
-            _featureFlags = featureFlags;
         }
 
         /// <inheritdoc />
