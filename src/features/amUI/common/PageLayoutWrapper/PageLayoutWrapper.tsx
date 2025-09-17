@@ -238,6 +238,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         }}
         sidebar={{
           menu: {
+            variant: 'subtle',
             groups: menuGroups,
             items: SidebarItems(
               false,
