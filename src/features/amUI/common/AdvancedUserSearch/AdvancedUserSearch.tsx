@@ -31,12 +31,12 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   accessPackage,
   onDelegate,
   onRevoke,
-  canDelegate = true,
   isLoading = false,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const isSm = useIsMobileOrSmaller();
+  const [addUsersMode, setAddUsersMode] = useState(false);
 
   const { users, hasNextPage, goNextPage, indirectUsers, hasNextIndirectPage, goNextIndirectPage } =
     useFilteredUsers({
@@ -58,19 +58,22 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
         <DsSearch className={classes.searchBar}>
           <DsSearch.Input
             aria-label={t('common.search')}
-            placeholder={t('common.search')}
+            placeholder={t('advanced_user_search.user_search_placeholder')}
             value={query}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)}
           />
           {query && <DsSearch.Clear onClick={() => setQuery('')} />}
         </DsSearch>
+        <Button onClick={() => setAddUsersMode(true)}>
+          {t('advanced_user_search.add_user_button')}
+        </Button>
       </div>
 
       <div className={classes.results}>
         {(indirectUsers && indirectUsers?.length > 0) || (users && users?.length > 0) ? (
           <>
-            <h3 className={classes.subHeader}>{t('users_page.direct_connections')}</h3>
-            {connections && connections.length > 0 && (
+            <h3 className={classes.subHeader}>{t('advanced_user_search.direct_connections')}</h3>
+            {users && users.length > 0 && !addUsersMode ? (
               <>
                 <List spacing={2}>
                   {users.map((user) => (
@@ -110,11 +113,17 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
                   </div>
                 )}
               </>
+            ) : (
+              <DsParagraph data-size='md'>
+                {t('advanced_user_search.user_no_search_result', { searchTerm: query })}
+              </DsParagraph>
             )}
             {indirectUsers && indirectUsers.length > 0 && query && (
               <>
                 <hr />
-                <h3 className={classes.subHeader}>{t('users_page.indirect_connections')}</h3>
+                <h3 className={classes.subHeader}>
+                  {t('advanced_user_search.indirect_connections')}
+                </h3>
 
                 <List spacing={2}>
                   {indirectUsers?.map((user) => (
@@ -159,7 +168,9 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
         ) : (
           <div className={classes.emptyState}>
             <DsParagraph data-size='md'>
-              {t('users_page.user_no_search_result_with_add_suggestion', { searchTerm: query })}
+              {t('advanced_user_search.user_no_search_result_with_add_suggestion', {
+                searchTerm: query,
+              })}
             </DsParagraph>
             <NewUserButton isLarge />
           </div>

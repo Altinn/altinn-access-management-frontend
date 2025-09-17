@@ -318,6 +318,15 @@
   "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
   "indirect_connections": "Brukere uten fullmakt"
   },
+  "advanced_user_search": {
+    "add_user_button": "ny bruker",
+    "indirect_connections": "Brukere uten fullmakt",
+    "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
+    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
+    "user_list_heading": "Andre med fullmakt",
+    "direct_connections": "Brukere med fullmakt",
+    "user_search_placeholder": "Søk etter person eller virksomhet"
+  },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
     "main_page_heading": "Fullmakter {{name}} har hos andre",

@@ -11,16 +11,16 @@
 .controls {
   display: flex;
   align-items: center;
-  gap: var(--fds-spacing-3);
+  gap: var(--ds-spacing-3);
 }
 
 .results {
-  margin-top: var(--fds-spacing-3);
+  margin-top: var(--ds-spacing-3);
 }
 
 .emptyState {
   display: grid;
-  gap: var(--fds-spacing-2);
+  gap: var(--ds-spacing-2);
 }
 
 .showMoreButtonContainer {
@@ -32,4 +32,11 @@
 
 .showMoreButton {
   width: 100%;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-spacing-3);
 }

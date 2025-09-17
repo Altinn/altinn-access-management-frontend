@@ -283,7 +283,7 @@
     "package_number_of_resources": "{{count}} tenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakkar.",
     "no_matching_search": "Ingen treff på søket",
-  "info_alert_text": "Tilgangspakkar skal erstatte dagens Altinn-roller. Dei vil bli fylt med fleire tenester etter kvart. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/profil/tilgangspakker/'>hjelpesida om tilgangspakkar</a>.",
+    "info_alert_text": "Tilgangspakkar skal erstatte dagens Altinn-roller. Dei vil bli fylt med fleire tenester etter kvart. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/profil/tilgangspakker/'>hjelpesida om tilgangspakkar</a>.",
     "person_info_alert": "Det er ikkje mogleg å gi og fjerne fullmakter til personar heilt enno. Dette vil komme seinare.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
@@ -311,8 +311,17 @@
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
     "no_users": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
-  "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?",
-  "indirect_connections": "Brukarar utan fullmakt"
+    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?",
+    "indirect_connections": "Brukarar utan fullmakt"
+  },
+  "advanced_user_search": {
+    "add_user_button": "ny brukar",
+    "user_list_heading": "Andre med fullmakt",
+    "direct_connections": "Brukarar med fullmakt",
+    "user_search_placeholder": "Søk etter brukarar eller verksemder",
+    "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
+    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?",
+    "indirect_connections": "Brukarar utan fullmakt"
   },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
