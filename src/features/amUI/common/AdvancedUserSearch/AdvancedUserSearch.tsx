@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { DsSearch, DsParagraph, List, Button } from '@altinn/altinn-components';
+import React, { useMemo, useState } from 'react';
+import { DsSearch, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { Connection } from '@/rtk/features/userInfoApi';
+import { ConnectionUserType, type Connection } from '@/rtk/features/userInfoApi';
 import { NewUserButton } from '@/features/amUI/users/NewUserModal/NewUserModal';
-import { UserItem } from '@/features/amUI/common/UserList/UserItem';
 
 import classes from './AdvancedUserSearch.module.css';
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
@@ -12,7 +11,8 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { ExtendedAccessPackage } from '../AccessPackageList/useAreaPackageList';
 import { UserList } from '../UserList/UserList';
-import { UserListActions } from '../UserList/UserListActions';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { ConnectionsList } from './ConnectionsList';
 
 export interface AdvancedUserSearchProps {
   connections?: Connection[];
@@ -38,12 +38,45 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const isSm = useIsMobileOrSmaller();
   const [addUsersMode, setAddUsersMode] = useState(false);
 
+  const filteredConnections = useMemo(
+    () => connections?.filter((item) => item.party.type !== ConnectionUserType.Systemuser),
+    [connections],
+  );
+
+  const filteredIndirectConnections = useMemo(
+    () => indirectConnections?.filter((item) => item.party.type !== ConnectionUserType.Systemuser),
+    [indirectConnections],
+  );
+
   const { users, hasNextPage, goNextPage, indirectUsers, hasNextIndirectPage, goNextIndirectPage } =
     useFilteredUsers({
-      connections,
-      indirectConnections,
+      connections: filteredConnections,
+      indirectConnections: filteredIndirectConnections,
       searchString: query,
     });
+
+  const trimmedQuery = query.trim();
+  const isQuery = trimmedQuery !== '';
+
+  const directHasResults = (users?.length ?? 0) > 0;
+  const indirectHasResults = (indirectUsers?.length ?? 0) > 0;
+
+  const showDirectSection = !addUsersMode;
+  const showDirectList = showDirectSection && directHasResults;
+  // Only show a direct "no results" message when searching and there ARE indirect results,
+  // otherwise the overall empty state will cover both lists.
+  const showDirectNoResults =
+    showDirectSection && !directHasResults && isQuery && indirectHasResults;
+
+  // Only show indirect connections if in addUsersMode or if search query is not empty
+  const showIndirectSection = addUsersMode || isQuery;
+  const showIndirectList = showIndirectSection && indirectHasResults;
+
+  // Show empty state if: (1) searching and no results in either list, or
+  // (2) in addUsersMode and no results in indirectUsers
+  const showEmptyState =
+    (isQuery && !directHasResults && !indirectHasResults) || (addUsersMode && !indirectHasResults);
+
   if (isLoading) {
     return (
       <UserList
@@ -64,112 +97,70 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           />
           {query && <DsSearch.Clear onClick={() => setQuery('')} />}
         </DsSearch>
-        <Button onClick={() => setAddUsersMode(true)}>
-          {t('advanced_user_search.add_user_button')}
-        </Button>
+
+        {addUsersMode ? (
+          <>
+            <DsButton
+              variant='secondary'
+              onClick={() => setAddUsersMode(false)}
+            >
+              {t('common.cancel')}
+            </DsButton>
+            {/* <NewUserButton /> */}
+          </>
+        ) : (
+          <DsButton
+            variant='secondary'
+            onClick={() => setAddUsersMode(true)}
+          >
+            <PlusCircleIcon /> {t('advanced_user_search.add_user_button')}
+          </DsButton>
+        )}
       </div>
 
       <div className={classes.results}>
-        {(indirectUsers && indirectUsers?.length > 0) || (users && users?.length > 0) ? (
+        {showDirectSection && (
           <>
-            <h3 className={classes.subHeader}>{t('advanced_user_search.direct_connections')}</h3>
-            {users && users.length > 0 && !addUsersMode ? (
-              <>
-                <List spacing={2}>
-                  {users.map((user) => (
-                    <UserItem
-                      key={user.id}
-                      user={user}
-                      size='md'
-                      titleAs='h4'
-                      interactive={false}
-                      showRoles={true}
-                      roleDirection='toUser'
-                      disableLinks
-                      controls={
-                        isSm ? null : (
-                          <UserListActions
-                            userId={user.id}
-                            userName={user.name}
-                            availableAction={DelegationAction.REVOKE}
-                            onRevoke={onRevoke}
-                          />
-                        )
-                      }
-                    />
-                  ))}
-                </List>
-                {hasNextPage && (
-                  <div className={classes.showMoreButtonContainer}>
-                    <Button
-                      className={classes.showMoreButton}
-                      onClick={goNextPage}
-                      disabled={!hasNextPage}
-                      variant='outline'
-                      size='md'
-                    >
-                      {t('common.show_more')}
-                    </Button>
-                  </div>
-                )}
-              </>
-            ) : (
+            {(showDirectList || showDirectNoResults) && (
+              <h3 className={classes.subHeader}>{t('advanced_user_search.direct_connections')}</h3>
+            )}
+            {showDirectList && (
+              <ConnectionsList
+                users={users}
+                isSm={isSm}
+                hasNextPage={hasNextPage}
+                goNextPage={goNextPage}
+                availableAction={DelegationAction.REVOKE}
+                onRevoke={onRevoke}
+              />
+            )}
+            {showDirectNoResults && (
               <DsParagraph data-size='md'>
-                {t('advanced_user_search.user_no_search_result', { searchTerm: query })}
+                {t('advanced_user_search.user_no_search_result', { searchTerm: trimmedQuery })}
               </DsParagraph>
             )}
-            {indirectUsers && indirectUsers.length > 0 && query && (
-              <>
-                <hr />
-                <h3 className={classes.subHeader}>
-                  {t('advanced_user_search.indirect_connections')}
-                </h3>
-
-                <List spacing={2}>
-                  {indirectUsers?.map((user) => (
-                    <UserItem
-                      key={user.id}
-                      user={user}
-                      size='md'
-                      titleAs='h4'
-                      interactive={false}
-                      showRoles={true}
-                      roleDirection='toUser'
-                      disableLinks
-                      controls={
-                        isSm ? null : (
-                          <UserListActions
-                            userId={user.id}
-                            userName={user.name}
-                            availableAction={DelegationAction.DELEGATE}
-                            onDelegate={onDelegate}
-                          />
-                        )
-                      }
-                    />
-                  ))}
-                </List>
-                {hasNextIndirectPage && (
-                  <div className={classes.showMoreButtonContainer}>
-                    <Button
-                      className={classes.showMoreButton}
-                      onClick={goNextIndirectPage}
-                      disabled={!hasNextIndirectPage}
-                      variant='outline'
-                      size='md'
-                    >
-                      {t('common.show_more')}
-                    </Button>
-                  </div>
-                )}
-              </>
-            )}
           </>
-        ) : (
+        )}
+
+        {showIndirectList && (
+          <>
+            <h3 className={classes.subHeader}>{t('advanced_user_search.indirect_connections')}</h3>
+            <ConnectionsList
+              users={indirectUsers}
+              isSm={isSm}
+              hasNextPage={!!hasNextIndirectPage}
+              goNextPage={goNextIndirectPage}
+              availableAction={DelegationAction.DELEGATE}
+              onDelegate={onDelegate}
+            />
+          </>
+        )}
+
+        {showEmptyState && (
           <div className={classes.emptyState}>
             <DsParagraph data-size='md'>
               {t('advanced_user_search.user_no_search_result_with_add_suggestion', {
-                searchTerm: query,
+                searchTerm: trimmedQuery,
               })}
             </DsParagraph>
             <NewUserButton isLarge />

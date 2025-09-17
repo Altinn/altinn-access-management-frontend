@@ -319,7 +319,7 @@
   "indirect_connections": "Brukere uten fullmakt"
   },
   "advanced_user_search": {
-    "add_user_button": "ny bruker",
+    "add_user_button": "Ny bruker",
     "indirect_connections": "Brukere uten fullmakt",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
