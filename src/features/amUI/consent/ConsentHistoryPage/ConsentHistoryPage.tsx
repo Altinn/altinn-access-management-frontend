@@ -1,7 +1,16 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { DsAlert, DsDialog, DsHeading, DsLink, DsSpinner } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsDialog,
+  DsHeading,
+  DsLink,
+  DsSkeleton,
+  Timeline,
+  TimelineActivity,
+  TimelineSegment,
+} from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -59,7 +68,7 @@ export const ConsentHistoryPage = () => {
               {t('consent_log.heading')}
             </DsHeading>
           </div>
-          {isLoadingConsentLog && <DsSpinner aria-label={t('consent_log.loading_consent_log')} />}
+          {isLoadingConsentLog && <LoadingTimeline />}
           {loadConsentLogError && (
             <DsAlert data-color='danger'>{t('consent_log.loading_consent_log_error')}</DsAlert>
           )}
@@ -80,5 +89,33 @@ export const ConsentHistoryPage = () => {
         </DsDialog>
       </PageLayoutWrapper>
     </PageWrapper>
+  );
+};
+
+const LoadingTimeline = () => {
+  return (
+    <Timeline>
+      <LoadingTimelineItem />
+      <LoadingTimelineItem />
+      <LoadingTimelineItem />
+    </Timeline>
+  );
+};
+
+const LoadingTimelineItem = () => {
+  return (
+    <TimelineSegment loading>
+      <TimelineActivity loading>
+        <DsSkeleton height={27} />
+        <DsSkeleton
+          height={21}
+          width={160}
+        />
+        <DsSkeleton
+          height={48}
+          width={130}
+        />
+      </TimelineActivity>
+    </TimelineSegment>
   );
 };

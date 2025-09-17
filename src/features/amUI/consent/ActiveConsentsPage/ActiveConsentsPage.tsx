@@ -6,7 +6,7 @@ import {
   DsDialog,
   DsHeading,
   DsLink,
-  DsSpinner,
+  DsParagraph,
   List,
   ListItem,
 } from '@altinn/altinn-components';
@@ -83,13 +83,16 @@ export const ActiveConsentsPage = () => {
         </div>
         <div>
           {isLoadingActiveConsents && (
-            <DsSpinner aria-label={t('active_consents.loading_consents')} />
+            <List>
+              <LoadingListItem />
+              <LoadingListItem />
+            </List>
           )}
           {loadActiveConsentsError && (
             <DsAlert data-color='danger'>{t('active_consents.load_consents_error')}</DsAlert>
           )}
           {activeConsents && activeConsents.length === 0 && (
-            <DsAlert data-color='info'>{t('active_consents.no_active_consents')}</DsAlert>
+            <DsParagraph>{t('active_consents.no_active_consents')}</DsParagraph>
           )}
           {groupedActiveConsents && (
             <List>
@@ -124,9 +127,15 @@ export const ActiveConsentsPage = () => {
 interface ConsentListItemProps {
   title: string;
   subItems: { id: string; title: string; isPoa: boolean }[];
+  isLoading?: boolean;
   onClick: (consentId: string) => void;
 }
-const ConsentListItem = ({ title, subItems, onClick }: ConsentListItemProps): React.ReactNode => {
+const ConsentListItem = ({
+  title,
+  subItems,
+  isLoading,
+  onClick,
+}: ConsentListItemProps): React.ReactNode => {
   const { t } = useTranslation();
 
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
@@ -136,6 +145,7 @@ const ConsentListItem = ({ title, subItems, onClick }: ConsentListItemProps): Re
       icon={{ svgElement: HandshakeIcon, theme: 'surface' }}
       as='button'
       size='md'
+      loading={isLoading}
       collapsible
       expanded={isExpanded}
       badge={{ label: subItems.length }}
@@ -148,6 +158,7 @@ const ConsentListItem = ({ title, subItems, onClick }: ConsentListItemProps): Re
             icon={HandshakeIcon}
             title={{ as: 'h4', children: item.title }}
             as='button'
+            loading={isLoading}
             onClick={() => onClick(item.id)}
             badge={{
               className: classes.consentBadge,
@@ -160,5 +171,19 @@ const ConsentListItem = ({ title, subItems, onClick }: ConsentListItemProps): Re
         ))}
       </List>
     </ListItem>
+  );
+};
+
+const LoadingListItem = () => {
+  return (
+    <ConsentListItem
+      isLoading
+      title={'xxxxxxxxxxx'}
+      subItems={[
+        { id: '1', title: 'xxxxxxxxxxx', isPoa: false },
+        { id: '2', title: 'xxxxxxxxxxx', isPoa: false },
+      ]}
+      onClick={() => {}}
+    />
   );
 };
