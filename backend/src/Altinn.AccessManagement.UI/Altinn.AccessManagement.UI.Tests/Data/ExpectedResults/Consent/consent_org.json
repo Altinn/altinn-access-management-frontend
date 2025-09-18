@@ -52,6 +52,13 @@
       "performedBy": "urn:altinn:organization:identifier-no:991825827",
       "eventType": "Accepted",
       "consentRequestID": "75af4b32-231b-4317-b31a-5e0c71a0bb64"
+    },
+    {
+      "consentEventID": "36e1b65a-ef0c-41e0-9057-b7fa836bc3b9",
+      "created": "2025-07-04T09:11:23.526811+00:00",
+      "performedBy": "urn:altinn:organization:identifier-no:991825827",
+      "eventType": "Used",
+      "consentRequestID": "75af4b32-231b-4317-b31a-5e0c71a0bb64"
     }
   ]
 }

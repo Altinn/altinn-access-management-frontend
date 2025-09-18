@@ -4,8 +4,6 @@ import type {
   AccountMenuItemProps,
   MenuGroupProps,
   MenuItemProps,
-  MenuItemSize,
-  IconTheme,
 } from '@altinn/altinn-components';
 import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';

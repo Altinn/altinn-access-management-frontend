@@ -9,10 +9,9 @@ import {
   TimelineSegment,
 } from '@altinn/altinn-components';
 import classes from './ConsentHistoryPage.module.css';
-import { ConsentHistoryItem, ConsentRequestEventType } from '../types';
+import { ConsentHistoryItem } from '../types';
 import { TFunction } from 'i18next';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { text } from 'stream/consumers';
 
 interface ConsentTimelineProps {
   consentLog: ConsentHistoryItem[];
