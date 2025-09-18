@@ -43,7 +43,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             try
             {
-                string dataPath = Path.Combine(dataFolder, "Role", "roles.json");
+                string dataPath = Path.Combine(dataFolder, "Roles", "roles.json");
                 List<Role> allRoles =
                     Util.GetMockData<List<Role>>(dataPath);
 

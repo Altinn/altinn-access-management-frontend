@@ -349,7 +349,7 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 
     if (mockSettings.Role)
     {
-        services.AddHttpClient<IRoleClient, RoleClient>();
+        services.AddHttpClient<IRoleClient, RoleClientMock>();
     }
     else
     {

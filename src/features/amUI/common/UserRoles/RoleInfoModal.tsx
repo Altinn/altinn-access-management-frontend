@@ -29,10 +29,12 @@ export const RoleInfoModal = ({ open, onClose, roleId }: RoleInfoModal) => {
       closedby='any'
     >
       {!roleId || isLoading ? (
-        <DsSpinner
-          data-size='lg'
-          aria-hidden='true'
-        />
+        <div className={classes.spinnerContainer}>
+          <DsSpinner
+            data-size='lg'
+            aria-hidden='true'
+          />
+        </div>
       ) : (
         <div className={classes.modalContent}>
           <DsHeading

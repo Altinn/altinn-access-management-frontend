@@ -1,0 +1,1964 @@
+[
+  {
+    "id": "66ad5542-4f4a-4606-996f-18690129ce00",
+    "name": "Administrativ enhet - offentlig sektor",
+    "code": "administrativ-enhet-offentlig-sektor",
+    "description": "Administrativ enhet - offentlig sektor",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:administrativ-enhet-offentlig-sektor",
+    "legacyRoleCode": "ADOS",
+    "legacyUrn": "urn:altinn:rolecode:ADOS",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "29a24eab-a25f-445d-b56d-e3b914844853",
+    "name": "Nestleder",
+    "code": "nestleder",
+    "description": "Styremedlem som opptrer som styreleder ved leders fravær",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:nestleder",
+    "legacyRoleCode": "NEST",
+    "legacyUrn": "urn:altinn:rolecode:NEST",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "8c1e91c2-a71c-4abf-a74e-a600a98be976",
+    "name": "Inngår i kontorfellesskap",
+    "code": "kontorfelleskapmedlem",
+    "description": "Inngår i kontorfellesskap",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:kontorfelleskapmedlem",
+    "legacyRoleCode": "KTRF",
+    "legacyUrn": "urn:altinn:rolecode:KTRF",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "cfc41a92-2061-4ff4-97dc-658ffba2c00e",
+    "name": "Organisasjonsledd i offentlig sektor",
+    "code": "organisasjonsledd-offentlig-sektor",
+    "description": "Organisasjonsledd i offentlig sektor",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:organisasjonsledd-offentlig-sektor",
+    "legacyRoleCode": "ORGL",
+    "legacyUrn": "urn:altinn:rolecode:ORGL",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "2fec6d4b-cead-419a-adf3-1bf482a3c9dc",
+    "name": "Særskilt oppdelt enhet",
+    "code": "saerskilt-oppdelt-enhet",
+    "description": "Særskilt oppdelt enhet",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:saerskilt-oppdelt-enhet",
+    "legacyRoleCode": "OPMV",
+    "legacyUrn": "urn:altinn:rolecode:OPMV",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "name": "Daglig leder",
+    "code": "daglig-leder",
+    "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+    "isKeyRole": true,
+    "urn": "urn:altinn:external-role:ccr:daglig-leder",
+    "legacyRoleCode": "DAGL",
+    "legacyUrn": "urn:altinn:rolecode:DAGL",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "18baa914-ac43-4663-9fa4-6f5760dc68eb",
+    "name": "Deltaker delt ansvar",
+    "code": "deltaker-delt-ansvar",
+    "description": "Fysisk- eller juridisk person som har personlig ansvar for deler av selskapets forpliktelser",
+    "isKeyRole": true,
+    "urn": "urn:altinn:external-role:ccr:deltaker-delt-ansvar",
+    "legacyRoleCode": "DTPR",
+    "legacyUrn": "urn:altinn:rolecode:DTPR",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "2651ed07-f31b-4bc1-87bd-4d270742a19d",
+    "name": "Innehaver",
+    "code": "innehaver",
+    "description": "Fysisk person som er eier av et enkeltpersonforetak",
+    "isKeyRole": true,
+    "urn": "urn:altinn:external-role:ccr:innehaver",
+    "legacyRoleCode": "INNH",
+    "legacyUrn": "urn:altinn:rolecode:INNH",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "f1021b8c-9fbc-4296-bd17-a05d713037ef",
+    "name": "Deltaker fullt ansvar",
+    "code": "deltaker-fullt-ansvar",
+    "description": "Fysisk- eller juridisk person som har ubegrenset, personlig ansvar for selskapets forpliktelser",
+    "isKeyRole": true,
+    "urn": "urn:altinn:external-role:ccr:deltaker-fullt-ansvar",
+    "legacyRoleCode": "DTSO",
+    "legacyUrn": "urn:altinn:rolecode:DTSO",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "d41d67f2-15b0-4c82-95db-b8d5baaa14a4",
+    "name": "Varamedlem",
+    "code": "varamedlem",
+    "description": "Fysisk- eller juridisk person som er stedfortreder for et styremedlem",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:varamedlem",
+    "legacyRoleCode": "VARA",
+    "legacyUrn": "urn:altinn:rolecode:VARA",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "1f8a2518-9494-468a-80a0-7405f0daf9e9",
+    "name": "Observatør",
+    "code": "observator",
+    "description": "Fysisk person som deltar i styremøter i en virksomhet, men uten stemmerett",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:observator",
+    "legacyRoleCode": "OBS",
+    "legacyUrn": "urn:altinn:rolecode:OBS",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "f045ffda-dbdc-41da-b674-b9b276ad5b01",
+    "name": "Styremedlem",
+    "code": "styremedlem",
+    "description": "Fysisk- eller juridisk person som inngår i et styre",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:styremedlem",
+    "legacyRoleCode": "MEDL",
+    "legacyUrn": "urn:altinn:rolecode:MEDL",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+    "name": "Styrets leder",
+    "code": "styreleder",
+    "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
+    "isKeyRole": true,
+    "urn": "urn:altinn:external-role:ccr:styreleder",
+    "legacyRoleCode": "LEDE",
+    "legacyUrn": "urn:altinn:rolecode:LEDE",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "2e2fc06e-d9b7-4cd9-91bc-d5de766d20de",
+    "name": "Den personlige konkursen angår",
+    "code": "personlige-konkurs",
+    "description": "Den personlige konkursen angår",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:personlige-konkurs",
+    "legacyRoleCode": "KENK",
+    "legacyUrn": "urn:altinn:rolecode:KENK",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "e852d758-e8dd-41ec-a1e2-4632deb6857d",
+    "name": "Norsk representant for utenlandsk enhet",
+    "code": "norsk-representant",
+    "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i Norge",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:norsk-representant",
+    "legacyRoleCode": "REPR",
+    "legacyUrn": "urn:altinn:rolecode:REPR",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "db013059-4a8a-442d-bf90-b03539fe5dda",
+    "name": "Kontaktperson",
+    "code": "kontaktperson",
+    "description": "Fysisk person som representerer en virksomhet",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:kontaktperson",
+    "legacyRoleCode": "KONT",
+    "legacyUrn": "urn:altinn:rolecode:KONT",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "69c4397a-9e34-4e73-9f69-534bc1bb74c8",
+    "name": "Kontaktperson NUF",
+    "code": "kontaktperson-nuf",
+    "description": "Fysisk person som representerer en virksomhet - NUF",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:kontaktperson-nuf",
+    "legacyRoleCode": "KNUF",
+    "legacyUrn": "urn:altinn:rolecode:KNUF",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "8f0cf433-954e-4680-a25d-a3cf9ffdf149",
+    "name": "Bestyrende reder",
+    "code": "bestyrende-reder",
+    "description": "Bestyrende reder",
+    "isKeyRole": true,
+    "urn": "urn:altinn:external-role:ccr:bestyrende-reder",
+    "legacyRoleCode": "BEST",
+    "legacyUrn": "urn:altinn:rolecode:BEST",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "9ce84a4d-4970-4ef2-8208-b8b8f4d45556",
+    "name": "Eierkommune",
+    "code": "eierkommune",
+    "description": "Eierkommune",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:eierkommune",
+    "legacyRoleCode": "EIKM",
+    "legacyUrn": "urn:altinn:rolecode:EIKM",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "2cacfb35-2346-4a8d-95f6-b6fa4206881c",
+    "name": "Bobestyrer",
+    "code": "bostyrer",
+    "description": "Bestyrer av et konkursbo eller dødsbo som er under offentlig skiftebehandling",
+    "isKeyRole": true,
+    "urn": "urn:altinn:external-role:ccr:bostyrer",
+    "legacyRoleCode": "BOBE",
+    "legacyUrn": "urn:altinn:rolecode:BOBE",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "e4674211-034a-45f3-99ac-b2356984968a",
+    "name": "Helseforetak",
+    "code": "helseforetak",
+    "description": "Helseforetak",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:helseforetak",
+    "legacyRoleCode": "HLSE",
+    "legacyUrn": "urn:altinn:rolecode:HLSE",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "f76b997a-9bd8-4f7b-899f-fcd85d35669f",
+    "name": "Revisor",
+    "code": "revisor",
+    "description": "Revisor",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:revisor",
+    "legacyRoleCode": "REVI",
+    "legacyUrn": "urn:altinn:rolecode:REVI",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "348b2f47-47ee-4084-abf8-68aa54c2b27f",
+    "name": "Forretningsfører",
+    "code": "forretningsforer",
+    "description": "Forretningsfører",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:forretningsforer",
+    "legacyRoleCode": "FFØR",
+    "legacyUrn": "urn:altinn:rolecode:FFØR",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "cfcf75af-9902-41f7-ab47-b77ba60bcae5",
+    "name": "Komplementar",
+    "code": "komplementar",
+    "description": "Komplementar",
+    "isKeyRole": true,
+    "urn": "urn:altinn:external-role:ccr:komplementar",
+    "legacyRoleCode": "KOMP",
+    "legacyUrn": "urn:altinn:rolecode:KOMP",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "50cc3f41-4dde-4417-8c04-eea428f169dd",
+    "name": "Konkursdebitor",
+    "code": "konkursdebitor",
+    "description": "Konkursdebitor",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:konkursdebitor",
+    "legacyRoleCode": "KDEB",
+    "legacyUrn": "urn:altinn:rolecode:KDEB",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "d78dd1d8-a3f3-4ae6-807e-ea5149f47035",
+    "name": "Inngår i kirkelig fellesråd",
+    "code": "kirkelig-fellesraad",
+    "description": "Inngår i kirkelig fellesråd",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:kirkelig-fellesraad",
+    "legacyRoleCode": "KIRK",
+    "legacyUrn": "urn:altinn:rolecode:KIRK",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "185f623b-f614-4a83-839c-1788764bd253",
+    "name": "Opplysninger om foretaket i hjemlandet",
+    "code": "hovedforetak",
+    "description": "Opplysninger om foretaket i hjemlandet",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:hovedforetak",
+    "legacyRoleCode": "HFOR",
+    "legacyUrn": "urn:altinn:rolecode:HFOR",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "46e27685-b3ba-423e-8b42-faab54de5817",
+    "name": "Regnskapsfører",
+    "code": "regnskapsforer",
+    "description": "Regnskapsfører",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:regnskapsforer",
+    "legacyRoleCode": "REGN",
+    "legacyUrn": "urn:altinn:rolecode:REGN",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "17cb6a9e-5d27-4a8e-9647-f3a53c7a09c6",
+    "name": "Er regnskapsforeradresse for",
+    "code": "regnskapsforeradressat",
+    "description": "Er regnskapsforeradresse for",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:regnskapsforeradressat",
+    "legacyRoleCode": "RFAD",
+    "legacyUrn": "urn:altinn:rolecode:RFAD",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "ea8f1038-9717-472d-a579-f32960f0eecb",
+    "name": "Signatur",
+    "code": "signerer",
+    "description": "Signatur",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:signerer",
+    "legacyRoleCode": "SIGN",
+    "legacyUrn": "urn:altinn:rolecode:SIGN",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "9822b632-3822-4a9e-b768-8411c046bb75",
+    "name": "Skal fusjoneres med",
+    "code": "fusjonsovertaker",
+    "description": "Skal fusjoneres med",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:fusjonsovertaker",
+    "legacyRoleCode": "FUSJ",
+    "legacyUrn": "urn:altinn:rolecode:FUSJ",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "e9292053-92ee-42e0-a30c-011667ee8db8",
+    "name": "Skal fisjoneres med",
+    "code": "fisjonsovertaker",
+    "description": "Skal fisjoneres med",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:fisjonsovertaker",
+    "legacyRoleCode": "FISJ",
+    "legacyUrn": "urn:altinn:rolecode:FISJ",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "5f868b06-7531-448c-a275-a2dfa100f840",
+    "name": "Har som registreringsenhet BEDR",
+    "code": "hovedenhet",
+    "description": "Har som registreringsenhet",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:hovedenhet",
+    "legacyRoleCode": "BEDR",
+    "legacyUrn": "urn:altinn:rolecode:BEDR",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "a53c833b-6dc1-4ceb-b56c-00d333c211c0",
+    "name": "Har som registreringsenhet AAFY",
+    "code": "ikke-naeringsdrivende-hovedenhet",
+    "description": "Har som registreringsenhet",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:ikke-naeringsdrivende-hovedenhet",
+    "legacyRoleCode": "AAFY",
+    "legacyUrn": "urn:altinn:rolecode:AAFY",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "f7c13f9b-8246-4a16-8b93-33e945b8cf5b",
+    "name": "Prokura i fellesskap",
+    "code": "prokurist-fellesskap",
+    "description": "Prokura i fellesskap",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:prokurist-fellesskap",
+    "legacyRoleCode": "POFE",
+    "legacyUrn": "urn:altinn:rolecode:POFE",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "e39b6f89-6e42-4ca4-8e21-913a632e9c95",
+    "name": "Prokura hver for seg",
+    "code": "prokurist-hver-for-seg",
+    "description": "Prokura hver for seg",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:prokurist-hver-for-seg",
+    "legacyRoleCode": "POHV",
+    "legacyUrn": "urn:altinn:rolecode:POHV",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "6aa99128-c901-4ab4-86cd-b5d92aeb0b80",
+    "name": "Prokura",
+    "code": "prokurist",
+    "description": "Prokura",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:prokurist",
+    "legacyRoleCode": "PROK",
+    "legacyUrn": "urn:altinn:rolecode:PROK",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "2c812df3-cbb8-46cf-9071-f5fbb6c28ad2",
+    "name": "Er revisoradresse for",
+    "code": "revisoradressat",
+    "description": "Er revisoradresse for",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:revisoradressat",
+    "legacyRoleCode": "READ",
+    "legacyUrn": "urn:altinn:rolecode:READ",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "94df9e5c-7d52-43a2-91af-a50cf81fca2d",
+    "name": "Sameiere",
+    "code": "sameier",
+    "description": "Ekstern rolle",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:sameier",
+    "legacyRoleCode": "SAM",
+    "legacyUrn": "urn:altinn:rolecode:SAM",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "917dcbb9-8cb9-4d2d-984c-8f877b510747",
+    "name": "Signatur i fellesskap",
+    "code": "signerer-fellesskap",
+    "description": "Signatur i fellesskap",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:signerer-fellesskap",
+    "legacyRoleCode": "SIFE",
+    "legacyUrn": "urn:altinn:rolecode:SIFE",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "a6a94254-7459-4096-b889-411793febbee",
+    "name": "Signatur hver for seg",
+    "code": "signerer-hver-for-seg",
+    "description": "Signatur hver for seg",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:signerer-hver-for-seg",
+    "legacyRoleCode": "SIHV",
+    "legacyUrn": "urn:altinn:rolecode:SIHV",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "0fc0fc0b-d3e1-4360-982e-b1d0a798f374",
+    "name": "Kontaktperson i kommune",
+    "code": "kontaktperson-kommune",
+    "description": "Ekstern rolle",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:kontaktperson-kommune",
+    "legacyRoleCode": "KOMK",
+    "legacyUrn": "urn:altinn:rolecode:KOMK",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "7f6c14f6-7809-4867-83ab-30c426b53d57",
+    "name": "Kontaktperson i Ad",
+    "code": "kontaktperson-ados",
+    "description": "enhet - offentlig sektor",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:kontaktperson-ados",
+    "legacyRoleCode": "KEMN",
+    "legacyUrn": "urn:altinn:rolecode:KEMN",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "e9e25aec-66ab-4c02-8737-21b79a5d9eb5",
+    "name": "Leder i partiets utovende organ",
+    "code": "parti-organ-leder",
+    "description": "Leder i partiets utovende organ",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:parti-organ-leder",
+    "legacyRoleCode": "HLED",
+    "legacyUrn": "urn:altinn:rolecode:HLED",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "0be0982c-6650-49f2-9a1e-364ad879472c",
+    "name": "Elektronisk signeringsrett",
+    "code": "elektronisk-signeringsrettig",
+    "description": "Elektronisk signeringsrett",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:elektronisk-signeringsrettig",
+    "legacyRoleCode": "ESGR",
+    "legacyUrn": "urn:altinn:rolecode:ESGR",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "ee453078-9a2a-4997-969e-40f6663379ab",
+    "name": "Tildeler av elektronisk signeringsrett",
+    "code": "elektronisk-signeringsrett-tildeler",
+    "description": "Tildeler av elektronisk signeringsrett",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:elektronisk-signeringsrett-tildeler",
+    "legacyRoleCode": "ETDL",
+    "legacyUrn": "urn:altinn:rolecode:ETDL",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "156ae2e3-d9e8-4daa-bb3c-5859a31be8c9",
+    "name": "Inngår i foretaksgruppe med",
+    "code": "foretaksgruppe-med",
+    "description": "Inngår i foretaksgruppe med",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:foretaksgruppe-med",
+    "legacyRoleCode": "FGRP",
+    "legacyUrn": "urn:altinn:rolecode:FGRP",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "a14d5cdd-a8c9-4e7b-ac90-5a008c0c6129",
+    "name": "Har som datter i konsern",
+    "code": "konsern-datter",
+    "description": "Har som datter i konsern",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:konsern-datter",
+    "legacyRoleCode": "KDAT",
+    "legacyUrn": "urn:altinn:rolecode:KDAT",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "acd90ac5-4a9d-4ab1-a5d9-5d33d1684a45",
+    "name": "Har som grunnlag for konsern",
+    "code": "konsern-grunnlag",
+    "description": "Har som grunnlag for konsern",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:konsern-grunnlag",
+    "legacyRoleCode": "KGRL",
+    "legacyUrn": "urn:altinn:rolecode:KGRL",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "bfa050a6-25bb-4af8-8de3-651d0c6fddc2",
+    "name": "Har som mor i konsern",
+    "code": "konsern-mor",
+    "description": "Har som mor i konsern",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:konsern-mor",
+    "legacyRoleCode": "KMOR",
+    "legacyUrn": "urn:altinn:rolecode:KMOR",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "e4a1253c-31c0-4e11-85ba-6e2e63627fb5",
+    "name": "Forestår avvikling",
+    "code": "forestaar-avvikling",
+    "description": "Forestår avvikling",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:forestaar-avvikling",
+    "legacyRoleCode": "AVKL",
+    "legacyUrn": "urn:altinn:rolecode:AVKL",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "177b7290-daea-4368-9a7a-71dbe1eb3b1b",
+    "name": "Inngår i felles- registrering",
+    "code": "felles-registrert-med",
+    "description": "Inngår i felles- registrering",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:felles-registrert-med",
+    "legacyRoleCode": "FEMV",
+    "legacyUrn": "urn:altinn:rolecode:FEMV",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "920f602d-b82b-40ee-bfd2-856a1c6a26f2",
+    "name": "Er frivillig registrert utleiebygg for",
+    "code": "utleiebygg",
+    "description": "Er frivillig registrert utleiebygg for",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:utleiebygg",
+    "legacyRoleCode": "UTBG",
+    "legacyUrn": "urn:altinn:rolecode:UTBG",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "3a9e145d-3ce6-4df4-85d4-8901affaf347",
+    "name": "Er virksomhet drevet i fellesskap av",
+    "code": "virksomhet-fellesskap-drifter",
+    "description": "Er virksomhet drevet i fellesskap av",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:virksomhet-fellesskap-drifter",
+    "legacyRoleCode": "VIFE",
+    "legacyUrn": "urn:altinn:rolecode:VIFE",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "92651683-36b2-4604-9ce9-b5b688f68696",
+    "name": "Utfyller MVA-oppgaver",
+    "code": "mva-utfyller",
+    "description": "Utfyller MVA-oppgaver",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:mva-utfyller",
+    "legacyRoleCode": "MVAU",
+    "legacyUrn": "urn:altinn:rolecode:MVAU",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "b5136a2c-f48c-40a7-8276-b74e121ab4eb",
+    "name": "Signerer MVA-oppgaver",
+    "code": "mva-signerer",
+    "description": "Signerer MVA-oppgaver",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:mva-signerer",
+    "legacyRoleCode": "MVAG",
+    "legacyUrn": "urn:altinn:rolecode:MVAG",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "4b3ae668-5cae-4416-9121-c20e81597b12",
+    "name": "Revisor registrert i revisorregisteret",
+    "code": "kontaktperson-revisor",
+    "description": "Rettigheter for revisjonsselskap",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:kontaktperson-revisor",
+    "legacyRoleCode": "SREVA",
+    "legacyUrn": "urn:altinn:rolecode:SREVA",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "cdd312f9-8a6e-4184-9374-d4ae4baabe3e",
+    "name": "Stifter",
+    "code": "stifter",
+    "description": "Stifter",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:stifter",
+    "legacyRoleCode": "STFT",
+    "legacyUrn": "urn:altinn:rolecode:STFT",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "f23b832a-ce0e-42f0-b314-e1b0751506f2",
+    "name": "Varamedlem i partiets utovende organ",
+    "code": "parti-organ-varamedlem",
+    "description": "Varamedlem i partiets utovende organ",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:parti-organ-varamedlem",
+    "legacyRoleCode": "HVAR",
+    "legacyUrn": "urn:altinn:rolecode:HVAR",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "355bc5d6-c346-4b6b-bdb4-ed2cbdee8318",
+    "name": "Nestleder i partiets utovende organ",
+    "code": "parti-organ-nestleder",
+    "description": "Nestleder i partiets utovende organ",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:parti-organ-nestleder",
+    "legacyRoleCode": "HNST",
+    "legacyUrn": "urn:altinn:rolecode:HNST",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "4a596f51-199e-4586-8292-f9f84b079769",
+    "name": "Styremedlem i partiets utovende organ",
+    "code": "parti-organ-styremedlem",
+    "description": "Styremedlem i partiets utovende organ",
+    "isKeyRole": false,
+    "urn": "urn:altinn:external-role:ccr:parti-organ-styremedlem",
+    "legacyRoleCode": "HMDL",
+    "legacyUrn": "urn:altinn:rolecode:HMDL",
+    "provider": {
+      "id": "0195ea92-2080-758b-89db-7735c4f68320",
+      "name": "Enhetsregisteret",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-ccr",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+    "name": "Rettighetshaver",
+    "code": "rettighetshaver",
+    "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+    "isKeyRole": false,
+    "urn": "urn:altinn:role:rettighetshaver",
+    "legacyRoleCode": null,
+    "legacyUrn": null,
+    "provider": {
+      "id": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Altinn 3",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn3",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "ff4c33f5-03f7-4445-85ed-1e60b8aafb30",
+    "name": "Agent",
+    "code": "agent",
+    "description": "Gir mulighet til å motta delegerte fullmakter for virksomheten",
+    "isKeyRole": false,
+    "urn": "urn:altinn:role:agent",
+    "legacyRoleCode": null,
+    "legacyUrn": null,
+    "provider": {
+      "id": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Altinn 3",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn3",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "c497b499-7e98-423d-9fe7-ad5a6c3b71ad",
+    "name": "Primærnæring og næringsmiddel",
+    "code": "A0212",
+    "description": "Denne rollen gir rettighet til tjenester innen import, foredling, produksjon og/eller salg av primærnæringsprodukter og andre næringsmiddel, samt dyrehold, akvakultur, planter og kosmetikk. Ved regelverksendringer eller innføring av nye digitale tjenester",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0212",
+    "legacyRoleCode": "A0212",
+    "legacyUrn": "urn:altinn:rolecode:A0212",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "151955ec-d8aa-4c14-a435-ffa96b26a9fb",
+    "name": "Post/arkiv",
+    "code": "A0236",
+    "description": "Denne rollen gir rettighet til å lese meldinger som blir sendt til brukerens meldingsboks. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0236",
+    "legacyRoleCode": "A0236",
+    "legacyUrn": "urn:altinn:rolecode:A0236",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "c2884487-a634-4537-95b4-bafb917b62a8",
+    "name": "Ansvarlig revisor",
+    "code": "A0237",
+    "description": "Delegerbar revisorrolle med signeringsrettighet.Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0237",
+    "legacyRoleCode": "A0237",
+    "legacyUrn": "urn:altinn:rolecode:A0237",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "10fcad57-7a91-4e02-a921-63e5751fbc24",
+    "name": "Revisormedarbeider",
+    "code": "A0238",
+    "description": "Denne rollen gir revisor rettighet til aktuelle skjema og tjenester. Denne gir ikke rettighet til å signere. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0238",
+    "legacyRoleCode": "A0238",
+    "legacyUrn": "urn:altinn:rolecode:A0238",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "ebed65a5-dd87-4180-b898-e1da249b128d",
+    "name": "Regnskapsfører med signeringsrettighet",
+    "code": "A0239",
+    "description": "Denne rollen gir regnskapsfører rettighet til aktuelle skjema og tjenester, samt signeringsrettighet for tjenestene. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0239",
+    "legacyRoleCode": "A0239",
+    "legacyUrn": "urn:altinn:rolecode:A0239",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "9407620b-21b6-4538-b4d8-2b4eb339c373",
+    "name": "Regnskapsfører uten signeringsrettighet",
+    "code": "A0240",
+    "description": "Denne rollen gir regnskapsfører rettighet til aktuelle skjema og tjenester. Denne gir ikke rettighet til å signere. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0240",
+    "legacyRoleCode": "A0240",
+    "legacyUrn": "urn:altinn:rolecode:A0240",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "723a43ab-13d8-4585-81e2-e4c734b2d4fc",
+    "name": "Regnskapsfører lønn",
+    "code": "A0241",
+    "description": "Denne rollen gir regnskapsfører rettighet til lønnsrelaterte tjenester. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.  ",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0241",
+    "legacyRoleCode": "A0241",
+    "legacyUrn": "urn:altinn:rolecode:A0241",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "6828080b-e846-4c51-b670-201af4917562",
+    "name": "Plan- og byggesak",
+    "code": "A0278",
+    "description": "Rollen er forbeholdt skjemaer og tjenester som er godkjent av Direktoratet for byggkvalitet (DiBK). Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0278",
+    "legacyRoleCode": "A0278",
+    "legacyUrn": "urn:altinn:rolecode:A0278",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "ba1c261c-20ec-44e2-9e0b-4e7cfe9f36e7",
+    "name": "Hovedadministrator",
+    "code": "hovedadministrator",
+    "description": "Intern rolle for å samle alle delegerbare fullmakter en hovedadministrator kan utføre for virksomheten",
+    "isKeyRole": false,
+    "urn": "urn:altinn:role:hovedadministrator",
+    "legacyRoleCode": null,
+    "legacyUrn": null,
+    "provider": {
+      "id": "0195ea92-2080-7e7c-bbe3-bb0521c1e51a",
+      "name": "Altinn 3",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn3",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "f4df0522-3034-405b-a9e5-83f971737033",
+    "name": "Skatteforhold for privatpersoner",
+    "code": "A0282",
+    "description": "Tillatelsen gjelder alle opplysninger vedrørende dine eller ditt enkeltpersonsforetaks skatteforhold. Ved regelverksendringer eller innføring av nye digitale tjenester kan Skatteetaten endre i tillatelsen.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0282",
+    "legacyRoleCode": "A0282",
+    "legacyUrn": "urn:altinn:rolecode:A0282",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "92ea5544-ca64-4e03-9532-646b9f86ff65",
+    "name": "Taushetsbelagt post ",
+    "code": "A0286",
+    "description": "Denne rollen gir tilgang til taushetsbelagt post fra stat og kommune. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0286",
+    "legacyRoleCode": "A0286",
+    "legacyUrn": "urn:altinn:rolecode:A0286",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "df34b69a-e0aa-4245-a840-3a850769b2bd",
+    "name": "Taushetsbelagt post - oppvekst og utdanning",
+    "code": "A0287",
+    "description": "Gir tilgang til taushetsbelagt post fra det offentlige innen oppvekst og utdanning",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0287",
+    "legacyRoleCode": "A0287",
+    "legacyUrn": "urn:altinn:rolecode:A0287",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "5fda4732-dd10-416d-b876-9e1715bbf21c",
+    "name": "Taushetsbelagt post - administrasjon",
+    "code": "A0288",
+    "description": "Gir tilgang til taushetsbelagt post fra det offentlige innen administrasjon",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0288",
+    "legacyRoleCode": "A0288",
+    "legacyUrn": "urn:altinn:rolecode:A0288",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "4652e98f-7a6b-4dc2-b061-fc8d6840e456",
+    "name": "Algetestdata",
+    "code": "A0293",
+    "description": "Havforskningsinstituttet - registrering av algetestdata",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0293",
+    "legacyRoleCode": "A0293",
+    "legacyUrn": "urn:altinn:rolecode:A0293",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "c22c6add-dd5d-4735-87de-b75491018e50",
+    "name": "Transportløyvegaranti",
+    "code": "A0294",
+    "description": "Statens vegvesen - rolle som gir tilgang til app for transportløyvegarantister",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0294",
+    "legacyRoleCode": "A0294",
+    "legacyUrn": "urn:altinn:rolecode:A0294",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "d8b9c47b-e5a7-4912-8aa8-1d2bab75e41c",
+    "name": "Revisorattesterer",
+    "code": "A0298",
+    "description": "Rollen gir bruker tilgang til å attestere tjenester for avgiver som revisor.  Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:A0298",
+    "legacyRoleCode": "A0298",
+    "legacyUrn": "urn:altinn:rolecode:A0298",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "48f9e5ec-efd5-4863-baba-9697b8971666",
+    "name": "Tilgangsstyring",
+    "code": "ADMAI",
+    "description": "Denne rollen gir administratortilgang til å gi videre rettigheter til andre.  ",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:ADMAI",
+    "legacyRoleCode": "ADMAI",
+    "legacyUrn": "urn:altinn:rolecode:ADMAI",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "e078bb18-f55a-4a2d-8964-c599f41b29b5",
+    "name": "Programmeringsgrensesnitt (API)",
+    "code": "APIADM",
+    "description": "Delegerbar rolle som gir  tilgang til å administrere tilgang til programmeringsgrensesnitt - API, på vegne av virksomheten.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:APIADM",
+    "legacyRoleCode": "APIADM",
+    "legacyUrn": "urn:altinn:rolecode:APIADM",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "0ea4e5de-3fb4-499e-b013-1e1b4459af24",
+    "name": "Programmeringsgrensesnitt for NUF (API)",
+    "code": "APIADMNUF",
+    "description": "Delegerbar rolle som gir kontaktperson for norskregistrert utenlandsk foretak (NUF) tilgang til å administrere tilgang til programmeringsgrensesnitt - API, på vegne av virksomheten.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:APIADMNUF",
+    "legacyRoleCode": "APIADMNUF",
+    "legacyUrn": "urn:altinn:rolecode:APIADMNUF",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "60abf944-cf8c-4845-b310-83bcb6c77198",
+    "name": "Revisorattesterer - MVA kompensasjon",
+    "code": "ATTST",
+    "description": "Denne rollen gir revisor rettighet til å attestere tjenesten Merverdiavgift - søknad om kompensasjon (RF-0009).",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:ATTST",
+    "legacyRoleCode": "ATTST",
+    "legacyUrn": "urn:altinn:rolecode:ATTST",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "0a76304e-345b-4f22-bb31-4837a630eb7a",
+    "name": "Konkursbo tilgangsstyring",
+    "code": "BOADM",
+    "description": "Denne rollen gir advokater mulighet til å styre hvem som har rettigheter til konkursbo.  ",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:BOADM",
+    "legacyRoleCode": "BOADM",
+    "legacyUrn": "urn:altinn:rolecode:BOADM",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "7246639c-137b-4981-b172-6134c9fc1a7f",
+    "name": "Konkursbo lesetilgang",
+    "code": "BOBEL",
+    "description": "Tilgang til å lese informasjon i tjenesten Konkursbehandling",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:BOBEL",
+    "legacyRoleCode": "BOBEL",
+    "legacyUrn": "urn:altinn:rolecode:BOBEL",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "5f73b031-8b5b-45d8-a682-e9a7e75a7691",
+    "name": "Konkursbo skrivetilgang",
+    "code": "BOBES",
+    "description": "Utvidet lesetilgang og innsendingsrett for tjenesten Konkursbehandling",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:BOBES",
+    "legacyRoleCode": "BOBES",
+    "legacyUrn": "urn:altinn:rolecode:BOBES",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "e0684f66-a46e-4706-a754-8889b532509c",
+    "name": "ECKEYROLE",
+    "code": "ECKEYROLE",
+    "description": "Nøkkelrolle for virksomhetsertifikatbrukere",
+    "isKeyRole": true,
+    "urn": "urn:altinn:rolecode:ECKEYROLE",
+    "legacyRoleCode": "ECKEYROLE",
+    "legacyUrn": "urn:altinn:rolecode:ECKEYROLE",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "1225bc46-4b03-4b63-b6e8-58926b29a97b",
+    "name": "Eksplisitt tjenestedelegering",
+    "code": "EKTJ",
+    "description": "Ikke-delegerbar roller for tjenester som kun skal delegeres enkeltvis",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:EKTJ",
+    "legacyRoleCode": "EKTJ",
+    "legacyUrn": "urn:altinn:rolecode:EKTJ",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "cde501eb-0d23-410b-b728-00ab9d68fb2e",
+    "name": "Godkjenning av bedriftshelsetjeneste",
+    "code": "GKBHT",
+    "description": "Godkjenning av bedriftshelsetjeneste",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:GKBHT",
+    "legacyRoleCode": "GKBHT",
+    "legacyUrn": "urn:altinn:rolecode:GKBHT",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "d9e05d40-9849-4982-bf04-aa03b19e4a66",
+    "name": "Hovedadministrator",
+    "code": "HADM",
+    "description": "Denne rollen gir mulighet for å delegere alle roller og rettigheter for en aktør, også de man ikke har selv. Hovedadministrator-rollen kan bare delegeres av daglig leder, styrets leder, innehaver og bestyrende reder.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:HADM",
+    "legacyRoleCode": "HADM",
+    "legacyUrn": "urn:altinn:rolecode:HADM",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "98bebcac-d6bb-4343-97b8-0fe8bc744d7a",
+    "name": "Økokrim rapportering",
+    "code": "HVASK",
+    "description": "Tilgang til tjenester fra Økokrim. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:HVASK",
+    "legacyRoleCode": "HVASK",
+    "legacyUrn": "urn:altinn:rolecode:HVASK",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "27e1ef41-df4d-439e-b948-df136c139e81",
+    "name": "Klientadministrator",
+    "code": "KLADM",
+    "description": "Tilgang til å administrere klientroller for regnskapsførere og revisorer",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:KLADM",
+    "legacyRoleCode": "KLADM",
+    "legacyUrn": "urn:altinn:rolecode:KLADM",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "b8e6dd1c-ca10-4ce6-9c27-53cdb3c275b3",
+    "name": "Kommunale tjenester",
+    "code": "KOMAB",
+    "description": "Rollen gir tilgang til kommunale tjenester. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:KOMAB",
+    "legacyRoleCode": "KOMAB",
+    "legacyUrn": "urn:altinn:rolecode:KOMAB",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "010b4c49-bf56-44e3-b73b-84be7b2a5eb6",
+    "name": "Lønn og personalmedarbeider",
+    "code": "LOPER",
+    "description": "Denne rollen gir rettighet til lønns- og personalrelaterte tjenester. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.  ",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:LOPER",
+    "legacyRoleCode": "LOPER",
+    "legacyUrn": "urn:altinn:rolecode:LOPER",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "0f276fc4-c201-4ff7-8e8a-caa3efe9c02a",
+    "name": "Parallell signering",
+    "code": "PASIG",
+    "description": "Denne rollen gir rettighet til å signere elementer fra andre avgivere.  ",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:PASIG",
+    "legacyRoleCode": "PASIG",
+    "legacyUrn": "urn:altinn:rolecode:PASIG",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "23cade0a-287a-49e0-8957-22d5a14cb100",
+    "name": "Patent, varemerke og design",
+    "code": "PAVAD",
+    "description": "Denne rollen gir rettighet til tjenester relatert til patent, varemerke og design. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:PAVAD",
+    "legacyRoleCode": "PAVAD",
+    "legacyUrn": "urn:altinn:rolecode:PAVAD",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "696478f4-c85b-4bda-ace0-caa058fe5def",
+    "name": "Privatperson begrensede rettigheter",
+    "code": "PRIUT",
+    "description": "Denne rollen gir mulighet til å benytte tjenester på vegne av en annen privatperson. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.  ",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:PRIUT",
+    "legacyRoleCode": "PRIUT",
+    "legacyUrn": "urn:altinn:rolecode:PRIUT",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "633cde7d-3604-45b2-ba8c-e16161cf2cf8",
+    "name": "Regnskapsmedarbeider",
+    "code": "REGNA",
+    "description": "Denne rollen gir rettighet til regnskapsrelaterte skjema og tjenester. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:REGNA",
+    "legacyRoleCode": "REGNA",
+    "legacyUrn": "urn:altinn:rolecode:REGNA",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "1d71e23d-91b6-44ca-b171-c179028e7cdf",
+    "name": "Revisorrettighet",
+    "code": "REVAI",
+    "description": "Denne rollen gir revisor rettighet til aktuelle skjema og tjenester",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:REVAI",
+    "legacyRoleCode": "REVAI",
+    "legacyUrn": "urn:altinn:rolecode:REVAI",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "1a15b75c-2387-4278-ba3a-7eb1cffe1653",
+    "name": "Taushetsbelagt post fra kommunen",
+    "code": "SENS01",
+    "description": "Rollen gir tilgang til tjenester med taushetsbelagt informasjon fra kommunen, og bør ikke delegeres i stort omfang",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:SENS01",
+    "legacyRoleCode": "SENS01",
+    "legacyUrn": "urn:altinn:rolecode:SENS01",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "e427a9fb-4b6b-44b3-b873-689d174283b8",
+    "name": "Signerer av Samordnet registermelding",
+    "code": "SIGNE",
+    "description": "Denne rollen gir rettighet til tjenester på vegne av enheter/foretak. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:SIGNE",
+    "legacyRoleCode": "SIGNE",
+    "legacyUrn": "urn:altinn:rolecode:SIGNE",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "16857e39-441f-4dd4-8592-aed94e816c04",
+    "name": "Begrenset signeringsrettighet",
+    "code": "SISKD",
+    "description": "Tilgang til å signere utvalgte skjema og tjenester. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:SISKD",
+    "legacyRoleCode": "SISKD",
+    "legacyUrn": "urn:altinn:rolecode:SISKD",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "b1213d79-03fa-4837-9193-e4b9fe24eccb",
+    "name": "Helse-, sosial- og velferdstjenester",
+    "code": "UIHTL",
+    "description": "Tilgang til helse-, sosial- og velferdsrelaterte tjenester. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:UIHTL",
+    "legacyRoleCode": "UIHTL",
+    "legacyUrn": "urn:altinn:rolecode:UIHTL",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "3c99647d-10b5-447e-9f0b-7bef1c7880f7",
+    "name": "Samferdsel",
+    "code": "UILUF",
+    "description": "Rollen gir rettighet til tjenester relatert til samferdsel. For eksempel tjenester fra Statens Vegvesen, Sjøfartsdirektoratet og Luftfartstilsynet. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rolen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:UILUF",
+    "legacyRoleCode": "UILUF",
+    "legacyUrn": "urn:altinn:rolecode:UILUF",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "dbaae9f8-107a-4222-9afd-d9f95cd5319c",
+    "name": "Utfyller/Innsender",
+    "code": "UTINN",
+    "description": "Denne rollen gir rettighet til et bredt utvalg skjema og tjenester som ikke har så strenge krav til autorisasjon. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:UTINN",
+    "legacyRoleCode": "UTINN",
+    "legacyUrn": "urn:altinn:rolecode:UTINN",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "af338fd5-3f1d-4ab5-8326-9dfecad26f71",
+    "name": "Energi, miljø og klima",
+    "code": "UTOMR",
+    "description": "Tilgang til tjenester relatert til energi, miljø og klima. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som rollen gir.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:UTOMR",
+    "legacyRoleCode": "UTOMR",
+    "legacyUrn": "urn:altinn:rolecode:UTOMR",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "478f710a-4af1-412d-9c67-de976fd0b229",
+    "name": "Hovedrolle for sensitive tjeneste",
+    "code": "SENS",
+    "description": "Hovedrolle for sensitive tjeneste",
+    "isKeyRole": false,
+    "urn": "urn:altinn:rolecode:SENS",
+    "legacyRoleCode": "SENS",
+    "legacyUrn": "urn:altinn:rolecode:SENS",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "1c6eeec1-fe70-4fc5-8b45-df4a2255dea6",
+    "name": "Privatperson",
+    "code": "privatperson",
+    "description": "Denne rollen er hentet fra Folkeregisteret og gir rettighet til flere tjenester.",
+    "isKeyRole": false,
+    "urn": "urn:altinn:role:privatperson",
+    "legacyRoleCode": "PRIV",
+    "legacyUrn": "urn:altinn:rolecode:PRIV",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  },
+  {
+    "id": "e16ab886-1e1e-4f45-8f79-46f06f720f3e",
+    "name": "Selvregistrert bruker",
+    "code": "selvregistrert",
+    "description": "Selvregistrert bruker",
+    "isKeyRole": false,
+    "urn": "urn:altinn:role:selvregistrert",
+    "legacyRoleCode": "SELN",
+    "legacyUrn": "urn:altinn:rolecode:SELN",
+    "provider": {
+      "id": "0195ea92-2080-777d-8626-69c91ea2a05d",
+      "name": "Altinn 2",
+      "refId": null,
+      "logoUrl": null,
+      "code": "sys-altinn2",
+      "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695"
+    }
+  }
+]
