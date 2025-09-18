@@ -53,8 +53,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     shortcuts: {
       divider: false,
       title: t('header.shortcuts'),
-      defaultIconTheme: 'transparent' as IconTheme,
-      defaultItemSize: 'sm' as MenuItemSize,
     },
     global: {
       divider: false,
