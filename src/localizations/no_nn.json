@@ -284,7 +284,7 @@
     "package_number_of_resources": "{{count}} tenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakkar.",
     "no_matching_search": "Ingen treff på søket",
-  "info_alert_text": "Tilgangspakkar skal erstatte dagens Altinn-roller. Dei vil bli fylt med fleire tenester etter kvart. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/profil/tilgangspakker/'>hjelpesida om tilgangspakkar</a>.",
+    "info_alert_text": "Tilgangspakkar skal erstatte dagens Altinn-roller. Dei vil bli fylt med fleire tenester etter kvart. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/profil/tilgangspakker/'>hjelpesida om tilgangspakkar</a>.",
     "person_info_alert": "Det er ikkje mogleg å gi og fjerne fullmakter til personar heilt enno. Dette vil komme seinare.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
@@ -731,6 +731,8 @@
     "poa_revoked": "{{to}}: fullmakt trekt",
     "consent_accepted": "{{to}}: fikk samtykke av {{from}}",
     "poa_accepted": "{{to}}: fikk fullmakt av {{from}}",
+    "consent_used": "{{to}}: har henta samtykke fra {{from}}",
+    "poa_used": "{{to}}: har henta fullmakt fra {{from}}",
     "no_results": "Ingen samtykker eller fullmakter ble funnet for dette søket",
     "no_active_consents": "Det finnes ingen innslag i avtaleloggen enda"
   },

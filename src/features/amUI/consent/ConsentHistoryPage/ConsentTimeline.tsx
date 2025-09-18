@@ -12,6 +12,7 @@ import classes from './ConsentHistoryPage.module.css';
 import { ConsentHistoryItem, ConsentRequestEventType } from '../types';
 import { TFunction } from 'i18next';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { text } from 'stream/consumers';
 
 interface ConsentTimelineProps {
   consentLog: ConsentHistoryItem[];
@@ -95,6 +96,25 @@ const toTimeStamp = (dateString: string, useFullMonthName?: boolean): string => 
   });
 };
 
+const timelineEventText = {
+  Accepted: {
+    poa: 'consent_log.poa_accepted',
+    consent: 'consent_log.consent_accepted',
+  },
+  Revoked: {
+    poa: 'consent_log.poa_revoked',
+    consent: 'consent_log.consent_revoked',
+  },
+  Expired: {
+    poa: 'consent_log.poa_expired',
+    consent: 'consent_log.consent_expired',
+  },
+  Used: {
+    poa: 'consent_log.poa_used',
+    consent: 'consent_log.consent_used',
+  },
+};
+
 interface TimelineItem {
   consentEventId: string;
   created: string;
@@ -112,32 +132,28 @@ const getTimeLineItems = (
 ): TimelineItem[] => {
   const getTimeLineText = (
     consent: ConsentHistoryItem,
-    eventType: ConsentRequestEventType | 'Expired',
+    eventType: keyof typeof timelineEventText,
     t: TFunction<'translation', undefined>,
   ): string => {
-    let textKey = `Ukjent hendelse ${eventType}`;
-    if (eventType === 'Accepted') {
-      textKey = consent.isPoa ? 'consent_log.poa_accepted' : 'consent_log.consent_accepted';
-    }
-    if (eventType === 'Revoked') {
-      textKey = consent.isPoa ? 'consent_log.poa_revoked' : 'consent_log.consent_revoked';
-    }
-    if (eventType === 'Expired') {
-      textKey = consent.isPoa ? 'consent_log.poa_expired' : 'consent_log.consent_expired';
-    }
-
+    const textKey = consent.isPoa
+      ? timelineEventText[eventType]['poa']
+      : timelineEventText[eventType]['consent'];
     return t(textKey, { to: consent.toPartyName, from: consent.fromPartyName });
   };
 
   return consentLog
     .reduce((acc: TimelineItem[], consent) => {
       const consentTimelineItems = consent.consentRequestEvents
-        .filter((event) => ['Accepted', 'Revoked', 'Expired'].includes(event.eventType))
+        .filter((event) => Object.keys(timelineEventText).includes(event.eventType))
         .map((event) => {
           return {
             consentEventId: event.consentEventID,
             bylineText: toTimeStamp(event.created, true),
-            timelineText: getTimeLineText(consent, event.eventType, t),
+            timelineText: getTimeLineText(
+              consent,
+              event.eventType as keyof typeof timelineEventText,
+              t,
+            ),
             validToText:
               event.eventType === 'Accepted'
                 ? t('consent_log.expires', { expires: toTimeStamp(consent.validTo) })

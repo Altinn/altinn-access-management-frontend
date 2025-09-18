@@ -77,7 +77,6 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
         <>
           <ConsentStatus
             events={consent.consentRequestEvents}
-            validTo={consent.validTo}
             isPoa={consent.isPoa}
           />
           {canConsentBeRevoked && (
@@ -159,11 +158,10 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
 
 interface ConsentStatusProps {
   events: ConsentRequestEvent[];
-  validTo: string;
   isPoa?: boolean;
 }
 
-const ConsentStatus = ({ events, validTo, isPoa }: ConsentStatusProps) => {
+const ConsentStatus = ({ events, isPoa }: ConsentStatusProps) => {
   const { t } = useTranslation();
 
   let statusClass = '';
