@@ -1,5 +1,7 @@
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useDelegatePackageMutation } from '@/rtk/features/accessPackageApi';
+import { useDispatch } from 'react-redux';
+import { userInfoApi } from '@/rtk/features/userInfoApi';
 import type { Party } from '@/rtk/features/lookupApi';
 
 export interface DelegationErrorDetails {
@@ -11,6 +13,8 @@ export interface DelegationErrorDetails {
 
 export const useDelegateAccessPackage = () => {
   const [delegate, { isLoading }] = useDelegatePackageMutation();
+
+  const dispatch = useDispatch();
 
   const delegatePackage = (
     toParty: Party,
@@ -28,6 +32,7 @@ export const useDelegateAccessPackage = () => {
     })
       .unwrap()
       .then(() => {
+        dispatch(userInfoApi.util.invalidateTags(['RightHolders']));
         onSuccess?.();
       })
       .catch((response) => {

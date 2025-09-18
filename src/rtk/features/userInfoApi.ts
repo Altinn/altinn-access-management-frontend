@@ -20,6 +20,7 @@ export interface ExtendedUser extends Omit<User, 'children'> {
   roles: RoleInfo[];
   children: (ExtendedUser | User)[] | null;
   matchInChildren?: boolean;
+  isInherited?: boolean;
 }
 
 export interface User {

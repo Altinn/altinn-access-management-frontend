@@ -15,8 +15,9 @@ export interface ConnectionsListProps {
   hasNextPage: boolean;
   goNextPage: () => void;
   availableAction: DelegationAction;
-  onRevoke?: (userId: string) => void;
-  onDelegate?: (userId: string) => void;
+  onRevoke?: (user: User) => void;
+  onDelegate?: (user: User) => void;
+  isActionLoading?: boolean;
 }
 
 export const ConnectionsList: React.FC<ConnectionsListProps> = ({
@@ -27,6 +28,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
   availableAction,
   onRevoke,
   onDelegate,
+  isActionLoading = false,
 }) => {
   const { t } = useTranslation();
 
@@ -46,8 +48,8 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
             controls={
               isSm ? null : (
                 <UserListActions
-                  userId={user.id}
-                  userName={user.name}
+                  isLoading={isActionLoading}
+                  user={user}
                   availableAction={availableAction}
                   onRevoke={onRevoke}
                   onDelegate={onDelegate}

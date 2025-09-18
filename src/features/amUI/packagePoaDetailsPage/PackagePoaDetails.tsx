@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import headerClasses from './PackagePoaDetailsHeader.module.css';
 import { DsAlert, DsParagraph, DsSearch, DsTabs, Heading } from '@altinn/altinn-components';
@@ -6,32 +6,30 @@ import { Link, useParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { useTranslation } from 'react-i18next';
-import { useGetRightHoldersQuery, type Connection, type User } from '@/rtk/features/userInfoApi';
-import { UserList } from '../common/UserList/UserList';
-import { debounce } from '@/resources/utils/debounce';
+import {
+  PartyType,
+  useGetRightHoldersQuery,
+  type Connection,
+  type User,
+} from '@/rtk/features/userInfoApi';
 import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { ResourceList } from '../common/ResourceList/ResourceList';
 import AdvancedUserSearch from '../common/AdvancedUserSearch/AdvancedUserSearch';
+import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
+import { Party } from '@/rtk/features/lookupApi';
+
+const mapUserToParty = (user: User): Party => ({
+  partyId: 0,
+  partyUuid: user.id,
+  name: user.name,
+  partyTypeName: user.variant === 'organization' ? PartyType.Organization : PartyType.Person,
+});
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
-  const [searchString, setSearchString] = useState<string>('');
-
-  const onSearch = useCallback(
-    debounce((newSearchString: string) => {
-      setSearchString(newSearchString);
-    }, 300),
-    [],
-  );
-
-  useEffect(() => {
-    return () => {
-      (onSearch as any).cancel?.();
-    };
-  }, [onSearch]);
 
   const {
     data: accessPackage,
@@ -95,12 +93,20 @@ export const PackagePoaDetails = () => {
     );
   }
 
-  const onDelegate = (userId: string) => {
-    // Delegate access to the user
+  const { onDelegate, onRevoke, isLoading: isActionLoading } = useAccessPackageActions({});
+
+  const handleOnDelegate = (user: User) => {
+    const toParty = mapUserToParty(user);
+    if (accessPackage && toParty) {
+      onDelegate(accessPackage, toParty);
+    }
   };
 
-  const onRevoke = (userId: string) => {
-    // Revoke access from the user
+  const handleOnRevoke = (user: User) => {
+    const toParty = mapUserToParty(user);
+    if (accessPackage && toParty) {
+      onRevoke(accessPackage, toParty);
+    }
   };
 
   return (
@@ -152,10 +158,10 @@ export const PackagePoaDetails = () => {
               <AdvancedUserSearch
                 connections={connections}
                 indirectConnections={indirectConnections}
-                accessPackage={accessPackage}
                 isLoading={isLoading || loadingIndirectConnections}
-                onDelegate={(userId) => onDelegate?.(userId)}
-                onRevoke={(userId) => onRevoke?.(userId)}
+                onDelegate={handleOnDelegate}
+                onRevoke={handleOnRevoke}
+                isActionLoading={isActionLoading || isLoading || loadingIndirectConnections}
               />
             </>
           )}

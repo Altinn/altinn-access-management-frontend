@@ -1,36 +1,51 @@
-import { Button, DsButton } from '@altinn/altinn-components';
+import { Button, DsButton, DsSkeleton, Skeleton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { Party } from '@/rtk/features/lookupApi';
+import { User } from '@/rtk/features/userInfoApi';
 
 export const UserListActions = ({
-  userId,
-  userName,
+  user,
   onDelegate,
   onRevoke,
   onRequest,
   availableAction,
+  isLoading,
 }: {
-  userId: string;
-  userName: string;
-  onDelegate?: (userId: string) => void;
-  onRevoke?: (userId: string) => void;
-  onRequest?: (userId: string) => void;
+  user: User;
+  onDelegate?: (user: User) => void;
+  onRevoke?: (user: User) => void;
+  onRequest?: (user: User) => void;
   availableAction?: DelegationAction;
+  isLoading?: boolean;
 }) => {
   const { t } = useTranslation();
 
   if (!availableAction || availableAction.length === 0) {
     return null;
   }
-
+  if (isLoading) {
+    return (
+      <DsButton
+        variant='tertiary'
+        data-size='md'
+        loading
+      >
+        <DsSkeleton
+          variant='text'
+          width='20'
+        />
+      </DsButton>
+    );
+  }
   return (
     <>
       {availableAction.includes(DelegationAction.DELEGATE) && onDelegate && (
         <DsButton
           variant='tertiary'
           data-size='md'
-          onClick={() => onDelegate(userId)}
+          onClick={() => onDelegate(user)}
         >
           <PlusCircleIcon /> {t('common.give_poa')}
         </DsButton>
@@ -39,7 +54,7 @@ export const UserListActions = ({
         <DsButton
           variant='tertiary'
           data-size='md'
-          onClick={() => onRequest(userId)}
+          onClick={() => onRequest(user)}
         >
           <PlusCircleIcon /> {t('common.request_poa')}
         </DsButton>
@@ -48,7 +63,7 @@ export const UserListActions = ({
         <DsButton
           variant='tertiary'
           data-size='md'
-          onClick={() => onRevoke(userId)}
+          onClick={() => onRevoke(user)}
         >
           <MinusCircleIcon /> {t('common.delete_poa')}
         </DsButton>
