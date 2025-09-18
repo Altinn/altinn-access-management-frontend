@@ -1,7 +1,7 @@
 ﻿namespace Altinn.AccessManagement.UI.Core.Models.Common;
 
 /// <summary>
-/// Role
+/// Represents a Role.
 /// </summary>
 public class Role
 {
@@ -9,17 +9,6 @@ public class Role
     /// Id
     /// </summary>
     public Guid Id { get; set; }
-
-    /// <summary>
-    /// EntityTypeId
-    /// e.g Organization
-    /// </summary>
-    public Guid? EntityTypeId { get; set; }
-
-    /// <summary>
-    /// ProviderId
-    /// </summary>
-    public Guid ProviderId { get; set; }
 
     /// <summary>
     /// Name
@@ -52,25 +41,26 @@ public class Role
     public string Urn { get; set; }
 
     /// <summary>
-    /// Can be assigned
+    /// Legacy role code
     /// </summary>
-    public bool IsAssignable { get; set; }
-}
+    public string LegacyRoleCode { get; set; }
 
-/// <summary>
-/// Extended Role
-/// </summary>
-public class ExtRole : Role
-{
     /// <summary>
-    /// EntityType
+    /// Legacy Urn
     /// </summary>
-    public EntityType EntityType { get; set; }
+    public string LegacyUrn { get; set; }
 
     /// <summary>
     /// Provider
     /// </summary>
     public Provider Provider { get; set; }
+
+    /// <summary>
+    /// Construct from Role
+    /// </summary>
+    public Role()
+    {
+    }
 }
 
 /// <summary>

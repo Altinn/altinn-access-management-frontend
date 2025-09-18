@@ -1,0 +1,11 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.heading {
+  padding-bottom: 0.2rem;
+}
