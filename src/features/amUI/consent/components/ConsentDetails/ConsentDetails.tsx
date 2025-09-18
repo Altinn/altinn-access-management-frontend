@@ -86,7 +86,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
                 disabled={isRevoking}
                 onClick={() => setIsPopoverOpen(true)}
               >
-                <EraserIcon />
+                <EraserIcon aria-hidden />
                 {consent.isPoa
                   ? t('active_consents.revoke_poa')
                   : t('active_consents.revoke_consent')}
