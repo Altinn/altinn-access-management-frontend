@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
             /// </summary>
             /// <param name="languageCode">languageCode.</param>
             /// <param name="id">id of the role.</param>
-            Task<Core.Models.Common.Role?> GetRoleMetaById(string languageCode, Guid id);
+            Task<Core.Models.Common.Role> GetRoleMetaById(string languageCode, Guid id);
 
             /// <summary>
             ///     Gets the roles for a user

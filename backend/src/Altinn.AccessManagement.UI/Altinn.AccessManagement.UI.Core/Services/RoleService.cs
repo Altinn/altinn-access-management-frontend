@@ -77,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Core.Models.Common.Role?> GetRoleMetaById(string languageCode, Guid id)
+        public async Task<Core.Models.Common.Role> GetRoleMetaById(string languageCode, Guid id)
         {
             return await _roleClient.GetRoleById(languageCode, id);
         }
