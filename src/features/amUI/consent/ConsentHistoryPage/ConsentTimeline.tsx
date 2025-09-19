@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -27,11 +27,17 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
     setSearchValue(event.target.value);
   };
 
-  const timeLineItems = getTimeLineItems(consentLog, t);
-  const filteredTimelineItems = timeLineItems.filter((item) => {
-    const q = searchValue.toLowerCase();
-    return [item.fromPartyName, item.toPartyName].some((name) => name?.toLowerCase().includes(q));
-  });
+  const timeLineItems = useMemo(() => getTimeLineItems(consentLog, t), [consentLog, t]);
+  const filteredTimelineItems = useMemo(
+    () =>
+      timeLineItems.filter((item) => {
+        const q = searchValue.trim().toLowerCase();
+        return [item.fromPartyName, item.toPartyName].some((name) =>
+          name?.toLowerCase().includes(q),
+        );
+      }),
+    [searchValue, timeLineItems],
+  );
 
   return (
     <>
