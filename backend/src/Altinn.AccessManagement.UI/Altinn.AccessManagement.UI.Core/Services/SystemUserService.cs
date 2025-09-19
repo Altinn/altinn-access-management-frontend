@@ -1,6 +1,7 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -13,7 +14,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class SystemUserService : ISystemUserService
     {
         private readonly ISystemUserClient _systemUserClient;
-        private readonly ISystemRegisterClient _systemRegisterClient;
         private readonly IRegisterClient _registerClient;
         private readonly ResourceHelper _resourceHelper;
 
@@ -21,17 +21,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Initializes a new instance of the <see cref="SystemUserService"/> class.
         /// </summary>
         /// <param name="systemUserClient">The system user client.</param>
-        /// <param name="systemRegisterClient">The system register client.</param>
         /// <param name="registerClient">The register client.</param>
         /// <param name="resourceHelper">Resources helper to enrich resources</param>
         public SystemUserService(
             ISystemUserClient systemUserClient,
-            ISystemRegisterClient systemRegisterClient,
             IRegisterClient registerClient,
             ResourceHelper resourceHelper)
         {
             _systemUserClient = systemUserClient;
-            _systemRegisterClient = systemRegisterClient;
             _registerClient = registerClient;
             _resourceHelper = resourceHelper;
         }
@@ -60,7 +57,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return Problem.SystemUserNotFound;
             }
 
-            return await MapSingleStandardSystemUser(systemUser, languageCode, cancellationToken);
+            // get access packages and rights for systemuser
+            Result<StandardSystemUserDelegations> delegations = await _systemUserClient.GetListOfDelegationsForStandardSystemUser(systemUser.PartyId, systemUser.Id, cancellationToken);
+            if (delegations.IsProblem)
+            {
+                return delegations.Problem;
+            }
+
+            return await MapSystemUserAccessPackagesAndRights(systemUser, delegations.Value.Rights, delegations.Value.AccessPackages, languageCode, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -78,7 +82,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             if (systemUser != null)
             {
-                return await MapSingleAgentSystemUser(systemUser, languageCode, cancellationToken);
+                // TODO: get rights from systemuser when API to look up actual rights is implemented. For now, agent system user cannot have single rights.
+                return await MapSystemUserAccessPackagesAndRights(systemUser, [], systemUser.AccessPackages, languageCode, cancellationToken);
             }
 
             return null;
@@ -130,34 +135,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return sortedList;
         }
 
-        private async Task<Result<SystemUserFE>> MapSingleStandardSystemUser(SystemUser systemUser, string languageCode, CancellationToken cancellationToken)
+        private async Task<SystemUserFE> MapSystemUserAccessPackagesAndRights(
+            SystemUser systemUser,
+            IEnumerable<Right> rights,
+            IEnumerable<RegisteredSystemAccessPackage> accessPackages,
+            string languageCode,
+            CancellationToken cancellationToken)
         {
+            // get access packages and rights
+            RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(rights, accessPackages, languageCode);
+
             // map system user
             SystemUserFE systemUserFE = (await MapToSystemUsersFE([systemUser], cancellationToken))[0];
-
-            // get access packages and rights
-            Result<StandardSystemUserDelegations> delegations = await _systemUserClient.GetListOfDelegationsForStandardSystemUser(systemUser.PartyId, systemUser.Id, cancellationToken);
-            if (delegations.IsProblem)
-            {
-                return delegations.Problem;
-            }
-
-            RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(delegations.Value.Rights, delegations.Value.AccessPackages, languageCode);
-            systemUserFE.AccessPackages = enrichedRights.AccessPackages;
-            systemUserFE.Resources = enrichedRights.Resources;
-            return systemUserFE;
-        }
-
-        private async Task<SystemUserFE> MapSingleAgentSystemUser(SystemUser systemUser, string languageCode, CancellationToken cancellationToken)
-        {
-            // map system user
-            SystemUserFE systemUserFE = (await MapToSystemUsersFE([systemUser], cancellationToken))[0];
-
-            // TODO: get rights from systemuser when API to look up actual rights is implemented
-            RegisteredSystem system = await _systemRegisterClient.GetSystem(systemUser.SystemId, cancellationToken);
-
-            // get access packages and rights
-            RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(system.Rights, systemUser.AccessPackages, languageCode);
             systemUserFE.AccessPackages = enrichedRights.AccessPackages;
             systemUserFE.Resources = enrichedRights.Resources;
             return systemUserFE;
