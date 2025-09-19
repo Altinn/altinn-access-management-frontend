@@ -1,15 +1,25 @@
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 export const AccessPackageInfoAlert = () => {
-  const { t } = useTranslation();
-
   return (
     <DsAlert
       data-color='info'
       data-size='sm'
     >
-      <DsParagraph>{t('access_packages.info_alert_text')}</DsParagraph>
+      <DsParagraph>
+        <Trans
+          i18nKey='access_packages.info_alert_text'
+          components={{
+            a: (
+              <a
+                target='_blank'
+                rel='noopener noreferrer'
+              />
+            ),
+          }}
+        />
+      </DsParagraph>
     </DsAlert>
   );
 };
