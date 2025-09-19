@@ -16,3 +16,7 @@
 .systemDescription {
   max-width: 37rem;
 }
+
+.descriptionText {
+  color: var(--ds-color-neutral-text-subtle);
+}
