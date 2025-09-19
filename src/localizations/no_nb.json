@@ -295,6 +295,7 @@
     }
   },
   "role": {
+    "provider_status": "Denne rollen er hentet fra ",
     "current_roles_title": "{{count}} administratortilganger",
     "roles_description": "Her finner du fullmakter for å administrere tilganger for virksomheten. Det er ikke knyttet noen ressurser eller tjenester til disse tilgangene.",
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",

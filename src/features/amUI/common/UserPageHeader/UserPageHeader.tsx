@@ -34,13 +34,6 @@ export const UserPageHeader = ({
       ? `for ${fromParty?.name}`
       : t('reportee_rights_page.heading_subtitle', { name: toParty?.name });
 
-  const roles = (
-    <UserRoles
-      rightOwnerUuid={fromParty?.partyUuid ?? ''}
-      rightHolderUuid={toParty?.partyUuid ?? ''}
-    />
-  );
-
   const avatar = () => {
     if (displayDirection) {
       return (
@@ -94,7 +87,7 @@ export const UserPageHeader = ({
           {subHeading}
         </DsParagraph>
       )}
-      {displayRoles && <div className={classes.userRoles}>{roles}</div>}
+      {displayRoles && <div className={classes.userRoles}>{<UserRoles />}</div>}
     </div>
   );
 };

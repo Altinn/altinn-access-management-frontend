@@ -84,6 +84,9 @@ export const roleApi = createApi({
       query: () => '/search',
       providesTags: ['roles'],
     }),
+    getRoleById: builder.query<Role, string>({
+      query: (id) => `/${id}`,
+    }),
     getRolesForUser: builder.query<Assignment[], RoleApiRequest>({
       query: ({ from, to }) => `/assignments/${from}/${to}`,
     }),
@@ -122,6 +125,7 @@ export const roleApi = createApi({
 
 export const {
   useGetRolesForUserQuery,
+  useGetRoleByIdQuery,
   useRevokeMutation,
   useDelegateMutation,
   useGetRolesQuery,

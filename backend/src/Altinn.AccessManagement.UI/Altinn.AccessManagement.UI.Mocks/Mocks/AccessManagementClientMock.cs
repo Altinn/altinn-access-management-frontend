@@ -207,7 +207,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString)
         {
-            List<Role> allRoles = Util.GetMockData<List<Role>>($"{dataFolder}/Roles/roles.json");
+            List<Role> allRoles = Util.GetMockData<List<Role>>($"{dataFolder}/Roles/roles_old.json");
             return searchString != null ? Task.FromResult(allRoles.Where(role => role.Name.ToLower().Contains(searchString.ToLower())).ToList()) : Task.FromResult(allRoles);
         }
 

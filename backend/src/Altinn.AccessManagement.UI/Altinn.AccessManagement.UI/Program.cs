@@ -347,6 +347,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
         services.AddHttpClient<IAccessPackageClient, AccessPackageClient>();
     }
 
+    if (mockSettings.Role)
+    {
+        services.AddHttpClient<IRoleClient, RoleClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IRoleClient, RoleClient>();
+    }
+
     if (mockSettings.RightHolder)
     {
         services.AddHttpClient<IRightHolderClient, RightHolderClientMock>();

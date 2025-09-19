@@ -16,3 +16,11 @@ const keyroles = [
 
 export const getRoleCodesForKeyRoles = (roles: RoleInfo[]) =>
   roles.filter((r) => keyroles.includes(r.code ?? '')).map((r) => `user_role.${r.code}`);
+
+export const getRoleCodesAndIdsForKeyRoles = (roles: RoleInfo[]) =>
+  roles
+    .filter((r) => keyroles.includes(r.code ?? ''))
+    .map((r) => ({
+      id: r.id,
+      code: `user_role.${r.code}`,
+    }));
