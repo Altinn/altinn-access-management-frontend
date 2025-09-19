@@ -15,6 +15,9 @@ export class DelegationPage {
   readonly confirmDeleteBtn: Locator;
   readonly closeModalBtn: Locator;
   readonly backBtn: Locator;
+  readonly ourAcessButton: Locator;
+  readonly rightsAccessLink: Locator;
+  readonly rightsNewBrukerFlateLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -29,6 +32,11 @@ export class DelegationPage {
     this.confirmDeleteBtn = page.getByRole('button', { name: 'Ja, slett' });
     this.closeModalBtn = page.getByRole('button', { name: 'Lukk' });
     this.backBtn = page.getByRole('button', { name: 'Tilbake' });
+    this.ourAcessButton = page.getByRole('button', { name: 'Våre tilganger hos andre' });
+    this.rightsAccessLink = page.getByRole('link', {
+      name: 'Rettigheter virksomheten har hos andre',
+    });
+    this.rightsNewBrukerFlateLink = page.getByRole('link', { name: 'Klikk her for å se disse' });
   }
 
   async openDelegationFlow() {
@@ -151,5 +159,24 @@ export class DelegationPage {
     const confirmBtn = this.page.getByRole('button', { name: 'Ja, slett', exact: true });
     await expect(confirmBtn).toBeVisible({ timeout: 10000 });
     await confirmBtn.click();
+  }
+  async newAccessRights(orgName: string) {
+    await this.rightsAccessLink.click();
+    await this.rightsNewBrukerFlateLink.click();
+    await this.tryNewAccessBtn.click();
+
+    //Click on Orgnization
+    const orgLink = this.page.getByRole('link', { name: orgName });
+    await expect(orgLink).toBeVisible();
+    await orgLink.click();
+  }
+
+  async verifyDelegatedPacakge(areanames: string, pacakageName: string) {
+    const areaBtn = this.page.getByRole('button', { name: areanames });
+    await expect(areaBtn).toBeVisible();
+    await areaBtn.click();
+
+    const packageBtn = this.page.getByRole('button', { name: pacakageName, exact: true });
+    await expect(packageBtn).toBeVisible();
   }
 }
