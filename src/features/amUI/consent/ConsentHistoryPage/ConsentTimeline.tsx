@@ -27,7 +27,8 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
     setSearchValue(event.target.value);
   };
 
-  const timelineItems = getTimeLineItems(consentLog, t).filter((item) => {
+  const timeLineItems = getTimeLineItems(consentLog, t);
+  const filteredTimelineItems = timeLineItems.filter((item) => {
     const q = searchValue.toLowerCase();
     return [item.fromPartyName, item.toPartyName].some((name) => name?.toLowerCase().includes(q));
   });
@@ -44,13 +45,13 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
         <DsSearch.Clear />
       </DsSearch>
       <Timeline>
-        {consentLog.length === 0 && (
+        {!searchValue && timeLineItems.length === 0 && (
           <DsParagraph data-color='info'>{t('consent_log.no_active_consents')}</DsParagraph>
         )}
-        {searchValue && timelineItems.length === 0 && (
+        {searchValue && filteredTimelineItems.length === 0 && (
           <DsParagraph data-color='info'>{t('consent_log.no_results')}</DsParagraph>
         )}
-        {timelineItems.map((item) => {
+        {filteredTimelineItems.map((item) => {
           return (
             <TimelineSegment
               data-color={reportee?.type === 'Person' ? 'person' : 'company'}
