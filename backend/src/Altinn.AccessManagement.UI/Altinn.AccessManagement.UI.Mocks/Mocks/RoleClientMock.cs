@@ -30,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<Role> GetRoleById(string languageCode, Guid id)
+        public Task<Role?> GetRoleById(string languageCode, Guid id)
         {
             // Trigger internal server error
             if (id.Equals(new Guid("d98ac728-d127-4a4c-96e1-738f856e5332")))

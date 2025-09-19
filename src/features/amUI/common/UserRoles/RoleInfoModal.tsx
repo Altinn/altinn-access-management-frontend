@@ -20,7 +20,7 @@ export const RoleInfoModal = ({ open, onClose, roleId }: RoleInfoModal) => {
   const { toParty, fromParty } = usePartyRepresentation();
   const { data: roleData, isLoading } = useGetRoleByIdQuery(roleId ?? '', { skip: !roleId });
 
-  const isExternal = roleData?.urn.includes('external-role');
+  const isExternal = roleData?.urn?.includes('external-role');
 
   return (
     <DsDialog

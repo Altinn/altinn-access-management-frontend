@@ -13,6 +13,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="languageCode">the language to use in texts returned</param>
         /// <param name="id">the id of the role</param>
         /// <returns>The role</returns>
-        Task<Role> GetRoleById(string languageCode, Guid id);
+        Task<Role?> GetRoleById(string languageCode, Guid id);
     }
 }

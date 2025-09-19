@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="accessTokenProvider">the handler for access token generator</param>
         public RoleClient(
             HttpClient httpClient,
-            ILogger<AccessPackageClient> logger,
+            ILogger<RoleClient> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings,
             IAccessTokenProvider accessTokenProvider)
@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<Role> GetRoleById(string languageCode, Guid roleId)
+        public async Task<Role?> GetRoleById(string languageCode, Guid roleId)
         {
             string endpointUrl = $"meta/info/roles/{roleId}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
