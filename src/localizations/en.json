@@ -120,7 +120,7 @@
     "users": "Users",
     "reportees": "Our access to other companies",
     "systemaccess": "API- and system access",
-    "consent": "Consent and power of attorney",
+    "consent": "Consents and powers of attorney",
     "poa_overview": "Power of attorney"
   },
   "error_page": {
@@ -695,10 +695,10 @@
     "sub_heading": "Active agreements",
     "loading_consents": "Loading active agreements...",
     "load_consents_error": "Could not load active agreements",
-    "consent_log": "See agreement log",
+    "consent_log": "View agreement log",
     "no_active_consents": "No active agreements",
-    "see_consent": "See/revoke consent",
-    "see_poa": "See/revoke power of attorney",
+    "see_consent": "View/revoke consent",
+    "see_poa": "View/revoke power of attorney",
     "loading_consent": "Loading agreements",
     "load_consent_error": "Could not load consent/power of attorney",
     "revoke_consent": "Revoke consent",

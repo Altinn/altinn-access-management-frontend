@@ -49,8 +49,8 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
     }
   };
 
-  const hasAccepted = consent?.consentRequestEvents.some((e) => e.eventType === 'Accepted');
-  const hasTerminal = consent?.consentRequestEvents.some((e) =>
+  const hasAccepted = !!consent?.consentRequestEvents.some((e) => e.eventType === 'Accepted');
+  const hasTerminal = !!consent?.consentRequestEvents.some((e) =>
     ['Rejected', 'Revoked', 'Deleted', 'Expired'].includes(e.eventType),
   );
   const canConsentBeRevoked = hasAccepted && !hasTerminal;

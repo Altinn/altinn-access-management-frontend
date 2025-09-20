@@ -16,10 +16,18 @@ export const ConsentStatus = ({ events, isPoa }: ConsentStatusProps) => {
   let statusText = '';
 
   const hasAcceptEvent = events.some((event) => event.eventType === 'Accepted');
-  const hasRevokeEvent = events.some((event) => event.eventType === 'Revoked');
+  const hasRevokeEvent = events.some(
+    (event) => event.eventType === 'Revoked' || event.eventType === 'Deleted',
+  );
   const hasExpiredEvent = events.some((event) => event.eventType === 'Expired');
 
-  if (hasExpiredEvent) {
+  // if consent is revoked and has expired, only show revoked status
+  if (hasAcceptEvent && hasRevokeEvent) {
+    statusClass = classes.statusInactive;
+    statusText = isPoa
+      ? t('active_consents.status_poa_revoked')
+      : t('active_consents.status_consent_revoked');
+  } else if (hasExpiredEvent) {
     statusClass = classes.statusInactive;
     statusText = isPoa
       ? t('active_consents.status_poa_expired')
@@ -29,11 +37,10 @@ export const ConsentStatus = ({ events, isPoa }: ConsentStatusProps) => {
     statusText = isPoa
       ? t('active_consents.status_poa_active')
       : t('active_consents.status_consent_active');
-  } else if (hasAcceptEvent && hasRevokeEvent) {
-    statusClass = classes.statusInactive;
-    statusText = isPoa
-      ? t('active_consents.status_poa_revoked')
-      : t('active_consents.status_consent_revoked');
+  }
+
+  if (!statusText) {
+    return null;
   }
 
   return <div className={cn(classes.statusContainer, statusClass)}>{statusText}</div>;
