@@ -1,9 +1,9 @@
 namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
 {
     /// <summary>
-    /// Consent request model where metadata values are replaced
+    /// Consent model where metadata values are replaced
     /// </summary>
-    public class ConsentRequestFE
+    public class ConsentFE
     {
         /// <summary>
         /// Consent Id
@@ -23,17 +23,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// <summary>
         /// Consent title
         /// </summary>
-        public Dictionary<string, string> Title { get; set; }
-
-        /// <summary>
-        /// Consent heading
-        /// </summary>
-        public Dictionary<string, string> Heading { get; set; }
+        public Dictionary<string, string> TitleAccepted { get; set; }
 
         /// <summary>
         /// Consent intro
         /// </summary>
-        public Dictionary<string, string> ServiceIntro { get; set; }
+        public Dictionary<string, string> ServiceIntroAccepted { get; set; }
 
         /// <summary>
         /// Consent message from request, or OverriddenDelegationContext from template
@@ -51,17 +46,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         public Dictionary<string, string> Expiration { get; set; }
 
         /// <summary>
-        /// Party name if request is for an organization
-        /// </summary>
-        public string FromPartyName { get; set; }
-
-        /// <summary>
-        /// Consent request expiration date
+        /// Consent expiration date
         /// </summary>
         public DateTimeOffset ValidTo { get; set; }
 
         /// <summary>
-        /// List all events related to consent request
+        /// List all events related to consent
         /// </summary>
         public List<ConsentRequestEventDto> ConsentRequestEvents { get; set; } = [];
     }

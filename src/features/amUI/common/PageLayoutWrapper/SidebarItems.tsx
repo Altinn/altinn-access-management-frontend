@@ -4,6 +4,7 @@ import {
   PersonGroupIcon,
   TenancyIcon,
   PadlockUnlockedIcon,
+  HandshakeIcon,
   InformationSquareIcon,
   LeaveIcon,
   LinkIcon,
@@ -11,7 +12,7 @@ import {
 import { t } from 'i18next';
 import { Link } from 'react-router';
 
-import { amUIPath, SystemUserPath } from '@/routes/paths';
+import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 import { getHostUrl } from '@/resources/utils/pathUtils';
 
 /**
@@ -29,6 +30,7 @@ export const SidebarItems = (
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const isLoading = !accountName;
 
   const heading: MenuItemProps = {
     id: '1',
@@ -38,6 +40,7 @@ export const SidebarItems = (
       type: accountType,
     },
     size: 'lg',
+    loading: isLoading,
     title: t('sidebar.access_management'),
     badge: { label: t('common.beta') },
     interactive: false,
@@ -48,6 +51,7 @@ export const SidebarItems = (
     id: '2',
     size: 'md' as MenuItemSize,
     title: t('sidebar.users'),
+    loading: isLoading,
     selected: pathname?.includes(`/${amUIPath.Users}`),
     icon: PersonGroupIcon,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -64,6 +68,7 @@ export const SidebarItems = (
     id: '2.1',
     size: 'md',
     title: t('sidebar.poa_overview'),
+    loading: isLoading,
     icon: PadlockUnlockedIcon,
     selected: pathname?.includes(`/${amUIPath.PoaOverview}`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -80,6 +85,7 @@ export const SidebarItems = (
     id: '4',
     size: 'md' as MenuItemSize,
     title: t('sidebar.reportees'),
+    loading: isLoading,
     selected: pathname?.includes(`/${amUIPath.Reportees}`),
     icon: LinkIcon,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,18 +97,35 @@ export const SidebarItems = (
     ),
   };
 
-  const systemUserPath = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
-  const systemUser: MenuItemProps = {
+  const consent: MenuItemProps = {
     groupId: 5,
     id: '5',
     size: 'md',
-    title: t('sidebar.systemaccess'),
-    icon: TenancyIcon,
-    selected: pathname?.includes(systemUserPath),
+    title: t('sidebar.consent'),
+    loading: isLoading,
+    icon: HandshakeIcon,
+    selected: pathname?.includes(`/${ConsentPath.Consent}/`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     as: (props: any) => (
       <Link
-        to={systemUserPath}
+        to={`/${ConsentPath.Consent}/${ConsentPath.Active}`}
+        {...props}
+      />
+    ),
+  };
+
+  const systemUser: MenuItemProps = {
+    groupId: 6,
+    id: '6',
+    size: 'md',
+    title: t('sidebar.systemaccess'),
+    loading: isLoading,
+    icon: TenancyIcon,
+    selected: pathname?.includes(`/${SystemUserPath.SystemUser}/`),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
+      <Link
+        to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}
         {...props}
       />
     ),
@@ -114,6 +137,7 @@ export const SidebarItems = (
       id: 'beta-about',
       size: 'md',
       title: t('header.new_altinn_info'),
+      loading: isLoading,
       icon: InformationSquareIcon,
       selected: pathname?.includes(`/${amUIPath.Info}`),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -129,6 +153,7 @@ export const SidebarItems = (
       id: 'beta-leave',
       size: 'md',
       title: t('header.leave_beta'),
+      loading: isLoading,
       icon: LeaveIcon,
       selected: false,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -147,6 +172,10 @@ export const SidebarItems = (
     items.push(heading);
   }
 
+  if (accountType === 'person') {
+    return [...items, consent, ...shortcuts];
+  }
+
   if (displayConfettiPackage) {
     items.push(users);
     if (isAdmin) {
@@ -160,7 +189,7 @@ export const SidebarItems = (
     }
   }
 
-  items.push(systemUser);
+  items.push(consent, systemUser);
 
   if (displayConfettiPackage && !isSmall) {
     shortcuts.map((shortcutItem) => items.push(shortcutItem));

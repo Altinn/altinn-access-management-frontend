@@ -1,0 +1,30 @@
+.consentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--ds-size-4);
+  gap: var(--ds-size-8);
+}
+
+.consentDetailsSpinner {
+  display: block;
+  margin: var(--ds-size-6) auto;
+}
+
+.expiration {
+  font-weight: 500;
+  margin-top: var(--ds-size-4);
+}
+
+.revokePopover {
+  max-width: none;
+}
+.popoverButtonRow {
+  display: flex;
+  gap: var(--ds-size-4);
+  margin-top: var(--ds-size-4);
+  padding-right: var(--ds-size-12);
+}
+.popoverText {
+  max-width: 15rem;
+}
