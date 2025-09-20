@@ -29,6 +29,7 @@ import { ConsentRights } from '../components/ConsentRights/ConsentRights';
 import classes from './ConsentRequestPage.module.css';
 import { ConsentRequestError } from './ConsentRequestError';
 import { getLogoutUrl } from '../../systemUser/urlUtils';
+import { ConsentStatus } from '../components/ConsentStatus/ConsentStatus';
 
 export const ConsentRequestPage = () => {
   const { t, i18n } = useTranslation();
@@ -186,6 +187,12 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
         >
           {request.title[language]}
         </DsHeading>
+        {isExpired && !isApproved && !isRejected && (
+          <ConsentStatus
+            events={request.consentRequestEvents}
+            isPoa={request.isPoa}
+          />
+        )}
       </div>
       <div className={classes.consentBlock}>
         <div className={classes.consentContent}>
@@ -201,13 +208,6 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
               {request.isPoa
                 ? t('consent_request.already_rejected_poa')
                 : t('consent_request.already_rejected')}
-            </DsAlert>
-          )}
-          {isExpired && !isApproved && !isRejected && (
-            <DsAlert data-color='warning'>
-              {request.isPoa
-                ? t('consent_request.past_validto_poa')
-                : t('consent_request.past_validto')}
             </DsAlert>
           )}
           <DsParagraph className={classes.heading}>{request.heading[language]}</DsParagraph>

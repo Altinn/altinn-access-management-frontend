@@ -9,15 +9,14 @@ import {
   DsSpinner,
 } from '@altinn/altinn-components';
 import { EraserIcon } from '@navikt/aksel-icons';
-import cn from 'classnames';
 
 import { useGetConsentQuery, useRevokeConsentMutation } from '@/rtk/features/consentApi';
 
 import { getLanguage } from '../../utils';
 import { ConsentRights } from '../ConsentRights/ConsentRights';
-import type { ConsentRequestEvent } from '../../types';
 
 import classes from './ConsentDetails.module.css';
+import { ConsentStatus } from '../ConsentStatus/ConsentStatus';
 
 interface ConsentDetailsProps {
   consentId: string;
@@ -154,39 +153,4 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
       )}
     </div>
   );
-};
-
-interface ConsentStatusProps {
-  events: ConsentRequestEvent[];
-  isPoa?: boolean;
-}
-
-const ConsentStatus = ({ events, isPoa }: ConsentStatusProps) => {
-  const { t } = useTranslation();
-
-  let statusClass = '';
-  let statusText = '';
-
-  const hasAcceptEvent = events.some((event) => event.eventType === 'Accepted');
-  const hasRevokeEvent = events.some((event) => event.eventType === 'Revoked');
-  const hasExpiredEvent = events.some((event) => event.eventType === 'Expired');
-
-  if (hasExpiredEvent) {
-    statusClass = classes.statusInactive;
-    statusText = isPoa
-      ? t('active_consents.status_poa_expired')
-      : t('active_consents.status_consent_expired');
-  } else if (hasAcceptEvent && !hasRevokeEvent) {
-    statusClass = classes.statusActive;
-    statusText = isPoa
-      ? t('active_consents.status_poa_active')
-      : t('active_consents.status_consent_active');
-  } else if (hasAcceptEvent && hasRevokeEvent) {
-    statusClass = classes.statusInactive;
-    statusText = isPoa
-      ? t('active_consents.status_poa_revoked')
-      : t('active_consents.status_consent_revoked');
-  }
-
-  return <div className={cn(classes.statusContainer, statusClass)}>{statusText}</div>;
 };

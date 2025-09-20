@@ -28,15 +28,3 @@
 .popoverText {
   max-width: 15rem;
 }
-
-.statusContainer {
-  border-radius: 9999px;
-  padding: 0 var(--ds-size-3);
-  color: var(--ds-color-base-contrast-default);
-}
-.statusActive {
-  background-color: var(--ds-color-success-base-hover);
-}
-.statusInactive {
-  background-color: var(--ds-color-danger-base-default);
-}
