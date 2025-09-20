@@ -12,7 +12,7 @@ import { EraserIcon } from '@navikt/aksel-icons';
 
 import { useGetConsentQuery, useRevokeConsentMutation } from '@/rtk/features/consentApi';
 
-import { getLanguage } from '../../utils';
+import { canConsentBeRevoked, getLanguage } from '../../utils';
 import { ConsentRights } from '../ConsentRights/ConsentRights';
 
 import classes from './ConsentDetails.module.css';
@@ -49,11 +49,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
     }
   };
 
-  const hasAccepted = !!consent?.consentRequestEvents.some((e) => e.eventType === 'Accepted');
-  const hasTerminal = !!consent?.consentRequestEvents.some((e) =>
-    ['Rejected', 'Revoked', 'Deleted', 'Expired'].includes(e.eventType),
-  );
-  const canConsentBeRevoked = hasAccepted && !hasTerminal;
+  const canBeRevoked = canConsentBeRevoked(consent?.consentRequestEvents || []);
 
   const isRevoking = isRevokingConsent || isFetchingConsent;
 
@@ -78,7 +74,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
             events={consent.consentRequestEvents}
             isPoa={consent.isPoa}
           />
-          {canConsentBeRevoked && (
+          {canBeRevoked && (
             <DsPopover.TriggerContext>
               <DsPopover.Trigger
                 variant='tertiary'

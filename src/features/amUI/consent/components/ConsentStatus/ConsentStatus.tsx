@@ -3,6 +3,7 @@ import { ConsentRequestEvent } from '../../types';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import classes from './ConsentStatus.module.css';
+import { isAccepted, isExpired, isRevoked } from '../../utils';
 
 interface ConsentStatusProps {
   events: ConsentRequestEvent[];
@@ -15,11 +16,9 @@ export const ConsentStatus = ({ events, isPoa }: ConsentStatusProps) => {
   let statusClass = '';
   let statusText = '';
 
-  const hasAcceptEvent = events.some((event) => event.eventType === 'Accepted');
-  const hasRevokeEvent = events.some(
-    (event) => event.eventType === 'Revoked' || event.eventType === 'Deleted',
-  );
-  const hasExpiredEvent = events.some((event) => event.eventType === 'Expired');
+  const hasAcceptEvent = isAccepted(events);
+  const hasRevokeEvent = isRevoked(events);
+  const hasExpiredEvent = isExpired(events);
 
   // if consent is revoked and has expired, only show revoked status
   if (hasAcceptEvent && hasRevokeEvent) {

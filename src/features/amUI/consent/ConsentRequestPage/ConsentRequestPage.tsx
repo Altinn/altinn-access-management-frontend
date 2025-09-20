@@ -23,7 +23,7 @@ import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import type { ConsentLanguage, ConsentRequest, ProblemDetail } from '../types';
-import { getLanguage } from '../utils';
+import { getLanguage, isAccepted, isExpired, isRevoked } from '../utils';
 import { ConsentRights } from '../components/ConsentRights/ConsentRights';
 
 import classes from './ConsentRequestPage.module.css';
@@ -137,18 +137,18 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
     { data: rejectResponse, error: rejectConsentError, isLoading: isRejectingConsent },
   ] = useRejectConsentRequestMutation();
 
-  const isApproved = request.consentRequestEvents.some((event) => event.eventType === 'Accepted');
-  const isRejected = request.consentRequestEvents.some((event) => event.eventType === 'Rejected');
-  const isExpired = request.consentRequestEvents.some((event) => event.eventType === 'Expired');
+  const isRequestApproved = isAccepted(request.consentRequestEvents);
+  const isRequestRejected = isRevoked(request.consentRequestEvents);
+  const isRequestExpired = isExpired(request.consentRequestEvents);
 
   const isActionButtonDisabled =
     isApprovingConsent ||
     isRejectingConsent ||
     approveResponse ||
     rejectResponse ||
-    isApproved ||
-    isRejected ||
-    isExpired;
+    isRequestApproved ||
+    isRequestRejected ||
+    isRequestExpired;
 
   const approveConsent = async (): Promise<void> => {
     if (!isActionButtonDisabled && request) {
@@ -187,7 +187,7 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
         >
           {request.title[language]}
         </DsHeading>
-        {isExpired && !isApproved && !isRejected && (
+        {isRequestExpired && !isRequestApproved && !isRequestRejected && (
           <ConsentStatus
             events={request.consentRequestEvents}
             isPoa={request.isPoa}
@@ -196,14 +196,14 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
       </div>
       <div className={classes.consentBlock}>
         <div className={classes.consentContent}>
-          {isApproved && (
+          {isRequestApproved && (
             <DsAlert data-color='warning'>
               {request.isPoa
                 ? t('consent_request.already_approved_poa')
                 : t('consent_request.already_approved')}
             </DsAlert>
           )}
-          {isRejected && (
+          {isRequestRejected && (
             <DsAlert data-color='warning'>
               {request.isPoa
                 ? t('consent_request.already_rejected_poa')
