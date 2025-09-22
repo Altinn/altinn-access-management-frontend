@@ -1,6 +1,5 @@
-import type { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { expect } from '@playwright/test';
 
 export class runAccessibilityTests {
   static brukerflateEnkelttjenesteDelegeringUU: any;
