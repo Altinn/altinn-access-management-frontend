@@ -7,7 +7,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
     /// </summary>
     public interface ISettingsService
     {
-
         /// <summary>
         /// Gets the notification addresses for an organization based on the organization number
         /// </summary>
@@ -16,6 +15,5 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// List of notification addresses
         /// </returns>
         Task<List<NotificationAddressResponse>> GetOrganisationNotificationAddresses(string orgNumber);
-
     }
 }
