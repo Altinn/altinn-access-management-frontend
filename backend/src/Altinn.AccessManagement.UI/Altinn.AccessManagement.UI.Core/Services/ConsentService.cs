@@ -174,11 +174,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             // look up all party names in one call instead of one by one
-            IEnumerable<string> partyUuids = consents.Value.Aggregate(new List<string> { }, (acc, consent) =>
-            {
-                List<string> handledBy = string.IsNullOrEmpty(consent.HandledBy) ? [] : [GetUrnValue(consent.HandledBy)];
-                return [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From), .. handledBy];
-            }).Distinct();
+            IEnumerable<string> partyUuids = consents.Value
+                .SelectMany(consent => new[] { consent.To, consent.From, consent.HandledBy }
+                    .Where(urn => !string.IsNullOrEmpty(urn))
+                    .Select(urn => GetUrnValue(urn)))
+                .Distinct();
+                
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
             Dictionary<string, Party> partyByUuid = PartyListToDict(parties);
             IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
