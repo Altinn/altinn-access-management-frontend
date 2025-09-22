@@ -31,7 +31,11 @@
     "nn": "Dette er ei melding fra banken",
     "en": "This is a message from the bank"
   },
-  "handledBy": null,
+  "handledBy": {
+    "nb": "STA TOM TIGER AS utfører tjenestene på vegne av RAKRYGGET UNG TIGER AS.",
+    "nn": "STA TOM TIGER AS utfører tenestene på vegne av RAKRYGGET UNG TIGER AS",
+    "en": "STA TOM TIGER AS utilizes the power of attorney on behalf of RAKRYGGET UNG TIGER AS."
+  },
   "expiration": {
     "nb": "Fullmakten gjelder én gangs bruk av tjenestene",
     "nn": "Fullmakta gjeld bruk av tenestene éin gong",

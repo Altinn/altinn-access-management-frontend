@@ -145,11 +145,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 .Distinct(StringComparer.OrdinalIgnoreCase);
 
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
+            Dictionary<string, Party> partyByUuid = parties.ToDictionary(p => p.PartyUuid.ToString(), p => p, StringComparer.OrdinalIgnoreCase);
+
             IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
             
             IEnumerable<ActiveConsentItemFE> activeConsentsFE = activeConsents.Select(consent =>
             {
-                Party toParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.To));
+                partyByUuid.TryGetValue(GetUrnValue(consent.To), out Party toParty);
                 return new ActiveConsentItemFE()
                 {
                     Id = consent.Id,
@@ -178,13 +180,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From), .. handledBy];
             }).Distinct();
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
+            Dictionary<string, Party> partyByUuid = parties.ToDictionary(p => p.PartyUuid.ToString(), p => p, StringComparer.OrdinalIgnoreCase);
             IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
 
             IEnumerable<ConsentLogItemFE> consentListItems = consents.Value.Select(consent =>
             {
-                Party toParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.To));
-                Party fromParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.From));
-                Party handledByParty = string.IsNullOrEmpty(consent.HandledBy) ? null : parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.HandledBy));
+                partyByUuid.TryGetValue(GetUrnValue(consent.To), out Party toParty);
+                partyByUuid.TryGetValue(GetUrnValue(consent.From), out Party fromParty);
+                string handledByPartyUuid = string.IsNullOrEmpty(consent.HandledBy) ? string.Empty : GetUrnValue(consent.HandledBy);
+                partyByUuid.TryGetValue(handledByPartyUuid, out Party handledByParty);
+
                 return new ConsentLogItemFE()
                 {
                     Id = consent.Id,
