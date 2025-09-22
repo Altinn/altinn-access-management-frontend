@@ -25,7 +25,7 @@ test.beforeEach(async ({ page }) => {
   process.env.ORG = toOrg;
 });
 
-test.describe('Consent - Norwegian template', () => {
+test.describe('Samtykke - Norsk', () => {
   test('Godta forespørsel - Standard samtykke', async ({ page }) => {
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },

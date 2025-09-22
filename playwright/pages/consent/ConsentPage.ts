@@ -77,7 +77,9 @@ export class ConsentPage {
     this.buttonFullmaktReject = page.getByRole('button', { name: /jeg gir ikke fullmakt/i });
 
     // Headings (use exact text when stable, regex when copy may drift)
-    this.standardHeading = page.getByRole('heading', { name: /Samtykke til bruk av dine data/ });
+    this.standardHeading = page.getByRole('heading', {
+      name: this.languageDictionary.consent_requests,
+    });
     this.headingKrav = page.getByRole('heading', { name: /Godkjenne deling med banken/ });
     this.headingFullmakt = page.getByRole('heading', {
       name: /Fullmakt til å handle på dine vegne/,
