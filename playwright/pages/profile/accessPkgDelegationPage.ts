@@ -187,6 +187,12 @@ export class DelegationPage {
     await orgLink.click();
   }
 
+  async chooseOrg(chooseorgName: string) {
+    const orgLink = this.page.getByRole('link', { name: chooseorgName });
+    await expect(orgLink).toBeVisible();
+    await orgLink.click();
+  }
+
   async verifyDelegatedPacakge(areanames: string, pacakageName: string) {
     const areaBtn = this.page.getByRole('button', { name: areanames });
     await expect(areaBtn).toBeVisible();

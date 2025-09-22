@@ -32,17 +32,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await delegation.closeAccessModal();
     await delegation.logoutFromBrukerflate();
 
-    //verify delegation success
-    //Step5 : Delete delegated pacakge directly from area list
-    //  await delegation.deleteDelegatedPackage('Transport og lagring', 'Veitransport');
-    // await delegation.deleteDelegatedPackage('Oppvekst og utdanning', 'Godkjenning av personell');
-
-    //Delete package by opening the package first
-    // await delegation.deletePackageInside('Bygg, anlegg og eiendom', 'Byggesøknad');
-    //Delete user from rettighetshaver list
-    // await delegation.deleteDelegatedUser();
-
-    // Step 1: Login with Org-2(Rettighetshaver) and select organization as reportee
+    // Step 6: Login with Org-2(Rettighetshaver) and select organization as reportee
     await login.loginWithUser('06815597492');
     await login.chooseReportee('LYKKELIG RAKRYGGET PUMA BBL');
 
@@ -52,6 +42,27 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await delegation.verifyDelegatedPacakge('Bygg, anlegg og eiendom', 'Byggesøknad');
     await delegation.verifyDelegatedPacakge('Transport og lagring', 'Veitransport');
     await delegation.verifyDelegatedPacakge('Oppvekst og utdanning', 'Godkjenning av personell');
+  });
+
+  test('Org-A revokes all delegated access package rights from Org-2', async ({
+    login,
+    delegation,
+  }) => {
+    await login.loginWithUser('23926299794');
+    await login.chooseReportee('UTGÅTT FLEKSIBEL TIGER AS');
+
+    // Step 2: Open delegation flow
+    await delegation.openDelegationFlow();
+    await delegation.chooseOrg('LYKKELIG RAKRYGGET PUMA BBL');
+
+    //Step3 : Delete delegated pacakge directly from area list
+    await delegation.deleteDelegatedPackage('Transport og lagring', 'Veitransport');
+    await delegation.deleteDelegatedPackage('Oppvekst og utdanning', 'Godkjenning av personell');
+
+    //Delete package by opening the package first
+    await delegation.deletePackageInside('Bygg, anlegg og eiendom', 'Byggesøknad');
+    //Delete user from rettighetshaver list
+    await delegation.deleteDelegatedUser();
   });
 
   test.afterAll(async () => {
