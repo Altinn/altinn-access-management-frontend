@@ -182,13 +182,13 @@ export class DelegationPage {
     await this.rightsNewBrukerFlateLink.click();
 
     //Click on Orgnization
-    const orgLink = this.page.getByRole('link', { name: orgName });
+    const orgLink = this.page.getByRole('link', { name: orgName }).first();
     await expect(orgLink).toBeVisible();
     await orgLink.click();
   }
 
   async chooseOrg(chooseorgName: string) {
-    const orgLink = this.page.getByRole('link', { name: chooseorgName });
+    const orgLink = this.page.getByRole('link', { name: chooseorgName }).first();
     await expect(orgLink).toBeVisible();
     await orgLink.click();
   }
