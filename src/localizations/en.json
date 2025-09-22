@@ -432,6 +432,18 @@
     "title_5": "What is the difference between regular system access and system access for customers?",
     "paragraph_5": "With a regular system access, you act on behalf of yourself. For example, if you own a small business and keep your own accounting in Fiken, you can create system access as part of Fiken's flow, or you can go to altinn.no and create it yourself by clicking \"Create new system access\".<br /><br /> If you are an accountant or auditor, you can create system access that can be assigned powers of attorney on behalf of your customers. The system will then be able to submit and retrieve customer data. This system access can only be created by approving the system access in the professional system you want to use. When you have approved it, you go to altinn.no to add the customers that are relevant for that system access. <br /><br />We look forward to showing you the new Altinn and greatly appreciate your patience while we rebuild. If you have questions or feedback, contact us at support@altinn.no."
   },
+  "settings_page": {
+    "page_title": "Settings - Altinn",
+    "page_heading": "Settings for {{name}}",
+    "alert_settings_heading": "Alert addresses for the organization",
+    "alerts_on_email": "Email alerts",
+    "alerts_on_sms": "SMS alerts",
+    "one_address": "1 address",
+    "num_of_addresses": "{{count}} addresses",
+    "email_label": "The organization's email addresses for alerts:",
+    "sms_label": "The organization's phone numbers for alerts:",
+    "address_number": "Address {{number}}:"
+  },
   "info_modal": {
     "title": "Try the new access management solution",
     "info": "We are renovating access management and you get a sneak peek at an early version! It is still under development, so some functions are missing. We still hope you will try.",
