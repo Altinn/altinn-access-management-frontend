@@ -16,7 +16,7 @@ export class TokenGenerator {
   public async generateAltinnPersonalToken(): Promise<string> {
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken` +
-      `?env=${process.env.environment}` +
+      `?env=${process.env.ENV_NAME}` +
       `&pid=${process.env.DAGL_PID}` +
       `&userid=${process.env.DAGL_USER_ID}` +
       `&partyid=${process.env.DAGL_PARTY_ID}` +

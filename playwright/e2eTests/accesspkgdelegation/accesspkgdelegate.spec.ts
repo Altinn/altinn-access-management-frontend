@@ -30,6 +30,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     );
 
     await delegation.closeAccessModal();
+    await delegation.logoutFromBrukerflate();
 
     //verify delegation success
     //Step5 : Delete delegated pacakge directly from area list
@@ -40,17 +41,14 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     // await delegation.deletePackageInside('Bygg, anlegg og eiendom', 'Byggesøknad');
     //Delete user from rettighetshaver list
     // await delegation.deleteDelegatedUser();
-  });
 
-  test('Org-2(Rettighetshaver) verifies it in "Våre tilganger hos andre"', async ({
-    login,
-    delegation,
-  }) => {
-    // Step 1: Login and select organization as reportee
+    // Step 1: Login with Org-2(Rettighetshaver) and select organization as reportee
     await login.loginWithUser('06815597492');
     await login.chooseReportee('LYKKELIG RAKRYGGET PUMA BBL');
 
     await delegation.newAccessRights('UTGÅTT FLEKSIBEL TIGER AS');
+
+    //Verify Org-2(Rettighetshaver) has got rights on accesspkg from Org-1(Avgiver) under "Våre tilganger hos andre"
     await delegation.verifyDelegatedPacakge('Bygg, anlegg og eiendom', 'Byggesøknad');
     await delegation.verifyDelegatedPacakge('Transport og lagring', 'Veitransport');
     await delegation.verifyDelegatedPacakge('Oppvekst og utdanning', 'Godkjenning av personell');

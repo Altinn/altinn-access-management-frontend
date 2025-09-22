@@ -18,6 +18,8 @@ export class DelegationPage {
   readonly ourAcessButton: Locator;
   readonly rightsAccessLink: Locator;
   readonly rightsNewBrukerFlateLink: Locator;
+  readonly menubtn: Locator;
+  readonly logoutBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -37,6 +39,8 @@ export class DelegationPage {
       name: 'Rettigheter virksomheten har hos andre',
     });
     this.rightsNewBrukerFlateLink = page.getByRole('link', { name: 'Klikk her for å se disse' });
+    this.menubtn = page.getByRole('button', { name: 'Meny' });
+    this.logoutBtn = page.getByRole('button', { name: 'Logg ut' });
   }
 
   async openDelegationFlow() {
@@ -111,6 +115,19 @@ export class DelegationPage {
     await closeBtn.click();
   }
 
+  async logoutFromBrukerflate() {
+    const menuBtn = this.page.getByRole('button', { name: 'Meny' });
+    await expect(menuBtn).toBeVisible();
+    await menuBtn.click();
+
+    // Click logout
+    const logoutBtn = this.page.getByRole('button', { name: 'Logg ut' });
+    await expect(logoutBtn).toBeVisible();
+    await logoutBtn.click();
+
+    await this.page.context().clearCookies();
+  }
+
   // Delete delegated package directly from area list
   async deleteDelegatedPackage(areaName: string, packageName: string) {
     const areaButton = this.page.getByRole('button', { name: areaName });
@@ -163,7 +180,6 @@ export class DelegationPage {
   async newAccessRights(orgName: string) {
     await this.rightsAccessLink.click();
     await this.rightsNewBrukerFlateLink.click();
-    await this.tryNewAccessBtn.click();
 
     //Click on Orgnization
     const orgLink = this.page.getByRole('link', { name: orgName });
