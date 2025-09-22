@@ -179,7 +179,9 @@ export const SidebarItems = (
 
   items.push(systemUser);
 
-  items.push(settings);
+  if (!displayLimitedPreviewLaunch) {
+    items.push(settings);
+  }
 
   if (displayConfettiPackage && !isSmall) {
     shortcuts.map((shortcutItem) => items.push(shortcutItem));

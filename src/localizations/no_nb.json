@@ -437,8 +437,10 @@
     "alert_settings_heading": "Varslingsadresser for virksomheten",
     "alerts_on_email": "Varslinger på e-post",
     "alerts_on_sms": "Varslinger på SMS",
+    "one_address": "1 adresse",
     "num_of_addresses": "{{count}} adresser",
     "email_label": "Virksomhetens e-postadresser for varslinger:",
+    "sms_label": "Virksomhetens telefonnumre for varslinger:",
     "address_number": "Adresse {{number}}:"
   },
   "info_modal": {

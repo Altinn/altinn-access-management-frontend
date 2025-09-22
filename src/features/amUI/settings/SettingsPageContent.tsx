@@ -2,19 +2,31 @@ import React from 'react';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useTranslation } from 'react-i18next';
-import { Divider, DsHeading, List, SettingsItem } from '@altinn/altinn-components';
+import { Divider, DsButton, DsHeading, List, SettingsItem } from '@altinn/altinn-components';
+import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi';
 
 import classes from './SettingsPageContent.module.css';
-import { BellIcon, ChatIcon, PaperplaneIcon, PhoneIcon } from '@navikt/aksel-icons';
+import { ChatIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { SettingsModal } from './SettingsModal';
 
 export const SettingsPageContent = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('settings_page.page_title'));
-  const { actingParty } = usePartyRepresentation();
 
   const [openModal, setOpenModal] = React.useState(false);
   const [modalMode, setModalMode] = React.useState<'email' | 'sms'>('email');
+
+  const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
+  const { data: notificationAddresses, isLoading: notifLoading } =
+    useGetOrgNotificationAddressesQuery(actingParty?.orgNumber ?? '', {
+      skip: !actingParty?.orgNumber,
+    });
+
+  const emailAddresses =
+    notificationAddresses?.filter((addr) => addr.email).map((addr) => addr.email) ?? [];
+  const phoneNumbers =
+    notificationAddresses?.filter((addr) => addr.phone).map((addr) => addr.phone) ?? [];
+  const isLoading = actorLoading || notifLoading;
 
   const onSettingsClick = (mode: 'email' | 'sms') => {
     setModalMode(mode);
@@ -39,20 +51,58 @@ export const SettingsPageContent = () => {
         <List size='sm'>
           <SettingsItem
             title={t('settings_page.alerts_on_email')}
-            value={'test@email.com'}
+            value={emailAddresses.join(', ')}
             icon={<PaperplaneIcon />}
-            badge={{ label: t('settings_page.num_of_addresses', { count: 1 }) }}
+            badge={
+              emailAddresses.length > 0 && {
+                label:
+                  emailAddresses.length === 1
+                    ? t('settings_page.one_address')
+                    : t('settings_page.num_of_addresses', { count: emailAddresses.length }),
+              }
+            }
             as={'button'}
             onClick={() => onSettingsClick('email')}
+            controls={
+              emailAddresses.length === 0 && (
+                <DsButton
+                  data-size='sm'
+                  variant='tertiary'
+                  onClick={() => onSettingsClick('email')}
+                >
+                  {t('common.add')}
+                </DsButton>
+              )
+            }
+            loading={isLoading}
           />
           <Divider as='li' />
           <SettingsItem
             title={t('settings_page.alerts_on_sms')}
-            value={'2222222222, +47 123 45 678'}
+            value={phoneNumbers.join(', ')}
             icon={<ChatIcon />}
-            badge={{ label: t('settings_page.num_of_addresses', { count: 1 }) }}
+            badge={
+              phoneNumbers.length > 0 && {
+                label:
+                  phoneNumbers.length === 1
+                    ? t('settings_page.one_address')
+                    : t('settings_page.num_of_addresses', { count: phoneNumbers.length }),
+              }
+            }
             as={'button'}
             onClick={() => onSettingsClick('sms')}
+            loading={isLoading}
+            controls={
+              phoneNumbers.length === 0 && (
+                <DsButton
+                  data-size='sm'
+                  variant='tertiary'
+                  onClick={() => onSettingsClick('sms')}
+                >
+                  {t('common.add')}
+                </DsButton>
+              )
+            }
           />
         </List>
         <SettingsModal
