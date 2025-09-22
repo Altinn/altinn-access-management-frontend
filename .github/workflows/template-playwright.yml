@@ -61,16 +61,19 @@ jobs:
           path: playwright/playwright-report/${{ inputs.environment }}
           retention-days: 30
 
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Upload HTML report to Azure
-        if: always()
-        shell: bash
-        run: |
-          REPORT_NAME=${{ inputs.environment }}
-          REPORT_ID=${{ github.sha }}
-          azcopy cp --recursive "playwright/playwright-report/$REPORT_NAME" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_ID/"
-          echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/index.html"
-        env:
-          AZCOPY_AUTO_LOGIN_TYPE: SPN
-          AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
-          AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
-          AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            REPORT_NAME=${{ inputs.environment }}
+            REPORT_ID=${{ github.sha }}
+            azcopy cp --recursive "playwright/playwright-report/$REPORT_NAME" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_ID/"
+            echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/index.html"
