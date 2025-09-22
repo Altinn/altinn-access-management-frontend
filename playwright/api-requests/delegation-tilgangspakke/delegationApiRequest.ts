@@ -1,11 +1,11 @@
 import { request } from '@playwright/test';
-import { TokenGenerator } from './tokenGenerator';
+import { Token } from './../Token';
 
 export class DelegationApiRequest {
-  private tokenGen: TokenGenerator;
+  private tokenClass: Token;
 
   constructor() {
-    this.tokenGen = new TokenGenerator();
+    this.tokenClass = new Token();
   }
 
   /**
@@ -13,7 +13,7 @@ export class DelegationApiRequest {
    */
   public async deleteAllDelegations() {
     const apiRequestContext = await request.newContext();
-    const token = await this.tokenGen.generateAltinnPersonalToken();
+    const token = await this.tokenClass.generateAltinnPersonalToken();
 
     // Build endpoint using env values
     const endpoint =
