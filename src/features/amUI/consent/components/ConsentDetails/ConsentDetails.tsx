@@ -132,7 +132,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
           >
             {consent.titleAccepted[language]}
           </DsHeading>
-          <DsParagraph>{consent.consentMessage[language]}</DsParagraph>
+          {consent.consentMessage && <DsParagraph>{consent.consentMessage[language]}</DsParagraph>}
           <DsHeading
             level={2}
             data-size='2xs'

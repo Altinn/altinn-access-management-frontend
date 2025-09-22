@@ -46,20 +46,5 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// The request message
         /// </summary>
         public Dictionary<string, string>? RequestMessage { get; set; }
-
-        /// <summary>
-        /// The consent template id.
-        /// </summary>
-        public required string TemplateId { get; set; }
-
-        /// <summary>
-        /// The version of the consent template.
-        /// </summary>
-        public required int TemplateVersion { get; set; }
-
-        /// <summary>
-        /// List all events related to consent
-        /// </summary>
-        public required List<ConsentRequestEventDto> ConsentRequestEvents { get; set; }
     }
 }
