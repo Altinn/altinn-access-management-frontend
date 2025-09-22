@@ -7,6 +7,7 @@ import {
   InformationSquareIcon,
   LeaveIcon,
   LinkIcon,
+  CogIcon,
 } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
@@ -108,6 +109,22 @@ export const SidebarItems = (
     ),
   };
 
+  const settings: MenuItemProps = {
+    groupId: 'settings-group',
+    id: 'settings',
+    size: 'md' as MenuItemSize,
+    title: t('sidebar.settings'),
+    selected: pathname?.includes(`/${amUIPath.Settings}`),
+    icon: CogIcon,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
+      <Link
+        to={`/${amUIPath.Settings}`}
+        {...props}
+      />
+    ),
+  };
+
   const shortcuts: MenuItemProps[] = [
     {
       groupId: 'shortcuts',
@@ -161,6 +178,8 @@ export const SidebarItems = (
   }
 
   items.push(systemUser);
+
+  items.push(settings);
 
   if (displayConfettiPackage && !isSmall) {
     shortcuts.map((shortcutItem) => items.push(shortcutItem));
