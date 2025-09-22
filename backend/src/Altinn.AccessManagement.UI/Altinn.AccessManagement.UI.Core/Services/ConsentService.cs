@@ -172,7 +172,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             // look up all party names in one call instead of one by one
-            IEnumerable<string> partyUuids = consents.Value.Aggregate(new List<string> { }, (acc, consent) => [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From)]).Distinct();
+            IEnumerable<string> partyUuids = consents.Value.Aggregate(new List<string> { }, (acc, consent) =>
+            {
+                List<string> handledBy = string.IsNullOrEmpty(consent.HandledBy) ? [] : [GetUrnValue(consent.HandledBy)];
+                return [.. acc, GetUrnValue(consent.To), GetUrnValue(consent.From), .. handledBy];
+            }).Distinct();
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
             IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
 
@@ -180,6 +184,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 Party toParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.To));
                 Party fromParty = parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.From));
+                Party handledByParty = string.IsNullOrEmpty(consent.HandledBy) ? null : parties.FirstOrDefault(p => p.PartyUuid.ToString() == GetUrnValue(consent.HandledBy));
                 return new ConsentLogItemFE()
                 {
                     Id = consent.Id,
@@ -188,6 +193,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     ToPartyName = toParty?.Name ?? string.Empty,
                     FromPartyId = consent.From,
                     FromPartyName = fromParty?.Name ?? string.Empty,
+                    HandledByPartyId = consent.HandledBy,
+                    HandledByPartyName = handledByParty?.Name ?? string.Empty,
                     ValidTo = consent.ValidTo,
                     ConsentRequestEvents = consent.ConsentRequestEvents,
                 };

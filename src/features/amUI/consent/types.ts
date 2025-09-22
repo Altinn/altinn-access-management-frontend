@@ -52,6 +52,8 @@ export interface ConsentHistoryItem {
   toPartyName: string;
   fromPartyId: string;
   fromPartyName: string;
+  handledByPartyId: string;
+  handledByPartyName: string;
   validTo: string;
   consentRequestEvents: ConsentRequestEvent[];
 }

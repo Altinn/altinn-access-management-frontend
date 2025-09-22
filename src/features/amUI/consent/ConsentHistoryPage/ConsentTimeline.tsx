@@ -141,10 +141,18 @@ const getTimeLineItems = (
     eventType: keyof typeof timelineEventText,
     t: TFunction<'translation', undefined>,
   ): string => {
+    const handledByText =
+      eventType === 'Used' && consent.handledByPartyName
+        ? t('consent_log.handledby', {
+            handledBy: consent.handledByPartyName,
+            to: consent.toPartyName,
+          })
+        : '';
+
     const textKey = consent.isPoa
       ? timelineEventText[eventType]['poa']
       : timelineEventText[eventType]['consent'];
-    return t(textKey, { to: consent.toPartyName, from: consent.fromPartyName });
+    return `${t(textKey, { to: consent.toPartyName, from: consent.fromPartyName })} ${handledByText}`;
   };
 
   return consentLog

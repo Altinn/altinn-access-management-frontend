@@ -3,7 +3,7 @@
     "id": "75af4b32-231b-4317-b31a-5e0c71a0bb64",
     "from": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
     "to": "urn:altinn:organization:identifier-no:60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
-    "handledBy": null,
+    "handledBy": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
     "validTo": "2075-05-21T11:11:24.9535551+00:00",
     "consentRights": [
       {
