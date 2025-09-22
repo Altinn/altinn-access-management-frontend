@@ -465,6 +465,15 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected?.Name, actual?.Name);
         }
 
+        public static void AssertEqual(Core.Models.Common.Role expected, Core.Models.Common.Role actual)
+        {
+            Assert.Equal(expected?.Id, actual?.Id);
+            Assert.Equal(expected?.Name, actual?.Name);
+            Assert.Equal(expected?.Code, actual?.Code);
+            Assert.Equal(expected?.Description, actual?.Description);
+            Assert.Equal(expected?.Urn, actual?.Urn);
+        }
+
         public static void AssertEqual(CompactRole expected, CompactRole actual)
         {
             Assert.Equal(expected?.Id, actual?.Id);

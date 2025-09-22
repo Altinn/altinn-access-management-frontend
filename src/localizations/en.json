@@ -296,6 +296,7 @@
     }
   },
   "role": {
+    "provider_status": "This role is fetched from ",
     "current_roles_title": "{{count}} administrator accesses",
     "roles_description": "Here you will find authorizations to manage access for the organization. No resources or services are associated with these accesses.",
     "role_delegation_success": "{{name}} has been successfully granted power of attorney over {{role}}.",
