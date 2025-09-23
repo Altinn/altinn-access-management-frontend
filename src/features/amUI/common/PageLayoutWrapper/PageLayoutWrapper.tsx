@@ -19,7 +19,7 @@ import {
   useGetReporteeQuery,
   useGetUserInfoQuery,
 } from '@/rtk/features/userInfoApi';
-import { amUIPath, GeneralPath, SystemUserPath } from '@/routes/paths';
+import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
