@@ -118,6 +118,7 @@ export const SidebarItems = (
     groupId: 'settings-group',
     id: 'settings',
     size: 'md' as MenuItemSize,
+    loading: isLoading,
     title: t('sidebar.settings'),
     selected: pathname?.includes(`/${amUIPath.Settings}`),
     icon: CogIcon,
