@@ -70,7 +70,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             ConsentRequestFE expectedResponse = Util.GetMockData<ConsentRequestFE>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{requestId}");       
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{requestId}");
             ConsentRequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<ConsentRequestFE>();
 
             // Assert
@@ -91,7 +91,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             ConsentRequestFE expectedResponse = Util.GetMockData<ConsentRequestFE>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{requestId}");       
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{requestId}");
             ConsentRequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<ConsentRequestFE>();
 
             // Assert

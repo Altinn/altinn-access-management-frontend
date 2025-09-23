@@ -7,6 +7,22 @@ export interface ConsentRight {
   consentTextHtml: ConsentLanguage;
 }
 
+export type ConsentRequestEventType =
+  | 'Created'
+  | 'Rejected'
+  | 'Accepted'
+  | 'Revoked'
+  | 'Deleted'
+  | 'Expired'
+  | 'Used';
+export interface ConsentRequestEvent {
+  consentEventID: string;
+  created: string;
+  performedBy: string;
+  eventType: ConsentRequestEventType;
+  consentRequestID: string;
+}
+
 export interface ConsentRequest {
   id: string;
   rights: ConsentRight[];
@@ -19,13 +35,7 @@ export interface ConsentRequest {
   handledBy?: ConsentLanguage;
   fromPartyName?: string;
   validTo: string;
-  consentRequestEvents: {
-    consentEventID: string;
-    created: string;
-    performedBy: string;
-    eventType: string;
-    consentRequestID: string;
-  }[];
+  consentRequestEvents: ConsentRequestEvent[];
 }
 
 export interface ProblemDetail {
