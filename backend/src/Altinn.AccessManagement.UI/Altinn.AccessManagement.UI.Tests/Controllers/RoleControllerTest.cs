@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -37,9 +38,81 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
+
             _client_feature_off.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             _client_feature_off.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
+        /// <summary>
+        ///     Test case: Get a role by using a valid id
+        ///     Expected: Returns the expected role
+        /// </summary>
+        [Fact]
+        public async Task GetRolebyId_ValidId()
+        {
+            Guid roleId = new Guid("55bd7d4d-08dd-46ee-ac8e-3a44d800d752"); // daglig leder
+            Core.Models.Common.Role expectedResult = Util.GetMockData<List<Core.Models.Common.Role>>(_expectedDataPath + $"/Role/roles.json").FirstOrDefault(r => r.Id == roleId);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{roleId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            Core.Models.Common.Role actualResult = JsonSerializer.Deserialize<Core.Models.Common.Role>(await response.Content.ReadAsStringAsync(), options);
+
+            AssertionUtil.AssertEqual(expectedResult, actualResult);
+        }
+
+        /// <summary>
+        ///     Test case: Get role metadata with invalid model state
+        ///     Expected: Returns BadRequest
+        /// </summary>
+        [Fact]
+        public async Task GetRoleMetaById_InvalidModelState()
+        {
+            // Arrange - using an invalid GUID format to trigger model state validation
+            string invalidId = "invalid-guid-format";
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{invalidId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Get role metadata by id that doesn't exist
+        ///     Expected: Returns NoContent when role is not found
+        /// </summary>
+        [Fact]
+        public async Task GetRoleMetaById_NotFound()
+        {
+            // Arrange - using a GUID that doesn't exist in the mock data
+            Guid nonExistentRoleId = new Guid("00000000-0000-0000-0000-000000000001");
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{nonExistentRoleId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Get role metadata with id that triggers internal server error
+        ///     Expected: Returns InternalServerError
+        /// </summary>
+        [Fact]
+        public async Task GetRoleMetaById_InternalServerError()
+        {
+            // Arrange - using the specific GUID that triggers internal server error in the mock
+            Guid errorTriggeringId = new Guid("d98ac728-d127-4a4c-96e1-738f856e5332");
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{errorTriggeringId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
 
         /// <summary>
@@ -164,7 +237,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///    Expected: Returns NotFound
         /// </summary>
         [Fact]
-        public async Task DelegateRole_Feature_Toggle_Off ()
+        public async Task DelegateRole_Feature_Toggle_Off()
         {
             // Arrange
             Guid from = Guid.NewGuid();
@@ -240,12 +313,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task RoleDelegationCheck_Disabled_Feature_Toggle()
         {
-            
+
             // uuid for Intelligent Albatross
             string rightOwnerUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
             // roleId for Tilgangsstyring
             var roleUuid = "4691c710-e0ad-4152-9783-9d1e787f02d3";
-                       
+
             var res = await _client_feature_off.GetAsync($"accessmanagement/api/v1/role/delegationcheck/{rightOwnerUuid}/{roleUuid}");
 
             Assert.Equal(HttpStatusCode.NotFound, res.StatusCode);
