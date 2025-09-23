@@ -19,14 +19,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:0.38.11":
-  version: 0.38.11
-  resolution: "@altinn/altinn-components@npm:0.38.11"
+"@altinn/altinn-components@npm:0.38.17":
+  version: 0.38.17
+  resolution: "@altinn/altinn-components@npm:0.38.17"
   dependencies:
     "@digdir/designsystemet-css": "npm:^1.0.6"
     "@digdir/designsystemet-react": "npm:^1.0.6"
     "@digdir/designsystemet-theme": "npm:^1.0.6"
-    "@navikt/aksel-icons": "npm:^7.22.0"
+    "@navikt/aksel-icons": "npm:^7.30.1"
     "@tanstack/react-virtual": "npm:^3.13.9"
     classnames: "npm:^2.5.1"
     react: "npm:^19.1.0"
@@ -34,7 +34,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/ee37aa120c62c6f484906684e6dd82a0bba51dacc3f42e13748860817f022cd81af7687c7c0b9bc5781ce8eef92f7d74246aa367b136b6b57c20d25159b43b35
+  checksum: 10/1153a425316ca5fc46115c31909607437e0059b03f2b9fb4f8e8fd0dbdf04a76289007dfd172ddb6ef41e3faa248671a1fd6693655dc422be12f8dec93bf5da9
   languageName: node
   linkType: hard
 
@@ -1356,7 +1356,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^7.12.2, @navikt/aksel-icons@npm:^7.22.0":
+"@navikt/aksel-icons@npm:^7.12.2":
   version: 7.22.0
   resolution: "@navikt/aksel-icons@npm:7.22.0"
   checksum: 10/1491ace9538e7a8e65bc598300e902951fda82279ee192c68a1790f6e023760e8b5fed84b0ddca0eabf63c2c582c5d84cd93fc9df1ba3b755b56b31bceaefaf4
@@ -1367,6 +1367,13 @@ __metadata:
   version: 7.25.1
   resolution: "@navikt/aksel-icons@npm:7.25.1"
   checksum: 10/dc7e6b6f2f146f49b1fa7fcf016203dd2d46bf9ede88f5e8f4f50646ca92bccddcd902c1c7d3fe4bcdd91863c3b7ffc10ac582b7960cfe04b41bfadfe1ae1d64
+  languageName: node
+  linkType: hard
+
+"@navikt/aksel-icons@npm:^7.30.1":
+  version: 7.30.1
+  resolution: "@navikt/aksel-icons@npm:7.30.1"
+  checksum: 10/529f0e78c75f90d0e3e4b315275510ef672bb0dba901395afc258bd43a167f6af569f4e57d33f7d456e6239da2193e5cc3d267f6669fe872a8d24d00827b2d54
   languageName: node
   linkType: hard
 
@@ -3116,7 +3123,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:0.38.11"
+    "@altinn/altinn-components": "npm:0.38.17"
     "@axe-core/playwright": "npm:^4.10.2"
     "@navikt/aksel-icons": "npm:^7.12.2"
     "@playwright/test": "npm:^1.55.0"

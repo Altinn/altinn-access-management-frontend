@@ -4,6 +4,8 @@ import type {
   AccountMenuItemProps,
   MenuGroupProps,
   MenuItemProps,
+  MenuItemSize,
+  Theme,
 } from '@altinn/altinn-components';
 import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -51,6 +53,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     shortcuts: {
       divider: false,
       title: t('header.shortcuts'),
+      defaultIconTheme: 'transparent' as Theme,
+      defaultItemSize: 'sm' as MenuItemSize,
     },
     global: {
       divider: false,
