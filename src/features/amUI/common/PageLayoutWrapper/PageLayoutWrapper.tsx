@@ -4,6 +4,8 @@ import type {
   AccountMenuItemProps,
   MenuGroupProps,
   MenuItemProps,
+  MenuItemSize,
+  Theme,
 } from '@altinn/altinn-components';
 import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +19,7 @@ import {
   useGetReporteeQuery,
   useGetUserInfoQuery,
 } from '@/rtk/features/userInfoApi';
-import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
+import { amUIPath, GeneralPath, SystemUserPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
@@ -51,6 +53,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     shortcuts: {
       divider: false,
       title: t('header.shortcuts'),
+      defaultIconTheme: 'transparent' as Theme,
+      defaultItemSize: 'sm' as MenuItemSize,
     },
     global: {
       divider: false,

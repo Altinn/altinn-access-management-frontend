@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
@@ -92,6 +93,22 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Status, actual.Status);
             AssertCollections(expected.ReasonCodes, actual.ReasonCodes, Assert.Equal);
 
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="NotificationAddressResponse" /> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(NotificationAddressResponse expected, NotificationAddressResponse actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.CountryCode, actual.CountryCode);
+            Assert.Equal(expected.Phone, actual.Phone);
+            Assert.Equal(expected.Email, actual.Email);
+            Assert.Equal(expected.NotificationAddressId, actual.NotificationAddressId);
         }
 
         /// <summary>
@@ -466,6 +483,15 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected?.Name, actual?.Name);
         }
 
+        public static void AssertEqual(Core.Models.Common.Role expected, Core.Models.Common.Role actual)
+        {
+            Assert.Equal(expected?.Id, actual?.Id);
+            Assert.Equal(expected?.Name, actual?.Name);
+            Assert.Equal(expected?.Code, actual?.Code);
+            Assert.Equal(expected?.Description, actual?.Description);
+            Assert.Equal(expected?.Urn, actual?.Urn);
+        }
+
         public static void AssertEqual(CompactRole expected, CompactRole actual)
         {
             Assert.Equal(expected?.Id, actual?.Id);
@@ -559,7 +585,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
             Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
-            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+            AssertCollections(expected.RequiredRights, actual.RequiredRights, AssertEqual);
+            AssertCollections(expected.UnwantedRights, actual.UnwantedRights, AssertEqual);
+            AssertCollections(expected.RequiredAccessPackages, actual.RequiredAccessPackages, AssertEqual);
+            AssertCollections(expected.UnwantedAccessPackages, actual.UnwantedAccessPackages, AssertEqual);
         }
 
         public static void AssertEqual(SystemUserAgentRequestFE expected, SystemUserAgentRequestFE actual)

@@ -118,7 +118,8 @@
     "reportees": "Våre tilganger hos andre",
     "systemaccess": "API- og systemtilganger",
     "consent": "Samtykker og fullmakter",
-    "poa_overview": "Fullmakter"
+    "poa_overview": "Fullmakter",
+    "settings": "Innstillingar"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -293,6 +294,7 @@
     }
   },
   "role": {
+    "provider_status": "Denne rolla er henta fra ",
     "current_roles_title": "{{count}} administratortilganger",
     "roles_description": "Her finner du fullmakter for å administrere tilganger for virksomheten. Det er ikke knyttet noen ressurser eller tjenester til disse tilgangene.",
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
@@ -427,6 +429,18 @@
     "paragraph_4": "Ein systemtilgang er ein ny type upersonleg brukar i Altinn som blir oppretta for at eit fagsystem (t.d. rekneskapsystem eller lønsystem) skal få fullmakt til å løyse oppgåver på vegne av eiga verksemd eller for kundane til verksemda.",
     "title_5": "Kva er forskjellen på vanleg systemtilgang og systemtilgang for kundar?",
     "paragraph_5": "Med ein vanleg systemtilgang handlar du på vegne av deg sjølv. T.d. om du eig ei lita verksemd og fører rekneskapet ditt sjølv i Fiken. Då kan du opprette systemtilgang som ein del av Fiken sin flyt, eller du kan gå inn på altinn.no og opprette den sjølv ved å trykke på «Lag ny systemtilgang».<br /><br /> Er du rekneskapsførar eller revisor kan du opprette systemtilgang som kan tildelast fullmakter på vegne av kundane dine. Då vil systemet kunne sende inn og hente ut kundedata. Denne systemtilgangen kan berre opprettast ved at du godkjenner systemtilgangen i ein flyt i fagsystemet du vil bruke. Når du har godkjent den, går du til altinn.no for å legge til kundane som er relevante for den systemtilgangen. <br /><br />Vi gler oss til å vise deg det nye Altinn og set stor pris på tolmodet ditt medan vi byggjer om. Har du spørsmål eller tilbakemeldingar, kontakt oss på support@altinn.no."
+  },
+  "settings_page": {
+    "page_title": "Innstillingar - Altinn",
+    "page_heading": "Innstillingar for {{name}}",
+    "alert_settings_heading": "Varslingsadresser for verksemda",
+    "alerts_on_email": "Varslingar på e-post",
+    "alerts_on_sms": "Varslingar på SMS",
+    "one_address": "1 adresse",
+    "num_of_addresses": "{{count}} adresser",
+    "email_label": "E-postadressene til verksemda for varslingar:",
+    "sms_label": "Telefonnummera til verksemda for varslingar:",
+    "address_number": "Adresse {{number}}:"
   },
   "info_modal": {
     "title": "Prøv den nye tilgangsstyringsløysinga",
@@ -606,8 +620,15 @@
     "page_title": "Oppdater systemtilgang - Altinn",
     "banner_title": "Oppdatering av systemtilgang",
     "change_request_header": "{{vendorName}} ber om godkjenning til å gjøre endringar i systemtilgang",
-    "rights_list_header": "Etter oppdateringen vil systemtilgangen ha disse fullmaktene:",
-    "rights_list_header_single": "Etter oppdateringen vil systemtilgangen ha denne fullmakten:",
+    "rights_list_header": "Dette vil endres i systemtilgangen:",
+    "add_right_single": "Denne enkeltretten vil legges til",
+    "add_rights": "Desse enkeltrettane vil legges til",
+    "remove_right_single": "Denne enkeltretten vil fjernes",
+    "remove_rights": "Desse enkeltrettane vil fjernes",
+    "add_accesspackage_single": "Denne tilgangspakken vil legges til",
+    "add_accesspackages": "Desse tilgangspakkane vil legges til",
+    "remove_accesspackage_single": "Denne tilgangspakken vil fjernes",
+    "remove_accesspackages": "Desse tilgangspakkane vil fjernes",
     "accept": "Godkjenn oppdatert systemtilgang",
     "reject": "Avvis",
     "loading_change_request": "Laster oppdaterings-førespurnad",

@@ -22,7 +22,8 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"],
-      "@mock/*": ["./.mock/*"]
+      "@mock/*": ["./.mock/*"],
+      "playwright/*": ["playwright/*"]
     },
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "typeRoots": [

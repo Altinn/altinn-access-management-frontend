@@ -8,6 +8,7 @@ import {
   InformationSquareIcon,
   LeaveIcon,
   LinkIcon,
+  CogIcon,
 } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
@@ -51,6 +52,7 @@ export const SidebarItems = (
     groupId: 2,
     id: '2',
     size: 'md' as MenuItemSize,
+    loading: isLoading,
     title: t('sidebar.users'),
     loading: isLoading,
     selected: pathname?.includes(`/${amUIPath.Users}`),
@@ -68,6 +70,7 @@ export const SidebarItems = (
     groupId: 2,
     id: '2.1',
     size: 'md',
+    loading: isLoading,
     title: t('sidebar.poa_overview'),
     loading: isLoading,
     icon: PadlockUnlockedIcon,
@@ -85,6 +88,7 @@ export const SidebarItems = (
     groupId: 4,
     id: '4',
     size: 'md' as MenuItemSize,
+    loading: isLoading,
     title: t('sidebar.reportees'),
     loading: isLoading,
     selected: pathname?.includes(`/${amUIPath.Reportees}`),
@@ -119,8 +123,8 @@ export const SidebarItems = (
     groupId: 6,
     id: '6',
     size: 'md',
-    title: t('sidebar.systemaccess'),
     loading: isLoading,
+    title: t('sidebar.systemaccess'),
     icon: TenancyIcon,
     selected: pathname?.includes(`/${SystemUserPath.SystemUser}/`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -132,11 +136,28 @@ export const SidebarItems = (
     ),
   };
 
+  const settings: MenuItemProps = {
+    groupId: 'settings-group',
+    id: 'settings',
+    size: 'md' as MenuItemSize,
+    title: t('sidebar.settings'),
+    selected: pathname?.includes(`/${amUIPath.Settings}`),
+    icon: CogIcon,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
+      <Link
+        to={`/${amUIPath.Settings}`}
+        {...props}
+      />
+    ),
+  };
+
   const shortcuts: MenuItemProps[] = [
     {
       groupId: 'shortcuts',
       id: 'beta-about',
       size: 'md',
+      loading: isLoading,
       title: t('header.new_altinn_info'),
       loading: isLoading,
       icon: InformationSquareIcon,
@@ -153,6 +174,7 @@ export const SidebarItems = (
       groupId: 'shortcuts',
       id: 'beta-leave',
       size: 'md',
+      loading: isLoading,
       title: t('header.leave_beta'),
       loading: isLoading,
       icon: LeaveIcon,
@@ -197,6 +219,10 @@ export const SidebarItems = (
   }
 
   items.push(systemUser);
+
+  if (!displayLimitedPreviewLaunch) {
+    items.push(settings);
+  }
 
   if (displayConfettiPackage && !isSmall) {
     shortcuts.map((shortcutItem) => items.push(shortcutItem));

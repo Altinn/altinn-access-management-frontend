@@ -15,5 +15,28 @@
         }
       ]
     }
+  ],
+  "unwantedRights": [
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "jks-test-resource"
+        }
+      ]
+    }
+  ],
+  "requiredAccessPackages": [
+    {
+      "urn": "urn:altinn:accesspackage:sjofart"
+    },
+    {
+      "urn": "urn:altinn:accesspackage:lufttransport"
+    }
+  ],
+  "unwantedAccessPackages": [
+    {
+      "urn": "urn:altinn:accesspackage:jordbruk"
+    }
   ]
 }

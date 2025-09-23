@@ -1,10 +1,16 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Integration.Util;
 using Altinn.Platform.Profile.Models;
+using Altinn.Platform.Register.Models;
 using AltinnCore.Authentication.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -81,6 +87,28 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             return userProfile;
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<NotificationAddressResponse>> GetOrgNotificationAddresses(string orgNumber)
+        {
+            try
+            {
+                string endpointUrl = $"organizations/{orgNumber}/notificationaddresses/mandatory";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
+
+                var resString = await response.Content.ReadAsStringAsync();
+                OrganizationResponse orgNotifications = await ClientUtils.DeserializeIfSuccessfullStatusCode<OrganizationResponse>(response);
+                return orgNotifications?.NotificationAddresses;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ProfileClient // GetOrgNotificationAddresses // Exception");
+                throw;
+            }
         }
 
         private async Task<UserProfile> GetUserProfileFromEndpoint(string endpointUrl)

@@ -37,6 +37,7 @@ import {
   ConsentPath,
 } from '../paths';
 import { PackagePoaDetailsPage } from '@/features/amUI/packagePoaDetailsPage/PackagePoaDetailsPage';
+import { SettingsPage } from '@/features/amUI/settings/SettingsPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -177,6 +178,10 @@ export const Router = createBrowserRouter(
       <Route
         path={amUIPath.Info}
         element={<InfoPage />}
+      />
+      <Route
+        path={amUIPath.Settings}
+        element={<SettingsPage />}
       />
     </Route>,
   ),

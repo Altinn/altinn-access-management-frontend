@@ -214,6 +214,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     services.AddSingleton<IAPIDelegationService, APIDelegationService>();
     services.AddSingleton<ILookupService, LookupService>();
+    services.AddSingleton<ISettingsService, SettingsService>();
     services.AddSingleton<IResourceService, ResourceService>();
     services.AddSingleton<IUserService, UserService>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
@@ -345,6 +346,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddHttpClient<IAccessPackageClient, AccessPackageClient>();
+    }
+
+    if (mockSettings.Role)
+    {
+        services.AddHttpClient<IRoleClient, RoleClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IRoleClient, RoleClient>();
     }
 
     if (mockSettings.RightHolder)
