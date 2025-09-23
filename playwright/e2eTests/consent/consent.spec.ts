@@ -2,7 +2,6 @@ import { expect } from '@playwright/test';
 import { test } from 'playwright/fixture/pomFixture';
 
 import { ConsentApiRequests } from '../../api-requests/ConsentApiRequests';
-import { ConsentPage, Language } from '../../pages/consent/ConsentPage';
 import { fromPersons, toOrgs } from './consentTestdata';
 
 test.describe.configure({ timeout: 30000 });
@@ -11,18 +10,18 @@ const redirectUrl = 'https://example.com/';
 
 let api: ConsentApiRequests;
 let validToTimestamp: string;
-let consentPage: ConsentPage;
 let fromPerson: string;
 let toOrg: string;
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({}) => {
   api = new ConsentApiRequests();
   validToTimestamp = addTimeToNowUtc({ years: 1 });
 
   const pickRandom = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
-  // consentPage = new ConsentPage(page, Language.NB);
   fromPerson = pickRandom(fromPersons);
   toOrg = pickRandom(toOrgs);
+
+  // Used to fetch valid token for org when creatnig consent request
   process.env.ORG = toOrg;
 });
 

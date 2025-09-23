@@ -12,6 +12,7 @@ import {
   instantiateResource,
 } from 'playwright/pages/profile/delegationPage';
 import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/delegeringHelper';
+import * as util from 'playwright/helpers/util';
 
 // Define the fixtures
 const test = baseTest.extend<{
