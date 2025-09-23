@@ -1,5 +1,6 @@
-import { expect, Page, test } from '@playwright/test';
-import { LoginPage } from '../../pages/LoginPage';
+import { expect } from '@playwright/test';
+import { test } from 'playwright/fixture/pomFixture';
+
 import { ConsentApiRequests } from '../../api-requests/ConsentApiRequests';
 import { ConsentPage, Language } from '../../pages/consent/ConsentPage';
 import { fromPersons, toOrgs } from './consentTestdata';
@@ -19,14 +20,14 @@ test.beforeEach(async ({ page }) => {
   validToTimestamp = addTimeToNowUtc({ years: 1 });
 
   const pickRandom = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
-  consentPage = new ConsentPage(page, Language.NB);
+  // consentPage = new ConsentPage(page, Language.NB);
   fromPerson = pickRandom(fromPersons);
   toOrg = pickRandom(toOrgs);
   process.env.ORG = toOrg;
 });
 
 test.describe('Samtykke - Norsk', () => {
-  test('Godta forespørsel - Standard samtykke', async ({ page }) => {
+  test('Godta forespørsel - Standard samtykke', async ({ page, login, consentPage }) => {
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -36,7 +37,8 @@ test.describe('Samtykke - Norsk', () => {
       metaData: { inntektsaar: '2028' },
     });
 
-    await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
+    await consentPage.open(consentResponse.viewUri);
+    await login.loginAsActorPid(fromPerson);
 
     await consentPage.languagePicker.click();
     await consentPage.norwegian.click();
@@ -55,7 +57,7 @@ test.describe('Samtykke - Norsk', () => {
     await consentPage.approveStandardAndWaitLogout(redirectUrl);
   });
 
-  test('Godta samtykke - krav-template', async ({ page }) => {
+  test('Godta samtykke - krav-template', async ({ page, consentPage, login }) => {
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -65,7 +67,8 @@ test.describe('Samtykke - Norsk', () => {
       metaData: { brukerdata: 'AutomatisertTiltakE2E' },
     });
 
-    await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
+    await consentPage.open(consentResponse.viewUri);
+    await login.loginAsActorPid(fromPerson);
 
     await consentPage.languagePicker.click();
     await consentPage.norwegian.click();
@@ -79,7 +82,7 @@ test.describe('Samtykke - Norsk', () => {
     await consentPage.approveStandardAndWaitLogout(redirectUrl);
   });
 
-  test('Godta samtykke - Fullmakt utføre tjeneste', async ({ page }) => {
+  test('Godta samtykke - Fullmakt utføre tjeneste', async ({ consentPage, page, login }) => {
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -90,7 +93,8 @@ test.describe('Samtykke - Norsk', () => {
     });
 
     // Go to consent to approve or reject
-    await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
+    await consentPage.open(consentResponse.viewUri);
+    await login.loginAsActorPid(fromPerson);
 
     // Pick language
     await consentPage.languagePicker.click();
@@ -109,7 +113,7 @@ test.describe('Samtykke - Norsk', () => {
     await consentPage.approveFullmaktAndWaitLogout(redirectUrl);
   });
 
-  test('Godta samtykke: Lånesøknad', async ({ page }) => {
+  test('Godta samtykke: Lånesøknad', async ({ consentPage, page, login }) => {
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -119,7 +123,8 @@ test.describe('Samtykke - Norsk', () => {
       metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
     });
 
-    await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
+    await consentPage.open(consentResponse.viewUri);
+    await login.loginAsActorPid(fromPerson);
 
     await consentPage.languagePicker.click();
     await consentPage.norwegian.click();
@@ -138,7 +143,7 @@ test.describe('Samtykke - Norsk', () => {
     await consentPage.approveStandardAndWaitLogout(redirectUrl);
   });
 
-  test('Godkjenn samtykke for template: Enkelt samtykke', async ({ page }) => {
+  test('Godkjenn samtykke for template: Enkelt samtykke', async ({ consentPage, page, login }) => {
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -148,7 +153,8 @@ test.describe('Samtykke - Norsk', () => {
       metaData: { simpletag: 'E2E Playwright metadata for simpletag' },
     });
 
-    await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
+    await consentPage.open(consentResponse.viewUri);
+    await login.loginAsActorPid(fromPerson);
 
     await consentPage.languagePicker.click();
     await consentPage.norwegian.click();
@@ -164,7 +170,7 @@ test.describe('Samtykke - Norsk', () => {
     await consentPage.approveStandardAndWaitLogout(redirectUrl);
   });
 
-  test('Reject consent', async ({ page }) => {
+  test('Reject consent', async ({ consentPage, login }) => {
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -174,7 +180,8 @@ test.describe('Samtykke - Norsk', () => {
       metaData: { simpletag: 'E2E reject test' },
     });
 
-    await consentPage.open(consentResponse.viewUri, pidLogin(page), fromPerson);
+    await consentPage.open(consentResponse.viewUri);
+    await login.loginAsActorPid(fromPerson);
 
     await consentPage.languagePicker.click();
     await consentPage.norwegian.click();
@@ -200,13 +207,6 @@ function formatUiDateTime(isoString: string): string {
     timeZone: 'Europe/Oslo',
   });
   return `${datePart} ${timePart}`;
-}
-
-function pidLogin(page: Page) {
-  return async (pid: string) => {
-    const loginPage = new LoginPage(page);
-    await loginPage.loginAsActorPid(pid);
-  };
 }
 
 function addTimeToNowUtc(opts: {

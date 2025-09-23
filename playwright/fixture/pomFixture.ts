@@ -1,4 +1,5 @@
 import { test as baseTest } from '@playwright/test';
+import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
 import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
 import { DelegationPage } from 'playwright/pages/profile/accessPkgDelegationPage';
 import { apiDelegation } from 'playwright/pages/profile/apidelegeringPage';
@@ -25,6 +26,7 @@ const test = baseTest.extend<{
   instantiateResources: instantiateResource;
   runAccessibilityTest: runAccessibilityTests;
   delegation: DelegationPage;
+  consentPage: ConsentPage;
 }>({
   login: async ({ page }, use) => {
     await use(new LoginPage(page));
@@ -60,6 +62,9 @@ const test = baseTest.extend<{
   },
   delegation: async ({ page }, use) => {
     await use(new DelegationPage(page));
+  },
+  consentPage: async ({ page }, use) => {
+    await use(new ConsentPage(page, Language.NB));
   },
 });
 

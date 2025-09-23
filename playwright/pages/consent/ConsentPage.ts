@@ -121,15 +121,10 @@ export class ConsentPage {
   }
 
   // Navigation
-  async open(
-    consentViewUri: string,
-    fromPidLogin: (pid: string) => Promise<void>,
-    fromPerson: string,
-  ): Promise<void> {
+  async open(consentViewUri: string): Promise<void> {
     const url = new URL(consentViewUri);
     url.searchParams.set('DONTCHOOSEREPORTEE', 'TRUE'); // API workaround flag
     await this.page.goto(url.toString(), { waitUntil: 'domcontentloaded' });
-    await fromPidLogin(fromPerson);
   }
 
   // Expectations (use only POM locators)
