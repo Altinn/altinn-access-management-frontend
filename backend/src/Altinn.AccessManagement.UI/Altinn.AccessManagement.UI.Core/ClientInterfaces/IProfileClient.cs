@@ -1,4 +1,5 @@
-﻿using Altinn.Platform.Profile.Models;
+﻿using Altinn.AccessManagement.UI.Core.Models.Profile;
+using Altinn.Platform.Profile.Models;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -18,5 +19,11 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <returns>users profile settings</returns>
         Task<UserProfile> GetUserProfile(Guid uuid);
+
+        /// <summary>
+        /// Gets the organization's notification addresses from altinn profile
+        /// </summary>
+        /// <returns>A list of addresses</returns>
+        Task<List<NotificationAddressResponse>> GetOrgNotificationAddresses(string orgNumber);
     }
 }

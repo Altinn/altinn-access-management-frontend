@@ -133,7 +133,8 @@
     "users": "Brukere",
     "reportees": "Våre tilganger hos andre",
     "systemaccess": "API- og systemtilganger",
-    "poa_overview": "Fullmakter"
+    "poa_overview": "Fullmakter",
+    "settings": "Innstillinger"
   },
   "profile": {
     "received": "Mottatte",
@@ -286,7 +287,7 @@
     "package_number_of_resources": "{{count}} tjenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
     "no_matching_search": "Ingen treff på søket",
-  "info_alert_text": "Tilgangspakker skal erstatte dagens Altinn-roller. De vil fylles med flere tjenester etterhvert. Les mer om dette på <a href='https://info.altinn.no/hjelp/profil/tilgangspakker/'>hjelpesiden om tilgangspakker</a>.",
+    "info_alert_text": "Tilgangspakker skal erstatte dagens Altinn-roller. De vil fylles med flere tjenester etterhvert. Les mer om dette på <a href='https://info.altinn.no/hjelp/profil/tilgangspakker/'>hjelpesiden om tilgangspakker</a>.",
     "person_info_alert": "Det er ikke mulig å gi og fjerne fullmakter til personer helt enda. Dette vil komme senere.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
@@ -430,6 +431,18 @@
     "paragraph_4": "En systemtilgang er en ny type upersonlig bruker i Altinn som opprettes for at et fagsystem (f.eks regnskapssystem eller lønnssystem) skal få fullmakt til å løse oppgaver på vegne av egen virksomhet eller for kundene til virksomheten.",
     "title_5": "Hva er forskjellen på vanlig systemtilgang og systemtilgang for kunder?",
     "paragraph_5": "Med en vanlig systemtilgang handler du på vegne av deg selv. F.eks om du eier en liten virksomhet og fører regnskapet ditt selv i Fiken. Da kan du opprette systemtilgang som en del av Fiken sin flyt, eller du kan gå inn på altinn.no og opprette den selv ved å trykke på “Lag ny systemtilgang”.<br /><br /> Er du regnskapsfører eller revisor kan du opprette systemtilgang som kan tildeles fullmakter på vegne av kundene dine. Da vil systemet kunne sende inn og hente ut kundenes data. Denne systemtilgangen kan kun opprettes ved at du godkjenner systemtilgangen i en flyt i fagsystemet du vil bruke. Når du har godkjent den, går du til altinn.no for å legge til kundene som er relevante for den systemtilgangen. <br /><br />Vi gleder oss til å vise deg det nye Altinn og setter stor pris på tålmodigheten din mens vi bygger om. Har du spørsmål eller tilbakemeldinger, kontakt oss på support@altinn.no."
+  },
+  "settings_page": {
+    "page_title": "Innstillinger - Altinn",
+    "page_heading": "Innstillinger for {{name}}",
+    "alert_settings_heading": "Varslingsadresser for virksomheten",
+    "alerts_on_email": "Varslinger på e-post",
+    "alerts_on_sms": "Varslinger på SMS",
+    "one_address": "1 adresse",
+    "num_of_addresses": "{{count}} adresser",
+    "email_label": "Virksomhetens e-postadresser for varslinger:",
+    "sms_label": "Virksomhetens telefonnumre for varslinger:",
+    "address_number": "Adresse {{number}}:"
   },
   "info_modal": {
     "title": "Prøv den nye tilgangsstyringsløsningen",

@@ -1,6 +1,4 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {

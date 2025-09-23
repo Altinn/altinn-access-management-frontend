@@ -120,7 +120,8 @@
     "users": "Users",
     "reportees": "Our access to other companies",
     "systemaccess": "API- and system access",
-    "poa_overview": "Power of attorney"
+    "poa_overview": "Power of attorney",
+    "settings": "Settings"
   },
   "error_page": {
     "not_found_site_type": "Error 404",
@@ -287,7 +288,7 @@
     "package_number_of_resources": "{{count}} services",
     "user_has_no_packages": "This user has no access packages.",
     "no_matching_search": "No matches for your search",
-  "info_alert_text": "Access packages will replace today's Altinn roles. They will be filled with more services over time. Read more on the <a href='https://info.altinn.no/en/help/profile/access-packages/'>help page about access packages</a>.",
+    "info_alert_text": "Access packages will replace today's Altinn roles. They will be filled with more services over time. Read more on the <a href='https://info.altinn.no/en/help/profile/access-packages/'>help page about access packages</a>.",
     "person_info_alert": "Giving powers of attorney to individuals is currently not supported. This will come later.",
     "delegation_check": {
       "delegation_check_error_heading": "Technical error",
@@ -431,6 +432,18 @@
     "paragraph_4": "A system access is a new type of impersonal user in Altinn that is created so that a professional system (e.g. accounting system or payroll system) can get power of attorney to solve tasks on behalf of its own organization or for the organization's customers.",
     "title_5": "What is the difference between regular system access and system access for customers?",
     "paragraph_5": "With a regular system access, you act on behalf of yourself. For example, if you own a small business and keep your own accounting in Fiken, you can create system access as part of Fiken's flow, or you can go to altinn.no and create it yourself by clicking \"Create new system access\".<br /><br /> If you are an accountant or auditor, you can create system access that can be assigned powers of attorney on behalf of your customers. The system will then be able to submit and retrieve customer data. This system access can only be created by approving the system access in the professional system you want to use. When you have approved it, you go to altinn.no to add the customers that are relevant for that system access. <br /><br />We look forward to showing you the new Altinn and greatly appreciate your patience while we rebuild. If you have questions or feedback, contact us at support@altinn.no."
+  },
+  "settings_page": {
+    "page_title": "Settings - Altinn",
+    "page_heading": "Settings for {{name}}",
+    "alert_settings_heading": "Alert addresses for the organization",
+    "alerts_on_email": "Email alerts",
+    "alerts_on_sms": "SMS alerts",
+    "one_address": "1 address",
+    "num_of_addresses": "{{count}} addresses",
+    "email_label": "The organization's email addresses for alerts:",
+    "sms_label": "The organization's phone numbers for alerts:",
+    "address_number": "Address {{number}}:"
   },
   "info_modal": {
     "title": "Try the new access management solution",

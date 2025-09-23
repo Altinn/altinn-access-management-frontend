@@ -10,6 +10,7 @@ import { overviewOrgApi } from '../features/apiDelegation/overviewOrg/overviewOr
 import { resourceApi } from '../features/resourceApi';
 import { accessPackageApi } from '../features/accessPackageApi';
 import { lookupApi } from '../features/lookupApi';
+import { settingsApi } from '../features/settingsApi';
 import { userInfoApi } from '../features/userInfoApi';
 import { roleApi } from '../features/roleApi';
 import { systemUserApi } from '../features/systemUserApi';
@@ -23,6 +24,7 @@ const store = configureStore({
     singleRightsSlice: singleRightsReducer,
     [userInfoApi.reducerPath]: userInfoApi.reducer,
     [lookupApi.reducerPath]: lookupApi.reducer,
+    [settingsApi.reducerPath]: settingsApi.reducer,
     [singleRightsApi.reducerPath]: singleRightsApi.reducer,
     [apiDelegationApi.reducerPath]: apiDelegationApi.reducer,
     [overviewOrgApi.reducerPath]: overviewOrgApi.reducer,
@@ -46,6 +48,7 @@ const store = configureStore({
       systemUserApi.middleware,
       consentApi.middleware,
       altinnCdnApi.middleware,
+      settingsApi.middleware,
     ),
 });
 

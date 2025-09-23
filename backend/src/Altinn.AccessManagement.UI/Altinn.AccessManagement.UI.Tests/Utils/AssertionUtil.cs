@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
@@ -91,6 +92,22 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Status, actual.Status);
             AssertCollections(expected.ReasonCodes, actual.ReasonCodes, Assert.Equal);
 
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="NotificationAddressResponse" /> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(NotificationAddressResponse expected, NotificationAddressResponse actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.CountryCode, actual.CountryCode);
+            Assert.Equal(expected.Phone, actual.Phone);
+            Assert.Equal(expected.Email, actual.Email);
+            Assert.Equal(expected.NotificationAddressId, actual.NotificationAddressId);
         }
 
         /// <summary>
