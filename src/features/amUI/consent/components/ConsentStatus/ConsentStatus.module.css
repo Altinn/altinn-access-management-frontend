@@ -4,7 +4,7 @@
   color: var(--ds-color-base-contrast-default);
 }
 .statusActive {
-  background-color: var(--ds-color-success-base-hover);
+  background-color: var(--ds-color-success-base-default);
 }
 .statusInactive {
   background-color: var(--ds-color-danger-base-default);
