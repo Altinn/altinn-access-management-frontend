@@ -64,7 +64,7 @@ jobs:
         with:
           client-id: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
           tenant-id: ${{ secrets.AZCOPY_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          subscription-id: ${{ secrets.AZCOPY_SUBSCRIPTION_ID }}
 
       - name: Upload HTML report to Azure
         uses: azure/cli@v2
