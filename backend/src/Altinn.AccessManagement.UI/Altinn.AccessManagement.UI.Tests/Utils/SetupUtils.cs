@@ -96,6 +96,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                         options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                         options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                         options.DisplayLimitedPreviewLaunch = flags?.DisplayLimitedPreviewLaunch ?? true;
+                        options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                     });
                 });
             });
