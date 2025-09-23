@@ -162,7 +162,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       menuItemsVirtual: { isVirtualized: accounts.length > 20 },
     },
     onSelectAccount: (accountId: string) => {
-      const redirectUrl = window.location.pathname.includes('systemuser')
+      const redirectUrl = window.location.pathname.includes(SystemUserPath.SystemUser)
         ? `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`
         : window.location.href;
 
