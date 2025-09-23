@@ -31,7 +31,7 @@ interface PageLayoutWrapperProps {
 }
 
 const getAccountType = (type: string): 'company' | 'person' => {
-  return type === 'Person' ? 'person' : 'company';
+  return type === 'Organization' ? 'company' : 'person';
 };
 
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {

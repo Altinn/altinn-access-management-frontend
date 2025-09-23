@@ -54,7 +54,6 @@ export const SidebarItems = (
     size: 'md' as MenuItemSize,
     loading: isLoading,
     title: t('sidebar.users'),
-    loading: isLoading,
     selected: pathname?.includes(`/${amUIPath.Users}`),
     icon: PersonGroupIcon,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -72,7 +71,6 @@ export const SidebarItems = (
     size: 'md',
     loading: isLoading,
     title: t('sidebar.poa_overview'),
-    loading: isLoading,
     icon: PadlockUnlockedIcon,
     selected: pathname?.includes(`/${amUIPath.PoaOverview}`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -90,7 +88,6 @@ export const SidebarItems = (
     size: 'md' as MenuItemSize,
     loading: isLoading,
     title: t('sidebar.reportees'),
-    loading: isLoading,
     selected: pathname?.includes(`/${amUIPath.Reportees}`),
     icon: LinkIcon,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -106,8 +103,8 @@ export const SidebarItems = (
     groupId: 5,
     id: '5',
     size: 'md',
-    title: t('sidebar.consent'),
     loading: isLoading,
+    title: t('sidebar.consent'),
     icon: HandshakeIcon,
     selected: pathname?.includes(`/${ConsentPath.Consent}/`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -140,6 +137,7 @@ export const SidebarItems = (
     groupId: 'settings-group',
     id: 'settings',
     size: 'md' as MenuItemSize,
+    loading: isLoading,
     title: t('sidebar.settings'),
     selected: pathname?.includes(`/${amUIPath.Settings}`),
     icon: CogIcon,
@@ -159,7 +157,6 @@ export const SidebarItems = (
       size: 'md',
       loading: isLoading,
       title: t('header.new_altinn_info'),
-      loading: isLoading,
       icon: InformationSquareIcon,
       selected: pathname?.includes(`/${amUIPath.Info}`),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -176,7 +173,6 @@ export const SidebarItems = (
       size: 'md',
       loading: isLoading,
       title: t('header.leave_beta'),
-      loading: isLoading,
       icon: LeaveIcon,
       selected: false,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
