@@ -78,9 +78,9 @@ export class ConsentApiRequests {
       ],
       redirectUrl,
       requestMessage: {
-        en: `Playwright E2E test run at ${new Date().toISOString()}`,
-        nb: 'Playwright integrasjonstest',
-        nn: 'Playwright ende-til-ende test',
+        en: `Playwright end to end test request message english`,
+        nb: 'Playwright ende-til-ende test request message bokmål',
+        nn: 'Playwright ende-til-ende test request message nynorsk',
       },
     };
 

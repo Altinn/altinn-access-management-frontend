@@ -3,6 +3,8 @@ import { test } from 'playwright/fixture/pomFixture';
 
 import { ConsentApiRequests } from '../../api-requests/ConsentApiRequests';
 import { fromPersons, toOrgs } from './consentTestdata';
+import { Language } from 'playwright/pages/consent/ConsentPage';
+import { addTimeToNowUtc, formatUiDateTime } from 'playwright/util/helper';
 
 test.describe.configure({ timeout: 30000 });
 
@@ -26,6 +28,7 @@ test.beforeEach(async ({}) => {
 });
 
 test.describe('Samtykke - Norsk', () => {
+  test.use({ language: Language.NB }); // all tests in this file run in EN
   test('Godta forespørsel - Standard samtykke', async ({ page, login, consentPage }) => {
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
@@ -39,8 +42,7 @@ test.describe('Samtykke - Norsk', () => {
     await consentPage.open(consentResponse.viewUri);
     await login.loginAsActorPid(fromPerson);
 
-    await consentPage.languagePicker.click();
-    await consentPage.norwegian.click();
+    await consentPage.pickLanguage(consentPage.language);
 
     await consentPage.expectStandardIntro();
     await expect(
@@ -189,35 +191,3 @@ test.describe('Samtykke - Norsk', () => {
     await consentPage.rejectStandardAndWaitLogout(redirectUrl);
   });
 });
-
-/** helper: converts the validTo (ISO/UTC) to Oslo UI format */
-function formatUiDateTime(isoString: string): string {
-  const date = new Date(isoString);
-  const datePart = date.toLocaleDateString('no-NO', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    timeZone: 'Europe/Oslo',
-  });
-  const timePart = date.toLocaleTimeString('no-NO', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'Europe/Oslo',
-  });
-  return `${datePart} ${timePart}`;
-}
-
-function addTimeToNowUtc(opts: {
-  minutes?: number;
-  seconds?: number;
-  days?: number;
-  years?: number;
-}): string {
-  const now = new Date();
-  if (opts.minutes) now.setUTCMinutes(now.getUTCMinutes() + opts.minutes);
-  if (opts.seconds) now.setUTCSeconds(now.getUTCSeconds() + opts.seconds);
-  if (opts.days) now.setUTCDate(now.getUTCDate() + opts.days);
-  if (opts.years) now.setUTCFullYear(now.getUTCFullYear() + opts.years);
-  return now.toISOString();
-}

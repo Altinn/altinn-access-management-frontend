@@ -1,4 +1,5 @@
 import type { Page, Locator } from '@playwright/test';
+
 import { expect } from '@playwright/test';
 import nb from '../../../src/localizations/no_nb.json';
 import en from '../../../src/localizations/en.json';
@@ -19,6 +20,7 @@ const DICTIONARIES = {
 
 export class ConsentPage {
   readonly page: Page;
+  readonly language: Language;
 
   // Links and buttons
   readonly linkAltinn: Locator;
@@ -58,9 +60,10 @@ export class ConsentPage {
   private languageDictionary: any;
 
   //Default language to Norwegian
-  constructor(page: Page, language: Language = Language.NB) {
+  constructor(page: Page, language: Language) {
     this.page = page;
     this.languageDictionary = DICTIONARIES[language];
+    this.language = language; // now the fixture value wins
 
     // Controls/links
     this.languagePicker = page.getByRole('button', { name: /language/i });
@@ -197,7 +200,7 @@ export class ConsentPage {
     }
   }
 
-  async waitForLogout(redirectUrl: string, timeout = 15_000): Promise<void> {
+  async waitForLogout(redirectUrl: string, timeout = 15000): Promise<void> {
     // Ensure the logout redirect happens
     await this.page.waitForURL(/login\.test\.idporten\.no\/logout\/success/i, { timeout });
 

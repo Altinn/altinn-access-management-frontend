@@ -1,6 +1,3 @@
-import { Page } from '@playwright/test';
-import { LoginPage } from 'playwright/pages/LoginPage';
-
 export function env(name: string): string {
   const value = process.env[name];
   if (!value) throw new Error(`Missing required env variable read from config with name: ${name}`);
@@ -12,16 +9,6 @@ export function env(name: string): string {
  */
 export function pickRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
-}
-
-/**
- * Creates a PID login function for a given page
- */
-export function createPidLogin(page: Page) {
-  return async (pid: string) => {
-    const loginPage = new LoginPage(page);
-    await loginPage.loginAsActorPid(pid);
-  };
 }
 
 /**

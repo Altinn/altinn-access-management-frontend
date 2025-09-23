@@ -1,4 +1,5 @@
-import { test as baseTest } from '@playwright/test';
+// pomFixtures.ts
+import { test as baseTest, expect } from '@playwright/test';
 import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
 import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
 import { DelegationPage } from 'playwright/pages/profile/accessPkgDelegationPage';
@@ -12,10 +13,14 @@ import {
   instantiateResource,
 } from 'playwright/pages/profile/delegationPage';
 import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/delegeringHelper';
-import * as util from 'playwright/helpers/util';
 
-// Define the fixtures
-const test = baseTest.extend<{
+// Optional: allow env override: TEST_LANG=EN
+const defaultLang = (process.env.TEST_LANG as Language) ?? Language.NB;
+
+type Fixtures = {
+  // NEW: make language an overridable option
+  language: Language;
+
   login: LoginPage;
   delegate: delegateToUser;
   delegateRights: delegateRightsToUser;
@@ -28,7 +33,12 @@ const test = baseTest.extend<{
   runAccessibilityTest: runAccessibilityTests;
   delegation: DelegationPage;
   consentPage: ConsentPage;
-}>({
+};
+
+const test = baseTest.extend<Fixtures>({
+  // NEW: language fixture (default NB, overridable via test.use or project/use)
+  language: [defaultLang, { option: true }],
+
   login: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
@@ -53,20 +63,20 @@ const test = baseTest.extend<{
   delegateRoles: async ({ page }, use) => {
     await use(new delegateRoleToUser(page));
   },
-
   apiDelegations: async ({ page }, use) => {
     await use(new apiDelegation(page));
   },
-
   runAccessibilityTest: async ({ page }, use) => {
     await use(new runAccessibilityTests(page));
   },
   delegation: async ({ page }, use) => {
     await use(new DelegationPage(page));
   },
-  consentPage: async ({ page }, use) => {
-    await use(new ConsentPage(page, Language.NB));
+
+  // UPDATED: inject language into ConsentPage constructor
+  consentPage: async ({ page, language }, use) => {
+    await use(new ConsentPage(page, language));
   },
 });
 
-export { test };
+export { test, expect };
