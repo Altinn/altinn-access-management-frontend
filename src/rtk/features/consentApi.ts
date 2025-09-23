@@ -10,6 +10,10 @@ import type {
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
+enum Tags {
+  ConsentList = 'ConsentList',
+}
+
 export const consentApi = createApi({
   reducerPath: 'consentApi',
   baseQuery: fetchBaseQuery({
@@ -20,6 +24,7 @@ export const consentApi = createApi({
       return headers;
     },
   }),
+  tagTypes: [Tags.ConsentList],
   endpoints: (builder) => ({
     // consent request
     getConsentRequest: builder.query<ConsentRequest, { requestId: string }>({
@@ -42,6 +47,7 @@ export const consentApi = createApi({
     // active consents
     getActiveConsents: builder.query<ActiveConsentListItem[], { partyId: string }>({
       query: ({ partyId }) => `consent/active/${partyId}`,
+      providesTags: [Tags.ConsentList],
     }),
     getConsentLog: builder.query<ConsentHistoryItem[], { partyId: string }>({
       query: ({ partyId }) => `consent/log/${partyId}`,
@@ -54,8 +60,13 @@ export const consentApi = createApi({
         url: `consent/${consentId}/revoke`,
         method: 'POST',
       }),
+      invalidatesTags: [Tags.ConsentList],
     }),
   }),
+});
+
+const apiWithTags = consentApi.enhanceEndpoints({
+  addTagTypes: [Tags.ConsentList],
 });
 
 export const {
@@ -66,6 +77,6 @@ export const {
   useGetConsentLogQuery,
   useGetConsentQuery,
   useRevokeConsentMutation,
-} = consentApi;
+} = apiWithTags;
 
-export const { endpoints, reducerPath, reducer, middleware } = consentApi;
+export const { endpoints, reducerPath, reducer, middleware } = apiWithTags;
