@@ -160,12 +160,11 @@ const ConsentListItem = ({
             as='button'
             loading={isLoading}
             onClick={() => onClick(item.id)}
-            badge={{
-              className: classes.consentBadge,
-              variant: 'text',
-              label: item.isPoa ? t('active_consents.see_poa') : t('active_consents.see_consent'),
-              theme: 'transparent',
-            }}
+            badge={
+              <div className={classes.consentBadge}>
+                {item.isPoa ? t('active_consents.see_poa') : t('active_consents.see_consent')}
+              </div>
+            }
             linkIcon
           />
         ))}

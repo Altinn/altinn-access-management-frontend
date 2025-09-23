@@ -15,7 +15,7 @@
 
 @media only screen and (max-width: 769px) {
   .expandedListItem {
-    padding: 0;
+    padding: var(--ds-size-2);
   }
 
   .consentBadge {
