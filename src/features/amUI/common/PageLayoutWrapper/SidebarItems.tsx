@@ -29,6 +29,7 @@ export const SidebarItems = (
   accountType: 'company' | 'person',
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
+  const displayConsentGui = window.featureFlags?.displayConsentGui;
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
   const isLoading = !accountName;
 
@@ -172,8 +173,10 @@ export const SidebarItems = (
     items.push(heading);
   }
 
-  if (accountType === 'person') {
-    return [...items, consent, ...shortcuts];
+  if (displayConsentGui) {
+    if (accountType === 'person') {
+      return [...items, consent, ...shortcuts];
+    }
   }
 
   if (displayConfettiPackage) {
@@ -189,7 +192,11 @@ export const SidebarItems = (
     }
   }
 
-  items.push(consent, systemUser);
+  if (displayConsentGui) {
+    items.push(consent);
+  }
+
+  items.push(systemUser);
 
   if (displayConfettiPackage && !isSmall) {
     shortcuts.map((shortcutItem) => items.push(shortcutItem));
