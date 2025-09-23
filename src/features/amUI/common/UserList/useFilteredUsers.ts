@@ -33,27 +33,38 @@ const partyMatchesSearchTerm = (party: User | ExtendedUser, searchString: string
   return nameMatch || orgNumberMatch;
 };
 
-const filterUserNode = (
-  userNode: ExtendedUser,
-  lowerCaseSearchString: string,
-): ExtendedUser | null => {
-  const isMatchSelf = partyMatchesSearchTerm(userNode, lowerCaseSearchString);
+const isExtendedUser = (user: ExtendedUser | User): user is ExtendedUser => {
+  return (
+    // roles is only present on ExtendedUser, children may exist on ExtendedUser
+    (user as ExtendedUser).roles !== undefined || Array.isArray((user as ExtendedUser).children)
+  );
+};
 
-  if (isMatchSelf) {
-    return { ...userNode, matchInChildren: false };
-  }
+const filterUserNode = (userNode: ExtendedUser, searchString: string): ExtendedUser | null => {
+  const isMatchSelf = partyMatchesSearchTerm(userNode, searchString);
 
-  const filteredChildren =
-    userNode.children?.filter((child) => partyMatchesSearchTerm(child, lowerCaseSearchString)) ??
-    [];
+  // Recursively evaluate and prune children to only keep matching branches or matching leaf users
+  const filteredChildren = (userNode.children ?? []).reduce<(ExtendedUser | User)[]>(
+    (acc, child) => {
+      if (isExtendedUser(child)) {
+        const filteredChild = filterUserNode(child, searchString);
+        if (filteredChild) acc.push(filteredChild);
+      } else if (partyMatchesSearchTerm(child, searchString)) {
+        acc.push(child);
+      }
+      return acc;
+    },
+    [],
+  );
 
-  if (filteredChildren.length > 0) {
+  if (isMatchSelf || filteredChildren.length > 0) {
     return {
       ...userNode,
       children: filteredChildren,
-      matchInChildren: true,
+      matchInChildren: !isMatchSelf && filteredChildren.length > 0,
     };
   }
+
   return null;
 };
 
@@ -104,16 +115,11 @@ export const useFilteredUsers = ({
 
   const indirectUsers = useMemo(() => {
     if (!indirectConnections) return undefined;
-    const connectedUserIds = new Set(processedUsers.map((user) => user.id));
-    const remainingUsers = indirectConnections.filter(
-      (user) => !connectedUserIds.has(user.party.id),
-    );
-
-    const mappedUsers = mapToExtendedUsers(remainingUsers);
+    const mappedUsers = mapToExtendedUsers(indirectConnections);
     const filtered = filterUsers(mappedUsers, searchString);
     const sortedUsers = sortUsers(filtered);
     return sortedUsers;
-  }, [indirectConnections, processedUsers]);
+  }, [indirectConnections, searchString]);
 
   const indirectPaginatedUsers = useMemo(() => {
     if (!indirectUsers) return [];

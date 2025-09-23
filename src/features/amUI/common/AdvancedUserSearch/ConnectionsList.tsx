@@ -46,15 +46,17 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
             roleDirection='toUser'
             disableLinks
             controls={
-              isSm ? null : (
-                <UserListActions
-                  isLoading={isActionLoading}
-                  user={user}
-                  availableAction={availableAction}
-                  onRevoke={onRevoke}
-                  onDelegate={onDelegate}
-                />
-              )
+              isSm
+                ? undefined
+                : (user) => (
+                    <UserListActions
+                      isLoading={isActionLoading}
+                      user={user}
+                      availableAction={availableAction}
+                      onRevoke={onRevoke}
+                      onDelegate={onDelegate}
+                    />
+                  )
             }
           />
         ))}

@@ -46,15 +46,15 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
     [indirectConnections],
   );
 
+  const trimmedQuery = query.trim();
+  const isQuery = trimmedQuery !== '';
+
   const { users, hasNextPage, goNextPage, indirectUsers, hasNextIndirectPage, goNextIndirectPage } =
     useFilteredUsers({
       connections: filteredConnections,
       indirectConnections: filteredIndirectConnections,
-      searchString: query,
+      searchString: trimmedQuery,
     });
-
-  const trimmedQuery = query.trim();
-  const isQuery = trimmedQuery !== '';
 
   const directHasResults = (users?.length ?? 0) > 0;
   const indirectHasResults = (indirectUsers?.length ?? 0) > 0;
@@ -128,6 +128,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
               goNextPage={goNextIndirectPage}
               availableAction={DelegationAction.DELEGATE}
               onDelegate={onDelegate}
+              isActionLoading={isActionLoading}
             />
           </>
         )}

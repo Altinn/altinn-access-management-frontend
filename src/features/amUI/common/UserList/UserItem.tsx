@@ -17,14 +17,12 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
 }
 
 interface UserItemProps
-  extends Pick<
-    UserListItemProps,
-    'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow' | 'controls'
-  > {
+  extends Pick<UserListItemProps, 'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'> {
   user: ExtendedUser | User;
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
+  controls?: (user: ExtendedUser | User) => React.ReactNode;
 }
 
 const userHeadingLevelForMapper = (level?: ElementType) => {
@@ -132,7 +130,7 @@ export const UserItem = ({
                 />
               )
       }
-      controls={!hasInheritingUsers && controls}
+      controls={!hasInheritingUsers && controls && controls(user)}
       titleAs={titleAs}
       subUnit={subUnit || hasSubUnitRole}
     >

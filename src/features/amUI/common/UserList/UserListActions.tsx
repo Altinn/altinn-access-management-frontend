@@ -1,8 +1,7 @@
-import { Button, DsButton, DsSkeleton, Skeleton } from '@altinn/altinn-components';
+import { DsButton, DsSkeleton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Party } from '@/rtk/features/lookupApi';
 import { User } from '@/rtk/features/userInfoApi';
 
 export const UserListActions = ({

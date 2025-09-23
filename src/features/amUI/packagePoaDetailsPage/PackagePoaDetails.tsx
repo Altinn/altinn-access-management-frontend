@@ -34,6 +34,7 @@ export const PackagePoaDetails = () => {
   const {
     data: accessPackage,
     isLoading,
+    isFetching,
     error,
   } = useGetPackagePermissionDetailsQuery(
     {
@@ -43,17 +44,20 @@ export const PackagePoaDetails = () => {
     { skip: !id || !fromParty?.partyUuid },
   );
 
-  const { data: indirectConnections, isLoading: loadingIndirectConnections } =
-    useGetRightHoldersQuery(
-      {
-        partyUuid: fromParty?.partyUuid ?? '',
-        fromUuid: fromParty?.partyUuid ?? '',
-        toUuid: '', // all
-      },
-      {
-        skip: !fromParty?.partyUuid,
-      },
-    );
+  const {
+    data: indirectConnections,
+    isLoading: loadingIndirectConnections,
+    isFetching: isFetchingIndirectConnections,
+  } = useGetRightHoldersQuery(
+    {
+      partyUuid: fromParty?.partyUuid ?? '',
+      fromUuid: fromParty?.partyUuid ?? '',
+      toUuid: '', // all
+    },
+    {
+      skip: !fromParty?.partyUuid,
+    },
+  );
 
   const connections: Connection[] = useMemo(() => {
     const group: Record<string, Connection> = {};
@@ -161,7 +165,13 @@ export const PackagePoaDetails = () => {
                 isLoading={isLoading || loadingIndirectConnections}
                 onDelegate={handleOnDelegate}
                 onRevoke={handleOnRevoke}
-                isActionLoading={isActionLoading || isLoading || loadingIndirectConnections}
+                isActionLoading={
+                  isActionLoading ||
+                  isLoading ||
+                  loadingIndirectConnections ||
+                  isFetching ||
+                  isFetchingIndirectConnections
+                }
               />
             </>
           )}

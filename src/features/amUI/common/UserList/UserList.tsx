@@ -97,15 +97,14 @@ export const UserList = ({
             showRoles={showRoles}
             roleDirection={roleDirection}
             disableLinks={disableLinks}
-            controls={
+            controls={(user) => (
               <UserListActions
-                userId={user.id}
-                userName={user.name}
+                user={user}
                 availableAction={availableAction}
-                onDelegate={onDelegate}
-                onRevoke={onRevoke}
+                onDelegate={() => onDelegate && onDelegate(user.id)}
+                onRevoke={() => onRevoke && onRevoke(user.id)}
               />
-            }
+            )}
           />
         ))}
       </List>
