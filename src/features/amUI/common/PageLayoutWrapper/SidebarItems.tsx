@@ -30,6 +30,7 @@ export const SidebarItems = (
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const isLoading = !accountName;
 
   const heading: MenuItemProps = {
     id: '1',
@@ -39,6 +40,7 @@ export const SidebarItems = (
       type: accountType,
     },
     size: 'lg',
+    loading: isLoading,
     title: t('sidebar.access_management'),
     badge: { label: t('common.beta') },
     interactive: false,
@@ -48,6 +50,7 @@ export const SidebarItems = (
     groupId: 2,
     id: '2',
     size: 'md' as MenuItemSize,
+    loading: isLoading,
     title: t('sidebar.users'),
     selected: pathname?.includes(`/${amUIPath.Users}`),
     icon: PersonGroupIcon,
@@ -64,6 +67,7 @@ export const SidebarItems = (
     groupId: 2,
     id: '2.1',
     size: 'md',
+    loading: isLoading,
     title: t('sidebar.poa_overview'),
     icon: PadlockUnlockedIcon,
     selected: pathname?.includes(`/${amUIPath.PoaOverview}`),
@@ -80,6 +84,7 @@ export const SidebarItems = (
     groupId: 4,
     id: '4',
     size: 'md' as MenuItemSize,
+    loading: isLoading,
     title: t('sidebar.reportees'),
     selected: pathname?.includes(`/${amUIPath.Reportees}`),
     icon: LinkIcon,
@@ -92,18 +97,18 @@ export const SidebarItems = (
     ),
   };
 
-  const systemUserPath = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
   const systemUser: MenuItemProps = {
     groupId: 5,
     id: '5',
     size: 'md',
+    loading: isLoading,
     title: t('sidebar.systemaccess'),
     icon: TenancyIcon,
-    selected: pathname?.includes(systemUserPath),
+    selected: pathname?.includes(`/${SystemUserPath.SystemUser}/`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     as: (props: any) => (
       <Link
-        to={systemUserPath}
+        to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}
         {...props}
       />
     ),
@@ -113,6 +118,7 @@ export const SidebarItems = (
     groupId: 'settings-group',
     id: 'settings',
     size: 'md' as MenuItemSize,
+    loading: isLoading,
     title: t('sidebar.settings'),
     selected: pathname?.includes(`/${amUIPath.Settings}`),
     icon: CogIcon,
@@ -130,6 +136,7 @@ export const SidebarItems = (
       groupId: 'shortcuts',
       id: 'beta-about',
       size: 'md',
+      loading: isLoading,
       title: t('header.new_altinn_info'),
       icon: InformationSquareIcon,
       selected: pathname?.includes(`/${amUIPath.Info}`),
@@ -145,6 +152,7 @@ export const SidebarItems = (
       groupId: 'shortcuts',
       id: 'beta-leave',
       size: 'md',
+      loading: isLoading,
       title: t('header.leave_beta'),
       icon: LeaveIcon,
       selected: false,

@@ -19,7 +19,7 @@ import {
   useGetReporteeQuery,
   useGetUserInfoQuery,
 } from '@/rtk/features/userInfoApi';
-import { amUIPath } from '@/routes/paths';
+import { amUIPath, GeneralPath, SystemUserPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
@@ -165,14 +165,15 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       },
       menuItemsVirtual: { isVirtualized: accounts.length > 20 },
     },
-    onSelectAccount: (accountId) => {
-      const redirectUrl = window.location.pathname.includes('systemuser')
-        ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
+    onSelectAccount: (accountId: string) => {
+      const redirectUrl = window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)
+        ? `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`
         : window.location.href;
-      (window as Window).open(
-        `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
-        '_self',
-      );
+
+      const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
+      changeUrl.searchParams.set('R', accountId);
+      changeUrl.searchParams.set('goTo', redirectUrl);
+      (window as Window).open(changeUrl.toString(), '_self');
     },
     logoutButton: {
       label: t('header.log_out'),
@@ -204,7 +205,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   return (
     <RootProvider>
       <Layout
-        color={'company'}
+        color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
         theme='subtle'
         header={{
           locale: {
@@ -239,7 +240,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             ),
           },
         }}
-        content={{ color: 'company' }}
+        content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
         footer={{
           address: 'Postboks 1382 Vika, 0114 Oslo.',
           address2: 'Org.nr. 991 825 827',
@@ -277,7 +278,7 @@ const getAccount = (reportee: ReporteeInfo, userUuid: string, currentReporteeUui
     id: reportee.partyId,
     icon: {
       name: reportee.name,
-      type: reportee.type === 'Organization' ? 'company' : 'person',
+      type: accountType,
     },
     name: reportee.name,
     description: reportee.type === 'Organization' ? reportee.organizationNumber : undefined,
