@@ -1,5 +1,21 @@
 import type { Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
+import nb from '../../../src/localizations/no_nb.json';
+import en from '../../../src/localizations/en.json';
+import nn from '../../../src/localizations/en.json';
+import no_nb from '@/localizations/no_nb.json';
+
+export enum Language {
+  NB = 'NB',
+  EN = 'EN',
+  NN = 'NN',
+}
+
+const DICTIONARIES = {
+  [Language.NB]: no_nb,
+  [Language.EN]: en,
+  [Language.NN]: nn, // when you add it
+} as const satisfies Record<Language, any>;
 
 export class ConsentPage {
   readonly page: Page;
@@ -12,6 +28,7 @@ export class ConsentPage {
   readonly buttonFullmaktReject: Locator;
   readonly languagePicker: Locator;
   readonly norwegian: Locator;
+  readonly english: Locator;
 
   // Headings
   readonly standardHeading: Locator;
@@ -37,16 +54,26 @@ export class ConsentPage {
   readonly textEnkeltBulletIntro: Locator;
   readonly textEnkeltLabel: Locator;
 
-  constructor(page: Page) {
+  // Used for selecting language files
+  private languageDictionary: any;
+
+  //Default language to Norwegian
+  constructor(page: Page, language: Language = Language.NB) {
     this.page = page;
+    this.languageDictionary = DICTIONARIES[language];
 
     // Controls/links
     this.languagePicker = page.getByRole('button', { name: /language/i });
     this.norwegian = page.locator('a', { hasText: 'Norsk (bokmål)' });
+    this.english = page.locator('a', { hasText: 'English' });
     this.linkAltinn = page.getByRole('link', { name: /altinn\.no/i });
     this.buttonApprove = page.getByRole('button', { name: /jeg gir samtykke/i });
     this.buttonReject = page.getByRole('button', { name: /jeg gir ikke samtykke/i });
-    this.buttonFullmaktApprove = page.getByRole('button', { name: /jeg gir fullmakt/i });
+
+    this.buttonFullmaktApprove = page.getByRole('button', {
+      name: this.languageDictionary.consent_request.approve_poa,
+    });
+
     this.buttonFullmaktReject = page.getByRole('button', { name: /jeg gir ikke fullmakt/i });
 
     // Headings (use exact text when stable, regex when copy may drift)
@@ -142,22 +169,42 @@ export class ConsentPage {
 
   // actions
   async approveStandardAndWaitLogout(redirectUrl: string): Promise<void> {
-    await Promise.all([this.waitForLogout(redirectUrl), this.buttonApprove.click()]);
+    await expect(this.buttonApprove).toBeVisible();
+    await expect(this.buttonApprove).toBeEnabled();
+    await this.buttonApprove.click();
+    await this.waitForLogout(redirectUrl);
   }
 
   async approveFullmaktAndWaitLogout(redirectUrl: string): Promise<void> {
-    await Promise.all([this.waitForLogout(redirectUrl), this.buttonFullmaktApprove.click()]);
+    await expect(this.buttonFullmaktApprove).toBeVisible();
+    await expect(this.buttonFullmaktApprove).toBeEnabled();
+    await this.buttonFullmaktApprove.click();
+    await this.waitForLogout(redirectUrl);
   }
 
   async rejectStandardAndWaitLogout(redirectUrl: string): Promise<void> {
-    await Promise.all([this.waitForLogout(redirectUrl), this.buttonReject.click()]);
+    await expect(this.buttonReject).toBeVisible();
+    await expect(this.buttonReject).toBeEnabled();
+    await this.buttonReject.click();
+    await this.waitForLogout(redirectUrl);
   }
 
-  async waitForLogout(redirectUrl: string, timeout = 15000): Promise<void> {
-    // First ensure the logout redirect happens
+  async pickLanguage(lang: Language): Promise<void> {
+    await this.languagePicker.click();
+
+    if (lang.toString() === Language.NB.toString()) {
+      await this.norwegian.click();
+    }
+    if (lang.toString() === Language.EN.toString()) {
+      await this.english.click();
+    }
+  }
+
+  async waitForLogout(redirectUrl: string, timeout = 15_000): Promise<void> {
+    // Ensure the logout redirect happens
     await this.page.waitForURL(/login\.test\.idporten\.no\/logout\/success/i, { timeout });
 
-    // Then ensure we land on the final page
+    // Ensure we land on the final page
     await this.page.waitForURL(redirectUrl, { timeout });
   }
 }
