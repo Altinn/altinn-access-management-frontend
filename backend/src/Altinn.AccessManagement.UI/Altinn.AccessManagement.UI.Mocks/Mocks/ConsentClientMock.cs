@@ -44,6 +44,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 ConsentRequestDetails request = Util.GetMockData<ConsentRequestDetails>($"{dataFolder}/Consent/consentRequest_org_without_message.json");
                 return Task.FromResult(new Result<ConsentRequestDetails>(request));
             }
+            // try to get consentRequest from consents_org.json
+            List<ConsentRequestDetails> requests = Util.GetMockData<List<ConsentRequestDetails>>($"{dataFolder}/Consent/consents_org.json");
+            ConsentRequestDetails returnRequest = requests.Find(x => x.Id == consentRequestId);
+            if (returnRequest != null)
+            {
+                return Task.FromResult(new Result<ConsentRequestDetails>(returnRequest));
+            }
+
             return Task.FromResult(new Result<ConsentRequestDetails>(ConsentProblem.ConsentNotFound));
         }
 

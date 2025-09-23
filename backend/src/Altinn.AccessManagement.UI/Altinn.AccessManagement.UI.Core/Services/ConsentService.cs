@@ -179,7 +179,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     .Where(urn => !string.IsNullOrEmpty(urn))
                     .Select(urn => GetUrnValue(urn)))
                 .Distinct();
-                
+
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
             Dictionary<string, Party> partyByUuid = PartyListToDict(parties);
             IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
@@ -212,24 +212,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<ConsentFE>> GetConsent(Guid consentId, CancellationToken cancellationToken)
         {
-            Result<Consent> consent = await _consentClient.GetConsent(consentId, cancellationToken);
             Result<ConsentRequestDetails> request = await _consentClient.GetConsentRequest(consentId, cancellationToken);
 
-            if (consent.IsProblem)
+            if (request.IsProblem)
             {
-                return consent.Problem;
+                return request.Problem;
             }
 
             ConsentTemplateParams templateParams = new()
             {
-                ConsentRights = consent.Value.ConsentRights,
-                FromUrn = consent.Value.From,
-                ToUrn = consent.Value.To,
-                HandledByUrn = consent.Value.HandledBy,
-                ValidTo = consent.Value.ValidTo,
+                ConsentRights = request.Value.ConsentRights,
+                FromUrn = request.Value.From,
+                ToUrn = request.Value.To,
+                HandledByUrn = request.Value.HandledBy,
+                ValidTo = request.Value.ValidTo,
                 TemplateId = request.Value.TemplateId,
                 TemplateVersion = request.Value.TemplateVersion,
-                RequestMessage = consent.Value.RequestMessage, // usikker på om vi trenger denne i ConsentFE
+                RequestMessage = request.Value.RequestMessage, // usikker på om vi trenger denne i ConsentFE
             };
             Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(templateParams, cancellationToken);
 
@@ -240,7 +239,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return new ConsentFE()
             {
-                Id = consent.Value.Id,
+                Id = request.Value.Id,
                 Rights = enrichedConsentTemplate.Value.Rights,
                 IsPoa = enrichedConsentTemplate.Value.IsPoa,
                 TitleAccepted = enrichedConsentTemplate.Value.TitleAccepted,
@@ -249,7 +248,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ConsentMessage = enrichedConsentTemplate.Value.ConsentMessage,
                 Expiration = enrichedConsentTemplate.Value.Expiration,
                 ConsentRequestEvents = request.Value.ConsentRequestEvents,
-                ValidTo = consent.Value.ValidTo,
+                ValidTo = request.Value.ValidTo,
             };
         }
 
