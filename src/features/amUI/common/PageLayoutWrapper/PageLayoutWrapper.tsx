@@ -173,7 +173,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         redirectUrl = new URL(
           `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
         ).toString();
-      } else if (window.location.pathname.includes(SystemUserPath.SystemUser)) {
+      } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
         redirectUrl = new URL(
           `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
         ).toString();

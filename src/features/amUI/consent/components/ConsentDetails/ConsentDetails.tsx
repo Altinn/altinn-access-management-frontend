@@ -64,89 +64,97 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
   }
 
   return (
-    <div className={classes.consentContainer}>
+    <>
       {loadConsentError && (
         <DsAlert data-color='danger'>{t('active_consents.load_consent_error')}</DsAlert>
       )}
       {consent && (
         <>
-          <ConsentStatus
-            events={consent.consentRequestEvents}
-            isPoa={consent.isPoa}
-          />
-          {canBeRevoked && (
-            <DsPopover.TriggerContext>
-              <DsPopover.Trigger
-                variant='tertiary'
-                disabled={isRevoking}
-                onClick={() => setIsPopoverOpen(true)}
-              >
-                <EraserIcon aria-hidden />
-                {consent.isPoa
-                  ? t('active_consents.revoke_poa')
-                  : t('active_consents.revoke_consent')}
-              </DsPopover.Trigger>
-              <DsPopover
-                open={isPopoverOpen}
-                placement='bottom'
-                className={classes.revokePopover}
-                data-color='danger'
-                onClose={() => setIsPopoverOpen(false)}
-              >
-                <DsParagraph className={classes.popoverText}>
+          <div className={classes.consentContainer}>
+            <ConsentStatus
+              events={consent.consentRequestEvents}
+              isPoa={consent.isPoa}
+            />
+          </div>
+          <div className={classes.consentContainer}>
+            {canBeRevoked && (
+              <DsPopover.TriggerContext>
+                <DsPopover.Trigger
+                  variant='tertiary'
+                  disabled={isRevoking}
+                  onClick={() => setIsPopoverOpen(true)}
+                >
+                  <EraserIcon aria-hidden />
                   {consent.isPoa
-                    ? t('active_consents.revoke_poa_text')
-                    : t('active_consents.revoke_consent_text')}
-                </DsParagraph>
-                <div className={classes.popoverButtonRow}>
-                  <DsButton
-                    data-color='danger'
-                    disabled={isRevoking}
-                    onClick={handleRevokeConsent}
-                  >
-                    {isRevoking && <DsSpinner aria-label={t('active_consents.revoking_consent')} />}
+                    ? t('active_consents.revoke_poa')
+                    : t('active_consents.revoke_consent')}
+                </DsPopover.Trigger>
+                <DsPopover
+                  open={isPopoverOpen}
+                  placement='bottom'
+                  className={classes.revokePopover}
+                  data-color='danger'
+                  onClose={() => setIsPopoverOpen(false)}
+                >
+                  <DsParagraph className={classes.popoverText}>
                     {consent.isPoa
-                      ? t('active_consents.confirm_revoke_poa')
-                      : t('active_consents.confirm_revoke_consent')}
-                  </DsButton>
-                  <DsButton
-                    variant='tertiary'
-                    onClick={() => setIsPopoverOpen(false)}
-                  >
-                    {t('common.cancel')}
-                  </DsButton>
-                </div>
-              </DsPopover>
-            </DsPopover.TriggerContext>
-          )}
-          {revokeConsentError && (
-            <DsAlert data-color='danger'>
-              {consent.isPoa
-                ? t('active_consents.revoke_poa_error')
-                : t('active_consents.revoke_consent_error')}
-            </DsAlert>
-          )}
-          <DsHeading
-            level={1}
-            data-size='md'
-          >
-            {consent.titleAccepted[language]}
-          </DsHeading>
-          {consent.consentMessage && <DsParagraph>{consent.consentMessage[language]}</DsParagraph>}
-          <DsHeading
-            level={2}
-            data-size='2xs'
-          >
-            {consent.serviceIntroAccepted[language]}
-          </DsHeading>
-          <ConsentRights
-            rights={consent.rights}
-            language={language}
-          />
-          <DsParagraph className={classes.expiration}>{consent.expiration[language]}</DsParagraph>
-          {consent.handledBy && <DsParagraph>{consent.handledBy[language]}</DsParagraph>}
+                      ? t('active_consents.revoke_poa_text')
+                      : t('active_consents.revoke_consent_text')}
+                  </DsParagraph>
+                  <div className={classes.popoverButtonRow}>
+                    <DsButton
+                      data-color='danger'
+                      disabled={isRevoking}
+                      onClick={handleRevokeConsent}
+                    >
+                      {isRevoking && (
+                        <DsSpinner aria-label={t('active_consents.revoking_consent')} />
+                      )}
+                      {consent.isPoa
+                        ? t('active_consents.confirm_revoke_poa')
+                        : t('active_consents.confirm_revoke_consent')}
+                    </DsButton>
+                    <DsButton
+                      variant='tertiary'
+                      onClick={() => setIsPopoverOpen(false)}
+                    >
+                      {t('common.cancel')}
+                    </DsButton>
+                  </div>
+                </DsPopover>
+              </DsPopover.TriggerContext>
+            )}
+            {revokeConsentError && (
+              <DsAlert data-color='danger'>
+                {consent.isPoa
+                  ? t('active_consents.revoke_poa_error')
+                  : t('active_consents.revoke_consent_error')}
+              </DsAlert>
+            )}
+            <DsHeading
+              level={1}
+              data-size='md'
+            >
+              {consent.titleAccepted[language]}
+            </DsHeading>
+            {consent.consentMessage && (
+              <DsParagraph>{consent.consentMessage[language]}</DsParagraph>
+            )}
+            <DsHeading
+              level={2}
+              data-size='2xs'
+            >
+              {consent.serviceIntroAccepted[language]}
+            </DsHeading>
+            <ConsentRights
+              rights={consent.rights}
+              language={language}
+            />
+            <DsParagraph className={classes.expiration}>{consent.expiration[language]}</DsParagraph>
+            {consent.handledBy && <DsParagraph>{consent.handledBy[language]}</DsParagraph>}
+          </div>
         </>
       )}
-    </div>
+    </>
   );
 };
