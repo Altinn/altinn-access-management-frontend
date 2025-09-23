@@ -27,6 +27,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayResourceDelegation { get; set; }
 
         /// <summary>
+        /// Whether or not to display the consent gui feature in the UI
+        /// </summary>
+        public bool DisplayConsentGui { get; set; }
+
+        /// <summary>
         /// Whether to show the new AMUI to PRIV users
         /// </summary>
         public bool RestrictPrivUse { get; set; }
