@@ -7,6 +7,7 @@ import {
   DsHeading,
   DsLink,
   DsParagraph,
+  DsSkeleton,
   List,
   ListItem,
 } from '@altinn/altinn-components';
@@ -176,7 +177,16 @@ const ConsentListItem = ({
             onClick={() => onClick(item.id)}
             badge={
               <div className={classes.consentBadge}>
-                {item.isPoa ? t('active_consents.see_poa') : t('active_consents.see_consent')}
+                {isLoading ? (
+                  <DsSkeleton
+                    variant='text'
+                    width={20}
+                  />
+                ) : (
+                  <>
+                    {item.isPoa ? t('active_consents.see_poa') : t('active_consents.see_consent')}
+                  </>
+                )}
               </div>
             }
             linkIcon
