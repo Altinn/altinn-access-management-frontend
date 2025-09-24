@@ -728,7 +728,6 @@
     "status_poa_active": "Fullmakten er aktiv",
     "status_poa_revoked": "Fullmakten er ikkje aktiv",
     "status_poa_expired": "Fullmakten er utgått",
-    "revoking_consent": "Trekker...",
     "revoke_consent_error": "Kunne ikkje trekke samtykke",
     "revoke_poa_error": "Kunne ikkje trekke fullmakt",
     "revoke_consent_text": "Er du sikker på at du vil trekke dette samtykket?",

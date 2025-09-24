@@ -731,7 +731,6 @@
     "status_poa_active": "Power of attorney is active",
     "status_poa_revoked": "Power of attorney is not active",
     "status_poa_expired": "Power of attorney has expired",
-    "revoking_consent": "Revoking...",
     "revoke_consent_error": "Could not revoke consent",
     "revoke_poa_error": "Could not revoke power of attorney",
     "revoke_consent_text": "Are you certain you want to revoke this consent?",

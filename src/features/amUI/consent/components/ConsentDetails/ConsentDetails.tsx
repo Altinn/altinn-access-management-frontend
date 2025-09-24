@@ -105,11 +105,9 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
                     <DsButton
                       data-color='danger'
                       disabled={isRevoking}
+                      loading={isRevoking}
                       onClick={handleRevokeConsent}
                     >
-                      {isRevoking && (
-                        <DsSpinner aria-label={t('active_consents.revoking_consent')} />
-                      )}
                       {consent.isPoa
                         ? t('active_consents.confirm_revoke_poa')
                         : t('active_consents.confirm_revoke_consent')}
