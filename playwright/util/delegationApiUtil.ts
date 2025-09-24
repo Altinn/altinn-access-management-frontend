@@ -15,4 +15,32 @@ export class DelegationApiUtil {
       await apiContext.dispose();
     }
   }
+  /**
+   * Add org for delegating access pacakage
+   */
+
+  public static async addOrgToDelegate() {
+    const apiContext = await request.newContext();
+
+    try {
+      const api = new DelegationApiRequest();
+      await api.addOrgForDelegation();
+    } finally {
+      await apiContext.dispose();
+    }
+  }
+
+  /**
+   * Delegate access pacakage
+   */
+  public static async delegateAccessPacakage() {
+    const apiContext = await request.newContext();
+
+    try {
+      const api = new DelegationApiRequest();
+      await api.delegateAccessPkg();
+    } finally {
+      await apiContext.dispose();
+    }
+  }
 }
