@@ -25,6 +25,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ConsentTimeline } from './ConsentTimeline';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '../utils';
+import { ConsentPath } from '@/routes/paths';
 
 export const ConsentHistoryPage = () => {
   const { t } = useTranslation();
@@ -60,7 +61,7 @@ export const ConsentHistoryPage = () => {
             data-size='md'
             data-color='neutral'
           >
-            <Link to={'/consent/active'}>
+            <Link to={`/${ConsentPath.Consent}/${ConsentPath.Active}`}>
               <ArrowLeftIcon
                 aria-hidden={true}
                 fontSize='1.3rem'
