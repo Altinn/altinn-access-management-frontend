@@ -51,7 +51,7 @@ jobs:
           USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
           PASSWORD_TEST_API: ${{ secrets.PASSWORD_TEST_API }}
         run: |
-          yarn run env:${{ inputs.environment }} --retries=2 --project ${{ inputs.project }} --workers=4
+          yarn run env:${{ inputs.environment }} --retries=2 --project ${{ inputs.project }} --workers=2 --grep "change"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -74,11 +74,11 @@ jobs:
             REPORT_NAME=${{ inputs.environment }}
             REPORT_ID=${{ github.sha }}
             ACCOUNT_NAME=playwrightreporting
-            az storage blob upload-batch \ 
-                --account-name "$ACCOUNT_NAME" \
-                --destination '$web' \ 
-                --destination-path "$REPORT_ID" \ 
-                --source "playwright/playwright-report/$REPORT_NAME" \ 
-                --overwrite \
-                --auth-mode login
+            az storage blob upload-batch \
+            --account-name "$ACCOUNT_NAME" \
+            --destination '$web' \
+            --destination-path "$REPORT_ID/$REPORT_NAME" \
+            --source "playwright/playwright-report/$REPORT_NAME" \
+            --overwrite \
+            --auth-mode login
                 echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/index.html"
