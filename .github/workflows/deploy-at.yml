@@ -4,7 +4,7 @@ run-name: 'AT environments: ${{ github.sha }}'
 
 on:
   push:
-    branches: ['main']
+    branches: ['*']
 
 jobs:
   containerize:
@@ -27,8 +27,8 @@ jobs:
       tag: ${{ github.sha }}
 
   playwright-e2e-tests:
-    name: "Playwright E2E-tests"
-    uses: "./.github/workflows/template-playwright.yml"
+    name: 'Playwright E2E-tests'
+    uses: './.github/workflows/template-playwright.yml'
     needs: deploy-main
     secrets: inherit
     strategy:
@@ -41,9 +41,9 @@ jobs:
       project: ${{ matrix.project }}
 
   playwright-accessibility-tests:
-    name: "Playwright Accessibility-tests"
+    name: 'Playwright Accessibility-tests'
     secrets: inherit
-    uses: "./.github/workflows/template-playwright.yml"
+    uses: './.github/workflows/template-playwright.yml'
     needs: deploy-main
     strategy:
       fail-fast: false
