@@ -1,4 +1,4 @@
-import { ReporteeInfo } from '@/rtk/features/userInfoApi';
+import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import type { ConsentLanguage, ConsentRequestEvent, ConsentRequestEventType } from './types';
 
 export const getLanguage = (language: string | null): keyof ConsentLanguage => {
