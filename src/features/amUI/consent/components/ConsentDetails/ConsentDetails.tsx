@@ -146,11 +146,15 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
             >
               {consent.serviceIntroAccepted[language]}
             </DsHeading>
-            <ConsentRights
-              rights={consent.rights}
-              language={language}
-            />
-            <DsParagraph className={classes.expiration}>{consent.expiration[language]}</DsParagraph>
+            <div>
+              <ConsentRights
+                rights={consent.rights}
+                language={language}
+              />
+              <DsParagraph className={classes.expiration}>
+                {consent.expiration[language]}
+              </DsParagraph>
+            </div>
             {consent.handledBy && <DsParagraph>{consent.handledBy[language]}</DsParagraph>}
           </div>
         </>
