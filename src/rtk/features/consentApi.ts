@@ -12,6 +12,7 @@ const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
 enum Tags {
   ConsentList = 'ConsentList',
+  ConsentLog = 'ConsentLog',
 }
 
 export const consentApi = createApi({
@@ -24,7 +25,7 @@ export const consentApi = createApi({
       return headers;
     },
   }),
-  tagTypes: [Tags.ConsentList],
+  tagTypes: [Tags.ConsentList, Tags.ConsentLog],
   endpoints: (builder) => ({
     // consent request
     getConsentRequest: builder.query<ConsentRequest, { requestId: string }>({
@@ -51,6 +52,7 @@ export const consentApi = createApi({
     }),
     getConsentLog: builder.query<ConsentHistoryItem[], { partyId: string }>({
       query: ({ partyId }) => `consent/log/${partyId}`,
+      providesTags: [Tags.ConsentLog],
     }),
     getConsent: builder.query<Consent, { consentId: string }>({
       query: ({ consentId }) => `consent/${consentId}`,
@@ -60,7 +62,7 @@ export const consentApi = createApi({
         url: `consent/${consentId}/revoke`,
         method: 'POST',
       }),
-      invalidatesTags: [Tags.ConsentList],
+      invalidatesTags: [Tags.ConsentList, Tags.ConsentLog],
     }),
   }),
 });
