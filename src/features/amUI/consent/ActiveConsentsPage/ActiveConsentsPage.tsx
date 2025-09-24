@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import {
@@ -47,17 +47,20 @@ export const ActiveConsentsPage = () => {
 
   const isLoading = isLoadingReportee || isLoadingIsAdmin || isLoadingActiveConsents;
 
-  const groupedActiveConsents = activeConsents?.reduce(
-    (acc: { [key: string]: ActiveConsentListItem[] }, consent) => {
+  const groupedActiveConsents = useMemo(() => {
+    if (!activeConsents) {
+      return undefined;
+    }
+    const acc: Record<string, ActiveConsentListItem[]> = {};
+    for (const consent of activeConsents) {
       const key = consent.toPartyId;
       if (!acc[key]) {
         acc[key] = [];
       }
-      acc[key] = [...acc[key], consent];
-      return acc;
-    },
-    {},
-  );
+      acc[key].push(consent);
+    }
+    return acc;
+  }, [activeConsents]);
 
   const showConsentDetails = (consentId: string): void => {
     setSelectedConsentId(consentId);
