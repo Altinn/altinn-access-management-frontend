@@ -23,6 +23,8 @@ import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
 
 import classes from './ActiveConsentsPage.module.css';
 import { ConsentPath } from '@/routes/paths';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { hasConsentPermission } from '../utils';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -32,11 +34,17 @@ export const ActiveConsentsPage = () => {
   useDocumentTitle(t('active_consents.page_title'));
   const partyUuid = getCookie('AltinnPartyUuid');
 
+  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
+  const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
+  const hasPermission = hasConsentPermission(reportee, isAdmin);
+
   const {
     data: activeConsents,
     isLoading: isLoadingActiveConsents,
     error: loadActiveConsentsError,
-  } = useGetActiveConsentsQuery({ partyId: partyUuid }, { skip: !partyUuid });
+  } = useGetActiveConsentsQuery({ partyId: partyUuid }, { skip: !partyUuid || !hasPermission });
+
+  const isLoading = isLoadingReportee || isLoadingIsAdmin || isLoadingActiveConsents;
 
   const groupedActiveConsents = activeConsents?.reduce(
     (acc: { [key: string]: ActiveConsentListItem[] }, consent) => {
@@ -85,7 +93,10 @@ export const ActiveConsentsPage = () => {
           </DsLink>
         </div>
         <div>
-          {isLoadingActiveConsents && (
+          {!isLoading && !hasPermission && (
+            <div>{t('active_consents.no_active_consents_permission')}</div>
+          )}
+          {isLoading && (
             <List>
               <LoadingListItem />
               <LoadingListItem />
