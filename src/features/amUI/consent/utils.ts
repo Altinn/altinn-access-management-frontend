@@ -37,6 +37,9 @@ export const canConsentBeRevoked = (events: ConsentRequestEvent[]) => {
   return isAccepted(events) && !hasTerminalEvent;
 };
 
-export const hasConsentPermission = (reportee?: ReporteeInfo, isAdmin?: boolean) => {
+export const hasConsentPermission = (
+  reportee?: ReporteeInfo,
+  isAdmin: boolean = false,
+): boolean => {
   return reportee?.type === 'Person' || (reportee?.type === 'Organization' && isAdmin);
 };
