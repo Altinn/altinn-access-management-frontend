@@ -67,7 +67,14 @@ export const UserItem = ({
     [user, hasInheritingUsers],
   );
 
-  const roleCodes = isExtendedUser(user) && user.roles ? getRoleCodesForKeyRoles(user.roles) : [];
+  const roleCodes =
+    isExtendedUser(user) && user.roles
+      ? getRoleCodesForKeyRoles(user.roles.filter((r) => !r.viaParty))
+      : [];
+  const viaRoleCodes =
+    isExtendedUser(user) && user.roles
+      ? getRoleCodesForKeyRoles(user.roles.filter((r) => r.viaParty))
+      : [];
 
   const isSubOrMainUnit =
     isExtendedUser(user) &&
@@ -107,7 +114,11 @@ export const UserItem = ({
       size={size}
       id={user.id}
       name={user.name}
-      description={!isExpanded ? description(user) : undefined}
+      description={
+        !isExpanded
+          ? `${description(user)}${viaRoleCodes.length > 0 ? ` | ${viaRoleCodes.map((r) => t(`${r}`)).join(', ')} ` : ''}`
+          : undefined
+      }
       roleNames={showRoles ? roleCodes.map((r) => t(`${r}`)) : undefined}
       type={type}
       expanded={isExpanded}

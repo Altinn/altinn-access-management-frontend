@@ -40,7 +40,7 @@ export const UserListActions = ({
   }
   return (
     <>
-      {availableAction.includes(DelegationAction.DELEGATE) && onDelegate && (
+      {availableAction === DelegationAction.DELEGATE && onDelegate && (
         <DsButton
           variant='tertiary'
           data-size='md'
@@ -49,7 +49,7 @@ export const UserListActions = ({
           <PlusCircleIcon /> {t('common.give_poa')}
         </DsButton>
       )}
-      {availableAction.includes(DelegationAction.REQUEST) && onRequest && (
+      {availableAction === DelegationAction.REQUEST && onRequest && (
         <DsButton
           variant='tertiary'
           data-size='md'
@@ -58,15 +58,18 @@ export const UserListActions = ({
           <PlusCircleIcon /> {t('common.request_poa')}
         </DsButton>
       )}
-      {availableAction.includes(DelegationAction.REVOKE) && onRevoke && (
-        <DsButton
-          variant='tertiary'
-          data-size='md'
-          onClick={() => onRevoke(user)}
-        >
-          <MinusCircleIcon /> {t('common.delete_poa')}
-        </DsButton>
-      )}
+      {availableAction === DelegationAction.REVOKE &&
+        onRevoke &&
+        'isInherited' in user &&
+        !user.isInherited && (
+          <DsButton
+            variant='tertiary'
+            data-size='md'
+            onClick={() => onRevoke(user)}
+          >
+            <MinusCircleIcon /> {t('common.delete_poa')}
+          </DsButton>
+        )}
     </>
   );
 };

@@ -91,6 +91,14 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           />
           {query && <DsSearch.Clear onClick={() => setQuery('')} />}
         </DsSearch>
+        <DsButton
+          variant={addUsersMode ? 'secondary' : 'tertiary'}
+          onClick={() => setAddUsersMode((prev) => !prev)}
+          className={classes.addUserButton}
+        >
+          {addUsersMode ? t('common.cancel') : t('advanced_user_search.add_user_button')}
+        </DsButton>
+        {addUsersMode && <NewUserButton />}
       </div>
 
       <div className={classes.results}>

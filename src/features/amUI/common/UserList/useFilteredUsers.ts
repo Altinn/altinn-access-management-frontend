@@ -115,6 +115,7 @@ export const useFilteredUsers = ({
 
   const indirectUsers = useMemo(() => {
     if (!indirectConnections) return undefined;
+
     const mappedUsers = mapToExtendedUsers(indirectConnections);
     const filtered = filterUsers(mappedUsers, searchString);
     const sortedUsers = sortUsers(filtered);
