@@ -1,0 +1,65 @@
+name: Scheduled Slow Playwright Tests
+
+on:
+  schedule:
+    # Run daily at 06:00 AM UTC (08:00 AM CET, 09:00 AM CEST)
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Allow manual triggering for testing
+
+jobs:
+  slow-e2e-tests:
+    name: Slow Playwright Tests - ${{ matrix.environment }} - ${{ matrix.project }}
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [AT24, TT02]
+        project: [e2e-tests]
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: yarn --immutable
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+      - name: Running slow Playwright tests
+        working-directory: playwright
+        env:
+          USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
+          PASSWORD_TEST_API: ${{ secrets.PASSWORD_TEST_API }}
+        run: |
+          yarn run env:${{ matrix.environment }} --project ${{ matrix.project }} --grep @slow
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: slow-playwright-report-${{ matrix.environment }}-${{ matrix.project }}
+          path: playwright/playwright-report/${{ matrix.environment }}
+          retention-days: 30
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
+          tenant-id: ${{ secrets.AZCOPY_TENANT_ID }}
+          subscription-id: ${{ secrets.AZCOPY_SUBSCRIPTION_ID }}
+
+      - name: Upload HTML report to Azure
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            REPORT_NAME=${{ matrix.environment }}-slow
+            REPORT_ID=${{ github.sha }}-${{ matrix.project }}
+            ACCOUNT_NAME=playwrightreporting
+            az storage blob upload-batch \
+                --account-name "$ACCOUNT_NAME" \
+                --destination "\$web" \
+                --destination-path "$REPORT_ID" \
+                --source "playwright/playwright-report/$REPORT_NAME" \
+                --overwrite \
+                --auth-mode login
+            echo "::Link to Slow Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/index.html"
