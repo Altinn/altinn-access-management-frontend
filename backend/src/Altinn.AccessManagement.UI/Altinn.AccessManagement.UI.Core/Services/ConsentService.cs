@@ -92,9 +92,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 HandledBy = enrichedConsentTemplate.Value.HandledBy,
                 ConsentMessage = enrichedConsentTemplate.Value.ConsentMessage,
                 Expiration = enrichedConsentTemplate.Value.Expiration,
-                FromPartyName = enrichedConsentTemplate.Value.FromPartyName,
                 ConsentRequestEvents = request.Value.ConsentRequestEvents,
                 ValidTo = request.Value.ValidTo,
+                FromPartyName = enrichedConsentTemplate.Value.FromPartyName,
+                ToPartyName = enrichedConsentTemplate.Value.ToPartyName,
+                HandledByPartyName = enrichedConsentTemplate.Value.HandledByPartyName
             };
         }
 
@@ -249,6 +251,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Expiration = enrichedConsentTemplate.Value.Expiration,
                 ConsentRequestEvents = request.Value.ConsentRequestEvents,
                 ValidTo = request.Value.ValidTo,
+                FromPartyName = enrichedConsentTemplate.Value.FromPartyName,
+                ToPartyName = enrichedConsentTemplate.Value.ToPartyName,
+                HandledByPartyName = enrichedConsentTemplate.Value.HandledByPartyName
             };
         }
 
@@ -256,28 +261,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken)
         {
             return await _consentClient.RevokeConsent(consentId, cancellationToken);
-        }
-
-        private Dictionary<string, string> GetStaticMetadata(Party to, Party from, Party handledBy, DateTimeOffset requestValidTo)
-        {
-            TimeZoneInfo timeZone = TimeZoneInfo.Utc;
-            try
-            {
-                // attempt to set timezone to norwegian
-                timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo");
-            }
-            catch (TimeZoneNotFoundException e)
-            {
-                _logger.LogWarning(e, "Could not find timezone Europe/Oslo. Defaulting to UTC {Message}.", e.Message);
-            }
-
-            return new()
-            {
-                { "CoveredBy", to.Name },
-                { "OfferedBy", from.Name },
-                { "HandledBy", handledBy?.Name },
-                { "Expiration", TimeZoneInfo.ConvertTime(requestValidTo, timeZone).ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) }
-            };
         }
 
         private static Dictionary<string, Party> PartyListToDict(IEnumerable<Party> parties)
@@ -407,7 +390,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return ConsentProblem.ConsentPartyNotFound;
             }
 
-            Dictionary<string, string> staticMetadata = GetStaticMetadata(toParty, fromParty, handledByParty, templateParams.ValidTo);
             Dictionary<string, string> title;
             Dictionary<string, string> heading;
             Dictionary<string, string> serviceIntro;
@@ -433,15 +415,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 Rights = rights,
                 IsPoa = consentTemplate.IsPoa,
-                Title = ReplaceMetadataInTranslationsDict(title, staticMetadata),
-                Heading = ReplaceMetadataInTranslationsDict(heading, staticMetadata),
-                ServiceIntro = ReplaceMetadataInTranslationsDict(serviceIntro, staticMetadata),
-                ServiceIntroAccepted = ReplaceMetadataInTranslationsDict(serviceIntroAccepted, staticMetadata),
-                TitleAccepted = ReplaceMetadataInTranslationsDict(consentTemplate.Texts.TitleAccepted, staticMetadata),
-                HandledBy = handledByParty != null ? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata) : null,
-                ConsentMessage = templateParams.RequestMessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
-                Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata),
-                FromPartyName = isFromOrg ? fromParty.Name : null
+                Title = title,
+                Heading = heading, 
+                ServiceIntro = serviceIntro,
+                ServiceIntroAccepted = serviceIntroAccepted,
+                TitleAccepted = consentTemplate.Texts.TitleAccepted,
+                HandledBy = handledByParty != null ? consentTemplate.Texts.HandledBy : null,
+                ConsentMessage = templateParams.RequestMessage ?? consentTemplate.Texts.OverriddenDelegationContext,
+                Expiration = expirationText,
+                FromPartyName = fromParty.Name,
+                ToPartyName = toParty.Name,
+                HandledByPartyName = handledByParty?.Name
             };
         }
 

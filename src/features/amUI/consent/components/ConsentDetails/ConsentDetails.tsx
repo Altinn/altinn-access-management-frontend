@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
@@ -12,7 +12,7 @@ import { EraserIcon } from '@navikt/aksel-icons';
 
 import { useGetConsentQuery, useRevokeConsentMutation } from '@/rtk/features/consentApi';
 
-import { canConsentBeRevoked, getLanguage } from '../../utils';
+import { canConsentBeRevoked, getLanguage, replaceConsentStaticMetadata } from '../../utils';
 import { ConsentRights } from '../ConsentRights/ConsentRights';
 
 import classes from './ConsentDetails.module.css';
@@ -28,7 +28,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
   const language = getLanguage(i18n.language);
 
   const {
-    data: consent,
+    data: loadedConsent,
     isLoading: isLoadingConsent,
     isFetching: isFetchingConsent,
     error: loadConsentError,
@@ -49,9 +49,12 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
     }
   };
 
-  const canBeRevoked = canConsentBeRevoked(consent?.consentRequestEvents || []);
+  const canBeRevoked = canConsentBeRevoked(loadedConsent?.consentRequestEvents || []);
 
   const isRevoking = isRevokingConsent || isFetchingConsent;
+  const consent = useMemo(() => {
+    return loadedConsent ? replaceConsentStaticMetadata(loadedConsent) : null;
+  }, [loadedConsent]);
 
   if (isLoadingConsent) {
     return (
