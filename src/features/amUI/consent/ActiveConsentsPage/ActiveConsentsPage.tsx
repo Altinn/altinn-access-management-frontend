@@ -96,7 +96,9 @@ export const ActiveConsentsPage = () => {
                       : t('active_consents.see_pending_consent'),
                   }))}
                   onClick={(consentId: string) => {
-                    navigate(`/${ConsentPath.Consent}/${ConsentPath.Request}?id=${consentId}`);
+                    navigate(
+                      `/${ConsentPath.Consent}/${ConsentPath.Request}?id=${consentId}&skiplogout`,
+                    );
                   }}
                 />
               ))}
