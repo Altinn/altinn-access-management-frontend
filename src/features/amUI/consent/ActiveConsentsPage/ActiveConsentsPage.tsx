@@ -1,17 +1,8 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import {
-  DsAlert,
-  DsDialog,
-  DsHeading,
-  DsLink,
-  DsParagraph,
-  DsSkeleton,
-  List,
-  ListItem,
-} from '@altinn/altinn-components';
-import { FolderFileIcon, HandshakeIcon } from '@navikt/aksel-icons';
+import { DsAlert, DsDialog, DsHeading, DsLink, DsParagraph, List } from '@altinn/altinn-components';
+import { FolderFileIcon } from '@navikt/aksel-icons';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -26,6 +17,7 @@ import classes from './ActiveConsentsPage.module.css';
 import { ConsentPath } from '@/routes/paths';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '../utils';
+import { ConsentListItem } from './ConsentListItem';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -139,66 +131,6 @@ export const ActiveConsentsPage = () => {
         </DsDialog>
       </PageLayoutWrapper>
     </PageWrapper>
-  );
-};
-
-interface ConsentListItemProps {
-  title: string;
-  subItems: { id: string; title: string; isPoa: boolean }[];
-  isLoading?: boolean;
-  onClick?: (consentId: string) => void;
-}
-const ConsentListItem = ({
-  title,
-  subItems,
-  isLoading,
-  onClick,
-}: ConsentListItemProps): React.ReactNode => {
-  const { t } = useTranslation();
-
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
-  return (
-    <ListItem
-      title={{ as: 'h3', children: title }}
-      icon={{ svgElement: HandshakeIcon, theme: 'surface' }}
-      as='button'
-      size='md'
-      loading={isLoading}
-      collapsible
-      expanded={isExpanded}
-      interactive={!!onClick}
-      badge={{ label: subItems.length }}
-      onClick={() => setIsExpanded((old) => !old)}
-    >
-      <List className={classes.expandedListItem}>
-        {subItems.map((item) => (
-          <ListItem
-            key={item.id}
-            icon={HandshakeIcon}
-            title={{ as: 'h4', children: item.title }}
-            as='button'
-            loading={isLoading}
-            interactive={!!onClick}
-            onClick={onClick ? () => onClick(item.id) : undefined}
-            badge={
-              <div className={classes.consentBadge}>
-                {isLoading ? (
-                  <DsSkeleton
-                    variant='text'
-                    width={20}
-                  />
-                ) : (
-                  <>
-                    {item.isPoa ? t('active_consents.see_poa') : t('active_consents.see_consent')}
-                  </>
-                )}
-              </div>
-            }
-            linkIcon
-          />
-        ))}
-      </List>
-    </ListItem>
   );
 };
 
