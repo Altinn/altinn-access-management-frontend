@@ -146,7 +146,7 @@ interface ConsentListItemProps {
   title: string;
   subItems: { id: string; title: string; isPoa: boolean }[];
   isLoading?: boolean;
-  onClick: (consentId: string) => void;
+  onClick?: (consentId: string) => void;
 }
 const ConsentListItem = ({
   title,
@@ -166,6 +166,7 @@ const ConsentListItem = ({
       loading={isLoading}
       collapsible
       expanded={isExpanded}
+      interactive={!!onClick}
       badge={{ label: subItems.length }}
       onClick={() => setIsExpanded((old) => !old)}
     >
@@ -177,7 +178,8 @@ const ConsentListItem = ({
             title={{ as: 'h4', children: item.title }}
             as='button'
             loading={isLoading}
-            onClick={() => onClick(item.id)}
+            interactive={!!onClick}
+            onClick={onClick ? () => onClick(item.id) : undefined}
             badge={
               <div className={classes.consentBadge}>
                 {isLoading ? (
@@ -209,7 +211,6 @@ const LoadingListItem = () => {
         { id: '1', title: 'xxxxxxxxxxx', isPoa: false },
         { id: '2', title: 'xxxxxxxxxxx', isPoa: false },
       ]}
-      onClick={() => {}}
     />
   );
 };
