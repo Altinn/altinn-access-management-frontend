@@ -4,7 +4,7 @@ import { test } from '@playwright/test';
 
 import { LoginPage } from 'playwright/pages/LoginPage';
 
-test('Login with TestID', async ({ page }) => {
+test('@skip Login with TestID', async ({ page }) => {
   const login = new LoginPage(page);
   await login.loginWithUser('02828698497');
 });

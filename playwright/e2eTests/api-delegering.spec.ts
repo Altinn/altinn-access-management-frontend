@@ -7,8 +7,6 @@ const standardApiDetails = {
   department: 'Testdepartement',
 };
 
-test.describe.configure({ mode: 'parallel' });
-
 test.describe('@slow API-Delegations to organization user', () => {
   test('Delegate api to an organization', async ({ apiDelegations, login }) => {
     const userThatDelegates = {
