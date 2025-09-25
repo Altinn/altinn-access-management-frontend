@@ -5,7 +5,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-spacing-4);
 }
 
 .controls {
@@ -16,11 +16,6 @@
 
 .results {
   margin-top: var(--ds-spacing-3);
-}
-
-.emptyState {
-  display: grid;
-  gap: var(--ds-spacing-2);
 }
 
 .showMoreButtonContainer {

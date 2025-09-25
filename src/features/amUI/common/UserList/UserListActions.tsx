@@ -21,7 +21,7 @@ export const UserListActions = ({
 }) => {
   const { t } = useTranslation();
 
-  if (!availableAction || availableAction.length === 0) {
+  if (!availableAction) {
     return null;
   }
   if (isLoading) {

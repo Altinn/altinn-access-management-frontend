@@ -6,11 +6,9 @@ import {
   type Connection,
   type User,
   useGetRightHoldersQuery,
-  ExtendedUser,
   PartyType,
 } from '@/rtk/features/userInfoApi';
 import { Party } from '@/rtk/features/lookupApi';
-import { CompactRole } from '@/dataObjects/dtos/Common';
 import AdvancedUserSearch from '../common/AdvancedUserSearch/AdvancedUserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';

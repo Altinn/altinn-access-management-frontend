@@ -17,6 +17,7 @@ const mockAllConnections: Connection[] = [
       variant: 'person',
       children: null,
       keyValues: { DateOfBirth: '1990-04-15' },
+      roles: [],
     },
     roles: [],
     connections: [],
@@ -29,6 +30,7 @@ const mockAllConnections: Connection[] = [
       variant: 'person',
       children: null,
       keyValues: { DateOfBirth: '1985-11-30' },
+      roles: [],
     },
     roles: [],
     connections: [],
@@ -41,6 +43,7 @@ const mockAllConnections: Connection[] = [
       variant: 'person',
       children: null,
       keyValues: { DateOfBirth: '2000-01-20' },
+      roles: [],
     },
     roles: [],
     connections: [],
@@ -53,6 +56,7 @@ const mockAllConnections: Connection[] = [
       variant: 'person',
       children: null,
       keyValues: { DateOfBirth: '1975-07-07' },
+      roles: [],
     },
     roles: [],
     connections: [],
@@ -65,6 +69,7 @@ const mockAllConnections: Connection[] = [
       variant: 'person',
       children: null,
       keyValues: { DateOfBirth: '2010-12-12' },
+      roles: [],
     },
     roles: [],
     connections: [],
@@ -80,6 +85,7 @@ const mockConnections: Connection[] = [
       variant: 'person',
       children: null,
       keyValues: { DateOfBirth: '1990-04-15' },
+      roles: [],
     },
     roles: [],
     connections: [],
@@ -92,6 +98,7 @@ const mockConnections: Connection[] = [
       variant: 'person',
       children: null,
       keyValues: { DateOfBirth: '1985-11-30' },
+      roles: [],
     },
     roles: [],
     connections: [],
@@ -127,7 +134,6 @@ export const Default: StoryObj<typeof meta> = {
   args: {
     connections: mockConnections,
     indirectConnections: mockAllConnections,
-    accessPackage: mockAccessPackage,
     canDelegate: true,
   },
 };
@@ -138,11 +144,4 @@ export const EmptySearchShowsAdd: StoryObj<typeof meta> = {
     connections: mockConnections,
     indirectConnections: mockAllConnections,
   },
-  render: (args: React.ComponentProps<typeof AdvancedUserSearch>) => (
-    <Provider store={store}>
-      <div style={{ padding: 24, maxWidth: 800 }}>
-        <AdvancedUserSearch {...args} />
-      </div>
-    </Provider>
-  ),
 };

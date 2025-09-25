@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { Connection, ExtendedUser } from '@/rtk/features/userInfoApi';
-import { CompactRole } from '@/dataObjects/dtos/Common';
+import { CompactRole, Entity } from '@/dataObjects/dtos/Common';
 
 /**
  * Temporary transformation hook.
@@ -22,7 +22,7 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
     const isInherited = (r?: CompactRole | null, fromUuid?: string, toUuid?: string) =>
       (!r || r?.code !== 'rettighetshaver') && fromUuid === toUuid;
 
-    const ensureRootConnection = (user: any, inherited: boolean): Connection => {
+    const ensureRootConnection = (user: Entity, inherited: boolean): Connection => {
       if (!group[user.id]) {
         const party: ExtendedUser = {
           id: user.id,
