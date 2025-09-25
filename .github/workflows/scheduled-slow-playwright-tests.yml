@@ -52,7 +52,7 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            REPORT_NAME=${{ matrix.environment }}-slow
+            REPORT_NAME=${{ matrix.environment }} -slow
             REPORT_ID=${{ github.sha }}-${{ matrix.project }}
             ACCOUNT_NAME=playwrightreporting
             az storage blob upload-batch \

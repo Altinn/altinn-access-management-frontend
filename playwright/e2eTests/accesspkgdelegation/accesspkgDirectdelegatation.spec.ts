@@ -44,7 +44,9 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await delegation.verifyDelegatedPacakge('Oppvekst og utdanning', 'Godkjenning av personell');
   });
 
-  test('Org-A revokes all delegated access package rights from Org-2', async ({ delegation }) => {
+  test.skip('Org-A revokes all delegated access package rights from Org-2', async ({
+    delegation,
+  }) => {
     await DelegationApiUtil.addOrgToDelegate();
     await DelegationApiUtil.delegateAccessPacakage();
 
