@@ -21,7 +21,7 @@
 .showMoreButtonContainer {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: var(--ds-spacing-4);
   width: 100%;
 }
 

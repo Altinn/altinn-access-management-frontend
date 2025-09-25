@@ -105,13 +105,6 @@ const mockConnections: Connection[] = [
   },
 ];
 
-const mockAccessPackage = {
-  id: 'ap1',
-  name: 'Test Access Package',
-  description: 'This is a test access package',
-  isAssignable: true,
-} as ExtendedAccessPackage;
-
 const meta = {
   title: 'Features/AMUI/AdvancedUserSearch',
   component: AdvancedUserSearch,

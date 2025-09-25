@@ -2,7 +2,7 @@ import { DsButton, DsSkeleton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { User } from '@/rtk/features/userInfoApi';
+import { ExtendedUser } from '@/rtk/features/userInfoApi';
 
 export const UserListActions = ({
   user,
@@ -12,10 +12,10 @@ export const UserListActions = ({
   availableAction,
   isLoading,
 }: {
-  user: User;
-  onDelegate?: (user: User) => void;
-  onRevoke?: (user: User) => void;
-  onRequest?: (user: User) => void;
+  user: ExtendedUser;
+  onDelegate?: (user: ExtendedUser) => void;
+  onRevoke?: (user: ExtendedUser) => void;
+  onRequest?: (user: ExtendedUser) => void;
   availableAction?: DelegationAction;
   isLoading?: boolean;
 }) => {
@@ -34,6 +34,7 @@ export const UserListActions = ({
         <DsSkeleton
           variant='text'
           width='20'
+          aria-label={t('common.loading')}
         />
       </DsButton>
     );
@@ -58,18 +59,15 @@ export const UserListActions = ({
           <PlusCircleIcon /> {t('common.request_poa')}
         </DsButton>
       )}
-      {availableAction === DelegationAction.REVOKE &&
-        onRevoke &&
-        'isInherited' in user &&
-        !user.isInherited && (
-          <DsButton
-            variant='tertiary'
-            data-size='md'
-            onClick={() => onRevoke(user)}
-          >
-            <MinusCircleIcon /> {t('common.delete_poa')}
-          </DsButton>
-        )}
+      {availableAction === DelegationAction.REVOKE && onRevoke && !user.isInherited && (
+        <DsButton
+          variant='tertiary'
+          data-size='md'
+          onClick={() => onRevoke(user)}
+        >
+          <MinusCircleIcon /> {t('common.delete_poa')}
+        </DsButton>
+      )}
     </>
   );
 };

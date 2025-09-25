@@ -66,7 +66,6 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
           <Button
             className={classes.showMoreButton}
             onClick={goNextPage}
-            disabled={!hasNextPage}
             variant='outline'
             size='md'
           >

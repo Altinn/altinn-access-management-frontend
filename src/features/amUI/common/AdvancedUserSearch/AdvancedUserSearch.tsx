@@ -23,6 +23,36 @@ export interface AdvancedUserSearchProps {
   canDelegate?: boolean;
 }
 
+const useUIState = (
+  addUsersMode: boolean,
+  isQuery: boolean,
+  directHasResults: boolean,
+  indirectHasResults: boolean,
+) => {
+  return useMemo(() => {
+    const showDirectSection = !addUsersMode;
+    const showDirectList = showDirectSection && directHasResults;
+    const showDirectNoResults =
+      showDirectSection && !directHasResults && isQuery && indirectHasResults;
+    const showIndirectSection = addUsersMode || isQuery;
+    const showIndirectList = showIndirectSection && indirectHasResults;
+    const showEmptyState =
+      (isQuery && !directHasResults && !indirectHasResults) ||
+      (addUsersMode && !indirectHasResults);
+    return {
+      showDirectSection,
+      showDirectList,
+      showDirectNoResults,
+      showIndirectSection,
+      showIndirectList,
+      showEmptyState,
+    };
+  }, [addUsersMode, isQuery, directHasResults, indirectHasResults]);
+};
+
+const filterSystemUsers = (items?: Connection[]) =>
+  items?.filter((item) => item.party.type !== ConnectionUserType.Systemuser);
+
 export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   connections,
   indirectConnections,
@@ -36,13 +66,10 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const isSm = useIsMobileOrSmaller();
   const [addUsersMode, setAddUsersMode] = useState(false);
 
-  const filteredConnections = useMemo(
-    () => connections?.filter((item) => item.party.type !== ConnectionUserType.Systemuser),
-    [connections],
-  );
+  const filteredConnections = useMemo(() => filterSystemUsers(connections), [connections]);
 
   const filteredIndirectConnections = useMemo(
-    () => indirectConnections?.filter((item) => item.party.type !== ConnectionUserType.Systemuser),
+    () => filterSystemUsers(indirectConnections),
     [indirectConnections],
   );
 
@@ -59,17 +86,13 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const directHasResults = (users?.length ?? 0) > 0;
   const indirectHasResults = (indirectUsers?.length ?? 0) > 0;
 
-  const showDirectSection = !addUsersMode;
-  const showDirectList = showDirectSection && directHasResults;
-
-  const showDirectNoResults =
-    showDirectSection && !directHasResults && isQuery && indirectHasResults;
-
-  const showIndirectSection = addUsersMode || isQuery;
-  const showIndirectList = showIndirectSection && indirectHasResults;
-
-  const showEmptyState =
-    (isQuery && !directHasResults && !indirectHasResults) || (addUsersMode && !indirectHasResults);
+  const {
+    showDirectSection,
+    showDirectList,
+    showDirectNoResults,
+    showIndirectList,
+    showEmptyState,
+  } = useUIState(addUsersMode, isQuery, directHasResults, indirectHasResults);
 
   if (isLoading) {
     return (

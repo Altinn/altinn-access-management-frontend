@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -64,7 +63,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     }
   };
 
-  if (connections.length === 0 && !isLoading) {
+  if (connections.length === 0 && !isLoading && !loadingIndirectConnections) {
     return (
       <DsParagraph
         data-size='md'

@@ -1,5 +1,5 @@
 import type { UserListItemProps } from '@altinn/altinn-components';
-import { Button, List, UserListItem } from '@altinn/altinn-components';
+import { List, UserListItem } from '@altinn/altinn-components';
 import type { ElementType } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
