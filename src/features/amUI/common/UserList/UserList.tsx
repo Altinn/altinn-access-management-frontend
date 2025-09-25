@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { useCallback } from 'react';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
-import type { Connection } from '@/rtk/features/userInfoApi';
+import type { Connection, ExtendedUser } from '@/rtk/features/userInfoApi';
 
 import { NewUserButton } from '../../users/NewUserModal/NewUserModal';
 
@@ -88,32 +87,26 @@ export const UserList = ({
         </div>
       )}
       <List spacing={2}>
-        {users?.map((user) => {
-          const controls = useCallback(
-            (u: typeof user) => (
+        {users?.map((user) => (
+          <UserItem
+            key={user.id}
+            user={user}
+            size='md'
+            titleAs={listItemTitleAs}
+            interactive={interactive}
+            showRoles={showRoles}
+            roleDirection={roleDirection}
+            disableLinks={disableLinks}
+            controls={(user) => (
               <UserListActions
-                user={u}
+                user={user as ExtendedUser}
                 availableAction={availableAction}
-                onDelegate={() => onDelegate?.(u.id)}
-                onRevoke={() => onRevoke?.(u.id)}
+                onDelegate={() => onDelegate && onDelegate(user.id)}
+                onRevoke={() => onRevoke && onRevoke(user.id)}
               />
-            ),
-            [availableAction, onDelegate, onRevoke],
-          );
-          return (
-            <UserItem
-              key={user.id}
-              user={user}
-              size='md'
-              titleAs={listItemTitleAs}
-              interactive={interactive}
-              showRoles={showRoles}
-              roleDirection={roleDirection}
-              disableLinks={disableLinks}
-              controls={controls}
-            />
-          );
-        })}
+            )}
+          />
+        ))}
       </List>
       {hasNextPage && (
         <div className={classes.showMoreButtonContainer}>

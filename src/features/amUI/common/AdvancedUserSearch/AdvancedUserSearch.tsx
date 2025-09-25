@@ -2,7 +2,12 @@ import React, { useMemo, useState } from 'react';
 import { DsSearch, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { ConnectionUserType, User, type Connection } from '@/rtk/features/userInfoApi';
+import {
+  ConnectionUserType,
+  ExtendedUser,
+  User,
+  type Connection,
+} from '@/rtk/features/userInfoApi';
 import { NewUserButton } from '@/features/amUI/users/NewUserModal/NewUserModal';
 
 import classes from './AdvancedUserSearch.module.css';
@@ -132,7 +137,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
             )}
             {showDirectList && (
               <ConnectionsList
-                users={users}
+                users={users as ExtendedUser[]}
                 isSm={isSm}
                 hasNextPage={hasNextPage}
                 goNextPage={goNextPage}
@@ -153,7 +158,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           <>
             <h3 className={classes.subHeader}>{t('advanced_user_search.indirect_connections')}</h3>
             <ConnectionsList
-              users={indirectUsers}
+              users={indirectUsers as ExtendedUser[]}
               isSm={isSm}
               hasNextPage={!!hasNextIndirectPage}
               goNextPage={goNextIndirectPage}

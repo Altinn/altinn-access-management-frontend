@@ -2,7 +2,7 @@ import React from 'react';
 import { List, Button } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import type { ExtendedUser } from '@/rtk/features/userInfoApi';
 import { UserItem } from '@/features/amUI/common/UserList/UserItem';
 import { UserListActions } from '../UserList/UserListActions';
 import { DelegationAction } from '../DelegationModal/EditModal';
@@ -10,13 +10,13 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import classes from './AdvancedUserSearch.module.css';
 
 export interface ConnectionsListProps {
-  users: (ExtendedUser | User)[];
+  users: ExtendedUser[];
   isSm: boolean;
   hasNextPage: boolean;
   goNextPage: () => void;
   availableAction: DelegationAction;
-  onRevoke?: (user: User) => void;
-  onDelegate?: (user: User) => void;
+  onRevoke?: (user: ExtendedUser) => void;
+  onDelegate?: (user: ExtendedUser) => void;
   isActionLoading?: boolean;
 }
 
@@ -51,7 +51,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
                 : (user) => (
                     <UserListActions
                       isLoading={isActionLoading}
-                      user={user}
+                      user={user as ExtendedUser}
                       availableAction={availableAction}
                       onRevoke={onRevoke}
                       onDelegate={onDelegate}
