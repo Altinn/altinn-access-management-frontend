@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { Connection, ExtendedUser } from '@/rtk/features/userInfoApi';
-import { CompactRole, Entity } from '@/dataObjects/dtos/Common';
+import { Entity } from '@/dataObjects/dtos/Common';
 
 /**
  * Temporary transformation hook.
@@ -18,11 +18,10 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
     if (!permissions || permissions.length === 0) return [];
 
     const group: Record<string, Connection> = {};
+    // Track whether a user should be marked inherited based on ANY of its direct roles
+    const inheritedFlags: Record<string, boolean> = {};
 
-    const isInherited = (r?: CompactRole | null, fromUuid?: string, toUuid?: string) =>
-      (!r || r?.code !== 'rettighetshaver') && fromUuid === toUuid;
-
-    const ensureRootConnection = (user: Entity, inherited: boolean): Connection => {
+    const ensureRootConnection = (user: Entity): Connection => {
       if (!group[user.id]) {
         const party: ExtendedUser = {
           id: user.id,
@@ -31,7 +30,7 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
           variant: user.variant,
           children: null,
           keyValues: user.keyValues,
-          isInherited: inherited,
+          isInherited: false, // will be finalized after aggregation
           roles: [],
         };
         group[user.id] = { party, roles: [], connections: [] };
@@ -42,7 +41,7 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
     for (const { to, from, role, via, viaRole } of permissions) {
       if (via) {
         // VIA path: create/ensure intermediary (via) then the child connection under it.
-        const viaConn = ensureRootConnection(via, false);
+        const viaConn = ensureRootConnection(via);
         let child = viaConn.connections.find((c) => c.party.id === to.id);
         if (!child) {
           child = {
@@ -67,13 +66,21 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
         continue; // done with via case
       }
 
-      // Direct delegation
-      const inherited = isInherited(role, from?.id, to?.id);
-      const root = ensureRootConnection(to, inherited);
+      const root = ensureRootConnection(to);
+
       if (role && !root.roles.some((r) => r.code === role.code)) {
         root.roles.push({ id: role.id, code: role.code });
       }
+
+      if (role && role.code !== 'rettighetshaver') {
+        inheritedFlags[to.id] = true;
+      }
     }
+
+    // Finalize inheritance after aggregating all roles for each user
+    Object.values(group).forEach((conn) => {
+      conn.party.isInherited = !!inheritedFlags[conn.party.id];
+    });
 
     return Object.values(group);
   }, [accessPackage?.permissions]);

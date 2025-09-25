@@ -35,7 +35,6 @@ const partyMatchesSearchTerm = (party: User | ExtendedUser, searchString: string
 
 const isExtendedUser = (user: ExtendedUser | User): user is ExtendedUser => {
   return (
-    // roles is only present on ExtendedUser, children may exist on ExtendedUser
     (user as ExtendedUser).roles !== undefined || Array.isArray((user as ExtendedUser).children)
   );
 };
@@ -43,7 +42,6 @@ const isExtendedUser = (user: ExtendedUser | User): user is ExtendedUser => {
 const filterUserNode = (userNode: ExtendedUser, searchString: string): ExtendedUser | null => {
   const isMatchSelf = partyMatchesSearchTerm(userNode, searchString);
 
-  // Recursively evaluate and prune children to only keep matching branches or matching leaf users
   const filteredChildren = (userNode.children ?? []).reduce<(ExtendedUser | User)[]>(
     (acc, child) => {
       if (isExtendedUser(child)) {
@@ -118,9 +116,37 @@ export const useFilteredUsers = ({
 
     const mappedUsers = mapToExtendedUsers(indirectConnections);
     const filtered = filterUsers(mappedUsers, searchString);
-    const sortedUsers = sortUsers(filtered);
-    return sortedUsers;
-  }, [indirectConnections, searchString]);
+    const sortedUsers = sortUsers(filtered) as ExtendedUser[];
+
+    const directUserIds = (() => {
+      const ids = new Set<string>();
+      const visit = (list: (ExtendedUser | User)[] | undefined | null) => {
+        if (!list) return;
+        for (const u of list) {
+          ids.add(u.id);
+          if ('children' in u && Array.isArray(u.children) && u.children.length > 0) {
+            visit(u.children as (ExtendedUser | User)[]);
+          }
+        }
+      };
+      visit(processedUsers);
+      return ids;
+    })();
+
+    const prune = (user: ExtendedUser): ExtendedUser | null => {
+      if (directUserIds.has(user.id)) return null;
+      const children = user.children;
+      if (Array.isArray(children) && children.length > 0) {
+        const prunedChildren = children
+          .map((c) => (isExtendedUser(c) ? prune(c) : directUserIds.has(c.id) ? null : c))
+          .filter(Boolean) as (ExtendedUser | User)[];
+        return { ...user, children: prunedChildren };
+      }
+      return user;
+    };
+
+    return sortedUsers.map((u) => prune(u)).filter((u): u is ExtendedUser => u !== null);
+  }, [indirectConnections, searchString, processedUsers]);
 
   const indirectPaginatedUsers = useMemo(() => {
     if (!indirectUsers) return [];
