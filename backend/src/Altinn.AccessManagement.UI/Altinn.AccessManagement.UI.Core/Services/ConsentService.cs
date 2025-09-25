@@ -135,8 +135,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             // filter consents to return only active consents
             IEnumerable<ConsentRequestDetails> activeConsents = consents.Value.Where(consent =>
-                !consent.ConsentRequestEvents.Any(e => excludedStatuses.Contains(e.EventType))
-                && consent.ConsentRequestEvents.Exists(e => e.EventType.Equals("accepted", StringComparison.OrdinalIgnoreCase)));
+                !consent.ConsentRequestEvents.Any(e => excludedStatuses.Contains(e.EventType)));
 
             // look up all party names in one call instead of one by one
             IEnumerable<string> partyUuids = activeConsents
@@ -155,6 +154,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return new ActiveConsentItemFE()
                 {
                     Id = consent.Id,
+                    CanBeConsented = !consent.ConsentRequestEvents.Any(x => x.EventType.Equals("accepted", StringComparison.OrdinalIgnoreCase)),
                     IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
                     ToPartyId = consent.To,
                     ToPartyName = toParty?.Name ?? string.Empty,

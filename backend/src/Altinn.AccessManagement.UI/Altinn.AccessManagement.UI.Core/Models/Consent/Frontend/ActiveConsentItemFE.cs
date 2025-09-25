@@ -11,6 +11,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         public Guid Id { get; set; }
 
         /// <summary>
+        /// If consent is not yet consented to
+        /// </summary>
+        public bool CanBeConsented { get; set; }
+
+        /// <summary>
         /// If consent is a power of attorney or a consent
         /// </summary>
         public bool IsPoa { get; set; }

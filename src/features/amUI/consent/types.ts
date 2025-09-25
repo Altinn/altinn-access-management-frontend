@@ -40,6 +40,7 @@ export interface ConsentRequest {
 
 export interface ActiveConsentListItem {
   id: string;
+  canBeConsented: boolean;
   isPoa: boolean;
   toPartyId: string;
   toPartyName: string;

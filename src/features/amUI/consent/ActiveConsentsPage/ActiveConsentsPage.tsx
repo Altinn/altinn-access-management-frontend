@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import {
   DsAlert,
   DsDialog,
@@ -29,6 +29,8 @@ import { hasConsentPermission } from '../utils';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedConsentId, setSelectedConsentId] = useState<string>('');
 
@@ -48,18 +50,13 @@ export const ActiveConsentsPage = () => {
   const isLoading = isLoadingReportee || isLoadingIsAdmin || isLoadingActiveConsents;
 
   const groupedActiveConsents = useMemo(() => {
-    if (!activeConsents) {
-      return undefined;
-    }
-    const acc: Record<string, ActiveConsentListItem[]> = {};
-    for (const consent of activeConsents) {
-      const key = consent.toPartyId;
-      if (!acc[key]) {
-        acc[key] = [];
-      }
-      acc[key].push(consent);
-    }
-    return acc;
+    const acceptedConsents = activeConsents?.filter((x) => !x.canBeConsented);
+    return groupConsents(acceptedConsents);
+  }, [activeConsents]);
+
+  const groupedPendingActiveConsents = useMemo(() => {
+    const pendingConsents = activeConsents?.filter((x) => x.canBeConsented);
+    return groupConsents(pendingConsents);
   }, [activeConsents]);
 
   const showConsentDetails = (consentId: string): void => {
@@ -76,6 +73,36 @@ export const ActiveConsentsPage = () => {
         >
           {t('active_consents.heading')}
         </DsHeading>
+        {groupedPendingActiveConsents && Object.keys(groupedPendingActiveConsents).length && (
+          <>
+            <div className={classes.activeConsentsHeading}>
+              <DsHeading
+                level={2}
+                data-size='sm'
+              >
+                {t('active_consents.pending_agreements')}
+              </DsHeading>
+            </div>
+            <List>
+              {Object.keys(groupedPendingActiveConsents).map((partyId) => (
+                <ConsentListItem
+                  key={partyId}
+                  title={groupedPendingActiveConsents[partyId][0].toPartyName}
+                  subItems={groupedPendingActiveConsents[partyId].map((item) => ({
+                    id: item.id,
+                    title: item.toPartyName,
+                    badgeText: item.isPoa
+                      ? t('active_consents.see_pending_poa')
+                      : t('active_consents.see_pending_consent'),
+                  }))}
+                  onClick={(consentId: string) => {
+                    navigate(`/${ConsentPath.Consent}/${ConsentPath.Request}?id=${consentId}`);
+                  }}
+                />
+              ))}
+            </List>
+          </>
+        )}
         <div className={classes.activeConsentsHeading}>
           <DsHeading
             level={2}
@@ -121,7 +148,9 @@ export const ActiveConsentsPage = () => {
                   subItems={groupedActiveConsents[partyId].map((item) => ({
                     id: item.id,
                     title: item.toPartyName,
-                    isPoa: item.isPoa,
+                    badgeText: item.isPoa
+                      ? t('active_consents.see_poa')
+                      : t('active_consents.see_consent'),
                   }))}
                   onClick={showConsentDetails}
                 />
@@ -144,7 +173,7 @@ export const ActiveConsentsPage = () => {
 
 interface ConsentListItemProps {
   title: string;
-  subItems: { id: string; title: string; isPoa: boolean }[];
+  subItems: { id: string; title: string; badgeText: string }[];
   isLoading?: boolean;
   onClick: (consentId: string) => void;
 }
@@ -186,9 +215,7 @@ const ConsentListItem = ({
                     width={20}
                   />
                 ) : (
-                  <>
-                    {item.isPoa ? t('active_consents.see_poa') : t('active_consents.see_consent')}
-                  </>
+                  <>{item.badgeText}</>
                 )}
               </div>
             }
@@ -206,10 +233,25 @@ const LoadingListItem = () => {
       isLoading
       title={'xxxxxxxxxxx'}
       subItems={[
-        { id: '1', title: 'xxxxxxxxxxx', isPoa: false },
-        { id: '2', title: 'xxxxxxxxxxx', isPoa: false },
+        { id: '1', title: 'xxxxxxxxxxx', badgeText: 'xxxxxxxxxxx' },
+        { id: '2', title: 'xxxxxxxxxxx', badgeText: 'xxxxxxxxxxx' },
       ]}
       onClick={() => {}}
     />
   );
+};
+
+const groupConsents = (consents: ActiveConsentListItem[] | undefined) => {
+  if (!consents) {
+    return undefined;
+  }
+  const acc: Record<string, ActiveConsentListItem[]> = {};
+  for (const consent of consents) {
+    const key = consent.toPartyId;
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(consent);
+  }
+  return acc;
 };
