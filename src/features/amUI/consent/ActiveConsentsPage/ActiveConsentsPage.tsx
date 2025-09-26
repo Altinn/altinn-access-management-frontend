@@ -1,17 +1,8 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import {
-  DsAlert,
-  DsDialog,
-  DsHeading,
-  DsLink,
-  DsParagraph,
-  DsSkeleton,
-  List,
-  ListItem,
-} from '@altinn/altinn-components';
-import { FolderFileIcon, HandshakeIcon } from '@navikt/aksel-icons';
+import { DsAlert, DsDialog, DsHeading, DsLink, DsParagraph, List } from '@altinn/altinn-components';
+import { FolderFileIcon } from '@navikt/aksel-icons';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -26,6 +17,7 @@ import classes from './ActiveConsentsPage.module.css';
 import { ConsentPath } from '@/routes/paths';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '../utils';
+import { ConsentListItem } from './ConsentListItem';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -114,14 +106,14 @@ export const ActiveConsentsPage = () => {
           </DsHeading>
           <DsLink
             asChild
-            data-size='lg'
+            className={classes.consentLogLink}
           >
             <Link to={`/${ConsentPath.Consent}/${ConsentPath.Log}`}>
               <FolderFileIcon
-                fontSize={28}
                 aria-hidden
+                fontSize={24}
               />
-              {t('active_consents.consent_log')}
+              <span>{t('active_consents.consent_log')}</span>
             </Link>
           </DsLink>
         </div>
@@ -173,62 +165,6 @@ export const ActiveConsentsPage = () => {
   );
 };
 
-interface ConsentListItemProps {
-  title: string;
-  subItems: { id: string; title: string; badgeText: string }[];
-  isLoading?: boolean;
-  onClick: (consentId: string) => void;
-}
-const ConsentListItem = ({
-  title,
-  subItems,
-  isLoading,
-  onClick,
-}: ConsentListItemProps): React.ReactNode => {
-  const { t } = useTranslation();
-
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
-  return (
-    <ListItem
-      title={{ as: 'h3', children: title }}
-      icon={{ svgElement: HandshakeIcon, theme: 'surface' }}
-      as='button'
-      size='md'
-      loading={isLoading}
-      collapsible
-      expanded={isExpanded}
-      badge={{ label: subItems.length }}
-      onClick={() => setIsExpanded((old) => !old)}
-    >
-      <List className={classes.expandedListItem}>
-        {subItems.map((item) => (
-          <ListItem
-            key={item.id}
-            icon={HandshakeIcon}
-            title={{ as: 'h4', children: item.title }}
-            as='button'
-            loading={isLoading}
-            onClick={() => onClick(item.id)}
-            badge={
-              <div className={classes.consentBadge}>
-                {isLoading ? (
-                  <DsSkeleton
-                    variant='text'
-                    width={20}
-                  />
-                ) : (
-                  <>{item.badgeText}</>
-                )}
-              </div>
-            }
-            linkIcon
-          />
-        ))}
-      </List>
-    </ListItem>
-  );
-};
-
 const LoadingListItem = () => {
   return (
     <ConsentListItem
@@ -238,7 +174,6 @@ const LoadingListItem = () => {
         { id: '1', title: 'xxxxxxxxxxx', badgeText: 'xxxxxxxxxxx' },
         { id: '2', title: 'xxxxxxxxxxx', badgeText: 'xxxxxxxxxxx' },
       ]}
-      onClick={() => {}}
     />
   );
 };

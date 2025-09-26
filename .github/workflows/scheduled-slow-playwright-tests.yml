@@ -1,41 +1,22 @@
-name: template-playwright.yml
+name: Scheduled Slow Playwright Tests
 
 on:
-  workflow_dispatch:
-    inputs:
-      project:
-        description: Playwright project
-        type: string
-        required: true
-      environment:
-        type: choice
-        required: true
-        options:
-          - AT21
-          - AT22
-          - AT23
-          - AT24
-          - TT02
-        description: Environment
-
-  workflow_call:
-    inputs:
-      project:
-        description: Playwright project
-        type: string
-        required: true
-      environment:
-        type: string
-        required: true
-        description: Environment
+  schedule:
+    # Run daily a 04:00 AM UTC (06 norsk tid)
+    - cron: '0 4 * * *'
+  workflow_dispatch: # Allow manual triggering for testing
 
 jobs:
-  e2e-tests:
-    name: Playwright end to end tests
+  slow-e2e-tests:
+    name: Slow Playwright Tests - ${{ matrix.environment }} - ${{ matrix.project }}
     permissions:
       id-token: write
       contents: read
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [AT24, TT02]
+        project: [e2e-tests]
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -45,18 +26,18 @@ jobs:
         run: yarn --immutable
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
-      - name: Running yarn tests
+      - name: Running slow Playwright tests
         working-directory: playwright
         env:
           USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
           PASSWORD_TEST_API: ${{ secrets.PASSWORD_TEST_API }}
         run: |
-          yarn run env:${{ inputs.environment }} --project ${{ inputs.project }} --workers=4 --grep-invert @slow
+          yarn run env:${{ matrix.environment }} --project ${{ matrix.project }} --grep @slow
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
-          name: playwright-report-${{ inputs.environment }}
-          path: playwright/playwright-report/${{ inputs.environment }}
+          name: slow-playwright-report-${{ matrix.environment }}-${{ matrix.project }}
+          path: playwright/playwright-report/${{ matrix.environment }}
           retention-days: 30
 
       - name: Azure CLI Login
@@ -71,8 +52,8 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            REPORT_NAME=${{ inputs.environment }}                 # e.g. AT24
-            REPORT_ID=${{ github.sha }}-${{ inputs.project }}     # unique per job (env+project)
+            REPORT_NAME=${{ matrix.environment }}                 # e.g. AT24
+            REPORT_ID=${{ github.sha }}-${{ matrix.project }}     # unique per job (env+project)
             ACCOUNT_NAME=playwrightreporting
 
             az storage blob upload-batch \

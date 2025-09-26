@@ -1,9 +1,20 @@
-.activeConsentsHeading {
+.activeConsentsTopHeading {
+  margin-top: var(--ds-size-4);
+}
+
+.activeConsentsSubHeading {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--ds-size-4);
   margin-top: var(--ds-size-12);
+}
+
+.consentLogLink {
+  font-size: var(--ds-font-size-4);
+  display: flex;
+  gap: var(--ds-size-1);
+  align-items: flex-end;
 }
 
 .expandedListItem {
