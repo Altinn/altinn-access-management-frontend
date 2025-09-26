@@ -51,12 +51,12 @@ jobs:
     name: 'Playwright Accessibility-tests'
     secrets: inherit
     uses: './.github/workflows/template-playwright.yml'
-    needs: deploy-main
+    needs: [deploy-main, sleep-before-tests]
     strategy:
       fail-fast: false
       matrix:
         environment: [AT22]
-        project: [accessibility-tests, sleep-before-tests]
+        project: [accessibility-tests]
     with:
       environment: ${{ matrix.environment }}
       project: ${{ matrix.project }}

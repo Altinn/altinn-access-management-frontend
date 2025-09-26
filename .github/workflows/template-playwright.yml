@@ -83,4 +83,10 @@ jobs:
                 --overwrite \
                 --auth-mode login
 
-            echo "::notice title=HTML report URL::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/"
+            echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> $GITHUB_ENV
+      - name: Show report URL
+        run: |
+          echo ""
+          echo "📊 Playwright test report:"
+          echo "➡️  $REPORT_URL"
+          echo ""
