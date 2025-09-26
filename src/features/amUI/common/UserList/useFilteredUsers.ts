@@ -129,35 +129,11 @@ export const useFilteredUsers = ({
     const filtered = filterUsers(mappedUsers, searchString);
     const sortedUsers = sortUsers(filtered) as ExtendedUser[];
 
-    const directUserIds = (() => {
-      const ids = new Set<string>();
-      const visit = (list: (ExtendedUser | User)[] | undefined | null) => {
-        if (!list) return;
-        for (const u of list) {
-          ids.add(u.id);
-          if ('children' in u && Array.isArray(u.children) && u.children.length > 0) {
-            visit(u.children as (ExtendedUser | User)[]);
-          }
-        }
-      };
-      visit(processedUsers);
-      return ids;
-    })();
+    // When delegation to sub-units is enabled we need to add a filter
+    // for when a parent should be included in both direct and indirect lists.
 
-    const prune = (user: ExtendedUser): ExtendedUser | null => {
-      if (directUserIds.has(user.id)) return null;
-      const children = user.children;
-      if (Array.isArray(children) && children.length > 0) {
-        const prunedChildren = children
-          .map((c) => (isExtendedUser(c) ? prune(c) : directUserIds.has(c.id) ? null : c))
-          .filter(Boolean) as (ExtendedUser | User)[];
-        return { ...user, children: prunedChildren };
-      }
-      return user;
-    };
-
-    return sortedUsers.map((u) => prune(u)).filter((u): u is ExtendedUser => u !== null);
-  }, [indirectConnections, searchString, processedUsers]);
+    return sortedUsers;
+  }, [indirectConnections, searchString]);
 
   const indirectPaginatedUsers = useMemo(() => {
     if (!indirectUsers) return [];
