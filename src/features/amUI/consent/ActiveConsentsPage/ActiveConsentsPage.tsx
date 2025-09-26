@@ -65,10 +65,11 @@ export const ActiveConsentsPage = () => {
         <DsHeading
           level={1}
           data-size='md'
+          className={classes.activeConsentsTopHeading}
         >
           {t('active_consents.heading')}
         </DsHeading>
-        <div className={classes.activeConsentsHeading}>
+        <div className={classes.activeConsentsSubHeading}>
           <DsHeading
             level={2}
             data-size='sm'
@@ -77,14 +78,11 @@ export const ActiveConsentsPage = () => {
           </DsHeading>
           <DsLink
             asChild
-            data-size='lg'
+            className={classes.consentLogLink}
           >
             <Link to={`/${ConsentPath.Consent}/${ConsentPath.Log}`}>
-              <FolderFileIcon
-                fontSize={28}
-                aria-hidden
-              />
-              {t('active_consents.consent_log')}
+              <FolderFileIcon aria-hidden />
+              <span>{t('active_consents.consent_log')}</span>
             </Link>
           </DsLink>
         </div>
