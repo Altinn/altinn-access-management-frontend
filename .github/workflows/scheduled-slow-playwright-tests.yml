@@ -52,14 +52,16 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            REPORT_NAME=${{ github.run_id }}
-            REPORT_ID=${{ github.sha }}-${{ matrix.project }}
+            REPORT_NAME=${{ matrix.environment }}                 # e.g. AT24
+            REPORT_ID=${{ github.sha }}-${{ matrix.project }}     # unique per job (env+project)
             ACCOUNT_NAME=playwrightreporting
+
             az storage blob upload-batch \
                 --account-name "$ACCOUNT_NAME" \
                 --destination "\$web" \
-                --destination-path "$REPORT_ID" \
+                --destination-path "$REPORT_ID/$REPORT_NAME" \
                 --source "playwright/playwright-report/$REPORT_NAME" \
                 --overwrite \
                 --auth-mode login
-            echo "::Link to Slow Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/index.html"
+
+            echo "::notice title=HTML report URL::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/"
