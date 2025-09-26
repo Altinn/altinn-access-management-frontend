@@ -2,8 +2,8 @@ name: Scheduled Slow Playwright Tests
 
 on:
   schedule:
-    # Run daily at 06:00 AM UTC (08:00 AM CET, 09:00 AM CEST)
-    - cron: '0 6 * * *'
+    # Run daily a 04:00 AM UTC (06 norsk tid)
+    - cron: '0 4 * * *'
   workflow_dispatch: # Allow manual triggering for testing
 
 jobs:
