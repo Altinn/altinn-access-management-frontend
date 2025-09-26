@@ -62,12 +62,13 @@ export const ActiveConsentsPage = () => {
         <DsHeading
           level={1}
           data-size='md'
+          className={classes.activeConsentsTopHeading}
         >
           {t('active_consents.heading')}
         </DsHeading>
         {groupedPendingActiveConsents && Object.keys(groupedPendingActiveConsents).length && (
           <>
-            <div className={classes.activeConsentsHeading}>
+            <div className={classes.activeConsentsSubHeading}>
               <DsHeading
                 level={2}
                 data-size='sm'
@@ -97,7 +98,7 @@ export const ActiveConsentsPage = () => {
             </List>
           </>
         )}
-        <div className={classes.activeConsentsHeading}>
+        <div className={classes.activeConsentsSubHeading}>
           <DsHeading
             level={2}
             data-size='sm'

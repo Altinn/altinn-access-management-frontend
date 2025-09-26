@@ -8,7 +8,7 @@ import classes from './ActiveConsentsPage.module.css';
 
 interface ConsentListItemProps {
   title: string;
-  subItems: { id: string; title: string; isPoa: boolean }[];
+  subItems: { id: string; title: string; badgeText: string }[];
   isLoading?: boolean;
   onClick?: (consentId: string) => void;
 }
@@ -52,9 +52,7 @@ export const ConsentListItem = ({
                     width={20}
                   />
                 ) : (
-                  <>
-                    {item.isPoa ? t('active_consents.see_poa') : t('active_consents.see_consent')}
-                  </>
+                  <>{item.badgeText}</>
                 )}
               </div>
             }
