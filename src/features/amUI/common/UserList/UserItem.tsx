@@ -116,7 +116,12 @@ export const UserItem = ({
       name={user.name}
       description={
         !isExpanded
-          ? `${description(user)}${viaRoleCodes.length > 0 ? ` | ${viaRoleCodes.map((r) => t(`${r}`)).join(', ')} ` : ''}`
+          ? [
+              description(user),
+              viaRoleCodes.length ? viaRoleCodes.map((r) => t(r)).join(', ') : undefined,
+            ]
+              .filter(Boolean)
+              .join(' | ') || undefined
           : undefined
       }
       roleNames={showRoles ? roleCodes.map((r) => t(`${r}`)) : undefined}

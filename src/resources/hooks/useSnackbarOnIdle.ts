@@ -3,7 +3,7 @@ import { SnackbarColor, useSnackbar } from '@altinn/altinn-components';
 
 interface PendingSnackbar {
   message: string;
-  color?: SnackbarColor;
+  color: SnackbarColor;
 }
 
 interface UseSnackbarOnIdleProps {
@@ -57,7 +57,7 @@ export const useSnackbarOnIdle = ({
       if (showOnUnmountRef.current && pendingRef.current) {
         openSnackbar({
           message: pendingRef.current.message,
-          color: pendingRef.current.color ?? 'success',
+          color: pendingRef.current.color,
         });
       }
       pendingRef.current = null;

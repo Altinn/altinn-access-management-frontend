@@ -34,9 +34,7 @@ const partyMatchesSearchTerm = (party: User | ExtendedUser, searchString: string
 };
 
 const isExtendedUser = (user: ExtendedUser | User): user is ExtendedUser => {
-  return (
-    (user as ExtendedUser).roles !== undefined || Array.isArray((user as ExtendedUser).children)
-  );
+  return Array.isArray((user as ExtendedUser).roles) || (user as ExtendedUser).roles !== undefined;
 };
 
 const filterUserNode = (userNode: ExtendedUser, searchString: string): ExtendedUser | null => {
@@ -67,7 +65,7 @@ const filterUserNode = (userNode: ExtendedUser, searchString: string): ExtendedU
   if (isMatchSelf || hasMatchInChildren) {
     return {
       ...userNode,
-      children: newChildren ?? [],
+      children: newChildren,
       matchInChildren: !isMatchSelf && hasMatchInChildren,
     };
   }
@@ -104,6 +102,10 @@ export const useFilteredUsers = ({
   useEffect(() => {
     setCurrentPage(1);
   }, [connections, searchString]);
+
+  useEffect(() => {
+    setIndirectUserPage(1);
+  }, [indirectConnections, searchString]);
 
   const processedUsers = useMemo(() => {
     if (!connections || connections.length === 0) return [];
