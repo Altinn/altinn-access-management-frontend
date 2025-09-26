@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 
 import type { Connection, ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import { s } from 'react-router/dist/development/index-react-server-client-BKpa2trA';
 
 const PAGE_SIZE = 10;
 
@@ -125,15 +126,26 @@ export const useFilteredUsers = ({
   const indirectUsers = useMemo(() => {
     if (!indirectConnections) return undefined;
 
-    const mappedUsers = mapToExtendedUsers(indirectConnections);
-    const filtered = filterUsers(mappedUsers, searchString);
-    const sortedUsers = sortUsers(filtered) as ExtendedUser[];
+    const sortedUsers = sortUsers(
+      filterUsers(mapToExtendedUsers(indirectConnections), searchString),
+    ) as ExtendedUser[];
 
-    // When delegation to sub-units is enabled we need to add a filter
-    // for when a parent should be included in both direct and indirect lists.
+    // Collect ids of all direct users for pruning
+    const directUserIds = (() => {
+      const ids = new Set<string>();
+      connections?.forEach((connection) => {
+        ids.add(connection.party.id);
+      });
+      return ids;
+    })();
 
-    return sortedUsers;
-  }, [indirectConnections, searchString]);
+    return sortedUsers.reduce<ExtendedUser[]>((acc, user) => {
+      if (!directUserIds.has(user.id)) {
+        acc.push(user);
+      }
+      return acc;
+    }, []);
+  }, [indirectConnections, searchString, connections]);
 
   const indirectPaginatedUsers = useMemo(() => {
     if (!indirectUsers) return [];

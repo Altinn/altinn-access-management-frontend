@@ -205,4 +205,75 @@ describe('useFilteredUsers', () => {
     expect(parent.children?.length).toBe(1);
     expect(parent.matchInChildren).toBeFalsy();
   });
+
+  it('prunes indirect root users that also exist in the direct graph', () => {
+    const indirectConnections: Connection[] = [
+      {
+        party: {
+          id: '123', // Alice exists in direct graph
+          name: 'Alice',
+          type: 'Person',
+          variant: 'Person',
+          children: null,
+          keyValues: { PartyId: '00000000' },
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+      },
+      {
+        party: {
+          id: 'ind-unique',
+          name: 'Indirect Unique',
+          type: 'Organisasjon',
+          variant: 'AS',
+          children: null,
+          keyValues: { PartyId: '11111111' },
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+      },
+    ];
+
+    const { result } = renderHook(() =>
+      useFilteredUsers({ connections: mockConnections, indirectConnections, searchString: '' }),
+    );
+
+    // Alice should be removed from indirect users because she exists directly
+    expect(result.current.indirectUsers?.some((u) => u.id === '123')).toBe(false);
+    // The unique one should remain
+    expect(result.current.indirectUsers?.some((u) => u.id === 'ind-unique')).toBe(true);
+  });
+
+  it('paginates indirect users and supports goNextIndirectPage', () => {
+    const makeIndirect = (n: number): Connection[] =>
+      Array.from({ length: n }).map((_, i) => ({
+        party: {
+          id: `ind-${i + 1}`,
+          name: `Indirect ${String(i + 1).padStart(2, '0')}`,
+          type: 'Organisasjon',
+          variant: 'AS',
+          children: null,
+          keyValues: { PartyId: `${i + 1}` },
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+      }));
+
+    const indirectConnections = makeIndirect(12);
+
+    const { result } = renderHook(() =>
+      useFilteredUsers({ connections: mockConnections, indirectConnections, searchString: '' }),
+    );
+
+    // Page size is 10
+    expect(result.current.indirectUsers).toHaveLength(10);
+    expect(result.current.hasNextIndirectPage).toBe(true);
+
+    act(() => result.current.goNextIndirectPage());
+    expect(result.current.indirectUsers).toHaveLength(12);
+    expect(result.current.hasNextIndirectPage).toBe(false);
+  });
 });

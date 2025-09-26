@@ -34,11 +34,30 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
           roles: [],
         };
         group[user.id] = { party, roles: [], connections: [] };
+      } else {
+        user.children?.forEach((child) => {
+          if (!group[user.id].connections?.find((c) => c.party.id === child.id)) {
+            group[user.id].connections.push({
+              party: {
+                id: child.id,
+                name: child.name,
+                type: child.type,
+                variant: child.variant,
+                children: null,
+                keyValues: child.keyValues,
+                isInherited: true, // always treated as inherited when via
+                roles: [],
+              },
+              roles: [],
+              connections: [],
+            });
+          }
+        });
       }
       return group[user.id];
     };
 
-    for (const { to, from, role, via, viaRole } of permissions) {
+    for (const { to, role, via, viaRole } of permissions) {
       if (via) {
         // VIA path: create/ensure intermediary (via) then the child connection under it.
         const viaConn = ensureRootConnection(via);
