@@ -26,10 +26,18 @@ jobs:
       environment: ${{ matrix.environment }}
       tag: ${{ github.sha }}
 
+  sleep-before-tests:
+    name: Sleep for 90 seconds
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep for 90 seconds
+        run: sleep 90s
+        shell: bash
+
   playwright-e2e-tests:
-    name: "Playwright E2E-tests"
-    uses: "./.github/workflows/template-playwright.yml"
-    needs: deploy-main
+    name: 'Playwright E2E-tests'
+    uses: './.github/workflows/template-playwright.yml'
+    needs: [deploy-main, sleep-before-tests]
     secrets: inherit
     strategy:
       fail-fast: false
@@ -41,9 +49,9 @@ jobs:
       project: ${{ matrix.project }}
 
   playwright-accessibility-tests:
-    name: "Playwright Accessibility-tests"
+    name: 'Playwright Accessibility-tests'
     secrets: inherit
-    uses: "./.github/workflows/template-playwright.yml"
+    uses: './.github/workflows/template-playwright.yml'
     needs: deploy-main
     strategy:
       fail-fast: false
