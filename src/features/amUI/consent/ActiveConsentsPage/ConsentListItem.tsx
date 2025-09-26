@@ -38,7 +38,7 @@ export const ConsentListItem = ({
         {subItems.map((item) => (
           <ListItem
             key={item.id}
-            icon={HandshakeIcon}
+            icon={{ svgElement: HandshakeIcon }}
             title={{ as: 'h4', children: item.title }}
             as='button'
             loading={isLoading}
