@@ -42,24 +42,27 @@ const isExtendedUser = (user: ExtendedUser | User): user is ExtendedUser => {
 const filterUserNode = (userNode: ExtendedUser, searchString: string): ExtendedUser | null => {
   const isMatchSelf = partyMatchesSearchTerm(userNode, searchString);
 
-  const filteredChildren = (userNode.children ?? []).reduce<(ExtendedUser | User)[]>(
-    (acc, child) => {
+  let hasMatchInChildren = false;
+  if (Array.isArray(userNode.children) && userNode.children.length > 0) {
+    for (const child of userNode.children) {
       if (isExtendedUser(child)) {
-        const filteredChild = filterUserNode(child, searchString);
-        if (filteredChild) acc.push(filteredChild);
+        const childResult = filterUserNode(child, searchString);
+        if (childResult) {
+          hasMatchInChildren = true;
+          break;
+        }
       } else if (partyMatchesSearchTerm(child, searchString)) {
-        acc.push(child);
+        hasMatchInChildren = true;
+        break;
       }
-      return acc;
-    },
-    [],
-  );
+    }
+  }
 
-  if (isMatchSelf || filteredChildren.length > 0) {
+  if (isMatchSelf || hasMatchInChildren) {
     return {
       ...userNode,
-      children: filteredChildren,
-      matchInChildren: !isMatchSelf && filteredChildren.length > 0,
+      children: userNode.children ?? [],
+      matchInChildren: !isMatchSelf && hasMatchInChildren,
     };
   }
 
