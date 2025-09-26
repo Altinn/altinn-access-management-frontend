@@ -314,10 +314,21 @@
     "main_page_heading": "Brukere med fullmakter i {{name}}",
     "sub_heading": "org.nr. {{org_number}}",
     "user_list_heading": "Andre med fullmakt",
+  "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
     "no_users": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
-    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?"
+  "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
+  "indirect_connections": "Brukere uten fullmakt"
+  },
+  "advanced_user_search": {
+  "add_user_button": "Legg til bruker",
+    "indirect_connections": "Brukere uten fullmakt",
+    "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
+    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
+    "user_list_heading": "Andre med fullmakt",
+    "direct_connections": "Brukere med fullmakt",
+    "user_search_placeholder": "Søk etter person eller virksomhet"
   },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
@@ -778,6 +789,8 @@
     "services_tab_title": "Tjenester",
     "load_error": "Oi! Noe gikk galt.",
     "back_to_overview_link": "Gå tilbake til oversikten",
+    "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
+  "package_revocation_success": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
     "users_tab": {
       "description": "Disse brukerne har fullmakt til alle tjenestene i tilgangspakken på vegne av {{fromparty}}.",
       "user_search_placeholder": "Søk etter person eller virksomhet",

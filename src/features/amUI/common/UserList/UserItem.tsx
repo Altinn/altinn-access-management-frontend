@@ -1,6 +1,6 @@
 import type { UserListItemProps } from '@altinn/altinn-components';
 import { List, UserListItem } from '@altinn/altinn-components';
-import type { ElementType } from 'react';
+import type { ElementType, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,7 @@ interface UserItemProps
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
+  controls?: (user: ExtendedUser | User) => ReactNode;
 }
 
 const userHeadingLevelForMapper = (level?: ElementType) => {
@@ -49,6 +50,7 @@ export const UserItem = ({
   subUnit = false,
   disableLinks = false,
   shadow,
+  controls,
   ...props
 }: UserItemProps) => {
   const limitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
@@ -65,7 +67,14 @@ export const UserItem = ({
     [user, hasInheritingUsers],
   );
 
-  const roleCodes = isExtendedUser(user) && user.roles ? getRoleCodesForKeyRoles(user.roles) : [];
+  const roleCodes =
+    isExtendedUser(user) && user.roles
+      ? getRoleCodesForKeyRoles(user.roles.filter((r) => !r.viaParty))
+      : [];
+  const viaRoleCodes =
+    isExtendedUser(user) && user.roles
+      ? getRoleCodesForKeyRoles(user.roles.filter((r) => r.viaParty))
+      : [];
 
   const isSubOrMainUnit =
     isExtendedUser(user) &&
@@ -105,7 +114,16 @@ export const UserItem = ({
       size={size}
       id={user.id}
       name={user.name}
-      description={!isExpanded ? description(user) : undefined}
+      description={
+        !isExpanded
+          ? [
+              description(user),
+              viaRoleCodes.length ? viaRoleCodes.map((r) => t(r)).join(', ') : undefined,
+            ]
+              .filter(Boolean)
+              .join(' | ') || undefined
+          : undefined
+      }
       roleNames={showRoles ? roleCodes.map((r) => t(`${r}`)) : undefined}
       type={type}
       expanded={isExpanded}
@@ -128,6 +146,7 @@ export const UserItem = ({
                 />
               )
       }
+      controls={!hasInheritingUsers && controls && controls(user)}
       titleAs={titleAs}
       subUnit={subUnit || hasSubUnitRole}
     >
@@ -148,6 +167,7 @@ export const UserItem = ({
               interactive={interactive}
               disableLinks={disableLinks}
               shadow='none'
+              controls={controls}
             />
           ))}
         </List>

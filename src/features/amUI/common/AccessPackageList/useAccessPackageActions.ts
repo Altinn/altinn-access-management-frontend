@@ -96,22 +96,25 @@ export const useAccessPackageActions = ({
     }
   };
 
-  const onDelegate = async (accessPackage: AccessPackage) => {
-    if (!toParty || !fromParty || !actingParty) {
+  const onDelegate = async (accessPackage: AccessPackage, toPartyOverride?: Party) => {
+    if (!fromParty || !actingParty) {
       return;
     }
+    const targetToParty = toPartyOverride ?? toParty;
+    if (!targetToParty) return;
+
     delegatePackage(
-      toParty,
+      targetToParty,
       fromParty,
       actingParty,
       accessPackage,
       () => {
-        handleDelegateSuccess(accessPackage, toParty);
+        handleDelegateSuccess(accessPackage, targetToParty);
       },
       (httpStatus, details) => {
         handleDelegateError(
           accessPackage,
-          toParty,
+          targetToParty,
           httpStatus.toString(),
           new Date().toISOString(),
           details,
@@ -120,20 +123,28 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRevoke = async (accessPackage: AccessPackage) => {
-    if (!toParty || !fromParty || !actingParty) {
+  const onRevoke = async (accessPackage: AccessPackage, toPartyOverride?: Party) => {
+    if (!fromParty || !actingParty) {
       return;
     }
+    const targetToParty = toPartyOverride ?? toParty;
+    if (!targetToParty) return;
+
     revokePackage(
-      toParty,
+      targetToParty,
       fromParty,
       actingParty,
       accessPackage,
       () => {
-        handleRevokeSuccess(accessPackage, toParty);
+        handleRevokeSuccess(accessPackage, targetToParty);
       },
       (httpStatus) => {
-        handleRevokeError(accessPackage, toParty, httpStatus.toString(), new Date().toISOString());
+        handleRevokeError(
+          accessPackage,
+          targetToParty,
+          httpStatus.toString(),
+          new Date().toISOString(),
+        );
       },
     );
   };
