@@ -81,7 +81,10 @@ export const ActiveConsentsPage = () => {
             className={classes.consentLogLink}
           >
             <Link to={`/${ConsentPath.Consent}/${ConsentPath.Log}`}>
-              <FolderFileIcon aria-hidden />
+              <FolderFileIcon
+                aria-hidden
+                fontSize={24}
+              />
               <span>{t('active_consents.consent_log')}</span>
             </Link>
           </DsLink>

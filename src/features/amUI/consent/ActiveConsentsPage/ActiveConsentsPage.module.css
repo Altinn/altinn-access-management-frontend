@@ -12,9 +12,9 @@
 
 .consentLogLink {
   font-size: var(--ds-font-size-4);
-}
-.consentLogLink > svg {
-  font-size: var(--ds-font-size-6);
+  display: flex;
+  gap: var(--ds-size-1);
+  align-items: flex-end;
 }
 
 .expandedListItem {
