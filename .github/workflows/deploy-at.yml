@@ -29,10 +29,9 @@ jobs:
   sleep-before-tests:
     name: Sleep for 90 seconds
     runs-on: ubuntu-latest
+    needs: deploy-main
     steps:
-      - name: Sleep for 90 seconds
-        run: sleep 90s
-        shell: bash
+      - run: sleep 90
 
   playwright-e2e-tests:
     name: 'Playwright E2E-tests'
@@ -57,7 +56,7 @@ jobs:
       fail-fast: false
       matrix:
         environment: [AT22]
-        project: [accessibility-tests]
+        project: [accessibility-tests, sleep-before-tests]
     with:
       environment: ${{ matrix.environment }}
       project: ${{ matrix.project }}
