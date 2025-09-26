@@ -72,14 +72,14 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
         <DsAlert data-color='danger'>{t('active_consents.load_consent_error')}</DsAlert>
       )}
       {consent && (
-        <>
-          <div className={classes.consentContainer}>
+        <div className={classes.consentContainer}>
+          <div className={classes.consentStatusBlock}>
             <ConsentStatus
               events={consent.consentRequestEvents}
               isPoa={consent.isPoa}
             />
           </div>
-          <div className={classes.consentContainer}>
+          <div className={classes.consentBlock}>
             {canBeRevoked && (
               <DsPopover.TriggerContext>
                 <DsPopover.Trigger
@@ -158,7 +158,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
             </div>
             {consent.handledBy && <DsParagraph>{consent.handledBy[language]}</DsParagraph>}
           </div>
-        </>
+        </div>
       )}
     </>
   );

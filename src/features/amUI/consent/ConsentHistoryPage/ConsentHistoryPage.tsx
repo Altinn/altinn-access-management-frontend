@@ -6,7 +6,6 @@ import {
   DsDialog,
   DsHeading,
   DsLink,
-  DsSkeleton,
   Timeline,
   TimelineActivity,
   TimelineSegment,
@@ -115,17 +114,13 @@ const LoadingTimeline = () => {
 const LoadingTimelineItem = () => {
   return (
     <TimelineSegment loading>
-      <TimelineActivity loading>
-        <DsSkeleton height={27} />
-        <DsSkeleton
-          height={21}
-          width={160}
-        />
-        <DsSkeleton
-          height={48}
-          width={130}
-        />
+      <TimelineActivity
+        loading
+        byline='xxxxxxxxxxxxxxxxxxxxx'
+      >
+        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
       </TimelineActivity>
+      <TimelineActivity loading>xxxxxxxxxxx</TimelineActivity>
     </TimelineSegment>
   );
 };

@@ -56,7 +56,7 @@ export class Token {
    * Used for fetching an Altinn test token for a specific role
    * @returns The Altinn test token as a string
    */
-  public async getPersonalAltinnToken(partyUuid: string = 'asdads'): Promise<string> {
+  public async getPersonalAltinnToken(): Promise<string> {
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${process.env.environment}` +
       `&pid=${process.env.PID}` +

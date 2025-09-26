@@ -268,6 +268,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return parties.Where(p => p != null && p.PartyUuid.HasValue).ToDictionary(p => p.PartyUuid.ToString(), p => p, StringComparer.OrdinalIgnoreCase);
         }
 
+        private static Dictionary<string, Party> PartyListToDict(IEnumerable<Party> parties)
+        {
+            return parties.Where(p => p != null && p.PartyUuid.HasValue).ToDictionary(p => p.PartyUuid.ToString(), p => p, StringComparer.OrdinalIgnoreCase);
+        }
+
         private static string GetUrnValue(string urn)
         {
             string[] parts = urn?.Split(':');
