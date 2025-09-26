@@ -30,7 +30,7 @@ interface UsersTabProps {
 
 export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
-  const { queueSnackbar } = useSnackbarOnIdle(isFetching);
+  const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -57,6 +57,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
       'success',
     );
   };
+
   const onRevokeSuccess = (p: AccessPackage, toParty: Party) => {
     queueSnackbar(
       t('package_poa_details_page.package_revocation_success', {
