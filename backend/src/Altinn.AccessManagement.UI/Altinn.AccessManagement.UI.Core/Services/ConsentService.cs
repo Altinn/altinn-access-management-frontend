@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Text;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
@@ -12,7 +11,6 @@ using Altinn.Authorization.ProblemDetails;
 using Altinn.Platform.Register.Enums;
 using Altinn.Platform.Register.Models;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -20,7 +18,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// <inheritdoc />
     public class ConsentService : IConsentService
     {
-        private readonly ILogger<ConsentService> _logger;
         private readonly IConsentClient _consentClient;
         private readonly IRegisterClient _registerClient;
         private readonly IResourceRegistryClient _resourceRegistryClient;
@@ -30,21 +27,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsentService"/> class.
         /// </summary>
-        /// <param name="logger">Logger instance.</param>
         /// <param name="consentClient">The consent client.</param>
         /// <param name="registerClient">The register client.</param>
         /// <param name="resourceRegistryClient">Resources client to load resources</param>
         /// <param name="memoryCache">the handler for cache</param>
         /// <param name="cacheConfig">the handler for cache configuration</param>
         public ConsentService(
-            ILogger<ConsentService> logger,
             IConsentClient consentClient,
             IRegisterClient registerClient,
             IResourceRegistryClient resourceRegistryClient,
             IMemoryCache memoryCache,
             IOptions<CacheConfig> cacheConfig)
         {
-            _logger = logger;
             _consentClient = consentClient;
             _registerClient = registerClient;
             _resourceRegistryClient = resourceRegistryClient;
@@ -261,11 +255,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken)
         {
             return await _consentClient.RevokeConsent(consentId, cancellationToken);
-        }
-
-        private static Dictionary<string, Party> PartyListToDict(IEnumerable<Party> parties)
-        {
-            return parties.Where(p => p != null && p.PartyUuid.HasValue).ToDictionary(p => p.PartyUuid.ToString(), p => p, StringComparer.OrdinalIgnoreCase);
         }
 
         private static Dictionary<string, Party> PartyListToDict(IEnumerable<Party> parties)
