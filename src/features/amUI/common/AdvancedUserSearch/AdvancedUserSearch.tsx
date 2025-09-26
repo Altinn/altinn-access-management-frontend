@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { DsSearch, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+import { PlusIcon } from '@navikt/aksel-icons';
 
 import {
   ConnectionUserType,
@@ -120,11 +121,13 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           {query && <DsSearch.Clear onClick={() => setQuery('')} />}
         </DsSearch>
         <DsButton
-          variant={addUsersMode ? 'secondary' : 'tertiary'}
+          variant={addUsersMode ? 'primary' : 'secondary'}
           onClick={() => setAddUsersMode((prev) => !prev)}
           className={classes.addUserButton}
+          data-color={addUsersMode ? 'danger' : 'primary'}
         >
           {addUsersMode ? t('common.cancel') : t('advanced_user_search.add_user_button')}
+          {!addUsersMode && <PlusIcon aria-hidden />}
         </DsButton>
         {addUsersMode && <NewUserButton />}
       </div>

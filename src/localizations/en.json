@@ -321,7 +321,7 @@
     "indirect_connections": "Users without power of attorney"
   },
   "advanced_user_search": {
-    "add_user_button": "New user",
+    "add_user_button": "Add user",
     "indirect_connections": "Users without power of attorney",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
@@ -720,6 +720,8 @@
     "services_tab_title": "Services",
     "load_error": "Oops! Something went wrong.",
     "back_to_overview_link": "Go back to the overview",
+    "package_delegation_success": "{{name}} has been granted power of attorney for {{accessPackage}}.",
+  "package_revocation_success": "{{name}} no longer has power of attorney for {{accessPackage}}.",
     "users_tab": {
       "description": "These users have power of attorney for all the services in the access package on behalf of {{fromparty}}",
       "user_search_placeholder": "Search for person or organization",

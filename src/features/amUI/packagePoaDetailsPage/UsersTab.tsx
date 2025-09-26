@@ -1,5 +1,6 @@
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph } from '@altinn/altinn-components';
+import { useDeferredSnackbar } from '../../../resources/hooks/useDeferredSnackbar';
 import { useTranslation } from 'react-i18next';
 import {
   type Connection,
@@ -29,7 +30,7 @@ interface UsersTabProps {
 
 export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
-
+  const { queueSnackbar } = useDeferredSnackbar(isFetching);
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -47,7 +48,30 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
 
   const connections = usePackagePermissionConnections(accessPackage);
 
-  const { onDelegate, onRevoke, isLoading: isActionLoading } = useAccessPackageActions({});
+  const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
+    queueSnackbar(
+      t('package_poa_details_page.package_delegation_success', {
+        name: toParty.name,
+        accessPackage: p?.name ?? '',
+      }),
+      'success',
+    );
+  };
+  const onRevokeSuccess = (p: AccessPackage, toParty: Party) => {
+    queueSnackbar(
+      t('package_poa_details_page.package_revocation_success', {
+        name: toParty.name,
+        accessPackage: p?.name ?? '',
+      }),
+      'success',
+    );
+  };
+
+  const {
+    onDelegate,
+    onRevoke,
+    isLoading: isActionLoading,
+  } = useAccessPackageActions({ onDelegateSuccess, onRevokeSuccess });
 
   const handleOnDelegate = (user: User) => {
     const toParty = mapUserToParty(user);

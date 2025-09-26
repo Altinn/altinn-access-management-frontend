@@ -316,7 +316,7 @@
     "indirect_connections": "Brukarar utan fullmakt"
   },
   "advanced_user_search": {
-    "add_user_button": "Ny brukar",
+    "add_user_button": "Legg til brukar",
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukarar med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
@@ -716,6 +716,8 @@
     "services_tab_title": "Tenester",
     "load_error": "Oi! Noko gjekk gale.",
     "back_to_overview_link": "Gå tilbake til oversikta",
+    "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
+  "package_revocation_success": "{{name}} har ikkje lenger fullmakt til {{accessPackage}}.",
     "users_tab": {
       "description": "Desse brukarane har fullmakt til alle tenestene i tilgangspakken på vegner av {{fromparty}}",
       "user_search_placeholder": "Søk etter person eller verksemd",
