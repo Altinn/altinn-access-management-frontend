@@ -1,6 +1,5 @@
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph } from '@altinn/altinn-components';
-import { useDeferredSnackbar } from '../../../resources/hooks/useDeferredSnackbar';
 import { useTranslation } from 'react-i18next';
 import {
   type Connection,
@@ -13,6 +12,7 @@ import AdvancedUserSearch from '../common/AdvancedUserSearch/AdvancedUserSearch'
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
+import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 
 const mapUserToParty = (user: User): Party => ({
   partyId: 0,
@@ -30,7 +30,7 @@ interface UsersTabProps {
 
 export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
-  const { queueSnackbar } = useDeferredSnackbar(isFetching);
+  const { queueSnackbar } = useSnackbarOnIdle(isFetching);
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
