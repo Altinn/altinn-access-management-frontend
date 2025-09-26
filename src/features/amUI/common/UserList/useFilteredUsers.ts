@@ -1,7 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 
 import type { Connection, ExtendedUser, User } from '@/rtk/features/userInfoApi';
-import { s } from 'react-router/dist/development/index-react-server-client-BKpa2trA';
 
 const PAGE_SIZE = 10;
 

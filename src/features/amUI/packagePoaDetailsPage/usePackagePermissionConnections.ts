@@ -18,8 +18,8 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
     if (!permissions || permissions.length === 0) return [];
 
     const group: Record<string, Connection> = {};
-    // Track whether a user should be marked inherited based on ANY of its direct roles
     const inheritedFlags: Record<string, boolean> = {};
+    const hasDirectRole: Record<string, boolean> = {};
 
     const ensureRootConnection = (user: Entity): Connection => {
       if (!group[user.id]) {
@@ -34,55 +34,48 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
           roles: [],
         };
         group[user.id] = { party, roles: [], connections: [] };
-      } else {
-        user.children?.forEach((child) => {
-          if (!group[user.id].connections?.find((c) => c.party.id === child.id)) {
-            group[user.id].connections.push({
-              party: {
-                id: child.id,
-                name: child.name,
-                type: child.type,
-                variant: child.variant,
-                children: null,
-                keyValues: child.keyValues,
-                isInherited: true, // always treated as inherited when via
-                roles: [],
-              },
-              roles: [],
-              connections: [],
-            });
-          }
-        });
       }
       return group[user.id];
+    };
+
+    const getOrCreateChildConnection = (
+      parent: Connection,
+      child: Entity,
+      isInherited = false,
+    ): Connection => {
+      let node = parent.connections.find((c) => c.party.id === child.id);
+      if (!node) {
+        node = {
+          party: {
+            id: child.id,
+            name: child.name,
+            type: child.type,
+            variant: child.variant,
+            children: null,
+            keyValues: child.keyValues,
+            roles: [],
+            isInherited,
+          },
+          roles: [],
+          connections: [],
+        };
+        parent.connections.push(node);
+      } else if (isInherited) {
+        node.party.isInherited = true;
+      }
+      return node;
     };
 
     for (const { to, role, via, viaRole } of permissions) {
       if (via) {
         // VIA path: create/ensure intermediary (via) then the child connection under it.
         const viaConn = ensureRootConnection(via);
-        let child = viaConn.connections.find((c) => c.party.id === to.id);
-        if (!child) {
-          child = {
-            party: {
-              id: to.id,
-              name: to.name,
-              type: to.type,
-              variant: to.variant,
-              children: null,
-              keyValues: to.keyValues,
-              roles: [],
-              isInherited: true, // always treated as inherited when via
-            },
-            roles: [],
-            connections: [],
-          };
-          viaConn.connections.push(child);
-        }
+        const child = getOrCreateChildConnection(viaConn, to, true);
         if (viaRole && !child.roles.some((r) => r.code === viaRole.code)) {
           child.roles.push({ id: viaRole.id, code: viaRole.code, viaParty: via });
         }
-        continue; // done with via case
+        inheritedFlags[to.id] = true;
+        continue;
       }
 
       const root = ensureRootConnection(to);
@@ -90,15 +83,14 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
       if (role && !root.roles.some((r) => r.code === role.code)) {
         root.roles.push({ id: role.id, code: role.code });
       }
-
-      if (role && role.code !== 'rettighetshaver') {
-        inheritedFlags[to.id] = true;
+      if (role) {
+        hasDirectRole[to.id] = true;
       }
     }
 
-    // Finalize inheritance after aggregating all roles for each user
     Object.values(group).forEach((conn) => {
-      conn.party.isInherited = !!inheritedFlags[conn.party.id];
+      conn.party.isInherited =
+        Boolean(inheritedFlags[conn.party.id]) && !Boolean(hasDirectRole[conn.party.id]);
     });
 
     return Object.values(group);
