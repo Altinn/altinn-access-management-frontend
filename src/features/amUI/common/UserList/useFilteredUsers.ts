@@ -43,17 +43,25 @@ const filterUserNode = (userNode: ExtendedUser, searchString: string): ExtendedU
   const isMatchSelf = partyMatchesSearchTerm(userNode, searchString);
 
   let hasMatchInChildren = false;
+  let newChildren: (ExtendedUser | User)[] = [];
   if (Array.isArray(userNode.children) && userNode.children.length > 0) {
     for (const child of userNode.children) {
       if (isExtendedUser(child)) {
         const childResult = filterUserNode(child, searchString);
         if (childResult) {
           hasMatchInChildren = true;
-          break;
+          newChildren.push(childResult);
+        } else {
+          // Keep original child structure when there is no match to preserve tree under matching ancestors
+          newChildren.push(child);
         }
-      } else if (partyMatchesSearchTerm(child, searchString)) {
-        hasMatchInChildren = true;
-        break;
+      } else {
+        const childMatches = partyMatchesSearchTerm(child, searchString);
+        if (childMatches) {
+          hasMatchInChildren = true;
+        }
+        // Always include the child; filtering of leaf users is driven by ancestor match state
+        newChildren.push(child);
       }
     }
   }
@@ -61,7 +69,7 @@ const filterUserNode = (userNode: ExtendedUser, searchString: string): ExtendedU
   if (isMatchSelf || hasMatchInChildren) {
     return {
       ...userNode,
-      children: userNode.children ?? [],
+      children: newChildren ?? [],
       matchInChildren: !isMatchSelf && hasMatchInChildren,
     };
   }

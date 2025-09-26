@@ -1,6 +1,6 @@
 import type { UserListItemProps } from '@altinn/altinn-components';
 import { List, UserListItem } from '@altinn/altinn-components';
-import type { ElementType } from 'react';
+import type { ElementType, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ interface UserItemProps
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
-  controls?: (user: ExtendedUser | User) => React.ReactNode;
+  controls?: (user: ExtendedUser | User) => ReactNode;
 }
 
 const userHeadingLevelForMapper = (level?: ElementType) => {
