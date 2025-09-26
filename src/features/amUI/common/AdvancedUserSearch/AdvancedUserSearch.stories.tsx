@@ -1,12 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { RootProvider } from '@altinn/altinn-components';
 
 import { AdvancedUserSearch } from './AdvancedUserSearch';
-import type { Connection, ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import type { Connection } from '@/rtk/features/userInfoApi';
 import { Provider } from 'react-redux';
 import store from '@/rtk/app/store';
-import { ExtendedAccessPackage } from '../AccessPackageList/useAreaPackageList';
 
 const mockAllConnections: Connection[] = [
   {
@@ -127,7 +126,10 @@ export const Default: StoryObj<typeof meta> = {
   args: {
     connections: mockConnections,
     indirectConnections: mockAllConnections,
-    canDelegate: true,
+    onDelegate: () => undefined,
+    onRevoke: () => undefined,
+    isLoading: false,
+    isActionLoading: false,
   },
 };
 

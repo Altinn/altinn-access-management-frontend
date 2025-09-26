@@ -13,7 +13,7 @@ interface UseSnackbarOnIdleProps {
 
 /**
  * Defers showing a snackbar until an external "busy" flag transitions from true to false.
- * Useful when you want to display a success message after the UI has finished a refresh/process.
+ * Useful when you want to display a snackbar message after the UI has finished a refresh.
  */
 export const useSnackbarOnIdle = ({
   isBusy,
