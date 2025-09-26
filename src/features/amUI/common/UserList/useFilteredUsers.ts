@@ -52,7 +52,6 @@ const filterUserNode = (userNode: ExtendedUser, searchString: string): ExtendedU
           hasMatchInChildren = true;
           newChildren.push(childResult);
         } else {
-          // Keep original child structure when there is no match to preserve tree under matching ancestors
           newChildren.push(child);
         }
       } else {
@@ -60,7 +59,6 @@ const filterUserNode = (userNode: ExtendedUser, searchString: string): ExtendedU
         if (childMatches) {
           hasMatchInChildren = true;
         }
-        // Always include the child; filtering of leaf users is driven by ancestor match state
         newChildren.push(child);
       }
     }
