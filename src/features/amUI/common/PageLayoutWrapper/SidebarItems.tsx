@@ -4,6 +4,7 @@ import {
   PersonGroupIcon,
   TenancyIcon,
   PadlockUnlockedIcon,
+  HandshakeIcon,
   InformationSquareIcon,
   LeaveIcon,
   LinkIcon,
@@ -12,7 +13,7 @@ import {
 import { t } from 'i18next';
 import { Link } from 'react-router';
 
-import { amUIPath, SystemUserPath } from '@/routes/paths';
+import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 import { getHostUrl } from '@/resources/utils/pathUtils';
 
 /**
@@ -29,6 +30,7 @@ export const SidebarItems = (
   accountType: 'company' | 'person',
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
+  const displayConsentGui = window.featureFlags?.displayConsentGui;
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
   const isLoading = !accountName;
 
@@ -97,9 +99,26 @@ export const SidebarItems = (
     ),
   };
 
-  const systemUser: MenuItemProps = {
+  const consent: MenuItemProps = {
     groupId: 5,
     id: '5',
+    size: 'md',
+    loading: isLoading,
+    title: t('sidebar.consent'),
+    icon: HandshakeIcon,
+    selected: pathname?.includes(`/${ConsentPath.Consent}/`),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
+      <Link
+        to={`/${ConsentPath.Consent}/${ConsentPath.Active}`}
+        {...props}
+      />
+    ),
+  };
+
+  const systemUser: MenuItemProps = {
+    groupId: 6,
+    id: '6',
     size: 'md',
     loading: isLoading,
     title: t('sidebar.systemaccess'),
@@ -172,6 +191,12 @@ export const SidebarItems = (
     items.push(heading);
   }
 
+  if (displayConsentGui) {
+    if (accountType === 'person') {
+      return [...items, consent, ...shortcuts];
+    }
+  }
+
   if (displayConfettiPackage) {
     items.push(users);
     if (isAdmin) {
@@ -183,6 +208,10 @@ export const SidebarItems = (
     if (isAdmin) {
       items.push(poaOverview);
     }
+  }
+
+  if (displayConsentGui) {
+    items.push(consent);
   }
 
   items.push(systemUser);

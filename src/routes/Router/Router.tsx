@@ -23,6 +23,8 @@ import { ReporteeRightsPage } from '@/features/amUI/reporteeRightsPage/ReporteeR
 import { SystemUserAgentRequestPage } from '@/features/amUI/systemUser/SystemUserAgentRequestPage';
 import { SystemUserAgentDelegationPage } from '@/features/amUI/systemUser/SystemUserAgentDelegationPage/SystemUserAgentDelegationPage';
 import { ConsentRequestPage } from '@/features/amUI/consent/ConsentRequestPage/ConsentRequestPage';
+import { ActiveConsentsPage } from '@/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPage';
+import { ConsentHistoryPage } from '@/features/amUI/consent/ConsentHistoryPage/ConsentHistoryPage';
 import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
 import { InfoPage } from '@/features/amUI/infoPage/InfoPage';
 
@@ -163,6 +165,14 @@ export const Router = createBrowserRouter(
         <Route
           path={ConsentPath.Request}
           element={<ConsentRequestPage />}
+        />
+        <Route
+          path={ConsentPath.Active}
+          element={<ActiveConsentsPage />}
+        />
+        <Route
+          path={ConsentPath.Log}
+          element={<ConsentHistoryPage />}
         />
       </Route>
       <Route

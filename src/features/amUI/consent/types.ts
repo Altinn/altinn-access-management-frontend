@@ -38,6 +38,39 @@ export interface ConsentRequest {
   consentRequestEvents: ConsentRequestEvent[];
 }
 
+export interface ActiveConsentListItem {
+  id: string;
+  isPoa: boolean;
+  toPartyId: string;
+  toPartyName: string;
+}
+
+export interface ConsentHistoryItem {
+  id: string;
+  isPoa: boolean;
+  toPartyId: string;
+  toPartyName: string;
+  fromPartyId: string;
+  fromPartyName: string;
+  handledByPartyId: string;
+  handledByPartyName: string;
+  validTo: string;
+  consentRequestEvents: ConsentRequestEvent[];
+}
+
+export interface Consent {
+  id: string;
+  rights: ConsentRight[];
+  isPoa: boolean;
+  titleAccepted: ConsentLanguage;
+  serviceIntroAccepted: ConsentLanguage;
+  consentMessage: ConsentLanguage;
+  expiration: ConsentLanguage;
+  handledBy?: ConsentLanguage;
+  validTo: string;
+  consentRequestEvents: ConsentRequestEvent[];
+}
+
 export interface ProblemDetail {
   code: string;
   detail: string;

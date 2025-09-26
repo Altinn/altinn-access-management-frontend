@@ -44,6 +44,10 @@ namespace Altinn.AccessManagement.UI.Core.Constants
             = _factory.Create(15, HttpStatusCode.BadRequest, "Consent cant be rejected. Wrong status");
 
         /// <summary>Gets a <see cref="ProblemDescriptor"/>.</summary>
+        public static ProblemDescriptor ConsentPartyNotFound { get; }  
+            = _factory.Create(95, HttpStatusCode.NotFound, "Consent party not found");
+
+        /// <summary>Gets a <see cref="ProblemDescriptor"/>.</summary>
         public static ProblemDescriptor ConsentResourceNotFound { get; }
             = _factory.Create(96, HttpStatusCode.NotFound, "Consent resource not found");
 
