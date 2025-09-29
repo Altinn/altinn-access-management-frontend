@@ -114,6 +114,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         />
       ),
     },
+    { groupId: 'current-user-label', hidden: true },
   ];
 
   const accountGroups: Record<string, MenuGroupProps> = {
@@ -193,9 +194,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     menuLabel: t('header.menu-label'),
     backLabel: t('header.back-label'),
     changeLabel: t('header.change-label'),
-    currentEndUserLabel: t('header.logged_in_as_name', {
-      name: userinfo?.name || '',
-    }),
+
     currentAccount: {
       name: reportee?.name || '',
       type: getAccountType(reportee?.type ?? ''),
@@ -203,12 +202,22 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
   };
 
+  const groups = {
+    'current-user-label': {
+      title: t('header.logged_in_as_name', {
+        name: userinfo?.name || '',
+      }),
+    },
+  };
+
   const desktopMenu = {
     items: headerLinks,
+    groups,
   };
 
   const mobileMenu = {
     items: headerLinks,
+    groups,
   };
 
   return (
@@ -231,6 +240,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             name: reportee?.name || '',
             type: getAccountType(reportee?.type ?? ''),
             id: reportee?.partyId || '',
+            icon: {
+              name: reportee?.name || '',
+              type: getAccountType(reportee?.type ?? ''),
+            },
           },
           globalMenu: globalMenu,
           desktopMenu: desktopMenu,
