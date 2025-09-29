@@ -7,8 +7,8 @@ on:
   workflow_dispatch: # Allow manual triggering for testing
 
 jobs:
-  slow-e2e-tests:
-    name: Slow Playwright Tests - ${{ matrix.environment }} - ${{ matrix.project }}
+  scheduled-e2e-tests:
+    name: Scheduled Playwright Tests - ${{ matrix.environment }} - ${{ matrix.project }}
     permissions:
       id-token: write
       contents: read
@@ -27,7 +27,7 @@ jobs:
         run: yarn --immutable
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
-      - name: Running slow Playwright tests
+      - name: Running Playwright tests
         working-directory: playwright
         env:
           USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
-          name: slow-playwright-report-${{ matrix.environment }}-${{ matrix.project }}
+          name: playwright-report-${{ matrix.environment }}-${{ matrix.project }}
           path: playwright/playwright-report/${{ matrix.environment }}
           retention-days: 30
 
