@@ -10,3 +10,21 @@
   gap: 1rem;
   padding-top: 1.5rem;
 }
+
+.addressList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.addressFieldRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}

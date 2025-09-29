@@ -83,7 +83,8 @@
     "subunit": "Underenhet",
     "subunit_lowercase": "underenhet",
     "mainunit_lowercase": "hovedenhet",
-    "date_of_birth": "Født"
+    "date_of_birth": "Født",
+    "save_changes": "Lagre endringer"
   },
   "beta_banner": {
     "info": "Du ser nå på en betaversjon av de nye sidene for tilgangsstyring i Altinn.",
@@ -442,7 +443,16 @@
     "num_of_addresses": "{{count}} adresser",
     "email_label": "Virksomhetens e-postadresser for varslinger:",
     "sms_label": "Virksomhetens telefonnumre for varslinger:",
-    "address_number": "Adresse {{number}}:"
+    "address_number": "Adresse {{number}}:",
+    "manage_addresses_info": "Altinn bruker adressen(e) til å varsle virksomheten om nytt innhold.",
+    "add_more": "Legg til flere",
+    "remove_email": "Fjern e-post",
+    "remove_sms": "Fjern telefonnummer"
+  },
+  "text_field_errors": {
+    "required": "Feltet er påkrevd",
+    "invalid_email_pattern": "Ugyldig e-postadresse",
+    "invalid_phone": "Ugyldig telefonnummer"
   },
   "info_modal": {
     "title": "Prøv den nye tilgangsstyringsløsningen",

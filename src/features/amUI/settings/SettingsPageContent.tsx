@@ -14,7 +14,7 @@ export const SettingsPageContent = () => {
   useDocumentTitle(t('settings_page.page_title'));
 
   const [openModal, setOpenModal] = React.useState(false);
-  const [modalMode, setModalMode] = React.useState<'email' | 'sms'>('email');
+  const [modalMode, setModalMode] = React.useState<'email' | 'sms' | null>(null);
 
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
   const { data: notificationAddresses, isLoading: notifLoading } =
@@ -25,12 +25,19 @@ export const SettingsPageContent = () => {
   const emailAddresses =
     notificationAddresses?.filter((addr) => addr.email).map((addr) => addr.email) ?? [];
   const phoneNumbers =
-    notificationAddresses?.filter((addr) => addr.phone).map((addr) => addr.phone) ?? [];
+    notificationAddresses
+      ?.filter((addr) => addr.phone)
+      .map((addr) => `${addr.countryCode} ${addr.phone}`) ?? [];
   const isLoading = actorLoading || notifLoading;
 
   const onSettingsClick = (mode: 'email' | 'sms') => {
     setModalMode(mode);
     setOpenModal(true);
+  };
+
+  const onCloseModal = () => {
+    setOpenModal(false);
+    setModalMode(null);
   };
 
   return (
@@ -63,18 +70,9 @@ export const SettingsPageContent = () => {
             }
             as={'button'}
             onClick={() => onSettingsClick('email')}
-            controls={
-              emailAddresses.length === 0 && (
-                <DsButton
-                  data-size='sm'
-                  variant='tertiary'
-                  onClick={() => onSettingsClick('email')}
-                >
-                  {t('common.add')}
-                </DsButton>
-              )
-            }
+            controls={emailAddresses.length === 0 && t('common.add')}
             loading={isLoading}
+            linkIcon
           />
           <Divider as='li' />
           <SettingsItem
@@ -92,23 +90,14 @@ export const SettingsPageContent = () => {
             as={'button'}
             onClick={() => onSettingsClick('sms')}
             loading={isLoading}
-            controls={
-              phoneNumbers.length === 0 && (
-                <DsButton
-                  data-size='sm'
-                  variant='tertiary'
-                  onClick={() => onSettingsClick('sms')}
-                >
-                  {t('common.add')}
-                </DsButton>
-              )
-            }
+            controls={phoneNumbers.length === 0 && t('common.add')}
+            linkIcon
           />
         </List>
         <SettingsModal
           mode={modalMode}
           open={openModal}
-          onClose={() => setOpenModal(false)}
+          onClose={onCloseModal}
         />
       </div>
     </div>

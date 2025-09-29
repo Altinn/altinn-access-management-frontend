@@ -84,7 +84,8 @@
     "mainunit_lowercase": "main unit",
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
-    "date_of_birth": "Born"
+    "date_of_birth": "Born",
+    "save_changes": "Save changes"
   },
   "beta_banner": {
     "info": "This is a beta version of the new access management pages in Altinn.",

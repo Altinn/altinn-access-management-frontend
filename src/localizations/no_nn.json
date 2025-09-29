@@ -81,7 +81,8 @@
     "subunit": "Underenhet",
     "subunit_lowercase": "underenhet",
     "mainunit_lowercase": "hovedenhet",
-    "date_of_birth": "Født"
+    "date_of_birth": "Født",
+    "save_changes": "Lagre endringar"
   },
   "beta_banner": {
     "info": "Du ser no på ein betaversjon av dei nye sidene for tilgangsstyring i Altinn.",
