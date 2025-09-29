@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
-import type { Connection, ExtendedUser } from '@/rtk/features/userInfoApi';
+import type { Connection, ExtendedUser, User } from '@/rtk/features/userInfoApi';
 
 import { NewUserButton } from '../../users/NewUserModal/NewUserModal';
 
@@ -25,6 +25,7 @@ export interface UserListProps {
   availableAction?: DelegationAction;
   onDelegate?: (userId: string) => void;
   onRevoke?: (userId: string) => void;
+  onAddNewUser?: (user: User) => void;
 }
 
 export const UserList = ({
@@ -40,6 +41,7 @@ export const UserList = ({
   availableAction,
   onDelegate,
   onRevoke,
+  onAddNewUser,
 }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
@@ -75,7 +77,10 @@ export const UserList = ({
                       searchTerm: searchString,
                     })}
                   </DsParagraph>
-                  <NewUserButton isLarge />
+                  <NewUserButton
+                    isLarge
+                    onComplete={onAddNewUser}
+                  />
                 </>
               ) : (
                 <DsParagraph data-size='md'>

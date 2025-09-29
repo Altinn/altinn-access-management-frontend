@@ -100,6 +100,15 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
     showEmptyState,
   } = useUIState(addUsersMode, isQuery, directHasResults, indirectHasResults);
 
+  const handleAddNewUser = async (user: User) => {
+    if (onDelegate) {
+      if (user?.id && user?.name) {
+        onDelegate(user);
+      }
+    }
+    setAddUsersMode(false);
+  };
+
   if (isLoading) {
     return (
       <UserList
@@ -120,16 +129,18 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           />
           {query && <DsSearch.Clear onClick={() => setQuery('')} />}
         </DsSearch>
-        <DsButton
-          variant={addUsersMode ? 'primary' : 'secondary'}
-          onClick={() => setAddUsersMode((prev) => !prev)}
-          className={classes.addUserButton}
-          data-color={addUsersMode ? 'danger' : 'primary'}
-        >
-          {addUsersMode ? t('common.cancel') : t('advanced_user_search.add_user_button')}
-          {!addUsersMode && <PlusIcon aria-hidden />}
-        </DsButton>
-        {addUsersMode && <NewUserButton />}
+        <div className={classes.buttonRow}>
+          <DsButton
+            variant={addUsersMode ? 'tertiary' : 'secondary'}
+            onClick={() => setAddUsersMode((prev) => !prev)}
+            className={classes.addUserButton}
+            data-color={addUsersMode ? 'danger' : 'primary'}
+          >
+            {!addUsersMode && <PlusIcon aria-hidden />}
+            {addUsersMode ? t('common.cancel') : t('advanced_user_search.add_user_button')}
+          </DsButton>
+          {addUsersMode && <NewUserButton onComplete={handleAddNewUser} />}
+        </div>
       </div>
 
       <div className={classes.results}>

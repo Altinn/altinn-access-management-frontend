@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { ExtendedUser } from '@/rtk/features/userInfoApi';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export const UserListActions = ({
   user,
@@ -20,6 +21,7 @@ export const UserListActions = ({
   isLoading?: boolean;
 }) => {
   const { t } = useTranslation();
+  const isSmall = useIsMobileOrSmaller();
 
   if (!availableAction) {
     return null;
@@ -31,11 +33,13 @@ export const UserListActions = ({
         data-size='md'
         loading
       >
-        <DsSkeleton
-          variant='text'
-          width='20'
-          aria-label={t('common.loading')}
-        />
+        {!isSmall && (
+          <DsSkeleton
+            variant='text'
+            width='20'
+            aria-label={t('common.loading')}
+          />
+        )}
       </DsButton>
     );
   }
@@ -46,8 +50,10 @@ export const UserListActions = ({
           variant='tertiary'
           data-size='md'
           onClick={() => onDelegate(user)}
+          aria-label={t('common.give_poa')}
         >
-          <PlusCircleIcon /> {t('common.give_poa')}
+          <PlusCircleIcon />
+          {!isSmall && t('common.give_poa')}
         </DsButton>
       )}
       {availableAction === DelegationAction.REQUEST && onRequest && (
@@ -55,8 +61,10 @@ export const UserListActions = ({
           variant='tertiary'
           data-size='md'
           onClick={() => onRequest(user)}
+          aria-label={t('common.request_poa')}
         >
-          <PlusCircleIcon /> {t('common.request_poa')}
+          <PlusCircleIcon />
+          {!isSmall && t('common.request_poa')}
         </DsButton>
       )}
       {availableAction === DelegationAction.REVOKE && onRevoke && !user.isInherited && (
@@ -64,8 +72,10 @@ export const UserListActions = ({
           variant='tertiary'
           data-size='md'
           onClick={() => onRevoke(user)}
+          aria-label={t('common.delete_poa')}
         >
-          <MinusCircleIcon /> {t('common.delete_poa')}
+          <MinusCircleIcon />
+          {!isSmall && t('common.delete_poa')}
         </DsButton>
       )}
     </>

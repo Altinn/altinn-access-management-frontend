@@ -8,6 +8,7 @@ import { UserListActions } from '../UserList/UserListActions';
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AdvancedUserSearch.module.css';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export interface ConnectionsListProps {
   users: ExtendedUser[];
@@ -22,7 +23,6 @@ export interface ConnectionsListProps {
 
 export const ConnectionsList: React.FC<ConnectionsListProps> = ({
   users,
-  isSm,
   hasNextPage,
   goNextPage,
   availableAction,
@@ -31,6 +31,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
   isActionLoading = false,
 }) => {
   const { t } = useTranslation();
+  const isSmall = useIsMobileOrSmaller();
 
   return (
     <>
@@ -42,22 +43,18 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
             size='md'
             titleAs='h4'
             interactive={false}
-            showRoles={true}
+            showRoles={!isSmall}
             roleDirection='toUser'
             disableLinks
-            controls={
-              isSm
-                ? undefined
-                : (user) => (
-                    <UserListActions
-                      isLoading={isActionLoading}
-                      user={user as ExtendedUser}
-                      availableAction={availableAction}
-                      onRevoke={onRevoke}
-                      onDelegate={onDelegate}
-                    />
-                  )
-            }
+            controls={(user) => (
+              <UserListActions
+                isLoading={isActionLoading}
+                user={user as ExtendedUser}
+                availableAction={availableAction}
+                onRevoke={onRevoke}
+                onDelegate={onDelegate}
+              />
+            )}
           />
         ))}
       </List>

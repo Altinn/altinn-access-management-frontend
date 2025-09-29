@@ -28,7 +28,7 @@ export const useAccessPackageActions = ({
   const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
-  const { toParty, fromParty, actingParty } = usePartyRepresentation();
+  const { toParty: toPartyFromContext, fromParty, actingParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
 
   const handleDelegateSuccess = (accessPackage: AccessPackage, toParty: Party) => {
@@ -96,11 +96,11 @@ export const useAccessPackageActions = ({
     }
   };
 
-  const onDelegate = async (accessPackage: AccessPackage, toPartyOverride?: Party) => {
+  const onDelegate = async (accessPackage: AccessPackage, toParty?: Party) => {
     if (!fromParty || !actingParty) {
       return;
     }
-    const targetToParty = toPartyOverride ?? toParty;
+    const targetToParty = toParty ?? toPartyFromContext;
     if (!targetToParty) return;
 
     delegatePackage(
@@ -123,11 +123,11 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRevoke = async (accessPackage: AccessPackage, toPartyOverride?: Party) => {
+  const onRevoke = async (accessPackage: AccessPackage, toParty?: Party) => {
     if (!fromParty || !actingParty) {
       return;
     }
-    const targetToParty = toPartyOverride ?? toParty;
+    const targetToParty = toParty ?? toPartyFromContext;
     if (!targetToParty) return;
 
     revokePackage(

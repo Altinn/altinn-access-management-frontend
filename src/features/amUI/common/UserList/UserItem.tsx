@@ -71,10 +71,16 @@ export const UserItem = ({
     isExtendedUser(user) && user.roles
       ? getRoleCodesForKeyRoles(user.roles.filter((r) => !r.viaParty))
       : [];
+
   const viaRoleCodes =
     isExtendedUser(user) && user.roles
       ? getRoleCodesForKeyRoles(user.roles.filter((r) => r.viaParty))
       : [];
+
+  const viaEntity =
+    isExtendedUser(user) && user.roles
+      ? user.roles.find((r) => r.viaParty)?.viaParty?.name
+      : undefined;
 
   const isSubOrMainUnit =
     isExtendedUser(user) &&
@@ -83,18 +89,26 @@ export const UserItem = ({
   const hasSubUnitRole = isSubOrMainUnit && roleDirection === 'fromUser';
 
   const description = (user: ExtendedUser | User) => {
+    let descriptionString = '';
     if (user.type === ConnectionUserType.Person) {
       const formattedDate = formatDateToNorwegian(user.keyValues?.DateOfBirth);
-      return formattedDate ? t('common.date_of_birth') + ' ' + formattedDate : undefined;
+      descriptionString += formattedDate
+        ? t('common.date_of_birth') + ' ' + formattedDate
+        : undefined;
     } else if (user.type === ConnectionUserType.Organization) {
-      return (
+      descriptionString +=
         t('common.org_nr') +
         ' ' +
         user.keyValues?.OrganizationIdentifier +
         (isSubOrMainUnit || subUnit
           ? ` (${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
-          : '')
-      );
+          : '');
+    }
+    if (viaRoleCodes.length > 0) {
+      descriptionString += ` | ${viaRoleCodes.map((r) => t(`${r}`)).join(', ')} for ${viaEntity}`;
+    }
+    if (descriptionString) {
+      return descriptionString;
     }
     return undefined;
   };
@@ -114,16 +128,7 @@ export const UserItem = ({
       size={size}
       id={user.id}
       name={user.name}
-      description={
-        !isExpanded
-          ? [
-              description(user),
-              viaRoleCodes.length ? viaRoleCodes.map((r) => t(r)).join(', ') : undefined,
-            ]
-              .filter(Boolean)
-              .join(' | ') || undefined
-          : undefined
-      }
+      description={!isExpanded ? description(user) : undefined}
       roleNames={showRoles ? roleCodes.map((r) => t(`${r}`)) : undefined}
       type={type}
       expanded={isExpanded}
