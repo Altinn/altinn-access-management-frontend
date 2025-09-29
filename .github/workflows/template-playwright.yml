@@ -61,6 +61,7 @@ jobs:
 
       - name: Azure CLI Login
         uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2
+        if: always()
         with:
           client-id: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
           tenant-id: ${{ secrets.AZCOPY_TENANT_ID }}
@@ -68,6 +69,7 @@ jobs:
 
       - name: Upload HTML report to Azure
         uses: azure/cli@9f7ce6f37c31b777ec6c6b6d1dfe7db79f497956 # v2
+        if: always()
         with:
           azcliversion: latest
           inlineScript: |
@@ -85,6 +87,7 @@ jobs:
 
             echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> $GITHUB_ENV
       - name: Show report URL
+        if: always()
         run: |
           echo ""
           echo "📊 Playwright test report:"
