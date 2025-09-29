@@ -36,7 +36,7 @@ const useUIState = (
   indirectHasResults: boolean,
 ) => {
   return useMemo(() => {
-    const showDirectSection = !addUsersMode;
+    const showDirectSection = !addUsersMode || isQuery;
     const showDirectList = showDirectSection && directHasResults;
     const showDirectNoResults =
       showDirectSection && !directHasResults && isQuery && indirectHasResults;
@@ -44,7 +44,7 @@ const useUIState = (
     const showIndirectList = showIndirectSection && indirectHasResults;
     const showEmptyState =
       (isQuery && !directHasResults && !indirectHasResults) ||
-      (addUsersMode && !indirectHasResults);
+      (addUsersMode && !indirectHasResults && !directHasResults);
     return {
       showDirectSection,
       showDirectList,
@@ -190,7 +190,10 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
                 searchTerm: trimmedQuery,
               })}
             </DsParagraph>
-            <NewUserButton isLarge />
+            <NewUserButton
+              isLarge
+              onComplete={handleAddNewUser}
+            />
           </div>
         )}
       </div>
