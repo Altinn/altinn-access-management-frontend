@@ -1,19 +1,20 @@
-name: Scheduled Slow Playwright Tests
+name: Scheduled Playwright Tests
 
 on:
   schedule:
-    # Run daily a 04:00 AM UTC (06 norsk tid)
-    - cron: '0 4 * * *'
+    # Run on weekdays at 04:00 AM UTC
+    - cron: '0 4 * * 1-5'
   workflow_dispatch: # Allow manual triggering for testing
 
 jobs:
-  slow-e2e-tests:
-    name: Slow Playwright Tests - ${{ matrix.environment }} - ${{ matrix.project }}
+  scheduled-e2e-tests:
+    name: Scheduled Playwright Tests - ${{ matrix.environment }} - ${{ matrix.project }}
     permissions:
       id-token: write
       contents: read
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         environment: [AT24, TT02]
         project: [e2e-tests]
@@ -26,40 +27,44 @@ jobs:
         run: yarn --immutable
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
-      - name: Running slow Playwright tests
+      - name: Running Playwright tests
         working-directory: playwright
         env:
           USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
           PASSWORD_TEST_API: ${{ secrets.PASSWORD_TEST_API }}
         run: |
-          yarn run env:${{ matrix.environment }} --project ${{ matrix.project }} --grep @slow
+          yarn run env:${{ matrix.environment }} --project ${{ matrix.project }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
-          name: slow-playwright-report-${{ matrix.environment }}-${{ matrix.project }}
+          name: playwright-report-${{ matrix.environment }}-${{ matrix.project }}
           path: playwright/playwright-report/${{ matrix.environment }}
           retention-days: 30
 
       - name: Azure CLI Login
-        uses: azure/login@v2
+        if: always()
+        uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2
         with:
           client-id: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
           tenant-id: ${{ secrets.AZCOPY_TENANT_ID }}
           subscription-id: ${{ secrets.AZCOPY_SUBSCRIPTION_ID }}
 
       - name: Upload HTML report to Azure
-        uses: azure/cli@v2
+        if: always()
+        uses: azure/cli@9f7ce6f37c31b777ec6c6b6d1dfe7db79f497956 # v2
         with:
           azcliversion: latest
           inlineScript: |
-            REPORT_NAME=${{ github.run_id }}
-            REPORT_ID=${{ github.sha }}-${{ matrix.project }}
+            REPORT_NAME=${{ matrix.environment }}                 # e.g. AT24
+            REPORT_ID=${{ github.sha }}-${{ matrix.project }}     # unique per job (env+project)
             ACCOUNT_NAME=playwrightreporting
+
             az storage blob upload-batch \
                 --account-name "$ACCOUNT_NAME" \
                 --destination "\$web" \
-                --destination-path "$REPORT_ID" \
+                --destination-path "$REPORT_ID/$REPORT_NAME" \
                 --source "playwright/playwright-report/$REPORT_NAME" \
                 --overwrite \
                 --auth-mode login
-            echo "::Link to Slow Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/index.html"
+
+            echo "::notice title=HTML report URL::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/"
