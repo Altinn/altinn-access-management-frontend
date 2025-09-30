@@ -22,3 +22,12 @@ export const validatePhoneNumber = (phone: string) => {
     errorMessageKey: isValid ? '' : 'text_field_errors.invalid_phone',
   };
 };
+
+export const validateCountryCode = (countryCode: string) => {
+  const isValid = /^\+\d{1,3}$/.test(countryCode);
+
+  return {
+    isValid,
+    errorMessageKey: isValid ? '' : 'text_field_errors.invalid_country_code',
+  };
+};

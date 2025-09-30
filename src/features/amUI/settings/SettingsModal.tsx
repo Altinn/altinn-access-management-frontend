@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsButton, DsDialog, DsHeading, DsParagraph, DsTextfield } from '@altinn/altinn-components';
+import { DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { ChatIcon, MinusCircleIcon, PaperplaneIcon } from '@navikt/aksel-icons';
+import { ChatIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { PlusIcon } from '@navikt/aksel-icons';
 
 import classes from './SettingsModal.module.css';
-import { validateEmail, validatePhoneNumber } from '@/resources/utils/textFieldUtils';
+import { EmailAddressFields } from './EmailAddressFields';
+import { SmsAddressFields } from './SmsAddressFields';
+import {
+  validateEmail,
+  validatePhoneNumber,
+  validateCountryCode,
+} from '@/resources/utils/textFieldUtils';
+
+export type Address = {
+  email: string;
+  phone: string;
+  countryCode: string;
+};
 
 export const SettingsModal = ({
   mode,
@@ -20,37 +32,45 @@ export const SettingsModal = ({
 }) => {
   const { t } = useTranslation();
   const { actingParty } = usePartyRepresentation();
-  const [addressList, setAddressList] = useState<string[]>(['']);
-  const [storedAddresses, setStoredAddresses] = useState<string[]>(['']);
-
-  const isChanges =
-    (storedAddresses.length === 0 && !!addressList[0]) ||
-    addressList.length !== storedAddresses.length ||
-    addressList.some((addr, index) => storedAddresses[index] !== addr);
-
+  const [addressList, setAddressList] = useState<Address[]>([
+    { email: '', phone: '', countryCode: '' },
+  ]);
+  const [storedAddresses, setStoredAddresses] = useState<Address[]>([
+    { email: '', phone: '', countryCode: '' },
+  ]);
   const { data: notificationAddresses, isLoading } = useGetOrgNotificationAddressesQuery(
     actingParty?.orgNumber ?? '',
     { skip: !actingParty?.orgNumber },
   );
 
-  console.log('addressList', addressList);
-  console.log('storedAddresses', storedAddresses);
-  console.log('isChanges', isChanges);
+  const addressIsEqual = (a: Address, b: Address) =>
+    a.email === b.email && a.phone === b.phone && a.countryCode === b.countryCode;
+
+  const isChanges =
+    (storedAddresses.length === 0 && !!addressList[0]) ||
+    addressList.length !== storedAddresses.length ||
+    addressList.some((addr, index) => !addressIsEqual(storedAddresses[index], addr));
 
   useEffect(() => {
     if (isLoading) return;
     if (mode === 'email') {
       const emailAddresses = notificationAddresses
         ?.filter((addr) => addr.email)
-        .map((addr) => addr.email) ?? [''];
-      const setList = emailAddresses.length > 0 ? emailAddresses : [''];
+        .map((addr) => ({ email: addr.email, phone: '', countryCode: '' }));
+      const setList =
+        emailAddresses && emailAddresses.length > 0
+          ? emailAddresses
+          : [{ email: '', phone: '', countryCode: '' }];
       setAddressList(setList);
       setStoredAddresses(setList);
     } else if (mode === 'sms') {
       const phoneNumbers = notificationAddresses
         ?.filter((addr) => addr.phone)
-        .map((addr) => addr.phone) ?? [''];
-      const setList = phoneNumbers.length > 0 ? phoneNumbers : [''];
+        .map((addr) => ({ email: '', phone: addr.phone, countryCode: addr.countryCode }));
+      const setList =
+        phoneNumbers && phoneNumbers.length > 0
+          ? phoneNumbers
+          : [{ email: '', phone: '', countryCode: '' }];
       setAddressList(setList);
       setStoredAddresses(setList);
     }
@@ -59,63 +79,33 @@ export const SettingsModal = ({
   let headingText = '';
   let labelText = '';
   let icon = null;
-  let removeLabel = '';
   switch (mode) {
     case 'email':
       headingText = t('settings_page.alerts_on_email');
       labelText = t('settings_page.email_label');
-      removeLabel = t('settings_page.remove_email');
       icon = <PaperplaneIcon fontSize='2rem' />;
       break;
     case 'sms':
       headingText = t('settings_page.alerts_on_sms');
       labelText = t('settings_page.sms_label');
-      removeLabel = t('settings_page.remove_sms');
       icon = <ChatIcon fontSize='2rem' />;
       break;
     default:
       return null;
   }
 
-  const onTextFieldChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const newList = [...addressList];
-    newList[index] = e.target.value;
-    setAddressList(newList);
+  const isValidAddresses = (addresses: Address[]) => {
+    return addresses
+      .filter((address) => address.email.length > 0 || address.phone.length > 0)
+      .every((address) => {
+        return (
+          (address.email.length > 0 && validateEmail(address.email).isValid) ||
+          (address.phone.length > 0 &&
+            validatePhoneNumber(address.phone).isValid &&
+            validateCountryCode(address.countryCode).isValid)
+        );
+      });
   };
-
-  const addressFields = addressList.map((address, index) => {
-    const validation = mode === 'email' ? validateEmail(address) : validatePhoneNumber(address);
-    return (
-      <div
-        key={index}
-        className={classes.addressFieldRow}
-      >
-        <DsTextfield
-          aria-label={t('settings_page.address_number', { number: 1 })}
-          value={address}
-          onChange={(e) => onTextFieldChange(e, index)}
-          disabled={isLoading}
-          error={validation.isValid || address.length === 0 ? '' : t(validation.errorMessageKey)}
-        />
-        {addressList.length > 1 && (
-          <DsButton
-            icon
-            variant='tertiary'
-            onClick={() => {
-              const newList = [...addressList];
-              newList.splice(index, 1);
-              setAddressList(newList);
-            }}
-            className={classes.removeButton}
-            data-color={'danger'}
-            data-size='md'
-          >
-            <MinusCircleIcon aria-label={removeLabel} />
-          </DsButton>
-        )}
-      </div>
-    );
-  });
 
   return (
     <DsDialog
@@ -140,13 +130,31 @@ export const SettingsModal = ({
         >
           {labelText}
         </DsHeading>
-        <div className={classes.addressList}>{addressFields}</div>
+        <div className={classes.addressList}>
+          {mode === 'email' && (
+            <EmailAddressFields
+              addressList={addressList}
+              setAddressList={setAddressList}
+              isLoading={isLoading}
+            />
+          )}
+          {mode === 'sms' && (
+            <SmsAddressFields
+              addressList={addressList}
+              setAddressList={setAddressList}
+              isLoading={isLoading}
+            />
+          )}
+        </div>
         <DsButton
           variant='secondary'
           onClick={() => {
-            setAddressList([...addressList, '']);
+            setAddressList([
+              ...addressList,
+              { email: '', phone: '', countryCode: mode === 'sms' ? '+47' : '' },
+            ]);
           }}
-          disabled={isLoading || addressList.length >= 5}
+          disabled={isLoading || addressList.length >= 10}
         >
           <PlusIcon />
           {t('settings_page.add_more')}
@@ -160,7 +168,7 @@ export const SettingsModal = ({
             onClick={() => {
               setAddressList(storedAddresses);
             }}
-            disabled={isLoading || !isChanges}
+            disabled={isLoading || !isChanges || !isValidAddresses(addressList)}
           >
             {t('common.save_changes')}
           </DsButton>

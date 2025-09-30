@@ -17,10 +17,24 @@
   gap: 0.5rem;
 }
 
-.addressFieldRow {
+.emailFieldRow {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
+}
+
+.emailFieldRow > *:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.phoneFieldRow {
+  display: grid;
+  grid-template-columns: 0.15fr 1fr auto;
+  justify-content: space-between;
+}
+
+.phoneFieldRow > *:not(:last-child) {
+  margin-right: 0.5rem;
 }
 
 .buttonRow {
