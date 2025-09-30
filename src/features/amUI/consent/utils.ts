@@ -82,10 +82,11 @@ export const replaceStaticMetadata = <T extends ConsentRequest | Consent>(
   };
 
   const result = { ...consent };
-  replaceFields.forEach((field) => {
+  for (const field of replaceFields) {
     const value = consent[field] as ConsentLanguage | undefined;
     result[field] = replaceMetadata(value, metadata) as T[typeof field];
-  });
+  }
+
   return result;
 };
 
