@@ -209,7 +209,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         },
       },
       menuItemsVirtual: { isVirtualized: accounts.length > 20 },
-      currentEndUserLabel: 'xxx',
     },
     onSelectAccount: (accountId: string) => {
       // check if this is a person; then redirect to consents page
