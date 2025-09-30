@@ -61,59 +61,41 @@ export const toDateTimeString = (dateString: string, useFullMonthName?: boolean)
   });
 };
 
+type KeysWithValueOfConsentLanguageOrUndefined<T> = {
+  [K in keyof T]: T[K] extends ConsentLanguage | undefined ? K : never;
+}[keyof T];
 interface ConsentMetadataValues {
   CoveredBy: string;
   OfferedBy: string;
   HandledBy: string;
   Expiration: string;
 }
-export const replaceRequestStaticMetadata = (consentRequest: ConsentRequest) => {
-  const staticMetadata: ConsentMetadataValues = {
-    CoveredBy: consentRequest.toPartyName,
-    OfferedBy: consentRequest.fromPartyName,
-    HandledBy: consentRequest.handledByPartyName,
-    Expiration: consentRequest.validTo ? toDateTimeString(consentRequest.validTo) : '',
-  };
-  return {
-    ...consentRequest,
-    title: replaceMetadata(consentRequest.title, staticMetadata),
-    heading: replaceMetadata(consentRequest.heading, staticMetadata),
-    serviceIntro: replaceMetadata(consentRequest.serviceIntro, staticMetadata),
-    consentMessage: consentRequest.consentMessage
-      ? replaceMetadata(consentRequest.consentMessage, staticMetadata)
-      : consentRequest.consentMessage,
-    expiration: replaceMetadata(consentRequest.expiration, staticMetadata),
-    handledBy: consentRequest.handledBy
-      ? replaceMetadata(consentRequest.handledBy, staticMetadata)
-      : consentRequest.handledBy,
-  };
-};
-
-export const replaceConsentStaticMetadata = (consent: Consent) => {
-  const staticMetadata: ConsentMetadataValues = {
+export const replaceStaticMetadata = <T extends ConsentRequest | Consent>(
+  consent: T,
+  replaceFields: KeysWithValueOfConsentLanguageOrUndefined<T>[],
+): T => {
+  const metadata: ConsentMetadataValues = {
     CoveredBy: consent.toPartyName,
     OfferedBy: consent.fromPartyName,
     HandledBy: consent.handledByPartyName,
     Expiration: consent.validTo ? toDateTimeString(consent.validTo) : '',
   };
-  return {
-    ...consent,
-    titleAccepted: replaceMetadata(consent.titleAccepted, staticMetadata),
-    serviceIntroAccepted: replaceMetadata(consent.serviceIntroAccepted, staticMetadata),
-    consentMessage: consent.consentMessage
-      ? replaceMetadata(consent.consentMessage, staticMetadata)
-      : consent.consentMessage,
-    expiration: replaceMetadata(consent.expiration, staticMetadata),
-    handledBy: consent.handledBy
-      ? replaceMetadata(consent.handledBy, staticMetadata)
-      : consent.handledBy,
-  };
+
+  const result = { ...consent };
+  replaceFields.forEach((field) => {
+    const value = consent[field] as ConsentLanguage | undefined;
+    result[field] = replaceMetadata(value, metadata) as T[typeof field];
+  });
+  return result;
 };
 
 const replaceMetadata = (
-  texts: ConsentLanguage,
+  texts: ConsentLanguage | undefined,
   metadata: ConsentMetadataValues,
-): ConsentLanguage => {
+): ConsentLanguage | undefined => {
+  if (!texts) {
+    return texts;
+  }
   const returnObj = { ...texts };
   // loop through each language
   for (const language of Object.keys(texts)) {

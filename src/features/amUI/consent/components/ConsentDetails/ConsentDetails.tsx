@@ -12,11 +12,12 @@ import { EraserIcon } from '@navikt/aksel-icons';
 
 import { useGetConsentQuery, useRevokeConsentMutation } from '@/rtk/features/consentApi';
 
-import { canConsentBeRevoked, getLanguage, replaceConsentStaticMetadata } from '../../utils';
+import { canConsentBeRevoked, getLanguage, replaceStaticMetadata } from '../../utils';
 import { ConsentRights } from '../ConsentRights/ConsentRights';
 
 import classes from './ConsentDetails.module.css';
 import { ConsentStatus } from '../ConsentStatus/ConsentStatus';
+import { Consent } from '../../types';
 
 interface ConsentDetailsProps {
   consentId: string;
@@ -53,7 +54,15 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
 
   const isRevoking = isRevokingConsent || isFetchingConsent;
   const consent = useMemo(() => {
-    return loadedConsent ? replaceConsentStaticMetadata(loadedConsent) : null;
+    return loadedConsent
+      ? replaceStaticMetadata<Consent>(loadedConsent, [
+          'titleAccepted',
+          'serviceIntroAccepted',
+          'consentMessage',
+          'expiration',
+          'handledBy',
+        ])
+      : null;
   }, [loadedConsent]);
 
   if (isLoadingConsent) {

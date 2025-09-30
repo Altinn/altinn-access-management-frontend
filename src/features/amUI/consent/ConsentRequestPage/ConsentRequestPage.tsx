@@ -23,13 +23,7 @@ import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import type { ConsentLanguage, ConsentRequest, ProblemDetail } from '../types';
-import {
-  getLanguage,
-  isAccepted,
-  isExpired,
-  isRevoked,
-  replaceRequestStaticMetadata,
-} from '../utils';
+import { getLanguage, isAccepted, isExpired, isRevoked, replaceStaticMetadata } from '../utils';
 import { ConsentRights } from '../components/ConsentRights/ConsentRights';
 
 import classes from './ConsentRequestPage.module.css';
@@ -58,7 +52,16 @@ export const ConsentRequestPage = () => {
   );
 
   const memoizedRequest = useMemo(() => {
-    return request ? replaceRequestStaticMetadata(request) : null;
+    return request
+      ? replaceStaticMetadata<ConsentRequest>(request, [
+          'title',
+          'heading',
+          'serviceIntro',
+          'consentMessage',
+          'expiration',
+          'handledBy',
+        ])
+      : null;
   }, [request]);
 
   const onChangeLocale = (newLocale: string) => {
