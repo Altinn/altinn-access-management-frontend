@@ -86,8 +86,8 @@ export const ConsentRequestPage = () => {
             title: 'Altinn',
           },
           currentAccount: {
-            name: request?.fromPartyName ?? '',
-            type: request?.fromPartyName === userData?.name ? 'person' : 'company',
+            name: memoizedRequest?.fromPartyName ?? '',
+            type: memoizedRequest?.fromPartyName === userData?.name ? 'person' : 'company',
             id: '',
           },
           globalMenu: {
