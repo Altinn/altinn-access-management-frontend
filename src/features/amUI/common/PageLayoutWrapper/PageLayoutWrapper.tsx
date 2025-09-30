@@ -159,6 +159,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         />
       ),
     },
+    { groupId: 'current-user', hidden: true },
   ];
 
   const accountGroups: Record<string, MenuGroupProps> = {
