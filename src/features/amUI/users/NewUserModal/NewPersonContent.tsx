@@ -36,7 +36,6 @@ export const NewPersonContent = ({
       .then((userUuid) => {
         if (onComplete) {
           onComplete({ id: userUuid, name: lastName, children: null, keyValues: null });
-          return;
         }
         modalRef.current?.close();
       })

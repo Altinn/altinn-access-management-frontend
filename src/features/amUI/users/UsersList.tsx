@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
 import type { Connection, User } from '@/rtk/features/userInfoApi';
@@ -39,7 +39,7 @@ export const UsersList = () => {
   const { t } = useTranslation();
   const { fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
-
+  const navigate = useNavigate();
   const { data: isAdmin } = useGetIsAdminQuery();
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
@@ -67,7 +67,7 @@ export const UsersList = () => {
     );
 
   const handleNewUser = (user: User) => {
-    window.location.href = `${window.location.href}/${user.id}`;
+    navigate(`/users/${user.id}`);
   };
 
   const [searchString, setSearchString] = useState<string>('');

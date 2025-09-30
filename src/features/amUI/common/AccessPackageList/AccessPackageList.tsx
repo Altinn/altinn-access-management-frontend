@@ -113,12 +113,10 @@ export const AccessPackageList = ({
           data-color='danger'
           data-size='sm'
         >
-          {searchError && (
-            <TechnicalErrorParagraphs
-              status={detail?.status || '500'}
-              time={new Date().toLocaleTimeString()}
-            />
-          )}
+          <TechnicalErrorParagraphs
+            status={detail?.status || '500'}
+            time={new Date().toISOString()}
+          />
         </DsAlert>
       </div>
     );

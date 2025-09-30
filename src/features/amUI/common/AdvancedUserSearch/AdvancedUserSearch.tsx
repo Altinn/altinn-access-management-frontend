@@ -69,7 +69,6 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
-  const isSm = useIsMobileOrSmaller();
   const [addUsersMode, setAddUsersMode] = useState(false);
 
   const filteredConnections = useMemo(() => filterSystemUsers(connections), [connections]);
@@ -152,7 +151,6 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
             {showDirectList && (
               <ConnectionsList
                 users={users as ExtendedUser[]}
-                isSm={isSm}
                 hasNextPage={hasNextPage}
                 goNextPage={goNextPage}
                 availableAction={DelegationAction.REVOKE}
@@ -173,7 +171,6 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
             <h3 className={classes.subHeader}>{t('advanced_user_search.indirect_connections')}</h3>
             <ConnectionsList
               users={indirectUsers as ExtendedUser[]}
-              isSm={isSm}
               hasNextPage={!!hasNextIndirectPage}
               goNextPage={goNextIndirectPage}
               availableAction={DelegationAction.DELEGATE}

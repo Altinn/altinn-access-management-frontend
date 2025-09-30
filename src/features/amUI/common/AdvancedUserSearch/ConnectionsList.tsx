@@ -12,7 +12,6 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export interface ConnectionsListProps {
   users: ExtendedUser[];
-  isSm: boolean;
   hasNextPage: boolean;
   goNextPage: () => void;
   availableAction: DelegationAction;
