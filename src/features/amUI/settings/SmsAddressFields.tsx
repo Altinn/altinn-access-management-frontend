@@ -1,15 +1,11 @@
-import {
-  validateCountryCode,
-  validateEmail,
-  validatePhoneNumber,
-} from '@/resources/utils/textFieldUtils';
+import { validatePhoneNumber } from '@/resources/utils/textFieldUtils';
 import { DsButton, DsTextfield } from '@altinn/altinn-components';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
 
 import classes from './SettingsModal.module.css';
-import { Address } from './SettingsModal';
+import { Address } from '@/rtk/features/settingsApi';
 
 export const SmsAddressFields = ({
   addressList,
@@ -44,7 +40,7 @@ export const SmsAddressFields = ({
         className={classes.phoneFieldRow}
       >
         <DsTextfield
-          aria-label={t('settings_page.country_code', { number: index + 1 })}
+          aria-label={t('settings_page.country_code_number', { number: index + 1 })}
           value={address.countryCode}
           onChange={(e) =>
             isValidCountryCodeChange(e.target.value) ? onCountryCodeChange(e, index) : null
@@ -53,7 +49,7 @@ export const SmsAddressFields = ({
           className={classes.countryCodeField}
         />
         <DsTextfield
-          aria-label={t('settings_page.address_number', { number: index + 1 })}
+          aria-label={t('settings_page.phone_number', { number: index + 1 })}
           value={address.phone}
           onChange={(e) => onPhoneChange(e, index)}
           disabled={isLoading}

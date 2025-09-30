@@ -25,5 +25,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             return await _profileClient.GetOrgNotificationAddresses(orgNumber);
         }
+
+        /// <inheritdoc/>
+        public async Task<NotificationAddressResponse> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress)
+        {
+            return await _profileClient.PostNewOrganisationNotificationAddress(orgNumber, notificationAddress);
+        }
+
+        /// <inheritdoc/>
+        public async Task<NotificationAddressResponse> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId)
+        {
+            return await _profileClient.DeleteOrganisationNotificationAddress(orgNumber, notificationAddressId);
+        }
     }
 }

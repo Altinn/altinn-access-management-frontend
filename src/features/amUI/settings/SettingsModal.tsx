@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
-import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi';
+import {
+  DsAlert,
+  DsButton,
+  DsDialog,
+  DsHeading,
+  DsParagraph,
+  DsSpinner,
+} from '@altinn/altinn-components';
+import {
+  Address,
+  NotificationAddress,
+  useGetOrgNotificationAddressesQuery,
+} from '@/rtk/features/settingsApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ChatIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { PlusIcon } from '@navikt/aksel-icons';
@@ -9,17 +20,7 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import classes from './SettingsModal.module.css';
 import { EmailAddressFields } from './EmailAddressFields';
 import { SmsAddressFields } from './SmsAddressFields';
-import {
-  validateEmail,
-  validatePhoneNumber,
-  validateCountryCode,
-} from '@/resources/utils/textFieldUtils';
-
-export type Address = {
-  email: string;
-  phone: string;
-  countryCode: string;
-};
+import { isValidAddresses, useSaveAddressChanges } from './addressMgmtUtils';
 
 export const SettingsModal = ({
   mode,
@@ -35,44 +36,48 @@ export const SettingsModal = ({
   const [addressList, setAddressList] = useState<Address[]>([
     { email: '', phone: '', countryCode: '' },
   ]);
-  const [storedAddresses, setStoredAddresses] = useState<Address[]>([
-    { email: '', phone: '', countryCode: '' },
+  const [storedAddresses, setStoredAddresses] = useState<NotificationAddress[]>([
+    { email: '', phone: '', countryCode: '', notificationAddressId: '' },
   ]);
   const { data: notificationAddresses, isLoading } = useGetOrgNotificationAddressesQuery(
     actingParty?.orgNumber ?? '',
     { skip: !actingParty?.orgNumber },
   );
-
-  const addressIsEqual = (a: Address, b: Address) =>
-    a.email === b.email && a.phone === b.phone && a.countryCode === b.countryCode;
-
-  const isChanges =
-    (storedAddresses.length === 0 && !!addressList[0]) ||
-    addressList.length !== storedAddresses.length ||
-    addressList.some((addr, index) => !addressIsEqual(storedAddresses[index], addr));
+  const { isChanges, saveChanges, isSaving, isError } = useSaveAddressChanges(
+    storedAddresses,
+    addressList,
+  );
 
   useEffect(() => {
     if (isLoading) return;
     if (mode === 'email') {
-      const emailAddresses = notificationAddresses
-        ?.filter((addr) => addr.email)
-        .map((addr) => ({ email: addr.email, phone: '', countryCode: '' }));
+      const emailAddresses = notificationAddresses?.filter((addr) => addr.email);
+
+      const simplifiedAddresses = emailAddresses?.map((addr) => ({
+        email: addr.email,
+        phone: '',
+        countryCode: '',
+      }));
       const setList =
-        emailAddresses && emailAddresses.length > 0
-          ? emailAddresses
+        simplifiedAddresses && simplifiedAddresses.length > 0
+          ? simplifiedAddresses
           : [{ email: '', phone: '', countryCode: '' }];
       setAddressList(setList);
-      setStoredAddresses(setList);
+      emailAddresses && setStoredAddresses(emailAddresses);
     } else if (mode === 'sms') {
-      const phoneNumbers = notificationAddresses
-        ?.filter((addr) => addr.phone)
-        .map((addr) => ({ email: '', phone: addr.phone, countryCode: addr.countryCode }));
+      const smsAddresses = notificationAddresses?.filter((addr) => addr.phone);
+
+      const simplifiedAddresses = smsAddresses?.map((addr) => ({
+        email: '',
+        phone: addr.phone,
+        countryCode: addr.countryCode,
+      }));
       const setList =
-        phoneNumbers && phoneNumbers.length > 0
-          ? phoneNumbers
-          : [{ email: '', phone: '', countryCode: '' }];
+        simplifiedAddresses && simplifiedAddresses.length > 0
+          ? simplifiedAddresses
+          : [{ email: '', phone: '', countryCode: '+47' }];
       setAddressList(setList);
-      setStoredAddresses(setList);
+      smsAddresses && setStoredAddresses(smsAddresses);
     }
   }, [mode, notificationAddresses, isLoading]);
 
@@ -94,19 +99,6 @@ export const SettingsModal = ({
       return null;
   }
 
-  const isValidAddresses = (addresses: Address[]) => {
-    return addresses
-      .filter((address) => address.email.length > 0 || address.phone.length > 0)
-      .every((address) => {
-        return (
-          (address.email.length > 0 && validateEmail(address.email).isValid) ||
-          (address.phone.length > 0 &&
-            validatePhoneNumber(address.phone).isValid &&
-            validateCountryCode(address.countryCode).isValid)
-        );
-      });
-  };
-
   return (
     <DsDialog
       open={open}
@@ -124,6 +116,17 @@ export const SettingsModal = ({
       </div>
 
       <div className={classes.modalContent}>
+        {isError && (
+          <DsAlert
+            data-color='danger'
+            className={classes.errorBox}
+            data-size='sm'
+          >
+            <DsParagraph className={classes.errorText}>
+              {t('settings_page.error_saving_addresses')}
+            </DsParagraph>
+          </DsAlert>
+        )}
         <DsHeading
           level={3}
           data-size='2xs'
@@ -165,11 +168,15 @@ export const SettingsModal = ({
         <div className={classes.buttonRow}>
           <DsButton
             variant='primary'
-            onClick={() => {
-              setAddressList(storedAddresses);
-            }}
-            disabled={isLoading || !isChanges || !isValidAddresses(addressList)}
+            onClick={saveChanges}
+            disabled={isLoading || !isChanges || !isValidAddresses(addressList) || isSaving}
           >
+            {isSaving && (
+              <DsSpinner
+                data-size='sm'
+                aria-label={t('common.saving')}
+              />
+            )}
             {t('common.save_changes')}
           </DsButton>
           <DsButton

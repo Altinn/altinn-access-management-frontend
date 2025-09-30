@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import React from 'react';
 
 import classes from './SettingsModal.module.css';
-import { Address } from './SettingsModal';
+import { Address } from '@/rtk/features/settingsApi';
 
 export const EmailAddressFields = ({
   addressList,
@@ -31,7 +31,7 @@ export const EmailAddressFields = ({
         className={classes.emailFieldRow}
       >
         <DsTextfield
-          aria-label={t('settings_page.address_number', { number: 1 })}
+          aria-label={t('settings_page.address_number', { number: index + 1 })}
           value={address.email}
           onChange={(e) => onTextFieldChange(e, index)}
           disabled={isLoading}

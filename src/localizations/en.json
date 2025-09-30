@@ -437,14 +437,21 @@
   "settings_page": {
     "page_title": "Settings - Altinn",
     "page_heading": "Settings for {{name}}",
-    "alert_settings_heading": "Alert addresses for the organization",
-    "alerts_on_email": "Email alerts",
-    "alerts_on_sms": "SMS alerts",
+    "alert_settings_heading": "Notification addresses for the organization",
+    "alerts_on_email": "Notifications by email",
+    "alerts_on_sms": "Notifications by SMS",
     "one_address": "1 address",
     "num_of_addresses": "{{count}} addresses",
-    "email_label": "The organization's email addresses for alerts:",
-    "sms_label": "The organization's phone numbers for alerts:",
-    "address_number": "Address {{number}}:"
+    "email_label": "Organization's email addresses for notifications:",
+    "sms_label": "Organization's phone numbers for notifications:",
+    "address_number": "Address {{number}}",
+    "phone_number": "Phone number {{number}}",
+    "country_code_number": "Country code {{number}}",
+    "manage_addresses_info": "Altinn uses the address(es) to notify the organization about new content.",
+    "add_more": "Add more",
+    "remove_email": "Remove email",
+    "remove_sms": "Remove phone number",
+    "error_saving_addresses": "Something went wrong. Please try again."
   },
   "info_modal": {
     "title": "Try the new access management solution",

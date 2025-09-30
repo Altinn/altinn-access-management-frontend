@@ -438,9 +438,16 @@
     "alerts_on_sms": "Varslingar på SMS",
     "one_address": "1 adresse",
     "num_of_addresses": "{{count}} adresser",
-    "email_label": "E-postadressene til verksemda for varslingar:",
-    "sms_label": "Telefonnummera til verksemda for varslingar:",
-    "address_number": "Adresse {{number}}:"
+    "email_label": "Verksemda sine e-postadresser for varslingar:",
+    "sms_label": "Verksemda sine telefonnummer for varslingar:",
+    "address_number": "Adresse {{number}}",
+    "phone_number": "Telefonnummer {{number}}",
+    "country_code_number": "Landskode {{number}}",
+    "manage_addresses_info": "Altinn brukar adressa(ne) til å varsle verksemda om nytt innhald.",
+    "add_more": "Legg til fleire",
+    "remove_email": "Fjern e-post",
+    "remove_sms": "Fjern telefonnummer",
+    "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen."
   },
   "info_modal": {
     "title": "Prøv den nye tilgangsstyringsløysinga",

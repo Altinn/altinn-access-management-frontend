@@ -443,11 +443,14 @@
     "num_of_addresses": "{{count}} adresser",
     "email_label": "Virksomhetens e-postadresser for varslinger:",
     "sms_label": "Virksomhetens telefonnumre for varslinger:",
-    "address_number": "Adresse {{number}}:",
+    "address_number": "Adresse {{number}}",
+    "phone_number": "Telefonnummer {{number}}",
+    "country_code_number": "Landskode {{number}}",
     "manage_addresses_info": "Altinn bruker adressen(e) til å varsle virksomheten om nytt innhold.",
     "add_more": "Legg til flere",
     "remove_email": "Fjern e-post",
-    "remove_sms": "Fjern telefonnummer"
+    "remove_sms": "Fjern telefonnummer",
+    "error_saving_addresses": "Noe gikk galt. Vennligst prøv igjen."
   },
   "text_field_errors": {
     "required": "Feltet er påkrevd",

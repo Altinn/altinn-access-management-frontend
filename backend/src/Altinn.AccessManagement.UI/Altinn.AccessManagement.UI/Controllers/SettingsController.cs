@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("org/{orgNumber}/notificationaddresses")]
-        public async Task<ActionResult<List<NotificationAddressResponse>>> GetOrganisationNotificationAddresses(string orgNumber)
+        public async Task<ActionResult<List<NotificationAddressResponse>>> GetOrganisationNotificationAddresses([FromRoute] string orgNumber)
         {
             if (!ModelState.IsValid)
             {
@@ -65,7 +65,73 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetOrganisation failed to fetch organisation information");
+                _logger.LogError(ex, "GetOrganisationNotificationAddresses failed to fetch organisation notification addresses");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for posting a new address for an organization
+        /// </summary>
+        /// <param name="orgNumber">The organization number of the organization</param>
+        /// <param name="notificationAddress">The notification address to be created</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("org/{orgNumber}/notificationaddresses")]
+        public async Task<ActionResult<NotificationAddressResponse>> PostNewOrganisationNotificationAddress([FromRoute] string orgNumber, [FromBody] NotificationAddressModel notificationAddress)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (string.IsNullOrEmpty(orgNumber) || orgNumber.Length != 9 || !int.TryParse(orgNumber, out _))
+            {
+                return StatusCode(400, "Org number must be a number with 9 digits");
+            }
+
+            try
+            {
+                return await _settingsService.PostNewOrganisationNotificationAddress(orgNumber, notificationAddress);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "PostNewOrganisationNotificationAddress failed to post new address");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for deleting an address for an organization
+        /// </summary>
+        /// <param name="orgNumber">The organization number of the organization</param>
+        /// <param name="notificationAddressId">The id of the notification address to be deleted</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpDelete]
+        [Authorize]
+        [Route("org/{orgNumber}/notificationaddresses/{notificationAddressId}")]
+        public async Task<ActionResult<NotificationAddressResponse>> DeleteOrganisationNotificationAddress([FromRoute] string orgNumber, [FromRoute] int notificationAddressId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (string.IsNullOrEmpty(orgNumber) || orgNumber.Length != 9 || !int.TryParse(orgNumber, out _))
+            {
+                return StatusCode(400, "Org number must be a number with 9 digits");
+            }
+
+            try
+            {
+                return await _settingsService.DeleteOrganisationNotificationAddress(orgNumber, notificationAddressId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "DeleteOrganisationNotificationAddress failed to delete address");
                 return StatusCode(500);
             }
         }
