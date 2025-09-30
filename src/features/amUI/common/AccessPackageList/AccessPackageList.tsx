@@ -1,4 +1,4 @@
-import { DsAlert, DsHeading, DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
