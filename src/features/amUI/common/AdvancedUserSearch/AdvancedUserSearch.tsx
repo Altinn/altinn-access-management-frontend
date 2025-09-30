@@ -13,7 +13,6 @@ import { NewUserButton } from '@/features/amUI/users/NewUserModal/NewUserModal';
 
 import classes from './AdvancedUserSearch.module.css';
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
 import { ConnectionsList } from './ConnectionsList';
@@ -23,10 +22,8 @@ export interface AdvancedUserSearchProps {
   indirectConnections?: Connection[];
   onDelegate?: (user: User) => void;
   onRevoke?: (user: User) => void;
-  availableActions?: DelegationAction[];
   isLoading?: boolean;
   isActionLoading?: boolean;
-  canDelegate?: boolean;
 }
 
 const useUIState = (
