@@ -76,6 +76,7 @@
     "show_less": "Show less",
     "technical_error": "Sorry, a technical error has occurred. Please contact Altinn user service if the problem persists.",
     "time_of_error": "Error occurred at time: {{time}}",
+    "trace_id": "Reference: {{traceId}}",
     "error_status": "HttpStatus: {{status}}",
     "ssn": "National identity number",
     "last_name": "Last name",

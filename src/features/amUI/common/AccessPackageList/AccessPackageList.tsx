@@ -116,6 +116,7 @@ export const AccessPackageList = ({
           <TechnicalErrorParagraphs
             status={detail?.status || '500'}
             time={new Date().toISOString()}
+            traceId={detail?.traceId}
           />
         </DsAlert>
       </div>

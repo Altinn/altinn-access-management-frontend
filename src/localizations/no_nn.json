@@ -75,6 +75,7 @@
     "show_less": "Sjå mindre",
     "technical_error": "Det har skjedd ein teknisk feil. Ver venleg å prøv igjen eller ta kontakt med Altinn brukerservice om problemet held fram.",
     "time_of_error": "Tidspunkt feilen oppstod: {{time}}",
+    "trace_id": "Referanse: {{traceId}}",
     "error_status": "HttpStatus: {{status}}",
     "ssn": "Fødselsnummer",
     "last_name": "Etternavn",
