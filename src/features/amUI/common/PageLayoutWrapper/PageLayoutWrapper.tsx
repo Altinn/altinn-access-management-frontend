@@ -84,10 +84,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       id: 'inbox',
       size: 'lg',
       title: t('header.inbox'),
-      as: (props: any) => (
+      as: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
         <a
           {...props}
-          href={`${getAfUrl()}`}
+          href={getAfUrl()}
         />
       ),
       badge: { label: t('common.beta') },
@@ -98,7 +98,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       id: 'profile',
       size: 'sm',
       title: t('header.profile'),
-      as: (props: any) => (
+      as: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
         <a
           {...props}
           href={`${getAfUrl()}profile`}
