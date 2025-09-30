@@ -286,6 +286,7 @@
     "delegated_packages_count_badge": "{{delegated}} of {{total}}",
     "package_number_of_resources": "{{count}} services",
     "user_has_no_packages": "This user has no access packages.",
+    "no_packages": "No access packages available.",
     "no_matching_search": "No matches for your search",
   "info_alert_text": "Access packages will replace today's Altinn roles. They will be filled with more services over time. Read more on the <a href='https://info.altinn.no/en/help/profile/access-packages/'>help page about access packages</a>.",
     "person_info_alert": "Giving powers of attorney to individuals is currently not supported. This will come later.",
