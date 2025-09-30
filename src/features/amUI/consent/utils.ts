@@ -116,16 +116,17 @@ const replaceMetadata = (
 ): ConsentLanguage => {
   const returnObj = { ...texts };
   // loop through each language
-  Object.keys(texts).forEach((language) => {
+  for (const language of Object.keys(texts)) {
     const lang = language as ConsentLocale;
     let replaced = texts[lang];
     // loop through all static metadata values
-    Object.keys(metadata).forEach((metadataKey) => {
+    for (const metadataKey of Object.keys(metadata)) {
       const key = metadataKey as keyof ConsentMetadataValues;
       replaced = replaced.replaceAll(`{${key}}`, metadata[key]);
-    });
+    }
+
     returnObj[lang] = replaced;
-  });
+  }
 
   return returnObj;
 };
