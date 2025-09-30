@@ -12,6 +12,7 @@ import classes from './ConsentHistoryPage.module.css';
 import { ConsentHistoryItem } from '../types';
 import { TFunction } from 'i18next';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { toDateTimeString } from '../utils';
 
 interface ConsentTimelineProps {
   consentLog: ConsentHistoryItem[];
@@ -92,16 +93,6 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
   );
 };
 
-const toTimeStamp = (dateString: string, useFullMonthName?: boolean): string => {
-  return new Date(dateString).toLocaleString('no-NO', {
-    day: '2-digit',
-    month: useFullMonthName ? 'long' : '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-};
-
 const timelineEventText = {
   Accepted: {
     poa: 'consent_log.poa_accepted',
@@ -162,7 +153,7 @@ const getTimeLineItems = (
         .map((event) => {
           return {
             consentEventId: event.consentEventID,
-            bylineText: toTimeStamp(event.created, true),
+            bylineText: toDateTimeString(event.created, true),
             timelineText: getTimeLineText(
               consent,
               event.eventType as keyof typeof timelineEventText,
@@ -170,7 +161,7 @@ const getTimeLineItems = (
             ),
             validToText:
               event.eventType === 'Accepted'
-                ? t('consent_log.expires', { expires: toTimeStamp(consent.validTo) })
+                ? t('consent_log.expires', { expires: toDateTimeString(consent.validTo) })
                 : '',
             created: event.created,
             fromPartyName: consent.fromPartyName,

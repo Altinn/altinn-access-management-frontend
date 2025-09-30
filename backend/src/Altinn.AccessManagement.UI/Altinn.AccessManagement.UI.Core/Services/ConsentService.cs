@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Text;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
@@ -12,7 +11,6 @@ using Altinn.Authorization.ProblemDetails;
 using Altinn.Platform.Register.Enums;
 using Altinn.Platform.Register.Models;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -20,7 +18,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// <inheritdoc />
     public class ConsentService : IConsentService
     {
-        private readonly ILogger<ConsentService> _logger;
         private readonly IConsentClient _consentClient;
         private readonly IRegisterClient _registerClient;
         private readonly IResourceRegistryClient _resourceRegistryClient;
@@ -30,21 +27,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsentService"/> class.
         /// </summary>
-        /// <param name="logger">Logger instance.</param>
         /// <param name="consentClient">The consent client.</param>
         /// <param name="registerClient">The register client.</param>
         /// <param name="resourceRegistryClient">Resources client to load resources</param>
         /// <param name="memoryCache">the handler for cache</param>
         /// <param name="cacheConfig">the handler for cache configuration</param>
         public ConsentService(
-            ILogger<ConsentService> logger,
             IConsentClient consentClient,
             IRegisterClient registerClient,
             IResourceRegistryClient resourceRegistryClient,
             IMemoryCache memoryCache,
             IOptions<CacheConfig> cacheConfig)
         {
-            _logger = logger;
             _consentClient = consentClient;
             _registerClient = registerClient;
             _resourceRegistryClient = resourceRegistryClient;
@@ -63,18 +57,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return request.Problem;
             }
 
-            ConsentTemplateParams templateParams = new()
-            {
-                ConsentRights = request.Value.ConsentRights,
-                FromUrn = request.Value.From,
-                ToUrn = request.Value.To,
-                HandledByUrn = request.Value.HandledBy,
-                ValidTo = request.Value.ValidTo,
-                TemplateId = request.Value.TemplateId,
-                TemplateVersion = request.Value.TemplateVersion,
-                RequestMessage = request.Value.RequestMessage,
-            };
-            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(templateParams, cancellationToken);
+            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(request.Value, cancellationToken);
 
             if (enrichedConsentTemplate.IsProblem)
             {
@@ -92,9 +75,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 HandledBy = enrichedConsentTemplate.Value.HandledBy,
                 ConsentMessage = enrichedConsentTemplate.Value.ConsentMessage,
                 Expiration = enrichedConsentTemplate.Value.Expiration,
-                FromPartyName = enrichedConsentTemplate.Value.FromPartyName,
                 ConsentRequestEvents = request.Value.ConsentRequestEvents,
                 ValidTo = request.Value.ValidTo,
+                FromPartyName = enrichedConsentTemplate.Value.FromPartyName,
+                ToPartyName = enrichedConsentTemplate.Value.ToPartyName,
+                HandledByPartyName = enrichedConsentTemplate.Value.HandledByPartyName
             };
         }
 
@@ -219,18 +204,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return request.Problem;
             }
 
-            ConsentTemplateParams templateParams = new()
-            {
-                ConsentRights = request.Value.ConsentRights,
-                FromUrn = request.Value.From,
-                ToUrn = request.Value.To,
-                HandledByUrn = request.Value.HandledBy,
-                ValidTo = request.Value.ValidTo,
-                TemplateId = request.Value.TemplateId,
-                TemplateVersion = request.Value.TemplateVersion,
-                RequestMessage = request.Value.RequestMessage, // usikker på om vi trenger denne i ConsentFE
-            };
-            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(templateParams, cancellationToken);
+            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(request.Value, cancellationToken);
 
             if (enrichedConsentTemplate.IsProblem)
             {
@@ -249,6 +223,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Expiration = enrichedConsentTemplate.Value.Expiration,
                 ConsentRequestEvents = request.Value.ConsentRequestEvents,
                 ValidTo = request.Value.ValidTo,
+                FromPartyName = enrichedConsentTemplate.Value.FromPartyName,
+                ToPartyName = enrichedConsentTemplate.Value.ToPartyName,
+                HandledByPartyName = enrichedConsentTemplate.Value.HandledByPartyName
             };
         }
 
@@ -256,28 +233,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken)
         {
             return await _consentClient.RevokeConsent(consentId, cancellationToken);
-        }
-
-        private Dictionary<string, string> GetStaticMetadata(Party to, Party from, Party handledBy, DateTimeOffset requestValidTo)
-        {
-            TimeZoneInfo timeZone = TimeZoneInfo.Utc;
-            try
-            {
-                // attempt to set timezone to norwegian
-                timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo");
-            }
-            catch (TimeZoneNotFoundException e)
-            {
-                _logger.LogWarning(e, "Could not find timezone Europe/Oslo. Defaulting to UTC {Message}.", e.Message);
-            }
-
-            return new()
-            {
-                { "CoveredBy", to.Name },
-                { "OfferedBy", from.Name },
-                { "HandledBy", handledBy?.Name },
-                { "Expiration", TimeZoneInfo.ConvertTime(requestValidTo, timeZone).ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) }
-            };
         }
 
         private static Dictionary<string, Party> PartyListToDict(IEnumerable<Party> parties)
@@ -352,12 +307,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return parties;
         }
 
-        private async Task<Result<EnrichedConsentTemplate>> EnrichConsentTemplate(ConsentTemplateParams templateParams, CancellationToken cancellationToken)
+        private async Task<Result<EnrichedConsentTemplate>> EnrichConsentTemplate(ConsentRequestDetails request, CancellationToken cancellationToken)
         {
             // GET all resources in request
             bool isOneTimeConsent = false;
             List<ConsentRightFE> rights = [];
-            foreach (ConsentRight right in templateParams.ConsentRights)
+            foreach (ConsentRight right in request.ConsentRights)
             {
                 try
                 {
@@ -383,8 +338,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             // GET metadata template used in resource
             IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
             ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) =>
-                template.Id == templateParams.TemplateId &&
-                template.Version == templateParams.TemplateVersion);
+                template.Id == request.TemplateId &&
+                template.Version == request.TemplateVersion);
 
             if (consentTemplate == null)
             {
@@ -393,9 +348,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             var expirationText = isOneTimeConsent ? consentTemplate.Texts.ExpirationOneTime : consentTemplate.Texts.Expiration;
 
-            string toPartyUuid = GetUrnValue(templateParams.ToUrn);
-            string fromPartyUuid = GetUrnValue(templateParams.FromUrn);
-            string handledByPartyUuid = templateParams.HandledByUrn != null ? GetUrnValue(templateParams.HandledByUrn) : null;
+            string toPartyUuid = GetUrnValue(request.To);
+            string fromPartyUuid = GetUrnValue(request.From);
+            string handledByPartyUuid = request.HandledBy != null ? GetUrnValue(request.HandledBy) : null;
             
             IEnumerable<Party> parties = await GetConsentParties([toPartyUuid, fromPartyUuid, handledByPartyUuid]);
             Party toParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == toPartyUuid);
@@ -407,7 +362,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return ConsentProblem.ConsentPartyNotFound;
             }
 
-            Dictionary<string, string> staticMetadata = GetStaticMetadata(toParty, fromParty, handledByParty, templateParams.ValidTo);
             Dictionary<string, string> title;
             Dictionary<string, string> heading;
             Dictionary<string, string> serviceIntro;
@@ -433,15 +387,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 Rights = rights,
                 IsPoa = consentTemplate.IsPoa,
-                Title = ReplaceMetadataInTranslationsDict(title, staticMetadata),
-                Heading = ReplaceMetadataInTranslationsDict(heading, staticMetadata),
-                ServiceIntro = ReplaceMetadataInTranslationsDict(serviceIntro, staticMetadata),
-                ServiceIntroAccepted = ReplaceMetadataInTranslationsDict(serviceIntroAccepted, staticMetadata),
-                TitleAccepted = ReplaceMetadataInTranslationsDict(consentTemplate.Texts.TitleAccepted, staticMetadata),
-                HandledBy = handledByParty != null ? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.HandledBy, staticMetadata) : null,
-                ConsentMessage = templateParams.RequestMessage ?? ReplaceMetadataInTranslationsDict(consentTemplate.Texts.OverriddenDelegationContext, staticMetadata),
-                Expiration = ReplaceMetadataInTranslationsDict(expirationText, staticMetadata),
-                FromPartyName = isFromOrg ? fromParty.Name : null
+                Title = title,
+                Heading = heading, 
+                ServiceIntro = serviceIntro,
+                ServiceIntroAccepted = serviceIntroAccepted,
+                TitleAccepted = consentTemplate.Texts.TitleAccepted,
+                HandledBy = handledByParty != null ? consentTemplate.Texts.HandledBy : null,
+                ConsentMessage = request.RequestMessage ?? consentTemplate.Texts.OverriddenDelegationContext,
+                Expiration = expirationText,
+                FromPartyName = fromParty.Name,
+                ToPartyName = toParty.Name,
+                HandledByPartyName = handledByParty?.Name
             };
         }
 
@@ -469,25 +425,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static bool IsPoaTemplate(IEnumerable<ConsentTemplate> consentTemplates, string templateId)
         {
             return consentTemplates.Any((template) => template.Id.Equals(templateId) && template.IsPoa);
-        }
-
-        private sealed class ConsentTemplateParams
-        {
-            public IEnumerable<ConsentRight> ConsentRights { get; set; }
-
-            public string FromUrn { get; set; }
-
-            public string ToUrn { get; set; }
-
-            public string HandledByUrn { get; set; }
-
-            public DateTimeOffset ValidTo { get; set; }
-
-            public string TemplateId { get; set; }
-
-            public int TemplateVersion { get; set; }
-
-            public Dictionary<string, string> RequestMessage { get; set; }
         }
     }
 }

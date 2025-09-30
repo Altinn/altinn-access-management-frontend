@@ -658,6 +658,9 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.HandledBy, actual.HandledBy);
             Assert.Equal(expected.IsPoa, actual.IsPoa);
             Assert.Equal(expected.FromPartyName, actual.FromPartyName);
+            Assert.Equal(expected.ToPartyName, actual.ToPartyName);
+            Assert.Equal(expected.HandledByPartyName, actual.HandledByPartyName);
+            Assert.Equal(expected.ValidTo, actual.ValidTo);
             AssertCollections(expected.Rights, actual.Rights, AssertEqual);
         }
 

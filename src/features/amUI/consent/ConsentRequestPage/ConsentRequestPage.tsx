@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
@@ -23,7 +23,7 @@ import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import type { ConsentLanguage, ConsentRequest, ProblemDetail } from '../types';
-import { getLanguage, isAccepted, isExpired, isRevoked } from '../utils';
+import { getLanguage, isAccepted, isExpired, isRevoked, replaceStaticMetadata } from '../utils';
 import { ConsentRights } from '../components/ConsentRights/ConsentRights';
 
 import classes from './ConsentRequestPage.module.css';
@@ -51,6 +51,19 @@ export const ConsentRequestPage = () => {
     },
   );
 
+  const memoizedRequest = useMemo(() => {
+    return request
+      ? replaceStaticMetadata<ConsentRequest>(request, [
+          'title',
+          'heading',
+          'serviceIntro',
+          'consentMessage',
+          'expiration',
+          'handledBy',
+        ])
+      : null;
+  }, [request]);
+
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
@@ -76,8 +89,8 @@ export const ConsentRequestPage = () => {
             title: 'Altinn',
           },
           currentAccount: {
-            name: request?.fromPartyName ?? (userData?.name || ''),
-            type: request?.fromPartyName ? 'company' : 'person',
+            name: memoizedRequest?.fromPartyName ?? '',
+            type: memoizedRequest?.fromPartyName === userData?.name ? 'person' : 'company',
             id: '',
           },
           globalMenu: {
@@ -109,9 +122,9 @@ export const ConsentRequestPage = () => {
             />
           )}
         </div>
-        {request && (
+        {memoizedRequest && (
           <ConsentRequestContent
-            request={request}
+            request={memoizedRequest}
             language={language}
           />
         )}
