@@ -275,8 +275,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           },
         }}
       >
-        <InfoModal />
         {children}
+        <InfoModal />
       </Layout>
       <Snackbar />
     </RootProvider>
