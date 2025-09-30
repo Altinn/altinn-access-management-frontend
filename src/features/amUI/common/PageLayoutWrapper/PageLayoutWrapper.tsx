@@ -7,10 +7,23 @@ import type {
   MenuItemSize,
   Theme,
 } from '@altinn/altinn-components';
-import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
+import {
+  Icon,
+  Layout,
+  MenuItem,
+  RootProvider,
+  SizeEnum,
+  Snackbar,
+} from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
-import { HandshakeIcon, InformationSquareIcon, LeaveIcon } from '@navikt/aksel-icons';
+import {
+  HandshakeIcon,
+  InboxFillIcon,
+  InformationSquareIcon,
+  LeaveIcon,
+  PersonCircleIcon,
+} from '@navikt/aksel-icons';
 
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
@@ -20,11 +33,12 @@ import {
   useGetUserInfoQuery,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
-import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
+import { getAfUrl, getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
+import { crossPlatformLinksEnabled } from '@/resources/utils/featureFlagUtils';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -62,6 +76,37 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   };
 
   const isSm = useIsTabletOrSmaller();
+
+  const platformLinks = [
+    {
+      groupId: 1,
+      icon: InboxFillIcon,
+      id: 'inbox',
+      size: 'lg',
+      title: t('header.inbox'),
+      as: (props: any) => (
+        <a
+          {...props}
+          href={`${getAfUrl()}`}
+        />
+      ),
+      badge: { label: t('common.beta') },
+    },
+    {
+      groupId: 'current-user',
+      icon: PersonCircleIcon,
+      id: 'profile',
+      size: 'sm',
+      title: t('header.profile'),
+      as: (props: any) => (
+        <a
+          {...props}
+          href={`${getAfUrl()}profile`}
+        />
+      ),
+    },
+  ] as MenuItemProps[];
+
   const headerLinks: MenuItemProps[] = [
     {
       groupId: 1,
@@ -78,6 +123,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       ),
       badge: { label: t('common.beta') },
     },
+    ...(crossPlatformLinksEnabled() ? platformLinks : []),
     ...(isSm
       ? SidebarItems(
           true,
@@ -87,7 +133,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           getAccountType(reportee?.type ?? ''),
         )
       : []),
-
     {
       id: 'info',
       groupId: 10,
@@ -114,7 +159,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         />
       ),
     },
-    { groupId: 'current-user-label', hidden: true },
   ];
 
   const accountGroups: Record<string, MenuGroupProps> = {
@@ -165,6 +209,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         },
       },
       menuItemsVirtual: { isVirtualized: accounts.length > 20 },
+      currentEndUserLabel: 'xxx',
     },
     onSelectAccount: (accountId: string) => {
       // check if this is a person; then redirect to consents page
@@ -191,6 +236,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         (window as Window).location = `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
       },
     },
+
     menuLabel: t('header.menu-label'),
     backLabel: t('header.back-label'),
     changeLabel: t('header.change-label'),
@@ -203,7 +249,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   };
 
   const groups = {
-    'current-user-label': {
+    'current-user': {
       title: t('header.logged_in_as_name', {
         name: userinfo?.name || '',
       }),
