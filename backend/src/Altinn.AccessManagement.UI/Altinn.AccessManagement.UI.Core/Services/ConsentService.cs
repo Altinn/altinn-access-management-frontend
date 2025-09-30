@@ -57,18 +57,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return request.Problem;
             }
 
-            ConsentTemplateParams templateParams = new()
-            {
-                ConsentRights = request.Value.ConsentRights,
-                FromUrn = request.Value.From,
-                ToUrn = request.Value.To,
-                HandledByUrn = request.Value.HandledBy,
-                ValidTo = request.Value.ValidTo,
-                TemplateId = request.Value.TemplateId,
-                TemplateVersion = request.Value.TemplateVersion,
-                RequestMessage = request.Value.RequestMessage,
-            };
-            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(templateParams, cancellationToken);
+            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(request.Value, cancellationToken);
 
             if (enrichedConsentTemplate.IsProblem)
             {
@@ -215,18 +204,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return request.Problem;
             }
 
-            ConsentTemplateParams templateParams = new()
-            {
-                ConsentRights = request.Value.ConsentRights,
-                FromUrn = request.Value.From,
-                ToUrn = request.Value.To,
-                HandledByUrn = request.Value.HandledBy,
-                ValidTo = request.Value.ValidTo,
-                TemplateId = request.Value.TemplateId,
-                TemplateVersion = request.Value.TemplateVersion,
-                RequestMessage = request.Value.RequestMessage, // usikker på om vi trenger denne i ConsentFE
-            };
-            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(templateParams, cancellationToken);
+            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(request.Value, cancellationToken);
 
             if (enrichedConsentTemplate.IsProblem)
             {
@@ -329,12 +307,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return parties;
         }
 
-        private async Task<Result<EnrichedConsentTemplate>> EnrichConsentTemplate(ConsentTemplateParams templateParams, CancellationToken cancellationToken)
+        private async Task<Result<EnrichedConsentTemplate>> EnrichConsentTemplate(ConsentRequestDetails request, CancellationToken cancellationToken)
         {
             // GET all resources in request
             bool isOneTimeConsent = false;
             List<ConsentRightFE> rights = [];
-            foreach (ConsentRight right in templateParams.ConsentRights)
+            foreach (ConsentRight right in request.ConsentRights)
             {
                 try
                 {
@@ -360,8 +338,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             // GET metadata template used in resource
             IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
             ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) =>
-                template.Id == templateParams.TemplateId &&
-                template.Version == templateParams.TemplateVersion);
+                template.Id == request.TemplateId &&
+                template.Version == request.TemplateVersion);
 
             if (consentTemplate == null)
             {
@@ -370,9 +348,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             var expirationText = isOneTimeConsent ? consentTemplate.Texts.ExpirationOneTime : consentTemplate.Texts.Expiration;
 
-            string toPartyUuid = GetUrnValue(templateParams.ToUrn);
-            string fromPartyUuid = GetUrnValue(templateParams.FromUrn);
-            string handledByPartyUuid = templateParams.HandledByUrn != null ? GetUrnValue(templateParams.HandledByUrn) : null;
+            string toPartyUuid = GetUrnValue(request.To);
+            string fromPartyUuid = GetUrnValue(request.From);
+            string handledByPartyUuid = request.HandledBy != null ? GetUrnValue(request.HandledBy) : null;
             
             IEnumerable<Party> parties = await GetConsentParties([toPartyUuid, fromPartyUuid, handledByPartyUuid]);
             Party toParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == toPartyUuid);
@@ -415,7 +393,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ServiceIntroAccepted = serviceIntroAccepted,
                 TitleAccepted = consentTemplate.Texts.TitleAccepted,
                 HandledBy = handledByParty != null ? consentTemplate.Texts.HandledBy : null,
-                ConsentMessage = templateParams.RequestMessage ?? consentTemplate.Texts.OverriddenDelegationContext,
+                ConsentMessage = request.RequestMessage ?? consentTemplate.Texts.OverriddenDelegationContext,
                 Expiration = expirationText,
                 FromPartyName = fromParty.Name,
                 ToPartyName = toParty.Name,
@@ -447,25 +425,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static bool IsPoaTemplate(IEnumerable<ConsentTemplate> consentTemplates, string templateId)
         {
             return consentTemplates.Any((template) => template.Id.Equals(templateId) && template.IsPoa);
-        }
-
-        private sealed class ConsentTemplateParams
-        {
-            public IEnumerable<ConsentRight> ConsentRights { get; set; }
-
-            public string FromUrn { get; set; }
-
-            public string ToUrn { get; set; }
-
-            public string HandledByUrn { get; set; }
-
-            public DateTimeOffset ValidTo { get; set; }
-
-            public string TemplateId { get; set; }
-
-            public int TemplateVersion { get; set; }
-
-            public Dictionary<string, string> RequestMessage { get; set; }
         }
     }
 }
