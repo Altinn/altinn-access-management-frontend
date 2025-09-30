@@ -122,7 +122,7 @@ const replaceMetadata = (
     // loop through all static metadata values
     Object.keys(metadata).forEach((metadataKey) => {
       const key = metadataKey as keyof ConsentMetadataValues;
-      replaced = replaced.replace(`{${key}}`, metadata[key]);
+      replaced = replaced.replaceAll(`{${key}}`, metadata[key]);
     });
     returnObj[lang] = replaced;
   });
