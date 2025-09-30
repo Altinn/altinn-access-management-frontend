@@ -7,31 +7,34 @@
     "en": "Consent to use of your data"
   },
   "heading": {
-    "nb": "DISKRET NÆR TIGER AS ønsker å hente opplysninger om deg",
-    "nn": "DISKRET NÆR TIGER AS ønskjer å hente opplysningar om deg",
-    "en": "DISKRET NÆR TIGER AS requests information about you"
+    "nb": "{CoveredBy} ønsker å hente opplysninger om deg",
+    "nn": "{CoveredBy} ønskjer å hente opplysningar om deg",
+    "en": "{CoveredBy} requests information about you"
   },
   "serviceIntro": {
-    "nb": "Ved at du samtykker, får DISKRET NÆR TIGER AS tilgang til følgende opplysninger om deg",
-    "nn": "Ved at du samtykker, får DISKRET NÆR TIGER AS tilgang til følgjande opplysningar om deg",
-    "en": "By giving consent, DISKRET NÆR TIGER AS gets access to the following information about you"
+    "nb": "Ved at du samtykker, får {CoveredBy} tilgang til følgende opplysninger om deg",
+    "nn": "Ved at du samtykker, får {CoveredBy} tilgang til følgjande opplysningar om deg",
+    "en": "By giving consent, {CoveredBy} gets access to the following information about you"
   },
   "consentMessage": {
-    "nb": "Ved å samtykke, gir du Skatteetaten rett til å utlevere opplysninger om deg direkte til DISKRET NÆR TIGER AS. Banken får opplysningene for å behandle søknaden din om finansiering",
-    "nn": "Ved å samtykka, gir du Skatteetaten rett til å utlevera opplysningar om deg direkte til DISKRET NÆR TIGER AS. Banken får opplysningane for å behandla søknaden din om finansiering.",
-    "en": "By consenting you grant the The Norwegian Tax Administration the right to disclose information about you directly to DISKRET NÆR TIGER AS. The bank receives the information to process your application for financing"
+    "nb": "Ved å samtykke, gir du Skatteetaten rett til å utlevere opplysninger om deg direkte til {CoveredBy}. Banken får opplysningene for å behandle søknaden din om finansiering",
+    "nn": "Ved å samtykka, gir du Skatteetaten rett til å utlevera opplysningar om deg direkte til {CoveredBy}. Banken får opplysningane for å behandla søknaden din om finansiering.",
+    "en": "By consenting you grant the The Norwegian Tax Administration the right to disclose information about you directly to {CoveredBy}. The bank receives the information to process your application for financing"
   },
   "expiration": {
-    "nb": "Samtykket er tidsavgrenset og vil gå ut 21.05.2075 13:11",
-    "nn": "Samtykket er tidsavgrensa og vil gå ut 21.05.2075 13:11",
-    "en": "The consent is time-limited, and will expire 21.05.2075 13:11"
+    "nb": "Samtykket er tidsavgrenset og vil gå ut {Expiration}",
+    "nn": "Samtykket er tidsavgrensa og vil gå ut {Expiration}",
+    "en": "The consent is time-limited, and will expire {Expiration}"
   },
   "handledBy": {
-    "nb": "STA TOM TIGER AS foretar dette oppslaget på vegne av DISKRET NÆR TIGER AS.",
-    "nn": "STA TOM TIGER AS gjer dette oppslaget på vegne av DISKRET NÆR TIGER AS.",
-    "en": "STA TOM TIGER AS performs the lookup on behalf of DISKRET NÆR TIGER AS."
+    "nb": "{HandledBy} foretar dette oppslaget på vegne av {CoveredBy}.",
+    "nn": "{HandledBy} gjer dette oppslaget på vegne av {CoveredBy}.",
+    "en": "{HandledBy} performs the lookup on behalf of {CoveredBy}."
   },
-  "fromPartyName": null,
+  "fromPartyName": "SITRONGUL MEDALJONG",
+  "toPartyName": "DISKRET NÆR TIGER AS",
+  "handledByPartyName": "STA TOM TIGER AS",
+  "validTo": "2075-05-21T11:11:24.9535551+00:00",
   "rights": [
     {
       "identifier": "consent-test-resource",
