@@ -33,7 +33,9 @@ export interface ConsentRequest {
   consentMessage?: ConsentLanguage;
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
-  fromPartyName?: string;
+  fromPartyName: string;
+  toPartyName: string;
+  handledByPartyName: string;
   validTo: string;
   consentRequestEvents: ConsentRequestEvent[];
 }
@@ -70,6 +72,9 @@ export interface Consent {
   handledBy?: ConsentLanguage;
   validTo: string;
   consentRequestEvents: ConsentRequestEvent[];
+  fromPartyName: string;
+  toPartyName: string;
+  handledByPartyName: string;
 }
 
 export interface ProblemDetail {

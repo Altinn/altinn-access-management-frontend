@@ -17,14 +17,14 @@
   ],
   "isPoa": true,
   "titleAccepted": {
-    "nb": "Fullmakt gitt til RAKRYGGET UNG TIGER AS",
-    "nn": "Fullmakt gitt til RAKRYGGET UNG TIGER AS",
-    "en": "Power of attorney given to RAKRYGGET UNG TIGER AS"
+    "nb": "Fullmakt gitt til {CoveredBy}",
+    "nn": "Fullmakt gitt til {CoveredBy}",
+    "en": "Power of attorney given to {CoveredBy}"
   },
   "serviceIntroAccepted": {
-    "nb": "Fullmakten gir RAKRYGGET UNG TIGER AS tilgang til følgende tjenester på vegne av DISKRET NÆR TIGER AS",
-    "nn": "Fullmakta gjer RAKRYGGET UNG TIGER AS tilgang til følgjande tenester på vegne av DISKRET NÆR TIGER AS",
-    "en": "The power of attorney gives RAKRYGGET UNG TIGER AS access to the following services on behalf of DISKRET NÆR TIGER AS"
+    "nb": "Fullmakten gir {CoveredBy} tilgang til følgende tjenester på vegne av {OfferedBy}",
+    "nn": "Fullmakta gjer {CoveredBy} tilgang til følgjande tenester på vegne av {OfferedBy}",
+    "en": "The power of attorney gives {CoveredBy} access to the following services on behalf of {OfferedBy}"
   },
   "consentMessage": {
     "nb": "Dette er en melding fra banken",
@@ -32,9 +32,9 @@
     "en": "This is a message from the bank"
   },
   "handledBy": {
-    "nb": "STA TOM TIGER AS utfører tjenestene på vegne av RAKRYGGET UNG TIGER AS.",
-    "nn": "STA TOM TIGER AS utfører tenestene på vegne av RAKRYGGET UNG TIGER AS",
-    "en": "STA TOM TIGER AS utilizes the power of attorney on behalf of RAKRYGGET UNG TIGER AS."
+    "nb": "{HandledBy} utfører tjenestene på vegne av {CoveredBy}.",
+    "nn": "{HandledBy} utfører tenestene på vegne av {CoveredBy}",
+    "en": "{HandledBy} utilizes the power of attorney on behalf of {CoveredBy}."
   },
   "expiration": {
     "nb": "Fullmakten gjelder én gangs bruk av tjenestene",
