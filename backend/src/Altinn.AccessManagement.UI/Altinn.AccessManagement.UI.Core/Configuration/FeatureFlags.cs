@@ -25,15 +25,20 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether or not to only display the service/resource delegation feature in the UI
         /// </summary>
         public bool DisplayResourceDelegation { get; set; }
-        
+
         /// <summary>
-        /// Whether or not to load access packages for standard system user from API
+        /// Whether or not to display the consent gui feature in the UI
         /// </summary>
-        public bool StandardSystemUserAccessPackages { get; set; }
+        public bool DisplayConsentGui { get; set; }
 
         /// <summary>
         /// Whether to show the new AMUI to PRIV users
         /// </summary>
         public bool RestrictPrivUse { get; set; }
+
+        /// <summary>
+        /// Whether to enable cross platform links
+        /// </summary>
+        public bool CrossPlatformLinks { get; set; }
     }
 }

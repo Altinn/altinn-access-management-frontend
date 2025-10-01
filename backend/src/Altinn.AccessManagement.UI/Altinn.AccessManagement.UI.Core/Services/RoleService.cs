@@ -12,6 +12,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAccessPackageClient _accessPackageClient;
+        private readonly IRoleClient _roleClient;
         private readonly ILookupService _lookupService;
         private readonly JsonSerializerOptions options = new JsonSerializerOptions
         {
@@ -23,12 +24,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// </summary>
         /// <param name="accessManagementClient">The access management client.</param>
         /// <param name="accessPackageClient">The access package client.</param>
-        /// <param name="lookupService">The lookup service.</param>s
-        public RoleService(IAccessManagementClient accessManagementClient, IAccessPackageClient accessPackageClient, ILookupService lookupService)
+        /// <param name="lookupService">The lookup service.</param>
+        /// <param name="roleClient">The role client.</param>
+        public RoleService(IAccessManagementClient accessManagementClient, IAccessPackageClient accessPackageClient, ILookupService lookupService, IRoleClient roleClient)
         {
             _accessManagementClient = accessManagementClient;
             _accessPackageClient = accessPackageClient;
             _lookupService = lookupService;
+            _roleClient = roleClient;
         }
 
         /// <inheritdoc />
@@ -71,6 +74,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return sortedAreas;
+        }
+
+        /// <inheritdoc />
+        public async Task<Core.Models.Common.Role> GetRoleMetaById(string languageCode, Guid id)
+        {
+            return await _roleClient.GetRoleById(languageCode, id);
         }
     }
 }

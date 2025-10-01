@@ -28,15 +28,13 @@ on:
         type: string
         required: true
         description: Environment
-    secrets:
-      USERNAME_TEST_API:
-        required: true
-      PASSWORD_TEST_API:
-        required: true
 
 jobs:
   e2e-tests:
     name: Playwright end to end tests
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -53,7 +51,7 @@ jobs:
           USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
           PASSWORD_TEST_API: ${{ secrets.PASSWORD_TEST_API }}
         run: |
-          yarn run env:${{ inputs.environment }} --retries=2 --project ${{ inputs.project }} --workers=4
+          yarn run env:${{ inputs.environment }} --project ${{ inputs.project }} --workers=4 --grep-invert @slow
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -61,16 +59,37 @@ jobs:
           path: playwright/playwright-report/${{ inputs.environment }}
           retention-days: 30
 
-      - name: Upload HTML report to Azure
+      - name: Azure CLI Login
+        uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2
         if: always()
-        shell: bash
+        with:
+          client-id: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
+          tenant-id: ${{ secrets.AZCOPY_TENANT_ID }}
+          subscription-id: ${{ secrets.AZCOPY_SUBSCRIPTION_ID }}
+
+      - name: Upload HTML report to Azure
+        uses: azure/cli@9f7ce6f37c31b777ec6c6b6d1dfe7db79f497956 # v2
+        if: always()
+        with:
+          azcliversion: latest
+          inlineScript: |
+            REPORT_NAME=${{ inputs.environment }}                 # e.g. AT24
+            REPORT_ID=${{ github.sha }}-${{ inputs.project }}     # unique per job (env+project)
+            ACCOUNT_NAME=playwrightreporting
+
+            az storage blob upload-batch \
+                --account-name "$ACCOUNT_NAME" \
+                --destination "\$web" \
+                --destination-path "$REPORT_ID/$REPORT_NAME" \
+                --source "playwright/playwright-report/$REPORT_NAME" \
+                --overwrite \
+                --auth-mode login
+
+            echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> $GITHUB_ENV
+      - name: Show report URL
+        if: always()
         run: |
-          REPORT_NAME=${{ inputs.environment }}
-          REPORT_ID=${{ github.sha }}
-          azcopy cp --recursive "playwright/playwright-report/$REPORT_NAME" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_ID/"
-          echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/index.html"
-        env:
-          AZCOPY_AUTO_LOGIN_TYPE: SPN
-          AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
-          AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
-          AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
+          echo ""
+          echo "📊 Playwright test report:"
+          echo "➡️  $REPORT_URL"
+          echo ""

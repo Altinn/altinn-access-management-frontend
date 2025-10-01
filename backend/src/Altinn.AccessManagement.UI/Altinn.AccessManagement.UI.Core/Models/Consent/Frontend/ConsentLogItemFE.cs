@@ -1,0 +1,58 @@
+namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
+{
+    /// <summary>
+    /// Consent model for log item
+    /// </summary>
+    public class ConsentLogItemFE
+    {
+        /// <summary>
+        /// Consent Id
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// If consent is a power of attorney or a consent
+        /// </summary>
+        public bool IsPoa { get; set; }
+
+        /// <summary>
+        /// Id of party that requested the consent
+        /// </summary>
+        public string ToPartyId { get; set; }
+
+        /// <summary>
+        /// Name of party that requested the consent
+        /// </summary>
+        public string ToPartyName { get; set; }
+
+        /// <summary>
+        /// Id of party that requested the consent
+        /// </summary>
+        public string FromPartyId { get; set; }
+
+        /// <summary>
+        /// Name of party that requested the consent
+        /// </summary>
+        public string FromPartyName { get; set; }
+
+        /// <summary>
+        /// Id of party that handles the request if consent is handled by different party than From
+        /// </summary>
+        public string HandledByPartyId { get; set; }
+
+        /// <summary>
+        /// Name of party that handles the request if consent is handled by different party than From
+        /// </summary>
+        public string HandledByPartyName { get; set; }
+
+        /// <summary>
+        /// List all events related to consent
+        /// </summary>
+        public List<ConsentRequestEventDto> ConsentRequestEvents { get; set; } = [];
+
+        /// <summary>
+        /// Consent expiration date
+        /// </summary>
+        public DateTimeOffset ValidTo { get; set; }
+    }
+}

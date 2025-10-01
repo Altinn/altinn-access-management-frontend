@@ -13,10 +13,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// <summary>
         /// Rights (resources) in consent
         /// </summary>
-        public List<ConsentRightFE> Rights { get; set; }
+        public List<ConsentRightFE> Rights { get; set; } = [];
 
         /// <summary>
-        /// If consent is a power of attourney or a consent
+        /// If consent is a power of attorney or a consent
         /// </summary>
         public bool IsPoa { get; set; }
 
@@ -51,9 +51,19 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         public Dictionary<string, string> Expiration { get; set; }
 
         /// <summary>
-        /// Party name if request is for an organization
+        /// Party name giving the consent
         /// </summary>
         public string FromPartyName { get; set; }
+
+        /// <summary>
+        /// Party name requesting consent
+        /// </summary>
+        public string ToPartyName { get; set; }
+
+        /// <summary>
+        /// Party name handling consent on behalf of ToPartyName
+        /// </summary>
+        public string HandledByPartyName { get; set; }
 
         /// <summary>
         /// Consent request expiration date

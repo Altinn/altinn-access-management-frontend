@@ -1,5 +1,5 @@
-import type { ChangeEvent, ReactElement } from 'react';
-import React from 'react';
+import type { ReactElement } from 'react';
+import React, { useMemo } from 'react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
@@ -19,15 +19,16 @@ import {
   useGetConsentRequestQuery,
   useRejectConsentRequestMutation,
 } from '@/rtk/features/consentApi';
-import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
+import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import type { ConsentLanguage, ConsentRequest, ProblemDetail } from '../types';
-import { getLanguage } from '../utils';
+import { getLanguage, isAccepted, isExpired, isRevoked, replaceStaticMetadata } from '../utils';
 import { ConsentRights } from '../components/ConsentRights/ConsentRights';
 
 import classes from './ConsentRequestPage.module.css';
 import { ConsentRequestError } from './ConsentRequestError';
+import { ConsentStatus } from '../components/ConsentStatus/ConsentStatus';
 
 export const ConsentRequestPage = () => {
   const { t, i18n } = useTranslation();
@@ -50,8 +51,20 @@ export const ConsentRequestPage = () => {
     },
   );
 
-  const onChangeLocale = (event: ChangeEvent<HTMLInputElement>) => {
-    const newLocale = event.target.value;
+  const memoizedRequest = useMemo(() => {
+    return request
+      ? replaceStaticMetadata<ConsentRequest>(request, [
+          'title',
+          'heading',
+          'serviceIntro',
+          'consentMessage',
+          'expiration',
+          'handledBy',
+        ])
+      : null;
+  }, [request]);
+
+  const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
@@ -62,9 +75,6 @@ export const ConsentRequestPage = () => {
         color='neutral'
         theme='subtle'
         header={{
-          menu: {
-            items: [],
-          },
           locale: {
             title: t('header.locale_title'),
             options: [
@@ -72,16 +82,29 @@ export const ConsentRequestPage = () => {
               { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
               { label: 'English', value: 'en', checked: i18n.language === 'en' },
             ],
-            onChange: onChangeLocale,
+            onSelect: onChangeLocale,
           },
           logo: {
             href: getAltinnStartPageUrl(),
             title: 'Altinn',
           },
           currentAccount: {
-            name: request?.fromPartyName ?? (userData?.name || ''),
-            type: request?.fromPartyName ? 'company' : 'person',
+            name: memoizedRequest?.fromPartyName ?? '',
+            type: memoizedRequest?.fromPartyName === userData?.name ? 'person' : 'company',
             id: '',
+          },
+          globalMenu: {
+            logoutButton: {
+              label: t('header.log_out'),
+              onClick: () =>
+                window.location.assign(`${getHostUrl()}ui/Authentication/Logout?languageID=1044`),
+            },
+            menuLabel: t('header.menu-label'),
+            backLabel: t('header.back-label'),
+            changeLabel: t('header.change-label'),
+            currentEndUserLabel: t('header.logged_in_as_name', {
+              name: userData?.name || '',
+            }),
           },
         }}
       >
@@ -99,9 +122,9 @@ export const ConsentRequestPage = () => {
             />
           )}
         </div>
-        {request && (
+        {memoizedRequest && (
           <ConsentRequestContent
-            request={request}
+            request={memoizedRequest}
             language={language}
           />
         )}
@@ -127,18 +150,18 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
     { data: rejectResponse, error: rejectConsentError, isLoading: isRejectingConsent },
   ] = useRejectConsentRequestMutation();
 
-  const isApproved = request.consentRequestEvents.some((event) => event.eventType === 'Accepted');
-  const isRejected = request.consentRequestEvents.some((event) => event.eventType === 'Rejected');
-  const isPastValidTo = new Date(request.validTo) < new Date();
+  const isRequestApproved = isAccepted(request.consentRequestEvents);
+  const isRequestRejected = isRevoked(request.consentRequestEvents);
+  const isRequestExpired = isExpired(request.consentRequestEvents);
 
   const isActionButtonDisabled =
     isApprovingConsent ||
     isRejectingConsent ||
     approveResponse ||
     rejectResponse ||
-    isApproved ||
-    isRejected ||
-    isPastValidTo;
+    isRequestApproved ||
+    isRequestRejected ||
+    isRequestExpired;
 
   const approveConsent = async (): Promise<void> => {
     if (!isActionButtonDisabled && request) {
@@ -177,28 +200,27 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
         >
           {request.title[language]}
         </DsHeading>
+        {isRequestExpired && !isRequestApproved && !isRequestRejected && (
+          <ConsentStatus
+            events={request.consentRequestEvents}
+            isPoa={request.isPoa}
+          />
+        )}
       </div>
       <div className={classes.consentBlock}>
         <div className={classes.consentContent}>
-          {isApproved && (
+          {isRequestApproved && (
             <DsAlert data-color='warning'>
               {request.isPoa
                 ? t('consent_request.already_approved_poa')
                 : t('consent_request.already_approved')}
             </DsAlert>
           )}
-          {isRejected && (
+          {isRequestRejected && (
             <DsAlert data-color='warning'>
               {request.isPoa
                 ? t('consent_request.already_rejected_poa')
                 : t('consent_request.already_rejected')}
-            </DsAlert>
-          )}
-          {isPastValidTo && !isApproved && !isRejected && (
-            <DsAlert data-color='warning'>
-              {request.isPoa
-                ? t('consent_request.past_validto_poa')
-                : t('consent_request.past_validto')}
             </DsAlert>
           )}
           <DsParagraph className={classes.heading}>{request.heading[language]}</DsParagraph>

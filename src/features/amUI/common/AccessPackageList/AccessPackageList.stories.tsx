@@ -60,10 +60,6 @@ export default {
       control: 'boolean',
       description: 'Show loading state',
     },
-    useDeleteConfirm: {
-      control: 'boolean',
-      description: 'Use delete confirmation dialog',
-    },
     searchString: {
       control: 'text',
       description: 'Search string to filter packages',
@@ -87,7 +83,6 @@ export const Default: StoryObj<AccessPackageListPropsAndCustomArgs> = {
     showAllPackages: true,
     minimizeAvailablePackages: false,
     isLoading: false,
-    useDeleteConfirm: true,
     searchString: '',
     availableActions: [DelegationAction.DELEGATE, DelegationAction.REVOKE],
   },

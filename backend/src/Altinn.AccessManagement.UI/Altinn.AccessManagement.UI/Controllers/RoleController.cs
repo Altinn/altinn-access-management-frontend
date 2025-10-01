@@ -1,10 +1,9 @@
-﻿using System.ComponentModel;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -60,6 +59,37 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 return await _roleService.GetSearch(languageCode, searchString);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+        }
+
+        /// <summary>
+        ///     Gets meta data for a given role
+        /// </summary>
+        /// <returns>The role meta data for </returns>
+        [HttpGet]
+        [Authorize]
+        [Route("{id}")]
+        public async Task<ActionResult<Core.Models.Common.Role>> GetRoleMetaById([FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            try
+            {
+                return await _roleService.GetRoleMetaById(languageCode, id);
             }
             catch (HttpStatusException ex)
             {

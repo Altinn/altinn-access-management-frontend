@@ -1,6 +1,6 @@
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import React from 'react';
-import { DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
+import { DsLink, DsParagraph } from '@altinn/altinn-components';
 import DOMPurify from 'dompurify';
 import type { DOMNode, HTMLReactParserOptions } from 'html-react-parser';
 import parseHtmlToReact, { domToReact } from 'html-react-parser';
@@ -22,7 +22,10 @@ export const ConsentRights = ({ rights, language }: ConsentRightsProps) => {
           key={right.identifier}
           className={classes.consentRight}
         >
-          <CheckmarkIcon className={classes.consentRightIcon} />
+          <CheckmarkIcon
+            className={classes.consentRightIcon}
+            aria-hidden
+          />
           <div className={classes.consentRightContent}>
             <DsParagraph className={classes.consentRightTitle}>{right.title[language]}</DsParagraph>
             <div>{transformText(right.consentTextHtml[language])}</div>

@@ -53,15 +53,27 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         public RegisteredSystemFE System { get; set; }
 
         /// <summary>
-        /// List of resources information
+        /// List of rights to add
         /// </summary>
-        [JsonPropertyName("resources")]
-        public List<ServiceResourceFE> Resources { get; set; } = new List<ServiceResourceFE>();
+        [JsonPropertyName("requiredRights")]
+        public List<ServiceResourceFE> RequiredRights { get; set; } = [];
 
         /// <summary>
-        /// List of access package information (with resources)
+        /// List of rights to remove
         /// </summary>
-        [JsonPropertyName("accessPackages")]
-        public List<AccessPackageFE> AccessPackages { get; set; } = new List<AccessPackageFE>();
+        [JsonPropertyName("unwantedRights")]
+        public List<ServiceResourceFE> UnwantedRights { get; set; } = [];
+
+        /// <summary>
+        /// List of access packages to add
+        /// </summary>
+        [JsonPropertyName("requiredAccessPackages")]
+        public List<AccessPackageFE> RequiredAccessPackages { get; set; } = [];
+
+        /// <summary>
+        /// List of access packages to remove
+        /// </summary>
+        [JsonPropertyName("unwantedAccessPackages")]
+        public List<AccessPackageFE> UnwantedAccessPackages { get; set; } = [];
     }
 }

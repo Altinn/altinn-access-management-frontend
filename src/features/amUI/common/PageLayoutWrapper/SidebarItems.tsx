@@ -4,14 +4,16 @@ import {
   PersonGroupIcon,
   TenancyIcon,
   PadlockUnlockedIcon,
+  HandshakeIcon,
   InformationSquareIcon,
   LeaveIcon,
   LinkIcon,
+  CogIcon,
 } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
 
-import { amUIPath, SystemUserPath } from '@/routes/paths';
+import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 import { getHostUrl } from '@/resources/utils/pathUtils';
 
 /**
@@ -28,7 +30,9 @@ export const SidebarItems = (
   accountType: 'company' | 'person',
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
+  const displayConsentGui = window.featureFlags?.displayConsentGui;
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const isLoading = !accountName;
 
   const heading: MenuItemProps = {
     id: '1',
@@ -38,6 +42,7 @@ export const SidebarItems = (
       type: accountType,
     },
     size: 'lg',
+    loading: isLoading,
     title: t('sidebar.access_management'),
     badge: { label: t('common.beta') },
     interactive: false,
@@ -47,6 +52,7 @@ export const SidebarItems = (
     groupId: 2,
     id: '2',
     size: 'md' as MenuItemSize,
+    loading: isLoading,
     title: t('sidebar.users'),
     selected: pathname?.includes(`/${amUIPath.Users}`),
     icon: PersonGroupIcon,
@@ -63,6 +69,7 @@ export const SidebarItems = (
     groupId: 2,
     id: '2.1',
     size: 'md',
+    loading: isLoading,
     title: t('sidebar.poa_overview'),
     icon: PadlockUnlockedIcon,
     selected: pathname?.includes(`/${amUIPath.PoaOverview}`),
@@ -79,6 +86,7 @@ export const SidebarItems = (
     groupId: 4,
     id: '4',
     size: 'md' as MenuItemSize,
+    loading: isLoading,
     title: t('sidebar.reportees'),
     selected: pathname?.includes(`/${amUIPath.Reportees}`),
     icon: LinkIcon,
@@ -91,18 +99,52 @@ export const SidebarItems = (
     ),
   };
 
-  const systemUserPath = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
-  const systemUser: MenuItemProps = {
+  const consent: MenuItemProps = {
     groupId: 5,
     id: '5',
     size: 'md',
-    title: t('sidebar.systemaccess'),
-    icon: TenancyIcon,
-    selected: pathname?.includes(systemUserPath),
+    loading: isLoading,
+    title: t('sidebar.consent'),
+    icon: HandshakeIcon,
+    selected: pathname?.includes(`/${ConsentPath.Consent}/`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     as: (props: any) => (
       <Link
-        to={systemUserPath}
+        to={`/${ConsentPath.Consent}/${ConsentPath.Active}`}
+        {...props}
+      />
+    ),
+  };
+
+  const systemUser: MenuItemProps = {
+    groupId: 6,
+    id: '6',
+    size: 'md',
+    loading: isLoading,
+    title: t('sidebar.systemaccess'),
+    icon: TenancyIcon,
+    selected: pathname?.includes(`/${SystemUserPath.SystemUser}/`),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
+      <Link
+        to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}
+        {...props}
+      />
+    ),
+  };
+
+  const settings: MenuItemProps = {
+    groupId: 'settings-group',
+    id: 'settings',
+    size: 'md' as MenuItemSize,
+    loading: isLoading,
+    title: t('sidebar.settings'),
+    selected: pathname?.includes(`/${amUIPath.Settings}`),
+    icon: CogIcon,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as: (props: any) => (
+      <Link
+        to={`/${amUIPath.Settings}`}
         {...props}
       />
     ),
@@ -113,6 +155,7 @@ export const SidebarItems = (
       groupId: 'shortcuts',
       id: 'beta-about',
       size: 'md',
+      loading: isLoading,
       title: t('header.new_altinn_info'),
       icon: InformationSquareIcon,
       selected: pathname?.includes(`/${amUIPath.Info}`),
@@ -128,6 +171,7 @@ export const SidebarItems = (
       groupId: 'shortcuts',
       id: 'beta-leave',
       size: 'md',
+      loading: isLoading,
       title: t('header.leave_beta'),
       icon: LeaveIcon,
       selected: false,
@@ -147,6 +191,12 @@ export const SidebarItems = (
     items.push(heading);
   }
 
+  if (displayConsentGui) {
+    if (accountType === 'person') {
+      return [...items, consent, ...shortcuts];
+    }
+  }
+
   if (displayConfettiPackage) {
     items.push(users);
     if (isAdmin) {
@@ -160,7 +210,15 @@ export const SidebarItems = (
     }
   }
 
+  if (displayConsentGui) {
+    items.push(consent);
+  }
+
   items.push(systemUser);
+
+  if (!displayLimitedPreviewLaunch) {
+    items.push(settings);
+  }
 
   if (displayConfettiPackage && !isSmall) {
     shortcuts.map((shortcutItem) => items.push(shortcutItem));

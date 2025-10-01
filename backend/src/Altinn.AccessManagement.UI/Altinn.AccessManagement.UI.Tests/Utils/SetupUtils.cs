@@ -96,6 +96,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                         options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                         options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                         options.DisplayLimitedPreviewLaunch = flags?.DisplayLimitedPreviewLaunch ?? true;
+                        options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                     });
                 });
             });
@@ -125,7 +126,9 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                        options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                        options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                        options.DisplayLimitedPreviewLaunch = flags?.DisplayLimitedPreviewLaunch ?? true;
+                       options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                        options.RestrictPrivUse = flags?.RestrictPrivUse ?? false;
+                       options.CrossPlatformLinks = flags?.CrossPlatformLinks ?? false;
                    });
                });
            });
@@ -145,6 +148,26 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IAccessPackageClient, AccessPackageClientMock>();
+                    services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient();
+        }
+
+        /// <summary>
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for SettingController tests</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<SettingsController> customFactory)
+        {
+            WebApplicationFactory<SettingsController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
                     services.AddTransient<IProfileClient, ProfileClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
