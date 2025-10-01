@@ -128,6 +128,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                        options.DisplayLimitedPreviewLaunch = flags?.DisplayLimitedPreviewLaunch ?? true;
                        options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                        options.RestrictPrivUse = flags?.RestrictPrivUse ?? false;
+                       options.CrossPlatformLinks = flags?.CrossPlatformLinks ?? false;
                    });
                });
            });

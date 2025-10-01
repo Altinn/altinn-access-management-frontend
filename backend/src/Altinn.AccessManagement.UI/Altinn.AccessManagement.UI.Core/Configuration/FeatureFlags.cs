@@ -35,5 +35,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to show the new AMUI to PRIV users
         /// </summary>
         public bool RestrictPrivUse { get; set; }
+
+        /// <summary>
+        /// Whether to enable cross platform links
+        /// </summary>
+        public bool CrossPlatformLinks { get; set; }
     }
 }

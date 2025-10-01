@@ -67,3 +67,23 @@ export const getHostUrl = () => {
       return 'https://altinn.no/';
   }
 };
+
+export const getAfUrl = () => {
+  const env = getEnv();
+  switch (env) {
+    case Environment.TT02:
+      return 'https://af.tt.altinn.no/';
+    case Environment.AT21:
+      return 'https://af.at.altinn.cloud/';
+    case Environment.AT22:
+      return 'https://af.at.altinn.cloud/';
+    case Environment.AT23:
+      return 'https://af.at.altinn.cloud/';
+    case Environment.AT24:
+      return 'https://af.at.altinn.cloud/';
+    case Environment.PROD:
+      return 'https://af.altinn.no/';
+    default:
+      return 'https://af.altinn.no/';
+  }
+};
