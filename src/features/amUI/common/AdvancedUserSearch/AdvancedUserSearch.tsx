@@ -26,31 +26,22 @@ export interface AdvancedUserSearchProps {
   isActionLoading?: boolean;
 }
 
-const useUIState = (
-  addUsersMode: boolean,
-  isQuery: boolean,
-  directHasResults: boolean,
-  indirectHasResults: boolean,
-) => {
+const useUIState = (isQuery: boolean, directHasResults: boolean, indirectHasResults: boolean) => {
   return useMemo(() => {
-    const showDirectSection = !addUsersMode || isQuery;
-    const showDirectList = showDirectSection && directHasResults;
-    const showDirectNoResults =
-      showDirectSection && !directHasResults && isQuery && indirectHasResults;
-    const showIndirectSection = addUsersMode || isQuery;
-    const showIndirectList = showIndirectSection && indirectHasResults;
-    const showEmptyState =
-      (isQuery && !directHasResults && !indirectHasResults) ||
-      (addUsersMode && !indirectHasResults && !directHasResults);
+    const showDirectSection = isQuery;
+    const showDirectList = isQuery && directHasResults;
+    const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
+    const showIndirectList = isQuery && indirectHasResults;
+    const showEmptyState = !directHasResults && !indirectHasResults;
+
     return {
       showDirectSection,
       showDirectList,
       showDirectNoResults,
-      showIndirectSection,
       showIndirectList,
       showEmptyState,
     };
-  }, [addUsersMode, isQuery, directHasResults, indirectHasResults]);
+  }, [isQuery, directHasResults, indirectHasResults]);
 };
 
 const filterSystemUsers = (items?: Connection[]) =>
@@ -66,7 +57,6 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
-  const [addUsersMode, setAddUsersMode] = useState(false);
 
   const filteredConnections = useMemo(() => filterSystemUsers(connections), [connections]);
 
@@ -94,7 +84,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
     showDirectNoResults,
     showIndirectList,
     showEmptyState,
-  } = useUIState(addUsersMode, isQuery, directHasResults, indirectHasResults);
+  } = useUIState(isQuery, directHasResults, indirectHasResults);
 
   const handleAddNewUser = async (user: User) => {
     if (onDelegate) {
@@ -102,7 +92,6 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
         onDelegate(user);
       }
     }
-    setAddUsersMode(false);
   };
 
   if (isLoading) {
@@ -126,16 +115,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           {query && <DsSearch.Clear onClick={() => setQuery('')} />}
         </DsSearch>
         <div className={classes.buttonRow}>
-          <DsButton
-            variant={addUsersMode ? 'tertiary' : 'secondary'}
-            onClick={() => setAddUsersMode((prev) => !prev)}
-            className={classes.addUserButton}
-            data-color={addUsersMode ? 'danger' : 'primary'}
-          >
-            {!addUsersMode && <PlusIcon aria-hidden />}
-            {addUsersMode ? t('common.cancel') : t('advanced_user_search.add_user_button')}
-          </DsButton>
-          {addUsersMode && <NewUserButton onComplete={handleAddNewUser} />}
+          <NewUserButton onComplete={handleAddNewUser} />
         </div>
       </div>
 
