@@ -683,10 +683,10 @@
     "18_delegation_right_missing_delegation_access": "Delegering av tjenester feilet: du har ikke rettigheter til å direkte delegere tjenester.",
     "19_delegation_right_missing_srr_right_access": "Delegering av tjenester feilet: en eller flere tjenester bruker tilgangslister der virksomhet ikke har tilgang.",
     "20_delegation_right_insufficient_authentication_level": "Delegering av tjenester feilet: en eller flere tjenester krever eksplisitt tilgangsnivå.",
-    "50_accesspackage_delegation_failed": "Delegering av tilgangspakker til systembrukeren feilet.",
-    "52_accesspackage_delegation_missing_required_access": "Du har ikke tilstrekkelige tilganger for å delegere disse tilgangspakkene.",
-    "54_accesspackage_failed_to_get_delegated_packages": "Kunne ikke hente delegerte tilgangspakker.",
-    "56_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systembruker."
+    "51_accesspackage_delegation_failed": "Delegering av tilgangspakker til systembrukeren feilet.",
+    "53_accesspackage_delegation_missing_required_access": "Du har ikke tilstrekkelige tilganger for å delegere disse tilgangspakkene.",
+    "55_accesspackage_failed_to_get_delegated_packages": "Kunne ikke hente delegerte tilgangspakker.",
+    "57_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systembruker."
   },
   "page_not_available": {
     "title": "Siden er ikke tilgjengelig",
