@@ -45,7 +45,7 @@ export const UserListActions = ({
   }
   return (
     <>
-      {availableAction === DelegationAction.DELEGATE && onDelegate && (
+      {availableAction === DelegationAction.DELEGATE && onDelegate && !user.isInherited && (
         <DsButton
           variant='tertiary'
           data-size='md'
@@ -56,7 +56,7 @@ export const UserListActions = ({
           {!isSmall && t('common.give_poa')}
         </DsButton>
       )}
-      {availableAction === DelegationAction.REQUEST && onRequest && (
+      {availableAction === DelegationAction.REQUEST && onRequest && !user.isInherited && (
         <DsButton
           variant='tertiary'
           data-size='md'

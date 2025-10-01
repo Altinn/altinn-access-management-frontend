@@ -42,7 +42,6 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
             size='md'
             titleAs='h4'
             interactive={false}
-            showRoles={!isSmall}
             roleDirection='toUser'
             disableLinks
             controls={(user) => (

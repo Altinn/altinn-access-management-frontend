@@ -88,10 +88,13 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
       }
     }
 
-    Object.values(group).forEach((conn) => {
+    const applyInheritedFlagRecursively = (conn: Connection) => {
       conn.party.isInherited =
         Boolean(inheritedFlags[conn.party.id]) && !Boolean(hasDirectRole[conn.party.id]);
-    });
+      // conn.connections.forEach((child) => applyInheritedFlagRecursively(child));
+    };
+
+    Object.values(group).forEach((rootConn) => applyInheritedFlagRecursively(rootConn));
 
     return Object.values(group);
   }, [accessPackage?.permissions]);
