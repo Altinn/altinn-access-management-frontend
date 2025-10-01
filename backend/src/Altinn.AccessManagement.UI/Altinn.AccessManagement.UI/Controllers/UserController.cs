@@ -391,7 +391,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for checking which system user permissions the authenticated user has.
+        /// Endpoint for checking if the authenticated user has access to client admin resource.
         /// </summary>
         [HttpGet]
         [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_CLIENT_ADMINISTRATION_READ_WITH_PASS_THROUGH)]
