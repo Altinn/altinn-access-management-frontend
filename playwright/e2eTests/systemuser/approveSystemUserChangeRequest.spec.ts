@@ -7,9 +7,19 @@ import { ApiRequests } from '../../api-requests/ApiRequests';
 
 test.describe('Godkjenn og avvis Systembruker endringsforespørsel', () => {
   let api: ApiRequests;
+  let orgNumber: string;
+  let systemId: string;
 
   test.beforeEach(async ({ page }) => {
     api = new ApiRequests();
+    orgNumber = process.env.ORG!;
+    systemId = process.env.SYSTEM_ID!;
+    if (!orgNumber) {
+      throw new Error('ORG environment variable is not set');
+    }
+    if (!systemId) {
+      throw new Error('SYSTEM_ID environment variable is not set');
+    }
     const login = new LoginPage(page);
     await login.loginWithUser('14824497789');
     await login.chooseReportee('AKTVERDIG RETORISK APE');
@@ -22,7 +32,10 @@ test.describe('Godkjenn og avvis Systembruker endringsforespørsel', () => {
 
     await api.approveSystemuserRequest(response.id);
 
-    const confirmUrlChangeRequest = await api.postSystemuserChangeRequest(externalRef);
+    const systemUserId = await api.getSystemUserByQuery(systemId, orgNumber, externalRef);
+
+    const confirmUrlChangeRequest = await api.postSystemuserChangeRequest(systemUserId);
+
     await page.goto(confirmUrlChangeRequest);
     await page.getByRole('button', { name: 'Avvis' }).click();
 
@@ -42,7 +55,9 @@ test.describe('Godkjenn og avvis Systembruker endringsforespørsel', () => {
 
     await api.approveSystemuserRequest(response.id);
 
-    const confirmUrlChangeRequest = await api.postSystemuserChangeRequest(externalRef);
+    const systemUserId = await api.getSystemUserByQuery(systemId, orgNumber, externalRef);
+
+    const confirmUrlChangeRequest = await api.postSystemuserChangeRequest(systemUserId);
     await page.goto(confirmUrlChangeRequest);
     await page.getByRole('button', { name: 'Godkjenn' }).click();
 
