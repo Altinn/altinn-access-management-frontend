@@ -158,7 +158,7 @@ export const userInfoApi = createApi({
       query: () => `isAdmin?party=${getCookie('AltinnPartyUuid')}`,
     }),
     getIsClientAdmin: builder.query<boolean, void>({
-      query: () => `user/isClientAdmin?party=${getCookie('AltinnPartyUuid')}`,
+      query: () => `isClientAdmin?party=${getCookie('AltinnPartyUuid')}`,
     }),
     validateNewUserPerson: builder.mutation<string, { ssn: string; lastName: string }>({
       query: ({ ssn, lastName }) => ({
