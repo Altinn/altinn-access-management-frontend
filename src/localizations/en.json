@@ -83,6 +83,7 @@
     "subunit": "Subunit",
     "subunit_lowercase": "subunit",
     "mainunit_lowercase": "main unit",
+    "org_nr_lowercase": "org.nr. {{org_number}}",
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
     "date_of_birth": "Born"
@@ -313,7 +314,6 @@
   "users_page": {
     "page_title": "Users and groups - Altinn",
     "main_page_heading": "Users with power of attorney in {{name}}",
-    "sub_heading": "org.nr. {{org_number}}",
     "user_list_heading": "Other users with power of attorney",
   "direct_connections": "Users with power of attorney",
     "user_search_placeholder": "Search for users",
@@ -714,7 +714,7 @@
   },
   "poa_overview_page": {
     "page_title": "Power of attorney overview",
-    "heading": "Power of attorney overview for {{fromparty}}"
+    "heading": "Power of attorney overview for {{name}}"
   },
   "package_poa_details_page": {
     "page_title": "Power of attorney details",

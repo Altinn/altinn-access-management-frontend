@@ -1,0 +1,8 @@
+.pageHeading {
+  /* default spacing and typography for reportee page headings */
+  margin-bottom: 1rem;
+}
+
+.pageHeadingSkeleton {
+  margin: 6px 0;
+}

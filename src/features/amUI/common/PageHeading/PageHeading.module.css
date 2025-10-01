@@ -1,0 +1,10 @@
+.pageHeading {
+  /* default spacing and typography for page headings */
+  margin-top: 15px;
+  padding-bottom: 1rem;
+}
+
+.pageHeadingSkeleton {
+  max-width: 100%;
+  margin-bottom: 0.5rem;
+}

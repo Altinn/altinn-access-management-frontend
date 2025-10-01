@@ -82,6 +82,7 @@
     "subunit": "Underenhet",
     "subunit_lowercase": "underenhet",
     "mainunit_lowercase": "hovedenhet",
+    "org_nr_lowercase": "org.nr. {{org_number}}",
     "date_of_birth": "Født"
   },
   "beta_banner": {
@@ -309,7 +310,6 @@
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
     "main_page_heading": "Brukarar med fullmakter i {{name}}",
-    "sub_heading": "org.nr. {{org_number}}",
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukarar med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
@@ -711,7 +711,7 @@
   },
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt",
-    "heading": "Fullmaktsoversikt for {{fromparty}}"
+    "heading": "Fullmaktsoversikt for {{name}}"
   },
   "package_poa_details_page": {
     "page_title": "Fullmaktsdetaljar",

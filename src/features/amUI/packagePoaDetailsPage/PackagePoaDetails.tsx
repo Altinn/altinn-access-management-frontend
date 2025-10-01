@@ -6,11 +6,9 @@ import { Link, useParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { useTranslation } from 'react-i18next';
-import { type User } from '@/rtk/features/userInfoApi';
 import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { ResourceList } from '../common/ResourceList/ResourceList';
-import { Party } from '@/rtk/features/lookupApi';
 import UsersTab from './UsersTab';
 
 export const PackagePoaDetails = () => {
