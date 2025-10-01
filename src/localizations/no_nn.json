@@ -733,7 +733,10 @@
     "revoke_consent_text": "Er du sikker på at du vil trekke dette samtykket?",
     "revoke_poa_text": "Er du sikker på at du vil trekke denne fullmakten?",
     "confirm_revoke_consent": "Ja, trekk samtykke",
-    "confirm_revoke_poa": "Ja, trekk fullmakt"
+    "confirm_revoke_poa": "Ja, trekk fullmakt",
+    "altinn2_consent_alert_header": "Du er nå i ein ny versjon av Samtykke- og fullmaktsoversikten",
+    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over aktive samtykke- og fullmaktsavtalar her. Finn du ikkje det du ser etter her kan du",
+    "altinn2_consent_alert_link": "gå tilbake til gamle Altinn og sjekke der."
   },
   "consent_log": {
     "page_title": "Avtalelogg - Altinn",
@@ -755,7 +758,9 @@
     "poa_used": "{{to}}: har henta fullmakt fra {{from}}.",
     "handledby": "{{handledBy}} har hentet data på vegne av {{to}}.",
     "no_results": "Ingen samtykker eller fullmakter ble funnet for dette søket",
-    "no_active_consents": "Det finnes ingen innslag i avtaleloggen enda"
+    "no_active_consents": "Det finnes ingen innslag i avtaleloggen enda",
+    "altinn2_consent_alert_header": "Du er nå i ein ny versjon av avtaleloggen",
+    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle samtykke- og fullmaktsavtaler her. Finn du ikkje det du ser etter her kan du"
   },
   "consent_errors": {
     "not_authorized_for_consent": "Bruker er ikkje autorisert for å gi samtykke/fullmakt",
