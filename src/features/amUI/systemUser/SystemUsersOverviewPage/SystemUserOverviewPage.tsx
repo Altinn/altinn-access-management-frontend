@@ -16,7 +16,6 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import {
   useGetAgentSystemUsersQuery,
-  useGetIsClientAdminQuery,
   useGetSystemUserReporteeQuery,
   useGetSystemUsersQuery,
 } from '@/rtk/features/systemUserApi';
@@ -28,6 +27,7 @@ import type { SystemUser } from '../types';
 
 import classes from './SystemUserOverviewPage.module.css';
 import { canCreateSystemUser } from '../permissionUtils';
+import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
@@ -36,7 +36,7 @@ export const SystemUserOverviewPage = () => {
   const partyId = getCookie('AltinnPartyId');
   const partyUuid = getCookie('AltinnPartyUuid');
 
-  const { data: isClientAdmin } = useGetIsClientAdminQuery(partyUuid);
+  const { data: isClientAdmin } = useGetIsClientAdminQuery();
   const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
 
   const {

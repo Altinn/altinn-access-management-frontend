@@ -16,7 +16,6 @@ import { PageContainer } from '@/features/amUI/common/PageContainer/PageContaine
 import {
   useAssignCustomerMutation,
   useDeleteAgentSystemuserMutation,
-  useGetIsClientAdminQuery,
   useGetSystemUserReporteeQuery,
   useRemoveCustomerMutation,
 } from '@/rtk/features/systemUserApi';
@@ -30,6 +29,7 @@ import { RightsList } from '../components/RightsList/RightsList';
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
 import { canCreateSystemUser } from '../permissionUtils';
+import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -65,7 +65,7 @@ export const SystemUserAgentDelegationPageContent = ({
   );
   const { openSnackbar, dismissSnackbar } = useSnackbar();
 
-  const { data: isClientAdmin } = useGetIsClientAdminQuery(partyUuid);
+  const { data: isClientAdmin } = useGetIsClientAdminQuery();
   const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
 
   const [deleteAgentSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =

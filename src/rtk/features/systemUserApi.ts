@@ -42,9 +42,6 @@ export const systemUserApi = createApi({
       keepUnusedDataFor: 300,
       query: (partyId) => `user/reportee/${partyId}`,
     }),
-    getIsClientAdmin: builder.query<boolean, string>({
-      query: (partyUuid) => `user/isClientAdmin?party=${partyUuid}`,
-    }),
 
     // systemregister
     getRegisteredSystems: builder.query<RegisteredSystem[], void>({
@@ -214,7 +211,6 @@ const apiWithTag = systemUserApi.enhanceEndpoints({
 
 export const {
   useGetSystemUserReporteeQuery,
-  useGetIsClientAdminQuery,
   useCreateSystemUserMutation,
   useDeleteSystemuserMutation,
   useGetSystemUserQuery,
