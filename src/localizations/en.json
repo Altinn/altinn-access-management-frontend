@@ -761,7 +761,7 @@
     "poa_used": "{{to}}: has retrieved power of attorney from {{from}}.",
     "handledby": "{{handledBy}} has retrieved the data on behalf of {{to}}.",
     "no_results": "No consent or power of attorney was found for this search",
-    "no_active_consents": "There area no entries in agreement log yet",
+    "no_active_consents": "There are no entries in agreement log yet",
     "altinn2_consent_alert_header": "You are now in a new version of the agreement log",
     "altinn2_consent_alert_body": "Soon you will find an overview of all consents and powers of attorney here. If you cannot find what you are looking for here you can"
   },
