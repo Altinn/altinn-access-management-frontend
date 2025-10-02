@@ -28,8 +28,8 @@ import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
-import { canCreateSystemUser } from '../permissionUtils';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { canCreateSystemUser } from '@/resources/utils/permissionUtils';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],

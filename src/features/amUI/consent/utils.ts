@@ -1,4 +1,3 @@
-import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import type {
   Consent,
   ConsentLanguage,
@@ -42,13 +41,6 @@ export const isRevoked = (events: ConsentRequestEvent[]): boolean => {
 export const canConsentBeRevoked = (events: ConsentRequestEvent[]) => {
   const hasTerminalEvent = isRevoked(events) || isExpired(events);
   return isAccepted(events) && !hasTerminalEvent;
-};
-
-export const hasConsentPermission = (
-  reportee?: ReporteeInfo,
-  isAdmin: boolean = false,
-): boolean => {
-  return reportee?.type === 'Person' || (reportee?.type === 'Organization' && isAdmin);
 };
 
 export const toDateTimeString = (dateString: string, useFullMonthName?: boolean) => {

@@ -16,8 +16,8 @@ import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
 import classes from './ActiveConsentsPage.module.css';
 import { ConsentPath } from '@/routes/paths';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { hasConsentPermission } from '../utils';
 import { ConsentListItem } from './ConsentListItem';
+import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();

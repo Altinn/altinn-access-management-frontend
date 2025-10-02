@@ -1,4 +1,11 @@
-import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
+import { ReporteeInfo } from '@/rtk/features/userInfoApi';
+
+export const hasConsentPermission = (
+  reportee?: ReporteeInfo,
+  isAdmin: boolean = false,
+): boolean => {
+  return reportee?.type === 'Person' || (reportee?.type === 'Organization' && isAdmin);
+};
 
 export const canCreateSystemUser = (reporteeInfo?: ReporteeInfo): boolean | undefined => {
   if (!reporteeInfo) {

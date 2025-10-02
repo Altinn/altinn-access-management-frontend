@@ -26,8 +26,8 @@ import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 import type { SystemUser } from '../types';
 
 import classes from './SystemUserOverviewPage.module.css';
-import { canCreateSystemUser } from '../permissionUtils';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { canCreateSystemUser } from '@/resources/utils/permissionUtils';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
