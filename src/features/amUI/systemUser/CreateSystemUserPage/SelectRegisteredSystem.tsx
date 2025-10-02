@@ -13,7 +13,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import type { RegisteredSystem } from '../types';
-import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
+import { CreateSystemUserCheck } from '../components/CreateSystemUserCheck/CreateSystemUserCheck';
 
 import classes from './CreateSystemUser.module.css';
 

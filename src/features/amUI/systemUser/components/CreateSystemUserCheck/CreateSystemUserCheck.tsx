@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert } from '@altinn/altinn-components';
 
-import classes from './CanCreateSystemUser.module.css';
+import classes from './CreateSystemUserCheck.module.css';
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
-import { canCreateSystemUser } from '../../permissionUtils';
+import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 
 interface CreateSystemUserCheckProps {
   reporteeData: ReporteeInfo | undefined;
@@ -16,7 +16,7 @@ export const CreateSystemUserCheck = ({
 }: CreateSystemUserCheckProps): React.ReactNode => {
   const { t } = useTranslation();
 
-  const canCreate = canCreateSystemUser(reporteeData);
+  const canCreate = hasCreateSystemUserPermission(reporteeData);
 
   return (
     <>
