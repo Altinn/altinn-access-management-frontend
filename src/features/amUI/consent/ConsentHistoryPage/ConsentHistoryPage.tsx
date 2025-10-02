@@ -23,8 +23,8 @@ import { useGetConsentLogQuery } from '@/rtk/features/consentApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ConsentTimeline } from './ConsentTimeline';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { hasConsentPermission } from '../utils';
 import { ConsentPath } from '@/routes/paths';
+import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 
 export const ConsentHistoryPage = () => {

@@ -25,3 +25,8 @@
   justify-content: space-between;
   margin-bottom: var(--ds-size-2);
 }
+
+.noPermissionsWarning {
+  max-width: 35rem;
+  margin-top: var(--ds-size-4);
+}

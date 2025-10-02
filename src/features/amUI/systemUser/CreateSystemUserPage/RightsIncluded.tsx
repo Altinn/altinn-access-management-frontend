@@ -6,11 +6,11 @@ import { DsSpinner, DsAlert, DsButton } from '@altinn/altinn-components';
 import {
   useCreateSystemUserMutation,
   useGetRegisteredSystemRightsQuery,
+  useGetSystemUserReporteeQuery,
 } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import type { ProblemDetail, RegisteredSystem } from '../types';
 import { RightsList } from '../components/RightsList/RightsList';
@@ -29,7 +29,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
   const { t } = useTranslation();
   const navigate = useNavigate();
   const partyId = getCookie('AltinnPartyId');
-  const { data: reporteeData } = useGetReporteeQuery();
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
 
   const {
     data: rights,

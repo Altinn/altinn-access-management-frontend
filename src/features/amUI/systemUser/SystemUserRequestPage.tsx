@@ -17,7 +17,7 @@ import { RightsList } from './components/RightsList/RightsList';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
-import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
+import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/CreateSystemUserCheck';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();

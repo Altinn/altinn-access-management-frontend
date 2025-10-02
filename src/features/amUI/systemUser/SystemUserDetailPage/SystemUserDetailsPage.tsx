@@ -3,20 +3,24 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { DsSpinner, DsAlert, DsParagraph } from '@altinn/altinn-components';
 
-import { useDeleteSystemuserMutation, useGetSystemUserQuery } from '@/rtk/features/systemUserApi';
+import {
+  useDeleteSystemuserMutation,
+  useGetSystemUserQuery,
+  useGetSystemUserReporteeQuery,
+} from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 import { PageWrapper } from '@/components';
 import { SystemUserPath } from '@/routes/paths';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserDetailsPage.module.css';
+import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
@@ -25,7 +29,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
   const partyId = getCookie('AltinnPartyId');
 
-  const { data: reporteeData } = useGetReporteeQuery();
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
 
   const {
     data: systemUser,
@@ -54,6 +58,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
         <PageContainer
           onNavigateBack={handleNavigateBack}
           pageActions={
+            hasCreateSystemUserPermission(reporteeData) &&
             systemUser && (
               <DeleteSystemUserPopover
                 integrationTitle={systemUser?.integrationTitle ?? ''}
