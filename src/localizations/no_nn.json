@@ -450,6 +450,11 @@
     "remove_sms": "Fjern telefonnummer",
     "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen."
   },
+  "text_field_errors": {
+    "required": "Feltet er påkrevd",
+    "invalid_email_pattern": "Ugyldig e-postadresse",
+    "invalid_phone": "Ugyldig telefonnummer"
+  },
   "info_modal": {
     "title": "Prøv den nye tilgangsstyringsløysinga",
     "info": "Vi pusser opp tilgangsstyring og du får sniktitte på en tidleg versjon! Ho er framleis under utvikling, så nokre funksjonar manglar. Vi håpar likevel du vil prøve.",

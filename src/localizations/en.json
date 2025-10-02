@@ -454,6 +454,11 @@
     "remove_sms": "Remove phone number",
     "error_saving_addresses": "Something went wrong. Please try again."
   },
+  "text_field_errors": {
+    "required": "The field is required",
+    "invalid_email_pattern": "Invalid email address",
+    "invalid_phone": "Invalid phone number"
+  },
   "info_modal": {
     "title": "Try the new access management solution",
     "info": "We are renovating access management and you get a sneak peek at an early version! It is still under development, so some functions are missing. We still hope you will try.",

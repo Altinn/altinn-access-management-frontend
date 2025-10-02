@@ -71,7 +71,7 @@ export const SmsAddressFields = ({
             className={classes.removeButton}
             data-size='md'
           >
-            <MinusCircleIcon aria-label={t('settings_page.remove_email')} />
+            <MinusCircleIcon aria-label={t('settings_page.remove_sms')} />
           </DsButton>
         )}
       </div>

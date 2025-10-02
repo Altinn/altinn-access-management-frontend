@@ -63,6 +63,10 @@ export const useSaveAddressChanges = (
   const [deleteAddress] = useDeleteOrgNotificationAddressMutation();
 
   const saveChanges = () => {
+    if (isSaving) {
+      return; // Prevent multiple simultaneous saves
+    }
+
     if (isChanges && actingParty?.orgNumber) {
       setIsSaving(true);
       setIsError(false); // Reset error state

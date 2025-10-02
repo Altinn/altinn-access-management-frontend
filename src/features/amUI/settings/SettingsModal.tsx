@@ -174,7 +174,7 @@ export const SettingsModal = ({
             {isSaving && (
               <DsSpinner
                 data-size='sm'
-                aria-label={t('common.saving')}
+                aria-label={t('common.loading')}
               />
             )}
             {t('common.save_changes')}
