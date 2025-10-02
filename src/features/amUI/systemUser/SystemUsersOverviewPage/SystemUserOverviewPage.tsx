@@ -74,7 +74,10 @@ export const SystemUserOverviewPage = () => {
           {!isLoading && (
             <>
               {isClientAdmin === false && hasCreateSystemUserPermission(reporteeData) === false && (
-                <DsAlert data-color='warning'>
+                <DsAlert
+                  data-color='warning'
+                  className={classes.noPermissionsWarning}
+                >
                   {t('systemuser_overviewpage.no_permissions_warning')}
                 </DsAlert>
               )}
