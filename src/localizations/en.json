@@ -739,7 +739,7 @@
     "confirm_revoke_poa": "Yes, revoke power of attorney",
     "altinn2_consent_alert_header": "You are now in a new version of the Consent- and power of attorney overview",
     "altinn2_consent_alert_body": "Soon you will find an overview of active consents- and powers of attorney here. If you cannot find what you are looking for here you can",
-    "altinn2_consent_alert_link": "go back to old Altinn and check there."
+    "altinn2_consent_alert_link": "go back to today's Altinn and check there."
   },
   "consent_log": {
     "page_title": "Agreement log - Altinn",

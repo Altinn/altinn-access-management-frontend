@@ -737,7 +737,7 @@
     "confirm_revoke_poa": "Ja, trekk fullmakt",
     "altinn2_consent_alert_header": "Du er nå i en ny versjon av Samtykke- og fullmaktsoversikten",
     "altinn2_consent_alert_body": "Etterhvert vil du finne oversikt over aktive samtykke- og fullmaktsavtaler her. Finner du ikke det du ser etter her kan du",
-    "altinn2_consent_alert_link": "gå tilbake til gamle Altinn og sjekke der."
+    "altinn2_consent_alert_link": "gå tilbake til dagens Altinn og sjekke der."
   },
   "consent_log": {
     "page_title": "Avtalelogg - Altinn",
