@@ -43,7 +43,7 @@ export const SettingsModal = ({
     actingParty?.orgNumber ?? '',
     { skip: !actingParty?.orgNumber },
   );
-  const { isChanges, saveChanges, isSaving, isError } = useSaveAddressChanges(
+  const { isChanges, saveChanges, isSaving, isError, setIsError } = useSaveAddressChanges(
     storedAddresses,
     addressList,
   );
@@ -99,10 +99,15 @@ export const SettingsModal = ({
       return null;
   }
 
+  const closeModal = () => {
+    setIsError(false);
+    onClose();
+  };
+
   return (
     <DsDialog
       open={open}
-      onClose={onClose}
+      onClose={closeModal}
       closedby='any'
     >
       <div className={classes.modalHeader}>
@@ -181,9 +186,7 @@ export const SettingsModal = ({
           </DsButton>
           <DsButton
             variant='secondary'
-            onClick={() => {
-              onClose();
-            }}
+            onClick={closeModal}
           >
             {t('common.cancel')}
           </DsButton>
