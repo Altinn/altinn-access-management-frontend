@@ -1,9 +1,9 @@
-﻿[
+[
   {
     "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
     "name": "Skatt, avgift, regnskap og toll",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-    "iconUrl": "Money_SackKroner",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
     "accessPackages": [
       {
         "id": "1dba50d6-f604-48e9-bd41-82321b13e85c",
@@ -14,7 +14,7 @@
           "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
           "name": "Skatt, avgift, regnskap og toll",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-          "iconUrl": "Money_SackKroner",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll",
           "group": {
@@ -36,7 +36,7 @@
           "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
           "name": "Skatt, avgift, regnskap og toll",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-          "iconUrl": "Money_SackKroner",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll",
           "group": {
@@ -58,7 +58,7 @@
           "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
           "name": "Skatt, avgift, regnskap og toll",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-          "iconUrl": "Money_SackKroner",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll",
           "group": {
@@ -80,7 +80,7 @@
           "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
           "name": "Skatt, avgift, regnskap og toll",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-          "iconUrl": "Money_SackKroner",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll",
           "group": {
@@ -102,7 +102,7 @@
           "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
           "name": "Skatt, avgift, regnskap og toll",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-          "iconUrl": "Money_SackKroner",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll",
           "group": {
@@ -124,7 +124,7 @@
           "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
           "name": "Skatt, avgift, regnskap og toll",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-          "iconUrl": "Money_SackKroner",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll",
           "group": {
@@ -146,7 +146,7 @@
           "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
           "name": "Skatt, avgift, regnskap og toll",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-          "iconUrl": "Money_SackKroner",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll",
           "group": {
@@ -168,7 +168,7 @@
           "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
           "name": "Skatt, avgift, regnskap og toll",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-          "iconUrl": "Money_SackKroner",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll",
           "group": {
@@ -190,7 +190,7 @@
           "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
           "name": "Skatt, avgift, regnskap og toll",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-          "iconUrl": "Money_SackKroner",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll",
           "group": {
@@ -212,7 +212,7 @@
           "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
           "name": "Skatt, avgift, regnskap og toll",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-          "iconUrl": "Money_SackKroner",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll",
           "group": {
@@ -234,7 +234,7 @@
           "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
           "name": "Skatt, avgift, regnskap og toll",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
-          "iconUrl": "Money_SackKroner",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Money_SackKroner.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll",
           "group": {
@@ -253,7 +253,7 @@
     "id": "6f7f3b02-8b5a-4823-9468-0f4646d3a790",
     "name": "Personale",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til personale.",
-    "iconUrl": "People_PersonGroup",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_PersonGroup.svg",
     "accessPackages": [
       {
         "id": "cf575d42-72be-4d14-b0d2-77352221df4f",
@@ -264,7 +264,7 @@
           "id": "6f7f3b02-8b5a-4823-9468-0f4646d3a790",
           "name": "Personale",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til personale.",
-          "iconUrl": "People_PersonGroup",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_PersonGroup.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:personale",
           "group": {
@@ -286,7 +286,7 @@
           "id": "6f7f3b02-8b5a-4823-9468-0f4646d3a790",
           "name": "Personale",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til personale.",
-          "iconUrl": "People_PersonGroup",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_PersonGroup.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:personale",
           "group": {
@@ -308,7 +308,7 @@
           "id": "6f7f3b02-8b5a-4823-9468-0f4646d3a790",
           "name": "Personale",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til personale.",
-          "iconUrl": "People_PersonGroup",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_PersonGroup.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:personale",
           "group": {
@@ -330,7 +330,7 @@
           "id": "6f7f3b02-8b5a-4823-9468-0f4646d3a790",
           "name": "Personale",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til personale.",
-          "iconUrl": "People_PersonGroup",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_PersonGroup.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:personale",
           "group": {
@@ -352,7 +352,7 @@
           "id": "6f7f3b02-8b5a-4823-9468-0f4646d3a790",
           "name": "Personale",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til personale.",
-          "iconUrl": "People_PersonGroup",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_PersonGroup.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:personale",
           "group": {
@@ -374,7 +374,7 @@
           "id": "6f7f3b02-8b5a-4823-9468-0f4646d3a790",
           "name": "Personale",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til personale.",
-          "iconUrl": "People_PersonGroup",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_PersonGroup.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:personale",
           "group": {
@@ -393,7 +393,7 @@
     "id": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
     "name": "Miljø, ulykke og sikkerhet",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til miljø, ulykke og sikkerhet.",
-    "iconUrl": "People_HandHeart",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_HandHeart.svg",
     "accessPackages": [
       {
         "id": "5eb07bdc-5c3c-4c85-add3-5405b214b8a3",
@@ -404,7 +404,7 @@
           "id": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
           "name": "Miljø, ulykke og sikkerhet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til miljø, ulykke og sikkerhet.",
-          "iconUrl": "People_HandHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_HandHeart.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:miljo_ulykke_og_sikkerhet",
           "group": {
@@ -426,7 +426,7 @@
           "id": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
           "name": "Miljø, ulykke og sikkerhet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til miljø, ulykke og sikkerhet.",
-          "iconUrl": "People_HandHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_HandHeart.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:miljo_ulykke_og_sikkerhet",
           "group": {
@@ -448,7 +448,7 @@
           "id": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
           "name": "Miljø, ulykke og sikkerhet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til miljø, ulykke og sikkerhet.",
-          "iconUrl": "People_HandHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_HandHeart.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:miljo_ulykke_og_sikkerhet",
           "group": {
@@ -590,7 +590,7 @@
           "id": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
           "name": "Miljø, ulykke og sikkerhet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til miljø, ulykke og sikkerhet.",
-          "iconUrl": "People_HandHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_HandHeart.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:miljo_ulykke_og_sikkerhet",
           "group": {
@@ -612,7 +612,7 @@
           "id": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
           "name": "Miljø, ulykke og sikkerhet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til miljø, ulykke og sikkerhet.",
-          "iconUrl": "People_HandHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_HandHeart.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:miljo_ulykke_og_sikkerhet",
           "group": {
@@ -634,7 +634,7 @@
           "id": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
           "name": "Miljø, ulykke og sikkerhet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til miljø, ulykke og sikkerhet.",
-          "iconUrl": "People_HandHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_People_HandHeart.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:miljo_ulykke_og_sikkerhet",
           "group": {
@@ -653,7 +653,7 @@
     "id": "6f938de8-34f2-4bab-a0c6-3a3eb64aad3b",
     "name": "Post og arkiv",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til post og arkiv.",
-    "iconUrl": "Interface_EnvelopeClosed",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Interface_EnvelopeClosed.svg",
     "accessPackages": [
       {
         "id": "91cf61ae-69ab-49d5-b51a-80591c91f255",
@@ -664,7 +664,7 @@
           "id": "6f938de8-34f2-4bab-a0c6-3a3eb64aad3b",
           "name": "Post og arkiv",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til post og arkiv.",
-          "iconUrl": "Interface_EnvelopeClosed",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Interface_EnvelopeClosed.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:post_og_arkiv",
           "group": {
@@ -686,7 +686,7 @@
           "id": "6f938de8-34f2-4bab-a0c6-3a3eb64aad3b",
           "name": "Post og arkiv",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til post og arkiv.",
-          "iconUrl": "Interface_EnvelopeClosed",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Interface_EnvelopeClosed.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:post_og_arkiv",
           "group": {
@@ -705,7 +705,7 @@
     "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
     "name": "Forhold ved virksomheten",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-    "iconUrl": "Workplace_Buildings3",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
     "accessPackages": [
       {
         "id": "06c13400-8683-4985-9802-cef13e247f24",
@@ -716,7 +716,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -738,7 +738,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -760,7 +760,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -782,7 +782,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -804,7 +804,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -826,7 +826,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -848,7 +848,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -870,7 +870,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -892,7 +892,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -914,7 +914,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -936,7 +936,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -958,7 +958,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -980,7 +980,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -1002,7 +1002,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -1024,7 +1024,7 @@
           "id": "3f5df819-7aca-49e1-bf6f-3e8f120f20d1",
           "name": "Forhold ved virksomheten",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til forhold ved virksomheten.",
-          "iconUrl": "Workplace_Buildings3",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings3.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:forhold_ved_virksomheten",
           "group": {
@@ -1043,7 +1043,7 @@
     "id": "892e98c6-1696-46e7-9bb1-59c08761ec64",
     "name": "Integrasjoner",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til integrasjoner.",
-    "iconUrl": "Interface_RotateLeft",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Interface_RotateLeft.svg",
     "accessPackages": [
       {
         "id": "27f488d7-d1f6-4aee-ae81-2bb42d62c446",
@@ -1054,7 +1054,7 @@
           "id": "892e98c6-1696-46e7-9bb1-59c08761ec64",
           "name": "Integrasjoner",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til integrasjoner.",
-          "iconUrl": "Interface_RotateLeft",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Interface_RotateLeft.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:integrasjoner",
           "group": {
@@ -1076,7 +1076,7 @@
           "id": "892e98c6-1696-46e7-9bb1-59c08761ec64",
           "name": "Integrasjoner",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til integrasjoner.",
-          "iconUrl": "Interface_RotateLeft",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Interface_RotateLeft.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:integrasjoner",
           "group": {
@@ -1098,7 +1098,7 @@
           "id": "892e98c6-1696-46e7-9bb1-59c08761ec64",
           "name": "Integrasjoner",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til integrasjoner.",
-          "iconUrl": "Interface_RotateLeft",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Interface_RotateLeft.svg",
           "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
           "urn": "accesspackage:area:integrasjoner",
           "group": {
@@ -1117,7 +1117,7 @@
     "id": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
     "name": "Jordbruk, skogbruk, jakt, fiske og akvakultur",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til jordbruk, skogbruk, jakt, fiske og akvakultur.",
-    "iconUrl": "Nature-and-animals_Plant",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Nature-and-animals-Plant.svg",
     "accessPackages": [
       {
         "id": "c5bbbc3f-605a-4dcb-a587-32124d7bb76d",
@@ -1128,7 +1128,7 @@
           "id": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
           "name": "Jordbruk, skogbruk, jakt, fiske og akvakultur",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til jordbruk, skogbruk, jakt, fiske og akvakultur.",
-          "iconUrl": "Nature-and-animals_Plant",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Nature-and-animals-Plant.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:jordbruk_skogbruk_jakt_fiske_og_akvakultur",
           "group": {
@@ -1150,7 +1150,7 @@
           "id": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
           "name": "Jordbruk, skogbruk, jakt, fiske og akvakultur",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til jordbruk, skogbruk, jakt, fiske og akvakultur.",
-          "iconUrl": "Nature-and-animals_Plant",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Nature-and-animals-Plant.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:jordbruk_skogbruk_jakt_fiske_og_akvakultur",
           "group": {
@@ -1172,7 +1172,7 @@
           "id": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
           "name": "Jordbruk, skogbruk, jakt, fiske og akvakultur",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til jordbruk, skogbruk, jakt, fiske og akvakultur.",
-          "iconUrl": "Nature-and-animals_Plant",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Nature-and-animals-Plant.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:jordbruk_skogbruk_jakt_fiske_og_akvakultur",
           "group": {
@@ -1194,7 +1194,7 @@
           "id": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
           "name": "Jordbruk, skogbruk, jakt, fiske og akvakultur",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til jordbruk, skogbruk, jakt, fiske og akvakultur.",
-          "iconUrl": "Nature-and-animals_Plant",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Nature-and-animals-Plant.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:jordbruk_skogbruk_jakt_fiske_og_akvakultur",
           "group": {
@@ -1216,7 +1216,7 @@
           "id": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
           "name": "Jordbruk, skogbruk, jakt, fiske og akvakultur",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til jordbruk, skogbruk, jakt, fiske og akvakultur.",
-          "iconUrl": "Nature-and-animals_Plant",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Nature-and-animals-Plant.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:jordbruk_skogbruk_jakt_fiske_og_akvakultur",
           "group": {
@@ -1238,7 +1238,7 @@
           "id": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
           "name": "Jordbruk, skogbruk, jakt, fiske og akvakultur",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til jordbruk, skogbruk, jakt, fiske og akvakultur.",
-          "iconUrl": "Nature-and-animals_Plant",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Nature-and-animals-Plant.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:jordbruk_skogbruk_jakt_fiske_og_akvakultur",
           "group": {
@@ -1260,7 +1260,7 @@
           "id": "fc93d25e-80bc-469a-aa43-a6cee80eb3e2",
           "name": "Jordbruk, skogbruk, jakt, fiske og akvakultur",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til jordbruk, skogbruk, jakt, fiske og akvakultur.",
-          "iconUrl": "Nature-and-animals_Plant",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Nature-and-animals-Plant.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:jordbruk_skogbruk_jakt_fiske_og_akvakultur",
           "group": {
@@ -1279,7 +1279,7 @@
     "id": "536b317c-ef85-45d4-9b48-6511578e1952",
     "name": "Bygg, anlegg og eiendom",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til bygg, anlegg og eiendom.",
-    "iconUrl": "People_HandHouse",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Bygg-anlegg-og-eiendom_HandHouse.svg",
     "accessPackages": [
       {
         "id": "1e40697b-e178-4920-8fbd-af5164b4d147",
@@ -1290,7 +1290,7 @@
           "id": "536b317c-ef85-45d4-9b48-6511578e1952",
           "name": "Bygg, anlegg og eiendom",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til bygg, anlegg og eiendom.",
-          "iconUrl": "People_HandHouse",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Bygg-anlegg-og-eiendom_HandHouse.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:bygg_anlegg_og_eiendom",
           "group": {
@@ -1312,7 +1312,7 @@
           "id": "536b317c-ef85-45d4-9b48-6511578e1952",
           "name": "Bygg, anlegg og eiendom",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til bygg, anlegg og eiendom.",
-          "iconUrl": "People_HandHouse",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Bygg-anlegg-og-eiendom_HandHouse.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:bygg_anlegg_og_eiendom",
           "group": {
@@ -1334,7 +1334,7 @@
           "id": "536b317c-ef85-45d4-9b48-6511578e1952",
           "name": "Bygg, anlegg og eiendom",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til bygg, anlegg og eiendom.",
-          "iconUrl": "People_HandHouse",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Bygg-anlegg-og-eiendom_HandHouse.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:bygg_anlegg_og_eiendom",
           "group": {
@@ -1356,7 +1356,7 @@
           "id": "536b317c-ef85-45d4-9b48-6511578e1952",
           "name": "Bygg, anlegg og eiendom",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til bygg, anlegg og eiendom.",
-          "iconUrl": "People_HandHouse",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Bygg-anlegg-og-eiendom_HandHouse.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:bygg_anlegg_og_eiendom",
           "group": {
@@ -1378,7 +1378,7 @@
           "id": "536b317c-ef85-45d4-9b48-6511578e1952",
           "name": "Bygg, anlegg og eiendom",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til bygg, anlegg og eiendom.",
-          "iconUrl": "People_HandHouse",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Bygg-anlegg-og-eiendom_HandHouse.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:bygg_anlegg_og_eiendom",
           "group": {
@@ -1400,7 +1400,7 @@
           "id": "536b317c-ef85-45d4-9b48-6511578e1952",
           "name": "Bygg, anlegg og eiendom",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til bygg, anlegg og eiendom.",
-          "iconUrl": "People_HandHouse",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Bygg-anlegg-og-eiendom_HandHouse.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:bygg_anlegg_og_eiendom",
           "group": {
@@ -1422,7 +1422,7 @@
           "id": "536b317c-ef85-45d4-9b48-6511578e1952",
           "name": "Bygg, anlegg og eiendom",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til bygg, anlegg og eiendom.",
-          "iconUrl": "People_HandHouse",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Bygg-anlegg-og-eiendom_HandHouse.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:bygg_anlegg_og_eiendom",
           "group": {
@@ -1441,7 +1441,7 @@
     "id": "6ff90072-566b-4acd-baac-ec477534e712",
     "name": "Transport og lagring",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til transport og lagring.",
-    "iconUrl": "Transportation_Truck",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Transportation_Truck.svg",
     "accessPackages": [
       {
         "id": "36c245db-3207-449e-92b1-94cb0a0f3031",
@@ -1452,7 +1452,7 @@
           "id": "6ff90072-566b-4acd-baac-ec477534e712",
           "name": "Transport og lagring",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til transport og lagring.",
-          "iconUrl": "Transportation_Truck",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Transportation_Truck.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:transport_og_lagring",
           "group": {
@@ -1474,7 +1474,7 @@
           "id": "6ff90072-566b-4acd-baac-ec477534e712",
           "name": "Transport og lagring",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til transport og lagring.",
-          "iconUrl": "Transportation_Truck",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Transportation_Truck.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:transport_og_lagring",
           "group": {
@@ -1496,7 +1496,7 @@
           "id": "6ff90072-566b-4acd-baac-ec477534e712",
           "name": "Transport og lagring",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til transport og lagring.",
-          "iconUrl": "Transportation_Truck",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Transportation_Truck.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:transport_og_lagring",
           "group": {
@@ -1518,7 +1518,7 @@
           "id": "6ff90072-566b-4acd-baac-ec477534e712",
           "name": "Transport og lagring",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til transport og lagring.",
-          "iconUrl": "Transportation_Truck",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Transportation_Truck.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:transport_og_lagring",
           "group": {
@@ -1540,7 +1540,7 @@
           "id": "6ff90072-566b-4acd-baac-ec477534e712",
           "name": "Transport og lagring",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til transport og lagring.",
-          "iconUrl": "Transportation_Truck",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Transportation_Truck.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:transport_og_lagring",
           "group": {
@@ -1562,7 +1562,7 @@
           "id": "6ff90072-566b-4acd-baac-ec477534e712",
           "name": "Transport og lagring",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til transport og lagring.",
-          "iconUrl": "Transportation_Truck",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Transportation_Truck.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:transport_og_lagring",
           "group": {
@@ -1581,7 +1581,7 @@
     "id": "eab59b26-833f-40ca-9e27-72107e8f1908",
     "name": "Helse, pleie, omsorg og vern",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til helse, pleie, omsorg og vern.",
-    "iconUrl": "Wellness_Hospital",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_Hospital.svg",
     "accessPackages": [
       {
         "id": "03404270-aa2d-498f-9e6a-103043d41f1f",
@@ -1592,7 +1592,7 @@
           "id": "eab59b26-833f-40ca-9e27-72107e8f1908",
           "name": "Helse, pleie, omsorg og vern",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til helse, pleie, omsorg og vern.",
-          "iconUrl": "Wellness_Hospital",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_Hospital.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:helse_pleie_omsorg_og_vern",
           "group": {
@@ -1614,7 +1614,7 @@
           "id": "eab59b26-833f-40ca-9e27-72107e8f1908",
           "name": "Helse, pleie, omsorg og vern",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til helse, pleie, omsorg og vern.",
-          "iconUrl": "Wellness_Hospital",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_Hospital.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:helse_pleie_omsorg_og_vern",
           "group": {
@@ -1636,7 +1636,7 @@
           "id": "eab59b26-833f-40ca-9e27-72107e8f1908",
           "name": "Helse, pleie, omsorg og vern",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til helse, pleie, omsorg og vern.",
-          "iconUrl": "Wellness_Hospital",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_Hospital.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:helse_pleie_omsorg_og_vern",
           "group": {
@@ -1658,7 +1658,7 @@
           "id": "eab59b26-833f-40ca-9e27-72107e8f1908",
           "name": "Helse, pleie, omsorg og vern",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til helse, pleie, omsorg og vern.",
-          "iconUrl": "Wellness_Hospital",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_Hospital.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:helse_pleie_omsorg_og_vern",
           "group": {
@@ -1680,7 +1680,7 @@
           "id": "eab59b26-833f-40ca-9e27-72107e8f1908",
           "name": "Helse, pleie, omsorg og vern",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til helse, pleie, omsorg og vern.",
-          "iconUrl": "Wellness_Hospital",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_Hospital.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:helse_pleie_omsorg_og_vern",
           "group": {
@@ -1702,7 +1702,7 @@
           "id": "eab59b26-833f-40ca-9e27-72107e8f1908",
           "name": "Helse, pleie, omsorg og vern",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til helse, pleie, omsorg og vern.",
-          "iconUrl": "Wellness_Hospital",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_Hospital.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:helse_pleie_omsorg_og_vern",
           "group": {
@@ -1724,7 +1724,7 @@
           "id": "eab59b26-833f-40ca-9e27-72107e8f1908",
           "name": "Helse, pleie, omsorg og vern",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til helse, pleie, omsorg og vern.",
-          "iconUrl": "Wellness_Hospital",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_Hospital.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:helse_pleie_omsorg_og_vern",
           "group": {
@@ -1743,7 +1743,7 @@
     "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
     "name": "Oppvekst og utdaning",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-    "iconUrl": "Workplace_Buildings2",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
     "accessPackages": [
       {
         "id": "8cf4ec08-90dc-47d0-93f8-64a50c9b38b0",
@@ -1754,7 +1754,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -1776,7 +1776,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -1798,7 +1798,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -1820,7 +1820,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -1842,7 +1842,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -1864,7 +1864,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -1886,7 +1886,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -1908,7 +1908,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -1930,7 +1930,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -1952,7 +1952,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -1974,7 +1974,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -1996,7 +1996,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -2018,7 +2018,7 @@
           "id": "7326614f-cf7c-492e-8e7f-d74e6e4a8970",
           "name": "Oppvekst og utdaning",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til oppvekst og utdaning.",
-          "iconUrl": "Workplace_Buildings2",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Buildings2.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:oppvekst_og_utdaning",
           "group": {
@@ -2037,7 +2037,7 @@
     "id": "6e152c10-0f63-4060-9b14-66808e7ac320",
     "name": "Energi, vann,avløp og avfall",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til energi, vann,avløp og avfall.",
-    "iconUrl": "Workplace_TapWater",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_TapWater.svg",
     "accessPackages": [
       {
         "id": "f56bdb15-686b-46f8-9343-bde5d7c17648",
@@ -2048,7 +2048,7 @@
           "id": "6e152c10-0f63-4060-9b14-66808e7ac320",
           "name": "Energi, vann,avløp og avfall",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til energi, vann,avløp og avfall.",
-          "iconUrl": "Workplace_TapWater",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_TapWater.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:energi_vann_avlop_og_avfall",
           "group": {
@@ -2070,7 +2070,7 @@
           "id": "6e152c10-0f63-4060-9b14-66808e7ac320",
           "name": "Energi, vann,avløp og avfall",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til energi, vann,avløp og avfall.",
-          "iconUrl": "Workplace_TapWater",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_TapWater.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:energi_vann_avlop_og_avfall",
           "group": {
@@ -2092,7 +2092,7 @@
           "id": "6e152c10-0f63-4060-9b14-66808e7ac320",
           "name": "Energi, vann,avløp og avfall",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til energi, vann,avløp og avfall.",
-          "iconUrl": "Workplace_TapWater",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_TapWater.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:energi_vann_avlop_og_avfall",
           "group": {
@@ -2114,7 +2114,7 @@
           "id": "6e152c10-0f63-4060-9b14-66808e7ac320",
           "name": "Energi, vann,avløp og avfall",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til energi, vann,avløp og avfall.",
-          "iconUrl": "Workplace_TapWater",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_TapWater.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:energi_vann_avlop_og_avfall",
           "group": {
@@ -2136,7 +2136,7 @@
           "id": "6e152c10-0f63-4060-9b14-66808e7ac320",
           "name": "Energi, vann,avløp og avfall",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til energi, vann,avløp og avfall.",
-          "iconUrl": "Workplace_TapWater",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_TapWater.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:energi_vann_avlop_og_avfall",
           "group": {
@@ -2158,7 +2158,7 @@
           "id": "6e152c10-0f63-4060-9b14-66808e7ac320",
           "name": "Energi, vann,avløp og avfall",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til energi, vann,avløp og avfall.",
-          "iconUrl": "Workplace_TapWater",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_TapWater.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:energi_vann_avlop_og_avfall",
           "group": {
@@ -2180,7 +2180,7 @@
           "id": "6e152c10-0f63-4060-9b14-66808e7ac320",
           "name": "Energi, vann,avløp og avfall",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til energi, vann,avløp og avfall.",
-          "iconUrl": "Workplace_TapWater",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_TapWater.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:energi_vann_avlop_og_avfall",
           "group": {
@@ -2199,7 +2199,7 @@
     "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
     "name": "Industrier",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-    "iconUrl": "Factory",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
     "accessPackages": [
       {
         "id": "65c7bbe7-aeb4-4f18-b0b0-1b1b83bd24d1",
@@ -2210,7 +2210,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2232,7 +2232,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2254,7 +2254,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2276,7 +2276,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2298,7 +2298,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2320,7 +2320,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2342,7 +2342,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2364,7 +2364,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2386,7 +2386,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2408,7 +2408,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2430,7 +2430,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2452,7 +2452,7 @@
           "id": "10c2dd29-5ab3-4a26-900e-8e2326150353",
           "name": "Industrier",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til industrier.",
-          "iconUrl": "Factory",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Altinn_Industrier_Factory.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:industrier",
           "group": {
@@ -2471,7 +2471,7 @@
     "id": "5996ba37-6db0-4391-8918-b1b0bd4b394b",
     "name": "Kultur og frivillighet",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til kultur og frivillighet.",
-    "iconUrl": "Wellness_HeadHeart",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_HeadHeart.svg",
     "accessPackages": [
       {
         "id": "75fa5863-3368-4ac6-9a4b-48f595e483ad",
@@ -2482,7 +2482,7 @@
           "id": "5996ba37-6db0-4391-8918-b1b0bd4b394b",
           "name": "Kultur og frivillighet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til kultur og frivillighet.",
-          "iconUrl": "Wellness_HeadHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_HeadHeart.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:kultur_og_frivillighet",
           "group": {
@@ -2504,7 +2504,7 @@
           "id": "5996ba37-6db0-4391-8918-b1b0bd4b394b",
           "name": "Kultur og frivillighet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til kultur og frivillighet.",
-          "iconUrl": "Wellness_HeadHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_HeadHeart.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:kultur_og_frivillighet",
           "group": {
@@ -2526,7 +2526,7 @@
           "id": "5996ba37-6db0-4391-8918-b1b0bd4b394b",
           "name": "Kultur og frivillighet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til kultur og frivillighet.",
-          "iconUrl": "Wellness_HeadHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_HeadHeart.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:kultur_og_frivillighet",
           "group": {
@@ -2548,7 +2548,7 @@
           "id": "5996ba37-6db0-4391-8918-b1b0bd4b394b",
           "name": "Kultur og frivillighet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til kultur og frivillighet.",
-          "iconUrl": "Wellness_HeadHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_HeadHeart.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:kultur_og_frivillighet",
           "group": {
@@ -2570,7 +2570,7 @@
           "id": "5996ba37-6db0-4391-8918-b1b0bd4b394b",
           "name": "Kultur og frivillighet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til kultur og frivillighet.",
-          "iconUrl": "Wellness_HeadHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_HeadHeart.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:kultur_og_frivillighet",
           "group": {
@@ -2592,7 +2592,7 @@
           "id": "5996ba37-6db0-4391-8918-b1b0bd4b394b",
           "name": "Kultur og frivillighet",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til kultur og frivillighet.",
-          "iconUrl": "Wellness_HeadHeart",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_HeadHeart.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:kultur_og_frivillighet",
           "group": {
@@ -2611,7 +2611,7 @@
     "id": "3797e9f0-dd83-404c-9897-e356c32ef600",
     "name": "Handel, overnatting og servering",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til handel, overnatting og servering.",
-    "iconUrl": "Wellness_TrayFood",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_TrayFood.svg",
     "accessPackages": [
       {
         "id": "a6d704b7-d56b-4517-be79-0acd5b55b35e",
@@ -2622,7 +2622,7 @@
           "id": "3797e9f0-dd83-404c-9897-e356c32ef600",
           "name": "Handel, overnatting og servering",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til handel, overnatting og servering.",
-          "iconUrl": "Wellness_TrayFood",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_TrayFood.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:handel_overnatting_og_servering",
           "group": {
@@ -2644,7 +2644,7 @@
           "id": "3797e9f0-dd83-404c-9897-e356c32ef600",
           "name": "Handel, overnatting og servering",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til handel, overnatting og servering.",
-          "iconUrl": "Wellness_TrayFood",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_TrayFood.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:handel_overnatting_og_servering",
           "group": {
@@ -2666,7 +2666,7 @@
           "id": "3797e9f0-dd83-404c-9897-e356c32ef600",
           "name": "Handel, overnatting og servering",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til handel, overnatting og servering.",
-          "iconUrl": "Wellness_TrayFood",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Wellness_TrayFood.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:handel_overnatting_og_servering",
           "group": {
@@ -2685,7 +2685,7 @@
     "id": "e31169f6-d4c7-4e45-93c7-f90bc285b639",
     "name": "Andre tjenesteytende næringer",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til andre tjenesteytende næringer.",
-    "iconUrl": "Workplace_Reception",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Reception.svg",
     "accessPackages": [
       {
         "id": "a736c33b-c15a-43ac-85be-a684630e1e59",
@@ -2696,7 +2696,7 @@
           "id": "e31169f6-d4c7-4e45-93c7-f90bc285b639",
           "name": "Andre tjenesteytende næringer",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til andre tjenesteytende næringer.",
-          "iconUrl": "Workplace_Reception",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Reception.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:andre_tjenesteytende_naeringer",
           "group": {
@@ -2718,7 +2718,7 @@
           "id": "e31169f6-d4c7-4e45-93c7-f90bc285b639",
           "name": "Andre tjenesteytende næringer",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til andre tjenesteytende næringer.",
-          "iconUrl": "Workplace_Reception",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Reception.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:andre_tjenesteytende_naeringer",
           "group": {
@@ -2740,7 +2740,7 @@
           "id": "e31169f6-d4c7-4e45-93c7-f90bc285b639",
           "name": "Andre tjenesteytende næringer",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til andre tjenesteytende næringer.",
-          "iconUrl": "Workplace_Reception",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Reception.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:andre_tjenesteytende_naeringer",
           "group": {
@@ -2762,7 +2762,7 @@
           "id": "e31169f6-d4c7-4e45-93c7-f90bc285b639",
           "name": "Andre tjenesteytende næringer",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til andre tjenesteytende næringer.",
-          "iconUrl": "Workplace_Reception",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Workplace_Reception.svg",
           "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4",
           "urn": "accesspackage:area:andre_tjenesteytende_naeringer",
           "group": {
@@ -2781,7 +2781,7 @@
     "id": "64cbcdc8-01c9-448c-b3d2-eb9582beb3c2",
     "name": "Fullmakter for regnskapsfører",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for regnskapsfører.",
-    "iconUrl": "Home_Calculator",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Home_Calculator.svg",
     "accessPackages": [
       {
         "id": "955d5779-3e2b-4098-b11d-0431dc41ddbe",
@@ -2792,7 +2792,7 @@
           "id": "64cbcdc8-01c9-448c-b3d2-eb9582beb3c2",
           "name": "Fullmakter for regnskapsfører",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for regnskapsfører.",
-          "iconUrl": "Home_Calculator",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Home_Calculator.svg",
           "groupId": "554f0321-53b8-4d97-be12-6a585c507159",
           "urn": "accesspackage:area:fullmakter_for_regnskapsforer",
           "group": {
@@ -2831,7 +2831,7 @@
           "id": "64cbcdc8-01c9-448c-b3d2-eb9582beb3c2",
           "name": "Fullmakter for regnskapsfører",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for regnskapsfører.",
-          "iconUrl": "Home_Calculator",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Home_Calculator.svg",
           "groupId": "554f0321-53b8-4d97-be12-6a585c507159",
           "urn": "accesspackage:area:fullmakter_for_regnskapsforer",
           "group": {
@@ -2853,7 +2853,7 @@
           "id": "64cbcdc8-01c9-448c-b3d2-eb9582beb3c2",
           "name": "Fullmakter for regnskapsfører",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for regnskapsfører.",
-          "iconUrl": "Home_Calculator",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Home_Calculator.svg",
           "groupId": "554f0321-53b8-4d97-be12-6a585c507159",
           "urn": "accesspackage:area:fullmakter_for_regnskapsforer",
           "group": {
@@ -2872,7 +2872,7 @@
     "id": "7df15290-f43c-4831-a1b4-3edfa43e526d",
     "name": "Fullmakter for revisor",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for revisor.",
-    "iconUrl": "Files-and-application_FileSearch",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Files-and-application_FileSearch.svg",
     "accessPackages": [
       {
         "id": "2f176732-b1e9-449b-9918-090d1fa986f6",
@@ -2883,7 +2883,7 @@
           "id": "7df15290-f43c-4831-a1b4-3edfa43e526d",
           "name": "Fullmakter for revisor",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for revisor.",
-          "iconUrl": "Files-and-application_FileSearch",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Files-and-application_FileSearch.svg",
           "groupId": "554f0321-53b8-4d97-be12-6a585c507159",
           "urn": "accesspackage:area:fullmakter_for_revisor",
           "group": {
@@ -2905,7 +2905,7 @@
           "id": "7df15290-f43c-4831-a1b4-3edfa43e526d",
           "name": "Fullmakter for revisor",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for revisor.",
-          "iconUrl": "Files-and-application_FileSearch",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Files-and-application_FileSearch.svg",
           "groupId": "554f0321-53b8-4d97-be12-6a585c507159",
           "urn": "accesspackage:area:fullmakter_for_revisor",
           "group": {
@@ -2924,7 +2924,7 @@
     "id": "f3daddb7-6e21-455e-b6d2-65a281375b6b",
     "name": "Fullmakter for konkursbo",
     "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for konkursbo.",
-    "iconUrl": "Statistics-and-math_TrendDown",
+    "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Statistics-and-math_TrendDown.svg",
     "accessPackages": [
       {
         "id": "5ef836c7-69cc-4ea8-84d6-fb933cc4fc5c",
@@ -2935,7 +2935,7 @@
           "id": "f3daddb7-6e21-455e-b6d2-65a281375b6b",
           "name": "Fullmakter for konkursbo",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for konkursbo.",
-          "iconUrl": "Statistics-and-math_TrendDown",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Statistics-and-math_TrendDown.svg",
           "groupId": "554f0321-53b8-4d97-be12-6a585c507159",
           "urn": "accesspackage:area:fullmakter_for_konkursbo",
           "group": {
@@ -2957,7 +2957,7 @@
           "id": "f3daddb7-6e21-455e-b6d2-65a281375b6b",
           "name": "Fullmakter for konkursbo",
           "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for konkursbo.",
-          "iconUrl": "Statistics-and-math_TrendDown",
+          "iconUrl": "https://altinncdn.no/authorization/accesspackageicons/Aksel_Statistics-and-math_TrendDown.svg",
           "groupId": "554f0321-53b8-4d97-be12-6a585c507159",
           "urn": "accesspackage:area:fullmakter_for_konkursbo",
           "group": {
