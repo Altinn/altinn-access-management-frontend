@@ -737,7 +737,10 @@
     "revoke_consent_text": "Are you certain you want to revoke this consent?",
     "revoke_poa_text": "Are you certain you want to revoke this power of attorney?",
     "confirm_revoke_consent": "Yes, revoke consent",
-    "confirm_revoke_poa": "Yes, revoke power of attorney"
+    "confirm_revoke_poa": "Yes, revoke power of attorney",
+    "altinn2_consent_alert_header": "You are now in a new version of the Consent- and power of attorney overview",
+    "altinn2_consent_alert_body": "Soon you will find an overview of active consents- and powers of attorney here. If you cannot find what you are looking for here you can",
+    "altinn2_consent_alert_link": "go back to today's Altinn and check there."
   },
   "consent_log": {
     "page_title": "Agreement log - Altinn",
@@ -759,7 +762,9 @@
     "poa_used": "{{to}}: has retrieved power of attorney from {{from}}.",
     "handledby": "{{handledBy}} has retrieved the data on behalf of {{to}}.",
     "no_results": "No consent or power of attorney was found for this search",
-    "no_active_consents": "There area no entries in agreement log yet"
+    "no_active_consents": "There are no entries in agreement log yet",
+    "altinn2_consent_alert_header": "You are now in a new version of the agreement log",
+    "altinn2_consent_alert_body": "Soon you will find an overview of all consents and powers of attorney here. If you cannot find what you are looking for here you can"
   },
   "consent_errors": {
     "not_authorized_for_consent": "User is not authorized to give consent/power of attorney",
