@@ -1,7 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import { DsHeading, DsParagraph, DsAlert, DsButton, DsCombobox } from '@altinn/altinn-components';
+import {
+  DsHeading,
+  DsParagraph,
+  DsAlert,
+  DsButton,
+  DsCombobox,
+  DsSpinner,
+} from '@altinn/altinn-components';
 
 import {
   useGetRegisteredSystemsQuery,
@@ -35,7 +42,8 @@ export const SelectRegisteredSystem = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const partyId = getCookie('AltinnPartyId');
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
+  const { data: reporteeData, isLoading: isLoadingReportee } =
+    useGetSystemUserReporteeQuery(partyId);
 
   const {
     data: registeredSystems,
@@ -51,73 +59,74 @@ export const SelectRegisteredSystem = ({
     <PageContainer
       onNavigateBack={() => navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`)}
     >
-      {reporteeData && (
-        <div className={classes.creationPageContainer}>
-          <DsHeading
-            level={1}
+      <div className={classes.creationPageContainer}>
+        <DsHeading
+          level={1}
+          data-size='sm'
+        >
+          {t('systemuser_creationpage.sub_title')}
+        </DsHeading>
+        {isLoadingReportee && (
+          <DsSpinner aria-label={t('systemuser_creationpage.loading_systems')} />
+        )}
+        <CreateSystemUserCheck reporteeData={reporteeData}>
+          <DsParagraph
             data-size='sm'
+            className={classes.systemDescription}
           >
-            {t('systemuser_creationpage.sub_title')}
-          </DsHeading>
-          <CreateSystemUserCheck reporteeData={reporteeData}>
-            <DsParagraph
-              data-size='sm'
-              className={classes.systemDescription}
+            {t('systemuser_creationpage.content_text1')}
+          </DsParagraph>
+          <div className={classes.inputContainer}>
+            <DsCombobox
+              label={t('systemuser_creationpage.pull_down_menu_label')}
+              loading={isLoadingRegisteredSystems}
+              loadingLabel={t('systemuser_creationpage.loading_systems')}
+              placeholder={t('systemuser_creationpage.choose')}
+              value={selectedSystem ? [selectedSystem.systemId] : undefined}
+              onValueChange={onSelectSystem}
+              filter={(inputValue: string, { label, description }) => {
+                const isLabelMatch = isStringMatch(inputValue, label);
+                const isDescriptionMatch = isStringMatch(inputValue, description);
+                return isLabelMatch || isDescriptionMatch;
+              }}
             >
-              {t('systemuser_creationpage.content_text1')}
-            </DsParagraph>
-            <div className={classes.inputContainer}>
-              <DsCombobox
-                label={t('systemuser_creationpage.pull_down_menu_label')}
-                loading={isLoadingRegisteredSystems}
-                loadingLabel={t('systemuser_creationpage.loading_systems')}
-                placeholder={t('systemuser_creationpage.choose')}
-                value={selectedSystem ? [selectedSystem.systemId] : undefined}
-                onValueChange={onSelectSystem}
-                filter={(inputValue: string, { label, description }) => {
-                  const isLabelMatch = isStringMatch(inputValue, label);
-                  const isDescriptionMatch = isStringMatch(inputValue, description);
-                  return isLabelMatch || isDescriptionMatch;
-                }}
-              >
-                {registeredSystems?.map((system) => {
-                  return (
-                    <DsCombobox.Option
-                      key={system.systemId}
-                      value={system.systemId}
-                      description={`${system.systemVendorOrgName} (${system.systemVendorOrgNumber})`}
-                    >
-                      {system.name}
-                    </DsCombobox.Option>
-                  );
-                })}
-              </DsCombobox>
-              {isLoadRegisteredSystemsError && (
-                <DsAlert data-color='danger'>
-                  {t('systemuser_creationpage.load_vendors_error')}
-                </DsAlert>
-              )}
-            </div>
-            <ButtonRow>
-              <DsButton
-                variant='primary'
-                onClick={handleConfirm}
-                disabled={!selectedSystem}
-              >
-                {t('systemuser_creationpage.confirm_button')}
-              </DsButton>
-              <DsButton
-                variant='tertiary'
-                asChild
-              >
-                <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}>
-                  {t('common.cancel')}
-                </Link>
-              </DsButton>
-            </ButtonRow>
-          </CreateSystemUserCheck>
-        </div>
-      )}
+              {registeredSystems?.map((system) => {
+                return (
+                  <DsCombobox.Option
+                    key={system.systemId}
+                    value={system.systemId}
+                    description={`${system.systemVendorOrgName} (${system.systemVendorOrgNumber})`}
+                  >
+                    {system.name}
+                  </DsCombobox.Option>
+                );
+              })}
+            </DsCombobox>
+            {isLoadRegisteredSystemsError && (
+              <DsAlert data-color='danger'>
+                {t('systemuser_creationpage.load_vendors_error')}
+              </DsAlert>
+            )}
+          </div>
+          <ButtonRow>
+            <DsButton
+              variant='primary'
+              onClick={handleConfirm}
+              disabled={!selectedSystem}
+            >
+              {t('systemuser_creationpage.confirm_button')}
+            </DsButton>
+            <DsButton
+              variant='tertiary'
+              asChild
+            >
+              <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}>
+                {t('common.cancel')}
+              </Link>
+            </DsButton>
+          </ButtonRow>
+        </CreateSystemUserCheck>
+      </div>
     </PageContainer>
   );
 };
