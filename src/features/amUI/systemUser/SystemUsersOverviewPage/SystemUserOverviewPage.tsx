@@ -52,7 +52,7 @@ export const SystemUserOverviewPage = () => {
   } = useGetAgentSystemUsersQuery(partyId);
 
   const isLoading =
-    isLoadingSystemUsers && isLoadingAgentSystemUsers && isLoadingReportee && isLoadingClientAdmin;
+    isLoadingSystemUsers || isLoadingAgentSystemUsers || isLoadingReportee || isLoadingClientAdmin;
 
   return (
     <PageWrapper>
