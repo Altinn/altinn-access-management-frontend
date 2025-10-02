@@ -7,7 +7,7 @@ export const hasConsentPermission = (
   return reportee?.type === 'Person' || (reportee?.type === 'Organization' && isAdmin);
 };
 
-export const canCreateSystemUser = (reporteeInfo?: ReporteeInfo): boolean | undefined => {
+export const hasCreateSystemUserPermission = (reporteeInfo?: ReporteeInfo): boolean | undefined => {
   if (!reporteeInfo) {
     return undefined;
   }

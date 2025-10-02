@@ -29,7 +29,7 @@ import { RightsList } from '../components/RightsList/RightsList';
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
-import { canCreateSystemUser } from '@/resources/utils/permissionUtils';
+import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -160,7 +160,7 @@ export const SystemUserAgentDelegationPageContent = ({
       onNavigateBack={handleNavigateBack}
       pageActions={
         systemUser &&
-        canCreateSystemUser(reporteeData) && (
+        hasCreateSystemUserPermission(reporteeData) && (
           <DeleteSystemUserPopover
             integrationTitle={systemUser.integrationTitle}
             isDeleteError={isDeleteError}

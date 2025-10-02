@@ -20,7 +20,7 @@ import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeade
 import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserDetailsPage.module.css';
-import { canCreateSystemUser } from '../permissionUtils';
+import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
@@ -58,7 +58,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
         <PageContainer
           onNavigateBack={handleNavigateBack}
           pageActions={
-            canCreateSystemUser(reporteeData) &&
+            hasCreateSystemUserPermission(reporteeData) &&
             systemUser && (
               <DeleteSystemUserPopover
                 integrationTitle={systemUser?.integrationTitle ?? ''}

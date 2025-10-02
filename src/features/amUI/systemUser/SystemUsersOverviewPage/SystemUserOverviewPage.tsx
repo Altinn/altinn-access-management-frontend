@@ -27,7 +27,7 @@ import type { SystemUser } from '../types';
 
 import classes from './SystemUserOverviewPage.module.css';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
-import { canCreateSystemUser } from '@/resources/utils/permissionUtils';
+import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
@@ -73,7 +73,7 @@ export const SystemUserOverviewPage = () => {
           {isLoading && <DsSpinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />}
           {!isLoading && (
             <>
-              {isClientAdmin === false && canCreateSystemUser(reporteeData) === false && (
+              {isClientAdmin === false && hasCreateSystemUserPermission(reporteeData) === false && (
                 <DsAlert data-color='warning'>
                   {t('systemuser_overviewpage.no_permissions_warning')}
                 </DsAlert>
@@ -88,12 +88,12 @@ export const SystemUserOverviewPage = () => {
                     >
                       {t('systemuser_overviewpage.existing_system_users_title')}
                     </DsHeading>
-                    {canCreateSystemUser(reporteeData) && <CreateSystemUserButton />}
+                    {hasCreateSystemUserPermission(reporteeData) && <CreateSystemUserButton />}
                   </div>
                   <SystemUserList systemUsers={systemUsers} />
                 </>
               )}
-              {systemUsers?.length === 0 && canCreateSystemUser(reporteeData) && (
+              {systemUsers?.length === 0 && hasCreateSystemUserPermission(reporteeData) && (
                 <CreateSystemUserButton />
               )}
               {isLoadSystemUsersError && (
