@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.Profile;
+﻿using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -128,6 +129,11 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 return await _settingsService.DeleteOrganisationNotificationAddress(orgNumber, notificationAddressId);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
