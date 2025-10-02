@@ -18,6 +18,7 @@ import { ConsentPath } from '@/routes/paths';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ConsentListItem } from './ConsentListItem';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
+import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -69,6 +70,10 @@ export const ActiveConsentsPage = () => {
         >
           {t('active_consents.heading')}
         </DsHeading>
+        <OldConsentAlert
+          heading={t('active_consents.altinn2_consent_alert_header')}
+          text={t('active_consents.altinn2_consent_alert_body')}
+        />
         <div className={classes.activeConsentsSubHeading}>
           <DsHeading
             level={2}

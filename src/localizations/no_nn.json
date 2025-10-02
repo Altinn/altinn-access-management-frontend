@@ -683,10 +683,10 @@
     "18_delegation_right_missing_delegation_access": "Delegering av tenester feila: du har ikkje rettar til å direkte delegere tenester.",
     "19_delegation_right_missing_srr_right_access": "Delegering av tenester feila: ei eller fleire tenester nyttar tilgangslister der verksemda ikkje har tilgang.",
     "20_delegation_right_insufficient_authentication_level": "Delegering av tenester feila: ei eller fleire tenester krev eksplisitt tilgangsnivå.",
-    "50_accesspackage_delegation_failed": "Delegering av tilgangspakkar til systembrukeren feila.",
-    "52_accesspackage_delegation_missing_required_access": "Du har ikkje tilstrekkeleg tilgong for å delegere desse tilgangspakkane.",
-    "54_accesspackage_failed_to_get_delegated_packages": "Kunne ikkje hente delegerte tilgangspakkar.",
-    "56_systemuser_failed_to_delete_accesspackage": "Kunne ikkje fjerne tilgangspakke-delegering for systembruker."
+    "51_accesspackage_delegation_failed": "Delegering av tilgangspakkar til systembrukeren feila.",
+    "53_accesspackage_delegation_missing_required_access": "Du har ikkje tilstrekkeleg tilgong for å delegere desse tilgangspakkane.",
+    "55_accesspackage_failed_to_get_delegated_packages": "Kunne ikkje hente delegerte tilgangspakkar.",
+    "57_systemuser_failed_to_delete_accesspackage": "Kunne ikkje fjerne tilgangspakke-delegering for systembruker."
   },
   "page_not_available": {
     "title": "Sida er ikkje tilgjengelig",
@@ -735,7 +735,10 @@
     "revoke_consent_text": "Er du sikker på at du vil trekke dette samtykket?",
     "revoke_poa_text": "Er du sikker på at du vil trekke denne fullmakten?",
     "confirm_revoke_consent": "Ja, trekk samtykke",
-    "confirm_revoke_poa": "Ja, trekk fullmakt"
+    "confirm_revoke_poa": "Ja, trekk fullmakt",
+    "altinn2_consent_alert_header": "Du er nå i ein ny versjon av Samtykke- og fullmaktsoversikten",
+    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over aktive samtykke- og fullmaktsavtalar her. Finn du ikkje det du ser etter her kan du",
+    "altinn2_consent_alert_link": "gå tilbake til dagens Altinn og sjekke der."
   },
   "consent_log": {
     "page_title": "Avtalelogg - Altinn",
@@ -757,7 +760,9 @@
     "poa_used": "{{to}}: har henta fullmakt fra {{from}}.",
     "handledby": "{{handledBy}} har hentet data på vegne av {{to}}.",
     "no_results": "Ingen samtykker eller fullmakter ble funnet for dette søket",
-    "no_active_consents": "Det finnes ingen innslag i avtaleloggen enda"
+    "no_active_consents": "Det finnes ingen innslag i avtaleloggen enda",
+    "altinn2_consent_alert_header": "Du er nå i ein ny versjon av avtaleloggen",
+    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle samtykke- og fullmaktsavtaler her. Finn du ikkje det du ser etter her kan du"
   },
   "consent_errors": {
     "not_authorized_for_consent": "Bruker er ikkje autorisert for å gi samtykke/fullmakt",

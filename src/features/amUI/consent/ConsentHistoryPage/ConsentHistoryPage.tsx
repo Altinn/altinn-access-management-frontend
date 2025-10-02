@@ -25,6 +25,7 @@ import { ConsentTimeline } from './ConsentTimeline';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ConsentPath } from '@/routes/paths';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
+import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 
 export const ConsentHistoryPage = () => {
   const { t } = useTranslation();
@@ -55,19 +56,25 @@ export const ConsentHistoryPage = () => {
     <PageWrapper>
       <PageLayoutWrapper>
         <div className={classes.consentHistoryPage}>
-          <DsLink
-            asChild={true}
-            data-size='md'
-            data-color='neutral'
-          >
-            <Link to={`/${ConsentPath.Consent}/${ConsentPath.Active}`}>
-              <ArrowLeftIcon
-                aria-hidden={true}
-                fontSize='1.3rem'
-              />
-              {t('common.back')}
-            </Link>
-          </DsLink>
+          <div>
+            <DsLink
+              asChild={true}
+              data-size='md'
+              data-color='neutral'
+            >
+              <Link to={`/${ConsentPath.Consent}/${ConsentPath.Active}`}>
+                <ArrowLeftIcon
+                  aria-hidden={true}
+                  fontSize='1.3rem'
+                />
+                {t('common.back')}
+              </Link>
+            </DsLink>
+            <OldConsentAlert
+              heading={t('consent_log.altinn2_consent_alert_header')}
+              text={t('consent_log.altinn2_consent_alert_body')}
+            />
+          </div>
           <div>
             <DsHeading
               level={1}
