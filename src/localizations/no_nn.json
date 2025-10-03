@@ -81,7 +81,8 @@
     "subunit": "Underenhet",
     "subunit_lowercase": "underenhet",
     "mainunit_lowercase": "hovedenhet",
-    "date_of_birth": "Født"
+    "date_of_birth": "Født",
+    "save_changes": "Lagre endringar"
   },
   "beta_banner": {
     "info": "Du ser no på ein betaversjon av dei nye sidene for tilgangsstyring i Altinn.",
@@ -313,7 +314,8 @@
     "sub_heading": "org.nr. {{org_number}}",
     "user_list_heading": "Andre med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
-    "no_users": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
+    "no_users": "Denne lista er tom",
+    "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønskjer du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?"
   },
@@ -439,9 +441,22 @@
     "alerts_on_sms": "Varslingar på SMS",
     "one_address": "1 adresse",
     "num_of_addresses": "{{count}} adresser",
-    "email_label": "E-postadressene til verksemda for varslingar:",
-    "sms_label": "Telefonnummera til verksemda for varslingar:",
-    "address_number": "Adresse {{number}}:"
+    "email_label": "Verksemda sine e-postadresser for varslingar:",
+    "sms_label": "Verksemda sine telefonnummer for varslingar:",
+    "address_number": "Adresse {{number}}",
+    "phone_number": "Telefonnummer {{number}}",
+    "country_code_number": "Landskode {{number}}",
+    "manage_addresses_info": "Altinn brukar adressa(ne) til å varsle verksemda om nytt innhald.",
+    "add_more": "Legg til fleire",
+    "remove_email": "Fjern e-post",
+    "remove_sms": "Fjern telefonnummer",
+    "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen.",
+    "no_addresses_error": "Verksemda må ha minst éin e-postadresse eller sms-adresse for varslingar."
+  },
+  "text_field_errors": {
+    "required": "Feltet er påkrevd",
+    "invalid_email_pattern": "Ugyldig e-postadresse",
+    "invalid_phone": "Ugyldig telefonnummer"
   },
   "info_modal": {
     "title": "Prøv den nye tilgangsstyringsløysinga",
