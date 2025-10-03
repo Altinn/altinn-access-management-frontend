@@ -22,9 +22,9 @@ export const SmsAddressFields = ({
   );
 
   useEffect(() => {
-    if (addressList.length < validationErrors.length) {
+    if (addressList.length > validationErrors.length) {
       setValidationErrors((prevErrors) => [...prevErrors, '']);
-    } else if (addressList.length > validationErrors.length) {
+    } else if (addressList.length < validationErrors.length) {
       setValidationErrors((prevErrors) => prevErrors.slice(0, addressList.length));
     }
   }, [addressList]);

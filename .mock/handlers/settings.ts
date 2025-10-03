@@ -42,10 +42,16 @@ export const settingsHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
   http.post(`${ACCESSMANAGEMENT_BASE_URL}/settings/org/:orgnumber/notificationaddresses`, () => {
     return HttpResponse.json([{ notificationAddressId: '2', email: 'test2@example.com' }]);
   }),
-  http.delete(`${ACCESSMANAGEMENT_BASE_URL}/settings/org/:orgnumber/notificationaddresses`, () => {
-    return HttpResponse.json([{ notificationAddressId: '1', email: 'test1@example.com' }]);
-  }),
-  http.put(`${ACCESSMANAGEMENT_BASE_URL}/settings/org/:orgnumber/notificationaddresses`, () => {
-    return HttpResponse.json([{ notificationAddressId: '1', email: 'test3@example.com' }]);
-  }),
+  http.delete(
+    `${ACCESSMANAGEMENT_BASE_URL}/settings/org/:orgnumber/notificationaddresses/:notificationAddressId`,
+    () => {
+      return HttpResponse.json([{ notificationAddressId: '1', email: 'test1@example.com' }]);
+    },
+  ),
+  http.put(
+    `${ACCESSMANAGEMENT_BASE_URL}/settings/org/:orgnumber/notificationaddresses/:notificationAddressId`,
+    () => {
+      return HttpResponse.json([{ notificationAddressId: '1', email: 'test3@example.com' }]);
+    },
+  ),
 ];
