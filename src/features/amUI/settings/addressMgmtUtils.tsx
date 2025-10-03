@@ -78,35 +78,38 @@ export const useSaveAddressChanges = (
 
       // Empty addresses can indicate deletions, but not additions
       const filteredCurrent = addressList.filter((addr) => addressIsEmpty(addr) === false);
-      const additions = filteredCurrent.filter(
-        (current) =>
-          !storedAddresses.some((stored) => addressIsEqual(stored, current)) &&
-          !current.notificationAddressId,
-      );
-      const updates = filteredCurrent.filter(
-        (current) =>
-          !storedAddresses.some((stored) => addressIsEqual(stored, current)) &&
-          current.notificationAddressId,
-      );
-      const deletions = storedAddresses.filter(
-        (stored) =>
-          !filteredCurrent.some(
-            (current) => current.notificationAddressId === stored.notificationAddressId,
-          ),
-      );
+      const additions =
+        filteredCurrent.filter(
+          (current) =>
+            !storedAddresses.some((stored) => addressIsEqual(stored, current)) &&
+            !current.notificationAddressId,
+        ) ?? [];
+      const updates =
+        filteredCurrent.filter(
+          (current) =>
+            !storedAddresses.some((stored) => addressIsEqual(stored, current)) &&
+            current.notificationAddressId,
+        ) ?? [];
+      const deletions =
+        storedAddresses.filter(
+          (stored) =>
+            !filteredCurrent.some(
+              (current) => current.notificationAddressId === stored.notificationAddressId,
+            ),
+        ) ?? [];
 
       // Delete outdated addresses and add new ones
       Promise.all([
-        ...additions?.map((address) =>
+        ...additions.map((address) =>
           createAddress({ orgNumber: actingParty?.orgNumber ?? '', address: address }),
         ),
-        ...deletions?.map((address) =>
+        ...deletions.map((address) =>
           deleteAddress({
             orgNumber: actingParty?.orgNumber ?? '',
             notificationAddressId: address.notificationAddressId,
           }),
         ),
-        ...updates?.map((address) =>
+        ...updates.map((address) =>
           updateAddress({ orgNumber: actingParty?.orgNumber ?? '', address: address }),
         ),
       ])
