@@ -35,5 +35,16 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// List of notification addresses
         /// </returns>
         Task<NotificationAddressResponse> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId);
+
+        /// <summary>
+        /// Updates a notification address for a given organization
+        /// </summary>
+        /// <param name="orgNumber">The organization number</param>
+        /// <param name="notificationAddressId">The id of the address to be updated</param>
+        /// <param name="notificationAddress">The updated address</param>
+        /// <returns>
+        /// List of notification addresses
+        /// </returns>
+        Task<NotificationAddressResponse> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress);
     }
 }

@@ -4,6 +4,7 @@ import {
   NotificationAddress,
   useCreateOrgNotificationAddressMutation,
   useDeleteOrgNotificationAddressMutation,
+  useUpdateOrgNotificationAddressMutation,
 } from '@/rtk/features/settingsApi';
 import { useState } from 'react';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -13,38 +14,41 @@ import {
   validateCountryCode,
 } from '@/resources/utils/textFieldUtils';
 
-const addressIsEqual = (stored: NotificationAddress, current: Address) =>
+export const addressIsEmpty = (address: Address) => !address.email && !address.phone;
+
+export const addressIsEqual = (stored: NotificationAddress, current: NotificationAddress) =>
   (stored.email === current.email || (!stored.email && !current.email)) &&
   (stored.phone === current.phone || (!stored.phone && !current.phone)) &&
   (stored.countryCode === current.countryCode || (!stored.countryCode && !current.countryCode));
 
-export const hasDeletions = (stored: NotificationAddress[], current: Address[]) => {
+export const hasDeletions = (stored: NotificationAddress[], current: NotificationAddress[]) => {
   return stored.length > current.length;
 };
 
-export const hasAdditions = (stored: NotificationAddress[], current: Address[]) => {
+export const hasAdditions = (stored: NotificationAddress[], current: NotificationAddress[]) => {
   return (
-    stored.length < current.filter((addr) => addr.email.length > 0 || addr.phone.length > 0).length
+    stored.length <
+    current.filter((addr) => addr.email?.length > 0 || addr.phone?.length > 0).length
   );
 };
 
-export const hasEdits = (stored: NotificationAddress[], current: Address[]) => {
+export const hasEdits = (stored: NotificationAddress[], current: NotificationAddress[]) => {
   return stored.some((addr, index) => !addressIsEqual(addr, current[index]));
 };
 
-export const hasChanges = (stored: NotificationAddress[], current: Address[]) =>
+export const hasChanges = (stored: NotificationAddress[], current: NotificationAddress[]) =>
   (current.length === 0 && !!stored[0]) ||
   hasAdditions(stored, current) ||
   hasDeletions(stored, current) ||
   hasEdits(stored, current);
 
-export const isValidAddresses = (addresses: Address[]) => {
+export const isValidAddresses = (addresses: NotificationAddress[]) => {
   return addresses
-    .filter((address) => address.email.length > 0 || address.phone.length > 0)
+    .filter((address) => address.email?.length > 0 || address.phone?.length > 0)
     .every((address) => {
       return (
-        (address.email.length > 0 && validateEmail(address.email).isValid) ||
-        (address.phone.length > 0 &&
+        (address.email?.length > 0 && validateEmail(address.email).isValid) ||
+        (address.phone?.length > 0 &&
           validatePhoneNumber(address.phone).isValid &&
           validateCountryCode(address.countryCode).isValid)
       );
@@ -53,7 +57,7 @@ export const isValidAddresses = (addresses: Address[]) => {
 
 export const useSaveAddressChanges = (
   storedAddresses: NotificationAddress[],
-  addressList: Address[],
+  addressList: NotificationAddress[],
 ) => {
   const isChanges = hasChanges(storedAddresses, addressList);
   const [isSaving, setIsSaving] = useState(false);
@@ -61,6 +65,7 @@ export const useSaveAddressChanges = (
   const { actingParty } = usePartyRepresentation();
   const [createAddress] = useCreateOrgNotificationAddressMutation();
   const [deleteAddress] = useDeleteOrgNotificationAddressMutation();
+  const [updateAddress] = useUpdateOrgNotificationAddressMutation();
 
   const saveChanges = () => {
     if (isSaving) {
@@ -72,26 +77,37 @@ export const useSaveAddressChanges = (
       setIsError(false); // Reset error state
 
       // Empty addresses can indicate deletions, but not additions
-      const filteredChanges = addressList.filter(
-        (addr) => addr.email.length > 0 || addr.phone.length > 0,
+      const filteredCurrent = addressList.filter((addr) => addressIsEmpty(addr) === false);
+      const additions = filteredCurrent.filter(
+        (current) =>
+          !storedAddresses.some((stored) => addressIsEqual(stored, current)) &&
+          !current.notificationAddressId,
       );
-      const toRemove = storedAddresses.filter(
-        (stored) => !addressList.some((current) => addressIsEqual(stored, current)),
+      const updates = filteredCurrent.filter(
+        (current) =>
+          !storedAddresses.some((stored) => addressIsEqual(stored, current)) &&
+          current.notificationAddressId,
       );
-      const toAdd = filteredChanges.filter(
-        (current) => !storedAddresses.some((stored) => addressIsEqual(stored, current)),
+      const deletions = storedAddresses.filter(
+        (stored) =>
+          !filteredCurrent.some(
+            (current) => current.notificationAddressId === stored.notificationAddressId,
+          ),
       );
 
       // Delete outdated addresses and add new ones
       Promise.all([
-        ...toRemove.map((address) =>
+        ...additions?.map((address) =>
+          createAddress({ orgNumber: actingParty?.orgNumber ?? '', address: address }),
+        ),
+        ...deletions?.map((address) =>
           deleteAddress({
             orgNumber: actingParty?.orgNumber ?? '',
             notificationAddressId: address.notificationAddressId,
           }),
         ),
-        ...toAdd.map((address) =>
-          createAddress({ orgNumber: actingParty?.orgNumber ?? '', address: address }),
+        ...updates?.map((address) =>
+          updateAddress({ orgNumber: actingParty?.orgNumber ?? '', address: address }),
         ),
       ])
         .then((results) => {

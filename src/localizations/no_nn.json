@@ -448,7 +448,8 @@
     "add_more": "Legg til fleire",
     "remove_email": "Fjern e-post",
     "remove_sms": "Fjern telefonnummer",
-    "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen."
+    "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen.",
+    "no_addresses_error": "Virksemda må ha minst éin e-postadresse eller sms-adresse for varslingar."
   },
   "text_field_errors": {
     "required": "Feltet er påkrevd",

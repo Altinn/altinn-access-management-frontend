@@ -2,24 +2,36 @@ import { validatePhoneNumber } from '@/resources/utils/textFieldUtils';
 import { DsButton, DsTextfield } from '@altinn/altinn-components';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import classes from './SettingsModal.module.css';
-import { Address } from '@/rtk/features/settingsApi';
+import { NotificationAddress } from '@/rtk/features/settingsApi';
 
 export const SmsAddressFields = ({
   addressList,
   setAddressList,
   isLoading,
 }: {
-  addressList: Address[];
-  setAddressList: React.Dispatch<React.SetStateAction<Address[]>>;
+  addressList: NotificationAddress[];
+  setAddressList: React.Dispatch<React.SetStateAction<NotificationAddress[]>>;
   isLoading: boolean;
 }) => {
   const { t } = useTranslation();
+  const [validationErrors, setValidationErrors] = React.useState<string[]>(
+    Array.from({ length: addressList.length }, () => ''),
+  );
+
+  useEffect(() => {
+    if (addressList.length < validationErrors.length) {
+      setValidationErrors((prevErrors) => [...prevErrors, '']);
+    } else if (addressList.length > validationErrors.length) {
+      setValidationErrors((prevErrors) => prevErrors.slice(0, addressList.length));
+    }
+  }, [addressList]);
+
   const onPhoneChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newList = [...addressList];
-    newList[index] = { ...newList[index], phone: e.target.value };
+    newList[index] = { ...newList[index], phone: e.target.value.replaceAll(/\s+/g, '') };
     setAddressList(newList);
   };
   const onCountryCodeChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -52,12 +64,15 @@ export const SmsAddressFields = ({
           aria-label={t('settings_page.phone_number', { number: index + 1 })}
           value={address.phone}
           onChange={(e) => onPhoneChange(e, index)}
+          onBlur={() => {
+            const validation = validatePhoneNumber(address.phone);
+            const newErrors = [...validationErrors];
+            newErrors[index] =
+              validation.isValid || address.phone.length === 0 ? '' : validation.errorMessageKey;
+            setValidationErrors(newErrors);
+          }}
           disabled={isLoading}
-          error={
-            phoneValidation.isValid || address.phone.length === 0
-              ? ''
-              : t(phoneValidation.errorMessageKey)
-          }
+          error={validationErrors[index] ? t(validationErrors[index]) : undefined}
         />
         {addressList.length > 1 && (
           <DsButton

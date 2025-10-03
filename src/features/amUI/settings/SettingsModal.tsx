@@ -20,25 +20,23 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import classes from './SettingsModal.module.css';
 import { EmailAddressFields } from './EmailAddressFields';
 import { SmsAddressFields } from './SmsAddressFields';
-import { isValidAddresses, useSaveAddressChanges } from './addressMgmtUtils';
+import { addressIsEmpty, isValidAddresses, useSaveAddressChanges } from './addressMgmtUtils';
 
 export const SettingsModal = ({
   mode,
   open,
+  canDeleteLastAddress,
   onClose,
 }: {
   mode: 'email' | 'sms' | null;
   open: boolean;
+  canDeleteLastAddress: boolean;
   onClose: () => void;
 }) => {
   const { t } = useTranslation();
   const { actingParty } = usePartyRepresentation();
-  const [addressList, setAddressList] = useState<Address[]>([
-    { email: '', phone: '', countryCode: '' },
-  ]);
-  const [storedAddresses, setStoredAddresses] = useState<NotificationAddress[]>([
-    { email: '', phone: '', countryCode: '', notificationAddressId: '' },
-  ]);
+  const [addressList, setAddressList] = useState<NotificationAddress[]>([]);
+  const [storedAddresses, setStoredAddresses] = useState<NotificationAddress[]>([]);
   const { data: notificationAddresses, isLoading } = useGetOrgNotificationAddressesQuery(
     actingParty?.orgNumber ?? '',
     { skip: !actingParty?.orgNumber },
@@ -52,38 +50,28 @@ export const SettingsModal = ({
     if (isLoading) return;
     if (mode === 'email') {
       const emailAddresses = notificationAddresses?.filter((addr) => addr.email);
-
-      const simplifiedAddresses = emailAddresses?.map((addr) => ({
-        email: addr.email,
-        phone: '',
-        countryCode: '',
-      }));
       const setList =
-        simplifiedAddresses && simplifiedAddresses.length > 0
-          ? simplifiedAddresses
-          : [{ email: '', phone: '', countryCode: '' }];
+        emailAddresses && emailAddresses.length > 0
+          ? emailAddresses
+          : [{ email: '', phone: '', countryCode: '', notificationAddressId: '' }];
       setAddressList(setList);
-      emailAddresses && setStoredAddresses(emailAddresses);
+      setStoredAddresses(emailAddresses ?? []);
     } else if (mode === 'sms') {
       const smsAddresses = notificationAddresses?.filter((addr) => addr.phone);
-
-      const simplifiedAddresses = smsAddresses?.map((addr) => ({
-        email: '',
-        phone: addr.phone,
-        countryCode: addr.countryCode,
-      }));
       const setList =
-        simplifiedAddresses && simplifiedAddresses.length > 0
-          ? simplifiedAddresses
-          : [{ email: '', phone: '', countryCode: '+47' }];
+        smsAddresses && smsAddresses.length > 0
+          ? smsAddresses
+          : [{ email: '', phone: '', countryCode: '+47', notificationAddressId: '' }];
       setAddressList(setList);
-      smsAddresses && setStoredAddresses(smsAddresses);
+      setStoredAddresses(smsAddresses ?? []);
     }
   }, [mode, notificationAddresses, isLoading]);
 
   let headingText = '';
   let labelText = '';
   let icon = null;
+  const noAddressesError =
+    addressList.length === 1 && addressIsEmpty(addressList[0]) && !canDeleteLastAddress;
   switch (mode) {
     case 'email':
       headingText = t('settings_page.alerts_on_email');
@@ -121,14 +109,16 @@ export const SettingsModal = ({
       </div>
 
       <div className={classes.modalContent}>
-        {isError && (
+        {(noAddressesError || isError) && (
           <DsAlert
             data-color='danger'
             className={classes.errorBox}
             data-size='sm'
           >
             <DsParagraph className={classes.errorText}>
-              {t('settings_page.error_saving_addresses')}
+              {isError
+                ? t('settings_page.error_saving_addresses')
+                : t('settings_page.no_addresses_error')}
             </DsParagraph>
           </DsAlert>
         )}
@@ -159,7 +149,12 @@ export const SettingsModal = ({
           onClick={() => {
             setAddressList([
               ...addressList,
-              { email: '', phone: '', countryCode: mode === 'sms' ? '+47' : '' },
+              {
+                notificationAddressId: '',
+                email: '',
+                phone: '',
+                countryCode: mode === 'sms' ? '+47' : '',
+              },
             ]);
           }}
           disabled={isLoading || addressList.length >= 10}
@@ -174,7 +169,13 @@ export const SettingsModal = ({
           <DsButton
             variant='primary'
             onClick={saveChanges}
-            disabled={isLoading || !isChanges || !isValidAddresses(addressList) || isSaving}
+            disabled={
+              isLoading ||
+              !isChanges ||
+              !isValidAddresses(addressList) ||
+              isSaving ||
+              noAddressesError
+            }
           >
             {isSaving && (
               <DsSpinner

@@ -451,7 +451,8 @@
     "add_more": "Legg til flere",
     "remove_email": "Fjern e-post",
     "remove_sms": "Fjern telefonnummer",
-    "error_saving_addresses": "Noe gikk galt. Vennligst prøv igjen."
+    "error_saving_addresses": "Noe gikk galt. Vennligst prøv igjen.",
+    "no_addresses_error": "Virksomheten må ha minst én e-postadresse eller sms-adresse for varslinger."
   },
   "text_field_errors": {
     "required": "Feltet er påkrevd",

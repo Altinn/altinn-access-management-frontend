@@ -452,7 +452,8 @@
     "add_more": "Add more",
     "remove_email": "Remove email",
     "remove_sms": "Remove phone number",
-    "error_saving_addresses": "Something went wrong. Please try again."
+    "error_saving_addresses": "Something went wrong. Please try again.",
+    "no_addresses_error": "The organization must have at least one email address or SMS number for notifications."
   },
   "text_field_errors": {
     "required": "The field is required",

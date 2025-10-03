@@ -98,6 +98,9 @@ export const SettingsPageContent = () => {
           mode={modalMode}
           open={openModal}
           onClose={onCloseModal}
+          canDeleteLastAddress={
+            modalMode === 'email' ? phoneNumbers.length > 0 : emailAddresses.length > 0 // Must have at least one address of either type
+          }
         />
       </div>
     </div>

@@ -141,5 +141,44 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return StatusCode(500);
             }
         }
+
+        /// <summary>
+        /// Endpoint for editing an already existing address for an organization
+        /// </summary>
+        /// <param name="orgNumber">The organization number of the organization</param>
+        /// <param name="notificationAddressId">The id of the notification address to be changed</param>
+        /// <param name="notificationAddress">The updated notification address</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPut]
+        [Authorize]
+        [Route("org/{orgNumber}/notificationaddresses/{notificationAddressId}")]
+        public async Task<ActionResult<NotificationAddressResponse>> UpdateOrganisationNotificationAddress([FromRoute] string orgNumber, [FromRoute] int notificationAddressId, [FromBody] NotificationAddressModel notificationAddress)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (string.IsNullOrEmpty(orgNumber) || orgNumber.Length != 9 || !int.TryParse(orgNumber, out _))
+            {
+                return StatusCode(400, "Org number must be a number with 9 digits");
+            }
+
+            try
+            {
+                return await _settingsService.UpdateOrganisationNotificationAddress(orgNumber, notificationAddressId, notificationAddress);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateOrganisationNotificationAddress failed to delete address");
+                return StatusCode(500);
+            }
+        }
     }
 }

@@ -132,6 +132,29 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Task.FromResult(response);
         }
 
+        public async Task<NotificationAddressResponse> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress)
+        {
+            // Special string triggers backend style error for tests
+            if (orgNumber == "000000000")
+            {
+                throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", HttpStatusCode.InternalServerError, string.Empty);
+            }
+
+            if (notificationAddressId < 10000) {
+                throw new HttpStatusException("NotFound", "The specified notification address was not found", HttpStatusCode.NotFound, string.Empty);
+            }
+
+            NotificationAddressResponse response = new NotificationAddressResponse
+            {
+                Email = notificationAddress.Email,
+                Phone = notificationAddress.Phone,
+                CountryCode = notificationAddress.CountryCode,
+                NotificationAddressId = notificationAddressId
+            };
+
+            return await Task.FromResult(response);
+        }
+
         private static string GetDataPathForProfiles()
         {
             string folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);

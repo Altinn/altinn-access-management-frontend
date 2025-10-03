@@ -2,18 +2,18 @@ import { validateEmail } from '@/resources/utils/textFieldUtils';
 import { DsButton, DsTextfield } from '@altinn/altinn-components';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import classes from './SettingsModal.module.css';
-import { Address } from '@/rtk/features/settingsApi';
+import { NotificationAddress } from '@/rtk/features/settingsApi';
 
 export const EmailAddressFields = ({
   addressList,
   setAddressList,
   isLoading,
 }: {
-  addressList: Address[];
-  setAddressList: React.Dispatch<React.SetStateAction<Address[]>>;
+  addressList: NotificationAddress[];
+  setAddressList: React.Dispatch<React.SetStateAction<NotificationAddress[]>>;
   isLoading: boolean;
 }) => {
   const { t } = useTranslation();
@@ -22,9 +22,19 @@ export const EmailAddressFields = ({
     newList[index] = { ...newList[index], email: e.target.value };
     setAddressList(newList);
   };
+  const [validationErrors, setValidationErrors] = React.useState<string[]>(
+    Array.from({ length: addressList.length }, () => ''),
+  );
+
+  useEffect(() => {
+    if (addressList.length < validationErrors.length) {
+      setValidationErrors((prevErrors) => [...prevErrors, '']);
+    } else if (addressList.length > validationErrors.length) {
+      setValidationErrors((prevErrors) => prevErrors.slice(0, addressList.length));
+    }
+  }, [addressList]);
 
   const emailFields = addressList.map((address, index) => {
-    const validation = validateEmail(address.email);
     return (
       <div
         key={index}
@@ -34,10 +44,15 @@ export const EmailAddressFields = ({
           aria-label={t('settings_page.address_number', { number: index + 1 })}
           value={address.email}
           onChange={(e) => onTextFieldChange(e, index)}
+          onBlur={() => {
+            const validation = validateEmail(address.email);
+            const newErrors = [...validationErrors];
+            newErrors[index] =
+              validation.isValid || address.email.length === 0 ? '' : validation.errorMessageKey;
+            setValidationErrors(newErrors);
+          }}
           disabled={isLoading}
-          error={
-            validation.isValid || address.email.length === 0 ? '' : t(validation.errorMessageKey)
-          }
+          error={validationErrors[index] ? t(validationErrors[index]) : undefined}
         />
         {addressList.length > 1 && (
           <DsButton

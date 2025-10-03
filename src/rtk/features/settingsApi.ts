@@ -55,6 +55,19 @@ export const settingsApi = createApi({
       },
       invalidatesTags: ['NotificationAddress'],
     }),
+    updateOrgNotificationAddress: builder.mutation<
+      NotificationAddress,
+      { address: NotificationAddress; orgNumber: string }
+    >({
+      query: ({ orgNumber, address }) => {
+        return {
+          url: `org/${orgNumber}/notificationaddresses/${address.notificationAddressId}`,
+          method: 'PUT',
+          body: address,
+        };
+      },
+      invalidatesTags: ['NotificationAddress'],
+    }),
   }),
 });
 
@@ -62,6 +75,7 @@ export const {
   useGetOrgNotificationAddressesQuery,
   useCreateOrgNotificationAddressMutation,
   useDeleteOrgNotificationAddressMutation,
+  useUpdateOrgNotificationAddressMutation,
 } = settingsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = settingsApi;

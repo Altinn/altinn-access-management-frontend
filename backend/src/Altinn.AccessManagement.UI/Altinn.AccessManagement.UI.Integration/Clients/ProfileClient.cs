@@ -159,6 +159,30 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
         }
 
+        /// <inheritdoc/>
+        public async Task<NotificationAddressResponse> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress)
+        {
+            try
+            {
+                string endpointUrl = $"organizations/{orgNumber}/notificationaddresses/mandatory/{notificationAddressId}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                StringContent requestBody = new StringContent(JsonSerializer.Serialize(notificationAddress, _serializerOptions), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _client.PutAsync(token, endpointUrl, requestBody, accessToken);
+
+                var resString = await response.Content.ReadAsStringAsync();
+                NotificationAddressResponse orgNotification = await ClientUtils.DeserializeIfSuccessfullStatusCode<NotificationAddressResponse>(response);
+                return orgNotification;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ProfileClient // UpdateOrganisationNotificationAddress // Exception");
+                throw;
+            }
+        }
+
         private async Task<UserProfile> GetUserProfileFromEndpoint(string endpointUrl)
         {
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
