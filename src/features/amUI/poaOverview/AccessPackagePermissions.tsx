@@ -54,6 +54,7 @@ export const AccessPackagePermissions = () => {
             {...props}
           />
         )}
+        noPackagesText={t('access_packages.no_packages')}
       />
     </>
   );

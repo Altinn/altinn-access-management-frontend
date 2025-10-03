@@ -75,8 +75,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             else
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
-                throw error;
+
+                throw new HttpStatusException(
+                    "StatusError",
+                    responseContent,
+                    response.StatusCode,
+                    Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
             }
         }
 
@@ -100,9 +104,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             else
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
-
-                throw error;
+                throw new HttpStatusException(
+                    "StatusError",
+                    responseContent,
+                    response.StatusCode,
+                    Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
             }
         }
 

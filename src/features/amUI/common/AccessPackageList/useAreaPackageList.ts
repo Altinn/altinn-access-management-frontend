@@ -47,9 +47,14 @@ export const useAreaPackageList = ({
     data: allPackageAreas,
     isLoading: loadingPackageAreas,
     isFetching: fetchingSearch,
+    error: searchError,
   } = useSearchQuery(searchString ?? '');
 
-  const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery(
+  const {
+    data: activeDelegations,
+    isLoading: loadingDelegations,
+    error: activeDelegationsError,
+  } = useGetUserDelegationsQuery(
     {
       from: fromParty?.partyUuid ?? '',
       to: toParty?.partyUuid ?? '',
@@ -127,6 +132,8 @@ export const useAreaPackageList = ({
     availableAreas,
     allPackageAreas,
     activeDelegations,
+    searchError,
+    activeDelegationsError,
   };
 };
 

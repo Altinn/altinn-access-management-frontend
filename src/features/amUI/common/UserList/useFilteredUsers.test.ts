@@ -14,6 +14,7 @@ const mockConnections: Connection[] = [
       variant: 'Person',
       children: null,
       keyValues: { PartyId: '00000000', DateOfBirth: '1981-03-20' },
+      roles: [],
     },
     roles: [
       {
@@ -39,6 +40,7 @@ const mockConnections: Connection[] = [
         },
       ],
       keyValues: { PartyId: '00000000', OrganizationIdentifier: '123456789' },
+      roles: [],
     },
     roles: [
       { id: '123', code: 'rettighetshaver' },
@@ -57,6 +59,7 @@ const mockConnections: Connection[] = [
       variant: 'ORGL',
       children: null,
       keyValues: { PartyId: '50088610', OrganizationIdentifier: '991825827' },
+      roles: [],
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
     connections: [],
@@ -78,6 +81,7 @@ const mockConnections: Connection[] = [
         },
       ],
       keyValues: { PartyId: '51325818', OrganizationIdentifier: '310167010' },
+      roles: [],
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
     connections: [],
@@ -99,6 +103,7 @@ const mockConnections: Connection[] = [
         },
       ],
       keyValues: { PartyId: '51480407', OrganizationIdentifier: '314081544' },
+      roles: [],
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
     connections: [],
@@ -186,5 +191,89 @@ describe('useFilteredUsers', () => {
     expect(result.current.users[0].children).toHaveLength(1);
     expect(result.current.users[0]?.name).toBe('Lorem AS');
     expect(result?.current?.users?.[0]?.children?.[0]?.name).toBe('InheritAlice');
+  });
+
+  it('should keep all children when parent matches search string', () => {
+    const { result } = renderHook(() =>
+      useFilteredUsers({ connections: mockConnections, searchString: 'Lorem' }),
+    );
+
+    expect(result.current.users).toHaveLength(1);
+    const parent = result.current.users[0] as ExtendedUser;
+    expect(parent.name).toBe('Lorem AS');
+    expect(parent.children).toBeTruthy();
+    expect(parent.children?.length).toBe(1);
+    expect(parent.matchInChildren).toBeFalsy();
+  });
+
+  it('prunes indirect root users that also exist in the direct graph', () => {
+    const indirectConnections: Connection[] = [
+      {
+        party: {
+          id: '123', // Alice exists in direct graph
+          name: 'Alice',
+          type: 'Person',
+          variant: 'Person',
+          children: null,
+          keyValues: { PartyId: '00000000' },
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+      },
+      {
+        party: {
+          id: 'ind-unique',
+          name: 'Indirect Unique',
+          type: 'Organisasjon',
+          variant: 'AS',
+          children: null,
+          keyValues: { PartyId: '11111111' },
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+      },
+    ];
+
+    const { result } = renderHook(() =>
+      useFilteredUsers({ connections: mockConnections, indirectConnections, searchString: '' }),
+    );
+
+    // Alice should be removed from indirect users because she exists directly
+    expect(result.current.indirectUsers?.some((u) => u.id === '123')).toBe(false);
+    // The unique one should remain
+    expect(result.current.indirectUsers?.some((u) => u.id === 'ind-unique')).toBe(true);
+  });
+
+  it('paginates indirect users and supports goNextIndirectPage', () => {
+    const makeIndirect = (n: number): Connection[] =>
+      Array.from({ length: n }).map((_, i) => ({
+        party: {
+          id: `ind-${i + 1}`,
+          name: `Indirect ${String(i + 1).padStart(2, '0')}`,
+          type: 'Organisasjon',
+          variant: 'AS',
+          children: null,
+          keyValues: { PartyId: `${i + 1}` },
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+      }));
+
+    const indirectConnections = makeIndirect(12);
+
+    const { result } = renderHook(() =>
+      useFilteredUsers({ connections: mockConnections, indirectConnections, searchString: '' }),
+    );
+
+    // Page size is 10
+    expect(result.current.indirectUsers).toHaveLength(10);
+    expect(result.current.hasNextIndirectPage).toBe(true);
+
+    act(() => result.current.goNextIndirectPage());
+    expect(result.current.indirectUsers).toHaveLength(12);
+    expect(result.current.hasNextIndirectPage).toBe(false);
   });
 });

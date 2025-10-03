@@ -1,7 +1,3 @@
-.searchBar {
-  max-width: 27rem;
-}
-
 .tabContent {
   display: flex;
   flex-direction: column;
