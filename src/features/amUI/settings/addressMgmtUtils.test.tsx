@@ -40,6 +40,7 @@ vi.mock('@/resources/utils/textFieldUtils', () => ({
 // Mock the RTK mutations
 const mockCreateAddress = vi.fn();
 const mockDeleteAddress = vi.fn();
+const mockUpdateAddress = vi.fn();
 
 vi.mock('@/rtk/features/settingsApi', async () => {
   const actual = await vi.importActual('@/rtk/features/settingsApi');
@@ -47,6 +48,7 @@ vi.mock('@/rtk/features/settingsApi', async () => {
     ...actual,
     useCreateOrgNotificationAddressMutation: () => [mockCreateAddress],
     useDeleteOrgNotificationAddressMutation: () => [mockDeleteAddress],
+    useUpdateOrgNotificationAddressMutation: () => [mockUpdateAddress],
   };
 });
 
@@ -67,10 +69,12 @@ const createAddress = (
   email: string = '',
   phone: string = '',
   countryCode: string = '',
-): Address => ({
+  notificationAddressId?: string,
+): NotificationAddress => ({
   email,
   phone,
   countryCode,
+  notificationAddressId: notificationAddressId || '',
 });
 
 // Test wrapper component
@@ -230,7 +234,7 @@ describe('addressMgmtUtils', () => {
   describe('hasChanges', () => {
     it('should return true when current is empty but stored has addresses', () => {
       const stored = [createNotificationAddress('1', 'test@example.com')];
-      const current: Address[] = [];
+      const current: NotificationAddress[] = [];
 
       expect(hasChanges(stored, current)).toBe(true);
     });
@@ -268,7 +272,7 @@ describe('addressMgmtUtils', () => {
 
     it('should return false when both arrays are empty', () => {
       const stored: NotificationAddress[] = [];
-      const current: Address[] = [];
+      const current: NotificationAddress[] = [];
 
       expect(hasChanges(stored, current)).toBe(false);
     });
@@ -361,7 +365,7 @@ describe('addressMgmtUtils', () => {
 
     it('should initialize with correct default state', () => {
       const stored: NotificationAddress[] = [];
-      const current: Address[] = [];
+      const current: NotificationAddress[] = [];
 
       const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
         wrapper: TestWrapper,
@@ -432,7 +436,12 @@ describe('addressMgmtUtils', () => {
       });
       expect(mockCreateAddress).toHaveBeenCalledWith({
         orgNumber: '123456789',
-        address: { email: 'new@example.com', phone: '', countryCode: '' },
+        address: {
+          email: 'new@example.com',
+          phone: '',
+          countryCode: '',
+          notificationAddressId: '',
+        },
       });
     });
 
@@ -491,11 +500,16 @@ describe('addressMgmtUtils', () => {
       expect(mockCreateAddress).toHaveBeenCalledTimes(2); // Only non-empty addresses
       expect(mockCreateAddress).toHaveBeenCalledWith({
         orgNumber: '123456789',
-        address: { email: 'test@example.com', phone: '', countryCode: '' },
+        address: {
+          email: 'test@example.com',
+          phone: '',
+          countryCode: '',
+          notificationAddressId: '',
+        },
       });
       expect(mockCreateAddress).toHaveBeenCalledWith({
         orgNumber: '123456789',
-        address: { email: '', phone: '12345678', countryCode: '+47' },
+        address: { email: '', phone: '12345678', countryCode: '+47', notificationAddressId: '' },
       });
     });
 
@@ -507,7 +521,10 @@ describe('addressMgmtUtils', () => {
         createNotificationAddress('1', 'keep@example.com'),
         createNotificationAddress('2', 'remove@example.com'),
       ];
-      const current = [createAddress('keep@example.com'), createAddress('add@example.com')];
+      const current = [
+        createAddress('keep@example.com', '', '', '1'), // Keep existing with ID
+        createAddress('add@example.com'), // New address without ID
+      ];
 
       const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
         wrapper: TestWrapper,
@@ -526,8 +543,44 @@ describe('addressMgmtUtils', () => {
       expect(mockCreateAddress).toHaveBeenCalledTimes(1);
       expect(mockCreateAddress).toHaveBeenCalledWith({
         orgNumber: '123456789',
-        address: { email: 'add@example.com', phone: '', countryCode: '' },
+        address: {
+          email: 'add@example.com',
+          phone: '',
+          countryCode: '',
+          notificationAddressId: '',
+        },
       });
+    });
+
+    it('should properly identify addresses to update', async () => {
+      mockUpdateAddress.mockResolvedValueOnce({ data: {} });
+
+      const stored = [createNotificationAddress('1', 'original@example.com')];
+      const current = [
+        createAddress('updated@example.com', '', '', '1'), // Same ID, different email = update
+      ];
+
+      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
+        wrapper: TestWrapper,
+      });
+
+      await act(async () => {
+        result.current.saveChanges();
+      });
+
+      expect(mockUpdateAddress).toHaveBeenCalledTimes(1);
+      expect(mockUpdateAddress).toHaveBeenCalledWith({
+        orgNumber: '123456789',
+        address: {
+          email: 'updated@example.com',
+          phone: '',
+          countryCode: '',
+          notificationAddressId: '1',
+        },
+      });
+
+      expect(mockCreateAddress).not.toHaveBeenCalled();
+      expect(mockDeleteAddress).not.toHaveBeenCalled();
     });
   });
 });

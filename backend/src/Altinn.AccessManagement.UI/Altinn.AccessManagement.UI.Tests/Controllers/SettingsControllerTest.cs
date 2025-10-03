@@ -296,5 +296,143 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.Equal("\"Org number must be a number with 9 digits\"", await response.Content.ReadAsStringAsync());
         }
+
+        /// <summary>
+        ///     Test case: Update notification address for a valid organization
+        ///     Expected: Return updated notification address
+        /// </summary>
+        [Fact]
+        public async Task UpdateOrganisationNotificationAddress_Valid()
+        {
+            // Arrange
+            string orgNumber = "310202398";
+            int notificationAddressId = 12345; // Use an ID that exists in the mock
+            var notificationAddress = new NotificationAddressModel
+            {
+                Email = "updated@example.com",
+                Phone = null,
+                CountryCode = null
+            };
+
+            // Act
+            HttpResponseMessage response = await _client.PutAsJsonAsync($"accessmanagement/api/v1/settings/org/{orgNumber}/notificationaddresses/{notificationAddressId}", notificationAddress);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            NotificationAddressResponse actualResult = JsonSerializer.Deserialize<NotificationAddressResponse>(await response.Content.ReadAsStringAsync(), options);
+            Assert.NotNull(actualResult);
+            Assert.Equal(notificationAddress.Email, actualResult.Email);
+            Assert.Equal(notificationAddress.Phone, actualResult.Phone);
+            Assert.Equal(notificationAddress.CountryCode, actualResult.CountryCode);
+            Assert.Equal(notificationAddressId, actualResult.NotificationAddressId);
+        }
+
+        /// <summary>
+        ///     Test case: Update notification address with phone details for a valid organization
+        ///     Expected: Return updated notification address with phone details
+        /// </summary>
+        [Fact]
+        public async Task UpdateOrganisationNotificationAddress_PhoneAddress_Valid()
+        {
+            // Arrange
+            string orgNumber = "310202398";
+            int notificationAddressId = 12345; // Use an ID that exists in the mock
+            var notificationAddress = new NotificationAddressModel
+            {
+                Email = null,
+                Phone = "87654321",
+                CountryCode = "+47"
+            };
+
+            // Act
+            HttpResponseMessage response = await _client.PutAsJsonAsync($"accessmanagement/api/v1/settings/org/{orgNumber}/notificationaddresses/{notificationAddressId}", notificationAddress);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            NotificationAddressResponse actualResult = JsonSerializer.Deserialize<NotificationAddressResponse>(await response.Content.ReadAsStringAsync(), options);
+            Assert.NotNull(actualResult);
+            Assert.Equal(notificationAddress.Email, actualResult.Email);
+            Assert.Equal(notificationAddress.Phone, actualResult.Phone);
+            Assert.Equal(notificationAddress.CountryCode, actualResult.CountryCode);
+            Assert.Equal(notificationAddressId, actualResult.NotificationAddressId);
+        }
+
+        /// <summary>
+        ///     Test case: Update a non-existent notification address
+        ///     Expected: Returns NotFound
+        /// </summary>
+        [Fact]
+        public async Task UpdateOrganisationNotificationAddress_NotFound_ReturnsNotFound()
+        {
+            // Arrange
+            string orgNumber = "310202398";
+            int notificationAddressId = 0; // Use an ID that doesn't exist in the mock
+            var notificationAddress = new NotificationAddressModel
+            {
+                Email = "updated@example.com",
+                Phone = null,
+                CountryCode = null
+            };
+
+            // Act
+            HttpResponseMessage response = await _client.PutAsJsonAsync($"accessmanagement/api/v1/settings/org/{orgNumber}/notificationaddresses/{notificationAddressId}", notificationAddress);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Backend service throws exception during PUT
+        ///     Expected: Returns InternalServerError
+        /// </summary>
+        [Fact]
+        public async Task UpdateOrganisationNotificationAddress_BackendError_ReturnsInternalServerError()
+        {
+            // Arrange
+            string orgNumber = "000000000"; // Special org number that triggers exception in mock
+            int notificationAddressId = 1;
+            var notificationAddress = new NotificationAddressModel
+            {
+                Email = "updated@example.com",
+                Phone = null,
+                CountryCode = null
+            };
+
+            // Act
+            HttpResponseMessage response = await _client.PutAsJsonAsync($"accessmanagement/api/v1/settings/org/{orgNumber}/notificationaddresses/{notificationAddressId}", notificationAddress);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Multiple validation scenarios for PUT endpoint using Theory
+        ///     Expected: All return BadRequest with validation message
+        /// </summary>
+        [Theory]
+        [InlineData("123")]
+        [InlineData("12345678901")]
+        [InlineData("abc123def")]
+        [InlineData("31020239A")]
+        public async Task UpdateOrganisationNotificationAddress_InvalidOrgNumbers_ReturnsBadRequest(string orgNumber)
+        {
+            // Arrange
+            int notificationAddressId = 1;
+            var notificationAddress = new NotificationAddressModel
+            {
+                Email = "updated@example.com",
+                Phone = null,
+                CountryCode = null
+            };
+
+            // Act
+            HttpResponseMessage response = await _client.PutAsJsonAsync($"accessmanagement/api/v1/settings/org/{orgNumber}/notificationaddresses/{notificationAddressId}", notificationAddress);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("\"Org number must be a number with 9 digits\"", await response.Content.ReadAsStringAsync());
+        }
     }
 }
