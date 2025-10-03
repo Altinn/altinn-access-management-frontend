@@ -219,11 +219,10 @@ export class ApiRequests {
     }
   }
 
-  public async postSystemuserChangeRequest(externalRef: string) {
+  public async postSystemuserChangeRequest(systemUserId: string) {
+    const id: string = crypto.randomUUID();
+
     const payload = {
-      systemId: `${process.env.SYSTEM_ID}`,
-      partyOrgNo: `${process.env.ORG}`,
-      externalRef: externalRef,
       requiredRights: [
         {
           resource: [
@@ -234,10 +233,14 @@ export class ApiRequests {
           ],
         },
       ],
-      redirectUrl: 'https://altinn.no',
+      requiredAccessPackages: [
+        {
+          urn: 'urn:altinn:accesspackage:plansak',
+        },
+      ],
     };
 
-    const endpoint = 'v1/systemuser/changerequest/vendor';
+    const endpoint = `v1/systemuser/changerequest/vendor?correlation-id=${id}&system-user-id=${systemUserId}`;
     const scopes =
       'altinn:authentication/systemuser.request.read altinn:authentication/systemuser.request.write';
 
@@ -308,6 +311,39 @@ export class ApiRequests {
   public async getStatusForSystemUserChangeRequest<T>(systemRequestId: string): Promise<T> {
     const endpoint = `v1/systemuser/changerequest/vendor/${systemRequestId}`;
     return this.sendGetStatusRequest(endpoint);
+  }
+
+  public async getSystemUserByQuery(
+    systemId: string,
+    orgno: string,
+    externalRef: string,
+  ): Promise<string> {
+    const endpoint = `v1/systemuser/vendor/byquery?system-id=${systemId}&orgno=${orgno}&external-ref=${externalRef}`;
+    const scopes = 'altinn:authentication/systemuser.request.write';
+    const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
+    const url = `${process.env.API_BASE_URL}${endpoint}`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error('Failed to get system user by query:', response.status, errorBody);
+        throw new Error(`Failed to get system user by query: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data.id;
+    } catch (error) {
+      console.error('Error getting system user by query:', error);
+      throw new Error('Failed to get system user by query. Check logs for details.');
+    }
   }
 
   private async sendGetStatusRequest(endpoint: string) {
