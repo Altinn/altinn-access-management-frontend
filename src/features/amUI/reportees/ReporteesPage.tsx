@@ -11,9 +11,7 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ReporteePageHeading } from '../common/ReporteePageHeading';
 
-import classes from './ReporteePage.module.css';
 import { ReporteesList } from './ReporteesList';
-import { PageHeading } from '../common/PageHeading';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();

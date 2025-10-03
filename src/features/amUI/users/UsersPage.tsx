@@ -19,7 +19,7 @@ export const UsersPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('users_page.page_title'));
 
-  const { data: reportee } = useGetReporteeQuery();
+  const { data: reportee, isLoading } = useGetReporteeQuery();
   const name = reportee?.name || '';
 
   useRerouteIfNotConfetti();
@@ -34,8 +34,7 @@ export const UsersPage = () => {
           <ReporteePageHeading
             title={t('users_page.main_page_heading', { name })}
             reportee={reportee}
-            className={classes.usersListHeading}
-            level={1}
+            isLoading={isLoading}
           />
           <UsersList />
         </PartyRepresentationProvider>

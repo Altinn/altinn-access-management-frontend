@@ -1,8 +1,9 @@
 .pageHeading {
-  /* default spacing and typography for reportee page headings */
-  margin-bottom: 1rem;
+  margin-top: 15px;
+  padding-bottom: 1rem;
 }
 
 .pageHeadingSkeleton {
-  margin: 6px 0;
+  max-width: 100%;
+  margin-bottom: 0.5rem;
 }

@@ -17,7 +17,7 @@ import { useRerouteIfLimitedPreview } from '@/resources/utils/featureFlagUtils';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
-  const { data: reportee } = useGetReporteeQuery();
+  const { data: reportee, isLoading } = useGetReporteeQuery();
 
   useDocumentTitle(t('poa_overview_page.page_title'));
 
@@ -35,7 +35,7 @@ export const PoaOverviewPage = () => {
           <ReporteePageHeading
             title={t('poa_overview_page.heading', { name: reportee?.name || '' })}
             reportee={reportee}
-            className={classes.pageHeading}
+            isLoading={isLoading}
           />
           <RightsTabs
             packagesPanel={<AccessPackagePermissions />}
