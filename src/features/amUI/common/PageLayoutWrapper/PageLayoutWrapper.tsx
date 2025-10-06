@@ -50,13 +50,14 @@ const getAccountType = (type: string): 'company' | 'person' => {
 
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t, i18n } = useTranslation();
-  const { data: reportee } = useGetReporteeQuery();
+  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
   const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery();
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
 
-  const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
+  const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsAdminQuery();
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -127,10 +128,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     ...(isSm
       ? SidebarItems(
           true,
+          isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin,
           pathname,
           isAdmin,
-          reportee?.name || '',
-          getAccountType(reportee?.type ?? ''),
+          isClientAdmin,
+          reportee,
         )
       : []),
     {
@@ -301,10 +303,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             groups: menuGroups,
             items: SidebarItems(
               false,
+              isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin,
               pathname,
               isAdmin,
-              reportee?.name || '',
-              getAccountType(reportee?.type ?? ''),
+              isClientAdmin,
+              reportee,
             ),
           },
         }}
