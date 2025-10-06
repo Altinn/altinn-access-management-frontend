@@ -65,7 +65,7 @@ export const ActiveConsentsPage = () => {
       <PageLayoutWrapper>
         <DsHeading
           level={1}
-          data-size='md'
+          data-size='sm'
           className={classes.activeConsentsTopHeading}
         >
           {t('active_consents.heading')}
@@ -77,7 +77,7 @@ export const ActiveConsentsPage = () => {
         <div className={classes.activeConsentsSubHeading}>
           <DsHeading
             level={2}
-            data-size='sm'
+            data-size='xs'
           >
             {t('active_consents.sub_heading')}
           </DsHeading>
