@@ -28,6 +28,7 @@ import {
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
   useGetReporteeQuery,
   useGetUserInfoQuery,
@@ -57,7 +58,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const [searchString, setSearchString] = useState<string>('');
 
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
-  const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsAdminQuery();
+  const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
