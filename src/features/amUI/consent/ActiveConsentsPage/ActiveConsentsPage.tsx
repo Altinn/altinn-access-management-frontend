@@ -71,8 +71,8 @@ export const ActiveConsentsPage = () => {
           {t('active_consents.heading')}
         </DsHeading>
         <OldConsentAlert
-          heading={t('active_consents.altinn2_consent_alert_header')}
-          text={t('active_consents.altinn2_consent_alert_body')}
+          heading='active_consents.altinn2_consent_alert_header'
+          text='active_consents.altinn2_consent_alert_body'
         />
         <div className={classes.activeConsentsSubHeading}>
           <DsHeading

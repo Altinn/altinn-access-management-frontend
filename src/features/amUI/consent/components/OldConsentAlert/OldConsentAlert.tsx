@@ -1,6 +1,6 @@
 import { getHostUrl } from '@/resources/utils/pathUtils';
 import { DsAlert, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import classes from './OldConsentAlert.module.css';
 
 interface OldConsentAlertProps {
@@ -9,13 +9,14 @@ interface OldConsentAlertProps {
 }
 
 export const OldConsentAlert = ({ heading, text }: OldConsentAlertProps) => {
+  const { t } = useTranslation();
   return (
     <DsAlert className={classes.consentAlert}>
       <DsHeading
         data-size='xs'
         level={2}
       >
-        {heading}
+        {t(heading)}
       </DsHeading>
       <DsParagraph>
         <Trans
