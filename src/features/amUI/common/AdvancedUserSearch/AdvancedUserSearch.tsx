@@ -28,15 +28,11 @@ export interface AdvancedUserSearchProps {
 
 const useUIState = (isQuery: boolean, directHasResults: boolean, indirectHasResults: boolean) => {
   return useMemo(() => {
-    const showDirectSection = isQuery;
-    const showDirectList = isQuery && directHasResults;
     const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
     const showIndirectList = isQuery && indirectHasResults;
     const showEmptyState = !directHasResults && !indirectHasResults;
 
     return {
-      showDirectSection,
-      showDirectList,
       showDirectNoResults,
       showIndirectList,
       showEmptyState,
@@ -78,13 +74,11 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const directHasResults = (users?.length ?? 0) > 0;
   const indirectHasResults = (indirectUsers?.length ?? 0) > 0;
 
-  const {
-    showDirectSection,
-    showDirectList,
-    showDirectNoResults,
-    showIndirectList,
-    showEmptyState,
-  } = useUIState(isQuery, directHasResults, indirectHasResults);
+  const { showDirectNoResults, showIndirectList, showEmptyState } = useUIState(
+    isQuery,
+    directHasResults,
+    indirectHasResults,
+  );
 
   const handleAddNewUser = async (user: User) => {
     if (onDelegate) {
@@ -120,28 +114,24 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
       </div>
 
       <div className={classes.results}>
-        {showDirectSection && (
-          <>
-            {(showDirectList || showDirectNoResults) && (
-              <h3 className={classes.subHeader}>{t('advanced_user_search.direct_connections')}</h3>
-            )}
-            {showDirectList && (
-              <ConnectionsList
-                users={users as ExtendedUser[]}
-                hasNextPage={hasNextPage}
-                goNextPage={goNextPage}
-                availableAction={DelegationAction.REVOKE}
-                isActionLoading={isActionLoading}
-                onRevoke={onRevoke}
-              />
-            )}
-            {showDirectNoResults && (
-              <DsParagraph data-size='md'>
-                {t('advanced_user_search.user_no_search_result', { searchTerm: trimmedQuery })}
-              </DsParagraph>
-            )}
-          </>
-        )}
+        <>
+          {showDirectNoResults && (
+            <h3 className={classes.subHeader}>{t('advanced_user_search.direct_connections')}</h3>
+          )}
+          <ConnectionsList
+            users={users as ExtendedUser[]}
+            hasNextPage={hasNextPage}
+            goNextPage={goNextPage}
+            availableAction={DelegationAction.REVOKE}
+            isActionLoading={isActionLoading}
+            onRevoke={onRevoke}
+          />
+          {showDirectNoResults && (
+            <DsParagraph data-size='md'>
+              {t('advanced_user_search.user_no_search_result', { searchTerm: trimmedQuery })}
+            </DsParagraph>
+          )}
+        </>
 
         {showIndirectList && (
           <>

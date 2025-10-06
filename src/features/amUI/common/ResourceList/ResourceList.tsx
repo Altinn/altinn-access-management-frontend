@@ -78,7 +78,7 @@ export const ResourceList = ({
                     as='button'
                     size='xs'
                     resourceName={resource.name || resource.title}
-                    ownerName={resource.provider?.name || resource.resourceOwnerName}
+                    ownerName={resource.provider?.name || resource.resourceOwnerName || ''}
                     ownerLogoUrl={
                       emblem ?? resource.provider?.logoUrl ?? resource.resourceOwnerLogoUrl
                     }

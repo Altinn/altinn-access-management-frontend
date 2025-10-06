@@ -6,98 +6,88 @@ import { Entity } from '@/dataObjects/dtos/Common';
 /**
  * Temporary transformation hook.
  *
- * Converts AccessPackage.permissions (flat list of permission relations) into the hierarchical
- * Connection[] structure expected by AdvancedUserSearch (mirroring the /rightholders endpoint result).
- * This will become unnecessary once (or if) the backend exposes permissions in the same structured
- * format as the connections endpoint. When that happens, replace usages of this hook with the direct
- * backend response and remove this file.
+ * Transforms a flat list of permission relations (accessPackage.permissions) into
+ * a hierarchical Connection[] structure similar to /rightholders endpoint output.
+ *
+ * IMPORTANT (business rule as clarified):
+ * Mark party.isInherited = true if (and only if) the party has at least one key role
+ * (regardless of whether it was obtained directly or via another party).
  */
-export const usePackagePermissionConnections = (accessPackage?: AccessPackage): Connection[] => {
-  return useMemo(() => {
+
+const EXCLUDED = new Set(['rettighetshaver']);
+
+export const usePackagePermissionConnections = (accessPackage?: AccessPackage): Connection[] =>
+  useMemo(() => {
     const permissions = accessPackage?.permissions;
-    if (!permissions || permissions.length === 0) return [];
+    if (!permissions?.length) return [];
 
     const group: Record<string, Connection> = {};
-    const inheritedFlags: Record<string, boolean> = {};
-    const hasDirectRole: Record<string, boolean> = {};
+    const inheritanceRelevant = new Set<string>();
 
-    const ensureRootConnection = (user: Entity): Connection => {
-      if (!group[user.id]) {
+    const ensureRoot = (e: Entity): Connection => {
+      if (!group[e.id]) {
         const party: ExtendedUser = {
-          id: user.id,
-          name: user.name,
-          type: user.type,
-          variant: user.variant,
+          id: e.id,
+          name: e.name,
+          type: e.type,
+          variant: e.variant,
           children: null,
-          keyValues: user.keyValues,
-          isInherited: false, // will be finalized after aggregation
+          keyValues: e.keyValues,
+          isInherited: false,
           roles: [],
         };
-        group[user.id] = { party, roles: [], connections: [] };
+        group[e.id] = { party, roles: [], connections: [] };
       }
-      return group[user.id];
+      return group[e.id];
     };
 
-    const getOrCreateChildConnection = (
-      parent: Connection,
-      child: Entity,
-      isInherited = false,
-    ): Connection => {
-      let node = parent.connections.find((c) => c.party.id === child.id);
+    const ensureChild = (parent: Connection, e: Entity): Connection => {
+      let node = parent.connections.find((c) => c.party.id === e.id);
       if (!node) {
         node = {
           party: {
-            id: child.id,
-            name: child.name,
-            type: child.type,
-            variant: child.variant,
+            id: e.id,
+            name: e.name,
+            type: e.type,
+            variant: e.variant,
             children: null,
-            keyValues: child.keyValues,
+            keyValues: e.keyValues,
             roles: [],
-            isInherited,
+            isInherited: false,
           },
           roles: [],
           connections: [],
         };
         parent.connections.push(node);
-      } else if (isInherited) {
-        node.party.isInherited = true;
       }
       return node;
     };
 
-    for (const { to, role, via, viaRole } of permissions) {
-      if (via) {
-        // VIA path: create/ensure intermediary (via) then the child connection under it.
-        const viaConn = ensureRootConnection(via);
-        const child = getOrCreateChildConnection(viaConn, to, true);
-        if (viaRole && !child.roles.some((r) => r.code === viaRole.code)) {
-          child.roles.push({ id: viaRole.id, code: viaRole.code, viaParty: via });
-        }
-        inheritedFlags[to.id] = true;
-        continue;
+    const addRole = (conn: Connection, id: string, code: string, viaParty?: Entity) => {
+      if (!conn.roles.some((r) => r.code === code)) {
+        conn.roles.push(viaParty ? { id, code, viaParty } : { id, code });
+        if (!EXCLUDED.has(code)) inheritanceRelevant.add(conn.party.id);
       }
-
-      const root = ensureRootConnection(to);
-
-      if (role && !root.roles.some((r) => r.code === role.code)) {
-        root.roles.push({ id: role.id, code: role.code });
-      }
-      if (role) {
-        hasDirectRole[to.id] = true;
-      }
-    }
-
-    const applyInheritedFlagRecursively = (conn: Connection) => {
-      conn.party.isInherited =
-        Boolean(inheritedFlags[conn.party.id]) && !Boolean(hasDirectRole[conn.party.id]);
-      // conn.connections.forEach((child) => applyInheritedFlagRecursively(child));
     };
 
-    Object.values(group).forEach((rootConn) => applyInheritedFlagRecursively(rootConn));
+    for (const { to, role, via, viaRole } of permissions) {
+      if (via) {
+        const viaConn = ensureRoot(via);
+        const child = ensureChild(viaConn, to);
+        if (viaRole) addRole(child, viaRole.id, viaRole.code, via);
+        continue;
+      }
+      const root = ensureRoot(to);
+      if (role) addRole(root, role.id, role.code);
+    }
 
+    const finalize = (conn: Connection) => {
+      conn.party.isInherited = inheritanceRelevant.has(conn.party.id);
+      conn.connections.forEach(finalize);
+    };
+
+    Object.values(group).forEach(finalize);
     return Object.values(group);
   }, [accessPackage?.permissions]);
-};
 
 export default usePackagePermissionConnections;
