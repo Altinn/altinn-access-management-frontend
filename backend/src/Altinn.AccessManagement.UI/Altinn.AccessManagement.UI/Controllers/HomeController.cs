@@ -131,7 +131,8 @@ namespace Altinn.AccessManagement.UI.Controllers
                 HttpContext.Response.Cookies.Append($"{cookiePrefix}amui_actingPartyUuid", userGuid.ToString(), new CookieOptions
                 {
                     HttpOnly = false, // Make this cookie readable by Javascript.
-                    SameSite = SameSiteMode.Strict
+                    SameSite = SameSiteMode.Strict,
+                    Secure = !_env.IsDevelopment()
                 });
             }
         }
