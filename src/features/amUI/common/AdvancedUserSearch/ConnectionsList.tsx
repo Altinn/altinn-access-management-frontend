@@ -49,8 +49,8 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
                 isLoading={isActionLoading}
                 user={user as ExtendedUser}
                 availableAction={availableAction}
-                onRevoke={onRevoke}
-                onDelegate={onDelegate}
+                onRevoke={onRevoke ? () => onRevoke(user as ExtendedUser) : undefined}
+                onDelegate={onDelegate ? () => onDelegate(user as ExtendedUser) : undefined}
               />
             )}
           />

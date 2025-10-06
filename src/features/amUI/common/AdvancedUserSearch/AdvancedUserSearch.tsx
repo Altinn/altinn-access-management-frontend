@@ -26,20 +26,6 @@ export interface AdvancedUserSearchProps {
   isActionLoading?: boolean;
 }
 
-const useUIState = (isQuery: boolean, directHasResults: boolean, indirectHasResults: boolean) => {
-  return useMemo(() => {
-    const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
-    const showIndirectList = isQuery && indirectHasResults;
-    const showEmptyState = !directHasResults && !indirectHasResults;
-
-    return {
-      showDirectNoResults,
-      showIndirectList,
-      showEmptyState,
-    };
-  }, [isQuery, directHasResults, indirectHasResults]);
-};
-
 const filterSystemUsers = (items?: Connection[]) =>
   items?.filter((item) => item.party.type !== ConnectionUserType.Systemuser);
 
@@ -74,11 +60,9 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const directHasResults = (users?.length ?? 0) > 0;
   const indirectHasResults = (indirectUsers?.length ?? 0) > 0;
 
-  const { showDirectNoResults, showIndirectList, showEmptyState } = useUIState(
-    isQuery,
-    directHasResults,
-    indirectHasResults,
-  );
+  const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
+  const showIndirectList = isQuery && indirectHasResults;
+  const showEmptyState = !directHasResults && !indirectHasResults;
 
   const handleAddNewUser = async (user: User) => {
     if (onDelegate) {

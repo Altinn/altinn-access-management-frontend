@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { ResourceList } from '../common/ResourceList/ResourceList';
-import UsersTab from './UsersTab';
+import { UsersTab } from './UsersTab';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
