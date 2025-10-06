@@ -84,7 +84,8 @@
     "mainunit_lowercase": "main unit",
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
-    "date_of_birth": "Born"
+    "date_of_birth": "Born",
+    "save_changes": "Save changes"
   },
   "beta_banner": {
     "info": "This is a beta version of the new access management pages in Altinn.",
@@ -317,7 +318,8 @@
     "sub_heading": "org.nr. {{org_number}}",
     "user_list_heading": "Other users with power of attorney",
     "user_search_placeholder": "Search for users",
-    "no_users": "Nobody but you have access. Do you want to change this?",
+    "no_users": "This list is empty",
+    "only_you_have_access": "Only you have access here. Do you want to change this?",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?"
   },
@@ -438,14 +440,27 @@
   "settings_page": {
     "page_title": "Settings - Altinn",
     "page_heading": "Settings for {{name}}",
-    "alert_settings_heading": "Alert addresses for the organization",
-    "alerts_on_email": "Email alerts",
-    "alerts_on_sms": "SMS alerts",
+    "alert_settings_heading": "Notification addresses for the organization",
+    "alerts_on_email": "Notifications by email",
+    "alerts_on_sms": "Notifications by SMS",
     "one_address": "1 address",
     "num_of_addresses": "{{count}} addresses",
-    "email_label": "The organization's email addresses for alerts:",
-    "sms_label": "The organization's phone numbers for alerts:",
-    "address_number": "Address {{number}}:"
+    "email_label": "Organization's email addresses for notifications:",
+    "sms_label": "Organization's phone numbers for notifications:",
+    "address_number": "Address {{number}}",
+    "phone_number": "Phone number {{number}}",
+    "country_code_number": "Country code {{number}}",
+    "manage_addresses_info": "Altinn uses the address(es) to notify the organization about new content.",
+    "add_more": "Add more",
+    "remove_email": "Remove email",
+    "remove_sms": "Remove phone number",
+    "error_saving_addresses": "Something went wrong. Please try again.",
+    "no_addresses_error": "The organization must have at least one email address or SMS number for notifications."
+  },
+  "text_field_errors": {
+    "required": "The field is required",
+    "invalid_email_pattern": "Invalid email address",
+    "invalid_phone": "Invalid phone number"
   },
   "info_modal": {
     "title": "Try the new access management solution",

@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.Platform.Profile.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -25,5 +26,23 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <returns>A list of addresses</returns>
         Task<List<NotificationAddressResponse>> GetOrgNotificationAddresses(string orgNumber);
+
+        /// <summary>
+        /// Posts a new notification address for a given organization
+        /// </summary>
+        /// <returns>A list of addresses</returns>
+        Task<NotificationAddressResponse> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress);
+
+        /// <summary>
+        /// Deletes a notification address for a given organization
+        /// </summary>
+        /// <returns>A list of addresses</returns>
+        Task<NotificationAddressResponse> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId);
+
+        /// <summary>
+        /// Updates a notification address for a given organization
+        /// </summary>
+        /// <returns>A list of addresses</returns>
+        Task<NotificationAddressResponse> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress);
     }
 }
