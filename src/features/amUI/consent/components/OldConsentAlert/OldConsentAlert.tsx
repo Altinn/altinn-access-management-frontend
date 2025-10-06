@@ -1,6 +1,6 @@
 import { getHostUrl } from '@/resources/utils/pathUtils';
 import { DsAlert, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import classes from './OldConsentAlert.module.css';
 
 interface OldConsentAlertProps {
@@ -10,20 +10,22 @@ interface OldConsentAlertProps {
 
 export const OldConsentAlert = ({ heading, text }: OldConsentAlertProps) => {
   const { t } = useTranslation();
-
   return (
     <DsAlert className={classes.consentAlert}>
       <DsHeading
         data-size='xs'
         level={2}
       >
-        {heading}
+        {t(heading)}
       </DsHeading>
       <DsParagraph>
-        {text}{' '}
-        <DsLink href={`${getHostUrl()}ui/profile/`}>
-          {t('active_consents.altinn2_consent_alert_link')}
-        </DsLink>
+        <Trans
+          i18nKey={text}
+          components={{
+            //@ts-ignore children is required in DsLink, but children will be set from <Trans>
+            a: <DsLink href={`${getHostUrl()}ui/profile/`} />,
+          }}
+        />
       </DsParagraph>
     </DsAlert>
   );

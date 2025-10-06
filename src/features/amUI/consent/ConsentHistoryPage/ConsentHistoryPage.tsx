@@ -79,8 +79,8 @@ export const ConsentHistoryPage = () => {
               {t('consent_log.heading')}
             </DsHeading>
             <OldConsentAlert
-              heading={t('consent_log.altinn2_consent_alert_header')}
-              text={t('consent_log.altinn2_consent_alert_body')}
+              heading='consent_log.altinn2_consent_alert_header'
+              text='consent_log.altinn2_consent_alert_body'
             />
           </div>
           {!isLoading && !hasPermission && <div>{t('consent_log.no_consent_log_permission')}</div>}
