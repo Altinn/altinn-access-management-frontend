@@ -30,7 +30,6 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
   isActionLoading = false,
 }) => {
   const { t } = useTranslation();
-  const isSmall = useIsMobileOrSmaller();
 
   return (
     <>

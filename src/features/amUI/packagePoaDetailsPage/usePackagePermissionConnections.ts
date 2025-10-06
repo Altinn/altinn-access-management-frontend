@@ -6,15 +6,12 @@ import { Entity } from '@/dataObjects/dtos/Common';
 /**
  * Temporary transformation hook.
  *
- * Transforms a flat list of permission relations (accessPackage.permissions) into
- * a hierarchical Connection[] structure similar to /rightholders endpoint output.
- *
- * IMPORTANT (business rule as clarified):
- * Mark party.isInherited = true if (and only if) the party has at least one key role
- * (regardless of whether it was obtained directly or via another party).
+ * Converts AccessPackage.permissions (flat list of permission relations) into the hierarchical
+ * Connection[] structure expected by AdvancedUserSearch (mirroring the /rightholders endpoint result).
+ * This will become unnecessary once (or if) the backend exposes permissions in the same structured
+ * format as the connections endpoint. When that happens, replace usages of this hook with the direct
+ * backend response and remove this file.
  */
-
-const EXCLUDED = new Set(['rettighetshaver']);
 
 export const usePackagePermissionConnections = (accessPackage?: AccessPackage): Connection[] =>
   useMemo(() => {
@@ -66,7 +63,7 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
     const addRole = (conn: Connection, id: string, code: string, viaParty?: Entity) => {
       if (!conn.roles.some((r) => r.code === code)) {
         conn.roles.push(viaParty ? { id, code, viaParty } : { id, code });
-        if (!EXCLUDED.has(code)) inheritanceRelevant.add(conn.party.id);
+        if (code !== 'rettighetshaver') inheritanceRelevant.add(conn.party.id);
       }
     };
 
