@@ -97,6 +97,45 @@ namespace Altinn.AccessManagement.UI.Controllers
             return Redirect(redirectUrl);
         }
 
+        private void SetReporteeSessionCookie()
+        {
+            string cookiePrefix = string.Empty;
+            switch (_env.EnvironmentName)
+            {
+                case "Development":
+                case "AT22":
+                    cookiePrefix = "at22_";
+                    break;
+                case "AT21":
+                    cookiePrefix = "at21_";
+                    break;
+                case "AT23":
+                    cookiePrefix = "at23_";
+                    break;
+                case "AT24":
+                    cookiePrefix = "at24_";
+                    break;
+                case "TT02":
+                    cookiePrefix = "tt02_";
+                    break;
+                default:
+                    // No prefix for production
+                    break;
+            }
+
+            if (HttpContext.Request.Cookies.ContainsKey($"{cookiePrefix}amui_actingPartyUuid") == false)
+            {
+                // Create a new cookie, defaulting the user to representing themselves
+                Guid userGuid = AuthenticationHelper.GetUserPartyUuid(_httpContextAccessor.HttpContext);
+
+                HttpContext.Response.Cookies.Append($"{cookiePrefix}amui_actingPartyUuid", userGuid.ToString(), new CookieOptions
+                {
+                    HttpOnly = false, // Make this cookie readable by Javascript.
+                    SameSite = SameSiteMode.Strict
+                });
+            }
+        }
+
         private async Task SetLanguageCookie()
         {
             if (HttpContext.Request.Cookies.ContainsKey("selectedLanguage") == false)
@@ -126,6 +165,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 await SetLanguageCookie();
+                SetReporteeSessionCookie();
                 return true;
             }
 
