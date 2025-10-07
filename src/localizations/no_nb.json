@@ -85,6 +85,7 @@
     "subunit_lowercase": "underenhet",
     "mainunit_lowercase": "hovedenhet",
     "org_nr_lowercase": "org.nr. {{org_number}}",
+    "date_of_birth": "Født",
     "save_changes": "Lagre endringer"
   },
   "beta_banner": {
