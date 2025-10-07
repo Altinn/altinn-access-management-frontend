@@ -74,7 +74,7 @@ export const ConsentHistoryPage = () => {
           <div>
             <DsHeading
               level={1}
-              data-size='md'
+              data-size='sm'
             >
               {t('consent_log.heading')}
             </DsHeading>

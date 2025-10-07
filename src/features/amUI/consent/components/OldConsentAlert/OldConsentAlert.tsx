@@ -13,7 +13,7 @@ export const OldConsentAlert = ({ heading, text }: OldConsentAlertProps) => {
   return (
     <DsAlert className={classes.consentAlert}>
       <DsHeading
-        data-size='xs'
+        data-size='2xs'
         level={2}
       >
         {t(heading)}
