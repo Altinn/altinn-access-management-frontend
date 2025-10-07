@@ -33,7 +33,6 @@ export class DelegationApiRequest {
     if (!response.ok()) {
       throw new Error(`Delegation creation failed: ${await response.text()}`);
     }
-    console.log(`Delegation created: ${process.env.PARTY_ID} → ${process.env.TO_ORG}`);
   }
 
   //Delegate access pacakge to 'Rettighetshaver'
@@ -65,7 +64,6 @@ export class DelegationApiRequest {
     if (!response.ok()) {
       throw new Error(`Delegating access pacakge failed: ${await response.text()}`);
     }
-    console.log(`Access pacakage delegated from: ${process.env.PARTY_ID} → ${process.env.TO_ORG}`);
   }
 
   /**
@@ -86,8 +84,6 @@ export class DelegationApiRequest {
     // Full URL
     const url = `${process.env.PLATFORM_URL}${endpoint}`;
 
-    console.log('Cleanup URL:', url);
-
     const response = await apiRequestContext.delete(url, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -99,7 +95,5 @@ export class DelegationApiRequest {
       const errorBody = await response.text();
       throw new Error(`Delegation cleanup failed. Status: ${response.status()} - ${errorBody}`);
     }
-
-    console.log('Delegations deleted successfully');
   }
 }

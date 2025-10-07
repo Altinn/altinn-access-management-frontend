@@ -11,6 +11,7 @@ test.describe('Systembruker endringsforespørsel', () => {
   let systemUserPage: SystemUserPage;
   let orgNumber: string;
   let systemId: string;
+  let systemUserIds: string[] = [];
 
   test.beforeEach(async ({ page }) => {
     api = new ApiRequests();
@@ -28,6 +29,18 @@ test.describe('Systembruker endringsforespørsel', () => {
     await loginPage.chooseReportee('AKTVERDIG RETORISK APE');
   });
 
+  test.afterEach(async () => {
+    // Cleanup system users created during tests
+    if (systemUserIds.length > 0) {
+      try {
+        await api.cleanUpSystemUsers(systemUserIds.map((id) => ({ id })));
+      } catch (error) {
+        console.error('Error during system user cleanup:', error);
+      }
+      systemUserIds = []; // Reset the array
+    }
+  });
+
   test('Avvis endringsforespørsel', async ({ page }): Promise<void> => {
     //Generate confirmUrl from API
     const externalRef = TestdataApi.generateExternalRef();
@@ -36,18 +49,19 @@ test.describe('Systembruker endringsforespørsel', () => {
     await api.approveSystemuserRequest(response.id);
 
     const systemUserId = await api.getSystemUserByQuery(systemId, orgNumber, externalRef);
+    systemUserIds.push(systemUserId); // Track for cleanup
 
     const changeRequestResponse = await api.postSystemuserChangeRequest(systemUserId);
 
     await page.goto(changeRequestResponse.confirmUrl);
     await page.getByRole('button', { name: 'Avvis' }).click();
-    //Read from status api to verify that status is not Accepted after clicking "Avvis"
+
+    //Look for login button
+    await expect(loginPage.loginButton).toBeVisible();
+
     const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
       changeRequestResponse.id,
     );
-
-    //Look for login button
-    await expect(page.getByRole('button', { name: 'Logg inn' }).first()).toBeVisible();
 
     expect(statusApiRequest.status).toBe('Rejected');
   });
@@ -55,18 +69,19 @@ test.describe('Systembruker endringsforespørsel', () => {
   test('Godkjenn endringsforespørsel', async ({ page }): Promise<void> => {
     const externalRef = TestdataApi.generateExternalRef();
     const response = await api.postSystemuserRequest(externalRef);
-    console.log('response', response);
 
     await api.approveSystemuserRequest(response.id);
 
     const systemUserId = await api.getSystemUserByQuery(systemId, orgNumber, externalRef);
+    systemUserIds.push(systemUserId); // Track for cleanup
 
     const changeRequestResponse = await api.postSystemuserChangeRequest(systemUserId);
     await page.goto(changeRequestResponse.confirmUrl);
     await page.getByRole('button', { name: 'Godkjenn' }).click();
 
     //Look for login button
-    await expect(page.getByRole('button', { name: 'Logg inn' }).first()).toBeVisible();
+
+    await expect(loginPage.loginButton).toBeVisible();
 
     //Read from status api to verify that status is not Accepted after clicking "Avvis"
     const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
