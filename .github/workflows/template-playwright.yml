@@ -74,7 +74,7 @@ jobs:
           azcliversion: latest
           inlineScript: |
             REPORT_NAME=${{ inputs.environment }}                 # e.g. AT24
-            REPORT_ID=${{ github.sha }}-${{ inputs.project }}     # unique per job (env+project)
+            REPORT_ID=${{ github.run_id }}-${{ inputs.environment }}     # unique per job run
             ACCOUNT_NAME=playwrightreporting
 
             az storage blob upload-batch \
