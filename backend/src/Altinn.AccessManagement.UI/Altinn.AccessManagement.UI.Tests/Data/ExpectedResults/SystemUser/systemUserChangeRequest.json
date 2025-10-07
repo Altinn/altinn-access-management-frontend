@@ -10,7 +10,7 @@
     "systemVendorOrgName": "LEPSØY OG TONSTAD",
     "name": "N/A"
   },
-  "resources": [
+  "requiredRights": [
     {
       "identifier": "ske-innrapportering-boligsameie",
       "title": "Innrapportering Boligsameie",
@@ -43,6 +43,59 @@
         }
       ],
       "keywords": ["Boligsameie", "innrapportering"]
+    }
+  ],
+  "unwantedRights": [
+    {
+      "identifier": "jks-test-resource",
+      "title": "JK's Test Ressurs",
+      "description": "Veldig fin test ressurs",
+      "rightDescription": "Du gir tilgang til denne fine test ressursen",
+      "homepage": null,
+      "status": "Active",
+      "spatial": null,
+      "contactPoints": [],
+      "delegable": true,
+      "visible": true,
+      "resourceOwnerName": "JK's Test departement",
+      "resourceOwnerOrgNumber": "991825827",
+      "resourceOwnerLogoUrl": "",
+      "resourceOwnerOrgcode": null,
+      "resourceReferences": [],
+      "priorityCounter": null,
+      "resourceType": "GenericAccessResource",
+      "authorizationReference": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "jks-test-resource"
+        }
+      ],
+      "keywords": []
+    }
+  ],
+  "requiredAccessPackages": [
+    {
+      "id": "9603dd83-be41-4190-b0a7-97490f4a601d",
+      "urn": "urn:altinn:accesspackage:sjofart",
+      "name": "Sjøfart",
+      "description": "Denne fullmakten gir tilgang til tjenester knyttet til skipsarbeidstakere og fartøy til sjøs. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+      "resources": []
+    },
+    {
+      "id": "3b3bc323-207b-4d56-a21f-97b6875ccc28",
+      "name": "Lufttransport",
+      "urn": "urn:altinn:accesspackage:lufttransport",
+      "description": "Denne fullmakten gir tilgang til tjenester knyttet til luftfartøy og romfartøy. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+      "resources": []
+    }
+  ],
+  "unwantedAccessPackages": [
+    {
+      "id": "c5bbbc3f-605a-4dcb-a587-32124d7bb76d",
+      "urn": "urn:altinn:accesspackage:jordbruk",
+      "name": "Jordbruk",
+      "description": "Denne tilgangspakken gir tilgang til tjenester knyttet til jordbruk. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+      "resources": []
     }
   ]
 }

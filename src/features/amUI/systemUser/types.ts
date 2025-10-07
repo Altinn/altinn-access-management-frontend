@@ -33,15 +33,24 @@ export interface SystemUser {
 
 type RequestStatus = 'New' | 'Accepted' | 'Rejected' | 'Denied' | 'Timedout';
 
-export interface SystemUserRequest {
+interface SystemUserRequestBase {
   id: string;
   partyId: string;
   partyUuid: string;
   status: RequestStatus;
   redirectUrl?: string;
   system: RegisteredSystem;
+}
+export interface SystemUserRequest extends SystemUserRequestBase {
   resources: ServiceResource[];
   accessPackages: SystemUserAccessPackage[];
+}
+
+export interface SystemUserChangeRequest extends SystemUserRequestBase {
+  requiredRights: ServiceResource[];
+  unwantedRights: ServiceResource[];
+  requiredAccessPackages: SystemUserAccessPackage[];
+  unwantedAccessPackages: SystemUserAccessPackage[];
 }
 
 // TODO: temp? type for access package with enriched resources

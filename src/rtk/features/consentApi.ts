@@ -1,9 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { ConsentRequest } from '@/features/amUI/consent/types';
+import type {
+  ActiveConsentListItem,
+  Consent,
+  ConsentHistoryItem,
+  ConsentRequest,
+} from '@/features/amUI/consent/types';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
+
+enum Tags {
+  ConsentList = 'ConsentList',
+  ConsentLog = 'ConsentLog',
+}
 
 export const consentApi = createApi({
   reducerPath: 'consentApi',
@@ -15,6 +25,7 @@ export const consentApi = createApi({
       return headers;
     },
   }),
+  tagTypes: [Tags.ConsentList, Tags.ConsentLog],
   endpoints: (builder) => ({
     // consent request
     getConsentRequest: builder.query<ConsentRequest, { requestId: string }>({
@@ -33,13 +44,41 @@ export const consentApi = createApi({
         method: 'POST',
       }),
     }),
+
+    // active consents
+    getActiveConsents: builder.query<ActiveConsentListItem[], { partyId: string }>({
+      query: ({ partyId }) => `consent/active/${partyId}`,
+      providesTags: [Tags.ConsentList],
+    }),
+    getConsentLog: builder.query<ConsentHistoryItem[], { partyId: string }>({
+      query: ({ partyId }) => `consent/log/${partyId}`,
+      providesTags: [Tags.ConsentLog],
+    }),
+    getConsent: builder.query<Consent, { consentId: string }>({
+      query: ({ consentId }) => `consent/${consentId}`,
+    }),
+    revokeConsent: builder.mutation<boolean, { consentId: string }>({
+      query: ({ consentId }) => ({
+        url: `consent/${consentId}/revoke`,
+        method: 'POST',
+      }),
+      invalidatesTags: [Tags.ConsentList, Tags.ConsentLog],
+    }),
   }),
+});
+
+const apiWithTags = consentApi.enhanceEndpoints({
+  addTagTypes: [Tags.ConsentList],
 });
 
 export const {
   useGetConsentRequestQuery,
   useApproveConsentRequestMutation,
   useRejectConsentRequestMutation,
-} = consentApi;
+  useGetActiveConsentsQuery,
+  useGetConsentLogQuery,
+  useGetConsentQuery,
+  useRevokeConsentMutation,
+} = apiWithTags;
 
-export const { endpoints, reducerPath, reducer, middleware } = consentApi;
+export const { endpoints, reducerPath, reducer, middleware } = apiWithTags;

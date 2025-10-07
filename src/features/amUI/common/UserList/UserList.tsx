@@ -67,7 +67,12 @@ export const UserList = ({
           className={classes.noResultsContent}
         >
           {searchString.length === 0 ? (
-            <DsParagraph data-size='md'>{t('users_page.no_users')}</DsParagraph>
+            <>
+              <DsParagraph data-size='md'>
+                {canAdd ? t('users_page.only_you_have_access') : t('users_page.no_users')}
+              </DsParagraph>
+              {canAdd && <NewUserButton isLarge />}
+            </>
           ) : (
             <>
               {canAdd ? (

@@ -35,6 +35,38 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<Result<bool>> ApproveConsentRequest(Guid consentRequestId, ApproveConsentContext context, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Gets list of active consents for party
+        /// </summary>
+        /// <param name="party">Id of party to get active consents for</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of active consents</returns>
+        Task<Result<List<ActiveConsentItemFE>>> GetActiveConsents(Guid party, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets consent history for party
+        /// </summary>
+        /// <param name="party">Id of party to get consent log for</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of consent log items</returns>
+        Task<Result<List<ConsentLogItemFE>>> GetConsentLog(Guid party, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get a consent
+        /// </summary>
+        /// <param name="consentId">Id of consent to get</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>A consent</returns>
+        Task<Result<ConsentFE>> GetConsent(Guid consentId, CancellationToken cancellationToken);
+        
+        /// <summary>
+        /// Revoke a consent
+        /// </summary>
+        /// <param name="consentId">The consent id to revoke</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Boolean value if revoke was successful or not</returns>
+        Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Get consent request redirect url
         /// </summary>
         /// <param name="consentRequestId">The consent id to approve</param>

@@ -7,6 +7,22 @@ export interface ConsentRight {
   consentTextHtml: ConsentLanguage;
 }
 
+export type ConsentRequestEventType =
+  | 'Created'
+  | 'Rejected'
+  | 'Accepted'
+  | 'Revoked'
+  | 'Deleted'
+  | 'Expired'
+  | 'Used';
+export interface ConsentRequestEvent {
+  consentEventID: string;
+  created: string;
+  performedBy: string;
+  eventType: ConsentRequestEventType;
+  consentRequestID: string;
+}
+
 export interface ConsentRequest {
   id: string;
   rights: ConsentRight[];
@@ -17,15 +33,47 @@ export interface ConsentRequest {
   consentMessage?: ConsentLanguage;
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
-  fromPartyName?: string;
+  fromPartyName: string;
+  toPartyName: string;
+  handledByPartyName: string;
   validTo: string;
-  consentRequestEvents: {
-    consentEventID: string;
-    created: string;
-    performedBy: string;
-    eventType: string;
-    consentRequestID: string;
-  }[];
+  consentRequestEvents: ConsentRequestEvent[];
+}
+
+export interface ActiveConsentListItem {
+  id: string;
+  isPoa: boolean;
+  toPartyId: string;
+  toPartyName: string;
+}
+
+export interface ConsentHistoryItem {
+  id: string;
+  isPoa: boolean;
+  toPartyId: string;
+  toPartyName: string;
+  fromPartyId: string;
+  fromPartyName: string;
+  handledByPartyId: string;
+  handledByPartyName: string;
+  validTo: string;
+  consentRequestEvents: ConsentRequestEvent[];
+}
+
+export interface Consent {
+  id: string;
+  rights: ConsentRight[];
+  isPoa: boolean;
+  titleAccepted: ConsentLanguage;
+  serviceIntroAccepted: ConsentLanguage;
+  consentMessage: ConsentLanguage;
+  expiration: ConsentLanguage;
+  handledBy?: ConsentLanguage;
+  validTo: string;
+  consentRequestEvents: ConsentRequestEvent[];
+  fromPartyName: string;
+  toPartyName: string;
+  handledByPartyName: string;
 }
 
 export interface ProblemDetail {

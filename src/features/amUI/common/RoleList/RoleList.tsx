@@ -36,7 +36,6 @@ export const RoleList = ({
     to: toParty?.partyUuid ?? '',
   });
 
-
   const isSm = useIsMobileOrSmaller();
 
   const groupedRoles = useMemo(() => {

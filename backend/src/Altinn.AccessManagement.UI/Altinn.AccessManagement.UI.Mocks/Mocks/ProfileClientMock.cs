@@ -1,8 +1,16 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Profile;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Platform.Profile.Models;
+using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -13,6 +21,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// </summary>
     public class ProfileClientMock : IProfileClient
     {
+        private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private readonly string dataFolder;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProfileClientMock" /> class
         /// </summary>
@@ -22,6 +33,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             IHttpContextAccessor httpContextAccessor,
             IAccessTokenProvider accessTokenProvider)
         {
+            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
         }
 
         /// <inheritdoc />
@@ -52,6 +64,95 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             return Task.FromResult<UserProfile>(null);
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<NotificationAddressResponse>> GetOrgNotificationAddresses(string orgNumber)
+        {
+            // Special string triggers backend style error for tests
+            if (orgNumber == "000000000")
+            {
+                throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", HttpStatusCode.InternalServerError, string.Empty);
+            }
+            string dataPath = Path.Combine(dataFolder, "Profile", "NotificationAddresses", $"{orgNumber}.json");
+            try
+            {
+                var mock = Util.GetMockData<OrganizationResponse>(dataPath);
+                return await Task.FromResult(mock.NotificationAddresses);
+            }
+            catch
+            {
+                // Fallback to null if file not found
+                return null;
+            }
+        }
+
+        public async Task<NotificationAddressResponse> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress)
+        {
+            // Special string triggers backend style error for tests
+            if (orgNumber == "000000000")
+            {
+                throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", HttpStatusCode.InternalServerError, string.Empty);
+            }
+            NotificationAddressResponse response = new NotificationAddressResponse
+            {
+                Email = notificationAddress.Email,
+                Phone = notificationAddress.Phone,
+                CountryCode = notificationAddress.CountryCode,
+                NotificationAddressId = 12345
+            };
+
+            return await Task.FromResult(response);
+        }
+
+        public async Task<NotificationAddressResponse> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId)
+        {
+            // Special string triggers backend style error for tests
+            if (orgNumber == "000000000")
+            {
+                throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", HttpStatusCode.InternalServerError, string.Empty);
+            }
+
+            NotificationAddressResponse response;
+            if (notificationAddressId == 12345)
+            {
+                response = new NotificationAddressResponse
+                {
+                    Email = "test@testemail.com",
+                    Phone = "123456789",
+                    CountryCode = "+47",
+                    NotificationAddressId = 12345
+                };
+            }
+            else
+            {
+                throw new HttpStatusException("NotFound", "The specified notification address was not found", HttpStatusCode.NotFound, string.Empty);
+            }
+
+            return await Task.FromResult(response);
+        }
+
+        public async Task<NotificationAddressResponse> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress)
+        {
+            // Special string triggers backend style error for tests
+            if (orgNumber == "000000000")
+            {
+                throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", HttpStatusCode.InternalServerError, string.Empty);
+            }
+
+            if (notificationAddressId < 10000) {
+                throw new HttpStatusException("NotFound", "The specified notification address was not found", HttpStatusCode.NotFound, string.Empty);
+            }
+
+            NotificationAddressResponse response = new NotificationAddressResponse
+            {
+                Email = notificationAddress.Email,
+                Phone = notificationAddress.Phone,
+                CountryCode = notificationAddress.CountryCode,
+                NotificationAddressId = notificationAddressId
+            };
+
+            return await Task.FromResult(response);
         }
 
         private static string GetDataPathForProfiles()

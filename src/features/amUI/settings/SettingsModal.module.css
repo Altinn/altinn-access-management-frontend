@@ -1,0 +1,44 @@
+.modalHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.5rem;
+}
+
+.addressList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.emailFieldRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.emailFieldRow > *:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.phoneFieldRow {
+  display: grid;
+  grid-template-columns: 0.15fr 1fr auto;
+  justify-content: space-between;
+}
+
+.phoneFieldRow > *:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
