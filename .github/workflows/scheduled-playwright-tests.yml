@@ -15,6 +15,7 @@ jobs:
         environment: [AT24, TT02]
         project: [e2e-tests]
     uses: ./.github/workflows/template-playwright.yml
+    secrets: inherit
     with:
       environment: ${{ matrix.environment }}
       project: ${{ matrix.project }}
