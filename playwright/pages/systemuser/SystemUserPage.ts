@@ -14,6 +14,7 @@ export class SystemUserPage {
   public readonly CREATE_NEW_SYSTEMUSER_HEADER: Locator;
   public readonly MAIN_HEADER: Locator;
   public readonly NEW_SYSTEMUSER_LABEL: Locator;
+  public readonly TRY_NEW_ACCESS_MANAGEMENT_BUTTON: Locator;
 
   constructor(public page: Page) {
     this.SELECT_VENDOR_LABEL = this.page.getByLabel(
@@ -57,6 +58,10 @@ export class SystemUserPage {
     this.MAIN_HEADER = this.page.getByRole('heading', {
       name: noNb.systemuser_overviewpage.banner_title,
       level: 1,
+    });
+
+    this.TRY_NEW_ACCESS_MANAGEMENT_BUTTON = this.page.getByRole('button', {
+      name: 'Prøv ny tilgangsstyring',
     });
   }
 
