@@ -180,6 +180,11 @@ export class ApiRequests {
           ],
         },
       ],
+      accessPackages: [
+        {
+          urn: 'urn:altinn:accesspackage:baerekraft',
+        },
+      ],
       redirectUrl: 'https://altinn.no',
     };
 
@@ -238,18 +243,22 @@ export class ApiRequests {
           urn: 'urn:altinn:accesspackage:plansak',
         },
       ],
+      unwantedAccessPackages: [
+        {
+          urn: 'urn:altinn:accesspackage:baerekraft',
+        },
+      ],
     };
 
     const endpoint = `v1/systemuser/changerequest/vendor?correlation-id=${id}&system-user-id=${systemUserId}`;
     const scopes =
       'altinn:authentication/systemuser.request.read altinn:authentication/systemuser.request.write';
 
-    const apiResponse = await this.sendPostRequest<typeof payload, { confirmUrl: string }>(
-      payload,
-      endpoint,
-      scopes,
-    );
-    return apiResponse.confirmUrl;
+    const apiResponse = await this.sendPostRequest<
+      typeof payload,
+      { confirmUrl: string; id: string }
+    >(payload, endpoint, scopes);
+    return apiResponse;
   }
 
   public async createSystemSystemRegister(): Promise<string> {
@@ -360,7 +369,7 @@ export class ApiRequests {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch status for system user request. Status: ${response.status}`);
+      throw new Error(`Failed to fetch status for request. Status: ${response.status}`);
     }
 
     return await response.json();

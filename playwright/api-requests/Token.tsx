@@ -62,6 +62,7 @@ export class Token {
       `&pid=${process.env.PID}` +
       `&userid=${process.env.ALTINN_USER_ID}` +
       `&partyid=${process.env.ALTINN_PARTY_ID}` +
+      `&partyUuid=${process.env.ALTINN_PARTY_UUID}` +
       `&authLvl=3&ttl=3000` +
       `&scopes=altinn:portal/enduser`;
 

@@ -5,7 +5,7 @@ import { LoginPage } from '../../pages/LoginPage';
 
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
-test.describe('Godkjenn og avvis Systembruker endringsforespørsel', () => {
+test.describe('Systembruker endringsforespørsel', () => {
   let api: ApiRequests;
   let orgNumber: string;
   let systemId: string;
@@ -25,7 +25,7 @@ test.describe('Godkjenn og avvis Systembruker endringsforespørsel', () => {
     await login.chooseReportee('AKTVERDIG RETORISK APE');
   });
 
-  test('Avvis Systembruker endringsforespørsel', async ({ page }): Promise<void> => {
+  test('Avvis endringsforespørsel', async ({ page }): Promise<void> => {
     //Generate confirmUrl from API
     const externalRef = TestdataApi.generateExternalRef();
     const response = await api.postSystemuserRequest(externalRef);
@@ -34,34 +34,41 @@ test.describe('Godkjenn og avvis Systembruker endringsforespørsel', () => {
 
     const systemUserId = await api.getSystemUserByQuery(systemId, orgNumber, externalRef);
 
-    const confirmUrlChangeRequest = await api.postSystemuserChangeRequest(systemUserId);
+    const changeRequestResponse = await api.postSystemuserChangeRequest(systemUserId);
 
-    await page.goto(confirmUrlChangeRequest);
+    await page.goto(changeRequestResponse.confirmUrl);
     await page.getByRole('button', { name: 'Avvis' }).click();
-
-    //Expect user to be logged out
-    await expect(page).toHaveURL('https://info.altinn.no');
-
     //Read from status api to verify that status is not Accepted after clicking "Avvis"
-    const statusApiRequest = await api.getStatusForSystemUserRequest<{ status: string }>(
-      response.id,
+    const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
+      changeRequestResponse.id,
     );
-    expect(statusApiRequest.status).toBe('Accepted');
+
+    //Look for login button
+    await expect(page.getByRole('button', { name: 'Logg inn' }).first()).toBeVisible();
+
+    expect(statusApiRequest.status).toBe('Rejected');
   });
 
-  test('Godkjenn Systembruker endringsforespørsel', async ({ page }): Promise<void> => {
+  test('Godkjenn endringsforespørsel', async ({ page }): Promise<void> => {
     const externalRef = TestdataApi.generateExternalRef();
     const response = await api.postSystemuserRequest(externalRef);
+    console.log('response', response);
 
     await api.approveSystemuserRequest(response.id);
 
     const systemUserId = await api.getSystemUserByQuery(systemId, orgNumber, externalRef);
 
-    const confirmUrlChangeRequest = await api.postSystemuserChangeRequest(systemUserId);
-    await page.goto(confirmUrlChangeRequest);
+    const changeRequestResponse = await api.postSystemuserChangeRequest(systemUserId);
+    await page.goto(changeRequestResponse.confirmUrl);
     await page.getByRole('button', { name: 'Godkjenn' }).click();
 
-    //Expect user to be logged out
-    await expect(page).toHaveURL('https://info.altinn.no');
+    //Look for login button
+    await expect(page.getByRole('button', { name: 'Logg inn' }).first()).toBeVisible();
+
+    //Read from status api to verify that status is not Accepted after clicking "Avvis"
+    const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
+      changeRequestResponse.id,
+    );
+    expect(statusApiRequest.status).toBe('Accepted');
   });
 });
