@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
-import type { Connection } from '@/rtk/features/userInfoApi';
+import type { Connection, User } from '@/rtk/features/userInfoApi';
 import {
   ConnectionUserType,
   useGetIsAdminQuery,
@@ -39,7 +39,7 @@ export const UsersList = () => {
   const { t } = useTranslation();
   const { fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
-
+  const navigate = useNavigate();
   const { data: isAdmin } = useGetIsAdminQuery();
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
@@ -65,6 +65,10 @@ export const UsersList = () => {
         skip: !fromParty?.partyUuid || !currentUser?.uuid || displayLimitedPreviewLaunch,
       },
     );
+
+  const handleNewUser = (user: User) => {
+    navigate(`/users/${user.id}`);
+  };
 
   const [searchString, setSearchString] = useState<string>('');
 
@@ -129,7 +133,7 @@ export const UsersList = () => {
             }}
           />
         </DsSearch>
-        {isAdmin && <NewUserButton />}
+        {isAdmin && <NewUserButton onComplete={handleNewUser} />}
       </div>
       {isAdmin && (
         <UserList
@@ -138,6 +142,7 @@ export const UsersList = () => {
           isLoading={!userList || loadingRightHolders || loadingPartyRepresentation}
           listItemTitleAs='h2'
           interactive={isAdmin}
+          onAddNewUser={handleNewUser}
         />
       )}
     </div>

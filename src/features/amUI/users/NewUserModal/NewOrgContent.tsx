@@ -3,14 +3,20 @@ import { useState } from 'react';
 import { t } from 'i18next';
 
 import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
-import { useAddRightHolderMutation } from '@/rtk/features/userInfoApi';
+import { useAddRightHolderMutation, User } from '@/rtk/features/userInfoApi';
 
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
 
-export const NewOrgContent = () => {
+export const NewOrgContent = ({
+  onComplete,
+  modalRef,
+}: {
+  onComplete?: (user: User) => void;
+  modalRef: React.RefObject<HTMLDialogElement | null>;
+}) => {
   const [orgNumber, setOrgNumber] = useState('');
 
   const {
@@ -28,7 +34,15 @@ export const NewOrgContent = () => {
       addRightHolder(orgData.partyUuid)
         .unwrap()
         .then(() => {
-          window.location.href = `${window.location.href}/${orgData?.partyUuid}`;
+          if (onComplete) {
+            onComplete({
+              id: orgData.partyUuid,
+              name: orgData.name,
+              children: null,
+              keyValues: null,
+            });
+          }
+          modalRef.current?.close();
         });
     }
   };

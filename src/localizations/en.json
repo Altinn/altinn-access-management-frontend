@@ -76,12 +76,14 @@
     "show_less": "Show less",
     "technical_error": "Sorry, a technical error has occurred. Please contact Altinn user service if the problem persists.",
     "time_of_error": "Error occurred at time: {{time}}",
+    "trace_id": "Reference: {{traceId}}",
     "error_status": "HttpStatus: {{status}}",
     "ssn": "National identity number",
     "last_name": "Last name",
     "subunit": "Subunit",
     "subunit_lowercase": "subunit",
     "mainunit_lowercase": "main unit",
+    "org_nr_lowercase": "org.nr. {{org_number}}",
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
     "date_of_birth": "Born",
@@ -290,6 +292,7 @@
     "delegated_packages_count_badge": "{{delegated}} of {{total}}",
     "package_number_of_resources": "{{count}} services",
     "user_has_no_packages": "This user has no access packages.",
+    "no_packages": "No access packages available.",
     "no_matching_search": "No matches for your search",
     "info_alert_text": "Access packages will replace today's Altinn roles. They will be filled with more services over time. Read more on the <a href='https://info.altinn.no/en/help/profile/access-packages/'>help page about access packages</a>.",
     "person_info_alert": "Giving powers of attorney to individuals is currently not supported. This will come later.",
@@ -315,13 +318,23 @@
   "users_page": {
     "page_title": "Users and groups - Altinn",
     "main_page_heading": "Users with power of attorney in {{name}}",
-    "sub_heading": "org.nr. {{org_number}}",
     "user_list_heading": "Other users with power of attorney",
+  "direct_connections": "Users with power of attorney",
     "user_search_placeholder": "Search for users",
     "no_users": "This list is empty",
     "only_you_have_access": "Only you have access here. Do you want to change this?",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
-    "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?"
+    "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
+    "indirect_connections": "Users without power of attorney"
+  },
+  "advanced_user_search": {
+    "add_user_button": "Add user",
+    "indirect_connections": "Users without power of attorney",
+    "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
+    "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
+    "user_list_heading": "Other users with power of attorney",
+    "direct_connections": "Users with power of attorney",
+    "user_search_placeholder": "Search for users"
   },
   "reportees_page": {
     "page_title": "Our access to other companies - Altinn",
@@ -793,7 +806,7 @@
   },
   "poa_overview_page": {
     "page_title": "Power of attorney overview",
-    "heading": "Power of attorney overview for {{fromparty}}"
+    "heading": "Power of attorney overview for {{name}}"
   },
   "package_poa_details_page": {
     "page_title": "Power of attorney details",
@@ -801,8 +814,10 @@
     "services_tab_title": "Services",
     "load_error": "Oops! Something went wrong.",
     "back_to_overview_link": "Go back to the overview",
+    "package_delegation_success": "{{name}} has been granted power of attorney for {{accessPackage}}.",
+  "package_revocation_success": "{{name}} no longer has power of attorney for {{accessPackage}}.",
     "users_tab": {
-      "description": "These users have power of attorney for all the services in the access package on behalf of {{fromparty}}",
+      "description": "Search for users to grant or revoke permissions.",
       "user_search_placeholder": "Search for person or organization",
       "no_users": "No users have power of attorney for this package on behalf of {{fromparty}}."
     },

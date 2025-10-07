@@ -8,6 +8,7 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
+import { useTranslation } from 'react-i18next';
 
 export const ActiveDelegations = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -15,6 +16,7 @@ export const ActiveDelegations = () => {
   const { setActionError } = useDelegationModalContext();
   const { toParty, selfParty, isLoading } = usePartyRepresentation();
   const isCurrentUser = selfParty?.partyUuid === toParty?.partyUuid;
+  const { t } = useTranslation();
 
   return (
     <>
@@ -41,6 +43,7 @@ export const ActiveDelegations = () => {
           setModalItem(accessPackage);
           modalRef.current?.showModal();
         }}
+        noPackagesText={t('access_packages.user_has_no_packages')}
       />
       <AccessPackageInfoModal
         modalRef={modalRef}

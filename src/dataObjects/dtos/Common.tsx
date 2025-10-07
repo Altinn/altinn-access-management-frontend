@@ -10,6 +10,7 @@ export interface Entity {
   type: string;
   variant: string;
   keyValues: UserKeyValues | null;
+  children?: Entity[] | null;
 }
 
 export interface CompactRole {
