@@ -37,10 +37,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<List<AuthorizedParty>> GetReporteeListForUser();
 
         /// <summary>
-        /// Endpoint for getting the parties the authenticated user can act on behalf of
+        /// Endpoint for getting the parties the authenticated user can act on behalf of, with connection info
         /// </summary>
-        /// <returns>List of actor parties with connection data</returns>
-        Task<List<ActorParty>> GetActorListForUser();
+        /// <returns>List of connections</returns>
+        Task<List<Connection>> GetActorListForUser();
 
         /// <summary>
         /// Gets the right holders of a given reportee

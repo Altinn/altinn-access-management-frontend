@@ -70,6 +70,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return parties;
         }
 
+        public async Task<List<Connection>> GetActorListForUser()
+        {
+            List<Connection> connections = await _rightHolderClient.GetRightHolders();
+            return connections;
+        }
+
         /// <inheritdoc/>
         public async Task<List<User>> GetReporteeRightHolders(int partyId)
         {
