@@ -440,6 +440,7 @@
     "page_title": "Innstillinger - Altinn",
     "page_heading": "Innstillinger for {{name}}",
     "alert_settings_heading": "Varslingsadresser for virksomheten",
+    "not_admin_alert": "Du har ikke tilgang til å redigere varslingsadresser for {{name}}. Bytt aktør eller kontakt noen med administratorrettighet.",
     "alerts_on_email": "Varslinger på e-post",
     "alerts_on_sms": "Varslinger på SMS",
     "one_address": "1 adresse",

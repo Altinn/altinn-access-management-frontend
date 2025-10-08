@@ -441,6 +441,7 @@
     "page_title": "Settings - Altinn",
     "page_heading": "Settings for {{name}}",
     "alert_settings_heading": "Notification addresses for the organization",
+    "not_admin_alert": "You do not have access to edit notification addresses for {{name}}. Switch actor or contact someone with administrator rights.",
     "alerts_on_email": "Notifications by email",
     "alerts_on_sms": "Notifications by SMS",
     "one_address": "1 address",
