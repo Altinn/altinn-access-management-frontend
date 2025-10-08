@@ -35,12 +35,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<RegisteredSystemFE>> GetSystems(string languageCode, CancellationToken cancellationToken)
         {
             List<RegisteredSystem> lista = await _systemRegisterClient.GetSystems(cancellationToken);
-            IEnumerable<RegisteredSystem> visibleSystems = lista.Where(system => system.IsVisible);
 
-            IEnumerable<string> orgNumbers = visibleSystems.Select(x => x.SystemVendorOrgNumber);
+            IEnumerable<string> orgNumbers = lista.Select(x => x.SystemVendorOrgNumber);
             List<PartyName> orgNames = await _registerClient.GetPartyNames(orgNumbers, cancellationToken);
             
-            return visibleSystems.Select(system => SystemRegisterUtils.MapToRegisteredSystemFE(languageCode, system, orgNames)).ToList();
+            return lista
+                .Select(system => SystemRegisterUtils.MapToRegisteredSystemFE(languageCode, system, orgNames))
+                .OrderBy(s => s.Name, StringComparer.OrdinalIgnoreCase)
+                .ToList();
         }
 
         /// <inheritdoc />

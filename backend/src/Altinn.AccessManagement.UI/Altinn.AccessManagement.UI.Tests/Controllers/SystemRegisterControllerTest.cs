@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -35,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: GetSystems returns the systems in the system register
         /// </summary>
         [Fact]
-        public async Task GetSystems_ReturnsAllSystem()
+        public async Task GetSystems_ReturnsAllSystemsSorted()
         {
             // Arrange
             string path = Path.Combine(_expectedDataPath, "SystemRegister", "allSystems.json");

@@ -1,5 +1,4 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 
@@ -32,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<List<RegisteredSystem>> GetSystems(CancellationToken cancellationToken)
         {
             List<RegisteredSystem> systems = Util.GetMockData<List<RegisteredSystem>>($"{dataFolder}/SystemRegister/systems.json");
-            return Task.FromResult(systems);
+            return Task.FromResult(systems.Where(s => s.IsVisible).ToList());
         }
     }
 }
