@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿﻿using System.Net;
 using Altinn.AccessManagement.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
@@ -412,8 +412,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         [HttpGet]
         [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_PROFIL_API_VARSLINGSDARESSER_FOR_VIRKSOMHETER_READ_WITH_PASS_THROUGH)]
-        [Route("isCompnayProfileAdmin")]
-        public ActionResult<bool> isCompnayProfileAdmin()
+        [Route("isCompanyProfileAdmin")]
+        public ActionResult<bool> IsCompanyProfileAdmin()
         {
             if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) &&
                 hasPermissionObj is bool hasPermission)

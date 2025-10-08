@@ -28,10 +28,10 @@ import {
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   useGetIsAdminQuery,
+  useGetIsCompanyProfileAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
   useGetReporteeQuery,
   useGetUserInfoQuery,
-  useGetisCompnayProfileAdminQuery,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
 import { getAfUrl, getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
@@ -58,7 +58,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const [searchString, setSearchString] = useState<string>('');
 
   const { data: isAdmin } = useGetIsAdminQuery();
-  const { data: canAccessSettings } = useGetisCompnayProfileAdminQuery();
+  const { data: canAccessSettings } = useGetIsCompanyProfileAdminQuery();
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
