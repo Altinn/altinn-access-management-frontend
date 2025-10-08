@@ -31,6 +31,7 @@ import {
   useGetReporteeListForAuthorizedUserQuery,
   useGetReporteeQuery,
   useGetUserInfoQuery,
+  useGetisCompnayProfileAdminQuery,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
 import { getAfUrl, getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
@@ -57,6 +58,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const [searchString, setSearchString] = useState<string>('');
 
   const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: canAccessSettings } = useGetisCompnayProfileAdminQuery();
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -131,6 +133,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           isAdmin,
           reportee?.name || '',
           getAccountType(reportee?.type ?? ''),
+          canAccessSettings ?? false,
         )
       : []),
     {
@@ -286,10 +289,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             name: reportee?.name || '',
             type: getAccountType(reportee?.type ?? ''),
             id: reportee?.partyId || '',
-            icon: {
-              name: reportee?.name || '',
-              type: getAccountType(reportee?.type ?? ''),
-            },
           },
           globalMenu: globalMenu,
           desktopMenu: desktopMenu,
@@ -305,6 +304,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               isAdmin,
               reportee?.name || '',
               getAccountType(reportee?.type ?? ''),
+              canAccessSettings ?? false,
             ),
           },
         }}

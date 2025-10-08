@@ -406,5 +406,22 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return Ok(false);
         }
+
+        /// <summary>
+        /// Endpoint for checking if the authenticated user has access to the altinn profil api varslingsdaresser for virksomheter resource.
+        /// </summary>
+        [HttpGet]
+        [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_PROFIL_API_VARSLINGSDARESSER_FOR_VIRKSOMHETER_READ_WITH_PASS_THROUGH)]
+        [Route("isCompnayProfileAdmin")]
+        public ActionResult<bool> isCompnayProfileAdmin()
+        {
+            if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) &&
+                hasPermissionObj is bool hasPermission)
+            {
+                return Ok(hasPermission);
+            }
+
+            return Ok(false);
+        }
     }
 }
