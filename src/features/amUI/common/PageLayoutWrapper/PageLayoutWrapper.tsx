@@ -212,7 +212,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           return `${hits} ${t('header.search-hits')}`;
         },
       },
-      isVirtualized: true,
+      isVirtualized: accounts.length > 20,
     },
     onSelectAccount: (accountId: string) => {
       // check if this is a person; then redirect to consents page
