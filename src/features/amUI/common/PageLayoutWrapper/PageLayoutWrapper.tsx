@@ -28,6 +28,7 @@ import {
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   useGetIsAdminQuery,
+  useGetIsCompanyProfileAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
   useGetReporteeQuery,
   useGetUserInfoQuery,
@@ -57,6 +58,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const [searchString, setSearchString] = useState<string>('');
 
   const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: canAccessSettings } = useGetIsCompanyProfileAdminQuery();
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -131,6 +133,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           isAdmin,
           reportee?.name || '',
           getAccountType(reportee?.type ?? ''),
+          canAccessSettings ?? false,
         )
       : []),
     {
@@ -209,7 +212,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           return `${hits} ${t('header.search-hits')}`;
         },
       },
-      menuItemsVirtual: { isVirtualized: accounts.length > 20 },
+      isVirtualized: accounts.length > 20,
     },
     onSelectAccount: (accountId: string) => {
       // check if this is a person; then redirect to consents page
@@ -286,10 +289,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             name: reportee?.name || '',
             type: getAccountType(reportee?.type ?? ''),
             id: reportee?.partyId || '',
-            icon: {
-              name: reportee?.name || '',
-              type: getAccountType(reportee?.type ?? ''),
-            },
+            icon: { name: reportee?.name || '', type: getAccountType(reportee?.type ?? '') },
           },
           globalMenu: globalMenu,
           desktopMenu: desktopMenu,
@@ -305,6 +305,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               isAdmin,
               reportee?.name || '',
               getAccountType(reportee?.type ?? ''),
+              canAccessSettings ?? false,
             ),
           },
         }}
