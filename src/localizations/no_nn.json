@@ -585,7 +585,6 @@
     "confirm_button": "Gå vidare",
     "choose": "Velg ...",
     "load_vendors_error": "Kunne ikkje laste systemleverandørar",
-    "name_too_long": "Namn på systemtilgang kan berre vere 255 teikn, du har skrive inn {{ nameLength }} teikn.",
     "loading_systems": "Lastar leverandørar og system..."
   },
   "systemuser_includedrightspage": {
@@ -611,7 +610,6 @@
     "update_systemuser_error": "Kunne ikkje oppdatere systemtilgang",
     "systemuser_deleted": "Systemtilgang sletta",
     "save_systemuser": "Lagre endringar",
-    "name_too_long": "Namn på systemtilgang kan berre vere 255 teikn, du har skrive inn {{ nameLength }} teikn.",
     "created_by": "Systemtilgang oppretta {{created}}",
     "accesspackage_resources_list_singular": "1 teneste",
     "accesspackage_resources_list_plural": "{{resourcesCount}} tenester",
