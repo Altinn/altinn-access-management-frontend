@@ -15,6 +15,10 @@ using Altinn.AccessManagement.UI.Tests.Utils;
 using Altinn.Platform.Profile.Enums;
 using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Moq;
 using User = Altinn.AccessManagement.UI.Core.Models.User.User;
 
@@ -937,6 +941,33 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Directly invoke controller IsCompanyProfileAdmin without HttpContext permission item.
+        /// Expected: Returns Ok(false) via fallback path (line 424 in controller file) covering missing HasRequestedPermission scenario.
+        /// </summary>
+        [Fact]
+        public void IsCompanyProfileAdmin_NoHasRequestedPermissionItem_ReturnsFalse()
+        {
+            // Arrange: create controller instance bypassing auth pipeline so HttpContext.Items lacks HasRequestedPermission
+            var httpContext = new DefaultHttpContext();
+            var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<UserController>>();
+            var featureFlags = Options.Create(new FeatureFlags());
+
+            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object, featureFlags)
+            {
+                ControllerContext = new ControllerContext { HttpContext = httpContext }
+            };
+
+            // Act
+            var result = controller.IsCompanyProfileAdmin();
+
+            // Assert
+            var ok = Assert.IsType<OkObjectResult>(result.Result);
+            Assert.False((bool)ok.Value);
         }
     }
 }
