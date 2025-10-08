@@ -1,4 +1,4 @@
-﻿﻿using System.Net;
+﻿using System.Net;
 using Altinn.AccessManagement.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
