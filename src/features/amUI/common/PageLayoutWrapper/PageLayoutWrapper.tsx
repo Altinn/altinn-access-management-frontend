@@ -212,7 +212,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           return `${hits} ${t('header.search-hits')}`;
         },
       },
-      menuItemsVirtual: { isVirtualized: accounts.length > 20 },
+      isVirtualized: true,
     },
     onSelectAccount: (accountId: string) => {
       // check if this is a person; then redirect to consents page
@@ -289,6 +289,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             name: reportee?.name || '',
             type: getAccountType(reportee?.type ?? ''),
             id: reportee?.partyId || '',
+            icon: { name: reportee?.name || '', type: getAccountType(reportee?.type ?? '') },
           },
           globalMenu: globalMenu,
           desktopMenu: desktopMenu,
