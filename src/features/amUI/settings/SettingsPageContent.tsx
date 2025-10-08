@@ -1,12 +1,20 @@
 import React from 'react';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { useTranslation } from 'react-i18next';
-import { Divider, DsAlert, DsHeading, List, SettingsItem } from '@altinn/altinn-components';
+import { useTranslation, Trans } from 'react-i18next';
+import {
+  Divider,
+  DsAlert,
+  DsButton,
+  DsHeading,
+  DsPopover,
+  List,
+  SettingsItem,
+} from '@altinn/altinn-components';
 import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi';
 
 import classes from './SettingsPageContent.module.css';
-import { ChatIcon, PaperplaneIcon } from '@navikt/aksel-icons';
+import { ChatIcon, PaperplaneIcon, QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { SettingsModal } from './SettingsModal';
 import { useGetIsCompanyProfileAdminQuery } from '@/rtk/features/userInfoApi';
 
@@ -63,12 +71,36 @@ export const SettingsPageContent = () => {
       >
         {t('settings_page.page_heading', { name: actingParty?.name })}
       </DsHeading>
-      <DsHeading
-        level={2}
-        data-size='xs'
-      >
-        {t('settings_page.alert_settings_heading')}
-      </DsHeading>
+      <div className={classes.settingsHeaderAndInfo}>
+        <DsHeading
+          level={2}
+          data-size='xs'
+        >
+          {t('settings_page.alert_settings_heading')}
+        </DsHeading>
+        <DsPopover.TriggerContext>
+          <DsPopover.Trigger
+            variant='tertiary'
+            icon
+          >
+            <QuestionmarkCircleIcon />
+          </DsPopover.Trigger>
+          <DsPopover placement='right'>
+            <Trans
+              i18nKey='settings_page.alert_settings_info'
+              components={{
+                a: (
+                  <a
+                    href='https://info.altinn.no/hjelp/'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  />
+                ),
+              }}
+            />
+          </DsPopover>
+        </DsPopover.TriggerContext>
+      </div>
       <div className={classes.settingsListContainer}>
         <List size='sm'>
           <SettingsItem
