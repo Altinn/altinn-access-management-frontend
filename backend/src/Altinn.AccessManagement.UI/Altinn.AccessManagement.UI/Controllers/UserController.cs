@@ -79,12 +79,41 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        [Route("actorlist")]
+        [Route("actorlist/old")]
         public async Task<ActionResult<List<AuthorizedParty>>> GetReporteeListForUser()
         {
             try
             {
                 List<AuthorizedParty> reporteelist = await _userService.GetReporteeListForUser();
+
+                if (reporteelist != null)
+                {
+                    return reporteelist;
+                }
+                else
+                {
+                    return StatusCode(404);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetReportee failed to fetch reportee information");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for getting the list of party connections the authenticated user can act on behalf of.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        [Route("actorlist")]
+        public async Task<ActionResult<List<Connection>>> GetActorListForAuthenticatedUser()
+        {
+            try
+            {
+                List<Connection> reporteelist = await _userService.GetActorListForUser();
 
                 if (reporteelist != null)
                 {
