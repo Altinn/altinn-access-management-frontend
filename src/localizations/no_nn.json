@@ -453,7 +453,7 @@
     "remove_sms": "Fjern telefonnummer",
     "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen.",
     "no_addresses_error": "Verksemda må ha minst éin e-postadresse eller sms-adresse for varslingar.",
-    "alert_settings_info": "Varslene som sendast ut til registrerte varslingsadresser sendast uavhengig av om mottakar har rett til å sjå innhaldet i Altinn. Dersom de har ei felles e-postadresse er det naturleg å leggje den inn her. <a>Les meir</a>"
+    "alert_settings_info": "Varsla som sendast ut til registrerte varslingsadresser sendast uavhengig av om mottakar har rett til å sjå innhaldet i Altinn. Dersom de har ei felles e-postadresse er det naturleg å leggje den inn her. <a>Les meir</a>"
   },
   "text_field_errors": {
     "required": "Feltet er påkrevd",
