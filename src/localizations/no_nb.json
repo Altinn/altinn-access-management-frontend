@@ -113,6 +113,7 @@
     "menu-label": "Meny",
     "account_you": "Deg selv",
     "account_others": "Andre kontoer",
+    "account_favorites": "Favoritter",
     "change-label": "Bytt",
     "search-label": "Finn bruker",
     "search-hits": "treff",
@@ -318,13 +319,13 @@
     "page_title": "Brukere og grupper - Altinn",
     "main_page_heading": "Brukere med fullmakter i {{name}}",
     "user_list_heading": "Andre med fullmakt",
-  "direct_connections": "Brukere med fullmakt",
+    "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
     "no_users": "Denne listen er tom",
     "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
-  "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
-  "indirect_connections": "Brukere uten fullmakt"
+    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
+    "indirect_connections": "Brukere uten fullmakt"
   },
   "advanced_user_search": {
     "add_user_button": "Ny bruker",
@@ -813,7 +814,7 @@
     "load_error": "Oi! Noe gikk galt.",
     "back_to_overview_link": "Gå tilbake til oversikten",
     "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
-  "package_revocation_success": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
+    "package_revocation_success": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
     "users_tab": {
       "description": "Søk etter brukere for å gi eller slette fullmakter.",
       "user_search_placeholder": "Søk etter person eller virksomhet",

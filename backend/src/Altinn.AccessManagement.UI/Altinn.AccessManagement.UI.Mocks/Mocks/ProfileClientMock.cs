@@ -155,6 +155,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Task.FromResult(response);
         }
 
+        /// <inheritdoc/>
+        public async Task<ProfileGroup> GetFavoriteProfileGroup()
+        {
+            var response = new ProfileGroup
+            {
+                Name = "__favoritter__",
+                IsFavorite = true,
+                Parties = new List<string> {
+                "cd35779b-b174-4ecc-bbef-ece13611be7f", "167536b5-f8ed-4c5a-8f48-0279507e53ae" }
+            };
+
+            return await Task.FromResult(response);
+        }
+
         private static string GetDataPathForProfiles()
         {
             string folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);

@@ -25,12 +25,14 @@ import {
   PersonCircleIcon,
 } from '@navikt/aksel-icons';
 
-import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
+import type { Connection, ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   useGetIsAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
+  useGetActorListForAuthorizedUserQuery,
   useGetReporteeQuery,
   useGetUserInfoQuery,
+  useGetFavoriteActorUuidsQuery,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
 import { getAfUrl, getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
@@ -38,7 +40,7 @@ import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
-import { crossPlatformLinksEnabled } from '@/resources/utils/featureFlagUtils';
+import { crossPlatformLinksEnabled, useNewActorList } from '@/resources/utils/featureFlagUtils';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -48,11 +50,22 @@ const getAccountType = (type: string): 'company' | 'person' => {
   return type === 'Organization' ? 'company' : 'person';
 };
 
+const getAccountTypeFromConnection = (type: string): 'company' | 'person' => {
+  return type === 'Organisasjon' ? 'company' : 'person';
+};
+
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t, i18n } = useTranslation();
+  const useNewActorListFlag = useNewActorList();
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
-  const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery();
+  const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
+    skip: useNewActorListFlag,
+  });
+  const { data: actorList } = useGetActorListForAuthorizedUserQuery(undefined, {
+    skip: !useNewActorListFlag,
+  });
+  const { data: favoriteUuids } = useGetFavoriteActorUuidsQuery();
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
 
@@ -163,34 +176,58 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   ];
 
   const accountGroups: Record<string, MenuGroupProps> = {
-    a: {
+    self: {
       title: t('header.account_you'),
       divider: true,
     },
-    b: {
+    others: {
       title: t('header.account_others'),
+      divider: true,
+    },
+    favorites: {
+      title: t('header.account_favorites'),
       divider: true,
     },
   };
 
   const accounts: AccountMenuItemProps[] = useMemo(() => {
-    if (!reporteeList || !userinfo || !reportee) {
+    if ((!reporteeList && !actorList) || !userinfo || !reportee) {
       return [];
     }
 
     const accountList = [];
-    for (const account of reporteeList ?? []) {
-      const mappedAccount = getAccount(account, userinfo.uuid, reportee.partyUuid);
-      accountList.push(mappedAccount);
+    if (useNewActorListFlag) {
+      for (const account of actorList ?? []) {
+        const mappedAccount = getAccountFromConnection(account, userinfo.uuid, reportee.partyUuid);
+        accountList.push(mappedAccount);
+        if (favoriteUuids?.includes(account.party.id)) {
+          const favoriteAccount = { ...mappedAccount, groupId: 'favorites' };
+          accountList.push(favoriteAccount);
+        }
+      }
+    } else {
+      for (const account of reporteeList ?? []) {
+        const mappedAccount = getAccount(account, userinfo.uuid, reportee.partyUuid);
+        accountList.push(mappedAccount);
 
-      if (account.subunits && account.subunits.length > 0) {
-        for (const subUnit of account.subunits) {
-          const mappedSubUnit = getAccount(subUnit, userinfo.uuid, reportee.partyUuid);
-          accountList.push(mappedSubUnit);
+        if (account.subunits && account.subunits.length > 0) {
+          for (const subUnit of account.subunits) {
+            const mappedSubUnit = getAccount(subUnit, userinfo.uuid, reportee.partyUuid);
+            accountList.push(mappedSubUnit);
+          }
         }
       }
     }
-    return accountList.sort((a, b) => (a.groupId > b.groupId ? 1 : -1)) ?? [];
+
+    return (
+      accountList.sort((a, b) => {
+        if (a.groupId === 'self') return -1;
+        if (b.groupId === 'self') return 1;
+        if (b.groupId !== 'self' && a.groupId === 'favorites') return -1;
+        if (a.groupId !== 'self' && b.groupId === 'favorites') return 1;
+        return a.name > b.name ? 1 : -1;
+      }) ?? []
+    );
   }, [reporteeList, userinfo, reportee]);
 
   const globalMenu = {
@@ -339,7 +376,11 @@ const footerLinks = [
   { href: 'https://info.altinn.no/om-altinn/tilgjengelighet/', resourceId: 'footer.accessibility' },
 ];
 
-const getAccount = (reportee: ReporteeInfo, userUuid: string, currentReporteeUuid: string) => {
+const getAccount = (
+  reportee: ReporteeInfo,
+  userUuid: string,
+  currentReporteeUuid: string,
+): AccountMenuItemProps => {
   const group = reportee.partyUuid === userUuid ? 'a' : 'b';
   const accountType = getAccountType(reportee?.type ?? '');
   return {
@@ -350,9 +391,44 @@ const getAccount = (reportee: ReporteeInfo, userUuid: string, currentReporteeUui
     },
     name: reportee.name,
     description: reportee.type === 'Organization' ? reportee.organizationNumber : undefined,
-    group: reportee.partyUuid === userUuid ? 'a' : 'b',
     groupId: group,
     type: accountType,
     selected: reportee.partyUuid === currentReporteeUuid,
+  };
+};
+
+const getAccountFromConnection = (
+  actorConnection: Connection,
+  userUuid: string,
+  currentReporteeUuid: string,
+): AccountMenuItemProps => {
+  const accountType = getAccountTypeFromConnection(actorConnection?.party.type ?? '');
+  const isSubUnit = actorConnection.party.type === 'Organisasjon' && !!actorConnection.party.parent;
+  const group =
+    actorConnection.party.id === userUuid
+      ? 'self'
+      : isSubUnit
+        ? actorConnection.party.parent?.id
+        : actorConnection.party.id;
+  const description = isSubUnit
+    ? '↪ Org. nr:' +
+      actorConnection.party.keyValues?.OrganizationIdentifier +
+      `, del av ${actorConnection.party.parent?.name}`
+    : actorConnection.party.type === 'Organisasjon'
+      ? 'Org. nr:' + actorConnection.party.keyValues?.OrganizationIdentifier
+      : 'Født: ' + actorConnection.party.keyValues?.DateOfBirth;
+
+  return {
+    id: actorConnection.party.keyValues?.PartyId ?? actorConnection.party.id,
+    icon: {
+      name: actorConnection.party.name,
+      type: accountType,
+      variant: actorConnection.party.parent ? 'outline' : 'solid',
+    },
+    name: actorConnection.party.name,
+    description: description,
+    groupId: group,
+    type: accountType,
+    selected: actorConnection.party.id === currentReporteeUuid,
   };
 };

@@ -31,6 +31,7 @@ export interface User {
   variant?: string;
   children: (User | ExtendedUser)[] | null;
   keyValues: UserKeyValues | null;
+  parent?: ExtendedUser | null;
 }
 
 export interface RoleInfo {
@@ -149,7 +150,19 @@ export const userInfoApi = createApi({
     }),
     getReporteeListForAuthorizedUser: builder.query<ReporteeInfo[], void>({
       query: () => {
+        return '/actorlist_old';
+      },
+      keepUnusedDataFor: 300,
+    }),
+    getActorListForAuthorizedUser: builder.query<Connection[], void>({
+      query: () => {
         return '/actorlist';
+      },
+      keepUnusedDataFor: 300,
+    }),
+    getFavoriteActorUuids: builder.query<string[], void>({
+      query: () => {
+        return '/actorlist/favorites';
       },
       keepUnusedDataFor: 300,
     }),
@@ -188,6 +201,8 @@ export const {
   useValidateNewUserPersonMutation,
   useGetReporteeListForPartyQuery,
   useGetReporteeListForAuthorizedUserQuery,
+  useGetActorListForAuthorizedUserQuery,
+  useGetFavoriteActorUuidsQuery,
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
 } = userInfoApi;

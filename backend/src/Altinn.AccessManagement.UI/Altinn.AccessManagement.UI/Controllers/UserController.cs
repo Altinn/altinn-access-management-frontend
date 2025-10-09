@@ -113,7 +113,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                List<Connection> reporteelist = await _userService.GetActorListForUser();
+                Guid authenticatedUserUuid = AuthenticationHelper.GetUserPartyUuid(_httpContextAccessor.HttpContext);
+                List<Connection> reporteelist = await _userService.GetActorListForUser(authenticatedUserUuid);
 
                 if (reporteelist != null)
                 {
@@ -126,7 +127,36 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetReportee failed to fetch reportee information");
+                _logger.LogError(ex, "GetActorListForAuthenticatedUser failed to fetch actorlist information");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for getting the favorite actors of the authenticated user.
+        /// </summary>
+        /// <returns>A lost of partyUuids</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("actorlist/favorites")]
+        public async Task<ActionResult<List<string>>> GetFavoriteActorUuids()
+        {
+            try
+            {
+                List<string> favorites = await _userService.GetFavoriteActorUuids();
+
+                if (favorites != null)
+                {
+                    return favorites;
+                }
+                else
+                {
+                    return StatusCode(404);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetFavoriteActorUuids failed to fetch actorlist information");
                 return StatusCode(500);
             }
         }

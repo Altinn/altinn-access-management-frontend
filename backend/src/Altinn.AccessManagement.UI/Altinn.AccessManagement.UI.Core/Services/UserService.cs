@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Profile.Models;
@@ -70,10 +71,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return parties;
         }
 
-        public async Task<List<Connection>> GetActorListForUser()
+        /// <inheritdoc/>
+        public async Task<List<Connection>> GetActorListForUser(Guid authenticatedUserPartyUuid)
         {
-            List<Connection> connections = await _rightHolderClient.GetRightHolders();
+            List<Connection> connections = await _rightHolderClient.GetRightHolders(authenticatedUserPartyUuid, null, authenticatedUserPartyUuid);
             return connections;
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<string>> GetFavoriteActorUuids()
+        {
+            ProfileGroup favoriteProfileGroup = await _profileClient.GetFavoriteProfileGroup();
+            return favoriteProfileGroup.Parties;
         }
 
         /// <inheritdoc/>

@@ -40,7 +40,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Endpoint for getting the parties the authenticated user can act on behalf of, with connection info
         /// </summary>
         /// <returns>List of connections</returns>
-        Task<List<Connection>> GetActorListForUser();
+        Task<List<Connection>> GetActorListForUser(Guid authenticatedUserPartyUuid);
+
+        /// <summary>
+        /// Function for getting the favorite actors of the authenticated user
+        /// </summary>
+        /// <returns>List of partyUuids</returns>
+        Task<List<string>> GetFavoriteActorUuids();
 
         /// <summary>
         /// Gets the right holders of a given reportee
