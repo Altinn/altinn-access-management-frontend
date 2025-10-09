@@ -1,9 +1,11 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Models.Register;
 using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -57,6 +59,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             UserProfile user = await _profileClient.GetUserProfile(uuid);
             return user == null ? null : new UserProfileFE(user);
+        }
+
+
+        /// <inheritdoc/>
+        public async Task<PartyFE> GetReporteeFromLoggedInUser(HttpContext context)
+        {
+            Guid? partyUuid = AuthenticationHelper.GetUserPartyUuid(context);
+
+            if (!partyUuid.HasValue)
+            {
+                return null;
+            }
+            
+            var partyFromRegistry = await _registerClient.GetParty(partyUuid.Value);
+            return partyFromRegistry == null ? null : new PartyFE(partyFromRegistry);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -119,6 +120,45 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetUserByUUID failed to fetch party information");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving the party from logged in user.
+        /// </summary>
+        /// <returns>Party information for the GUI</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("party/user")]
+        public async Task<ActionResult<PartyFE>> GetPartyFromLoggedInUser()
+        {
+            if (ModelState.IsValid == false)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState, 400));
+            }
+
+            try
+            {
+                Guid? userUuid = AuthenticationHelper.GetUserPartyUuid(HttpContext);
+
+                if (!userUuid.HasValue)
+                {
+                    return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState, 400, detail: "Missing or invalid user uuid in token"));
+                }
+
+                PartyFE party = await _lookupService.GetReporteeFromLoggedInUser(HttpContext);
+
+                if (party != null)
+                {
+                    return party;
+                }
+
+                return StatusCode(404);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetReportee failed to fetch party information");
                 return StatusCode(500);
             }
         }

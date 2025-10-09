@@ -1,13 +1,18 @@
 import type { JSX } from 'react';
-import { createContext, useContext } from 'react';
+import { act, createContext, useContext } from 'react';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
 import { t } from 'i18next';
 
-import { useGetPartyByUUIDQuery, type Party } from '@/rtk/features/lookupApi';
 import {
+  useGetPartyByUUIDQuery,
+  useGetPartyFromLoggedInUserQuery,
+  type Party,
+} from '@/rtk/features/lookupApi';
+import {
+  Connection,
   useGetReporteeQuery,
   useGetRightHoldersQuery,
   useGetUserInfoQuery,
@@ -18,6 +23,8 @@ import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { NotAvailableForUserTypeAlert } from '../NotAvailableForUserTypeAlert/NotAvailableForUserTypeAlert';
 import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
+import useConnectedParty from './useConnectedParty';
+import { skip } from 'node:test';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -37,6 +44,7 @@ export interface PartyRepresentationContextOutput {
   toParty?: Party;
   actingParty?: Party;
   selfParty?: Party;
+  selfPartyConnection?: Connection;
   isLoading?: boolean;
   isError?: boolean;
 }
@@ -86,36 +94,111 @@ export const PartyRepresentationProvider = ({
     !!toPartyUuid &&
     (connections?.length === 0 || connections === undefined);
 
-  const { data: currentUser, isLoading: currentUserIsLoading } = useGetUserInfoQuery();
-  const { data: fromParty, isLoading: fromPartyIsLoading } = useGetPartyByUUIDQuery(
+  // const partyUuid = getCookie('AltinnPartyUuid');
+  // const { data, isLoading } = useGetRightHoldersQuery(
+  //   { partyUuid, fromUuid: partyUuid, toUuid: selfPartyUuid },
+  //   { skip: !partyUuid || !selfPartyUuid },
+  // );
+
+  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
+
+  // this is the acting party's connection to the current user,
+  // where the party is the current user
+  const {
+    partyConnection: selfPartyConnection,
+    party: selfParty,
+    isLoading: selfPartyIsLoading,
+  } = useConnectedParty({
+    partyUuid: actingPartyUuid,
+    fromUuid: actingPartyUuid,
+    toUuid: currentUser?.partyUuid,
+    skip: !currentUser?.partyUuid || !actingPartyUuid,
+  });
+
+  console.log('🪵 ~ PartyRepresentationProvider ~ selfParty:', selfParty?.name);
+
+  const { data: old_currentUser } = useGetUserInfoQuery();
+  console.log('🪵 ~ PartyRepresentationProvider ~ old_currentUser:', old_currentUser?.name);
+
+  // this is the connection between acting party and the current user,
+  // where the party is the acting party
+  const {
+    partyConnection: actingPartyConnection,
+    party: actingParty,
+    isLoading: actingPartyIsLoading,
+  } = useConnectedParty({
+    partyUuid: currentUser?.partyUuid,
+    fromUuid: actingPartyUuid,
+    toUuid: currentUser?.partyUuid,
+    skip: !currentUser?.partyUuid || !actingPartyUuid,
+  });
+
+  console.log('🪵 ~ PartyRepresentationProvider ~ actingParty:', actingParty?.name);
+
+  // this is the connection between the acting party and fromParty where the party is the acting party
+  const {
+    partyConnection: fromPartyConnection,
+    party: fromParty,
+    isLoading: fromPartyIsLoading,
+  } = useConnectedParty({
+    partyUuid: currentUser?.partyUuid,
+    fromUuid: fromPartyUuid,
+    toUuid: currentUser?.partyUuid,
+    skip: !currentUser?.partyUuid || !fromPartyUuid,
+  });
+
+  console.log('🪵 ~ PartyRepresentationProvider ~ fromParty:', fromParty?.name);
+
+  const { data: old_fromParty } = useGetPartyByUUIDQuery(
     { partyUuid: fromPartyUuid ?? '' },
     { skip: isConnectionLoading || invalidConnection || (!!toPartyUuid && !connections) },
   );
-  const { data: toParty, isLoading: toPartyIsLoading } = useGetPartyByUUIDQuery(
+  console.log('🪵 ~ PartyRepresentationProvider ~ old_fromParty:', old_fromParty?.name);
+
+  // this is the connection between the acting party and toParty where the party is the acting party
+  const {
+    partyConnection: toPartyConnection,
+    party: toParty,
+    isLoading: toPartyIsLoading,
+  } = useConnectedParty({
+    partyUuid: actingPartyUuid,
+    fromUuid: fromPartyUuid || actingPartyUuid,
+    toUuid: toPartyUuid,
+    skip: !currentUser?.partyUuid || !toPartyUuid,
+  });
+
+  console.log('🪵 ~ PartyRepresentationProvider ~ toParty:', toParty?.name);
+
+  const { data: old_toParty } = useGetPartyByUUIDQuery(
     { partyUuid: toPartyUuid ?? '' },
     {
       skip: isConnectionLoading || invalidConnection || (!!fromPartyUuid && !connections),
     },
   );
-  const { data: reportee, isLoading: reporteeIsLoading } = useGetReporteeQuery();
+  console.log('🪵 ~ PartyRepresentationProvider ~ old_toParty:', old_toParty?.name);
 
-  const availableForUserType = reporteeIsLoading || availableForUserTypeCheck(reportee?.type);
+  // const { data: reportee, isLoading: reporteeIsLoading } = useGetReporteeQuery();
+  // console.log('🪵 ~ PartyRepresentationProvider ~ reportee:', reportee);
+
+  const availableForUserType =
+    actingPartyIsLoading || availableForUserTypeCheck(actingParty?.partyTypeName.toString());
 
   const isLoading =
     isConnectionLoading ||
     fromPartyIsLoading ||
     toPartyIsLoading ||
     currentUserIsLoading ||
-    reporteeIsLoading;
+    actingPartyIsLoading;
   const isError = invalidConnection || !availableForUserType;
 
   return (
     <PartyRepresentationContext.Provider
       value={{
-        fromParty: invalidConnection ? undefined : fromParty,
+        fromParty: invalidConnection || !fromParty ? undefined : fromParty,
         toParty: invalidConnection ? undefined : toParty,
         actingParty: fromPartyUuid == actingPartyUuid ? fromParty : toParty,
-        selfParty: currentUser?.party,
+        selfParty: currentUser,
+        selfPartyConnection: selfPartyConnection,
         isLoading: isLoading,
         isError: isError,
       }}

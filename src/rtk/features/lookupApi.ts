@@ -73,6 +73,10 @@ export const lookupApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
     }),
+    getPartyFromLoggedInUser: builder.query<Party, void>({
+      query: () => `party/user`,
+      keepUnusedDataFor: 300,
+    }),
     getReporteeParty: builder.query<Party, void>({
       query: () => `party/${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 300,
@@ -84,6 +88,7 @@ export const {
   useGetUserByUUIDQuery,
   useGetPartyByUUIDQuery,
   useGetOrganizationQuery,
+  useGetPartyFromLoggedInUserQuery,
   useGetReporteePartyQuery,
 } = lookupApi;
 

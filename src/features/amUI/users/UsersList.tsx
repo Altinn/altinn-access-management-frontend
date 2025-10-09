@@ -52,19 +52,8 @@ export const UsersList = () => {
       skip: !fromParty?.partyUuid || !isAdmin,
     },
   );
-
-  const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
-  const { data: currentUserAsRightHolder, isLoading: currentUserConnectionLoading } =
-    useGetRightHoldersQuery(
-      {
-        partyUuid: currentUser?.uuid ?? '',
-        fromUuid: fromParty?.partyUuid ?? '',
-        toUuid: currentUser?.uuid ?? '',
-      },
-      {
-        skip: !fromParty?.partyUuid || !currentUser?.uuid || displayLimitedPreviewLaunch,
-      },
-    );
+  const { selfPartyConnection: currentUser, isLoading: currentUserLoading } =
+    usePartyRepresentation();
 
   const handleNewUser = (user: User) => {
     navigate(`/users/${user.id}`);
@@ -78,7 +67,7 @@ export const UsersList = () => {
     }
     const remainingAfterExtraction = extractFromList(
       rightHolders || [],
-      displayLimitedPreviewLaunch ? 'nobody' : (currentUser?.uuid ?? 'loading'),
+      displayLimitedPreviewLaunch ? 'nobody' : (currentUser?.party.id ?? 'loading'),
     );
     return remainingAfterExtraction;
   }, [rightHolders, currentUser]);
@@ -95,15 +84,13 @@ export const UsersList = () => {
       {!displayLimitedPreviewLaunch && (
         <>
           <CurrentUserPageHeader
-            currentUser={currentUserAsRightHolder && currentUserAsRightHolder[0]}
-            loading={
-              !!(currentUserLoading || currentUserConnectionLoading || loadingPartyRepresentation)
-            }
+            currentUser={currentUser}
+            loading={!!(currentUserLoading || loadingPartyRepresentation)}
             as={(props) =>
-              currentUserAsRightHolder ? (
+              currentUser ? (
                 <Link
                   {...props}
-                  to={`/users/${currentUserAsRightHolder[0]?.party.id}`}
+                  to={`/users/${currentUser?.party.id ?? ''}`}
                 />
               ) : (
                 <div {...props} />
