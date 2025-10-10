@@ -12,16 +12,16 @@ import classes from './ReporteePage.module.css';
 
 export const ReporteesList = () => {
   const { t } = useTranslation();
-  const { fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
+  const { toParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
     {
-      partyUuid: fromParty?.partyUuid ?? '',
+      partyUuid: toParty?.partyUuid ?? '',
       fromUuid: '', // all
-      toUuid: fromParty?.partyUuid ?? '',
+      toUuid: toParty?.partyUuid ?? '',
     },
     {
-      skip: !fromParty?.partyUuid,
+      skip: !toParty?.partyUuid,
     },
   );
 

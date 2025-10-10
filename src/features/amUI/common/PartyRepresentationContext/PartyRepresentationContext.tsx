@@ -115,13 +115,14 @@ export const PartyRepresentationProvider = ({
     skip: !currentUser?.partyUuid || !actingPartyUuid,
   });
 
-  console.log('🪵 ~ PartyRepresentationProvider ~ selfParty:', selfParty?.name);
+  // console.log('🪵 ~ PartyRepresentationProvider ~ selfParty:', selfParty?.name);
 
-  const { data: old_currentUser } = useGetUserInfoQuery();
-  console.log('🪵 ~ PartyRepresentationProvider ~ old_currentUser:', old_currentUser?.name);
+  // const { data: old_currentUser } = useGetUserInfoQuery();
+  // console.log('🪵 ~ PartyRepresentationProvider ~ old_currentUser:', old_currentUser?.name);
 
   // this is the connection between acting party and the current user,
   // where the party is the acting party
+
   const {
     partyConnection: actingPartyConnection,
     party: actingParty,
@@ -133,7 +134,7 @@ export const PartyRepresentationProvider = ({
     skip: !currentUser?.partyUuid || !actingPartyUuid,
   });
 
-  console.log('🪵 ~ PartyRepresentationProvider ~ actingParty:', actingParty?.name);
+  // console.log('🪵 ~ PartyRepresentationProvider ~ actingParty:', actingParty?.name);
 
   // this is the connection between the acting party and fromParty where the party is the acting party
   const {
@@ -147,12 +148,12 @@ export const PartyRepresentationProvider = ({
     skip: !currentUser?.partyUuid || !fromPartyUuid,
   });
 
-  console.log('🪵 ~ PartyRepresentationProvider ~ fromParty:', fromParty?.name);
-
   const { data: old_fromParty } = useGetPartyByUUIDQuery(
     { partyUuid: fromPartyUuid ?? '' },
     { skip: isConnectionLoading || invalidConnection || (!!toPartyUuid && !connections) },
   );
+
+  console.log('🪵 ~ PartyRepresentationProvider ~ fromParty:', fromParty?.name);
   console.log('🪵 ~ PartyRepresentationProvider ~ old_fromParty:', old_fromParty?.name);
 
   // this is the connection between the acting party and toParty where the party is the acting party
@@ -167,14 +168,14 @@ export const PartyRepresentationProvider = ({
     skip: !currentUser?.partyUuid || !toPartyUuid,
   });
 
-  console.log('🪵 ~ PartyRepresentationProvider ~ toParty:', toParty?.name);
-
   const { data: old_toParty } = useGetPartyByUUIDQuery(
     { partyUuid: toPartyUuid ?? '' },
     {
       skip: isConnectionLoading || invalidConnection || (!!fromPartyUuid && !connections),
     },
   );
+
+  console.log('🪵 ~ PartyRepresentationProvider ~ toParty:', toParty?.name);
   console.log('🪵 ~ PartyRepresentationProvider ~ old_toParty:', old_toParty?.name);
 
   // const { data: reportee, isLoading: reporteeIsLoading } = useGetReporteeQuery();
