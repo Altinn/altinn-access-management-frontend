@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IProfileClient _profileClient;
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAccessManagementClientV0 _accessManagementClientV0;
-        private readonly IRightHolderClient _rightHolderClient;
+        private readonly IConnectionClient _rightHolderClient;
         private readonly IRegisterClient _registerClient;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             IAccessManagementClient accessManagementClient,
             IAccessManagementClientV0 accessManagementClientV0,
             IRegisterClient registerClient,
-            IRightHolderClient rightHolderClient)
+            IConnectionClient rightHolderClient)
         {
             _logger = logger;
             _profileClient = profileClient;
@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>
         public async Task<List<Connection>> GetActorListForUser(Guid authenticatedUserPartyUuid)
         {
-            List<Connection> connections = await _rightHolderClient.GetRightHolders(authenticatedUserPartyUuid, null, authenticatedUserPartyUuid);
+            List<Connection> connections = await _rightHolderClient.GetConnections(authenticatedUserPartyUuid, null, authenticatedUserPartyUuid);
             return connections;
         }
 
@@ -86,7 +86,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<User>> GetReporteeRightHolders(int partyId)
+        public async Task<List<User>> GetReporteeConnections(int partyId)
         {
             List<AuthorizedParty> rightHolders = await _accessManagementClient.GetReporteeRightHolders(partyId);
 
@@ -132,24 +132,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid? from, Guid? to)
+        public async Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to)
         {
-            HttpResponseMessage response = await _rightHolderClient.RevokeRightHolder(party, from, to);
+            HttpResponseMessage response = await _rightHolderClient.RevokeRightHolderConnection(party, from, to);
             return response;
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> AddReporteeRightHolder(Guid partyUuid, Guid rightholderPartyUuid)
+        public async Task<HttpResponseMessage> AddReporteeRightHolderConnection(Guid partyUuid, Guid rightholderPartyUuid)
         {
-            return await _rightHolderClient.PostNewRightHolder(partyUuid, rightholderPartyUuid);
+            return await _rightHolderClient.PostNewRightHolderConnection(partyUuid, rightholderPartyUuid);
         }
 
         /// <inheritdoc/>
-        public async Task<List<Connection>> GetRightHolders(Guid partyUuid, Guid? from, Guid? to)
+        public async Task<List<Connection>> GetConnections(Guid partyUuid, Guid? from, Guid? to)
         {
             try
             {
-                return await _rightHolderClient.GetRightHolders(partyUuid, from, to);
+                return await _rightHolderClient.GetConnections(partyUuid, from, to);
             }
             catch (Exception ex)
             {

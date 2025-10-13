@@ -14,7 +14,10 @@ import { Trans } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { amUIPath } from '@/routes/paths';
-import { useGetRightHoldersQuery, useRemoveRightHolderMutation } from '@/rtk/features/userInfoApi';
+import {
+  useGetRightHoldersQuery,
+  useRemoveRightHolderMutation,
+} from '@/rtk/features/connectionApi';
 import { accessPackageApi } from '@/rtk/features/accessPackageApi';
 
 import {

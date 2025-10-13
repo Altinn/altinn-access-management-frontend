@@ -1,16 +1,15 @@
 import React from 'react';
 import { useNewActorList } from '@/resources/utils/featureFlagUtils';
 import {
-  Connection,
   ReporteeInfo,
   useGetFavoriteActorUuidsQuery,
   useGetReporteeQuery,
   useGetUserInfoQuery,
-  UserInfo,
 } from '@/rtk/features/userInfoApi';
 import { AccountMenuItemProps, MenuGroupProps } from '@altinn/altinn-components';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Connection } from '@/rtk/features/connectionApi';
 
 export interface useAccountProps {
   reporteeList?: ReporteeInfo[];

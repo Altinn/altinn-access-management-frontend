@@ -360,11 +360,11 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 
     if (mockSettings.RightHolder)
     {
-        services.AddHttpClient<IRightHolderClient, RightHolderClientMock>();
+        services.AddHttpClient<IConnectionClient, ConnectionClientMock>();
     }
     else
     {
-        services.AddHttpClient<IRightHolderClient, RightHolderClient>();
+        services.AddHttpClient<IConnectionClient, ConnectionClient>();
     }
 
     if (mockSettings.Register)

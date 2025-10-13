@@ -2,10 +2,11 @@ import { Button, DsAlert, TextField } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { User, useValidateNewUserPersonMutation } from '@/rtk/features/userInfoApi';
+import { User } from '@/rtk/features/userInfoApi';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
+import { useValidateNewUserPersonMutation } from '@/rtk/features/connectionApi';
 
 export const NewPersonContent = ({
   onComplete,

@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="partyId">The party Id of the reportee</param>
         /// <returns>List of right holders</returns>
-        Task<List<User>> GetReporteeRightHolders(int partyId);
+        Task<List<User>> GetReporteeConnections(int partyId);
 
         /// <summary>
         /// Gets all accesses of a given right holder for a reportee
@@ -78,7 +78,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="from">The GUID identifying the party from which to revoke right holders.</param>
         /// <param name="to">The GUID identifying the party to which to revoke right holders.</param>
         /// <returns>HttpResponseMessage indicating whether the action was successful.</returns>
-        Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid? from, Guid? to);
+        Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to);
 
         /// <summary>
         /// Endpoint for adding a new party as a right holder to reportee party.
@@ -86,7 +86,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="partyUuid">The uuid of the reportee party</param>
         /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder</param>
         /// <returns>The result of the adding</returns>
-        Task<HttpResponseMessage> AddReporteeRightHolder(Guid partyUuid, Guid rightholderPartyUuid);
+        Task<HttpResponseMessage> AddReporteeRightHolderConnection(Guid partyUuid, Guid rightholderPartyUuid);
 
         /// <summary>
         /// Endpoint for getting all right holders for a given party, from a given party to a given party.
@@ -95,6 +95,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="from">The uuid of the party from which to get right holders</param>
         /// <param name="to">The uuid of the party to which to get right holders</param>
         /// <returns> A list of RightHolderInfo </returns>
-        Task<List<Connection>> GetRightHolders(Guid party, Guid? from, Guid? to);
+        Task<List<Connection>> GetConnections(Guid party, Guid? from, Guid? to);
     }
 }
