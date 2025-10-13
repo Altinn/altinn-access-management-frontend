@@ -2,12 +2,18 @@ import { Button, DsAlert, TextField } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useValidateNewUserPersonMutation } from '@/rtk/features/userInfoApi';
+import { User, useValidateNewUserPersonMutation } from '@/rtk/features/userInfoApi';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
 
-export const NewPersonContent = () => {
+export const NewPersonContent = ({
+  onComplete,
+  modalRef,
+}: {
+  onComplete?: (user: User) => void;
+  modalRef: React.RefObject<HTMLDialogElement | null>;
+}) => {
   const { t } = useTranslation();
   const [ssn, setSsn] = useState('');
   const [lastName, setLastName] = useState('');
@@ -28,7 +34,10 @@ export const NewPersonContent = () => {
     validateNewPerson({ ssn, lastName })
       .unwrap()
       .then((userUuid) => {
-        window.location.href = `${window.location.href}/${userUuid}`;
+        if (onComplete) {
+          onComplete({ id: userUuid, name: lastName, children: null, keyValues: null });
+        }
+        modalRef.current?.close();
       })
       .catch(() => {
         setErrorTime(new Date().toISOString());

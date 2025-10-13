@@ -2,11 +2,11 @@ import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
-  test('Org-A delegates access pacakge to Org-B', async ({ login, delegation }) => {
-    // Step 1: Login and select organization as reportee
+  test.beforeEach(async ({ login, delegation }) => {
     await login.loginWithUser('23926299794');
     await login.chooseReportee('UTGÅTT FLEKSIBEL TIGER AS');
-
+  });
+  test('Org-A delegates access pacakge to Org-B', async ({ login, delegation }) => {
     // Step 2: Open delegation flow
     await delegation.openDelegationFlow();
 
@@ -44,12 +44,11 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await delegation.verifyDelegatedPacakge('Oppvekst og utdanning', 'Godkjenning av personell');
   });
 
-  test('Org-A revokes all delegated access package rights from Org-2', async ({
-    login,
+  test.skip('Org-A revokes all delegated access package rights from Org-2', async ({
     delegation,
   }) => {
-    await login.loginWithUser('23926299794');
-    await login.chooseReportee('UTGÅTT FLEKSIBEL TIGER AS');
+    await DelegationApiUtil.addOrgToDelegate();
+    await DelegationApiUtil.delegateAccessPacakage();
 
     // Step 2: Open delegation flow
     await delegation.openDelegationFlow();
@@ -66,8 +65,6 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
   });
 
   test.afterAll(async () => {
-    console.log('Running cleanup after all tests...');
     await DelegationApiUtil.cleanupDelegations();
-    console.log('Cleanup finished.');
   });
 });

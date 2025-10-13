@@ -37,7 +37,10 @@ export const AccessPackageDelegationCheckProvider = ({
   const resultMap = useMemo(
     () =>
       (data ?? []).reduce<Record<string, { result: boolean; reasons: Reason[] }>>((acc, cur) => {
-        acc[cur.package.id] = { result: cur.result, reasons: cur.reasons };
+        const id = cur?.package?.id;
+        if (id) {
+          acc[id] = { result: cur.result, reasons: cur.reasons ?? [] };
+        }
         return acc;
       }, {}),
     [data],

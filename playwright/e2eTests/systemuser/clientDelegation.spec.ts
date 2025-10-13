@@ -84,7 +84,7 @@ test.describe('Klientdelegering', () => {
     if (!process.env.SYSTEMUSER_URL) {
       throw new Error('Environment variable SYSTEMUSER_URL is not defined.');
     }
-    await page.goto(process.env.SYSTEMUSER_URL);
+    await page.goto(process.env.SYSTEMUSER_URL + '/overview');
 
     // Intro to "new brukerflate"
     await page.getByRole('button', { name: 'Prøv ny tilgangsstyring' }).click();

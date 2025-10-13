@@ -6,6 +6,7 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { NewPersonContent } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
 import { NewOrgContent } from './NewOrgContent';
+import { User } from '@/rtk/features/userInfoApi';
 
 /**
  * NewUserButton component renders a button that, when clicked, opens a modal to add a new user.
@@ -14,9 +15,10 @@ import { NewOrgContent } from './NewOrgContent';
 interface NewUserButtonProps {
   /*** Render a larger version of the trigger button */
   isLarge?: boolean;
+  onComplete?: (user: User) => void;
 }
 
-export const NewUserButton: React.FC<NewUserButtonProps> = ({ isLarge }) => {
+export const NewUserButton: React.FC<NewUserButtonProps> = ({ isLarge, onComplete }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   return (
@@ -29,16 +31,20 @@ export const NewUserButton: React.FC<NewUserButtonProps> = ({ isLarge }) => {
         <PlusIcon aria-label={t('common.add')} />
         {isLarge ? t('new_user_modal.trigger_button_large') : t('new_user_modal.trigger_button')}
       </DsButton>
-      <NewUserModal modalRef={modalRef} />
+      <NewUserModal
+        modalRef={modalRef}
+        onComplete={onComplete}
+      />
     </>
   );
 };
 
 interface NewUserModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
+  onComplete?: (user: User) => void;
 }
 
-const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
+const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => {
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
   return (
     <DsDialog
@@ -63,10 +69,16 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
           <DsTabs.Tab value='org'>{t('new_user_modal.organization')}</DsTabs.Tab>
         </DsTabs.List>
         <DsTabs.Panel value='person'>
-          <NewPersonContent />
+          <NewPersonContent
+            onComplete={onComplete}
+            modalRef={modalRef}
+          />
         </DsTabs.Panel>
         <DsTabs.Panel value='org'>
-          <NewOrgContent />
+          <NewOrgContent
+            onComplete={onComplete}
+            modalRef={modalRef}
+          />
         </DsTabs.Panel>
       </DsTabs>
     </DsDialog>

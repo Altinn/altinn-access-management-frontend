@@ -9,17 +9,15 @@ import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfo
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { ReporteePageHeading } from '../common/ReporteePageHeading';
 
-import classes from './ReporteePage.module.css';
 import { ReporteesList } from './ReporteesList';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();
   const { data: isAdmin, isLoading } = useGetIsAdminQuery();
-  const { data: reportee } = useGetReporteeQuery();
+  const { data: reportee, isLoading: reporteeLoading } = useGetReporteeQuery();
   const name = reportee?.name || '';
-  const orgNumber = reportee?.organizationNumber || '';
-  const isMainUnit = (reportee?.subunits?.length ?? 0) > 0;
 
   useDocumentTitle(t('reportees_page.page_title'));
 
@@ -35,17 +33,11 @@ export const ReporteesPage = () => {
             fromPartyUuid={getCookie('AltinnPartyUuid')}
             actingPartyUuid={getCookie('AltinnPartyUuid')}
           >
-            <div className={classes.reporteeListHeading}>
-              <DsHeading
-                level={1}
-                data-size='sm'
-              >
-                {t('reportees_page.main_page_heading', { name: name || '' })}
-                <br />
-                {t('users_page.sub_heading', { org_number: orgNumber || '' })}{' '}
-                {isMainUnit ? `(${t('common.mainunit_lowercase')})` : ''}
-              </DsHeading>
-            </div>
+            <ReporteePageHeading
+              title={t('reportees_page.main_page_heading', { name: reportee?.name || '' })}
+              reportee={reportee}
+              isLoading={reporteeLoading}
+            />
             <ReporteesList />
           </PartyRepresentationProvider>
         )}

@@ -7,7 +7,9 @@ declare global {
       displayResourceDelegation: boolean;
       displayConfettiPackage: boolean;
       displayLimitedPreviewLaunch: boolean;
+      displayConsentGui: boolean;
       restrictPrivUse: boolean;
+      crossPlatformLinks: boolean;
     };
   }
 }

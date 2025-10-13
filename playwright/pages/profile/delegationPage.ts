@@ -182,7 +182,6 @@ export class revokeRights {
             const fjernAlleElement = fjernAlleElements.nth(i);
             await fjernAlleElement.scrollIntoViewIfNeeded();
             await fjernAlleElement.click({ force: true });
-            console.log(`Clicked "Fjern alle" button ${i + 1}.`);
           }
         }
         await this.page.getByRole('button').filter({ hasText: 'Ferdig' }).click();
@@ -228,12 +227,10 @@ export class revokeRights {
           if (fjernAlleCount === 0) {
             console.error('No "Fjern alle" buttons found.');
           } else {
-            console.log(`Found ${fjernAlleCount} "Fjern alle" buttons. Clicking each...`);
             for (let i = 0; i < fjernAlleCount; i++) {
               const fjernAlleElement = fjernAlleElements.nth(i);
               await fjernAlleElement.scrollIntoViewIfNeeded();
               await fjernAlleElement.click({ force: true });
-              console.log(`Clicked "Fjern alle" button ${i + 1}.`);
             }
           }
           await this.page.getByRole('button').filter({ hasText: 'Ferdig' }).click();

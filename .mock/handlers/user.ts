@@ -168,4 +168,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       ],
     });
   }),
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/isClientAdmin`, () => {
+    return HttpResponse.json(true);
+  }),
 ];

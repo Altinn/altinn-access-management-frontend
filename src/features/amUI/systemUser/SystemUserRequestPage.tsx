@@ -17,7 +17,7 @@ import { RightsList } from './components/RightsList/RightsList';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
-import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
+import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/CreateSystemUserCheck';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
@@ -143,6 +143,7 @@ export const SystemUserRequestPage = () => {
           <RightsList
             resources={request.resources}
             accessPackages={request.accessPackages}
+            headingLevel={4}
           />
           <DsParagraph>{t('systemuser_request.withdraw_consent_info')}</DsParagraph>
           <div>

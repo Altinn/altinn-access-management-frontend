@@ -1,4 +1,4 @@
-import { DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -14,6 +14,8 @@ import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';
 import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
 import { AreaItemContent } from './AreaItemContent';
+import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
+import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -31,6 +33,7 @@ interface AccessPackageListProps {
   onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
   onRevokeError?: (accessPackage: AccessPackage, error: ActionError) => void;
   packageAs?: React.ElementType;
+  noPackagesText?: string;
 }
 
 export const AccessPackageList = ({
@@ -49,6 +52,7 @@ export const AccessPackageList = ({
   showPermissions,
   showPackagesCount,
   packageAs,
+  noPackagesText,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
 
@@ -59,6 +63,8 @@ export const AccessPackageList = ({
     assignedAreas,
     availableAreas,
     allPackageAreas,
+    searchError,
+    activeDelegationsError,
   } = useAreaPackageList({
     showAllAreas,
     showAllPackages,
@@ -99,6 +105,24 @@ export const AccessPackageList = ({
     );
   }
 
+  if (searchError || activeDelegationsError) {
+    const detail = createErrorDetails(searchError || activeDelegationsError);
+    return (
+      <div>
+        <DsAlert
+          data-color='danger'
+          data-size='sm'
+        >
+          <TechnicalErrorParagraphs
+            status={detail?.status || '500'}
+            time={new Date().toISOString()}
+            traceId={detail?.traceId}
+          />
+        </DsAlert>
+      </div>
+    );
+  }
+
   if (
     searchString &&
     searchString?.length > 0 &&
@@ -117,17 +141,11 @@ export const AccessPackageList = ({
     ? combinedAreas
     : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
 
-  // Collect all relevant package ids for delegation check (assigned + available)
-  const packageIds = displayAreas.flatMap((a) => [
-    ...a.packages.assigned.map((p) => p.id),
-    ...a.packages.available.map((p) => p.id),
-  ]);
-
   return (
     <div className={classes.accessAreaList}>
-      {displayAreas.length === 0 ? (
+      {displayAreas.length === 0 && !searchError && !activeDelegationsError ? (
         <DsParagraph className={classes.noAccessPackages}>
-          {t('access_packages.user_has_no_packages')}
+          {noPackagesText || t('access_packages.no_packages')}
         </DsParagraph>
       ) : (
         <List>

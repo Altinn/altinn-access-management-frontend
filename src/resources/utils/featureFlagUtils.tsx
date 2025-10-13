@@ -25,3 +25,7 @@ export const availableForUserTypeCheck = (userType?: string) => {
   }
   return false;
 };
+
+export const crossPlatformLinksEnabled = () => {
+  return window.featureFlags?.crossPlatformLinks === true;
+};

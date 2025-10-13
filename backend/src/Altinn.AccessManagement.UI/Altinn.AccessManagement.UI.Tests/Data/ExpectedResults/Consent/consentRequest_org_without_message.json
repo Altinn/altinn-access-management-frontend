@@ -2,19 +2,19 @@
   "id": "1a04a7fa-24c1-4e06-9217-8aee89239a9f",
   "isPoa": true,
   "title": {
-    "nb": "Fullmakt til å handle på vegne av DISKRET NÆR TIGER AS",
-    "nn": "Fullmakt til å handla på vegne av DISKRET NÆR TIGER AS",
-    "en": "Power of attorney to act on behalf of DISKRET NÆR TIGER AS"
+    "nb": "Fullmakt til å handle på vegne av {OfferedBy}",
+    "nn": "Fullmakt til å handla på vegne av {OfferedBy}",
+    "en": "Power of attorney to act on behalf of {OfferedBy}"
   },
   "heading": {
-    "nb": "RAKRYGGET UNG TIGER AS ønsker å utføre tjenester på vegne av DISKRET NÆR TIGER AS",
-    "nn": "RAKRYGGET UNG TIGER AS ønsker å utføra tenester på vegne av DISKRET NÆR TIGER AS",
-    "en": "RAKRYGGET UNG TIGER AS requests power of attorney from DISKRET NÆR TIGER AS"
+    "nb": "{CoveredBy} ønsker å utføre tjenester på vegne av {OfferedBy}",
+    "nn": "{CoveredBy} ønsker å utføra tenester på vegne av {OfferedBy}",
+    "en": "{CoveredBy} requests power of attorney from {OfferedBy}"
   },
   "serviceIntro": {
-    "nb": "Ved at du gir fullmakt, får RAKRYGGET UNG TIGER AS tilgang til følgende tjenester på vegne av DISKRET NÆR TIGER AS",
-    "nn": "Ved at du gjer fullmakt, får RAKRYGGET UNG TIGER AS tilgang til følgjande tenester på vegne av DISKRET NÆR TIGER AS",
-    "en": "By granting power of attorney, RAKRYGGET UNG TIGER AS get access to the following services on behalf of DISKRET NÆR TIGER AS"
+    "nb": "Ved at du gir fullmakt, får {CoveredBy} tilgang til følgende tjenester på vegne av {OfferedBy}",
+    "nn": "Ved at du gjer fullmakt, får {CoveredBy} tilgang til følgjande tenester på vegne av {OfferedBy}",
+    "en": "By granting power of attorney, {CoveredBy} get access to the following services on behalf of {OfferedBy}"
   },
   "consentMessage": null,
   "expiration": {
@@ -24,6 +24,8 @@
   },
   "handledBy": null,
   "fromPartyName": "DISKRET NÆR TIGER AS",
+  "toPartyName": "RAKRYGGET UNG TIGER AS",
+  "validTo": "2075-05-21T11:11:24.9535551+00:00",
   "rights": [
     {
       "identifier": "consent-test-resource-poa",

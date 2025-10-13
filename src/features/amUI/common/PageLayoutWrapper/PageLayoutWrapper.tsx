@@ -5,26 +5,41 @@ import type {
   MenuGroupProps,
   MenuItemProps,
   MenuItemSize,
-  MenuItemTheme,
+  Theme,
 } from '@altinn/altinn-components';
-import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
+import {
+  Icon,
+  Layout,
+  MenuItem,
+  RootProvider,
+  SizeEnum,
+  Snackbar,
+} from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
-import { HandshakeIcon, InformationSquareIcon, LeaveIcon } from '@navikt/aksel-icons';
+import {
+  HandshakeIcon,
+  InboxFillIcon,
+  InformationSquareIcon,
+  LeaveIcon,
+  PersonCircleIcon,
+} from '@navikt/aksel-icons';
 
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   useGetIsAdminQuery,
+  useGetIsCompanyProfileAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
   useGetReporteeQuery,
   useGetUserInfoQuery,
 } from '@/rtk/features/userInfoApi';
-import { amUIPath } from '@/routes/paths';
-import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
+import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
+import { getAfUrl, getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
+import { crossPlatformLinksEnabled } from '@/resources/utils/featureFlagUtils';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -43,6 +58,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const [searchString, setSearchString] = useState<string>('');
 
   const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: canAccessSettings } = useGetIsCompanyProfileAdminQuery();
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -53,7 +69,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     shortcuts: {
       divider: false,
       title: t('header.shortcuts'),
-      defaultIconTheme: 'transparent' as MenuItemTheme,
+      defaultIconTheme: 'transparent' as Theme,
       defaultItemSize: 'sm' as MenuItemSize,
     },
     global: {
@@ -62,6 +78,37 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   };
 
   const isSm = useIsTabletOrSmaller();
+
+  const platformLinks = [
+    {
+      groupId: 1,
+      icon: InboxFillIcon,
+      id: 'inbox',
+      size: 'lg',
+      title: t('header.inbox'),
+      as: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+        <a
+          {...props}
+          href={getAfUrl()}
+        />
+      ),
+      badge: { label: t('common.beta') },
+    },
+    {
+      groupId: 'current-user',
+      icon: PersonCircleIcon,
+      id: 'profile',
+      size: 'sm',
+      title: t('header.profile'),
+      as: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+        <a
+          {...props}
+          href={`${getAfUrl()}profile`}
+        />
+      ),
+    },
+  ] as MenuItemProps[];
+
   const headerLinks: MenuItemProps[] = [
     {
       groupId: 1,
@@ -78,6 +125,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       ),
       badge: { label: t('common.beta') },
     },
+    ...(crossPlatformLinksEnabled() ? platformLinks : []),
     ...(isSm
       ? SidebarItems(
           true,
@@ -85,9 +133,9 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           isAdmin,
           reportee?.name || '',
           getAccountType(reportee?.type ?? ''),
+          canAccessSettings ?? false,
         )
       : []),
-
     {
       id: 'info',
       groupId: 10,
@@ -114,6 +162,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         />
       ),
     },
+    { groupId: 'current-user', hidden: true },
   ];
 
   const accountGroups: Record<string, MenuGroupProps> = {
@@ -163,16 +212,26 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           return `${hits} ${t('header.search-hits')}`;
         },
       },
-      menuItemsVirtual: { isVirtualized: accounts.length > 20 },
+      isVirtualized: accounts.length > 20,
     },
-    onSelectAccount: (accountId) => {
-      const redirectUrl = window.location.pathname.includes('systemuser')
-        ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
-        : window.location.href;
-      (window as Window).open(
-        `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
-        '_self',
-      );
+    onSelectAccount: (accountId: string) => {
+      // check if this is a person; then redirect to consents page
+      let redirectUrl = window.location.href;
+      const isPersonAccount = accounts.find((a) => a.id === accountId)?.type === 'person';
+      if (isPersonAccount) {
+        redirectUrl = new URL(
+          `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
+        ).toString();
+      } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
+        redirectUrl = new URL(
+          `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
+        ).toString();
+      }
+
+      const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
+      changeUrl.searchParams.set('R', accountId);
+      changeUrl.searchParams.set('goTo', redirectUrl);
+      (window as Window).open(changeUrl.toString(), '_self');
     },
     logoutButton: {
       label: t('header.log_out'),
@@ -180,12 +239,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         (window as Window).location = `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
       },
     },
+
     menuLabel: t('header.menu-label'),
     backLabel: t('header.back-label'),
     changeLabel: t('header.change-label'),
-    currentEndUserLabel: t('header.logged_in_as_name', {
-      name: userinfo?.name || '',
-    }),
+
     currentAccount: {
       name: reportee?.name || '',
       type: getAccountType(reportee?.type ?? ''),
@@ -193,18 +251,28 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
   };
 
+  const groups = {
+    'current-user': {
+      title: t('header.logged_in_as_name', {
+        name: userinfo?.name || '',
+      }),
+    },
+  };
+
   const desktopMenu = {
     items: headerLinks,
+    groups,
   };
 
   const mobileMenu = {
     items: headerLinks,
+    groups,
   };
 
   return (
     <RootProvider>
       <Layout
-        color={'company'}
+        color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
         theme='subtle'
         header={{
           locale: {
@@ -221,6 +289,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             name: reportee?.name || '',
             type: getAccountType(reportee?.type ?? ''),
             id: reportee?.partyId || '',
+            icon: { name: reportee?.name || '', type: getAccountType(reportee?.type ?? '') },
           },
           globalMenu: globalMenu,
           desktopMenu: desktopMenu,
@@ -228,6 +297,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         }}
         sidebar={{
           menu: {
+            variant: 'subtle',
             groups: menuGroups,
             items: SidebarItems(
               false,
@@ -235,10 +305,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               isAdmin,
               reportee?.name || '',
               getAccountType(reportee?.type ?? ''),
+              canAccessSettings ?? false,
             ),
           },
         }}
-        content={{ color: 'company' }}
+        content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
         footer={{
           address: 'Postboks 1382 Vika, 0114 Oslo.',
           address2: 'Org.nr. 991 825 827',
@@ -251,8 +322,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           },
         }}
       >
-        <InfoModal />
         {children}
+        <InfoModal />
       </Layout>
       <Snackbar />
     </RootProvider>
@@ -276,7 +347,7 @@ const getAccount = (reportee: ReporteeInfo, userUuid: string, currentReporteeUui
     id: reportee.partyId,
     icon: {
       name: reportee.name,
-      type: reportee.type === 'Organization' ? 'company' : 'person',
+      type: accountType,
     },
     name: reportee.name,
     description: reportee.type === 'Organization' ? reportee.organizationNumber : undefined,

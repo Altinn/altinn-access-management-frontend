@@ -14,6 +14,8 @@ export interface TechnicalErrorParagraphsProps {
   size?: DsParagraphProps['data-size'];
   /*** Optional override of message to display */
   message?: string;
+  /*** Optional traceId to display */
+  traceId?: string;
 }
 
 export const TechnicalErrorParagraphs = ({
@@ -21,6 +23,7 @@ export const TechnicalErrorParagraphs = ({
   time,
   size = 'sm',
   message,
+  traceId,
 }: TechnicalErrorParagraphsProps) => {
   const { t } = useTranslation();
   return (
@@ -41,6 +44,7 @@ export const TechnicalErrorParagraphs = ({
         })}
         {' - '} {t('common.error_status', { status: status })}
       </DsParagraph>
+      {traceId && <DsParagraph data-size={size}>{t('common.trace_id', { traceId })}</DsParagraph>}
     </>
   );
 };
@@ -50,5 +54,6 @@ export const createErrorDetails = (error: FetchBaseQueryError | SerializedError 
     ? {
         status: error.status.toString(),
         time: error.data as string,
+        traceId: (error.data as { traceId?: string })?.traceId,
       }
     : null;

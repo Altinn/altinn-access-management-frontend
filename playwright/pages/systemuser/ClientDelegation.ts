@@ -110,7 +110,7 @@ export class ClientDelegationPage {
     await confirmDeleteButton.click();
 
     //Should close modal and take you back to overview page
-    await expect(this.page).toHaveURL(env('SYSTEMUSER_URL'));
+    await expect(this.page).toHaveURL(env('SYSTEMUSER_URL') + '/overview');
     await expect(this.systemUserLink(name)).toHaveCount(0);
   }
 }

@@ -7,9 +7,7 @@ const standardApiDetails = {
   department: 'Testdepartement',
 };
 
-test.describe.configure({ mode: 'parallel' });
-
-test.describe('API-Delegations to organization user', () => {
+test.describe('@slow API-Delegations to organization user', () => {
   test('Delegate api to an organization', async ({ apiDelegations, login }) => {
     const userThatDelegates = {
       id: '12917198150',
@@ -210,7 +208,7 @@ test.describe('API-Delegations to organization user', () => {
   });
 });
 
-test.describe('API Delegation Access Control Tests', () => {
+test.describe('@slow API Delegation Access Control Tests', () => {
   test('Verify that Tilgangsstyrer does NOT have access to API delegering panel', async ({
     page,
     login,
