@@ -1,6 +1,7 @@
 import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
 import { mapConnectionToParty } from './partyUtils';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 /**
  * useConnectedParty
@@ -13,19 +14,22 @@ import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 export const useConnectedParty = ({
   fromPartyUuid,
   toPartyUuid,
+  skip = false,
 }: {
   fromPartyUuid?: string;
   toPartyUuid?: string;
+  skip?: boolean;
 }) => {
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
+  const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
   const request = {
-    partyUuid: currentUser?.partyUuid ?? '',
-    fromUuid: fromPartyUuid ?? currentUser?.partyUuid ?? '',
-    toUuid: toPartyUuid ?? currentUser?.partyUuid ?? '',
+    partyUuid: actingPartyUuid ?? '',
+    fromUuid: fromPartyUuid ?? actingPartyUuid ?? '',
+    toUuid: toPartyUuid ?? actingPartyUuid ?? '',
   };
 
   const { data: connection, isLoading } = useGetRightHoldersQuery(request, {
-    skip: !currentUser?.partyUuid || (!fromPartyUuid && !toPartyUuid),
+    skip: !currentUser?.partyUuid || (!fromPartyUuid && !toPartyUuid) || skip,
   });
 
   const partyConnection = connection?.[0];

@@ -15,9 +15,9 @@ import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorPa
 import { NotAvailableForUserTypeAlert } from '../NotAvailableForUserTypeAlert/NotAvailableForUserTypeAlert';
 import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 import useConnectedParty from './useConnectedParty';
-import { skip } from 'node:test';
 import { useReporteeParty } from './useReporteeParty';
-import { mapConnectionToParty } from './partyUtils';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { skip } from 'node:test';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -72,6 +72,50 @@ export const PartyRepresentationProvider = ({
     throw new Error('actingPartyUuid must equal one of the provided party UUIDs');
   }
 
+  // Case du er på din egen side i tilgangsstyring og ikke hovedadmin -> acting-party = selfparty. (vi kan sjekke is-admin fram til vi får en egen ressurs på hovedadmin)
+  // ellers hentes acting-party fra useReporteeParty
+
+  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
+
+  const partyUuid = getCookie('AltinnPartyUuid') ?? '';
+  const { party: reportee, isLoading: actingPartyIsLoading } = useReporteeParty();
+
+  let actingParty: Party | undefined;
+
+  // 1. Hvis inlogget bruker er damme som from eller to id  da er acting-party = selfparty. Hvis ikke: Acting-party hentes fra useReporteeParty
+  if (currentUser?.partyUuid === partyUuid) {
+    actingParty = currentUser;
+  } else {
+    actingParty = reportee;
+  }
+
+  // Call hooks unconditionally, then decide values
+  const { party: fromConnectedParty, isLoading: fromPartyIsLoading } = useConnectedParty({
+    fromPartyUuid,
+    skip: !fromPartyUuid || fromPartyUuid === actingPartyUuid,
+  });
+
+  const { party: toConnectedParty, isLoading: toPartyIsLoading } = useConnectedParty({
+    toPartyUuid,
+    skip: !toPartyUuid || toPartyUuid === actingPartyUuid,
+  });
+
+  // 2. From-party: hvis satt og er lik actingpartyUuid, da er from-party = acting-party. Hvis ikke bruk connected party
+  const fromParty: Party | undefined =
+    fromPartyUuid !== undefined
+      ? undefined
+      : fromPartyUuid === actingPartyUuid
+        ? actingParty
+        : fromConnectedParty;
+
+  // 3. To-party: hvis satt og er lik actingpartyUuid, da er to-party = acting-party. Hvis ikke bruk connected party
+  const toParty: Party | undefined =
+    toPartyUuid !== undefined
+      ? undefined
+      : toPartyUuid === actingPartyUuid
+        ? actingParty
+        : toConnectedParty;
+
   const {
     data: connections,
     isLoading: isConnectionLoading,
@@ -81,21 +125,15 @@ export const PartyRepresentationProvider = ({
     { skip: !fromPartyUuid || !toPartyUuid },
   );
 
-  const toParty = mapConnectionToParty(connections?.find((c) => c.party.id === toPartyUuid)?.party);
-
-  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
-
-  const { party: actingParty, isLoading: actingPartyIsLoading } = useReporteeParty();
-
-  const { party: fromParty, isLoading: fromPartyIsLoading } = useConnectedParty({
-    fromPartyUuid: fromPartyUuid,
-  });
-
   const availableForUserType =
     actingPartyIsLoading || availableForUserTypeCheck(actingParty?.partyTypeName.toString());
 
   const isLoading =
-    isConnectionLoading || fromPartyIsLoading || currentUserIsLoading || actingPartyIsLoading;
+    isConnectionLoading ||
+    fromPartyIsLoading ||
+    toPartyIsLoading ||
+    currentUserIsLoading ||
+    actingPartyIsLoading;
 
   const invalidConnection =
     !isConnectionLoading &&
