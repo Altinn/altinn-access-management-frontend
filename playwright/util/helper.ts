@@ -45,5 +45,5 @@ export function formatUiDateTime(isoString: string): string {
     hour12: false,
     timeZone: 'Europe/Oslo',
   });
-  return `${datePart} ${timePart}`;
+  return `${datePart}, ${timePart}`;
 }

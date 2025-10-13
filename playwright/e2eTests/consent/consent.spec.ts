@@ -50,6 +50,7 @@ test.describe('Samtykke - Norsk', () => {
         'Du samtykker til at vi kan hente og bruke dine inntektsopplysninger fra Skatteetaten',
       ),
     ).toBeVisible();
+
     await expect(page.getByText('Samtykket er tidsavgrenset og')).toBeVisible();
 
     const expected = formatUiDateTime(validToTimestamp);

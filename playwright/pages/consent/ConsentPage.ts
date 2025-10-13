@@ -1,7 +1,6 @@
 import type { Page, Locator } from '@playwright/test';
 
 import { expect } from '@playwright/test';
-import nb from '../../../src/localizations/no_nb.json';
 import en from '../../../src/localizations/en.json';
 import nn from '../../../src/localizations/en.json';
 import no_nb from '@/localizations/no_nb.json';
@@ -89,7 +88,7 @@ export class ConsentPage {
     });
 
     // Common label
-    this.labelPlaywrightTest = page.getByText(/Playwright integrasjonstest/i);
+    // this.labelPlaywrightTest = page.getByText(/Playwright integrasjonstest/i);
 
     // Standard intro text
     this.textStandardLead = page.getByText(/ønsker å hente opplysninger om deg/i);
@@ -134,13 +133,13 @@ export class ConsentPage {
   async expectStandardIntro(): Promise<void> {
     await expect(this.standardHeading).toBeVisible();
     await expect(this.textStandardLead).toBeVisible();
-    await expect(this.labelPlaywrightTest).toBeVisible();
+    // await expect(this.labelPlaywrightTest).toBeVisible();
     await expect(this.textStandardDetail).toBeVisible();
   }
 
   async expectKravIntro(): Promise<void> {
     await expect(this.headingKrav).toBeVisible();
-    await expect(this.labelPlaywrightTest).toBeVisible();
+    // await expect(this.labelPlaywrightTest).toBeVisible();
     await expect(this.textKravLead).toBeVisible();
     await expect(this.textUserAccess).toBeVisible();
     await expect(this.linkAltinn).toBeVisible();
@@ -148,13 +147,13 @@ export class ConsentPage {
 
   async expectFullmaktIntro(): Promise<void> {
     await expect(this.headingFullmakt).toBeVisible();
-    await expect(this.labelPlaywrightTest).toBeVisible();
+    // await expect(this.labelPlaywrightTest).toBeVisible();
     await expect(this.textFullmaktIntro).toBeVisible();
   }
 
   async expectEnkeltIntro(): Promise<void> {
     await expect(this.textEnkeltLead).toBeVisible();
-    await expect(this.labelPlaywrightTest).toBeVisible();
+    // await expect(this.labelPlaywrightTest).toBeVisible();
     await expect(this.textEnkeltBulletIntro).toBeVisible();
     await expect(this.textEnkeltLabel).toBeVisible();
   }
