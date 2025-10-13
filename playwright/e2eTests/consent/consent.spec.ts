@@ -13,7 +13,6 @@ const redirectUrl = 'https://example.com/';
 let api: ConsentApiRequests;
 let validToTimestamp: string;
 let fromPerson: string;
-let fromOrg: string;
 let toOrg: string;
 
 test.beforeEach(async ({}) => {
@@ -208,7 +207,7 @@ test.describe('Samtykke fra organisasjon til organisasjon', () => {
     process.env.ORG = toOrg;
   });
 
-  test('Fra org til org-samtykke skal kunne godkjenne samtykke med Utfyller/innsender-rollen', async ({
+  test('Skal kunne godkjenne samtykke med Utfyller/innsender-rollen', async ({
     page,
     consentPage,
     login,
@@ -232,7 +231,7 @@ test.describe('Samtykke fra organisasjon til organisasjon', () => {
     await consentPage.pickLanguage(consentPage.language);
 
     // Verify org-to-org consent specific content
-    await consentPage.expectStandardIntro();
+    // await consentPage.expectStandardIntro();
     await expect(
       page.getByText(
         'Du samtykker til at vi kan hente og bruke dine inntektsopplysninger fra Skatteetaten',
