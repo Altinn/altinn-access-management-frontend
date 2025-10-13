@@ -36,9 +36,6 @@ export class ConsentPage {
   readonly headingKrav: Locator;
   readonly headingFullmakt: Locator;
 
-  // Common labels/text blocks used across views
-  readonly labelPlaywrightTest: Locator;
-
   // Standard intro text chunks
   readonly textStandardLead: Locator;
   readonly textStandardDetail: Locator;
@@ -86,9 +83,6 @@ export class ConsentPage {
     this.headingFullmakt = page.getByRole('heading', {
       name: /Fullmakt til å handle på dine vegne/,
     });
-
-    // Common label
-    // this.labelPlaywrightTest = page.getByText(/Playwright integrasjonstest/i);
 
     // Standard intro text
     this.textStandardLead = page.getByText(/ønsker å hente opplysninger om deg/i);
