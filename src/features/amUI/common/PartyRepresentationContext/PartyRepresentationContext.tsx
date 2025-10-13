@@ -16,8 +16,6 @@ import { NotAvailableForUserTypeAlert } from '../NotAvailableForUserTypeAlert/No
 import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 import useConnectedParty from './useConnectedParty';
 import { useReporteeParty } from './useReporteeParty';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { skip } from 'node:test';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -62,6 +60,9 @@ export const PartyRepresentationProvider = ({
   actingPartyUuid,
   returnToUrlOnError,
 }: PartyRepresentationProviderProps) => {
+  console.log('🪵 ~ PartyRepresentationProvider ~ toPartyUuid:', toPartyUuid);
+  console.log('🪵 ~ PartyRepresentationProvider ~ actingPartyUuid:', actingPartyUuid);
+  console.log('🪵 ~ PartyRepresentationProvider ~ fromPartyUuid:', fromPartyUuid);
   if (!toPartyUuid && !fromPartyUuid) {
     throw new Error('PartyRepresentationProvider must be used with at least one party UUID');
   }
@@ -74,22 +75,16 @@ export const PartyRepresentationProvider = ({
 
   // Case du er på din egen side i tilgangsstyring og ikke hovedadmin -> acting-party = selfparty. (vi kan sjekke is-admin fram til vi får en egen ressurs på hovedadmin)
   // ellers hentes acting-party fra useReporteeParty
+  // 1. Hvis inlogget bruker er damme som from eller to id  da er acting-party = selfparty. Hvis ikke: Acting-party hentes fra useReporteeParty
+  // 2. From-party: hvis satt og er lik actingpartyUuid, da er from-party = acting-party. Hvis ikke bruk connected party
+  // 3. To-party: hvis satt og er lik actingpartyUuid, da er to-party = acting-party. Hvis ikke bruk connected party
 
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
+  const { party: reportee, isLoading: reporteeIsLoading } = useReporteeParty();
 
-  const partyUuid = getCookie('AltinnPartyUuid') ?? '';
-  const { party: reportee, isLoading: actingPartyIsLoading } = useReporteeParty();
+  // Acting party is either the current user or the reportee (if acting on behalf of another party)
+  const actingParty = currentUser?.partyUuid === actingPartyUuid ? currentUser : reportee;
 
-  let actingParty: Party | undefined;
-
-  // 1. Hvis inlogget bruker er damme som from eller to id  da er acting-party = selfparty. Hvis ikke: Acting-party hentes fra useReporteeParty
-  if (currentUser?.partyUuid === partyUuid) {
-    actingParty = currentUser;
-  } else {
-    actingParty = reportee;
-  }
-
-  // Call hooks unconditionally, then decide values
   const { party: fromConnectedParty, isLoading: fromPartyIsLoading } = useConnectedParty({
     fromPartyUuid,
     skip: !fromPartyUuid || fromPartyUuid === actingPartyUuid,
@@ -100,21 +95,9 @@ export const PartyRepresentationProvider = ({
     skip: !toPartyUuid || toPartyUuid === actingPartyUuid,
   });
 
-  // 2. From-party: hvis satt og er lik actingpartyUuid, da er from-party = acting-party. Hvis ikke bruk connected party
-  const fromParty: Party | undefined =
-    fromPartyUuid !== undefined
-      ? undefined
-      : fromPartyUuid === actingPartyUuid
-        ? actingParty
-        : fromConnectedParty;
-
-  // 3. To-party: hvis satt og er lik actingpartyUuid, da er to-party = acting-party. Hvis ikke bruk connected party
-  const toParty: Party | undefined =
-    toPartyUuid !== undefined
-      ? undefined
-      : toPartyUuid === actingPartyUuid
-        ? actingParty
-        : toConnectedParty;
+  // Use acting party if the UUID matches, otherwise use the connected party
+  const fromParty = fromPartyUuid === actingPartyUuid ? actingParty : fromConnectedParty;
+  const toParty = toPartyUuid === actingPartyUuid ? actingParty : toConnectedParty;
 
   const {
     data: connections,
@@ -126,14 +109,14 @@ export const PartyRepresentationProvider = ({
   );
 
   const availableForUserType =
-    actingPartyIsLoading || availableForUserTypeCheck(actingParty?.partyTypeName.toString());
+    reporteeIsLoading || availableForUserTypeCheck(actingParty?.partyTypeName.toString());
 
   const isLoading =
     isConnectionLoading ||
     fromPartyIsLoading ||
     toPartyIsLoading ||
     currentUserIsLoading ||
-    actingPartyIsLoading;
+    reporteeIsLoading;
 
   const invalidConnection =
     !isConnectionLoading &&
