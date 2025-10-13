@@ -67,16 +67,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Endpoint for retrieving a party by uuid
         /// </summary>
         /// <param name="uuid">The uuid for the party to look up</param>
-        /// <param name="useOldRegistry">Indicates if the party should be fetched from the old registry data</param>
         /// <returns>Party information for the GUI</returns>
         [HttpGet]
         [Authorize]
         [Route("party/{uuid}")]
-        public async Task<ActionResult<PartyFE>> GetPartyByUUID(Guid uuid, [FromQuery] bool useOldRegistry)
+        public async Task<ActionResult<PartyFE>> GetPartyByUUID(Guid uuid)
         {
             try
             {
-                PartyFE party = useOldRegistry ? await _lookupService.GetPartyByUUID_old(uuid) : await _lookupService.GetPartyByUUID(uuid);
+                PartyFE party = await _lookupService.GetPartyByUUID_old(uuid);
 
                 if (party != null)
                 {

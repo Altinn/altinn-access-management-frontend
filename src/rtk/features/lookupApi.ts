@@ -62,9 +62,8 @@ export const lookupApi = createApi({
     getUserByUUID: builder.query<UserProfile, string>({
       query: (userUUID) => `user/${userUUID}`,
     }),
-    getPartyByUUID: builder.query<Party, { partyUuid: string; useOldRegistry?: boolean }>({
-      query: ({ partyUuid, useOldRegistry = false }) =>
-        `party/${partyUuid}?useOldRegistry=${useOldRegistry}`,
+    deprecatedGetPartyByUUID: builder.query<Party, { partyUuid: string }>({
+      query: ({ partyUuid }) => `party/${partyUuid}`,
       keepUnusedDataFor: 300,
     }),
     getOrganization: builder.query<Organization, string>({
@@ -88,7 +87,7 @@ export const lookupApi = createApi({
 
 export const {
   useGetUserByUUIDQuery,
-  useGetPartyByUUIDQuery,
+  useDeprecatedGetPartyByUUIDQuery,
   useGetOrganizationQuery,
   useGetPartyFromLoggedInUserQuery,
   useGetReporteePartyQuery,

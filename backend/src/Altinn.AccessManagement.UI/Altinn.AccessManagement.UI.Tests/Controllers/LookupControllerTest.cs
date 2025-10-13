@@ -100,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
             Guid lookupUUID = new Guid("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
 
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}?useOldRegistry={true}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -109,46 +109,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(51317934, actualParty.PartyId);
             Assert.Equal(PartyType.Organization, actualParty.PartyTypeName);
             Assert.Equal("RAKRYGGET UNG TIGER AS", actualParty.Name);
-        }
-
-        /// <summary>
-        /// Assert that an authenticated user is able to lookup an org party based on uuid
-        /// </summary>
-        [Fact]
-        public async Task GetPartyByUUID_Org_Success()
-        {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
-            Guid lookupUUID = new Guid("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
-            Assert.Equal(lookupUUID, actualParty.PartyUuid);
-            Assert.Equal(51442738, actualParty.PartyId);
-            Assert.Equal(PartyType.Organization, actualParty.PartyTypeName);
-            Assert.Equal("RAKRYGGET UNG TIGER AS", actualParty.Name);
-        }
-
-        /// <summary>
-        /// Assert that an authenticated user is able to lookup a person party based on uuid
-        /// </summary>
-        [Fact]
-        public async Task GetPartyByUUID_Person_Success()
-        {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
-            Guid lookupUUID = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
-            Assert.Equal(lookupUUID, actualParty.PartyUuid);
-            Assert.Equal(50789533, actualParty.PartyId);
-            Assert.Equal(PartyType.Person, actualParty.PartyTypeName);
-            Assert.Equal("SITRONGUL MEDALJONG", actualParty.Name);
         }
 
         /// <summary>

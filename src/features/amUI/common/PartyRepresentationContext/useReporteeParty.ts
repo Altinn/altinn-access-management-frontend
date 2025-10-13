@@ -13,8 +13,16 @@ import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 export const useReporteeParty = () => {
   const partyUuid = getCookie('AltinnPartyUuid') ?? '';
-  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
-  const { data: connection, isLoading } = useGetRightHoldersQuery(
+  const {
+    data: currentUser,
+    error: currentUserError,
+    isLoading: currentUserIsLoading,
+  } = useGetPartyFromLoggedInUserQuery();
+  const {
+    data: connection,
+    isLoading,
+    error,
+  } = useGetRightHoldersQuery(
     {
       partyUuid: currentUser?.partyUuid ?? '',
       fromUuid: partyUuid,
@@ -28,7 +36,7 @@ export const useReporteeParty = () => {
   const partyConnection = connection?.[0];
 
   const party = mapConnectionToParty(partyConnection?.party);
-  return { party, isLoading: isLoading || currentUserIsLoading };
+  return { party, isLoading: isLoading || currentUserIsLoading, error: error || currentUserError };
 };
 
 export default useReporteeParty;
