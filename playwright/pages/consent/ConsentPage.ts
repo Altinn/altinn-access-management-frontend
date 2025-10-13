@@ -66,8 +66,25 @@ export class ConsentPage {
     this.norwegian = page.locator('a', { hasText: 'Norsk (bokmål)' });
     this.english = page.locator('a', { hasText: 'English' });
     this.linkAltinn = page.getByRole('link', { name: /altinn\.no/i });
-    this.buttonApprove = page.getByRole('button', { name: /jeg gir samtykke/i });
-    this.buttonReject = page.getByRole('button', { name: /jeg gir ikke samtykke/i });
+    // Language-specific button selectors
+    const buttonTexts = {
+      [Language.EN]: {
+        approve: /yes, i give consent/i,
+        reject: /no, i do not give consent/i,
+      },
+      [Language.NB]: {
+        approve: /jeg gir samtykke/i,
+        reject: /jeg gir ikke samtykke/i,
+      },
+      [Language.NN]: {
+        approve: /jeg gir samtykke/i,
+        reject: /jeg gir ikke samtykke/i,
+      },
+    };
+
+    const texts = buttonTexts[language] || buttonTexts[Language.NB];
+    this.buttonApprove = page.getByRole('button', { name: texts.approve });
+    this.buttonReject = page.getByRole('button', { name: texts.reject });
 
     this.buttonFullmaktApprove = page.getByRole('button', {
       name: this.languageDictionary.consent_request.approve_poa,

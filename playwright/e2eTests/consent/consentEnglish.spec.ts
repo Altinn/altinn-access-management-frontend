@@ -26,9 +26,9 @@ test.beforeEach(async ({}) => {
   process.env.ORG = toOrg;
 });
 
-test.describe('Samtykke - English', () => {
+test.describe('Consent - English', () => {
   test.use({ language: Language.EN }); // all tests in this file run in EN
-  test('Godta forespørsel - Standard samtykke', async ({ page, login, consentPage }) => {
+  test('Approve request - Standard consent', async ({ page, login, consentPage }) => {
     const consentResponse = await api.createConsentRequest({
       from: { type: 'person', id: fromPerson },
       to: { type: 'org', id: toOrg },
@@ -43,17 +43,24 @@ test.describe('Samtykke - English', () => {
 
     await consentPage.pickLanguage(consentPage.language);
 
-    await consentPage.expectStandardIntro();
-    await expect(
-      page.getByText(
-        'Du samtykker til at vi kan hente og bruke dine inntektsopplysninger fra Skatteetaten',
-      ),
-    ).toBeVisible();
-    await expect(page.getByText('Samtykket er tidsavgrenset og')).toBeVisible();
+    // English-specific content verification
+    await expect(page.getByRole('heading', { name: /Consent to use of your data/i })).toBeVisible();
+
+    await expect(page.getByText('Consent to use of your data')).toBeVisible();
 
     const expected = formatUiDateTime(validToTimestamp);
-    await consentPage.expectExpiry('Samtykket er', expected);
+    await expect(
+      page.getByText(`The consent is time-limited, and will expire ${expected}`),
+    ).toBeVisible();
 
+    // Verify metadata is displayed
+    await expect(page.getByText('year of income: 2028')).toBeVisible();
+
+    // English approval button
+    await expect(page.getByRole('button', { name: /I give consent/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /I do not give consent/i })).toBeVisible();
+
+    // Approve the consent
     await consentPage.approveStandardAndWaitLogout(redirectUrl);
   });
 });
