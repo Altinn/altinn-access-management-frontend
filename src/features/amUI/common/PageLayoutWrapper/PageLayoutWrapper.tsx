@@ -1,20 +1,12 @@
 import type { ChangeEvent } from 'react';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import type {
   AccountMenuItemProps,
-  MenuGroupProps,
   MenuItemProps,
   MenuItemSize,
   Theme,
 } from '@altinn/altinn-components';
-import {
-  Icon,
-  Layout,
-  MenuItem,
-  RootProvider,
-  SizeEnum,
-  Snackbar,
-} from '@altinn/altinn-components';
+import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import {
@@ -25,7 +17,6 @@ import {
   PersonCircleIcon,
 } from '@navikt/aksel-icons';
 
-import type { Connection, ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   useGetIsAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
@@ -41,6 +32,7 @@ import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
 import { crossPlatformLinksEnabled, useNewActorList } from '@/resources/utils/featureFlagUtils';
+import { useAccounts } from './useAccounts';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -48,10 +40,6 @@ interface PageLayoutWrapperProps {
 
 const getAccountType = (type: string): 'company' | 'person' => {
   return type === 'Organization' ? 'company' : 'person';
-};
-
-const getAccountTypeFromConnection = (type: string): 'company' | 'person' => {
-  return type === 'Organisasjon' ? 'company' : 'person';
 };
 
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
@@ -65,7 +53,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { data: actorList } = useGetActorListForAuthorizedUserQuery(undefined, {
     skip: !useNewActorListFlag,
   });
-  const { data: favoriteUuids } = useGetFavoriteActorUuidsQuery();
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
 
@@ -175,60 +162,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     { groupId: 'current-user', hidden: true },
   ];
 
-  const accountGroups: Record<string, MenuGroupProps> = {
-    self: {
-      title: t('header.account_you'),
-      divider: true,
-    },
-    others: {
-      title: t('header.account_others'),
-      divider: true,
-    },
-    favorites: {
-      title: t('header.account_favorites'),
-      divider: true,
-    },
-  };
-
-  const accounts: AccountMenuItemProps[] = useMemo(() => {
-    if ((!reporteeList && !actorList) || !userinfo || !reportee) {
-      return [];
-    }
-
-    const accountList = [];
-    if (useNewActorListFlag) {
-      for (const account of actorList ?? []) {
-        const mappedAccount = getAccountFromConnection(account, userinfo.uuid, reportee.partyUuid);
-        accountList.push(mappedAccount);
-        if (favoriteUuids?.includes(account.party.id)) {
-          const favoriteAccount = { ...mappedAccount, groupId: 'favorites' };
-          accountList.push(favoriteAccount);
-        }
-      }
-    } else {
-      for (const account of reporteeList ?? []) {
-        const mappedAccount = getAccount(account, userinfo.uuid, reportee.partyUuid);
-        accountList.push(mappedAccount);
-
-        if (account.subunits && account.subunits.length > 0) {
-          for (const subUnit of account.subunits) {
-            const mappedSubUnit = getAccount(subUnit, userinfo.uuid, reportee.partyUuid);
-            accountList.push(mappedSubUnit);
-          }
-        }
-      }
-    }
-
-    return (
-      accountList.sort((a, b) => {
-        if (a.groupId === 'self') return -1;
-        if (b.groupId === 'self') return 1;
-        if (b.groupId !== 'self' && a.groupId === 'favorites') return -1;
-        if (a.groupId !== 'self' && b.groupId === 'favorites') return 1;
-        return a.name > b.name ? 1 : -1;
-      }) ?? []
-    );
-  }, [reporteeList, userinfo, reportee]);
+  const { accounts, accountGroups } = useAccounts({ reporteeList, actorList });
 
   const globalMenu = {
     accountMenu: {
@@ -375,60 +309,3 @@ const footerLinks = [
   { href: 'https://info.altinn.no/om-altinn/personvern/', resourceId: 'footer.privacy_policy' },
   { href: 'https://info.altinn.no/om-altinn/tilgjengelighet/', resourceId: 'footer.accessibility' },
 ];
-
-const getAccount = (
-  reportee: ReporteeInfo,
-  userUuid: string,
-  currentReporteeUuid: string,
-): AccountMenuItemProps => {
-  const group = reportee.partyUuid === userUuid ? 'a' : 'b';
-  const accountType = getAccountType(reportee?.type ?? '');
-  return {
-    id: reportee.partyId,
-    icon: {
-      name: reportee.name,
-      type: accountType,
-    },
-    name: reportee.name,
-    description: reportee.type === 'Organization' ? reportee.organizationNumber : undefined,
-    groupId: group,
-    type: accountType,
-    selected: reportee.partyUuid === currentReporteeUuid,
-  };
-};
-
-const getAccountFromConnection = (
-  actorConnection: Connection,
-  userUuid: string,
-  currentReporteeUuid: string,
-): AccountMenuItemProps => {
-  const accountType = getAccountTypeFromConnection(actorConnection?.party.type ?? '');
-  const isSubUnit = actorConnection.party.type === 'Organisasjon' && !!actorConnection.party.parent;
-  const group =
-    actorConnection.party.id === userUuid
-      ? 'self'
-      : isSubUnit
-        ? actorConnection.party.parent?.id
-        : actorConnection.party.id;
-  const description = isSubUnit
-    ? '↪ Org. nr:' +
-      actorConnection.party.keyValues?.OrganizationIdentifier +
-      `, del av ${actorConnection.party.parent?.name}`
-    : actorConnection.party.type === 'Organisasjon'
-      ? 'Org. nr:' + actorConnection.party.keyValues?.OrganizationIdentifier
-      : 'Født: ' + actorConnection.party.keyValues?.DateOfBirth;
-
-  return {
-    id: actorConnection.party.keyValues?.PartyId ?? actorConnection.party.id,
-    icon: {
-      name: actorConnection.party.name,
-      type: accountType,
-      variant: actorConnection.party.parent ? 'outline' : 'solid',
-    },
-    name: actorConnection.party.name,
-    description: description,
-    groupId: group,
-    type: accountType,
-    selected: actorConnection.party.id === currentReporteeUuid,
-  };
-};

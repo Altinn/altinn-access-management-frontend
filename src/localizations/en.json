@@ -94,11 +94,13 @@
     "link": "Click here to go back to today's Altinn."
   },
   "header": {
-    "access_management": "Access Management",
+    "access_management": "Access management",
     "inbox": "Inbox",
     "profile": "My profile",
     "account_you": "You",
     "account_others": "Other accounts",
+    "account_orgs": "Organizations",
+    "account_persons": "Persons",
     "account_favorites": "Favorites",
     "menu-label": "Menu",
     "change-label": "Change",

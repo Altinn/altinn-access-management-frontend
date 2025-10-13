@@ -51,7 +51,7 @@ interface UserInfoApiResponse {
   userUuid: string;
 }
 
-interface UserInfo {
+export interface UserInfo {
   name: string;
   uuid: string;
   party: Party;
@@ -65,6 +65,7 @@ export interface ReporteeInfo {
   partyId: string;
   authorizedRoles: string[];
   subunits?: ReporteeInfo[];
+  onlyHierarchyElementWithNoAccess: boolean;
 }
 
 export enum PartyType {
@@ -150,7 +151,7 @@ export const userInfoApi = createApi({
     }),
     getReporteeListForAuthorizedUser: builder.query<ReporteeInfo[], void>({
       query: () => {
-        return '/actorlist_old';
+        return '/actorlist/old';
       },
       keepUnusedDataFor: 300,
     }),
