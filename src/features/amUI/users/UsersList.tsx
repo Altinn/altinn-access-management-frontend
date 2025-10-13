@@ -18,6 +18,7 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
+import useSelfConnection from '../common/PartyRepresentationContext/useSelfConnection';
 
 const extractFromList = (
   list: Connection[],
@@ -52,8 +53,7 @@ export const UsersList = () => {
       skip: !fromParty?.partyUuid || !isAdmin,
     },
   );
-  const { selfPartyConnection: currentUser, isLoading: currentUserLoading } =
-    usePartyRepresentation();
+  const { partyConnection: currentUser, isLoading: currentUserLoading } = useSelfConnection();
 
   const handleNewUser = (user: User) => {
     navigate(`/users/${user.id}`);

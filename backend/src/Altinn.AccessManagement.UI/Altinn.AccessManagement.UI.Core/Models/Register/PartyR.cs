@@ -79,8 +79,8 @@ public record PartyR
     /// <summary>
     /// The date of death of the person, if the party is a person.
     /// </summary>
-    [JsonPropertyName("personDateOfBirth")]
-    public string PersonDateOfBirth { get; init; }
+    [JsonPropertyName("dateOfBirth")]
+    public string DateOfBirth { get; init; }
 
     /// <summary>
     /// The organization unit type, if the party is an organization.

@@ -1,42 +1,37 @@
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetRightHoldersQuery, useGetReporteeQuery, User } from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
 import { mapConnectionToParty } from './partyUtils';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 /**
  * useConnectedParty
  * ------------------
- * Hook that fetches the connection between the acting party and either the `from` or `to` party.
+ * Hook that fetches the connection between the current user and either the fromParty or toParty.
  *
  * Returns the connection if it exists.
  */
 
 export const useConnectedParty = ({
-  partyUuid,
-  fromUuid,
-  toUuid,
-  skip,
+  fromPartyUuid,
+  toPartyUuid,
 }: {
-  partyUuid?: string;
-  fromUuid?: string;
-  toUuid?: string;
-  skip?: boolean;
+  fromPartyUuid?: string;
+  toPartyUuid?: string;
 }) => {
-  // const partyUuid = getCookie('AltinnPartyUuid') ?? '';
-
+  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const request = {
-    partyUuid: partyUuid ?? getCookie('AltinnPartyUuid') ?? '',
-    fromUuid: fromUuid ?? partyUuid,
-    toUuid: toUuid ?? partyUuid,
+    partyUuid: currentUser?.partyUuid ?? '',
+    fromUuid: fromPartyUuid ?? currentUser?.partyUuid ?? '',
+    toUuid: toPartyUuid ?? currentUser?.partyUuid ?? '',
   };
 
   const { data: connection, isLoading } = useGetRightHoldersQuery(request, {
-    skip: skip || !partyUuid || (!fromUuid && !toUuid),
+    skip: !currentUser?.partyUuid || (!fromPartyUuid && !toPartyUuid),
   });
 
   const partyConnection = connection?.[0];
 
   const party = mapConnectionToParty(partyConnection?.party);
-  return { partyConnection, party, isLoading };
+  return { party, isLoading: isLoading || currentUserIsLoading };
 };
 
 export default useConnectedParty;

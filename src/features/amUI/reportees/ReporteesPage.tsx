@@ -30,7 +30,7 @@ export const ReporteesPage = () => {
           </DsAlert>
         ) : (
           <PartyRepresentationProvider
-            toPartyUuid={getCookie('AltinnPartyUuid')}
+            fromPartyUuid={getCookie('AltinnPartyUuid')}
             actingPartyUuid={getCookie('AltinnPartyUuid')}
           >
             <ReporteePageHeading
