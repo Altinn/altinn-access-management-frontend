@@ -609,7 +609,7 @@
     "delete_systemuser_header": "Slette systemtilgang",
     "delete_systemuser_body": "Er du sikker på at du vil slette systemtilgangen \"{{title}}\"?",
     "delete_systemuser_error": "Kunne ikkje slette systemtilgang",
-    "delete_has_customer_warning": "Systemtilgangen kan ikkje slettes før alle kunder er fjerna fra systemtilgangen.",
+    "delete_has_customer_warning": "Kundene som er tilordna systemtilgangen vil også bli fjernet.",
     "update_systemuser_error": "Kunne ikkje oppdatere systemtilgang",
     "systemuser_deleted": "Systemtilgang sletta",
     "save_systemuser": "Lagre endringar",
@@ -814,7 +814,7 @@
     "load_error": "Oi! Noko gjekk gale.",
     "back_to_overview_link": "Gå tilbake til oversikta",
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
-  "package_revocation_success": "{{name}} har ikkje lenger fullmakt til {{accessPackage}}.",
+    "package_revocation_success": "{{name}} har ikkje lenger fullmakt til {{accessPackage}}.",
     "users_tab": {
       "description": "Søk etter brukere for å gi eller slette fullmakter.",
       "user_search_placeholder": "Søk etter person eller verksemd",

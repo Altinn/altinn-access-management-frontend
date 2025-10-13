@@ -41,38 +41,37 @@ export const DeleteSystemUserPopover = ({
           className={classes.deletePopover}
           onClose={() => setIsPopoverOpen(false)}
         >
-          {hasAgentDelegation ? (
+          <DsParagraph>
+            {t('systemuser_detailpage.delete_systemuser_body', {
+              title: integrationTitle,
+            })}
+          </DsParagraph>
+          {hasAgentDelegation && (
             <DsParagraph>{t('systemuser_detailpage.delete_has_customer_warning')}</DsParagraph>
-          ) : (
-            <>
-              {t('systemuser_detailpage.delete_systemuser_body', {
-                title: integrationTitle,
-              })}
-              {isDeleteError && (
-                <DsAlert
-                  data-color='danger'
-                  role='alert'
-                >
-                  {t('systemuser_detailpage.delete_systemuser_error')}
-                </DsAlert>
-              )}
-              <ButtonRow>
-                <DsButton
-                  data-color='danger'
-                  disabled={isDeletingSystemUser}
-                  onClick={handleDeleteSystemUser}
-                >
-                  {t('systemuser_detailpage.delete_systemuser')}
-                </DsButton>
-                <DsButton
-                  variant='tertiary'
-                  onClick={() => setIsPopoverOpen(false)}
-                >
-                  {t('common.cancel')}
-                </DsButton>
-              </ButtonRow>
-            </>
           )}
+          {isDeleteError && (
+            <DsAlert
+              data-color='danger'
+              role='alert'
+            >
+              {t('systemuser_detailpage.delete_systemuser_error')}
+            </DsAlert>
+          )}
+          <ButtonRow>
+            <DsButton
+              data-color='danger'
+              disabled={isDeletingSystemUser}
+              onClick={handleDeleteSystemUser}
+            >
+              {t('systemuser_detailpage.delete_systemuser')}
+            </DsButton>
+            <DsButton
+              variant='tertiary'
+              onClick={() => setIsPopoverOpen(false)}
+            >
+              {t('common.cancel')}
+            </DsButton>
+          </ButtonRow>
         </DsPopover>
       </DsPopover.TriggerContext>
     </div>
