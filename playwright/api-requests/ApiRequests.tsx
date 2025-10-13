@@ -250,7 +250,7 @@ export class ApiRequests {
       ],
     };
 
-    const endpoint = `v1/systemuser/changerequest/vendor?correlation-id=${id}&system-user-id=${systemUserId}`;
+    const endpoint = `/authentication/api/v1/systemuser/changerequest/vendor?correlation-id=${id}&system-user-id=${systemUserId}`;
     const scopes =
       'altinn:authentication/systemuser.request.read altinn:authentication/systemuser.request.write';
 
@@ -327,9 +327,10 @@ export class ApiRequests {
     orgno: string,
     externalRef: string,
   ): Promise<string> {
-    const endpoint = `v1/systemuser/vendor/byquery?system-id=${systemId}&orgno=${orgno}&external-ref=${externalRef}`;
+    const endpoint = `/authentication/api/v1/systemuser/vendor/byquery?system-id=${systemId}&orgno=${orgno}&external-ref=${externalRef}`;
     const scopes = 'altinn:authentication/systemuser.request.write';
     const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
+
     const url = `${process.env.API_BASE_URL}${endpoint}`;
 
     try {
