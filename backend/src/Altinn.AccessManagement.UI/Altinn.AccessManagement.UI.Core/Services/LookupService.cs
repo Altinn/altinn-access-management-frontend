@@ -63,16 +63,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
 
         /// <inheritdoc/>
-        public async Task<PartyFE> GetReporteeFromLoggedInUser(HttpContext context)
-        {
-            Guid? partyUuid = AuthenticationHelper.GetUserPartyUuid(context);
-
-            if (!partyUuid.HasValue)
-            {
-                return null;
-            }
-            
-            var partyFromRegistry = await _registerClient.GetParty(partyUuid.Value);
+        public async Task<PartyFE> GetReporteeFromLoggedInUser(Guid userUuid)
+        {            
+            var partyFromRegistry = await _registerClient.GetParty(userUuid);
             return partyFromRegistry == null ? null : new PartyFE(partyFromRegistry);
         }
     }

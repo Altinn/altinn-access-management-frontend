@@ -41,8 +41,8 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Gets a Party using the provided from uuid. 
         /// </summary>
-        /// <param name="context">The HTTP context</param>
+        /// <param name="userUuid">The uuid of the user</param>
         /// <returns>Party information for the GUI</returns>
-        Task<PartyFE> GetReporteeFromLoggedInUser(HttpContext context);
+        Task<PartyFE> GetReporteeFromLoggedInUser(Guid userUuid);
     }
 }

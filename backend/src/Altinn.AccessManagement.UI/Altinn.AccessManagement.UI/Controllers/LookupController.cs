@@ -147,8 +147,8 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState, 400, detail: "Missing or invalid user uuid in token"));
                 }
 
-                PartyFE party = await _lookupService.GetReporteeFromLoggedInUser(HttpContext);
-
+                PartyFE party = await _lookupService.GetReporteeFromLoggedInUser(userUuid.Value);
+    
                 if (party != null)
                 {
                     return party;
