@@ -218,6 +218,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISettingsService, SettingsService>();
     services.AddSingleton<IResourceService, ResourceService>();
     services.AddSingleton<IUserService, UserService>();
+    services.AddSingleton<IConnectionService, ConnectionService>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();

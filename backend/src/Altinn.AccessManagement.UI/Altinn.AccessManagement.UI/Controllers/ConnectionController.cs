@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     [Route("accessmanagement/api/v1/connection")]
     public class ConnectionController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IConnectionService _connectionService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
         private readonly FeatureFlags _featureFlags;
@@ -25,12 +25,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Initializes a new instance of the <see cref="ConnectionController"/> class
         /// </summary>
         public ConnectionController(
-            IUserService profileService,
+            IConnectionService connectionService,
             IHttpContextAccessor httpContextAccessor,
             ILogger<ConnectionController> logger,
             IOptions<FeatureFlags> featureFlags)
         {
-            _userService = profileService;
+            _connectionService = connectionService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _featureFlags = featureFlags.Value;
@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
 
-                List<User> rightHolders = await _userService.GetReporteeConnections(partyId);
+                List<User> rightHolders = await _connectionService.GetReporteeConnections(partyId);
 
                 return rightHolders;
             }
@@ -81,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                await _userService.RevokeRightHolderConnection(party, from, to);
+                await _connectionService.RevokeRightHolderConnection(party, from, to);
                 return NoContent();
             }
             catch (HttpStatusException ex)
@@ -123,7 +123,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                Guid? partyUuid = await _userService.ValidatePerson(validationInput.Ssn, validationInput.LastName);
+                Guid? partyUuid = await _connectionService.ValidatePerson(validationInput.Ssn, validationInput.LastName);
 
                 if (partyUuid != null)
                 {
@@ -172,7 +172,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                var response = await _userService.AddReporteeRightHolderConnection(partyUuid, rightholderPartyUuid);
+                var response = await _connectionService.AddReporteeRightHolderConnection(partyUuid, rightholderPartyUuid);
                 return Ok();
             }
             catch (HttpStatusException ex)
@@ -211,7 +211,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
 
-                var rightHolders = await _userService.GetConnections(party, from, to);
+                var rightHolders = await _connectionService.GetConnections(party, from, to);
 
                 return Ok(rightHolders);
             }
