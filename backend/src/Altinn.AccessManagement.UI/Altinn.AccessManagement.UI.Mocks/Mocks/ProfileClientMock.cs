@@ -23,6 +23,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     {
         private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string dataFolder;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProfileClientMock" /> class
@@ -34,6 +35,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             IAccessTokenProvider accessTokenProvider)
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <inheritdoc />
@@ -140,7 +142,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", HttpStatusCode.InternalServerError, string.Empty);
             }
 
-            if (notificationAddressId < 10000) {
+            if (notificationAddressId < 10000)
+            {
                 throw new HttpStatusException("NotFound", "The specified notification address was not found", HttpStatusCode.NotFound, string.Empty);
             }
 
@@ -158,6 +161,37 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc/>
         public async Task<ProfileGroup> GetFavoriteProfileGroup()
         {
+            // Check authentication context for special test scenarios
+            var httpContext = _httpContextAccessor?.HttpContext;
+            if (httpContext?.User?.Identity?.IsAuthenticated == true)
+            {
+                var partyUuid = AuthenticationHelper.GetUserPartyUuid(_httpContextAccessor.HttpContext);
+                // Special test scenario for 500 - internal server error
+                if (partyUuid == Guid.Empty)
+                {
+                    throw new HttpRequestException("Internal server error");
+                }
+
+                // Special test scenario for 404 - user not found
+                if (partyUuid == new Guid("00000000-0000-0000-0000-000000000404"))
+                {
+                    return null;
+                }
+
+                // Special test scenario for empty favorites list
+                if (partyUuid == new Guid("51329012-0000-0000-0000-000000000000"))
+                {
+                    var emptyResponse = new ProfileGroup
+                    {
+                        Name = "__favoritter__",
+                        IsFavorite = true,
+                        Parties = new List<string>()
+                    };
+                    return await Task.FromResult(emptyResponse);
+                }
+            }
+
+            // Default response for valid user (20004938 -> cd35779b-b174-4ecc-bbef-ece13611be7f)
             var response = new ProfileGroup
             {
                 Name = "__favoritter__",

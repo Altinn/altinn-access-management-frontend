@@ -82,7 +82,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<string>> GetFavoriteActorUuids()
         {
             ProfileGroup favoriteProfileGroup = await _profileClient.GetFavoriteProfileGroup();
-            return favoriteProfileGroup.Parties;
+            return favoriteProfileGroup?.Parties;
         }
 
         /// <inheritdoc/>

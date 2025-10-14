@@ -1,11 +1,13 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Models;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -18,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     /// <summary>
     /// Test class for <see cref="ConnectionController"/>
     /// </summary>
-    [Collection("ProfileController Tests")]
+    [Collection("ConnectionController Tests")]
     public class ConnectionControllerTest : IClassFixture<CustomWebApplicationFactory<ConnectionController>>
     {
         private readonly CustomWebApplicationFactory<ConnectionController> _factory;
@@ -38,6 +40,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client_feature_off = SetupUtils.GetTestClient(factory, new FeatureFlags { DisplayLimitedPreviewLaunch = false });
             _testDataFolder = Path.GetDirectoryName(new Uri(typeof(ConnectionControllerTest).Assembly.Location).LocalPath);
 
+            // Reset the static counter in RegisterClientMock to avoid test interference
+            ResetFailedPersonLookupCounter();
+        }
+
+        /// <summary>
+        /// Resets the static failed person lookup counter in RegisterClientMock to prevent test interference
+        /// </summary>
+        private static void ResetFailedPersonLookupCounter()
+        {
+            try
+            {
+                var registerClientMockType = typeof(RegisterClientMock);
+                var failedLookupField = registerClientMockType.GetField("_numberOfFaliedPersonLookups", BindingFlags.NonPublic | BindingFlags.Static);
+                if (failedLookupField != null)
+                {
+                    failedLookupField.SetValue(null, 0);
+                }
+            }
+            catch (Exception)
+            {
+                // If reflection fails, just continue - tests might still work
+            }
         }
 
         /// <summary>
@@ -152,12 +176,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task ValidatePerson_TooManyRequests()
         {
+            // Reset the counter to ensure this test starts fresh
+            ResetFailedPersonLookupCounter();
+
             // Arrange
             var partyId = 51329012;
             var ssn = "20838198311"; // Invalid ssn
             var lastname = "Hansen"; // Invalid name combination
 
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            var token = PrincipalUtil.GetToken(20004938, 20004938, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };

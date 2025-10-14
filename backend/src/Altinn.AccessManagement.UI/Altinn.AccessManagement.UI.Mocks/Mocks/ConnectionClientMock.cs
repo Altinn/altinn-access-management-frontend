@@ -48,6 +48,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
             }
+
+            // Special case for 404 testing - return null for specific party UUID
+            if (party == Guid.Parse("00000000-0000-0000-0000-000000000404"))
+            {
+                return Task.FromResult<List<Connection>>(null);
+            }
+
             try
             {
                 var testDataPath = Path.Combine(dataFolder, "RightHolders", $"{party}.json");

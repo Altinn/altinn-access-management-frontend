@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 using Altinn.Platform.Profile.Enums;
@@ -259,6 +260,180 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
+
+        /// <summary>
+        /// Test case: GetActorListForAuthenticatedUser returns a list of connections for valid user
+        /// Expected: Returns OK with list of connections
+        /// </summary>
+        [Fact]
+        public async Task GetActorListForAuthenticatedUser_ValidUser_ReturnsConnections()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", "cd35779b-b174-4ecc-bbef-ece13611be7f.json");
+            List<Connection> expectedResponse = Util.GetMockData<List<Connection>>(path);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+            List<Connection> actualResponse = await response.Content.ReadFromJsonAsync<List<Connection>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        /// Test case: GetActorListForAuthenticatedUser returns empty list when no connections exist
+        /// Expected: Returns OK with empty list
+        /// </summary>
+        [Fact]
+        public async Task GetActorListForAuthenticatedUser_NoConnections_ReturnsEmptyList()
+        {
+            // Arrange
+            const int userId = 1234;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+            List<Connection> actualResponse = await response.Content.ReadFromJsonAsync<List<Connection>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Empty(actualResponse);
+        }
+
+        /// <summary>
+        /// Test case: GetActorListForAuthenticatedUser returns 404 when service returns null
+        /// Expected: Returns 404 Not Found
+        /// </summary>
+        [Fact]
+        public async Task GetActorListForAuthenticatedUser_ServiceReturnsNull_Returns404()
+        {
+            // Arrange
+            const int userId = 404;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetActorListForAuthenticatedUser returns 500 when internal server error occurs
+        /// Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetActorListForAuthenticatedUser_InternalServerError_Returns500()
+        {
+            // Arrange
+            const int userId = 500;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetFavoriteActorUuids returns list of favorite actor UUIDs for valid user
+        /// Expected: Returns OK with list of favorite UUIDs
+        /// </summary>
+        [Fact]
+        public async Task GetFavoriteActorUuids_ValidUser_ReturnsFavoriteUuids()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            List<string> expectedResponse = new List<string> {
+                "cd35779b-b174-4ecc-bbef-ece13611be7f", "167536b5-f8ed-4c5a-8f48-0279507e53ae" };
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/favorites");
+            List<string> actualResponse = await response.Content.ReadFromJsonAsync<List<string>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, Assert.Equal);
+        }
+
+        /// <summary>
+        /// Test case: GetFavoriteActorUuids returns empty list when user has no favorites
+        /// Expected: Returns OK with empty list
+        /// </summary>
+        [Fact]
+        public async Task GetFavoriteActorUuids_NoFavorites_ReturnsEmptyList()
+        {
+            // Arrange
+            const int userId = 1234;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            List<string> expectedResponse = new List<string>();
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/favorites");
+            List<string> actualResponse = await response.Content.ReadFromJsonAsync<List<string>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Empty(actualResponse);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, Assert.Equal);
+        }
+
+        /// <summary>
+        /// Test case: GetFavoriteActorUuids returns 404 when service returns null
+        /// Expected: Returns 404 Not Found
+        /// </summary>
+        [Fact]
+        public async Task GetFavoriteActorUuids_ServiceReturnsNull_Returns404()
+        {
+            // Arrange
+            const int userId = 404;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/favorites");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetFavoriteActorUuids returns 500 when internal server error occurs
+        /// Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetFavoriteActorUuids_InternalServerError_Returns500()
+        {
+            // Arrange
+            const int userId = 500;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/favorites");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+
 
 
         /// <summary>
