@@ -47,7 +47,10 @@ export const DeleteSystemUserPopover = ({
             })}
           </DsParagraph>
           {hasAgentDelegation && (
-            <DsParagraph>{t('systemuser_detailpage.delete_has_customer_warning')}</DsParagraph>
+            <>
+              <br />
+              <DsParagraph>{t('systemuser_detailpage.delete_has_customer_warning')}</DsParagraph>
+            </>
           )}
           {isDeleteError && (
             <DsAlert
@@ -57,7 +60,7 @@ export const DeleteSystemUserPopover = ({
               {t('systemuser_detailpage.delete_systemuser_error')}
             </DsAlert>
           )}
-          <ButtonRow>
+          <ButtonRow smallMarginTop>
             <DsButton
               data-color='danger'
               disabled={isDeletingSystemUser}
