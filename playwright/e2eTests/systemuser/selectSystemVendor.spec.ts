@@ -12,7 +12,8 @@ test.describe('System Register', async () => {
   let system: string;
 
   test.beforeEach(async ({ page }) => {
-    const api = new ApiRequests();
+    const orgNumber = '310547891'; // Hardcoded org ID for testing
+    const api = new ApiRequests(orgNumber);
     system = await api.createSystemSystemRegister(); // Create system before each test
     const login = new LoginPage(page);
     await login.loginWithUser('14824497789');

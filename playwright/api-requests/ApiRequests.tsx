@@ -164,9 +164,9 @@ export class ApiRequests {
     );
   }
 
-  public async postSystemuserRequest(externalRef: string) {
+  public async postSystemuserRequest(externalRef: string, systemId: string) {
     const payload = {
-      systemId: `${process.env.SYSTEM_ID}`,
+      systemId: `${systemId}`,
       partyOrgNo: `${this.tokenClass.orgNo}`,
       externalRef: externalRef,
       rights: [
@@ -215,9 +215,6 @@ export class ApiRequests {
       if (!response.ok) {
         const errorBody = await response.text();
         console.error('Failed to approve system user request:', response.status, errorBody);
-        console.log('url', url);
-        console.log('userToken', userToken);
-        console.log('response', response);
         throw new Error(`Failed to approve system user request: ${response.statusText}`);
       }
     } catch (error) {

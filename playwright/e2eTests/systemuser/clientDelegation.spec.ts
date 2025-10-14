@@ -12,7 +12,8 @@ test.describe('Klientdelegering', () => {
   let api: ApiRequests;
 
   test.beforeEach(() => {
-    api = new ApiRequests();
+    const orgNumber = '310547891'; // Hardcoded org ID for testing
+    api = new ApiRequests(orgNumber);
   });
 
   test('Ansvarlig revisor', async ({ page }) => {

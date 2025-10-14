@@ -13,7 +13,8 @@ test.describe('System user deletion', () => {
   let api: ApiRequests;
 
   test.beforeEach(async ({ page }) => {
-    api = new ApiRequests();
+    const orgNumber = '310547891'; // Hardcoded org ID for testing
+    api = new ApiRequests(orgNumber);
     const login = new LoginPage(page);
     await login.loginWithUser('14824497789');
     await login.chooseReportee('AKTVERDIG RETORISK APE');
