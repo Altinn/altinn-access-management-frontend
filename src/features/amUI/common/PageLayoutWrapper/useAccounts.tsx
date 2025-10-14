@@ -45,6 +45,8 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
             account,
             currentUser.uuid,
             actingParty.partyUuid,
+            t('common.org_no'),
+            t('common.part_of'),
           );
           accountList.push(mappedAccount);
           if (favoriteUuids?.includes(account.party.id)) {
@@ -54,7 +56,13 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
         }
       } else if (reporteeList) {
         for (const account of reporteeList ?? []) {
-          const mappedAccount = getAccount(account, currentUser.uuid, actingParty.partyUuid);
+          const mappedAccount = getAccount(
+            account,
+            currentUser.uuid,
+            actingParty.partyUuid,
+            t('common.org_no'),
+            t('common.part_of'),
+          );
           accountList.push(mappedAccount);
 
           if (favoriteUuids?.includes(account.partyUuid)) {
@@ -69,6 +77,8 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
                 subUnit,
                 currentUser.uuid,
                 actingParty.partyUuid,
+                t('common.org_no'),
+                t('common.part_of'),
                 parent,
               );
               accountList.push(mappedSubUnit);
@@ -118,6 +128,8 @@ const getAccount = (
   reportee: ReporteeInfo,
   userUuid: string,
   currentReporteeUuid: string,
+  orgNumberText: string,
+  partOfText: string,
   parent?: ReporteeInfo,
 ): AccountMenuItemProps => {
   const lastToFirstName = (name: string) => {
@@ -129,9 +141,9 @@ const getAccount = (
   const group =
     reportee.partyUuid === userUuid ? 'self' : isSubUnit ? parent?.partyUuid : reportee.partyUuid;
   const description = isSubUnit
-    ? '↪ Org. nr:' + reportee.organizationNumber + `, del av ${parent?.name}`
-    : reportee.type === 'Organisasjon'
-      ? 'Org. nr:' + reportee.organizationNumber
+    ? `↪ ${orgNumberText}: ${reportee.organizationNumber}, ${partOfText} ${parent?.name}`
+    : reportee.type === 'Organization'
+      ? `${orgNumberText}: ${reportee.organizationNumber}`
       : '';
   const accountType = getAccountType(reportee?.type ?? '');
   return {
@@ -154,6 +166,9 @@ const getAccountFromConnection = (
   actorConnection: Connection,
   userUuid: string,
   currentReporteeUuid: string,
+  orgNumberText: string,
+  partOfText: string,
+  parent?: ReporteeInfo,
 ): AccountMenuItemProps => {
   const accountType = getAccountTypeFromConnection(actorConnection?.party.type ?? '');
   const isSubUnit = actorConnection.party.type === 'Organisasjon' && !!actorConnection.party.parent;
@@ -164,12 +179,10 @@ const getAccountFromConnection = (
         ? actorConnection.party.parent?.id
         : actorConnection.party.id;
   const description = isSubUnit
-    ? '↪ Org. nr:' +
-      actorConnection.party.keyValues?.OrganizationIdentifier +
-      `, del av ${actorConnection.party.parent?.name}`
+    ? `↪ ${orgNumberText}: ${actorConnection.party.keyValues?.OrganizationIdentifier}, ${partOfText} ${actorConnection.party.parent?.name}`
     : actorConnection.party.type === 'Organisasjon'
-      ? 'Org. nr:' + actorConnection.party.keyValues?.OrganizationIdentifier
-      : 'Født: ' + actorConnection.party.keyValues?.DateOfBirth;
+      ? `${orgNumberText}: ${actorConnection.party.keyValues?.OrganizationIdentifier}`
+      : `${partOfText}: ${actorConnection.party.keyValues?.DateOfBirth}`;
 
   return {
     id: actorConnection.party.keyValues?.PartyId ?? actorConnection.party.id,

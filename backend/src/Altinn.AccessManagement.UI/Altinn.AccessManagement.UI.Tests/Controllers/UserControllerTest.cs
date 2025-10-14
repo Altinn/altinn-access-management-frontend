@@ -224,11 +224,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///   Test case: GetReporteeListForUser returns 400 Bad Request when user id is 0
-        ///   Expected: Returns 400 Bad Request
+        ///   Test case: GetReporteeListForUser handles 404
+        ///   Expected: Returns 404 Not found
         /// </summary>
         [Fact]
-        public async Task GetReporteeListForUser_Returns_400()
+        public async Task GetReporteeListForUser_Returns_404()
         {
             // Arrange
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetReporteeListForUser", "reporteeList.json");
@@ -246,7 +246,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///   Test case: GetReporteeListForUser returns 500 Internal server error when error occurs
-        ///   Expected: Returns 400 Bad Request
+        ///   Expected: Returns 500 Internal Server Error
         /// </summary>
         [Fact]
         public async Task GetReporteeListForUser_Returns_500()
