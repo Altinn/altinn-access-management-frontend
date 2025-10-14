@@ -1,5 +1,4 @@
 ﻿﻿using Altinn.AccessManagement.UI.Core.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {

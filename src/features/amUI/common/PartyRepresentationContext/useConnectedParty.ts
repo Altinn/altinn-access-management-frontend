@@ -1,8 +1,6 @@
 import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
 import { mapConnectionToParty } from './partyUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { error } from 'console';
-import { isError } from 'cypress/types/lodash';
 
 /**
  * useConnectedParty

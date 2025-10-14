@@ -4,7 +4,6 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Models.Register;
 using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
