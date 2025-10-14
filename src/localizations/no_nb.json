@@ -318,13 +318,13 @@
     "page_title": "Brukere og grupper - Altinn",
     "main_page_heading": "Brukere med fullmakter i {{name}}",
     "user_list_heading": "Andre med fullmakt",
-  "direct_connections": "Brukere med fullmakt",
+    "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
     "no_users": "Denne listen er tom",
     "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
-  "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
-  "indirect_connections": "Brukere uten fullmakt"
+    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
+    "indirect_connections": "Brukere uten fullmakt"
   },
   "advanced_user_search": {
     "add_user_button": "Ny bruker",
@@ -611,7 +611,7 @@
     "delete_systemuser_header": "Slette systemtilgang",
     "delete_systemuser_body": "Er du sikker på at du vil slette systemtilgangen \"{{title}}\"?",
     "delete_systemuser_error": "Kunne ikke slette systemtilgang",
-    "delete_has_customer_warning": "Systemtilgangen kan ikke slettes før alle kunder er fjernet fra systemtilgangen.",
+    "delete_has_customer_warning": "Kundene som er tilordnet systemtilgangen vil også bli fjernet.",
     "update_systemuser_error": "Kunne ikke oppdatere systemtilgang",
     "systemuser_deleted": "Systemtilgang slettet",
     "save_systemuser": "Lagre endringer",
@@ -815,7 +815,7 @@
     "load_error": "Oi! Noe gikk galt.",
     "back_to_overview_link": "Gå tilbake til oversikten",
     "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
-  "package_revocation_success": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
+    "package_revocation_success": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
     "users_tab": {
       "description": "Søk etter brukere for å gi eller slette fullmakter.",
       "user_search_placeholder": "Søk etter person eller virksomhet",
