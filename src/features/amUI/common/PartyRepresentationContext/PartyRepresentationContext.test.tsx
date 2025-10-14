@@ -8,6 +8,8 @@ import { PartyRepresentationProvider, usePartyRepresentation } from './PartyRepr
 import * as lookupApi from '@/rtk/features/lookupApi';
 import * as userInfoApi from '@/rtk/features/userInfoApi';
 import * as accessPackageApi from '@/rtk/features/accessPackageApi';
+import * as useReporteePartyModule from './useReporteeParty';
+import * as useConnectedPartyModule from './useConnectedParty';
 import type { Party } from '@/rtk/features/lookupApi';
 import type { Connection } from '@/rtk/features/userInfoApi';
 
@@ -28,6 +30,14 @@ vi.mock('@/rtk/features/userInfoApi', async () => {
     useGetIsHovedadminQuery: vi.fn(),
   };
 });
+
+vi.mock('./useReporteeParty', () => ({
+  useReporteeParty: vi.fn(),
+}));
+
+vi.mock('./useConnectedParty', () => ({
+  default: vi.fn(),
+}));
 
 vi.mock('@/resources/Cookie/CookieMethods', () => ({
   getCookie: vi.fn((name: string) => {
@@ -137,6 +147,20 @@ const renderWithProvider = (
 describe('PartyRepresentationProvider - Acting Party Logic', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // Set default mocks for useReporteeParty and useConnectedParty
+    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+      party: undefined,
+      isLoading: false,
+      error: undefined,
+    });
+
+    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+      party: undefined,
+      isLoading: false,
+      error: undefined,
+      isError: false,
+    });
   });
 
   test('should throw error when neither fromPartyUuid nor toPartyUuid is provided', () => {
@@ -199,15 +223,14 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    // Mock NOT hovedadmin
-    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
-      data: false,
+    // Mock useReporteeParty - not needed in this case
+    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+      party: undefined,
       isLoading: false,
-      isSuccess: true,
-      isError: false,
-    } as any);
+      error: undefined,
+    });
 
-    // Mock connections (empty for this case)
+    // Mock connections
     vi.mocked(userInfoApi.useGetRightHoldersQuery).mockReturnValue({
       data: [],
       isLoading: false,
@@ -236,13 +259,12 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    // Mock IS hovedadmin
-    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
-      data: true,
+    // Mock useReporteeParty - not needed in this case
+    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+      party: undefined,
       isLoading: false,
-      isSuccess: true,
-      isError: false,
-    } as any);
+      error: undefined,
+    });
 
     // Mock connections
     vi.mocked(userInfoApi.useGetRightHoldersQuery).mockReturnValue({
@@ -272,13 +294,20 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    // Mock NOT hovedadmin
-    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
-      data: false,
+    // Mock useReporteeParty - not needed in this case
+    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+      party: undefined,
       isLoading: false,
-      isSuccess: true,
+      error: undefined,
+    });
+
+    // Mock useConnectedParty for the "to" party
+    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+      party: mockConnectedParty,
+      isLoading: false,
+      error: undefined,
       isError: false,
-    } as any);
+    });
 
     // Mock connections
     vi.mocked(userInfoApi.useGetRightHoldersQuery).mockReturnValue({
@@ -309,13 +338,20 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    // Mock NOT hovedadmin
-    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
-      data: false,
+    // Mock useReporteeParty - returns the reportee party
+    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+      party: mockReporteeParty,
       isLoading: false,
-      isSuccess: true,
+      error: undefined,
+    });
+
+    // Mock useConnectedParty for the "to" party
+    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+      party: mockConnectedParty,
+      isLoading: false,
+      error: undefined,
       isError: false,
-    } as any);
+    });
 
     // Mock connections - reportee connection
     const reporteeConnection: Connection = {
@@ -345,8 +381,8 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
 
     await waitFor(() => {
-      // In this case, actingParty will be undefined initially because reportee comes from useReporteeParty hook
-      // which is mocked separately. The logic works correctly in the actual implementation.
+      expect(screen.getByTestId('acting-party')).toHaveTextContent('Reportee Organization');
+      expect(screen.getByTestId('from-party')).toHaveTextContent('Reportee Organization');
       expect(screen.getByTestId('is-loading')).toHaveTextContent('false');
     });
   });
@@ -359,12 +395,18 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
-      data: false,
+    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+      party: undefined,
       isLoading: false,
-      isSuccess: true,
+      error: undefined,
+    });
+
+    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+      party: mockConnectedParty,
+      isLoading: false,
+      error: undefined,
       isError: false,
-    } as any);
+    });
 
     vi.mocked(userInfoApi.useGetRightHoldersQuery).mockReturnValue({
       data: [mockConnection],
@@ -393,12 +435,18 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
-      data: false,
+    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+      party: undefined,
       isLoading: false,
-      isSuccess: true,
+      error: undefined,
+    });
+
+    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+      party: mockConnectedParty,
+      isLoading: false,
+      error: undefined,
       isError: false,
-    } as any);
+    });
 
     vi.mocked(userInfoApi.useGetRightHoldersQuery).mockReturnValue({
       data: [mockConnection],
@@ -427,12 +475,18 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
-      data: undefined,
+    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+      party: undefined,
       isLoading: true,
-      isSuccess: false,
+      error: undefined,
+    });
+
+    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+      party: undefined,
+      isLoading: false,
+      error: undefined,
       isError: false,
-    } as any);
+    });
 
     vi.mocked(userInfoApi.useGetRightHoldersQuery).mockReturnValue({
       data: undefined,
@@ -469,12 +523,18 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
-      data: false,
+    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+      party: mockReporteeParty,
       isLoading: false,
-      isSuccess: true,
+      error: undefined,
+    });
+
+    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+      party: undefined,
+      isLoading: false,
+      error: undefined,
       isError: false,
-    } as any);
+    });
 
     // Return empty connections to simulate invalid connection
     vi.mocked(userInfoApi.useGetRightHoldersQuery).mockReturnValue({
@@ -492,10 +552,13 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
 
     await waitFor(
       () => {
-        // When there's an invalid connection, the TestConsumer should not be rendered (error alert is shown instead)
-        expect(screen.queryByTestId('from-party')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('to-party')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('acting-party')).not.toBeInTheDocument();
+        // When there's an invalid connection, the alert is shown
+        // fromParty and toParty are undefined (shown as "none")
+        // but actingParty is still set (reportee in this case)
+        expect(screen.getByTestId('from-party')).toHaveTextContent('none');
+        expect(screen.getByTestId('to-party')).toHaveTextContent('none');
+        expect(screen.getByTestId('acting-party')).toHaveTextContent('Reportee Organization');
+        expect(screen.getByTestId('is-loading')).toHaveTextContent('false');
       },
       { timeout: 2000 },
     );

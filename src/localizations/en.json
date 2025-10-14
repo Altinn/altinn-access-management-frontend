@@ -140,7 +140,8 @@
     "unknown_error_header": "Oops! An error seems to have occurred",
     "unknown_error_description": "Please try reloading the page.",
     "if_persistent_contact_service": "If the error persists, you can go to Altinn's help page or contact support at 75 00 60 00",
-    "user_connection_error": "Huh, looks like there's nothing here. "
+    "user_connection_error": "Huh, looks like there's nothing here. ",
+    "acting_party_data_error": "A technical error occurred."
   },
   "profile": {
     "received": "Received",

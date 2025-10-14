@@ -38,6 +38,7 @@ export const AccessPackageSection = () => {
     },
     { skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid },
   );
+  console.log('🪵 ~ AccessPackageSection ~ accesses:', accesses);
 
   const numberOfAccesses = accesses ? Object.values(accesses).flat().length : 0;
 

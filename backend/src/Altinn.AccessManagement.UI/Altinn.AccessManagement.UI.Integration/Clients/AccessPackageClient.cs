@@ -129,7 +129,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             var httpResponse = await _client.PostAsync(token, endpointUrl, null);
-
+            var content = await httpResponse.Content.ReadAsStringAsync();
             return httpResponse;
         }
 

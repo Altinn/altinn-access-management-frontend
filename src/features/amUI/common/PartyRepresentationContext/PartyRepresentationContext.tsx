@@ -1,7 +1,7 @@
 import type { JSX } from 'react';
-import { createContext, useContext } from 'react';
+import { act, createContext, useContext } from 'react';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
-import type { SerializedError } from '@reduxjs/toolkit';
+import { current, type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
 import { t } from 'i18next';
@@ -32,6 +32,10 @@ interface PartyRepresentationProviderProps {
   toPartyUuid?: string;
   /** On connection error, the user will be provided with a link to this url in order to get them to a page with a valid state */
   returnToUrlOnError?: string;
+  /** Optional loading component to show while data is being fetched */
+  loadingComponent?: JSX.Element;
+  /** Optional override for loading state */
+  isLoading?: boolean;
 }
 
 export interface PartyRepresentationContextOutput {
@@ -63,6 +67,8 @@ export const PartyRepresentationProvider = ({
   toPartyUuid,
   actingPartyUuid,
   returnToUrlOnError,
+  loadingComponent,
+  isLoading: externalIsLoading,
 }: PartyRepresentationProviderProps) => {
   if (!toPartyUuid && !fromPartyUuid) {
     throw new Error('PartyRepresentationProvider must be used with at least one party UUID');
@@ -74,57 +80,47 @@ export const PartyRepresentationProvider = ({
     throw new Error('actingPartyUuid must equal one of the provided party UUIDs');
   }
 
-  // Case:
-  // Du er på din egen side i tilgangsstyring og ikke hovedadmin -> acting-party = selfparty.
-  // Vi kan sjekke is-hovedadmin på ressurs altinn_access_management_hovedadmin
-  // ellers hentes acting-party fra useReporteeParty
-
-  // 1. Hvis inlogget bruker er samme som from- eller to-id da skal acting-party settes til selfparty. Hvis ikke: Acting-party hentes fra useReporteeParty
-  // 2. From-party: Hvis satt og er lik actingPartyUuid, da er from-party = acting-party. Hvis ikke bruk connected party
-  // 3. To-party: Hvis satt og er lik actingPartyUuid, da er to-party = acting-party. Hvis ikke bruk connected party
-
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const { party: reportee, isLoading: reporteeIsLoading } = useReporteeParty();
 
   const { party: fromConnectedParty, isLoading: fromPartyIsLoading } = useConnectedParty({
     fromPartyUuid,
-    skip: !fromPartyUuid || fromPartyUuid === actingPartyUuid,
+    skip:
+      !fromPartyUuid ||
+      fromPartyUuid === actingPartyUuid ||
+      (fromPartyUuid === currentUser?.partyUuid && fromPartyUuid === reportee?.partyUuid),
   });
 
   const { party: toConnectedParty, isLoading: toPartyIsLoading } = useConnectedParty({
     toPartyUuid,
-    skip: !toPartyUuid || toPartyUuid === actingPartyUuid,
+    skip:
+      !toPartyUuid ||
+      toPartyUuid === actingPartyUuid ||
+      (toPartyUuid === currentUser?.partyUuid && toPartyUuid === reportee?.partyUuid),
   });
 
-  // Case:
-  // Du er på din egen side i tilgangsstyring og ikke hovedadmin -> acting-party = selfparty.
-  // Vi kan sjekke is-hovedadmin på ressurs altinn_access_management_hovedadmin
-  // ellers hentes acting-party fra useReporteeParty
-
-  const { data: isHovedadmin, isLoading: isHovedadminLoading } = useGetIsHovedadminQuery();
-
-  // Acting party logic:
-  // If on your own access management page (toPartyUuid === currentUser) and NOT hovedadmin:
-  //   -> acting-party = selfparty (currentUser)
-  // If acting party UUID matches current user:
-  //   -> acting-party = currentUser
-  // Otherwise:
-  //   -> acting-party = reportee (acting on behalf of another party)
   let actingParty: Party | undefined;
-  if (toPartyUuid === currentUser?.partyUuid && !isHovedadmin) {
-    // User is on their own page and is not hovedadmin
-    actingParty = currentUser;
-  } else if (currentUser?.partyUuid === actingPartyUuid) {
-    // Acting party UUID matches current user
+  if (actingPartyUuid === currentUser?.partyUuid) {
+    // User is on their own page
     actingParty = currentUser;
   } else {
     // Acting on behalf of another party (reportee)
     actingParty = reportee;
   }
 
-  // Use acting party if the UUID matches, otherwise use the connected party
-  const fromParty = fromPartyUuid === actingPartyUuid ? actingParty : fromConnectedParty;
-  const toParty = toPartyUuid === actingPartyUuid ? actingParty : toConnectedParty;
+  const fromParty =
+    fromPartyUuid === actingPartyUuid
+      ? actingParty
+      : fromPartyUuid === reportee?.partyUuid
+        ? reportee
+        : fromConnectedParty;
+
+  const toParty =
+    toPartyUuid === actingPartyUuid
+      ? actingParty
+      : toPartyUuid === currentUser?.partyUuid
+        ? currentUser
+        : toConnectedParty;
 
   const {
     data: connections,
@@ -139,12 +135,12 @@ export const PartyRepresentationProvider = ({
     reporteeIsLoading || availableForUserTypeCheck(actingParty?.partyTypeName.toString());
 
   const isLoading =
+    externalIsLoading ||
     isConnectionLoading ||
     fromPartyIsLoading ||
     toPartyIsLoading ||
     currentUserIsLoading ||
-    reporteeIsLoading ||
-    isHovedadminLoading;
+    reporteeIsLoading;
 
   const invalidConnection =
     !isConnectionLoading &&
@@ -153,6 +149,10 @@ export const PartyRepresentationProvider = ({
     (connections?.length === 0 || connections === undefined);
 
   const isError = (!fromParty && !toParty) || !availableForUserType;
+
+  if (isLoading && loadingComponent) {
+    return loadingComponent;
+  }
 
   return (
     <PartyRepresentationContext.Provider
@@ -167,6 +167,11 @@ export const PartyRepresentationProvider = ({
     >
       {!isLoading && invalidConnection && connectionErrorAlert(error, returnToUrlOnError)}
       {!isLoading && !availableForUserType && <NotAvailableForUserTypeAlert />}
+      {isError && !isLoading && !invalidConnection && (
+        <DsAlert data-color='warning'>
+          <DsParagraph>{t('error_page.acting_party_data_error')}</DsParagraph>
+        </DsAlert>
+      )}
       <AccessPackageDelegationCheckProvider>
         {(!isError || isLoading) && children}
       </AccessPackageDelegationCheckProvider>
