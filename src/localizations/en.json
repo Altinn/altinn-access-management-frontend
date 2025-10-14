@@ -457,6 +457,7 @@
     "page_title": "Settings - Altinn",
     "page_heading": "Settings for {{name}}",
     "alert_settings_heading": "Notification addresses for the organization",
+    "not_admin_alert": "You do not have access to edit notification addresses for {{name}}. Switch actor or contact someone with administrator rights.",
     "alerts_on_email": "Notifications by email",
     "alerts_on_sms": "Notifications by SMS",
     "one_address": "1 address",
@@ -471,7 +472,8 @@
     "remove_email": "Remove email",
     "remove_sms": "Remove phone number",
     "error_saving_addresses": "Something went wrong. Please try again.",
-    "no_addresses_error": "The organization must have at least one email address or SMS number for notifications."
+    "no_addresses_error": "The organization must have at least one email address or SMS number for notifications.",
+    "alert_settings_info": "Notifications sent to registered notification addresses are sent regardless of whether the recipient has the right to view the content in Altinn. If you have a shared email address, it is natural to include it here. <a>Read more</a>"
   },
   "text_field_errors": {
     "required": "The field is required",

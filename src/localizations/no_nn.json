@@ -453,6 +453,7 @@
     "page_title": "Innstillingar - Altinn",
     "page_heading": "Innstillingar for {{name}}",
     "alert_settings_heading": "Varslingsadresser for verksemda",
+    "not_admin_alert": "Du har ikkje tilgang til å redigere varslingsadresser for {{name}}. Bytt aktør eller kontakt nokon med administratorrett.",
     "alerts_on_email": "Varslingar på e-post",
     "alerts_on_sms": "Varslingar på SMS",
     "one_address": "1 adresse",
@@ -467,7 +468,8 @@
     "remove_email": "Fjern e-post",
     "remove_sms": "Fjern telefonnummer",
     "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen.",
-    "no_addresses_error": "Verksemda må ha minst éin e-postadresse eller sms-adresse for varslingar."
+    "no_addresses_error": "Verksemda må ha minst éin e-postadresse eller sms-adresse for varslingar.",
+    "alert_settings_info": "Varsla som sendast ut til registrerte varslingsadresser sendast uavhengig av om mottakar har rett til å sjå innhaldet i Altinn. Dersom de har ei felles e-postadresse er det naturleg å leggje den inn her. <a>Les meir</a>"
   },
   "text_field_errors": {
     "required": "Feltet er påkrevd",

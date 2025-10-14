@@ -28,6 +28,7 @@ export const SidebarItems = (
   isAdmin: boolean | undefined,
   accountName: string,
   accountType: 'company' | 'person',
+  canAccessSettings: boolean = false,
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const displayConsentGui = window.featureFlags?.displayConsentGui;
@@ -216,7 +217,7 @@ export const SidebarItems = (
 
   items.push(systemUser);
 
-  if (!displayLimitedPreviewLaunch) {
+  if (!displayLimitedPreviewLaunch && canAccessSettings) {
     items.push(settings);
   }
 
