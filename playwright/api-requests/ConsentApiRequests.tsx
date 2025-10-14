@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import { Token } from './Token';
+import { env } from 'playwright/util/helper';
 
 export class ConsentApiRequests {
   private tokenClass: Token;
@@ -12,7 +13,7 @@ export class ConsentApiRequests {
     endpoint: string,
     scopes: string,
   ): Promise<TResponse> {
-    const baseUrl = process.env.API_BASE_URL;
+    const baseUrl = env('API_BASE_URL');
     let url = baseUrl + endpoint;
 
     const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);

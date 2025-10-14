@@ -468,7 +468,6 @@ export class ConsentPage {
         await this.english.click();
         break;
       default:
-        // Fallback to Norwegian if language is not recognized
         await this.norwegian.click();
         break;
     }

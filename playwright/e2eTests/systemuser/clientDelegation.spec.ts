@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test';
 import { test, expect } from '@playwright/test';
 
 import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../util/loadFacilitators';
+import { env } from 'playwright/util/helper';
 import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
 import { LoginPage } from '../../pages/LoginPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
@@ -85,7 +86,7 @@ test.describe('Klientdelegering', () => {
     if (!process.env.SYSTEMUSER_URL) {
       throw new Error('Environment variable SYSTEMUSER_URL is not defined.');
     }
-    await page.goto(process.env.SYSTEMUSER_URL + '/overview');
+    await page.goto(env('SYSTEMUSER_URL') + '/overview');
 
     // Intro to "new brukerflate"
     await page.getByRole('button', { name: 'Prøv ny tilgangsstyring' }).click();

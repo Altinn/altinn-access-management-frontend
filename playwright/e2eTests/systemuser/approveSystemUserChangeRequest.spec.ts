@@ -1,6 +1,7 @@
 import test, { expect } from '@playwright/test';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
+import { env } from 'playwright/util/helper';
 import { LoginPage } from '../../pages/LoginPage';
 import { SystemUserPage } from '../../pages/systemuser/SystemUserPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
@@ -87,7 +88,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     await loginPage.loginWithUser('14824497789');
     await loginPage.chooseReportee('AKTVERDIG RETORISK APE');
 
-    const systemUserUrl = `${process.env.SYSTEMUSER_URL}`;
+    const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
     await page.goto(systemUserUrl + '/' + systemUserId);
 
     await systemUserPage.TRY_NEW_ACCESS_MANAGEMENT_BUTTON.click();

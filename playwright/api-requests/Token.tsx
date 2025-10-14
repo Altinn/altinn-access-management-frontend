@@ -1,3 +1,5 @@
+import { env } from 'playwright/util/helper';
+
 export class Token {
   private readonly username: string;
   private readonly password: string;
@@ -62,11 +64,11 @@ export class Token {
    */
   public async getPersonalAltinnToken(): Promise<string> {
     const url =
-      `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${process.env.environment}` +
-      `&pid=${process.env.PID}` +
-      `&userid=${process.env.ALTINN_USER_ID}` +
-      `&partyid=${process.env.ALTINN_PARTY_ID}` +
-      `&partyUuid=${process.env.ALTINN_PARTY_UUID}` +
+      `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${this.environment}` +
+      `&pid=${env('PID')}` +
+      `&userid=${env('ALTINN_USER_ID')}` +
+      `&partyid=${env('ALTINN_PARTY_ID')}` +
+      `&partyUuid=${env('ALTINN_PARTY_UUID')}` +
       `&authLvl=3&ttl=3000` +
       `&scopes=altinn:portal/enduser`;
 
@@ -95,11 +97,11 @@ export class Token {
   public async generateAltinnPersonalToken(): Promise<string> {
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken` +
-      `?env=${process.env.ENV_NAME}` +
-      `&pid=${process.env.DAGL_PID}` +
-      `&userid=${process.env.DAGL_USER_ID}` +
-      `&partyid=${process.env.DAGL_PARTY_ID}` +
-      `&partyuuid=${process.env.DAGL_PARTY_UUID}` +
+      `?env=${env('ENV_NAME')}` +
+      `&pid=${env('DAGL_PID')}` +
+      `&userid=${env('DAGL_USER_ID')}` +
+      `&partyid=${env('DAGL_PARTY_ID')}` +
+      `&partyuuid=${env('DAGL_PARTY_UUID')}` +
       `&authLvl=3&ttl=3000&scopes=altinn:portal/enduser`;
 
     const authHeader = Buffer.from(`${this.username}:${this.password}`).toString('base64');

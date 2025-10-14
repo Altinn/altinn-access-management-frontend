@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
+import { env } from 'playwright/util/helper';
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
 import { LoginPage } from 'playwright/pages/LoginPage';
 
@@ -24,7 +25,7 @@ test.describe('System Register', async () => {
     const systemUserPage = new SystemUserPage(page);
 
     // Navigate to system user page
-    await page.goto(`${process.env.SYSTEMUSER_URL}` + '/overview');
+    await page.goto(`${env('SYSTEMUSER_URL')}` + '/overview');
 
     // Intro to "new brukerflate"
     await page.getByRole('button', { name: 'Prøv ny tilgangsstyring' }).click();
