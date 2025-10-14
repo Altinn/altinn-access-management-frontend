@@ -3,7 +3,6 @@ import { PartyType, User } from '@/rtk/features/userInfoApi';
 
 export const mapConnectionToParty = (party: User | undefined): Party | undefined => {
   if (!party) return undefined;
-  console.log('🪵 ~ mapConnectionToParty ~ party.type:', party.type);
   return {
     partyId: Number.parseInt(party.id) ?? 0,
     name: party.name,
