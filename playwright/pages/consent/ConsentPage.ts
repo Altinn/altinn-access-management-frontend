@@ -14,7 +14,7 @@ export enum Language {
 const DICTIONARIES = {
   [Language.NB]: no_nb,
   [Language.EN]: en,
-  [Language.NN]: nn, // when you add it
+  [Language.NN]: nn,
 } as const satisfies Record<Language, any>;
 
 export class ConsentPage {

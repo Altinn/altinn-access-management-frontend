@@ -17,15 +17,13 @@ let fromPerson: string;
 let toOrg: string;
 
 test.beforeEach(async ({}) => {
-  api = new ConsentApiRequests();
-  validToTimestamp = addTimeToNowUtc({ years: 1 });
-
   const pickRandom = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
   fromPerson = pickRandom(fromPersons);
   toOrg = pickRandom(toOrgs);
 
-  // Used to fetch valid token for org when creatnig consent request
-  process.env.ORG = toOrg;
+  // Create API instance with specific org to avoid conflicts
+  api = new ConsentApiRequests(toOrg);
+  validToTimestamp = addTimeToNowUtc({ years: 1 });
 });
 
 languages.forEach((language) => {
@@ -212,8 +210,8 @@ languages.forEach((language) => {
       [fromOrg, fromPerson] = pickRandom(fromOrgs);
       toOrg = pickRandom(toOrgs);
 
-      // Used to fetch valid token for org when creating consent request
-      process.env.ORG = toOrg;
+      // Create API instance with specific org to avoid conflicts
+      api = new ConsentApiRequests(toOrg);
     });
 
     test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language}) - User: ${fromPerson}`, async ({

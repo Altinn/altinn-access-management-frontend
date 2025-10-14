@@ -1,16 +1,15 @@
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { Token } from './Token';
-import { randomUUID } from 'crypto'; // Node >= 14.17
 
 export class ApiRequests {
   private tokenClass: Token;
 
-  constructor() {
-    this.tokenClass = new Token();
+  constructor(org?: string) {
+    this.tokenClass = new Token(org);
   }
 
   public async createSystemInSystemregisterWithAccessPackages(name: string): Promise<string> {
-    const vendorId = process.env.ORG;
+    const vendorId = this.tokenClass.orgNo;
     const clientId = `Client_${Date.now()}_${Math.random()}`;
 
     const payload = {
@@ -89,7 +88,7 @@ export class ApiRequests {
   }
 
   public async deleteSystemInSystemRegister(systemName: string) {
-    const endpoint = `v1/systemregister/vendor/${process.env.ORG}_${systemName}`;
+    const endpoint = `v1/systemregister/vendor/${this.tokenClass.orgNo}_${systemName}`;
     const scopes =
       'altinn:authentication/systemuser.request.write altinn:authentication/systemregister.write altinn:authentication/systemuser.request.read';
     const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
@@ -168,7 +167,7 @@ export class ApiRequests {
   public async postSystemuserRequest(externalRef: string) {
     const payload = {
       systemId: `${process.env.SYSTEM_ID}`,
-      partyOrgNo: `${process.env.ORG}`,
+      partyOrgNo: `${this.tokenClass.orgNo}`,
       externalRef: externalRef,
       rights: [
         {
@@ -216,6 +215,9 @@ export class ApiRequests {
       if (!response.ok) {
         const errorBody = await response.text();
         console.error('Failed to approve system user request:', response.status, errorBody);
+        console.log('url', url);
+        console.log('userToken', userToken);
+        console.log('response', response);
         throw new Error(`Failed to approve system user request: ${response.statusText}`);
       }
     } catch (error) {

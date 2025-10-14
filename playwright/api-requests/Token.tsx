@@ -4,10 +4,10 @@ export class Token {
   private readonly org: string;
   private readonly environment: string;
 
-  constructor() {
+  constructor(org?: string) {
     this.username = process.env.USERNAME_TEST_API || '';
     this.password = process.env.PASSWORD_TEST_API || '';
-    this.org = process.env.ORG || '';
+    this.org = org || process.env.ORG || '';
     this.environment = process.env.environment || '';
 
     if (!this.username) {
@@ -27,6 +27,10 @@ export class Token {
     }
   }
 
+  public get orgNo(): string {
+    return this.org;
+  }
+
   /**
    * Fetches an enterprise Altinn token for a specific organization and environment.
    * @param scopes Scopes required for the token.
@@ -36,7 +40,7 @@ export class Token {
     // Construct the URL for fetching the enterprise Altinn test token
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetEnterpriseToken` +
-      `?orgNo=${process.env.ORG}&env=${process.env.environment}&scopes=${scopes}`;
+      `?orgNo=${this.org}&env=${this.environment}&scopes=${scopes}`;
 
     const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
     const headers = {

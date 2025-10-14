@@ -4,8 +4,8 @@ import { Token } from './Token';
 export class ConsentApiRequests {
   private tokenClass: Token;
 
-  constructor() {
-    this.tokenClass = new Token();
+  constructor(org?: string) {
+    this.tokenClass = new Token(org);
   }
   private async sendPostRequest<TPayload, TResponse>(
     payload: TPayload,
@@ -35,7 +35,7 @@ export class ConsentApiRequests {
     return (await response.json()) as TResponse;
   }
 
-  //Todo - move this to a separate setup class
+  //
   /**
    * Generalized consent request supporting both person and org as 'from'.
    * @param fromType 'person' or 'org'
