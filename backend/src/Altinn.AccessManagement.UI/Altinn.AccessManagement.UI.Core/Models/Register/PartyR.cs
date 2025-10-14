@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.Authorization.ModelUtils;
@@ -77,7 +77,7 @@ public record PartyR
     public string OrganizationIdentifier { get; init; }
 
     /// <summary>
-    /// The date of death of the person, if the party is a person.
+    /// The date of birth of the person, if the party is a person.
     /// </summary>
     [JsonPropertyName("dateOfBirth")]
     public string DateOfBirth { get; init; }

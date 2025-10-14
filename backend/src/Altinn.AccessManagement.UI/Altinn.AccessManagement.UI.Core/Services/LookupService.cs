@@ -1,5 +1,4 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Models.Register;
@@ -64,9 +63,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         /// <inheritdoc/>
         public async Task<PartyFE> GetReporteeFromLoggedInUser(Guid userUuid)
-        {            
-            var partyFromRegistry = await _registerClient.GetParty(userUuid);
-            return partyFromRegistry == null ? null : new PartyFE(partyFromRegistry);
+        {
+            return await GetPartyByUUID(userUuid);
         }
     }
 }

@@ -91,7 +91,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 return null;
             }
 
-            string? raw = user.FindFirst("urn:altinn:party:uuid")?.Value;
+            string? raw = user.FindFirst(AltinnCoreClaimTypes.PartyUuid)?.Value;
             if (Guid.TryParse(raw, out var uuid))
             {
                 return uuid;

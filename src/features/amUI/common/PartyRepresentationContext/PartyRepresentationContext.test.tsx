@@ -161,6 +161,14 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       error: undefined,
       isError: false,
     });
+
+    // Set default mock for useGetIsHovedadminQuery
+    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
+      data: false,
+      isLoading: false,
+      isSuccess: true,
+      isError: false,
+    } as any);
   });
 
   test('should throw error when neither fromPartyUuid nor toPartyUuid is provided', () => {
@@ -223,6 +231,14 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
+    // Mock NOT hovedadmin
+    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
+      data: false,
+      isLoading: false,
+      isSuccess: true,
+      isError: false,
+    } as any);
+
     // Mock useReporteeParty - not needed in this case
     vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
       party: undefined,
@@ -254,6 +270,14 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     // Mock current user
     vi.mocked(lookupApi.useGetPartyFromLoggedInUserQuery).mockReturnValue({
       data: mockCurrentUser,
+      isLoading: false,
+      isSuccess: true,
+      isError: false,
+    } as any);
+
+    // Mock IS hovedadmin
+    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
+      data: true,
       isLoading: false,
       isSuccess: true,
       isError: false,

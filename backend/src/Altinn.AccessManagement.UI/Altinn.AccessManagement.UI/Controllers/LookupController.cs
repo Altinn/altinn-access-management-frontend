@@ -1,4 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Configuration;
+﻿﻿using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
@@ -157,7 +157,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetReportee failed to fetch party information");
+                _logger.LogError(ex, "GetPartyFromLoggedInUser failed to fetch party information");
                 return StatusCode(500);
             }
         }

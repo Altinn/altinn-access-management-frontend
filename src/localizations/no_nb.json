@@ -105,7 +105,7 @@
     "unknown_error_description": "Vennligst prøv å laste inn siden på nytt.",
     "if_persistent_contact_service": "Dersom feilen vedvarer kan du gå til Altinn sin hjelpeside eller kontakte brukerstøtte på telefon 75 00 60 00",
     "user_connection_error": "Ojsann, her var det visst ingenting. ",
-    "acting_party_data_error": "Det har oppstått en teknisk feil."
+    "acting_party_data_error": "Det har oppstått en teknisk feil. Vennligst prøv igjen senere. Dersom problemet vedvarer, kontakt Altinn brukerstøtte på telefon 75 00 60 00."
   },
   "header": {
     "access_management": "Tilgangsstyring",

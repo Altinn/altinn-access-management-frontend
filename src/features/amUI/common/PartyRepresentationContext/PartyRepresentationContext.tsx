@@ -1,17 +1,13 @@
 import type { JSX } from 'react';
-import { act, createContext, useContext } from 'react';
+import { createContext, useContext } from 'react';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
-import { current, type SerializedError } from '@reduxjs/toolkit';
+import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
 import { t } from 'i18next';
 
 import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
-import {
-  Connection,
-  useGetIsHovedadminQuery,
-  useGetRightHoldersQuery,
-} from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
 import { availableForUserTypeCheck } from '@/resources/utils/featureFlagUtils';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
@@ -43,7 +39,6 @@ export interface PartyRepresentationContextOutput {
   toParty?: Party;
   actingParty?: Party;
   selfParty?: Party;
-  selfPartyConnection?: Connection;
   isLoading?: boolean;
   isError?: boolean;
 }

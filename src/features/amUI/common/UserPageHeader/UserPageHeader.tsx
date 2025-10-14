@@ -49,13 +49,13 @@ export const UserPageHeader = ({
           <MenuItemIcon
             icon={{
               name: user?.name ?? '',
-              type: isOrganization(user?.partyTypeName.toString()) ? 'company' : 'person',
+              type: isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person',
             }}
             size={'lg'}
           />
           <Avatar
             name={secondaryParty?.name ?? ''}
-            type={isOrganization(secondaryParty?.partyTypeName.toString()) ? 'company' : 'person'}
+            type={isOrganization(secondaryParty?.partyTypeName?.toString()) ? 'company' : 'person'}
             size={'lg'}
             className={classes.secondaryAvatar}
           />
@@ -67,7 +67,7 @@ export const UserPageHeader = ({
         <MenuItemIcon
           icon={{
             name: user?.name ?? '',
-            type: isOrganization(user?.partyTypeName.toString()) ? 'company' : 'person',
+            type: isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person',
           }}
           size={'lg'}
         />

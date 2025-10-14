@@ -1,4 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models;
+﻿﻿using Altinn.AccessManagement.UI.Core.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<UserProfileFE> GetUserByUUID(Guid uuid);
 
         /// <summary>
-        /// Gets a Party using the provided from uuid. 
+        /// Gets a Party using the provided uuid.
         /// </summary>
         /// <param name="userUuid">The uuid of the user</param>
         /// <returns>Party information for the GUI</returns>
