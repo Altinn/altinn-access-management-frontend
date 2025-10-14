@@ -13,6 +13,7 @@ import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 export const useReporteeParty = () => {
   const partyUuid = getCookie('AltinnPartyUuid') ?? '';
+
   const {
     data: currentUser,
     error: currentUserError,

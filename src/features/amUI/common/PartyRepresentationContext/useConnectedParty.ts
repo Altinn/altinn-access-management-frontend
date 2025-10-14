@@ -1,12 +1,13 @@
 import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
 import { mapConnectionToParty } from './partyUtils';
-import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { error } from 'console';
+import { isError } from 'cypress/types/lodash';
 
 /**
  * useConnectedParty
  * ------------------
- * Hook that fetches the connection between the current user and either the fromParty or toParty.
+ * Hook that fetches the connection between the acting party and either the fromParty or toParty.
  *
  * Returns the connection if it exists.
  */
@@ -20,7 +21,6 @@ export const useConnectedParty = ({
   toPartyUuid?: string;
   skip?: boolean;
 }) => {
-  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
   const request = {
     partyUuid: actingPartyUuid ?? '',
@@ -28,14 +28,19 @@ export const useConnectedParty = ({
     toUuid: toPartyUuid ?? actingPartyUuid ?? '',
   };
 
-  const { data: connection, isLoading } = useGetRightHoldersQuery(request, {
-    skip: !currentUser?.partyUuid || (!fromPartyUuid && !toPartyUuid) || skip,
+  const {
+    data: connection,
+    isLoading,
+    isError,
+    error,
+  } = useGetRightHoldersQuery(request, {
+    skip: (!fromPartyUuid && !toPartyUuid) || skip,
   });
 
   const partyConnection = connection?.[0];
 
   const party = mapConnectionToParty(partyConnection?.party);
-  return { party, isLoading: isLoading || currentUserIsLoading };
+  return { party, isLoading, error, isError };
 };
 
 export default useConnectedParty;

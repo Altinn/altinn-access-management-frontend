@@ -7,7 +7,11 @@ import { Link } from 'react-router';
 import { t } from 'i18next';
 
 import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
-import { Connection, useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
+import {
+  Connection,
+  useGetIsHovedadminQuery,
+  useGetRightHoldersQuery,
+} from '@/rtk/features/userInfoApi';
 import { availableForUserTypeCheck } from '@/resources/utils/featureFlagUtils';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
@@ -60,9 +64,6 @@ export const PartyRepresentationProvider = ({
   actingPartyUuid,
   returnToUrlOnError,
 }: PartyRepresentationProviderProps) => {
-  console.log('🪵 ~ PartyRepresentationProvider ~ toPartyUuid:', toPartyUuid);
-  console.log('🪵 ~ PartyRepresentationProvider ~ actingPartyUuid:', actingPartyUuid);
-  console.log('🪵 ~ PartyRepresentationProvider ~ fromPartyUuid:', fromPartyUuid);
   if (!toPartyUuid && !fromPartyUuid) {
     throw new Error('PartyRepresentationProvider must be used with at least one party UUID');
   }
@@ -73,17 +74,17 @@ export const PartyRepresentationProvider = ({
     throw new Error('actingPartyUuid must equal one of the provided party UUIDs');
   }
 
-  // Case du er på din egen side i tilgangsstyring og ikke hovedadmin -> acting-party = selfparty. (vi kan sjekke is-admin fram til vi får en egen ressurs på hovedadmin)
+  // Case:
+  // Du er på din egen side i tilgangsstyring og ikke hovedadmin -> acting-party = selfparty.
+  // Vi kan sjekke is-hovedadmin på ressurs altinn_access_management_hovedadmin
   // ellers hentes acting-party fra useReporteeParty
-  // 1. Hvis inlogget bruker er damme som from eller to id  da er acting-party = selfparty. Hvis ikke: Acting-party hentes fra useReporteeParty
-  // 2. From-party: hvis satt og er lik actingpartyUuid, da er from-party = acting-party. Hvis ikke bruk connected party
-  // 3. To-party: hvis satt og er lik actingpartyUuid, da er to-party = acting-party. Hvis ikke bruk connected party
+
+  // 1. Hvis inlogget bruker er samme som from- eller to-id da skal acting-party settes til selfparty. Hvis ikke: Acting-party hentes fra useReporteeParty
+  // 2. From-party: Hvis satt og er lik actingPartyUuid, da er from-party = acting-party. Hvis ikke bruk connected party
+  // 3. To-party: Hvis satt og er lik actingPartyUuid, da er to-party = acting-party. Hvis ikke bruk connected party
 
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const { party: reportee, isLoading: reporteeIsLoading } = useReporteeParty();
-
-  // Acting party is either the current user or the reportee (if acting on behalf of another party)
-  const actingParty = currentUser?.partyUuid === actingPartyUuid ? currentUser : reportee;
 
   const { party: fromConnectedParty, isLoading: fromPartyIsLoading } = useConnectedParty({
     fromPartyUuid,
@@ -94,6 +95,32 @@ export const PartyRepresentationProvider = ({
     toPartyUuid,
     skip: !toPartyUuid || toPartyUuid === actingPartyUuid,
   });
+
+  // Case:
+  // Du er på din egen side i tilgangsstyring og ikke hovedadmin -> acting-party = selfparty.
+  // Vi kan sjekke is-hovedadmin på ressurs altinn_access_management_hovedadmin
+  // ellers hentes acting-party fra useReporteeParty
+
+  const { data: isHovedadmin, isLoading: isHovedadminLoading } = useGetIsHovedadminQuery();
+
+  // Acting party logic:
+  // If on your own access management page (toPartyUuid === currentUser) and NOT hovedadmin:
+  //   -> acting-party = selfparty (currentUser)
+  // If acting party UUID matches current user:
+  //   -> acting-party = currentUser
+  // Otherwise:
+  //   -> acting-party = reportee (acting on behalf of another party)
+  let actingParty: Party | undefined;
+  if (toPartyUuid === currentUser?.partyUuid && !isHovedadmin) {
+    // User is on their own page and is not hovedadmin
+    actingParty = currentUser;
+  } else if (currentUser?.partyUuid === actingPartyUuid) {
+    // Acting party UUID matches current user
+    actingParty = currentUser;
+  } else {
+    // Acting on behalf of another party (reportee)
+    actingParty = reportee;
+  }
 
   // Use acting party if the UUID matches, otherwise use the connected party
   const fromParty = fromPartyUuid === actingPartyUuid ? actingParty : fromConnectedParty;
@@ -116,7 +143,8 @@ export const PartyRepresentationProvider = ({
     fromPartyIsLoading ||
     toPartyIsLoading ||
     currentUserIsLoading ||
-    reporteeIsLoading;
+    reporteeIsLoading ||
+    isHovedadminLoading;
 
   const invalidConnection =
     !isConnectionLoading &&
