@@ -14,8 +14,7 @@ import {
 } from 'playwright/pages/profile/delegationPage';
 import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/delegeringHelper';
 
-// Optional: allow env override: TEST_LANG=EN
-const defaultLang = (process.env.TEST_LANG as Language) ?? Language.NB;
+const defaultLang = Language.NB;
 
 type Fixtures = {
   // NEW: make language an overridable option
