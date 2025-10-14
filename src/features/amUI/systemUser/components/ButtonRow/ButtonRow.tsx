@@ -8,9 +8,9 @@ interface ButtonRowProps {
   children: React.ReactNode;
 }
 
-export const ButtonRow = ({ children }: ButtonRowProps): React.ReactNode => {
+export const ButtonRow = ({ smallMarginTop, children }: ButtonRowProps): React.ReactNode => {
   const classNames = cn(classes.buttonRow, {
-    [classes.smallMarginTop]: classes.smallMarginTop,
+    [classes.smallMarginTop]: smallMarginTop,
   });
   return <div className={classNames}>{children}</div>;
 };
