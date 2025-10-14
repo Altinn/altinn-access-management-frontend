@@ -35,7 +35,7 @@ export const useSelfConnection = (): {
     ? {
         id: currentUser.partyUuid,
         name: currentUser.name,
-        type: currentUser.unitType,
+        type: currentUser.partyTypeName.toString(),
         keyValues: {
           OrganizationIdentifier: currentUser.orgNumber,
           PartyId: currentUser.partyId.toString(),
@@ -45,7 +45,6 @@ export const useSelfConnection = (): {
         children: [],
       }
     : undefined;
-
   const partyConnection: Connection | undefined = party
     ? {
         party,
