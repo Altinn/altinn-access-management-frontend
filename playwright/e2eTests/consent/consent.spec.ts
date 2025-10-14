@@ -46,7 +46,7 @@ languages.forEach((language) => {
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginAsActorPid(fromPerson);
+      await login.loginNotChoosingActor(fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
@@ -74,7 +74,7 @@ languages.forEach((language) => {
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginAsActorPid(fromPerson);
+      await login.loginNotChoosingActor(fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
@@ -101,7 +101,7 @@ languages.forEach((language) => {
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginAsActorPid(fromPerson);
+      await login.loginNotChoosingActor(fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
@@ -128,7 +128,7 @@ languages.forEach((language) => {
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginAsActorPid(fromPerson);
+      await login.loginNotChoosingActor(fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
@@ -158,7 +158,7 @@ languages.forEach((language) => {
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginAsActorPid(fromPerson);
+      await login.loginNotChoosingActor(fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
@@ -184,7 +184,7 @@ languages.forEach((language) => {
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginAsActorPid(fromPerson);
+      await login.loginNotChoosingActor(fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
@@ -214,7 +214,7 @@ languages.forEach((language) => {
       api = new ConsentApiRequests(toOrg);
     });
 
-    test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language}) - User: ${fromPerson}`, async ({
+    test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language})`, async ({
       page,
       consentPage,
       login,
@@ -232,7 +232,7 @@ languages.forEach((language) => {
 
       // Navigate to the consent page
       await consentPage.open(consentResponse.viewUri);
-      await login.loginAsActorPid(fromPerson);
+      await login.loginNotChoosingActor(fromPerson);
 
       // Pick language
       await consentPage.pickLanguage(consentPage.language);

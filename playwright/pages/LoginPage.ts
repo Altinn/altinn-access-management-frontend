@@ -57,12 +57,6 @@ export class LoginPage {
     await this.selectActor(this.searchBox, orgnummer);
   }
 
-  async loginAsActorPid(pid: string) {
-    await this.testIdLink.click();
-    await this.pidInput.fill(pid);
-    await this.autentiserButton.click();
-  }
-
   async chooseReportee(reportee: string) {
     const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
     await chosenReportee.click();
