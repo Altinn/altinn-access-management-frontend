@@ -6,11 +6,8 @@ import { fromPersons, toOrgs, fromOrgs } from './consentTestdata';
 import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, formatUiDateTime } from 'playwright/util/helper';
 
-test.describe.configure({ timeout: 10000 });
-
 const redirectUrl = 'https://example.com/';
 
-// Test matrix for mobile viewport with different languages
 const languages = [Language.NB, Language.NN, Language.EN];
 const mobileViewport = { width: 375, height: 667 };
 
@@ -37,7 +34,10 @@ languages.forEach((language) => {
       language,
       viewport: mobileViewport,
     });
-    test(`Standard samtykke (${language})`, async ({ page, login, consentPage }) => {
+    test(`Standard samtykke (${language}) - User: ${fromPerson}`, async ({
+      login,
+      consentPage,
+    }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -61,7 +61,11 @@ languages.forEach((language) => {
       await consentPage.approveStandardAndWaitLogout(redirectUrl);
     });
 
-    test(`Krav-template (${language})`, async ({ page, consentPage, login }) => {
+    test(`Krav-template (${language}) - User: ${fromPerson}`, async ({
+      page,
+      consentPage,
+      login,
+    }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -84,7 +88,11 @@ languages.forEach((language) => {
       await consentPage.approveStandardAndWaitLogout(redirectUrl);
     });
 
-    test(`Fullmakt utføre tjeneste (${language})`, async ({ consentPage, page, login }) => {
+    test(`Fullmakt utføre tjeneste (${language}) - User: ${fromPerson}`, async ({
+      consentPage,
+      page,
+      login,
+    }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -111,7 +119,7 @@ languages.forEach((language) => {
       await consentPage.approveFullmaktAndWaitLogout(redirectUrl);
     });
 
-    test(`Lånesøknad (${language})`, async ({ consentPage, page, login }) => {
+    test(`Lånesøknad (${language}) - User: ${fromPerson}`, async ({ consentPage, page, login }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -124,26 +132,24 @@ languages.forEach((language) => {
       await consentPage.open(consentResponse.viewUri);
       await login.loginAsActorPid(fromPerson);
 
-      await consentPage.languagePicker.click();
-      await consentPage.norwegian.click();
+      await consentPage.pickLanguage(consentPage.language);
 
       await consentPage.expectStandardIntro();
-      await expect(
-        page.getByText(
-          'Du samtykker til at søknadsdata kan brukes i forbindelse med låneprosessen',
-        ),
-      ).toBeVisible();
-      await expect(page.getByText('Rente: 4.2')).toBeVisible();
-      await expect(page.getByText('utloepsar: 2027')).toBeVisible();
-      await expect(page.getByText('Bank: Testbanken E2E')).toBeVisible();
-      await expect(
-        page.getByText('Samtykket gjelder én gangs utlevering av opplysningene'),
-      ).toBeVisible();
+      await expect(consentPage.textLoanApplication).toBeVisible();
+      await expect(consentPage.getInterestRateText('4.2')).toBeVisible();
+      await expect(consentPage.getExpirationYearText('2027')).toBeVisible();
+      await expect(consentPage.getBankNameText('Testbanken E2E')).toBeVisible();
+
+      await expect(consentPage.textOneTimeDelivery).toBeVisible();
 
       await consentPage.approveStandardAndWaitLogout(redirectUrl);
     });
 
-    test(`Enkelt samtykke (${language})`, async ({ consentPage, page, login }) => {
+    test(`Enkelt samtykke (${language}) - User: ${fromPerson}`, async ({
+      consentPage,
+      page,
+      login,
+    }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -156,21 +162,20 @@ languages.forEach((language) => {
       await consentPage.open(consentResponse.viewUri);
       await login.loginAsActorPid(fromPerson);
 
-      await consentPage.languagePicker.click();
-      await consentPage.norwegian.click();
+      await consentPage.pickLanguage(consentPage.language);
 
       await consentPage.expectEnkeltIntro();
+      await expect(consentPage.textDataUsage).toBeVisible();
+      await expect(consentPage.textDataProtection).toBeVisible();
       await expect(
-        page.getByText('Du samtykker til at dine data kan brukes i denne tjenesten'),
+        consentPage.getMetadataText('E2E Playwright metadata for simpletag'),
       ).toBeVisible();
-      await expect(page.getByText('vi tar vare på dine data')).toBeVisible();
-      await expect(page.getByText('metadata: E2E Playwright metadata for simpletag')).toBeVisible();
 
-      await expect(page.getByText('Samtykket gjelder én gangs bruk')).toBeVisible();
+      await expect(consentPage.textOneTimeUse).toBeVisible();
       await consentPage.approveStandardAndWaitLogout(redirectUrl);
     });
 
-    test(`Avvis samtykke (${language})`, async ({ consentPage, login }) => {
+    test(`Avvis samtykke (${language}) - User: ${fromPerson}`, async ({ consentPage, login }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -183,10 +188,9 @@ languages.forEach((language) => {
       await consentPage.open(consentResponse.viewUri);
       await login.loginAsActorPid(fromPerson);
 
-      await consentPage.languagePicker.click();
-      await consentPage.norwegian.click();
+      await consentPage.pickLanguage(consentPage.language);
 
-      await expect(consentPage.heading('Forespørsel om samtykke')).toBeVisible();
+      await expect(consentPage.textConsentRequestHeading).toBeVisible();
       await consentPage.rejectStandardAndWaitLogout(redirectUrl);
     });
   });
@@ -212,7 +216,7 @@ languages.forEach((language) => {
       process.env.ORG = toOrg;
     });
 
-    test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language})`, async ({
+    test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language}) - User: ${fromPerson}`, async ({
       page,
       consentPage,
       login,
@@ -241,7 +245,7 @@ languages.forEach((language) => {
       await consentPage.expectExpiry(expected);
 
       // Verify metadata is displayed
-      await expect(page.getByText('inntektsaar: 2028')).toBeVisible();
+      await expect(consentPage.getIncomeYearText('2028')).toBeVisible();
 
       // Approve the consent
       await consentPage.approveStandardAndWaitLogout(redirectUrl);

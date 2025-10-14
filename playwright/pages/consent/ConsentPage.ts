@@ -65,6 +65,28 @@ export class ConsentPage {
   // Fullmakt heading text
   readonly textFullmaktHeading: Locator;
 
+  // Loan application text
+  readonly textLoanApplication: Locator;
+
+  // One-time delivery text
+  readonly textOneTimeDelivery: Locator;
+
+  // Loan metadata text
+  readonly textInterestRate: Locator;
+  readonly textExpirationYear: Locator;
+  readonly textBankName: Locator;
+
+  // Simple consent text
+  readonly textDataUsage: Locator;
+  readonly textDataProtection: Locator;
+  readonly textOneTimeUse: Locator;
+
+  // Income year text
+  readonly textIncomeYear: Locator;
+
+  // Consent request heading
+  readonly textConsentRequestHeading: Locator;
+
   // Used for selecting language files
   private languageDictionary: any;
 
@@ -189,9 +211,9 @@ export class ConsentPage {
     this.textEnkeltLead = page.getByText(enkeltLeadTexts[language]);
 
     const enkeltBulletIntroTexts = {
-      [Language.NN]: /Ved å godkjenne denne førespurnaden samtykker du til følgande:/i,
+      [Language.NN]: /Ved å godkjenna denne førespurnaden samtykke du til følgjande:/i,
       [Language.NB]: /Ved å godkjenne denne forespørselen samtykker du til følgende:/i,
-      [Language.EN]: /By approving this request, you consent to the following:/i,
+      [Language.EN]: /By accepting this request you consent to the following:/i,
     };
     this.textEnkeltBulletIntro = page.getByText(enkeltBulletIntroTexts[language]);
 
@@ -235,6 +257,62 @@ export class ConsentPage {
       [Language.EN]: /Consent perform service/i,
     };
     this.textFullmaktHeading = page.getByText(fullmaktHeadingTexts[language]);
+
+    // Loan application text - language specific
+    const loanApplicationTexts = {
+      [Language.NN]: /Du samtykkjer til at søknadsdata kan brukast i låneprosessen/i,
+      [Language.NB]: /Du samtykker til at søknadsdata kan brukes i forbindelse med låneprosessen/i,
+      [Language.EN]: /You consent to your application data being used in the loan process/i,
+    };
+    this.textLoanApplication = page.getByText(loanApplicationTexts[language]);
+
+    // One-time delivery text - language specific
+    const oneTimeDeliveryTexts = {
+      [Language.NN]: /Samtykket gjeld ein gongs utlevering av opplysningane/i,
+      [Language.NB]: /Samtykket gjelder én gangs utlevering av opplysningene/i,
+      [Language.EN]: /The consent applies for one-time disclosure of information/i,
+    };
+    this.textOneTimeDelivery = page.getByText(oneTimeDeliveryTexts[language]);
+
+    // Loan metadata text - these will be set by methods
+    this.textInterestRate = page.locator('text=/Rente:/');
+    this.textExpirationYear = page.locator('text=/utloepsar:/');
+    this.textBankName = page.locator('text=/Bank:/');
+
+    // Simple consent text - language specific
+    const dataUsageTexts = {
+      [Language.NN]: /Du samtykkjer til at dataa dine kan brukast i denne tenesta/i,
+      [Language.NB]: /Du samtykker til at dine data kan brukes i denne tjenesten/i,
+      [Language.EN]: /You consent to your data being used in this service/i,
+    };
+    this.textDataUsage = page.getByText(dataUsageTexts[language]);
+
+    const dataProtectionTexts = {
+      [Language.NN]: /vi tek vare på dine data/i,
+      [Language.NB]: /vi tar vare på dine data/i,
+      [Language.EN]: /we protect your data/i,
+    };
+    this.textDataProtection = page.getByText(dataProtectionTexts[language]);
+
+    const oneTimeUseTexts = {
+      [Language.NN]: /Samtykket gjeld ein gongs bruk/i,
+      [Language.NB]: /Samtykket gjelder én gangs bruk/i,
+      [Language.EN]: /The consent applies for one-time usage/i,
+    };
+    this.textOneTimeUse = page.getByText(oneTimeUseTexts[language]);
+
+    // Income year text - will be set by method
+    this.textIncomeYear = page.locator('text=/inntektsaar:/');
+
+    // Consent request heading - language specific
+    const consentRequestHeadingTexts = {
+      [Language.NN]: /Førespurnad om samtykke/i,
+      [Language.NB]: /Forespørsel om samtykke/i,
+      [Language.EN]: /Request for consent/i,
+    };
+    this.textConsentRequestHeading = page.getByRole('heading', {
+      name: consentRequestHeadingTexts[language],
+    });
   }
 
   // Dynamic helpers
@@ -303,6 +381,57 @@ export class ConsentPage {
     await expect(this.textContains(re)).toBeVisible();
   }
 
+  // Loan metadata methods
+  getInterestRateText(rate: string): Locator {
+    const interestTexts = {
+      [Language.NN]: `Rente: ${rate}`,
+      [Language.NB]: `Rente: ${rate}`,
+      [Language.EN]: `Interest: ${rate}`,
+    };
+    const expectedText = interestTexts[this.language];
+    return this.page.getByText(expectedText);
+  }
+
+  getExpirationYearText(year: string): Locator {
+    const yearTexts = {
+      [Language.NN]: `utloepsar: ${year}`,
+      [Language.NB]: `utloepsar: ${year}`,
+      [Language.EN]: `Expiration year: ${year}`,
+    };
+    const expectedText = yearTexts[this.language] || yearTexts[Language.NB];
+    return this.page.getByText(expectedText);
+  }
+
+  getBankNameText(bankName: string): Locator {
+    const bankTexts = {
+      [Language.NN]: `Bank: ${bankName}`,
+      [Language.NB]: `Bank: ${bankName}`,
+      [Language.EN]: `Bank: ${bankName}`,
+    };
+    const expectedText = bankTexts[this.language] || bankTexts[Language.NB];
+    return this.page.getByText(expectedText);
+  }
+
+  getMetadataText(metadata: string): Locator {
+    const metadataTexts = {
+      [Language.NN]: `metadata: ${metadata}`,
+      [Language.NB]: `metadata: ${metadata}`,
+      [Language.EN]: `metadata: ${metadata}`,
+    };
+    const expectedText = metadataTexts[this.language] || metadataTexts[Language.NB];
+    return this.page.getByText(expectedText);
+  }
+
+  getIncomeYearText(year: string): Locator {
+    const incomeYearTexts = {
+      [Language.NN]: `inntektsaar: ${year}`,
+      [Language.NB]: `inntektsaar: ${year}`,
+      [Language.EN]: `year of income: ${year}`,
+    };
+    const expectedText = incomeYearTexts[this.language] || incomeYearTexts[Language.NB];
+    return this.page.getByText(expectedText);
+  }
+
   // actions
   async approveStandardAndWaitLogout(redirectUrl: string): Promise<void> {
     await expect(this.buttonApprove).toBeVisible();
@@ -328,14 +457,20 @@ export class ConsentPage {
   async pickLanguage(lang: Language): Promise<void> {
     await this.languagePicker.click();
 
-    if (lang.toString() === Language.NB.toString()) {
-      await this.norwegian.click();
-    }
-    if (lang.toString() === Language.NN.toString()) {
-      await this.nynorsk.click();
-    }
-    if (lang.toString() === Language.EN.toString()) {
-      await this.english.click();
+    switch (lang) {
+      case Language.NB:
+        await this.norwegian.click();
+        break;
+      case Language.NN:
+        await this.nynorsk.click();
+        break;
+      case Language.EN:
+        await this.english.click();
+        break;
+      default:
+        // Fallback to Norwegian if language is not recognized
+        await this.norwegian.click();
+        break;
     }
   }
 
