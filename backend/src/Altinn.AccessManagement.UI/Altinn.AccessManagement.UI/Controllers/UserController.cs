@@ -130,7 +130,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Endpoint for getting the favorite actors of the authenticated user.
         /// </summary>
-        /// <returns>A lost of partyUuids</returns>
+        /// <returns>A list of partyUuids</returns>
         [HttpGet]
         [Authorize]
         [Route("actorlist/favorites")]

@@ -46,6 +46,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("reportee/{partyId}/rightholders")]
         public async Task<ActionResult<List<User>>> GetReporteeRightHolders(int partyId)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
