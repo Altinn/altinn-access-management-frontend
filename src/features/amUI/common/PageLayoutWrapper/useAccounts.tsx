@@ -47,6 +47,7 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
             actingParty.partyUuid,
             t('common.org_no'),
             t('common.part_of'),
+            t('common.date_of_birth'),
           );
           accountList.push(mappedAccount);
           if (favoriteUuids?.includes(account.party.id)) {
@@ -95,6 +96,8 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
         accountList.sort((a, b) => {
           if (a.groupId === 'self') return -1;
           if (b.groupId === 'self') return 1;
+          if (a.type === 'company' && b.type === 'person') return 1;
+          if (b.type === 'company' && a.type === 'person') return -1;
           if (b.groupId !== 'self' && a.groupId === 'favorites') return -1;
           if (a.groupId !== 'self' && b.groupId === 'favorites') return 1;
           return a.name > b.name ? 1 : -1;
@@ -102,6 +105,10 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
 
       const firstCompany = sortedAccounts.find(
         (a) => a.type === 'company' && a.groupId !== 'favorites',
+      );
+
+      const firstPerson = sortedAccounts.find(
+        (a) => a.type === 'person' && a.groupId !== 'favorites' && a.groupId !== 'self',
       );
 
       const accountGroups: Record<string, MenuGroupProps> = {
@@ -113,6 +120,10 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
           title: t('header.account_orgs'),
           divider: true,
         },
+        [firstPerson?.groupId || 'person']: {
+          title: t('header.account_persons'),
+          divider: true,
+        },
         favorites: {
           title: t('header.account_favorites'),
           divider: true,
@@ -121,7 +132,7 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
       return [sortedAccounts, accountGroups];
     }, [reporteeList, actorList, currentUser, actingParty]);
 
-  return { accounts, accountGroups };
+  return { accounts, accountGroups, favoriteUuids, actingParty, currentUser };
 };
 
 const getAccount = (
@@ -168,7 +179,7 @@ const getAccountFromConnection = (
   currentReporteeUuid: string,
   orgNumberText: string,
   partOfText: string,
-  parent?: ReporteeInfo,
+  dateOfBirthText?: string,
 ): AccountMenuItemProps => {
   const accountType = getAccountTypeFromConnection(actorConnection?.party.type ?? '');
   const isSubUnit = actorConnection.party.type === 'Organisasjon' && !!actorConnection.party.parent;
@@ -182,7 +193,7 @@ const getAccountFromConnection = (
     ? `↪ ${orgNumberText}: ${actorConnection.party.keyValues?.OrganizationIdentifier}, ${partOfText} ${actorConnection.party.parent?.name}`
     : actorConnection.party.type === 'Organisasjon'
       ? `${orgNumberText}: ${actorConnection.party.keyValues?.OrganizationIdentifier}`
-      : `${partOfText}: ${actorConnection.party.keyValues?.DateOfBirth}`;
+      : `${dateOfBirthText}: ${actorConnection.party.keyValues?.DateOfBirth}`;
 
   return {
     id: actorConnection.party.keyValues?.PartyId ?? actorConnection.party.id,
