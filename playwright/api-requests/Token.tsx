@@ -7,26 +7,10 @@ export class Token {
   private readonly environment: string;
 
   constructor(org?: string) {
-    this.username = process.env.USERNAME_TEST_API || '';
-    this.password = process.env.PASSWORD_TEST_API || '';
-    this.org = org || process.env.ORG || '';
-    this.environment = process.env.environment || '';
-
-    if (!this.username) {
-      throw new Error('API username is not defined in the environment variables.');
-    }
-
-    if (!this.password) {
-      throw new Error('API password is not defined in the environment variables.');
-    }
-
-    if (!this.org) {
-      throw new Error('ORG is not defined in the environment variables.');
-    }
-
-    if (!this.environment) {
-      throw new Error('Environment is not defined in the environment variables.');
-    }
+    this.username = env('USERNAME_TEST_API');
+    this.password = env('PASSWORD_TEST_API');
+    this.org = org || env('ORG');
+    this.environment = env('environment');
   }
 
   public get orgNo(): string {

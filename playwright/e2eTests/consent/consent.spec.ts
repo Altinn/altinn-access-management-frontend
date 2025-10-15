@@ -16,7 +16,7 @@ let validToTimestamp: string;
 let fromPerson: string;
 let toOrg: string;
 
-test.beforeEach(async ({}) => {
+test.beforeEach(async () => {
   const pickRandom = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
   fromPerson = pickRandom(fromPersons);
   toOrg = pickRandom(toOrgs);
@@ -27,15 +27,12 @@ test.beforeEach(async ({}) => {
 });
 
 languages.forEach((language) => {
-  test.describe(`Samtykke`, () => {
+  test.describe(`Samtykke - fra person til org (${language})`, () => {
     test.use({
       language,
       viewport: mobileViewport,
     });
-    test(`Standard samtykke (${language}) - User: ${fromPerson}`, async ({
-      login,
-      consentPage,
-    }) => {
+    test(`Standard samtykke`, async ({ login, consentPage }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -59,11 +56,7 @@ languages.forEach((language) => {
       await consentPage.approveStandardAndWaitLogout(redirectUrl);
     });
 
-    test(`Krav-template (${language}) - User: ${fromPerson}`, async ({
-      page,
-      consentPage,
-      login,
-    }) => {
+    test(`Krav-template`, async ({ page, consentPage, login }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -86,11 +79,7 @@ languages.forEach((language) => {
       await consentPage.approveStandardAndWaitLogout(redirectUrl);
     });
 
-    test(`Fullmakt utføre tjeneste (${language}) - User: ${fromPerson}`, async ({
-      consentPage,
-      page,
-      login,
-    }) => {
+    test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -117,7 +106,7 @@ languages.forEach((language) => {
       await consentPage.approveFullmaktAndWaitLogout(redirectUrl);
     });
 
-    test(`Lånesøknad (${language}) - User: ${fromPerson}`, async ({ consentPage, page, login }) => {
+    test(`Lånesøknad`, async ({ consentPage, page, login }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -143,11 +132,7 @@ languages.forEach((language) => {
       await consentPage.approveStandardAndWaitLogout(redirectUrl);
     });
 
-    test(`Enkelt samtykke (${language}) - User: ${fromPerson}`, async ({
-      consentPage,
-      page,
-      login,
-    }) => {
+    test(`Enkelt samtykke`, async ({ consentPage, page, login }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -173,7 +158,7 @@ languages.forEach((language) => {
       await consentPage.approveStandardAndWaitLogout(redirectUrl);
     });
 
-    test(`Avvis samtykke (${language}) - User: ${fromPerson}`, async ({ consentPage, login }) => {
+    test(`Avvis samtykke`, async ({ consentPage, login }) => {
       const consentResponse = await api.createConsentRequest({
         from: { type: 'person', id: fromPerson },
         to: { type: 'org', id: toOrg },
@@ -194,6 +179,7 @@ languages.forEach((language) => {
   });
 });
 
+// Org-to-org tests
 languages.forEach((language) => {
   test.describe(`Samtykke fra organisasjon til organisasjon: (${language})`, () => {
     test.use({
