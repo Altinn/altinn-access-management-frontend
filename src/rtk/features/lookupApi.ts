@@ -65,7 +65,9 @@ export const lookupApi = createApi({
     /**
      * @deprecated This endpoint is deprecated and should not be used in new code.
      * It can be removed when the old access management frontend is decommissioned.
-     * use useConnectedParty- or useSelfParty-hook instead.
+     * Use useGetPartyFromLoggedInUserQuery for logged-in user data, or see
+     * useReporteeParty/useConnectedParty hooks in "common/PartyRepresentationContext/useConnectedParty.ts"
+     * for secure alternatives.
      **/
     deprecatedGetPartyByUUID: builder.query<Party, { partyUuid: string }>({
       query: ({ partyUuid }) => `party/${partyUuid}`,

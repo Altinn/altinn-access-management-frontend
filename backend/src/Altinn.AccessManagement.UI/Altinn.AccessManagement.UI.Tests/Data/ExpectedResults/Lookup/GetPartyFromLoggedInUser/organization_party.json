@@ -1,0 +1,29 @@
+{
+  "partyId": 50067799,
+  "partyUuid": "6b0574ae-f569-4c0d-a8d4-8ad56f427890",
+  "partyTypeName": 2,
+  "orgNumber": "991825827",
+  "ssn": null,
+  "unitType": "ORGL",
+  "name": "Digitaliseringsdirektoratet",
+  "isDeleted": false,
+  "onlyHierarchyElementWithNoAccess": false,
+  "person": null,
+  "organization": {
+    "orgNumber": "991825827",
+    "name": "Digitaliseringsdirektoratet",
+    "unitType": "ORGL",
+    "telephoneNumber": null,
+    "mobileNumber": null,
+    "faxNumber": null,
+    "emailAddress": null,
+    "internetAddress": null,
+    "mailingAddress": null,
+    "mailingPostalCode": null,
+    "mailingPostalCity": null,
+    "businessAddress": null,
+    "businessPostalCode": null,
+    "businessPostalCity": null
+  },
+  "childParties": null
+}

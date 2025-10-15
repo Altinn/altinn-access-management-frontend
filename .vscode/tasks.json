@@ -14,12 +14,23 @@
         "problemMatcher": "$msCompile"
     },
     {
+        "label": "build-ui-project",
+        "command": "dotnet",
+        "type": "process",
+        "args": [
+            "build",
+            "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj",
+            "/property:GenerateFullPaths=true",
+            "/consoleloggerparameters:NoSummary;ForceNoAlign"
+        ],
+        "problemMatcher": "$msCompile"
+    },
+    {
         "label": "publish",
         "command": "dotnet",
         "type": "process",
         "args": [
             "publish",
-            "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln",
             "/property:GenerateFullPaths=true",
             "/consoleloggerparameters:NoSummary;ForceNoAlign"
         ],
@@ -31,9 +42,7 @@
         "type": "process",
         "args": [
             "watch",
-            "run",
-            "--project",
-            "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln"
+            "run"
         ],
         "problemMatcher": "$msCompile"
     }

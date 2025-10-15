@@ -1,12 +1,15 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using Altinn.AccessManagement.UI.Tests.Utils;
+using AltinnCore.Authentication.Constants;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -27,6 +30,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private readonly HttpClient _client;
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IRegisterClient _registerClient;
+        private readonly string _testDataPath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupControllerTest"/> class.
@@ -38,6 +42,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _accessManagementClient = Mock.Of<IAccessManagementClient>();
             _registerClient = new RegisterClientMock();
             _client = GetTestClient();
+            _testDataPath = Path.Combine(GetTestDataPath(), "ExpectedResults", "Lookup");
+        }
+
+        private static string GetTestDataPath()
+        {
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(LookupControllerTest).Assembly.Location).LocalPath);
+            return Path.Combine(unitTestFolder, "Data");
         }
 
         private HttpClient GetTestClient()
@@ -184,6 +195,125 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/user/{lookupUUID}");
 
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that an authenticated user can retrieve their party information successfully
+        /// </summary>
+        [Fact]
+        public async Task GetPartyFromLoggedInUser_Success()
+        {
+            // Arrange
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = GetTokenWithPartyUuid(1337, 501337, userPartyUuid);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "person_party.json");
+            PartyFE expectedParty = Util.GetMockData<PartyFE>(path);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
+            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertEqual(expectedParty, actualParty);
+        }
+
+        /// <summary>
+        /// Assert that an authenticated user without party UUID in token gets a 400 Bad Request
+        /// </summary>
+        [Fact]
+        public async Task GetPartyFromLoggedInUser_MissingPartyUuidInToken_400()
+        {
+            // Arrange
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that an unauthenticated user gets 401 Unauthorized response
+        /// </summary>
+        [Fact]
+        public async Task GetPartyFromLoggedInUser_Unauthenticated_401()
+        {
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that a request with a non-existent party UUID returns 404 Not Found
+        /// </summary>
+        [Fact]
+        public async Task GetPartyFromLoggedInUser_PartyNotFound_404()
+        {
+            // Arrange
+            Guid nonExistentUuid = new Guid("00000000-0000-0000-0000-000000000001");
+            string token = GetTokenWithPartyUuid(1337, 501337, nonExistentUuid);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that an authenticated user can retrieve organization party information
+        /// </summary>
+        [Fact]
+        public async Task GetPartyFromLoggedInUser_OrganizationParty_Success()
+        {
+            // Arrange
+            Guid orgPartyUuid = new Guid("6b0574ae-f569-4c0d-a8d4-8ad56f427890");
+            string token = GetTokenWithPartyUuid(1337, 501337, orgPartyUuid);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "organization_party.json");
+            PartyFE expectedParty = Util.GetMockData<PartyFE>(path);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
+            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertEqual(expectedParty, actualParty);
+        }
+
+        /// <summary>
+        /// Helper method to create a JWT token with a specific party UUID
+        /// </summary>
+        /// <param name="userId">The user id</param>
+        /// <param name="partyId">The party id</param>
+        /// <param name="partyUuid">The party UUID to include in the token</param>
+        /// <returns>JWT token string</returns>
+        private static string GetTokenWithPartyUuid(int userId, int partyId, Guid partyUuid)
+        {
+            List<Claim> claims = new List<Claim>();
+            string issuer = "www.altinn.no";
+            claims.Add(new Claim(AltinnCoreClaimTypes.UserId, userId.ToString(), ClaimValueTypes.String, issuer));
+            claims.Add(new Claim(AltinnCoreClaimTypes.UserName, "UserOne", ClaimValueTypes.String, issuer));
+            claims.Add(new Claim(AltinnCoreClaimTypes.PartyID, partyId.ToString(), ClaimValueTypes.Integer32, issuer));
+            claims.Add(new Claim(AltinnCoreClaimTypes.AuthenticateMethod, "Mock", ClaimValueTypes.String, issuer));
+            claims.Add(new Claim(AltinnCoreClaimTypes.AuthenticationLevel, "2", ClaimValueTypes.Integer32, issuer));
+            claims.Add(new Claim("urn:altinn:party:uuid", partyUuid.ToString(), ClaimValueTypes.String, issuer));
+
+            ClaimsIdentity identity = new ClaimsIdentity("mock");
+            identity.AddClaims(claims);
+            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+            string token = JwtTokenMock.GenerateToken(principal, new TimeSpan(1, 1, 1));
+
+            return token;
         }
     }
 }
