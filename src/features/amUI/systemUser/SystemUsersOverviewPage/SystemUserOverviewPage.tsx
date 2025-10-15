@@ -60,7 +60,7 @@ export const SystemUserOverviewPage = () => {
         <div className={classes.flexContainer}>
           <DsHeading
             level={1}
-            data-size='md'
+            data-size='sm'
           >
             {t('systemuser_overviewpage.banner_title')}
           </DsHeading>
@@ -81,23 +81,22 @@ export const SystemUserOverviewPage = () => {
                   {t('systemuser_overviewpage.no_permissions_warning')}
                 </DsAlert>
               )}
-              {systemUsers && systemUsers.length > 0 && (
+              {systemUsers && (
                 <>
                   <div className={classes.listHeader}>
-                    <DsHeading
-                      level={2}
-                      data-size='xs'
-                      className={classes.systemUserHeader}
-                    >
-                      {t('systemuser_overviewpage.existing_system_users_title')}
-                    </DsHeading>
+                    {systemUsers.length > 0 && (
+                      <DsHeading
+                        level={2}
+                        data-size='xs'
+                        className={classes.systemUserHeader}
+                      >
+                        {t('systemuser_overviewpage.existing_system_users_title')}
+                      </DsHeading>
+                    )}
                     {hasCreateSystemUserPermission(reporteeData) && <CreateSystemUserButton />}
                   </div>
                   <SystemUserList systemUsers={systemUsers} />
                 </>
-              )}
-              {systemUsers?.length === 0 && hasCreateSystemUserPermission(reporteeData) && (
-                <CreateSystemUserButton />
               )}
               {isLoadSystemUsersError && (
                 <DsAlert data-color='danger'>
@@ -180,7 +179,6 @@ const CreateSystemUserButton = (): React.ReactNode => {
   return (
     <DsButton
       variant='secondary'
-      className={classes.createSystemUserButton}
       asChild
     >
       <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`}>
