@@ -68,6 +68,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="uuid">The uuid for the party to look up</param>
         /// <returns>Party information for the GUI</returns>
+        /// <remarks>
+        /// This endpoint is deprecated and should not be used in new code.
+        /// It can be removed when the old access management frontend is decommissioned.
+        /// Use GET party/user for logged-in user data, or use the new secure party lookup mechanisms 
+        /// that verify the relationship between the acting party and the requested party.
+        /// </remarks>
+        [Obsolete("This endpoint is deprecated. Use GET party/user for logged-in user data, or use secure party lookup mechanisms that verify party relationships.")]
         [HttpGet]
         [Authorize]
         [Route("party/{uuid}")]
