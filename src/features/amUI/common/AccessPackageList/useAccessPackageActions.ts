@@ -28,7 +28,7 @@ export const useAccessPackageActions = ({
   const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
-  const { toParty, fromParty, actingParty } = usePartyRepresentation();
+  const { toParty: toPartyFromContext, fromParty, actingParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
 
   const handleDelegateSuccess = (accessPackage: AccessPackage, toParty: Party) => {
@@ -96,22 +96,25 @@ export const useAccessPackageActions = ({
     }
   };
 
-  const onDelegate = async (accessPackage: AccessPackage) => {
-    if (!toParty || !fromParty || !actingParty) {
+  const onDelegate = async (accessPackage: AccessPackage, toParty?: Party) => {
+    if (!fromParty || !actingParty) {
       return;
     }
+    const targetToParty = toParty ?? toPartyFromContext;
+    if (!targetToParty) return;
+
     delegatePackage(
-      toParty,
+      targetToParty,
       fromParty,
       actingParty,
       accessPackage,
       () => {
-        handleDelegateSuccess(accessPackage, toParty);
+        handleDelegateSuccess(accessPackage, targetToParty);
       },
       (httpStatus, details) => {
         handleDelegateError(
           accessPackage,
-          toParty,
+          targetToParty,
           httpStatus.toString(),
           new Date().toISOString(),
           details,
@@ -120,20 +123,28 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRevoke = async (accessPackage: AccessPackage) => {
-    if (!toParty || !fromParty || !actingParty) {
+  const onRevoke = async (accessPackage: AccessPackage, toParty?: Party) => {
+    if (!fromParty || !actingParty) {
       return;
     }
+    const targetToParty = toParty ?? toPartyFromContext;
+    if (!targetToParty) return;
+
     revokePackage(
-      toParty,
+      targetToParty,
       fromParty,
       actingParty,
       accessPackage,
       () => {
-        handleRevokeSuccess(accessPackage, toParty);
+        handleRevokeSuccess(accessPackage, targetToParty);
       },
       (httpStatus) => {
-        handleRevokeError(accessPackage, toParty, httpStatus.toString(), new Date().toISOString());
+        handleRevokeError(
+          accessPackage,
+          targetToParty,
+          httpStatus.toString(),
+          new Date().toISOString(),
+        );
       },
     );
   };

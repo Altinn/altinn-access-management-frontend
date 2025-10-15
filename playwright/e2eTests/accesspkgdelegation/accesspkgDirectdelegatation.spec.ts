@@ -65,8 +65,6 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
   });
 
   test.afterAll(async () => {
-    console.log('Running cleanup after all tests...');
     await DelegationApiUtil.cleanupDelegations();
-    console.log('Cleanup finished.');
   });
 });

@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
+import { Entity } from '@/dataObjects/dtos/Common';
 
 export enum ConnectionUserType {
   Person = 'Person',
@@ -20,6 +21,7 @@ export interface ExtendedUser extends Omit<User, 'children'> {
   roles: RoleInfo[];
   children: (ExtendedUser | User)[] | null;
   matchInChildren?: boolean;
+  isInherited?: boolean;
 }
 
 export interface User {
@@ -34,10 +36,11 @@ export interface User {
 export interface RoleInfo {
   id: string;
   code?: string;
+  viaParty?: Entity;
 }
 
 export interface Connection {
-  party: User;
+  party: ExtendedUser;
   roles: RoleInfo[];
   connections: Connection[];
 }
@@ -160,6 +163,9 @@ export const userInfoApi = createApi({
     getIsClientAdmin: builder.query<boolean, void>({
       query: () => `isClientAdmin?party=${getCookie('AltinnPartyUuid')}`,
     }),
+    getIsCompanyProfileAdmin: builder.query<boolean, void>({
+      query: () => `isCompanyProfileAdmin?party=${getCookie('AltinnPartyUuid')}`,
+    }),
     validateNewUserPerson: builder.mutation<string, { ssn: string; lastName: string }>({
       query: ({ ssn, lastName }) => ({
         url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/validateperson`,
@@ -187,6 +193,7 @@ export const {
   useGetReporteeListForAuthorizedUserQuery,
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
+  useGetIsCompanyProfileAdminQuery,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;

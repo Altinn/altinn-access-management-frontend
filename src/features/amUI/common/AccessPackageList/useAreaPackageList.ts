@@ -47,9 +47,14 @@ export const useAreaPackageList = ({
     data: allPackageAreas,
     isLoading: loadingPackageAreas,
     isFetching: fetchingSearch,
+    error: searchError,
   } = useSearchQuery(searchString ?? '');
 
-  const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery(
+  const {
+    data: activeDelegations,
+    isLoading: loadingDelegations,
+    error: activeDelegationsError,
+  } = useGetUserDelegationsQuery(
     {
       from: fromParty?.partyUuid ?? '',
       to: toParty?.partyUuid ?? '',
@@ -127,11 +132,35 @@ export const useAreaPackageList = ({
     availableAreas,
     allPackageAreas,
     activeDelegations,
+    searchError,
+    activeDelegationsError,
   };
 };
 
+/**
+ * Determine whether a permission is "inherited".
+ *
+ * A permission is considered NOT inherited only when it is directly delegated from
+ * the specified from-party to the specified to-party and the permission's role
+ * code is "rettighetshaver". In all other cases the permission is treated as
+ * inherited (for example when the delegation comes via another party or the
+ * role code differs).
+ * If the permission object is missing a role, the function
+ * returns false (not inherited).
+ *
+ * @param p - the permission object
+ * @param toPartyUuid - UUID of the to-party to compare against the permission's to.id
+ * @param fromPartyUuid - UUID of the from-party to compare against the permission's from.id
+ * @returns true if the permission is inherited, false if it is a direct "rettighetshaver" delegation
+ */
+
 export const isInherited = (p: Permissions, toPartyUuid: string, fromPartyUuid: string) =>
-  !(toPartyUuid === p.to.id && fromPartyUuid === p.from.id && p.role?.code === 'rettighetshaver');
+  !(
+    toPartyUuid === p.to.id &&
+    fromPartyUuid === p.from.id &&
+    p.role &&
+    p.role?.code === 'rettighetshaver'
+  );
 
 export const getDeletableStatus = (
   pkg: AccessPackageDelegation,

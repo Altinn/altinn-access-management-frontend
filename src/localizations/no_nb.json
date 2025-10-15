@@ -75,6 +75,7 @@
     "show_less": "Se mindre",
     "technical_error": "Det har skjedd en teknisk feil. Vennligst prøv igjen eller ta kontakt med Altinn brukerservice hvis problemet fortsetter.",
     "time_of_error": "Tidspunkt feilen inntraff: {{time}}",
+    "trace_id": "Referanse: {{traceId}}",
     "error_status": "HttpStatus: {{status}}",
     "ssn": "Fødselsnummer",
     "last_name": "Etternavn",
@@ -83,6 +84,7 @@
     "subunit": "Underenhet",
     "subunit_lowercase": "underenhet",
     "mainunit_lowercase": "hovedenhet",
+    "org_nr_lowercase": "org.nr. {{org_number}}",
     "date_of_birth": "Født",
     "save_changes": "Lagre endringer"
   },
@@ -289,6 +291,7 @@
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
     "package_number_of_resources": "{{count}} tjenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
+    "no_packages": "Ingen tilgangspakker er tilgjengelige.",
     "no_matching_search": "Ingen treff på søket",
     "info_alert_text": "Tilgangspakker skal erstatte dagens Altinn-roller. De vil fylles med flere tjenester etterhvert. Les mer om dette på <a href='https://info.altinn.no/hjelp/profil/tilgangspakker/'>hjelpesiden om tilgangspakker</a>.",
     "person_info_alert": "Det er ikke mulig å gi og fjerne fullmakter til personer helt enda. Dette vil komme senere.",
@@ -314,13 +317,23 @@
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
     "main_page_heading": "Brukere med fullmakter i {{name}}",
-    "sub_heading": "org.nr. {{org_number}}",
     "user_list_heading": "Andre med fullmakt",
+    "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
     "no_users": "Denne listen er tom",
     "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
-    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?"
+    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
+    "indirect_connections": "Brukere uten fullmakt"
+  },
+  "advanced_user_search": {
+    "add_user_button": "Ny bruker",
+    "indirect_connections": "Brukere uten fullmakt",
+    "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
+    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
+    "user_list_heading": "Andre med fullmakt",
+    "direct_connections": "Brukere med fullmakt",
+    "user_search_placeholder": "Søk etter person eller virksomhet"
   },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
@@ -440,6 +453,7 @@
     "page_title": "Innstillinger - Altinn",
     "page_heading": "Innstillinger for {{name}}",
     "alert_settings_heading": "Varslingsadresser for virksomheten",
+    "not_admin_alert": "Du har ikke tilgang til å redigere varslingsadresser for {{name}}. Bytt aktør eller kontakt noen med administratorrettighet.",
     "alerts_on_email": "Varslinger på e-post",
     "alerts_on_sms": "Varslinger på SMS",
     "one_address": "1 adresse",
@@ -454,7 +468,8 @@
     "remove_email": "Fjern e-post",
     "remove_sms": "Fjern telefonnummer",
     "error_saving_addresses": "Noe gikk galt. Vennligst prøv igjen.",
-    "no_addresses_error": "Virksomheten må ha minst én e-postadresse eller sms-adresse for varslinger."
+    "no_addresses_error": "Virksomheten må ha minst én e-postadresse eller sms-adresse for varslinger.",
+    "alert_settings_info": "Varslene som sendes ut til registrerte varslingsadresser sendes uavhengig av om mottaker har rettighet til å se innholdet i altinn. Hvis dere har en felles e-postadresse er det naturlig å legge den inn her. <a>Les mer</a>"
   },
   "text_field_errors": {
     "required": "Feltet er påkrevd",
@@ -596,7 +611,7 @@
     "delete_systemuser_header": "Slette systemtilgang",
     "delete_systemuser_body": "Er du sikker på at du vil slette systemtilgangen \"{{title}}\"?",
     "delete_systemuser_error": "Kunne ikke slette systemtilgang",
-    "delete_has_customer_warning": "Systemtilgangen kan ikke slettes før alle kunder er fjernet fra systemtilgangen.",
+    "delete_has_customer_warning": "Kundene som er tilordnet systemtilgangen vil også bli fjernet.",
     "update_systemuser_error": "Kunne ikke oppdatere systemtilgang",
     "systemuser_deleted": "Systemtilgang slettet",
     "save_systemuser": "Lagre endringer",
@@ -791,7 +806,7 @@
   },
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt",
-    "heading": "Fullmaktsoversikt for {{fromparty}}"
+    "heading": "Fullmaktsoversikt for {{name}}"
   },
   "package_poa_details_page": {
     "page_title": "Fullmaktsdetaljer",
@@ -799,8 +814,10 @@
     "services_tab_title": "Tjenester",
     "load_error": "Oi! Noe gikk galt.",
     "back_to_overview_link": "Gå tilbake til oversikten",
+    "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
+    "package_revocation_success": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
     "users_tab": {
-      "description": "Disse brukerne har fullmakt til alle tjenestene i tilgangspakken på vegne av {{fromparty}}.",
+      "description": "Søk etter brukere for å gi eller slette fullmakter.",
       "user_search_placeholder": "Søk etter person eller virksomhet",
       "no_users": "Ingen har fullmakt til denne pakken på vegne av {{fromparty}}."
     },

@@ -5,3 +5,7 @@
   gap: var(--ds-size-4);
   margin-top: var(--ds-size-15);
 }
+
+.smallMarginTop {
+  margin-top: var(--ds-size-8);
+}

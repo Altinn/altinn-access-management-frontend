@@ -34,6 +34,7 @@ export const SidebarItems = (
   isAdmin: boolean | undefined,
   isClientAdmin: boolean | undefined,
   reportee: ReporteeInfo | undefined,
+  canAccessSettings: boolean = false,
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const displayConsentGui = window.featureFlags?.displayConsentGui;
@@ -221,7 +222,7 @@ export const SidebarItems = (
     items.push(systemUser);
   }
 
-  if (!displayLimitedPreviewLaunch) {
+  if (!displayLimitedPreviewLaunch && canAccessSettings) {
     items.push(settings);
   }
 

@@ -1,0 +1,49 @@
+.searchBar {
+  max-width: 27rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-4);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3);
+}
+
+.buttonRow {
+  display: flex;
+  flex-direction: row;
+  gap: var(--ds-spacing-3);
+}
+@media only screen and (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .searchBar {
+    max-width: 100%;
+  }
+}
+
+.showMoreButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--ds-spacing-4);
+  width: 100%;
+}
+
+.showMoreButton {
+  width: 100%;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-spacing-3);
+}

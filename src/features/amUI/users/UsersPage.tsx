@@ -13,14 +13,14 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
 import { UsersList } from './UsersList';
 import classes from './UsersList.module.css';
+import { ReporteePageHeading } from '../common/ReporteePageHeading';
 
 export const UsersPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('users_page.page_title'));
-  const { data: reportee } = useGetReporteeQuery();
+
+  const { data: reportee, isLoading } = useGetReporteeQuery();
   const name = reportee?.name || '';
-  const orgNumber = reportee?.organizationNumber || '';
-  const isMainUnit = (reportee?.subunits?.length ?? 0) > 0;
 
   useRerouteIfNotConfetti();
 
@@ -31,16 +31,11 @@ export const UsersPage = () => {
           fromPartyUuid={getCookie('AltinnPartyUuid')}
           actingPartyUuid={getCookie('AltinnPartyUuid')}
         >
-          <DsHeading
-            level={1}
-            data-size='sm'
-            className={classes.usersListHeading}
-          >
-            {t('users_page.main_page_heading', { name: name || '' })}
-            <br />
-            {t('users_page.sub_heading', { org_number: orgNumber || '' })}{' '}
-            {isMainUnit ? `(${t('common.mainunit_lowercase')})` : ''}
-          </DsHeading>
+          <ReporteePageHeading
+            title={t('users_page.main_page_heading', { name })}
+            reportee={reportee}
+            isLoading={isLoading}
+          />
           <UsersList />
         </PartyRepresentationProvider>
       </PageLayoutWrapper>

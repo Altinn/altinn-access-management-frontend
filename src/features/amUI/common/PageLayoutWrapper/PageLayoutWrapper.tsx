@@ -7,14 +7,7 @@ import type {
   MenuItemSize,
   Theme,
 } from '@altinn/altinn-components';
-import {
-  Icon,
-  Layout,
-  MenuItem,
-  RootProvider,
-  SizeEnum,
-  Snackbar,
-} from '@altinn/altinn-components';
+import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import {
@@ -29,6 +22,7 @@ import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
+  useGetIsCompanyProfileAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
   useGetReporteeQuery,
   useGetUserInfoQuery,
@@ -59,6 +53,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
+  const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
+    useGetIsCompanyProfileAdminQuery();
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -78,6 +74,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   };
 
   const isSm = useIsTabletOrSmaller();
+  const isLoadingMenu =
+    isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
 
   const platformLinks = [
     {
@@ -129,11 +127,12 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     ...(isSm
       ? SidebarItems(
           true,
-          isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin,
+          isLoadingMenu,
           pathname,
           isAdmin,
           isClientAdmin,
           reportee,
+          canAccessSettings ?? false,
         )
       : []),
     {
@@ -212,7 +211,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           return `${hits} ${t('header.search-hits')}`;
         },
       },
-      menuItemsVirtual: { isVirtualized: accounts.length > 20 },
+      isVirtualized: accounts.length > 20,
     },
     onSelectAccount: (accountId: string) => {
       // check if this is a person; then redirect to consents page
@@ -289,10 +288,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             name: reportee?.name || '',
             type: getAccountType(reportee?.type ?? ''),
             id: reportee?.partyId || '',
-            icon: {
-              name: reportee?.name || '',
-              type: getAccountType(reportee?.type ?? ''),
-            },
+            icon: { name: reportee?.name || '', type: getAccountType(reportee?.type ?? '') },
           },
           globalMenu: globalMenu,
           desktopMenu: desktopMenu,
@@ -304,11 +300,12 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             groups: menuGroups,
             items: SidebarItems(
               false,
-              isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin,
+              isLoadingMenu,
               pathname,
               isAdmin,
               isClientAdmin,
               reportee,
+              canAccessSettings ?? false,
             ),
           },
         }}
