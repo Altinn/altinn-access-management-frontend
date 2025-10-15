@@ -130,7 +130,7 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
         },
       };
       return [sortedAccounts, accountGroups];
-    }, [reporteeList, actorList, currentUser, actingParty]);
+    }, [reporteeList, actorList, currentUser, actingParty, favoriteUuids]);
 
   return { accounts, accountGroups, favoriteUuids, actingParty, currentUser };
 };
