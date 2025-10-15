@@ -21,7 +21,7 @@ export const ReporteesList = () => {
       toUuid: toParty?.partyUuid ?? '',
     },
     {
-      skip: !toParty?.partyUuid,
+      skip: !toParty?.partyUuid || !actingParty?.partyUuid,
     },
   );
 

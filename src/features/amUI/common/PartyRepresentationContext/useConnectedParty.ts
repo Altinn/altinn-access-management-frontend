@@ -32,7 +32,7 @@ export const useConnectedParty = ({
     isError,
     error,
   } = useGetRightHoldersQuery(request, {
-    skip: (!fromPartyUuid && !toPartyUuid) || skip,
+    skip: (!fromPartyUuid && !toPartyUuid) || !actingPartyUuid || skip,
   });
 
   const partyConnection = connection?.[0];

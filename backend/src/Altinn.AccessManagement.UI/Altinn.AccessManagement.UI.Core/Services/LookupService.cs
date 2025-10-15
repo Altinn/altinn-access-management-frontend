@@ -59,7 +59,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return user == null ? null : new UserProfileFE(user);
         }
 
-
         /// <inheritdoc/>
         public async Task<PartyFE> GetReporteeFromLoggedInUser(Guid userUuid)
         {

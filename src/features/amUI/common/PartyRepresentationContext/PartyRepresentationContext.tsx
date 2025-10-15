@@ -7,7 +7,7 @@ import { Link } from 'react-router';
 import { t } from 'i18next';
 
 import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
-import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery, PartyType } from '@/rtk/features/userInfoApi';
 import { availableForUserTypeCheck } from '@/resources/utils/featureFlagUtils';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
@@ -126,8 +126,9 @@ export const PartyRepresentationProvider = ({
     { skip: !fromPartyUuid || !toPartyUuid },
   );
 
-  const availableForUserType =
-    reporteeIsLoading || availableForUserTypeCheck(actingParty?.partyTypeName.toString());
+  const actingUserType =
+    actingParty?.partyTypeName === PartyType.Organization ? 'Organization' : 'Person';
+  const availableForUserType = reporteeIsLoading || availableForUserTypeCheck(actingUserType);
 
   const isLoading =
     externalIsLoading ||

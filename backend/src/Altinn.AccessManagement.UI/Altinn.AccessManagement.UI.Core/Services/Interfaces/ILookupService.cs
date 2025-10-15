@@ -1,4 +1,4 @@
-﻿﻿using Altinn.AccessManagement.UI.Core.Models;
+﻿using Altinn.AccessManagement.UI.Core.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {

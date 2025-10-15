@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.Authorization.ModelUtils;
 using CommunityToolkit.Diagnostics;
-
+ 
 namespace Altinn.Platform.Models.Register;
 
 /// <summary>

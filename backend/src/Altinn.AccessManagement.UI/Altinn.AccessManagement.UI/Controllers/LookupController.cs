@@ -1,4 +1,4 @@
-﻿﻿using Altinn.AccessManagement.UI.Core.Configuration;
+﻿using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
