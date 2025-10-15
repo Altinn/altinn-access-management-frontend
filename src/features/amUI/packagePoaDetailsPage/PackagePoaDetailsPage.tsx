@@ -10,19 +10,27 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
-import { useRerouteIfLimitedPreview } from '@/resources/utils/featureFlagUtils';
+import {
+  poaOverviewPageEnabled,
+  useRerouteIfLimitedPreview,
+} from '@/resources/utils/featureFlagUtils';
 
 import { PackagePoaDetails } from './PackagePoaDetails';
 import { amUIPath } from '@/routes/paths/amUIPath';
+import { useNavigate } from 'react-router';
 
 export const PackagePoaDetailsPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useDocumentTitle(t('package_poa_details_page.page_title'));
 
   const partyUuid = getCookie('AltinnPartyUuid') || '';
 
-  useRerouteIfLimitedPreview();
+  const pageIsEnabled = poaOverviewPageEnabled();
+  if (!pageIsEnabled) {
+    navigate('/not-found', { replace: true });
+  }
 
   return (
     <PageWrapper>

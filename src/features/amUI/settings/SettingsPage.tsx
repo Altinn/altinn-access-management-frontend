@@ -5,10 +5,10 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 import { amUIPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SettingsPageContent } from './SettingsPageContent';
-import { useRerouteIfLimitedPreview } from '@/resources/utils/featureFlagUtils';
+import { useRerouteIfSettingsPageDisabled } from '@/resources/utils/featureFlagUtils';
 
 export const SettingsPage = () => {
-  useRerouteIfLimitedPreview();
+  useRerouteIfSettingsPageDisabled();
 
   return (
     <PageWrapper>
