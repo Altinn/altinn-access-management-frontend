@@ -62,6 +62,11 @@ export const lookupApi = createApi({
     getUserByUUID: builder.query<UserProfile, string>({
       query: (userUUID) => `user/${userUUID}`,
     }),
+    /**
+     * @deprecated This endpoint is deprecated and should not be used in new code.
+     * It can be removed when the old access management frontend is decommissioned.
+     * use useConnectedParty- or useSelfParty-hook instead.
+     **/
     deprecatedGetPartyByUUID: builder.query<Party, { partyUuid: string }>({
       query: ({ partyUuid }) => `party/${partyUuid}`,
       keepUnusedDataFor: 300,
