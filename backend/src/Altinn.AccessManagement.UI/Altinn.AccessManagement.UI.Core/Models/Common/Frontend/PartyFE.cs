@@ -45,9 +45,9 @@ namespace Altinn.AccessManagement.UI.Core.Models
         public bool IsDeleted { get; set; }
 
         /// <summary>
-        /// Gets or sets the PersonDateOfBirth
+        /// Gets or sets the DateOfBirth
         /// </summary>
-        public string PersonDateOfBirth { get; set; }
+        public string DateOfBirth { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether if the reportee in the list is only there for showing the hierarchy (a parent unit with no access)
@@ -101,7 +101,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
             IsDeleted = party.IsDeleted;
             OrgNumber = party.OrganizationIdentifier;
             UnitType = party.UnitType;
-            PersonDateOfBirth = party.PersonDateOfBirth;
+            DateOfBirth = party.DateOfBirth;
         }
 
         /// <summary>

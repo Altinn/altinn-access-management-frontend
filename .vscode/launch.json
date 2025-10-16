@@ -13,7 +13,20 @@
       "type": "dotnet",
       "request": "launch",
       "projectPath": "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj",
-      "launchConfigurationId": "TargetFramework=;LocalDev_5000"
+      "launchConfigurationId": "TargetFramework=net9.0;LocalDev_5000",
+      "preLaunchTask": "build"
+    },
+    {
+      "name": "C#: Altinn.AccessManagement.UI direct",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/bin/Debug/net9.0/Altinn.AccessManagement.UI.dll",
+      "cwd": "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "stopAtEntry": false,
+      "preLaunchTask": "build-ui-project"
     }
   ]
 }

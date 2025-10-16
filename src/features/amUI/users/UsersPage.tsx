@@ -12,7 +12,6 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
 import { UsersList } from './UsersList';
-import classes from './UsersList.module.css';
 import { ReporteePageHeading } from '../common/ReporteePageHeading';
 
 export const UsersPage = () => {

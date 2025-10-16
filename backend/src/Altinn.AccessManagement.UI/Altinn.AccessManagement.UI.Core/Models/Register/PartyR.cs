@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.Authorization.ModelUtils;
 using CommunityToolkit.Diagnostics;
-
+ 
 namespace Altinn.Platform.Models.Register;
 
 /// <summary>
@@ -77,10 +77,10 @@ public record PartyR
     public string OrganizationIdentifier { get; init; }
 
     /// <summary>
-    /// The date of death of the person, if the party is a person.
+    /// The date of birth of the person, if the party is a person.
     /// </summary>
-    [JsonPropertyName("personDateOfBirth")]
-    public string PersonDateOfBirth { get; init; }
+    [JsonPropertyName("dateOfBirth")]
+    public string DateOfBirth { get; init; }
 
     /// <summary>
     /// The organization unit type, if the party is an organization.

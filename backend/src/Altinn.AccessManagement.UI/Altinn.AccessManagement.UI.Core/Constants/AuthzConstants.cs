@@ -29,5 +29,10 @@
         /// Policy tag for authorizing if user has read access to the Altinn profil API varslingsdaresser for virksomheter resource.
         /// </summary>
         public const string POLICY_ACCESS_MANAGEMENT_PROFIL_API_VARSLINGSDARESSER_FOR_VIRKSOMHETER_READ_WITH_PASS_THROUGH = "AccessManagementProfilApiVarslingsdaresserForVirksomheterReadOrAuthorizedParty";
+
+        /// <summary>
+        /// Policy tag for authorizing if user has read access to the altinn_access_management_hovedadmin resource.
+        /// </summary>
+        public const string POLICY_ACCESS_MANAGEMENT_HOVEDADMIN_READ_WITH_PASS_THROUGH = "AccessManagementHovedadminReadOrAuthorizedParty";
     }
 }

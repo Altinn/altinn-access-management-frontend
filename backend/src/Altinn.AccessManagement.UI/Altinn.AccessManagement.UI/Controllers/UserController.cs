@@ -423,5 +423,22 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return Ok(false);
         }
+
+        /// <summary>
+        /// Endpoint for checking if the authenticated user has access to the altinn_access_management_hovedadmin resource.
+        /// </summary>
+        [HttpGet]
+        [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_HOVEDADMIN_READ_WITH_PASS_THROUGH)]
+        [Route("isHovedadmin")]
+        public ActionResult<bool> IsHovedadmin()
+        {
+            if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) &&
+                hasPermissionObj is bool hasPermission)
+            {
+                return Ok(hasPermission);
+            }
+
+            return Ok(false);
+        }
     }
 }

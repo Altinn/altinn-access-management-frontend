@@ -22,6 +22,8 @@ export type Party = {
   unitType?: string;
   name: string;
   partyTypeName: PartyType;
+  dateOfBirth?: string;
+  isDeleted?: boolean;
 };
 
 export enum UserType {
@@ -60,9 +62,15 @@ export const lookupApi = createApi({
     getUserByUUID: builder.query<UserProfile, string>({
       query: (userUUID) => `user/${userUUID}`,
     }),
-    getPartyByUUID: builder.query<Party, { partyUuid: string; useOldRegistry?: boolean }>({
-      query: ({ partyUuid, useOldRegistry = false }) =>
-        `party/${partyUuid}?useOldRegistry=${useOldRegistry}`,
+    /**
+     * @deprecated This endpoint is deprecated and should not be used in new code.
+     * It can be removed when the old access management frontend is decommissioned.
+     * Use useGetPartyFromLoggedInUserQuery for logged-in user data, or see
+     * useReporteeParty/useConnectedParty hooks in "common/PartyRepresentationContext/useConnectedParty.ts"
+     * for secure alternatives.
+     **/
+    deprecatedGetPartyByUUID: builder.query<Party, { partyUuid: string }>({
+      query: ({ partyUuid }) => `party/${partyUuid}`,
       keepUnusedDataFor: 300,
     }),
     getOrganization: builder.query<Organization, string>({
@@ -73,6 +81,10 @@ export const lookupApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
     }),
+    getPartyFromLoggedInUser: builder.query<Party, void>({
+      query: () => `party/user`,
+      keepUnusedDataFor: 300,
+    }),
     getReporteeParty: builder.query<Party, void>({
       query: () => `party/${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 300,
@@ -82,8 +94,9 @@ export const lookupApi = createApi({
 
 export const {
   useGetUserByUUIDQuery,
-  useGetPartyByUUIDQuery,
+  useDeprecatedGetPartyByUUIDQuery,
   useGetOrganizationQuery,
+  useGetPartyFromLoggedInUserQuery,
   useGetReporteePartyQuery,
 } = lookupApi;
 

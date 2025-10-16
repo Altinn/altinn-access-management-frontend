@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { Button, DsAlert, DsButton, DsHeading, DsPopover } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsPopover } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { PartyType } from '@/rtk/features/userInfoApi';

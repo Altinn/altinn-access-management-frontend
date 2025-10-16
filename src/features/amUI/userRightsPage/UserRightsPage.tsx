@@ -6,7 +6,6 @@ import { useRerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { amUIPath } from '@/routes/paths';
 import { PageWrapper } from '@/components';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -19,12 +18,24 @@ import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
+import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { UserRightsPageSkeleton } from './UserRightsPageSkeleton';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
+  const { data: isHovedadmin, isLoading: isHovedadminLoading } = useGetIsHovedadminQuery();
+  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
 
-  useDocumentTitle(t('user_rights_page.page_title'));
+  // Case:
+  // Du er på din egen side i tilgangsstyring og ikke hovedadmin (currentUser = toParty). Hvis ikke bruker vi aktør fra cookie (reportee)
+  // Vi sjekker is-hovedadmin på ressurs altinn_access_management_hovedadmin
+
+  const actingPartyUuid =
+    !isHovedadminLoading && !isHovedadmin && !currentUserIsLoading && currentUser?.partyUuid === id
+      ? currentUser?.partyUuid
+      : getCookie('AltinnPartyUuid');
 
   useRerouteIfNotConfetti();
 
@@ -34,7 +45,9 @@ export const UserRightsPage = () => {
     <PageWrapper>
       <PageLayoutWrapper>
         <PartyRepresentationProvider
-          actingPartyUuid={getCookie('AltinnPartyUuid')}
+          loadingComponent={<UserRightsPageSkeleton />}
+          isLoading={isHovedadminLoading || currentUserIsLoading}
+          actingPartyUuid={actingPartyUuid ?? ''}
           fromPartyUuid={getCookie('AltinnPartyUuid')}
           toPartyUuid={id ?? undefined}
           returnToUrlOnError={`/${amUIPath.Users}`}
