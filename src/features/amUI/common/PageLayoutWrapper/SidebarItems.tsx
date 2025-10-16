@@ -20,7 +20,6 @@ import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
 } from '@/resources/utils/permissionUtils';
-import { poaOverviewPageEnabled, settingsPageEnabled } from '@/resources/utils/featureFlagUtils';
 
 /**
  * Generates a list of sidebar items for the page layout.

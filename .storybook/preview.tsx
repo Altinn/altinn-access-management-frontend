@@ -15,6 +15,8 @@ declare global {
       restrictPrivUse: boolean;
       displaySettingsPage: boolean;
       displayPoaOverviewPage: boolean;
+      crossPlatformLinks: boolean;
+      displayConsentGui: boolean;
     };
   }
 }
@@ -46,6 +48,8 @@ window.featureFlags = {
   restrictPrivUse: false,
   displaySettingsPage: true,
   displayPoaOverviewPage: true,
+  crossPlatformLinks: false,
+  displayConsentGui: false,
 };
 
 // Initialise i18next;

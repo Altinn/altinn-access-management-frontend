@@ -1,6 +1,8 @@
 <script>
   console.log('Script is running');
+  // Merge new flags into any existing window.featureFlags so we don't overwrite other keys
   window.featureFlags = {
+    ...(window.featureFlags || {}),
     displayPopularSingleRightsServices: false,
     displayResourceDelegation: false,
     displayConfettiPackage: false,

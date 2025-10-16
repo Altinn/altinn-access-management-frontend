@@ -10,18 +10,14 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
-import {
-  poaOverviewPageEnabled,
-  useRerouteIfLimitedPreview,
-} from '@/resources/utils/featureFlagUtils';
+import { poaOverviewPageEnabled } from '@/resources/utils/featureFlagUtils';
 
 import { PackagePoaDetails } from './PackagePoaDetails';
 import { amUIPath } from '@/routes/paths/amUIPath';
-import { useNavigate } from 'react-router';
+import { Navigate } from 'react-router';
 
 export const PackagePoaDetailsPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   useDocumentTitle(t('package_poa_details_page.page_title'));
 
@@ -29,7 +25,12 @@ export const PackagePoaDetailsPage = () => {
 
   const pageIsEnabled = poaOverviewPageEnabled();
   if (!pageIsEnabled) {
-    navigate('/not-found', { replace: true });
+    return (
+      <Navigate
+        to='/not-found'
+        replace
+      />
+    );
   }
 
   return (
