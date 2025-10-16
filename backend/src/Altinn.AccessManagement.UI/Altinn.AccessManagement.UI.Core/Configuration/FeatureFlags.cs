@@ -40,5 +40,15 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to enable cross platform links
         /// </summary>
         public bool CrossPlatformLinks { get; set; }
+
+        /// <summary>
+        /// Whether to display the settings page in the sidebar
+        /// </summary>
+        public bool DisplaySettingsPage { get; set; }
+
+        /// <summary>
+        /// Whether to display the POA overview page in the sidebar
+        /// </summary>
+        public bool DisplayPoaOverviewPage { get; set; }
     }
 }
