@@ -2,17 +2,17 @@ import type { Page } from '@playwright/test';
 import { test, expect } from '@playwright/test';
 
 import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../util/loadFacilitators';
+import { env } from 'playwright/util/helper';
 import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
 import { LoginPage } from '../../pages/LoginPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
-
-test.describe.configure({ timeout: 60000 });
 
 test.describe('Klientdelegering', () => {
   let api: ApiRequests;
 
   test.beforeEach(() => {
-    api = new ApiRequests();
+    const orgNumber = '310547891'; // Hardcoded org ID for testing
+    api = new ApiRequests(orgNumber);
   });
 
   test('Ansvarlig revisor', async ({ page }) => {
@@ -78,13 +78,13 @@ test.describe('Klientdelegering', () => {
     await expect(loginPage.loginButton).toBeVisible();
 
     // Navigate to system user login page
-    await loginPage.loginAs(user.pid, user.org);
+    await loginPage.loginAcActorOrg(user.pid, user.org);
 
     //Go to system user overview page
     if (!process.env.SYSTEMUSER_URL) {
       throw new Error('Environment variable SYSTEMUSER_URL is not defined.');
     }
-    await page.goto(process.env.SYSTEMUSER_URL + '/overview');
+    await page.goto(env('SYSTEMUSER_URL') + '/overview');
 
     // Intro to "new brukerflate"
     await page.getByRole('button', { name: 'Prøv ny tilgangsstyring' }).click();

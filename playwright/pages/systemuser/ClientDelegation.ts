@@ -1,4 +1,3 @@
-// playwright/pages/ClientDelegationPage.ts
 import type { Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 

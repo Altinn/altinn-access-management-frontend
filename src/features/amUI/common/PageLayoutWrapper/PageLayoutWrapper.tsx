@@ -19,6 +19,7 @@ import {
 
 import {
   useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
   useGetIsCompanyProfileAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
   useGetActorListForAuthorizedUserQuery,
@@ -46,7 +47,7 @@ const getAccountType = (type: string): 'company' | 'person' => {
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t, i18n } = useTranslation();
   const useNewActorListFlag = useNewActorList();
-  const { data: reportee } = useGetReporteeQuery();
+  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
   const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
     skip: useNewActorListFlag,
@@ -57,8 +58,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
 
-  const { data: isAdmin } = useGetIsAdminQuery();
-  const { data: canAccessSettings } = useGetIsCompanyProfileAdminQuery();
+  const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
+  const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
+  const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
+    useGetIsCompanyProfileAdminQuery();
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -78,6 +81,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   };
 
   const isSm = useIsTabletOrSmaller();
+  const isLoadingMenu =
+    isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
 
   const platformLinks = [
     {
@@ -129,10 +134,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     ...(isSm
       ? SidebarItems(
           true,
+          isLoadingMenu,
           pathname,
           isAdmin,
-          reportee?.name || '',
-          getAccountType(reportee?.type ?? ''),
+          isClientAdmin,
+          reportee,
           canAccessSettings ?? false,
         )
       : []),
@@ -272,10 +278,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             groups: menuGroups,
             items: SidebarItems(
               false,
+              isLoadingMenu,
               pathname,
               isAdmin,
-              reportee?.name || '',
-              getAccountType(reportee?.type ?? ''),
+              isClientAdmin,
+              reportee,
               canAccessSettings ?? false,
             ),
           },
