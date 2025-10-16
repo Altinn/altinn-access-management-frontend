@@ -100,7 +100,7 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
           if (b.type === 'company' && a.type === 'person') return -1;
           if (b.groupId !== 'self' && a.groupId === 'favorites') return -1;
           if (a.groupId !== 'self' && b.groupId === 'favorites') return 1;
-          return a.name > b.name ? 1 : -1;
+          return a.name.localeCompare(b.name);
         }) ?? [];
 
       const firstCompany = sortedAccounts.find(
