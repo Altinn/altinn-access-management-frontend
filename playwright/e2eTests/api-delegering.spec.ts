@@ -1,6 +1,7 @@
 import { expect } from '@playwright/test';
 
 import { test } from './../fixture/pomFixture';
+import { env } from 'playwright/util/helper';
 
 const standardApiDetails = {
   name: 'Maskinporten Schema - AM - K6',
@@ -94,7 +95,7 @@ test.describe('@slow API-Delegations to organization user', () => {
     await apiDelegations.verifyConfirmationPage(standardApiDetails, userThatReceivesDelegation);
 
     //Delegate API to same Org to which API was delegated before
-    await page.goto(process.env.BASE_URL + '/ui/profile');
+    await page.goto(env('BASE_URL') + '/ui/profile');
     await apiDelegations.delegateAPI(standardApiDetails.name, userThatReceivesDelegation.orgNumber);
     await apiDelegations.verifyConfirmationPage(standardApiDetails, userThatReceivesDelegation);
   });
@@ -218,7 +219,7 @@ test.describe('@slow API Delegation Access Control Tests', () => {
     await login.loginWithUser('02828698497');
     await login.chooseReportee(reporteeWithoutAccess);
 
-    await page.goto((process.env.BASE_URL as string) + '/ui/profile');
+    await page.goto(env('BASE_URL') + '/ui/profile');
 
     //Make sure the user is on the correct page
     await expect(
@@ -240,7 +241,7 @@ test.describe('@slow API Delegation Access Control Tests', () => {
     await login.loginWithUser(user);
     await login.chooseReportee(reporteeWithAPIRole);
 
-    await page.goto((process.env.BASE_URL as string) + '/ui/profile');
+    await page.goto(env('BASE_URL') + '/ui/profile');
 
     //Make sure the user is on the correct page
     await expect(
@@ -264,7 +265,7 @@ test.describe('@slow API Delegation Access Control Tests', () => {
     await login.loginWithUser(userThatDelegates.id);
     await login.chooseReportee(userThatDelegates.reportee);
 
-    await page.goto((process.env.BASE_URL as string) + '/ui/profile');
+    await page.goto(env('BASE_URL') + '/ui/profile');
     //Make sure the user is on the correct page
     await expect(
       page.getByRole('heading', { name: `Profil for ${userThatDelegates.reportee}` }),

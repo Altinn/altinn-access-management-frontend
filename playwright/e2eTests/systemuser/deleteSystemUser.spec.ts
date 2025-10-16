@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
+import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 
 import { SystemUserPage } from '../../pages/systemuser/SystemUserPage';
@@ -13,7 +14,8 @@ test.describe('System user deletion', () => {
   let api: ApiRequests;
 
   test.beforeEach(async ({ page }) => {
-    api = new ApiRequests();
+    const orgNumber = '310547891'; // Hardcoded org ID for testing
+    api = new ApiRequests(orgNumber);
     const login = new LoginPage(page);
     await login.loginWithUser('14824497789');
     await login.chooseReportee('AKTVERDIG RETORISK APE');
@@ -25,7 +27,7 @@ test.describe('System user deletion', () => {
     const systemUserPage = new SystemUserPage(page);
 
     // Navigate to system user page
-    await page.goto(`${process.env.SYSTEMUSER_URL}/overview`);
+    await page.goto(`${env('SYSTEMUSER_URL')}/overview`);
 
     // Intro to "new brukerflate"
     await page.getByRole('button', { name: 'Prøv ny tilgangsstyring' }).click();

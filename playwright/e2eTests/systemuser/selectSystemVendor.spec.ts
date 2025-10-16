@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
+import { env } from 'playwright/util/helper';
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
 import { LoginPage } from 'playwright/pages/LoginPage';
 
@@ -12,7 +13,8 @@ test.describe('System Register', async () => {
   let system: string;
 
   test.beforeEach(async ({ page }) => {
-    const api = new ApiRequests();
+    const orgNumber = '310547891'; // Hardcoded org ID for testing
+    const api = new ApiRequests(orgNumber);
     system = await api.createSystemSystemRegister(); // Create system before each test
     const login = new LoginPage(page);
     await login.loginWithUser('14824497789');
@@ -23,7 +25,7 @@ test.describe('System Register', async () => {
     const systemUserPage = new SystemUserPage(page);
 
     // Navigate to system user page
-    await page.goto(`${process.env.SYSTEMUSER_URL}` + '/overview');
+    await page.goto(`${env('SYSTEMUSER_URL')}` + '/overview');
 
     // Intro to "new brukerflate"
     await page.getByRole('button', { name: 'Prøv ny tilgangsstyring' }).click();

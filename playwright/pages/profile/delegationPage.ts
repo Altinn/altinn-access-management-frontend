@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import type { Page } from '@playwright/test';
 import { expect } from '@playwright/test';
+import { env } from 'playwright/util/helper';
 
 export class delegateToUser {
   constructor(public page: Page) {}
@@ -119,7 +120,7 @@ export class delegateRoleToUser {
       console.log('Mailid is already registered');
     }
     await this.page.getByRole('link', { name: 'Ferdig' }).click();
-    await this.page.goto(process.env.BASE_URL + '/ui/profile');
+    await this.page.goto(env('BASE_URL') + '/ui/profile');
   }
 
   async delegateRoles(roleName1: string, roleName2: string, reporteeName: string) {
@@ -137,7 +138,7 @@ export class delegateRoleToUser {
       console.log('Mailid is already registered');
     }
     await this.page.getByRole('link', { name: 'Ferdig' }).click();
-    await this.page.goto(process.env.BASE_URL + '/ui/profile');
+    await this.page.goto(env('BASE_URL') + '/ui/profile');
     await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
     await this.page.getByRole('link', { name: reporteeName }).click();
     const reporteeButton = this.page.getByRole('link', { name: reporteeName }).nth(1);
@@ -186,11 +187,11 @@ export class revokeRights {
         }
         await this.page.getByRole('button').filter({ hasText: 'Ferdig' }).click();
         await this.page.getByRole('link', { name: 'Ferdig' }).click();
-        await this.page.goto(process.env.BASE_URL + '/ui/profile');
+        await this.page.goto(env('BASE_URL') + '/ui/profile');
       }
     } else {
       console.error('Reportee not found');
-      await this.page.goto(process.env.BASE_URL + '/ui/profile');
+      await this.page.goto(env('BASE_URL') + '/ui/profile');
     }
   }
 
@@ -235,12 +236,12 @@ export class revokeRights {
           }
           await this.page.getByRole('button').filter({ hasText: 'Ferdig' }).click();
           await this.page.getByRole('link', { name: 'Ferdig' }).click();
-          await this.page.goto(process.env.BASE_URL + '/ui/profile');
+          await this.page.goto(env('BASE_URL') + '/ui/profile');
         }
       }
     } else {
       console.error('Reportee not found');
-      await this.page.goto(process.env.BASE_URL + '/ui/profile');
+      await this.page.goto(env('BASE_URL') + '/ui/profile');
     }
   }
 }
@@ -250,7 +251,7 @@ export class instantiateResource {
 
   async instantiateApp(appReportee: string) {
     // Go to the app URL
-    await this.page.goto(process.env.APP_URL as string);
+    await this.page.goto(env('APP_URL'));
     try {
       const headingVisible = await this.page
         .waitForSelector('role=heading[name="Hvem vil du sende inn for?"]', { timeout: 5000 })
@@ -264,7 +265,7 @@ export class instantiateResource {
 
         // If heading is not visible, check the current URL
         const baseUrl = this.page.url().split('?')[0].split('#')[0];
-        const expectedBaseUrl = process.env.APP_URL;
+        const expectedBaseUrl = env('APP_URL');
 
         if (baseUrl !== expectedBaseUrl) {
           throw new Error(
@@ -274,7 +275,7 @@ export class instantiateResource {
 
         // Close form if the button is available
         await this.page.getByRole('link', { name: 'Tilbake til innboks' }).click();
-        await this.page.goto(process.env.BASE_URL + '/ui/profile');
+        await this.page.goto(env('BASE_URL') + '/ui/profile');
       }
     } catch (error) {
       console.error('An error occurred during navigation:', error);

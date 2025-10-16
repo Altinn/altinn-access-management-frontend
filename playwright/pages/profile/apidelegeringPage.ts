@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
+import { env } from 'playwright/util/helper';
 
 import no_nb from '../../../src/localizations/no_nb.json';
 
@@ -202,7 +203,7 @@ export class apiDelegation {
       await this.saveButton.click();
       await this.cancelButton.click();
     } else {
-      await this.page.goto(process.env.BASE_URL + '/ui/profile');
+      await this.page.goto(env('BASE_URL') + '/ui/profile');
     }
   }
 
