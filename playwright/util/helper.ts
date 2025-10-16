@@ -29,21 +29,14 @@ export function addTimeToNowUtc(opts: {
 }
 
 /**
- * Converts ISO/UTC string to Oslo UI format (DD.MM.YYYY HH:MM)
+ * Converts ISO/UTC string to date format (DD.MM.YYYY HH:MM)
  */
-export function formatUiDateTime(isoString: string): string {
-  const date = new Date(isoString);
-  const datePart = date.toLocaleDateString('no-NO', {
+export function formatUiDateTime(dateString: string): string {
+  return new Date(dateString).toLocaleString('no-NO', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
-    timeZone: 'Europe/Oslo',
-  });
-  const timePart = date.toLocaleTimeString('no-NO', {
     hour: '2-digit',
     minute: '2-digit',
-    hour12: false,
-    timeZone: 'Europe/Oslo',
   });
-  return `${datePart}, ${timePart}`;
 }
