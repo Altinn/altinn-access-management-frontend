@@ -7,17 +7,14 @@ import { Link } from 'react-router';
 import { t } from 'i18next';
 
 import { useGetPartyByUUIDQuery, type Party } from '@/rtk/features/lookupApi';
-import {
-  useGetReporteeQuery,
-  useGetRightHoldersQuery,
-  useGetUserInfoQuery,
-} from '@/rtk/features/userInfoApi';
+import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import { availableForUserTypeCheck } from '@/resources/utils/featureFlagUtils';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { NotAvailableForUserTypeAlert } from '../NotAvailableForUserTypeAlert/NotAvailableForUserTypeAlert';
 import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */

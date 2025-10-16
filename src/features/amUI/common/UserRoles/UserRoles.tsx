@@ -4,7 +4,7 @@ import cn from 'classnames';
 
 import classes from './userRoles.module.css';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getRoleCodesAndIdsForKeyRoles, getRoleCodesForKeyRoles } from './roleUtils';

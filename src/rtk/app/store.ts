@@ -16,6 +16,7 @@ import { roleApi } from '../features/roleApi';
 import { systemUserApi } from '../features/systemUserApi';
 import { consentApi } from '../features/consentApi';
 import { altinnCdnApi } from '../features/altinnCdnApi';
+import { connectionApi } from '../features/connectionApi';
 
 const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ const store = configureStore({
     apiDelegation: apiDelegationReducer,
     singleRightsSlice: singleRightsReducer,
     [userInfoApi.reducerPath]: userInfoApi.reducer,
+    [connectionApi.reducerPath]: connectionApi.reducer,
     [lookupApi.reducerPath]: lookupApi.reducer,
     [settingsApi.reducerPath]: settingsApi.reducer,
     [singleRightsApi.reducerPath]: singleRightsApi.reducer,
@@ -43,6 +45,7 @@ const store = configureStore({
       overviewOrgApi.middleware,
       resourceApi.middleware,
       userInfoApi.middleware,
+      connectionApi.middleware,
       accessPackageApi.middleware,
       roleApi.middleware,
       systemUserApi.middleware,

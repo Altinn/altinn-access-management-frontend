@@ -29,3 +29,7 @@ export const availableForUserTypeCheck = (userType?: string) => {
 export const crossPlatformLinksEnabled = () => {
   return window.featureFlags?.crossPlatformLinks === true;
 };
+
+export const useNewActorList = () => {
+  return window.featureFlags?.useNewActorsList === true;
+};

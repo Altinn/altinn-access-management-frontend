@@ -10,6 +10,7 @@ declare global {
       displayConsentGui: boolean;
       restrictPrivUse: boolean;
       crossPlatformLinks: boolean;
+      useNewActorsList: boolean;
     };
   }
 }
