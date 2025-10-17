@@ -138,11 +138,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 partyByUuid.TryGetValue(GetUrnValue(consent.To), out Party toParty);
                 bool showInPortal =
                     consent.PortalViewMode.Equals("show", StringComparison.OrdinalIgnoreCase) &&
-                    consent.ConsentRequestEvents.Any(x => x.EventType.Equals("accepted", StringComparison.OrdinalIgnoreCase));
+                    !consent.ConsentRequestEvents.Any(x => x.EventType.Equals("accepted", StringComparison.OrdinalIgnoreCase));
                 return new ActiveConsentItemFE()
                 {
                     Id = consent.Id,
-                    CanBeConsented = showInPortal,
+                    IsPendingConsent = showInPortal,
                     IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
                     ToPartyId = consent.To,
                     ToPartyName = toParty?.Name ?? string.Empty,

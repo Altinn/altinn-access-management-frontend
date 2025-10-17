@@ -13,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// <summary>
         /// If consent can be consented to. True if PortalViewMode is Show and consent is not yet accepted.
         /// </summary>
-        public bool CanBeConsented { get; set; }
+        public bool IsPendingConsent { get; set; }
 
         /// <summary>
         /// If consent is a power of attorney or a consent

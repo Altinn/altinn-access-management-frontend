@@ -43,12 +43,12 @@ export const ActiveConsentsPage = () => {
   const isLoading = isLoadingReportee || isLoadingIsAdmin || isLoadingActiveConsents;
 
   const groupedActiveConsents = useMemo(() => {
-    const acceptedConsents = activeConsents?.filter((x) => !x.canBeConsented);
+    const acceptedConsents = activeConsents?.filter((x) => !x.isPendingConsent);
     return groupConsents(acceptedConsents);
   }, [activeConsents]);
 
   const groupedPendingActiveConsents = useMemo(() => {
-    const pendingConsents = activeConsents?.filter((x) => x.canBeConsented);
+    const pendingConsents = activeConsents?.filter((x) => x.isPendingConsent);
     return groupConsents(pendingConsents);
   }, [activeConsents]);
 
@@ -71,7 +71,7 @@ export const ActiveConsentsPage = () => {
             heading='active_consents.altinn2_consent_alert_header'
             text='active_consents.altinn2_consent_alert_body'
           />
-          {groupedPendingActiveConsents && Object.keys(groupedPendingActiveConsents).length && (
+          {groupedPendingActiveConsents && Object.keys(groupedPendingActiveConsents).length > 0 && (
             <>
               <div className={classes.activeConsentsSubHeading}>
                 <DsHeading
