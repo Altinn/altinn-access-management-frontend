@@ -122,8 +122,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             IEnumerable<ConsentRequestDetails> activeConsents = consents.Value.Where(consent =>
             {
                 bool isTerminated = consent.ConsentRequestEvents.Any(e => excludedStatuses.Contains(e.EventType));
-                bool isAccepted = consent.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase));
-                bool isShownInPortal = string.Equals(consent.PortalViewMode, "show", StringComparison.OrdinalIgnoreCase);
+                bool isAccepted = IsConsentAccepted(consent);
+                bool isShownInPortal = IsPortalModeConsent(consent);
                 return !isTerminated && (isAccepted || isShownInPortal);
             });
 
@@ -141,13 +141,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
             IEnumerable<ActiveConsentItemFE> activeConsentsFE = activeConsents.Select(consent =>
             {
                 partyByUuid.TryGetValue(GetUrnValue(consent.To), out Party toParty);
-                bool isAccepted = consent.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase));
-                bool showInPortal = string.Equals(consent.PortalViewMode, "show", StringComparison.OrdinalIgnoreCase) && !isAccepted;
-
                 return new ActiveConsentItemFE()
                 {
                     Id = consent.Id,
-                    IsPendingConsent = showInPortal,
+                    IsPendingConsent = !IsConsentAccepted(consent) && IsPortalModeConsent(consent),
                     IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
                     ToPartyId = consent.To,
                     ToPartyName = toParty?.Name ?? string.Empty,
@@ -246,6 +243,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static Dictionary<string, Party> PartyListToDict(IEnumerable<Party> parties)
         {
             return parties.Where(p => p != null && p.PartyUuid.HasValue).ToDictionary(p => p.PartyUuid.ToString(), p => p, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private static bool IsPortalModeConsent(ConsentRequestDetails consentRequest)
+        {
+            return string.Equals(consentRequest.PortalViewMode, "show", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsConsentAccepted(ConsentRequestDetails consentRequest)
+        {
+            return consentRequest.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase));
         }
 
         private static string GetUrnValue(string urn)
