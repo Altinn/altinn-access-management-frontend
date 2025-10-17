@@ -64,7 +64,6 @@ export const ActiveConsentsPage = () => {
           <DsHeading
             level={1}
             data-size='sm'
-            className={classes.activeConsentsTopHeading}
           >
             {t('active_consents.heading')}
           </DsHeading>
