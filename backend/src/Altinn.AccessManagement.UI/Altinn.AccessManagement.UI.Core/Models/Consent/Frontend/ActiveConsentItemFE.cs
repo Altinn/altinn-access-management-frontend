@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         public Guid Id { get; set; }
 
         /// <summary>
-        /// If consent is not yet consented to
+        /// If consent can be consented to. True if PortalViewMode is Show and consent is not yet accepted.
         /// </summary>
         public bool CanBeConsented { get; set; }
 

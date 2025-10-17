@@ -680,6 +680,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.CanBeConsented, actual.CanBeConsented);
             Assert.Equal(expected.IsPoa, actual.IsPoa);
             Assert.Equal(expected.ToPartyId, actual.ToPartyId);
             Assert.Equal(expected.ToPartyName, actual.ToPartyName);
