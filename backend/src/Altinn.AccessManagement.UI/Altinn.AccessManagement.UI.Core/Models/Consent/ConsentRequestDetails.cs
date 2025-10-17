@@ -13,6 +13,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         public required Guid Id { get; set; }
 
         /// <summary>
+        /// Defines if consent request is shown in portal
+        /// </summary>
+        public string? PortalViewMode { get; set; }
+
+        /// <summary>
         /// Defines the party that has to consent to the consentRequest
         /// </summary>
         public required string From { get; set; }

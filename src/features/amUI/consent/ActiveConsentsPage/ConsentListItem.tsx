@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { DsSkeleton, List, ListItem } from '@altinn/altinn-components';
 import { HandshakeIcon } from '@navikt/aksel-icons';
@@ -8,7 +7,7 @@ import classes from './ActiveConsentsPage.module.css';
 
 interface ConsentListItemProps {
   title: string;
-  subItems: { id: string; title: string; isPoa: boolean }[];
+  subItems: { id: string; title: string; badgeText: string }[];
   isLoading?: boolean;
   onClick?: (consentId: string) => void;
 }
@@ -18,8 +17,6 @@ export const ConsentListItem = ({
   isLoading,
   onClick,
 }: ConsentListItemProps): React.ReactNode => {
-  const { t } = useTranslation();
-
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   return (
     <ListItem
@@ -52,9 +49,7 @@ export const ConsentListItem = ({
                     width={20}
                   />
                 ) : (
-                  <>
-                    {item.isPoa ? t('active_consents.see_poa') : t('active_consents.see_consent')}
-                  </>
+                  <>{item.badgeText}</>
                 )}
               </div>
             }
