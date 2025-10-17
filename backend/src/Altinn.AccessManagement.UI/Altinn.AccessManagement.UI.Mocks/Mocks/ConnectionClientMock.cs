@@ -1,19 +1,17 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.User;
-using Bogus.Extensions.UnitedKingdom;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
-using System.Text;
 using System.Text.Json;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    ///     Mock class for <see cref="IRightHolderClient"></see> interface
+    ///     Mock class for <see cref="IConnectionClient"></see> interface
     /// </summary>
-    public class RightHolderClientMock : IRightHolderClient
+    public class ConnectionClientMock : IConnectionClient
     {
         private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string dataFolder;
@@ -21,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <summary>
         ///     Initializes a new instance of the <see cref="AccessManagementClientMock" /> class
         /// </summary>
-        public RightHolderClientMock(
+        public ConnectionClientMock(
             HttpClient httpClient,
             ILogger<AccessManagementClientMock> logger,
             IHttpContextAccessor httpContextAccessor)
@@ -31,7 +29,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
 
         /// <inheritdoc/>
-        public Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid? from, Guid? to)
+        public Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to)
         {
 
             if (party == Guid.Empty)
@@ -44,12 +42,19 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc/>
-        public Task<List<Connection>> GetRightHolders(Guid party, Guid? from, Guid? to)
+        public Task<List<Connection>> GetConnections(Guid party, Guid? from, Guid? to)
         {
             if (party == Guid.Empty)
             {
                 throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
             }
+
+            // Special case for 404 testing - return null for specific party UUID
+            if (party == Guid.Parse("00000000-0000-0000-0000-000000000404"))
+            {
+                return Task.FromResult<List<Connection>>(null);
+            }
+
             try
             {
                 var testDataPath = Path.Combine(dataFolder, "RightHolders", $"{party}.json");
@@ -64,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc/>
-        public Task<HttpResponseMessage> PostNewRightHolder(Guid party, Guid to, CancellationToken cancellationToken = default)
+        public Task<HttpResponseMessage> PostNewRightHolderConnection(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
             if (party == Guid.Empty)
             {

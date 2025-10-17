@@ -43,16 +43,16 @@ export const DelegationCheckError = ({
         return t(
           'systemuser_delegation_errors.20_delegation_right_insufficient_authentication_level',
         );
-      case 'AMUI-00050':
-        return t('systemuser_delegation_errors.50_accesspackage_delegation_failed');
-      case 'AMUI-00052':
+      case 'AMUI-00051':
+        return t('systemuser_delegation_errors.51_accesspackage_delegation_failed');
+      case 'AMUI-00053':
         return t(
-          'systemuser_delegation_errors.52_accesspackage_delegation_missing_required_access',
+          'systemuser_delegation_errors.53_accesspackage_delegation_missing_required_access',
         );
-      case 'AMUI-00054':
-        return t('systemuser_delegation_errors.54_accesspackage_failed_to_get_delegated_packages');
-      case 'AMUI-00056':
-        return t('systemuser_delegation_errors.56_systemuser_failed_to_delete_accesspackage');
+      case 'AMUI-00055':
+        return t('systemuser_delegation_errors.55_accesspackage_failed_to_get_delegated_packages');
+      case 'AMUI-00057':
+        return t('systemuser_delegation_errors.57_systemuser_failed_to_delete_accesspackage');
 
       default:
         return t(defaultError);

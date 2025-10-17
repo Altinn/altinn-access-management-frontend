@@ -23,8 +23,9 @@ import { useGetConsentLogQuery } from '@/rtk/features/consentApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ConsentTimeline } from './ConsentTimeline';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { hasConsentPermission } from '../utils';
 import { ConsentPath } from '@/routes/paths';
+import { hasConsentPermission } from '@/resources/utils/permissionUtils';
+import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 
 export const ConsentHistoryPage = () => {
   const { t } = useTranslation();
@@ -55,26 +56,32 @@ export const ConsentHistoryPage = () => {
     <PageWrapper>
       <PageLayoutWrapper>
         <div className={classes.consentHistoryPage}>
-          <DsLink
-            asChild={true}
-            data-size='md'
-            data-color='neutral'
-          >
-            <Link to={`/${ConsentPath.Consent}/${ConsentPath.Active}`}>
-              <ArrowLeftIcon
-                aria-hidden={true}
-                fontSize='1.3rem'
-              />
-              {t('common.back')}
-            </Link>
-          </DsLink>
+          <div>
+            <DsLink
+              asChild={true}
+              data-size='md'
+              data-color='neutral'
+            >
+              <Link to={`/${ConsentPath.Consent}/${ConsentPath.Active}`}>
+                <ArrowLeftIcon
+                  aria-hidden={true}
+                  fontSize='1.3rem'
+                />
+                {t('common.back')}
+              </Link>
+            </DsLink>
+          </div>
           <div>
             <DsHeading
               level={1}
-              data-size='md'
+              data-size='sm'
             >
               {t('consent_log.heading')}
             </DsHeading>
+            <OldConsentAlert
+              heading='consent_log.altinn2_consent_alert_header'
+              text='consent_log.altinn2_consent_alert_body'
+            />
           </div>
           {!isLoading && !hasPermission && <div>{t('consent_log.no_consent_log_permission')}</div>}
           {isLoading && <LoadingTimeline />}

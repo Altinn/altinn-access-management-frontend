@@ -9,6 +9,8 @@ declare global {
       displayLimitedPreviewLaunch: boolean;
       displayConsentGui: boolean;
       restrictPrivUse: boolean;
+      crossPlatformLinks: boolean;
+      useNewActorsList: boolean;
     };
   }
 }

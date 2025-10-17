@@ -61,7 +61,9 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthorizationBuilder()
-    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_access_management", true)));
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_access_management", true)))
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_CLIENT_ADMINISTRATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_client_administration", true)))
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_PROFIL_API_VARSLINGSDARESSER_FOR_VIRKSOMHETER_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn-profil-api-varslingsdaresser-for-virksomheter", true)));   
 
 builder.Services.AddScoped<IAuthorizationHandler, EndUserResourceAccessHandler>();
 
@@ -217,6 +219,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISettingsService, SettingsService>();
     services.AddSingleton<IResourceService, ResourceService>();
     services.AddSingleton<IUserService, UserService>();
+    services.AddSingleton<IConnectionService, ConnectionService>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();
@@ -359,11 +362,11 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 
     if (mockSettings.RightHolder)
     {
-        services.AddHttpClient<IRightHolderClient, RightHolderClientMock>();
+        services.AddHttpClient<IConnectionClient, ConnectionClientMock>();
     }
     else
     {
-        services.AddHttpClient<IRightHolderClient, RightHolderClient>();
+        services.AddHttpClient<IConnectionClient, ConnectionClient>();
     }
 
     if (mockSettings.Register)

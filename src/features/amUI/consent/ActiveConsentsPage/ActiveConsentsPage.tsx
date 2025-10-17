@@ -16,8 +16,9 @@ import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
 import classes from './ActiveConsentsPage.module.css';
 import { ConsentPath } from '@/routes/paths';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { hasConsentPermission } from '../utils';
+import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { ConsentListItem } from './ConsentListItem';
+import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -59,108 +60,114 @@ export const ActiveConsentsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <DsHeading
-          level={1}
-          data-size='md'
-          className={classes.activeConsentsTopHeading}
-        >
-          {t('active_consents.heading')}
-        </DsHeading>
-        {groupedPendingActiveConsents && Object.keys(groupedPendingActiveConsents).length && (
-          <>
-            <div className={classes.activeConsentsSubHeading}>
-              <DsHeading
-                level={2}
-                data-size='sm'
-              >
-                {t('active_consents.pending_agreements')}
-              </DsHeading>
-            </div>
-            <List>
-              {Object.keys(groupedPendingActiveConsents).map((partyId) => (
-                <ConsentListItem
-                  key={partyId}
-                  title={groupedPendingActiveConsents[partyId][0].toPartyName}
-                  subItems={groupedPendingActiveConsents[partyId].map((item) => ({
-                    id: item.id,
-                    title: item.toPartyName,
-                    badgeText: item.isPoa
-                      ? t('active_consents.see_pending_poa')
-                      : t('active_consents.see_pending_consent'),
-                  }))}
-                  onClick={(consentId: string) => {
-                    navigate(
-                      `/${ConsentPath.Consent}/${ConsentPath.Request}?id=${consentId}&skiplogout=true`,
-                    );
-                  }}
-                />
-              ))}
-            </List>
-          </>
-        )}
-        <div className={classes.activeConsentsSubHeading}>
+        <div className={classes.activeConsentsPage}>
           <DsHeading
-            level={2}
+            level={1}
             data-size='sm'
+            className={classes.activeConsentsTopHeading}
           >
-            {t('active_consents.sub_heading')}
+            {t('active_consents.heading')}
           </DsHeading>
-          <DsLink
-            asChild
-            className={classes.consentLogLink}
-          >
-            <Link to={`/${ConsentPath.Consent}/${ConsentPath.Log}`}>
-              <FolderFileIcon
-                aria-hidden
-                fontSize={24}
-              />
-              <span>{t('active_consents.consent_log')}</span>
-            </Link>
-          </DsLink>
-        </div>
-        <div>
-          {!isLoading && !hasPermission && (
-            <div>{t('active_consents.no_active_consents_permission')}</div>
+          <OldConsentAlert
+            heading='active_consents.altinn2_consent_alert_header'
+            text='active_consents.altinn2_consent_alert_body'
+          />
+          {groupedPendingActiveConsents && Object.keys(groupedPendingActiveConsents).length && (
+            <>
+              <div className={classes.activeConsentsSubHeading}>
+                <DsHeading
+                  level={2}
+                  data-size='xs'
+                >
+                  {t('active_consents.pending_agreements')}
+                </DsHeading>
+              </div>
+              <List>
+                {Object.keys(groupedPendingActiveConsents).map((partyId) => (
+                  <ConsentListItem
+                    key={partyId}
+                    title={groupedPendingActiveConsents[partyId][0].toPartyName}
+                    subItems={groupedPendingActiveConsents[partyId].map((item) => ({
+                      id: item.id,
+                      title: item.toPartyName,
+                      badgeText: item.isPoa
+                        ? t('active_consents.see_pending_poa')
+                        : t('active_consents.see_pending_consent'),
+                    }))}
+                    onClick={(consentId: string) => {
+                      navigate(
+                        `/${ConsentPath.Consent}/${ConsentPath.Request}?id=${consentId}&skiplogout=true`,
+                      );
+                    }}
+                  />
+                ))}
+              </List>
+            </>
           )}
-          {isLoading && (
-            <List>
-              <LoadingListItem />
-              <LoadingListItem />
-            </List>
-          )}
-          {loadActiveConsentsError && (
-            <DsAlert data-color='danger'>{t('active_consents.load_consents_error')}</DsAlert>
-          )}
-          {activeConsents && activeConsents.length === 0 && (
-            <DsParagraph>{t('active_consents.no_active_consents')}</DsParagraph>
-          )}
-          {groupedActiveConsents && (
-            <List>
-              {Object.keys(groupedActiveConsents).map((partyId) => (
-                <ConsentListItem
-                  key={partyId}
-                  title={groupedActiveConsents[partyId][0].toPartyName}
-                  subItems={groupedActiveConsents[partyId].map((item) => ({
-                    id: item.id,
-                    title: item.toPartyName,
-                    badgeText: item.isPoa
-                      ? t('active_consents.see_poa')
-                      : t('active_consents.see_consent'),
-                  }))}
-                  onClick={showConsentDetails}
+          <div className={classes.activeConsentsSubHeading}>
+            <DsHeading
+              level={2}
+              data-size='xs'
+            >
+              {t('active_consents.sub_heading')}
+            </DsHeading>
+            <DsLink
+              asChild
+              className={classes.consentLogLink}
+            >
+              <Link to={`/${ConsentPath.Consent}/${ConsentPath.Log}`}>
+                <FolderFileIcon
+                  aria-hidden
+                  fontSize={24}
                 />
-              ))}
-            </List>
-          )}
+                <span>{t('active_consents.consent_log')}</span>
+              </Link>
+            </DsLink>
+          </div>
+          <div>
+            {!isLoading && !hasPermission && (
+              <div>{t('active_consents.no_active_consents_permission')}</div>
+            )}
+            {isLoading && (
+              <List>
+                <LoadingListItem />
+                <LoadingListItem />
+              </List>
+            )}
+            {loadActiveConsentsError && (
+              <DsAlert data-color='danger'>{t('active_consents.load_consents_error')}</DsAlert>
+            )}
+            {activeConsents && activeConsents.length === 0 && (
+              <DsParagraph>{t('active_consents.no_active_consents')}</DsParagraph>
+            )}
+            {groupedActiveConsents && (
+              <List>
+                {Object.keys(groupedActiveConsents).map((partyId) => (
+                  <ConsentListItem
+                    key={partyId}
+                    title={groupedActiveConsents[partyId][0].toPartyName}
+                    subItems={groupedActiveConsents[partyId].map((item) => ({
+                      id: item.id,
+                      title: item.toPartyName,
+                      badgeText: item.isPoa
+                        ? t('active_consents.see_poa')
+                        : t('active_consents.see_consent'),
+                    }))}
+                    onClick={showConsentDetails}
+                  />
+                ))}
+              </List>
+            )}
+          </div>
+          <DsDialog
+            ref={modalRef}
+            className={classes.consentDialog}
+            closedby='any'
+            onClose={() => setSelectedConsentId('')}
+          >
+            {selectedConsentId && <ConsentDetails consentId={selectedConsentId} />}
+          </DsDialog>
         </div>
-        <DsDialog
-          ref={modalRef}
-          className={classes.consentDialog}
-          closedby='any'
-          onClose={() => setSelectedConsentId('')}
-        >
-          {selectedConsentId && <ConsentDetails consentId={selectedConsentId} />}
-        </DsDialog>
       </PageLayoutWrapper>
     </PageWrapper>
   );

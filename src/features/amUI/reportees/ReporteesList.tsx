@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DsSearch } from '@altinn/altinn-components';
 
 import { debounce } from '@/resources/utils';
-import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 import { UserList } from '../common/UserList/UserList';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';

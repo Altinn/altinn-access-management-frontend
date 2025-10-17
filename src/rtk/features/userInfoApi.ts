@@ -3,12 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
-
-export enum ConnectionUserType {
-  Person = 'Person',
-  Organization = 'Organisasjon',
-  Systemuser = 'Systembruker',
-}
+import { Entity } from '@/dataObjects/dtos/Common';
+import { Connection } from './connectionApi';
 
 interface UserKeyValues {
   OrganizationIdentifier?: string;
@@ -20,6 +16,7 @@ export interface ExtendedUser extends Omit<User, 'children'> {
   roles: RoleInfo[];
   children: (ExtendedUser | User)[] | null;
   matchInChildren?: boolean;
+  isInherited?: boolean;
 }
 
 export interface User {
@@ -29,17 +26,13 @@ export interface User {
   variant?: string;
   children: (User | ExtendedUser)[] | null;
   keyValues: UserKeyValues | null;
+  parent?: ExtendedUser | null;
 }
 
 export interface RoleInfo {
   id: string;
   code?: string;
-}
-
-export interface Connection {
-  party: User;
-  roles: RoleInfo[];
-  connections: Connection[];
+  viaParty?: Entity;
 }
 
 interface UserInfoApiResponse {
@@ -47,7 +40,7 @@ interface UserInfoApiResponse {
   userUuid: string;
 }
 
-interface UserInfo {
+export interface UserInfo {
   name: string;
   uuid: string;
   party: Party;
@@ -61,6 +54,7 @@ export interface ReporteeInfo {
   partyId: string;
   authorizedRoles: string[];
   subunits?: ReporteeInfo[];
+  onlyHierarchyElementWithNoAccess: boolean;
 }
 
 export enum PartyType {
@@ -101,42 +95,6 @@ export const userInfoApi = createApi({
       query: () => `reportee/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
     }),
-    addRightHolder: builder.mutation<void, string>({
-      query: (partyUuidToBeAdded) => ({
-        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder?rightholderPartyUuid=${partyUuidToBeAdded}`,
-        method: 'POST',
-      }),
-      transformErrorResponse: (response: {
-        status: string | number;
-      }): { status: string | number; data: string } => {
-        return { status: response.status, data: new Date().toISOString() };
-      },
-    }),
-    getRightHolders: builder.query<
-      Connection[],
-      { partyUuid: string; fromUuid?: string; toUuid?: string }
-    >({
-      query: ({ partyUuid, fromUuid, toUuid }) =>
-        `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}`,
-      keepUnusedDataFor: 3,
-      providesTags: ['RightHolders'],
-      transformErrorResponse: (response: {
-        status: string | number;
-      }): { status: string | number; data: string } => {
-        return { status: response.status, data: new Date().toISOString() };
-      },
-    }),
-    removeRightHolder: builder.mutation<void, { party: string; to: string; from: string }>({
-      query: ({ party, to, from }) => ({
-        url: `reportee?party=${party}&to=${to}&from=${from}`,
-        method: 'DELETE',
-      }),
-      transformErrorResponse: (response: {
-        status: string | number;
-      }): { status: string | number; data: string } => {
-        return { status: response.status, data: new Date().toISOString() };
-      },
-    }),
     getReporteeListForParty: builder.query<User[], void>({
       query: () => {
         const partyUuid = getCookie('AltinnPartyUuid');
@@ -146,28 +104,30 @@ export const userInfoApi = createApi({
     }),
     getReporteeListForAuthorizedUser: builder.query<ReporteeInfo[], void>({
       query: () => {
+        return '/actorlist/old';
+      },
+      keepUnusedDataFor: 300,
+    }),
+    getActorListForAuthorizedUser: builder.query<Connection[], void>({
+      query: () => {
         return '/actorlist';
       },
       keepUnusedDataFor: 300,
     }),
-    getUserAccesses: builder.query<UserAccesses, { from: string; to: string }>({
-      query: ({ from, to }) => `from/${from}/to/${to}/accesses`,
+    getFavoriteActorUuids: builder.query<string[], void>({
+      query: () => {
+        return '/actorlist/favorites';
+      },
       keepUnusedDataFor: 300,
     }),
     getIsAdmin: builder.query<boolean, void>({
       query: () => `isAdmin?party=${getCookie('AltinnPartyUuid')}`,
     }),
-    validateNewUserPerson: builder.mutation<string, { ssn: string; lastName: string }>({
-      query: ({ ssn, lastName }) => ({
-        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/validateperson`,
-        method: 'POST',
-        body: JSON.stringify({ ssn, lastName }),
-      }),
-      transformErrorResponse: (response: {
-        status: string | number;
-      }): { status: string | number } => {
-        return { status: response.status };
-      },
+    getIsClientAdmin: builder.query<boolean, void>({
+      query: () => `isClientAdmin?party=${getCookie('AltinnPartyUuid')}`,
+    }),
+    getIsCompanyProfileAdmin: builder.query<boolean, void>({
+      query: () => `isCompanyProfileAdmin?party=${getCookie('AltinnPartyUuid')}`,
     }),
   }),
 });
@@ -175,14 +135,13 @@ export const userInfoApi = createApi({
 export const {
   useGetUserInfoQuery,
   useGetReporteeQuery,
-  useGetRightHoldersQuery,
-  useAddRightHolderMutation,
-  useRemoveRightHolderMutation,
-  useGetUserAccessesQuery,
-  useValidateNewUserPersonMutation,
   useGetReporteeListForPartyQuery,
   useGetReporteeListForAuthorizedUserQuery,
+  useGetActorListForAuthorizedUserQuery,
+  useGetFavoriteActorUuidsQuery,
   useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetIsCompanyProfileAdminQuery,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;

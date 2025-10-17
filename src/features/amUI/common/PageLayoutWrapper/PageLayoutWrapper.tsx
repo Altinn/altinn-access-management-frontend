@@ -1,8 +1,7 @@
 import type { ChangeEvent } from 'react';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import type {
   AccountMenuItemProps,
-  MenuGroupProps,
   MenuItemProps,
   MenuItemSize,
   Theme,
@@ -10,21 +9,32 @@ import type {
 import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
-import { HandshakeIcon, InformationSquareIcon, LeaveIcon } from '@navikt/aksel-icons';
+import {
+  HandshakeIcon,
+  InboxFillIcon,
+  InformationSquareIcon,
+  LeaveIcon,
+  PersonCircleIcon,
+} from '@navikt/aksel-icons';
 
-import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetIsCompanyProfileAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
+  useGetActorListForAuthorizedUserQuery,
   useGetReporteeQuery,
   useGetUserInfoQuery,
+  useGetFavoriteActorUuidsQuery,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
-import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
+import { getAfUrl, getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
+import { crossPlatformLinksEnabled, useNewActorList } from '@/resources/utils/featureFlagUtils';
+import { useAccounts } from './useAccounts';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -36,13 +46,22 @@ const getAccountType = (type: string): 'company' | 'person' => {
 
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t, i18n } = useTranslation();
-  const { data: reportee } = useGetReporteeQuery();
+  const useNewActorListFlag = useNewActorList();
+  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
-  const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery();
+  const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
+    skip: useNewActorListFlag,
+  });
+  const { data: actorList } = useGetActorListForAuthorizedUserQuery(undefined, {
+    skip: !useNewActorListFlag,
+  });
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
 
-  const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
+  const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
+  const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
+    useGetIsCompanyProfileAdminQuery();
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -62,6 +81,39 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   };
 
   const isSm = useIsTabletOrSmaller();
+  const isLoadingMenu =
+    isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
+
+  const platformLinks = [
+    {
+      groupId: 1,
+      icon: InboxFillIcon,
+      id: 'inbox',
+      size: 'lg',
+      title: t('header.inbox'),
+      as: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+        <a
+          {...props}
+          href={getAfUrl()}
+        />
+      ),
+      badge: { label: t('common.beta') },
+    },
+    {
+      groupId: 'current-user',
+      icon: PersonCircleIcon,
+      id: 'profile',
+      size: 'sm',
+      title: t('header.profile'),
+      as: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+        <a
+          {...props}
+          href={`${getAfUrl()}profile`}
+        />
+      ),
+    },
+  ] as MenuItemProps[];
+
   const headerLinks: MenuItemProps[] = [
     {
       groupId: 1,
@@ -78,16 +130,18 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       ),
       badge: { label: t('common.beta') },
     },
+    ...(crossPlatformLinksEnabled() ? platformLinks : []),
     ...(isSm
       ? SidebarItems(
           true,
+          isLoadingMenu,
           pathname,
           isAdmin,
-          reportee?.name || '',
-          getAccountType(reportee?.type ?? ''),
+          isClientAdmin,
+          reportee,
+          canAccessSettings ?? false,
         )
       : []),
-
     {
       id: 'info',
       groupId: 10,
@@ -114,39 +168,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         />
       ),
     },
-    { groupId: 'current-user-label', hidden: true },
+    { groupId: 'current-user', hidden: true },
   ];
 
-  const accountGroups: Record<string, MenuGroupProps> = {
-    a: {
-      title: t('header.account_you'),
-      divider: true,
-    },
-    b: {
-      title: t('header.account_others'),
-      divider: true,
-    },
-  };
-
-  const accounts: AccountMenuItemProps[] = useMemo(() => {
-    if (!reporteeList || !userinfo || !reportee) {
-      return [];
-    }
-
-    const accountList = [];
-    for (const account of reporteeList ?? []) {
-      const mappedAccount = getAccount(account, userinfo.uuid, reportee.partyUuid);
-      accountList.push(mappedAccount);
-
-      if (account.subunits && account.subunits.length > 0) {
-        for (const subUnit of account.subunits) {
-          const mappedSubUnit = getAccount(subUnit, userinfo.uuid, reportee.partyUuid);
-          accountList.push(mappedSubUnit);
-        }
-      }
-    }
-    return accountList.sort((a, b) => (a.groupId > b.groupId ? 1 : -1)) ?? [];
-  }, [reporteeList, userinfo, reportee]);
+  const { accounts, accountGroups } = useAccounts({ reporteeList, actorList });
 
   const globalMenu = {
     accountMenu: {
@@ -164,7 +189,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           return `${hits} ${t('header.search-hits')}`;
         },
       },
-      menuItemsVirtual: { isVirtualized: accounts.length > 20 },
+      isVirtualized: accounts.length > 20,
     },
     onSelectAccount: (accountId: string) => {
       // check if this is a person; then redirect to consents page
@@ -191,6 +216,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         (window as Window).location = `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
       },
     },
+
     menuLabel: t('header.menu-label'),
     backLabel: t('header.back-label'),
     changeLabel: t('header.change-label'),
@@ -203,7 +229,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   };
 
   const groups = {
-    'current-user-label': {
+    'current-user': {
       title: t('header.logged_in_as_name', {
         name: userinfo?.name || '',
       }),
@@ -240,10 +266,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             name: reportee?.name || '',
             type: getAccountType(reportee?.type ?? ''),
             id: reportee?.partyId || '',
-            icon: {
-              name: reportee?.name || '',
-              type: getAccountType(reportee?.type ?? ''),
-            },
+            icon: { name: reportee?.name || '', type: getAccountType(reportee?.type ?? '') },
           },
           globalMenu: globalMenu,
           desktopMenu: desktopMenu,
@@ -255,10 +278,12 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             groups: menuGroups,
             items: SidebarItems(
               false,
+              isLoadingMenu,
               pathname,
               isAdmin,
-              reportee?.name || '',
-              getAccountType(reportee?.type ?? ''),
+              isClientAdmin,
+              reportee,
+              canAccessSettings ?? false,
             ),
           },
         }}
@@ -292,21 +317,3 @@ const footerLinks = [
   { href: 'https://info.altinn.no/om-altinn/personvern/', resourceId: 'footer.privacy_policy' },
   { href: 'https://info.altinn.no/om-altinn/tilgjengelighet/', resourceId: 'footer.accessibility' },
 ];
-
-const getAccount = (reportee: ReporteeInfo, userUuid: string, currentReporteeUuid: string) => {
-  const group = reportee.partyUuid === userUuid ? 'a' : 'b';
-  const accountType = getAccountType(reportee?.type ?? '');
-  return {
-    id: reportee.partyId,
-    icon: {
-      name: reportee.name,
-      type: accountType,
-    },
-    name: reportee.name,
-    description: reportee.type === 'Organization' ? reportee.organizationNumber : undefined,
-    group: reportee.partyUuid === userUuid ? 'a' : 'b',
-    groupId: group,
-    type: accountType,
-    selected: reportee.partyUuid === currentReporteeUuid,
-  };
-};

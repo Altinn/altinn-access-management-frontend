@@ -9,7 +9,7 @@
         /// AuthenticationLevel.
         /// </summary>
         public const string AuthenticationLevel = "urn:altinn:authlevel";
-        
+
         /// <summary>
         /// User id.
         /// </summary>
@@ -19,6 +19,11 @@
         /// Party id.
         /// </summary>
         public const string PartyID = "urn:altinn:partyid";
+
+        /// <summary>
+        /// Party uuid.
+        /// </summary>
+        public const string PartyUUID = "urn:altinn:party:uuid";
 
         /// <summary>
         /// The representing party id.

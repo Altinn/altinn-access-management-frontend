@@ -16,7 +16,7 @@ import type { ProblemDetail } from './types';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
-import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
+import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/CreateSystemUserCheck';
 import { RightsList } from './components/RightsList/RightsList';
 
 export const SystemUserAgentRequestPage = () => {

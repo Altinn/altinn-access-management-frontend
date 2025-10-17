@@ -29,11 +29,11 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 "AUTH-00043" => Problem.AgentSystemUser_FailedToGetClients_Unauthorized,
                 "AUTH-00044" => Problem.AgentSystemUser_FailedToGetClients_Forbidden,
                 "AUTH-00045" => Problem.AgentSystemUser_FailedToGetClients,
-                "AUTH-00049" => Problem.AccessPackage_DelegationCheckFailed,
-                "AUTH-00050" => Problem.AccessPackage_DelegationFailed,
-                "AUTH-00052" => Problem.AccessPackage_Delegation_MissingRequiredAccess,
-                "AUTH-00054" => Problem.AccessPackage_FailedToGetDelegatedPackages,
-                "AUTH-00056" => Problem.SystemUser_FailedToDeleteAccessPackage,
+                "AUTH-00050" => Problem.AccessPackage_DelegationCheckFailed,
+                "AUTH-00051" => Problem.AccessPackage_DelegationFailed,
+                "AUTH-00053" => Problem.AccessPackage_Delegation_MissingRequiredAccess,
+                "AUTH-00055" => Problem.AccessPackage_FailedToGetDelegatedPackages,
+                "AUTH-00057" => Problem.SystemUser_FailedToDeleteAccessPackage,
 
                 _ => Problem.Generic_EndOfMethod,
             };

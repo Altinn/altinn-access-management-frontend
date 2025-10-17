@@ -15,6 +15,11 @@ import { Link } from 'react-router';
 
 import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 import { getHostUrl } from '@/resources/utils/pathUtils';
+import { ReporteeInfo } from '@/rtk/features/userInfoApi';
+import {
+  hasConsentPermission,
+  hasCreateSystemUserPermission,
+} from '@/resources/utils/permissionUtils';
 
 /**
  * Generates a list of sidebar items for the page layout.
@@ -24,22 +29,23 @@ import { getHostUrl } from '@/resources/utils/pathUtils';
  */
 export const SidebarItems = (
   isSmall: boolean = false,
+  isLoading: boolean = false,
   pathname: string = '',
   isAdmin: boolean | undefined,
-  accountName: string,
-  accountType: 'company' | 'person',
+  isClientAdmin: boolean | undefined,
+  reportee: ReporteeInfo | undefined,
+  canAccessSettings: boolean = false,
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const displayConsentGui = window.featureFlags?.displayConsentGui;
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
-  const isLoading = !accountName;
 
   const heading: MenuItemProps = {
     id: '1',
     groupId: 1,
     icon: {
-      name: accountName,
-      type: accountType,
+      name: reportee?.name || '',
+      type: reportee?.type === 'Organization' ? 'company' : 'person',
     },
     size: 'lg',
     loading: isLoading,
@@ -191,10 +197,8 @@ export const SidebarItems = (
     items.push(heading);
   }
 
-  if (displayConsentGui) {
-    if (accountType === 'person') {
-      return [...items, consent, ...shortcuts];
-    }
+  if (reportee?.type === 'Person' && displayConsentGui) {
+    return [...items, consent, ...shortcuts];
   }
 
   if (displayConfettiPackage) {
@@ -210,18 +214,20 @@ export const SidebarItems = (
     }
   }
 
-  if (displayConsentGui) {
+  if (displayConsentGui && hasConsentPermission(reportee, isAdmin)) {
     items.push(consent);
   }
 
-  items.push(systemUser);
+  if (hasCreateSystemUserPermission(reportee) || isClientAdmin) {
+    items.push(systemUser);
+  }
 
-  if (!displayLimitedPreviewLaunch) {
+  if (!displayLimitedPreviewLaunch && canAccessSettings) {
     items.push(settings);
   }
 
   if (displayConfettiPackage && !isSmall) {
-    shortcuts.map((shortcutItem) => items.push(shortcutItem));
+    items.push(...shortcuts);
   }
 
   return items;

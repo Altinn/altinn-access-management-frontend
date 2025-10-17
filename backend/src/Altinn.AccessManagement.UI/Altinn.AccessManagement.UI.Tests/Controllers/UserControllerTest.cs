@@ -1,8 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
@@ -10,11 +8,14 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
-using Altinn.AccessManagement.UI.Models;
 using Altinn.AccessManagement.UI.Tests.Utils;
 using Altinn.Platform.Profile.Enums;
 using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Moq;
 using User = Altinn.AccessManagement.UI.Core.Models.User.User;
 
@@ -200,390 +201,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Assert that List of right holders is returned when valid input
-        /// </summary>
-        [Fact]
-        public async Task GetReporteeRightHolders_ReturnsList()
-        {
-            const int userId = 1234;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string reporteePartyID = "51329012";
-
-            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{reporteePartyID}.json");
-            List<User> expectedResponse = Util.GetMockData<List<User>>(path);
-
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyID}/rightholders");
-            List<User> actualResponse = await response.Content.ReadFromJsonAsync<List<User>>();
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
-        }
-
-        /// <summary>
-        /// Right holder's list of accesses is returned when valid input
-        /// </summary>
-        [Fact]
-        public async Task GetRightholderAccesses_Returns_Accesses()
-        {
-            const int userId = 1234;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
-            string rightHolderUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb"; // Valid user that has rights for the reportee
-
-            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", "RightHolderAccess", $"{rightHolderUuid}.json");
-            UserAccesses expectedResponse = Util.GetMockData<UserAccesses>(path);
-
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/from/{reporteeUuid}/to/{rightHolderUuid}/accesses");
-            UserAccesses actualResponse = await response.Content.ReadFromJsonAsync<UserAccesses>();
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
-        }
-
-        /// <summary>
-        /// Returns Bad Request when invalid input
-        /// </summary>
-        [Fact]
-        public async Task GetRightholderAccesses_Invalid_ModelState()
-        {
-            const int userId = 1234;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
-            string rightHolderUuid = "invalid_guid"; // invalid user uuid
-
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/from/{reporteeUuid}/to/{rightHolderUuid}/accesses");
-            UserAccesses actualResponse = await response.Content.ReadFromJsonAsync<UserAccesses>();
-
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        }
-
-        /// <summary>
-        /// Invalid rightHolderUuid returns HTTP error when invalid input is provided
-        /// </summary>
-        [Fact]
-        public async Task GetRightholderAccesses_Invalid_Input()
-        {
-            const int userId = 1234;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
-            string rightHolderUuid = "5c0656db-cf51-43a4-bd64-6a91c800000"; // Invalid user uuid. User has no rights for reportee
-
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/from/{reporteeUuid}/to/{rightHolderUuid}/accesses");
-
-            Assert.False(response.IsSuccessStatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: Validate a valid person
-        ///    Expected: Returns a 200 and the party uuid of the person
-        /// </summary>
-        [Fact]
-        public async Task ValidatePerson_ValidInput()
-        {
-            // Arrange
-            var partyId = 51329012;
-            var ssn = "20838198385";
-            var lastname = "Medaljong";
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
-            string jsonRights = JsonSerializer.Serialize(input);
-            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
-
-            var expectedResponse = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-
-            var response = await httpResponse.Content.ReadFromJsonAsync<Guid>();
-            Assert.Equal(expectedResponse, response);
-
-        }
-
-        /// <summary>
-        ///    Test case: Enter invalid input
-        ///    Expected: Returns a 404 not found
-        /// </summary>
-        [Fact]
-        public async Task ValidatePerson_InvalidInput()
-        {
-            // Arrange
-            var partyId = 51329012;
-            var ssn = "2083819838a"; // Invalid ssn
-            var lastname = "Medaljong";
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
-            string jsonRights = JsonSerializer.Serialize(input);
-            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: Enter an ivalid ssn and last name combination
-        ///    Expected: Returns a 404 not found
-        /// </summary>
-        [Fact]
-        public async Task ValidatePerson_InvalidInputCombination()
-        {
-            // Arrange
-            var partyId = 51329012;
-            var ssn = "20838198385"; // Valid ssn
-            var lastname = "Albatross"; // Valid last name, but does not belong to person with given ssn
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
-            string jsonRights = JsonSerializer.Serialize(input);
-            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: Enter invalid data too many times
-        ///    Expected: Returns a 429 - too many requests
-        /// </summary>
-        [Fact]
-        public async Task ValidatePerson_TooManyRequests()
-        {
-            // Arrange
-            var partyId = 51329012;
-            var ssn = "20838198311"; // Invalid ssn
-            var lastname = "Hansen"; // Invalid name combination
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
-            string jsonRights = JsonSerializer.Serialize(input);
-            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
-
-            // Act - reapeat the request 4 times to lock the user
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
-            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
-            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
-            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.TooManyRequests, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: Sending the wrong input in body triggers a bad request
-        ///    Expected: Returns a 400 - bad request
-        /// </summary>
-        [Fact]
-        public async Task ValidatePerson_BadRequest()
-        {
-            // Arrange
-            var partyId = 51329012;
-            string input = "The wrong input";
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            string jsonRights = JsonSerializer.Serialize(input);
-            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
-
-            // Act 
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: ValidatePerson when feature is toggled off
-        ///    Expected: Returns a 404 - not found
-        /// </summary>
-        [Fact]
-        public async Task ValidatePerson_Feature_Toggle_Off()
-        {
-            // Arrange
-            var partyId = 51329012;
-            var ssn = "20838198385"; // valid input
-            var lastname = "Medaljong";
-
-            HttpClient client = _client_feature_off;
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
-            string jsonRights = JsonSerializer.Serialize(input);
-            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: AddReporteeRightHolder succeeds with valid inputs
-        ///    Expected: Returns 200 OK
-        /// </summary>
-        [Fact]
-        public async Task AddReporteeRightHolder_ValidInput_ReturnsOk()
-        {
-            // Arrange
-            var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
-            var rightHolderPartyUuid = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb"); // Valid right holder
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync(
-                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={rightHolderPartyUuid}",
-                null);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: AddReporteeRightHolder with invalid model state
-        ///    Expected: Returns 400 Bad Request
-        /// </summary>
-        [Fact]
-        public async Task AddReporteeRightHolder_InvalidModelState_ReturnsBadRequest()
-        {
-            // Arrange
-            var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
-            var invalidRightHolderUuid = "not-a-guid"; // Invalid UUID format
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync(
-                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={invalidRightHolderUuid}",
-                null);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: AddReporteeRightHolder that triggers an HttpStatusException
-        ///    Expected: Returns status code based on the exception
-        /// </summary>
-        [Fact]
-        public async Task AddReporteeRightHolder_TriggersHttpStatusException_ReturnsErrorStatus()
-        {
-            // Arrange
-            // Using Guid.Empty will trigger the InternalServerError in RightHolderClientMock
-            var reporteePartyUuid = Guid.Empty;
-            var rightHolderPartyUuid = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync(
-                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={rightHolderPartyUuid}",
-                null);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
-            string content = await httpResponse.Content.ReadAsStringAsync();
-            Assert.Contains("Unexpected HttpStatus response", content);
-        }
-
-        /// <summary>
-        ///    Test case: RevokeRightHolder succeeds with valid inputs
-        ///    Expected: Returns 200 OK
-        /// </summary>
-        [Fact]
-        public async Task RevokeRightHolder_ValidInput_ReturnsNoContent()
-        {
-            // Arrange
-            var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
-            var rightHolderPartyUuid = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb"); // Valid right holder
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync(
-                $"accessmanagement/api/v1/user/reportee?party={reporteePartyUuid}&from={rightHolderPartyUuid}&to={reporteePartyUuid}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.NoContent, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: RevokeRightHolder with invalid model state
-        ///    Expected: Returns 400 Bad Request
-        /// </summary>
-        [Fact]
-        public async Task RevokeRightHolder_InvalidModelState_ReturnsBadRequest()
-        {
-            // Arrange
-            var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
-            var invalidRightHolderUuid = "not-a-guid"; // Invalid UUID format
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync(
-                $"accessmanagement/api/v1/user/reportee?party={invalidRightHolderUuid}&from={invalidRightHolderUuid}&to={invalidRightHolderUuid}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: RevokeRightHolder that triggers an HttpStatusException
-        ///    Expected: Returns status code based on the exception
-        /// </summary>
-        [Fact]
-        public async Task RevokeRightHolder_TriggersHttpStatusException_ReturnsErrorStatus()
-        {
-            // Arrange
-            // Using Guid.Empty will trigger the HttpStatusException in the mock
-            var reporteePartyUuid = Guid.Empty;
-            var rightHolderPartyUuid = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync(
-                $"accessmanagement/api/v1/user/reportee?party={reporteePartyUuid}&from={rightHolderPartyUuid}&to={reporteePartyUuid}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-            string content = await httpResponse.Content.ReadAsStringAsync();
-            Assert.Contains("Unexpected HttpStatus response", content);
-        }
-
-        /// <summary>
         ///   Test case: GetReporteeListForUser returns a list of reportees for the user
         ///   Expected: Returns a list of reportees
         /// </summary>
@@ -598,7 +215,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
-            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/old");
             List<AuthorizedParty> actualResponse = await response.Content.ReadFromJsonAsync<List<AuthorizedParty>>();
 
             // Assert
@@ -607,11 +224,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///   Test case: GetReporteeListForUser returns 400 Bad Request when user id is 0
-        ///   Expected: Returns 400 Bad Request
+        ///   Test case: GetReporteeListForUser handles 404
+        ///   Expected: Returns 404 Not found
         /// </summary>
         [Fact]
-        public async Task GetReporteeListForUser_Returns_400()
+        public async Task GetReporteeListForUser_Returns_404()
         {
             // Arrange
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetReporteeListForUser", "reporteeList.json");
@@ -621,7 +238,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
-            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/old");
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -629,7 +246,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///   Test case: GetReporteeListForUser returns 500 Internal server error when error occurs
-        ///   Expected: Returns 400 Bad Request
+        ///   Expected: Returns 500 Internal Server Error
         /// </summary>
         [Fact]
         public async Task GetReporteeListForUser_Returns_500()
@@ -642,6 +259,90 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/old");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetActorListForAuthenticatedUser returns a list of connections for valid user
+        /// Expected: Returns OK with list of connections
+        /// </summary>
+        [Fact]
+        public async Task GetActorListForAuthenticatedUser_ValidUser_ReturnsConnections()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", "cd35779b-b174-4ecc-bbef-ece13611be7f.json");
+            List<Connection> expectedResponse = Util.GetMockData<List<Connection>>(path);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+            List<Connection> actualResponse = await response.Content.ReadFromJsonAsync<List<Connection>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        /// Test case: GetActorListForAuthenticatedUser returns empty list when no connections exist
+        /// Expected: Returns OK with empty list
+        /// </summary>
+        [Fact]
+        public async Task GetActorListForAuthenticatedUser_NoConnections_ReturnsEmptyList()
+        {
+            // Arrange
+            const int userId = 1234;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+            List<Connection> actualResponse = await response.Content.ReadFromJsonAsync<List<Connection>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Empty(actualResponse);
+        }
+
+        /// <summary>
+        /// Test case: GetActorListForAuthenticatedUser returns 404 when service returns null
+        /// Expected: Returns 404 Not Found
+        /// </summary>
+        [Fact]
+        public async Task GetActorListForAuthenticatedUser_ServiceReturnsNull_Returns404()
+        {
+            // Arrange
+            const int userId = 404;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetActorListForAuthenticatedUser returns 500 when internal server error occurs
+        /// Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetActorListForAuthenticatedUser_InternalServerError_Returns500()
+        {
+            // Arrange
+            const int userId = 500;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
             var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
 
             // Assert
@@ -649,92 +350,94 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///   Test case: GetRightholders returns bad request when invalid model state
-        ///   Expected: Returns 400 Bad Request
+        /// Test case: GetFavoriteActorUuids returns list of favorite actor UUIDs for valid user
+        /// Expected: Returns OK with list of favorite UUIDs
         /// </summary>
         [Fact]
-        public async Task GetRightholders_BadRequestOnInvalidModelState()
+        public async Task GetFavoriteActorUuids_ValidUser_ReturnsFavoriteUuids()
         {
             // Arrange
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party=invalid-party-id");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        }
-
-        [Theory]
-        [InlineData("b0a79f3d-4cef-430a-9774-301b754e0f6f", null, null)]
-        [InlineData("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199", "", "")]
-        public async Task GetRightholders_MissingPartyAndFromOrTo_ReturnsBadRequest(string party, string from, string to)
-        {
-            /// Arrange
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            List<string> expectedResponse = new List<string> {
+                "cd35779b-b174-4ecc-bbef-ece13611be7f", "167536b5-f8ed-4c5a-8f48-0279507e53ae" };
 
             // Act
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={party}&from={from}&to={to}");
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/favorites");
+            List<string> actualResponse = await response.Content.ReadFromJsonAsync<List<string>>();
 
             // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Equal("Either 'from' or 'to' query parameter must be provided.", await response.Content.ReadAsStringAsync());
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, Assert.Equal);
         }
 
-        [Theory]
-        [InlineData(null, "b0a79f3d-4cef-430a-9774-301b754e0f6f", "")]
-        [InlineData("", "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199", "")]
-        [InlineData("", "b0a79f3d-4cef-430a-9774-301b754e0f6f", "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199")]
-        public async Task GetRightholders_MissingPartyAndFromOrTo_ReturnsInvalidModelState(string party, string from, string to)
-        {
-            /// Arrange
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={party}&from={from}&to={to}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Contains("The value '' is invalid", await response.Content.ReadAsStringAsync());
-        }
-
+        /// <summary>
+        /// Test case: GetFavoriteActorUuids returns empty list when user has no favorites
+        /// Expected: Returns OK with empty list
+        /// </summary>
         [Fact]
-        public async Task GetRightholders_HandlesError()
+        public async Task GetFavoriteActorUuids_NoFavorites_ReturnsEmptyList()
         {
-            /// Arrange
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            // Arrange
+            const int userId = 1234;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            List<string> expectedResponse = new List<string>();
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/favorites");
+            List<string> actualResponse = await response.Content.ReadFromJsonAsync<List<string>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Empty(actualResponse);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, Assert.Equal);
+        }
+
+        /// <summary>
+        /// Test case: GetFavoriteActorUuids returns 404 when service returns null
+        /// Expected: Returns 404 Not Found
+        /// </summary>
+        [Fact]
+        public async Task GetFavoriteActorUuids_ServiceReturnsNull_Returns404()
+        {
+            // Arrange
+            const int userId = 404;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={Guid.Empty}&from={Guid.Empty}&to={Guid.Empty}");
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/favorites");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetFavoriteActorUuids returns 500 when internal server error occurs
+        /// Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetFavoriteActorUuids_InternalServerError_Returns500()
+        {
+            // Arrange
+            const int userId = 500;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/favorites");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
 
 
-        [Theory]
-        [InlineData("cd35779b-b174-4ecc-bbef-ece13611be7f", "cd35779b-b174-4ecc-bbef-ece13611be7f", "")]
-        public async Task GetRightholders_ReturnsRightholdersList(string party, string from, string to)
-        {
-            /// Arrange
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{party}.json");
-            List<Connection> expectedResponse = Util.GetMockData<List<Connection>>(path);
-
-            // Act
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/rightholders?party={party}&from={from}&to={to}");
-            var resJson = await response.Content.ReadAsStringAsync();
-            List<Connection> actualResponse = await response.Content.ReadFromJsonAsync<List<Connection>>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
-        }
 
 
         /// <summary>
@@ -803,6 +506,167 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: CheckIsClientAdmin returns true when user has client admin permissions
+        /// Expected: Returns true
+        /// </summary>
+        [Fact]
+        public async Task CheckIsClientAdmin_WithAdminPermission_ReturnsTrue()
+        {
+            // Arrange
+            const int adminUserId = 20004938;
+            var token = PrincipalUtil.GetToken(adminUserId, 1234, 2);
+
+            var partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isClientAdmin?party={partyId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            bool hasAccess = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.True(hasAccess);
+        }
+
+        /// <summary>
+        /// Test case: CheckIsClientAdmin returns false when user doesn't have client admin permissions for the provided party
+        /// Expected: Returns false
+        /// </summary>
+        [Fact]
+        public async Task CheckIsClientAdmin_WithoutAdminPermission_ReturnsFalse()
+        {
+            // Arrange
+            const int regularUserId = 1234;
+            var token = PrincipalUtil.GetToken(regularUserId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var partyId = Guid.Parse("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isClientAdmin?party={partyId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            bool hasAccess = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.False(hasAccess);
+        }
+
+        /// <summary>
+        /// Test case: CheckIsClientAdmin returns Forbidden when partyId is null or invalid
+        /// Expected: Returns false
+        /// </summary>
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("not-a-guid")]
+        public async Task CheckIsClientAdmin_InvalidInputs_ReturnsForbidden(string invalid_party)
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isClientAdmin?party={invalid_party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: CheckIsCompanyProfileAdmin returns true when user has required permissions
+        /// Expected: Returns true
+        /// </summary>
+        [Fact]
+        public async Task CheckIsCompanyProfileAdmin_WithPermission_ReturnsTrue()
+        {
+            // Arrange
+            const int adminUserId = 20004938;
+            var token = PrincipalUtil.GetToken(adminUserId, 1234, 2);
+            var partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isCompanyProfileAdmin?party={partyId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            bool hasAccess = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.True(hasAccess);
+        }
+
+        /// <summary>
+        /// Test case: CheckIsCompanyProfileAdmin returns false when user does not have permissions
+        /// Expected: Returns false
+        /// </summary>
+        [Fact]
+        public async Task CheckIsCompanyProfileAdmin_WithoutPermission_ReturnsFalse()
+        {
+            // Arrange
+            const int regularUserId = 1234;
+            var token = PrincipalUtil.GetToken(regularUserId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var partyId = Guid.Parse("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isCompanyProfileAdmin?party={partyId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            bool hasAccess = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.False(hasAccess);
+        }
+
+        /// <summary>
+        /// Test case: CheckIsCompanyProfileAdmin returns Forbidden when partyId is null or invalid
+        /// Expected: Returns Forbidden
+        /// </summary>
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("not-a-guid")]
+        public async Task CheckIsCompanyProfileAdmin_InvalidInputs_ReturnsForbidden(string invalid_party)
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isCompanyProfileAdmin?party={invalid_party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Directly invoke controller IsCompanyProfileAdmin without HttpContext permission item.
+        /// Expected: Returns Ok(false) via fallback path (line 424 in controller file) covering missing HasRequestedPermission scenario.
+        /// </summary>
+        [Fact]
+        public void IsCompanyProfileAdmin_NoHasRequestedPermissionItem_ReturnsFalse()
+        {
+            // Arrange: create controller instance bypassing auth pipeline so HttpContext.Items lacks HasRequestedPermission
+            var httpContext = new DefaultHttpContext();
+            var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<UserController>>();
+            var featureFlags = Options.Create(new FeatureFlags());
+
+            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object, featureFlags)
+            {
+                ControllerContext = new ControllerContext { HttpContext = httpContext }
+            };
+
+            // Act
+            var result = controller.IsCompanyProfileAdmin();
+
+            // Assert
+            var ok = Assert.IsType<OkObjectResult>(result.Result);
+            Assert.False((bool)ok.Value);
         }
     }
 }

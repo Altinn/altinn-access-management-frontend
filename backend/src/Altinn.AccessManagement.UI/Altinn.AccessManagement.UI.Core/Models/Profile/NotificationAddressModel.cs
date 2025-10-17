@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a notification address
     /// </summary>
-    public abstract class NotificationAddressModel
+    public class NotificationAddressModel
     {
         /// <summary>
         /// Country code for phone number

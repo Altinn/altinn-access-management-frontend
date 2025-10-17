@@ -76,25 +76,34 @@
     "show_less": "Show less",
     "technical_error": "Sorry, a technical error has occurred. Please contact Altinn user service if the problem persists.",
     "time_of_error": "Error occurred at time: {{time}}",
+    "trace_id": "Reference: {{traceId}}",
     "error_status": "HttpStatus: {{status}}",
     "ssn": "National identity number",
     "last_name": "Last name",
     "subunit": "Subunit",
     "subunit_lowercase": "subunit",
     "mainunit_lowercase": "main unit",
+    "org_nr_lowercase": "org.no. {{org_number}}",
+    "org_no": "Org.no",
+    "part_of": "part of",
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
-    "date_of_birth": "Born"
+    "date_of_birth": "Born",
+    "save_changes": "Save changes"
   },
   "beta_banner": {
     "info": "This is a beta version of the new access management pages in Altinn.",
     "link": "Click here to go back to today's Altinn."
   },
   "header": {
-    "access_management": "Access Management",
+    "access_management": "Access management",
     "inbox": "Inbox",
+    "profile": "My profile",
     "account_you": "You",
     "account_others": "Other accounts",
+    "account_orgs": "Organizations",
+    "account_persons": "Persons",
+    "account_favorites": "Favorites",
     "menu-label": "Menu",
     "change-label": "Change",
     "search-label": "Find user",
@@ -288,6 +297,7 @@
     "delegated_packages_count_badge": "{{delegated}} of {{total}}",
     "package_number_of_resources": "{{count}} services",
     "user_has_no_packages": "This user has no access packages.",
+    "no_packages": "No access packages available.",
     "no_matching_search": "No matches for your search",
     "info_alert_text": "Access packages will replace today's Altinn roles. They will be filled with more services over time. Read more on the <a href='https://info.altinn.no/en/help/profile/access-packages/'>help page about access packages</a>.",
     "person_info_alert": "Giving powers of attorney to individuals is currently not supported. This will come later.",
@@ -313,12 +323,23 @@
   "users_page": {
     "page_title": "Users and groups - Altinn",
     "main_page_heading": "Users with power of attorney in {{name}}",
-    "sub_heading": "org.nr. {{org_number}}",
     "user_list_heading": "Other users with power of attorney",
+    "direct_connections": "Users with power of attorney",
     "user_search_placeholder": "Search for users",
-    "no_users": "Nobody but you have access. Do you want to change this?",
+    "no_users": "This list is empty",
+    "only_you_have_access": "Only you have access here. Do you want to change this?",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
-    "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?"
+    "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
+    "indirect_connections": "Users without power of attorney"
+  },
+  "advanced_user_search": {
+    "add_user_button": "Add user",
+    "indirect_connections": "Users without power of attorney",
+    "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
+    "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
+    "user_list_heading": "Other users with power of attorney",
+    "direct_connections": "Users with power of attorney",
+    "user_search_placeholder": "Search for users"
   },
   "reportees_page": {
     "page_title": "Our access to other companies - Altinn",
@@ -437,14 +458,29 @@
   "settings_page": {
     "page_title": "Settings - Altinn",
     "page_heading": "Settings for {{name}}",
-    "alert_settings_heading": "Alert addresses for the organization",
-    "alerts_on_email": "Email alerts",
-    "alerts_on_sms": "SMS alerts",
+    "alert_settings_heading": "Notification addresses for the organization",
+    "not_admin_alert": "You do not have access to edit notification addresses for {{name}}. Switch actor or contact someone with administrator rights.",
+    "alerts_on_email": "Notifications by email",
+    "alerts_on_sms": "Notifications by SMS",
     "one_address": "1 address",
     "num_of_addresses": "{{count}} addresses",
-    "email_label": "The organization's email addresses for alerts:",
-    "sms_label": "The organization's phone numbers for alerts:",
-    "address_number": "Address {{number}}:"
+    "email_label": "Organization's email addresses for notifications:",
+    "sms_label": "Organization's phone numbers for notifications:",
+    "address_number": "Address {{number}}",
+    "phone_number": "Phone number {{number}}",
+    "country_code_number": "Country code {{number}}",
+    "manage_addresses_info": "Altinn uses the address(es) to notify the organization about new content.",
+    "add_more": "Add more",
+    "remove_email": "Remove email",
+    "remove_sms": "Remove phone number",
+    "error_saving_addresses": "Something went wrong. Please try again.",
+    "no_addresses_error": "The organization must have at least one email address or SMS number for notifications.",
+    "alert_settings_info": "Notifications sent to registered notification addresses are sent regardless of whether the recipient has the right to view the content in Altinn. If you have a shared email address, it is natural to include it here. <a>Read more</a>"
+  },
+  "text_field_errors": {
+    "required": "The field is required",
+    "invalid_email_pattern": "Invalid email address",
+    "invalid_phone": "Invalid phone number"
   },
   "info_modal": {
     "title": "Try the new access management solution",
@@ -545,6 +581,7 @@
     "agent_delegation_systemusers_title": "System accesses for customers",
     "edit_system_user": "Edit system access",
     "loading_systemusers": "Loading system accesses",
+    "no_permissions_warning": "You do not have sufficient rights to create a system access or manage customers for system accesses.",
     "no_key_role1": "You do not have sufficient rights.",
     "no_key_role2": "To create a system access you need the role Access controller, Main administrator or General manager",
     "new_system_user": "NEW",
@@ -580,11 +617,10 @@
     "delete_systemuser_header": "Delete system access",
     "delete_systemuser_body": "Are you sure you want to delete the system access \"{{title}}\"?",
     "delete_systemuser_error": "Could not delete system access",
-    "delete_has_customer_warning": "The system access cannot be deleted until all customers are removed from the system access.",
+    "delete_has_customer_warning": "Customers assigned to the system access will also be removed.",
     "update_systemuser_error": "Failed to update system access",
     "systemuser_deleted": "System access deleted",
     "save_systemuser": "Save changes",
-    "name_too_long": "Name of system access cannot be longer than 255 characters, you have entered {{ nameLength }} characters.",
     "created_by": "System access created {{created}}",
     "accesspackage_resources_list_singular": "1 service",
     "accesspackage_resources_list_plural": "{{resourcesCount}} services",
@@ -684,10 +720,10 @@
     "18_delegation_right_missing_delegation_access": "Delegation of services failed: you do not have the rights to directly delegate services.",
     "19_delegation_right_missing_srr_right_access": "Delegation of services failed: one or more services use access lists where the organization does not have access.",
     "20_delegation_right_insufficient_authentication_level": "Delegation of services failed: one or more services require an explicit access level.",
-    "50_accesspackage_delegation_failed": "Delegation of access packages to the system user failed.",
-    "52_accesspackage_delegation_missing_required_access": "You do not have sufficient access rights to delegate the requested access packages.",
-    "54_accesspackage_failed_to_get_delegated_packages": "Unable to retrieve delegated access packages.",
-    "56_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system user."
+    "51_accesspackage_delegation_failed": "Delegation of access packages to the system user failed.",
+    "53_accesspackage_delegation_missing_required_access": "You do not have sufficient access rights to delegate the requested access packages.",
+    "55_accesspackage_failed_to_get_delegated_packages": "Unable to retrieve delegated access packages.",
+    "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system user."
   },
   "page_not_available": {
     "title": "This page is not available",
@@ -739,7 +775,9 @@
     "revoke_consent_text": "Are you certain you want to revoke this consent?",
     "revoke_poa_text": "Are you certain you want to revoke this power of attorney?",
     "confirm_revoke_consent": "Yes, revoke consent",
-    "confirm_revoke_poa": "Yes, revoke power of attorney"
+    "confirm_revoke_poa": "Yes, revoke power of attorney",
+    "altinn2_consent_alert_header": "You are now in a new version of the Consent- and power of attorney overview",
+    "altinn2_consent_alert_body": "Soon you will find an overview of all active consents and powers of attorney here. If you cannot find what you are looking for, you can go to the <a>old Altinn-pages</a> and choose “Consents and Authorizations” in the overview."
   },
   "consent_log": {
     "page_title": "Agreement log - Altinn",
@@ -761,7 +799,9 @@
     "poa_used": "{{to}}: has retrieved power of attorney from {{from}}.",
     "handledby": "{{handledBy}} has retrieved the data on behalf of {{to}}.",
     "no_results": "No consent or power of attorney was found for this search",
-    "no_active_consents": "There area no entries in agreement log yet"
+    "no_active_consents": "There are no entries in agreement log yet",
+    "altinn2_consent_alert_header": "You are now in a new version of the agreement log",
+    "altinn2_consent_alert_body": "Soon you will find an overview of all consents and powers of attorney here. If you cannot find what you are looking for, you can go to the <a>old Altinn-pages</a> and choose “Consents and Authorizations” in the overview."
   },
   "consent_errors": {
     "not_authorized_for_consent": "User is not authorized to give consent/power of attorney",
@@ -775,7 +815,7 @@
   },
   "poa_overview_page": {
     "page_title": "Power of attorney overview",
-    "heading": "Power of attorney overview for {{fromparty}}"
+    "heading": "Power of attorney overview for {{name}}"
   },
   "package_poa_details_page": {
     "page_title": "Power of attorney details",
@@ -783,8 +823,10 @@
     "services_tab_title": "Services",
     "load_error": "Oops! Something went wrong.",
     "back_to_overview_link": "Go back to the overview",
+    "package_delegation_success": "{{name}} has been granted power of attorney for {{accessPackage}}.",
+    "package_revocation_success": "{{name}} no longer has power of attorney for {{accessPackage}}.",
     "users_tab": {
-      "description": "These users have power of attorney for all the services in the access package on behalf of {{fromparty}}",
+      "description": "Search for users to grant or revoke permissions.",
       "user_search_placeholder": "Search for person or organization",
       "no_users": "No users have power of attorney for this package on behalf of {{fromparty}}."
     },

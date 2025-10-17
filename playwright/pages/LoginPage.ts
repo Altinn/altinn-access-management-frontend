@@ -1,5 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
+import { env } from 'playwright/util/helper';
 
 export class LoginPage {
   readonly page: Page;
@@ -45,8 +46,8 @@ export class LoginPage {
     await this.autentiserButton.click();
   }
 
-  async loginAs(pid: string, orgnummer: string) {
-    const baseUrl = process.env.BASE_URL as string;
+  async loginAcActorOrg(pid: string, orgnummer: string) {
+    const baseUrl = env('BASE_URL');
     await this.page.goto(baseUrl);
     await this.loginButton.click();
     await this.testIdLink.click();
@@ -61,7 +62,7 @@ export class LoginPage {
     const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
     await chosenReportee.click();
 
-    await this.page.goto(`${process.env.BASE_URL}/ui/profile`);
+    await this.page.goto(`${env('BASE_URL')}/ui/profile`);
     await this.profileLink.click();
 
     const profileHeader = this.page.getByRole('heading', {
@@ -74,7 +75,7 @@ export class LoginPage {
   }
 
   private async navigateToLoginPage() {
-    await this.page.goto(process.env.BASE_URL as string);
+    await this.page.goto(env('BASE_URL'));
     await this.loginButton.click();
     await this.testIdLink.click();
   }
@@ -117,7 +118,7 @@ export class logoutWithUser {
   constructor(public page: Page) {}
 
   async gotoLogoutPage(logoutReportee: string) {
-    await this.page.goto(`${process.env.BASE_URL}/ui/profile`);
+    await this.page.goto(`${env('BASE_URL')}/ui/profile`);
 
     if (await this.page.getByText('Oida, denne siden kjenner vi ikke til...').isVisible()) {
       await this.page.getByRole('link', { name: 'profil' }).click();

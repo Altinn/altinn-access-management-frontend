@@ -2,32 +2,25 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert } from '@altinn/altinn-components';
 
-import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
-
-import classes from './CanCreateSystemUser.module.css';
+import classes from './CreateSystemUserCheck.module.css';
+import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
+import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 
 interface CreateSystemUserCheckProps {
   reporteeData: ReporteeInfo | undefined;
   children: React.ReactNode;
 }
-
-const canCreateSystemUser = (reporteeInfo: ReporteeInfo): boolean => {
-  const isOrganization = reporteeInfo.type === 'Organization';
-  const hasCorrectRole = reporteeInfo.authorizedRoles.some((role) =>
-    ['DAGL', 'HADM', 'ADMAI'].includes(role),
-  );
-  return isOrganization && hasCorrectRole;
-};
-
 export const CreateSystemUserCheck = ({
   reporteeData,
   children,
 }: CreateSystemUserCheckProps): React.ReactNode => {
   const { t } = useTranslation();
 
+  const canCreate = hasCreateSystemUserPermission(reporteeData);
+
   return (
     <>
-      {reporteeData && !canCreateSystemUser(reporteeData) && (
+      {reporteeData && canCreate === false && (
         <DsAlert
           data-color='warning'
           className={classes.noRightsAlert}
@@ -38,7 +31,7 @@ export const CreateSystemUserCheck = ({
           {t('systemuser_overviewpage.no_key_role2')}
         </DsAlert>
       )}
-      {reporteeData && canCreateSystemUser(reporteeData) && children}
+      {reporteeData && canCreate && children}
     </>
   );
 };
