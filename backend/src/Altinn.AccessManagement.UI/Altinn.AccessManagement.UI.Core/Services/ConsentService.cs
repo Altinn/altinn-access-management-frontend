@@ -120,7 +120,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             // filter consents to return only active consents
             IEnumerable<ConsentRequestDetails> activeConsents = consents.Value.Where(consent =>
-                !consent.ConsentRequestEvents.Any(e => excludedStatuses.Contains(e.EventType)));
+            {
+                bool isTerminated = consent.ConsentRequestEvents.Any(e => excludedStatuses.Contains(e.EventType));
+                bool isAccepted = consent.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase));
+                bool isShownInPortal = string.Equals(consent.PortalViewMode, "show", StringComparison.OrdinalIgnoreCase);
+                return !isTerminated && (isAccepted || isShownInPortal);
+            });
 
             // look up all party names in one call instead of one by one
             IEnumerable<string> partyUuids = activeConsents
@@ -136,9 +141,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
             IEnumerable<ActiveConsentItemFE> activeConsentsFE = activeConsents.Select(consent =>
             {
                 partyByUuid.TryGetValue(GetUrnValue(consent.To), out Party toParty);
-                bool showInPortal =
-                    consent.PortalViewMode.Equals("show", StringComparison.OrdinalIgnoreCase) &&
-                    !consent.ConsentRequestEvents.Any(x => x.EventType.Equals("accepted", StringComparison.OrdinalIgnoreCase));
+                bool isAccepted = consent.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase));
+                bool showInPortal = string.Equals(consent.PortalViewMode, "show", StringComparison.OrdinalIgnoreCase) && !isAccepted;
+
                 return new ActiveConsentItemFE()
                 {
                     Id = consent.Id,

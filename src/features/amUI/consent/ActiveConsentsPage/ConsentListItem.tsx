@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { DsSkeleton, List, ListItem } from '@altinn/altinn-components';
 import { HandshakeIcon } from '@navikt/aksel-icons';
@@ -18,8 +17,6 @@ export const ConsentListItem = ({
   isLoading,
   onClick,
 }: ConsentListItemProps): React.ReactNode => {
-  const { t } = useTranslation();
-
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   return (
     <ListItem

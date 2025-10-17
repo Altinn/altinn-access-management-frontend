@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// <summary>
         /// Defines if consent request is shown in portal
         /// </summary>
-        public string? PortalViewMode { get; set; } = "Hide";
+        public string? PortalViewMode { get; set; }
 
         /// <summary>
         /// Defines the party that has to consent to the consentRequest
