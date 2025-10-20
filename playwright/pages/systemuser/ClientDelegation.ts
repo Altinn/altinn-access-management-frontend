@@ -7,20 +7,26 @@ export class ClientDelegationPage {
   readonly page: Page;
 
   readonly confirmButton: Locator;
-  readonly addCustomersButton: Locator;
+  readonly customersButton: Locator;
   readonly confirmAndCloseButton: Locator;
   readonly deleteSystemAccessButtons: Locator;
-  readonly modifyCustomersButton: Locator;
   readonly clientSearchBox: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.confirmButton = page.getByRole('button', { name: 'Godkjenn' });
-    this.addCustomersButton = page.getByRole('button', { name: 'Legg til kunder' });
-    this.modifyCustomersButton = page.getByRole('button', { name: 'Legg til eller fjern kunder' });
-    this.confirmAndCloseButton = page.getByRole('button', { name: 'Bekreft og lukk' });
+    this.customersButton = page.getByRole('button', {
+      name: /^(Legg til kunder|Legg til eller fjern kunder)$/,
+    });
+
+    // Scope modal-specific locators to the open dialog to avoid strict mode violations
+    this.confirmAndCloseButton = page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Bekreft og lukk' });
     this.deleteSystemAccessButtons = page.getByRole('button', { name: 'Slett systemtilgang' });
-    this.clientSearchBox = page.getByRole('searchbox', { name: 'Søk etter kunde' });
+    this.clientSearchBox = page
+      .getByRole('dialog')
+      .getByRole('searchbox', { name: 'Søk etter kunde' });
   }
 
   systemUserLink(name: string): Locator {
@@ -28,15 +34,15 @@ export class ClientDelegationPage {
   }
 
   addCustomerButtonByName(name: string): Locator {
-    return this.page.getByRole('button', { name: `Legg til ${name}` });
+    return this.page.getByRole('dialog').getByRole('button', { name: `Legg til ${name}` });
   }
 
   removeCustomerButtonByName(name: string): Locator {
-    return this.page.getByRole('button', { name: `Fjern ${name}` });
+    return this.page.getByRole('dialog').getByRole('button', { name: `Fjern ${name}` });
   }
 
   confirmationText(text: string): Locator {
-    return this.page.getByText(text);
+    return this.page.getByRole('dialog').getByText(text);
   }
 
   async confirmAndCreateSystemUser(accessPackage: string) {
@@ -59,8 +65,8 @@ export class ClientDelegationPage {
     confirmationText: string,
     orgnummer: string = '234234234',
   ) {
-    await expect(this.addCustomersButton).toBeVisible();
-    await this.addCustomersButton.click();
+    await expect(this.customersButton).toBeVisible();
+    await this.customersButton.click();
 
     //Customers have different sorting per environment, so most consistent option is to search
     await this.clientSearchBox.fill(orgnummer);
@@ -80,9 +86,9 @@ export class ClientDelegationPage {
   }
 
   async removeCustomer(name: string) {
-    // Open the modify customers modal
-    await expect(this.modifyCustomersButton).toBeVisible();
-    await this.modifyCustomersButton.click();
+    // Open the customers modal (works for both add and modify labels)
+    await expect(this.customersButton).toBeVisible();
+    await this.customersButton.click();
 
     // Find and click the remove button for the specified customer
     const removeButton = this.removeCustomerButtonByName(name);
