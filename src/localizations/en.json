@@ -129,7 +129,7 @@
     "users": "Users",
     "reportees": "Our access to other companies",
     "systemaccess": "API- and system access",
-    "consent": "Consents and powers of attorney",
+    "consent": "Consent and power of attorney agreements",
     "poa_overview": "Power of attorney",
     "settings": "Settings"
   },
@@ -747,7 +747,7 @@
     "already_rejected_poa": "This power of attorney is already rejected"
   },
   "active_consents": {
-    "page_title": "Active consents and powers of attorney - Altinn",
+    "page_title": "Consent and power of attorney agreements - Altinn",
     "heading": "Consents and powers of attorney",
     "sub_heading": "Active agreements",
     "loading_consents": "Loading active agreements...",
