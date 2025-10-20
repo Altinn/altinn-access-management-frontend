@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
-import type { Connection, User } from '@/rtk/features/userInfoApi';
+import type { User } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import {
+  type Connection,
   ConnectionUserType,
-  useGetIsAdminQuery,
   useGetRightHoldersQuery,
-  useGetUserInfoQuery,
-} from '@/rtk/features/userInfoApi';
+} from '@/rtk/features/connectionApi';
 import { debounce } from '@/resources/utils';
 
 import { UserList } from '../common/UserList/UserList';

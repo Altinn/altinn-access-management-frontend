@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-import { ConnectionUserType, type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
+import { type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
+import { ConnectionUserType } from '@/rtk/features/connectionApi';
 import { formatDateToNorwegian } from '@/resources/utils';
 
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';

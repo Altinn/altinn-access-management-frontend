@@ -1,12 +1,8 @@
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import {
-  type Connection,
-  type User,
-  useGetRightHoldersQuery,
-  PartyType,
-} from '@/rtk/features/userInfoApi';
+import { type User, PartyType } from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { Party } from '@/rtk/features/lookupApi';
 import AdvancedUserSearch from '../common/AdvancedUserSearch/AdvancedUserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';

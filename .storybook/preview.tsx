@@ -17,6 +17,7 @@ declare global {
       displayPoaOverviewPage: boolean;
       crossPlatformLinks: boolean;
       displayConsentGui: boolean;
+      useNewActorsList: boolean;
     };
   }
 }
@@ -50,6 +51,7 @@ window.featureFlags = {
   displayPoaOverviewPage: true,
   crossPlatformLinks: false,
   displayConsentGui: false,
+  useNewActorsList: false,
 };
 
 // Initialise i18next;

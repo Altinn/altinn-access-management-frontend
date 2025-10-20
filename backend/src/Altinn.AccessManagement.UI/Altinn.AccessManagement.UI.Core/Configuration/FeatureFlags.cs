@@ -50,5 +50,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to display the POA overview page in the sidebar
         /// </summary>
         public bool DisplayPoaOverviewPage { get; set; }
+
+        /// <summary>
+        /// Whether to use the new actors list populated by the connections API
+        /// </summary>
+        public bool UseNewActorsList { get; set; }
     }
 }

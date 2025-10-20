@@ -1,6 +1,7 @@
 import test, { expect } from '@playwright/test';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
+import { env } from 'playwright/util/helper';
 import { LoginPage } from '../../pages/LoginPage';
 import { SystemUserPage } from '../../pages/systemuser/SystemUserPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
@@ -14,17 +15,11 @@ test.describe('Systembruker endringsforespørsel', () => {
   let systemUserIds: string[] = [];
 
   test.beforeEach(async ({ page }) => {
-    api = new ApiRequests();
+    orgNumber = '310547891'; // Hardcoded org ID for testing
+    systemId = '310547891_E2E-Playwright-Authentication'; // Hardcoded system ID for testing
+    api = new ApiRequests(orgNumber);
     loginPage = new LoginPage(page);
     systemUserPage = new SystemUserPage(page);
-    orgNumber = process.env.ORG!;
-    systemId = process.env.SYSTEM_ID!;
-    if (!orgNumber) {
-      throw new Error('ORG environment variable is not set');
-    }
-    if (!systemId) {
-      throw new Error('SYSTEM_ID environment variable is not set');
-    }
     await loginPage.loginWithUser('14824497789');
     await loginPage.chooseReportee('AKTVERDIG RETORISK APE');
   });
@@ -44,7 +39,7 @@ test.describe('Systembruker endringsforespørsel', () => {
   test('Avvis endringsforespørsel', async ({ page }): Promise<void> => {
     //Generate confirmUrl from API
     const externalRef = TestdataApi.generateExternalRef();
-    const response = await api.postSystemuserRequest(externalRef);
+    const response = await api.postSystemuserRequest(externalRef, systemId);
 
     await api.approveSystemuserRequest(response.id);
 
@@ -68,7 +63,7 @@ test.describe('Systembruker endringsforespørsel', () => {
 
   test('Godkjenn endringsforespørsel', async ({ page }): Promise<void> => {
     const externalRef = TestdataApi.generateExternalRef();
-    const response = await api.postSystemuserRequest(externalRef);
+    const response = await api.postSystemuserRequest(externalRef, systemId);
 
     await api.approveSystemuserRequest(response.id);
 
@@ -93,7 +88,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     await loginPage.loginWithUser('14824497789');
     await loginPage.chooseReportee('AKTVERDIG RETORISK APE');
 
-    const systemUserUrl = `${process.env.SYSTEMUSER_URL}`;
+    const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
     await page.goto(systemUserUrl + '/' + systemUserId);
 
     await systemUserPage.TRY_NEW_ACCESS_MANAGEMENT_BUTTON.click();

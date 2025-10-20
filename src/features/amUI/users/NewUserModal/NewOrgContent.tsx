@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { t } from 'i18next';
 
 import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
-import { useAddRightHolderMutation, User } from '@/rtk/features/userInfoApi';
+import { User } from '@/rtk/features/userInfoApi';
 
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
+import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
 
 export const NewOrgContent = ({
   onComplete,

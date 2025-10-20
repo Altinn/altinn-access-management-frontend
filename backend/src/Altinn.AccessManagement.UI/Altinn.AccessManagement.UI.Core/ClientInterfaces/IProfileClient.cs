@@ -44,5 +44,11 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <returns>A list of addresses</returns>
         Task<NotificationAddressResponse> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress);
+
+        /// <summary>
+        /// Gets the user's favorite profile group from altinn profile
+        /// </summary>
+        /// <returns>A ProfileGroup containing the users favorite parties</returns>
+        Task<ProfileGroup> GetFavoriteProfileGroup();
     }
 }

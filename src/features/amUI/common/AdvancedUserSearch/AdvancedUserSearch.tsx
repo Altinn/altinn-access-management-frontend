@@ -3,12 +3,8 @@ import { DsSearch, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon } from '@navikt/aksel-icons';
 
-import {
-  ConnectionUserType,
-  ExtendedUser,
-  User,
-  type Connection,
-} from '@/rtk/features/userInfoApi';
+import { ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import { ConnectionUserType, type Connection } from '@/rtk/features/connectionApi';
 import { NewUserButton } from '@/features/amUI/users/NewUserModal/NewUserModal';
 
 import classes from './AdvancedUserSearch.module.css';

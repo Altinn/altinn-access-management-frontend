@@ -55,3 +55,7 @@ export const settingsPageEnabled = () => {
 export const poaOverviewPageEnabled = () => {
   return window.featureFlags?.displayPoaOverviewPage === true;
 };
+
+export const useNewActorList = () => {
+  return window.featureFlags?.useNewActorsList === true;
+};

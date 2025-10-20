@@ -183,6 +183,28 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
         }
 
+        /// <inheritdoc/>
+        public async Task<ProfileGroup> GetFavoriteProfileGroup()
+        {
+            try
+            {
+                string endpointUrl = $"users/current/party-groups/favorites";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
+
+                var resString = await response.Content.ReadAsStringAsync();
+                ProfileGroup profileGroups = await ClientUtils.DeserializeIfSuccessfullStatusCode<ProfileGroup>(response);
+                return profileGroups;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ProfileClient // GetFavoriteProfileGroup // Exception");
+                throw;
+            }
+        }
+
         private async Task<UserProfile> GetUserProfileFromEndpoint(string endpointUrl)
         {
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);

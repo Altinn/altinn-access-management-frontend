@@ -3,3 +3,40 @@ export function env(name: string): string {
   if (!value) throw new Error(`Missing required env variable read from config with name: ${name}`);
   return value;
 }
+
+/**
+ * Picks a random element from an array
+ */
+export function pickRandom<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+/**
+ * Adds time to the current UTC date and returns ISO string
+ */
+export function addTimeToNowUtc(opts: {
+  minutes?: number;
+  seconds?: number;
+  days?: number;
+  years?: number;
+}): string {
+  const now = new Date();
+  if (opts.minutes) now.setUTCMinutes(now.getUTCMinutes() + opts.minutes);
+  if (opts.seconds) now.setUTCSeconds(now.getUTCSeconds() + opts.seconds);
+  if (opts.days) now.setUTCDate(now.getUTCDate() + opts.days);
+  if (opts.years) now.setUTCFullYear(now.getUTCFullYear() + opts.years);
+  return now.toISOString();
+}
+
+/**
+ * Converts ISO/UTC string to date format (DD.MM.YYYY HH:MM)
+ */
+export function formatUiDateTime(dateString: string): string {
+  return new Date(dateString).toLocaleString('no-NO', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}

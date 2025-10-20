@@ -1,30 +1,20 @@
+import { env } from 'playwright/util/helper';
+
 export class Token {
   private readonly username: string;
   private readonly password: string;
   private readonly org: string;
   private readonly environment: string;
 
-  constructor() {
-    this.username = process.env.USERNAME_TEST_API || '';
-    this.password = process.env.PASSWORD_TEST_API || '';
-    this.org = process.env.ORG || '';
-    this.environment = process.env.environment || '';
+  constructor(org?: string) {
+    this.username = env('USERNAME_TEST_API');
+    this.password = env('PASSWORD_TEST_API');
+    this.org = org || env('ORG');
+    this.environment = env('environment');
+  }
 
-    if (!this.username) {
-      throw new Error('API username is not defined in the environment variables.');
-    }
-
-    if (!this.password) {
-      throw new Error('API password is not defined in the environment variables.');
-    }
-
-    if (!this.org) {
-      throw new Error('ORG is not defined in the environment variables.');
-    }
-
-    if (!this.environment) {
-      throw new Error('Environment is not defined in the environment variables.');
-    }
+  public get orgNo(): string {
+    return this.org;
   }
 
   /**
@@ -36,7 +26,7 @@ export class Token {
     // Construct the URL for fetching the enterprise Altinn test token
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetEnterpriseToken` +
-      `?orgNo=${process.env.ORG}&env=${process.env.environment}&scopes=${scopes}`;
+      `?orgNo=${this.org}&env=${this.environment}&scopes=${scopes}`;
 
     const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
     const headers = {
@@ -58,11 +48,11 @@ export class Token {
    */
   public async getPersonalAltinnToken(): Promise<string> {
     const url =
-      `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${process.env.environment}` +
-      `&pid=${process.env.PID}` +
-      `&userid=${process.env.ALTINN_USER_ID}` +
-      `&partyid=${process.env.ALTINN_PARTY_ID}` +
-      `&partyUuid=${process.env.ALTINN_PARTY_UUID}` +
+      `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${this.environment}` +
+      `&pid=${env('PID')}` +
+      `&userid=${env('ALTINN_USER_ID')}` +
+      `&partyid=${env('ALTINN_PARTY_ID')}` +
+      `&partyUuid=${env('ALTINN_PARTY_UUID')}` +
       `&authLvl=3&ttl=3000` +
       `&scopes=altinn:portal/enduser`;
 
@@ -91,11 +81,11 @@ export class Token {
   public async generateAltinnPersonalToken(): Promise<string> {
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken` +
-      `?env=${process.env.ENV_NAME}` +
-      `&pid=${process.env.DAGL_PID}` +
-      `&userid=${process.env.DAGL_USER_ID}` +
-      `&partyid=${process.env.DAGL_PARTY_ID}` +
-      `&partyuuid=${process.env.DAGL_PARTY_UUID}` +
+      `?env=${env('ENV_NAME')}` +
+      `&pid=${env('DAGL_PID')}` +
+      `&userid=${env('DAGL_USER_ID')}` +
+      `&partyid=${env('DAGL_PARTY_ID')}` +
+      `&partyuuid=${env('DAGL_PARTY_UUID')}` +
       `&authLvl=3&ttl=3000&scopes=altinn:portal/enduser`;
 
     const authHeader = Buffer.from(`${this.username}:${this.password}`).toString('base64');

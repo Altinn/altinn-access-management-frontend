@@ -12,6 +12,7 @@ declare global {
       crossPlatformLinks: boolean;
       displaySettingsPage: boolean;
       displayPoaOverviewPage: boolean;
+      useNewActorsList: boolean;
     };
   }
 }
