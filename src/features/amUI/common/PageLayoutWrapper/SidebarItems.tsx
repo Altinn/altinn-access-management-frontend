@@ -38,7 +38,9 @@ export const SidebarItems = (
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const displayConsentGui = window.featureFlags?.displayConsentGui;
-  const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+
+  const displaySettingsPage = window.featureFlags?.displaySettingsPage;
+  const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
 
   const heading: MenuItemProps = {
     id: '1',
@@ -208,10 +210,8 @@ export const SidebarItems = (
     }
   }
 
-  if (!displayLimitedPreviewLaunch) {
-    if (isAdmin) {
-      items.push(poaOverview);
-    }
+  if (displayPoaOverviewPage && isAdmin) {
+    items.push(poaOverview);
   }
 
   if (displayConsentGui && hasConsentPermission(reportee, isAdmin)) {
@@ -222,7 +222,7 @@ export const SidebarItems = (
     items.push(systemUser);
   }
 
-  if (!displayLimitedPreviewLaunch && canAccessSettings) {
+  if (canAccessSettings && displaySettingsPage) {
     items.push(settings);
   }
 

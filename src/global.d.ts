@@ -10,6 +10,8 @@ declare global {
       displayConsentGui: boolean;
       restrictPrivUse: boolean;
       crossPlatformLinks: boolean;
+      displaySettingsPage: boolean;
+      displayPoaOverviewPage: boolean;
       useNewActorsList: boolean;
     };
   }

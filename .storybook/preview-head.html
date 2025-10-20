@@ -1,11 +1,15 @@
 <script>
   console.log('Script is running');
+  // Merge new flags into any existing window.featureFlags so we don't overwrite other keys
   window.featureFlags = {
+    ...(window.featureFlags || {}),
     displayPopularSingleRightsServices: false,
     displayResourceDelegation: false,
     displayConfettiPackage: false,
     displayLimitedPreviewLaunch: false,
     restrictPrivUse: false,
+    displaySettingsPage: false,
+    displayPoaOverviewPage: false,
     useNewActorsList: false,
   };
   document.cookie = 'AltinnPartyId=51329012';
