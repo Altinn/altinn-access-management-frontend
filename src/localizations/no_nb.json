@@ -142,7 +142,7 @@
     "users": "Brukere",
     "reportees": "Våre tilganger hos andre",
     "systemaccess": "API- og systemtilganger",
-    "consent": "Samtykker og fullmakter",
+    "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
     "settings": "Innstillinger"
   },
@@ -746,7 +746,7 @@
     "already_rejected_poa": "Denne fullmakten er allerede avvist"
   },
   "active_consents": {
-    "page_title": "Aktive samtykker og fullmakter - Altinn",
+    "page_title": "Samtykke- og fullmaktsavtaler - Altinn",
     "heading": "Samtykker og fullmakter",
     "sub_heading": "Aktive avtaler",
     "loading_consents": "Laster aktive avtaler...",

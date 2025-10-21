@@ -9,29 +9,37 @@ import classes from './ActiveConsentsPage.module.css';
 interface ConsentListItemProps {
   title: string;
   subItems: { id: string; title: string; isPoa: boolean }[];
+  partyType?: string;
   isLoading?: boolean;
   onClick?: (consentId: string) => void;
 }
 export const ConsentListItem = ({
   title,
   subItems,
+  partyType,
   isLoading,
   onClick,
 }: ConsentListItemProps): React.ReactNode => {
   const { t } = useTranslation();
 
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const partyColor = partyType === 'Person' ? 'person' : 'company';
+
   return (
     <ListItem
       title={{ as: 'h3', children: title }}
-      icon={{ svgElement: HandshakeIcon, theme: 'surface' }}
+      icon={{
+        svgElement: HandshakeIcon,
+        theme: 'surface',
+        color: partyColor,
+      }}
       as='button'
       size='md'
       loading={isLoading}
       collapsible
       expanded={isExpanded}
       interactive={!!onClick}
-      badge={{ label: subItems.length }}
+      badge={{ label: subItems.length, color: partyColor }}
       onClick={() => setIsExpanded((old) => !old)}
     >
       <List className={classes.expandedListItem}>
