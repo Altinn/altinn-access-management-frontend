@@ -69,17 +69,6 @@ export const ConsentRequestPage = () => {
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
 
-  const menu = {
-    items: [{ groupId: 'current-user', hidden: true }],
-    groups: {
-      'current-user': {
-        title: t('header.logged_in_as_name', {
-          name: userData?.name || '',
-        }),
-      },
-    },
-  };
-
   const account: { name: string; type: 'person' | 'company' } = {
     name: memoizedRequest?.fromPartyName ?? '',
     type: memoizedRequest?.fromPartyName === userData?.name ? 'person' : 'company',
@@ -118,9 +107,17 @@ export const ConsentRequestPage = () => {
             menuLabel: t('header.menu-label'),
             backLabel: t('header.back-label'),
             changeLabel: t('header.change-label'),
+            menu: {
+              items: [{ groupId: 'current-user', hidden: true }],
+              groups: {
+                'current-user': {
+                  title: t('header.logged_in_as_name', {
+                    name: userData?.name || '',
+                  }),
+                },
+              },
+            },
           },
-          desktopMenu: menu,
-          mobileMenu: menu,
         }}
       >
         <div className={classes.centerBlock}>
