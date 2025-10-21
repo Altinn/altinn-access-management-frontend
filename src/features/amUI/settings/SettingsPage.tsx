@@ -5,10 +5,19 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 import { amUIPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SettingsPageContent } from './SettingsPageContent';
-import { useRerouteIfLimitedPreview } from '@/resources/utils/featureFlagUtils';
+import { settingsPageEnabled } from '@/resources/utils/featureFlagUtils';
+import { Navigate } from 'react-router';
 
 export const SettingsPage = () => {
-  useRerouteIfLimitedPreview();
+  const pageIsEnabled = settingsPageEnabled();
+  if (!pageIsEnabled) {
+    return (
+      <Navigate
+        to='/not-found'
+        replace
+      />
+    );
+  }
 
   return (
     <PageWrapper>

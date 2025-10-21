@@ -19,6 +19,24 @@ export const useRerouteIfLimitedPreview = () => {
   }, [navigate]);
 };
 
+export const useRerouteIfSettingsPageDisabled = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (window.featureFlags?.displaySettingsPage === false) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [navigate]);
+};
+
+export const useRerouteIfPoaOverviewPageDisabled = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (window.featureFlags?.displayPoaOverviewPage === false) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [navigate]);
+};
+
 export const availableForUserTypeCheck = (userType?: string) => {
   if ((userType && userType === 'Organization') || window.featureFlags?.restrictPrivUse === false) {
     return true;
@@ -28,6 +46,14 @@ export const availableForUserTypeCheck = (userType?: string) => {
 
 export const crossPlatformLinksEnabled = () => {
   return window.featureFlags?.crossPlatformLinks === true;
+};
+
+export const settingsPageEnabled = () => {
+  return window.featureFlags?.displaySettingsPage === true;
+};
+
+export const poaOverviewPageEnabled = () => {
+  return window.featureFlags?.displayPoaOverviewPage === true;
 };
 
 export const useNewActorList = () => {

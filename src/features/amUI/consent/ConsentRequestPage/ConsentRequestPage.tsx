@@ -70,6 +70,11 @@ export const ConsentRequestPage = () => {
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
 
+  const account: { name: string; type: 'person' | 'company' } = {
+    name: memoizedRequest?.fromPartyName ?? '',
+    type: memoizedRequest?.fromPartyName === userData?.name ? 'person' : 'company',
+  };
+
   return (
     <RootProvider>
       <Layout
@@ -90,9 +95,9 @@ export const ConsentRequestPage = () => {
             title: 'Altinn',
           },
           currentAccount: {
-            name: memoizedRequest?.fromPartyName ?? '',
-            type: memoizedRequest?.fromPartyName === userData?.name ? 'person' : 'company',
+            ...account,
             id: '',
+            icon: account,
           },
           globalMenu: {
             logoutButton: {
@@ -103,9 +108,16 @@ export const ConsentRequestPage = () => {
             menuLabel: t('header.menu-label'),
             backLabel: t('header.back-label'),
             changeLabel: t('header.change-label'),
-            currentEndUserLabel: t('header.logged_in_as_name', {
-              name: userData?.name || '',
-            }),
+            menu: {
+              items: [{ groupId: 'current-user', hidden: true }],
+              groups: {
+                'current-user': {
+                  title: t('header.logged_in_as_name', {
+                    name: userData?.name || '',
+                  }),
+                },
+              },
+            },
           },
         }}
       >

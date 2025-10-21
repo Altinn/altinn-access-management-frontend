@@ -152,7 +152,7 @@ export class ConsentPage {
     });
 
     const headingFullmaktTexts = {
-      [Language.NN]: /Fullmakt til å handla på dine vegne/i,
+      [Language.NN]: /Fullmakt til å handle på dine vegne/i,
       [Language.NB]: /Fullmakt til å handle på dine vegne/i,
       [Language.EN]: /Power of attorney to act on your behalf/i,
     };
@@ -195,7 +195,7 @@ export class ConsentPage {
     // Fullmakt intro text - language specific
     const fullmaktIntroTexts = {
       [Language.NN]:
-        /Ved at du gjer fullmakt, får[\s\S]*tilgang til følgjande tenester på dine vegne/i,
+        /Ved at du gir fullmakt, får[\s\S]*tilgang til følgjande tenester på dine vegne/i,
       [Language.NB]: /Ved at du gir fullmakt, får[\s\S]*tilgang til følgende tjenester/i,
       [Language.EN]:
         /By granting power of attorney, [\s\S]*gets access to the following services on your behalf/i,
@@ -211,7 +211,7 @@ export class ConsentPage {
     this.textEnkeltLead = page.getByText(enkeltLeadTexts[language]);
 
     const enkeltBulletIntroTexts = {
-      [Language.NN]: /Ved å godkjenna denne førespurnaden samtykke du til følgjande:/i,
+      [Language.NN]: /Ved å godkjenne denne førespurnaden samtykker du til følgjande:/i,
       [Language.NB]: /Ved å godkjenne denne forespørselen samtykker du til følgende:/i,
       [Language.EN]: /By accepting this request you consent to the following:/i,
     };
@@ -244,8 +244,8 @@ export class ConsentPage {
 
     // Fullmakt expiry text - language specific
     const fullmaktExpiryTexts = {
-      [Language.NN]: /Fullmakta er tidsavgrensa og vil gå ut/i,
-      [Language.NB]: /Fullmakten er tidsavgrenset og vil gå ut/i,
+      [Language.NN]: /Fullmakta er tidsavgrensa og opphøyrer/i,
+      [Language.NB]: /Fullmakten er tidsavgrenset og opphører/i,
       [Language.EN]: /The power of attorney is time-limited, and will expire/i,
     };
     this.textFullmaktExpiry = page.getByText(fullmaktExpiryTexts[language]);
@@ -362,8 +362,8 @@ export class ConsentPage {
 
   async expectExpiry(formattedOslo: string): Promise<void> {
     const expiryTexts = {
-      [Language.NN]: `Samtykket er tidsavgrensa og vil gå ut ${formattedOslo}`,
-      [Language.NB]: `Samtykket er tidsavgrenset og vil gå ut ${formattedOslo}`,
+      [Language.NN]: `Samtykket er tidsavgrensa og opphøyrer ${formattedOslo}`,
+      [Language.NB]: `Samtykket er tidsavgrenset og opphører ${formattedOslo}`,
       [Language.EN]: `The consent is time-limited, and will expire ${formattedOslo}`,
     };
 

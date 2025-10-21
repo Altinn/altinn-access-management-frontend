@@ -86,6 +86,7 @@ export const ActiveConsentsPage = () => {
                   <ConsentListItem
                     key={partyId}
                     title={groupedPendingActiveConsents[partyId][0].toPartyName}
+                    partyType={reportee?.type}
                     subItems={groupedPendingActiveConsents[partyId].map((item) => ({
                       id: item.id,
                       title: item.toPartyName,
@@ -145,6 +146,7 @@ export const ActiveConsentsPage = () => {
                   <ConsentListItem
                     key={partyId}
                     title={groupedActiveConsents[partyId][0].toPartyName}
+                    partyType={reportee?.type}
                     subItems={groupedActiveConsents[partyId].map((item) => ({
                       id: item.id,
                       title: item.toPartyName,

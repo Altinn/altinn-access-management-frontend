@@ -21,6 +21,7 @@ test.describe('Klientdelegering', () => {
       role: FacilitatorRole.Revisor,
       accessPackageApiName: 'ansvarlig-revisor',
       accessPackageDisplayName: 'Ansvarlig revisor',
+      removeCustomers: true,
     });
   });
 
@@ -30,6 +31,7 @@ test.describe('Klientdelegering', () => {
       role: FacilitatorRole.Regnskapsfoerer,
       accessPackageApiName: 'regnskapsforer-lonn',
       accessPackageDisplayName: 'Regnskapsfører lønn',
+      removeCustomers: false,
     });
   });
 
@@ -39,6 +41,7 @@ test.describe('Klientdelegering', () => {
       role: FacilitatorRole.Forretningsfoerer,
       accessPackageApiName: 'forretningsforer-eiendom',
       accessPackageDisplayName: 'Forretningsforer eiendom',
+      removeCustomers: false,
     });
   });
 
@@ -47,11 +50,13 @@ test.describe('Klientdelegering', () => {
     role,
     accessPackageApiName,
     accessPackageDisplayName,
+    removeCustomers,
   }: {
     page: Page;
     role: FacilitatorRole;
     accessPackageApiName: string;
     accessPackageDisplayName: string;
+    removeCustomers: boolean;
   }) {
     const loginPage = new LoginPage(page);
     const user = loadFacilitator(role);
@@ -81,9 +86,6 @@ test.describe('Klientdelegering', () => {
     await loginPage.loginAcActorOrg(user.pid, user.org);
 
     //Go to system user overview page
-    if (!process.env.SYSTEMUSER_URL) {
-      throw new Error('Environment variable SYSTEMUSER_URL is not defined.');
-    }
     await page.goto(env('SYSTEMUSER_URL') + '/overview');
 
     // Intro to "new brukerflate"
@@ -94,7 +96,7 @@ test.describe('Klientdelegering', () => {
 
     await clientDelegationPage.openAccessPackage(accessPackageDisplayName);
 
-    // Add customers to system user and remove them after so you can delete system user
+    // Add customers to system user
     for (const customer of customers) {
       await clientDelegationPage.addCustomer(
         customer.label,
@@ -102,7 +104,10 @@ test.describe('Klientdelegering', () => {
         customer.orgnummer,
       );
 
-      await clientDelegationPage.removeCustomer(customer.confirmation);
+      // Only remove customers if removeCustomers is true
+      if (removeCustomers) {
+        await clientDelegationPage.removeCustomer(customer.confirmation);
+      }
     }
 
     //Cleanup: All clients need to be removed (api validation) to delete system user
