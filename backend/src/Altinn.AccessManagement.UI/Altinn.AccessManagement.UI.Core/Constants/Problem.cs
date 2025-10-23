@@ -141,12 +141,18 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// Gets a <see cref="ProblemDescriptor"/>.
         /// </summary>
         public static ProblemDescriptor AccessPackage_FailedToGetDelegatedPackages { get; }
-            = _factory.Create(55, HttpStatusCode.BadRequest, "Unable to get delegated access packages");
+            = _factory.Create(55, HttpStatusCode.InternalServerError, "Failed to get delegated access packages");
 
         /// <summary>
         /// Gets a <see cref="ProblemDescriptor"/>.
         /// </summary>
         public static ProblemDescriptor SystemUser_FailedToDeleteAccessPackage { get; }
             = _factory.Create(57, HttpStatusCode.BadRequest, "Failed to delete access package delegation for system user");
-        }
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor SystemUser_FailedToGetDelegatedRights { get; }
+            = _factory.Create(62, HttpStatusCode.InternalServerError, "Failed to get delegated rights");
+    }
 }
