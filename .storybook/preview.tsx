@@ -13,6 +13,11 @@ declare global {
       displayLimitedPreviewLaunch: boolean;
       displayResourceDelegation: boolean;
       restrictPrivUse: boolean;
+      displaySettingsPage: boolean;
+      displayPoaOverviewPage: boolean;
+      crossPlatformLinks: boolean;
+      displayConsentGui: boolean;
+      useNewActorsList: boolean;
     };
   }
 }
@@ -42,6 +47,11 @@ window.featureFlags = {
   displayLimitedPreviewLaunch: false,
   displayResourceDelegation: true,
   restrictPrivUse: false,
+  displaySettingsPage: true,
+  displayPoaOverviewPage: true,
+  crossPlatformLinks: false,
+  displayConsentGui: false,
+  useNewActorsList: false,
 };
 
 // Initialise i18next;

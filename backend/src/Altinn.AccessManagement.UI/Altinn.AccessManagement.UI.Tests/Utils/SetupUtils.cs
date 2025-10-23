@@ -107,6 +107,37 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for ConnectionController tests</param>
+        /// <param name="flags">Override featureFlags in the client. Defaults to true if not set</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<ConnectionController> customFactory, FeatureFlags flags)
+        {
+            WebApplicationFactory<ConnectionController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                    services.Configure<FeatureFlags>(options =>
+                    {
+                        options.DisplayPopularSingleRightsServices = flags?.DisplayPopularSingleRightsServices ?? true;
+                        options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
+                        options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
+                        options.DisplayLimitedPreviewLaunch = flags?.DisplayLimitedPreviewLaunch ?? true;
+                        options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
+                        options.UseNewActorsList = flags?.UseNewActorsList ?? false;
+                    });
+                });
+            });
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient();
+        }
+
+        /// <summary>
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for UserController tests</param>
         /// <param name="flags">Override featureFlags in the client. Defaults to true if not set</param>
         /// <returns>HttpClient</returns>

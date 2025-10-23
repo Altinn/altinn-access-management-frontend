@@ -79,25 +79,26 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         }
 
         /// <summary>
-        /// Gets the user's party UUID (urn:altinn:party:uuid) from JWT claims.
+        /// Gets the users party uuid
         /// </summary>
-        /// <param name="context">The HTTP context.</param>
-        /// <returns>The logged-in user's party UUID, or null if not present/invalid.</returns>
-        public static Guid? GetUserPartyUuid(HttpContext context)
+        /// <param name="context">the http context</param>
+        /// <returns>the logged in user's partyUUID</returns>
+        public static Guid GetUserPartyUuid(HttpContext context)
         {
-            var user = context?.User;
-            if (user?.Identity?.IsAuthenticated != true)
+            Guid partyUUID = Guid.Empty;
+
+            if (context.User != null)
             {
-                return null;
+                foreach (Claim claim in context.User.Claims)
+                {
+                    if (claim.Type.Equals(AltinnCoreClaimTypes.PartyUUID))
+                    {
+                        partyUUID = Guid.Parse(claim.Value);
+                    }
+                }
             }
 
-            string raw = user.FindFirst("urn:altinn:party:uuid")?.Value;
-            if (Guid.TryParse(raw, out var uuid))
-            {
-                return uuid;
-            }
-
-            return null;
+            return partyUUID;
         }
     }
 }

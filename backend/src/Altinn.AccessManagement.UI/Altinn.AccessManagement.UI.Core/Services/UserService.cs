@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Profile.Models;
@@ -21,8 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IProfileClient _profileClient;
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAccessManagementClientV0 _accessManagementClientV0;
-        private readonly IRightHolderClient _rightHolderClient;
-        private readonly IRegisterClient _registerClient;
+        private readonly IConnectionClient _connectionClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="APIDelegationService"/> class.
@@ -31,22 +31,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="profileClient">handler for profile client</param>
         /// <param name="accessManagementClient">handler for AM client</param>
         /// <param name="accessManagementClientV0">handler for old AM client</param>
-        /// <param name="registerClient">handler for register client</param>
-        /// <param name="rightHolderClient">handler for right holder client</param>  
+        /// <param name="connectionClient">handler for right holder client</param>  
         public UserService(
             ILogger<IAPIDelegationService> logger,
             IProfileClient profileClient,
             IAccessManagementClient accessManagementClient,
             IAccessManagementClientV0 accessManagementClientV0,
-            IRegisterClient registerClient,
-            IRightHolderClient rightHolderClient)
+            IConnectionClient connectionClient)
         {
             _logger = logger;
             _profileClient = profileClient;
             _accessManagementClient = accessManagementClient;
             _accessManagementClientV0 = accessManagementClientV0;
-            _registerClient = registerClient;
-            _rightHolderClient = rightHolderClient;
+            _connectionClient = connectionClient;
         }
 
         /// <inheritdoc/>
@@ -71,11 +68,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<User>> GetReporteeRightHolders(int partyId)
+        public async Task<List<Connection>> GetActorListForUser(Guid authenticatedUserPartyUuid)
         {
-            List<AuthorizedParty> rightHolders = await _accessManagementClient.GetReporteeRightHolders(partyId);
+            List<Connection> connections = await _connectionClient.GetConnections(authenticatedUserPartyUuid, null, authenticatedUserPartyUuid);
+            return connections;
+        }
 
-            return rightHolders.Select(party => new User(party)).ToList();
+        /// <inheritdoc/>
+        public async Task<List<string>> GetFavoriteActorUuids()
+        {
+            ProfileGroup favoriteProfileGroup = await _profileClient.GetFavoriteProfileGroup();
+            return favoriteProfileGroup?.Parties;
         }
 
         /// <inheritdoc/>
@@ -84,63 +87,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<AuthorizedParty> rightOwners = await _accessManagementClient.GetReporteeList(partyUuid);
 
             return rightOwners.Select(party => new User(party)).ToList();
-        }
-
-        /// <inheritdoc/>
-        public Task<UserAccesses> GetUserAccesses(Guid from, Guid to)
-        {
-            return _accessManagementClient.GetUserAccesses(from, to);
-        }
-
-        /// <inheritdoc/>
-        public async Task<Guid?> ValidatePerson(string ssn, string lastname)
-        {
-            // Check for bad input
-            string ssn_cleaned = ssn.Trim().Replace("\"", string.Empty);
-            string lastname_cleaned = lastname.Trim().Replace("\"", string.Empty);
-            if (ssn_cleaned.Length != 11 || !ssn_cleaned.All(char.IsDigit))
-            {
-                return null;
-            }
-
-            // Check that a person with the provided ssn and last name exists 
-            Person person = await _registerClient.GetPerson(ssn_cleaned, lastname_cleaned);
-
-            if (person == null)
-            {
-                return null;
-            }
-
-            Party personParty = await _registerClient.GetPartyForPerson(ssn_cleaned);
-
-            return personParty?.PartyUuid;
-        }
-
-        /// <inheritdoc/>
-        public async Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid? from, Guid? to)
-        {
-            HttpResponseMessage response = await _rightHolderClient.RevokeRightHolder(party, from, to);
-            return response;
-        }
-
-        /// <inheritdoc/>
-        public async Task<HttpResponseMessage> AddReporteeRightHolder(Guid partyUuid, Guid rightholderPartyUuid)
-        {
-            return await _rightHolderClient.PostNewRightHolder(partyUuid, rightholderPartyUuid);
-        }
-
-        /// <inheritdoc/>
-        public async Task<List<Connection>> GetRightHolders(Guid partyUuid, Guid? from, Guid? to)
-        {
-            try
-            {
-                return await _rightHolderClient.GetRightHolders(partyUuid, from, to);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed fetching rightholders for {PartyUuid}", partyUuid);
-                throw;
-            }
         }
     }
 }

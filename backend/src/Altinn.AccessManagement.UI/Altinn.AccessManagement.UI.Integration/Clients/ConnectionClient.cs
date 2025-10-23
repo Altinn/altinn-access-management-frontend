@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     /// <summary>
     /// Client for interacting with Access packages
     /// </summary>
-    public class RightHolderClient : IRightHolderClient
+    public class ConnectionClient : IConnectionClient
     {
         private readonly ILogger _logger;
         private readonly HttpClient _client;
@@ -33,9 +33,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
         /// <param name="platformSettings"> platform settings configuration</param>
         /// <param name="accessTokenProvider">the handler for access token generator</param>
-        public RightHolderClient(
+        public ConnectionClient(
             HttpClient httpClient,
-            ILogger<RightHolderClient> logger,
+            ILogger<ConnectionClient> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings,
             IAccessTokenProvider accessTokenProvider)
@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> PostNewRightHolder(Guid party, Guid to, CancellationToken cancellationToken = default)
+        public async Task<HttpResponseMessage> PostNewRightHolderConnection(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/connections?party={party}&from={party}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -67,7 +67,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> RevokeRightHolder(Guid party, Guid? from, Guid? to)
+        public async Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to)
         {
             string endpointUrl = $"enduser/connections?party={party}&from={from}&to={to}&cascade=true";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -84,7 +84,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<Connection>> GetRightHolders(Guid party, Guid? from, Guid? to)
+        public async Task<List<Connection>> GetConnections(Guid party, Guid? from, Guid? to)
         {
             var endpointBuilder = new System.Text.StringBuilder($"enduser/connections?party={party}&from={from?.ToString() ?? string.Empty}&to={to?.ToString() ?? string.Empty}");
 

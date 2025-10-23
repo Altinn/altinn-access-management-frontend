@@ -13,7 +13,7 @@ import classes from './PoaOverviewPage.module.css';
 
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { AccessPackagePermissions } from './AccessPackagePermissions';
-import { useRerouteIfLimitedPreview } from '@/resources/utils/featureFlagUtils';
+import { useRerouteIfPoaOverviewPageDisabled } from '@/resources/utils/featureFlagUtils';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ export const PoaOverviewPage = () => {
 
   const partyUuid = getCookie('AltinnPartyUuid') || undefined;
 
-  useRerouteIfLimitedPreview();
+  useRerouteIfPoaOverviewPageDisabled();
 
   return (
     <PageWrapper>

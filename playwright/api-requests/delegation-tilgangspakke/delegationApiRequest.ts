@@ -1,5 +1,6 @@
 import { request } from '@playwright/test';
 import { Token } from './../Token';
+import { env } from 'playwright/util/helper';
 
 export class DelegationApiRequest {
   private tokenClass: Token;
@@ -16,12 +17,12 @@ export class DelegationApiRequest {
     // Build endpoint using env values
     const endpoint =
       `v1/enduser/connections` +
-      `?party=${process.env.PARTY_ID}` +
-      `&from=${process.env.PARTY_ID}` +
-      `&to=${process.env.TO_ORG}`;
+      `?party=${env('PARTY_ID')}` +
+      `&from=${env('PARTY_ID')}` +
+      `&to=${env('TO_ORG')}`;
 
     // Full URL
-    const url = `${process.env.PLATFORM_URL}${endpoint}`;
+    const url = `${env('PLATFORM_URL')}${endpoint}`;
 
     const response = await apiRequestContext.post(url, {
       headers: {
@@ -44,15 +45,15 @@ export class DelegationApiRequest {
     // Build endpoint using env values
     const endpoint =
       `v1/enduser/connections` +
-      `?party=${process.env.PARTY_ID}` +
-      `&from=${process.env.PARTY_ID}` +
-      `&to=${process.env.TO_ORG}`;
-    +`&package=${process.env.BYGG_PACKAGE_URN}`;
-    +`&package=${process.env.OPPVEKST_PACKAGE_URN}`;
-    +`&package=${process.env.VEI_PACKAGE_URN}`;
+      `?party=${env('PARTY_ID')}` +
+      `&from=${env('PARTY_ID')}` +
+      `&to=${env('TO_ORG')}`;
+    +`&package=${env('BYGG_PACKAGE_URN')}`;
+    +`&package=${env('OPPVEKST_PACKAGE_URN')}`;
+    +`&package=${env('VEI_PACKAGE_URN')}`;
 
     // Full URL
-    const url = `${process.env.PLATFORM_URL}${endpoint}`;
+    const url = `${env('PLATFORM_URL')}${endpoint}`;
 
     const response = await apiRequestContext.post(url, {
       headers: {
@@ -76,13 +77,13 @@ export class DelegationApiRequest {
     // Build endpoint using env values
     const endpoint =
       `v1/enduser/connections` +
-      `?party=${process.env.PARTY_ID}` +
-      `&from=${process.env.PARTY_ID}` +
-      `&to=${process.env.TO_ORG}` +
+      `?party=${env('PARTY_ID')}` +
+      `&from=${env('PARTY_ID')}` +
+      `&to=${env('TO_ORG')}` +
       `&cascade=true`;
 
     // Full URL
-    const url = `${process.env.PLATFORM_URL}${endpoint}`;
+    const url = `${env('PLATFORM_URL')}${endpoint}`;
 
     const response = await apiRequestContext.delete(url, {
       headers: {
