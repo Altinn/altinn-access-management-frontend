@@ -17,6 +17,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         public Guid Id { get; set; }
 
         /// <summary>
+        /// An optional name used only in display on UI. If not set by the request it will default to the System-Name. 
+        /// </summary>
+        [JsonPropertyName("integrationTitle")]
+        public string IntegrationTitle { get; set; }
+
+        /// <summary>
         /// PartyId of the SystemUser's Party (the customer that delegates rights to the systemuser).
         /// </summary>
         [Required]

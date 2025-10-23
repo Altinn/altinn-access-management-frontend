@@ -37,7 +37,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<SystemUserAgentRequestFE>> GetSystemUserAgentRequest(Guid agentRequestId, string languageCode, CancellationToken cancellationToken)
         {
-            Result<SystemUserAgentRequest> agentRequest = await _systemUserAgentRequestClient.GetSystemUserAgentRequest(agentRequestId, cancellationToken);
+            Result<SystemUserRequest> agentRequest = await _systemUserAgentRequestClient.GetSystemUserAgentRequest(agentRequestId, cancellationToken);
             
             if (agentRequest.IsProblem)
             {

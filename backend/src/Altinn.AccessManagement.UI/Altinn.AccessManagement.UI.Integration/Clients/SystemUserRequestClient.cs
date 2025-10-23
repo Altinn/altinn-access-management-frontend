@@ -133,5 +133,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        public Task<List<SystemUserRequest>> GetPendingSystemuserRequests(int partyId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

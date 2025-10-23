@@ -1,0 +1,17 @@
+[
+  {
+    "id": "dbea3869-d863-47a3-b730-537a3a1336e7",
+    "status": "New",
+    "integrationTitle": "Fiken sypersystem",
+    "systemId": "910493353_fiken_demo_product",
+    "partyOrgNo": "51329012",
+    "partyId": 51329012,
+    "partyUuid": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "redirectUrl": "https://smartcloudaltinn.azurewebsites.net/receipt",
+    "accessPackages": [
+      {
+        "urn": "urn:altinn:accesspackage:ansvarlig-revisor"
+      }
+    ]
+  }
+]

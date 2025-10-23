@@ -35,6 +35,7 @@ export const SidebarItems = (
   isClientAdmin: boolean | undefined,
   reportee: ReporteeInfo | undefined,
   canAccessSettings: boolean = false,
+  pendingSystemUsersCount: number,
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const displayConsentGui = window.featureFlags?.displayConsentGui;
@@ -131,6 +132,11 @@ export const SidebarItems = (
     loading: isLoading,
     title: t('sidebar.systemaccess'),
     icon: TenancyIcon,
+    badge: {
+      label: pendingSystemUsersCount > 0 ? pendingSystemUsersCount.toString() : undefined,
+      color: 'danger',
+      variant: 'base',
+    },
     selected: pathname?.includes(`/${SystemUserPath.SystemUser}/`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     as: (props: any) => (

@@ -6,16 +6,15 @@ import classes from './SystemUserOverviewPage.module.css';
 import { BadgeProps, DsHeading, List, ListItem } from '@altinn/altinn-components';
 import { TenancyIcon } from '@navikt/aksel-icons';
 
-type ListType = 'agent' | 'standard' | 'pendingStandard' | 'pendingAgent';
 interface SystemUserListProps {
   systemUsers: SystemUser[];
   listHeading: string;
-  listType: ListType;
+  isPendingRequestList?: boolean;
   headerContent?: ReactNode;
 }
 export const SystemUserList = ({
   systemUsers,
-  listType,
+  isPendingRequestList,
   listHeading,
   headerContent,
 }: SystemUserListProps) => {
@@ -40,17 +39,24 @@ export const SystemUserList = ({
       </div>
       <List>
         {systemUsers?.map((systemUser) => {
-          const href = (listType: ListType): string =>
-            ({
-              agent: `/systemuser/${systemUser.id}/agentdelegation`,
-              standard: `/systemuser/${systemUser.id}`,
-              pendingStandard: `/systemuser/request?id=${systemUser.id}/`,
-              pendingAgent: `/systemuser/agentrequest?id=${systemUser.id}/`,
-            })[listType];
+          let href: string = '';
+          if (systemUser.systemUserType === 'Standard' && !isPendingRequestList) {
+            href = `/systemuser/${systemUser.id}`;
+          } else if (systemUser.systemUserType === 'Agent' && !isPendingRequestList) {
+            href = `/systemuser/${systemUser.id}/agentdelegation`;
+          } else if (systemUser.systemUserType === 'Standard' && isPendingRequestList) {
+            href = `/systemuser/request?id=${systemUser.id}/`;
+          } else if (systemUser.systemUserType === 'Agent' && isPendingRequestList) {
+            href = `/systemuser/agentrequest?id=${systemUser.id}/`;
+          }
 
           let badge: BadgeProps | ReactElement | undefined = undefined;
-          if (listType === 'pendingStandard' || listType === 'pendingAgent') {
-            badge = <div className={classes.systemUserBadge}>Godkjenn systemtilgang</div>;
+          if (isPendingRequestList && systemUser.systemUserType === 'Standard') {
+            badge = <div className={classes.systemUserBadge}>Godkjenn egen systemtilgang</div>;
+          } else if (isPendingRequestList && systemUser.systemUserType === 'Agent') {
+            badge = (
+              <div className={classes.systemUserBadge}>Godkjenn systemtilgang for kunder</div>
+            );
           } else if (newlyCreatedId === systemUser.id) {
             badge = { label: t('systemuser_overviewpage.new_system_user'), color: 'info' };
           }
@@ -63,7 +69,7 @@ export const SystemUserList = ({
               description={systemUser.system.systemVendorOrgName}
               as={(props) => (
                 <Link
-                  to={href(listType)}
+                  to={href}
                   {...props}
                 />
               )}

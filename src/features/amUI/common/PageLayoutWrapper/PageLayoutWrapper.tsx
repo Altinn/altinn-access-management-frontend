@@ -35,6 +35,7 @@ import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
 import { crossPlatformLinksEnabled, useNewActorList } from '@/resources/utils/featureFlagUtils';
 import { useAccounts } from './useAccounts';
+import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -62,6 +63,14 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
+
+  const { data: pendingSystemUsers } = useGetPendingSystemUserRequestsQuery(
+    reportee?.partyId ?? '',
+    {
+      skip: !reportee?.partyId,
+    },
+  );
+  const pendingSystemUsersCount = pendingSystemUsers?.length ?? 0;
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -140,6 +149,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           isClientAdmin,
           reportee,
           canAccessSettings ?? false,
+          pendingSystemUsersCount,
         )
       : []),
     {
@@ -284,6 +294,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               isClientAdmin,
               reportee,
               canAccessSettings ?? false,
+              pendingSystemUsersCount,
             ),
           },
         }}

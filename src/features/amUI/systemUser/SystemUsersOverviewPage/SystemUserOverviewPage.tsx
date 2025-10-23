@@ -8,6 +8,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import {
   useGetAgentSystemUsersQuery,
+  useGetPendingSystemUserRequestsQuery,
   useGetSystemUserReporteeQuery,
   useGetSystemUsersQuery,
 } from '@/rtk/features/systemUserApi';
@@ -42,6 +43,14 @@ export const SystemUserOverviewPage = () => {
     isError: isLoadAgentSystemUsersError,
   } = useGetAgentSystemUsersQuery(partyId);
 
+  const {
+    data: pendingSystemUsers,
+    isLoading: isLoadingPendingSystemUsers,
+    isError: isLoadPendingSystemUsersError,
+  } = useGetPendingSystemUserRequestsQuery(partyId, {
+    skip: !hasCreateSystemUserPermission(reporteeData),
+  });
+
   const isLoading =
     isLoadingSystemUsers || isLoadingAgentSystemUsers || isLoadingReportee || isLoadingClientAdmin;
 
@@ -72,10 +81,16 @@ export const SystemUserOverviewPage = () => {
                   {t('systemuser_overviewpage.no_permissions_warning')}
                 </DsAlert>
               )}
+              {pendingSystemUsers && pendingSystemUsers.length > 0 && (
+                <SystemUserList
+                  systemUsers={pendingSystemUsers}
+                  isPendingRequestList
+                  listHeading='Ventende systembrukere'
+                />
+              )}
               {systemUsers && (
                 <SystemUserList
                   systemUsers={systemUsers}
-                  listType='standard'
                   listHeading={t('systemuser_overviewpage.existing_system_users_title')}
                   headerContent={
                     hasCreateSystemUserPermission(reporteeData) && <CreateSystemUserButton />
@@ -90,7 +105,6 @@ export const SystemUserOverviewPage = () => {
               {agentSystemUsers && agentSystemUsers.length > 0 && (
                 <SystemUserList
                   systemUsers={agentSystemUsers}
-                  listType='agent'
                   listHeading={t('systemuser_overviewpage.agent_delegation_systemusers_title')}
                 />
               )}

@@ -196,5 +196,26 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return NotFound();
         }
+
+        /// <summary>
+        /// Get all pending system user requests for given party
+        /// 
+        /// </summary>
+        /// <param name="partyId">Party user represents</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("{partyId}/pending")]
+        public async Task<ActionResult> GetPendingSystemuserRequests([FromRoute] int partyId, CancellationToken cancellationToken)
+        {
+            Result<List<SystemUserFE>> list = await _systemUserService.GetPendingSystemuserRequests(partyId, cancellationToken);
+
+            if (list.IsProblem)
+            {
+                return list.Problem.ToActionResult();
+            }
+
+            return Ok(list.Value);
+        }
     }
 }
