@@ -12,7 +12,7 @@ import * as connectionApi from '@/rtk/features/connectionApi';
 import { useConnectedParty } from './useConnectedParty';
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
-import useReporteeParty from './useReporteeParty';
+import { useReporteeParty } from './useReporteeParty';
 
 // Mock the API modules
 vi.mock('@/rtk/features/lookupApi', async () => {
@@ -128,12 +128,14 @@ const createMockStore = () => {
       [lookupApi.lookupApi.reducerPath]: lookupApi.lookupApi.reducer,
       [userInfoApi.userInfoApi.reducerPath]: userInfoApi.userInfoApi.reducer,
       [accessPackageApi.accessPackageApi.reducerPath]: accessPackageApi.accessPackageApi.reducer,
+      [connectionApi.connectionApi.reducerPath]: connectionApi.connectionApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(
         lookupApi.lookupApi.middleware,
         userInfoApi.userInfoApi.middleware,
         accessPackageApi.accessPackageApi.middleware,
+        connectionApi.connectionApi.middleware,
       ),
   });
 };
