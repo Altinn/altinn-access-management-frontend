@@ -1,4 +1,4 @@
-import type { Connection } from '@/rtk/features/userInfoApi';
+import { Connection } from '@/rtk/features/connectionApi';
 
 export const RIGHTHOLDER_ROLE = 'rettighetshaver';
 

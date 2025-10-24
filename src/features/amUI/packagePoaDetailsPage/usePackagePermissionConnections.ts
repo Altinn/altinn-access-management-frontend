@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { Connection, ExtendedUser } from '@/rtk/features/userInfoApi';
+import { ExtendedUser } from '@/rtk/features/userInfoApi';
 import { Entity } from '@/dataObjects/dtos/Common';
+import { Connection } from '@/rtk/features/connectionApi';
 
 /**
  * Temporary transformation hook.

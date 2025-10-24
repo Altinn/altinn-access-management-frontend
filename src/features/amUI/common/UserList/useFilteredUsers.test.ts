@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 
-import type { Connection, ExtendedUser } from '@/rtk/features/userInfoApi';
+import type { ExtendedUser } from '@/rtk/features/userInfoApi';
 
 import { useFilteredUsers } from './useFilteredUsers';
+import { Connection } from '@/rtk/features/connectionApi';
 
 const mockConnections: Connection[] = [
   {

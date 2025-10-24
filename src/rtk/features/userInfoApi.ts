@@ -132,18 +132,6 @@ export const userInfoApi = createApi({
     getIsHovedadmin: builder.query<boolean, void>({
       query: () => `isHovedadmin?party=${getCookie('AltinnPartyUuid')}`,
     }),
-    validateNewUserPerson: builder.mutation<string, { ssn: string; lastName: string }>({
-      query: ({ ssn, lastName }) => ({
-        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/validateperson`,
-        method: 'POST',
-        body: JSON.stringify({ ssn, lastName }),
-      }),
-      transformErrorResponse: (response: {
-        status: string | number;
-      }): { status: string | number } => {
-        return { status: response.status };
-      },
-    }),
   }),
 });
 

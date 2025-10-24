@@ -1,7 +1,7 @@
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetRightHoldersQuery } from '@/rtk/features/userInfoApi';
 import { mapConnectionToParty } from './partyUtils';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 /**
  * useReporteeParty
