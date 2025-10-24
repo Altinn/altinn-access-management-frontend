@@ -35,6 +35,8 @@ import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
 import { crossPlatformLinksEnabled, useNewActorList } from '@/resources/utils/featureFlagUtils';
 import { useAccounts } from './useAccounts';
+import { GlobalSearchProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/GlobalSearch';
+import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/AccountSelector';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -173,43 +175,43 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   const { accounts, accountGroups } = useAccounts({ reporteeList, actorList });
 
-  const globalMenu = {
+  const search: GlobalSearchProps = {
+    onEnter: (value: string) => {
+      const encodedValue = encodeURIComponent(value);
+      window.location.href = `${getHostUrl()}sok?q=${encodedValue}`;
+    },
+  };
+
+  const accountSelector: AccountSelectorProps = {
     accountMenu: {
       items: accounts,
       groups: accountGroups,
-      search: {
-        name: 'account-search',
-        value: searchString,
-        onChange: (event: ChangeEvent<HTMLInputElement>) => {
-          setSearchString(event.target.value);
-        },
-        placeholder: t('header.search-label'),
-        hidden: false,
-        getResultsLabel: (hits: number) => {
-          return `${hits} ${t('header.search-hits')}`;
-        },
-      },
+      currentAccount: accounts.find((a) => a.id === reportee?.partyId) as AccountMenuItemProps,
       isVirtualized: accounts.length > 20,
-    },
-    onSelectAccount: (accountId: string) => {
-      // check if this is a person; then redirect to consents page
-      let redirectUrl = window.location.href;
-      const isPersonAccount = accounts.find((a) => a.id === accountId)?.type === 'person';
-      if (isPersonAccount) {
-        redirectUrl = new URL(
-          `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
-        ).toString();
-      } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
-        redirectUrl = new URL(
-          `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
-        ).toString();
-      }
+      onSelectAccount: (accountId: string) => {
+        // check if this is a person; then redirect to consents page
+        let redirectUrl = window.location.href;
+        const isPersonAccount = accounts.find((a) => a.id === accountId)?.type === 'person';
+        if (isPersonAccount) {
+          redirectUrl = new URL(
+            `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
+          ).toString();
+        } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
+          redirectUrl = new URL(
+            `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
+          ).toString();
+        }
 
-      const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-      changeUrl.searchParams.set('R', accountId);
-      changeUrl.searchParams.set('goTo', redirectUrl);
-      (window as Window).open(changeUrl.toString(), '_self');
+        const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
+        changeUrl.searchParams.set('R', accountId);
+        changeUrl.searchParams.set('goTo', redirectUrl);
+        (window as Window).open(changeUrl.toString(), '_self');
+      },
     },
+    externalFullScreen: false,
+  };
+
+  const globalMenu = {
     logoutButton: {
       label: t('header.log_out'),
       onClick: () => {
@@ -246,9 +248,14 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     groups,
   };
 
+  const languageFromi18n = i18n.language;
+  const languageCode =
+    languageFromi18n === 'no_nn' ? 'nn' : languageFromi18n === 'en' ? 'en' : 'nb';
+
   return (
-    <RootProvider>
+    <RootProvider languageCode={languageCode}>
       <Layout
+        useGlobalHeader
         color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
         theme='subtle'
         header={{
@@ -271,6 +278,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           globalMenu: globalMenu,
           desktopMenu: desktopMenu,
           mobileMenu: mobileMenu,
+          globalSearch: search,
+          accountSelector: accountSelector,
         }}
         sidebar={{
           menu: {
