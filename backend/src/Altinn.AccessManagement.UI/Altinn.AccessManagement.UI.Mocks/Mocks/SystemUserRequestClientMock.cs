@@ -62,6 +62,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new Result<bool>(true));
         }        
 
+        public Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(new Result<bool>(true));
+        }
+
         internal static class TestErrors
         {
             private static readonly ProblemDescriptorFactory _factory

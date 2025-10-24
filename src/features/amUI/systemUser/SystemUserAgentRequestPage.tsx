@@ -16,8 +16,9 @@ import type { ProblemDetail } from './types';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
-import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/CreateSystemUserCheck';
 import { RightsList } from './components/RightsList/RightsList';
+import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
+import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
@@ -159,7 +160,7 @@ export const SystemUserAgentRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck reporteeData={reporteeData}>
+            {hasCreateSystemUserPermission(reporteeData) ? (
               <ButtonRow>
                 <DsButton
                   variant='primary'
@@ -182,7 +183,14 @@ export const SystemUserAgentRequestPage = () => {
                     : t('systemuser_request.reject')}
                 </DsButton>
               </ButtonRow>
-            </CreateSystemUserCheck>
+            ) : (
+              <EscalateRequest
+                requestId={request.id}
+                partyId={request.partyId}
+                redirectUrl={request.redirectUrl}
+                isAgentRequest
+              />
+            )}
           </div>
         </>
       )}

@@ -138,5 +138,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             throw new NotImplementedException();
         }
+
+        public Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -653,7 +653,15 @@
     "reject_loading": "Rejecting system access...",
     "request_accepted": "This request is already approved",
     "request_rejected": "This request is already rejected",
-    "request_expired": "This request has expired"
+    "request_expired": "This request has expired",
+    "escalate_title": "You lack required authorization",
+    "escalate_description": "To create a system access you must be an Access Manager. Do you want to forward the request to the Access Manager in your organisation?",
+    "escalate_confirm_button": "Yes, forward request",
+    "escalate_cancel_button": "Cancel request",
+    "escalate_error": "Could not forward the request",
+    "escalate_sent_title": "Request forwarded",
+    "escalate_sent_description": "The Access Manager in your organisation should now have received the request in Altinn.",
+    "escalate_close_button": "Finish"
   },
   "systemuser_change_request": {
     "page_title": "Update system access - Altinn",

@@ -169,6 +169,13 @@ export const systemUserApi = createApi({
       }),
       invalidatesTags: [Tags.SystemUsers, Tags.PendingSystemUsers],
     }),
+    escalateRequest: builder.mutation<void, { partyId: string; requestId: string }>({
+      query: ({ partyId, requestId }) => ({
+        url: `systemuser/request/${partyId}/${requestId}/escalate`,
+        method: 'POST',
+      }),
+      invalidatesTags: [Tags.PendingSystemUsers],
+    }),
 
     // change request
     getChangeRequest: builder.query<SystemUserChangeRequest, { changeRequestId: string }>({
@@ -207,6 +214,13 @@ export const systemUserApi = createApi({
       }),
       invalidatesTags: [Tags.SystemUsers, Tags.PendingSystemUsers],
     }),
+    escalateAgentRequest: builder.mutation<void, { partyId: string; requestId: string }>({
+      query: ({ partyId, requestId }) => ({
+        url: `systemuser/agentrequest/${partyId}/${requestId}/escalate`,
+        method: 'POST',
+      }),
+      invalidatesTags: [Tags.PendingSystemUsers],
+    }),
   }),
 });
 
@@ -240,6 +254,8 @@ export const {
   useApproveAgentSystemUserRequestMutation,
   useRejectAgentSystemUserRequestMutation,
   useGetPendingSystemUserRequestsQuery,
+  useEscalateRequestMutation,
+  useEscalateAgentRequestMutation,
 } = apiWithTag;
 
 export const { endpoints, reducerPath, reducer, middleware } = apiWithTag;

@@ -649,7 +649,15 @@
     "reject_loading": "Avviser systemtilgang...",
     "request_accepted": "Denne førespurnaden er allereie godkjend",
     "request_rejected": "Denne førespurnaden er allereie avvist",
-    "request_expired": "Denne førespurnaden har gått ut"
+    "request_expired": "Denne førespurnaden har gått ut",
+    "escalate_title": "Du manglar nødvendig fullmakt",
+    "escalate_description": "For å opprette ein systemtilgang må du vere Tilgangsstyrar. Vil du senda førespurnaden vidare til Tilgangsstyraren i verksemda di?",
+    "escalate_confirm_button": "Ja, send vidare",
+    "escalate_cancel_button": "Avbryt førespurnaden",
+    "escalate_error": "Kunne ikkje senda førespurnaden vidare",
+    "escalate_sent_title": "Førespurnaden er videresendt",
+    "escalate_sent_description": "Tilgangsstyraren i verksemda di skal no ha fått førespurnaden i Altinn.",
+    "escalate_close_button": "Avslutt"
   },
   "systemuser_change_request": {
     "page_title": "Oppdater systemtilgang - Altinn",
