@@ -129,6 +129,9 @@ export const userInfoApi = createApi({
     getIsCompanyProfileAdmin: builder.query<boolean, void>({
       query: () => `isCompanyProfileAdmin?party=${getCookie('AltinnPartyUuid')}`,
     }),
+    getIsHovedadmin: builder.query<boolean, void>({
+      query: () => `isHovedadmin?party=${getCookie('AltinnPartyUuid')}`,
+    }),
   }),
 });
 
@@ -142,6 +145,7 @@ export const {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
   useGetIsCompanyProfileAdminQuery,
+  useGetIsHovedadminQuery,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;

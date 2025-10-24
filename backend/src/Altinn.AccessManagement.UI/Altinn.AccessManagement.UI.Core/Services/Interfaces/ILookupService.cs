@@ -36,5 +36,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="uuid">The uuid of the user</param>
         /// <returns>The user profile that corresponds to the uuid parameter</returns>
         Task<UserProfileFE> GetUserByUUID(Guid uuid);
+
+        /// <summary>
+        /// Gets a Party using the provided uuid.
+        /// </summary>
+        /// <param name="userUuid">The uuid of the user</param>
+        /// <returns>Party information for the GUI</returns>
+        Task<PartyFE> GetPartyFromLoggedInUser(Guid userUuid);
     }
 }

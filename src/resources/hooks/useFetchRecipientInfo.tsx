@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { UserType, useGetPartyByUUIDQuery, useGetUserByUUIDQuery } from '@/rtk/features/lookupApi';
+import {
+  UserType,
+  useDeprecatedGetPartyByUUIDQuery,
+  useGetUserByUUIDQuery,
+} from '@/rtk/features/lookupApi';
 
 // Used for fetching recipient name from userUUID or partyUUID
 export const useFetchRecipientInfo = (
@@ -30,8 +34,8 @@ export const useFetchRecipientInfo = (
     data: party,
     error: getPartyError,
     isLoading: getPartyIsLoading,
-  } = useGetPartyByUUIDQuery(
-    { partyUuid: partyUUID ?? '', useOldRegistry: true },
+  } = useDeprecatedGetPartyByUUIDQuery(
+    { partyUuid: partyUUID ?? '' },
     { skip: partyUUID === null || userUUID !== null },
   );
 

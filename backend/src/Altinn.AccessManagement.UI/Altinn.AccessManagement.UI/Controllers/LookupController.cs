@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -66,16 +67,22 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Endpoint for retrieving a party by uuid
         /// </summary>
         /// <param name="uuid">The uuid for the party to look up</param>
-        /// <param name="useOldRegistry">Indicates if the party should be fetched from the old registry data</param>
         /// <returns>Party information for the GUI</returns>
+        /// <remarks>
+        /// This endpoint is deprecated and should not be used in new code.
+        /// It can be removed when the old access management frontend is decommissioned.
+        /// Use GET party/user for logged-in user data, or use the new secure party lookup mechanisms 
+        /// that verify the relationship between the acting party and the requested party.
+        /// </remarks>
+        [Obsolete("This endpoint is deprecated. Use GET party/user for logged-in user data, or use secure party lookup mechanisms that verify party relationships.")]
         [HttpGet]
         [Authorize]
         [Route("party/{uuid}")]
-        public async Task<ActionResult<PartyFE>> GetPartyByUUID(Guid uuid, [FromQuery] bool useOldRegistry)
+        public async Task<ActionResult<PartyFE>> GetPartyByUUID(Guid uuid)
         {
             try
             {
-                PartyFE party = useOldRegistry ? await _lookupService.GetPartyByUUID_old(uuid) : await _lookupService.GetPartyByUUID(uuid);
+                PartyFE party = await _lookupService.GetPartyByUUID_old(uuid);
 
                 if (party != null)
                 {
@@ -119,6 +126,45 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetUserByUUID failed to fetch party information");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving the party from logged in user.
+        /// </summary>
+        /// <returns>Party information for the GUI</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("party/user")]
+        public async Task<ActionResult<PartyFE>> GetPartyFromLoggedInUser()
+        {
+            if (ModelState.IsValid == false)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState, 400));
+            }
+
+            try
+            {
+                Guid? userUuid = AuthenticationHelper.GetUserPartyUuid(HttpContext);
+
+                if (!userUuid.HasValue || userUuid == Guid.Empty)
+                {
+                    return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState, 400, detail: "Missing or invalid user uuid in token"));
+                }
+
+                PartyFE party = await _lookupService.GetPartyFromLoggedInUser(userUuid.Value);
+    
+                if (party != null)
+                {
+                    return party;
+                }
+
+                return StatusCode(404);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetPartyFromLoggedInUser failed to fetch party information");
                 return StatusCode(500);
             }
         }

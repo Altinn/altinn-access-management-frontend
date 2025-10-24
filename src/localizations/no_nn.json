@@ -140,8 +140,9 @@
     "go_to_help": "Gå til hjelpesida",
     "unknown_error_header": "Oi! Det har visst skjedd ein feil",
     "unknown_error_description": "Prøv å laste inn sida på nytt.",
-    "if_persistent_contact_service": "Dersom feilen held fram kan du finne svar på Altinn sine hjelpesider, eller kontakte Altinn brukarservice på telefon 75 00 60 00.",
-    "user_connection_error": "Ojsann, her var det visst ingenting. "
+    "if_persistent_contact_service": "Dersom feilen held fram kan du finne svar på Altinn sine hjelpesider, eller kontakte brukarservice på telefon 75 00 60 00.",
+    "user_connection_error": "Ojsann, her var det visst ingenting. ",
+    "acting_party_data_error": "Det har oppstått ein teknisk feil. Prøv igjen seinare. Dersom problemet held fram, kontakt Altinn brukarservice på telefon 75 00 60 00."
   },
   "profile": {
     "received": "Mottatt",

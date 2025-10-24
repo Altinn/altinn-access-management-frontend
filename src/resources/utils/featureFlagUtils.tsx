@@ -1,3 +1,4 @@
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -38,7 +39,10 @@ export const useRerouteIfPoaOverviewPageDisabled = () => {
 };
 
 export const availableForUserTypeCheck = (userType?: string) => {
-  if ((userType && userType === 'Organization') || window.featureFlags?.restrictPrivUse === false) {
+  if (
+    (userType && (userType === 'Organization' || userType === PartyType.Organization.toString())) ||
+    window.featureFlags?.restrictPrivUse === false
+  ) {
     return true;
   }
   return false;
