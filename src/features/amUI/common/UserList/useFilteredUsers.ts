@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 
-import type { Connection, ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import { Connection } from '@/rtk/features/connectionApi';
 
 const PAGE_SIZE = 10;
 

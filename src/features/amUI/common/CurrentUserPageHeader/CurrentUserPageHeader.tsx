@@ -1,7 +1,6 @@
 import { UserListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-
-import type { Connection } from '@/rtk/features/userInfoApi';
+import type { Connection } from '@/rtk/features/connectionApi';
 import { formatDateToNorwegian } from '@/resources/utils';
 
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
