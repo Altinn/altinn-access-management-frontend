@@ -586,7 +586,7 @@
     "api_tab": "API-tilgangar",
     "pending_request_badge": "Godkjenn eiga systemtilgang",
     "pending_agent_request_badge": "Godkjenn systemtilgang for kundar",
-    "pending_system_users_title": "Ventende systembruker-forespørsler"
+    "pending_system_users_title": "Ventende systembruker-førespurnader"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
@@ -739,7 +739,7 @@
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
-    "loading_consent": "Laster forespørsel...",
+    "loading_consent": "Laster førespurnad...",
     "load_consent_error": "Kunne ikkje laste samtykke/fullmakt",
     "approve_consent": "Ja, eg gir samtykke",
     "reject_consent": "Nei, eg gir ikkje samtykke",
