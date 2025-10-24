@@ -205,7 +205,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string token = GetTokenWithPartyUuid(1337, 501337, userPartyUuid);
+            string token = GetTokenWithPartyUuid(1337, 50789533, userPartyUuid);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             
             string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "person_party.json");
@@ -275,7 +275,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             Guid orgPartyUuid = new Guid("6b0574ae-f569-4c0d-a8d4-8ad56f427890");
-            string token = GetTokenWithPartyUuid(1337, 501337, orgPartyUuid);
+            string token = GetTokenWithPartyUuid(1337, 50067799, orgPartyUuid);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             
             string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "organization_party.json");

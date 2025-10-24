@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<PartyFE> GetReporteeFromLoggedInUser(Guid userUuid)
+        public async Task<PartyFE> GetPartyFromLoggedInUser(Guid userUuid)
         {
             return await GetPartyByUUID(userUuid);
         }

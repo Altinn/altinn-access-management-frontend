@@ -14,7 +14,7 @@
   },
   {
     "partyType": "organization",
-    "unitType": "AS",
+    "unitType": "ORGL",
     "partyUuid": "6b0574ae-f569-4c0d-a8d4-8ad56f427890",
     "partyId": 50067799,
     "displayName": "Digitaliseringsdirektoratet",

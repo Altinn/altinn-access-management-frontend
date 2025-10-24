@@ -148,12 +148,12 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 Guid? userUuid = AuthenticationHelper.GetUserPartyUuid(HttpContext);
 
-                if (!userUuid.HasValue)
+                if (!userUuid.HasValue || userUuid == Guid.Empty)
                 {
                     return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState, 400, detail: "Missing or invalid user uuid in token"));
                 }
 
-                PartyFE party = await _lookupService.GetReporteeFromLoggedInUser(userUuid.Value);
+                PartyFE party = await _lookupService.GetPartyFromLoggedInUser(userUuid.Value);
     
                 if (party != null)
                 {
