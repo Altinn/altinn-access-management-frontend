@@ -85,7 +85,7 @@ export const SystemUserOverviewPage = () => {
                 <SystemUserList
                   systemUsers={pendingSystemUsers}
                   isPendingRequestList
-                  listHeading='Ventende systembrukere'
+                  listHeading={t('systemuser_overviewpage.pending_system_users_title')}
                 />
               )}
               {systemUsers && (

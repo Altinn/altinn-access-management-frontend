@@ -587,7 +587,8 @@
     "systemuser_tab": "Systemtilganger",
     "api_tab": "API-tilganger",
     "pending_request_badge": "Godkjenn egen systemtilgang",
-    "pending_agent_request_badge": "Godkjenn systemtilgang for kunder"
+    "pending_agent_request_badge": "Godkjenn systemtilgang for kunder",
+    "pending_system_users_title": "Ventende systembruker-forespørsler"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",

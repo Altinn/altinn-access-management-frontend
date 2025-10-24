@@ -588,7 +588,8 @@
     "systemuser_tab": "System accesses",
     "api_tab": "API-accesses",
     "pending_request_badge": "Approve own system access",
-    "pending_agent_request_badge": "Approve system access for customers"
+    "pending_agent_request_badge": "Approve system access for customers",
+    "pending_system_users_title": "Pending system user requests"
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",
