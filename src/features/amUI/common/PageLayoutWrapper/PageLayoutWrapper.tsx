@@ -35,6 +35,7 @@ import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
 import { crossPlatformLinksEnabled, useNewActorList } from '@/resources/utils/featureFlagUtils';
 import { useAccounts } from './useAccounts';
+import { useAccountSelector } from './useAccountSelector';
 import { GlobalSearchProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/GlobalSearch';
 import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/AccountSelector';
 
@@ -51,12 +52,15 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const useNewActorListFlag = useNewActorList();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
-  const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
-    skip: useNewActorListFlag,
-  });
+  const { data: reporteeList, isLoading: isLoadingReporteeList } =
+    useGetReporteeListForAuthorizedUserQuery(undefined, {
+      skip: useNewActorListFlag,
+    });
   const { data: actorList } = useGetActorListForAuthorizedUserQuery(undefined, {
     skip: !useNewActorListFlag,
   });
+  const { data: favoriteAccountUuids, isLoading: isLoadingFavoriteAccounts } =
+    useGetFavoriteActorUuidsQuery();
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
 
@@ -173,7 +177,35 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     { groupId: 'current-user', hidden: true },
   ];
 
-  const { accounts, accountGroups } = useAccounts({ reporteeList, actorList });
+  //const { accounts, accountGroups } = useAccounts({ reporteeList, actorList });
+  const accountSelectorData = useAccountSelector({
+    partyListDTO: reporteeList,
+    favoriteAccountUuids: favoriteAccountUuids,
+    currentAccountUuid: reportee?.partyUuid,
+    selfAccountUuid: userinfo?.uuid,
+    isLoading: isLoadingReporteeList || isLoadingFavoriteAccounts,
+    onSelectAccount: (accountId: string) => {
+      // check if this is a person; then redirect to consents page
+      let redirectUrl = window.location.href;
+      const isPersonAccount =
+        reporteeList?.find((a) => a.partyUuid === accountId)?.type === 'person';
+      if (isPersonAccount) {
+        redirectUrl = new URL(
+          `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
+        ).toString();
+      } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
+        redirectUrl = new URL(
+          `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
+        ).toString();
+      }
+
+      const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
+      changeUrl.searchParams.set('R', accountId);
+      changeUrl.searchParams.set('goTo', redirectUrl);
+      (window as Window).open(changeUrl.toString(), '_self');
+    },
+    isVirtualized: reporteeList && reporteeList.length > 20,
+  });
 
   const search: GlobalSearchProps = {
     onEnter: (value: string) => {
@@ -183,31 +215,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   };
 
   const accountSelector: AccountSelectorProps = {
-    accountMenu: {
-      items: accounts,
-      groups: accountGroups,
-      currentAccount: accounts.find((a) => a.id === reportee?.partyId) as AccountMenuItemProps,
-      isVirtualized: accounts.length > 20,
-      onSelectAccount: (accountId: string) => {
-        // check if this is a person; then redirect to consents page
-        let redirectUrl = window.location.href;
-        const isPersonAccount = accounts.find((a) => a.id === accountId)?.type === 'person';
-        if (isPersonAccount) {
-          redirectUrl = new URL(
-            `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
-          ).toString();
-        } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
-          redirectUrl = new URL(
-            `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
-          ).toString();
-        }
-
-        const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-        changeUrl.searchParams.set('R', accountId);
-        changeUrl.searchParams.set('goTo', redirectUrl);
-        (window as Window).open(changeUrl.toString(), '_self');
-      },
-    },
+    ...accountSelectorData,
     externalFullScreen: false,
   };
 

@@ -94,13 +94,10 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
 
       const sortedAccounts =
         accountList.sort((a, b) => {
-          if (a.groupId === 'self') return -1;
-          if (b.groupId === 'self') return 1;
+          if (a.id === actingParty.partyUuid) return -1;
+          if (b.id === actingParty.partyUuid) return 1;
           if (a.type === 'company' && b.type === 'person') return 1;
-          if (b.type === 'company' && a.type === 'person') return -1;
-          if (b.groupId !== 'self' && a.groupId === 'favorites') return -1;
-          if (a.groupId !== 'self' && b.groupId === 'favorites') return 1;
-          return a.name.localeCompare(b.name);
+          return -1;
         }) ?? [];
 
       const firstCompany = sortedAccounts.find(
@@ -112,10 +109,6 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
       );
 
       const accountGroups: Record<string, MenuGroupProps> = {
-        self: {
-          title: t('header.account_you'),
-          divider: true,
-        },
         [firstCompany?.groupId || 'company']: {
           title: t('header.account_orgs'),
           divider: true,
@@ -150,7 +143,11 @@ const getAccount = (
   const name = reportee.type === 'Person' ? lastToFirstName(reportee.name) : reportee.name;
   const isSubUnit = reportee.type === 'Organization' && !!parent;
   const group =
-    reportee.partyUuid === userUuid ? 'self' : isSubUnit ? parent?.partyUuid : reportee.partyUuid;
+    reportee.partyUuid === userUuid
+      ? 'favorites'
+      : isSubUnit
+        ? parent?.partyUuid
+        : reportee.partyUuid;
   const description = isSubUnit
     ? `↪ ${orgNumberText}: ${reportee.organizationNumber}, ${partOfText} ${parent?.name}`
     : reportee.type === 'Organization'
@@ -185,7 +182,7 @@ const getAccountFromConnection = (
   const isSubUnit = actorConnection.party.type === 'Organisasjon' && !!actorConnection.party.parent;
   const group =
     actorConnection.party.id === userUuid
-      ? 'self'
+      ? 'favorites'
       : isSubUnit
         ? actorConnection.party.parent?.id
         : actorConnection.party.id;

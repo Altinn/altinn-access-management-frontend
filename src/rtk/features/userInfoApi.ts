@@ -47,14 +47,17 @@ export interface UserInfo {
 }
 
 export interface ReporteeInfo {
+  partyUuid: string;
   name: string;
   organizationNumber?: string;
-  type?: string;
-  partyUuid: string;
   partyId: string;
+  type?: string;
+  unitType?: string;
+  isDeleted: boolean;
+  onlyHierarchyElementWithNoAccess: boolean;
+  authorizedResources: string[];
   authorizedRoles: string[];
   subunits?: ReporteeInfo[];
-  onlyHierarchyElementWithNoAccess: boolean;
 }
 
 export enum PartyType {
