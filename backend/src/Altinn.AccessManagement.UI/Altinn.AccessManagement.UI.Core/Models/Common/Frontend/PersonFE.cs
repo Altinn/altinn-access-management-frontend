@@ -93,6 +93,13 @@ namespace Altinn.AccessManagement.UI.Core.Models
         public DateTime? DateOfDeath { get; set; }
 
         /// <summary>
+        /// Default constructor for JSON deserialization
+        /// </summary>
+        public PersonFE()
+        {
+        }
+
+        /// <summary>
         /// Creates a PersonFE object from a Person object
         /// </summary>
         /// <param name="person">A Person object</param>

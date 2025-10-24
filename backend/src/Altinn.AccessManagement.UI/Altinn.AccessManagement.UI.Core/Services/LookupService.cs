@@ -58,5 +58,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             UserProfile user = await _profileClient.GetUserProfile(uuid);
             return user == null ? null : new UserProfileFE(user);
         }
+
+        /// <inheritdoc/>
+        public async Task<PartyFE> GetPartyFromLoggedInUser(Guid userUuid)
+        {
+            return await GetPartyByUUID(userUuid);
+        }
     }
 }

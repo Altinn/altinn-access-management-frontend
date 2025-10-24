@@ -1,13 +1,12 @@
 import type { JSX } from 'react';
 import { createContext, useContext } from 'react';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
-import type { SerializedError } from '@reduxjs/toolkit';
+import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
 import { t } from 'i18next';
 
-import { useGetPartyByUUIDQuery, type Party } from '@/rtk/features/lookupApi';
-import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
 import { availableForUserTypeCheck } from '@/resources/utils/featureFlagUtils';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
@@ -15,6 +14,8 @@ import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorPa
 import { NotAvailableForUserTypeAlert } from '../NotAvailableForUserTypeAlert/NotAvailableForUserTypeAlert';
 import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { useReporteeParty } from './useReporteeParty';
+import { useConnectedParty } from './useConnectedParty';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -27,6 +28,10 @@ interface PartyRepresentationProviderProps {
   toPartyUuid?: string;
   /** On connection error, the user will be provided with a link to this url in order to get them to a page with a valid state */
   returnToUrlOnError?: string;
+  /** Optional loading component to show while data is being fetched */
+  loadingComponent?: JSX.Element;
+  /** Optional override for loading state */
+  isLoading?: boolean;
 }
 
 export interface PartyRepresentationContextOutput {
@@ -57,6 +62,8 @@ export const PartyRepresentationProvider = ({
   toPartyUuid,
   actingPartyUuid,
   returnToUrlOnError,
+  loadingComponent,
+  isLoading: externalIsLoading,
 }: PartyRepresentationProviderProps) => {
   if (!toPartyUuid && !fromPartyUuid) {
     throw new Error('PartyRepresentationProvider must be used with at least one party UUID');
@@ -68,6 +75,50 @@ export const PartyRepresentationProvider = ({
     throw new Error('actingPartyUuid must equal one of the provided party UUIDs');
   }
 
+  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
+  const { party: reportee, isLoading: reporteeIsLoading } = useReporteeParty();
+
+  const { party: fromConnectedParty, isLoading: fromPartyIsLoading } = useConnectedParty({
+    fromPartyUuid,
+    skip:
+      !fromPartyUuid ||
+      fromPartyUuid === actingPartyUuid ||
+      fromPartyUuid === currentUser?.partyUuid ||
+      fromPartyUuid === reportee?.partyUuid,
+  });
+
+  const { party: toConnectedParty, isLoading: toPartyIsLoading } = useConnectedParty({
+    toPartyUuid,
+    skip:
+      !toPartyUuid ||
+      toPartyUuid === actingPartyUuid ||
+      toPartyUuid === currentUser?.partyUuid ||
+      toPartyUuid === reportee?.partyUuid,
+  });
+
+  let actingParty: Party | undefined;
+  if (actingPartyUuid === currentUser?.partyUuid) {
+    // User is on their own page
+    actingParty = currentUser;
+  } else {
+    // Acting on behalf of another party (reportee)
+    actingParty = reportee;
+  }
+
+  const fromParty =
+    fromPartyUuid === actingPartyUuid
+      ? actingParty
+      : fromPartyUuid === reportee?.partyUuid
+        ? reportee
+        : fromConnectedParty;
+
+  const toParty =
+    toPartyUuid === actingPartyUuid
+      ? actingParty
+      : toPartyUuid === currentUser?.partyUuid
+        ? currentUser
+        : toConnectedParty;
+
   const {
     data: connections,
     isLoading: isConnectionLoading,
@@ -77,48 +128,47 @@ export const PartyRepresentationProvider = ({
     { skip: !fromPartyUuid || !toPartyUuid },
   );
 
+  const availableForUserType =
+    reporteeIsLoading || availableForUserTypeCheck(actingParty?.partyTypeName?.toString());
+
+  const isLoading =
+    externalIsLoading ||
+    isConnectionLoading ||
+    fromPartyIsLoading ||
+    toPartyIsLoading ||
+    currentUserIsLoading ||
+    reporteeIsLoading;
+
   const invalidConnection =
     !isConnectionLoading &&
     !!fromPartyUuid &&
     !!toPartyUuid &&
     (connections?.length === 0 || connections === undefined);
 
-  const { data: currentUser, isLoading: currentUserIsLoading } = useGetUserInfoQuery();
-  const { data: fromParty, isLoading: fromPartyIsLoading } = useGetPartyByUUIDQuery(
-    { partyUuid: fromPartyUuid ?? '' },
-    { skip: isConnectionLoading || invalidConnection || (!!toPartyUuid && !connections) },
-  );
-  const { data: toParty, isLoading: toPartyIsLoading } = useGetPartyByUUIDQuery(
-    { partyUuid: toPartyUuid ?? '' },
-    {
-      skip: isConnectionLoading || invalidConnection || (!!fromPartyUuid && !connections),
-    },
-  );
-  const { data: reportee, isLoading: reporteeIsLoading } = useGetReporteeQuery();
+  const isError = (!fromParty && !toParty) || !availableForUserType;
 
-  const availableForUserType = reporteeIsLoading || availableForUserTypeCheck(reportee?.type);
-
-  const isLoading =
-    isConnectionLoading ||
-    fromPartyIsLoading ||
-    toPartyIsLoading ||
-    currentUserIsLoading ||
-    reporteeIsLoading;
-  const isError = invalidConnection || !availableForUserType;
+  if (isLoading && loadingComponent) {
+    return loadingComponent;
+  }
 
   return (
     <PartyRepresentationContext.Provider
       value={{
-        fromParty: invalidConnection ? undefined : fromParty,
+        fromParty: invalidConnection || !fromParty ? undefined : fromParty,
         toParty: invalidConnection ? undefined : toParty,
-        actingParty: fromPartyUuid == actingPartyUuid ? fromParty : toParty,
-        selfParty: currentUser?.party,
+        actingParty: actingParty,
+        selfParty: currentUser,
         isLoading: isLoading,
         isError: isError,
       }}
     >
       {!isLoading && invalidConnection && connectionErrorAlert(error, returnToUrlOnError)}
       {!isLoading && !availableForUserType && <NotAvailableForUserTypeAlert />}
+      {isError && !isLoading && !invalidConnection && (
+        <DsAlert data-color='warning'>
+          <DsParagraph>{t('error_page.acting_party_data_error')}</DsParagraph>
+        </DsAlert>
+      )}
       <AccessPackageDelegationCheckProvider>
         {(!isError || isLoading) && children}
       </AccessPackageDelegationCheckProvider>

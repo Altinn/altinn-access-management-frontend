@@ -1,12 +1,15 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using Altinn.AccessManagement.UI.Tests.Utils;
+using AltinnCore.Authentication.Constants;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -27,6 +30,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private readonly HttpClient _client;
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IRegisterClient _registerClient;
+        private readonly string _testDataPath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupControllerTest"/> class.
@@ -38,6 +42,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _accessManagementClient = Mock.Of<IAccessManagementClient>();
             _registerClient = new RegisterClientMock();
             _client = GetTestClient();
+            _testDataPath = Path.Combine(GetTestDataPath(), "ExpectedResults", "Lookup");
+        }
+
+        private static string GetTestDataPath()
+        {
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(LookupControllerTest).Assembly.Location).LocalPath);
+            return Path.Combine(unitTestFolder, "Data");
         }
 
         private HttpClient GetTestClient()
@@ -100,7 +111,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
             Guid lookupUUID = new Guid("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
 
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}?useOldRegistry={true}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -109,46 +120,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(51317934, actualParty.PartyId);
             Assert.Equal(PartyType.Organization, actualParty.PartyTypeName);
             Assert.Equal("RAKRYGGET UNG TIGER AS", actualParty.Name);
-        }
-
-        /// <summary>
-        /// Assert that an authenticated user is able to lookup an org party based on uuid
-        /// </summary>
-        [Fact]
-        public async Task GetPartyByUUID_Org_Success()
-        {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
-            Guid lookupUUID = new Guid("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
-            Assert.Equal(lookupUUID, actualParty.PartyUuid);
-            Assert.Equal(51442738, actualParty.PartyId);
-            Assert.Equal(PartyType.Organization, actualParty.PartyTypeName);
-            Assert.Equal("RAKRYGGET UNG TIGER AS", actualParty.Name);
-        }
-
-        /// <summary>
-        /// Assert that an authenticated user is able to lookup a person party based on uuid
-        /// </summary>
-        [Fact]
-        public async Task GetPartyByUUID_Person_Success()
-        {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
-            Guid lookupUUID = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
-            Assert.Equal(lookupUUID, actualParty.PartyUuid);
-            Assert.Equal(50789533, actualParty.PartyId);
-            Assert.Equal(PartyType.Person, actualParty.PartyTypeName);
-            Assert.Equal("SITRONGUL MEDALJONG", actualParty.Name);
         }
 
         /// <summary>
@@ -224,6 +195,99 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/user/{lookupUUID}");
 
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that an authenticated user can retrieve their party information successfully
+        /// </summary>
+        [Fact]
+        public async Task GetPartyFromLoggedInUser_Success()
+        {
+            // Arrange
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "person_party.json");
+            PartyFE expectedParty = Util.GetMockData<PartyFE>(path);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
+            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertEqual(expectedParty, actualParty);
+        }
+
+        /// <summary>
+        /// Assert that an authenticated user without party UUID in token gets a 400 Bad Request
+        /// </summary>
+        [Fact]
+        public async Task GetPartyFromLoggedInUser_MissingPartyUuidInToken_400()
+        {
+            // Arrange
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that an unauthenticated user gets 401 Unauthorized response
+        /// </summary>
+        [Fact]
+        public async Task GetPartyFromLoggedInUser_Unauthenticated_401()
+        {
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that a request with a non-existent party UUID returns 404 Not Found
+        /// </summary>
+        [Fact]
+        public async Task GetPartyFromLoggedInUser_PartyNotFound_404()
+        {
+            // Arrange
+            Guid nonExistentUuid = new Guid("00000000-0000-0000-0000-000000000001");
+            string token = PrincipalUtil.GetToken(1337, 501337, nonExistentUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that an authenticated user can retrieve organization party information
+        /// </summary>
+        [Fact]
+        public async Task GetPartyFromLoggedInUser_OrganizationParty_Success()
+        {
+            // Arrange
+            Guid orgPartyUuid = new Guid("6b0574ae-f569-4c0d-a8d4-8ad56f427890");
+            string token = PrincipalUtil.GetToken(1337, 50067799, orgPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "organization_party.json");
+            PartyFE expectedParty = Util.GetMockData<PartyFE>(path);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
+            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertEqual(expectedParty, actualParty);
         }
     }
 }

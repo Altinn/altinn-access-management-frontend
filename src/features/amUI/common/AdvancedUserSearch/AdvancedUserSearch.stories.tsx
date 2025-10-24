@@ -3,9 +3,9 @@ import React from 'react';
 import { RootProvider } from '@altinn/altinn-components';
 
 import { AdvancedUserSearch } from './AdvancedUserSearch';
-import type { Connection } from '@/rtk/features/userInfoApi';
 import { Provider } from 'react-redux';
 import store from '@/rtk/app/store';
+import { Connection } from '@/rtk/features/connectionApi';
 
 const mockAllConnections: Connection[] = [
   {
