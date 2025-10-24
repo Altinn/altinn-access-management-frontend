@@ -127,7 +127,7 @@ export const PartyRepresentationProvider = ({
   );
 
   const availableForUserType =
-    reporteeIsLoading || availableForUserTypeCheck(actingParty?.partyTypeName.toString());
+    reporteeIsLoading || availableForUserTypeCheck(actingParty?.partyTypeName?.toString());
 
   const isLoading =
     externalIsLoading ||

@@ -205,7 +205,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string token = GetTokenWithPartyUuid(1337, 50789533, userPartyUuid);
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             
             string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "person_party.json");
@@ -257,7 +257,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             Guid nonExistentUuid = new Guid("00000000-0000-0000-0000-000000000001");
-            string token = GetTokenWithPartyUuid(1337, 501337, nonExistentUuid);
+            string token = PrincipalUtil.GetToken(1337, 501337, nonExistentUuid, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
@@ -275,7 +275,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             Guid orgPartyUuid = new Guid("6b0574ae-f569-4c0d-a8d4-8ad56f427890");
-            string token = GetTokenWithPartyUuid(1337, 50067799, orgPartyUuid);
+            string token = PrincipalUtil.GetToken(1337, 50067799, orgPartyUuid, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             
             string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "organization_party.json");
@@ -288,32 +288,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             AssertionUtil.AssertEqual(expectedParty, actualParty);
-        }
-
-        /// <summary>
-        /// Helper method to create a JWT token with a specific party UUID
-        /// </summary>
-        /// <param name="userId">The user id</param>
-        /// <param name="partyId">The party id</param>
-        /// <param name="partyUuid">The party UUID to include in the token</param>
-        /// <returns>JWT token string</returns>
-        private static string GetTokenWithPartyUuid(int userId, int partyId, Guid partyUuid)
-        {
-            List<Claim> claims = new List<Claim>();
-            string issuer = "www.altinn.no";
-            claims.Add(new Claim(AltinnCoreClaimTypes.UserId, userId.ToString(), ClaimValueTypes.String, issuer));
-            claims.Add(new Claim(AltinnCoreClaimTypes.UserName, "UserOne", ClaimValueTypes.String, issuer));
-            claims.Add(new Claim(AltinnCoreClaimTypes.PartyID, partyId.ToString(), ClaimValueTypes.Integer32, issuer));
-            claims.Add(new Claim(AltinnCoreClaimTypes.AuthenticateMethod, "Mock", ClaimValueTypes.String, issuer));
-            claims.Add(new Claim(AltinnCoreClaimTypes.AuthenticationLevel, "2", ClaimValueTypes.Integer32, issuer));
-            claims.Add(new Claim("urn:altinn:party:uuid", partyUuid.ToString(), ClaimValueTypes.String, issuer));
-
-            ClaimsIdentity identity = new ClaimsIdentity("mock");
-            identity.AddClaims(claims);
-            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-            string token = JwtTokenMock.GenerateToken(principal, new TimeSpan(1, 1, 1));
-
-            return token;
         }
     }
 }
