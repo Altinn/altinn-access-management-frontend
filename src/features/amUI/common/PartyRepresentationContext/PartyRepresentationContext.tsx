@@ -14,8 +14,8 @@ import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorPa
 import { NotAvailableForUserTypeAlert } from '../NotAvailableForUserTypeAlert/NotAvailableForUserTypeAlert';
 import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import useReporteeParty from './useReporteeParty';
-import useConnectedParty from './useConnectedParty';
+import { useReporteeParty } from './useReporteeParty';
+import { useConnectedParty } from './useConnectedParty';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -83,7 +83,8 @@ export const PartyRepresentationProvider = ({
     skip:
       !fromPartyUuid ||
       fromPartyUuid === actingPartyUuid ||
-      (fromPartyUuid === currentUser?.partyUuid && fromPartyUuid === reportee?.partyUuid),
+      fromPartyUuid === currentUser?.partyUuid ||
+      fromPartyUuid === reportee?.partyUuid,
   });
 
   const { party: toConnectedParty, isLoading: toPartyIsLoading } = useConnectedParty({
@@ -91,7 +92,8 @@ export const PartyRepresentationProvider = ({
     skip:
       !toPartyUuid ||
       toPartyUuid === actingPartyUuid ||
-      (toPartyUuid === currentUser?.partyUuid && toPartyUuid === reportee?.partyUuid),
+      toPartyUuid === currentUser?.partyUuid ||
+      toPartyUuid === reportee?.partyUuid,
   });
 
   let actingParty: Party | undefined;

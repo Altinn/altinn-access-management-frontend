@@ -18,7 +18,7 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
-import useSelfConnection from '../common/PartyRepresentationContext/useSelfConnection';
+import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 
 const extractFromList = (
   list: Connection[],

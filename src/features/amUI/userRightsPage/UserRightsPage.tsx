@@ -28,10 +28,6 @@ export const UserRightsPage = () => {
   const { data: isHovedadmin, isLoading: isHovedadminLoading } = useGetIsHovedadminQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
 
-  // Case:
-  // Du er på din egen side i tilgangsstyring og ikke hovedadmin (currentUser = toParty). Hvis ikke bruker vi aktør fra cookie (reportee)
-  // Vi sjekker is-hovedadmin på ressurs altinn_access_management_hovedadmin
-
   const actingPartyUuid =
     !isHovedadminLoading && !isHovedadmin && !currentUserIsLoading && currentUser?.partyUuid === id
       ? currentUser?.partyUuid

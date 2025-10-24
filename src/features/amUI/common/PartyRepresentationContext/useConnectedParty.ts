@@ -40,5 +40,3 @@ export const useConnectedParty = ({
   const party = mapConnectionToParty(partyConnection?.party);
   return { party, isLoading, error, isError };
 };
-
-export default useConnectedParty;

@@ -56,5 +56,3 @@ export const useSelfConnection = (): {
 
   return { partyConnection, isLoading: isLoading || currentUserIsLoading };
 };
-
-export default useSelfConnection;

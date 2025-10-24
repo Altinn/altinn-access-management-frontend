@@ -167,7 +167,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       error: undefined,
     });
 
-    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
@@ -338,7 +338,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
 
     // Mock useConnectedParty for the "to" party
-    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
       party: mockConnectedParty,
       isLoading: false,
       error: undefined,
@@ -382,7 +382,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
 
     // Mock useConnectedParty for the "to" party
-    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
       party: mockConnectedParty,
       isLoading: false,
       error: undefined,
@@ -437,7 +437,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       error: undefined,
     });
 
-    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
       party: mockConnectedParty,
       isLoading: false,
       error: undefined,
@@ -477,7 +477,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       error: undefined,
     });
 
-    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
       party: mockConnectedParty,
       isLoading: false,
       error: undefined,
@@ -517,7 +517,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       error: undefined,
     });
 
-    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
@@ -565,7 +565,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       error: undefined,
     });
 
-    vi.mocked(useConnectedPartyModule.default).mockReturnValue({
+    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
