@@ -8,10 +8,11 @@ import { PartyRepresentationProvider, usePartyRepresentation } from './PartyRepr
 import * as lookupApi from '@/rtk/features/lookupApi';
 import * as userInfoApi from '@/rtk/features/userInfoApi';
 import * as accessPackageApi from '@/rtk/features/accessPackageApi';
+import * as connectionApi from '@/rtk/features/connectionApi';
 import * as useReporteePartyModule from './useReporteeParty';
 import * as useConnectedPartyModule from './useConnectedParty';
 import type { Party } from '@/rtk/features/lookupApi';
-import { Connection, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import type { Connection } from '@/rtk/features/connectionApi';
 
 // Mock the API modules
 vi.mock('@/rtk/features/lookupApi', async () => {
@@ -26,18 +27,29 @@ vi.mock('@/rtk/features/userInfoApi', async () => {
   const actual = await vi.importActual('@/rtk/features/userInfoApi');
   return {
     ...actual,
-    useGetRightHoldersQuery: vi.fn(),
     useGetIsHovedadminQuery: vi.fn(),
   };
 });
 
-vi.mock('./useReporteeParty', () => ({
-  useReporteeParty: vi.fn(),
-}));
+vi.mock('./useReporteeParty', () => {
+  const mockUseReporteeParty = vi.fn();
+  return {
+    useReporteeParty: mockUseReporteeParty,
+    default: mockUseReporteeParty,
+  };
+});
 
 vi.mock('./useConnectedParty', () => ({
   default: vi.fn(),
 }));
+
+vi.mock('@/rtk/features/connectionApi', async () => {
+  const actual = await vi.importActual('@/rtk/features/connectionApi');
+  return {
+    ...actual,
+    useGetRightHoldersQuery: vi.fn(),
+  };
+});
 
 vi.mock('@/resources/Cookie/CookieMethods', () => ({
   getCookie: vi.fn((name: string) => {
@@ -247,7 +259,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
 
     // Mock connections
-    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
       data: [],
       isLoading: false,
       isSuccess: true,
@@ -291,7 +303,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
 
     // Mock connections
-    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
       data: [],
       isLoading: false,
       isSuccess: true,
@@ -334,7 +346,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
 
     // Mock connections
-    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
       data: [mockConnection],
       isLoading: false,
       isSuccess: true,
@@ -391,7 +403,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       connections: [],
     };
 
-    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
       data: [reporteeConnection],
       isLoading: false,
       isSuccess: true,
@@ -432,7 +444,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     });
 
-    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
       data: [mockConnection],
       isLoading: false,
       isSuccess: true,
@@ -472,7 +484,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     });
 
-    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
       data: [mockConnection],
       isLoading: false,
       isSuccess: true,
@@ -512,7 +524,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     });
 
-    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
       data: undefined,
       isLoading: true,
       isSuccess: false,
@@ -561,7 +573,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
 
     // Return empty connections to simulate invalid connection
-    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
       data: [],
       isLoading: false,
       isSuccess: true,
