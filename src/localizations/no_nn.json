@@ -582,7 +582,9 @@
     "no_key_role2": "For å lage ein systemtilgang treng du rolla Tilgangsstyrar, Hovudadministrator eller Dagleg leiar.",
     "new_system_user": "NY",
     "systemuser_tab": "Systemtilganger",
-    "api_tab": "API-tilganger"
+    "api_tab": "API-tilganger",
+    "pending_request_badge": "Godkjenn eiga systemtilgang",
+    "pending_agent_request_badge": "Godkjenn systemtilgang for kundar"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",

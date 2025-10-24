@@ -586,7 +586,9 @@
     "no_key_role2": "To create a system access you need the role Access controller, Main administrator or General manager",
     "new_system_user": "NEW",
     "systemuser_tab": "System accesses",
-    "api_tab": "API-accesses"
+    "api_tab": "API-accesses",
+    "pending_request_badge": "Approve own system access",
+    "pending_agent_request_badge": "Approve system access for customers"
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",

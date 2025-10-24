@@ -52,10 +52,16 @@ export const SystemUserList = ({
 
           let badge: BadgeProps | ReactElement | undefined = undefined;
           if (isPendingRequestList && systemUser.systemUserType === 'Standard') {
-            badge = <div className={classes.systemUserBadge}>Godkjenn egen systemtilgang</div>;
+            badge = (
+              <div className={classes.systemUserBadge}>
+                {t('systemuser_overviewpage.pending_request_badge')}
+              </div>
+            );
           } else if (isPendingRequestList && systemUser.systemUserType === 'Agent') {
             badge = (
-              <div className={classes.systemUserBadge}>Godkjenn systemtilgang for kunder</div>
+              <div className={classes.systemUserBadge}>
+                {t('systemuser_overviewpage.pending_agent_request_badge')}
+              </div>
             );
           } else if (newlyCreatedId === systemUser.id) {
             badge = { label: t('systemuser_overviewpage.new_system_user'), color: 'info' };
