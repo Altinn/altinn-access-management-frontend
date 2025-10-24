@@ -9,10 +9,10 @@ import * as lookupApi from '@/rtk/features/lookupApi';
 import * as userInfoApi from '@/rtk/features/userInfoApi';
 import * as accessPackageApi from '@/rtk/features/accessPackageApi';
 import * as connectionApi from '@/rtk/features/connectionApi';
-import * as useReporteePartyModule from './useReporteeParty';
-import * as useConnectedPartyModule from './useConnectedParty';
+import { useConnectedParty } from './useConnectedParty';
 import type { Party } from '@/rtk/features/lookupApi';
-import type { Connection } from '@/rtk/features/connectionApi';
+import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
+import useReporteeParty from './useReporteeParty';
 
 // Mock the API modules
 vi.mock('@/rtk/features/lookupApi', async () => {
@@ -39,9 +39,13 @@ vi.mock('./useReporteeParty', () => {
   };
 });
 
-vi.mock('./useConnectedParty', () => ({
-  default: vi.fn(),
-}));
+vi.mock('./useConnectedParty', () => {
+  const mockUseConnectedParty = vi.fn();
+  return {
+    useConnectedParty: mockUseConnectedParty,
+    default: mockUseConnectedParty,
+  };
+});
 
 vi.mock('@/rtk/features/connectionApi', async () => {
   const actual = await vi.importActual('@/rtk/features/connectionApi');
@@ -161,13 +165,13 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     vi.clearAllMocks();
 
     // Set default mocks for useReporteeParty and useConnectedParty
-    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+    vi.mocked(useReporteeParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
     });
 
-    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
+    vi.mocked(useConnectedParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
@@ -252,14 +256,14 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     } as any);
 
     // Mock useReporteeParty - not needed in this case
-    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+    vi.mocked(useReporteeParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
     });
 
     // Mock connections
-    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
       data: [],
       isLoading: false,
       isSuccess: true,
@@ -296,14 +300,14 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     } as any);
 
     // Mock useReporteeParty - not needed in this case
-    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+    vi.mocked(useReporteeParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
     });
 
     // Mock connections
-    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
       data: [],
       isLoading: false,
       isSuccess: true,
@@ -331,14 +335,14 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     } as any);
 
     // Mock useReporteeParty - not needed in this case
-    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+    vi.mocked(useReporteeParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
     });
 
     // Mock useConnectedParty for the "to" party
-    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
+    vi.mocked(useConnectedParty).mockReturnValue({
       party: mockConnectedParty,
       isLoading: false,
       error: undefined,
@@ -346,7 +350,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
 
     // Mock connections
-    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
       data: [mockConnection],
       isLoading: false,
       isSuccess: true,
@@ -375,14 +379,14 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     } as any);
 
     // Mock useReporteeParty - returns the reportee party
-    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+    vi.mocked(useReporteeParty).mockReturnValue({
       party: mockReporteeParty,
       isLoading: false,
       error: undefined,
     });
 
     // Mock useConnectedParty for the "to" party
-    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
+    vi.mocked(useConnectedParty).mockReturnValue({
       party: mockConnectedParty,
       isLoading: false,
       error: undefined,
@@ -403,7 +407,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       connections: [],
     };
 
-    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
       data: [reporteeConnection],
       isLoading: false,
       isSuccess: true,
@@ -431,13 +435,13 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+    vi.mocked(useReporteeParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
     });
 
-    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
+    vi.mocked(useConnectedParty).mockReturnValue({
       party: mockConnectedParty,
       isLoading: false,
       error: undefined,
@@ -471,13 +475,13 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+    vi.mocked(useReporteeParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
     });
 
-    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
+    vi.mocked(useConnectedParty).mockReturnValue({
       party: mockConnectedParty,
       isLoading: false,
       error: undefined,
@@ -511,20 +515,20 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+    vi.mocked(useReporteeParty).mockReturnValue({
       party: undefined,
       isLoading: true,
       error: undefined,
     });
 
-    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
+    vi.mocked(useConnectedParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
       isError: false,
     });
 
-    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
       data: undefined,
       isLoading: true,
       isSuccess: false,
@@ -559,13 +563,13 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    vi.mocked(useReporteePartyModule.useReporteeParty).mockReturnValue({
+    vi.mocked(useReporteeParty).mockReturnValue({
       party: mockReporteeParty,
       isLoading: false,
       error: undefined,
     });
 
-    vi.mocked(useConnectedPartyModule.useConnectedParty).mockReturnValue({
+    vi.mocked(useConnectedParty).mockReturnValue({
       party: undefined,
       isLoading: false,
       error: undefined,
