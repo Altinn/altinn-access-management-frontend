@@ -575,6 +575,7 @@
     "banner_title": "Systemtilgang",
     "sub_title_text": "Ved å opprette en systemtilgang gir du et fagsystem tilgang til å løse oppgaver i Altinn på vegne av bedriften din.",
     "systemusers_load_error": "Kunne ikke laste systemtilganger",
+    "pending_systemusers_load_error": "Kunne ikke laste ventende systembruker-forespørsler",
     "agent_delegation_systemusers_load_error": "Kunne ikke laste systemtilganger for kunder",
     "new_system_user_button": "Lag ny systemtilgang",
     "existing_system_users_title": "Egne systemtilganger",

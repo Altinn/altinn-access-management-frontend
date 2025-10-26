@@ -52,7 +52,11 @@ export const SystemUserOverviewPage = () => {
   });
 
   const isLoading =
-    isLoadingSystemUsers || isLoadingAgentSystemUsers || isLoadingReportee || isLoadingClientAdmin;
+    isLoadingSystemUsers ||
+    isLoadingAgentSystemUsers ||
+    isLoadingReportee ||
+    isLoadingClientAdmin ||
+    isLoadingPendingSystemUsers;
 
   return (
     <PageWrapper>
@@ -87,6 +91,11 @@ export const SystemUserOverviewPage = () => {
                   isPendingRequestList
                   listHeading={t('systemuser_overviewpage.pending_system_users_title')}
                 />
+              )}
+              {isLoadPendingSystemUsersError && (
+                <DsAlert data-color='danger'>
+                  {t('systemuser_overviewpage.systemusers_load_error')}
+                </DsAlert>
               )}
               {systemUsers && (
                 <SystemUserList
