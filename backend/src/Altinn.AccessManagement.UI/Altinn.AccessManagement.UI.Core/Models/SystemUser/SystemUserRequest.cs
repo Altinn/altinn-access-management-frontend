@@ -64,14 +64,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// The set of Rights requested for this system user. Must be equal to or less than the set defined in the Registered System.
         /// Must be a minimum of 1 selected Right.
         /// </summary>
-        [Required]
         [JsonPropertyName("rights")]
         public List<Right> Rights { get; set; }
 
         /// <summary>
         /// The set of Access Packages requested for this system user. Must be equal to or less than the set defined in the Registered System.
         /// </summary>
-        [Required]
         [JsonPropertyName("accessPackages")]
         public List<RegisteredSystemAccessPackage> AccessPackages { get; set; }
 

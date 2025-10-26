@@ -17,7 +17,7 @@ const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
 enum Tags {
   SystemUsers = 'Systemusers',
-  PendingSystemUsers = 'Systemusers',
+  PendingSystemUsers = 'PendingSystemusers',
 }
 
 interface NewSystemUserRequest {
@@ -225,7 +225,7 @@ export const systemUserApi = createApi({
 });
 
 const apiWithTag = systemUserApi.enhanceEndpoints({
-  addTagTypes: [Tags.SystemUsers],
+  addTagTypes: [Tags.SystemUsers, Tags.PendingSystemUsers],
 });
 
 export const {

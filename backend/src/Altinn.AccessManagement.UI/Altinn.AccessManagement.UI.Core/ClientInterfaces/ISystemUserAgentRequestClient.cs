@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>List of all system users for specified party</returns>
+        /// <returns>List of all pending agent system users for specified party</returns>
         Task<List<SystemUserRequest>> GetPendingAgentSystemuserRequests(int partyId, CancellationToken cancellationToken);
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="partyId">Used to identify the party the system user request is for.</param>
         /// <param name="agentRequestId">The id of the system user agent request</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Boolean, result of the reject system user operation, or a ProblemDetails result with error</returns>
+        /// <returns>Boolean, result of the escalate system user operation, or a ProblemDetails result with error</returns>
         Task<Result<bool>> EscalateSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken);
     }
 }

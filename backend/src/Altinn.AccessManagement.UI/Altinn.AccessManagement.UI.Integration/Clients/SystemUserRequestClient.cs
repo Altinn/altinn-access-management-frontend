@@ -135,7 +135,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<SystemUserRequest>> GetPendingSystemuserRequests(int partyId, CancellationToken cancellationToken)
+        public async Task<List<SystemUserRequest>> GetPendingSystemUserRequests(int partyId, CancellationToken cancellationToken)
         {
             try
             {
@@ -150,25 +150,25 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return JsonSerializer.Deserialize<List<SystemUserRequest>>(responseContent, _jsonSerializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserRequestClient // GetPendingSystemuserRequests // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserRequestClient // GetPendingSystemUserRequests // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserRequestClient // GetPendingSystemuserRequests // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserRequestClient // GetPendingSystemUserRequests // Exception");
                 throw;
             }
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/request/{partyId}/{agentRequestId}/escalate";
+                string endpoint = $"systemuser/request/{partyId}/{requestId}/escalate";
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 

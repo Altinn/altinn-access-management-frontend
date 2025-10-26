@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<SystemUserRequest>> GetPendingSystemuserRequests(int partyId, CancellationToken cancellationToken)
+        public Task<List<SystemUserRequest>> GetPendingSystemUserRequests(int partyId, CancellationToken cancellationToken)
         {
             List<SystemUserRequest> systemUserAgentRequests = Util.GetMockData<List<SystemUserRequest>>($"{dataFolder}/SystemUser/pendingStandardRequests.json");
             return Task.FromResult(new List<SystemUserRequest>(systemUserAgentRequests));
@@ -62,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new Result<bool>(true));
         }        
 
-        public Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        public Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
         {
             return Task.FromResult(new Result<bool>(true));
         }

@@ -39,9 +39,9 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Escalates a system user request
         /// </summary>
         /// <param name="partyId">Used to identify the party the system user request is for.</param>
-        /// <param name="agentRequestId">The id of the system user agent request</param>
+        /// <param name="requestId">The id of the system user request</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Boolean, result of the reject system user operation, or a ProblemDetails result with error</returns>
-        Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken);
+        /// <returns>Boolean, result of the escalate system user operation, or a ProblemDetails result with error</returns>
+        Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken);
     }
 }

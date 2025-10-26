@@ -205,10 +205,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("{partyId}/pending")]
-        public async Task<ActionResult> GetPendingSystemuserRequests([FromRoute] int partyId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetPendingSystemUserRequests([FromRoute] int partyId, CancellationToken cancellationToken)
         {
-            Result<List<SystemUserFE>> list = await _systemUserService.GetPendingSystemuserRequests(partyId, cancellationToken);
+            Result<List<SystemUserFE>> list = await _systemUserService.GetPendingSystemUserRequests(partyId, cancellationToken);
 
             if (list.IsProblem)
             {
