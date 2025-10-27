@@ -68,7 +68,8 @@ export const SystemUserList = ({
           }
 
           const refText =
-            systemUser.systemUserType === 'Standard' || systemUser.systemUserType === 'Agent'
+            isPendingRequestList &&
+            (systemUser.systemUserType === 'Standard' || systemUser.systemUserType === 'Agent')
               ? `(ref: ${systemUser.id.slice(-5)})`
               : '';
 
