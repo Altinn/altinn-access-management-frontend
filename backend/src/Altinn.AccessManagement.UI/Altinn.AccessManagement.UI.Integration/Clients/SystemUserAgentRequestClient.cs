@@ -135,7 +135,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<SystemUserRequest>> GetPendingAgentSystemuserRequests(int partyId, CancellationToken cancellationToken)
+        public async Task<List<SystemUserRequest>> GetPendingAgentSystemUserRequests(int partyId, CancellationToken cancellationToken)
         {
             try
             {
@@ -150,14 +150,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return JsonSerializer.Deserialize<List<SystemUserRequest>>(responseContent, _jsonSerializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserAgentRequestClient // GetPendingAgentSystemuserRequests // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserAgentRequestClient // GetPendingAgentSystemUserRequests // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentRequestClient // GetPendingAgentSystemuserRequests // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentRequestClient // GetPendingAgentSystemUserRequests // Exception");
                 throw;
             }
         }

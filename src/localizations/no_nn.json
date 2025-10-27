@@ -572,7 +572,7 @@
     "banner_title": "Systemtilgangar",
     "sub_title_text": "Ved å opprette ein systemtilgang gir du eit fagsystem tilgang til å løyse oppgåver i Altinn på vegne av bedrifta di.",
     "systemusers_load_error": "Kunne ikkje laste systemtilgangar",
-    "pending_systemusers_load_error": "Kunne ikkje laste ventende systetilgang-førespurnader",
+    "pending_systemusers_load_error": "Kunne ikkje laste ventende systemtilgang-førespurnader",
     "agent_delegation_systemusers_load_error": "Kunne ikkje laste systemtilganger for kunder",
     "new_system_user_button": "Lag ny systemtilgang",
     "existing_system_users_title": "Egne systemtilgangar",
@@ -587,7 +587,7 @@
     "api_tab": "API-tilgangar",
     "pending_request_badge": "Godkjenn eiga systemtilgang",
     "pending_agent_request_badge": "Godkjenn systemtilgang for kundar",
-    "pending_system_users_title": "Ventende systetilgang-førespurnader"
+    "pending_system_users_title": "Ventende systemtilgang-førespurnader"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
