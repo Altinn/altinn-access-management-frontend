@@ -64,6 +64,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<Result<bool>> EscalateSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
+            SystemUserRequest systemUserAgentRequest = Util.GetMockData<SystemUserRequest>($"{dataFolder}/SystemUser/systemUserAgentRequest.json");
+            if (agentRequestId != systemUserAgentRequest.Id)
+            {
+                return Task.FromResult(new Result<bool>(TestErrors.RequestNotFound));
+            }
             return Task.FromResult(new Result<bool>(true));
         }
 
