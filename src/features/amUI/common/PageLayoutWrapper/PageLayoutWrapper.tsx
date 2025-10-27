@@ -67,7 +67,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { data: pendingSystemUsers } = useGetPendingSystemUserRequestsQuery(
     reportee?.partyId ?? '',
     {
-      skip: !reportee?.partyId,
+      skip: !(reportee?.partyId && isAdmin),
     },
   );
   const pendingSystemUsersCount = pendingSystemUsers?.length ?? 0;

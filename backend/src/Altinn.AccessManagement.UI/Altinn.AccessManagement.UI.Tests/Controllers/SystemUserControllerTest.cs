@@ -290,5 +290,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
         }
+
+        /// <summary>
+        ///     Test case: GetPendingSystemUsers checks that pending system users (standard and agent) are returned
+        ///     Expected: GetPendingSystemUsers returns pending system users
+        /// </summary>
+        [Fact]
+        public async Task GetPendingSystemUsers_ReturnsPendingSystemUsers()
+        {
+            // Arrange
+            int partyId = 51329012;
+
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "pendingSystemusers.json");
+            List<SystemUserRequestFE> expectedResponse = Util.GetMockData<List<SystemUserRequestFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyId}/pending");
+            List<SystemUserRequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SystemUserRequestFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
     }
 }
