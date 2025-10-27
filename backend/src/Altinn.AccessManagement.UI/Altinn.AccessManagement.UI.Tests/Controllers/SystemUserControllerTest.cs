@@ -312,5 +312,23 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
+
+        /// <summary>
+        ///     Test case: GetPendingSystemUsers checks error is returned when call fails
+        ///     Expected: GetPendingSystemUsers returns error
+        /// </summary>
+        [Fact]
+        public async Task GetPendingSystemUsers_ReturnsError()
+        {
+            // Arrange
+            int partyId = 1234567;
+            HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyId}/pending");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
     }
 }
