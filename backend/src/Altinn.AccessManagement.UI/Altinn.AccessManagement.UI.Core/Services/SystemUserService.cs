@@ -121,11 +121,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             Task<Result<List<SystemUserRequest>>> standardTask = _systemUserRequestClient.GetPendingSystemUserRequests(partyId, cancellationToken);
             Task<Result<List<SystemUserRequest>>> agentTask = _systemUserAgentRequestClient.GetPendingAgentSystemUserRequests(partyId, cancellationToken);
             await Task.WhenAll(standardTask, agentTask);
+
             if (standardTask.Result.IsProblem)
             {
                 return standardTask.Result.Problem;
             }
-            
+
             if (agentTask.Result.IsProblem)
             {
                 return agentTask.Result.Problem;
@@ -133,14 +134,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             IEnumerable<SystemUser> requestsAsSystemUsers = await MapRequestsToPendingSystemUsers(standardTask.Result.Value, "Standard", cancellationToken);
             IEnumerable<SystemUser> agentRequestsAsSystemUsers = await MapRequestsToPendingSystemUsers(agentTask.Result.Value, "Agent", cancellationToken);
-            return await MapToSystemUsersFE([.. requestsAsSystemUsers, .. agentRequestsAsSystemUsers], cancellationToken);
+            List<SystemUserFE> pendingSystemUsers = await MapToSystemUsersFE([.. requestsAsSystemUsers, .. agentRequestsAsSystemUsers], cancellationToken);
+            return pendingSystemUsers;
         }
 
         private async Task<IEnumerable<SystemUser>> MapRequestsToPendingSystemUsers(IEnumerable<SystemUserRequest> requests, string systemUserType, CancellationToken cancellationToken)
         {
-            var tasks = requests.Select(async r =>
+            IEnumerable<Task<SystemUser>> tasks = requests.Select(async r =>
             {
-                var system = await _systemRegisterClient.GetSystem(r.SystemId, cancellationToken);
+                RegisteredSystem system = await _systemRegisterClient.GetSystem(r.SystemId, cancellationToken);
 
                 return new SystemUser
                 {
@@ -150,7 +152,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Created = r.Created,
                     SupplierOrgNo = system?.SystemVendorOrgNumber ?? "0",
                     SystemUserType = systemUserType,
-                    SystemId = r.SystemId
+                    SystemId = r.SystemId,
+                    ReporteeOrgNo = r.PartyOrgNo
                 };
             });
 
