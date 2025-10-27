@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { DsAlert, DsHeading, DsPopover, DsSearch } from '@altinn/altinn-components';
@@ -53,6 +53,12 @@ export const AccessPackageSection = () => {
     [],
   );
 
+  useEffect(() => {
+    return () => {
+      debouncedUpdate.cancel();
+    };
+  }, [debouncedUpdate]);
+
   return (
     <>
       <AccessPackageInfoAlert />
@@ -97,6 +103,7 @@ export const AccessPackageSection = () => {
                 />
                 <DsSearch.Clear
                   onClick={() => {
+                    debouncedUpdate.cancel();
                     setSearchString('');
                     setDebouncedSearchString('');
                   }}
