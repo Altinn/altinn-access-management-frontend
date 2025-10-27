@@ -148,8 +148,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           isAdmin,
           isClientAdmin,
           reportee,
-          canAccessSettings ?? false,
           pendingSystemUsersCount,
+          canAccessSettings ?? false,
         )
       : []),
     {
@@ -293,8 +293,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               isAdmin,
               isClientAdmin,
               reportee,
-              canAccessSettings ?? false,
               pendingSystemUsersCount,
+              canAccessSettings ?? false,
             ),
           },
         }}

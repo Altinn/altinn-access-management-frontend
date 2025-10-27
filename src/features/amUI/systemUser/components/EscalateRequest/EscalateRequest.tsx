@@ -28,7 +28,6 @@ export const EscalateRequest = ({
   partyId,
   isAgentRequest,
 }: EscalateRequestProps) => {
-  const { t } = useTranslation();
   const [isStepTwo, setIsStepTwo] = useState<boolean>(false);
 
   const [postEscalateRequest, { isError: escalateRequestError, isLoading: isEscalatingRequest }] =
@@ -56,15 +55,15 @@ export const EscalateRequest = ({
       data-color='warning'
       className={classes.escalateAlert}
     >
-      {!isStepTwo ? (
+      {isStepTwo ? (
+        <StepTwo onCancel={redirectAndLogout} />
+      ) : (
         <StepOne
           isLoading={isEscalatingRequest || isEscalatingAgentRequest}
           isError={escalateRequestError || escalateAgentRequestError}
           onEscalate={onEscalate}
           onCancel={redirectAndLogout}
         />
-      ) : (
-        <StepTwo onCancel={redirectAndLogout} />
       )}
     </DsAlert>
   );

@@ -77,9 +77,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
         
         /// <inheritdoc />
-        public async Task<Result<bool>> EscalateSystemUserAgentRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> EscalateSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
-            return await _systemUserAgentRequestClient.EscalateSystemUserAgentRequest(partyId, requestId, cancellationToken);
+            return await _systemUserAgentRequestClient.EscalateSystemUserAgentRequest(partyId, agentRequestId, cancellationToken);
         }
     }
 }

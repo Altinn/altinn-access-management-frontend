@@ -47,22 +47,22 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<Result<bool>> ApproveSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
-            return ValidateAndExecuteAction(agentRequestId, cancellationToken);
+            return ValidateAndExecuteAction(agentRequestId);
         }
 
         /// <inheritdoc />
         public Task<Result<bool>> RejectSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
-            return ValidateAndExecuteAction(agentRequestId, cancellationToken);
+            return ValidateAndExecuteAction(agentRequestId);
         }
 
         /// <inheritdoc />
         public Task<Result<bool>> EscalateSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
-            return ValidateAndExecuteAction(agentRequestId, cancellationToken);
+            return ValidateAndExecuteAction(agentRequestId);
         }
 
-        private Task<Result<bool>> ValidateAndExecuteAction(Guid agentRequestId, CancellationToken cancellationToken)
+        private Task<Result<bool>> ValidateAndExecuteAction(Guid agentRequestId)
         {
             SystemUserRequest systemUserAgentRequest = Util.GetMockData<SystemUserRequest>($"{dataFolder}/SystemUser/systemUserAgentRequest.json");
             if (agentRequestId != systemUserAgentRequest.Id)
