@@ -43,26 +43,22 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<Result<bool>> ApproveSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
         {
-            SystemUserRequest systemUserRequest = Util.GetMockData<SystemUserRequest>($"{dataFolder}/SystemUser/systemUserRequest.json");
-            if (requestId != systemUserRequest.Id)
-            {
-                return Task.FromResult(new Result<bool>(TestErrors.RequestNotFound));
-            }
-            return Task.FromResult(new Result<bool>(true));
+            return ValidateAndExecuteAction(requestId, cancellationToken);
         }
 
-                /// <inheritdoc />
+        /// <inheritdoc />
         public Task<Result<bool>> RejectSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
         {
-            SystemUserRequest systemUserRequest = Util.GetMockData<SystemUserRequest>($"{dataFolder}/SystemUser/systemUserRequest.json");
-            if (requestId != systemUserRequest.Id)
-            {
-                return Task.FromResult(new Result<bool>(TestErrors.RequestNotFound));
-            }
-            return Task.FromResult(new Result<bool>(true));
+            return ValidateAndExecuteAction(requestId, cancellationToken);
         }        
 
+        /// <inheritdoc />
         public Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        {
+            return ValidateAndExecuteAction(requestId, cancellationToken);
+        }
+
+        private Task<Result<bool>> ValidateAndExecuteAction(Guid requestId, CancellationToken cancellationToken)
         {
             SystemUserRequest systemUserRequest = Util.GetMockData<SystemUserRequest>($"{dataFolder}/SystemUser/systemUserRequest.json");
             if (requestId != systemUserRequest.Id)

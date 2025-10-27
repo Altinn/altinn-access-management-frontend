@@ -178,8 +178,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: RejectSystemUserRequest checks that the system user request is escalated
-        ///     Expected: RejectSystemUserRequest returns true
+        ///     Test case: EscalateSystemUserRequest checks that the system user request is escalated
+        ///     Expected: EscalateSystemUserRequest returns true
         /// </summary>
         [Fact]
         public async Task EscalateSystemUserRequest_ReturnsTrue()
@@ -205,7 +205,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task EscalateSystemUserRequest_ReturnsError()
         {
-           // Arrange
+            // Arrange
             int partyId = 51329012;
             string requestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";

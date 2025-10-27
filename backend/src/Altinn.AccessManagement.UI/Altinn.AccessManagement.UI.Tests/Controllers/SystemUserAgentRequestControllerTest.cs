@@ -178,8 +178,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: RejectSystemUserAgentRequest checks that the system user agent request is escalated
-        ///     Expected: RejectSystemUserAgentRequest returns true
+        ///     Test case: EscalateSystemUserAgentRequest checks that the system user agent request is escalated
+        ///     Expected: EscalateSystemUserAgentRequest returns true
         /// </summary>
         [Fact]
         public async Task EscalateSystemUserAgentRequest_ReturnsTrue()
@@ -205,7 +205,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task EscalateSystemUserAgentRequest_ReturnsError()
         {
-           // Arrange
+            // Arrange
             int partyId = 51329012;
             string agentRequestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
