@@ -10,7 +10,11 @@ import { useDelegationModalContext } from '../../common/DelegationModal/Delegati
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 import { useTranslation } from 'react-i18next';
 
-export const ActiveDelegations = () => {
+interface ActiveDelegationsProps {
+  searchString?: string;
+}
+
+export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
@@ -24,7 +28,8 @@ export const ActiveDelegations = () => {
         isLoading={isLoading}
         showPackagesCount
         showAllPackages
-        minimizeAvailablePackages
+        minimizeAvailablePackages={!searchString}
+        searchString={searchString}
         onSelect={(accessPackage) => {
           setModalItem(accessPackage);
           modalRef.current?.showModal();

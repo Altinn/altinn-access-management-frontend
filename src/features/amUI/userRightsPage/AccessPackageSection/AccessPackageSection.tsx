@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsAlert, DsHeading, DsPopover } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsPopover, DsSearch } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -16,6 +16,7 @@ import { AccessPackageInfoAlert } from './AccessPackageInfoAlert';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import classes from './AccessPackageSection.module.css';
+import { debounce } from '@/resources/utils';
 
 export const AccessPackageSection = () => {
   const { t } = useTranslation();
@@ -40,6 +41,17 @@ export const AccessPackageSection = () => {
   );
 
   const numberOfAccesses = accesses ? Object.values(accesses).flat().length : 0;
+
+  // Local search state with debounce to avoid excessive backend calls
+  const [searchString, setSearchString] = useState<string>('');
+  const [debouncedSearchString, setDebouncedSearchString] = useState<string>('');
+
+  const debouncedUpdate = useCallback(
+    debounce((value: string) => {
+      setDebouncedSearchString(value);
+    }, 300),
+    [],
+  );
 
   return (
     <>
@@ -70,16 +82,41 @@ export const AccessPackageSection = () => {
               <DsPopover>{t('access_packages.helptext_content')}</DsPopover>
             </DsPopover.TriggerContext>
           </div>
-          {(toParty?.partyTypeName === PartyType.Organization || !displayLimitedPreviewLaunch) && (
-            <DelegationModal
-              delegationType={DelegationType.AccessPackage}
-              availableActions={[
-                DelegationAction.REVOKE,
-                isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
-              ]}
-            />
-          )}
-          <ActiveDelegations />
+          <div className={classes.inputs}>
+            <div className={classes.searchField}>
+              <DsSearch data-size='sm'>
+                <DsSearch.Input
+                  aria-label={t('access_packages.search_label')}
+                  placeholder={t('access_packages.search_label')}
+                  value={searchString}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = event.target.value;
+                    setSearchString(value);
+                    debouncedUpdate(value);
+                  }}
+                />
+                <DsSearch.Clear
+                  onClick={() => {
+                    setSearchString('');
+                    setDebouncedSearchString('');
+                  }}
+                />
+              </DsSearch>
+            </div>
+            <div className={classes.delegateButton}>
+              {(toParty?.partyTypeName === PartyType.Organization ||
+                !displayLimitedPreviewLaunch) && (
+                <DelegationModal
+                  delegationType={DelegationType.AccessPackage}
+                  availableActions={[
+                    DelegationAction.REVOKE,
+                    isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
+                  ]}
+                />
+              )}
+            </div>
+          </div>
+          <ActiveDelegations searchString={debouncedSearchString} />
         </>
       )}
     </>
