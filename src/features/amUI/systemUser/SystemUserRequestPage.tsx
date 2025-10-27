@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -19,11 +19,14 @@ import { DelegationCheckError } from './components/DelegationCheckError/Delegati
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
+import { SystemUserPath } from '@/routes/paths';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   useDocumentTitle(t('systemuser_request.page_title'));
   const [searchParams] = useSearchParams();
+  const skipLogout = searchParams.get('skiplogout');
   const requestId = searchParams.get('id') ?? '';
 
   const {
@@ -76,6 +79,10 @@ export const SystemUserRequestPage = () => {
   };
 
   const onRejectOrApprove = (): void => {
+    if (skipLogout) {
+      navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+    }
+
     const url = request?.redirectUrl
       ? `${getApiBaseUrl()}/request/${request?.id}/logout`
       : getLogoutUrl();

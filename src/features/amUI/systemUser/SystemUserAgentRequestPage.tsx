@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import {
@@ -19,11 +19,14 @@ import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
 import { RightsList } from './components/RightsList/RightsList';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
+import { SystemUserPath } from '@/routes/paths';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   useDocumentTitle(t('systemuser_agent_request.page_title'));
   const [searchParams] = useSearchParams();
+  const skipLogout = searchParams.get('skiplogout');
   const requestId = searchParams.get('id') ?? '';
 
   const {
@@ -76,6 +79,10 @@ export const SystemUserAgentRequestPage = () => {
   };
 
   const onRejectOrApprove = (): void => {
+    if (skipLogout) {
+      navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+    }
+
     const url = request?.redirectUrl
       ? `${getApiBaseUrl()}/agentrequest/${request?.id}/logout`
       : getLogoutUrl();

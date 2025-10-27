@@ -45,9 +45,9 @@ export const SystemUserList = ({
           } else if (systemUser.systemUserType === 'Agent' && !isPendingRequestList) {
             href = `/systemuser/${systemUser.id}/agentdelegation`;
           } else if (systemUser.systemUserType === 'Standard' && isPendingRequestList) {
-            href = `/systemuser/request?id=${systemUser.id}/`;
+            href = `/systemuser/request?id=${systemUser.id}&skiplogout=true`;
           } else if (systemUser.systemUserType === 'Agent' && isPendingRequestList) {
-            href = `/systemuser/agentrequest?id=${systemUser.id}/`;
+            href = `/systemuser/agentrequest?id=${systemUser.id}&skiplogout=true`;
           }
 
           let badge: BadgeProps | ReactElement | undefined = undefined;
@@ -67,11 +67,16 @@ export const SystemUserList = ({
             badge = { label: t('systemuser_overviewpage.new_system_user'), color: 'info' };
           }
 
+          const refText =
+            systemUser.systemUserType === 'Standard' || systemUser.systemUserType === 'Agent'
+              ? `(ref: ${systemUser.id.slice(-5)})`
+              : '';
+
           return (
             <ListItem
               key={systemUser.id}
               size='lg'
-              title={{ children: systemUser.integrationTitle, as: 'h3' }}
+              title={{ children: `${systemUser.integrationTitle} ${refText}`, as: 'h3' }}
               description={systemUser.system.systemVendorOrgName}
               as={(props) => (
                 <Link
