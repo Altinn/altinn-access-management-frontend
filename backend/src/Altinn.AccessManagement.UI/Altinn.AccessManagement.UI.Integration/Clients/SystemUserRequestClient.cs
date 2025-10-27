@@ -135,7 +135,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<SystemUserRequest>> GetPendingSystemUserRequests(int partyId, CancellationToken cancellationToken)
+        public async Task<Result<List<SystemUserRequest>>> GetPendingSystemUserRequests(int partyId, CancellationToken cancellationToken)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // GetPendingSystemUserRequests // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return null;
+                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {

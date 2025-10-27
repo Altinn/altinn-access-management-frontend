@@ -118,11 +118,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<List<SystemUserFE>>> GetPendingSystemUserRequests(int partyId, CancellationToken cancellationToken)
         {
-            Task<List<SystemUserRequest>> standardTask = _systemUserRequestClient.GetPendingSystemUserRequests(partyId, cancellationToken);
-            Task<List<SystemUserRequest>> agentTask = _systemUserAgentRequestClient.GetPendingAgentSystemUserRequests(partyId, cancellationToken);
+            Task<Result<List<SystemUserRequest>>> standardTask = _systemUserRequestClient.GetPendingSystemUserRequests(partyId, cancellationToken);
+            Task<Result<List<SystemUserRequest>>> agentTask = _systemUserAgentRequestClient.GetPendingAgentSystemUserRequests(partyId, cancellationToken);
             await Task.WhenAll(standardTask, agentTask);
-            IEnumerable<SystemUser> requestsAsSystemUsers = await MapRequestsToPendingSystemUsers(standardTask.Result, "Standard", cancellationToken);
-            IEnumerable<SystemUser> agentRequestsAsSystemUsers = await MapRequestsToPendingSystemUsers(agentTask.Result, "Agent", cancellationToken);
+            if (standardTask.Result.IsProblem)
+            {
+                return standardTask.Result.Problem;
+            }
+            
+            if (agentTask.Result.IsProblem)
+            {
+                return agentTask.Result.Problem;
+            }
+
+            IEnumerable<SystemUser> requestsAsSystemUsers = await MapRequestsToPendingSystemUsers(standardTask.Result.Value, "Standard", cancellationToken);
+            IEnumerable<SystemUser> agentRequestsAsSystemUsers = await MapRequestsToPendingSystemUsers(agentTask.Result.Value, "Agent", cancellationToken);
             return await MapToSystemUsersFE([.. requestsAsSystemUsers, .. agentRequestsAsSystemUsers], cancellationToken);
         }
 

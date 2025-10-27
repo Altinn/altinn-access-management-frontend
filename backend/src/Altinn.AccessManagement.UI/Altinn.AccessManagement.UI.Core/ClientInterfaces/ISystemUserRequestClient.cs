@@ -40,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all pending system users for specified party</returns>
-        Task<List<SystemUserRequest>> GetPendingSystemUserRequests(int partyId, CancellationToken cancellationToken);
+        Task<Result<List<SystemUserRequest>>> GetPendingSystemUserRequests(int partyId, CancellationToken cancellationToken);
         
         /// <summary>
         /// Escalates a system user request
