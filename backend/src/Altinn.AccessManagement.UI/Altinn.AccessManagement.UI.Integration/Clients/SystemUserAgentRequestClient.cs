@@ -142,7 +142,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpoint = $"systemuser/request/agent/{partyId}/pending";
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
-
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode) 
@@ -152,8 +151,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // SystemUserAgentRequestClient // GetPendingAgentSystemUserRequests // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
+                AltinnProblemDetails pendingProblemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ProblemMapper.MapToAuthUiError(pendingProblemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
@@ -179,8 +178,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // SystemUserAgentRequestClient // EscalateSystemUserAgentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
 
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
+                AltinnProblemDetails escalateProblemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ProblemMapper.MapToAuthUiError(escalateProblemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
