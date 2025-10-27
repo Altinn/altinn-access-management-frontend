@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -87,7 +88,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString)
         {
-            string endpointUrl = $"meta/info/accesspackages/search/?term={searchString}&searchInResources=true";
+            string safeSearchTerm = Uri.EscapeDataString(searchString ?? string.Empty);
+            string endpointUrl = $"meta/info/accesspackages/search/?term={safeSearchTerm}&searchInResources=true";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
