@@ -5,6 +5,7 @@ import {
   DsButton,
   DsDialog,
   DsHeading,
+  ResourceListItem,
   List,
 } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
@@ -12,13 +13,12 @@ import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { getButtonIconSize } from '@/resources/utils';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
-import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
-import { ResourceDetailsContent } from '@/features/amUI/common/ResourceList/ResourceDetails';
 
 import type { SystemUserAccessPackage } from '../../types';
 
 import classes from './RightsList.module.css';
 import { AccessPackageInfo } from './AccessPackageInfo';
+import { ResourceDetails } from './ResourceDetails';
 
 interface RightsListProps {
   resources: ServiceResource[];
@@ -109,23 +109,25 @@ export const RightsList = ({
                   })}
             </DsHeading>
           )}
-          <div className={classes.rightsList}>
-            <ResourceList
-              resources={resources}
-              enableSearch={false}
-              showMoreButton={false}
-              showDetails={false}
-              onSelect={onSelectResource}
-              size='md'
-              titleAs={listItemHeadingLevel}
-              getOrgCode={(resource) =>
-                resource.resourceOwnerOrgNumber ?? resource.resourceOwnerOrgcode
-              }
-              getLogoUrl={(resource) => resource.resourceOwnerLogoUrl}
-              getLogoAlt={(resource) => resource.resourceOwnerName ?? ''}
-              getOwnerName={(resource) => resource.resourceOwnerName ?? ''}
-            />
-          </div>
+          <List className={classes.rightsList}>
+            {resources.map((resource) => {
+              const emblem = getProviderLogoUrl(resource.resourceOwnerOrgNumber ?? '');
+              return (
+                <ResourceListItem
+                  key={resource.identifier}
+                  id={resource.identifier}
+                  as='button'
+                  titleAs={listItemHeadingLevel}
+                  size='md'
+                  ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
+                  ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
+                  ownerName={resource.resourceOwnerName ?? ''}
+                  resourceName={resource.title}
+                  onClick={() => onSelectResource(resource)}
+                />
+              );
+            })}
+          </List>
         </div>
       )}
       <DsDialog
@@ -151,15 +153,7 @@ export const RightsList = ({
             onSelectResource={(resource: ServiceResource) => setSelectedResource(resource)}
           />
         )}
-        {selectedResource && (
-          <ResourceDetailsContent
-            resource={selectedResource}
-            providerLogoUrl={
-              getProviderLogoUrl(selectedResource.resourceOwnerOrgNumber ?? '') ??
-              selectedResource.resourceOwnerLogoUrl
-            }
-          />
-        )}
+        {selectedResource && <ResourceDetails resource={selectedResource} />}
       </DsDialog>
     </div>
   );
