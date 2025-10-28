@@ -3,45 +3,52 @@
 
 import { ResourceListItem } from '@altinn/altinn-components';
 import type { FC } from 'react';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { ResourceDelegation } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Party } from '@/rtk/features/lookupApi';
+import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 import { EditModal } from '../../common/DelegationModal/EditModal';
 
 import { DeleteResourceButton } from './DeleteResourceButton';
-import classes from './SingleRightsSection.module.css';
 
 interface SingleRightItemProps {
-  resource: ServiceResource;
+  delegation: ResourceDelegation;
   toParty: Party;
 }
 
-const SingleRightItem: FC<SingleRightItemProps> = ({ resource, toParty }) => {
+const SingleRightItem: FC<SingleRightItemProps> = ({ delegation, toParty }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
+  const { resource } = delegation;
+  const { getProviderLogoUrl, isLoading: providerLogoLoading } = useProviderLogoUrl();
+
+  const emblem = useMemo(
+    () => getProviderLogoUrl(resource?.resourceOwnerOrgNumber ?? ''),
+    [getProviderLogoUrl, resource?.resourceOwnerOrgNumber],
+  );
 
   return (
     <>
-      <li className={classes.singleRightItem}>
-        <ResourceListItem
-          resourceName={resource.title}
-          ownerName={resource.resourceOwnerName ?? ''}
-          ownerLogoUrl={resource.resourceOwnerLogoUrl}
-          id={resource.identifier}
-          size='md'
-          as='button'
-          onClick={() => modalRef.current?.showModal()}
-          controls={
-            <div className={classes.actions}>
-              <DeleteResourceButton
-                resource={resource}
-                toParty={toParty}
-              />
-            </div>
-          }
-        />
-      </li>
+      <ResourceListItem
+        resourceName={resource.title}
+        ownerName={resource.resourceOwnerName ?? ''}
+        id={resource.identifier}
+        // color={hasAccess ? "company" : "neutral"}
+        size='md'
+        as='button'
+        onClick={() => modalRef.current?.showModal()}
+        titleAs='h3'
+        ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
+        loading={providerLogoLoading}
+        controls={
+          <DeleteResourceButton
+            resource={resource}
+            toParty={toParty}
+          />
+        }
+        ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
+      />
       <EditModal
         ref={modalRef}
         resource={resource}

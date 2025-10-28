@@ -348,8 +348,7 @@
     "access_packages_title": "Tilgangspakkar",
     "single_rights_title": "Tenester",
     "roles_title": "Administratortilgangar",
-    "resource_type_text": "Enkeltteneste",
-    "delete_confirm_message": "Er du sikker på at du vil slette denne?"
+    "resource_type_text": "Enkeltteneste"
   },
   "delete_user": {
     "user_trigger_button": "Slett brukar",

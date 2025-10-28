@@ -165,22 +165,16 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
         (delegation) => delegation.resource?.identifier === resource.identifier,
       );
     return (
-      <li
+      <ResourceListItem
         key={resource.identifier ?? index}
-        className={classes.resourceItem}
-      >
-        <ResourceListItem
-          id={resource.identifier}
-          ownerName={resource.resourceOwnerName ?? ''}
-          resourceName={resource.title}
-          ownerLogoUrl={resource.resourceOwnerLogoUrl}
-          ownerLogoUrlAlt={resource.resourceOwnerName}
-          onClick={() => onSelection(resource)}
-          badge={
-            hasPoa ? { label: t('common.has_poa'), theme: 'base', color: 'success' } : undefined
-          }
-        />
-      </li>
+        id={resource.identifier}
+        ownerName={resource.resourceOwnerName ?? ''}
+        resourceName={resource.title}
+        ownerLogoUrl={resource.resourceOwnerLogoUrl}
+        ownerLogoUrlAlt={resource.resourceOwnerName}
+        onClick={() => onSelection(resource)}
+        badge={hasPoa ? { label: t('common.has_poa'), theme: 'base', color: 'success' } : undefined}
+      />
     );
   });
 

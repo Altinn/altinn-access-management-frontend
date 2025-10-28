@@ -351,8 +351,7 @@
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
     "roles_title": "Administratortilganger",
-    "resource_type_text": "Enkelttjeneste",
-    "delete_confirm_message": "Er du sikker på at du vil slette denne?"
+    "resource_type_text": "Enkelttjeneste"
   },
   "delete_user": {
     "user_trigger_button": "Slett bruker",

@@ -352,8 +352,7 @@
     "access_packages_title": "Access packages",
     "single_rights_title": "Services",
     "roles_title": "Administrative accesses",
-    "resource_type_text": "Single right",
-    "delete_confirm_message": "Are you sure you want to delete this?"
+    "resource_type_text": "Single right"
   },
   "delete_user": {
     "user_trigger_button": "Delete user",

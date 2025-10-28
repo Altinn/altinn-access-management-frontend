@@ -36,6 +36,7 @@ import { StatusMessageForScreenReader } from '@/components/StatusMessageForScree
 
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
+import { StatusSection } from '../StatusSection';
 
 import classes from './ResourceInfo.module.css';
 import { ResourceAlert } from './ResourceAlert';
@@ -284,6 +285,11 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
       })
     );
 
+  const hasDelegableRights = rights.some((r) => r.delegable);
+  const showMissingRightsStatus =
+    !hasAccess && ((rights.length > 0 && !hasDelegableRights) || !!missingAccessMessage);
+  const cannotDelegateHere = resource?.delegable === false;
+
   return (
     <>
       <StatusMessageForScreenReader politenessSetting='assertive'>
@@ -352,6 +358,11 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                   {missingAccessMessage}
                 </DsAlert>
               )}
+              <StatusSection
+                userHasAccess={hasAccess}
+                showMissingRightsMessage={showMissingRightsStatus}
+                cannotDelegateHere={cannotDelegateHere}
+              />
               <div className={classes.rightsSection}>
                 <DsHeading
                   level={4}
