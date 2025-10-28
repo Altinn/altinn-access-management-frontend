@@ -28,8 +28,6 @@ export const SingleRightsSection = () => {
     party: fromPartyId,
     userId: id || '',
   });
-  console.log('error: ', error);
-  console.log('isError: ', isError);
 
   const { toParty } = usePartyRepresentation();
   const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights ?? [], 5);

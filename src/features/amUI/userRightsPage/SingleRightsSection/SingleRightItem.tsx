@@ -34,7 +34,6 @@ const SingleRightItem: FC<SingleRightItemProps> = ({ delegation, toParty }) => {
         resourceName={resource.title}
         ownerName={resource.resourceOwnerName ?? ''}
         id={resource.identifier}
-        // color={hasAccess ? "company" : "neutral"}
         size='md'
         as='button'
         onClick={() => modalRef.current?.showModal()}
@@ -45,6 +44,7 @@ const SingleRightItem: FC<SingleRightItemProps> = ({ delegation, toParty }) => {
           <DeleteResourceButton
             resource={resource}
             toParty={toParty}
+            fullText
           />
         }
         ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}

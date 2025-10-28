@@ -12,6 +12,7 @@ import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 import { getButtonIconSize } from '@/resources/utils';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 import type { SystemUserAccessPackage } from '../../types';
 
@@ -33,6 +34,7 @@ export const RightsList = ({
   headingLevel,
 }: RightsListProps): React.ReactNode => {
   const { t } = useTranslation();
+  const { getProviderLogoUrl } = useProviderLogoUrl();
   const modalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
   const [selectedAccessPackage, setSelectedAccessPackage] =
@@ -108,20 +110,23 @@ export const RightsList = ({
             </DsHeading>
           )}
           <List className={classes.rightsList}>
-            {resources.map((resource) => (
-              <ResourceListItem
-                key={resource.identifier}
-                id={resource.identifier}
-                as='button'
-                titleAs={listItemHeadingLevel}
-                size='md'
-                ownerLogoUrl={resource.resourceOwnerLogoUrl}
-                ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
-                ownerName={resource.resourceOwnerName ?? ''}
-                resourceName={resource.title}
-                onClick={() => onSelectResource(resource)}
-              />
-            ))}
+            {resources.map((resource) => {
+              const emblem = getProviderLogoUrl(resource.resourceOwnerOrgNumber ?? '');
+              return (
+                <ResourceListItem
+                  key={resource.identifier}
+                  id={resource.identifier}
+                  as='button'
+                  titleAs={listItemHeadingLevel}
+                  size='md'
+                  ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
+                  ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
+                  ownerName={resource.resourceOwnerName ?? ''}
+                  resourceName={resource.title}
+                  onClick={() => onSelectResource(resource)}
+                />
+              );
+            })}
           </List>
         </div>
       )}

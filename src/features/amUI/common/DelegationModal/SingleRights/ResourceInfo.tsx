@@ -33,6 +33,7 @@ import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
@@ -63,6 +64,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
   const [rights, setRights] = useState<ChipRight[]>([]);
   const { openSnackbar } = useSnackbar();
   const { id } = useParams();
+  const { getProviderLogoUrl } = useProviderLogoUrl();
 
   const { toParty, fromParty } = usePartyRepresentation();
   const hasUnsavedChanges = !arraysEqualUnordered(
@@ -289,6 +291,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
   const showMissingRightsStatus =
     !hasAccess && ((rights.length > 0 && !hasDelegableRights) || !!missingAccessMessage);
   const cannotDelegateHere = resource?.delegable === false;
+  const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
 
   return (
     <>
@@ -298,12 +301,22 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
       {!!resource && (
         <div className={classes.infoView}>
           <div className={classes.infoHeading}>
-            <Avatar
-              size='lg'
-              type='company'
-              imageUrl={resource.resourceOwnerLogoUrl}
-              name={resource.resourceOwnerName ?? ''}
-            />
+            <div className={classes.resourceIcon}>
+              {emblem || resource.resourceOwnerLogoUrl ? (
+                <img
+                  src={emblem ?? resource.resourceOwnerLogoUrl}
+                  alt={resource.resourceOwnerName ?? ''}
+                  width={40}
+                  height={40}
+                />
+              ) : (
+                <Avatar
+                  type='company'
+                  imageUrl={resource.resourceOwnerLogoUrl}
+                  name={resource.resourceOwnerName ?? ''}
+                />
+              )}
+            </div>
             <div className={classes.resource}>
               <div className={classes.infoHeading}>
                 <DsHeading
