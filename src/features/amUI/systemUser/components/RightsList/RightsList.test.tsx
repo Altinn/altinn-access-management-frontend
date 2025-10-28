@@ -1,9 +1,22 @@
 import React from 'react';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { RightsList } from './RightsList';
+
+vi.mock('@/resources/hooks/useProviderLogoUrl', () => ({
+  useProviderLogoUrl: () => ({
+    getProviderLogoUrl: () => undefined,
+    isLoading: false,
+  }),
+}));
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
 
 const resource = {
   identifier: 'ske-innrapportering-boligsameie',

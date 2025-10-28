@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { List, Button, Icon, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { Button, Icon, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { PackageIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
@@ -10,6 +10,7 @@ import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageLis
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 
+import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -24,7 +25,6 @@ import {
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
-import { useResourceList } from './useResourceList';
 import classes from './AccessPackageInfo.module.css';
 
 export interface PackageInfoProps {
@@ -81,7 +81,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
       )) ||
     false;
 
-  const resourceListItems = useResourceList(accessPackage.resources);
   const deletableStatus = React.useMemo(
     () =>
       delegationAccess
@@ -181,7 +180,29 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               })}
             </DsHeading>
             <div className={classes.service_list}>
-              <List>{resourceListItems}</List>
+              <ResourceList
+                resources={accessPackage.resources}
+                enableSearch={false}
+                showMoreButton={false}
+                showDetails={false}
+                interactive={false}
+                size='xs'
+                as='div'
+                getOrgCode={(resource) =>
+                  resource.provider?.code ??
+                  resource.resourceOwnerOrgcode ??
+                  resource.resourceOwnerOrgNumber
+                }
+                getLogoUrl={(resource) =>
+                  resource.provider?.logoUrl ?? resource.resourceOwnerLogoUrl
+                }
+                getLogoAlt={(resource) =>
+                  resource.provider?.name ?? resource.resourceOwnerName ?? ''
+                }
+                getOwnerName={(resource) =>
+                  resource.provider?.name ?? resource.resourceOwnerName ?? ''
+                }
+              />
             </div>
           </div>
 

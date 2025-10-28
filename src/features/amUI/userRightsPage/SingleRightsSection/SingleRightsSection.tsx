@@ -3,17 +3,19 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { DsHeading } from '@altinn/altinn-components';
 
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { List } from '@/features/amUI/common/List/List';
+import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import usePagination from '@/resources/hooks/usePagination';
 import { AmPagination } from '@/components/Paginering';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { EditModal } from '../../common/DelegationModal/EditModal';
 
 import classes from './SingleRightsSection.module.css';
-import SingleRightItem from './SingleRightItem';
+import { DeleteResourceButton } from './DeleteResourceButton';
 
 export const SingleRightsSection = () => {
   const { t } = useTranslation();
@@ -31,6 +33,13 @@ export const SingleRightsSection = () => {
 
   const { toParty } = usePartyRepresentation();
   const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights ?? [], 5);
+  const modalRef = React.useRef<HTMLDialogElement>(null);
+  const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
+
+  const resources = React.useMemo(
+    () => paginatedData.map((delegation) => delegation.resource).filter(Boolean),
+    [paginatedData],
+  ) as ServiceResource[];
 
   return (
     toParty && (
@@ -46,20 +55,27 @@ export const SingleRightsSection = () => {
         {isError && <div>{t('user_rights_page.error')}</div>}
         {isLoading && <div>{t('user_rights_page.loading')}</div>}
 
-        <List
-          className={classes.singleRightsList}
-          aria-labelledby='single_rights_title'
-          spacing
-          background
-        >
-          {paginatedData.map((delegation) => (
-            <SingleRightItem
-              key={delegation.resource?.identifier}
-              toParty={toParty}
-              delegation={delegation}
-            />
-          ))}
-        </List>
+        <div className={classes.singleRightsList}>
+          <ResourceList
+            resources={resources}
+            enableSearch={false}
+            showMoreButton={false}
+            showDetails={false}
+            onSelect={(resource) => {
+              setSelectedResource(resource);
+              modalRef.current?.showModal();
+            }}
+            size='md'
+            titleAs='h3'
+            renderControls={(resource) => (
+              <DeleteResourceButton
+                resource={resource}
+                toParty={toParty}
+                fullText
+              />
+            )}
+          />
+        </div>
         <div className={classes.tools}>
           {totalPages > 1 && (
             <AmPagination
@@ -72,6 +88,11 @@ export const SingleRightsSection = () => {
             />
           )}
         </div>
+        <EditModal
+          ref={modalRef}
+          resource={selectedResource ?? undefined}
+          onClose={() => setSelectedResource(null)}
+        />
       </div>
     )
   );

@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { List } from '@/components';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
+import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 
-import { ResourceList } from './ResourceList';
 import classes from './ResourceSearch.module.css';
 
 interface SearchResultsProps {
@@ -76,15 +75,30 @@ export const SearchResults = ({
           </DsParagraph>
         )}
       </div>
-      <List className={classes.resourceList}>
-        {resources && (
+      {resources && (
+        <div className={classes.resourceList}>
           <ResourceList
             resources={resources}
-            delegatedResources={delegatedResources}
+            enableSearch={false}
+            showMoreButton={false}
+            showDetails={false}
             onSelect={onSelect}
+            size='sm'
+            titleAs='h3'
+            getBadge={(resource) => {
+              const hasPoa =
+                delegatedResources &&
+                delegatedResources.some(
+                  (delegation) => delegation.resource?.identifier === resource.identifier,
+                );
+
+              return hasPoa
+                ? { label: t('common.has_poa'), theme: 'base', color: 'success' }
+                : undefined;
+            }}
           />
-        )}
-      </List>
+        </div>
+      )}
       {totalNumberOfResults !== undefined &&
         totalNumberOfResults > searchResultsPerPage &&
         !displayPopularResources && (
