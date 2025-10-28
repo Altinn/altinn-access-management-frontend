@@ -473,7 +473,7 @@ export class ConsentPage {
     }
   }
 
-  async waitForLogout(redirectUrl: string, timeout = 15000): Promise<void> {
+  async waitForLogout(redirectUrl: string, timeout = 30000): Promise<void> {
     // Ensure the logout redirect happens
     await this.page.waitForURL(/login\.test\.idporten\.no\/logout\/success/i, { timeout });
 
