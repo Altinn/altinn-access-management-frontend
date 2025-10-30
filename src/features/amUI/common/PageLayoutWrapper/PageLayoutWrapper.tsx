@@ -44,6 +44,7 @@ import {
   useNewLogoutUrl,
 } from '@/resources/utils/featureFlagUtils';
 import { useAccounts } from './useAccounts';
+import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -72,6 +73,14 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
+
+  const { data: pendingSystemUsers } = useGetPendingSystemUserRequestsQuery(
+    reportee?.partyId ?? '',
+    {
+      skip: !(reportee?.partyId && isAdmin),
+    },
+  );
+  const pendingSystemUsersCount = pendingSystemUsers?.length ?? 0;
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -149,6 +158,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           isAdmin,
           isClientAdmin,
           reportee,
+          pendingSystemUsersCount,
           canAccessSettings ?? false,
         )
       : []),
@@ -297,6 +307,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               isAdmin,
               isClientAdmin,
               reportee,
+              pendingSystemUsersCount,
               canAccessSettings ?? false,
             ),
           },

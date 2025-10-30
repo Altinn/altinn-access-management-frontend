@@ -69,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         public string ExternalRef { get; set; } = string.Empty;
 
         /// <summary>
-        /// Either Agent or Default
+        /// Either Agent or Standard
         /// </summary>
         [JsonPropertyName("systemUserType")]
         public string SystemUserType { get; set; }

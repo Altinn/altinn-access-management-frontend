@@ -14,6 +14,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class SystemUserService : ISystemUserService
     {
         private readonly ISystemUserClient _systemUserClient;
+        private readonly ISystemUserRequestClient _systemUserRequestClient;
+        private readonly ISystemUserAgentRequestClient _systemUserAgentRequestClient;
+        private readonly ISystemRegisterClient _systemRegisterClient;
         private readonly IRegisterClient _registerClient;
         private readonly ResourceHelper _resourceHelper;
 
@@ -21,14 +24,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Initializes a new instance of the <see cref="SystemUserService"/> class.
         /// </summary>
         /// <param name="systemUserClient">The system user client.</param>
+        /// <param name="systemUserRequestClient">The system user request client.</param>
+        /// <param name="systemUserAgentRequestClient">The system user agent request client.</param>
+        /// <param name="systemRegisterClient">The system register client.</param>
         /// <param name="registerClient">The register client.</param>
         /// <param name="resourceHelper">Resources helper to enrich resources</param>
         public SystemUserService(
             ISystemUserClient systemUserClient,
+            ISystemUserRequestClient systemUserRequestClient,
+            ISystemUserAgentRequestClient systemUserAgentRequestClient,
+            ISystemRegisterClient systemRegisterClient,
             IRegisterClient registerClient,
             ResourceHelper resourceHelper)
         {
             _systemUserClient = systemUserClient;
+            _systemUserRequestClient = systemUserRequestClient;
+            _systemUserAgentRequestClient = systemUserAgentRequestClient;
+            _systemRegisterClient = systemRegisterClient;
             _registerClient = registerClient;
             _resourceHelper = resourceHelper;
         }
@@ -103,7 +115,52 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return createdSystemUser;
         }
 
-        private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, CancellationToken cancellationToken)
+        /// <inheritdoc />
+        public async Task<Result<List<SystemUserFE>>> GetPendingSystemUserRequests(int partyId, CancellationToken cancellationToken)
+        {
+            Task<Result<List<SystemUserRequest>>> standardTask = _systemUserRequestClient.GetPendingSystemUserRequests(partyId, cancellationToken);
+            Task<Result<List<SystemUserRequest>>> agentTask = _systemUserAgentRequestClient.GetPendingAgentSystemUserRequests(partyId, cancellationToken);
+            await Task.WhenAll(standardTask, agentTask);
+
+            if (standardTask.Result.IsProblem)
+            {
+                return standardTask.Result.Problem;
+            }
+
+            if (agentTask.Result.IsProblem)
+            {
+                return agentTask.Result.Problem;
+            }
+
+            IEnumerable<SystemUser> requestsAsSystemUsers = await MapRequestsToPendingSystemUsers(standardTask.Result.Value, "Standard", cancellationToken);
+            IEnumerable<SystemUser> agentRequestsAsSystemUsers = await MapRequestsToPendingSystemUsers(agentTask.Result.Value, "Agent", cancellationToken);
+            List<SystemUserFE> pendingSystemUsers = await MapToSystemUsersFE([.. requestsAsSystemUsers, .. agentRequestsAsSystemUsers], cancellationToken);
+            return pendingSystemUsers;
+        }
+
+        private async Task<IEnumerable<SystemUser>> MapRequestsToPendingSystemUsers(IEnumerable<SystemUserRequest> requests, string systemUserType, CancellationToken cancellationToken)
+        {
+            IEnumerable<Task<SystemUser>> tasks = requests.Select(async r =>
+            {
+                RegisteredSystem system = await _systemRegisterClient.GetSystem(r.SystemId, cancellationToken);
+
+                return new SystemUser
+                {
+                    Id = r.Id.ToString(),
+                    IntegrationTitle = r.IntegrationTitle,
+                    PartyId = r.PartyId.ToString(),
+                    Created = r.Created,
+                    SupplierOrgNo = system?.SystemVendorOrgNumber ?? "0",
+                    SystemUserType = systemUserType,
+                    SystemId = r.SystemId,
+                    ReporteeOrgNo = r.PartyOrgNo
+                };
+            });
+
+            return await Task.WhenAll(tasks);
+        }
+
+        private async Task<List<SystemUserFE>> MapToSystemUsersFE(IEnumerable<SystemUser> systemUsers, CancellationToken cancellationToken)
         {
             List<PartyName> partyNames = await _registerClient.GetPartyNames(systemUsers.Select(x => x.SupplierOrgNo).Distinct(), cancellationToken);
             Dictionary<string, string> nameByOrgNo = partyNames.ToDictionary(p => p.OrgNo, p => p.Name);
