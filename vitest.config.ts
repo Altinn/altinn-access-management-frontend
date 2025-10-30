@@ -31,6 +31,6 @@ export default defineConfig({
         inline: ['@altinn/altinn-components'],
       },
     },
-    pool: 'vmThreads',
+    pool: 'threads',
   },
 });
