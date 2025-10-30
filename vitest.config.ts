@@ -26,6 +26,11 @@ export default defineConfig({
     coverage: {
       provider: 'istanbul', // or 'v8'
     },
+    server: {
+      deps: {
+        inline: ['@altinn/altinn-components'],
+      },
+    },
     pool: 'vmThreads',
   },
 });
