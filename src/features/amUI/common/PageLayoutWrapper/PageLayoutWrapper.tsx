@@ -8,7 +8,7 @@ import type {
 } from '@altinn/altinn-components';
 import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { href, Link, useLocation } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import {
   HandshakeIcon,
   InboxFillIcon,
