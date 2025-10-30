@@ -8,7 +8,7 @@ import type {
 } from '@altinn/altinn-components';
 import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router';
+import { href, Link, useLocation } from 'react-router';
 import {
   HandshakeIcon,
   InboxFillIcon,
@@ -206,7 +206,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       }
 
       const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-      changeUrl.searchParams.set('R', accountId);
+      changeUrl.searchParams.set(useNewActorListFlag ? 'P' : 'R', accountId);
       changeUrl.searchParams.set('goTo', redirectUrl);
       (window as Window).open(changeUrl.toString(), '_self');
     },
