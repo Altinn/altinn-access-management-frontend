@@ -37,12 +37,14 @@ export const consentApi = createApi({
         method: 'POST',
         body: { language },
       }),
+      invalidatesTags: [Tags.ConsentList, Tags.ConsentLog],
     }),
     rejectConsentRequest: builder.mutation<boolean, { requestId: string }>({
       query: ({ requestId }) => ({
         url: `consent/request/${requestId}/reject`,
         method: 'POST',
       }),
+      invalidatesTags: [Tags.ConsentList, Tags.ConsentLog],
     }),
 
     // active consents
