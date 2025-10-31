@@ -1,6 +1,11 @@
+import { useNewLogoutUrl } from '@/resources/utils/featureFlagUtils';
+import { getHostUrl, getPlatformUrl } from '@/resources/utils/pathUtils';
+
 export const getLogoutUrl = (): string => {
-  const hostUrl = window.location.hostname.replace('am.ui.', '');
-  return `https://${hostUrl}/ui/Authentication/Logout`;
+  const useNewLogoutUrlFlag = useNewLogoutUrl();
+  return useNewLogoutUrlFlag
+    ? `${getPlatformUrl()}authentication/api/v1/logout`
+    : `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
 };
 
 export const getApiBaseUrl = (): string => {
