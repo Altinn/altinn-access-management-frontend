@@ -19,7 +19,7 @@ import {
   useGetConsentRequestQuery,
   useRejectConsentRequestMutation,
 } from '@/rtk/features/consentApi';
-import { getAltinnStartPageUrl, getHostUrl, getPlatformUrl } from '@/resources/utils/pathUtils';
+import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import type { ConsentLanguage, ConsentRequest, ProblemDetail } from '../types';
@@ -29,13 +29,11 @@ import { ConsentRights } from '../components/ConsentRights/ConsentRights';
 import classes from './ConsentRequestPage.module.css';
 import { ConsentRequestError } from './ConsentRequestError';
 import { ConsentStatus } from '../components/ConsentStatus/ConsentStatus';
-import { useNewLogoutUrl } from '@/resources/utils/featureFlagUtils';
 
 export const ConsentRequestPage = () => {
   const { t, i18n } = useTranslation();
 
   useDocumentTitle(t('consent_request.page_title'));
-  const useNewLogoutUrlFlag = useNewLogoutUrl();
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
   const language = getLanguage(i18n.language);
@@ -104,9 +102,7 @@ export const ConsentRequestPage = () => {
             logoutButton: {
               label: t('header.log_out'),
               onClick: () => {
-                const logoutUrl = useNewLogoutUrlFlag
-                  ? `${getPlatformUrl()}authentication/api/v1/logout`
-                  : `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
+                const logoutUrl = getLogoutUrl();
                 window.location.assign(logoutUrl);
               },
             },
