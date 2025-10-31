@@ -44,9 +44,10 @@ yarn run env:AT22 --grep "test name" --timeout 10000 --repeat-each 10 --workers=
 ```
 
 ### Microsoft Playwright Testing
+
 - We have added local support for running tests in cloud: use the following command to run tests:
-``` yarn run env:TT02 --config=playwright.service.config.ts ```         
-- You must add the an environment variable with the name 'PLAYWRIGHT_SERVICE_URL' pointing to the URL we're using  
+  `yarn run env:TT02 --config=playwright.service.config.ts`
+- You must add the an environment variable with the name 'PLAYWRIGHT_SERVICE_URL' pointing to the URL we're using
 
 ## Test strategy
 
@@ -80,5 +81,61 @@ Test data - what do we need?
 - Product owners - Ragnhild and Espen. Must decide what we can do here and how we prioritize.
 
 #### Running tests locally simulating Github action runs using Act (Mac OS)
+
 - Install Collima, and start image.
 - Run Act using: 'act -j playwright-e2e-tests --container-architecture linux/amd64 --pull=false --verbose'
+
+## Maskinporten Integration
+
+The project includes support for Maskinporten authentication for thorough integration testing of consent flows. This allows testing with real OAuth 2.0 / OIDC flows instead of the test token generator.
+
+### Setup
+
+1. **Generate a JWK key pair**:
+
+   ```bash
+   node playwright/util/jwkGenerator.ts
+   ```
+
+   This will output a public and private key pair in JWK format.
+
+2. **Register your public key in Maskinporten**:
+   - Go to https://sjolvbetjening.test.samarbeid.digdir.no/login
+   - Create or edit your Maskinporten client
+   - Add the public key (from step 1) as a JWK
+   - Note down your client ID
+
+3. **Configure environment variables**:
+   - Copy `playwright/config/env.example` to `playwright/config/.env`
+   - Fill in the required values:
+     - `MASKINPORTEN_CLIENT_ID`: Your client ID from step 2
+     - `MASKINPORTEN_JWK`: The private key from step 1 (as JSON string)
+
+### Running Maskinporten Tests
+
+Maskinporten tests run **only in TT02 environment** due to lacking proper maskinporten support in AT environments
+
+```cmd
+yarn run env:TT02 --grep "Maskinporten"
+```
+
+### Test Coverage
+
+The Maskinporten integration tests verify:
+
+- Creating consent requests using Maskinporten tokens
+- User approval flow
+- Fetching consent tokens with authorization_details
+- Token validation and error handling
+
+### Architecture
+
+- **MaskinportenToken class**: Handles Maskinporten authentication and token fetching
+- **JWT helper utilities**: Creates and signs JWTs for Maskinporten
+- **JWK generator**: Utility to generate RSA key pairs from scratch
+- **ConsentApiRequests**: Supports both test token generator and Maskinporten via `useMaskinporten` flag
+
+### References
+
+- Maskinporten documentation: https://docs.digdir.no/maskinporten_index.html
+- Altinn consent documentation: https://docs.altinn.studio/nb/authorization/guides/system-vendor/consent/

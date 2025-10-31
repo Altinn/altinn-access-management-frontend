@@ -21,9 +21,8 @@ test.beforeEach(async () => {
   fromPerson = pickRandom(fromPersons);
   toOrg = pickRandom(toOrgs);
 
-  // Create API instance with specific org to avoid conflicts
   api = new ConsentApiRequests(toOrg);
-  validToTimestamp = addTimeToNowUtc({ years: 1 });
+  validToTimestamp = addTimeToNowUtc({ days: 2 });
 });
 
 languages.forEach((language) => {
