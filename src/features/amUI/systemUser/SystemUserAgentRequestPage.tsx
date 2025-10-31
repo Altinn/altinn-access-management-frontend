@@ -15,9 +15,10 @@ import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
-import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
+import { getApiBaseUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/CreateSystemUserCheck';
 import { RightsList } from './components/RightsList/RightsList';
+import { getLogoutUrl } from '@/resources/utils/pathUtils';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();

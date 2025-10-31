@@ -32,17 +32,13 @@ import {
   getAfUrl,
   getAltinnStartPageUrl,
   getHostUrl,
-  getPlatformUrl,
+  getLogoutUrl,
 } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
-import {
-  crossPlatformLinksEnabled,
-  useNewActorList,
-  useNewLogoutUrl,
-} from '@/resources/utils/featureFlagUtils';
+import { crossPlatformLinksEnabled, useNewActorList } from '@/resources/utils/featureFlagUtils';
 import { useAccounts } from './useAccounts';
 
 interface PageLayoutWrapperProps {
@@ -56,7 +52,6 @@ const getAccountType = (type: string): 'company' | 'person' => {
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t, i18n } = useTranslation();
   const useNewActorListFlag = useNewActorList();
-  const useNewLogoutUrlFlag = useNewLogoutUrl();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
   const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
@@ -223,11 +218,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     logoutButton: {
       label: t('header.log_out'),
       onClick: async () => {
-        if (useNewLogoutUrlFlag) {
-          (window as Window).location = `${getPlatformUrl()}authentication/api/v1/logout`;
-        } else {
-          (window as Window).location = `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
-        }
+        const logoutUrl = getLogoutUrl();
+        window.location.assign(logoutUrl);
       },
     },
 

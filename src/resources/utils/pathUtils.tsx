@@ -1,3 +1,5 @@
+import { useNewLogoutUrl } from './featureFlagUtils';
+
 enum Environment {
   TT02 = 'tt02',
   PROD = 'prod',
@@ -106,4 +108,11 @@ export const getPlatformUrl = () => {
     default:
       return 'https://platform.altinn.no/';
   }
+};
+
+export const getLogoutUrl = (): string => {
+  const useNewLogoutUrlFlag = useNewLogoutUrl();
+  return useNewLogoutUrlFlag
+    ? `${getPlatformUrl()}authentication/api/v1/logout`
+    : `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
 };

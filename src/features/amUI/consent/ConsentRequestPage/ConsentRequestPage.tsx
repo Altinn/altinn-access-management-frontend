@@ -19,7 +19,7 @@ import {
   useGetConsentRequestQuery,
   useRejectConsentRequestMutation,
 } from '@/rtk/features/consentApi';
-import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
+import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import type { ConsentLanguage, ConsentRequest, ProblemDetail } from '../types';
@@ -101,8 +101,10 @@ export const ConsentRequestPage = () => {
           globalMenu: {
             logoutButton: {
               label: t('header.log_out'),
-              onClick: () =>
-                window.location.assign(`${getHostUrl()}ui/Authentication/Logout?languageID=1044`),
+              onClick: () => {
+                const logoutUrl = getLogoutUrl();
+                window.location.assign(logoutUrl);
+              },
             },
             menuLabel: t('header.menu-label'),
             backLabel: t('header.back-label'),
