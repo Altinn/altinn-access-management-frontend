@@ -703,6 +703,7 @@
     "add_customers": "Add customers",
     "edit_customers": "Add or remove customers",
     "customer_search": "Search for customer",
+    "hide_assigned_customers": "Hide customers already added",
     "remove_from_system_user": "Remove from system access",
     "remove_from_system_user_aria": "Remove {{customerName}} from system access",
     "add_to_system_user": "Add to system access",

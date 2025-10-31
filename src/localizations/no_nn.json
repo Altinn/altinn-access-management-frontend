@@ -699,6 +699,7 @@
     "add_customers": "Legg til kundar",
     "edit_customers": "Legg til eller fjern kundar",
     "customer_search": "Søk etter kunde",
+    "hide_assigned_customers": "Gøym kundar som er lagde til",
     "remove_from_system_user": "Fjern frå systemtilgang",
     "remove_from_system_user_aria": "Fjern {{customerName}} frå systemtilgang",
     "add_to_system_user": "Legg til i systemtilgang",
