@@ -1,0 +1,32 @@
+{
+  "partyId": 50789533,
+  "partyUuid": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+  "partyTypeName": 1,
+  "orgNumber": null,
+  "ssn": "20838198385",
+  "unitType": null,
+  "name": "SITRONGUL MEDALJONG",
+  "isDeleted": false,
+  "onlyHierarchyElementWithNoAccess": false,
+  "person": {
+    "ssn": "20838198385",
+    "name": "SITRONGUL MEDALJONG",
+    "firstName": "SITRONGUL",
+    "middleName": null,
+    "lastName": "MEDALJONG",
+    "telephoneNumber": null,
+    "mobileNumber": null,
+    "mailingAddress": null,
+    "mailingPostalCode": null,
+    "mailingPostalCity": null,
+    "addressMunicipalNumber": null,
+    "addressMunicipalName": null,
+    "addressStreetName": null,
+    "addressHouseNumber": null,
+    "addressHouseLetter": null,
+    "addressPostalCode": null,
+    "addressCity": null
+  },
+  "organization": null,
+  "childParties": null
+}

@@ -21,6 +21,14 @@ interface UserPageHeaderProps {
   displayRoles?: boolean;
 }
 
+const isOrganization = (partyType?: string) => {
+  return (
+    partyType === PartyType.Organization.toString() ||
+    partyType?.toLowerCase() === 'organization' ||
+    partyType?.toLowerCase() === 'organisasjon'
+  );
+};
+
 export const UserPageHeader = ({
   direction = 'to',
   displayDirection = false,
@@ -57,13 +65,13 @@ export const UserPageHeader = ({
           <MenuItemIcon
             icon={{
               name: userName,
-              type: user?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+              type: isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person',
             }}
             size={'lg'}
           />
           <Avatar
             name={secondaryUserName}
-            type={secondaryParty?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
+            type={isOrganization(secondaryParty?.partyTypeName?.toString()) ? 'company' : 'person'}
             size={'lg'}
             className={classes.secondaryAvatar}
           />
@@ -75,7 +83,7 @@ export const UserPageHeader = ({
         <MenuItemIcon
           icon={{
             name: userName,
-            type: user?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+            type: isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person',
           }}
           size={'lg'}
         />

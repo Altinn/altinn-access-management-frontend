@@ -1,7 +1,5 @@
 import { describe, it, expect } from 'vitest';
 
-import type { Connection } from '@/rtk/features/userInfoApi';
-
 import {
   getDeletionStatus,
   getTextKeysForDeletionStatus,
@@ -11,6 +9,7 @@ import {
   type DeletionStatus,
   type DeletionI18nKeys,
 } from './deletionModalUtils';
+import { Connection } from '@/rtk/features/connectionApi';
 
 const mockConnection = (roleCodes: string[] | null): Connection[] => {
   return [
@@ -21,6 +20,10 @@ const mockConnection = (roleCodes: string[] | null): Connection[] => {
         name: '',
         children: null,
         keyValues: null,
+        type: '',
+        variant: '',
+        roles: [],
+        isInherited: false,
       },
       connections: [],
     },

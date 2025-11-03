@@ -2,18 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "C#: Altinn.AccessManagement.UI[LocalDev_5000] Debug",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj",
+      "preLaunchTask": "build"
+    },
+    {
       "type": "chrome",
       "request": "launch",
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:8080",
       "webRoot": "${workspaceFolder}"
-    },
-    {
-      "name": "C#: Altinn.AccessManagement.UI [LocalDev_5000]",
-      "type": "dotnet",
-      "request": "launch",
-      "projectPath": "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj",
-      "launchConfigurationId": "TargetFramework=;LocalDev_5000"
     }
   ]
 }

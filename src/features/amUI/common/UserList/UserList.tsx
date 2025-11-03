@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
-import type { Connection, ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
 
 import { NewUserButton } from '../../users/NewUserModal/NewUserModal';
 
@@ -11,6 +11,7 @@ import classes from './UserList.module.css';
 import { SkeletonUserList } from './SkeletonUserList';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserListActions } from './UserListActions';
+import { Connection } from '@/rtk/features/connectionApi';
 
 export interface UserListProps {
   connections?: Connection[];
