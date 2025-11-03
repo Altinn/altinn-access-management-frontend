@@ -661,7 +661,7 @@
     "escalate_title": "Du mangler nødvendig fullmakt",
     "escalate_description": "For å lage en systemtilgang må du være Tilgangsstyrer. Vil du sende forespørselen videre til Tilgangsstyrer i din virksomhet?",
     "escalate_confirm_button": "Ja, send videre",
-    "escalate_cancel_button": "Avbryt forespørsel",
+    "escalate_cancel_button": "Avbryt",
     "escalate_error": "Kunne ikke sende forespørsel videre",
     "escalate_sent_title": "Forespørselen er videresendt",
     "escalate_sent_description": "Tilgangsstyrer i virksomheten din skal nå ha fått forespørselen i Altinn.",
