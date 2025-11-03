@@ -63,3 +63,7 @@ export const poaOverviewPageEnabled = () => {
 export const useNewActorList = () => {
   return window.featureFlags?.useNewActorsList === true;
 };
+
+export const useNewLogoutUrl = () => {
+  return window.featureFlags?.useNewLogoutUrl === true;
+};

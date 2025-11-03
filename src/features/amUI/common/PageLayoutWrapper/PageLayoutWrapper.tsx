@@ -28,7 +28,12 @@ import {
   useGetFavoriteActorUuidsQuery,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
-import { getAfUrl, getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
+import {
+  getAfUrl,
+  getAltinnStartPageUrl,
+  getHostUrl,
+  getLogoutUrl,
+} from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { SidebarItems } from './SidebarItems';
@@ -222,8 +227,9 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
     logoutButton: {
       label: t('header.log_out'),
-      onClick: () => {
-        (window as Window).location = `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
+      onClick: async () => {
+        const logoutUrl = getLogoutUrl();
+        window.location.assign(logoutUrl);
       },
     },
 

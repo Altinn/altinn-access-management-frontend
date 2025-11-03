@@ -1,3 +1,5 @@
+import { useNewLogoutUrl } from './featureFlagUtils';
+
 enum Environment {
   TT02 = 'tt02',
   PROD = 'prod',
@@ -86,4 +88,31 @@ export const getAfUrl = () => {
     default:
       return 'https://af.altinn.no/';
   }
+};
+
+export const getPlatformUrl = () => {
+  const env = getEnv();
+  switch (env) {
+    case Environment.TT02:
+      return 'https://platform.tt02.altinn.no/';
+    case Environment.AT21:
+      return 'https://platform.at21.altinn.cloud/';
+    case Environment.AT22:
+      return 'https://platform.at22.altinn.cloud/';
+    case Environment.AT23:
+      return 'https://platform.at23.altinn.cloud/';
+    case Environment.AT24:
+      return 'https://platform.at24.altinn.cloud/';
+    case Environment.PROD:
+      return 'https://platform.altinn.no/';
+    default:
+      return 'https://platform.altinn.no/';
+  }
+};
+
+export const getLogoutUrl = (): string => {
+  const useNewLogoutUrlFlag = useNewLogoutUrl();
+  return useNewLogoutUrlFlag
+    ? `${getPlatformUrl()}authentication/api/v1/logout`
+    : `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
 };
