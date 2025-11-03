@@ -6,7 +6,7 @@ import type {
   MenuItemSize,
   Theme,
 } from '@altinn/altinn-components';
-import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
+import { Layout, RootProvider, Snackbar, useAccountSelector } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import {
@@ -26,6 +26,8 @@ import {
   useGetReporteeQuery,
   useGetUserInfoQuery,
   useGetFavoriteActorUuidsQuery,
+  useAddFavoriteActorUuidMutation,
+  useRemoveFavoriteActorUuidMutation,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
 import { getAfUrl, getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
@@ -34,8 +36,6 @@ import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
 import { crossPlatformLinksEnabled, useNewActorList } from '@/resources/utils/featureFlagUtils';
-import { useAccounts } from './useAccounts';
-import { useAccountSelector } from './useAccountSelector';
 import { GlobalSearchProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/GlobalSearch';
 import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/AccountSelector';
 
@@ -61,6 +61,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   });
   const { data: favoriteAccountUuids, isLoading: isLoadingFavoriteAccounts } =
     useGetFavoriteActorUuidsQuery();
+  const [addFavoriteActorUuid] = useAddFavoriteActorUuidMutation();
+  const [removeFavoriteActorUuid] = useRemoveFavoriteActorUuidMutation();
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
 
@@ -177,13 +179,29 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     { groupId: 'current-user', hidden: true },
   ];
 
-  //const { accounts, accountGroups } = useAccounts({ reporteeList, actorList });
+  const onToggleFavorite = (accountId: string) => {
+    if (favoriteAccountUuids?.includes(accountId)) {
+      removeFavoriteActorUuid(accountId);
+    } else {
+      addFavoriteActorUuid(accountId);
+    }
+  };
+
+  const languageFromi18n = i18n.language;
+  const languageCode =
+    languageFromi18n === 'no_nn' ? 'nn' : languageFromi18n === 'en' ? 'en' : 'nb';
+
   const accountSelectorData = useAccountSelector({
+    languageCode: languageCode,
     partyListDTO: reporteeList,
     favoriteAccountUuids: favoriteAccountUuids,
     currentAccountUuid: reportee?.partyUuid,
     selfAccountUuid: userinfo?.uuid,
+    isVirtualized: reporteeList && reporteeList.length > 20,
     isLoading: isLoadingReporteeList || isLoadingFavoriteAccounts,
+
+    onToggleFavorite: onToggleFavorite,
+
     onSelectAccount: (accountId: string) => {
       // check if this is a person; then redirect to consents page
       let redirectUrl = window.location.href;
@@ -200,15 +218,14 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       }
 
       const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-      changeUrl.searchParams.set('R', accountId);
+      changeUrl.searchParams.set('P', accountId);
       changeUrl.searchParams.set('goTo', redirectUrl);
       (window as Window).open(changeUrl.toString(), '_self');
     },
-    isVirtualized: reporteeList && reporteeList.length > 20,
   });
 
   const search: GlobalSearchProps = {
-    onEnter: (value: string) => {
+    onSearch: (value: string) => {
       const encodedValue = encodeURIComponent(value);
       window.location.href = `${getHostUrl()}sok?q=${encodedValue}`;
     },
@@ -216,7 +233,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   const accountSelector: AccountSelectorProps = {
     ...accountSelectorData,
-    externalFullScreen: false,
+    forceOpenFullScreen: false,
   };
 
   const globalMenu = {
@@ -255,10 +272,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     items: headerLinks,
     groups,
   };
-
-  const languageFromi18n = i18n.language;
-  const languageCode =
-    languageFromi18n === 'no_nn' ? 'nn' : languageFromi18n === 'en' ? 'en' : 'nb';
 
   return (
     <RootProvider languageCode={languageCode}>

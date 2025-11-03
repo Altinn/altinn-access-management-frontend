@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsHeading } from '@altinn/altinn-components';
+import { formatDisplayName } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -20,7 +20,10 @@ export const UsersPage = () => {
   useDocumentTitle(t('users_page.page_title'));
 
   const { data: reportee, isLoading } = useGetReporteeQuery();
-  const name = reportee?.name || '';
+  const name = formatDisplayName({
+    fullName: reportee?.name || '',
+    type: reportee?.type === 'Person' ? 'person' : 'company',
+  });
 
   useRerouteIfNotConfetti();
 

@@ -1,7 +1,7 @@
-import { UserListItem } from '@altinn/altinn-components';
+import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { Connection } from '@/rtk/features/userInfoApi';
+import type { Connection } from '@/rtk/features/connectionApi';
 import { formatDateToNorwegian } from '@/resources/utils';
 
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
@@ -23,7 +23,10 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
     <div className={classes.currentUser}>
       <UserListItem
         id={currentUser?.party?.id || ''}
-        name={currentUser?.party?.name || ''}
+        name={formatDisplayName({
+          fullName: currentUser?.party?.name || '',
+          type: currentUser?.party?.type === 'Person' ? 'person' : 'company',
+        })}
         description={
           formattedBirthDate ? t('common.date_of_birth') + ` ${formattedBirthDate}` : undefined
         }

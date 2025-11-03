@@ -25,6 +25,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessManagement
         public string OrganizationNumber { get; set; }
 
         /// <summary>
+        /// Gets the date of birth if the party is a person 
+        /// </summary>
+        public string DateOfBirth { get; set; }
+
+        /// <summary>
         /// Gets or sets the party id
         /// </summary>
         public int PartyId { get; set; }
