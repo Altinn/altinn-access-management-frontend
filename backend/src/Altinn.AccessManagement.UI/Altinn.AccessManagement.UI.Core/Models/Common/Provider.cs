@@ -34,5 +34,26 @@
         /// The type of provider
         /// </summary>
         public Guid TypeId { get; set; }
+
+        /// <summary>
+        /// The provider type metadata
+        /// </summary>
+        public ProviderType Type { get; set; }
+    }
+
+    /// <summary>
+    /// Provider type descriptor
+    /// </summary>
+    public class ProviderType
+    {
+        /// <summary>
+        /// Id
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Name
+        /// </summary>
+        public string Name { get; set; }
     }
 }

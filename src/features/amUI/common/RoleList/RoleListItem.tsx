@@ -1,9 +1,9 @@
 import { ListItem } from '@altinn/altinn-components';
 
-import type { ExtendedRole } from '@/rtk/features/roleApi';
+import type { Role } from '@/rtk/features/roleApi';
 
-interface RoleLIstItemProps {
-  role: ExtendedRole;
+interface RoleListItemProps {
+  role: Role;
   onClick: () => void;
   active?: boolean;
   controls: React.ReactNode;
@@ -16,7 +16,7 @@ export const RoleListItem = ({
   active = false,
   loading,
   controls,
-}: RoleLIstItemProps) => {
+}: RoleListItemProps) => {
   return (
     <ListItem
       id={role.id}

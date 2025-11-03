@@ -8,7 +8,9 @@ import {
   useDelegationCheckQuery,
   useGetRolesForUserQuery,
   type Role,
+  type RoleConnection,
 } from '@/rtk/features/roleApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
 import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
@@ -30,27 +32,58 @@ export interface PackageInfoProps {
 export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
 
-  const { fromParty, toParty } = usePartyRepresentation();
-  const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
-    from: fromParty?.partyUuid ?? '',
-    to: toParty?.partyUuid ?? '',
-  });
+  const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  const { data: roleConnections, isFetching } = useGetRolesForUserQuery(
+    {
+      from: fromParty?.partyUuid ?? '',
+      to: toParty?.partyUuid ?? '',
+      party: actingParty?.partyUuid ?? getCookie('AltinnPartyUuid') ?? '',
+    },
+    {
+      skip: !fromParty?.partyUuid || !toParty?.partyUuid,
+    },
+  );
   const { setActionError, actionError } = useDelegationModalContext();
   const { data: delegationCheckResult } = useDelegationCheckQuery({
     rightownerUuid: fromParty?.partyUuid ?? '',
     roleUuid: role.id,
   });
 
-  const assignment = useMemo(() => {
-    if (activeDelegations && !isFetching) {
-      return activeDelegations.find((assignment) => assignment.role.id === role.id);
+  const connectionSummary = useMemo(() => {
+    if (!roleConnections || isFetching) {
+      return null;
     }
-    return null;
-  }, [activeDelegations, isFetching, role.id]);
 
-  const userHasRole = !!assignment;
-  const userHasInheritedRole = assignment?.inherited && assignment.inherited.length > 0;
-  const inheritedFromRoleName = userHasInheritedRole ? assignment?.inherited[0]?.name : undefined;
+    const connection = roleConnections.find((item: RoleConnection) => item.role.id === role.id);
+    if (!connection) {
+      return null;
+    }
+
+    const directPermission = connection.permissions.find(
+      (permission) =>
+        permission.from?.id === fromParty?.partyUuid && permission.to?.id === toParty?.partyUuid,
+    );
+
+    const inheritedPermission = connection.permissions.find(
+      (permission) =>
+        permission.from?.id !== fromParty?.partyUuid || permission.to?.id !== toParty?.partyUuid,
+    );
+
+    return {
+      hasRole: true,
+      hasDirectPermission: !!directPermission,
+      hasInheritedDelegation: !!inheritedPermission,
+      inheritedFrom: inheritedPermission?.from?.name,
+      revocationContext: directPermission
+        ? { from: directPermission.from.id, to: directPermission.to.id }
+        : undefined,
+    };
+  }, [fromParty?.partyUuid, isFetching, roleConnections, role.id, toParty?.partyUuid]);
+
+  const userHasRole = !!connectionSummary?.hasRole;
+  const userHasInheritedRole = connectionSummary?.hasInheritedDelegation ?? false;
+  const inheritedFromRoleName = connectionSummary?.inheritedFrom;
+  const revocationContext = connectionSummary?.revocationContext;
 
   return (
     <div className={classes.container}>
@@ -134,10 +167,16 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
         )}
         {userHasRole && role && availableActions.includes(DelegationAction.REVOKE) && (
           <RevokeRoleButton
-            assignmentId={assignment.id}
             accessRole={role}
+            from={revocationContext?.from ?? ''}
+            to={revocationContext?.to ?? ''}
             fullText
-            disabled={isFetching || userHasInheritedRole}
+            disabled={
+              isFetching ||
+              userHasInheritedRole ||
+              !revocationContext ||
+              !connectionSummary?.hasDirectPermission
+            }
             variant='solid'
             size='md'
             icon={false}

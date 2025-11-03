@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { List } from '@altinn/altinn-components';
 
-import type { Role, ExtendedRole } from '@/rtk/features/roleApi';
+import type { Role, RoleConnection } from '@/rtk/features/roleApi';
 import { useGetRolesForUserQuery, useGetRolesQuery } from '@/rtk/features/roleApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
@@ -17,10 +18,18 @@ import { DelegateRoleButton } from './DelegateRoleButton';
 import { RequestRoleButton } from './RequestRoleButton';
 
 interface RoleListProps {
-  onSelect: (role: ExtendedRole) => void;
+  onSelect: (role: Role) => void;
   availableActions?: DelegationAction[];
   isLoading?: boolean;
   onActionError: (role: Role, error: ActionError) => void;
+}
+
+interface RoleListEntry {
+  role: Role;
+  revocation?: { from: string; to: string };
+  hasDirectDelegation: boolean;
+  hasInheritedDelegation: boolean;
+  inheritedFrom?: string;
 }
 
 export const RoleList = ({
@@ -29,64 +38,117 @@ export const RoleList = ({
   isLoading,
   onActionError,
 }: RoleListProps) => {
-  const { fromParty, toParty, isLoading: partyIsLoading } = usePartyRepresentation();
+  const { fromParty, toParty, actingParty, isLoading: partyIsLoading } = usePartyRepresentation();
   const { data: roleAreas, isLoading: roleAreasIsLoading } = useGetRolesQuery();
-  const { data: userRoles, isLoading: userRolesIsLoading } = useGetRolesForUserQuery({
-    from: fromParty?.partyUuid ?? '',
-    to: toParty?.partyUuid ?? '',
-  });
+  const { data: roleConnections, isLoading: roleConnectionsIsLoading } = useGetRolesForUserQuery(
+    {
+      from: fromParty?.partyUuid ?? '',
+      to: toParty?.partyUuid ?? '',
+      party: actingParty?.partyUuid ?? getCookie('AltinnPartyUuid') ?? '',
+    },
+    {
+      skip: !fromParty?.partyUuid || !toParty?.partyUuid,
+    },
+  );
 
   const isSm = useIsMobileOrSmaller();
 
   const groupedRoles = useMemo(() => {
-    return roleAreas?.reduce(
+    if (!roleAreas) {
+      return undefined;
+    }
+
+    const summarizeConnection = (
+      connection: RoleConnection | undefined,
+    ): Omit<RoleListEntry, 'role'> => {
+      if (!connection) {
+        return {
+          revocation: undefined,
+          hasDirectDelegation: false,
+          hasInheritedDelegation: false,
+        };
+      }
+
+      const directPermission = connection.permissions.find(
+        (permission) =>
+          permission.from?.id === fromParty?.partyUuid && permission.to?.id === toParty?.partyUuid,
+      );
+
+      const hasInheritedDelegation = connection.permissions.some(
+        (permission) =>
+          permission.from?.id !== fromParty?.partyUuid || permission.to?.id !== toParty?.partyUuid,
+      );
+
+      const inheritedFrom = connection.permissions.find(
+        (permission) =>
+          permission.from?.id !== fromParty?.partyUuid || permission.to?.id !== toParty?.partyUuid,
+      )?.from?.name;
+
+      return {
+        revocation: directPermission
+          ? { from: directPermission.from.id, to: directPermission.to.id }
+          : undefined,
+        hasDirectDelegation: !!directPermission,
+        hasInheritedDelegation,
+        inheritedFrom,
+      };
+    };
+
+    return roleAreas.reduce(
       (res, roleArea) => {
         roleArea.roles.forEach((role) => {
-          const roleAssignment = userRoles?.find((userRole) => userRole.role.id === role.id);
-          if (roleAssignment) {
+          const connection = roleConnections?.find((item) => item.role.id === role.id);
+
+          if (connection) {
+            const summary = summarizeConnection(connection);
             res.activeRoles.push({
-              ...role,
-              inherited: roleAssignment.inherited,
-              assignmentId: roleAssignment.id,
+              role,
+              ...summary,
             });
           } else {
-            res.availableRoles.push({ ...role, inherited: [] });
+            res.availableRoles.push({
+              role,
+              hasDirectDelegation: false,
+              hasInheritedDelegation: false,
+            });
           }
         });
+
         return res;
       },
       {
-        activeRoles: [] as ExtendedRole[],
-        availableRoles: [] as ExtendedRole[],
+        activeRoles: [] as RoleListEntry[],
+        availableRoles: [] as RoleListEntry[],
       },
     );
-  }, [roleAreas, userRoles]);
+  }, [fromParty?.partyUuid, roleAreas, roleConnections, toParty?.partyUuid]);
 
-  if (partyIsLoading || roleAreasIsLoading || userRolesIsLoading || isLoading) {
+  if (partyIsLoading || roleAreasIsLoading || roleConnectionsIsLoading || isLoading) {
     return <SkeletonRoleList />;
   }
   return (
     <div className={classes.roleLists}>
       {groupedRoles && groupedRoles.activeRoles.length > 0 && (
         <List>
-          {groupedRoles.activeRoles.map((role) => (
+          {groupedRoles.activeRoles.map((roleEntry) => (
             <RoleListItem
-              key={role.id}
-              role={role}
+              key={roleEntry.role.id}
+              role={roleEntry.role}
               active
               onClick={() => {
-                onSelect(role);
+                onSelect(roleEntry.role);
               }}
               controls={
                 !isSm &&
                 availableActions?.includes(DelegationAction.REVOKE) && (
                   <RevokeRoleButton
-                    key={role.id}
-                    assignmentId={role?.assignmentId ?? ''}
-                    accessRole={role}
+                    key={roleEntry.role.id}
+                    accessRole={roleEntry.role}
+                    from={roleEntry.revocation?.from ?? ''}
+                    to={roleEntry.revocation?.to ?? ''}
                     fullText={false}
                     size='sm'
-                    disabled={role.inherited?.length > 0}
+                    disabled={!roleEntry.hasDirectDelegation || roleEntry.hasInheritedDelegation}
                     onRevokeError={onActionError}
                   />
                 )
@@ -97,23 +159,23 @@ export const RoleList = ({
       )}
       {groupedRoles && groupedRoles.availableRoles.length > 0 && (
         <List>
-          {groupedRoles.availableRoles.map((role) => (
+          {groupedRoles.availableRoles.map((roleEntry) => (
             <RoleListItem
-              key={role.id}
-              role={role}
-              onClick={() => onSelect(role)}
+              key={roleEntry.role.id}
+              role={roleEntry.role}
+              onClick={() => onSelect(roleEntry.role)}
               controls={
                 !isSm && (
                   <>
                     {availableActions?.includes(DelegationAction.DELEGATE) && (
                       <DelegateRoleButton
-                        accessRole={role}
-                        key={role.id}
+                        accessRole={roleEntry.role}
+                        key={roleEntry.role.id}
                         fullText={false}
                         size='sm'
                         onDelegateError={onActionError}
                         onSelect={() => {
-                          onSelect(role);
+                          onSelect(roleEntry.role);
                         }}
                         showSpinner={true}
                         showWarning={true}

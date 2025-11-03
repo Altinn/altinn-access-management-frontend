@@ -1,11 +1,9 @@
-﻿using System.Net;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Net;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
-using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +19,6 @@ namespace Altinn.AccessManagement.UI.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
-        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly IRoleService _roleService;
         private readonly FeatureFlags _featureFlags;
 
@@ -37,28 +34,35 @@ namespace Altinn.AccessManagement.UI.Controllers
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _roleService = roleService;
-            _serializerOptions.Converters.Add(new JsonStringEnumConverter());
             _featureFlags = featureFlags.Value;
         }
 
         /// <summary>
-        ///     Search through all roles and return matches
+        /// Gets role connections for the given parties.
         /// </summary>
-        /// <returns>All search results, sorted into areas</returns>
+        /// <param name="party">The party performing the lookup.</param>
+        /// <param name="from">Optional right owner to filter on.</param>
+        /// <param name="to">Optional right holder to filter on.</param>
         [HttpGet]
         [Authorize]
-        [Route("search")]
-        public async Task<ActionResult<List<RoleAreaFE>>> Search([FromQuery] string searchString)
+        [Route("connections")]
+        public async Task<ActionResult<List<RolePermission>>> GetConnections([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            if (!from.HasValue && !to.HasValue)
+            {
+                return BadRequest("Either 'from' or 'to' query parameter must be provided.");
+            }
+
             try
             {
-                return await _roleService.GetSearch(languageCode, searchString);
+                string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+                List<RolePermission> connections = await _roleService.GetConnections(party, to, from, languageCode);
+                return Ok(connections);
             }
             catch (HttpStatusException ex)
             {
@@ -67,113 +71,22 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return NoContent();
                 }
 
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
-        }
-
-        /// <summary>
-        ///     Gets meta data for a given role
-        /// </summary>
-        /// <returns>The role meta data for </returns>
-        [HttpGet]
-        [Authorize]
-        [Route("{id}")]
-        public async Task<ActionResult<Core.Models.Common.Role>> GetRoleMetaById([FromRoute] Guid id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            try
-            {
-                return await _roleService.GetRoleMetaById(languageCode, id);
-            }
-            catch (HttpStatusException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
-
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
-        }
-
-        /// <summary>
-        ///     Get roles for user
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Authorize]
-        [Route("assignments/{rightOwnerUuid}/{rightHolderUuid}")]
-        public async Task<ActionResult<List<RoleAssignment>>> GetRolesForUser(Guid rightOwnerUuid, Guid rightHolderUuid)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
-            {
-                return StatusCode(404, "Feature not available");
-            }
-
-            try
-            {
-                var httpContext = _httpContextAccessor.HttpContext;
-                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(httpContext);
-                return await _roleService.GetRolesForUser(languageCode, rightOwnerUuid, rightHolderUuid);
-            }
-            catch (HttpStatusException ex)
-            {
-                _logger.LogError(ex, "Error getting roles");
+                _logger.LogError(ex, "Error getting role connections");
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
         }
 
         /// <summary>
-        /// Delegate role to user
+        /// Revokes a role connection for a right holder.
         /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        [Authorize]
-        [Route("delegate/{from}/{to}/{roleId}")]
-        public async Task<ActionResult> DelegateRoleToUser([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] Guid roleId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
-            {
-                return StatusCode(404, "Feature not available");
-            }
-
-            try
-            {
-                var response = await _roleService.CreateRoleDelegation(from, to, roleId);
-                return StatusCode((int)response.StatusCode, response.Content);
-            }
-            catch (HttpStatusException ex)
-            {
-                _logger.LogError(ex, "Error delegating role");
-                return StatusCode((int)ex.StatusCode, ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Revoke role for user
-        /// </summary>
-        /// <returns></returns>
+        /// <param name="from">The right owner that delegated the role.</param>
+        /// <param name="to">The right holder that received the role.</param>
+        /// <param name="party">The party performing the action.</param>
+        /// <param name="roleId">The role identifier.</param>
         [HttpDelete]
         [Authorize]
-        [Route("assignments/{assignmentId}")]
-        public async Task<ActionResult> RevokeRoleForUser([FromRoute] Guid assignmentId)
+        [Route("connections")]
+        public async Task<ActionResult> RevokeRole([FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] Guid party, [FromQuery] Guid roleId)
         {
             if (!ModelState.IsValid)
             {
@@ -185,14 +98,29 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return StatusCode(404, "Feature not available");
             }
 
+            if (party != to && party != from)
+            {
+                return BadRequest("Party must match either 'from' or 'to'.");
+            }
+
+            if (roleId == Guid.Empty)
+            {
+                return BadRequest("roleId is required");
+            }
+
             try
             {
-                var response = await _roleService.DeleteRoleDelegation(assignmentId);
-                return StatusCode((int)response.StatusCode, response.Content);
+                await _roleService.RevokeRole(from, to, party, roleId);
+                return NoContent();
             }
             catch (HttpStatusException ex)
             {
-                _logger.LogError(ex, "Error deleting assignment");
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                _logger.LogError(ex, "Error revoking role");
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
         }

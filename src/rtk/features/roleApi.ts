@@ -1,36 +1,36 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import type { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
-interface EntityType {
+export interface ProviderType {
   id: string;
-  providerId: string;
   name: string;
 }
 
-interface Provider {
+export interface Provider {
   id: string;
   name: string;
+  refId?: string | null;
+  logoUrl?: string | null;
+  code?: string;
+  typeId?: string;
+  type?: ProviderType | null;
 }
 
 export interface Role {
-  entityType: EntityType;
-  provider: Provider;
   id: string;
-  entityTypeId: string;
-  providerId: string;
   name: string;
   code: string;
   description: string;
-  urn: string;
-  area: Area;
-  isDelegable: boolean;
-}
-
-export interface ExtendedRole extends Role {
-  inherited: Role[];
-  assignmentId?: string;
+  urn?: string;
+  isKeyRole?: boolean;
+  legacyRoleCode?: string | null;
+  legacyUrn?: string | null;
+  provider?: Provider;
+  area?: Area;
+  isDelegable?: boolean;
 }
 
 interface Area {
@@ -44,18 +44,15 @@ export interface AreaFE extends Area {
   roles: Role[];
 }
 
-export interface Assignment {
-  id: string;
-  roleId: string;
-  fromId: string;
-  toId: string;
+export interface RoleConnection {
   role: Role;
-  inherited: Role[];
+  permissions: Permissions[];
 }
 
-interface RoleApiRequest {
+interface RoleConnectionsRequest {
   from: string;
   to: string;
+  party?: string;
 }
 
 interface DelegationCheckResponse {
@@ -87,13 +84,15 @@ export const roleApi = createApi({
     getRoleById: builder.query<Role, string>({
       query: (id) => `/${id}`,
     }),
-    getRolesForUser: builder.query<Assignment[], RoleApiRequest>({
-      query: ({ from, to }) => `/assignments/${from}/${to}`,
+    getRolesForUser: builder.query<RoleConnection[], RoleConnectionsRequest>({
+      query: ({ from, to, party = getCookie('AltinnPartyUuid') }) =>
+        `/connections?party=${party}&from=${from}&to=${to}`,
+      providesTags: ['roles'],
     }),
-    revoke: builder.mutation<void, { assignmentId: string }>({
-      query({ assignmentId }) {
+    revoke: builder.mutation<void, { from: string; to: string; roleId: string; party?: string }>({
+      query({ from, to, roleId, party = getCookie('AltinnPartyUuid') }) {
         return {
-          url: `/assignments/${assignmentId}`,
+          url: `/connections?party=${party}&from=${from}&to=${to}&roleId=${roleId}`,
           method: 'DELETE',
         };
       },

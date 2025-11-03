@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import type { Assignment } from '@/rtk/features/roleApi';
+import type { RoleConnection } from '@/rtk/features/roleApi';
 
 import { filterDigdirAssignments, filterDigdirRole } from './roleUtils';
 
@@ -22,13 +22,13 @@ describe('roleUtils', () => {
           urn: 'role3',
         },
       },
-    ] as Assignment[];
+    ] as RoleConnection[];
     const result = filterDigdirAssignments(assignments);
     expect(result.length).toBe(2);
     expect(result[0].role.urn).toBe('digdir:role1');
     expect(result[1].role.urn).toBe('digdir:role2');
   });
-  test('filterDigdirAssignments', () => {
+  test('filterDigdirAssignments returns empty when no digdir roles', () => {
     const assignments = [
       {
         role: {
@@ -43,7 +43,7 @@ describe('roleUtils', () => {
       {
         role: {},
       },
-    ] as Assignment[];
+    ] as RoleConnection[];
     const result = filterDigdirAssignments(assignments);
     expect(result.length).toBe(0);
   });

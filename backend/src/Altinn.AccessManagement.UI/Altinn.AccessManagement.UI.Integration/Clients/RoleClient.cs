@@ -1,11 +1,13 @@
-﻿using System.Net;
-using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Integration.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,7 +24,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
         private readonly IAccessTokenProvider _accessTokenProvider;
-        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessPackageClient"/> class
@@ -49,28 +50,33 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<Role> GetRoleById(string languageCode, Guid roleId)
+        public async Task<PaginatedResult<RolePermission>> GetRoleConnections(Guid party, Guid? to, Guid? from, string languageCode)
         {
-            string endpointUrl = $"meta/info/roles/{roleId}";
+            string endpointUrl = $"enduser/connections/roles?party={party}&to={to}&from={from}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<RolePermission>>(response, _logger, "RoleClient // GetRoleConnections");
+        }
 
-            if (response.StatusCode == HttpStatusCode.NotFound)
+        /// <inheritdoc />
+        public async Task RevokeRole(Guid from, Guid to, Guid party, Guid roleId)
+        {
+            string endpointUrl = $"enduser/connections/roles?party={party}&to={to}&from={from}&roleId={roleId}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+
+            if (response.IsSuccessStatusCode)
             {
-                return null;
+                return;
             }
-            else if (response.StatusCode == HttpStatusCode.OK)
-            {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<Role>(responseContent, _serializerOptions);
-            }
-            else
-            {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
-                throw error;
-            }
+
+            _logger.LogError("Revoke role delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
+            throw new HttpStatusException(
+                "StatusError",
+                "Unexpected response status from Access Management",
+                response.StatusCode,
+                Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
     }
 }

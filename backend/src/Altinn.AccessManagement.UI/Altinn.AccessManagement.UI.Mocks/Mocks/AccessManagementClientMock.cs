@@ -202,69 +202,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
         }
-
-        //// Roles
-
-        public Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString)
-        {
-            List<Role> allRoles = Util.GetMockData<List<Role>>($"{dataFolder}/Roles/roles_old.json");
-            return searchString != null ? Task.FromResult(allRoles.Where(role => role.Name.ToLower().Contains(searchString.ToLower())).ToList()) : Task.FromResult(allRoles);
-        }
-
-        /// <inheritdoc />    
-        public Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
-        {
-            if (rightHolderUuid == Guid.Empty)
-            {
-                throw new Exception("Right holder uuid is not valid");
-            }
-            try
-            {
-                List<RoleAssignment> allAssignments = Util.GetMockData<List<RoleAssignment>>($"{dataFolder}/Roles/GetRolesForUser/{rightHolderUuid}.json");
-                if (allAssignments == null)
-                {
-                    return Task.FromResult(new List<RoleAssignment>());
-                }
-                return Task.FromResult(allAssignments);
-            }
-            catch
-            {
-                return Task.FromResult(new List<RoleAssignment>());
-            }
-        }
-
-        /// <inheritdoc />
-        public Task<HttpResponseMessage> CreateRoleDelegation(Guid from, Guid to, Guid roleId)
-        {
-            if (to == Guid.Empty)
-            {
-                throw new Exception("Right holder uuid is not valid");
-            }
-            // Mocking delegate error - role "Kundeadministrator"
-            if (roleId.ToString() == "3abe9842-06a5-483f-b76d-a65dec152b2d")
-            {
-                throw new Exception("Assignment id is not valid");
-            }
-
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
-        }
-
-        /// <inheritdoc />
-        public Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId)
-        {
-            if (assignmentId == Guid.Empty)
-            {
-                throw new Exception("Right holder uuid is not valid");
-            }
-            // Mocking revoke error - role "Kundeadministrator" for user "medaljong sitrongul"
-            if (assignmentId.ToString() == "5e9700d8-1d03-4665-8ce0-13a028741938")
-            {
-                throw new Exception("Assignment id is not valid");
-            }
-
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
-        }
-
         // A helper for testing handling of exceptions in client
         private static void ThrowExceptionIfTriggerParty(string id)
         {

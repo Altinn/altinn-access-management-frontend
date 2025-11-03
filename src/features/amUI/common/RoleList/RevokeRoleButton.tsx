@@ -13,7 +13,8 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 
 interface RevokeRoleButtonProps extends Omit<ButtonProps, 'icon'> {
   accessRole: Role;
-  assignmentId: string;
+  from: string;
+  to: string;
   fullText?: boolean;
   icon?: boolean;
   onRevokeSuccess?: (role: Role, toParty: Party) => void;
@@ -21,8 +22,9 @@ interface RevokeRoleButtonProps extends Omit<ButtonProps, 'icon'> {
 }
 
 export const RevokeRoleButton = ({
-  assignmentId,
   accessRole,
+  from,
+  to,
   fullText = false,
   disabled,
   variant = 'text',
@@ -70,9 +72,12 @@ export const RevokeRoleButton = ({
   };
 
   const onClick = () => {
-    if (representingParty) {
+    if (representingParty && from && to) {
       revoke({
-        assignmentId: assignmentId,
+        from,
+        to,
+        roleId: accessRole.id,
+        party: representingParty.partyUuid,
       })
         .unwrap()
         .then(() => {
@@ -88,7 +93,7 @@ export const RevokeRoleButton = ({
     <Button
       variant={variant}
       onClick={onClick}
-      disabled={disabled || isLoading || !representingParty}
+      disabled={disabled || isLoading || !representingParty || !from || !to}
       icon={icon ? MinusCircleIcon : undefined}
       {...props}
     >
