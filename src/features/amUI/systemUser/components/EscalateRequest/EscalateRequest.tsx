@@ -7,13 +7,14 @@ import {
 } from '@altinn/altinn-components';
 import React, { useState } from 'react';
 import { ButtonRow } from '../ButtonRow/ButtonRow';
-import { getApiBaseUrl, getLogoutUrl } from '../../urlUtils';
+import { getApiBaseUrl } from '../../urlUtils';
 import classes from './EscalateRequest.module.css';
 import {
   useEscalateAgentRequestMutation,
   useEscalateRequestMutation,
 } from '@/rtk/features/systemUserApi';
 import { useTranslation } from 'react-i18next';
+import { getLogoutUrl } from '@/resources/utils/pathUtils';
 
 interface EscalateRequestProps {
   requestId: string;
