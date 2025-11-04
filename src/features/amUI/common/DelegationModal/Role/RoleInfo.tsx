@@ -40,9 +40,10 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
       party: actingParty?.partyUuid ?? getCookie('AltinnPartyUuid') ?? '',
     },
     {
-      skip: !fromParty?.partyUuid || !toParty?.partyUuid,
+      skip: (!fromParty?.partyUuid && !toParty?.partyUuid) || !actingParty?.partyUuid,
     },
   );
+
   const { setActionError, actionError } = useDelegationModalContext();
   const { data: delegationCheckResult } = useDelegationCheckQuery({
     rightownerUuid: fromParty?.partyUuid ?? '',
@@ -145,44 +146,16 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
       <DsParagraph>{role?.description}</DsParagraph>
 
       <div className={classes.actions}>
-        {!userHasRole && availableActions.includes(DelegationAction.REQUEST) && (
-          <RequestRoleButton
-            variant='solid'
-            size='md'
-            icon={false}
-          />
-        )}
-        {!userHasRole && availableActions.includes(DelegationAction.DELEGATE) && (
-          <DelegateRoleButton
-            accessRole={role}
-            fullText
-            disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
-            variant='solid'
-            size='md'
-            icon={false}
-            onDelegateError={(_role: Role, error: ActionError) => {
-              setActionError(error);
-            }}
-          />
-        )}
         {userHasRole && role && availableActions.includes(DelegationAction.REVOKE) && (
           <RevokeRoleButton
             accessRole={role}
-            from={revocationContext?.from ?? ''}
-            to={revocationContext?.to ?? ''}
+            from=''
+            to=''
             fullText
-            disabled={
-              isFetching ||
-              userHasInheritedRole ||
-              !revocationContext ||
-              !connectionSummary?.hasDirectPermission
-            }
+            disabled={true}
             variant='solid'
             size='md'
-            icon={false}
-            onRevokeError={function (_role: Role, errorInfo: ActionError): void {
-              setActionError(errorInfo);
-            }}
+            onRevokeError={() => {}}
           />
         )}
       </div>

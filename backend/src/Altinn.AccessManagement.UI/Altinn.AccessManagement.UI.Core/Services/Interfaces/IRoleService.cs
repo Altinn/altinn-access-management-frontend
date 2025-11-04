@@ -12,10 +12,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
             /// Gets role connections for the given parties.
             /// </summary>
             /// <param name="party">The party performing the lookup.</param>
-            /// <param name="to">Optional right holder filter.</param>
             /// <param name="from">Optional right owner filter.</param>
+            /// <param name="to">Optional right holder filter.</param>
             /// <param name="languageCode">Language code for localization.</param>
-            Task<List<RolePermission>> GetConnections(Guid party, Guid? to, Guid? from, string languageCode);
+            Task<List<RolePermission>> GetConnections(Guid party, Guid? from, Guid? to, string languageCode);
 
             /// <summary>
             /// Revokes a role connection for a right holder.

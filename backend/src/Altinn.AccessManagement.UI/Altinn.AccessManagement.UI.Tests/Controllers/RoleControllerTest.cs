@@ -59,7 +59,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.NotNull(actual);
             Assert.Equal(expected.Count, actual.Count);
-            Assert.Equal(expected.First().Role.Id, actual.First().Role.Id);
+            AssertionUtil.AssertCollections(expected, actual, AssertionUtil.AssertEqual);
         }
 
         [Fact]

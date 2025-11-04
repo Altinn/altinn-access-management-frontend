@@ -20,12 +20,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
             _roleClient = roleClient;
         }
         
-        // PaginatedResult<RolePermission> GetConnections(Guid party, Guid? to, Guid? from, string languageCode) --- IGNORE ---
-        
         /// <inheritdoc />
-        public async Task<List<RolePermission>> GetConnections(Guid party, Guid? to, Guid? from, string languageCode)
+        public async Task<List<RolePermission>> GetConnections(Guid party, Guid? from, Guid? to, string languageCode)
         {
-            var paginated = await _roleClient.GetRoleConnections(party, to, from, languageCode);
+            var paginated = await _roleClient.GetRoleConnections(party, from, to, languageCode);
             return paginated?.Items?.ToList() ?? new List<RolePermission>();
         }
 

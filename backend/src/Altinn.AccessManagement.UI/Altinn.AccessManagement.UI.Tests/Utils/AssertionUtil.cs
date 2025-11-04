@@ -546,6 +546,15 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertEqual(expected.Role, actual.Role);
         }
 
+        public static void AssertEqual(RolePermission expected, RolePermission actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            AssertEqual(expected.Role, actual.Role);
+            AssertCollections(expected.Permissions?.ToList(), actual.Permissions?.ToList(), AssertEqual);
+        }
+
         static void AssertEqual(Altinn.AccessManagement.UI.Core.Models.Role.Role expected, Altinn.AccessManagement.UI.Core.Models.Role.Role actual)
         {
             Assert.NotNull(actual);

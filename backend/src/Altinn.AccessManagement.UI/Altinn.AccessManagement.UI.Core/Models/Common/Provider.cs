@@ -36,7 +36,7 @@
         public Guid TypeId { get; set; }
 
         /// <summary>
-        /// The provider type metadata
+        /// The provider type
         /// </summary>
         public ProviderType Type { get; set; }
     }

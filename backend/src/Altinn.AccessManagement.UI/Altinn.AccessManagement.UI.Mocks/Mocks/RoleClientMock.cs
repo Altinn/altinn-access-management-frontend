@@ -29,12 +29,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<PaginatedResult<RolePermission>> GetRoleConnections(Guid party, Guid? to, Guid? from, string languageCode)
+        public Task<PaginatedResult<RolePermission>> GetRoleConnections(Guid party, Guid? from, Guid? to, string languageCode)
         {
             Util.ThrowExceptionIfTriggerParty(from?.ToString());
             try
             {
-                string dataPath = Path.Combine(dataFolder, "Roles", "Connections", $"{from}_{to}.json");
+                string dataPath = Path.Combine(dataFolder, "Roles", "Connections", $"{from?.ToString() ?? ""}_{to?.ToString() ?? ""}.json");
                 return Task.FromResult(Util.GetMockData<PaginatedResult<RolePermission>>(dataPath));
             }
             catch

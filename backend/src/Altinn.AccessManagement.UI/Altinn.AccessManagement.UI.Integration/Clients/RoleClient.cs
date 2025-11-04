@@ -50,9 +50,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<RolePermission>> GetRoleConnections(Guid party, Guid? to, Guid? from, string languageCode)
+        public async Task<PaginatedResult<RolePermission>> GetRoleConnections(Guid party, Guid? from, Guid? to, string languageCode)
         {
-            string endpointUrl = $"enduser/connections/roles?party={party}&to={to}&from={from}";
+            string endpointUrl = $"enduser/connections/roles?party={party}&from={from}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
@@ -66,17 +66,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
 
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                return;
+                _logger.LogError("Revoke role delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
+                throw new HttpStatusException(
+                    "StatusError",
+                    "Unexpected response status from Access Management",
+                    response.StatusCode,
+                    Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
             }
-
-            _logger.LogError("Revoke role delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
-            throw new HttpStatusException(
-                "StatusError",
-                "Unexpected response status from Access Management",
-                response.StatusCode,
-                Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
     }
 }

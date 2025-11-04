@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿﻿using System.Collections.Generic;
 using System.Net;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -61,15 +61,11 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-                List<RolePermission> connections = await _roleService.GetConnections(party, to, from, languageCode);
+                List<RolePermission> connections = await _roleService.GetConnections(party, from, to, languageCode);
                 return Ok(connections);
             }
             catch (HttpStatusException ex)
             {
-                if (ex.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
 
                 _logger.LogError(ex, "Error getting role connections");
                 return StatusCode((int)ex.StatusCode, ex.Message);
@@ -91,11 +87,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
-
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
-            {
-                return StatusCode(404, "Feature not available");
             }
 
             if (party != to && party != from)

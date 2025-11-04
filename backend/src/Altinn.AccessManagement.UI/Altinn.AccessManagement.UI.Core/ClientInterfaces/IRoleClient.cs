@@ -1,4 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.Common;
+﻿﻿using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -20,10 +20,10 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <summary>
         /// Revokes a role connection from a right holder.
         /// </summary>
+        /// <param name="party">The party performing the revocation.</param>
         /// <param name="from">The right owner that granted the role.</param>
         /// <param name="to">The right holder receiving the role.</param>
-        /// <param name="party">The party performing the revocation.</param>
         /// <param name="roleId">The role to revoke.</param>
-        Task RevokeRole(Guid from, Guid to, Guid party, Guid roleId);
+        Task RevokeRole(Guid party, Guid from, Guid to, Guid roleId);
     }
 }
