@@ -657,10 +657,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.ServiceIntro, actual.ServiceIntro);
             Assert.Equal(expected.HandledBy, actual.HandledBy);
             Assert.Equal(expected.IsPoa, actual.IsPoa);
-            Assert.Equal(expected.FromPartyName, actual.FromPartyName);
-            Assert.Equal(expected.ToPartyName, actual.ToPartyName);
-            Assert.Equal(expected.HandledByPartyName, actual.HandledByPartyName);
             Assert.Equal(expected.ValidTo, actual.ValidTo);
+            AssertEqual(expected.FromParty, actual.FromParty);
+            AssertEqual(expected.ToParty, actual.ToParty);
+            AssertEqual(expected.HandledByParty, actual.HandledByParty);
             AssertCollections(expected.Rights, actual.Rights, AssertEqual);
         }
 
@@ -681,8 +681,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.IsPoa, actual.IsPoa);
-            Assert.Equal(expected.ToPartyId, actual.ToPartyId);
-            Assert.Equal(expected.ToPartyName, actual.ToPartyName);
+            AssertEqual(expected.ToParty, actual.ToParty);
+            AssertEqual(expected.FromParty, actual.FromParty);
         }
 
         public static void AssertEqual(ConsentLogItemFE expected, ConsentLogItemFE actual)
@@ -692,11 +692,9 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.IsPoa, actual.IsPoa);
-            Assert.Equal(expected.ToPartyId, actual.ToPartyId);
-            Assert.Equal(expected.ToPartyName, actual.ToPartyName);
-            Assert.Equal(expected.FromPartyId, actual.FromPartyId);
-            Assert.Equal(expected.FromPartyName, actual.FromPartyName);
             Assert.Equal(expected.ValidTo, actual.ValidTo);
+            AssertEqual(expected.ToParty, actual.ToParty);
+            AssertEqual(expected.FromParty, actual.FromParty);
             AssertCollections(expected.ConsentRequestEvents, actual.ConsentRequestEvents, AssertEqual);
         }
 
@@ -724,8 +722,26 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.HandledBy, actual.HandledBy);
             Assert.Equal(expected.IsPoa, actual.IsPoa);
             Assert.Equal(expected.ValidTo, actual.ValidTo);
+            AssertEqual(expected.FromParty, actual.FromParty);
+            AssertEqual(expected.ToParty, actual.ToParty);
+            AssertEqual(expected.HandledByParty, actual.HandledByParty);
             AssertCollections(expected.ConsentRequestEvents, actual.ConsentRequestEvents, AssertEqual);
             AssertCollections(expected.Rights, actual.Rights, AssertEqual);
+        }
+
+        public static void AssertEqual(ConsentPartyFE expected, ConsentPartyFE actual)
+        {
+            if (expected == null)
+            {
+                Assert.Null(actual);
+                return;
+            }
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Type, actual.Type);
         }
 
         public static void AssertEqual(Altinn.AccessManagement.UI.Core.Models.User.Entity expected, Altinn.AccessManagement.UI.Core.Models.User.Entity actual)
