@@ -77,13 +77,6 @@ export const roleApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getRoles: builder.query<AreaFE[], void>({
-      query: () => '/search',
-      providesTags: ['roles'],
-    }),
-    getRoleById: builder.query<Role, string>({
-      query: (id) => `/${id}`,
-    }),
     getRolesForUser: builder.query<RoleConnection[], RoleConnectionsRequest>({
       query: ({ from, to, party = getCookie('AltinnPartyUuid') }) =>
         `/connections?party=${party}&from=${from}&to=${to}`,
@@ -98,37 +91,9 @@ export const roleApi = createApi({
       },
       invalidatesTags: ['roles'],
     }),
-    delegate: builder.mutation<void, { to: string; roleId: string }>({
-      invalidatesTags: ['roles'],
-      query: ({ to, roleId }) => {
-        const from = getCookie('AltinnPartyUuid');
-        return {
-          url: `delegate/${from}/${to}/${roleId}`,
-          method: 'POST',
-        };
-      },
-    }),
-    delegationCheck: builder.query<
-      DelegationCheckResponse,
-      { rightownerUuid: string; roleUuid: string }
-    >({
-      query({ rightownerUuid, roleUuid }) {
-        return {
-          url: `/delegationcheck/${rightownerUuid}/${roleUuid}`,
-          method: 'GET',
-        };
-      },
-    }),
   }),
 });
 
-export const {
-  useGetRolesForUserQuery,
-  useGetRoleByIdQuery,
-  useRevokeMutation,
-  useDelegateMutation,
-  useGetRolesQuery,
-  useDelegationCheckQuery,
-} = roleApi;
+export const { useGetRolesForUserQuery, useRevokeMutation } = roleApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = roleApi;

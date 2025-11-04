@@ -2,19 +2,10 @@ import { Avatar, DsAlert, DsParagraph, DsHeading } from '@altinn/altinn-componen
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import {
-  useDelegationCheckQuery,
-  useGetRolesForUserQuery,
-  type Role,
-  type RoleConnection,
-} from '@/rtk/features/roleApi';
+import { useGetRolesForUserQuery, type Role, type RoleConnection } from '@/rtk/features/roleApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
-import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
-import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
 import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -45,10 +36,6 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
   );
 
   const { setActionError, actionError } = useDelegationModalContext();
-  const { data: delegationCheckResult } = useDelegationCheckQuery({
-    rightownerUuid: fromParty?.partyUuid ?? '',
-    roleUuid: role.id,
-  });
 
   const connectionSummary = useMemo(() => {
     if (!roleConnections || isFetching) {
@@ -134,13 +121,8 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
 
       <StatusSection
         userHasAccess={userHasRole}
-        showMissingRightsMessage={!userHasRole && !delegationCheckResult?.canDelegate}
+        showMissingRightsMessage={false}
         inheritedFrom={inheritedFromRoleName}
-        delegationCheckText={
-          delegationCheckResult?.detailCode !== ErrorCode.Unknown
-            ? getErrorCodeTextKey(delegationCheckResult?.detailCode)
-            : 'role.cant_delegate_generic'
-        }
       />
 
       <DsParagraph>{role?.description}</DsParagraph>
