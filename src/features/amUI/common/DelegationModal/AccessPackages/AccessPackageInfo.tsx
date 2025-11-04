@@ -26,6 +26,7 @@ import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/Packag
 
 import { useResourceList } from './useResourceList';
 import classes from './AccessPackageInfo.module.css';
+import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -72,7 +73,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     return null;
   }, [activeDelegations, isFetching, accessPackage.id]);
 
-  const { displayLimitedPreviewLaunch } = window.featureFlags || {};
+  const requestEnabled = requestDelegationEnabled();
   const userHasPackage = delegationAccess !== null;
   const accessIsInherited =
     (delegationAccess &&
@@ -213,9 +214,11 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               </Button>
             )}
             {!userHasPackage &&
-              availableActions.includes(DelegationAction.REQUEST) &&
-              // Todo: Implement request access package
-              !displayLimitedPreviewLaunch && <Button disabled>{t('common.request_poa')}</Button>}
+              requestEnabled &&
+              availableActions.includes(DelegationAction.REQUEST) && (
+                // TODO: Implement request access package
+                <Button disabled>{t('common.request_poa')}</Button>
+              )}
           </div>
         </>
       )}

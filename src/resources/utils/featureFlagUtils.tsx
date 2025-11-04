@@ -60,6 +60,10 @@ export const poaOverviewPageEnabled = () => {
   return window.featureFlags?.displayPoaOverviewPage === true;
 };
 
+export const requestDelegationEnabled = () => {
+  return window.featureFlags?.requestDelegationEnabled === true;
+};
+
 export const useNewActorList = () => {
   return window.featureFlags?.useNewActorsList === true;
 };

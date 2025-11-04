@@ -9,7 +9,7 @@ interface AccessPackageInfoModalProps {
   modalItem: AccessPackage | undefined;
   onClose?: () => void;
   openWithError?: ActionError | null;
-  modalActions?: DelegationAction | DelegationAction[];
+  modalActions?: DelegationAction[];
 }
 
 export const AccessPackageInfoModal = ({
@@ -28,16 +28,7 @@ export const AccessPackageInfoModal = ({
       accessPackage={modalItem}
       openWithError={openWithError}
       onClose={onClose}
-      availableActions={
-        Array.isArray(modalActions)
-          ? modalActions
-          : modalActions !== undefined
-            ? [modalActions]
-            : [
-                !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-                DelegationAction.REVOKE,
-              ]
-      }
+      availableActions={modalActions}
     />
   );
 };

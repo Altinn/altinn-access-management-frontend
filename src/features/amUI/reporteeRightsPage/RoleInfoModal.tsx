@@ -27,10 +27,7 @@ export const RoleInfoModal = ({ modalRef, role, onClose }: RoleInfoModalProps) =
     <EditModal
       ref={modalRef}
       role={role}
-      availableActions={[
-        !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-        DelegationAction.REVOKE,
-      ]}
+      availableActions={[DelegationAction.REVOKE]}
     />
   );
 };

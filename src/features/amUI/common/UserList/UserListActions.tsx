@@ -4,6 +4,7 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { ExtendedUser } from '@/rtk/features/userInfoApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 export const UserListActions = ({
   user,
@@ -22,6 +23,7 @@ export const UserListActions = ({
 }) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
+  const requestEnabled = requestDelegationEnabled();
 
   if (!availableAction) {
     return null;
@@ -56,17 +58,20 @@ export const UserListActions = ({
           {!isSmall && t('common.give_poa')}
         </DsButton>
       )}
-      {availableAction === DelegationAction.REQUEST && onRequest && !user.isInherited && (
-        <DsButton
-          variant='tertiary'
-          data-size='md'
-          onClick={() => onRequest(user)}
-          aria-label={t('common.request_poa')}
-        >
-          <PlusCircleIcon />
-          {!isSmall && t('common.request_poa')}
-        </DsButton>
-      )}
+      {availableAction === DelegationAction.REQUEST &&
+        requestEnabled &&
+        onRequest &&
+        !user.isInherited && (
+          <DsButton
+            variant='tertiary'
+            data-size='md'
+            onClick={() => onRequest(user)}
+            aria-label={t('common.request_poa')}
+          >
+            <PlusCircleIcon />
+            {!isSmall && t('common.request_poa')}
+          </DsButton>
+        )}
       {availableAction === DelegationAction.REVOKE && onRevoke && !user.isInherited && (
         <DsButton
           variant='tertiary'

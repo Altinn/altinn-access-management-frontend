@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { DsHeading, Skeleton } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -10,12 +10,22 @@ import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/A
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { AccessPackageInfoAlert } from '../userRightsPage/AccessPackageSection/AccessPackageInfoAlert';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 export const ReporteeAccessPackageSection = () => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
+
+  const requestEnabled = requestDelegationEnabled();
+  const availableActions = useMemo(() => {
+    const actions: DelegationAction[] = [DelegationAction.REVOKE];
+    if (requestEnabled) {
+      actions.push(DelegationAction.REQUEST);
+    }
+    return actions;
+  }, [requestEnabled]);
 
   const { toParty, fromParty, actingParty, isLoading: isLoadingParty } = usePartyRepresentation();
 
@@ -52,7 +62,7 @@ export const ReporteeAccessPackageSection = () => {
       </Skeleton>
       <AccessPackageList
         isLoading={isLoadingAccesses || isLoadingParty}
-        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+        availableActions={availableActions}
         showAllPackages
         minimizeAvailablePackages
         onSelect={(accessPackage) => {
@@ -74,7 +84,7 @@ export const ReporteeAccessPackageSection = () => {
       <AccessPackageInfoModal
         modalRef={modalRef}
         modalItem={modalItem}
-        modalActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+        modalActions={availableActions}
       />
     </>
   );

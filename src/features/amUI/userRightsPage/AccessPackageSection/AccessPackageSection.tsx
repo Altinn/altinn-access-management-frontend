@@ -16,6 +16,7 @@ import { AccessPackageInfoAlert } from './AccessPackageInfoAlert';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import classes from './AccessPackageSection.module.css';
+import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 export const AccessPackageSection = () => {
   const { t } = useTranslation();
@@ -29,6 +30,18 @@ export const AccessPackageSection = () => {
   } = usePartyRepresentation();
   const isCurrentUser = selfParty?.partyUuid === id;
   const displayLimitedPreviewLaunch = window.featureFlags.displayLimitedPreviewLaunch;
+  const requestEnabled = requestDelegationEnabled();
+  const delegationModalActions = React.useMemo(() => {
+    const actions: DelegationAction[] = [DelegationAction.REVOKE];
+    if (isCurrentUser) {
+      if (requestEnabled) {
+        actions.push(DelegationAction.REQUEST);
+      }
+    } else {
+      actions.push(DelegationAction.DELEGATE);
+    }
+    return actions;
+  }, [isCurrentUser, requestEnabled]);
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
     {
@@ -73,10 +86,7 @@ export const AccessPackageSection = () => {
           {(toParty?.partyTypeName === PartyType.Organization || !displayLimitedPreviewLaunch) && (
             <DelegationModal
               delegationType={DelegationType.AccessPackage}
-              availableActions={[
-                DelegationAction.REVOKE,
-                isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
-              ]}
+              availableActions={delegationModalActions}
             />
           )}
           <ActiveDelegations />

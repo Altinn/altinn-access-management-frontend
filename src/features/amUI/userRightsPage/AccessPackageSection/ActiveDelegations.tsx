@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
@@ -9,6 +9,7 @@ import { useDelegationModalContext } from '../../common/DelegationModal/Delegati
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 import { useTranslation } from 'react-i18next';
+import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 export const ActiveDelegations = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -17,6 +18,18 @@ export const ActiveDelegations = () => {
   const { toParty, selfParty, isLoading } = usePartyRepresentation();
   const isCurrentUser = selfParty?.partyUuid === toParty?.partyUuid;
   const { t } = useTranslation();
+  const requestEnabled = requestDelegationEnabled();
+  const availableActions = useMemo(() => {
+    const actions: DelegationAction[] = [DelegationAction.REVOKE];
+    if (isCurrentUser) {
+      if (requestEnabled) {
+        actions.push(DelegationAction.REQUEST);
+      }
+    } else {
+      actions.push(DelegationAction.DELEGATE);
+    }
+    return actions;
+  }, [isCurrentUser, requestEnabled]);
 
   return (
     <>
@@ -29,10 +42,7 @@ export const ActiveDelegations = () => {
           setModalItem(accessPackage);
           modalRef.current?.showModal();
         }}
-        availableActions={[
-          DelegationAction.REVOKE,
-          isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
-        ]}
+        availableActions={availableActions}
         onDelegateError={(accessPackage, error) => {
           setActionError(error);
           setModalItem(accessPackage);

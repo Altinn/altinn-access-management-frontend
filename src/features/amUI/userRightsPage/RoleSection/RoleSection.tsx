@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
@@ -12,6 +12,7 @@ import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 interface RoleSectionProps {
   numberOfAccesses?: number;
@@ -39,10 +40,7 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
       </DsHeading>
       <DsParagraph data-size='sm'>{t('role.roles_description')}</DsParagraph>
       <RoleList
-        availableActions={[
-          isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
-          DelegationAction.REVOKE,
-        ]}
+        availableActions={[DelegationAction.REVOKE]}
         onActionError={(role, error) => {
           setModalItem(role);
           setActionError(error);
@@ -59,10 +57,7 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
           modalRef={modalRef}
           role={modalItem}
           onClose={() => setModalItem(undefined)}
-          availableActions={[
-            isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
-            DelegationAction.REVOKE,
-          ]}
+          availableActions={[DelegationAction.REVOKE]}
         />
       )}
     </>
