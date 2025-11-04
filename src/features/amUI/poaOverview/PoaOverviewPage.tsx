@@ -36,6 +36,7 @@ export const PoaOverviewPage = () => {
         <PartyRepresentationProvider
           fromPartyUuid={partyUuid}
           actingPartyUuid={partyUuid ?? ''}
+          errorOnPriv={true}
         >
           <ReporteePageHeading
             title={t('poa_overview_page.heading', { name })}

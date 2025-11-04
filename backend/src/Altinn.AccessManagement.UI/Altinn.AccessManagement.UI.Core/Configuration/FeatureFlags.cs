@@ -57,11 +57,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool UseNewActorsList { get; set; }
 
         /// <summary>
-        /// Whether to use the new logout URL structure
-        /// </summary>
-        public bool UseNewLogoutUrl { get; set; }
-
-        /// <summary>
         /// Whether to use the new header component
         /// </summary>
         public bool UseNewHeader { get; set; }

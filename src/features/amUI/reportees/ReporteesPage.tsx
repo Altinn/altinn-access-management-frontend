@@ -35,6 +35,7 @@ export const ReporteesPage = () => {
           <PartyRepresentationProvider
             toPartyUuid={getCookie('AltinnPartyUuid')}
             actingPartyUuid={getCookie('AltinnPartyUuid')}
+            errorOnPriv={true}
           >
             <ReporteePageHeading
               title={t('reportees_page.main_page_heading', { name })}
