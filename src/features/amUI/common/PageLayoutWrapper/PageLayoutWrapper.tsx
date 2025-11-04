@@ -6,7 +6,13 @@ import type {
   MenuItemSize,
   Theme,
 } from '@altinn/altinn-components';
-import { Layout, RootProvider, Snackbar, useAccountSelector } from '@altinn/altinn-components';
+import {
+  formatDisplayName,
+  Layout,
+  RootProvider,
+  Snackbar,
+  useAccountSelector,
+} from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import {
@@ -28,6 +34,7 @@ import {
   useGetFavoriteActorUuidsQuery,
   useAddFavoriteActorUuidMutation,
   useRemoveFavoriteActorUuidMutation,
+  PartyType,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath, ConsentPath, GeneralPath, SystemUserPath } from '@/routes/paths';
 import {
@@ -129,7 +136,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   const headerLinks: MenuItemProps[] = [
     {
-      groupId: 1,
+      groupId: 2,
       icon: HandshakeIcon,
       id: 'access_management',
       size: 'lg',
@@ -264,7 +271,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const groups = {
     'current-user': {
       title: t('header.logged_in_as_name', {
-        name: userinfo?.name || '',
+        name: formatDisplayName({
+          fullName: userinfo?.name || '',
+          type: userinfo?.party?.partyTypeName === PartyType.Person ? 'person' : 'company',
+          reverseNameOrder: true,
+        }),
       }),
     },
   };
@@ -299,12 +310,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           badge: {
             label: t('common.beta'),
             color: reportee?.type === 'Organization' ? 'company' : 'person',
-          },
-          currentAccount: {
-            name: reportee?.name || '',
-            type: getAccountType(reportee?.type ?? ''),
-            id: reportee?.partyId || '',
-            icon: { name: reportee?.name || '', type: getAccountType(reportee?.type ?? '') },
           },
           globalMenu: globalMenu,
           desktopMenu: desktopMenu,

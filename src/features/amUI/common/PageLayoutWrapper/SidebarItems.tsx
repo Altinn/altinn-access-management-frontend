@@ -1,5 +1,9 @@
 import React from 'react';
-import type { MenuItemProps, MenuItemSize } from '@altinn/altinn-components';
+import {
+  formatDisplayName,
+  type MenuItemProps,
+  type MenuItemSize,
+} from '@altinn/altinn-components';
 import {
   PersonGroupIcon,
   TenancyIcon,
@@ -46,8 +50,11 @@ export const SidebarItems = (
     id: '1',
     groupId: 1,
     icon: {
-      name: reportee?.name || '',
-      type: reportee?.type === 'Organization' ? 'company' : 'person',
+      name: formatDisplayName({
+        fullName: reportee?.name || '',
+        type: reportee?.type === 'Person' ? 'person' : 'company',
+      }),
+      type: reportee?.type === 'Person' ? 'person' : 'company',
     },
     size: 'lg',
     loading: isLoading,
