@@ -296,6 +296,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             onSelect: onChangeLocale,
           },
           logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
+          badge: {
+            label: t('common.beta'),
+            color: reportee?.type === 'Organization' ? 'company' : 'person',
+          },
           currentAccount: {
             name: reportee?.name || '',
             type: getAccountType(reportee?.type ?? ''),

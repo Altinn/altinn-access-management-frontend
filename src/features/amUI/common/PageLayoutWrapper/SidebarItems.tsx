@@ -52,7 +52,6 @@ export const SidebarItems = (
     size: 'lg',
     loading: isLoading,
     title: t('sidebar.access_management'),
-    badge: { label: t('common.beta') },
     interactive: false,
   };
 
