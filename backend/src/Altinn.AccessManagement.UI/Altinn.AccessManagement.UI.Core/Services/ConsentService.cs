@@ -143,8 +143,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     Id = consent.Id,
                     IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
-                    ToParty = GetConsentParty(consent.To, toParty.Name),
-                    FromParty = GetConsentParty(consent.From, fromParty.Name),
+                    ToParty = GetConsentParty(consent.To, toParty?.Name),
+                    FromParty = GetConsentParty(consent.From, fromParty?.Name),
                 };
             });
 
@@ -182,8 +182,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     Id = consent.Id,
                     IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
-                    ToParty = GetConsentParty(consent.To, toParty.Name),
-                    FromParty = GetConsentParty(consent.From, fromParty.Name),
+                    ToParty = GetConsentParty(consent.To, toParty?.Name),
+                    FromParty = GetConsentParty(consent.From, fromParty?.Name),
                     HandledByParty = GetConsentParty(consent.HandledBy, handledByParty?.Name),
                     ValidTo = consent.ValidTo,
                     ConsentRequestEvents = consent.ConsentRequestEvents,

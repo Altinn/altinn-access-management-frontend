@@ -71,7 +71,7 @@ export const ConsentRequestPage = () => {
 
   const account: { name: string; type: 'person' | 'company' } = {
     name: memoizedRequest?.fromParty.name ?? '',
-    type: memoizedRequest?.fromParty.name === userData?.name ? 'person' : 'company',
+    type: memoizedRequest?.fromParty.type === 'Person' ? 'person' : 'company',
   };
 
   return (
