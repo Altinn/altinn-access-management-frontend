@@ -1,5 +1,17 @@
 {
   "id": "1a04a7fa-24c1-4e06-9217-8aee89239a9f",
+
+  "fromParty": {
+    "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "name": "DISKRET NÆR TIGER AS",
+    "type": "Organization"
+  },
+  "toParty": {
+    "id": "urn:altinn:organization:identifier-no:60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+    "name": "RAKRYGGET UNG TIGER AS",
+    "type": "Organization"
+  },
+  "handledByParty": null,
   "isPoa": true,
   "title": {
     "nb": "Fullmakt til å handle på vegne av {OfferedBy}",
@@ -22,9 +34,6 @@
     "nn": "Fullmakta gjeld bruk av tenestene éin gong",
     "en": "The power of attorney applies for one-time access to the service."
   },
-  "handledBy": null,
-  "fromPartyName": "DISKRET NÆR TIGER AS",
-  "toPartyName": "RAKRYGGET UNG TIGER AS",
   "validTo": "2075-05-21T11:11:24.9535551+00:00",
   "rights": [
     {

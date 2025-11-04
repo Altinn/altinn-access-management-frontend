@@ -1,5 +1,3 @@
-import { useNewLogoutUrl } from './featureFlagUtils';
-
 enum Environment {
   TT02 = 'tt02',
   PROD = 'prod',
@@ -111,8 +109,5 @@ export const getPlatformUrl = () => {
 };
 
 export const getLogoutUrl = (): string => {
-  const useNewLogoutUrlFlag = useNewLogoutUrl();
-  return useNewLogoutUrlFlag
-    ? `${getPlatformUrl()}authentication/api/v1/logout`
-    : `${getHostUrl()}ui/Authentication/Logout?languageID=1044`;
+  return `${getPlatformUrl()}authentication/api/v1/logout`;
 };
