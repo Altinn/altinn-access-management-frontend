@@ -67,3 +67,7 @@ export const useNewActorList = () => {
 export const useNewLogoutUrl = () => {
   return window.featureFlags?.useNewLogoutUrl === true;
 };
+
+export const useNewHeader = () => {
+  return window.featureFlags?.useNewHeader === true;
+};

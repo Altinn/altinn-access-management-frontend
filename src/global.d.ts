@@ -14,6 +14,7 @@ declare global {
       displayPoaOverviewPage: boolean;
       useNewActorsList: boolean;
       useNewLogoutUrl: boolean;
+      useNewHeader: boolean;
     };
   }
 }
