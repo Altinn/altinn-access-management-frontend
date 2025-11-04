@@ -132,6 +132,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                         options.RevokeRolesEnabled = flags?.RevokeRolesEnabled ?? false;
                         options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                         options.UseNewActorsList = flags?.UseNewActorsList ?? false;
+                        options.UseNewLogoutUrl = flags?.UseNewLogoutUrl ?? false;
                     });
                 });
             });
@@ -166,6 +167,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                        options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                        options.RestrictPrivUse = flags?.RestrictPrivUse ?? false;
                        options.CrossPlatformLinks = flags?.CrossPlatformLinks ?? false;
+                       options.UseNewLogoutUrl = flags?.UseNewLogoutUrl ?? false;
                    });
                });
            });

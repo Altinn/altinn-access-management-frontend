@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
-import type { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
 export interface ProviderType {
   id: string;
@@ -40,10 +39,6 @@ interface Area {
   iconUrl: string;
 }
 
-export interface AreaFE extends Area {
-  roles: Role[];
-}
-
 export interface RoleConnection {
   role: Role;
   permissions: Permissions[];
@@ -53,11 +48,6 @@ interface RoleConnectionsRequest {
   from: string;
   to: string;
   party?: string;
-}
-
-interface DelegationCheckResponse {
-  detailCode: ErrorCode;
-  canDelegate: boolean;
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/role`;

@@ -16,7 +16,6 @@ import classes from './RoleInfo.module.css';
 
 export interface PackageInfoProps {
   role: Role;
-  onDelegate?: () => void;
   availableActions?: DelegationAction[];
 }
 
@@ -34,7 +33,6 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
       skip: (!fromParty?.partyUuid && !toParty?.partyUuid) || !actingParty?.partyUuid,
     },
   );
-
   const { setActionError, actionError } = useDelegationModalContext();
 
   const connection: RoleConnection | undefined =
@@ -52,11 +50,11 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
     : undefined;
 
   const userHasRole = !!connection;
-  const deleteRolesFeatureEnabled = revokeRolesEnabled();
+  const revokeFeatureEnabled = revokeRolesEnabled();
   const canRevoke =
     userHasRole &&
     availableActions.includes(DelegationAction.REVOKE) &&
-    deleteRolesFeatureEnabled &&
+    revokeFeatureEnabled &&
     role?.provider?.code === 'sys-altinn2' &&
     !!revocationContext;
 
@@ -125,9 +123,12 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
             from={revocationContext.from}
             to={revocationContext.to}
             fullText
+            from={revocationContext.from}
+            to={revocationContext.to}
             variant='solid'
             color='danger'
             size='md'
+            icon={false}
             onRevokeError={(_, error) => setActionError(error)}
             onRevokeSuccess={() => setActionError(null)}
           />

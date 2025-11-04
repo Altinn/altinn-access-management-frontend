@@ -13,7 +13,6 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 import { RoleListItem } from './RoleListItem';
 import { RevokeRoleButton } from './RevokeRoleButton';
 
-import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
 import { SkeletonRoleList } from './SkeletonRoleList';
 
@@ -51,7 +50,7 @@ export const RoleList = ({
     },
   );
 
-  const deleteRolesFeatureEnabled = revokeRolesEnabled();
+  const revokeFeatureEnabled = revokeRolesEnabled();
 
   const roleListEntries = useMemo(() => {
     if (!roleConnections) {
@@ -69,6 +68,7 @@ export const RoleList = ({
     return roleConnections
       .map((connection) => {
         const directPermission = directMatch(connection);
+
         return {
           role: connection.role,
           providerName: connection.role.provider?.name,
@@ -84,31 +84,7 @@ export const RoleList = ({
       .sort((a, b) => collator.compare(a.role.name, b.role.name));
   }, [fromParty?.partyUuid, roleConnections, toParty?.partyUuid]);
 
-  const groupedRoles = useMemo(() => {
-    return roleAreas?.reduce(
-      (res, roleArea) => {
-        roleArea.roles.forEach((role) => {
-          const roleAssignment = userRoles?.find((userRole) => userRole.role.id === role.id);
-          if (roleAssignment) {
-            res.activeRoles.push({
-              ...role,
-              inherited: roleAssignment.inherited,
-              assignmentId: roleAssignment.id,
-            });
-          } else {
-            res.availableRoles.push({ ...role, inherited: [] });
-          }
-        });
-        return res;
-      },
-      {
-        activeRoles: [] as ExtendedRole[],
-        availableRoles: [] as ExtendedRole[],
-      },
-    );
-  }, [roleAreas, userRoles]);
-
-  if (partyIsLoading || roleAreasIsLoading || userRolesIsLoading || isLoading) {
+  if (partyIsLoading || roleConnectionsIsLoading || isLoading) {
     return <SkeletonRoleList />;
   }
 
@@ -124,22 +100,22 @@ export const RoleList = ({
     <div className={classes.roleLists}>
       <List aria-label={t('role.activeRolesLabel')}>
         {roleListEntries.map(({ role, providerName, providerCode, revocation }) => {
-          const revokeActionEnabled =
+          const showRevokeButton =
             Boolean(
               availableActions?.includes(DelegationAction.REVOKE) &&
                 providerCode === 'sys-altinn2' &&
                 revocation,
-            ) && deleteRolesFeatureEnabled;
+            ) && revokeFeatureEnabled;
 
           return (
             <RoleListItem
               key={role.id}
               role={role}
-              active
               description={providerName}
+              active
               onClick={() => onSelect(role)}
               controls={
-                revokeActionEnabled ? (
+                showRevokeButton ? (
                   <RevokeRoleButton
                     accessRole={role}
                     from={revocation?.from ?? ''}

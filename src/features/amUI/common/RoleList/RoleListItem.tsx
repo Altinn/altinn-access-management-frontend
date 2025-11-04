@@ -14,8 +14,8 @@ interface RoleListItemProps {
 export const RoleListItem = ({
   role,
   onClick,
-  active = false,
   description,
+  active = false,
   loading,
   controls,
 }: RoleListItemProps) => {

@@ -38,9 +38,11 @@ export const RevokeRoleButton = ({
   const { data: representingParty } = useGetReporteePartyQuery();
   const [revoke, { isLoading }] = useRevokeMutation();
   const { toParty } = usePartyRepresentation();
+
   const handleRevokeSuccess = (role: Role, toParty?: Party) => {
-    if (onRevokeSuccess && toParty) onRevokeSuccess(role, toParty);
-    else {
+    if (onRevokeSuccess && toParty) {
+      onRevokeSuccess(role, toParty);
+    } else {
       openSnackbar({
         message: t('role.role_deletion_success', {
           name: toParty?.name ?? '',
@@ -57,9 +59,9 @@ export const RevokeRoleButton = ({
     httpStatus?: string,
     timestamp?: string,
   ) => {
-    if (onRevokeError)
+    if (onRevokeError) {
       onRevokeError(role, { httpStatus: httpStatus ?? '', timestamp: timestamp ?? '' });
-    else {
+    } else {
       openSnackbar({
         message: t('role.role_deletion_error', {
           name: toParty?.name,
