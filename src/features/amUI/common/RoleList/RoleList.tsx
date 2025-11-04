@@ -1,12 +1,19 @@
-import type { Role } from '@/rtk/features/roleApi';
+import { useMemo } from 'react';
+import { List, DsParagraph } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
+
+import type { Role, RoleConnection } from '@/rtk/features/roleApi';
 import { useGetRolesForUserQuery } from '@/rtk/features/roleApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { ActionError } from '@/resources/hooks/useActionError';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { revokeRolesEnabled } from '@/resources/utils/featureFlagUtils';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { RoleListItem } from './RoleListItem';
+import { RevokeRoleButton } from './RevokeRoleButton';
 
+import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
 import { SkeletonRoleList } from './SkeletonRoleList';
 
@@ -31,6 +38,7 @@ export const RoleList = ({
   isLoading,
   onActionError,
 }: RoleListProps) => {
+  const { t } = useTranslation();
   const { fromParty, toParty, actingParty, isLoading: partyIsLoading } = usePartyRepresentation();
   const { data: roleConnections, isLoading: roleConnectionsIsLoading } = useGetRolesForUserQuery(
     {
@@ -42,12 +50,110 @@ export const RoleList = ({
       skip: !fromParty?.partyUuid || !toParty?.partyUuid,
     },
   );
-  console.log('roleConnections: ', roleConnections);
 
-  const isSm = useIsMobileOrSmaller();
+  const deleteRolesFeatureEnabled = revokeRolesEnabled();
 
-  if (partyIsLoading || roleConnectionsIsLoading || isLoading) {
+  const roleListEntries = useMemo(() => {
+    if (!roleConnections) {
+      return [];
+    }
+
+    const directMatch = (connection: RoleConnection) =>
+      connection.permissions.find(
+        (permission) =>
+          permission.from?.id === fromParty?.partyUuid && permission.to?.id === toParty?.partyUuid,
+      );
+
+    const collator = new Intl.Collator(undefined, { sensitivity: 'base' });
+
+    return roleConnections
+      .map((connection) => {
+        const directPermission = directMatch(connection);
+        return {
+          role: connection.role,
+          providerName: connection.role.provider?.name,
+          providerCode: connection.role.provider?.code,
+          revocation: directPermission
+            ? {
+                from: directPermission.from.id,
+                to: directPermission.to.id,
+              }
+            : undefined,
+        };
+      })
+      .sort((a, b) => collator.compare(a.role.name, b.role.name));
+  }, [fromParty?.partyUuid, roleConnections, toParty?.partyUuid]);
+
+  const groupedRoles = useMemo(() => {
+    return roleAreas?.reduce(
+      (res, roleArea) => {
+        roleArea.roles.forEach((role) => {
+          const roleAssignment = userRoles?.find((userRole) => userRole.role.id === role.id);
+          if (roleAssignment) {
+            res.activeRoles.push({
+              ...role,
+              inherited: roleAssignment.inherited,
+              assignmentId: roleAssignment.id,
+            });
+          } else {
+            res.availableRoles.push({ ...role, inherited: [] });
+          }
+        });
+        return res;
+      },
+      {
+        activeRoles: [] as ExtendedRole[],
+        availableRoles: [] as ExtendedRole[],
+      },
+    );
+  }, [roleAreas, userRoles]);
+
+  if (partyIsLoading || roleAreasIsLoading || userRolesIsLoading || isLoading) {
     return <SkeletonRoleList />;
   }
-  return <div className={classes.roleLists}>role connections</div>;
+
+  if (!roleListEntries.length) {
+    return (
+      <div className={classes.roleLists}>
+        <DsParagraph data-size='sm'>{t('role.no_roles')}</DsParagraph>
+      </div>
+    );
+  }
+
+  return (
+    <div className={classes.roleLists}>
+      <List aria-label={t('role.activeRolesLabel')}>
+        {roleListEntries.map(({ role, providerName, providerCode, revocation }) => {
+          const revokeActionEnabled =
+            Boolean(
+              availableActions?.includes(DelegationAction.REVOKE) &&
+                providerCode === 'sys-altinn2' &&
+                revocation,
+            ) && deleteRolesFeatureEnabled;
+
+          return (
+            <RoleListItem
+              key={role.id}
+              role={role}
+              active
+              description={providerName}
+              onClick={() => onSelect(role)}
+              controls={
+                revokeActionEnabled ? (
+                  <RevokeRoleButton
+                    accessRole={role}
+                    from={revocation?.from ?? ''}
+                    to={revocation?.to ?? ''}
+                    fullText
+                    variant='text'
+                    onRevokeError={(errorRole, error) => onActionError(errorRole, error)}
+                  />
+                ) : undefined
+              }
+            />
+          );
+        })}
+      </List>
+    </div>
+  );
 };

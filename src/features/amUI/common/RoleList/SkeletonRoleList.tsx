@@ -1,4 +1,4 @@
-import { List, ListItem, DsSkeleton, DsParagraph, DsHeading } from '@altinn/altinn-components';
+import { List, ListItem, DsSkeleton } from '@altinn/altinn-components';
 
 import classes from './roleSection.module.css';
 import { url } from 'inspector';
@@ -13,7 +13,7 @@ export const SkeletonRoleList = () => {
   ];
 
   return (
-    <div className={classes.areas}>
+    <div className={classes.roleLists}>
       <List>
         {listSkeleton.map((role) => (
           <ListItem

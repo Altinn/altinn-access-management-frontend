@@ -15,6 +15,7 @@ declare global {
       useNewActorsList: boolean;
       useNewLogoutUrl: boolean;
       requestDelegationEnabled: boolean;
+      revokeRolesEnabled: boolean;
     };
   }
 }

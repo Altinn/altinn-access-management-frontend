@@ -97,6 +97,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                         options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                         options.DisplayLimitedPreviewLaunch = flags?.DisplayLimitedPreviewLaunch ?? true;
                         options.RequestDelegationEnabled = flags?.RequestDelegationEnabled ?? false;
+                        options.RevokeRolesEnabled = flags?.RevokeRolesEnabled ?? false;
                         options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                     });
                 });
@@ -128,6 +129,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                         options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                         options.DisplayLimitedPreviewLaunch = flags?.DisplayLimitedPreviewLaunch ?? true;
                         options.RequestDelegationEnabled = flags?.RequestDelegationEnabled ?? false;
+                        options.RevokeRolesEnabled = flags?.RevokeRolesEnabled ?? false;
                         options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                         options.UseNewActorsList = flags?.UseNewActorsList ?? false;
                     });
@@ -160,6 +162,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                        options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                        options.DisplayLimitedPreviewLaunch = flags?.DisplayLimitedPreviewLaunch ?? true;
                        options.RequestDelegationEnabled = flags?.RequestDelegationEnabled ?? false;
+                       options.RevokeRolesEnabled = flags?.RevokeRolesEnabled ?? false;
                        options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                        options.RestrictPrivUse = flags?.RestrictPrivUse ?? false;
                        options.CrossPlatformLinks = flags?.CrossPlatformLinks ?? false;

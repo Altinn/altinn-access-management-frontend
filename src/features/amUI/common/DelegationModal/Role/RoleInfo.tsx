@@ -1,5 +1,4 @@
 import { Avatar, DsAlert, DsParagraph, DsHeading } from '@altinn/altinn-components';
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetRolesForUserQuery, type Role, type RoleConnection } from '@/rtk/features/roleApi';
@@ -11,6 +10,7 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { StatusSection } from '../StatusSection';
+import { revokeRolesEnabled } from '@/resources/utils/featureFlagUtils';
 
 import classes from './RoleInfo.module.css';
 
@@ -37,41 +37,28 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
 
   const { setActionError, actionError } = useDelegationModalContext();
 
-  const connectionSummary = useMemo(() => {
-    if (!roleConnections || isFetching) {
-      return null;
-    }
+  const connection: RoleConnection | undefined =
+    !roleConnections || isFetching
+      ? undefined
+      : roleConnections.find((item: RoleConnection) => item.role.id === role.id);
 
-    const connection = roleConnections.find((item: RoleConnection) => item.role.id === role.id);
-    if (!connection) {
-      return null;
-    }
+  const directPermission = connection?.permissions.find(
+    (permission) =>
+      permission.from?.id === fromParty?.partyUuid && permission.to?.id === toParty?.partyUuid,
+  );
 
-    const directPermission = connection.permissions.find(
-      (permission) =>
-        permission.from?.id === fromParty?.partyUuid && permission.to?.id === toParty?.partyUuid,
-    );
+  const revocationContext = directPermission
+    ? { from: directPermission.from.id, to: directPermission.to.id }
+    : undefined;
 
-    const inheritedPermission = connection.permissions.find(
-      (permission) =>
-        permission.from?.id !== fromParty?.partyUuid || permission.to?.id !== toParty?.partyUuid,
-    );
-
-    return {
-      hasRole: true,
-      hasDirectPermission: !!directPermission,
-      hasInheritedDelegation: !!inheritedPermission,
-      inheritedFrom: inheritedPermission?.from?.name,
-      revocationContext: directPermission
-        ? { from: directPermission.from.id, to: directPermission.to.id }
-        : undefined,
-    };
-  }, [fromParty?.partyUuid, isFetching, roleConnections, role.id, toParty?.partyUuid]);
-
-  const userHasRole = !!connectionSummary?.hasRole;
-  const userHasInheritedRole = connectionSummary?.hasInheritedDelegation ?? false;
-  const inheritedFromRoleName = connectionSummary?.inheritedFrom;
-  const revocationContext = connectionSummary?.revocationContext;
+  const userHasRole = !!connection;
+  const deleteRolesFeatureEnabled = revokeRolesEnabled();
+  const canRevoke =
+    userHasRole &&
+    availableActions.includes(DelegationAction.REVOKE) &&
+    deleteRolesFeatureEnabled &&
+    role?.provider?.code === 'sys-altinn2' &&
+    !!revocationContext;
 
   return (
     <div className={classes.container}>
@@ -122,22 +109,27 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
       <StatusSection
         userHasAccess={userHasRole}
         showMissingRightsMessage={false}
-        inheritedFrom={inheritedFromRoleName}
       />
 
+      {role?.provider?.name && (
+        <DsParagraph data-size='sm'>
+          {t('role.provider_status', { provider: role.provider.name })}
+        </DsParagraph>
+      )}
       <DsParagraph>{role?.description}</DsParagraph>
 
       <div className={classes.actions}>
-        {userHasRole && role && availableActions.includes(DelegationAction.REVOKE) && (
+        {canRevoke && revocationContext && (
           <RevokeRoleButton
             accessRole={role}
-            from=''
-            to=''
+            from={revocationContext.from}
+            to={revocationContext.to}
             fullText
-            disabled={true}
             variant='solid'
+            color='danger'
             size='md'
-            onRevokeError={() => {}}
+            onRevokeError={(_, error) => setActionError(error)}
+            onRevokeSuccess={() => setActionError(null)}
           />
         )}
       </div>

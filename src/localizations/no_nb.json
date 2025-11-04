@@ -308,7 +308,7 @@
     }
   },
   "role": {
-    "provider_status": "Denne rollen er hentet fra ",
+    "provider_status": "Rollen leveres av {{provider}}.",
     "current_roles_title": "{{count}} roller",
     "roles_description": "Her finner du fullmakter for å administrere tilganger for virksomheten. Det er ikke knyttet noen ressurser eller tjenester til disse tilgangene.",
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
@@ -316,6 +316,7 @@
     "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",
     "role_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{role}} fra {{name}}.",
     "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle <b>{{role_name}}</b>. Den kan derfor ikke slettes.",
+    "no_roles": "Ingen roller er tilgjengelige akkurat nå.",
     "activeRolesLabel": "Liste over roller som er tildelt brukeren",
     "availableRolesLabel": "Liste over roller som kan tildeles brukeren",
     "cant_delegate_generic": "Du kan ikke delegere denne rollen"

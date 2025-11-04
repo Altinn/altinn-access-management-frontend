@@ -42,9 +42,9 @@ export const RevokeRoleButton = ({
     if (onRevokeSuccess && toParty) onRevokeSuccess(role, toParty);
     else {
       openSnackbar({
-        message: t('access_packages.package_deletion_success', {
+        message: t('role.role_deletion_success', {
           name: toParty?.name ?? '',
-          accessPackage: role.name,
+          role: role.name,
         }),
         color: 'success',
       });
@@ -61,9 +61,9 @@ export const RevokeRoleButton = ({
       onRevokeError(role, { httpStatus: httpStatus ?? '', timestamp: timestamp ?? '' });
     else {
       openSnackbar({
-        message: t('access_packages.package_deletion_error', {
+        message: t('role.role_deletion_error', {
           name: toParty?.name,
-          accessPackage: role.name,
+          role: role.name,
         }),
         color: 'danger',
         duration: SnackbarDuration.infinite,

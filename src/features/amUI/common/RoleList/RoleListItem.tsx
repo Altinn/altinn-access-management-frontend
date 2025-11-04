@@ -5,8 +5,9 @@ import type { Role } from '@/rtk/features/roleApi';
 interface RoleListItemProps {
   role: Role;
   onClick: () => void;
+  description?: string | null;
   active?: boolean;
-  controls: React.ReactNode;
+  controls?: React.ReactNode;
   loading?: boolean;
 }
 
@@ -14,6 +15,7 @@ export const RoleListItem = ({
   role,
   onClick,
   active = false,
+  description,
   loading,
   controls,
 }: RoleListItemProps) => {
@@ -23,9 +25,9 @@ export const RoleListItem = ({
       onClick={onClick}
       as='button'
       title={{ as: 'h3', children: role.name }}
+      description={description ?? undefined}
       size='sm'
       color={active ? 'company' : 'neutral'}
-      variant='tinted'
       loading={loading}
       controls={controls}
     />

@@ -64,6 +64,10 @@ export const requestDelegationEnabled = () => {
   return window.featureFlags?.requestDelegationEnabled === true;
 };
 
+export const revokeRolesEnabled = () => {
+  return window.featureFlags?.revokeRolesEnabled === true;
+};
+
 export const useNewActorList = () => {
   return window.featureFlags?.useNewActorsList === true;
 };

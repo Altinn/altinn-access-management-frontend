@@ -27,6 +27,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool RequestDelegationEnabled { get; set; }
 
         /// <summary>
+        /// Whether to enable role revocation functionality in the UI
+        /// </summary>
+        public bool RevokeRolesEnabled { get; set; }
+
+        /// <summary>
         /// Whether or not to only display the service/resource delegation feature in the UI
         /// </summary>
         public bool DisplayResourceDelegation { get; set; }
