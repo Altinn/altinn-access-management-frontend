@@ -16,34 +16,19 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         public bool IsPoa { get; set; }
 
         /// <summary>
-        /// Id of party that requested the consent
+        /// Party that requested the consent
         /// </summary>
-        public string ToPartyId { get; set; }
+        public ConsentPartyFE ToParty { get; set; }
 
         /// <summary>
-        /// Name of party that requested the consent
+        /// Party that requested the consent
         /// </summary>
-        public string ToPartyName { get; set; }
+        public ConsentPartyFE FromParty { get; set; }
 
         /// <summary>
-        /// Id of party that requested the consent
+        /// Party that handles the request if consent is handled by different party than From
         /// </summary>
-        public string FromPartyId { get; set; }
-
-        /// <summary>
-        /// Name of party that requested the consent
-        /// </summary>
-        public string FromPartyName { get; set; }
-
-        /// <summary>
-        /// Id of party that handles the request if consent is handled by different party than From
-        /// </summary>
-        public string HandledByPartyId { get; set; }
-
-        /// <summary>
-        /// Name of party that handles the request if consent is handled by different party than From
-        /// </summary>
-        public string HandledByPartyName { get; set; }
+        public ConsentPartyFE HandledByParty { get; set; }
 
         /// <summary>
         /// List all events related to consent
