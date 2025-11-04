@@ -309,7 +309,7 @@
   },
   "role": {
     "provider_status": "Denne rollen er hentet fra ",
-    "current_roles_title": "{{count}} administratortilganger",
+    "current_roles_title": "{{count}} roller",
     "roles_description": "Her finner du fullmakter for å administrere tilganger for virksomheten. Det er ikke knyttet noen ressurser eller tjenester til disse tilgangene.",
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
     "role_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{role}}.",
@@ -350,7 +350,7 @@
     "page_title": "Brukertilganger - Altinn",
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
-    "roles_title": "Administratortilganger",
+    "roles_title": "Roller",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },

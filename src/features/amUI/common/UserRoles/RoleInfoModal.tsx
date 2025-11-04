@@ -2,7 +2,6 @@ import React from 'react';
 
 import { DsDialog, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { useGetRoleByIdQuery } from '@/rtk/features/roleApi';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
 import statusClasses from '../DelegationModal/StatusSection.module.css';
@@ -18,9 +17,8 @@ interface RoleInfoModal {
 export const RoleInfoModal = ({ open, onClose, roleId }: RoleInfoModal) => {
   const { t } = useTranslation();
   const { toParty, fromParty } = usePartyRepresentation();
-  const { data: roleData, isLoading } = useGetRoleByIdQuery(roleId ?? '', { skip: !roleId });
 
-  const isExternal = roleData?.urn?.includes('external-role');
+  // const isExternal = roleData?.urn?.includes('external-role');
 
   return (
     <DsDialog
@@ -28,7 +26,7 @@ export const RoleInfoModal = ({ open, onClose, roleId }: RoleInfoModal) => {
       onClose={onClose}
       closedby='any'
     >
-      {!roleId || isLoading ? (
+      {/* {!roleId || isLoading ? (
         <div className={classes.spinnerContainer}>
           <DsSpinner
             data-size='lg'
@@ -59,7 +57,7 @@ export const RoleInfoModal = ({ open, onClose, roleId }: RoleInfoModal) => {
 
           <DsParagraph>{roleData?.description}</DsParagraph>
         </div>
-      )}
+      )} */}
     </DsDialog>
   );
 };

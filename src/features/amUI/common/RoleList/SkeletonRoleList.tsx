@@ -1,6 +1,7 @@
 import { List, ListItem, DsSkeleton, DsParagraph, DsHeading } from '@altinn/altinn-components';
 
 import classes from './roleSection.module.css';
+import { url } from 'inspector';
 
 export const SkeletonRoleList = () => {
   const listSkeleton = [
@@ -13,28 +14,15 @@ export const SkeletonRoleList = () => {
 
   return (
     <div className={classes.areas}>
-      <DsHeading data-size='md'>
-        <DsSkeleton variant='text'>
-          <DsSkeleton
-            variant='text'
-            width={40}
-          />
-        </DsSkeleton>
-      </DsHeading>
-      <DsParagraph data-size='md'>
-        <DsSkeleton
-          variant='text'
-          width={100}
-        />
-      </DsParagraph>
       <List>
         {listSkeleton.map((role) => (
           <ListItem
             key={role.id}
             title={role.name}
+            description={role.name}
             data-color='neutral'
-            variant='tinted'
             loading
+            size='md'
           />
         ))}
       </List>

@@ -79,41 +79,42 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="to">The right holder that received the role.</param>
         /// <param name="party">The party performing the action.</param>
         /// <param name="roleId">The role identifier.</param>
+        /// TODO: Backend is not done implementing this yet, so this is a placeholder for now.
         [HttpDelete]
         [Authorize]
         [Route("connections")]
         public async Task<ActionResult> RevokeRole([FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] Guid party, [FromQuery] Guid roleId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            throw new NotImplementedException();
 
-            if (party != to && party != from)
-            {
-                return BadRequest("Party must match either 'from' or 'to'.");
-            }
+            // if (!ModelState.IsValid)
+            // {
+            //     return BadRequest(ModelState);
+            // }
 
-            if (roleId == Guid.Empty)
-            {
-                return BadRequest("roleId is required");
-            }
+            // if (party != to && party != from)
+            // {
+            //     return BadRequest("Party must match either 'from' or 'to'.");
+            // }
 
-            try
-            {
-                await _roleService.RevokeRole(from, to, party, roleId);
-                return NoContent();
-            }
-            catch (HttpStatusException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
+            // if (roleId == Guid.Empty)
+            // {
+            //     return BadRequest("roleId is required");
+            // }
 
-                _logger.LogError(ex, "Error revoking role");
-                return StatusCode((int)ex.StatusCode, ex.Message);
-            }
+            // try
+            // {
+            //     await _roleService.RevokeRole(from, to, party, roleId);
+            //     return NoContent();
+            // }
+            // catch (HttpStatusException ex)
+            // {
+            //     if (ex.StatusCode == HttpStatusCode.NoContent)
+            //     {
+            //         return NoContent();
+            //     }
+            //     return StatusCode((int)ex.StatusCode, ex.Message);
+            // }
         }
     }
 }

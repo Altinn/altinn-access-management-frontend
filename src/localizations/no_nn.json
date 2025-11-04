@@ -306,7 +306,7 @@
   },
   "role": {
     "provider_status": "Denne rolla er henta frå ",
-    "current_roles_title": "{{count}} administratortilgangar",
+    "current_roles_title": "{{count}} roller",
     "roles_description": "Her finn du fullmakter for å administrere tilgangar for verksemda. Det er ikke knytta ressursar eller teenester til desse tilgangene.",
     "role_delegation_success": "{{name}} har no fått fullmakt til {{role}}.",
     "role_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{role}}.",
@@ -347,7 +347,7 @@
     "page_title": "Brukertilgang - Altinn",
     "access_packages_title": "Tilgangspakkar",
     "single_rights_title": "Tenester",
-    "roles_title": "Administratortilgangar",
+    "roles_title": "Roller",
     "resource_type_text": "Enkeltteneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
