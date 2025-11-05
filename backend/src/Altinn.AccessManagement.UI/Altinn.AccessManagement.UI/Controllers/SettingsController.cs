@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
+using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -68,6 +69,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 $"{altinnStandardLanguage}",
                 new CookieOptions
                 {
+                    Expires = DateTimeOffset.UtcNow.AddMonths(1),
                     HttpOnly = true,
                     SameSite = SameSiteMode.Strict,
                     Secure = true,
