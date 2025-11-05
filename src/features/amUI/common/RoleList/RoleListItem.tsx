@@ -1,4 +1,5 @@
 import { ListItem } from '@altinn/altinn-components';
+import { FilesIcon } from '@navikt/aksel-icons';
 
 import type { Role } from '@/rtk/features/roleApi';
 
@@ -30,6 +31,7 @@ export const RoleListItem = ({
       color={active ? 'company' : 'neutral'}
       loading={loading}
       controls={controls}
+      icon={FilesIcon}
     />
   );
 };

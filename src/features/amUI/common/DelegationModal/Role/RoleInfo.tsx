@@ -13,6 +13,7 @@ import { StatusSection } from '../StatusSection';
 import { revokeRolesEnabled } from '@/resources/utils/featureFlagUtils';
 
 import classes from './RoleInfo.module.css';
+import { FilesIcon } from '@navikt/aksel-icons';
 
 export interface PackageInfoProps {
   role: Role;
@@ -61,13 +62,7 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <Avatar
-          size='md'
-          name={role?.name}
-          imageUrl={role?.area?.iconUrl}
-          imageUrlAlt={role?.area?.name}
-          type='company'
-        />
+        <FilesIcon className={classes.icon} />
         <DsHeading
           level={3}
           data-size='sm'
@@ -123,8 +118,6 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
             from={revocationContext.from}
             to={revocationContext.to}
             fullText
-            from={revocationContext.from}
-            to={revocationContext.to}
             variant='solid'
             color='danger'
             size='md'

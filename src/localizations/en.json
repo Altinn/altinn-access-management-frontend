@@ -311,7 +311,7 @@
   "role": {
     "provider_status": "The role is provided by {{provider}}.",
     "current_roles_title": "{{count}} roles",
-    "roles_description": "Here you will find authorizations to manage access for the organization. No resources or services are associated with these accesses.",
+    "roles_description": "Altinn roles that only contain services or resources in the new Altinn solution. These services will also be added to the new access packages. The user might still have access in the old solution.",
     "role_delegation_success": "{{name}} has been successfully granted power of attorney over {{role}}.",
     "role_delegation_error": "Failed to grant power of attorney over {{role}} to {{name}}.",
     "role_deletion_success": "Power of attorney over {{role}} has been successfully revoked for {{name}}.",
@@ -319,6 +319,8 @@
     "inherited_role_message": "<b>{{user_name}}</b> has access to this through their role {{role_name}}. Therefore, it cannot be deleted.",
     "no_roles": "There are no roles available right now.",
     "activeRolesLabel": "List of roles the user has been granted",
+    "other_provider_title": "Other providers",
+    "roles_description_link_text": "Take me to the old solution.",
     "availableRolesLabel": "List of roles available for the user",
     "cant_delegate_generic": "You can't delegate this role"
   },

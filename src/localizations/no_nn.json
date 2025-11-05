@@ -307,7 +307,7 @@
   "role": {
     "provider_status": "Rolla blir levert av {{provider}}.",
     "current_roles_title": "{{count}} roller",
-    "roles_description": "Her finn du fullmakter for å administrere tilgangar for verksemda. Det er ikke knytta ressursar eller teenester til desse tilgangene.",
+    "roles_description": "Altinn-roller som berre inneheld tenester eller ressursar i \"ny Altinn-løysing\". Desse tenestene blir òg lagt inn i dei nye tilgangspakkane. Det kan vere at brukaren òg har tilgangar i den gamle løysinga.",
     "role_delegation_success": "{{name}} har no fått fullmakt til {{role}}.",
     "role_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{role}}.",
     "role_deletion_success": "Fullmakta til {{role}} er fjerna frå {{name}}.",
@@ -315,6 +315,8 @@
     "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom rolla si <b>{{role_name}}</b>. Den kan derfor ikkje slettast.",
     "no_roles": "Ingen roller er tilgjengelege akkurat no.",
     "activeRolesLabel": "Liste over roller som er tildelt brukaren",
+    "other_provider_title": "Andre tilbydarar",
+    "roles_description_link_text": "Ta meg til den gamle løysinga, takk.",
     "availableRolesLabel": "Liste over roller som kan tildelast brukaren",
     "cant_delegate_generic": "Du kan ikkje delegere denne rolla"
   },

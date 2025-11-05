@@ -9,7 +9,6 @@ import { RoleList } from '../common/RoleList/RoleList';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
-import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 interface ReporteeRoleSectionProps {
   numberOfAccesses?: number;

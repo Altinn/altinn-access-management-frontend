@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { List, DsParagraph } from '@altinn/altinn-components';
+import { List, DsParagraph, DsHeading, DsLink } from '@altinn/altinn-components';
+import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import type { Role, RoleConnection } from '@/rtk/features/roleApi';
@@ -7,6 +8,9 @@ import { useGetRolesForUserQuery } from '@/rtk/features/roleApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import { revokeRolesEnabled } from '@/resources/utils/featureFlagUtils';
+import { useFetchRecipientInfo } from '@/resources/hooks/useFetchRecipientInfo';
+import { getRedirectToServicesAvailableForUserUrl } from '@/resources/utils';
+import { getHostUrl } from '@/resources/utils/pathUtils';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
@@ -23,13 +27,20 @@ interface RoleListProps {
   onActionError: (role: Role, error: ActionError) => void;
 }
 
-interface RoleListEntry {
+type RoleListEntry = {
   role: Role;
-  revocation?: { from: string; to: string };
-  hasDirectDelegation: boolean;
-  hasInheritedDelegation: boolean;
-  inheritedFrom?: string;
-}
+  providerCode: string | null | undefined;
+  revocation?: {
+    from: string;
+    to: string;
+  };
+};
+
+type GroupedRoleList = {
+  providerName: string | null | undefined;
+  providerCode: string | null | undefined;
+  entries: RoleListEntry[];
+};
 
 export const RoleList = ({
   onSelect,
@@ -39,6 +50,7 @@ export const RoleList = ({
 }: RoleListProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty, actingParty, isLoading: partyIsLoading } = usePartyRepresentation();
+  const { userID, partyID } = useFetchRecipientInfo(toParty?.partyUuid ?? '', null);
   const { data: roleConnections, isLoading: roleConnectionsIsLoading } = useGetRolesForUserQuery(
     {
       from: fromParty?.partyUuid ?? '',
@@ -52,7 +64,7 @@ export const RoleList = ({
 
   const revokeFeatureEnabled = revokeRolesEnabled();
 
-  const roleListEntries = useMemo(() => {
+  const groupedRoleListEntries = useMemo(() => {
     if (!roleConnections) {
       return [];
     }
@@ -65,30 +77,76 @@ export const RoleList = ({
 
     const collator = new Intl.Collator(undefined, { sensitivity: 'base' });
 
-    return roleConnections
-      .map((connection) => {
-        const directPermission = directMatch(connection);
+    const providerPriority = (providerCode?: string | null) => {
+      if (providerCode === 'sys-ccr') {
+        return 0;
+      }
 
-        return {
-          role: connection.role,
-          providerName: connection.role.provider?.name,
-          providerCode: connection.role.provider?.code,
-          revocation: directPermission
-            ? {
-                from: directPermission.from.id,
-                to: directPermission.to.id,
-              }
-            : undefined,
-        };
-      })
-      .sort((a, b) => collator.compare(a.role.name, b.role.name));
+      if (providerCode === 'sys-altinn2') {
+        return 1;
+      }
+
+      return 2;
+    };
+
+    const groups = new Map<string, GroupedRoleList>();
+
+    roleConnections.forEach((connection) => {
+      const directPermission = directMatch(connection);
+      const entry: RoleListEntry = {
+        role: connection.role,
+        providerCode: connection.role.provider?.code,
+        revocation: directPermission
+          ? {
+              from: directPermission.from.id,
+              to: directPermission.to.id,
+            }
+          : undefined,
+      };
+
+      const providerName = connection.role.provider?.name;
+      const providerCode = connection.role.provider?.code;
+      const groupKey = providerCode ?? providerName ?? 'unknown';
+
+      const group = groups.get(groupKey) ?? {
+        providerName,
+        providerCode,
+        entries: [] as RoleListEntry[],
+      };
+
+      group.entries.push(entry);
+      group.providerName = group.providerName ?? providerName;
+      group.providerCode = group.providerCode ?? providerCode;
+      groups.set(groupKey, group);
+    });
+
+    return Array.from(groups.values())
+      .map((group) => ({
+        ...group,
+        entries: group.entries.sort((a, b) => collator.compare(a.role.name, b.role.name)),
+      }))
+      .sort((a, b) => {
+        const priorityDifference =
+          providerPriority(a.providerCode) - providerPriority(b.providerCode);
+
+        if (priorityDifference !== 0) {
+          return priorityDifference;
+        }
+
+        return collator.compare(a.providerName ?? '', b.providerName ?? '');
+      });
   }, [fromParty?.partyUuid, roleConnections, toParty?.partyUuid]);
+
+  const oldSolutionUrl =
+    userID && partyID
+      ? getRedirectToServicesAvailableForUserUrl(userID, partyID)
+      : `${getHostUrl()}ui/profile/`;
 
   if (partyIsLoading || roleConnectionsIsLoading || isLoading) {
     return <SkeletonRoleList />;
   }
 
-  if (!roleListEntries.length) {
+  if (!groupedRoleListEntries.length) {
     return (
       <div className={classes.roleLists}>
         <DsParagraph data-size='sm'>{t('role.no_roles')}</DsParagraph>
@@ -98,38 +156,69 @@ export const RoleList = ({
 
   return (
     <div className={classes.roleLists}>
-      <List aria-label={t('role.activeRolesLabel')}>
-        {roleListEntries.map(({ role, providerName, providerCode, revocation }) => {
-          const showRevokeButton =
-            Boolean(
-              availableActions?.includes(DelegationAction.REVOKE) &&
-                providerCode === 'sys-altinn2' &&
-                revocation,
-            ) && revokeFeatureEnabled;
+      <DsHeading
+        level={2}
+        data-size='2xs'
+        id='access_packages_title'
+      >
+        {t('role.current_roles_title', { count: roleConnections?.length })}
+      </DsHeading>
+      <DsParagraph data-size='sm'>
+        {t('role.roles_description')}{' '}
+        <DsLink asChild>
+          <Link to={oldSolutionUrl}>{t('role.roles_description_link_text')}</Link>
+        </DsLink>
+      </DsParagraph>
+      {groupedRoleListEntries.map(({ providerName, providerCode, entries }, index) => {
+        const providerTitle = providerName ?? providerCode ?? t('role.other_provider_title');
+        const headingId = `role_list_provider_${index}`;
 
-          return (
-            <RoleListItem
-              key={role.id}
-              role={role}
-              description={providerName}
-              active
-              onClick={() => onSelect(role)}
-              controls={
-                showRevokeButton ? (
-                  <RevokeRoleButton
-                    accessRole={role}
-                    from={revocation?.from ?? ''}
-                    to={revocation?.to ?? ''}
-                    fullText
-                    variant='text'
-                    onRevokeError={(errorRole, error) => onActionError(errorRole, error)}
+        return (
+          <div
+            key={`${providerCode ?? providerTitle}-${index}`}
+            className={classes.roleArea}
+          >
+            <DsHeading
+              level={3}
+              data-size='2xs'
+              id={headingId}
+            >
+              {providerTitle}
+            </DsHeading>
+            <List aria-labelledby={headingId}>
+              {entries.map(({ role, providerCode: entryProviderCode, revocation }) => {
+                const showRevokeButton =
+                  Boolean(
+                    availableActions?.includes(DelegationAction.REVOKE) &&
+                      entryProviderCode === 'sys-altinn2' &&
+                      revocation,
+                  ) && revokeFeatureEnabled;
+
+                return (
+                  <RoleListItem
+                    key={role.id}
+                    role={role}
+                    active
+                    onClick={() => onSelect(role)}
+                    controls={
+                      showRevokeButton ? (
+                        <RevokeRoleButton
+                          accessRole={role}
+                          from={revocation?.from ?? ''}
+                          to={revocation?.to ?? ''}
+                          fullText
+                          variant='text'
+                          onRevokeError={(errorRole, error) => onActionError(errorRole, error)}
+                        />
+                      ) : undefined
+                    }
                   />
-                ) : undefined
-              }
-            />
-          );
-        })}
-      </List>
+                );
+              })}
+            </List>
+          </div>
+        );
+      })}
     </div>
   );
 };

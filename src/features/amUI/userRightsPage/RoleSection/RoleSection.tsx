@@ -12,13 +12,8 @@ import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
-interface RoleSectionProps {
-  numberOfAccesses?: number;
-}
-
-export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
+export const RoleSection = () => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
@@ -31,14 +26,6 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
   return (
     <>
       <OldRolesAlert />
-      <DsHeading
-        level={2}
-        data-size='2xs'
-        id='access_packages_title'
-      >
-        {t('role.current_roles_title', { count: numberOfAccesses })}
-      </DsHeading>
-      <DsParagraph data-size='sm'>{t('role.roles_description')}</DsParagraph>
       <RoleList
         availableActions={[DelegationAction.REVOKE]}
         onActionError={(role, error) => {
