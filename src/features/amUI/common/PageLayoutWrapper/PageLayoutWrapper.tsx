@@ -9,7 +9,6 @@ import {
   useGetIsCompanyProfileAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
-import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 
 import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
@@ -30,18 +29,12 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const useNewHeaderFlag = useNewHeader();
   const { data: reportee } = useGetReporteeQuery();
   const { pathname } = useLocation();
-  const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
   const { data: isAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings } = useGetIsCompanyProfileAdminQuery();
 
   const { menuGroups, isLoadingMenu } = useGlobalMenu();
-  const onChangeLocale = (newLocale: string) => {
-    i18n.changeLanguage(newLocale);
-    document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
-    updateSelectedLanguage(newLocale);
-  };
 
   const { header, languageCode } = useHeader();
   const footer = useFooter();

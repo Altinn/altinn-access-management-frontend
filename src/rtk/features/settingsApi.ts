@@ -70,8 +70,9 @@ export const settingsApi = createApi({
     }),
     updateSelectedLanguage: builder.mutation<void, string>({
       query: (languageCode) => ({
-        url: `language/selectedLanguage?languageCode=${languageCode}`,
+        url: `language/selectedLanguage`,
         method: 'POST',
+        body: { languageCode },
       }),
     }),
   }),
