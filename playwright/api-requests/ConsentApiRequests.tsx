@@ -10,15 +10,22 @@ export class ConsentApiRequests {
     this.tokenClass = new Token(org);
   }
 
-  private async sendPostRequest<TPayload, TResponse>(
+  /**
+   * Unified helper method for POST requests that handles token acquisition and HTTP request logic.
+   * @param payload The request payload
+   * @param endpoint The API endpoint
+   * @param getToken Async function that returns the authentication token
+   * @returns The parsed JSON response
+   */
+  private async sendPostRequestInternal<TPayload, TResponse>(
     payload: TPayload,
     endpoint: string,
-    scopes: string,
+    getToken: () => Promise<string>,
   ): Promise<TResponse> {
     const baseUrl = env('API_BASE_URL');
     let url = baseUrl + endpoint;
 
-    const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
+    const token = await getToken();
 
     const response = await fetch(url, {
       method: 'POST',
@@ -38,33 +45,25 @@ export class ConsentApiRequests {
     return (await response.json()) as TResponse;
   }
 
+  private async sendPostRequest<TPayload, TResponse>(
+    payload: TPayload,
+    endpoint: string,
+    scopes: string,
+  ): Promise<TResponse> {
+    return this.sendPostRequestInternal<TPayload, TResponse>(payload, endpoint, () =>
+      this.tokenClass.getEnterpriseAltinnToken(scopes),
+    );
+  }
+
   private async sendPostRequestWithMaskinporten<TPayload, TResponse>(
     payload: TPayload,
     endpoint: string,
     scopes: string,
     maskinportenToken: MaskinportenToken,
   ): Promise<TResponse> {
-    const baseUrl = env('API_BASE_URL');
-    let url = baseUrl + endpoint;
-
-    const token = await maskinportenToken.getMaskinportenToken(scopes);
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      console.error(`HTTP Error! Status: ${response.status}, Body: ${errorBody}`);
-      throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorBody}`);
-    }
-
-    return (await response.json()) as TResponse;
+    return this.sendPostRequestInternal<TPayload, TResponse>(payload, endpoint, () =>
+      maskinportenToken.getMaskinportenToken(scopes),
+    );
   }
 
   //

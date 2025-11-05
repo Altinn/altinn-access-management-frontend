@@ -1,5 +1,8 @@
+import type { Page } from '@playwright/test';
 import { ConsentApiRequests } from '../../api-requests/ConsentApiRequests';
 import { MaskinportenToken } from '../../api-requests/MaskinportenToken';
+import type { LoginPage } from '../../pages/LoginPage';
+import type { ConsentPage } from '../../pages/consent/ConsentPage';
 
 const REDIRECT_URL = 'https://example.com/';
 
@@ -9,9 +12,9 @@ export interface ConsentScenario {
   fromPerson: string;
   toOrg: string;
   validTo: string;
-  page: any;
-  login: any;
-  consentPage: any;
+  page: Page;
+  login: LoginPage;
+  consentPage: ConsentPage;
   resourceValue: string;
   metaData?: Record<string, string>;
 }

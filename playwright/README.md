@@ -93,11 +93,8 @@ The project includes support for Maskinporten authentication for thorough integr
 
 1. **Generate a JWK key pair**:
 
-   ```bash
-   node playwright/util/jwkGenerator.ts
-   ```
-
-   This will output a public and private key pair in JWK format.
+- https://github.com/Altinn/altinn-authorization-utils/tree/main/src/Altinn.Cli
+- Generate a private and public key
 
 2. **Register your public key in Maskinporten**:
    - Go to https://sjolvbetjening.test.samarbeid.digdir.no/login

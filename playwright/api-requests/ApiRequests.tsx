@@ -228,6 +228,16 @@ export class ApiRequests {
     const id: string = crypto.randomUUID();
 
     const payload = {
+      unwantedRights: [
+        {
+          resource: [
+            {
+              value: 'authentication-e2e-test',
+              id: 'urn:altinn:resource',
+            },
+          ],
+        },
+      ],
       requiredRights: [
         {
           resource: [
