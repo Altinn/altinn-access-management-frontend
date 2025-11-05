@@ -3,8 +3,16 @@
     "id": "75af4b32-231b-4317-b31a-5e0c71a0bb64",
     "isPendingConsent": false,
     "isPoa": true,
-    "toPartyId": "urn:altinn:organization:identifier-no:60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
-    "toPartyName": "RAKRYGGET UNG TIGER AS"
+    "toParty": {
+      "id": "urn:altinn:organization:identifier-no:60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+      "name": "RAKRYGGET UNG TIGER AS",
+      "type": "Organization"
+    },
+    "fromParty": {
+      "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "DISKRET NÆR TIGER AS",
+      "type": "Organization"
+    }
   },
   {
     "id": "0fa3e590-0ab5-442c-ba8d-9410e6a63785",
@@ -17,7 +25,15 @@
     "id": "10fded43-fcd4-4f32-b31c-725fdaba6139",
     "isPendingConsent": true,
     "isPoa": false,
-    "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
-    "toPartyName": "STA TOM TIGER AS"
+    "toParty": {
+      "id": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+      "name": "STA TOM TIGER AS",
+      "type": "Organization"
+    },
+    "fromParty": {
+      "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "DISKRET NÆR TIGER AS",
+      "type": "Organization"
+    }
   }
 ]

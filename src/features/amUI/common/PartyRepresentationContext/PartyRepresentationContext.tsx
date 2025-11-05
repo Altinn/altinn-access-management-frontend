@@ -32,6 +32,8 @@ interface PartyRepresentationProviderProps {
   loadingComponent?: JSX.Element;
   /** Optional override for loading state */
   isLoading?: boolean;
+  /** If true, an error alert will be shown if the acting party has 'person' user type */
+  errorOnPriv?: boolean;
 }
 
 export interface PartyRepresentationContextOutput {
@@ -64,6 +66,7 @@ export const PartyRepresentationProvider = ({
   returnToUrlOnError,
   loadingComponent,
   isLoading: externalIsLoading,
+  errorOnPriv = false,
 }: PartyRepresentationProviderProps) => {
   if (!toPartyUuid && !fromPartyUuid) {
     throw new Error('PartyRepresentationProvider must be used with at least one party UUID');
@@ -145,7 +148,9 @@ export const PartyRepresentationProvider = ({
     !!toPartyUuid &&
     (connections?.length === 0 || connections === undefined);
 
-  const isError = (!fromParty && !toParty) || !availableForUserType;
+  const isError = !fromParty && !toParty;
+
+  const shouldShowUserTypeRestrictionAlert = !isLoading && !availableForUserType && errorOnPriv;
 
   if (isLoading && loadingComponent) {
     return loadingComponent;
@@ -163,14 +168,14 @@ export const PartyRepresentationProvider = ({
       }}
     >
       {!isLoading && invalidConnection && connectionErrorAlert(error, returnToUrlOnError)}
-      {!isLoading && !availableForUserType && <NotAvailableForUserTypeAlert />}
+      {shouldShowUserTypeRestrictionAlert && <NotAvailableForUserTypeAlert />}
       {isError && !isLoading && !invalidConnection && (
         <DsAlert data-color='warning'>
           <DsParagraph>{t('error_page.acting_party_data_error')}</DsParagraph>
         </DsAlert>
       )}
       <AccessPackageDelegationCheckProvider>
-        {(!isError || isLoading) && children}
+        {!isError && !isLoading && !shouldShowUserTypeRestrictionAlert && children}
       </AccessPackageDelegationCheckProvider>
     </PartyRepresentationContext.Provider>
   );

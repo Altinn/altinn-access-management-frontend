@@ -56,18 +56,18 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         public Dictionary<string, string> Expiration { get; set; }
 
         /// <summary>
-        /// Party name giving the consent
+        /// Party giving the consent
         /// </summary>
-        public string FromPartyName { get; set; }
+        public ConsentPartyFE FromParty { get; set; }
 
         /// <summary>
-        /// Party name requesting consent
+        /// Party requesting consent
         /// </summary>
-        public string ToPartyName { get; set; }
+        public ConsentPartyFE ToParty { get; set; }
 
         /// <summary>
-        /// Party name handling consent on behalf of ToPartyName
+        /// Party handling consent on behalf of ToParty
         /// </summary>
-        public string HandledByPartyName { get; set; }
+        public ConsentPartyFE HandledByParty { get; set; }
     }
 }

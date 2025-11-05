@@ -47,5 +47,17 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <returns>List of partyUuids</returns>
         Task<List<string>> GetFavoriteActorUuids();
+
+        /// <summary>
+        /// Adds a partyUuid to the user's favorite profile group in altinn profile
+        /// </summary>
+        /// <returns></returns>
+        Task AddPartyUuidToFavorites(Guid partyUuid);
+
+        /// <summary>
+        /// Deletes a partyUuid from the user's favorite profile group in altinn profile
+        /// </summary>
+        /// <returns></returns>
+        Task DeletePartyUuidFromFavorites(Guid partyUuid);
     }
 }

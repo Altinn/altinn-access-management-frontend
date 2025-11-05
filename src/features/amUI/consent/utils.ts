@@ -67,9 +67,9 @@ export const replaceStaticMetadata = <T extends ConsentRequest | Consent>(
   replaceFields: KeysWithValueOfConsentLanguageOrUndefined<T>[],
 ): T => {
   const metadata: ConsentMetadataValues = {
-    CoveredBy: consent.toPartyName,
-    OfferedBy: consent.fromPartyName,
-    HandledBy: consent.handledByPartyName,
+    CoveredBy: consent.toParty.name,
+    OfferedBy: consent.fromParty.name,
+    HandledBy: consent.handledByParty?.name ?? '',
     Expiration: consent.validTo ? toDateTimeString(consent.validTo) : '',
   };
 
