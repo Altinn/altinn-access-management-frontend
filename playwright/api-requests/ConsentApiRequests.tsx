@@ -66,20 +66,12 @@ export class ConsentApiRequests {
     );
   }
 
-  //
   /**
-   * Generalized consent request supporting both person and org as 'from'.
-   * @param fromType 'person' or 'org'
-   * @param validToIsoUtc ISO UTC string for validity
+   * Builds the consent request payload from parameters.
+   * @param params The consent request parameters
+   * @returns The complete payload object for the consent request
    */
-  public async createConsentRequest({
-    from,
-    to,
-    validToIsoUtc,
-    resourceValue = 'enkelt-samtykke',
-    redirectUrl = 'https://vg.no',
-    metaData = { simpletag: 'playwright-e2e-metadata' },
-  }: CreateConsentRequestParams): Promise<{ viewUri: string }> {
+  private buildConsentRequestPayload(params: CreateConsentRequestParams) {
     const requestId = randomUUID();
 
     const urnPrefix: Record<FromParty['type'] | ToParty['type'], string> = {
@@ -87,14 +79,18 @@ export class ConsentApiRequests {
       org: 'urn:altinn:organization:identifier-no:',
     };
 
-    const fromUrn = `${urnPrefix[from.type]}${from.id}`;
-    const toUrn = `${urnPrefix[to.type]}${to.id}`; // to.type er 'org' per type-def
+    const fromUrn = `${urnPrefix[params.from.type]}${params.from.id}`;
+    const toUrn = `${urnPrefix[params.to.type]}${params.to.id}`;
 
-    const payload = {
+    const resourceValue = params.resourceValue || 'enkelt-samtykke';
+    const redirectUrl = params.redirectUrl || 'https://vg.no';
+    const metaData = params.metaData || { simpletag: 'playwright-e2e-metadata' };
+
+    return {
       id: requestId,
       from: fromUrn,
       to: toUrn,
-      validTo: validToIsoUtc,
+      validTo: params.validToIsoUtc,
       consentRights: [
         {
           action: ['consent'],
@@ -114,6 +110,18 @@ export class ConsentApiRequests {
         nn: 'Playwright ende-til-ende test request message nynorsk',
       },
     };
+  }
+
+  //
+  /**
+   * Generalized consent request supporting both person and org as 'from'.
+   * @param fromType 'person' or 'org'
+   * @param validToIsoUtc ISO UTC string for validity
+   */
+  public async createConsentRequest(
+    params: CreateConsentRequestParams,
+  ): Promise<{ viewUri: string }> {
+    const payload = this.buildConsentRequestPayload(params);
 
     const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
     const scopes = 'altinn:consentrequests.write';
@@ -131,40 +139,7 @@ export class ConsentApiRequests {
     params: CreateConsentRequestParams,
     maskinportenToken: MaskinportenToken,
   ): Promise<{ viewUri: string }> {
-    const requestId = randomUUID();
-
-    const urnPrefix: Record<FromParty['type'] | ToParty['type'], string> = {
-      person: 'urn:altinn:person:identifier-no:',
-      org: 'urn:altinn:organization:identifier-no:',
-    };
-
-    const fromUrn = `${urnPrefix[params.from.type]}${params.from.id}`;
-    const toUrn = `${urnPrefix[params.to.type]}${params.to.id}`;
-
-    const payload = {
-      id: requestId,
-      from: fromUrn,
-      to: toUrn,
-      validTo: params.validToIsoUtc,
-      consentRights: [
-        {
-          action: ['consent'],
-          resource: [
-            {
-              type: 'urn:altinn:resource',
-              value: params.resourceValue || 'enkelt-samtykke',
-            },
-          ],
-          metaData: params.metaData || { simpletag: 'playwright-e2e-metadata' },
-        },
-      ],
-      redirectUrl: params.redirectUrl || 'https://vg.no',
-      requestMessage: {
-        en: `Playwright end to end test request message english`,
-        nb: 'Playwright ende-til-ende test request message bokmål',
-        nn: 'Playwright ende-til-ende test request message nynorsk',
-      },
-    };
+    const payload = this.buildConsentRequestPayload(params);
 
     const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
     const scopes = 'altinn:consentrequests.write';

@@ -68,7 +68,15 @@ export class MaskinportenToken {
       );
     }
 
-    const tokenData = JSON.parse(responseBody);
+    let tokenData;
+    try {
+      tokenData = JSON.parse(responseBody);
+    } catch (parseError) {
+      const errorMessage = parseError instanceof Error ? parseError.message : String(parseError);
+      throw new Error(
+        `Failed to parse Maskinporten token response as JSON: ${errorMessage}. Status: ${status} ${statusText}. Response body: ${responseBody}`,
+      );
+    }
     return tokenData.access_token;
   }
 

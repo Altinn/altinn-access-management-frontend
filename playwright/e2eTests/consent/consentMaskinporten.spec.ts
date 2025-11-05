@@ -27,7 +27,7 @@ function makeScenario() {
   return { fromPerson, toOrg, validTo, api, mpToken };
 }
 
-test.describe('Generate consent request for Digdir using maskinporten to fetch token)', () => {
+test.describe('Generate consent request for Digdir using maskinporten to fetch token', () => {
   test.use({ language: Language.NB, viewport: DESKTOP });
 
   test('Create and approve standard consent with Maskinporten', async ({
