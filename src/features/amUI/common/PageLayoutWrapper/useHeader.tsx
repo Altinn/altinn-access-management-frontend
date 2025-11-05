@@ -66,40 +66,44 @@ export const useHeader = () => {
 
   let header: GlobalHeaderProps | HeaderProps;
 
+  // For new header
+  const accountSelectorData = useAccountSelector({
+    languageCode: languageCode,
+    partyListDTO: reporteeList,
+    favoriteAccountUuids: favoriteAccountUuids,
+    currentAccountUuid: reportee?.partyUuid,
+    selfAccountUuid: userinfo?.uuid,
+    isVirtualized: reporteeList && reporteeList.length > 20,
+    isLoading: isLoadingReporteeList || isLoadingFavoriteAccounts,
+
+    onToggleFavorite: onToggleFavorite,
+
+    onSelectAccount: (accountId: string) => {
+      // check if this is a person; then redirect to consents page
+      let redirectUrl = window.location.href;
+      const isPersonAccount =
+        reporteeList?.find((a) => a.partyUuid === accountId)?.type === 'person';
+      if (isPersonAccount) {
+        redirectUrl = new URL(
+          `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
+        ).toString();
+      } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
+        redirectUrl = new URL(
+          `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
+        ).toString();
+      }
+
+      const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
+      changeUrl.searchParams.set('P', accountId);
+      changeUrl.searchParams.set('goTo', redirectUrl);
+      (window as Window).open(changeUrl.toString(), '_self');
+    },
+  });
+
+  // For old header
+  const { accounts, accountGroups } = useAccounts({ reporteeList, actorList });
+
   if (useNewHeaderFlag) {
-    const accountSelectorData = useAccountSelector({
-      languageCode: languageCode,
-      partyListDTO: reporteeList,
-      favoriteAccountUuids: favoriteAccountUuids,
-      currentAccountUuid: reportee?.partyUuid,
-      selfAccountUuid: userinfo?.uuid,
-      isVirtualized: reporteeList && reporteeList.length > 20,
-      isLoading: isLoadingReporteeList || isLoadingFavoriteAccounts,
-
-      onToggleFavorite: onToggleFavorite,
-
-      onSelectAccount: (accountId: string) => {
-        // check if this is a person; then redirect to consents page
-        let redirectUrl = window.location.href;
-        const isPersonAccount =
-          reporteeList?.find((a) => a.partyUuid === accountId)?.type === 'person';
-        if (isPersonAccount) {
-          redirectUrl = new URL(
-            `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
-          ).toString();
-        } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
-          redirectUrl = new URL(
-            `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
-          ).toString();
-        }
-
-        const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-        changeUrl.searchParams.set('P', accountId);
-        changeUrl.searchParams.set('goTo', redirectUrl);
-        (window as Window).open(changeUrl.toString(), '_self');
-      },
-    });
-
     const search: GlobalSearchProps = {
       onSearch: (value: string) => {
         const encodedValue = encodeURIComponent(value);
@@ -130,8 +134,6 @@ export const useHeader = () => {
       accountSelector: accountSelector,
     };
   } else {
-    const { accounts, accountGroups } = useAccounts({ reporteeList, actorList });
-
     const accountMenu = {
       items: accounts,
       groups: accountGroups,

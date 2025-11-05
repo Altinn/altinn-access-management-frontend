@@ -177,7 +177,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     const isLoading = currentServiceWithStatus?.isLoading;
     let status = currentServiceWithStatus?.status;
 
-    if (!currentServiceWithStatus?.rightList || currentServiceWithStatus?.rightList.length === 0) {
+    if (
+      currentServiceWithStatus &&
+      (!currentServiceWithStatus?.rightList || currentServiceWithStatus?.rightList.length === 0)
+    ) {
       status = ServiceStatus.HTTPError;
     }
 

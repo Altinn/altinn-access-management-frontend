@@ -1,5 +1,15 @@
 import { useTranslation } from 'react-i18next';
 
+const footerLinks = [
+  { href: 'https://info.altinn.no/om-altinn/', resourceId: 'footer.about_altinn' },
+  {
+    href: 'https://info.altinn.no/om-altinn/driftsmeldinger/',
+    resourceId: 'footer.service_messages',
+  },
+  { href: 'https://info.altinn.no/om-altinn/personvern/', resourceId: 'footer.privacy_policy' },
+  { href: 'https://info.altinn.no/om-altinn/tilgjengelighet/', resourceId: 'footer.accessibility' },
+];
+
 export const useFooter = () => {
   const { t } = useTranslation();
 
@@ -17,13 +27,3 @@ export const useFooter = () => {
 
   return footer;
 };
-
-const footerLinks = [
-  { href: 'https://info.altinn.no/om-altinn/', resourceId: 'footer.about_altinn' },
-  {
-    href: 'https://info.altinn.no/om-altinn/driftsmeldinger/',
-    resourceId: 'footer.service_messages',
-  },
-  { href: 'https://info.altinn.no/om-altinn/personvern/', resourceId: 'footer.privacy_policy' },
-  { href: 'https://info.altinn.no/om-altinn/tilgjengelighet/', resourceId: 'footer.accessibility' },
-];
