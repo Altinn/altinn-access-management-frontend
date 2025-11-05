@@ -46,7 +46,7 @@ export const ActiveConsentsPage = () => {
     }
     const acc: Record<string, ActiveConsentListItem[]> = {};
     for (const consent of activeConsents) {
-      const key = consent.toPartyId;
+      const key = consent.toParty.id;
       if (!acc[key]) {
         acc[key] = [];
       }
@@ -115,11 +115,11 @@ export const ActiveConsentsPage = () => {
                 {Object.keys(groupedActiveConsents).map((partyId) => (
                   <ConsentListItem
                     key={partyId}
-                    title={groupedActiveConsents[partyId][0].toPartyName}
+                    title={groupedActiveConsents[partyId][0].toParty.name}
                     partyType={reportee?.type}
                     subItems={groupedActiveConsents[partyId].map((item) => ({
                       id: item.id,
-                      title: item.toPartyName,
+                      title: item.toParty.name,
                       isPoa: item.isPoa,
                     }))}
                     onClick={showConsentDetails}

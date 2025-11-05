@@ -14,10 +14,15 @@ import classes from './PoaOverviewPage.module.css';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { AccessPackagePermissions } from './AccessPackagePermissions';
 import { useRerouteIfPoaOverviewPageDisabled } from '@/resources/utils/featureFlagUtils';
+import { formatDisplayName } from '@altinn/altinn-components';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
   const { data: reportee, isLoading } = useGetReporteeQuery();
+  const name = formatDisplayName({
+    fullName: reportee?.name || '',
+    type: reportee?.type === 'Person' ? 'person' : 'company',
+  });
 
   useDocumentTitle(t('poa_overview_page.page_title'));
 
@@ -31,9 +36,10 @@ export const PoaOverviewPage = () => {
         <PartyRepresentationProvider
           fromPartyUuid={partyUuid}
           actingPartyUuid={partyUuid ?? ''}
+          errorOnPriv={true}
         >
           <ReporteePageHeading
-            title={t('poa_overview_page.heading', { name: reportee?.name || '' })}
+            title={t('poa_overview_page.heading', { name })}
             reportee={reportee}
             isLoading={isLoading}
           />

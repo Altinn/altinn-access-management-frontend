@@ -437,7 +437,125 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
 
+        /// <summary>
+        /// Test case: AddPartyUuidToFavorites successfully adds party UUID to favorites
+        /// Expected: Returns OK
+        /// </summary>
+        [Fact]
+        public async Task AddPartyUuidToFavorites_ValidPartyUuid_ReturnsOk()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var partyUuid = Guid.NewGuid();
 
+            // Act
+            var response = await _client.PutAsync($"accessmanagement/api/v1/user/actorlist/favorites/{partyUuid}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddPartyUuidToFavorites returns BadRequest when model state is invalid
+        /// Expected: Returns BadRequest
+        /// </summary>
+        [Fact]
+        public async Task AddPartyUuidToFavorites_InvalidModelState_ReturnsBadRequest()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var invalidPartyUuid = "not-a-valid-guid";
+
+            // Act
+            var response = await _client.PutAsync($"accessmanagement/api/v1/user/actorlist/favorites/{invalidPartyUuid}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddPartyUuidToFavorites returns InternalServerError when service throws exception
+        /// Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task AddPartyUuidToFavorites_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var emptyGuid = Guid.Empty; // This triggers the mock to throw an exception
+
+            // Act
+            var response = await _client.PutAsync($"accessmanagement/api/v1/user/actorlist/favorites/{emptyGuid}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: DeletePartyUuidFromFavorites successfully removes party UUID from favorites
+        /// Expected: Returns OK
+        /// </summary>
+        [Fact]
+        public async Task DeletePartyUuidFromFavorites_ValidPartyUuid_ReturnsOk()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var partyUuid = Guid.NewGuid();
+
+            // Act
+            var response = await _client.DeleteAsync($"accessmanagement/api/v1/user/actorlist/favorites/{partyUuid}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: DeletePartyUuidFromFavorites returns BadRequest when model state is invalid
+        /// Expected: Returns BadRequest
+        /// </summary>
+        [Fact]
+        public async Task DeletePartyUuidFromFavorites_InvalidModelState_ReturnsBadRequest()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var invalidPartyUuid = "not-a-valid-guid";
+
+            // Act
+            var response = await _client.DeleteAsync($"accessmanagement/api/v1/user/actorlist/favorites/{invalidPartyUuid}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: DeletePartyUuidFromFavorites returns InternalServerError when service throws exception
+        /// Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task DeletePartyUuidFromFavorites_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var emptyGuid = Guid.Empty; // This triggers the mock to throw an exception
+
+            // Act
+            var response = await _client.DeleteAsync($"accessmanagement/api/v1/user/actorlist/favorites/{emptyGuid}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
 
 
         /// <summary>

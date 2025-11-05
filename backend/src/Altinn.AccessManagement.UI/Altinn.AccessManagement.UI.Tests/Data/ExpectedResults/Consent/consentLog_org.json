@@ -2,10 +2,16 @@
   {
     "id": "75af4b32-231b-4317-b31a-5e0c71a0bb64",
     "isPoa": true,
-    "toPartyId": "urn:altinn:organization:identifier-no:60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
-    "toPartyName": "RAKRYGGET UNG TIGER AS",
-    "fromPartyId": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "fromPartyName": "DISKRET NÆR TIGER AS",
+    "toParty": {
+      "id": "urn:altinn:organization:identifier-no:60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+      "name": "RAKRYGGET UNG TIGER AS",
+      "type": "Organization"
+    },
+    "fromParty": {
+      "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "DISKRET NÆR TIGER AS",
+      "type": "Organization"
+    },
     "validTo": "2075-05-21T11:11:24.9535551+00:00",
     "consentRequestEvents": [
       {
@@ -34,10 +40,16 @@
   {
     "id": "0fa3e590-0ab5-442c-ba8d-9410e6a63785",
     "isPoa": false,
-    "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
-    "toPartyName": "STA TOM TIGER AS",
-    "fromPartyId": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "fromPartyName": "DISKRET NÆR TIGER AS",
+    "toParty": {
+      "id": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+      "name": "STA TOM TIGER AS",
+      "type": "Organization"
+    },
+    "fromParty": {
+      "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "DISKRET NÆR TIGER AS",
+      "type": "Organization"
+    },
     "validTo": "2096-11-11T11:11:24.9535551+00:00",
     "consentRequestEvents": [
       {
@@ -59,10 +71,16 @@
   {
     "id": "6c7a60bb-b6a9-4902-92eb-919f8c9c1338",
     "isPoa": false,
-    "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
-    "toPartyName": "STA TOM TIGER AS",
-    "fromPartyId": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "fromPartyName": "DISKRET NÆR TIGER AS",
+    "toParty": {
+      "id": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+      "name": "STA TOM TIGER AS",
+      "type": "Organization"
+    },
+    "fromParty": {
+      "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "DISKRET NÆR TIGER AS",
+      "type": "Organization"
+    },
     "validTo": "2074-12-12T13:00:24.9535551+00:00",
     "consentRequestEvents": [
       {
@@ -91,10 +109,16 @@
   {
     "id": "9d466fd8-8d51-4a49-8269-8daddf4adad2",
     "isPoa": false,
-    "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
-    "toPartyName": "STA TOM TIGER AS",
-    "fromPartyId": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "fromPartyName": "DISKRET NÆR TIGER AS",
+    "toParty": {
+      "id": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+      "name": "STA TOM TIGER AS",
+      "type": "Organization"
+    },
+    "fromParty": {
+      "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "DISKRET NÆR TIGER AS",
+      "type": "Organization"
+    },
     "validTo": "2024-12-12T13:00:24.9535551+00:00",
     "consentRequestEvents": [
       {
@@ -123,10 +147,16 @@
   {
     "id": "10fded43-fcd4-4f32-b31c-725fdaba6139",
     "isPoa": false,
-    "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
-    "toPartyName": "STA TOM TIGER AS",
-    "fromPartyId": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "fromPartyName": "DISKRET NÆR TIGER AS",
+    "toParty": {
+      "id": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+      "name": "STA TOM TIGER AS",
+      "type": "Organization"
+    },
+    "fromParty": {
+      "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "DISKRET NÆR TIGER AS",
+      "type": "Organization"
+    },
     "validTo": "2095-01-01T11:11:24.9535551+00:00",
     "consentRequestEvents": [
       {
