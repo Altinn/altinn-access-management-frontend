@@ -85,11 +85,11 @@ export const ActiveConsentsPage = () => {
                 {Object.keys(groupedPendingActiveConsents).map((partyId) => (
                   <ConsentListItem
                     key={partyId}
-                    title={groupedPendingActiveConsents[partyId][0].toPartyName}
+                    title={groupedPendingActiveConsents[partyId][0].toParty.name}
                     partyType={reportee?.type}
                     subItems={groupedPendingActiveConsents[partyId].map((item) => ({
                       id: item.id,
-                      title: item.toPartyName,
+                      title: item.toParty.name,
                       badgeText: item.isPoa
                         ? t('active_consents.see_pending_poa')
                         : t('active_consents.see_pending_consent'),
