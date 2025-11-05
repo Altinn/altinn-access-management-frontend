@@ -19,7 +19,6 @@ import { StatusSection } from '../StatusSection';
 import { revokeRolesEnabled } from '@/resources/utils/featureFlagUtils';
 
 import classes from './RoleInfo.module.css';
-import { FilesIcon } from '@navikt/aksel-icons';
 
 export interface PackageInfoProps {
   role: Role;
@@ -95,7 +94,6 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <FilesIcon className={classes.icon} />
         <DsHeading
           level={3}
           data-size='sm'
