@@ -1,5 +1,6 @@
-﻿﻿using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
+using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -16,6 +17,13 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="from">Optional right owner filter.</param>
         /// <param name="languageCode">Language code for localization.</param>
         Task<PaginatedResult<RolePermission>> GetRoleConnections(Guid party, Guid? to, Guid? from, string languageCode);
+
+        /// <summary>
+        /// Retrieves metadata for a package by id.
+        /// </summary>
+        /// <param name="roleId">The role identifier.</param>
+        /// <param name="languageCode">Language code for localization.</param>
+        Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode);
 
         /// <summary>
         /// Revokes a role connection from a right holder.

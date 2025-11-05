@@ -1,4 +1,5 @@
-﻿using System.Net;
+using System.IO;
+using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Common;
@@ -6,19 +7,20 @@ using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    ///     Mock class for <see cref="IAccessPackageClient"></see> interface
+    ///     Mock class for <see cref="IRoleClient"></see> interface
     /// </summary>
     public class RoleClientMock : IRoleClient
     {
         private readonly string dataFolder;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="AccessManagementClientMock" /> class
+        ///     Initializes a new instance of the <see cref="RoleClientMock" /> class
         /// </summary>
         public RoleClientMock(
             HttpClient httpClient,
@@ -44,6 +46,31 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     "Unexpected mockResponse status from Access Management",
                     HttpStatusCode.BadRequest,
                     "");
+            }
+        }
+
+        /// <inheritdoc />
+        public Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode)
+        {
+            string triggerValue = roleId.ToString();
+            Util.ThrowExceptionIfTriggerParty(triggerValue);
+
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "Roles", "Details", $"{roleId}.json");
+                return Task.FromResult(Util.GetMockData<RoleMetadata>(dataPath));
+            }
+            catch (FileNotFoundException)
+            {
+                return Task.FromResult<RoleMetadata>(null);
+            }
+            catch
+            {
+                throw new HttpStatusException(
+                    "StatusError",
+                    "Unexpected mockResponse status from Access Management",
+                    HttpStatusCode.BadRequest,
+                    string.Empty);
             }
         }
 

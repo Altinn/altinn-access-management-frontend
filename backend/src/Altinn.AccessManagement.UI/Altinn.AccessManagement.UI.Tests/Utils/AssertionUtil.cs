@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
@@ -485,11 +487,22 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         public static void AssertEqual(Core.Models.Common.Role expected, Core.Models.Common.Role actual)
         {
-            Assert.Equal(expected?.Id, actual?.Id);
-            Assert.Equal(expected?.Name, actual?.Name);
-            Assert.Equal(expected?.Code, actual?.Code);
-            Assert.Equal(expected?.Description, actual?.Description);
-            Assert.Equal(expected?.Urn, actual?.Urn);
+            if (expected == null)
+            {
+                Assert.Null(actual);
+                return;
+            }
+
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Code, actual.Code);
+            Assert.Equal(expected.Description, actual.Description);
+            Assert.Equal(expected.IsKeyRole, actual.IsKeyRole);
+            Assert.Equal(expected.Urn, actual.Urn);
+            Assert.Equal(expected.LegacyRoleCode, actual.LegacyRoleCode);
+            Assert.Equal(expected.LegacyUrn, actual.LegacyUrn);
+            AssertEqual(expected.Provider, actual.Provider);
         }
 
         public static void AssertEqual(CompactRole expected, CompactRole actual)
@@ -875,6 +888,37 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 Assert.True(actual.ContainsKey(kvp.Key), $"Expected key '{kvp.Key}' not found in actual dictionary");
                 AssertEqual(kvp.Value, actual[kvp.Key]);
             }
+        }
+
+        private static void AssertEqual(Provider expected, Provider actual)
+        {
+            if (expected == null)
+            {
+                Assert.Null(actual);
+                return;
+            }
+
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.RefId, actual.RefId);
+            Assert.Equal(expected.LogoUrl, actual.LogoUrl);
+            Assert.Equal(expected.Code, actual.Code);
+            Assert.Equal(expected.TypeId, actual.TypeId);
+            AssertEqual(expected.Type, actual.Type);
+        }
+
+        private static void AssertEqual(ProviderType expected, ProviderType actual)
+        {
+            if (expected == null)
+            {
+                Assert.Null(actual);
+                return;
+            }
+
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
         }
     }
 }

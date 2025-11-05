@@ -72,6 +72,9 @@ export const roleApi = createApi({
         `/connections?party=${party}&from=${from}&to=${to}`,
       providesTags: ['roles'],
     }),
+    getRoleById: builder.query<Role, string>({
+      query: (roleId) => `/${roleId}`,
+    }),
     revoke: builder.mutation<void, { from: string; to: string; roleId: string; party?: string }>({
       query({ from, to, roleId, party = getCookie('AltinnPartyUuid') }) {
         return {
@@ -84,6 +87,6 @@ export const roleApi = createApi({
   }),
 });
 
-export const { useGetRolesForUserQuery, useRevokeMutation } = roleApi;
+export const { useGetRolesForUserQuery, useGetRoleByIdQuery, useRevokeMutation } = roleApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = roleApi;

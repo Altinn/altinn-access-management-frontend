@@ -1,4 +1,4 @@
-﻿﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Net;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -66,8 +67,39 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (HttpStatusException ex)
             {
-
                 _logger.LogError(ex, "Error getting role connections");
+                return StatusCode((int)ex.StatusCode, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Gets role metadata for the provided role id.
+        /// </summary>
+        /// <param name="roleId">The role identifier.</param>
+        [HttpGet]
+        [Authorize]
+        [Route("{roleId:guid}")]
+        public async Task<ActionResult<RoleMetadata>> GetRoleById([FromRoute] Guid roleId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+                RoleMetadata role = await _roleService.GetRoleById(roleId, languageCode);
+                if (role == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(role);
+            }
+            catch (HttpStatusException ex)
+            {
+                _logger.LogError(ex, "Error getting role {RoleId}", roleId);
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
         }

@@ -1,7 +1,13 @@
-import { Avatar, DsAlert, DsParagraph, DsHeading } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsHeading } from '@altinn/altinn-components';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetRolesForUserQuery, type Role, type RoleConnection } from '@/rtk/features/roleApi';
+import {
+  useGetRoleByIdQuery,
+  useGetRolesForUserQuery,
+  type Role,
+  type RoleConnection,
+} from '@/rtk/features/roleApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
@@ -35,6 +41,33 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
     },
   );
   const { setActionError, actionError } = useDelegationModalContext();
+
+  const shouldFetchRoleDetails = Boolean(role?.id);
+  const {
+    data: roleDetails,
+    error: roleDetailsError,
+    isFetching: isFetchingRoleDetails,
+  } = useGetRoleByIdQuery(role?.id ?? '', {
+    skip: !shouldFetchRoleDetails,
+  });
+
+  useEffect(() => {
+    if (isFetchingRoleDetails) {
+      console.log('Fetching role details for modal', role?.id);
+    }
+  }, [isFetchingRoleDetails, role?.id]);
+
+  useEffect(() => {
+    if (roleDetails) {
+      console.log('Fetched role details', roleDetails);
+    }
+  }, [roleDetails]);
+
+  useEffect(() => {
+    if (roleDetailsError) {
+      console.error('Failed to fetch role details', roleDetailsError);
+    }
+  }, [roleDetailsError]);
 
   const connection: RoleConnection | undefined =
     !roleConnections || isFetching

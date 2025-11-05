@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 
 // ReSharper disable InconsistentNaming
 
@@ -128,6 +129,31 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid missingRoleId = new("00000000-0000-0000-0000-000000000001");
 
             HttpResponseMessage response = await _client.DeleteAsync($"accessmanagement/api/v1/role/connections?party={from}&from={from}&to={to}&roleId={missingRoleId}");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetRoleById_ReturnsExpectedRole()
+        {
+            Guid roleId = new("55bd7d4d-08dd-46ee-ac8e-3a44d800d752");
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{roleId}");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            RoleMetadata actual = JsonSerializer.Deserialize<RoleMetadata>(await response.Content.ReadAsStringAsync(), _serializerOptions);
+            RoleMetadata expected = Util.GetMockData<RoleMetadata>($"{ExpectedDataPath}/Role/Details/{roleId}.json");
+
+            AssertionUtil.AssertEqual(expected, actual);
+        }
+
+        [Fact]
+        public async Task GetRoleById_WhenNotFound_ReturnsNotFound()
+        {
+            Guid missingRoleId = Guid.NewGuid();
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{missingRoleId}");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }

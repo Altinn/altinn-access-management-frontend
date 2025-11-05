@@ -1,5 +1,6 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Net;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -24,6 +25,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
         private readonly IAccessTokenProvider _accessTokenProvider;
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessPackageClient"/> class
@@ -57,6 +59,33 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<RolePermission>>(response, _logger, "RoleClient // GetRoleConnections");
+        }
+
+        /// <inheritdoc />
+        public async Task<Altinn.AccessManagement.UI.Core.Models.Common.Role> GetRoleById(Guid roleId, string languageCode)
+        {
+            string endpointUrl = $"meta/info/roles/{roleId}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<Altinn.AccessManagement.UI.Core.Models.Common.Role>(content, _serializerOptions);
+            }
+
+            _logger.LogError("Get role metadata from accessmanagement failed with {StatusCode}", response.StatusCode);
+            throw new HttpStatusException(
+                "StatusError",
+                "Unexpected response status from Access Management",
+                response.StatusCode,
+                Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
 
         /// <inheritdoc />

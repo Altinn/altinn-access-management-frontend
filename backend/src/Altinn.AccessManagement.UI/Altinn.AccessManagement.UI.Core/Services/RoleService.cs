@@ -28,6 +28,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
+        public Task<Core.Models.Common.Role> GetRoleById(Guid roleId, string languageCode) => _roleClient.GetRoleById(roleId, languageCode);
+
+        /// <inheritdoc />
         public Task RevokeRole(Guid from, Guid to, Guid party, Guid roleId)
         {
             return _roleClient.RevokeRole(from, to, party, roleId);
