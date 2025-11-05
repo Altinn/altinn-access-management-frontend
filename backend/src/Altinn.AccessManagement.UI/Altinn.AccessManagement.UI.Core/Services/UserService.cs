@@ -82,6 +82,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
+        public async Task AddPartyUuidToFavorites(Guid partyUuid)
+        {
+            await _profileClient.AddPartyUuidToFavorites(partyUuid);
+        }
+
+        /// <inheritdoc/>
+        public async Task DeletePartyUuidFromFavorites(Guid partyUuid)
+        {
+            await _profileClient.DeletePartyUuidFromFavorites(partyUuid);
+        }
+
+        /// <inheritdoc/>
         public async Task<List<User>> GetReporteeList(Guid partyUuid)
         {
             List<AuthorizedParty> rightOwners = await _accessManagementClient.GetReporteeList(partyUuid);

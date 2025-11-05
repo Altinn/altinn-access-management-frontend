@@ -55,5 +55,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to use the new actors list populated by the connections API
         /// </summary>
         public bool UseNewActorsList { get; set; }
+
+        /// <summary>
+        /// Whether to use the new header component
+        /// </summary>
+        public bool UseNewHeader { get; set; }
     }
 }

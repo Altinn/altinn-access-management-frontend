@@ -1,5 +1,5 @@
 import type { UserListItemProps } from '@altinn/altinn-components';
-import { List, UserListItem } from '@altinn/altinn-components';
+import { formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
 import type { ElementType, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
@@ -128,7 +128,7 @@ export const UserItem = ({
       {...props}
       size={size}
       id={user.id}
-      name={user.name}
+      name={type !== 'system' ? formatDisplayName({ fullName: user.name, type }) : user.name}
       description={!isExpanded ? description(user) : undefined}
       roleNames={showRoles ? roleCodes.map((r) => t(`${r}`)) : undefined}
       type={type}
