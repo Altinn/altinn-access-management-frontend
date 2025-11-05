@@ -1,7 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
+using Microsoft.Net.Http.Headers;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -31,6 +36,95 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
+        /// <summary>
+        ///     Test case: Valid language codes update the persistent context cookie
+        ///     Expected: Cookie is set with correct value and security attributes
+        /// </summary>
+        [Theory]
+        [InlineData("nb", "UL=1044")]
+        [InlineData("no_nb", "UL=1044")]
+        [InlineData("en", "UL=1033")]
+        public async Task UpdateSelectedLanguage_ValidLanguageCodes_SetCookie(string languageCode, string expectedCookieValue)
+        {
+            // Arrange
+            var request = new { LanguageCode = languageCode };
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsJsonAsync("accessmanagement/api/v1/settings/language/selectedLanguage", request);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.True(response.Headers.TryGetValues("Set-Cookie", out IEnumerable<string> cookieHeaders));
+            string altinnCookie = cookieHeaders.FirstOrDefault(cookie => cookie.StartsWith("altinnPersistentContext=", StringComparison.OrdinalIgnoreCase));
+            Assert.NotNull(altinnCookie);
+            SetCookieHeaderValue parsedCookie = SetCookieHeaderValue.Parse(altinnCookie!);
+            string cookieValue = Uri.UnescapeDataString(parsedCookie.Value.ToString());
+            Assert.Equal(expectedCookieValue, cookieValue);
+            Assert.Equal("/", parsedCookie.Path.ToString());
+            Assert.True(parsedCookie.HttpOnly);
+            Assert.True(parsedCookie.Secure);
+            Assert.Equal(SameSiteMode.Strict, parsedCookie.SameSite);
+        }
+
+        /// <summary>
+        ///     Test case: Missing language code returns bad request
+        ///     Expected: Returns BadRequest with validation message
+        /// </summary>
+        [Theory]
+        [InlineData("")]
+        [InlineData("   ")]
+        public async Task UpdateSelectedLanguage_InvalidLanguageCode_ReturnsBadRequest(string invalidLanguageCode)
+        {
+            // Arrange
+            var request = new { LanguageCode = invalidLanguageCode };
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsJsonAsync("accessmanagement/api/v1/settings/language/selectedLanguage", request);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("\"Language code is required.\"", await response.Content.ReadAsStringAsync());
+        }
+
+        /// <summary>
+        ///     Test case: Unsupported language code returns bad request
+        ///     Expected: Returns BadRequest with validation message
+        /// </summary>
+        [Fact]
+        public async Task UpdateSelectedLanguage_UnsupportedLanguage_ReturnsBadRequest()
+        {
+            // Arrange
+            var request = new { LanguageCode = "de" };
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsJsonAsync("accessmanagement/api/v1/settings/language/selectedLanguage", request);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("\"Unsupported language code.\"", await response.Content.ReadAsStringAsync());
+        }
+
+        /// <summary>
+        ///     Test case: Null request body returns bad request
+        ///     Expected: Returns BadRequest with validation message
+        /// </summary>
+        [Fact]
+        public async Task UpdateSelectedLanguage_NullRequest_ReturnsBadRequest()
+        {
+            // Arrange
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, "accessmanagement/api/v1/settings/language/selectedLanguage")
+            {
+                Content = new StringContent("null", Encoding.UTF8, "application/json")
+            };
+
+            // Act
+            HttpResponseMessage response = await _client.SendAsync(requestMessage);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("\"Language code is required.\"", await response.Content.ReadAsStringAsync());
         }
 
         /// <summary>

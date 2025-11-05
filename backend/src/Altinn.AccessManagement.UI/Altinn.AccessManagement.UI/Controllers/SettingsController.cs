@@ -4,8 +4,9 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Altinn.AccessManagement.UI.Controllers
+namespace Altinn.AccessManagement.UI.Controllers 
 {
     /// <summary>
     /// Controller responsible for all operations for lookup
@@ -29,6 +30,51 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             _logger = logger;
             _settingsService = settingsService;
+        }
+
+        /// <summary>
+        /// Request payload for updating the selected language cookie.
+        /// </summary>
+        public class UpdateSelectedLanguageRequest
+        {
+            /// <summary>
+            /// Gets or sets the language code to persist.
+            /// </summary>
+            public string LanguageCode { get; set; } = string.Empty;
+        }
+
+        /// <summary>
+        /// Updates the Altinn persistent context cookie with the selected language.
+        /// </summary>
+        [HttpPost]
+        [Authorize]
+        [Route("language/selectedLanguage")]
+        public IActionResult UpdateSelectedLanguage([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] UpdateSelectedLanguageRequest? request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.LanguageCode))
+            {
+                return BadRequest("Language code is required.");
+            }
+
+            string altinnStandardLanguage = LanguageHelper.TryGetAltinn2StandardLanguage(request.LanguageCode);
+
+            if (string.IsNullOrEmpty(altinnStandardLanguage))
+            {
+                return BadRequest("Unsupported language code.");
+            }
+
+            Response.Cookies.Append(
+                "altinnPersistentContext",
+                $"{altinnStandardLanguage}",
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                    Secure = true,
+                    Path = "/"
+                });
+
+            return Ok();
         }
 
         /// <summary>

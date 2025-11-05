@@ -35,6 +35,7 @@ import {
   getLogoutUrl,
 } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 
 import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
@@ -62,6 +63,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   });
   const { pathname } = useLocation();
   const [searchString, setSearchString] = useState<string>('');
+  const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
@@ -71,6 +73,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
+    updateSelectedLanguage(newLocale);
   };
 
   const menuGroups = {

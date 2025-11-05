@@ -68,6 +68,12 @@ export const settingsApi = createApi({
       },
       invalidatesTags: ['NotificationAddress'],
     }),
+    updateSelectedLanguage: builder.mutation<void, string>({
+      query: (languageCode) => ({
+        url: `language/selectedLanguage?languageCode=${languageCode}`,
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
@@ -76,6 +82,7 @@ export const {
   useCreateOrgNotificationAddressMutation,
   useDeleteOrgNotificationAddressMutation,
   useUpdateOrgNotificationAddressMutation,
+  useUpdateSelectedLanguageMutation,
 } = settingsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = settingsApi;

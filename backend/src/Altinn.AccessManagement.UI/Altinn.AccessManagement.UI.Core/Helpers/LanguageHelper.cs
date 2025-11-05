@@ -16,6 +16,26 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         };
 
         /// <summary>
+        /// Gets the Altinn 2 standard language code based on either backend or frontend standard.
+        /// </summary>
+        /// <param name="languageCode">The language code.</param>
+        /// <returns>The Altinn 2 standard language code if found; otherwise null.</returns>
+        public static string? TryGetAltinn2StandardLanguage(string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+            {
+                return null;
+            }
+
+            var mapping = LanguageMappings.Find(m =>
+                languageCode.Contains(m.Altinn2Standard) ||
+                m.BackendStandard == languageCode ||
+                m.FrontendStandard == languageCode);
+
+            return mapping.Altinn2Standard;
+        }
+
+        /// <summary>
         /// Gets the backend standard language based on the either Altinn 2 or frontend standard.
         /// </summary>
         /// <param name="languageCode">The language code.</param>
