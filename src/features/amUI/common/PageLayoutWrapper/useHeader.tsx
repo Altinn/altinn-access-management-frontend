@@ -69,12 +69,12 @@ export const useHeader = () => {
   // For new header
   const accountSelectorData = useAccountSelector({
     languageCode: languageCode,
-    partyListDTO: reporteeList,
-    favoriteAccountUuids: favoriteAccountUuids,
+    partyListDTO: reporteeList ?? [],
+    favoriteAccountUuids: favoriteAccountUuids ?? [],
     currentAccountUuid: reportee?.partyUuid,
     selfAccountUuid: userinfo?.uuid,
     isVirtualized: reporteeList && reporteeList.length > 20,
-    isLoading: isLoadingReporteeList || isLoadingFavoriteAccounts,
+    isLoading: isLoadingReporteeList || isLoadingReportee || isLoadingFavoriteAccounts,
 
     onToggleFavorite: onToggleFavorite,
 

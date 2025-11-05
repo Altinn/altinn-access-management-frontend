@@ -168,6 +168,62 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       ],
     });
   }),
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/actorlist/old`, () => {
+    return HttpResponse.json([
+      {
+        partyUuid: '54f128f7-ca7c-4a57-ad49-3787eb79b506',
+        name: 'DISKRET NÆR TIGER AS',
+        organizationNumber: '310202398',
+        dateOfBirth: null,
+        partyId: '50365521',
+        type: 'Organization',
+        unitType: null,
+        isDeleted: false,
+        onlyHierarchyElementWithNoAccess: false,
+        authorizedResources: [],
+        authorizedRoles: [],
+        subunits: [
+          {
+            partyUuid: '0020c970-ba68-44cd-8440-0894b594f58a',
+            name: 'DISKRET NÆR TIGER AVDELING',
+            organizationNumber: '311312294',
+            dateOfBirth: null,
+            partyId: '50365522',
+            type: 'Organization',
+            unitType: 'SubUnit',
+            isDeleted: false,
+            onlyHierarchyElementWithNoAccess: false,
+            authorizedResources: [],
+            authorizedRoles: [],
+            subunits: [],
+          },
+        ],
+      },
+      {
+        partyUuid: '167536b5-f8ed-4c5a-8f48-0279507e53ae',
+        name: 'SITRONGUL MEDALJONG',
+        organizationNumber: null,
+        dateOfBirth: '1984-04-03',
+        partyId: '50789533',
+        type: 'Person',
+        unitType: null,
+        isDeleted: false,
+        onlyHierarchyElementWithNoAccess: false,
+        authorizedResources: [],
+        authorizedRoles: [],
+        subunits: [],
+      },
+    ]);
+  }),
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/actorlist/favorites`, () => {
+    return HttpResponse.json(['54f128f7-ca7c-4a57-ad49-3787eb79b506']);
+  }),
+  http.put(`${ACCESSMANAGEMENT_BASE_URL}/user/actorlist/favorites/:actorUuid`, () => {
+    return HttpResponse.json(null, { status: 200 });
+  }),
+  http.delete(`${ACCESSMANAGEMENT_BASE_URL}/user/actorlist/favorites/:actorUuid`, () => {
+    return HttpResponse.json(null, { status: 200 });
+  }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/isClientAdmin`, () => {
     return HttpResponse.json(true);
   }),
