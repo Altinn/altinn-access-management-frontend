@@ -26,20 +26,13 @@ const getAccountType = (type: string): 'company' | 'person' => {
 
 export const useHeader = () => {
   const { t, i18n } = useTranslation();
-  const useNewActorListFlag = useNewActorList();
   const useNewHeaderFlag = useNewHeader();
-  const isSm = useIsTabletOrSmaller();
   const [searchString, setSearchString] = useState<string>('');
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
   const { data: reporteeList, isLoading: isLoadingReporteeList } =
-    useGetReporteeListForAuthorizedUserQuery(undefined, {
-      skip: useNewActorListFlag,
-    });
-  const { data: actorList } = useGetActorListForAuthorizedUserQuery(undefined, {
-    skip: !useNewActorListFlag,
-  });
+    useGetReporteeListForAuthorizedUserQuery(undefined);
   const { data: favoriteAccountUuids, isLoading: isLoadingFavoriteAccounts } =
     useGetFavoriteActorUuidsQuery();
   const [addFavoriteActorUuid] = useAddFavoriteActorUuidMutation();
@@ -52,6 +45,7 @@ export const useHeader = () => {
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
   };
 
+  // TODO: Add optimistic updates and error handling
   const onToggleFavorite = (accountId: string) => {
     if (favoriteAccountUuids?.includes(accountId)) {
       removeFavoriteActorUuid(accountId);
@@ -101,7 +95,7 @@ export const useHeader = () => {
   });
 
   // For old header
-  const { accounts, accountGroups } = useAccounts({ reporteeList, actorList });
+  const { accounts, accountGroups } = useAccounts({ reporteeList });
 
   if (useNewHeaderFlag) {
     const search: GlobalSearchProps = {
