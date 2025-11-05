@@ -1,17 +1,14 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
-using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
 using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
 using AltinnCore.Authentication.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -97,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string endpointUrl = $"organizations/{orgNumber}/notificationaddresses/mandatory";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string token = AltinnCore.Authentication.Utils.JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = await _accessTokenProvider.GetAccessToken();
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
@@ -119,7 +116,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string endpointUrl = $"organizations/{orgNumber}/notificationaddresses/mandatory";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string token = AltinnCore.Authentication.Utils.JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = await _accessTokenProvider.GetAccessToken();
 
                 StringContent requestBody = new StringContent(JsonSerializer.Serialize(notificationAddress, _serializerOptions), Encoding.UTF8, "application/json");
@@ -143,7 +140,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string endpointUrl = $"organizations/{orgNumber}/notificationaddresses/mandatory/{notificationAddressId}";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string token = AltinnCore.Authentication.Utils.JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = await _accessTokenProvider.GetAccessToken();
 
                 HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, accessToken);
@@ -165,7 +162,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string endpointUrl = $"organizations/{orgNumber}/notificationaddresses/mandatory/{notificationAddressId}";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string token = AltinnCore.Authentication.Utils.JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = await _accessTokenProvider.GetAccessToken();
 
                 StringContent requestBody = new StringContent(JsonSerializer.Serialize(notificationAddress, _serializerOptions), Encoding.UTF8, "application/json");
@@ -189,7 +186,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string endpointUrl = $"users/current/party-groups/favorites";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string token = AltinnCore.Authentication.Utils.JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = await _accessTokenProvider.GetAccessToken();
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
@@ -205,9 +202,56 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
         }
 
+        /// <inheritdoc/>
+        public async Task AddPartyUuidToFavorites(Guid partyUuid)
+        {
+            try
+            {
+                string endpointUrl = $"users/current/party-groups/favorites/{partyUuid}";
+                string token = AltinnCore.Authentication.Utils.JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                HttpResponseMessage response = await _client.PutAsync(token, endpointUrl, null, accessToken);
+
+                var resString = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpStatusException("Unexpected response from Profile", response.ReasonPhrase, response.StatusCode, string.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ProfileClient // AddPartyUuidToFavorites // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task DeletePartyUuidFromFavorites(Guid partyUuid)
+        {
+            try
+            {
+                string endpointUrl = $"users/current/party-groups/favorites/{partyUuid}";
+                string token = AltinnCore.Authentication.Utils.JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, accessToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpStatusException("Unexpected response from Profile", response.ReasonPhrase, response.StatusCode, string.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ProfileClient // DeletePartyUuidFromFavorites // Exception");
+                throw;
+            }
+        }
+
         private async Task<UserProfile> GetUserProfileFromEndpoint(string endpointUrl)
         {
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            string token = AltinnCore.Authentication.Utils.JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var accessToken = await _accessTokenProvider.GetAccessToken();
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);

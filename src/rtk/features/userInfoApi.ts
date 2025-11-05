@@ -47,14 +47,18 @@ export interface UserInfo {
 }
 
 export interface ReporteeInfo {
+  partyUuid: string;
   name: string;
   organizationNumber?: string;
-  type?: string;
-  partyUuid: string;
+  dateOfBirth?: string;
   partyId: string;
+  type?: string;
+  unitType?: string;
+  isDeleted: boolean;
+  onlyHierarchyElementWithNoAccess: boolean;
+  authorizedResources: string[];
   authorizedRoles: string[];
   subunits?: ReporteeInfo[];
-  onlyHierarchyElementWithNoAccess: boolean;
 }
 
 export enum PartyType {
@@ -82,7 +86,7 @@ export const userInfoApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['UserInfo', 'RightHolders'],
+  tagTypes: ['UserInfo', 'Favorites'],
   endpoints: (builder) => ({
     getUserInfo: builder.query<UserInfo, void>({
       query: () => 'profile',
@@ -119,6 +123,25 @@ export const userInfoApi = createApi({
         return '/actorlist/favorites';
       },
       keepUnusedDataFor: 300,
+      providesTags: ['Favorites'],
+    }),
+    addFavoriteActorUuid: builder.mutation<void, string>({
+      query: (actorUuid) => {
+        return {
+          url: `/actorlist/favorites/${actorUuid}`,
+          method: 'PUT',
+        };
+      },
+      invalidatesTags: ['Favorites'],
+    }),
+    removeFavoriteActorUuid: builder.mutation<void, string>({
+      query: (actorUuid) => {
+        return {
+          url: `/actorlist/favorites/${actorUuid}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['Favorites'],
     }),
     getIsAdmin: builder.query<boolean, void>({
       query: () => `isAdmin?party=${getCookie('AltinnPartyUuid')}`,
@@ -142,6 +165,8 @@ export const {
   useGetReporteeListForAuthorizedUserQuery,
   useGetActorListForAuthorizedUserQuery,
   useGetFavoriteActorUuidsQuery,
+  useAddFavoriteActorUuidMutation,
+  useRemoveFavoriteActorUuidMutation,
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
   useGetIsCompanyProfileAdminQuery,

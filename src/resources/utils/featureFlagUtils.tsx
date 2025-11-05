@@ -63,3 +63,7 @@ export const poaOverviewPageEnabled = () => {
 export const useNewActorList = () => {
   return window.featureFlags?.useNewActorsList === true;
 };
+
+export const useNewHeader = () => {
+  return window.featureFlags?.useNewHeader === true;
+};

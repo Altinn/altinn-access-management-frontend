@@ -1,4 +1,4 @@
-import { DsAlert, DsHeading } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
 
@@ -17,7 +17,10 @@ export const ReporteesPage = () => {
   const { t } = useTranslation();
   const { data: isAdmin, isLoading } = useGetIsAdminQuery();
   const { data: reportee, isLoading: reporteeLoading } = useGetReporteeQuery();
-  const name = reportee?.name || '';
+  const name = formatDisplayName({
+    fullName: reportee?.name || '',
+    type: reportee?.type === 'Person' ? 'person' : 'company',
+  });
 
   useDocumentTitle(t('reportees_page.page_title'));
 
@@ -35,7 +38,7 @@ export const ReporteesPage = () => {
             errorOnPriv={true}
           >
             <ReporteePageHeading
-              title={t('reportees_page.main_page_heading', { name: reportee?.name || '' })}
+              title={t('reportees_page.main_page_heading', { name })}
               reportee={reportee}
               isLoading={reporteeLoading}
             />
