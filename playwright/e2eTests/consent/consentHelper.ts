@@ -23,18 +23,8 @@ export interface ConsentScenario {
  * Create and approve a consent using Maskinporten authentication
  */
 export async function createAndApproveConsent(opts: ConsentScenario) {
-  const {
-    api,
-    mpToken,
-    fromPerson,
-    toOrg,
-    validTo,
-    page,
-    login,
-    consentPage,
-    resourceValue,
-    metaData,
-  } = opts;
+  const { api, mpToken, fromPerson, toOrg, validTo, login, consentPage, resourceValue, metaData } =
+    opts;
 
   const resp = await api.createConsentRequestWithMaskinporten(
     {

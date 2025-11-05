@@ -95,7 +95,6 @@ export function createMaskinportenGrantAssertion(
  * @param clientId The Maskinporten client ID
  * @param consentRequestId The ID of the consent request
  * @param fromPersonId The person ID in URN format (e.g., urn:altinn:person:identifier-no:21818297804)
- * @param tokenEndpoint The Maskinporten token endpoint URL
  * @param privateKey The private key in JWK format
  * @returns The signed JWT as a string
  */
@@ -103,7 +102,6 @@ export function createConsentAuthorizationJWT(
   clientId: string,
   consentRequestId: string,
   fromPersonId: string,
-  tokenEndpoint: string,
   privateKey: JsonWebKey,
 ): string {
   const { iat, exp } = getCurrentTimestamps();

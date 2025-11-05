@@ -88,7 +88,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
       const consentId = getConsentRequestId(consentResp.viewUri);
       const token = await api.getConsentTokenWithMaskinporten(consentId, fromPerson, mpToken);
       expect(token).toBeTruthy();
-      expect(token.length).toBeGreaterThan(0);
+      expect(token.length).toBeGreaterThan(10);
     });
   });
 

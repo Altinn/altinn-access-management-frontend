@@ -91,7 +91,6 @@ export class MaskinportenToken {
       this.clientId,
       consentRequestId,
       fromPersonId,
-      this.tokenEndpoint,
       this.jwk,
     );
 

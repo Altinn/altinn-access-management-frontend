@@ -178,7 +178,6 @@ languages.forEach((language) => {
   });
 });
 
-// Org-to-org tests
 languages.forEach((language) => {
   test.describe(`Samtykke fra organisasjon til organisasjon: (${language})`, () => {
     test.use({
@@ -200,7 +199,6 @@ languages.forEach((language) => {
     });
 
     test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language})`, async ({
-      page,
       consentPage,
       login,
     }) => {
@@ -215,11 +213,9 @@ languages.forEach((language) => {
         metaData: { inntektsaar: '2028' },
       });
 
-      // Navigate to the consent page
       await consentPage.open(consentResponse.viewUri);
       await login.loginNotChoosingActor(fromPerson);
 
-      // Pick language
       await consentPage.pickLanguage(consentPage.language);
 
       await expect(consentPage.textIncomeData).toBeVisible();
