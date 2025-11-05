@@ -18,8 +18,16 @@
     "id": "0fa3e590-0ab5-442c-ba8d-9410e6a63785",
     "isPendingConsent": false,
     "isPoa": false,
-    "toPartyId": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
-    "toPartyName": "STA TOM TIGER AS"
+    "toParty": {
+      "id": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+      "name": "STA TOM TIGER AS",
+      "type": "Organization"
+    },
+    "fromParty": {
+      "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "DISKRET NÆR TIGER AS",
+      "type": "Organization"
+    }
   },
   {
     "id": "10fded43-fcd4-4f32-b31c-725fdaba6139",
