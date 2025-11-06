@@ -9,6 +9,7 @@ import {
   DsHeading,
   DsParagraph,
   DsSpinner,
+  GlobalHeaderProps,
   Layout,
   RootProvider,
 } from '@altinn/altinn-components';
@@ -19,26 +20,26 @@ import {
   useGetConsentRequestQuery,
   useRejectConsentRequestMutation,
 } from '@/rtk/features/consentApi';
-import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
-import type { ConsentLanguage, ConsentRequest, ProblemDetail } from '../types';
-import { getLanguage, isAccepted, isExpired, isRevoked, replaceStaticMetadata } from '../utils';
+import type { ConsentLanguage, ConsentLocale, ConsentRequest, ProblemDetail } from '../types';
+import { isAccepted, isExpired, isRevoked, replaceStaticMetadata } from '../utils';
 import { ConsentRights } from '../components/ConsentRights/ConsentRights';
 
 import classes from './ConsentRequestPage.module.css';
 import { ConsentRequestError } from './ConsentRequestError';
 import { ConsentStatus } from '../components/ConsentStatus/ConsentStatus';
+import { useNewHeader } from '@/resources/utils/featureFlagUtils';
+import { useHeader } from '../../common/PageLayoutWrapper/useHeader';
 
 export const ConsentRequestPage = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   useDocumentTitle(t('consent_request.page_title'));
   const [searchParams] = useSearchParams();
+  const useNewHeaderFlag = useNewHeader();
+  const { header, languageCode: language } = useHeader();
   const requestId = searchParams.get('id') ?? '';
-  const language = getLanguage(i18n.language);
-
-  const { data: userData } = useGetUserInfoQuery();
 
   const {
     data: request,
@@ -64,60 +65,25 @@ export const ConsentRequestPage = () => {
       : null;
   }, [request]);
 
-  const onChangeLocale = (newLocale: string) => {
-    i18n.changeLanguage(newLocale);
-    document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
-  };
-
-  const account: { name: string; type: 'person' | 'company' } = {
-    name: memoizedRequest?.fromParty.name ?? '',
-    type: memoizedRequest?.fromParty.type === 'Person' ? 'person' : 'company',
-  };
-
+  const headerCondig = header as GlobalHeaderProps;
+  // set current to request fromParty
+  const currentAccount = headerCondig.accountSelector?.accountMenu.items.find(
+    (item) => item.id === memoizedRequest?.fromParty.id.split(':').pop(),
+  );
   return (
     <RootProvider>
       <Layout
+        useGlobalHeader={useNewHeaderFlag}
         color='neutral'
         theme='subtle'
         header={{
-          locale: {
-            title: t('header.locale_title'),
-            options: [
-              { label: 'Norsk (bokmål)', value: 'no_nb', checked: i18n.language === 'no_nb' },
-              { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
-              { label: 'English', value: 'en', checked: i18n.language === 'en' },
-            ],
-            onSelect: onChangeLocale,
-          },
-          logo: {
-            href: getAltinnStartPageUrl(),
-            title: 'Altinn',
-          },
-          currentAccount: {
-            ...account,
-            id: '',
-            icon: account,
-          },
-          globalMenu: {
-            logoutButton: {
-              label: t('header.log_out'),
-              onClick: () => {
-                const logoutUrl = getLogoutUrl();
-                window.location.assign(logoutUrl);
-              },
-            },
-            menuLabel: t('header.menu-label'),
-            backLabel: t('header.back-label'),
-            changeLabel: t('header.change-label'),
-            menu: {
-              items: [{ groupId: 'current-user', hidden: true }],
-              groups: {
-                'current-user': {
-                  title: t('header.logged_in_as_name', {
-                    name: userData?.name || '',
-                  }),
-                },
-              },
+          ...header,
+          accountSelector: {
+            ...headerCondig.accountSelector,
+            accountMenu: {
+              ...headerCondig.accountSelector?.accountMenu,
+              currentAccount: currentAccount,
+              items: [],
             },
           },
         }}
@@ -139,7 +105,7 @@ export const ConsentRequestPage = () => {
         {memoizedRequest && (
           <ConsentRequestContent
             request={memoizedRequest}
-            language={language}
+            language={language as ConsentLocale}
           />
         )}
       </Layout>
