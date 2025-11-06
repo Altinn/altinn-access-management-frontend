@@ -71,7 +71,6 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     Expires = DateTimeOffset.UtcNow.AddDays(1),
                     HttpOnly = true,
-                    SameSite = SameSiteMode.Strict,
                     Secure = true,
                     Path = "/"
                 });
