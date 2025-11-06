@@ -1,4 +1,4 @@
-import { Button, DsAlert, TextField } from '@altinn/altinn-components';
+import { Button, DsAlert, DsParagraph, TextField } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -6,7 +6,10 @@ import { User } from '@/rtk/features/userInfoApi';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-import { useValidateNewUserPersonMutation } from '@/rtk/features/connectionApi';
+import {
+  useAddRightHolderMutation,
+  useValidateNewUserPersonMutation,
+} from '@/rtk/features/connectionApi';
 
 export const NewPersonContent = ({
   onComplete,
@@ -20,7 +23,7 @@ export const NewPersonContent = ({
   const [lastName, setLastName] = useState('');
   const [errorTime, setErrorTime] = useState<string>('');
 
-  const [validateNewPerson, { error, isError, isLoading }] = useValidateNewUserPersonMutation();
+  const [addRightHolder, { error, isError, isLoading }] = useAddRightHolderMutation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
 
   const errorDetails =
@@ -32,11 +35,12 @@ export const NewPersonContent = ({
       : null;
 
   const navigateIfValidPerson = () => {
-    validateNewPerson({ ssn, lastName })
+    const personInput = { personIdentifier: ssn, lastName: lastName };
+    addRightHolder({ personInput })
       .unwrap()
-      .then((userUuid) => {
+      .then((toUuid) => {
         if (onComplete) {
-          onComplete({ id: userUuid, name: lastName, children: null, keyValues: null });
+          onComplete({ id: toUuid, name: lastName, children: null, keyValues: null });
         }
         modalRef.current?.close();
       })

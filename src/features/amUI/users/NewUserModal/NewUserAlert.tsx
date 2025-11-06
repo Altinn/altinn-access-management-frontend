@@ -15,7 +15,7 @@ export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
   const { t } = useTranslation();
   let errorText;
 
-  if (error && error.status === '404' && userType === 'person') {
+  if (error && error.status === '400' && userType === 'person') {
     errorText = (
       <DsParagraph data-size='sm'>{t('new_user_modal.not_found_error_person')}</DsParagraph>
     );
