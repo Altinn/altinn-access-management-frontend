@@ -13,7 +13,7 @@ declare global {
       displaySettingsPage: boolean;
       displayPoaOverviewPage: boolean;
       useNewActorsList: boolean;
-      useNewLogoutUrl: boolean;
+      useNewHeader: boolean;
     };
   }
 }

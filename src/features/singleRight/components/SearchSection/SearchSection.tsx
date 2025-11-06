@@ -175,13 +175,20 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     );
 
     const isLoading = currentServiceWithStatus?.isLoading;
-    const status = currentServiceWithStatus?.status;
+    let status = currentServiceWithStatus?.status;
+
+    if (
+      currentServiceWithStatus &&
+      (!currentServiceWithStatus?.rightList || currentServiceWithStatus?.rightList.length === 0)
+    ) {
+      status = ServiceStatus.HTTPError;
+    }
 
     const errorCodeTextKeyList =
-      currentServiceWithStatus?.status === ServiceStatus.NotDelegable ||
-      currentServiceWithStatus?.status === ServiceStatus.Unauthorized ||
-      currentServiceWithStatus?.status === ServiceStatus.HTTPError
-        ? currentServiceWithStatus.rightList?.flatMap(
+      status === ServiceStatus.NotDelegable ||
+      status === ServiceStatus.Unauthorized ||
+      status === ServiceStatus.HTTPError
+        ? currentServiceWithStatus?.rightList?.flatMap(
             (result) =>
               result.details
                 ?.filter((detail) => Object.values(ErrorCode).includes(detail.code as ErrorCode))

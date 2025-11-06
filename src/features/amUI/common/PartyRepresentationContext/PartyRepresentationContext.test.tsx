@@ -146,7 +146,13 @@ const renderWithProvider = (
     fromPartyUuid,
     toPartyUuid,
     actingPartyUuid,
-  }: { fromPartyUuid?: string; toPartyUuid?: string; actingPartyUuid: string },
+    loadingComponent,
+  }: {
+    fromPartyUuid?: string;
+    toPartyUuid?: string;
+    actingPartyUuid: string;
+    loadingComponent?: React.ReactElement;
+  },
 ) => {
   const store = createMockStore();
   return render(
@@ -155,6 +161,7 @@ const renderWithProvider = (
         fromPartyUuid={fromPartyUuid}
         toPartyUuid={toPartyUuid}
         actingPartyUuid={actingPartyUuid}
+        loadingComponent={loadingComponent}
       >
         {ui}
       </PartyRepresentationProvider>
@@ -541,9 +548,11 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       fromPartyUuid: 'from-uuid',
       toPartyUuid: 'to-uuid',
       actingPartyUuid: 'from-uuid',
+      loadingComponent: <div data-testid='loading-state'>loading</div>,
     });
 
-    expect(screen.getByTestId('is-loading')).toHaveTextContent('true');
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
+    expect(screen.queryByTestId('is-loading')).toBeNull();
   });
 
   test('usePartyRepresentation hook should throw error when used outside provider', () => {

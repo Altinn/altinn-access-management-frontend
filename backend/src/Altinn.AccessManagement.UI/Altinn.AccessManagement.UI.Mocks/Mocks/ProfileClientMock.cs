@@ -203,6 +203,28 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Task.FromResult(response);
         }
 
+        /// <inheritdoc/>
+        public async Task AddPartyUuidToFavorites(Guid partyUuid)
+        {
+            if (partyUuid == Guid.Empty)
+            {
+                throw new HttpRequestException("Internal server error");
+            }
+
+            await Task.CompletedTask;
+        }
+
+        /// <inheritdoc/>
+        public async Task DeletePartyUuidFromFavorites(Guid partyUuid)
+        {
+            if (partyUuid == Guid.Empty)
+            {
+                throw new HttpRequestException("Internal server error");
+            }
+
+            await Task.CompletedTask;
+        }
+
         private static string GetDataPathForProfiles()
         {
             string folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);

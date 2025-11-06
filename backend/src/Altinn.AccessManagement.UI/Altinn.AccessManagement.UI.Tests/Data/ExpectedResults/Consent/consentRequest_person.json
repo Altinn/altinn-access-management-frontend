@@ -1,5 +1,20 @@
 {
   "id": "e2071c55-6adf-487b-af05-9198a230ed44",
+  "fromParty": {
+    "id": "urn:altinn:person:identifier-no:167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "name": "SITRONGUL MEDALJONG",
+    "type": "Person"
+  },
+  "toParty": {
+    "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "name": "DISKRET NÆR TIGER AS",
+    "type": "Organization"
+  },
+  "handledByParty": {
+    "id": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "name": "STA TOM TIGER AS",
+    "type": "Organization"
+  },
   "isPoa": false,
   "title": {
     "nb": "Samtykke til bruk av dine data",
@@ -31,9 +46,6 @@
     "nn": "{HandledBy} gjer dette oppslaget på vegne av {CoveredBy}.",
     "en": "{HandledBy} performs the lookup on behalf of {CoveredBy}."
   },
-  "fromPartyName": "SITRONGUL MEDALJONG",
-  "toPartyName": "DISKRET NÆR TIGER AS",
-  "handledByPartyName": "STA TOM TIGER AS",
   "validTo": "2075-05-21T11:11:24.9535551+00:00",
   "rights": [
     {

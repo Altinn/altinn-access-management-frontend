@@ -16,13 +16,13 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         public bool IsPoa { get; set; }
 
         /// <summary>
-        /// Id of party that requested the consent
+        /// Party that requested the consent
         /// </summary>
-        public string ToPartyId { get; set; }
+        public ConsentPartyFE ToParty { get; set; }
 
         /// <summary>
-        /// Name of party that requested the consent
+        /// Party that requested the consent
         /// </summary>
-        public string ToPartyName { get; set; }
+        public ConsentPartyFE FromParty { get; set; }
     }
 }
