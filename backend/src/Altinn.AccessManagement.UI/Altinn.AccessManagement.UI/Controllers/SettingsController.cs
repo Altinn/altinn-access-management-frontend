@@ -28,6 +28,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="logger">the logger.</param>
         /// <param name="settingsService">service implementation for settings</param>
+        /// <param name="generalSettings">general settings</param>
         public SettingsController(
             ILogger<SettingsController> logger,
             ISettingsService settingsService,
