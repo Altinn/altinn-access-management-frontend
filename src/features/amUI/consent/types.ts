@@ -1,7 +1,7 @@
 export type ConsentLocale = 'nb' | 'nn' | 'en';
 export type ConsentLanguage = Record<ConsentLocale, string>;
 
-interface ConsentParty {
+export interface ConsentParty {
   id: string;
   name: string;
   type: string;
