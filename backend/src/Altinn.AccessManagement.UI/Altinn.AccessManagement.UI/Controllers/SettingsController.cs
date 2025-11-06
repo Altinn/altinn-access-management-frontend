@@ -69,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 altinnStandardLanguage,
                 new CookieOptions
                 {
-                    Expires = DateTimeOffset.UtcNow.AddMonths(1),
+                    Expires = DateTimeOffset.UtcNow.AddDays(1),
                     HttpOnly = true,
                     SameSite = SameSiteMode.Strict,
                     Secure = true,
