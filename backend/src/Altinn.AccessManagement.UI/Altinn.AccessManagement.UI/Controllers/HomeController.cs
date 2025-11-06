@@ -93,11 +93,13 @@ namespace Altinn.AccessManagement.UI.Controllers
 
         private Task SetLanguageCookie()
         {
-            string languageCode = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(_httpContextAccessor.HttpContext);
+            var httpContext = _httpContextAccessor.HttpContext;
+
+            string languageCode = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(httpContext);
 
             if (string.IsNullOrEmpty(languageCode))
             {
-                languageCode = _httpContextAccessor.HttpContext?.Request.Cookies["selectedLanguage"];
+                languageCode = httpContext?.Request.Cookies["selectedLanguage"];
             }
 
             if (string.IsNullOrEmpty(languageCode))
