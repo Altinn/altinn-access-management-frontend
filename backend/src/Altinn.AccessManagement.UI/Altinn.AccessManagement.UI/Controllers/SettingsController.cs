@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("language/selectedLanguage")]
         public IActionResult UpdateSelectedLanguage([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] UpdateSelectedLanguageRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.LanguageCode))
+            if (request == null || string.IsNullOrWhiteSpace(request.LanguageCode))
             {
                 return BadRequest("Language code is required.");
             }
