@@ -1,11 +1,9 @@
 import { expect } from '@playwright/test';
 import { test } from 'playwright/fixture/pomFixture';
-import { ConsentApiRequests } from '../../api-requests/ConsentApiRequests';
-import { MaskinportenToken } from '../../api-requests/MaskinportenToken';
-import { fromPersons } from './consentTestdata';
 import { Language } from 'playwright/pages/consent/ConsentPage';
-import { addTimeToNowUtc, env, formatUiDateTime } from 'playwright/util/helper';
-import { createAndApproveConsent, getConsentRequestId } from './consentHelper.js';
+import { env, formatUiDateTime } from 'playwright/util/helper';
+import { createAndApproveConsent, getConsentRequestId } from './helper/consentHelper.js';
+import { scenarioBuilder } from './helper/scenarioBuilder';
 
 const DESKTOP = { width: 1920, height: 1080 };
 
@@ -17,16 +15,6 @@ function getDigitaliseringsdirektoratetLocator(page: any) {
   return page.getByText('DIGITALISERINGSDIREKTORATET');
 }
 
-function makeScenario() {
-  const pickRandom = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
-  const fromPerson = pickRandom(fromPersons);
-  const toOrg = MASKINPORTEN_ORG_ID;
-  const validTo = addTimeToNowUtc({ days: 5 });
-  const api = new ConsentApiRequests(toOrg);
-  const mpToken = new MaskinportenToken();
-  return { fromPerson, toOrg, validTo, api, mpToken };
-}
-
 test.describe('Generate consent request for Digdir using maskinporten to fetch token', () => {
   test.use({ language: Language.NB, viewport: DESKTOP });
 
@@ -35,14 +23,9 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
     login,
     consentPage,
   }) => {
-    const { api, mpToken, fromPerson, toOrg, validTo } = makeScenario();
-
+    const scenario = scenarioBuilder.personToOrgWithMaskinporten(MASKINPORTEN_ORG_ID);
     await createAndApproveConsent({
-      api,
-      mpToken,
-      fromPerson,
-      toOrg,
-      validTo,
+      ...scenario,
       page,
       login,
       consentPage,
@@ -54,7 +37,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
       await consentPage.expectStandardIntro();
       await expect(consentPage.textIncomeData).toBeVisible();
       await expect(getDigitaliseringsdirektoratetLocator(page)).toHaveCount(2);
-      await consentPage.expectExpiry(formatUiDateTime(validTo));
+      await consentPage.expectExpiry(formatUiDateTime(scenario.validTo));
     });
 
     await consentPage.approveStandardAndWaitLogout('https://example.com/');
@@ -65,14 +48,9 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
     test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
 
     test('Fetch consent token after approval', async ({ page, login, consentPage }) => {
-      const { api, mpToken, fromPerson, toOrg, validTo } = makeScenario();
-
+      const scenario = scenarioBuilder.personToOrgWithMaskinporten(MASKINPORTEN_ORG_ID);
       const consentResp = await createAndApproveConsent({
-        api,
-        mpToken,
-        fromPerson,
-        toOrg,
-        validTo,
+        ...scenario,
         page,
         login,
         consentPage,
@@ -86,7 +64,11 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
       await consentPage.approveStandardAndWaitLogout('https://example.com/');
 
       const consentId = getConsentRequestId(consentResp.viewUri);
-      const token = await api.getConsentTokenWithMaskinporten(consentId, fromPerson, mpToken);
+      const token = await scenario.api.getConsentTokenWithMaskinporten(
+        consentId,
+        scenario.fromPerson,
+        scenario.mpToken,
+      );
       expect(token).toBeTruthy();
       expect(token.length).toBeGreaterThan(10);
     });
@@ -97,14 +79,8 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
     login,
     consentPage,
   }) => {
-    const { api, mpToken, fromPerson, toOrg, validTo } = makeScenario();
-
     const resp = await createAndApproveConsent({
-      api,
-      mpToken,
-      fromPerson,
-      toOrg,
-      validTo,
+      ...scenarioBuilder.personToOrgWithMaskinporten(MASKINPORTEN_ORG_ID),
       page,
       login,
       consentPage,

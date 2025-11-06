@@ -1,8 +1,8 @@
 import type { Page } from '@playwright/test';
-import { ConsentApiRequests } from '../../api-requests/ConsentApiRequests';
-import { MaskinportenToken } from '../../api-requests/MaskinportenToken';
-import type { LoginPage } from '../../pages/LoginPage';
-import type { ConsentPage } from '../../pages/consent/ConsentPage';
+import { ConsentApiRequests } from '../../../api-requests/ConsentApiRequests';
+import { MaskinportenToken } from '../../../api-requests/MaskinportenToken';
+import type { LoginPage } from '../../../pages/LoginPage';
+import type { ConsentPage } from '../../../pages/consent/ConsentPage';
 
 const REDIRECT_URL = 'https://example.com/';
 
