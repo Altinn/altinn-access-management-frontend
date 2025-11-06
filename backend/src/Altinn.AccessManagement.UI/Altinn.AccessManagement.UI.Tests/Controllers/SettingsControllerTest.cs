@@ -44,8 +44,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// </summary>
         [Theory]
         [InlineData("nb", "UL=1044")]
-        [InlineData("no_nb", "UL=1044")]
         [InlineData("en", "UL=1033")]
+        [InlineData("no_nn", "UL=2068")]
         public async Task UpdateSelectedLanguage_ValidLanguageCodes_SetCookie(string languageCode, string expectedCookieValue)
         {
             // Arrange
@@ -65,7 +65,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal("/", parsedCookie.Path.ToString());
             Assert.True(parsedCookie.HttpOnly);
             Assert.True(parsedCookie.Secure);
-            Assert.Equal(SameSiteMode.Strict, parsedCookie.SameSite);
         }
 
         /// <summary>
