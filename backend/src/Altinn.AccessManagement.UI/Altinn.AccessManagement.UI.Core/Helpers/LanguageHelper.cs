@@ -20,11 +20,11 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// </summary>
         /// <param name="languageCode">The language code.</param>
         /// <returns>The Altinn 2 standard language code if found; otherwise null.</returns>
-        public static string? TryGetAltinn2StandardLanguage(string languageCode)
+        public static string TryGetAltinn2StandardLanguage(string languageCode)
         {
             if (string.IsNullOrEmpty(languageCode))
             {
-                return null;
+                return string.Empty;
             }
 
             var mapping = LanguageMappings.Find(m =>
