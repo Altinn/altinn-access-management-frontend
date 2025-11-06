@@ -9,6 +9,7 @@ import {
   DsHeading,
   DsParagraph,
   DsSpinner,
+  formatDisplayName,
   Layout,
   RootProvider,
 } from '@altinn/altinn-components';
@@ -114,7 +115,7 @@ export const ConsentRequestPage = () => {
               groups: {
                 'current-user': {
                   title: t('header.logged_in_as_name', {
-                    name: userData?.name || '',
+                    name: formatDisplayName({ fullName: userData?.name || '', type: 'person' }),
                   }),
                 },
               },
