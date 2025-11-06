@@ -50,9 +50,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("language/selectedLanguage")]
-        public IActionResult UpdateSelectedLanguage([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] UpdateSelectedLanguageRequest? request)
+        public IActionResult UpdateSelectedLanguage([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] UpdateSelectedLanguageRequest request)
         {
-            if (request == null || string.IsNullOrWhiteSpace(request.LanguageCode))
+            if (string.IsNullOrWhiteSpace(request.LanguageCode))
             {
                 return BadRequest("Language code is required.");
             }
