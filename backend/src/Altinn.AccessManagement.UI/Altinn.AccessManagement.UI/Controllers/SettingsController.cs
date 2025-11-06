@@ -1,13 +1,15 @@
 ﻿using System;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Options;
 
-namespace Altinn.AccessManagement.UI.Controllers 
+namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
     /// Controller responsible for all operations for lookup
@@ -19,6 +21,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     {
         private readonly ILogger _logger;
         private readonly ISettingsService _settingsService;
+        private readonly GeneralSettings _generalSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsController"/> class.
@@ -27,10 +30,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="settingsService">service implementation for settings</param>
         public SettingsController(
             ILogger<SettingsController> logger,
-            ISettingsService settingsService)
+            ISettingsService settingsService,
+            IOptions<GeneralSettings> generalSettings)
         {
             _logger = logger;
             _settingsService = settingsService;
+            _generalSettings = generalSettings.Value;
         }
 
         /// <summary>
@@ -48,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Updates the Altinn persistent context cookie with the selected language.
         /// </summary>
         [HttpPost]
-        [Authorize] 
+        [Authorize]
         [Route("language/selectedLanguage")]
         public IActionResult UpdateSelectedLanguage([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] UpdateSelectedLanguageRequest request)
         {
@@ -64,16 +69,23 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest("Unsupported language code.");
             }
 
+            CookieOptions cookieOptions = new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddDays(1),
+                HttpOnly = true,
+                Secure = true,
+                Path = "/"
+            };
+
+            if (!string.IsNullOrWhiteSpace(_generalSettings?.Hostname))
+            {
+                cookieOptions.Domain = _generalSettings.Hostname;
+            }
+
             Response.Cookies.Append(
                 "altinnPersistentContext",
                 altinnStandardLanguage,
-                new CookieOptions
-                {
-                    Expires = DateTimeOffset.UtcNow.AddDays(1),
-                    HttpOnly = true,
-                    Secure = true,
-                    Path = "/"
-                });
+                cookieOptions);
 
             return Ok();
         }
