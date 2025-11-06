@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Updates the Altinn persistent context cookie with the selected language.
         /// </summary>
         [HttpPost]
-        [Authorize]
+        [Authorize] 
         [Route("language/selectedLanguage")]
         public IActionResult UpdateSelectedLanguage([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] UpdateSelectedLanguageRequest request)
         {
@@ -66,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             Response.Cookies.Append(
                 "altinnPersistentContext",
-                $"{altinnStandardLanguage}",
+                altinnStandardLanguage,
                 new CookieOptions
                 {
                     Expires = DateTimeOffset.UtcNow.AddMonths(1),
