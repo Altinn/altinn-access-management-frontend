@@ -133,17 +133,17 @@ const getTimeLineItems = (
     t: TFunction<'translation', undefined>,
   ): string => {
     const handledByText =
-      eventType === 'Used' && consent.handledByPartyName
+      eventType === 'Used' && consent.handledByParty?.name
         ? t('consent_log.handledby', {
-            handledBy: consent.handledByPartyName,
-            to: consent.toPartyName,
+            handledBy: consent.handledByParty.name,
+            to: consent.toParty.name,
           })
         : '';
 
     const textKey = consent.isPoa
       ? timelineEventText[eventType]['poa']
       : timelineEventText[eventType]['consent'];
-    return `${t(textKey, { to: consent.toPartyName, from: consent.fromPartyName })} ${handledByText}`;
+    return `${t(textKey, { to: consent.toParty.name, from: consent.fromParty.name })} ${handledByText}`;
   };
 
   return consentLog
@@ -164,8 +164,8 @@ const getTimeLineItems = (
                 ? t('consent_log.expires', { expires: toDateTimeString(consent.validTo) })
                 : '',
             created: event.created,
-            fromPartyName: consent.fromPartyName,
-            toPartyName: consent.toPartyName,
+            fromPartyName: consent.fromParty.name,
+            toPartyName: consent.toParty.name,
             isPoa: consent.isPoa,
             consentId: consent.id,
           };

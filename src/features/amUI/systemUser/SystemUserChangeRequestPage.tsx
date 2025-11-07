@@ -16,9 +16,10 @@ import type { ProblemDetail, SystemUserAccessPackage } from './types';
 import { RightsList } from './components/RightsList/RightsList';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
-import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
+import { getApiBaseUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/CreateSystemUserCheck';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { getLogoutUrl } from '@/resources/utils/pathUtils';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
