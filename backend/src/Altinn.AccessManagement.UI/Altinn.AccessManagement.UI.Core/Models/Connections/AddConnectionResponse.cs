@@ -13,7 +13,7 @@
         /// <summary>
         /// New role id.
         /// </summary>
-        public Guid RoleI { get; set; }
+        public Guid RoleId { get; set; }
 
         /// <summary>
         /// From id.
