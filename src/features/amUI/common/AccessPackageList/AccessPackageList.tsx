@@ -125,7 +125,7 @@ export const AccessPackageList = ({
 
   const displayAreas = searchString
     ? combinedAreas
-    : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
+    : [...combinedAreas].sort((a, b) => a.name.localeCompare(b.name));
 
   if (
     searchString &&
