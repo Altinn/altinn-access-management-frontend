@@ -81,6 +81,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             if (personInput != null)
             {
+                if (string.IsNullOrWhiteSpace(personInput.PersonIdentifier) || string.IsNullOrWhiteSpace(personInput.LastName))
+                {
+                    throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
+                }
+
                 // Check for bad input
                 string ssn_cleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
                 string lastname_cleaned = personInput.LastName.Trim().Replace("\"", string.Empty);

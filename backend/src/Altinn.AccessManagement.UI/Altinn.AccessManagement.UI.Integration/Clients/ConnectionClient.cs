@@ -54,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<Guid> PostNewRightHolderConnection(Guid party, Guid? to, PersonInput personInput = null, CancellationToken cancellationToken = default)
         {
-            string endpointUrl = $"enduser/connections?party={party}&from={party}" + (to != null ? $"&to={to}" : null);
+            string endpointUrl = $"enduser/connections?party={party}&from={party}" + (to != null ? $"&to={to}" : string.Empty);
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             StringContent requestBody = personInput != null ? new StringContent(JsonSerializer.Serialize(personInput, _serializerOptions), Encoding.UTF8, "application/json") : null;
