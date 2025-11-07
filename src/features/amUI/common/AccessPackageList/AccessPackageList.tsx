@@ -123,10 +123,15 @@ export const AccessPackageList = ({
     );
   }
 
+  const displayAreas = searchString
+    ? combinedAreas
+    : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
+
   if (
-    searchString &&
-    searchString?.length > 0 &&
-    (allPackageAreas === undefined || allPackageAreas.length === 0)
+    (searchString &&
+      searchString?.length > 0 &&
+      (allPackageAreas === undefined || allPackageAreas.length === 0)) ||
+    (!showAllAreas && displayAreas.length === 0)
   ) {
     return (
       <div className={classes.accessAreaList}>
@@ -136,10 +141,6 @@ export const AccessPackageList = ({
       </div>
     );
   }
-
-  const displayAreas = searchString
-    ? combinedAreas
-    : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className={classes.accessAreaList}>
