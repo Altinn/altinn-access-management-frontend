@@ -118,7 +118,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 // Make this cookie readable by Javascript.
                 HttpOnly = false,
-                SameSite = SameSiteMode.Strict
             });
 
             return Task.CompletedTask;
