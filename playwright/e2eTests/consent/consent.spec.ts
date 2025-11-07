@@ -1,30 +1,14 @@
 import { expect } from '@playwright/test';
 import { test } from 'playwright/fixture/pomFixture';
 
-import { ConsentApiRequests } from '../../api-requests/ConsentApiRequests';
-import { fromPersons, toOrgs, fromOrgs } from './consentTestdata';
 import { Language } from 'playwright/pages/consent/ConsentPage';
-import { addTimeToNowUtc, formatUiDateTime } from 'playwright/util/helper';
+import { formatUiDateTime } from 'playwright/util/helper';
+import { scenarioBuilder } from './helper/scenarioBuilder';
 
 const redirectUrl = 'https://example.com/';
 
 const languages = [Language.NB, Language.NN, Language.EN];
 const mobileViewport = { width: 375, height: 667 };
-
-let api: ConsentApiRequests;
-let validToTimestamp: string;
-let fromPerson: string;
-let toOrg: string;
-
-test.beforeEach(async () => {
-  const pickRandom = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
-  fromPerson = pickRandom(fromPersons);
-  toOrg = pickRandom(toOrgs);
-
-  // Create API instance with specific org to avoid conflicts
-  api = new ConsentApiRequests(toOrg);
-  validToTimestamp = addTimeToNowUtc({ years: 1 });
-});
 
 languages.forEach((language) => {
   test.describe(`Samtykke - fra person til org (${language})`, () => {
@@ -33,64 +17,67 @@ languages.forEach((language) => {
       viewport: mobileViewport,
     });
     test(`Standard samtykke`, async ({ login, consentPage }) => {
-      const consentResponse = await api.createConsentRequest({
-        from: { type: 'person', id: fromPerson },
-        to: { type: 'org', id: toOrg },
-        validToIsoUtc: validToTimestamp,
+      const scenario = scenarioBuilder.personToOrg();
+      const consentResponse = await scenario.api.createConsentRequest({
+        from: { type: 'person', id: scenario.fromPerson },
+        to: { type: 'org', id: scenario.toOrg },
+        validToIsoUtc: scenario.validTo,
         resourceValue: 'standard-samtykke-for-dele-data',
         redirectUrl,
         metaData: { inntektsaar: '2028' },
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginNotChoosingActor(fromPerson);
+      await login.loginNotChoosingActor(scenario.fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
       await consentPage.expectStandardIntro();
       await expect(consentPage.textIncomeData).toBeVisible();
 
-      const expected = formatUiDateTime(validToTimestamp);
+      const expected = formatUiDateTime(scenario.validTo);
       await consentPage.expectExpiry(expected);
 
       await consentPage.approveStandardAndWaitLogout(redirectUrl);
     });
 
     test(`Krav-template`, async ({ page, consentPage, login }) => {
-      const consentResponse = await api.createConsentRequest({
-        from: { type: 'person', id: fromPerson },
-        to: { type: 'org', id: toOrg },
-        validToIsoUtc: validToTimestamp,
+      const scenario = scenarioBuilder.personToOrg();
+      const consentResponse = await scenario.api.createConsentRequest({
+        from: { type: 'person', id: scenario.fromPerson },
+        to: { type: 'org', id: scenario.toOrg },
+        validToIsoUtc: scenario.validTo,
         resourceValue: 'samtykke-brukerstyrt-tilgang',
         redirectUrl,
         metaData: { brukerdata: 'AutomatisertTiltakE2E' },
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginNotChoosingActor(fromPerson);
+      await login.loginNotChoosingActor(scenario.fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
       await consentPage.expectKravIntro();
 
-      const expected = formatUiDateTime(validToTimestamp);
+      const expected = formatUiDateTime(scenario.validTo);
       await consentPage.expectExpiry(expected);
 
       await consentPage.approveStandardAndWaitLogout(redirectUrl);
     });
 
     test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login }) => {
-      const consentResponse = await api.createConsentRequest({
-        from: { type: 'person', id: fromPerson },
-        to: { type: 'org', id: toOrg },
-        validToIsoUtc: validToTimestamp,
+      const scenario = scenarioBuilder.personToOrg();
+      const consentResponse = await scenario.api.createConsentRequest({
+        from: { type: 'person', id: scenario.fromPerson },
+        to: { type: 'org', id: scenario.toOrg },
+        validToIsoUtc: scenario.validTo,
         resourceValue: 'samtykke-fullmakt-utfoere-tjeneste',
         redirectUrl,
         metaData: { tiltak: '2024' },
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginNotChoosingActor(fromPerson);
+      await login.loginNotChoosingActor(scenario.fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
@@ -99,7 +86,7 @@ languages.forEach((language) => {
       await expect(consentPage.textFullmaktService).toBeVisible();
       await expect(page.getByText('Tiltak: 2024')).toBeVisible();
 
-      const expected = formatUiDateTime(validToTimestamp);
+      const expected = formatUiDateTime(scenario.validTo);
       await consentPage.expectFullmaktExpiry();
       await consentPage.expectExpiryDate(expected);
 
@@ -107,17 +94,18 @@ languages.forEach((language) => {
     });
 
     test(`Lånesøknad`, async ({ consentPage, page, login }) => {
-      const consentResponse = await api.createConsentRequest({
-        from: { type: 'person', id: fromPerson },
-        to: { type: 'org', id: toOrg },
-        validToIsoUtc: validToTimestamp,
+      const scenario = scenarioBuilder.personToOrg();
+      const consentResponse = await scenario.api.createConsentRequest({
+        from: { type: 'person', id: scenario.fromPerson },
+        to: { type: 'org', id: scenario.toOrg },
+        validToIsoUtc: scenario.validTo,
         resourceValue: 'samtykke-laanesoeknad',
         redirectUrl,
         metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginNotChoosingActor(fromPerson);
+      await login.loginNotChoosingActor(scenario.fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
@@ -133,17 +121,18 @@ languages.forEach((language) => {
     });
 
     test(`Enkelt samtykke`, async ({ consentPage, page, login }) => {
-      const consentResponse = await api.createConsentRequest({
-        from: { type: 'person', id: fromPerson },
-        to: { type: 'org', id: toOrg },
-        validToIsoUtc: validToTimestamp,
+      const scenario = scenarioBuilder.personToOrg();
+      const consentResponse = await scenario.api.createConsentRequest({
+        from: { type: 'person', id: scenario.fromPerson },
+        to: { type: 'org', id: scenario.toOrg },
+        validToIsoUtc: scenario.validTo,
         resourceValue: 'enkelt-samtykke',
         redirectUrl,
         metaData: { simpletag: 'E2E Playwright metadata for simpletag' },
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginNotChoosingActor(fromPerson);
+      await login.loginNotChoosingActor(scenario.fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
@@ -159,17 +148,18 @@ languages.forEach((language) => {
     });
 
     test(`Avvis samtykke`, async ({ consentPage, login }) => {
-      const consentResponse = await api.createConsentRequest({
-        from: { type: 'person', id: fromPerson },
-        to: { type: 'org', id: toOrg },
-        validToIsoUtc: validToTimestamp,
+      const scenario = scenarioBuilder.personToOrg();
+      const consentResponse = await scenario.api.createConsentRequest({
+        from: { type: 'person', id: scenario.fromPerson },
+        to: { type: 'org', id: scenario.toOrg },
+        validToIsoUtc: scenario.validTo,
         resourceValue: 'enkelt-samtykke',
         redirectUrl,
         metaData: { simpletag: 'E2E reject test' },
       });
 
       await consentPage.open(consentResponse.viewUri);
-      await login.loginNotChoosingActor(fromPerson);
+      await login.loginNotChoosingActor(scenario.fromPerson);
 
       await consentPage.pickLanguage(consentPage.language);
 
@@ -179,7 +169,6 @@ languages.forEach((language) => {
   });
 });
 
-// Org-to-org tests
 languages.forEach((language) => {
   test.describe(`Samtykke fra organisasjon til organisasjon: (${language})`, () => {
     test.use({
@@ -187,45 +176,30 @@ languages.forEach((language) => {
       viewport: mobileViewport,
     });
 
-    let fromOrg: string;
-    let toOrg: string;
-    let fromPerson: string; // daglig leder of the requesting org
-
-    test.beforeEach(async ({}) => {
-      const pickRandom = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
-      [fromOrg, fromPerson] = pickRandom(fromOrgs);
-      toOrg = pickRandom(toOrgs);
-
-      // Create API instance with specific org to avoid conflicts
-      api = new ConsentApiRequests(toOrg);
-    });
-
     test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language})`, async ({
-      page,
       consentPage,
       login,
     }) => {
       // Create consent request from one org to another org
       // For å godkjenne her kreves det at ressursen i ressursregisteret er satt opp med utfyller/innsender-rollen for org til org-samtykke
-      const consentResponse = await api.createConsentRequest({
-        from: { type: 'org', id: fromOrg },
-        to: { type: 'org', id: toOrg },
-        validToIsoUtc: validToTimestamp,
+      const scenario = scenarioBuilder.orgToOrg();
+      const consentResponse = await scenario.api.createConsentRequest({
+        from: { type: 'org', id: scenario.fromOrg },
+        to: { type: 'org', id: scenario.toOrg },
+        validToIsoUtc: scenario.validTo,
         resourceValue: 'standard-samtykke-for-dele-data',
         redirectUrl,
         metaData: { inntektsaar: '2028' },
       });
 
-      // Navigate to the consent page
       await consentPage.open(consentResponse.viewUri);
-      await login.loginNotChoosingActor(fromPerson);
+      await login.loginNotChoosingActor(scenario.fromPerson);
 
-      // Pick language
       await consentPage.pickLanguage(consentPage.language);
 
       await expect(consentPage.textIncomeData).toBeVisible();
 
-      const expected = formatUiDateTime(validToTimestamp);
+      const expected = formatUiDateTime(scenario.validTo);
       await consentPage.expectExpiry(expected);
 
       // Verify metadata is displayed
