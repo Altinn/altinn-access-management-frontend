@@ -12,6 +12,7 @@ import type {
 } from '@/features/amUI/systemUser/types';
 
 import type { ReporteeInfo } from './userInfoApi';
+import { formatDisplayName } from '@altinn/altinn-components';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
@@ -25,6 +26,16 @@ interface NewSystemUserRequest {
   integrationTitle: string;
   systemId: string;
 }
+
+const formatSystemVendorName = (system: RegisteredSystem) => {
+  return {
+    ...system,
+    systemVendorOrgName: formatDisplayName({
+      fullName: system.systemVendorOrgName,
+      type: 'company',
+    }),
+  };
+};
 
 export const systemUserApi = createApi({
   reducerPath: 'systemUserApi',
@@ -42,12 +53,21 @@ export const systemUserApi = createApi({
     getSystemUserReportee: builder.query<ReporteeInfo, string>({
       keepUnusedDataFor: 300,
       query: (partyId) => `user/reportee/${partyId}`,
+      transformResponse: (response: ReporteeInfo) => {
+        return {
+          ...response,
+          name: formatDisplayName({ fullName: response.name, type: 'company' }),
+        };
+      },
     }),
 
     // systemregister
     getRegisteredSystems: builder.query<RegisteredSystem[], void>({
       query: () => `/systemregister`,
       keepUnusedDataFor: Infinity,
+      transformResponse: (response: RegisteredSystem[]) => {
+        return response.map(formatSystemVendorName);
+      },
     }),
     getRegisteredSystemRights: builder.query<RegisteredSystemRights, string>({
       query: (systemId) => `systemregister/rights/${systemId}`,
@@ -57,9 +77,23 @@ export const systemUserApi = createApi({
     getSystemUsers: builder.query<SystemUser[], string>({
       query: (partyId) => `systemuser/${partyId}`,
       providesTags: [Tags.SystemUsers],
+      transformResponse: (response: SystemUser[]) => {
+        return response.map((x) => {
+          return {
+            ...x,
+            system: formatSystemVendorName(x.system),
+          };
+        });
+      },
     }),
     getSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
       query: ({ partyId, systemUserId }) => `systemuser/${partyId}/${systemUserId}`,
+      transformResponse: (response: SystemUser) => {
+        return {
+          ...response,
+          system: formatSystemVendorName(response.system),
+        };
+      },
     }),
     createSystemUser: builder.mutation<{ id: string }, NewSystemUserRequest>({
       query: ({ partyId, ...systemUser }) => ({
@@ -93,9 +127,23 @@ export const systemUserApi = createApi({
     getAgentSystemUsers: builder.query<SystemUser[], string>({
       query: (partyId) => `systemuser/agent/${partyId}`,
       providesTags: [Tags.SystemUsers],
+      transformResponse: (response: SystemUser[]) => {
+        return response.map((x) => {
+          return {
+            ...x,
+            system: formatSystemVendorName(x.system),
+          };
+        });
+      },
     }),
     getAgentSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
       query: ({ partyId, systemUserId }) => `systemuser/agent/${partyId}/${systemUserId}`,
+      transformResponse: (response: SystemUser) => {
+        return {
+          ...response,
+          system: formatSystemVendorName(response.system),
+        };
+      },
     }),
     deleteAgentSystemuser: builder.mutation<
       void,
@@ -114,6 +162,14 @@ export const systemUserApi = createApi({
       query: ({ partyId, systemUserId, partyUuid }) =>
         `systemuser/agentdelegation/${partyId}/${systemUserId}/customers?partyuuid=${partyUuid}`,
       keepUnusedDataFor: Infinity,
+      transformResponse: (response: AgentDelegationCustomer[]) => {
+        return response.map((x) => {
+          return {
+            ...x,
+            name: formatDisplayName({ fullName: x.name, type: 'company' }),
+          };
+        });
+      },
     }),
     getAssignedCustomers: builder.query<
       AgentDelegation[],
@@ -154,6 +210,12 @@ export const systemUserApi = createApi({
     // system user request
     getSystemUserRequest: builder.query<SystemUserRequest, { requestId: string }>({
       query: ({ requestId }) => `systemuser/request/${requestId}`,
+      transformResponse: (response: SystemUserRequest) => {
+        return {
+          ...response,
+          system: formatSystemVendorName(response.system),
+        };
+      },
     }),
     approveSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({
@@ -180,6 +242,12 @@ export const systemUserApi = createApi({
     // change request
     getChangeRequest: builder.query<SystemUserChangeRequest, { changeRequestId: string }>({
       query: ({ changeRequestId }) => `systemuser/changerequest/${changeRequestId}`,
+      transformResponse: (response: SystemUserChangeRequest) => {
+        return {
+          ...response,
+          system: formatSystemVendorName(response.system),
+        };
+      },
     }),
     approveChangeRequest: builder.mutation<void, { partyId: string; changeRequestId: string }>({
       query: ({ partyId, changeRequestId }) => ({
@@ -199,6 +267,12 @@ export const systemUserApi = createApi({
     // agent request
     getAgentSystemUserRequest: builder.query<SystemUserRequest, { requestId: string }>({
       query: ({ requestId }) => `systemuser/agentrequest/${requestId}`,
+      transformResponse: (response: SystemUserRequest) => {
+        return {
+          ...response,
+          system: formatSystemVendorName(response.system),
+        };
+      },
     }),
     approveAgentSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({

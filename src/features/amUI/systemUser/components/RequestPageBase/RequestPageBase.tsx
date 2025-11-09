@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { DsHeading, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import AltinnLogo from '@/assets/AltinnTextLogo.svg?react';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
@@ -33,7 +33,7 @@ export const RequestPageBase = ({
           <AltinnLogo />
           {userData && (
             <div>
-              <div>{userData?.name}</div>
+              <div>{formatDisplayName({ fullName: userData?.name, type: 'person' })}</div>
               <div>for {reporteeName}</div>
             </div>
           )}

@@ -7,8 +7,6 @@ import { LoginPage } from 'playwright/pages/LoginPage';
 
 import { SystemUserPage } from '../../pages/systemuser/SystemUserPage';
 
-test.describe.configure({ timeout: 30000 }); // Set timeout for all tests in this file
-
 test.describe('System user deletion', () => {
   let systemId: string;
   let api: ApiRequests;

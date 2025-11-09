@@ -1,9 +1,13 @@
-﻿using Altinn.AccessManagement.UI.Core.Helpers;
+﻿using System;
+using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -17,18 +21,74 @@ namespace Altinn.AccessManagement.UI.Controllers
     {
         private readonly ILogger _logger;
         private readonly ISettingsService _settingsService;
+        private readonly GeneralSettings _generalSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsController"/> class.
         /// </summary>
         /// <param name="logger">the logger.</param>
         /// <param name="settingsService">service implementation for settings</param>
+        /// <param name="generalSettings">general settings</param>
         public SettingsController(
             ILogger<SettingsController> logger,
-            ISettingsService settingsService)
+            ISettingsService settingsService,
+            IOptions<GeneralSettings> generalSettings)
         {
             _logger = logger;
             _settingsService = settingsService;
+            _generalSettings = generalSettings.Value;
+        }
+
+        /// <summary>
+        /// Request payload for updating the selected language cookie.
+        /// </summary>
+        public class UpdateSelectedLanguageRequest
+        {
+            /// <summary>
+            /// Gets or sets the language code to persist.
+            /// </summary>
+            public string LanguageCode { get; set; } = string.Empty;
+        }
+
+        /// <summary>
+        /// Updates the Altinn persistent context cookie with the selected language.
+        /// </summary>
+        [HttpPost]
+        [Authorize]
+        [Route("language/selectedLanguage")]
+        public IActionResult UpdateSelectedLanguage([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] UpdateSelectedLanguageRequest request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.LanguageCode))
+            {
+                return BadRequest("Language code is required.");
+            }
+
+            string altinnStandardLanguage = LanguageHelper.TryGetAltinn2StandardLanguage(request.LanguageCode);
+
+            if (string.IsNullOrEmpty(altinnStandardLanguage))
+            {
+                return BadRequest("Unsupported language code.");
+            }
+
+            CookieOptions cookieOptions = new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddDays(1),
+                HttpOnly = true,
+                Secure = true,
+                Path = "/"
+            };
+
+            if (!string.IsNullOrWhiteSpace(_generalSettings?.Hostname))
+            {
+                cookieOptions.Domain = _generalSettings.Hostname;
+            }
+
+            Response.Cookies.Append(
+                "altinnPersistentContext",
+                altinnStandardLanguage,
+                cookieOptions);
+
+            return Ok();
         }
 
         /// <summary>

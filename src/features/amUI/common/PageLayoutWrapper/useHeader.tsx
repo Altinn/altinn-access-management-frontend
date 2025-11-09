@@ -19,6 +19,7 @@ import {
 import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader';
 import { useAccounts } from './useAccounts';
 import { ChangeEvent, useState } from 'react';
+import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 
 const getAccountType = (type: string): 'company' | 'person' => {
   return type === 'Organization' ? 'company' : 'person';
@@ -39,10 +40,12 @@ export const useHeader = () => {
   const [removeFavoriteActorUuid] = useRemoveFavoriteActorUuidMutation();
 
   const { globalMenu, desktopMenu, mobileMenu, menuGroups, isLoadingMenu } = useGlobalMenu();
+  const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
+    updateSelectedLanguage(newLocale);
   };
 
   // TODO: Add optimistic updates and error handling

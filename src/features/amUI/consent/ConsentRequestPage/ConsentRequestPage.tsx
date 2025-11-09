@@ -9,6 +9,7 @@ import {
   DsHeading,
   DsParagraph,
   DsSpinner,
+  formatDisplayName,
   Layout,
   RootProvider,
 } from '@altinn/altinn-components';
@@ -21,6 +22,7 @@ import {
 } from '@/rtk/features/consentApi';
 import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 
 import type { ConsentLanguage, ConsentRequest, ProblemDetail } from '../types';
 import { getLanguage, isAccepted, isExpired, isRevoked, replaceStaticMetadata } from '../utils';
@@ -32,6 +34,7 @@ import { ConsentStatus } from '../components/ConsentStatus/ConsentStatus';
 
 export const ConsentRequestPage = () => {
   const { t, i18n } = useTranslation();
+  const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
   useDocumentTitle(t('consent_request.page_title'));
   const [searchParams] = useSearchParams();
@@ -67,6 +70,7 @@ export const ConsentRequestPage = () => {
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
+    updateSelectedLanguage(newLocale);
   };
 
   const account: { name: string; type: 'person' | 'company' } = {
@@ -114,7 +118,7 @@ export const ConsentRequestPage = () => {
               groups: {
                 'current-user': {
                   title: t('header.logged_in_as_name', {
-                    name: userData?.name || '',
+                    name: formatDisplayName({ fullName: userData?.name || '', type: 'person' }),
                   }),
                 },
               },
