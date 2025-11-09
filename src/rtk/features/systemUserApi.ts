@@ -121,6 +121,14 @@ export const systemUserApi = createApi({
     getPendingSystemUserRequests: builder.query<SystemUser[], string>({
       query: (partyId) => `systemuser/${partyId}/pending`,
       providesTags: [Tags.PendingSystemUsers],
+      transformResponse: (response: SystemUser[]) => {
+        return response.map((x) => {
+          return {
+            ...x,
+            system: formatSystemVendorName(x.system),
+          };
+        });
+      },
     }),
 
     // agent delegation systemuser
