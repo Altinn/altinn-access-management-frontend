@@ -35,3 +35,9 @@
 .searchResult {
   padding: 10px 0 10px 0;
 }
+
+.addButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

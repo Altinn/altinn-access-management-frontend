@@ -1,4 +1,4 @@
-import { Button, TextField, DsParagraph } from '@altinn/altinn-components';
+import { Button, TextField, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { t } from 'i18next';
 
@@ -32,7 +32,7 @@ export const NewOrgContent = ({
 
   const onAdd = () => {
     if (orgData?.partyUuid) {
-      addRightHolder(orgData.partyUuid)
+      addRightHolder({ partyUuidToBeAdded: orgData.partyUuid })
         .unwrap()
         .then(() => {
           if (onComplete) {
@@ -82,10 +82,17 @@ export const NewOrgContent = ({
       <div className={classes.validationButton}>
         <Button
           disabled={isGetOrgError || isLoading || !orgData || orgData.orgNumber !== orgNumber}
-          loading={isLoading}
           onClick={onAdd}
         >
-          {t('new_user_modal.add_org_button')}
+          <span className={classes.addButton}>
+            {isLoading && (
+              <DsSpinner
+                data-size='xs'
+                aria-hidden='true'
+              />
+            )}
+            {isLoading ? <span>{t('common.loading')}</span> : t('new_user_modal.add_org_button')}
+          </span>
         </Button>
       </div>
     </div>

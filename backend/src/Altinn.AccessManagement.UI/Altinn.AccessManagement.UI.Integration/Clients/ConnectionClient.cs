@@ -1,9 +1,11 @@
 ﻿using System.Net;
+using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -50,12 +52,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> PostNewRightHolderConnection(Guid party, Guid to, CancellationToken cancellationToken = default)
+        public async Task<Guid> PostNewRightHolderConnection(Guid party, Guid? to, PersonInput personInput = null, CancellationToken cancellationToken = default)
         {
-            string endpointUrl = $"enduser/connections?party={party}&from={party}&to={to}";
+            string endpointUrl = $"enduser/connections?party={party}&from={party}" + (to != null ? $"&to={to}" : string.Empty);
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            var httpResponse = await _client.PostAsync(token, endpointUrl, null);
+            StringContent requestBody = personInput != null ? new StringContent(JsonSerializer.Serialize(personInput, _serializerOptions), Encoding.UTF8, "application/json") : null;
+
+            var httpResponse = await _client.PostAsync(token, endpointUrl, requestBody);
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
 
             if (!httpResponse.IsSuccessStatusCode)
             {
@@ -63,7 +69,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
             }
 
-            return httpResponse;
+            AddConnectionResponse response = JsonSerializer.Deserialize<AddConnectionResponse>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return response.ToId;
         }
 
         /// <inheritdoc/>

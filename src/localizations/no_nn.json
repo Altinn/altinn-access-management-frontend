@@ -437,7 +437,9 @@
     "trigger_button_large": "Gi fullmakt til ny brukar",
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til verksemd",
-    "limited_preview_message": "Du kan diverre ikkje legge til personar heilt endå. Dette vil komme seinare."
+    "limited_preview_message": "Du kan diverre ikkje legge til personar heilt endå. Dette vil komme seinare.",
+    "ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
+    "last_name_format_error": "Vennligst fyll inn eit gyldig etternavn"
   },
   "info_page": {
     "page_title": "Om nye Altinn",
