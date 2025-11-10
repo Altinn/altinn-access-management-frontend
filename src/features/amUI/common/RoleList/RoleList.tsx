@@ -50,25 +50,18 @@ export const RoleList = ({
 
   const revokeFeatureEnabled = revokeRolesEnabled();
 
-  const {
-    altinn2Roles,
-    isLoading: groupedRolesLoading,
-    error,
-  } = useGroupedRoleListEntries({
+  const { altinn2Roles } = useGroupedRoleListEntries({
     roleConnections,
-    fromPartyId: fromParty?.partyUuid,
-    toPartyId: toParty?.partyUuid,
-    isLoading: roleConnectionsIsLoading,
     error: roleConnectionsError,
   });
 
   const roleFetchErrorDetails = createErrorDetails(roleConnectionsError);
 
-  if (partyIsLoading || isLoading || roleConnectionsIsLoading || groupedRolesLoading) {
+  if (partyIsLoading || isLoading || roleConnectionsIsLoading) {
     return <SkeletonRoleList />;
   }
 
-  if (roleConnectionsError || error) {
+  if (roleConnectionsError) {
     const status = roleFetchErrorDetails?.status ?? '500';
     const time = roleFetchErrorDetails?.time ?? new Date().toISOString();
 

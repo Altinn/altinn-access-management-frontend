@@ -19,12 +19,6 @@ export const SkeletonRoleList = () => {
           <ListItem
             key={role.id}
             title={role.name}
-            description={
-              <DsSkeleton
-                variant='text'
-                width={120}
-              />
-            }
             data-color='neutral'
             loading
             size='md'
