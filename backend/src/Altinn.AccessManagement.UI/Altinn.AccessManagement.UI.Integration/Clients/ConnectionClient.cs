@@ -70,7 +70,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             AddConnectionResponse response = JsonSerializer.Deserialize<AddConnectionResponse>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            return response.Id;
+            return response.ToId;
         }
 
         /// <inheritdoc/>

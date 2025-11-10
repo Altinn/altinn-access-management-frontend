@@ -441,7 +441,9 @@
     "trigger_button_large": "Give power of attorney to new user",
     "add_person_button": "Add person",
     "add_org_button": "Add organization",
-    "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future."
+    "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future.",
+    "ssn_format_error": "Social security number must consist of 11 digits",
+    "last_name_format_error": "Please enter a valid last name"
   },
   "info_page": {
     "page_title": "About new Altinn",

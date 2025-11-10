@@ -1,4 +1,4 @@
-import { Button, DsAlert, DsParagraph, TextField } from '@altinn/altinn-components';
+import { Button, DsAlert, DsParagraph, DsTextfield } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,6 +22,8 @@ export const NewPersonContent = ({
   const [ssn, setSsn] = useState('');
   const [lastName, setLastName] = useState('');
   const [errorTime, setErrorTime] = useState<string>('');
+  const [ssnFormatError, setSsnFormatError] = useState<string>('');
+  const [lastNameFormatError, setLastNameFormatError] = useState<string>('');
 
   const [addRightHolder, { error, isError, isLoading }] = useAddRightHolderMutation();
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
@@ -53,6 +55,9 @@ export const NewPersonContent = ({
     return <DsAlert data-color='info'>{t('new_user_modal.limited_preview_message')}</DsAlert>;
   }
 
+  const isValidSsnFormat = () => ssn.length === 11 && /^\d{11}$/.test(ssn);
+  const isValidLastnameFormat = () => lastName.length >= 1;
+
   return (
     <div className={classes.newPersonContent}>
       {isError && (
@@ -61,21 +66,31 @@ export const NewPersonContent = ({
           error={errorDetails}
         />
       )}
-      <TextField
+      <DsTextfield
         className={classes.textField}
         label={t('common.ssn')}
-        size='sm'
-        onChange={(e) => setSsn((e.target as HTMLInputElement).value)}
+        data-size='sm'
+        onChange={(e) => setSsn(e.target.value)}
+        error={ssnFormatError}
+        onBlur={() => {
+          const error = isValidSsnFormat() ? '' : t('new_user_modal.ssn_format_error');
+          setSsnFormatError(error);
+        }}
       />
-      <TextField
+      <DsTextfield
         className={classes.textField}
         label={t('common.last_name')}
-        size='sm'
-        onChange={(e) => setLastName((e.target as HTMLInputElement).value)}
+        data-size='sm'
+        onChange={(e) => setLastName(e.target.value)}
+        error={lastNameFormatError}
+        onBlur={() => {
+          const error = isValidLastnameFormat() ? '' : t('new_user_modal.last_name_format_error');
+          setLastNameFormatError(error);
+        }}
       />
       <div className={classes.validationButton}>
         <Button
-          disabled={ssn.length !== 11 || lastName.length < 1}
+          disabled={!isValidSsnFormat() || !isValidLastnameFormat()}
           loading={isLoading}
           onClick={navigateIfValidPerson}
         >
