@@ -82,7 +82,6 @@ export const RoleList = ({
             status={status}
             time={time}
             traceId={roleFetchErrorDetails?.traceId}
-            message={error}
           />
         </DsAlert>
       </div>
