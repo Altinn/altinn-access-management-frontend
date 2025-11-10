@@ -11,6 +11,7 @@
     "status_code": "Statuskode",
     "maskinporten": "Maskinporten",
     "broennoeysund_register": "Brønnøysundregistera",
+  "enhetsregisteret": "Einingsregisteret",
     "error_message": "Feilmelding",
     "loading": "Lastar",
     "success": "Fullført",
@@ -497,7 +498,8 @@
     "launchAlertLinkText": "Sjå fullmakter frå tidlegare Altinn",
     "oldRolesHeading": "Altinn-roller",
     "oldRolesContent": "Her ser du Altinn-roller som kan innehalde tenester/ressursar som allereie ligg i \"ny Altinn-løysing\". Desse tenestene blir òg lagde inn i dei nye tilgangspakkane. Denne brukaren har dei same rollene i den gamle løysinga, men der inneheld dei andre og fleire tenester.",
-    "oldRolesLinkText": "Gå til gammal løysing"
+    "oldRolesLinkText": "Gå til gammal løysing",
+  "legacyRoleContent": "Denne rollen vil snart fjernes. Bruke heller tilgangspakker."
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

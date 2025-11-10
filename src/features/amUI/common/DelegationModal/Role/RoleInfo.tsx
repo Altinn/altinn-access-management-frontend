@@ -15,8 +15,8 @@ import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
-import { StatusSection } from '../StatusSection';
 import { revokeRolesEnabled } from '@/resources/utils/featureFlagUtils';
+import { LegacyRoleAlert } from '../../LegacyRoleAlert/LegacyRoleAlert';
 
 import classes from './RoleInfo.module.css';
 
@@ -45,31 +45,13 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
   const {
     data: roleDetails,
     error: roleDetailsError,
-    isFetching: isFetchingRoleDetails,
+    isLoading: isLoadingRoleDetails,
   } = useGetRoleByIdQuery(role?.id ?? '', {
     skip: !shouldFetchRoleDetails,
   });
 
-  useEffect(() => {
-    if (isFetchingRoleDetails) {
-      console.log('Fetching role details for modal', role?.id);
-    }
-  }, [isFetchingRoleDetails, role?.id]);
-
-  useEffect(() => {
-    if (roleDetails) {
-      console.log('Fetched role details', roleDetails);
-    }
-  }, [roleDetails]);
-
-  useEffect(() => {
-    if (roleDetailsError) {
-      console.error('Failed to fetch role details', roleDetailsError);
-    }
-  }, [roleDetailsError]);
-
   const connection: RoleConnection | undefined =
-    !roleConnections || isFetching
+    !roleConnections || isLoadingRoleDetails
       ? undefined
       : roleConnections.find((item: RoleConnection) => item.role.id === role.id);
 
@@ -90,6 +72,9 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
     revokeFeatureEnabled &&
     role?.provider?.code === 'sys-altinn2' &&
     !!revocationContext;
+
+  const isLegacyRoleProvider = role?.provider?.code === 'sys-altinn2';
+  const isErRole = role?.provider?.code === 'sys-ccr';
 
   return (
     <div className={classes.container}>
@@ -130,14 +115,13 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
         </DsAlert>
       )}
 
-      <StatusSection
-        userHasAccess={userHasRole}
-        showMissingRightsMessage={false}
-      />
-
-      {role?.provider?.name && (
-        <DsParagraph data-size='sm'>
-          {t('role.provider_status', { provider: role.provider.name })}
+      {isLegacyRoleProvider && <LegacyRoleAlert />}
+      {isErRole && (
+        <DsParagraph
+          data-size='xs'
+          className={classes.subtleNote}
+        >
+          {t('common.enhetsregisteret')}
         </DsParagraph>
       )}
       <DsParagraph>{role?.description}</DsParagraph>

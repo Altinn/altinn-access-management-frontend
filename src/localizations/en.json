@@ -11,6 +11,7 @@
     "status_code": "Status code",
     "maskinporten": "Maskinporten",
     "broennoeysund_register": "The Brønnøysund Register Center",
+  "enhetsregisteret": "Central Coordinating Register for Legal Entities",
     "error_message": "Error message",
     "loading": "Loading",
     "success": "Success",
@@ -501,7 +502,8 @@
     "launchAlertLinkText": "View authorizations from the previous Altinn",
     "oldRolesHeading": "Altinn roles",
     "oldRolesContent": "Here you can see Altinn roles that may include services/resources already found in the \"new Altinn solution.\" These services will also be added to the new access packages. This user has the same roles in the old solution, but there they contain different and additional services.",
-    "oldRolesLinkText": "Go to the old solution"
+    "oldRolesLinkText": "Go to the old solution",
+  "legacyRoleContent": "Denne rollen vil snart fjernes. Bruke heller tilgangspakker."
   },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",

@@ -116,6 +116,9 @@ const createConnection = (id: string, providerCode: string): RoleConnection =>
         to: {
           id: 'to-party',
           name: 'To Person',
+          type: 'party',
+          variant: 'person',
+          keyValues: [],
         },
         via: null,
         role: {

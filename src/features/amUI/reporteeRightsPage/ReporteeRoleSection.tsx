@@ -4,7 +4,7 @@ import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import type { Role } from '@/rtk/features/roleApi';
 
-import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
+import { RoleInfoModal } from '../common/RoleInfoModal/RoleInfoModal';
 import { RoleList } from '../common/RoleList/RoleList';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';

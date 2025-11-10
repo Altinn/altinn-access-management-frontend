@@ -7,7 +7,7 @@ import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import type { Role } from '@/rtk/features/roleApi';
 
 import { RoleList } from '../../common/RoleList/RoleList';
-import { RoleInfoModal } from '../../common/RoleList/RoleInfoModal';
+import { RoleInfoModal } from '../../common/RoleInfoModal/RoleInfoModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';

@@ -5,15 +5,17 @@ import cn from 'classnames';
 import classes from './userRoles.module.css';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getRoleCodesAndIdsForKeyRoles, getRoleCodesForKeyRoles } from './roleUtils';
-import { RoleInfoModal } from './RoleInfoModal';
+import { getRoleCodesAndIdsForKeyRoles } from './roleUtils';
+import { RoleInfoModal } from '../RoleInfoModal/RoleInfoModal';
+import { useGetRoleByIdQuery, type Role } from '@/rtk/features/roleApi';
 
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   const { t } = useTranslation();
-  const [modalOpen, setModalOpen] = useState(false);
+  const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
+  const [modalRole, setModalRole] = useState<Role | undefined>(undefined);
 
   const {
     toParty,
@@ -36,14 +38,26 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     return getRoleCodesAndIdsForKeyRoles(connectionData[0].roles) ?? [];
   }, [connectionData, isConnectionLoading, loadingPartyRepresentation]);
 
+  const { data: selectedRole } = useGetRoleByIdQuery(selectedRoleId ?? '', {
+    skip: !selectedRoleId,
+  });
+
+  useEffect(() => {
+    if (selectedRole) {
+      setModalRole(selectedRole);
+      if (modalRef.current && !modalRef.current.open) {
+        modalRef.current.showModal();
+      }
+    }
+  }, [selectedRole]);
+
   const onChipClick = (roleId: string) => {
-    setModalOpen(true);
     setSelectedRoleId(roleId);
   };
 
   const onModalClose = () => {
-    setModalOpen(false);
     setSelectedRoleId(null);
+    setModalRole(undefined);
   };
 
   return (
@@ -64,9 +78,9 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
         })}
       </div>
       <RoleInfoModal
-        open={modalOpen}
+        modalRef={modalRef}
+        role={modalRole}
         onClose={onModalClose}
-        roleId={selectedRoleId ?? undefined}
       />
     </>
   );
