@@ -496,7 +496,10 @@
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyer Altinn",
     "launchAlertContent": "Denne brukeren kan også ha fullmakter fra tidligere Altinn.",
-    "launchAlertLinkText": "Se fullmakter fra tidligere Altinn"
+    "launchAlertLinkText": "Se fullmakter fra tidligere Altinn",
+    "oldRolesHeading": "Altinn-roller",
+    "oldRolesContent": "Her ser du Altinn-roller som kan inneholde tjenester/ressurser som allerede ligger i \"ny Altinn-løsning\". Disse tjenestene blir også lagt inn i de nye tilgangspakkene. Denne brukeren har de samme rollene i den gamle løsningen, men der inneholder de andre og flere tjenester.",
+    "oldRolesLinkText": "Gå til gammel løsning"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

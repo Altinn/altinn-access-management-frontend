@@ -28,16 +28,16 @@ export const OldRolesAlert = () => {
           data-size='xs'
           className={styles.heading}
         >
-          {t('a2Alerts.launchAlertHeading')}
+          {t('a2Alerts.oldRolesHeading')}
         </DsHeading>
 
-        <DsParagraph>{t('a2Alerts.launchAlertContent')}</DsParagraph>
+        <DsParagraph>{t('a2Alerts.oldRolesContent')}</DsParagraph>
         <DsLink>
           <Link
             to={url}
             className={styles.link}
           >
-            {t('a2Alerts.launchAlertLinkText')}
+            {t('a2Alerts.oldRolesLinkText')}
             <ExternalLinkIcon aria-hidden />
           </Link>
         </DsLink>

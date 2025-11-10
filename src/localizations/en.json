@@ -497,7 +497,10 @@
   "a2Alerts": {
     "launchAlertHeading": "We are renewing Altinn",
     "launchAlertContent": "This user may also have authorizations from the previous Altinn.",
-    "launchAlertLinkText": "View authorizations from the previous Altinn"
+    "launchAlertLinkText": "View authorizations from the previous Altinn",
+    "oldRolesHeading": "Altinn roles",
+    "oldRolesContent": "Here you can see Altinn roles that may include services/resources already found in the \"new Altinn solution.\" These services will also be added to the new access packages. This user has the same roles in the old solution, but there they contain different and additional services.",
+    "oldRolesLinkText": "Go to the old solution"
   },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",
