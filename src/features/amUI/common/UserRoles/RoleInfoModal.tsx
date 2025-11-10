@@ -7,6 +7,7 @@ import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import statusClasses from '../DelegationModal/StatusSection.module.css';
 import classes from './RoleInfoModal.module.css';
 import { useTranslation } from 'react-i18next';
+import { useGetRoleByIdQuery } from '@/rtk/features/roleApi';
 
 interface RoleInfoModal {
   open: boolean;
@@ -18,7 +19,10 @@ export const RoleInfoModal = ({ open, onClose, roleId }: RoleInfoModal) => {
   const { t } = useTranslation();
   const { toParty, fromParty } = usePartyRepresentation();
 
-  // const isExternal = roleData?.urn?.includes('external-role');
+  const getRoleQuery = useGetRoleByIdQuery(roleId ?? '', { skip: !roleId });
+  const { data: roleData, isLoading } = getRoleQuery;
+
+  const isExternal = roleData?.urn?.includes('external-role');
 
   return (
     <DsDialog
@@ -26,7 +30,7 @@ export const RoleInfoModal = ({ open, onClose, roleId }: RoleInfoModal) => {
       onClose={onClose}
       closedby='any'
     >
-      {/* {!roleId || isLoading ? (
+      {!roleId || isLoading ? (
         <div className={classes.spinnerContainer}>
           <DsSpinner
             data-size='lg'
@@ -37,7 +41,7 @@ export const RoleInfoModal = ({ open, onClose, roleId }: RoleInfoModal) => {
         <div className={classes.modalContent}>
           <DsHeading
             level={2}
-            data-size='md'
+            data-size='sm'
             className={classes.heading}
           >
             {roleData?.name}
@@ -48,16 +52,12 @@ export const RoleInfoModal = ({ open, onClose, roleId }: RoleInfoModal) => {
                 fontSize='1.5rem'
                 className={statusClasses.inheritedInfoIcon}
               />
-              <DsParagraph data-size='xs'>
-                {t('role.provider_status')}
-                {roleData?.provider.name}
-              </DsParagraph>
+              <DsParagraph data-size='xs'>{roleData?.provider?.name}</DsParagraph>
             </div>
           )}
-
           <DsParagraph>{roleData?.description}</DsParagraph>
         </div>
-      )} */}
+      )}
     </DsDialog>
   );
 };
