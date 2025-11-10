@@ -32,11 +32,11 @@ export const OldRolesAlert = () => {
         </DsHeading>
 
         <DsParagraph>{t('a2Alerts.oldRolesContent')}</DsParagraph>
-        <DsLink>
-          <Link
-            to={url}
-            className={styles.link}
-          >
+        <DsLink
+          asChild
+          className={styles.link}
+        >
+          <Link to={url}>
             {t('a2Alerts.oldRolesLinkText')}
             <ExternalLinkIcon aria-hidden />
           </Link>

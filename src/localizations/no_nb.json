@@ -316,7 +316,8 @@
     "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",
     "role_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{role}} fra {{name}}.",
     "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle <b>{{role_name}}</b>. Den kan derfor ikke slettes.",
-    "no_roles": "Ingen roller er tilgjengelige akkurat nå.",
+    "no_roles": "Denne brukeren har ikke tilgang til noen Altinn-roller.",
+    "fetch_error_heading": "Kunne ikke hente roller",
     "activeRolesLabel": "Liste over roller som er tildelt brukeren",
     "other_provider_title": "Andre tilbydere",
     "roles_description_link_text": "Ta meg til den gamle løsningen takk.",
@@ -497,8 +498,8 @@
     "launchAlertHeading": "Vi fornyer Altinn",
     "launchAlertContent": "Denne brukeren kan også ha fullmakter fra tidligere Altinn.",
     "launchAlertLinkText": "Se fullmakter fra tidligere Altinn",
-    "oldRolesHeading": "Altinn-roller",
-    "oldRolesContent": "Her ser du Altinn-roller som kan inneholde tjenester/ressurser som allerede ligger i \"ny Altinn-løsning\". Disse tjenestene blir også lagt inn i de nye tilgangspakkene. Denne brukeren har de samme rollene i den gamle løsningen, men der inneholder de andre og flere tjenester.",
+    "oldRolesHeading": "Altinnroller",
+    "oldRolesContent": "Her ser du Altinnroller som kan inneholde tjenester/ressurser som allerede ligger i \"ny Altinnløsning\". Disse tjenestene blir også lagt inn i de nye tilgangspakkene. Denne brukeren har de samme rollene i den gamle løsningen, men der inneholder de andre og flere tjenester.",
     "oldRolesLinkText": "Gå til gammel løsning"
   },
   "user_role": {

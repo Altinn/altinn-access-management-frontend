@@ -14,14 +14,10 @@ import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 
 export const RoleSection = () => {
-  const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
-  const { id: rightHolderUuid } = useParams();
-  const { toParty } = usePartyRepresentation();
-  const { data: currentUser, isLoading: currentUserIsLoading } = useGetUserInfoQuery();
-  const isCurrentUser = currentUser?.uuid === rightHolderUuid;
+  const { toParty, isLoading } = usePartyRepresentation();
 
   return (
     <>
@@ -37,7 +33,7 @@ export const RoleSection = () => {
           setModalItem(role);
           modalRef.current?.showModal();
         }}
-        isLoading={currentUserIsLoading}
+        isLoading={isLoading}
       />
       {toParty && (
         <RoleInfoModal
