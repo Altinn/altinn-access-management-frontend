@@ -11,7 +11,7 @@ import classes from './UserList.module.css';
 import { SkeletonUserList } from './SkeletonUserList';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserListActions } from './UserListActions';
-import { Connection } from '@/rtk/features/connectionApi';
+import { Connection, ConnectionUserType } from '@/rtk/features/connectionApi';
 
 export interface UserListProps {
   connections?: Connection[];
@@ -98,26 +98,32 @@ export const UserList = ({
         </div>
       )}
       <List spacing={2}>
-        {users?.map((user) => (
-          <UserItem
-            key={user.id}
-            user={user}
-            size='md'
-            titleAs={listItemTitleAs}
-            interactive={interactive}
-            showRoles={showRoles}
-            roleDirection={roleDirection}
-            disableLinks={disableLinks}
-            controls={(user) => (
-              <UserListActions
-                user={user as ExtendedUser}
-                availableAction={availableAction}
-                onDelegate={() => onDelegate && onDelegate(user.id)}
-                onRevoke={() => onRevoke && onRevoke(user.id)}
-              />
-            )}
-          />
-        ))}
+        {users
+          ?.filter(
+            (user) =>
+              user.type === ConnectionUserType.Organization ||
+              user.type === ConnectionUserType.Person,
+          )
+          .map((user) => (
+            <UserItem
+              key={user.id}
+              user={user}
+              size='md'
+              titleAs={listItemTitleAs}
+              interactive={interactive}
+              showRoles={showRoles}
+              roleDirection={roleDirection}
+              disableLinks={disableLinks}
+              controls={(user) => (
+                <UserListActions
+                  user={user as ExtendedUser}
+                  availableAction={availableAction}
+                  onDelegate={() => onDelegate && onDelegate(user.id)}
+                  onRevoke={() => onRevoke && onRevoke(user.id)}
+                />
+              )}
+            />
+          ))}
       </List>
       {hasNextPage && (
         <div className={classes.showMoreButtonContainer}>

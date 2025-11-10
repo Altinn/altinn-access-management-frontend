@@ -161,21 +161,27 @@ export const UserItem = ({
           spacing={'sm'}
           className={classes.inheritingUsers}
         >
-          {subUsers.map((child, index) => (
-            <UserItem
-              key={child.id}
-              user={{ ...child, children: null }} // do not allow further expansion of inheriting users
-              size='xs'
-              titleAs={userHeadingLevelForMapper(titleAs)}
-              subUnit={index !== 0 && child.type === ConnectionUserType.Organization}
-              roleDirection={roleDirection}
-              showRoles={showRoles}
-              interactive={interactive}
-              disableLinks={disableLinks}
-              shadow='none'
-              controls={controls}
-            />
-          ))}
+          {subUsers
+            .filter(
+              (user) =>
+                user.type === ConnectionUserType.Person ||
+                user.type === ConnectionUserType.Organization,
+            )
+            .map((child, index) => (
+              <UserItem
+                key={child.id}
+                user={{ ...child, children: null }} // do not allow further expansion of inheriting users
+                size='xs'
+                titleAs={userHeadingLevelForMapper(titleAs)}
+                subUnit={index !== 0 && child.type === ConnectionUserType.Organization}
+                roleDirection={roleDirection}
+                showRoles={showRoles}
+                interactive={interactive}
+                disableLinks={disableLinks}
+                shadow='none'
+                controls={controls}
+              />
+            ))}
         </List>
       )}
     </UserListItem>

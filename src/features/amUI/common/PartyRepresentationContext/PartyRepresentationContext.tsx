@@ -175,7 +175,11 @@ export const PartyRepresentationProvider = ({
         </DsAlert>
       )}
       <AccessPackageDelegationCheckProvider>
-        {!isError && !isLoading && !shouldShowUserTypeRestrictionAlert && children}
+        {!isError &&
+          !isLoading &&
+          !shouldShowUserTypeRestrictionAlert &&
+          !invalidConnection &&
+          children}
       </AccessPackageDelegationCheckProvider>
     </PartyRepresentationContext.Provider>
   );
