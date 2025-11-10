@@ -89,27 +89,29 @@ export const AccessPackageSection = () => {
             </DsPopover.TriggerContext>
           </div>
           <div className={classes.inputs}>
-            <div className={classes.searchField}>
-              <DsSearch data-size='sm'>
-                <DsSearch.Input
-                  aria-label={t('access_packages.search_label')}
-                  placeholder={t('access_packages.search_label')}
-                  value={searchString}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    const value = event.target.value;
-                    setSearchString(value);
-                    debouncedUpdate(value);
-                  }}
-                />
-                <DsSearch.Clear
-                  onClick={() => {
-                    debouncedUpdate.cancel();
-                    setSearchString('');
-                    setDebouncedSearchString('');
-                  }}
-                />
-              </DsSearch>
-            </div>
+            {numberOfAccesses > 0 && (
+              <div className={classes.searchField}>
+                <DsSearch data-size='sm'>
+                  <DsSearch.Input
+                    aria-label={t('access_packages.search_label')}
+                    placeholder={t('access_packages.search_label')}
+                    value={searchString}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      const value = event.target.value;
+                      setSearchString(value);
+                      debouncedUpdate(value);
+                    }}
+                  />
+                  <DsSearch.Clear
+                    onClick={() => {
+                      debouncedUpdate.cancel();
+                      setSearchString('');
+                      setDebouncedSearchString('');
+                    }}
+                  />
+                </DsSearch>
+              </div>
+            )}
             <div className={classes.delegateButton}>
               {(toParty?.partyTypeName === PartyType.Organization ||
                 !displayLimitedPreviewLaunch) && (
