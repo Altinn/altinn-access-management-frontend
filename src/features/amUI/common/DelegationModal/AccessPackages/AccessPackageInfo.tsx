@@ -26,7 +26,6 @@ import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/Packag
 
 import { useResourceList } from './useResourceList';
 import classes from './AccessPackageInfo.module.css';
-import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -73,7 +72,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     return null;
   }, [activeDelegations, isFetching, accessPackage.id]);
 
-  const requestEnabled = requestDelegationEnabled();
+  const requestEnabled = false;
   const userHasPackage = delegationAccess !== null;
   const accessIsInherited =
     (delegationAccess &&

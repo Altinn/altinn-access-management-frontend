@@ -16,7 +16,6 @@ import { AccessPackageInfoAlert } from './AccessPackageInfoAlert';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import classes from './AccessPackageSection.module.css';
-import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 export const AccessPackageSection = () => {
   const { t } = useTranslation();
@@ -30,7 +29,7 @@ export const AccessPackageSection = () => {
   } = usePartyRepresentation();
   const isCurrentUser = selfParty?.partyUuid === id;
   const displayLimitedPreviewLaunch = window.featureFlags.displayLimitedPreviewLaunch;
-  const requestEnabled = requestDelegationEnabled();
+  const requestEnabled = false;
   const delegationModalActions = React.useMemo(() => {
     const actions: DelegationAction[] = [DelegationAction.REVOKE];
     if (isCurrentUser) {

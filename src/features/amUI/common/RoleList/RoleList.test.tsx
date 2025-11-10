@@ -50,13 +50,13 @@ vi.mock('@/resources/utils/featureFlagUtils', async () => {
   );
   return {
     ...actual,
-    revokeRolesEnabled: vi.fn(),
+    showRolesTab: vi.fn(),
   };
 });
 
-import { revokeRolesEnabled } from '@/resources/utils/featureFlagUtils';
+import { showRolesTab } from '@/resources/utils/featureFlagUtils';
 
-const revokeRolesEnabledMock = vi.mocked(revokeRolesEnabled);
+const showRolesTabMock = vi.mocked(showRolesTab);
 
 vi.mock('@/resources/hooks/useFetchRecipientInfo', () => ({
   useFetchRecipientInfo: () => ({
@@ -134,7 +134,7 @@ const createConnection = (id: string, providerCode: string): RoleConnection =>
 describe('RoleList', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    revokeRolesEnabledMock.mockReturnValue(true);
+    showRolesTabMock.mockReturnValue(true);
     useGetRolesForUserQueryMock.mockReturnValue({
       data: [
         createConnection('1', 'sys-ccr'),
@@ -176,7 +176,7 @@ describe('RoleList', () => {
   });
 
   it('hides revoke control when feature toggle is disabled', () => {
-    revokeRolesEnabledMock.mockReturnValue(false);
+    showRolesTabMock.mockReturnValue(false);
 
     render(
       <MemoryRouter>

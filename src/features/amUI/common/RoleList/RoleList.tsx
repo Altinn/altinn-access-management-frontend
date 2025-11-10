@@ -5,7 +5,7 @@ import type { Role } from '@/rtk/features/roleApi';
 import { useGetRolesForUserQuery } from '@/rtk/features/roleApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { ActionError } from '@/resources/hooks/useActionError';
-import { revokeRolesEnabled } from '@/resources/utils/featureFlagUtils';
+import { showRolesTab } from '@/resources/utils/featureFlagUtils';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
@@ -48,7 +48,7 @@ export const RoleList = ({
     },
   );
 
-  const revokeFeatureEnabled = revokeRolesEnabled();
+  const rolesTabEnabled = showRolesTab();
 
   const { altinn2Roles } = useGroupedRoleListEntries({
     roleConnections,
@@ -112,7 +112,7 @@ export const RoleList = ({
             const showRevokeButton =
               fromParty &&
               toParty &&
-              revokeFeatureEnabled &&
+              rolesTabEnabled &&
               availableActions?.includes(DelegationAction.REVOKE);
 
             return (

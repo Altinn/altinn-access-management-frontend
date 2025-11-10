@@ -13,8 +13,7 @@ declare global {
       displaySettingsPage: boolean;
       displayPoaOverviewPage: boolean;
       useNewActorsList: boolean;
-      requestDelegationEnabled: boolean;
-      revokeRolesEnabled: boolean;
+      showRolesTab: boolean;
     };
   }
 }

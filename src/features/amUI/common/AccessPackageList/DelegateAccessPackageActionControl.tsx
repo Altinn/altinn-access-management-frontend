@@ -2,7 +2,6 @@ import { Button, DsSpinner } from '@altinn/altinn-components';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { DelegationAction } from '../DelegationModal/EditModal';
-import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 interface DelegateAccessPackageActionControlsProps {
   isLoading: boolean;
@@ -24,8 +23,7 @@ export const DelegateAccessPackageActionControl = ({
   disabled = false,
 }: DelegateAccessPackageActionControlsProps) => {
   const { t } = useTranslation();
-  const requestEnabled = requestDelegationEnabled();
-
+  const requestEnabled = false;
   if (isLoading) {
     return (
       <DsSpinner

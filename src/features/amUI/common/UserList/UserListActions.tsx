@@ -4,7 +4,6 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { ExtendedUser } from '@/rtk/features/userInfoApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 export const UserListActions = ({
   user,
@@ -23,7 +22,7 @@ export const UserListActions = ({
 }) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
-  const requestEnabled = requestDelegationEnabled();
+  const requestEnabled = false;
 
   if (!availableAction) {
     return null;

@@ -10,7 +10,6 @@ import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/A
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { AccessPackageInfoAlert } from '../userRightsPage/AccessPackageSection/AccessPackageInfoAlert';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 export const ReporteeAccessPackageSection = () => {
   const { t } = useTranslation();
@@ -18,7 +17,7 @@ export const ReporteeAccessPackageSection = () => {
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
 
-  const requestEnabled = requestDelegationEnabled();
+  const requestEnabled = false;
   const availableActions = useMemo(() => {
     const actions: DelegationAction[] = [DelegationAction.REVOKE];
     if (requestEnabled) {

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsBadge, DsTabs } from '@altinn/altinn-components';
+import { showRolesTab } from '@/resources/utils/featureFlagUtils';
 
 import classes from './RightsTabs.module.css';
 interface RightsTabsProps {
@@ -20,7 +21,8 @@ export const RightsTabs = ({
   const { t } = useTranslation();
   const [chosenTab, setChosenTab] = useState('packages');
 
-  const { displayLimitedPreviewLaunch, displayResourceDelegation } = window.featureFlags;
+  const { displayResourceDelegation } = window.featureFlags;
+  const displayRoleTab = showRolesTab();
 
   return (
     <DsTabs
@@ -54,7 +56,7 @@ export const RightsTabs = ({
             {t('user_rights_page.single_rights_title')}
           </DsTabs.Tab>
         )}
-        {!displayLimitedPreviewLaunch && (
+        {displayRoleTab && (
           <DsTabs.Tab value='roleAssignments'>
             {tabBadge && (
               <DsBadge
@@ -82,7 +84,7 @@ export const RightsTabs = ({
           {singleRightsPanel}
         </DsTabs.Panel>
       )}
-      {!displayLimitedPreviewLaunch && (
+      {displayRoleTab && (
         <DsTabs.Panel
           className={classes.tabContent}
           value='roleAssignments'

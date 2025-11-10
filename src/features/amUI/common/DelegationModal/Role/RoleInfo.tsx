@@ -15,7 +15,7 @@ import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
-import { revokeRolesEnabled } from '@/resources/utils/featureFlagUtils';
+import { showRolesTab } from '@/resources/utils/featureFlagUtils';
 import { LegacyRoleAlert } from '../../LegacyRoleAlert/LegacyRoleAlert';
 
 import classes from './RoleInfo.module.css';
@@ -65,11 +65,11 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
     : undefined;
 
   const userHasRole = !!connection;
-  const revokeFeatureEnabled = revokeRolesEnabled();
+  const rolesTabEnabled = showRolesTab();
   const canRevoke =
     userHasRole &&
     availableActions.includes(DelegationAction.REVOKE) &&
-    revokeFeatureEnabled &&
+    rolesTabEnabled &&
     role?.provider?.code === 'sys-altinn2' &&
     !!revocationContext;
 

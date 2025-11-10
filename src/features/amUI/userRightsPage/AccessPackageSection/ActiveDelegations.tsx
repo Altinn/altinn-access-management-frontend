@@ -9,7 +9,6 @@ import { useDelegationModalContext } from '../../common/DelegationModal/Delegati
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 import { useTranslation } from 'react-i18next';
-import { requestDelegationEnabled } from '@/resources/utils/featureFlagUtils';
 
 export const ActiveDelegations = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -18,7 +17,7 @@ export const ActiveDelegations = () => {
   const { toParty, selfParty, isLoading } = usePartyRepresentation();
   const isCurrentUser = selfParty?.partyUuid === toParty?.partyUuid;
   const { t } = useTranslation();
-  const requestEnabled = requestDelegationEnabled();
+  const requestEnabled = false;
   const availableActions = useMemo(() => {
     const actions: DelegationAction[] = [DelegationAction.REVOKE];
     if (isCurrentUser) {

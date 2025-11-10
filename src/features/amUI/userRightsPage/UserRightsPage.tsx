@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import { useRerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
+import { showRolesTab, useRerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { amUIPath } from '@/routes/paths';
 import { PageWrapper } from '@/components';
@@ -35,7 +35,7 @@ export const UserRightsPage = () => {
 
   useRerouteIfNotConfetti();
 
-  const { displayLimitedPreviewLaunch } = window.featureFlags;
+  const displayRoles = showRolesTab();
 
   return (
     <PageWrapper>
@@ -55,7 +55,7 @@ export const UserRightsPage = () => {
             >
               <UserPageHeader
                 direction='to'
-                displayRoles={!displayLimitedPreviewLaunch}
+                displayRoles={displayRoles}
               />
               <RightsTabs
                 packagesPanel={<AccessPackageSection />}

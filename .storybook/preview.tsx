@@ -18,6 +18,7 @@ declare global {
       crossPlatformLinks: boolean;
       displayConsentGui: boolean;
       useNewActorsList: boolean;
+      showRolesTab: boolean;
     };
   }
 }
@@ -52,6 +53,7 @@ window.featureFlags = {
   crossPlatformLinks: false,
   displayConsentGui: false,
   useNewActorsList: false,
+  showRolesTab: true,
 };
 
 // Initialise i18next;
@@ -100,7 +102,7 @@ const mockNavigator = {
   listen: () => () => {},
 };
 
-const withI18next = (Story, context) => {
+const withI18next = (Story: any, context: { globals: { locale: string } }) => {
   const { locale } = context.globals;
   // When the locale global changes
   // Set the new locale in i18n

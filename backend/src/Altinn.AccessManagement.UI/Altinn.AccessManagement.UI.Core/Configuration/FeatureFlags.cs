@@ -22,14 +22,9 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayLimitedPreviewLaunch { get; set; }
 
         /// <summary>
-        /// Whether to enable delegation request functionality in the UI
+        /// Whether to show the roles tab on the user page
         /// </summary>
-        public bool RequestDelegationEnabled { get; set; }
-
-        /// <summary>
-        /// Whether to enable role revocation functionality in the UI
-        /// </summary>
-        public bool RevokeRolesEnabled { get; set; }
+        public bool ShowRolesTab { get; set; }
 
         /// <summary>
         /// Whether or not to only display the service/resource delegation feature in the UI
