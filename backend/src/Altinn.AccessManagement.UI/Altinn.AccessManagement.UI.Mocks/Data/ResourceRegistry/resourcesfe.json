@@ -826,10 +826,10 @@
     "resourceOwnerName": null,
     "resourceOwnerOrgNumber": "123456789",
     "resourceOwnerLogoUrl": null,
-    "resourceOwnerOrgcode": "ZZZDEMO",
+  "resourceOwnerOrgcode": "zzzdemo",
     "resourceReferences": [],
     "priorityCounter": null,
-    "resourceType": "Altinn2Service",
+  "resourceType": "MaskinportenSchema",
     "authorizationReference": [
       {
         "id": "urn:altinn:resource",

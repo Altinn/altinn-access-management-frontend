@@ -332,7 +332,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 new ResourceOwnerFE("Testdepartementet", "974760746"),
                 new ResourceOwnerFE(null, "123456789")
                 {
-                    OrganisationCode = "ZZZDEMO",
+                    OrganisationCode = "zzzdemo",
                 },
             };
 

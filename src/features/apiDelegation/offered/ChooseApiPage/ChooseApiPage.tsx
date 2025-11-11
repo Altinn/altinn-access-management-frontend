@@ -69,7 +69,7 @@ export const ChooseApiPage = () => {
     }
 
     return searchResults.map((api) => {
-      if (api.orgName && api.orgName !== api.orgCode) {
+      if (api.orgName && !isProviderNameLoading) {
         return api;
       }
 

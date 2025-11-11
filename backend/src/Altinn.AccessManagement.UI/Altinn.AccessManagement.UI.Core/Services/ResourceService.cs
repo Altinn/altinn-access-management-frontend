@@ -224,7 +224,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                                  && !string.IsNullOrEmpty(sr.HasCompetentAuthority.Orgcode)
                                  && relevantResourceTypeList.Contains(sr.ResourceType))
                     .GroupBy(sr => sr.HasCompetentAuthority.Orgcode, StringComparer.OrdinalIgnoreCase)
-                    .Select(g => g.First()) // Take the first item from each group to eliminate duplicates
+                    .Select(g =>
+                    {
+                        ServiceResource preferred = g.FirstOrDefault(sr => !string.IsNullOrWhiteSpace(ResolveOrganisationName(sr.HasCompetentAuthority?.Name)));
+                        return preferred ?? g.First();
+                    })
                     .Select(sr =>
                     {
                         string organisationName = ResolveOrganisationName(sr.HasCompetentAuthority?.Name);
