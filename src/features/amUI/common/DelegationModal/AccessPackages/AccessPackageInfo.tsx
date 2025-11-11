@@ -2,7 +2,6 @@ import * as React from 'react';
 import { List, Button, Icon, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { PackageIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
 import { useAccessPackageDelegationCheck } from '../../DelegationCheck/AccessPackageDelegationCheckContext';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
@@ -25,6 +24,7 @@ import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
 import { useResourceList } from './useResourceList';
+import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
 
 export interface PackageInfoProps {
@@ -36,6 +36,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
+  const displayAccessRequestFeature = displayAccessRequest();
 
   const {
     onDelegate,
@@ -72,7 +73,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     return null;
   }, [activeDelegations, isFetching, accessPackage.id]);
 
-  const { displayLimitedPreviewLaunch } = window.featureFlags || {};
   const userHasPackage = delegationAccess !== null;
   const accessIsInherited =
     (delegationAccess &&
@@ -215,7 +215,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             {!userHasPackage &&
               availableActions.includes(DelegationAction.REQUEST) &&
               // Todo: Implement request access package
-              !displayLimitedPreviewLaunch && <Button disabled>{t('common.request_poa')}</Button>}
+              displayAccessRequestFeature && <Button disabled>{t('common.request_poa')}</Button>}
           </div>
         </>
       )}

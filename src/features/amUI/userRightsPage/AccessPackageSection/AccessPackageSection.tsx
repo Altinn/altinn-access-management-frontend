@@ -17,6 +17,7 @@ import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import classes from './AccessPackageSection.module.css';
 import { debounce } from '@/resources/utils';
+import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 
 export const AccessPackageSection = () => {
   const { t } = useTranslation();
@@ -29,7 +30,7 @@ export const AccessPackageSection = () => {
     isLoading: loadingPartyRepresentation,
   } = usePartyRepresentation();
   const isCurrentUser = selfParty?.partyUuid === id;
-  const displayLimitedPreviewLaunch = window.featureFlags.displayLimitedPreviewLaunch;
+  const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
     {
@@ -114,7 +115,7 @@ export const AccessPackageSection = () => {
             )}
             <div className={classes.delegateButton}>
               {(toParty?.partyTypeName === PartyType.Organization ||
-                !displayLimitedPreviewLaunch) && (
+                shouldDisplayPrivDelegation) && (
                 <DelegationModal
                   delegationType={DelegationType.AccessPackage}
                   availableActions={[

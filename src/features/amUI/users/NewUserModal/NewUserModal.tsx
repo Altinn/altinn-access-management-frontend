@@ -7,6 +7,7 @@ import { NewPersonContent } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
 import { NewOrgContent } from './NewOrgContent';
 import { User } from '@/rtk/features/userInfoApi';
+import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 
 /**
  * NewUserButton component renders a button that, when clicked, opens a modal to add a new user.
@@ -45,7 +46,7 @@ interface NewUserModalProps {
 }
 
 const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => {
-  const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const shouldDisplayPrivDelegation = displayPrivDelegation();
   return (
     <DsDialog
       ref={modalRef}
@@ -61,7 +62,7 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => 
         {t('new_user_modal.modal_title')}
       </DsHeading>
       <DsTabs
-        defaultValue={displayLimitedPreviewLaunch ? 'org' : 'person'}
+        defaultValue={shouldDisplayPrivDelegation ? 'org' : 'person'}
         data-size='sm'
       >
         <DsTabs.List>

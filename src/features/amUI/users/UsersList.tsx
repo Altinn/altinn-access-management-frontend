@@ -19,6 +19,7 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
+import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 
 const extractFromList = (
   list: Connection[],
@@ -39,7 +40,7 @@ const extractFromList = (
 export const UsersList = () => {
   const { t } = useTranslation();
   const { fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
-  const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const shouldDisplayPrivDelegation = displayPrivDelegation();
   const navigate = useNavigate();
   const { data: isAdmin } = useGetIsAdminQuery();
 
@@ -67,7 +68,7 @@ export const UsersList = () => {
     }
     const remainingAfterExtraction = extractFromList(
       rightHolders || [],
-      displayLimitedPreviewLaunch ? 'nobody' : (currentUser?.party.id ?? 'loading'),
+      shouldDisplayPrivDelegation ? 'nobody' : (currentUser?.party.id ?? 'loading'),
     );
     return remainingAfterExtraction;
   }, [rightHolders, currentUser]);
@@ -81,7 +82,7 @@ export const UsersList = () => {
 
   return (
     <div className={classes.usersList}>
-      {!displayLimitedPreviewLaunch && (
+      {!shouldDisplayPrivDelegation && (
         <>
           <CurrentUserPageHeader
             currentUser={currentUser}

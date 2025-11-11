@@ -18,6 +18,8 @@ declare global {
       crossPlatformLinks: boolean;
       displayConsentGui: boolean;
       useNewActorsList: boolean;
+      displayPrivDelegation: boolean;
+      displayAccessRequest: boolean;
     };
   }
 }
@@ -52,6 +54,8 @@ window.featureFlags = {
   crossPlatformLinks: false,
   displayConsentGui: false,
   useNewActorsList: false,
+  displayPrivDelegation: false,
+  displayAccessRequest: false,
 };
 
 // Initialise i18next;

@@ -60,5 +60,20 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to use the new header component
         /// </summary>
         public bool UseNewHeader { get; set; }
+
+        /// <summary>
+        /// Whether to display the PRIV delegation feature
+        /// </summary>
+        public bool DisplayPrivDelegation { get; set; }
+
+        /// <summary>
+        /// Whether to display the access request feature
+        /// </summary>
+        public bool DisplayAccessRequest { get; set; }
+
+        /// <summary>
+        /// Whether to display sub-connections feature
+        /// </summary>
+        public bool DisplaySubConnections { get; set; }
     }
 }
