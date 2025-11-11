@@ -37,13 +37,16 @@ export const SidebarItems = (
 
   const displaySettingsPage = window.featureFlags?.displaySettingsPage;
   const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
+  const displayRequestsPage = window.featureFlags?.displayRequestsPage;
 
   const items: MenuItemProps[] = [];
 
   if (!isSmall) {
     items.push(getHeadingMenuItem(pathname, isLoading, reportee));
   }
-  items.push(getRequestsMenuItem(pathname, isLoading));
+  if (displayRequestsPage) {
+    items.push(getRequestsMenuItem(pathname, isLoading));
+  }
 
   if (displayConfettiPackage) {
     items.push(getUsersMenuItem(pathname, isLoading));

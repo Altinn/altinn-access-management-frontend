@@ -38,8 +38,6 @@ import {
   getUsersMenuItem,
 } from '@/resources/utils/sidebarConfig';
 
-const requestCount = 0;
-
 export const LandingPage = () => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
@@ -52,13 +50,11 @@ export const LandingPage = () => {
     type: reportee?.type === 'Organization' ? 'company' : 'person',
   });
 
-  const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
-  const displayConsentGui = window.featureFlags?.displayConsentGui;
-
-  const displaySettingsPage = window.featureFlags?.displaySettingsPage;
-  const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
-
   const getMenuItems = (): MenuItemProps[] => {
+    const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
+    const displayConsentGui = window.featureFlags?.displayConsentGui;
+    const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
+
     if (!reportee) {
       const loadingMenuItem = {
         icon: HandshakeIcon,
@@ -68,52 +64,52 @@ export const LandingPage = () => {
         loading: true,
       };
       return [loadingMenuItem, loadingMenuItem, loadingMenuItem, loadingMenuItem];
-    } else {
-      const items = [];
-      if (displayConfettiPackage) {
+    }
+
+    const items = [];
+    if (displayConfettiPackage) {
+      items.push({
+        ...getUsersMenuItem(),
+        description:
+          reportee.type === 'Organization'
+            ? t('landing_page.users_item_description_org')
+            : t('landing_page.users_item_description_person'),
+      });
+      if (isAdmin) {
         items.push({
-          ...getUsersMenuItem(),
+          ...getReporteesMenuItem(),
           description:
             reportee.type === 'Organization'
-              ? t('landing_page.users_item_description_org')
-              : t('landing_page.users_item_description_person'),
-        });
-        if (isAdmin) {
-          items.push({
-            ...getReporteesMenuItem(),
-            description:
-              reportee.type === 'Organization'
-                ? t('landing_page.reportees_item_description_org')
-                : t('landing_page.reportees_item_description_person'),
-          });
-        }
-      }
-
-      if (displayPoaOverviewPage && isAdmin) {
-        items.push({
-          ...getPoaOverviewMenuItem(),
-          description: t('landing_page.poa_item_description'),
+              ? t('landing_page.reportees_item_description_org')
+              : t('landing_page.reportees_item_description_person'),
         });
       }
-
-      if (displayConsentGui && hasConsentPermission(reportee, isAdmin)) {
-        items.push({
-          ...getConsentMenuItem(),
-          description: t('landing_page.consent_item_description'),
-        });
-      }
-
-      if (
-        hasCreateSystemUserPermission(reportee) ||
-        hasSystemClientAdminPermission(reportee, isClientAdmin)
-      ) {
-        items.push({
-          ...getSystemUserMenuItem(),
-          description: t('landing_page.systemuser_item_description'),
-        });
-      }
-      return items;
     }
+
+    if (displayPoaOverviewPage && isAdmin) {
+      items.push({
+        ...getPoaOverviewMenuItem(),
+        description: t('landing_page.poa_item_description'),
+      });
+    }
+
+    if (displayConsentGui && hasConsentPermission(reportee, isAdmin)) {
+      items.push({
+        ...getConsentMenuItem(),
+        description: t('landing_page.consent_item_description'),
+      });
+    }
+
+    if (
+      hasCreateSystemUserPermission(reportee) ||
+      hasSystemClientAdminPermission(reportee, isClientAdmin)
+    ) {
+      items.push({
+        ...getSystemUserMenuItem(),
+        description: t('landing_page.systemuser_item_description'),
+      });
+    }
+    return items;
   };
 
   const getRequestCountText = (reportee: ReporteeInfo, requestCount: number): string => {
@@ -126,6 +122,27 @@ export const LandingPage = () => {
       reportee: name,
       requestCount: countText,
     });
+  };
+
+  const getOtherItems = (): MenuItemProps[] => {
+    const displaySettingsPage = window.featureFlags?.displaySettingsPage;
+    const displayRequestsPage = window.featureFlags?.displayRequestsPage;
+    const requestCount = 0;
+    const items = [];
+
+    if (displayRequestsPage) {
+      items.push({
+        ...getRequestsMenuItem(),
+        title: getRequestCountText(reportee!, requestCount),
+        loading: !reportee,
+      });
+    }
+
+    if (canAccessSettings && displaySettingsPage) {
+      items.push(getSettingsMenuItem());
+    }
+
+    return items;
   };
 
   return (
@@ -167,17 +184,12 @@ export const LandingPage = () => {
             heading={t('landing_page.shortcut_links_heading')}
             items={getMenuItems()}
           />
-          <ListItemContainer
-            heading={t('landing_page.other_links_heading')}
-            items={[
-              {
-                ...getRequestsMenuItem(),
-                title: getRequestCountText(reportee!, requestCount),
-                loading: !reportee,
-              },
-              ...(canAccessSettings && displaySettingsPage ? [getSettingsMenuItem()] : []),
-            ]}
-          />
+          {getOtherItems().length > 0 && (
+            <ListItemContainer
+              heading={t('landing_page.other_links_heading')}
+              items={getOtherItems()}
+            />
+          )}
         </div>
       </PageLayoutWrapper>
     </PageWrapper>

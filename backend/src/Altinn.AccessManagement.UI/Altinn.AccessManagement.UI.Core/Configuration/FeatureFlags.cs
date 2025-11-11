@@ -60,5 +60,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to use the new header component
         /// </summary>
         public bool UseNewHeader { get; set; }
+
+        /// <summary>
+        /// Whether to display the requests page
+        /// </summary>
+        public bool DisplayRequestsPage { get; set; }
     }
 }
