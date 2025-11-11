@@ -29,5 +29,6 @@
   height: 1px;
   left: 2px;
   right: 2px;
+  pointer-events: none;
   background-color: var(--ds-color-neutral-border-subtle);
 }
