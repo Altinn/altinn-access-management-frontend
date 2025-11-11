@@ -38,6 +38,15 @@ export const useRerouteIfPoaOverviewPageDisabled = () => {
   }, [navigate]);
 };
 
+export const useRerouteIfRequestPageDisabled = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (window.featureFlags?.displayRequestsPage === false) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [navigate]);
+};
+
 export const availableForUserTypeCheck = (userType?: string) => {
   if (
     (userType && (userType === 'Organization' || userType === PartyType.Organization.toString())) ||
