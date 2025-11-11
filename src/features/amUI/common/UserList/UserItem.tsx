@@ -55,17 +55,19 @@ export const UserItem = ({
   ...props
 }: UserItemProps) => {
   const limitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
-  const hasInheritingUsers = user.children && user.children.length > 0 && !limitedPreviewLaunch;
+  const childrenToDisplay =
+    user.children?.filter(
+      (child) =>
+        child.type === ConnectionUserType.Person || child.type === ConnectionUserType.Organization,
+    ) || [];
+  const hasInheritingUsers = childrenToDisplay.length > 0 && !limitedPreviewLaunch;
   const [isExpanded, setExpanded] = useState(false);
   const { t } = useTranslation();
 
   useEffect(
     () =>
-      setExpanded(
-        (user.children && hasInheritingUsers && isExtendedUser(user) && user.matchInChildren) ??
-          false,
-      ),
-    [user, hasInheritingUsers],
+      setExpanded((hasInheritingUsers && isExtendedUser(user) && user.matchInChildren) ?? false),
+    [user],
   );
 
   const roleCodes =
@@ -121,7 +123,7 @@ export const UserItem = ({
         ? 'company'
         : 'system';
 
-  const subUsers = hasInheritingUsers ? [user as User, ...(user.children ?? [])] : [];
+  const subUsers = hasInheritingUsers ? [user as User, ...(childrenToDisplay ?? [])] : [];
 
   return (
     <UserListItem
