@@ -9,6 +9,7 @@ import {
   LeaveIcon,
   LinkIcon,
   CogIcon,
+  BellDotIcon,
 } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
@@ -125,6 +126,19 @@ export const getSettingsMenuItem = (pathname?: string, isLoading = false): MenuI
     selected: pathname?.includes(`/${amUIPath.Settings}`),
     icon: CogIcon,
     as: (props) => getMenuLinkAs(props, `/${amUIPath.Settings}`),
+  };
+};
+
+export const getRequestsMenuItem = (pathname?: string, isLoading = false): MenuItemProps => {
+  return {
+    groupId: '2',
+    id: '2.2',
+    size: 'md',
+    loading: isLoading,
+    title: t('sidebar.requests'),
+    selected: pathname?.includes(`/${amUIPath.Requests}`),
+    icon: BellDotIcon,
+    as: (props) => getMenuLinkAs(props, `/${amUIPath.Requests}`),
   };
 };
 

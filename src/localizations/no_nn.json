@@ -129,7 +129,8 @@
     "systemaccess": "API- og systemtilgangar",
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
-    "settings": "Innstillingar"
+    "settings": "Innstillingar",
+    "requests": "Forespørsler"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",

@@ -146,7 +146,8 @@
     "systemaccess": "API- og systemtilganger",
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
-    "settings": "Innstillinger"
+    "settings": "Innstillinger",
+    "requests": "Forespørsler"
   },
   "profile": {
     "received": "Mottatte",

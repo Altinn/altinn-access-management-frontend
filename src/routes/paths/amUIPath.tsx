@@ -8,4 +8,5 @@ export enum amUIPath {
   Info = 'info',
   Settings = 'settings',
   LandingPage = 'landing-page',
+  Requests = 'requests',
 }

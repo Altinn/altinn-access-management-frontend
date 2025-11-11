@@ -11,6 +11,7 @@ import {
   getHeadingMenuItem,
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
+  getRequestsMenuItem,
   getSettingsMenuItem,
   getShortcutsMenuItem,
   getSystemUserMenuItem,
@@ -42,6 +43,7 @@ export const SidebarItems = (
   if (!isSmall) {
     items.push(getHeadingMenuItem(pathname, isLoading, reportee));
   }
+  items.push(getRequestsMenuItem(pathname, isLoading));
 
   if (displayConfettiPackage) {
     items.push(getUsersMenuItem(pathname, isLoading));

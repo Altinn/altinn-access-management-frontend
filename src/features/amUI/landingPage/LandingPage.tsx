@@ -32,12 +32,13 @@ import {
   getConsentMenuItem,
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
+  getRequestsMenuItem,
   getSettingsMenuItem,
   getSystemUserMenuItem,
   getUsersMenuItem,
 } from '@/resources/utils/sidebarConfig';
 
-const requestCount = 2;
+const requestCount = 0;
 
 export const LandingPage = () => {
   const { t } = useTranslation();
@@ -48,7 +49,7 @@ export const LandingPage = () => {
 
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
+    type: reportee?.type === 'Organization' ? 'company' : 'person',
   });
 
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
@@ -136,10 +137,7 @@ export const LandingPage = () => {
               type: reportee?.type === 'Organization' ? 'company' : 'person',
               name: reporteeName,
             }}
-            title={formatDisplayName({
-              fullName: reportee?.name || '',
-              type: reportee?.type === 'Organization' ? 'company' : 'person',
-            })}
+            title={reporteeName}
             description={
               reportee?.type === 'Organization'
                 ? `${t('common.org_nr')} ${reportee?.organizationNumber?.match(/.{1,3}/g)?.join(' ') || ''}`
@@ -173,14 +171,8 @@ export const LandingPage = () => {
             heading={t('landing_page.other_links_heading')}
             items={[
               {
-                icon: BellDotIcon,
+                ...getRequestsMenuItem(),
                 title: getRequestCountText(reportee!, requestCount),
-                as: (props) => (
-                  <Link
-                    to={`/${'requests'}`}
-                    {...props}
-                  />
-                ),
                 loading: !reportee,
               },
               ...(canAccessSettings && displaySettingsPage ? [getSettingsMenuItem()] : []),

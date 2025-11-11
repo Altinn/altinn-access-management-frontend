@@ -132,7 +132,8 @@
     "systemaccess": "API- and system access",
     "consent": "Consent and power of attorney agreements",
     "poa_overview": "Power of attorney",
-    "settings": "Settings"
+    "settings": "Settings",
+    "requests": "Requests"
   },
   "error_page": {
     "not_found_site_type": "Error 404",
