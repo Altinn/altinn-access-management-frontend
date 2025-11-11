@@ -1,0 +1,33 @@
+.landingPage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-12);
+  margin-top: var(--ds-size-2);
+}
+
+.landingPageAlert {
+  padding-top: var(--ds-size-2);
+  padding-bottom: var(--ds-size-6);
+}
+
+.listItemContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-3);
+  width: 100%;
+  margin-top: var(--ds-size-4);
+  padding: var(--ds-size-2);
+  box-shadow: var(--ds-shadow-xs);
+  border-radius: var(--ds-border-radius-md);
+  background-color: var(--ds-color-background-default);
+}
+
+.listItemContainer > li:not(:last-child):after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  height: 1px;
+  left: 3px;
+  right: 3px;
+  background-color: var(--ds-color-neutral-border-subtle);
+}

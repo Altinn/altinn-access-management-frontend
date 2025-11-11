@@ -38,6 +38,7 @@ import {
 } from '../paths';
 import { PackagePoaDetailsPage } from '@/features/amUI/packagePoaDetailsPage/PackagePoaDetailsPage';
 import { SettingsPage } from '@/features/amUI/settings/SettingsPage';
+import { LandingPage } from '@/features/amUI/landingPage/LandingPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -182,6 +183,10 @@ export const Router = createBrowserRouter(
       <Route
         path={amUIPath.Settings}
         element={<SettingsPage />}
+      />
+      <Route
+        path={amUIPath.LandingPage}
+        element={<LandingPage />}
       />
     </Route>,
   ),

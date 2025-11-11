@@ -89,7 +89,8 @@
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
     "date_of_birth": "Born",
-    "save_changes": "Save changes"
+    "save_changes": "Save changes",
+    "none": "no"
   },
   "beta_banner": {
     "info": "This is a beta version of the new access management pages in Altinn.",
@@ -836,5 +837,21 @@
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
     "no_resources": "No resources available."
+  },
+  "landing_page": {
+    "alert_heading": "Welcome to the new solution",
+    "alert_body": "These are the new pages for access management in Altinn. We don't have everything in place yet, so you may need to use the old solution for some tasks. Thank you for your patience!",
+    "alert_link": "Read all about the new solution",
+    "shortcut_links_heading": "Where do you want to go?",
+    "other_links_heading": "Other",
+    "users_item_description_org": "Overview of people and organisations that have been granted access in your organisation",
+    "users_item_description_person": "Overview of people and organisations that have been granted access for you",
+    "reportees_item_description_org": "Overview of everyone who has granted your organisation any access",
+    "reportees_item_description_person": "Overview of everyone who has granted you any access",
+    "poa_item_description": "Overview of access packages and individual services",
+    "consent_item_description": "Overview of active and pending consent and power of attorney agreements",
+    "systemuser_item_description": "Overview of system accesses",
+    "new_requests_single": "{{reportee}} has {{requestCount}} new request",
+    "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"
   }
 }

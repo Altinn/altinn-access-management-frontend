@@ -7,4 +7,5 @@ export enum amUIPath {
   PackagePoaDetails = 'poa-overview/access-package/:id',
   Info = 'info',
   Settings = 'settings',
+  LandingPage = 'landing-page',
 }

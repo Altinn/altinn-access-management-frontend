@@ -86,7 +86,8 @@
     "org_no": "Org.nr",
     "part_of": "del av",
     "date_of_birth": "Født",
-    "save_changes": "Lagre endringar"
+    "save_changes": "Lagre endringar",
+    "none": "ingen"
   },
   "beta_banner": {
     "info": "Du ser no på ein betaversjon av dei nye sidene for tilgangsstyring i Altinn.",
@@ -832,5 +833,21 @@
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
     "no_resources": "Ingen tenester tilgjengelege."
+  },
+  "landing_page": {
+    "alert_heading": "Velkomen til ny løysing",
+    "alert_body": "Dette er dei nye sidene for tilgangsstyring i Altinn. Me har dessverre ikkje alt på plass enno, så nokre ting må du kanskje gjera i den gamle løysinga. Takk for tolmodet!",
+    "alert_link": "Les alt om den nye løysinga",
+    "shortcut_links_heading": "Kvar vil du gå?",
+    "other_links_heading": "Anna",
+    "users_item_description_org": "Oversikt over personar og verksemder som har fått tilgangar hjå dykk",
+    "users_item_description_person": "Oversikt over personar og verksemder som har fått tilgangar hos deg",
+    "reportees_item_description_org": "Oversikt over alle som har gjeve dykk nokre tilgangar",
+    "reportees_item_description_person": "Oversikt over alle som har gjeve deg nokre tilgangar",
+    "poa_item_description": "Oversikt over tilgangspakkar og enkeltjenester",
+    "consent_item_description": "Oversikt over aktive og ventande samtykke- og fullmaktsavtalar",
+    "systemuser_item_description": "Oversikt over systemtilgangar",
+    "new_requests_single": "{{reportee}} har {{requestCount}} ny førespurnad",
+    "new_requests_plural": "{{reportee}} har {{requestCount}} nye førespurnader"
   }
 }
