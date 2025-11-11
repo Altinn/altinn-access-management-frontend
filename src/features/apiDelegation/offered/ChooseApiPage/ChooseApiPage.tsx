@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
@@ -9,7 +9,7 @@ import { Page, PageHeader, PageContent, PageContainer } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
-import { useMediaQuery } from '@/resources/hooks';
+import { useMediaQuery, useProviderName } from '@/resources/hooks';
 import {
   softAddApi,
   softRemoveApi,
@@ -61,18 +61,41 @@ export const ChooseApiPage = () => {
   } = useSearchQuery({ searchString, ROfilters: filters });
 
   const { data: apiProviders } = useGetResourceOwnersQuery(resourceTypeList);
+  const { getProviderName, isLoading: isProviderNameLoading } = useProviderName();
+
+  const resolvedSearchResults = useMemo<DelegableApi[]>(() => {
+    if (!searchResults) {
+      return [];
+    }
+
+    return searchResults.map((api) => {
+      if (api.orgName && api.orgName !== api.orgCode) {
+        return api;
+      }
+
+      const resolvedName = api.orgCode ? getProviderName(api.orgCode) : undefined;
+      if (!resolvedName && !api.orgCode) {
+        return api;
+      }
+
+      return {
+        ...api,
+        orgName: resolvedName ?? api.orgName ?? api.orgCode ?? '',
+      };
+    });
+  }, [searchResults, getProviderName]);
 
   useEffect(() => {
     if (!isLoading && urlParams) {
       makeChosenApisFromParams();
     }
-  }, [isLoading]);
+  }, [isLoading, resolvedSearchResults]);
 
   const makeChosenApisFromParams = () => {
     const promises: Promise<void>[] = [];
 
     for (const key of urlParams.keys()) {
-      searchResults?.forEach((api: DelegableApi) => {
+      resolvedSearchResults.forEach((api: DelegableApi) => {
         if (
           api.identifier === key &&
           chosenApis.filter((chosenApi: DelegableApi) => chosenApi.identifier === key).length === 0
@@ -114,20 +137,28 @@ export const ChooseApiPage = () => {
     setUrlParams(urlParams);
   };
 
-  const filterOptions: FilterOption[] | undefined = apiProviders
-    ? apiProviders.map((provider: ResourceOwner) => {
-        return {
-          label: provider.organisationName,
-          value: provider.organisationNumber,
-        };
-      })
-    : [];
+  const filterOptions = useMemo(() => {
+    if (!apiProviders) return [];
+
+    return apiProviders.map((provider: ResourceOwner) => ({
+      label:
+        provider.organisationName ??
+        getProviderName(provider.organisationCode) ??
+        provider.organisationCode,
+      value: provider.organisationNumber,
+    }));
+  }, [apiProviders, getProviderName]);
 
   const chosenApiActionBars = chosenApis.map((api: DelegableApi, index) => {
+    const providerName = api.orgCode ? getProviderName(api.orgCode) : undefined;
+    const resolvedName = providerName ?? api.orgName ?? api.orgCode ?? '';
+    const apiWithResolvedName =
+      resolvedName !== api.orgName ? { ...api, orgName: resolvedName } : api;
+
     return (
       <ApiActionBar
         key={`${api.identifier}${index}`}
-        api={api}
+        api={apiWithResolvedName}
         variant={'remove'}
         color={'success'}
         onRemove={() => handleRemove(api)}
@@ -241,7 +272,7 @@ export const ChooseApiPage = () => {
                       error={error}
                       isFetching={isFetching}
                       urlParams={urlParams}
-                      searchResults={searchResults || []}
+                      searchResults={resolvedSearchResults}
                       chosenApis={chosenApis}
                     />
                   )}

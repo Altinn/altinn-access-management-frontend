@@ -300,10 +300,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             List<ResourceOwnerFE> actualResult = await response.Content.ReadFromJsonAsync<List<ResourceOwnerFE>>();
-            for (int i = 0; i < expectedResult.Count; i++)
-            {
-                Assert.Equal(expectedResult[i], actualResult[i]);
-            }
+            Assert.NotNull(actualResult);
+            Assert.Equal(expectedResult.Count, actualResult.Count);
+            AssertionUtil.AssertEqual(expectedResult, actualResult);
+            Assert.All(actualResult, owner => Assert.False(string.IsNullOrEmpty(owner.OrganisationCode)));
         }
 
         /// <summary>
@@ -330,6 +330,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 new ResourceOwnerFE("PÅFUNNSETATEN", "985399077"),
                 new ResourceOwnerFE("Skatteetaten", "974761076"),
                 new ResourceOwnerFE("Testdepartementet", "974760746"),
+                new ResourceOwnerFE(null, "123456789")
+                {
+                    OrganisationCode = "ZZZDEMO",
+                },
             };
 
             // Act

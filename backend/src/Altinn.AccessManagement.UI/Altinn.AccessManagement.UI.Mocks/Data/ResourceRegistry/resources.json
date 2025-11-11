@@ -1205,5 +1205,41 @@
         "value": "ske-innrapportering-boligsameie"
       }
     ]
+  },
+  {
+    "identifier": "appid-520",
+    "title": {
+      "en": "Ownerless Resource",
+      "nb": "Ressurs uten navn",
+      "nn": "Ressurs utan namn"
+    },
+    "description": {
+      "en": "Test resource without owner name set in resource registry.",
+      "nb": "Testressurs uten eiernavn i ressursregisteret.",
+      "nn": "Testressurs utan eigarnamn i ressursregisteret."
+    },
+    "rightDescription": {
+      "en": "Delegating grants access despite the missing owner name entry.",
+      "nb": "Delegering gir tilgang selv om eiernavn mangler.",
+      "nn": "Delegasjon gir tilgang sjølv om eigarnamn manglar."
+    },
+    "status": "Active",
+    "contactPoints": [],
+    "delegable": true,
+    "visible": true,
+    "hasCompetentAuthority": {
+      "name": null,
+      "organization": "123456789",
+      "orgcode": "zzzdemo"
+    },
+    "keywords": [],
+    "resourceType": "MaskinportenSchema",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-520"
+      }
+    ]
   }
 ]

@@ -203,17 +203,38 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 List<ServiceResource> resources = await GetResources();
 
+                string ResolveOrganisationName(Dictionary<string, string> translations)
+                {
+                    if (translations == null)
+                    {
+                        return null;
+                    }
+
+                    if (!string.IsNullOrEmpty(languageCode) && translations.TryGetValue(languageCode, out string localizedName))
+                    {
+                        return localizedName;
+                    }
+
+                    return translations.TryGetValue("nb", out string defaultName) ? defaultName : null;
+                }
+
                 // Filter resources based on criteria and remove duplicates based on OrganisationName
                 var resourceOwnerList = resources
-                    .Where(sr => sr.HasCompetentAuthority != null && sr.HasCompetentAuthority.Name != null
-                                 && sr.HasCompetentAuthority.Name.ContainsKey(languageCode)
+                    .Where(sr => sr.HasCompetentAuthority != null
+                                 && !string.IsNullOrEmpty(sr.HasCompetentAuthority.Orgcode)
                                  && relevantResourceTypeList.Contains(sr.ResourceType))
-                    .GroupBy(sr => sr.HasCompetentAuthority.Orgcode.ToUpper())
+                    .GroupBy(sr => sr.HasCompetentAuthority.Orgcode, StringComparer.OrdinalIgnoreCase)
                     .Select(g => g.First()) // Take the first item from each group to eliminate duplicates
-                    .Select(sr => new ResourceOwnerFE(
-                            sr.HasCompetentAuthority.Name[languageCode],
-                            sr.HasCompetentAuthority.Organization))
-                    .OrderBy(resourceOwner => resourceOwner.OrganisationName) // Order alphabetically
+                    .Select(sr =>
+                    {
+                        string organisationName = ResolveOrganisationName(sr.HasCompetentAuthority?.Name);
+
+                        return new ResourceOwnerFE(organisationName, sr.HasCompetentAuthority.Organization)
+                        {
+                            OrganisationCode = sr.HasCompetentAuthority.Orgcode,
+                        };
+                    })
+                    .OrderBy(resourceOwner => resourceOwner.OrganisationName ?? resourceOwner.OrganisationCode, StringComparer.OrdinalIgnoreCase) // Order alphabetically
                     .ToList();
 
                 return resourceOwnerList;
@@ -268,9 +289,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)
         {
-            return orgList.Orgs.Values
-                .Select(org => new ResourceOwnerFE(GetNameInCorrectLanguage(org.Name, languageCode), org.Orgnr))
-                .ToList();
+            return orgList.Orgs?
+                .Select(org => new ResourceOwnerFE(GetNameInCorrectLanguage(org.Value.Name, languageCode), org.Value.Orgnr)
+                {
+                    OrganisationCode = org.Key,
+                })
+                .ToList() ?? new List<ResourceOwnerFE>();
         }
 
         private static string GetNameInCorrectLanguage(Name name, string languageCode)

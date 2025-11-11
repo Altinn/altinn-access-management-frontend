@@ -811,5 +811,31 @@
       }
     ],
     "keywords": [ "Boligsameie", "innrapportering" ]
+  },
+  {
+    "identifier": "appid-520",
+    "title": "Ressurs uten navn",
+    "description": "Testressurs uten eiernavn i ressursregisteret.",
+    "rightDescription": "Delegering gir tilgang selv om eiernavn mangler.",
+    "homepage": null,
+    "status": "Active",
+    "spatial": null,
+    "contactPoints": [],
+    "delegable": true,
+    "visible": true,
+    "resourceOwnerName": null,
+    "resourceOwnerOrgNumber": "123456789",
+    "resourceOwnerLogoUrl": null,
+    "resourceOwnerOrgcode": "ZZZDEMO",
+    "resourceReferences": [],
+    "priorityCounter": null,
+    "resourceType": "Altinn2Service",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-520"
+      }
+    ],
+    "keywords": []
   }
 ]
