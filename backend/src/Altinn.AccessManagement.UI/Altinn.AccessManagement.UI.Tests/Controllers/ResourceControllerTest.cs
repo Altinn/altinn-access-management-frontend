@@ -69,6 +69,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(expectedResources, actualResources, AssertionUtil.AssertEqual);
+
+            // Ensure resources without an owner name still surface with their organisational metadata intact.
+            ServiceResourceFE expectedMissingOwnerResource = expectedResources.Find(r => r.Identifier == "appid-520");
+            Assert.NotNull(expectedMissingOwnerResource);
+
+            ServiceResourceFE actualMissingOwnerResource = actualResources.Find(r => r.Identifier == expectedMissingOwnerResource.Identifier);
+            Assert.NotNull(actualMissingOwnerResource);
+            Assert.Null(actualMissingOwnerResource.ResourceOwnerName);
+            Assert.Equal(expectedMissingOwnerResource.ResourceOwnerOrgNumber, actualMissingOwnerResource.ResourceOwnerOrgNumber);
+            Assert.Equal(expectedMissingOwnerResource.ResourceOwnerOrgcode, actualMissingOwnerResource.ResourceOwnerOrgcode);
         }
 
         /// <summary>
