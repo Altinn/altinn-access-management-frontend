@@ -331,7 +331,8 @@
     "only_you_have_access": "Only you have access here. Do you want to change this?",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
-    "indirect_connections": "Users without power of attorney"
+    "indirect_connections": "Users without power of attorney",
+    "no_access_to_users_message": "Only access managers can see the full list of users with powers of attorney in the organization."
   },
   "advanced_user_search": {
     "add_user_button": "Add user",
@@ -441,7 +442,9 @@
     "trigger_button_large": "Give power of attorney to new user",
     "add_person_button": "Add person",
     "add_org_button": "Add organization",
-    "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future."
+    "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future.",
+    "ssn_format_error": "Social security number must consist of 11 digits",
+    "last_name_format_error": "Please enter a valid last name"
   },
   "info_page": {
     "page_title": "About new Altinn",
