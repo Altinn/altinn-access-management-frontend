@@ -135,12 +135,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<List<SystemUserRequest>>> GetPendingAgentSystemUserRequests(int partyId, CancellationToken cancellationToken)
+        public async Task<Result<List<SystemUserRequest>>> GetPendingAgentSystemUserRequests(int partyId, string orgNo, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/request/agent/{partyId}/pending";
+                string endpoint = $"systemuser/request/agent/{partyId}/{orgNo}/pending";
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 

@@ -26,6 +26,7 @@ export const SystemUserOverviewPage = () => {
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
 
   const partyId = getCookie('AltinnPartyId');
+  const partyUuid = getCookie('AltinnPartyUuid') || '';
 
   const { data: isClientAdmin, isLoading: isLoadingClientAdmin } = useGetIsClientAdminQuery();
   const { data: reporteeData, isLoading: isLoadingReportee } =
@@ -47,7 +48,7 @@ export const SystemUserOverviewPage = () => {
     data: pendingSystemUsers,
     isLoading: isLoadingPendingSystemUsers,
     isError: isLoadPendingSystemUsersError,
-  } = useGetPendingSystemUserRequestsQuery(partyId, {
+  } = useGetPendingSystemUserRequestsQuery(partyUuid, {
     skip: !hasCreateSystemUserPermission(reporteeData),
   });
 

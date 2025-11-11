@@ -119,7 +119,7 @@ export const systemUserApi = createApi({
       invalidatesTags: [Tags.SystemUsers],
     }),
     getPendingSystemUserRequests: builder.query<SystemUser[], string>({
-      query: (partyId) => `systemuser/${partyId}/pending`,
+      query: (partyUuid) => `systemuser/${partyUuid}/pending`,
       providesTags: [Tags.PendingSystemUsers],
       transformResponse: (response: SystemUser[]) => {
         return response.map((x) => {

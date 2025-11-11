@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<Result<List<SystemUserRequest>>> GetPendingAgentSystemUserRequests(int partyId, CancellationToken cancellationToken)
+        public Task<Result<List<SystemUserRequest>>> GetPendingAgentSystemUserRequests(int partyId, string orgNo, CancellationToken cancellationToken)
         {
             List<SystemUserRequest> systemUserAgentRequests = Util.GetMockData<List<SystemUserRequest>>($"{dataFolder}/SystemUser/pendingAgentRequests.json");
             if (systemUserAgentRequests.First().PartyId != partyId)

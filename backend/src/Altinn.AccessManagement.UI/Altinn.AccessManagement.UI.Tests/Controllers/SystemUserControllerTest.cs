@@ -299,13 +299,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetPendingSystemUsers_ReturnsPendingSystemUsers()
         {
             // Arrange
-            int partyId = 51329012;
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
 
             string path = Path.Combine(_expectedDataPath, "SystemUser", "pendingSystemusers.json");
             List<SystemUserRequestFE> expectedResponse = Util.GetMockData<List<SystemUserRequestFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyId}/pending");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyUuid}/pending");
             List<SystemUserRequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SystemUserRequestFE>>();
 
             // Assert
@@ -321,11 +321,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetPendingSystemUsers_ReturnsError()
         {
             // Arrange
-            int partyId = 1234567;
-            HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
+            string partyUuid = "4c285815-bf80-4f3a-a0b2-4ebf9acae3ea";
+            HttpStatusCode expectedResponse = HttpStatusCode.BadRequest;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyId}/pending");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyUuid}/pending");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);

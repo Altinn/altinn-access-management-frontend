@@ -100,5 +100,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// used to determine if the Request is still valid.
         /// </summary>
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Tracks if the original user creating the Request have escalated the Approval of this Request
+        /// to somebody else in the organisation with AccessManager (Package:Tilgangsstyring)
+        /// </summary>
+        public bool Escalated { get; set; }
     }
 }

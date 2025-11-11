@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
+using Altinn.Platform.Models.Register;
 using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -116,10 +117,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<SystemUserFE>>> GetPendingSystemUserRequests(int partyId, CancellationToken cancellationToken)
+        public async Task<Result<List<SystemUserFE>>> GetPendingSystemUserRequests(Guid partyUuid, CancellationToken cancellationToken)
         {
-            Task<Result<List<SystemUserRequest>>> standardTask = _systemUserRequestClient.GetPendingSystemUserRequests(partyId, cancellationToken);
-            Task<Result<List<SystemUserRequest>>> agentTask = _systemUserAgentRequestClient.GetPendingAgentSystemUserRequests(partyId, cancellationToken);
+            PartyR party = await _registerClient.GetParty(partyUuid);
+            if (party == null)
+            {
+                return Problem.Reportee_Orgno_NotFound;
+            }
+            
+            Task<Result<List<SystemUserRequest>>> standardTask = _systemUserRequestClient.GetPendingSystemUserRequests((int)party.PartyId, party.OrganizationIdentifier, cancellationToken);
+            Task<Result<List<SystemUserRequest>>> agentTask = _systemUserAgentRequestClient.GetPendingAgentSystemUserRequests((int)party.PartyId, party.OrganizationIdentifier, cancellationToken);
             await Task.WhenAll(standardTask, agentTask);
 
             if (standardTask.Result.IsProblem)
@@ -140,7 +147,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<IEnumerable<SystemUser>> MapRequestsToPendingSystemUsers(IEnumerable<SystemUserRequest> requests, string systemUserType, CancellationToken cancellationToken)
         {
-            IEnumerable<Task<SystemUser>> tasks = requests.Select(async r =>
+            IEnumerable<Task<SystemUser>> tasks = requests.Where(r => r.Escalated).Select(async r =>
             {
                 RegisteredSystem system = await _systemRegisterClient.GetSystem(r.SystemId, cancellationToken);
 

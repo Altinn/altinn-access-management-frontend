@@ -201,15 +201,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Get all pending system user requests for given party
         /// 
         /// </summary>
-        /// <param name="partyId">Party user represents</param>
+        /// <param name="partyUuid">Party user represents</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        [HttpGet("{partyId}/pending")]
-        public async Task<ActionResult> GetPendingSystemUserRequests([FromRoute] int partyId, CancellationToken cancellationToken)
+        [HttpGet("{partyUuid}/pending")]
+        public async Task<ActionResult> GetPendingSystemUserRequests([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<List<SystemUserFE>> list = await _systemUserService.GetPendingSystemUserRequests(partyId, cancellationToken);
+            Result<List<SystemUserFE>> list = await _systemUserService.GetPendingSystemUserRequests(partyUuid, cancellationToken);
 
             if (list.IsProblem)
             {

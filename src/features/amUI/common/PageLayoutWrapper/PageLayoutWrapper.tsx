@@ -36,13 +36,13 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { data: canAccessSettings } = useGetIsCompanyProfileAdminQuery();
 
   const { data: pendingSystemUsers } = useGetPendingSystemUserRequestsQuery(
-    reportee?.partyId ?? '',
+    reportee?.partyUuid ?? '',
     {
-      skip: !(reportee?.partyId && isAdmin),
+      skip: !(reportee?.partyUuid && isAdmin),
     },
   );
   const pendingSystemUsersCount = pendingSystemUsers?.length ?? 0;
-  
+
   const { menuGroups, isLoadingMenu } = useGlobalMenu();
 
   const { header, languageCode } = useHeader();

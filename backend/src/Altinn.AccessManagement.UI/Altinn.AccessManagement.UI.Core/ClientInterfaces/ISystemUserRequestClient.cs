@@ -38,9 +38,10 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Return all pending system user requests created for a given party
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
+        /// <param name="orgNo">The org no of the party to retrieve</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all pending system users for specified party</returns>
-        Task<Result<List<SystemUserRequest>>> GetPendingSystemUserRequests(int partyId, CancellationToken cancellationToken);
+        Task<Result<List<SystemUserRequest>>> GetPendingSystemUserRequests(int partyId, string orgNo, CancellationToken cancellationToken);
         
         /// <summary>
         /// Escalates a system user request
