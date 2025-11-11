@@ -814,7 +814,7 @@
   },
   {
     "identifier": "appid-520",
-    "title": "Ressurs uten navn",
+    "title": "Ressurs uten eiernavn",
     "description": "Testressurs uten eiernavn i ressursregisteret.",
     "rightDescription": "Delegering gir tilgang selv om eiernavn mangler.",
     "homepage": null,

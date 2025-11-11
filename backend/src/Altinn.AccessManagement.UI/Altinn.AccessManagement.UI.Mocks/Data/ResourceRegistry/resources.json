@@ -1210,8 +1210,8 @@
     "identifier": "appid-520",
     "title": {
       "en": "Ownerless Resource",
-      "nb": "Ressurs uten navn",
-      "nn": "Ressurs utan namn"
+      "nb": "Ressurs uten eiernavn",
+      "nn": "Ressurs utan eigarnamn"
     },
     "description": {
       "en": "Test resource without owner name set in resource registry.",
