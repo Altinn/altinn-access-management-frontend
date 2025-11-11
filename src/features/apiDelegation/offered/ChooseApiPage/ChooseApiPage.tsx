@@ -69,21 +69,14 @@ export const ChooseApiPage = () => {
     }
 
     return searchResults.map((api) => {
-      if (api.orgName && !isProviderNameLoading) {
-        return api;
-      }
-
       const resolvedName = api.orgCode ? getProviderName(api.orgCode) : undefined;
-      if (!resolvedName && !api.orgCode) {
-        return api;
-      }
 
       return {
         ...api,
         orgName: resolvedName ?? api.orgName ?? api.orgCode ?? '',
       };
     });
-  }, [searchResults, getProviderName]);
+  }, [searchResults, getProviderName, isProviderNameLoading]);
 
   useEffect(() => {
     if (!isLoading && urlParams) {

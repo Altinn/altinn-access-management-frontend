@@ -76,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
 
                     var paginatedResult = PaginationUtils.GetListPage(searchResults, page, resultsPerPage);
-                    
+
                     // Add logo to each resource if it exists
                     foreach (ServiceResourceFE resource in paginatedResult.PageList)
                     {
@@ -294,10 +294,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)
         {
             return orgList.Orgs?
-                .Select(org => new ResourceOwnerFE(GetNameInCorrectLanguage(org.Value.Name, languageCode), org.Value.Orgnr)
-                {
-                    OrganisationCode = org.Key,
-                })
+               .Select(org => new ResourceOwnerFE(org.Value.Name != null ? GetNameInCorrectLanguage(org.Value.Name, languageCode) : null, org.Value.Orgnr)
+               {
+                   OrganisationCode = org.Key,
+               })
                 .ToList() ?? new List<ResourceOwnerFE>();
         }
 
@@ -346,9 +346,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     .SetPriority(CacheItemPriority.High)
                     .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
 
-                _memoryCache.Set(cacheKey, resources, cacheEntryOptions); 
-            }     
-            
+                _memoryCache.Set(cacheKey, resources, cacheEntryOptions);
+            }
+
             return resources;
         }
 
