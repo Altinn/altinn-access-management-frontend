@@ -22,8 +22,12 @@ export interface AdvancedUserSearchProps {
   isActionLoading?: boolean;
 }
 
-const filterSystemUsers = (items?: Connection[]) =>
-  items?.filter((item) => item.party.type !== ConnectionUserType.Systemuser);
+const filterAvailableUserTypes = (items?: Connection[]) =>
+  items?.filter(
+    (item) =>
+      item.party.type === ConnectionUserType.Person ||
+      item.party.type === ConnectionUserType.Organization,
+  ) || [];
 
 export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   connections,
@@ -36,10 +40,10 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
 
-  const filteredConnections = useMemo(() => filterSystemUsers(connections), [connections]);
+  const filteredConnections = useMemo(() => filterAvailableUserTypes(connections), [connections]);
 
   const filteredIndirectConnections = useMemo(
-    () => filterSystemUsers(indirectConnections),
+    () => filterAvailableUserTypes(indirectConnections),
     [indirectConnections],
   );
 
