@@ -62,7 +62,7 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => 
         {t('new_user_modal.modal_title')}
       </DsHeading>
       <DsTabs
-        defaultValue={shouldDisplayPrivDelegation ? 'org' : 'person'}
+        defaultValue={shouldDisplayPrivDelegation ? 'person' : 'org'}
         data-size='sm'
       >
         <DsTabs.List>

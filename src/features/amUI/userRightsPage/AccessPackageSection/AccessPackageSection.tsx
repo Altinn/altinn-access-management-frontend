@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { DsAlert, DsHeading, DsPopover, DsSearch } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
@@ -29,7 +29,9 @@ export const AccessPackageSection = () => {
     actingParty,
     isLoading: loadingPartyRepresentation,
   } = usePartyRepresentation();
+  const { data: isHovedadmin } = useGetIsHovedadminQuery();
   const isCurrentUser = selfParty?.partyUuid === id;
+  const canGiveAccess = !isCurrentUser || (isCurrentUser && isHovedadmin);
   const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
@@ -63,7 +65,7 @@ export const AccessPackageSection = () => {
   return (
     <>
       <AccessPackageInfoAlert />
-      {toParty?.partyTypeName === PartyType.Person && (
+      {toParty?.partyTypeName === PartyType.Person && !shouldDisplayPrivDelegation && (
         <DsAlert data-color='warning'>{t('access_packages.person_info_alert')}</DsAlert>
       )}
       {loadingPartyRepresentation || loadingAccesses ? (
@@ -115,12 +117,12 @@ export const AccessPackageSection = () => {
             )}
             <div className={classes.delegateButton}>
               {(toParty?.partyTypeName === PartyType.Organization ||
-                shouldDisplayPrivDelegation) && (
+                (shouldDisplayPrivDelegation && canGiveAccess)) && (
                 <DelegationModal
                   delegationType={DelegationType.AccessPackage}
                   availableActions={[
                     DelegationAction.REVOKE,
-                    isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
+                    canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
                   ]}
                 />
               )}

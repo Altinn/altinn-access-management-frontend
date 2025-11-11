@@ -332,7 +332,8 @@
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
     "indirect_connections": "Users without power of attorney",
-    "no_access_to_users_message": "Only access managers can see the full list of users with powers of attorney in the organization."
+    "no_access_to_users_header": "We are still working on this page!",
+    "no_access_to_users_message": "Only access managers can see the full list of users with powers of attorney in this organization. <br /> A list of key personnel (the board) will eventually be made available to users without access management."
   },
   "advanced_user_search": {
     "add_user_button": "Add user",

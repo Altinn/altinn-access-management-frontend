@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
 import { DsHeading, DsParagraph, DsSearch } from '@altinn/altinn-components';
 
 import type { User } from '@/rtk/features/userInfoApi';
-import { useGetIsAdminQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   type Connection,
   ConnectionUserType,
@@ -68,7 +68,7 @@ export const UsersList = () => {
     }
     const remainingAfterExtraction = extractFromList(
       rightHolders || [],
-      shouldDisplayPrivDelegation ? 'nobody' : (currentUser?.party.id ?? 'loading'),
+      shouldDisplayPrivDelegation ? (currentUser?.party.id ?? 'loading') : 'nobody',
     );
     return remainingAfterExtraction;
   }, [rightHolders, currentUser]);
@@ -82,7 +82,7 @@ export const UsersList = () => {
 
   return (
     <div className={classes.usersList}>
-      {!shouldDisplayPrivDelegation && (
+      {shouldDisplayPrivDelegation && (
         <>
           <CurrentUserPageHeader
             currentUser={currentUser}
@@ -139,7 +139,21 @@ export const UsersList = () => {
           />
         </>
       ) : (
-        <DsParagraph>{t('users_page.no_access_to_users_message')}</DsParagraph>
+        <div className={classes.noAccessContainer}>
+          <DsHeading
+            data-size='xs'
+            level={4}
+          >
+            {t('users_page.no_access_to_users_header')}
+          </DsHeading>
+
+          <DsParagraph>
+            <Trans
+              i18nKey='users_page.no_access_to_users_message'
+              components={{ br: <br /> }}
+            />
+          </DsParagraph>
+        </div>
       )}
     </div>
   );
