@@ -66,11 +66,8 @@ export const UserItem = ({
 
   useEffect(
     () =>
-      setExpanded(
-        (childrenToDisplay && hasInheritingUsers && isExtendedUser(user) && user.matchInChildren) ??
-          false,
-      ),
-    [user, hasInheritingUsers],
+      setExpanded((hasInheritingUsers && isExtendedUser(user) && user.matchInChildren) ?? false),
+    [user],
   );
 
   const roleCodes =
