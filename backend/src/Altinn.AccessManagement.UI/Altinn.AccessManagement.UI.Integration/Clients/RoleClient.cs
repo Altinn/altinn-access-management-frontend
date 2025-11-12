@@ -1,14 +1,20 @@
-﻿using System.Net;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Integration.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
@@ -49,7 +55,17 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<Role> GetRoleById(string languageCode, Guid roleId)
+        public async Task<PaginatedResult<RolePermission>> GetRoleConnections(Guid party, Guid? from, Guid? to, string languageCode)
+        {
+            string endpointUrl = $"enduser/connections/roles?party={party}&from={from}&to={to}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<RolePermission>>(response, _logger, "RoleClient // GetRoleConnections");
+        }
+
+        /// <inheritdoc />
+        public async Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode)
         {
             string endpointUrl = $"meta/info/roles/{roleId}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -60,17 +76,39 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 return null;
             }
-            else if (response.StatusCode == HttpStatusCode.OK)
+
+            if (response.IsSuccessStatusCode)
             {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<Role>(responseContent, _serializerOptions);
+                string content = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<RoleMetadata>(content, _serializerOptions);
             }
-            else
-            {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
-                throw error;
-            }
+
+            _logger.LogError("Get role metadata from accessmanagement failed with {StatusCode}", response.StatusCode);
+            throw new HttpStatusException(
+                "StatusError",
+                "Unexpected response status from Access Management",
+                response.StatusCode,
+                Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<AccessPackage>> GetRolePackages(Guid roleId, string variant, bool includeResources, string languageCode)
+        {
+            string endpointUrl = $"meta/info/roles/{roleId}/packages?variant={variant}&includeResources={includeResources}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<AccessPackage>>(response, _logger, "RoleClient // GetRolePackages");
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<ResourceAM>> GetRoleResources(Guid roleId, string variant, bool includePackageResources, string languageCode)
+        {
+            string endpointUrl = $"meta/info/roles/{roleId}/resources?variant={variant}&includePackageResources={includePackageResources}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<ResourceAM>>(response, _logger, "RoleClient // GetRoleResources");
         }
     }
 }

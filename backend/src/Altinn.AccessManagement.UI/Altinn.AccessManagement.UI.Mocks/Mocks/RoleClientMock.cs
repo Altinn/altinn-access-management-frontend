@@ -1,64 +1,113 @@
-﻿using System.Net;
-using System.Text.Json;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-
+using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    ///     Mock class for <see cref="IAccessPackageClient"></see> interface
+    ///     Mock class for <see cref="IRoleClient"></see> interface
     /// </summary>
     public class RoleClientMock : IRoleClient
     {
-        private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        private readonly string dataFolder;
+        private readonly string _dataFolder;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="AccessManagementClientMock" /> class
+        ///     Initializes a new instance of the <see cref="RoleClientMock" /> class
         /// </summary>
         public RoleClientMock(
             HttpClient httpClient,
             ILogger<AccessManagementClientMock> logger,
             IHttpContextAccessor httpContextAccessor)
         {
-            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
+            _dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
         }
 
         /// <inheritdoc />
-        public Task<Role> GetRoleById(string languageCode, Guid id)
+        public Task<PaginatedResult<RolePermission>> GetRoleConnections(Guid party, Guid? from, Guid? to, string languageCode)
         {
-            // Trigger internal server error
-            if (id.Equals(new Guid("d98ac728-d127-4a4c-96e1-738f856e5332")))
-            {
-                throw new HttpStatusException(
-                    "InternalServerError",
-                    "InternalServerError",
-                    HttpStatusCode.InternalServerError,
-                    "");
-            }
+            Util.ThrowExceptionIfTriggerParty(from?.ToString());
             try
             {
-                string dataPath = Path.Combine(dataFolder, "Roles", "roles.json");
-                List<Role> allRoles =
-                    Util.GetMockData<List<Role>>(dataPath);
-
-                Role result = allRoles?.FirstOrDefault(r => r?.Id == id);
-
-                return Task.FromResult(result);
+                string dataPath = Path.Combine(_dataFolder, "Roles", "Connections", $"{from?.ToString() ?? string.Empty}_{to?.ToString() ?? string.Empty}.json");
+                return Task.FromResult(Util.GetMockData<PaginatedResult<RolePermission>>(dataPath));
             }
             catch
             {
-
                 throw new HttpStatusException(
-                    "Not found",
-                    "Not found",
-                    HttpStatusCode.NotFound,
-                    "");
+                    "StatusError",
+                    "Unexpected mockResponse status from Access Management",
+                    HttpStatusCode.BadRequest,
+                    string.Empty);
+            }
+        }
+
+        /// <inheritdoc />
+        public Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode)
+        {
+            string triggerValue = roleId.ToString();
+            Util.ThrowExceptionIfTriggerParty(triggerValue);
+
+            try
+            {
+                string dataPath = Path.Combine(_dataFolder, "Roles", "Details", $"{roleId}.json");
+                return Task.FromResult(Util.GetMockData<RoleMetadata>(dataPath));
+            }
+            catch (FileNotFoundException)
+            {
+                return Task.FromResult<RoleMetadata>(null);
+            }
+            catch
+            {
+                throw new HttpStatusException(
+                    "StatusError",
+                    "Unexpected mockResponse status from Access Management",
+                    HttpStatusCode.BadRequest,
+                    string.Empty);
+            }
+        }
+
+        /// <inheritdoc />
+        public Task<IEnumerable<AccessPackage>> GetRolePackages(Guid roleId, string variant, bool includeResources, string languageCode)
+        {
+            try
+            {
+                string dataPath = Path.Combine(_dataFolder, "Roles", "Packages", $"{roleId}.json");
+                return Task.FromResult(Util.GetMockData<IEnumerable<AccessPackage>>(dataPath));
+            }
+            catch
+            {
+                throw new HttpStatusException(
+                    "StatusError",
+                    "Unexpected mockResponse status from Access Management",
+                    HttpStatusCode.BadRequest,
+                    string.Empty);
+            }
+        }
+
+        /// <inheritdoc />
+        public Task<IEnumerable<ResourceAM>> GetRoleResources(Guid roleId, string variant, bool includePackageResources, string languageCode)
+        {
+            try
+            {
+                string dataPath = Path.Combine(_dataFolder, "Roles", "Resources", $"{roleId}.json");
+                return Task.FromResult(Util.GetMockData<IEnumerable<ResourceAM>>(dataPath));
+            }
+            catch
+            {
+                throw new HttpStatusException(
+                    "StatusError",
+                    "Unexpected mockResponse status from Access Management",
+                    HttpStatusCode.BadRequest,
+                    string.Empty);
             }
         }
     }
