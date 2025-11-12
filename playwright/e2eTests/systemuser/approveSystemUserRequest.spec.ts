@@ -17,7 +17,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     const response = await api.postSystemuserRequest(externalRef, systemId);
 
     await page.goto(response.confirmUrl);
-    await login.LoginWithUserFromFrontpage('14824497789');
+    await login.loginNotChoosingActor('14824497789');
 
     await page.getByRole('button', { name: 'Avvis' }).click();
 

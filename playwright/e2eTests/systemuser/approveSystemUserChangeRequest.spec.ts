@@ -9,12 +9,10 @@ test.describe('Systembruker endringsforespørsel', () => {
   let systemId: string;
   let systemUserIds: string[] = [];
 
-  test.beforeEach(async ({ page, login }) => {
+  test.beforeEach(async () => {
     orgNumber = '310547891'; // Hardcoded org ID for testing
     systemId = '310547891_E2E-Playwright-Authentication'; // Hardcoded system ID for testing
     api = new ApiRequests(orgNumber);
-    await login.LoginWithUserFromFrontpage('14824497789');
-    await login.chooseReportee('AKTVERDIG RETORISK APE');
   });
 
   test.afterEach(async () => {
@@ -42,6 +40,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     const changeRequestResponse = await api.postSystemuserChangeRequest(systemUserId);
 
     await page.goto(changeRequestResponse.confirmUrl);
+    await login.loginNotChoosingActor('14824497789');
     await page.getByRole('button', { name: 'Avvis' }).click();
 
     //Look for login button
@@ -65,6 +64,7 @@ test.describe('Systembruker endringsforespørsel', () => {
 
     const changeRequestResponse = await api.postSystemuserChangeRequest(systemUserId);
     await page.goto(changeRequestResponse.confirmUrl);
+    await login.loginNotChoosingActor('14824497789');
     await page.getByRole('button', { name: 'Godkjenn' }).click();
 
     //Look for login button
