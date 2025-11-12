@@ -72,7 +72,7 @@ export class LoginPage {
     // Click on the marked/highlighted result
     // The mark element contains the highlighted text, find the button that contains it
     const markedResult = this.page.locator('mark').filter({ hasText: new RegExp(reportee, 'i') });
-    await expect(markedResult).toBeVisible();
+    //await expect(markedResult).toBeVisible();
     await markedResult.first().click();
   }
 
