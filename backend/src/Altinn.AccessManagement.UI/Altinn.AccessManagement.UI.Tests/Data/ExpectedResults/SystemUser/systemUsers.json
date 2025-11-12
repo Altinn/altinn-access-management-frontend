@@ -10,6 +10,7 @@
       "systemVendorOrgName": "N/A",
       "name": "N/A"
     },
+    "systemUserType": "standard",
     "resources": [],
     "accesspackages": []
   },
@@ -24,6 +25,7 @@
       "systemVendorOrgName": "LEPSØY OG TONSTAD",
       "name": "N/A"
     },
+    "systemUserType": "standard",
     "resources": [],
     "accesspackages": []
   }

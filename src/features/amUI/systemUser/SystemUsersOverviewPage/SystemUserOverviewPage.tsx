@@ -95,7 +95,7 @@ export const SystemUserOverviewPage = () => {
               )}
               {isLoadPendingSystemUsersError && (
                 <DsAlert data-color='danger'>
-                  {t('systemuser_overviewpage.systemusers_load_error')}
+                  {t('systemuser_overviewpage.pending_systemusers_load_error')}
                 </DsAlert>
               )}
               {systemUsers && (

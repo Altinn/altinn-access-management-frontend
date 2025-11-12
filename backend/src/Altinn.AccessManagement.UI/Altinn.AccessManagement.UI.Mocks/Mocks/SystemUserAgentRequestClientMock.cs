@@ -37,10 +37,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<Result<List<SystemUserRequest>>> GetPendingAgentSystemUserRequests(int partyId, string orgNo, CancellationToken cancellationToken)
         {
             List<SystemUserRequest> systemUserAgentRequests = Util.GetMockData<List<SystemUserRequest>>($"{dataFolder}/SystemUser/pendingAgentRequests.json");
-            if (systemUserAgentRequests.First().PartyId != partyId)
-            {
-                return Task.FromResult(new Result<List<SystemUserRequest>>(TestErrors.RequestNotFound));
-            }
             return Task.FromResult(new Result<List<SystemUserRequest>>([.. systemUserAgentRequests]));
         }
 

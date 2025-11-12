@@ -9,6 +9,7 @@
     "created": "2025-03-01T12:00:00Z",
     "supplierOrgNo": "925141623",
     "externalRef": "",
+    "userType": "agent",
     "accessPackages": [
       {
         "urn": "urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"
@@ -25,6 +26,7 @@
     "created": "2025-02-15T12:00:00Z",
     "supplierOrgNo": "925141623",
     "externalRef": "",
+    "userType": "agent",
     "accessPackages": [
       {
         "urn": "urn:altinn:accesspackage:ansvarlig-revisor"
@@ -41,6 +43,7 @@
     "created": "2025-01-20T12:00:00Z",
     "supplierOrgNo": "925141623",
     "externalRef": "",
+    "userType": "agent",
     "accessPackages": [
       {
         "urn": "urn:altinn:accesspackage:forretningsforer-eiendom"

@@ -9,6 +9,7 @@
     "systemVendorOrgName": "N/A",
     "name": "N/A"
   },
+  "systemUserType": "standard",
   "resources": [
     {
       "identifier": "ske-innrapportering-boligsameie",

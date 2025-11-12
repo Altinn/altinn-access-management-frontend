@@ -519,6 +519,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
             Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
+            Assert.Equal(expected.SystemUserType, actual.SystemUserType);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
             AssertCollections(expected.AccessPackages, actual.AccessPackages, AssertEqual);
         }
