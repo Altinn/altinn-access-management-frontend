@@ -66,6 +66,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// </summary>
         public bool DisplayRequestsPage { get; set; }
 
+        /// <summary>
         /// Whether to display the PRIV delegation feature
         /// </summary>
         public bool DisplayPrivDelegation { get; set; }
