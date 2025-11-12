@@ -10,6 +10,7 @@ import {
   useAddRightHolderMutation,
   useValidateNewUserPersonMutation,
 } from '@/rtk/features/connectionApi';
+import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 
 export const NewPersonContent = ({
   onComplete,
@@ -26,7 +27,7 @@ export const NewPersonContent = ({
   const [lastNameFormatError, setLastNameFormatError] = useState<string>('');
 
   const [addRightHolder, { error, isError, isLoading }] = useAddRightHolderMutation();
-  const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const errorDetails =
     isError && error && 'status' in error
@@ -51,7 +52,7 @@ export const NewPersonContent = ({
       });
   };
 
-  if (displayLimitedPreviewLaunch) {
+  if (!shouldDisplayPrivDelegation) {
     return <DsAlert data-color='info'>{t('new_user_modal.limited_preview_message')}</DsAlert>;
   }
 

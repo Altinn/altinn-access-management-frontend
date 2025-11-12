@@ -328,7 +328,8 @@
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?",
     "indirect_connections": "Brukarar utan fullmakt",
-    "no_access_to_users_message": "Kun tilgangsstyrarar kan se full liste av brukarar med fullmakter i virksemden."
+    "no_access_to_users_header": "Denne sida jobbar vi framleis med!",
+    "no_access_to_users_message": "Kun tilgangsstyrarar kan se full liste av brukarar med fullmakter i denne verksemda. <br /> Liste over nøkkelpersonar (styret) vil bli tilgjengeleg for brukarar utan tilgangsstyring etterhvert."
   },
   "advanced_user_search": {
     "add_user_button": "Ny brukar",

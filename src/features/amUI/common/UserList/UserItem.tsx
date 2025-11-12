@@ -12,6 +12,7 @@ import { formatDateToNorwegian } from '@/resources/utils';
 import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
 import classes from './UserList.module.css';
+import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
@@ -54,13 +55,13 @@ export const UserItem = ({
   controls,
   ...props
 }: UserItemProps) => {
-  const limitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const shouldDisplaySubConnections = displaySubConnections();
   const childrenToDisplay =
     user.children?.filter(
       (child) =>
         child.type === ConnectionUserType.Person || child.type === ConnectionUserType.Organization,
     ) || [];
-  const hasInheritingUsers = childrenToDisplay.length > 0 && !limitedPreviewLaunch;
+  const hasInheritingUsers = childrenToDisplay.length > 0 && shouldDisplaySubConnections;
   const [isExpanded, setExpanded] = useState(false);
   const { t } = useTranslation();
 
