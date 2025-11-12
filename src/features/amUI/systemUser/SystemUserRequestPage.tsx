@@ -194,7 +194,7 @@ export const SystemUserRequestPage = () => {
                 </DsButton>
               </ButtonRow>
             )}
-            {hasCreateSystemUserPermission(reporteeData) === false && (
+            {hasCreateSystemUserPermission(reporteeData) === false && request.status === 'New' && (
               <EscalateRequest
                 requestId={request.id}
                 partyId={request.partyId}
