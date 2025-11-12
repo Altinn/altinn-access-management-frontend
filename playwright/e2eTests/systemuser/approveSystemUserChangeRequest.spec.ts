@@ -1,27 +1,20 @@
-import test, { expect } from '@playwright/test';
-
+import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
-import { LoginPage } from '../../pages/LoginPage';
-import { SystemUserPage } from '../../pages/systemuser/SystemUserPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
 test.describe('Systembruker endringsforespørsel', () => {
   let api: ApiRequests;
-  let loginPage: LoginPage;
-  let systemUserPage: SystemUserPage;
   let orgNumber: string;
   let systemId: string;
   let systemUserIds: string[] = [];
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, login }) => {
     orgNumber = '310547891'; // Hardcoded org ID for testing
     systemId = '310547891_E2E-Playwright-Authentication'; // Hardcoded system ID for testing
     api = new ApiRequests(orgNumber);
-    loginPage = new LoginPage(page);
-    systemUserPage = new SystemUserPage(page);
-    await loginPage.loginWithUser('14824497789');
-    await loginPage.chooseReportee('AKTVERDIG RETORISK APE');
+    await login.LoginWithUserFromFrontpage('14824497789');
+    await login.chooseReportee('AKTVERDIG RETORISK APE');
   });
 
   test.afterEach(async () => {
@@ -36,7 +29,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     }
   });
 
-  test('Avvis endringsforespørsel', async ({ page }): Promise<void> => {
+  test('Avvis endringsforespørsel', async ({ page, login }): Promise<void> => {
     //Generate confirmUrl from API
     const externalRef = TestdataApi.generateExternalRef();
     const response = await api.postSystemuserRequest(externalRef, systemId);
@@ -44,7 +37,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     await api.approveSystemuserRequest(response.id);
 
     const systemUserId = await api.getSystemUserByQuery(systemId, orgNumber, externalRef);
-    systemUserIds.push(systemUserId); // Track for cleanup
+    systemUserIds.push(systemUserId);
 
     const changeRequestResponse = await api.postSystemuserChangeRequest(systemUserId);
 
@@ -52,7 +45,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     await page.getByRole('button', { name: 'Avvis' }).click();
 
     //Look for login button
-    await expect(loginPage.loginButton).toBeVisible();
+    await expect(login.loginButton).toBeVisible();
 
     const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
       changeRequestResponse.id,
@@ -61,7 +54,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     expect(statusApiRequest.status).toBe('Rejected');
   });
 
-  test('Godkjenn endringsforespørsel', async ({ page }): Promise<void> => {
+  test('Godkjenn endringsforespørsel', async ({ page, login, systemUserPage }): Promise<void> => {
     const externalRef = TestdataApi.generateExternalRef();
     const response = await api.postSystemuserRequest(externalRef, systemId);
 
@@ -76,7 +69,7 @@ test.describe('Systembruker endringsforespørsel', () => {
 
     //Look for login button
 
-    await expect(loginPage.loginButton).toBeVisible();
+    await expect(login.loginButton).toBeVisible();
 
     //Read from status api to verify that status is not Accepted after clicking "Avvis"
     const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
@@ -85,8 +78,8 @@ test.describe('Systembruker endringsforespørsel', () => {
     expect(statusApiRequest.status).toBe('Accepted');
 
     // Verify rights given
-    await loginPage.loginWithUser('14824497789');
-    await loginPage.chooseReportee('AKTVERDIG RETORISK APE');
+    await login.LoginWithUserFromFrontpage('14824497789');
+    await login.chooseReportee('AKTVERDIG RETORISK APE');
 
     const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
     await page.goto(systemUserUrl + '/' + systemUserId);

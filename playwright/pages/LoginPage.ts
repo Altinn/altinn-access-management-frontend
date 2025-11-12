@@ -1,6 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 import { env } from 'playwright/util/helper';
+import { AccessManagementFrontPage } from './AccessManagementFrontPage';
 
 export class LoginPage {
   readonly page: Page;
@@ -23,7 +24,7 @@ export class LoginPage {
     this.autentiserButton = this.page.getByRole('button', { name: 'Autentiser' });
   }
 
-  async loginWithUser(testUser: string) {
+  async LoginWithUserFromFrontpage(testUser: string) {
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
         await this.navigateToLoginPage();
@@ -59,24 +60,26 @@ export class LoginPage {
   }
 
   async chooseReportee(reportee: string) {
-    const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
-    await chosenReportee.click();
+    // Use test-data independent selector: match button containing "Født:" pattern for person actors
+    // Falls back to name-based selector if "Født:" pattern not found (for organizations)
+    let selectReporteeButton = this.page.getByRole('button').filter({ hasText: /Født:/ });
+    await selectReporteeButton.first().click();
 
-    await this.page.goto(`${env('BASE_URL')}/ui/profile`);
-    await this.profileLink.click();
+    // Search for reportee in the searchbox
+    const searchBox = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
+    await searchBox.fill(reportee);
 
-    const profileHeader = this.page.getByRole('heading', {
-      name: new RegExp(
-        `Profil for (.*${reportee}.*|.*${reportee.split(' ').reverse().join(' ')}.*)`,
-        'i',
-      ),
-    });
-    await expect(profileHeader).toBeVisible();
+    // Click on the marked/highlighted result
+    // The mark element contains the highlighted text, find the button that contains it
+    const markedResult = this.page.locator('mark').filter({ hasText: new RegExp(reportee, 'i') });
+    await expect(markedResult).toBeVisible();
+    await markedResult.first().click();
   }
 
   private async navigateToLoginPage() {
     await this.page.goto(env('BASE_URL'));
-    await this.loginButton.click();
+    await this.page.getByRole('button', { name: 'Meny' }).click();
+    await this.page.getByRole('group').getByRole('link', { name: 'Tilgangsstyring' }).click();
     await this.testIdLink.click();
   }
 
@@ -86,7 +89,9 @@ export class LoginPage {
   }
 
   private async verifyLoginSuccess() {
-    await expect(this.velgAktoerHeading).toBeVisible();
+    const frontPage = new AccessManagementFrontPage(this.page);
+    await expect(frontPage.tryNewAccessManagementButton).toBeVisible();
+    await frontPage.tryNewAccessManagementButton.click();
   }
 
   async selectActor(input: Locator, orgnummer: string) {

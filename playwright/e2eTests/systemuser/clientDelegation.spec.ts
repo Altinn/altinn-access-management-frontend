@@ -2,9 +2,9 @@ import type { Page } from '@playwright/test';
 import { test, expect } from '@playwright/test';
 
 import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../util/loadFacilitators';
-import { env } from 'playwright/util/helper';
 import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
 import { LoginPage } from '../../pages/LoginPage';
+import { AccessManagementFrontPage } from '../../pages/AccessManagementFrontPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
 test.describe('Klientdelegering', () => {
@@ -85,11 +85,9 @@ test.describe('Klientdelegering', () => {
     // Navigate to system user login page
     await loginPage.loginAcActorOrg(user.pid, user.org);
 
-    //Go to system user overview page
-    await page.goto(env('SYSTEMUSER_URL') + '/overview');
-
-    // Intro to "new brukerflate"
-    await page.getByRole('button', { name: 'Prøv ny tilgangsstyring' }).click();
+    //Go to system user overview page via menu link
+    const frontPage = new AccessManagementFrontPage(page);
+    await frontPage.apiAndSystemAccessLink.click();
 
     await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
     await clientDelegationPage.systemUserLink(name).click();

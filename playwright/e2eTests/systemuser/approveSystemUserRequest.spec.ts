@@ -13,7 +13,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   test.beforeEach(async ({ page }) => {
     api = new ApiRequests(orgNumber);
     const login = new LoginPage(page);
-    await login.loginWithUser('14824497789');
+    await login.LoginWithUserFromFrontpage('14824497789');
     await login.chooseReportee('AKTVERDIG RETORISK APE');
   });
 
