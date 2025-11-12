@@ -25,7 +25,7 @@ import { Link } from 'react-router';
 import { amUIPath } from '@/routes/paths';
 import {
   hasConsentPermission,
-  hasSystemClientAdminPermission,
+  hasSystemUserClientAdminPermission,
   hasCreateSystemUserPermission,
 } from '@/resources/utils/permissionUtils';
 import {
@@ -102,7 +102,7 @@ export const LandingPage = () => {
 
     if (
       hasCreateSystemUserPermission(reportee) ||
-      hasSystemClientAdminPermission(reportee, isClientAdmin)
+      hasSystemUserClientAdminPermission(reportee, isClientAdmin)
     ) {
       items.push({
         ...getSystemUserMenuItem(),

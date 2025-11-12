@@ -3,7 +3,7 @@ import { type MenuItemProps } from '@altinn/altinn-components';
 import { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   hasConsentPermission,
-  hasSystemClientAdminPermission,
+  hasSystemUserClientAdminPermission,
   hasCreateSystemUserPermission,
 } from '@/resources/utils/permissionUtils';
 import {
@@ -65,7 +65,7 @@ export const SidebarItems = (
 
   if (
     hasCreateSystemUserPermission(reportee) ||
-    hasSystemClientAdminPermission(reportee, isClientAdmin)
+    hasSystemUserClientAdminPermission(reportee, isClientAdmin)
   ) {
     items.push(getSystemUserMenuItem(pathname, isLoading));
   }

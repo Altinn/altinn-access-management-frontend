@@ -18,7 +18,7 @@ export const hasCreateSystemUserPermission = (reporteeInfo?: ReporteeInfo): bool
   return isOrganization && hasCorrectRole;
 };
 
-export const hasSystemClientAdminPermission = (
+export const hasSystemUserClientAdminPermission = (
   reporteeInfo?: ReporteeInfo,
   isClientAdmin: boolean = false,
 ): boolean | undefined => {
