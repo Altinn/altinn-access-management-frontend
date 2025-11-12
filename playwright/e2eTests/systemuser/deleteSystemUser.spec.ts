@@ -7,7 +7,7 @@ test.describe('System user deletion', () => {
   let api: ApiRequests;
 
   test.beforeEach(async ({ page, login, systemUserPage, accessManagementFrontPage }) => {
-    const orgNumber = '310547891'; // Hardcoded org ID for testing
+    const orgNumber = '310547891';
     api = new ApiRequests(orgNumber);
     await login.LoginWithUserFromFrontpage('14824497789');
     await login.chooseReportee('AKTVERDIG RETORISK APE');

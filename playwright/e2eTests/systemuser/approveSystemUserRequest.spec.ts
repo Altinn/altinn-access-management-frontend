@@ -1,18 +1,15 @@
-import test, { expect } from '@playwright/test';
+import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { LoginPage } from '../../pages/LoginPage';
-
-import { ApiRequests } from '../../api-requests/ApiRequests';
+import { ApiRequests } from 'playwright/api-requests/ApiRequests';
 
 test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   let api: ApiRequests;
   const orgNumber = '310547891'; // Hardcoded org ID for testing
   const systemId = '310547891_E2E-Playwright-Authentication'; // Hardcoded system ID for testing
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, login }) => {
     api = new ApiRequests(orgNumber);
-    const login = new LoginPage(page);
     await login.LoginWithUserFromFrontpage('14824497789');
     await login.chooseReportee('AKTVERDIG RETORISK APE');
   });

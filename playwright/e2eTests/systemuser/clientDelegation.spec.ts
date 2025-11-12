@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { test, expect } from '@playwright/test';
+import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../util/loadFacilitators';
 import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
@@ -15,9 +15,10 @@ test.describe('Klientdelegering', () => {
     api = new ApiRequests(orgNumber);
   });
 
-  test('Ansvarlig revisor', async ({ page }) => {
+  test('Ansvarlig revisor', async ({ page, login }) => {
     await runDelegationTest({
       page,
+      login,
       role: FacilitatorRole.Revisor,
       accessPackageApiName: 'ansvarlig-revisor',
       accessPackageDisplayName: 'Ansvarlig revisor',
@@ -25,9 +26,10 @@ test.describe('Klientdelegering', () => {
     });
   });
 
-  test('Regnskapsfører', async ({ page }) => {
+  test('Regnskapsfører', async ({ page, login }) => {
     await runDelegationTest({
       page,
+      login,
       role: FacilitatorRole.Regnskapsfoerer,
       accessPackageApiName: 'regnskapsforer-lonn',
       accessPackageDisplayName: 'Regnskapsfører lønn',
@@ -35,9 +37,10 @@ test.describe('Klientdelegering', () => {
     });
   });
 
-  test('Forretningsfører', async ({ page }) => {
+  test('Forretningsfører', async ({ page, login }) => {
     await runDelegationTest({
       page,
+      login,
       role: FacilitatorRole.Forretningsfoerer,
       accessPackageApiName: 'forretningsforer-eiendom',
       accessPackageDisplayName: 'Forretningsforer eiendom',
@@ -47,18 +50,19 @@ test.describe('Klientdelegering', () => {
 
   async function runDelegationTest({
     page,
+    login,
     role,
     accessPackageApiName,
     accessPackageDisplayName,
     removeCustomers,
   }: {
     page: Page;
+    login: LoginPage;
     role: FacilitatorRole;
     accessPackageApiName: string;
     accessPackageDisplayName: string;
     removeCustomers: boolean;
   }) {
-    const loginPage = new LoginPage(page);
     const user = loadFacilitator(role);
     const customers = loadCustomers(role);
 
@@ -74,16 +78,16 @@ test.describe('Klientdelegering', () => {
 
     //Navigate to approve system user request URL returned by API
     await page.goto(response.confirmUrl);
-    await loginPage.loginNotChoosingActor(user.pid);
+    await login.loginNotChoosingActor(user.pid);
 
     //Approve system user and click it
     await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
 
     // Verify logout by checking for login page elements
-    await expect(loginPage.loginButton).toBeVisible();
+    await expect(login.loginButton).toBeVisible();
 
     // Navigate to system user login page
-    await loginPage.loginAcActorOrg(user.pid, user.org);
+    await login.loginAcActorOrg(user.pid, user.org);
 
     //Go to system user overview page via menu link
     const frontPage = new AccessManagementFrontPage(page);
