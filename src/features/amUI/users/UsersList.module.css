@@ -24,6 +24,13 @@
   padding-bottom: 15px;
 }
 
+.noAccessContainer {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 @media (max-width: 700px) {
   .searchAndAddUser {
     flex-direction: column;

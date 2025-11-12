@@ -14,6 +14,9 @@ declare global {
       displayPoaOverviewPage: boolean;
       useNewActorsList: boolean;
       useNewHeader: boolean;
+      displayPrivDelegation: boolean;
+      displayAccessRequest: boolean;
+      displaySubConnections: boolean;
     };
   }
 }
