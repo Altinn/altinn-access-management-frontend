@@ -87,9 +87,9 @@ test.describe('Klientdelegering', () => {
     await expect(login.loginButton).toBeVisible();
 
     // Navigate to system user login page
-    await login.loginAcActorOrg(user.pid, user.org);
+    await login.LoginWithUserFromFrontpage(user.pid);
     // Use facilitator name if available, otherwise fallback to placeholder
-    const reporteeName = user.name || 'PLACEHOLDER_ORG_NAME';
+    const reporteeName = user.name;
     await login.chooseReportee(reporteeName);
 
     //Go to system user overview page via menu link

@@ -24,11 +24,11 @@ export class LoginPage {
     this.autentiserButton = this.page.getByRole('button', { name: 'Autentiser' });
   }
 
-  async LoginWithUserFromFrontpage(testUser: string) {
+  async LoginWithUserFromFrontpage(pid: string) {
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
         await this.navigateToLoginPage();
-        await this.authenticateUser(testUser);
+        await this.authenticateUser(pid);
         await this.verifyLoginSuccess();
         return;
       } catch (error) {

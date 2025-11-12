@@ -7,7 +7,7 @@ import { parse } from 'csv-parse/sync';
 export interface Facilitator {
   pid: string;
   org: string;
-  name?: string;
+  name: string;
 }
 
 export interface CustomerData {
