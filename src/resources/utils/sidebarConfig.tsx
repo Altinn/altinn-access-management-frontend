@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import React, { ComponentProps, JSX } from 'react';
 import { formatDisplayName, type MenuItemProps } from '@altinn/altinn-components';
 import {
   PersonGroupIcon,
@@ -18,12 +18,11 @@ import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 import { getHostUrl } from '@/resources/utils/pathUtils';
 import { ReporteeInfo } from '@/rtk/features/userInfoApi';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getMenuLinkAs = (props: any, toUrl: string): JSX.Element => {
+const getMenuLinkAs = (props: ComponentProps<typeof Link>, toUrl: string): JSX.Element => {
   return (
     <Link
-      to={toUrl}
       {...props}
+      to={toUrl}
     />
   );
 };
@@ -98,7 +97,7 @@ export const getConsentMenuItem = (pathname?: string, isLoading = false): MenuIt
     loading: isLoading,
     title: t('sidebar.consent'),
     icon: HandshakeIcon,
-    selected: pathname?.includes(`/${ConsentPath.Consent}/`),
+    selected: pathname?.includes(`/${ConsentPath.Consent}`),
     as: (props) => getMenuLinkAs(props, `/${ConsentPath.Consent}/${ConsentPath.Active}`),
   };
 };
@@ -111,7 +110,7 @@ export const getSystemUserMenuItem = (pathname?: string, isLoading = false): Men
     loading: isLoading,
     title: t('sidebar.systemaccess'),
     icon: TenancyIcon,
-    selected: pathname?.includes(`/${SystemUserPath.SystemUser}/`),
+    selected: pathname?.includes(`/${SystemUserPath.SystemUser}`),
     as: (props) => getMenuLinkAs(props, `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`),
   };
 };

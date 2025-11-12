@@ -20,7 +20,7 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { formatDateToNorwegian } from '@/resources/utils';
 import { useTranslation } from 'react-i18next';
-import { ArrowRightIcon, BellDotIcon, HandshakeIcon } from '@navikt/aksel-icons';
+import { ArrowRightIcon } from '@navikt/aksel-icons';
 import { Link } from 'react-router';
 import { amUIPath } from '@/routes/paths';
 import {
@@ -56,8 +56,11 @@ export const LandingPage = () => {
     const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
 
     if (!reportee) {
-      const loadingMenuItem = {
-        icon: HandshakeIcon,
+      const loadingMenuItem: MenuItemProps = {
+        icon: {
+          name: 'xxxxx xxxxxxxxx',
+          type: 'person',
+        },
         title: 'xxxxxxxxxxxxxxx',
         description: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         href: '',
@@ -66,7 +69,7 @@ export const LandingPage = () => {
       return [loadingMenuItem, loadingMenuItem, loadingMenuItem, loadingMenuItem];
     }
 
-    const items = [];
+    const items: MenuItemProps[] = [];
     if (displayConfettiPackage) {
       items.push({
         ...getUsersMenuItem(),
@@ -112,7 +115,10 @@ export const LandingPage = () => {
     return items;
   };
 
-  const getRequestCountText = (reportee: ReporteeInfo, requestCount: number): string => {
+  const getRequestCountText = (
+    reportee: ReporteeInfo | undefined,
+    requestCount: number,
+  ): string => {
     const name = reportee?.type === 'Organization' ? reporteeName : t('common.you_uppercase');
     const countText = requestCount === 0 ? t('common.none') : requestCount;
     const requestTextKey =
@@ -128,12 +134,12 @@ export const LandingPage = () => {
     const displaySettingsPage = window.featureFlags?.displaySettingsPage;
     const displayRequestsPage = window.featureFlags?.displayRequestsPage;
     const requestCount = 0;
-    const items = [];
+    const items: MenuItemProps[] = [];
 
     if (displayRequestsPage) {
       items.push({
         ...getRequestsMenuItem(),
-        title: getRequestCountText(reportee!, requestCount),
+        title: getRequestCountText(reportee, requestCount),
         loading: !reportee,
       });
     }
