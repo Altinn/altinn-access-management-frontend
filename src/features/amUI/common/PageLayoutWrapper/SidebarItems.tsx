@@ -138,11 +138,14 @@ export const SidebarItems = (
     loading: isLoading,
     title: t('sidebar.systemaccess'),
     icon: TenancyIcon,
-    badge: {
-      label: pendingSystemUsersCount > 0 ? pendingSystemUsersCount.toString() : undefined,
-      color: 'danger',
-      variant: 'base',
-    },
+    badge:
+      pendingSystemUsersCount > 0
+        ? {
+            label: pendingSystemUsersCount.toString(),
+            color: 'danger',
+            variant: 'base',
+          }
+        : undefined,
     selected: pathname?.includes(`/${SystemUserPath.SystemUser}/`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     as: (props: any) => (

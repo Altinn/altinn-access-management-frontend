@@ -82,12 +82,12 @@ export const SystemUserRequestPage = () => {
   const onRejectOrApprove = (): void => {
     if (skipLogout) {
       navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+    } else {
+      const url = request?.redirectUrl
+        ? `${getApiBaseUrl()}/request/${request?.id}/logout`
+        : getLogoutUrl();
+      window.location.assign(url);
     }
-
-    const url = request?.redirectUrl
-      ? `${getApiBaseUrl()}/request/${request?.id}/logout`
-      : getLogoutUrl();
-    window.location.assign(url);
   };
 
   return (
