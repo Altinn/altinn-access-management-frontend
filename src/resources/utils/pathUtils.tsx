@@ -5,6 +5,7 @@ enum Environment {
   AT22 = 'at22',
   AT23 = 'at23',
   AT24 = 'at24',
+  YT01 = 'yt01',
 }
 
 export const getEnv = () => {
@@ -23,6 +24,9 @@ export const getEnv = () => {
   }
   if (host.includes('at24')) {
     return Environment.AT24;
+  }
+  if (host.includes('yt01')) {
+    return Environment.YT01;
   }
   return Environment.PROD;
 };
@@ -72,15 +76,17 @@ export const getAfUrl = () => {
   const env = getEnv();
   switch (env) {
     case Environment.TT02:
-      return 'https://af.tt.altinn.no/';
+      return 'https://af.tt02.altinn.no/';
     case Environment.AT21:
-      return 'https://af.at.altinn.cloud/';
+      return 'https://af.at23.altinn.cloud/';
     case Environment.AT22:
-      return 'https://af.at.altinn.cloud/';
+      return 'https://af.at23.altinn.cloud/';
     case Environment.AT23:
-      return 'https://af.at.altinn.cloud/';
+      return 'https://af.at23.altinn.cloud/';
     case Environment.AT24:
-      return 'https://af.at.altinn.cloud/';
+      return 'https://af.at23.altinn.cloud/';
+    case Environment.YT01:
+      return 'https://af.yt01.altinn.cloud/';
     case Environment.PROD:
       return 'https://af.altinn.no/';
     default:
