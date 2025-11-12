@@ -10,7 +10,7 @@
     "name": "N/A"
   },
   "resources": [],
-  "systemUserType": "agent",
+  "userType": "agent",
   "accesspackages": [
     {
       "id": "955d5779-3e2b-4098-b11d-0431dc41ddbe",

@@ -10,7 +10,7 @@
       "systemVendorOrgName": "N/A",
       "name": "N/A"
     },
-    "systemUserType": "agent",
+    "userType": "agent",
     "resources": [],
     "accesspackages": []
   },
@@ -25,7 +25,7 @@
       "systemVendorOrgName": "N/A",
       "name": "N/A"
     },
-    "systemUserType": "agent",
+    "userType": "agent",
     "resources": [],
     "accesspackages": []
   },
@@ -40,7 +40,7 @@
       "systemVendorOrgName": "N/A",
       "name": "N/A"
     },
-    "systemUserType": "agent",
+    "userType": "agent",
     "resources": [],
     "accesspackages": []
   }

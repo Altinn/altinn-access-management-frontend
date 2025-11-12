@@ -47,8 +47,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// <summary>
         /// Either agent or standard
         /// </summary>
-        [JsonPropertyName("systemUserType")]
-        public string SystemUserType { get; set; }
+        [JsonPropertyName("userType")]
+        public string UserType { get; set; }
 
         /// <summary>
         /// List of resources information

@@ -145,7 +145,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return pendingSystemUsers;
         }
 
-        private async Task<IEnumerable<SystemUser>> MapRequestsToPendingSystemUsers(IEnumerable<SystemUserRequest> requests, string systemUserType, CancellationToken cancellationToken)
+        private async Task<IEnumerable<SystemUser>> MapRequestsToPendingSystemUsers(IEnumerable<SystemUserRequest> requests, string userType, CancellationToken cancellationToken)
         {
             IEnumerable<Task<SystemUser>> tasks = requests.Where(r => r.Escalated).Select(async r =>
             {
@@ -158,7 +158,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     PartyId = r.PartyId.ToString(),
                     Created = r.Created,
                     SupplierOrgNo = system?.SystemVendorOrgNumber ?? "0",
-                    UserType = systemUserType,
+                    UserType = userType,
                     SystemId = r.SystemId,
                     ReporteeOrgNo = r.PartyOrgNo
                 };
@@ -191,7 +191,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     PartyId = systemUser.PartyId,
                     Created = systemUser.Created,
                     System = systemFE,
-                    SystemUserType = systemUser.UserType,
+                    UserType = systemUser.UserType,
                 });
             }
 

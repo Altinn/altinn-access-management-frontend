@@ -40,24 +40,24 @@ export const SystemUserList = ({
       <List>
         {systemUsers?.map((systemUser) => {
           let href: string = '';
-          if (systemUser.systemUserType === 'standard' && !isPendingRequestList) {
+          if (systemUser.userType === 'standard' && !isPendingRequestList) {
             href = `/systemuser/${systemUser.id}`;
-          } else if (systemUser.systemUserType === 'agent' && !isPendingRequestList) {
+          } else if (systemUser.userType === 'agent' && !isPendingRequestList) {
             href = `/systemuser/${systemUser.id}/agentdelegation`;
-          } else if (systemUser.systemUserType === 'standard' && isPendingRequestList) {
+          } else if (systemUser.userType === 'standard' && isPendingRequestList) {
             href = `/systemuser/request?id=${systemUser.id}&skiplogout=true`;
-          } else if (systemUser.systemUserType === 'agent' && isPendingRequestList) {
+          } else if (systemUser.userType === 'agent' && isPendingRequestList) {
             href = `/systemuser/agentrequest?id=${systemUser.id}&skiplogout=true`;
           }
 
           let badge: BadgeProps | ReactElement | undefined = undefined;
-          if (isPendingRequestList && systemUser.systemUserType === 'standard') {
+          if (isPendingRequestList && systemUser.userType === 'standard') {
             badge = (
               <div className={classes.systemUserBadge}>
                 {t('systemuser_overviewpage.pending_request_badge')}
               </div>
             );
-          } else if (isPendingRequestList && systemUser.systemUserType === 'agent') {
+          } else if (isPendingRequestList && systemUser.userType === 'agent') {
             badge = (
               <div className={classes.systemUserBadge}>
                 {t('systemuser_overviewpage.pending_agent_request_badge')}
@@ -69,7 +69,7 @@ export const SystemUserList = ({
 
           const refText =
             isPendingRequestList &&
-            (systemUser.systemUserType === 'standard' || systemUser.systemUserType === 'agent')
+            (systemUser.userType === 'standard' || systemUser.userType === 'agent')
               ? `(ref: ${systemUser.id.slice(-5)})`
               : '';
 
