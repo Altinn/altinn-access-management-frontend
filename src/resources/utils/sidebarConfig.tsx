@@ -46,8 +46,8 @@ export const getHeadingMenuItem = (
     size: 'lg',
     loading: isLoading,
     title: t('sidebar.access_management'),
-    selected: pathname?.includes(`/${amUIPath.LandingPage}`),
-    as: (props) => getMenuLinkAs(props, `/${amUIPath.LandingPage}`),
+    selected: pathname === '/',
+    as: (props) => getMenuLinkAs(props, '/'),
   };
 };
 

@@ -48,6 +48,10 @@ export const Router = createBrowserRouter(
       errorElement={<ErrorPage />}
     >
       <Route
+        index
+        element={<LandingPage />}
+      />
+      <Route
         path={ApiDelegationPath.OfferedApiDelegations}
         errorElement={<ErrorPage />}
       >
@@ -184,10 +188,6 @@ export const Router = createBrowserRouter(
       <Route
         path={amUIPath.Settings}
         element={<SettingsPage />}
-      />
-      <Route
-        path={amUIPath.LandingPage}
-        element={<LandingPage />}
       />
       <Route
         path={amUIPath.Requests}

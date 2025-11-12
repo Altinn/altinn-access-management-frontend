@@ -100,7 +100,7 @@ export const useGlobalMenu = () => {
       selected: true,
       as: (props) => (
         <Link
-          to={`/${amUIPath.LandingPage}`}
+          to={'/'}
           {...props}
         />
       ),
