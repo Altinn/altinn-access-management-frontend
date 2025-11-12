@@ -139,8 +139,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return agentTask.Result.Problem;
             }
 
-            IEnumerable<SystemUser> requestsAsSystemUsers = await MapRequestsToPendingSystemUsers(standardTask.Result.Value, "Standard", cancellationToken);
-            IEnumerable<SystemUser> agentRequestsAsSystemUsers = await MapRequestsToPendingSystemUsers(agentTask.Result.Value, "Agent", cancellationToken);
+            IEnumerable<SystemUser> requestsAsSystemUsers = await MapRequestsToPendingSystemUsers(standardTask.Result.Value, "standard", cancellationToken);
+            IEnumerable<SystemUser> agentRequestsAsSystemUsers = await MapRequestsToPendingSystemUsers(agentTask.Result.Value, "agent", cancellationToken);
             List<SystemUserFE> pendingSystemUsers = await MapToSystemUsersFE([.. requestsAsSystemUsers, .. agentRequestsAsSystemUsers], cancellationToken);
             return pendingSystemUsers;
         }
