@@ -20,6 +20,7 @@ declare global {
       useNewActorsList: boolean;
       displayPrivDelegation: boolean;
       displayAccessRequest: boolean;
+      displaySubConnections: boolean;
     };
   }
 }
@@ -56,6 +57,7 @@ window.featureFlags = {
   useNewActorsList: false,
   displayPrivDelegation: false,
   displayAccessRequest: false,
+  displaySubConnections: false,
 };
 
 // Initialise i18next;
