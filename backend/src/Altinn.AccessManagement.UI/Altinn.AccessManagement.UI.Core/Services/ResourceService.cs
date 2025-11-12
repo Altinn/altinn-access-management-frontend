@@ -76,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
 
                     var paginatedResult = PaginationUtils.GetListPage(searchResults, page, resultsPerPage);
-                    
+
                     // Add logo to each resource if it exists
                     foreach (ServiceResourceFE resource in paginatedResult.PageList)
                     {
@@ -203,17 +203,42 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 List<ServiceResource> resources = await GetResources();
 
+                string ResolveOrganisationName(Dictionary<string, string> translations)
+                {
+                    if (translations == null)
+                    {
+                        return null;
+                    }
+
+                    if (!string.IsNullOrEmpty(languageCode) && translations.TryGetValue(languageCode, out string localizedName))
+                    {
+                        return localizedName;
+                    }
+
+                    return translations.TryGetValue("nb", out string defaultName) ? defaultName : null;
+                }
+
                 // Filter resources based on criteria and remove duplicates based on OrganisationName
                 var resourceOwnerList = resources
-                    .Where(sr => sr.HasCompetentAuthority != null && sr.HasCompetentAuthority.Name != null
-                                 && sr.HasCompetentAuthority.Name.ContainsKey(languageCode)
+                    .Where(sr => sr.HasCompetentAuthority != null
+                                 && !string.IsNullOrEmpty(sr.HasCompetentAuthority.Orgcode)
                                  && relevantResourceTypeList.Contains(sr.ResourceType))
-                    .GroupBy(sr => sr.HasCompetentAuthority.Orgcode.ToUpper())
-                    .Select(g => g.First()) // Take the first item from each group to eliminate duplicates
-                    .Select(sr => new ResourceOwnerFE(
-                            sr.HasCompetentAuthority.Name[languageCode],
-                            sr.HasCompetentAuthority.Organization))
-                    .OrderBy(resourceOwner => resourceOwner.OrganisationName) // Order alphabetically
+                    .GroupBy(sr => sr.HasCompetentAuthority.Orgcode, StringComparer.OrdinalIgnoreCase)
+                    .Select(g =>
+                    {
+                        ServiceResource preferred = g.FirstOrDefault(sr => !string.IsNullOrWhiteSpace(ResolveOrganisationName(sr.HasCompetentAuthority?.Name)));
+                        return preferred ?? g.First();
+                    })
+                    .Select(sr =>
+                    {
+                        string organisationName = ResolveOrganisationName(sr.HasCompetentAuthority?.Name);
+
+                        return new ResourceOwnerFE(organisationName, sr.HasCompetentAuthority.Organization)
+                        {
+                            OrganisationCode = sr.HasCompetentAuthority.Orgcode,
+                        };
+                    })
+                    .OrderBy(resourceOwner => resourceOwner.OrganisationName ?? resourceOwner.OrganisationCode, StringComparer.OrdinalIgnoreCase) // Order alphabetically
                     .ToList();
 
                 return resourceOwnerList;
@@ -268,9 +293,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)
         {
-            return orgList.Orgs.Values
-                .Select(org => new ResourceOwnerFE(GetNameInCorrectLanguage(org.Name, languageCode), org.Orgnr))
-                .ToList();
+            return orgList.Orgs?
+               .Select(org => new ResourceOwnerFE(org.Value.Name != null ? GetNameInCorrectLanguage(org.Value.Name, languageCode) : null, org.Value.Orgnr)
+               {
+                   OrganisationCode = org.Key,
+               })
+                .ToList() ?? new List<ResourceOwnerFE>();
         }
 
         private static string GetNameInCorrectLanguage(Name name, string languageCode)
@@ -318,9 +346,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     .SetPriority(CacheItemPriority.High)
                     .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
 
-                _memoryCache.Set(cacheKey, resources, cacheEntryOptions); 
-            }     
-            
+                _memoryCache.Set(cacheKey, resources, cacheEntryOptions);
+            }
+
             return resources;
         }
 
