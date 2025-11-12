@@ -332,7 +332,9 @@
     "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
-    "indirect_connections": "Brukere uten fullmakt"
+    "indirect_connections": "Brukere uten fullmakt",
+    "no_access_to_users_header": "Denne siden jobber vi fremdeles med!",
+    "no_access_to_users_message": "Kun tilgangsstyrerere kan se full liste av brukere med fullmakter i denne virksomheten. <br /> Liste over nøkkelpersoner (styret) vil være tilgjengelig for brukere uten tilgangsstyring etterhvert."
   },
   "advanced_user_search": {
     "add_user_button": "Ny bruker",
@@ -442,7 +444,9 @@
     "trigger_button_large": "Gi fullmakt til ny bruker",
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til virksomhet",
-    "limited_preview_message": "Du kan dessverre ikke legge til personer helt enda. Dette vil komme senere."
+    "limited_preview_message": "Du kan dessverre ikke legge til personer helt enda. Dette vil komme senere.",
+    "ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
+    "last_name_format_error": "Vennligst fyll inn et gyldig etternavn"
   },
   "info_page": {
     "page_title": "Om nye Altinn",

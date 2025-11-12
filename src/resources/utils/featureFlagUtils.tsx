@@ -76,3 +76,15 @@ export const useNewActorList = () => {
 export const useNewHeader = () => {
   return window.featureFlags?.useNewHeader === true;
 };
+
+export const displayPrivDelegation = () => {
+  return window.featureFlags?.displayPrivDelegation === true;
+};
+
+export const displayAccessRequest = () => {
+  return window.featureFlags?.displayAccessRequest === true;
+};
+
+export const displaySubConnections = () => {
+  return window.featureFlags?.displaySubConnections === true;
+};

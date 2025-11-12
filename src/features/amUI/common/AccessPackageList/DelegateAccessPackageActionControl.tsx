@@ -2,6 +2,7 @@ import { Button, DsSpinner } from '@altinn/altinn-components';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { DelegationAction } from '../DelegationModal/EditModal';
+import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
 
 interface DelegateAccessPackageActionControlsProps {
   isLoading: boolean;
@@ -23,7 +24,7 @@ export const DelegateAccessPackageActionControl = ({
   disabled = false,
 }: DelegateAccessPackageActionControlsProps) => {
   const { t } = useTranslation();
-  const displayLimitedPreviewLaunch = window.featureFlags.displayLimitedPreviewLaunch;
+  const displayAccessRequestFeature = displayAccessRequest();
 
   if (isLoading) {
     return (
@@ -48,7 +49,7 @@ export const DelegateAccessPackageActionControl = ({
       </Button>
     );
   }
-  if (availableActions?.includes(DelegationAction.REQUEST) && !displayLimitedPreviewLaunch) {
+  if (availableActions?.includes(DelegationAction.REQUEST) && displayAccessRequestFeature) {
     return (
       <Button
         icon={PlusCircleIcon}

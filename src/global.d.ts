@@ -15,6 +15,9 @@ declare global {
       useNewActorsList: boolean;
       useNewHeader: boolean;
       displayRequestsPage: boolean;
+      displayPrivDelegation: boolean;
+      displayAccessRequest: boolean;
+      displaySubConnections: boolean;
     };
   }
 }

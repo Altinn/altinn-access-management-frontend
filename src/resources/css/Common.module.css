@@ -2,13 +2,6 @@ body {
   margin: 0;
 }
 
-html {
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  background-color: var(--ds-color-background-subtle);
-  scrollbar-color: var(--ds-color-neutral-border-subtle) rgba(0, 0, 0, 0);
-}
-
 :root {
   font-family: 'Inter', sans-serif;
   --backgroundColorA2: #1eadf7;
@@ -46,23 +39,10 @@ html {
 
   /* Overide tokens from designSystem & altinn-components */
   --ds-color-neutral-surface-default: #fff;
-  --ds-body-md-font-size: 1rem;
   --ds-color-text-subtle: #10204a;
   --ds-link-color-visited: inherit;
 }
 
-/* Overide ds tokens for mobile screens */
-@media screen and (max-width: 768px) {
-  :root {
-    --ds-heading-2xl-font-size: 3.25rem;
-    --ds-heading-xl-font-size: 2.75rem;
-    --ds-heading-lg-font-size: 2rem;
-    --ds-heading-md-font-size: 1.5rem;
-    --ds-heading-sm-font-size: 1.25rem;
-    --ds-heading-xs-font-size: 1.2rem;
-    --ds-heading-2xs-font-size: 1.1rem;
-  }
-}
 body {
   margin: 0;
 }

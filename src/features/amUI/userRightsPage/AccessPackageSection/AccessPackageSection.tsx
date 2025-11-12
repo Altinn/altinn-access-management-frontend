@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { DsAlert, DsHeading, DsPopover, DsSearch } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
@@ -17,6 +17,7 @@ import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import classes from './AccessPackageSection.module.css';
 import { debounce } from '@/resources/utils';
+import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 
 export const AccessPackageSection = () => {
   const { t } = useTranslation();
@@ -28,8 +29,10 @@ export const AccessPackageSection = () => {
     actingParty,
     isLoading: loadingPartyRepresentation,
   } = usePartyRepresentation();
+  const { data: isHovedadmin } = useGetIsHovedadminQuery();
   const isCurrentUser = selfParty?.partyUuid === id;
-  const displayLimitedPreviewLaunch = window.featureFlags.displayLimitedPreviewLaunch;
+  const canGiveAccess = !isCurrentUser || (isCurrentUser && isHovedadmin);
+  const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
     {
@@ -62,7 +65,7 @@ export const AccessPackageSection = () => {
   return (
     <>
       <AccessPackageInfoAlert />
-      {toParty?.partyTypeName === PartyType.Person && (
+      {toParty?.partyTypeName === PartyType.Person && !shouldDisplayPrivDelegation && (
         <DsAlert data-color='warning'>{t('access_packages.person_info_alert')}</DsAlert>
       )}
       {loadingPartyRepresentation || loadingAccesses ? (
@@ -89,35 +92,37 @@ export const AccessPackageSection = () => {
             </DsPopover.TriggerContext>
           </div>
           <div className={classes.inputs}>
-            <div className={classes.searchField}>
-              <DsSearch data-size='sm'>
-                <DsSearch.Input
-                  aria-label={t('access_packages.search_label')}
-                  placeholder={t('access_packages.search_label')}
-                  value={searchString}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    const value = event.target.value;
-                    setSearchString(value);
-                    debouncedUpdate(value);
-                  }}
-                />
-                <DsSearch.Clear
-                  onClick={() => {
-                    debouncedUpdate.cancel();
-                    setSearchString('');
-                    setDebouncedSearchString('');
-                  }}
-                />
-              </DsSearch>
-            </div>
+            {numberOfAccesses > 0 && (
+              <div className={classes.searchField}>
+                <DsSearch data-size='sm'>
+                  <DsSearch.Input
+                    aria-label={t('access_packages.search_label')}
+                    placeholder={t('access_packages.search_label')}
+                    value={searchString}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      const value = event.target.value;
+                      setSearchString(value);
+                      debouncedUpdate(value);
+                    }}
+                  />
+                  <DsSearch.Clear
+                    onClick={() => {
+                      debouncedUpdate.cancel();
+                      setSearchString('');
+                      setDebouncedSearchString('');
+                    }}
+                  />
+                </DsSearch>
+              </div>
+            )}
             <div className={classes.delegateButton}>
               {(toParty?.partyTypeName === PartyType.Organization ||
-                !displayLimitedPreviewLaunch) && (
+                (shouldDisplayPrivDelegation && canGiveAccess)) && (
                 <DelegationModal
                   delegationType={DelegationType.AccessPackage}
                   availableActions={[
                     DelegationAction.REVOKE,
-                    isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
+                    canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
                   ]}
                 />
               )}
