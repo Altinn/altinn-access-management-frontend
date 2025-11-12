@@ -84,8 +84,6 @@ test.describe('Systembruker endringsforespørsel', () => {
     const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
     await page.goto(systemUserUrl + '/' + systemUserId);
 
-    await systemUserPage.TRY_NEW_ACCESS_MANAGEMENT_BUTTON.click();
-
     // Verify the reflected changes
     await expect(page.getByText('Plansak')).toBeVisible();
     await expect(page.getByText('Baerekraft')).not.toBeVisible();
