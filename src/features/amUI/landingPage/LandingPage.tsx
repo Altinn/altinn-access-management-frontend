@@ -176,7 +176,7 @@ export const LandingPage = () => {
             <DsLink asChild>
               <Link to={`/${amUIPath.Info}`}>
                 {t('landing_page.alert_link')}
-                <ArrowRightIcon fontSize={24} />
+                <ArrowRightIcon className={classes.arrowIcon} />
               </Link>
             </DsLink>
           </DsAlert>

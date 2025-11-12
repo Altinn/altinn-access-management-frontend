@@ -9,6 +9,10 @@
   padding-top: var(--ds-size-2);
   padding-bottom: var(--ds-size-6);
 }
+.arrowIcon {
+  font-size: 24px;
+  margin-left: var(--ds-size-1);
+}
 
 .listItemContainer {
   display: flex;
