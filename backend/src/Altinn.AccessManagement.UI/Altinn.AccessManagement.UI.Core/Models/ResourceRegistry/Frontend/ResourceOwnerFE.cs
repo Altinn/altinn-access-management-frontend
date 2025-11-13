@@ -5,5 +5,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
     /// </summary>
     /// <param name="OrganisationName">The name of the resource owner</param>
     /// <param name="OrganisationNumber">The organisation number to the organisation</param>
-    public record ResourceOwnerFE(string OrganisationName, string OrganisationNumber);
+    public record ResourceOwnerFE(string OrganisationName, string OrganisationNumber)
+    {
+        /// <summary>
+        ///     The organisation code for the resource owner
+        /// </summary>
+        public string OrganisationCode { get; init; }
+    }
 }

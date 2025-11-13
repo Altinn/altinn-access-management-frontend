@@ -35,7 +35,7 @@ export const UserRightsPage = () => {
 
   useRerouteIfNotConfetti();
 
-  const { displayLimitedPreviewLaunch } = window.featureFlags;
+  const { displayRoles } = window.featureFlags;
 
   return (
     <PageWrapper>
@@ -55,7 +55,7 @@ export const UserRightsPage = () => {
             >
               <UserPageHeader
                 direction='to'
-                displayRoles={!displayLimitedPreviewLaunch}
+                displayRoles={displayRoles}
               />
               <RightsTabs
                 packagesPanel={<AccessPackageSection />}

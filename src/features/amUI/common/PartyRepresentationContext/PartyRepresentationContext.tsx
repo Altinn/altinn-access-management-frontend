@@ -150,7 +150,9 @@ export const PartyRepresentationProvider = ({
 
   const isError = !fromParty && !toParty;
 
-  const shouldShowUserTypeRestrictionAlert = !isLoading && !availableForUserType && errorOnPriv;
+  const shouldShowConnectionErrorAlert = !isLoading && invalidConnection;
+  const shouldShowUserTypeRestrictionAlert =
+    !shouldShowConnectionErrorAlert && !isLoading && !availableForUserType && errorOnPriv;
 
   if (isLoading && loadingComponent) {
     return loadingComponent;
@@ -167,7 +169,7 @@ export const PartyRepresentationProvider = ({
         isError: isError,
       }}
     >
-      {!isLoading && invalidConnection && connectionErrorAlert(error, returnToUrlOnError)}
+      {shouldShowConnectionErrorAlert && connectionErrorAlert(error, returnToUrlOnError)}
       {shouldShowUserTypeRestrictionAlert && <NotAvailableForUserTypeAlert />}
       {isError && !isLoading && !invalidConnection && (
         <DsAlert data-color='warning'>

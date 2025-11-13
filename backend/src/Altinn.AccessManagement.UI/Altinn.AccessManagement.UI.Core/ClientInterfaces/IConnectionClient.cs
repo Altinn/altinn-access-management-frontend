@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.User;
+﻿using Altinn.AccessManagement.UI.Core.Models.Connections;
+using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -11,9 +12,11 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Creates a connection between the authenticated user's selected party and the specified target party by assigning them as a right holder.
         /// </summary>
         /// <param name="party">The GUID identifying the party the authenticated user is acting on behalf of.</param>
-        /// <param name="to">The GUID identifying the target party to which the assignment should be created.</param>
+        /// <param name="to">The GUID identifying the target party to which the assignment should be created. (only given for orgs)</param>
+        /// <param name="personInput">Additional confirmation data if the rightholder to be added is a person (null if it is an org).</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-        Task<HttpResponseMessage> PostNewRightHolderConnection(Guid party, Guid to, CancellationToken cancellationToken = default);
+        /// <returns>The guid of the newly added rightholder</returns>
+        Task<Guid> PostNewRightHolderConnection(Guid party, Guid? to, PersonInput personInput = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///   Revokes all rights associated with a right holder connection by revoking their status as a right holder for another party.

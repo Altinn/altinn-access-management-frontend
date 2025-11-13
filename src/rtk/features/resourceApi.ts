@@ -3,8 +3,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export interface ResourceOwner {
-  organisationName: string;
+  organisationName: string | null;
   organisationNumber: string;
+  organisationCode: string;
 }
 
 export enum ResourceType {

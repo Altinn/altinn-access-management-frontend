@@ -33,6 +33,7 @@ export interface DelegableApiDto {
   title: string;
   identifier: string;
   resourceOwnerName: string;
+  resourceOwnerOrgcode: string;
   rightDescription: string;
   description?: string;
   resourceReferences?: resourceReferenceDTO[];
@@ -45,7 +46,8 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
   const delegableApi: DelegableApi = {
     identifier: obj.identifier,
     apiName: obj.title,
-    orgName,
+    orgName: orgName ?? obj.resourceOwnerOrgcode ?? '',
+    orgCode: obj.resourceOwnerOrgcode,
     rightDescription: obj.rightDescription,
     description: obj.description,
     scopes: [],
@@ -88,7 +90,12 @@ export const apiDelegationApi = createApi({
       },
       transformResponse: (response: DelegableApiDto[]) => {
         return response
-          .filter((item) => item.rightDescription && item.title && item.resourceOwnerName)
+          .filter(
+            (item) =>
+              item.rightDescription &&
+              item.title &&
+              (item.resourceOwnerName || item.resourceOwnerOrgcode),
+          )
           .map((item) => mapToDelegableApi(item, item.resourceOwnerName));
       },
     }),

@@ -117,7 +117,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
+            if (!_featureFlags.DisplayRoles)
             {
                 return StatusCode(404, "Feature not available");
             }
@@ -149,7 +149,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
+            if (!_featureFlags.DisplayRoles)
             {
                 return StatusCode(404, "Feature not available");
             }
@@ -180,7 +180,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
+            if (!_featureFlags.DisplayRoles)
             {
                 return StatusCode(404, "Feature not available");
             }

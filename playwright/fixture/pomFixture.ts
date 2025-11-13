@@ -2,6 +2,8 @@
 import { test as baseTest, expect } from '@playwright/test';
 import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
 import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
+import { AccessManagementFrontPage } from 'playwright/pages/AccessManagementFrontPage';
+import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { DelegationPage } from 'playwright/pages/profile/accessPkgDelegationPage';
 import { apiDelegation } from 'playwright/pages/profile/apidelegeringPage';
 import {
@@ -21,6 +23,8 @@ type Fixtures = {
   language: Language;
 
   login: LoginPage;
+  accessManagementFrontPage: AccessManagementFrontPage;
+  systemUserPage: SystemUserPage;
   delegate: delegateToUser;
   delegateRights: delegateRightsToUser;
   deleteRights: revokeRights;
@@ -40,6 +44,12 @@ const test = baseTest.extend<Fixtures>({
 
   login: async ({ page }, use) => {
     await use(new LoginPage(page));
+  },
+  accessManagementFrontPage: async ({ page }, use) => {
+    await use(new AccessManagementFrontPage(page));
+  },
+  systemUserPage: async ({ page }, use) => {
+    await use(new SystemUserPage(page));
   },
   delegate: async ({ page }, use) => {
     await use(new delegateToUser(page));

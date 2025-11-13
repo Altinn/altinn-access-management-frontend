@@ -34,5 +34,21 @@
       "phone": "+47123456",
       "url": "/kontakt"
     }
-  }
+  },
+  "zzzdemo": {
+      "name": {
+        "en": "ZZZ Demo Organization",
+        "nb": "ZZZ Demo Organisasjon",
+        "nn": "ZZZ Demo Organisasjon"
+      },
+      "logo": "/orgs/zzzdemo/zzzdemo.png",
+      "emblem": "/orgs/zzzdemo/zzzdemo.svg",
+      "orgnr": "123456789",
+      "homepage": "",
+      "environments": ["tt02"],
+      "contact": {
+        "phone": "+47123456",
+        "url": "/zzzdemo/kontakt-oss"
+      }
+    }
 }

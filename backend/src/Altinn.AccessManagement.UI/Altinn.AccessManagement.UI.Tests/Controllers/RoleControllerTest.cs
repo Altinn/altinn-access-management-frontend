@@ -33,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             _factory = factory;
             _client = SetupUtils.GetTestClient(factory, null);
-            _client_feature_off = SetupUtils.GetTestClient(factory, new FeatureFlags { DisplayLimitedPreviewLaunch = false });
+            _client_feature_off = SetupUtils.GetTestClient(factory, new FeatureFlags { DisplayRoles = false });
 
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
