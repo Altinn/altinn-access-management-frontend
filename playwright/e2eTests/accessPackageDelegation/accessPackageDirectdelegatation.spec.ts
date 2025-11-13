@@ -40,7 +40,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await login.LoginWithUserFromFrontpage('06815597492');
     await login.chooseReportee('LYKKELIG RAKRYGGET PUMA BBL');
 
-    await delegation.newAccessRights('UTGÅTT FLEKSIBEL TIGER AS');
+    await delegation.newAccessRights('Utgått Fleksibel Tiger AS');
 
     //Verify Org-2(Rettighetshaver) has got rights on accesspkg from Org-1(Avgiver) under "Våre tilganger hos andre"
     await delegation.verifyDelegatedPacakge('Bygg, anlegg og eiendom', 'Byggesøknad');
