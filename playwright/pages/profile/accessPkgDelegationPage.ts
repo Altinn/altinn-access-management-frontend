@@ -16,7 +16,6 @@ export class DelegationPage {
   readonly backBtn: Locator;
   readonly ourAcessButton: Locator;
   readonly rightsAccessLink: Locator;
-  readonly rightsNewBrukerFlateLink: Locator;
   readonly menubtn: Locator;
   readonly logoutBtn: Locator;
 
@@ -34,9 +33,8 @@ export class DelegationPage {
     this.backBtn = page.getByRole('button', { name: 'Tilbake' });
     this.ourAcessButton = page.getByRole('button', { name: 'Våre tilganger hos andre' });
     this.rightsAccessLink = page.getByRole('link', {
-      name: 'Rettigheter virksomheten har hos andre',
+      name: 'Våre tilganger hos andre',
     });
-    this.rightsNewBrukerFlateLink = page.getByRole('link', { name: 'Klikk her for å se disse' });
     this.menubtn = page.getByRole('button', { name: 'Meny' });
     this.logoutBtn = page.getByRole('button', { name: 'Logg ut' });
   }
@@ -184,7 +182,6 @@ export class DelegationPage {
   }
   async newAccessRights(orgName: string) {
     await this.rightsAccessLink.click();
-    await this.rightsNewBrukerFlateLink.click();
 
     //Click on Orgnization
     const orgLink = this.page.getByRole('link', { name: orgName }).first();
