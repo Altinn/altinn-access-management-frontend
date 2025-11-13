@@ -187,6 +187,9 @@ export class DelegationPage {
     const orgbButton = this.page.getByRole('button', { name: orgName }).first();
     await expect(orgbButton).toBeVisible();
     await orgbButton.click();
+
+    // TODO FIX THIS
+    await this.page.getByText('UUtgått Fleksibel Tiger ASOrg.nr. 312973367').click();
   }
 
   async chooseOrg(chooseorgName: string) {
