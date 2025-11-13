@@ -6,9 +6,13 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await login.LoginWithUserFromFrontpage('23926299794');
     await login.chooseReportee('UTGÅTT FLEKSIBEL TIGER AS');
   });
-  test('Org-A delegates access pacakge to Org-B', async ({ login, delegation }) => {
-    // Step 2: Open delegation flow
-    await delegation.openDelegationFlow();
+  test('Org-A delegates access pacakge to Org-B', async ({
+    login,
+    delegation,
+    accessManagementFrontPage,
+  }) => {
+    // Step 2: Open delegation flow using Fullmakter menu link
+    await accessManagementFrontPage.usersLink.click();
 
     // Step 3: Add new user
     await delegation.addUser();
@@ -46,12 +50,13 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
 
   test.skip('Org-A revokes all delegated access package rights from Org-2', async ({
     delegation,
+    accessManagementFrontPage,
   }) => {
     await DelegationApiUtil.addOrgToDelegate();
     await DelegationApiUtil.delegateAccessPacakage();
 
-    // Step 2: Open delegation flow
-    await delegation.openDelegationFlow();
+    // Step 2: Open delegation flow using Fullmakter menu link
+    await accessManagementFrontPage.usersLink.click();
     await delegation.chooseOrg('LYKKELIG RAKRYGGET PUMA BBL');
 
     //Step3 : Delete delegated pacakge directly from area list

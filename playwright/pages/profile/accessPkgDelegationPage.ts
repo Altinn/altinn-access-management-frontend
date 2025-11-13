@@ -55,7 +55,7 @@ export class DelegationPage {
   }
 
   async addUser() {
-    const addUserBtn = this.page.getByRole('button', { name: 'Legg til Ny bruker' });
+    const addUserBtn = this.page.getByRole('button', { name: 'Ny bruker' });
     await expect(addUserBtn).toBeVisible();
     await addUserBtn.click();
   }
