@@ -12,12 +12,7 @@ interface RoleInfoModalProps {
   availableActions?: DelegationAction[];
 }
 
-export const RoleInfoModal = ({
-  modalRef,
-  role,
-  onClose,
-  availableActions,
-}: RoleInfoModalProps) => {
+export const RoleInfoModal = ({ modalRef, role, onClose }: RoleInfoModalProps) => {
   useEffect(() => {
     const handleClose = () => onClose?.();
 
@@ -29,7 +24,6 @@ export const RoleInfoModal = ({
     <EditModal
       ref={modalRef}
       role={role}
-      availableActions={availableActions}
     />
   );
 };

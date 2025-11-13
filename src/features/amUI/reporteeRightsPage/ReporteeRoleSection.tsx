@@ -36,12 +36,6 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
           setModalItem(role);
           modalRef.current?.showModal();
         }}
-        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
-        onActionError={(role, error) => {
-          setModalItem(role);
-          modalRef.current?.showModal();
-          setActionError(error);
-        }}
       />
       <RoleInfoModal
         modalRef={modalRef}
