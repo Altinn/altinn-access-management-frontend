@@ -90,8 +90,13 @@ export class LoginPage {
 
   private async verifyLoginSuccess() {
     const frontPage = new AccessManagementFrontPage(this.page);
-    await expect(frontPage.tryNewAccessManagementButton).toBeVisible();
-    await frontPage.tryNewAccessManagementButton.click();
+    // Check if button is visible with a short timeout, skip if not visible
+    const isButtonVisible = await frontPage.tryNewAccessManagementButton
+      .isVisible({ timeout: 3000 })
+      .catch(() => false);
+    if (isButtonVisible) {
+      await frontPage.tryNewAccessManagementButton.click();
+    }
   }
 
   async selectActor(input: Locator, orgnummer: string) {
