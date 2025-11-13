@@ -22,7 +22,7 @@ test.describe('@slow API-Delegations to organization user', () => {
       orgNumber: '312792680',
     };
 
-    await login.loginWithUser(userThatDelegates.id);
+    await login.LoginWithUserFromFrontpage(userThatDelegates.id);
     await login.chooseReportee(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
@@ -48,7 +48,7 @@ test.describe('@slow API-Delegations to organization user', () => {
       orgNumber: '310661414',
     };
 
-    await login.loginWithUser(userThatDelegates.id);
+    await login.LoginWithUserFromFrontpage(userThatDelegates.id);
     await login.chooseReportee(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
@@ -65,7 +65,7 @@ test.describe('@slow API-Delegations to organization user', () => {
     await logoutUser.gotoLogoutPage(userThatDelegates.reportee);
     await context.clearCookies();
 
-    await login.loginWithUser(userThatReceivesDelegation.id);
+    await login.LoginWithUserFromFrontpage(userThatReceivesDelegation.id);
     await login.chooseReportee(userThatReceivesDelegation.reportee);
     await apiDelegations.verifyAPIOverviewPage(userThatDelegates.reportee, standardApiDetails.name);
   });
@@ -86,7 +86,7 @@ test.describe('@slow API-Delegations to organization user', () => {
       orgNumber: '310881740',
     };
 
-    await login.loginWithUser(userThatDelegates.id);
+    await login.LoginWithUserFromFrontpage(userThatDelegates.id);
     await login.chooseReportee(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
@@ -115,7 +115,7 @@ test.describe('@slow API-Delegations to organization user', () => {
       orgNumber: '310195030',
     };
 
-    await login.loginWithUser(userThatDelegates.id);
+    await login.LoginWithUserFromFrontpage(userThatDelegates.id);
     await login.chooseReportee(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
@@ -145,7 +145,7 @@ test.describe('@slow API-Delegations to organization user', () => {
       orgNumber: '313646963',
     };
 
-    await login.loginWithUser(userThatDelegates.id);
+    await login.LoginWithUserFromFrontpage(userThatDelegates.id);
     await login.chooseReportee(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
     await apiDelegations.delegateAPI(standardApiDetails.name, userThatReceivesDelegation.orgNumber);
@@ -176,7 +176,7 @@ test.describe('@slow API-Delegations to organization user', () => {
       reportee: 'HYGGELIG RU APE',
     };
 
-    await login.loginWithUser(userThatDelegates.id);
+    await login.LoginWithUserFromFrontpage(userThatDelegates.id);
     await login.chooseReportee(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
@@ -216,7 +216,7 @@ test.describe('@slow API Delegation Access Control Tests', () => {
     apiDelegations,
   }) => {
     const reporteeWithoutAccess = 'AMBASSADERÅD HUMORISTISK';
-    await login.loginWithUser('02828698497');
+    await login.LoginWithUserFromFrontpage('02828698497');
     await login.chooseReportee(reporteeWithoutAccess);
 
     await page.goto(env('BASE_URL') + '/ui/profile');
@@ -238,7 +238,7 @@ test.describe('@slow API Delegation Access Control Tests', () => {
     //Login as Tilgangsstyrer
     const user = '14824497789';
     const reporteeWithAPIRole = 'AKTVERDIG RETORISK APE';
-    await login.loginWithUser(user);
+    await login.LoginWithUserFromFrontpage(user);
     await login.chooseReportee(reporteeWithAPIRole);
 
     await page.goto(env('BASE_URL') + '/ui/profile');
@@ -262,7 +262,7 @@ test.describe('@slow API Delegation Access Control Tests', () => {
       reportee: 'MORSK PROAKTIV TIGER AS',
     };
 
-    await login.loginWithUser(userThatDelegates.id);
+    await login.LoginWithUserFromFrontpage(userThatDelegates.id);
     await login.chooseReportee(userThatDelegates.reportee);
 
     await page.goto(env('BASE_URL') + '/ui/profile');

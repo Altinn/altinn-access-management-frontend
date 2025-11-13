@@ -6,5 +6,5 @@ import { LoginPage } from 'playwright/pages/LoginPage';
 
 test('Login with TestID', async ({ page }) => {
   const login = new LoginPage(page);
-  await login.loginWithUser('02828698497');
+  await login.LoginWithUserFromFrontpage('02828698497');
 });
