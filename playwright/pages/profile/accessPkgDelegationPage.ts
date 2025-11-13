@@ -6,7 +6,6 @@ export class DelegationPage {
 
   readonly accessRightsLink: Locator;
   readonly newBrukerflateLink: Locator;
-  readonly tryNewAccessBtn: Locator;
   readonly addUserBtn: Locator;
   readonly addOrgBtn: Locator;
   readonly grantAccessBtn: Locator;
@@ -25,7 +24,6 @@ export class DelegationPage {
     this.page = page;
     this.accessRightsLink = page.getByRole('link', { name: 'Andre med rettigheter til' });
     this.newBrukerflateLink = page.getByRole('link', { name: 'Klikk her' });
-    this.tryNewAccessBtn = page.getByRole('button', { name: 'Prøv ny tilgangsstyring' });
     this.addUserBtn = page.getByRole('button', { name: 'Legg til Ny bruker' });
     this.addOrgBtn = page.getByRole('button', { name: 'Legg til virksomhet' });
     this.grantAccessBtn = page.getByRole('button', { name: 'Gi fullmakt' });
@@ -49,9 +47,6 @@ export class DelegationPage {
 
     await expect(this.newBrukerflateLink).toBeVisible();
     await this.newBrukerflateLink.click();
-
-    await expect(this.tryNewAccessBtn).toBeVisible();
-    await this.tryNewAccessBtn.click();
   }
 
   async addUser() {
