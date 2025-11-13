@@ -20,7 +20,7 @@ export const RightsTabs = ({
   const { t } = useTranslation();
   const [chosenTab, setChosenTab] = useState('packages');
 
-  const { displayLimitedPreviewLaunch, displayResourceDelegation } = window.featureFlags;
+  const { displayResourceDelegation, displayRoles } = window.featureFlags;
 
   return (
     <DsTabs
@@ -41,7 +41,7 @@ export const RightsTabs = ({
           )}
           {t('user_rights_page.access_packages_title')}
         </DsTabs.Tab>
-        {displayResourceDelegation && (
+        {displayResourceDelegation && singleRightsPanel && (
           <DsTabs.Tab value='singleRights'>
             {tabBadge && (
               <DsBadge
@@ -54,7 +54,7 @@ export const RightsTabs = ({
             {t('user_rights_page.single_rights_title')}
           </DsTabs.Tab>
         )}
-        {!displayLimitedPreviewLaunch && (
+        {displayRoles && roleAssignmentsPanel && (
           <DsTabs.Tab value='roleAssignments'>
             {tabBadge && (
               <DsBadge
@@ -74,7 +74,7 @@ export const RightsTabs = ({
       >
         {packagesPanel}
       </DsTabs.Panel>
-      {displayResourceDelegation && (
+      {displayResourceDelegation && singleRightsPanel && (
         <DsTabs.Panel
           className={classes.tabContent}
           value='singleRights'
@@ -82,7 +82,7 @@ export const RightsTabs = ({
           {singleRightsPanel}
         </DsTabs.Panel>
       )}
-      {!displayLimitedPreviewLaunch && (
+      {displayRoles && roleAssignmentsPanel && (
         <DsTabs.Panel
           className={classes.tabContent}
           value='roleAssignments'

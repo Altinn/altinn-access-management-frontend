@@ -29,8 +29,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     {
         private readonly CustomWebApplicationFactory<UserController> _factory;
         private readonly HttpClient _client;
-        private readonly HttpClient _client_feature_off;
-
         private readonly IProfileClient _profileClient;
         private string _testDataFolder;
 
@@ -43,7 +41,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _factory = factory;
             _profileClient = Mock.Of<IProfileClient>();
             _client = SetupUtils.GetTestClient(factory, null);
-            _client_feature_off = SetupUtils.GetTestClient(factory, new FeatureFlags { DisplayLimitedPreviewLaunch = false });
             _testDataFolder = Path.GetDirectoryName(new Uri(typeof(UserControllerTest).Assembly.Location).LocalPath);
 
         }

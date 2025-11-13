@@ -11,15 +11,6 @@ export const useRerouteIfNotConfetti = () => {
   }, [navigate]);
 };
 
-export const useRerouteIfLimitedPreview = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (window.featureFlags?.displayLimitedPreviewLaunch === true) {
-      navigate('/not-found', { replace: true });
-    }
-  }, [navigate]);
-};
-
 export const useRerouteIfSettingsPageDisabled = () => {
   const navigate = useNavigate();
   useEffect(() => {
