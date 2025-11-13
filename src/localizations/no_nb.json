@@ -309,7 +309,7 @@
   },
   "role": {
     "provider_status": "Denne rollen er hentet fra ",
-    "current_roles_title": "{{count}} administratortilganger",
+    "current_roles_title": "{{count}} roller",
     "roles_description": "Her finner du fullmakter for å administrere tilganger for virksomheten. Det er ikke knyttet noen ressurser eller tjenester til disse tilgangene.",
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
     "role_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{role}}.",
@@ -352,7 +352,7 @@
     "page_title": "Brukertilganger - Altinn",
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
-    "roles_title": "Administratortilganger",
+    "roles_title": "Roller",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -497,7 +497,10 @@
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyer Altinn",
     "launchAlertContent": "Denne brukeren kan også ha fullmakter fra tidligere Altinn.",
-    "launchAlertLinkText": "Se fullmakter fra tidligere Altinn"
+    "launchAlertLinkText": "Se fullmakter fra tidligere Altinn",
+    "oldRolesContent": "Her ser du Altinnroller som kan inneholde tjenester/ressurser som allerede ligger i \"ny Altinnløsning\". Disse tjenestene blir også lagt inn i de nye tilgangspakkene. Denne brukeren har de samme rollene i den gamle løsningen, men der inneholder de andre og flere tjenester.",
+    "oldRolesLinkText": "Gå til gammel løsning",
+    "legacyRoleContent": "Denne rollen vil snart fjernes. Bruke heller tilgangspakker."
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

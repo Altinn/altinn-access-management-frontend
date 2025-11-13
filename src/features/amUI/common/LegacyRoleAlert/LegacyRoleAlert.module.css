@@ -4,14 +4,6 @@
   gap: 0.4rem;
 }
 
-.link {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.2rem;
-  width: fit-content;
-}
-
 .heading {
   margin-bottom: var(--ds-size-2);
 }

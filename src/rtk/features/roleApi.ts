@@ -2,19 +2,19 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-interface Provider {
+export interface ProviderType {
   id: string;
   name: string;
-  refId: string;
-  logoUrl: string;
-  code: string;
-  typeId: string;
-  type: ProviderType;
 }
 
-interface ProviderType {
+export interface Provider {
   id: string;
   name: string;
+  refId?: string | null;
+  logoUrl?: string | null;
+  code?: string;
+  typeId?: string;
+  type?: ProviderType | null;
 }
 
 export interface Role {
@@ -22,72 +22,25 @@ export interface Role {
   name: string;
   code: string;
   description: string;
-  isKeyRole: boolean;
-  urn: string;
-  legacyRoleCode?: string;
-  legacyUrn?: string;
-  provider: Provider;
+  urn?: string;
+  isKeyRole?: boolean;
+  legacyRoleCode?: string | null;
+  legacyUrn?: string | null;
+  provider?: Provider;
+  area?: Area;
+  isDelegable?: boolean;
 }
 
-export interface CompactRole {
-  id: string;
-  code: string;
-  children?: CompactRole[];
-}
-
-export interface CompactEntity {
+interface Area {
   id: string;
   name: string;
-  type: string;
-  variant: string;
-  parent?: CompactEntity;
-  children?: CompactEntity[];
-  keyValues?: Record<string, string>;
-}
-
-export interface Permission {
-  from: CompactEntity;
-  to: CompactEntity;
-  via?: CompactEntity;
-  role?: CompactRole;
-  viaRole?: CompactRole;
+  description: string;
+  iconUrl: string;
 }
 
 export interface RolePermission {
   role: Role;
-  permissions: Permission[];
-}
-
-interface RoleAreaGroupMetadata {
-  id: string;
-  name: string;
-  urn: string;
-  description: string;
-  type: string;
-}
-
-interface RoleAreaMetadata {
-  id: string;
-  name: string;
-  urn: string;
-  description: string;
-  iconUrl: string;
-  group: RoleAreaGroupMetadata;
-}
-
-interface RoleProviderMetadata {
-  id: string;
-  name: string;
-  refId: string;
-  logoUrl: string;
-  code: string;
-  typeId: string;
-  type: ProviderType;
-}
-
-interface RoleResourceTypeMetadata {
-  id: string;
-  name: string;
+  permissions: Permissions[];
 }
 
 export interface RoleResourceMetadata {
@@ -97,8 +50,8 @@ export interface RoleResourceMetadata {
   name: string;
   description: string;
   refId: string;
-  provider: RoleProviderMetadata;
-  type: RoleResourceTypeMetadata;
+  // provider: RoleProviderMetadata;
+  // type: RoleResourceTypeMetadata;
 }
 
 export interface RolePackageMetadata {
@@ -109,7 +62,7 @@ export interface RolePackageMetadata {
   isDelegable: boolean;
   isAssignable: boolean;
   isResourcePolicyAvailable: boolean;
-  area: RoleAreaMetadata;
+  // area: RoleAreaMetadata;
   resources: RoleResourceMetadata[];
 }
 
@@ -130,7 +83,10 @@ export const roleApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getConnections: builder.query<RolePermission[], { party: string; from?: string; to?: string }>({
+    getRoleConnections: builder.query<
+      RolePermission[],
+      { party: string; from?: string; to?: string }
+    >({
       query: ({ party, from, to }) => {
         const params = new URLSearchParams({ party });
         if (from) params.append('from', from);
@@ -170,7 +126,7 @@ export const roleApi = createApi({
 });
 
 export const {
-  useGetConnectionsQuery,
+  useGetRoleConnectionsQuery,
   useGetRoleByIdQuery,
   useGetRolePackagesQuery,
   useGetRoleResourcesQuery,
