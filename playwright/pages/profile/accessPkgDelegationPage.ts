@@ -78,7 +78,9 @@ export class DelegationPage {
   }
 
   async grantAccessPkgNameDirect(areaName: string, packageName: string, orgName: string) {
-    const searchBox = this.page.getByRole('searchbox', { name: 'Søk etter tilgangspakker' });
+    const searchBox = this.page
+      .getByRole('searchbox', { name: 'Søk etter tilgangspakker' })
+      .first();
     await expect(searchBox).toBeVisible();
     await searchBox.fill(areaName);
 
@@ -94,7 +96,9 @@ export class DelegationPage {
   }
 
   async grantAccessPkgName(areaName: string, packageName: string) {
-    const searchBox = this.page.getByRole('searchbox', { name: 'Søk etter tilgangspakker' });
+    const searchBox = this.page
+      .getByRole('searchbox', { name: 'Søk etter tilgangspakker' })
+      .first();
     await expect(searchBox).toBeVisible();
     await searchBox.fill(areaName);
 
