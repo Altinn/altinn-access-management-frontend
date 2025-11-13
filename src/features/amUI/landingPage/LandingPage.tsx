@@ -78,21 +78,22 @@ export const LandingPage = () => {
             ? t('landing_page.users_item_description_org')
             : t('landing_page.users_item_description_person'),
       });
-      if (isAdmin) {
-        items.push({
-          ...getReporteesMenuItem(),
-          description:
-            reportee.type === 'Organization'
-              ? t('landing_page.reportees_item_description_org')
-              : t('landing_page.reportees_item_description_person'),
-        });
-      }
     }
 
     if (displayPoaOverviewPage && isAdmin) {
       items.push({
         ...getPoaOverviewMenuItem(),
         description: t('landing_page.poa_item_description'),
+      });
+    }
+
+    if (displayConfettiPackage && isAdmin) {
+      items.push({
+        ...getReporteesMenuItem(),
+        description:
+          reportee.type === 'Organization'
+            ? t('landing_page.reportees_item_description_org')
+            : t('landing_page.reportees_item_description_person'),
       });
     }
 
