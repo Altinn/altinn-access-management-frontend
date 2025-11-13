@@ -5,14 +5,15 @@ import cn from 'classnames';
 import classes from './userRoles.module.css';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { useMemo, useState } from 'react';
+import { useGetRoleByIdQuery } from '@/rtk/features/roleApi';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getRoleCodesAndIdsForKeyRoles, getRoleCodesForKeyRoles } from './roleUtils';
-import { RoleInfoModal } from './RoleInfoModal';
+import { getRoleCodesAndIdsForKeyRoles } from './roleUtils';
+import { RoleInfoModal } from '../DelegationModal/RoleInfoModal';
 
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   const { t } = useTranslation();
-  const [modalOpen, setModalOpen] = useState(false);
+  const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
 
   const {
@@ -36,13 +37,20 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     return getRoleCodesAndIdsForKeyRoles(connectionData[0].roles) ?? [];
   }, [connectionData, isConnectionLoading, loadingPartyRepresentation]);
 
+  const { data: selectedRole } = useGetRoleByIdQuery(selectedRoleId ?? '', {
+    skip: !selectedRoleId,
+  });
+  const isModalLoading = !!selectedRoleId && selectedRole?.id !== selectedRoleId;
+  const roleForModal = isModalLoading ? undefined : selectedRole;
+
   const onChipClick = (roleId: string) => {
-    setModalOpen(true);
     setSelectedRoleId(roleId);
+    if (!modalRef.current?.open) {
+      modalRef.current?.showModal();
+    }
   };
 
   const onModalClose = () => {
-    setModalOpen(false);
     setSelectedRoleId(null);
   };
 
@@ -64,9 +72,10 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
         })}
       </div>
       <RoleInfoModal
-        open={modalOpen}
+        modalRef={modalRef}
+        role={roleForModal}
+        isLoading={isModalLoading}
         onClose={onModalClose}
-        roleId={selectedRoleId ?? undefined}
       />
     </>
   );

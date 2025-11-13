@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { forwardRef, useEffect } from 'react';
-import { DsDialog } from '@altinn/altinn-components';
+import { DsDialog, DsSpinner } from '@altinn/altinn-components';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -26,10 +26,11 @@ export interface EditModalProps {
   availableActions?: DelegationAction[];
   openWithError?: ActionError | null;
   onClose?: () => void;
+  isLoading?: boolean;
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  ({ resource, accessPackage, role, availableActions, openWithError, onClose }, ref) => {
+  ({ resource, accessPackage, role, availableActions, openWithError, onClose, isLoading }, ref) => {
     const { setActionError, reset } = useDelegationModalContext();
 
     const onClosing = () => {
@@ -69,7 +70,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
         }}
       >
         <div className={classes.content}>
-          {renderModalContent(resource, accessPackage, role, availableActions)}
+          {renderModalContent(resource, accessPackage, role, availableActions, isLoading)}
         </div>
       </DsDialog>
     );
@@ -81,7 +82,19 @@ const renderModalContent = (
   accessPackage?: AccessPackage,
   role?: Role,
   availableActions?: DelegationAction[],
+  isLoading?: boolean,
 ) => {
+  if (isLoading) {
+    return (
+      <div className={classes.spinnerWrapper}>
+        <DsSpinner
+          data-size='lg'
+          aria-live='polite'
+          aria-label='Loading'
+        />
+      </div>
+    );
+  }
   if (resource) {
     return <ResourceInfo resource={resource} />;
   }
@@ -94,12 +107,7 @@ const renderModalContent = (
     );
   }
   if (role) {
-    return (
-      <RoleInfo
-        role={role}
-        availableActions={availableActions}
-      />
-    );
+    return <RoleInfo role={role} />;
   }
   return null;
 };

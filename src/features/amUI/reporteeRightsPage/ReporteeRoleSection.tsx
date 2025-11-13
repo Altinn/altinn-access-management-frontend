@@ -4,10 +4,9 @@ import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import type { Role } from '@/rtk/features/roleApi';
 
-import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
+import { RoleInfoModal } from '../common/DelegationModal/RoleInfoModal';
 import { RoleList } from '../common/RoleList/RoleList';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
-import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
 
 interface ReporteeRoleSectionProps {
@@ -18,7 +17,6 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
-  const { setActionError } = useDelegationModalContext();
 
   return (
     <>
@@ -41,7 +39,6 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
         modalRef={modalRef}
         role={modalItem}
         onClose={() => setModalItem(undefined)}
-        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
       />
     </>
   );
