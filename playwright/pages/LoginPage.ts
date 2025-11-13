@@ -12,6 +12,7 @@ export class LoginPage {
   readonly profileLink: Locator;
   readonly velgAktoerHeading: Locator;
   readonly autentiserButton: Locator;
+  browserAlreadyUsed: boolean = false;
 
   constructor(page: Page) {
     this.page = page;
@@ -89,14 +90,13 @@ export class LoginPage {
   }
 
   private async verifyLoginSuccess() {
-    const frontPage = new AccessManagementFrontPage(this.page);
-    // Check if button is visible with a short timeout, skip if not visible
-    try {
-      await expect(frontPage.tryNewAccessManagementButton).toBeVisible({ timeout: 3000 });
-      await frontPage.tryNewAccessManagementButton.click();
-    } catch {
-      // Button not visible, skip clicking it
+    // Skip button click if browser is already used (e.g., for access package delegation test)
+    if (this.browserAlreadyUsed) {
+      return;
     }
+    const frontPage = new AccessManagementFrontPage(this.page);
+    await expect(frontPage.tryNewAccessManagementButton).toBeVisible();
+    await frontPage.tryNewAccessManagementButton.click();
   }
 
   async selectActor(input: Locator, orgnummer: string) {

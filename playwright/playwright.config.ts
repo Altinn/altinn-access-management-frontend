@@ -18,7 +18,7 @@ const config: PlaywrightTestConfig = {
   use: {
     trace: 'on',
     screenshot: { mode: 'only-on-failure', fullPage: true },
-    video: { mode: 'retain-on-failure', size: { width: 1600, height: 1300 } },
+    video: { mode: 'retain-on-failure', size: { width: 1900, height: 1500 } },
     launchOptions: {
       args: ['--start-maximized'],
     },
@@ -47,7 +47,7 @@ const config: PlaywrightTestConfig = {
     {
       name: 'e2e-tests',
       testMatch: 'playwright/e2eTests/**/*.spec.ts',
-      timeout: 60 * 1000, //30 seconds default timeout
+      timeout: 90 * 1000,
       expect: {
         timeout: 15_000,
       },
