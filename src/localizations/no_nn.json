@@ -343,7 +343,7 @@
     "indirect_connections": "Brukarar utan fullmakt"
   },
   "reportees_page": {
-    "page_title": "Våre tilganger hos andre - Altinn",
+    "page_title": "Tilganger hos andre - Altinn",
     "main_page_heading": "Fullmakter {{name}} har hos andre",
     "not_admin_alert": "Du har ikkje tilgang til å sjå denne sida hos {{name}}. Bytt side eller vel ein anna aktør."
   },

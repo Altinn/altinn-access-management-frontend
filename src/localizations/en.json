@@ -128,7 +128,7 @@
   "sidebar": {
     "access_management": "Access management",
     "users": "Users",
-    "reportees": "Our access to other companies",
+    "reportees": "Access to other companies",
     "systemaccess": "API- and system access",
     "consent": "Consent and power of attorney agreements",
     "poa_overview": "Power of attorney",
@@ -347,7 +347,7 @@
     "user_search_placeholder": "Search for users"
   },
   "reportees_page": {
-    "page_title": "Our access to other companies - Altinn",
+    "page_title": "Access to other companies - Altinn",
     "main_page_heading": "Authorizations {{name}} has with others",
     "not_admin_alert": "You do not have access to this page for {{name}}. Please switch to a different page or change to a reportee you have sufficient rights for."
   },
@@ -384,7 +384,7 @@
     "reportee_deletion_not_allowed_message": "<p>{{to_name}} only has authorizations through their roles in the Central Coordinating Register for Legal Entities and therefore cannot be deleted from {{from_name}} in Altinn. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p>"
   },
   "reportee_rights_page": {
-    "page_title": "Our access to other companies - Altinn",
+    "page_title": "Access to other companies - Altinn",
     "heading_subtitle": "Power of attorney given to {{name}}"
   },
   "delegation_modal": {
