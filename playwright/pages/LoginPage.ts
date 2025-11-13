@@ -91,11 +91,11 @@ export class LoginPage {
   private async verifyLoginSuccess() {
     const frontPage = new AccessManagementFrontPage(this.page);
     // Check if button is visible with a short timeout, skip if not visible
-    const isButtonVisible = await frontPage.tryNewAccessManagementButton
-      .isVisible({ timeout: 3000 })
-      .catch(() => false);
-    if (isButtonVisible) {
+    try {
+      await expect(frontPage.tryNewAccessManagementButton).toBeVisible({ timeout: 3000 });
       await frontPage.tryNewAccessManagementButton.click();
+    } catch {
+      // Button not visible, skip clicking it
     }
   }
 
