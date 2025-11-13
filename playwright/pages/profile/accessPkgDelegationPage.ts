@@ -61,9 +61,15 @@ export class DelegationPage {
   }
 
   async addOrganization(orgNumber: string) {
-    const orgInput = this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
-    await orgInput.fill(orgNumber);
+    const orgTab = this.page.getByRole('tab', { name: 'Virksomhet' });
+    await expect(orgTab).toBeVisible();
+    await orgTab.click();
+    const orgField = this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
+    await expect(orgField).toBeVisible();
+    await orgField.fill(orgNumber);
+
     const addOrgBtn = this.page.getByRole('button', { name: 'Legg til virksomhet' });
+    await expect(addOrgBtn).toBeVisible();
     await addOrgBtn.click();
 
     const openModalButton = this.page.getByRole('button', { name: 'Gi fullmakt' });
