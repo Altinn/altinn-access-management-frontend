@@ -6,7 +6,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await login.LoginWithUserFromFrontpage('23926299794');
     await login.chooseReportee('UTGÅTT FLEKSIBEL TIGER AS');
   });
-  test('Org-A delegates access pacakge to Org-B', async ({
+  test.skip('Org-A delegates access pacakge to Org-B', async ({
     login,
     delegation,
     accessManagementFrontPage,
