@@ -7,6 +7,7 @@ import { parse } from 'csv-parse/sync';
 export interface Facilitator {
   pid: string;
   org: string;
+  name: string;
 }
 
 export interface CustomerData {
@@ -58,6 +59,15 @@ export function loadFacilitator(role: FacilitatorRole, pickRandom = false): Faci
   if (invalidRow) {
     throw new Error(`Invalid facilitator row in ${role}/facilitator.csv (missing pid/org)`);
   }
+
+  // Validate name if present in CSV
+  records.forEach((r, index) => {
+    if (r.name === undefined || r.name === '') {
+      console.warn(
+        `Warning: Facilitator row ${index + 1} in ${role}/facilitator.csv is missing name field`,
+      );
+    }
+  });
 
   return pickRandom ? records[Math.floor(Math.random() * records.length)] : records[0];
 }

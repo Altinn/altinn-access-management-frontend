@@ -22,7 +22,7 @@ const config: PlaywrightTestConfig = {
     launchOptions: {
       args: ['--start-maximized'],
     },
-    viewport: null, // Disable Playwright's default viewport setting, required to utilize maximum screen. Mostly useful for viewing test results / screenshots to be able to view the entire screen
+    viewport: { width: 1600, height: 1200 },
   },
   reporter: [
     process.env.CI ? ['line'] : ['dot'],
