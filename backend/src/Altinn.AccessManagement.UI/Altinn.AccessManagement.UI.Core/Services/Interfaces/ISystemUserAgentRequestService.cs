@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The system user request</returns>
         Task<Result<SystemUserAgentRequestFE>> GetSystemUserAgentRequest(Guid agentRequestId, string languageCode, CancellationToken cancellationToken);
-        
+
         /// <summary>
         /// Approve an agent delegation user request to create a new system user
         /// </summary>
@@ -25,7 +25,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the create system user operation, or a ProblemDetails result with error</returns>
         Task<Result<bool>> ApproveSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken);
-        
+
         /// <summary>
         /// Reject an agent delegation system user request
         /// </summary>
@@ -34,5 +34,14 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the reject system user operation, or a ProblemDetails result with error</returns>
         Task<Result<bool>> RejectSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken);
+        
+        /// <summary>
+        /// Escalates an agent delegation system user request
+        /// </summary>
+        /// <param name="partyId">Used to identify the party the system user request is for.</param>
+        /// <param name="agentRequestId">The id of the system user agent request</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Boolean, result of the escalate system user operation, or a ProblemDetails result with error</returns>
+        Task<Result<bool>> EscalateSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken);
     }
 }

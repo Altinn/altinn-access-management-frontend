@@ -16,6 +16,7 @@ import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
+import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -34,6 +35,14 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings } = useGetIsCompanyProfileAdminQuery();
 
+  const { data: pendingSystemUsers } = useGetPendingSystemUserRequestsQuery(
+    reportee?.partyUuid ?? '',
+    {
+      skip: !(reportee?.partyUuid && isAdmin),
+    },
+  );
+  const pendingSystemUsersCount = pendingSystemUsers?.length ?? 0;
+
   const { menuGroups, isLoadingMenu } = useGlobalMenu();
 
   const { header, languageCode } = useHeader();
@@ -45,6 +54,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     isAdmin,
     isClientAdmin,
     reportee,
+    pendingSystemUsersCount,
     canAccessSettings ?? false,
   );
 
