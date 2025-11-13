@@ -184,9 +184,9 @@ export class DelegationPage {
     await this.rightsAccessLink.click();
 
     //Click on Orgnization
-    const orgLink = this.page.getByRole('link', { name: orgName }).first();
-    await expect(orgLink).toBeVisible();
-    await orgLink.click();
+    const orgbButton = this.page.getByRole('button', { name: orgName }).first();
+    await expect(orgbButton).toBeVisible();
+    await orgbButton.click();
   }
 
   async chooseOrg(chooseorgName: string) {
