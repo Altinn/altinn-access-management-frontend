@@ -90,7 +90,8 @@
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
     "date_of_birth": "Born",
     "save_changes": "Save changes",
-    "none": "no"
+    "none": "no",
+    "digdir": "The Norwegian Digitalisation Agency,"
   },
   "beta_banner": {
     "info": "This is a beta version of the new access management pages in Altinn.",
@@ -120,7 +121,9 @@
     "shortcuts": "Shortcuts"
   },
   "footer": {
+    "digdir_address": "PO box 1382 Vika, 0114 Oslo. Org.no. 991 825 827",
     "about_altinn": "About Altinn",
+    "help": "Help and contact",
     "service_messages": "Service messages",
     "privacy_policy": "Privacy policy",
     "accessibility": "Accessibility"

@@ -17,6 +17,8 @@ import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
 
+import classes from './PageLayoutWrapper.module.css';
+
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
 }
@@ -65,7 +67,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
         footer={footer}
       >
-        {children}
+        <div className={classes.content}>{children}</div>
         <InfoModal />
       </Layout>
       <Snackbar />
