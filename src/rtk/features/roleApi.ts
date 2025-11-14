@@ -102,26 +102,28 @@ export const roleApi = createApi({
     }),
     getRolePackages: builder.query<
       RolePackageMetadata[],
-      { roleId: string; variant?: string; includeResources?: boolean }
+      { roleCode: string; variant?: string; includeResources?: boolean }
     >({
-      query: ({ roleId, variant, includeResources = false }) => {
+      query: ({ roleCode, variant, includeResources = false }) => {
         const params = new URLSearchParams({
+          roleCode,
           includeResources: includeResources.toString(),
         });
         if (variant) params.append('variant', variant);
-        return `/${roleId}/packages?${params.toString()}`;
+        return `/packages?${params.toString()}`;
       },
     }),
     getRoleResources: builder.query<
       RoleResourceMetadata[],
-      { roleId: string; variant?: string; includePackageResources?: boolean }
+      { roleCode: string; variant?: string; includePackageResources?: boolean }
     >({
-      query: ({ roleId, variant, includePackageResources = false }) => {
+      query: ({ roleCode, variant, includePackageResources = false }) => {
         const params = new URLSearchParams({
+          roleCode,
           includePackageResources: includePackageResources.toString(),
         });
         if (variant) params.append('variant', variant);
-        return `/${roleId}/resources?${params.toString()}`;
+        return `/resources?${params.toString()}`;
       },
     }),
   }),

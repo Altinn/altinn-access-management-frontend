@@ -103,18 +103,17 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Gets the packages available for the specified role.
         /// </summary>
-        /// <param name="roleId">The role identifier.</param>
+        /// <param name="roleCode">The role code.</param>
         /// <param name="variant">Optional variant filter. Must match the entity type of the party offering the role (e.g., "person", "enterprise", "AS", "NUF", "ENK").</param>
         /// <param name="includeResources">Whether package resources should be included.</param>
         /// <remarks>
         /// The variant parameter should correspond to the entity type of the party offering the role.
         /// Common values include: "person" for individuals, or organization types like "AS", "NUF", "ENK", etc.
         /// </remarks>
-        [HttpGet]
+        [HttpGet("packages")]
         [Authorize]
-        [Route("{roleId:guid}/packages")]
         public async Task<ActionResult<IEnumerable<AccessPackage>>> GetRolePackages(
-            [FromRoute] Guid roleId,
+            [FromQuery(Name = "roleCode")] string roleCode,
             [FromQuery] string variant = null,
             [FromQuery] bool includeResources = false)
         {
@@ -123,15 +122,20 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (string.IsNullOrWhiteSpace(roleCode))
+            {
+                return BadRequest("roleCode query parameter must be provided.");
+            }
+
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-                IEnumerable<AccessPackage> packages = await _roleService.GetRolePackages(roleId, variant, includeResources, languageCode);
+                IEnumerable<AccessPackage> packages = await _roleService.GetRolePackages(roleCode, variant, includeResources, languageCode);
                 return Ok(packages);
             }
             catch (HttpStatusException ex)
             {
-                _logger.LogError(ex, "Error getting packages for role {RoleId}", roleId);
+                _logger.LogError(ex, "Error getting packages for role {RoleCode}", roleCode);
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
         }
@@ -139,18 +143,17 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Gets the resources available for the specified role.
         /// </summary>
-        /// <param name="roleId">The role identifier.</param>
+        /// <param name="roleCode">The role code.</param>
         /// <param name="variant">Optional variant filter. Must match the entity type of the party offering the role (e.g., "person", "enterprise", "AS", "NUF", "ENK").</param>
         /// <param name="includePackageResources">Whether to include resources inherited from packages.</param>
         /// <remarks>
         /// The variant parameter should correspond to the entity type of the party offering the role.
         /// Common values include: "person" for individuals, or organization types like "AS", "NUF", "ENK", etc.
         /// </remarks>
-        [HttpGet]
+        [HttpGet("resources")]
         [Authorize]
-        [Route("{roleId:guid}/resources")]
         public async Task<ActionResult<IEnumerable<ResourceAM>>> GetRoleResources(
-            [FromRoute] Guid roleId,
+            [FromQuery(Name = "roleCode")] string roleCode,
             [FromQuery] string variant = null,
             [FromQuery(Name = "includePackageResources")] bool includePackageResources = false)
         {
@@ -159,15 +162,20 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (string.IsNullOrWhiteSpace(roleCode))
+            {
+                return BadRequest("roleCode query parameter must be provided.");
+            }
+
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-                IEnumerable<ResourceAM> resources = await _roleService.GetRoleResources(roleId, variant, includePackageResources, languageCode);
+                IEnumerable<ResourceAM> resources = await _roleService.GetRoleResources(roleCode, variant, includePackageResources, languageCode);
                 return Ok(resources);
             }
             catch (HttpStatusException ex)
             {
-                _logger.LogError(ex, "Error getting resources for role {RoleId}", roleId);
+                _logger.LogError(ex, "Error getting resources for role {RoleCode}", roleCode);
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
         }

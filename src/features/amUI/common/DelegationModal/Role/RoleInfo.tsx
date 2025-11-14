@@ -27,14 +27,15 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
   console.log('fromParty: ', fromParty);
   console.log('toParty: ', toParty);
 
+  const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
   const { data: rolePackages, isLoading: rolePackagesIsLoading } = useGetRolePackagesQuery(
-    { roleId: role.id, variant: fromParty?.variant || '' },
-    { skip: !fromParty?.variant },
+    { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
+    { skip: shouldSkipRoleRefs },
   );
   console.log('rolePackages: ', rolePackages);
   const { data: roleResources, isLoading: roleResourcesIsLoading } = useGetRoleResourcesQuery(
-    { roleId: role.id, variant: fromParty?.variant || '' },
-    { skip: !fromParty?.variant },
+    { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
+    { skip: shouldSkipRoleRefs },
   );
   console.log('roleResources: ', roleResources);
 

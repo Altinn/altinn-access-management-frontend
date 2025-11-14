@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -92,9 +93,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<AccessPackage>> GetRolePackages(Guid roleId, string variant, bool includeResources, string languageCode)
+        public async Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
         {
-            string endpointUrl = $"meta/info/roles/{roleId}/packages?variant={variant}&includeResources={includeResources}";
+            string endpointUrl =
+                $"meta/info/roles/packages?role={Uri.EscapeDataString(roleCode ?? string.Empty)}&variant={Uri.EscapeDataString(variant ?? string.Empty)}&includeResources={includeResources}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
@@ -102,9 +104,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<ResourceAM>> GetRoleResources(Guid roleId, string variant, bool includePackageResources, string languageCode)
+        public async Task<IEnumerable<ResourceAM>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode)
         {
-            string endpointUrl = $"meta/info/roles/{roleId}/resources?variant={variant}&includePackageResources={includePackageResources}";
+            string endpointUrl =
+                $"meta/info/roles/resources?role={Uri.EscapeDataString(roleCode ?? string.Empty)}&variant={Uri.EscapeDataString(variant ?? string.Empty)}&includePackageResources={includePackageResources}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);

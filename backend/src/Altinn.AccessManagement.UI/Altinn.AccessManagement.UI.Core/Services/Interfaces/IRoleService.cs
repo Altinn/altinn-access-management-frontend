@@ -29,19 +29,19 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Gets package metadata for a role.
         /// </summary>
-        /// <param name="roleId">The role identifier.</param>
+        /// <param name="roleCode">The role code.</param>
         /// <param name="variant">Optional variant filter.</param>
         /// <param name="includeResources">Whether to include resources for each package.</param>
         /// <param name="languageCode">Language code for localization.</param>
-        Task<IEnumerable<AccessPackage>> GetRolePackages(Guid roleId, string variant, bool includeResources, string languageCode);
+        Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode);
 
         /// <summary>
         /// Gets resource metadata for a role.
         /// </summary>
-        /// <param name="roleId">The role identifier.</param>
+        /// <param name="roleCode">The role code.</param>
         /// <param name="variant">Optional variant filter.</param>
         /// <param name="includePackageResources">Whether to include resources assigned via packages.</param>
         /// <param name="languageCode">Language code for localization.</param>
-        Task<IEnumerable<ResourceAM>> GetRoleResources(Guid roleId, string variant, bool includePackageResources, string languageCode);
+        Task<IEnumerable<ResourceAM>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode);
     }
 }

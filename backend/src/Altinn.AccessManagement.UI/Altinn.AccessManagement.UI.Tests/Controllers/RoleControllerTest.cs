@@ -104,14 +104,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetRolePackages_ReturnsExpectedPackages()
         {
-            Guid roleId = new("55bd7d4d-08dd-46ee-ac8e-3a44d800d752");
+            const string roleCode = "daglig-leder";
 
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{roleId}/packages?variant=person&includeResources=true");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/packages?roleCode={roleCode}&variant=person&includeResources=true");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<AccessPackage> actual = JsonSerializer.Deserialize<List<AccessPackage>>(await response.Content.ReadAsStringAsync(), _serializerOptions);
-            List<AccessPackage> expected = Util.GetMockData<List<AccessPackage>>($"{ExpectedDataPath}/Role/Packages/{roleId}.json");
+            List<AccessPackage> expected = Util.GetMockData<List<AccessPackage>>($"{ExpectedDataPath}/Role/Packages/{roleCode}.json");
 
             Assert.NotNull(actual);
             Assert.Equivalent(expected, actual);
@@ -120,14 +120,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetRoleResources_ReturnsExpectedResources()
         {
-            Guid roleId = new("55bd7d4d-08dd-46ee-ac8e-3a44d800d752");
+            const string roleCode = "daglig-leder";
 
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{roleId}/resources?variant=person&includePackageResources=true");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/resources?roleCode={roleCode}&variant=person&includePackageResources=true");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<ResourceAM> actual = JsonSerializer.Deserialize<List<ResourceAM>>(await response.Content.ReadAsStringAsync(), _serializerOptions);
-            List<ResourceAM> expected = Util.GetMockData<List<ResourceAM>>($"{ExpectedDataPath}/Role/Resources/{roleId}.json");
+            List<ResourceAM> expected = Util.GetMockData<List<ResourceAM>>($"{ExpectedDataPath}/Role/Resources/{roleCode}.json");
 
             Assert.NotNull(actual);
             Assert.Equivalent(expected, actual);
