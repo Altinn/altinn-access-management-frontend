@@ -1,5 +1,5 @@
 import { getHostUrl, getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
-import { GeneralPath, ConsentPath, SystemUserPath } from '@/routes/paths';
+import { GeneralPath } from '@/routes/paths';
 import { formatDisplayName, HeaderProps, useAccountSelector } from '@altinn/altinn-components';
 import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/AccountSelector';
 import { GlobalSearchProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/GlobalSearch';
@@ -77,18 +77,7 @@ export const useHeader = () => {
     onToggleFavorite: onToggleFavorite,
 
     onSelectAccount: (accountId: string) => {
-      // check if this is a person; then redirect to consents page
-      let redirectUrl = window.location.href;
-      const isPersonAccount =
-        reporteeList?.find((a) => a.partyUuid === accountId)?.type === 'Person';
-      if (isPersonAccount) {
-        redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
-      } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
-        redirectUrl = new URL(
-          `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
-        ).toString();
-      }
-
+      const redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
       const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
       changeUrl.searchParams.set('P', accountId);
       changeUrl.searchParams.set('goTo', redirectUrl);
@@ -150,18 +139,7 @@ export const useHeader = () => {
 
     const onSelectAccount = (accountId: string) => {
       // check if this is a person; then redirect to consents page
-      let redirectUrl = window.location.href;
-      const isPersonAccount = accounts.find((a) => a.id === accountId)?.type === 'person';
-      if (isPersonAccount) {
-        redirectUrl = new URL(
-          `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
-        ).toString();
-      } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
-        redirectUrl = new URL(
-          `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
-        ).toString();
-      }
-
+      const redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
       const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
       changeUrl.searchParams.set('R', accountId);
       changeUrl.searchParams.set('goTo', redirectUrl);
