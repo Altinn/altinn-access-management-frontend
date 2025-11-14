@@ -80,11 +80,9 @@ export const useHeader = () => {
       // check if this is a person; then redirect to consents page
       let redirectUrl = window.location.href;
       const isPersonAccount =
-        reporteeList?.find((a) => a.partyUuid === accountId)?.type === 'person';
+        reporteeList?.find((a) => a.partyUuid === accountId)?.type === 'Person';
       if (isPersonAccount) {
-        redirectUrl = new URL(
-          `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
-        ).toString();
+        redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
       } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
         redirectUrl = new URL(
           `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
