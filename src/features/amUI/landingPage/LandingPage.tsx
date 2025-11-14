@@ -37,25 +37,35 @@ import {
   getSystemUserMenuItem,
   getUsersMenuItem,
 } from '@/resources/utils/sidebarConfig';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
-  const { data: reportee } = useGetReporteeQuery();
-  const { data: isAdmin } = useGetIsAdminQuery();
-  const { data: isClientAdmin } = useGetIsClientAdminQuery();
-  const { data: canAccessSettings } = useGetIsCompanyProfileAdminQuery();
+  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
+  const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
+  const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
+  const { data: canAccessSettings, isLoading: isLoadingCanAccessSettings } =
+    useGetIsCompanyProfileAdminQuery();
+  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
 
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
     type: reportee?.type === 'Organization' ? 'company' : 'person',
   });
 
+  const isLoading =
+    isLoadingReportee ||
+    isLoadingIsAdmin ||
+    isLoadingIsClientAdmin ||
+    isLoadingCanAccessSettings ||
+    currentUserIsLoading;
+
   const getMenuItems = (): MenuItemProps[] => {
     const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
     const displayConsentGui = window.featureFlags?.displayConsentGui;
     const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
 
-    if (!reportee) {
+    if (isLoading) {
       const loadingMenuItem: MenuItemProps = {
         icon: {
           name: 'xxxxx xxxxxxxxx',
@@ -74,7 +84,7 @@ export const LandingPage = () => {
       items.push({
         ...getUsersMenuItem(),
         description:
-          reportee.type === 'Organization'
+          reportee?.type === 'Organization'
             ? t('landing_page.users_item_description_org')
             : t('landing_page.users_item_description_person'),
       });
@@ -91,7 +101,7 @@ export const LandingPage = () => {
       items.push({
         ...getReporteesMenuItem(),
         description:
-          reportee.type === 'Organization'
+          reportee?.type === 'Organization'
             ? t('landing_page.reportees_item_description_org')
             : t('landing_page.reportees_item_description_person'),
       });
@@ -120,7 +130,8 @@ export const LandingPage = () => {
     reportee: ReporteeInfo | undefined,
     requestCount: number,
   ): string => {
-    const name = reportee?.type === 'Organization' ? reporteeName : t('common.you_uppercase');
+    const name =
+      reportee?.partyUuid === currentUser?.partyUuid ? t('common.you_uppercase') : reporteeName;
     const countText = requestCount === 0 ? t('common.none') : requestCount;
     const requestTextKey =
       requestCount === 1 ? 'landing_page.new_requests_single' : 'landing_page.new_requests_plural';
@@ -133,7 +144,7 @@ export const LandingPage = () => {
 
   const getOtherItems = (): MenuItemProps[] => {
     const displaySettingsPage = window.featureFlags?.displaySettingsPage;
-    const displayRequestsPage = window.featureFlags?.displayRequestsPage;
+    const displayRequestsPage = true;
     const requestCount = 0;
     const items: MenuItemProps[] = [];
 
@@ -141,12 +152,12 @@ export const LandingPage = () => {
       items.push({
         ...getRequestsMenuItem(),
         title: getRequestCountText(reportee, requestCount),
-        loading: !reportee,
+        loading: isLoading,
       });
     }
 
     if (canAccessSettings && displaySettingsPage) {
-      items.push(getSettingsMenuItem());
+      items.push({ ...getSettingsMenuItem(), loading: isLoading });
     }
 
     return items;
