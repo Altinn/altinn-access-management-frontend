@@ -144,7 +144,7 @@ export const LandingPage = () => {
 
   const getOtherItems = (): MenuItemProps[] => {
     const displaySettingsPage = window.featureFlags?.displaySettingsPage;
-    const displayRequestsPage = true;
+    const displayRequestsPage = window.featureFlags?.displayRequestsPage;
     const requestCount = 0;
     const items: MenuItemProps[] = [];
 
