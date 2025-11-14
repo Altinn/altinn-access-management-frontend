@@ -37,7 +37,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             Util.ThrowExceptionIfTriggerParty(from?.ToString());
             try
             {
-                string dataPath = Path.Combine(_dataFolder, "Roles", "Connections", $"{from?.ToString() ?? string.Empty}_{to?.ToString() ?? string.Empty}.json");
+                string dataPath = GetConnectionsDataPath(from, to);
                 return Task.FromResult(Util.GetMockData<PaginatedResult<RolePermission>>(dataPath));
             }
             catch
@@ -50,6 +50,25 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
+        private string GetConnectionsDataPath(Guid? from, Guid? to)
+        {
+            string folder = Path.Combine(_dataFolder, "Roles", "Connections");
+            string shortFileName = $"{ShortenIdentifier(from)}_{ShortenIdentifier(to)}.json";
+            string shortPath = Path.Combine(folder, shortFileName);
+
+            if (File.Exists(shortPath))
+            {
+                return shortPath;
+            }
+
+            string legacyFileName = $"{from?.ToString() ?? string.Empty}_{to?.ToString() ?? string.Empty}.json";
+            return Path.Combine(folder, legacyFileName);
+        }
+
+        private static string ShortenIdentifier(Guid? id)
+        {
+            return id.HasValue ? id.Value.ToString("N")[..8] : "none";
+        }
         /// <inheritdoc />
         public Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode)
         {

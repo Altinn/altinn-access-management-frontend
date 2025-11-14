@@ -48,11 +48,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<RolePermission> actual = JsonSerializer.Deserialize<List<RolePermission>>(await response.Content.ReadAsStringAsync(), _serializerOptions);
-            List<RolePermission> expected = Util.GetMockData<List<RolePermission>>($"{ExpectedDataPath}/Role/Connections/{from}_{to}.json");
+            List<RolePermission> expected = Util.GetMockData<List<RolePermission>>($"{ExpectedDataPath}/Role/Connections/{ShortenIdentifier(from)}_{ShortenIdentifier(to)}.json");
 
             Assert.NotNull(actual);
             Assert.Equivalent(expected, actual);
         }
+
+        private static string ShortenIdentifier(Guid id) => id.ToString("N")[..8];
 
         [Fact]
         public async Task GetConnections_RequiresFromOrTo()
