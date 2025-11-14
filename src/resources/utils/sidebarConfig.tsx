@@ -37,7 +37,6 @@ export const getHeadingMenuItem = (
     id: '1',
     groupId: 1,
     icon: { svgElement: PadlockLockedFillIcon, theme: 'base' },
-    badge: <Badge>{t('common.beta')}</Badge>,
     size: 'lg',
     loading: isLoading,
     title: t('sidebar.access_management'),
