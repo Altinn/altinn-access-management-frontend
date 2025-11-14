@@ -89,7 +89,8 @@
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
     "date_of_birth": "Born",
-    "save_changes": "Save changes"
+    "save_changes": "Save changes",
+    "none": "no"
   },
   "beta_banner": {
     "info": "This is a beta version of the new access management pages in Altinn.",
@@ -127,11 +128,12 @@
   "sidebar": {
     "access_management": "Access management",
     "users": "Users",
-    "reportees": "Our access to other companies",
+    "reportees": "Access to other companies",
     "systemaccess": "API- and system access",
     "consent": "Consent and power of attorney agreements",
     "poa_overview": "Power of attorney",
-    "settings": "Settings"
+    "settings": "Settings",
+    "requests": "Requests"
   },
   "error_page": {
     "not_found_site_type": "Error 404",
@@ -345,7 +347,7 @@
     "user_search_placeholder": "Search for users"
   },
   "reportees_page": {
-    "page_title": "Our access to other companies - Altinn",
+    "page_title": "Access to other companies - Altinn",
     "main_page_heading": "Authorizations {{name}} has with others",
     "not_admin_alert": "You do not have access to this page for {{name}}. Please switch to a different page or change to a reportee you have sufficient rights for."
   },
@@ -382,7 +384,7 @@
     "reportee_deletion_not_allowed_message": "<p>{{to_name}} only has authorizations through their roles in the Central Coordinating Register for Legal Entities and therefore cannot be deleted from {{from_name}} in Altinn. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p>"
   },
   "reportee_rights_page": {
-    "page_title": "Our access to other companies - Altinn",
+    "page_title": "Access to other companies - Altinn",
     "heading_subtitle": "Power of attorney given to {{name}}"
   },
   "delegation_modal": {
@@ -840,5 +842,21 @@
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
     "no_resources": "No resources available."
+  },
+  "landing_page": {
+    "alert_heading": "Welcome to the new solution",
+    "alert_body": "These are the new pages for access management in Altinn. We don't have everything in place yet, so you may need to use the old solution for some tasks. Thank you for your patience!",
+    "alert_link": "Read all about the new solution",
+    "shortcut_links_heading": "Where do you want to go?",
+    "other_links_heading": "Other",
+    "users_item_description_org": "Overview of people and organisations that have been granted access in your organisation",
+    "users_item_description_person": "Overview of people and organisations that have been granted access for you",
+    "reportees_item_description_org": "Overview of everyone who has granted your organisation any access",
+    "reportees_item_description_person": "Overview of everyone who has granted you any access",
+    "poa_item_description": "Overview of access packages and individual services",
+    "consent_item_description": "Overview of active and pending consent and power of attorney agreements",
+    "systemuser_item_description": "Overview of system accesses",
+    "new_requests_single": "{{reportee}} has {{requestCount}} new request",
+    "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"
   }
 }

@@ -62,6 +62,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool UseNewHeader { get; set; }
 
         /// <summary>
+        /// Whether to display the requests page
+        /// </summary>
+        public bool DisplayRequestsPage { get; set; }
+
+        /// <summary>
         /// Whether to display the PRIV delegation feature
         /// </summary>
         public bool DisplayPrivDelegation { get; set; }

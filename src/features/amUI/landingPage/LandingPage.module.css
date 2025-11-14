@@ -1,0 +1,42 @@
+.landingPage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-12);
+  margin-top: var(--ds-size-2);
+}
+
+.landingPageAlert {
+  padding-top: var(--ds-size-2);
+  padding-bottom: var(--ds-size-6);
+}
+.arrowIcon {
+  font-size: 24px;
+  margin-left: var(--ds-size-1);
+}
+
+:root {
+  --row-gap: var(--ds-size-5);
+  --separator-height: var(--ds-border-width-default);
+}
+.listItemContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--row-gap);
+  width: 100%;
+  margin-top: var(--ds-size-4);
+  padding: var(--ds-size-2);
+  box-shadow: var(--ds-shadow-xs);
+  border-radius: var(--ds-border-radius-md);
+  background-color: var(--ds-color-background-default);
+}
+
+.listItemContainer > li:not(:last-child):after {
+  content: '';
+  position: absolute;
+  bottom: calc(var(--row-gap) * -0.5 - var(--separator-height));
+  height: var(--separator-height);
+  left: 2px;
+  right: 2px;
+  pointer-events: none;
+  background-color: var(--ds-color-neutral-border-subtle);
+}
