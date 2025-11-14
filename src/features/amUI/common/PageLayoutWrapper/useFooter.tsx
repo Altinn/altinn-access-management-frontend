@@ -17,7 +17,7 @@ export const useFooter = () => {
   const { t } = useTranslation();
 
   const footer = {
-    address: t('common.digdir'),
+    address: t('common.digdir') + ',',
     address2: t('footer.digdir_address'),
     menu: {
       items: footerLinks.map((link) => ({
