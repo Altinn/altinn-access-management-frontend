@@ -49,7 +49,7 @@ const config: PlaywrightTestConfig = {
       testMatch: 'playwright/e2eTests/**/*.spec.ts',
       timeout: 90 * 1000,
       expect: {
-        timeout: 15_000,
+        timeout: 15 * 1000, // 15 seconds for expect assertions
       },
       use: {
         browserName: 'chromium',
@@ -59,6 +59,9 @@ const config: PlaywrightTestConfig = {
     {
       name: 'accessibility-tests',
       testMatch: 'playwright/uuTests/accessibilityTests/*.spec.ts',
+      expect: {
+        timeout: 15 * 1000, // 15 seconds for expect assertions
+      },
       use: {
         browserName: 'chromium',
         headless: true,
