@@ -27,7 +27,6 @@ export const RoleInfoModal = ({
       availableActions={availableActions}
       openWithError={openWithError}
       onClose={onClose}
-      isLoading={isLoading}
     />
   );
 };

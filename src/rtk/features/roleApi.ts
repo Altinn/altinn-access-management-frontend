@@ -50,8 +50,6 @@ export interface RoleResourceMetadata {
   name: string;
   description: string;
   refId: string;
-  // provider: RoleProviderMetadata;
-  // type: RoleResourceTypeMetadata;
 }
 
 export interface RolePackageMetadata {
@@ -62,7 +60,6 @@ export interface RolePackageMetadata {
   isDelegable: boolean;
   isAssignable: boolean;
   isResourcePolicyAvailable: boolean;
-  // area: RoleAreaMetadata;
   resources: RoleResourceMetadata[];
 }
 

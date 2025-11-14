@@ -308,7 +308,7 @@
     "provider_status": "Denne rolla er henta frå ",
     "current_roles_title": "{{count}} roller",
     "fetch_error_heading": "Kan ikkje vise roller for denne brukaren",
-    "fetch_error_description": "Vi klarer ikkje å hente rollene akkurat no. Prøv igjen seinare. Dersom problemet held fram, kontakt Altinn brukarteneste.",
+    "fetch_error_description": "Vi klarer ikkje å hente rollene akkurat no.",
     "no_roles_message": "Denne brukaren har ingen roller."
   },
   "users_page": {

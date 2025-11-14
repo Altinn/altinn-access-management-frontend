@@ -312,7 +312,7 @@
     "provider_status": "This role is fetched from ",
     "current_roles_title": "{{count}} roles",
     "fetch_error_heading": "Unable to show roles for this user",
-    "fetch_error_description": "We can't fetch the roles right now. Please try again later. If the problem persists, contact Altinn user service.",
+    "fetch_error_description": "We can't fetch the roles right now.",
     "no_roles_message": "This user has no roles."
   },
   "users_page": {
