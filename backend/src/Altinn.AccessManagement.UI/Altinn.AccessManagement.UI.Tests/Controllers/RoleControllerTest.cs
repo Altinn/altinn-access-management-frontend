@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -120,6 +121,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         [Fact]
+        public async Task GetRolePackages_WhenRoleCodeMissing_ReturnsBadRequest()
+        {
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/packages?variant=person");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            string message = await response.Content.ReadAsStringAsync();
+            Assert.Contains("roleCode and variant query parameters must be provided", message, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public async Task GetRolePackages_WhenVariantMissing_ReturnsBadRequest()
+        {
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/packages?roleCode=daglig-leder");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            string message = await response.Content.ReadAsStringAsync();
+            Assert.Contains("roleCode and variant query parameters must be provided", message, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
         public async Task GetRoleResources_ReturnsExpectedResources()
         {
             const string roleCode = "daglig-leder";
@@ -134,5 +157,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.NotNull(actual);
             Assert.Equivalent(expected, actual);
         }
+
+        [Fact]
+        public async Task GetRoleResources_WhenRoleCodeMissing_ReturnsBadRequest()
+        {
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/resources?variant=person");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            string message = await response.Content.ReadAsStringAsync();
+            Assert.Contains("roleCode and variant query parameters must be provided", message, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public async Task GetRoleResources_WhenVariantMissing_ReturnsBadRequest()
+        {
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/resources?roleCode=daglig-leder");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            string message = await response.Content.ReadAsStringAsync();
+            Assert.Contains("roleCode and variant query parameters must be provided", message, StringComparison.OrdinalIgnoreCase);
+        }
+
     }
 }

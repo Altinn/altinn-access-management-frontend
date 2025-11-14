@@ -1,9 +1,9 @@
 [
   {
-    "Id": "a0b2a1aa-1111-4afa-8d1f-08db7d4c0001",
-    "Name": "Hovedadministrator",
-    "Urn": "urn:altinn:package:hovedadmin",
-    "Description": "Gir tilgang til å administrere roller og rettigheter.",
+    "Id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "Name": "Daglig leder",
+    "Urn": "urn:altinn:package:daglig-leder",
+    "Description": "Gir rollen Daglig leder oversikt og tilgang til å administrere virksomhetens roller og rettigheter.",
     "IsDelegable": true,
     "IsAssignable": true,
     "IsResourcePolicyAvailable": false,
@@ -29,6 +29,30 @@
         "Name": "Altinn Studio",
         "Description": "Administrere apper og tildele roller",
         "RefId": "altinn-studio",
+        "Provider": {
+          "Id": "7c71eb3f-1f0d-4e4f-9124-0d5b7f100001",
+          "Name": "Digitaliseringsdirektoratet",
+          "RefId": "991825827",
+          "LogoUrl": "https://altinncdn.no/logos/digdir.svg",
+          "Code": "digdir",
+          "TypeId": "c720b8f6-39f9-4ab0-93be-558acb300001",
+          "Type": {
+            "Id": "c720b8f6-39f9-4ab0-93be-558acb300001",
+            "Name": "GovernmentAgency"
+          }
+        },
+        "Type": {
+          "Id": "bde90d39-2fcb-4e06-a417-a3afcf600001",
+          "Name": "Application"
+        }
+      },
+      {
+        "Id": "3e9d9ed0-7cf2-49ce-96d1-6fbba6130001",
+        "ProviderId": "7c71eb3f-1f0d-4e4f-9124-0d5b7f100001",
+        "TypeId": "bde90d39-2fcb-4e06-a417-a3afcf600001",
+        "Name": "Altinn Autorisasjon",
+        "Description": "Full oversikt over roller og rettigheter",
+        "RefId": "altinn-authorization",
         "Provider": {
           "Id": "7c71eb3f-1f0d-4e4f-9124-0d5b7f100001",
           "Name": "Digitaliseringsdirektoratet",

@@ -122,7 +122,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (string.IsNullOrWhiteSpace(roleCode) || variant == null)
+            if (string.IsNullOrWhiteSpace(roleCode) || string.IsNullOrWhiteSpace(variant))
             {
                 return BadRequest("roleCode and variant query parameters must be provided.");
             }
@@ -161,7 +161,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (string.IsNullOrWhiteSpace(roleCode) || variant == null)
+            if (string.IsNullOrWhiteSpace(roleCode) || string.IsNullOrWhiteSpace(variant))
             {
                 return BadRequest("roleCode and variant query parameters must be provided.");
             }
