@@ -1,3 +1,4 @@
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
@@ -61,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     ResourceOwnerName = resource.Provider.Name,
                     ResourceOwnerLogoUrl = resource.Provider.LogoUrl,
                     ResourceOwnerOrgcode = resource.Provider.Code,
-                    ResourceType = resource.Type.Name
+                    ResourceType = Enum.TryParse<ResourceType>(resource.Type?.Name, true, out var resourceType) ? resourceType : ResourceType.Default
                 };
             }).ToList();
         }

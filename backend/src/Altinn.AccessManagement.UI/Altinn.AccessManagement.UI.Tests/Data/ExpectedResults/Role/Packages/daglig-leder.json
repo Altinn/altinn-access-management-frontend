@@ -1,0 +1,75 @@
+[
+  {
+    "Id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+    "Name": "Daglig leder",
+    "Urn": "urn:altinn:package:daglig-leder",
+    "Description": "Gir rollen Daglig leder oversikt og tilgang til å administrere virksomhetens roller og rettigheter.",
+    "IsDelegable": true,
+    "IsAssignable": true,
+    "IsResourcePolicyAvailable": false,
+    "Area": {
+      "Id": "17e78c5f-f6d6-4bbd-95d9-4dd9c9f3b001",
+      "Name": "Tilgangsstyring",
+      "Urn": "urn:altinn:area:tilgangsstyring",
+      "Description": "Styr tilgang til virksomhetens tjenester",
+      "IconUrl": "https://altinncdn.no/icons/tilgangsstyring.svg",
+      "Group": {
+        "Id": "6c571ad3-1d73-44c1-8bc4-89be55c00001",
+        "Name": "Virksomhet",
+        "Urn": "urn:altinn:areagroup:virksomhet",
+        "Description": "Rettigheter for virksomhetsbrukere",
+        "Type": "enterprise"
+      }
+    },
+    "Resources": [
+      {
+        "Id": "d640f1a4-81c4-4a6a-94c6-2e6c3c300001",
+        "ProviderId": "7c71eb3f-1f0d-4e4f-9124-0d5b7f100001",
+        "TypeId": "bde90d39-2fcb-4e06-a417-a3afcf600001",
+        "Name": "Altinn Studio",
+        "Description": "Administrere apper og tildele roller",
+        "RefId": "altinn-studio",
+        "Provider": {
+          "Id": "7c71eb3f-1f0d-4e4f-9124-0d5b7f100001",
+          "Name": "Digitaliseringsdirektoratet",
+          "RefId": "991825827",
+          "LogoUrl": "https://altinncdn.no/logos/digdir.svg",
+          "Code": "digdir",
+          "TypeId": "c720b8f6-39f9-4ab0-93be-558acb300001",
+          "Type": {
+            "Id": "c720b8f6-39f9-4ab0-93be-558acb300001",
+            "Name": "GovernmentAgency"
+          }
+        },
+        "Type": {
+          "Id": "bde90d39-2fcb-4e06-a417-a3afcf600001",
+          "Name": "Application"
+        }
+      },
+      {
+        "Id": "3e9d9ed0-7cf2-49ce-96d1-6fbba6130001",
+        "ProviderId": "7c71eb3f-1f0d-4e4f-9124-0d5b7f100001",
+        "TypeId": "bde90d39-2fcb-4e06-a417-a3afcf600001",
+        "Name": "Altinn Autorisasjon",
+        "Description": "Full oversikt over roller og rettigheter",
+        "RefId": "altinn-authorization",
+        "Provider": {
+          "Id": "7c71eb3f-1f0d-4e4f-9124-0d5b7f100001",
+          "Name": "Digitaliseringsdirektoratet",
+          "RefId": "991825827",
+          "LogoUrl": "https://altinncdn.no/logos/digdir.svg",
+          "Code": "digdir",
+          "TypeId": "c720b8f6-39f9-4ab0-93be-558acb300001",
+          "Type": {
+            "Id": "c720b8f6-39f9-4ab0-93be-558acb300001",
+            "Name": "GovernmentAgency"
+          }
+        },
+        "Type": {
+          "Id": "bde90d39-2fcb-4e06-a417-a3afcf600001",
+          "Name": "Application"
+        }
+      }
+    ]
+  }
+]

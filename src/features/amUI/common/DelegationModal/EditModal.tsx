@@ -94,12 +94,7 @@ const renderModalContent = (
     );
   }
   if (role) {
-    return (
-      <RoleInfo
-        role={role}
-        availableActions={availableActions}
-      />
-    );
+    return <RoleInfo role={role} />;
   }
   return null;
 };

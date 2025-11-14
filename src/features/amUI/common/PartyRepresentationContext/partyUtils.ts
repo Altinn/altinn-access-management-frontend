@@ -13,5 +13,6 @@ export const mapConnectionToParty = (party: User | undefined): Party | undefined
       party.type?.toLocaleLowerCase() === 'organisasjon'
         ? PartyType.Organization
         : PartyType.Person,
+    variant: party.variant,
   };
 };

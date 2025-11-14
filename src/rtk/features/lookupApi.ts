@@ -24,6 +24,7 @@ export type Party = {
   partyTypeName: PartyType;
   dateOfBirth?: string;
   isDeleted?: boolean;
+  variant?: string;
 };
 
 export enum UserType {

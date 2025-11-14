@@ -60,7 +60,7 @@ export const UserRightsPage = () => {
               <RightsTabs
                 packagesPanel={<AccessPackageSection />}
                 singleRightsPanel={<SingleRightsSection />}
-                roleAssignmentsPanel={<RoleSection numberOfAccesses={0} />}
+                roleAssignmentsPanel={<RoleSection />}
               />
             </PageContainer>
           </DelegationModalProvider>

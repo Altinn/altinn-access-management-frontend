@@ -1,0 +1,86 @@
+[
+  {
+    "role": {
+      "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+      "name": "Daglig leder",
+      "code": "daglig-leder",
+      "description": "Fysisk- eller juridisk person som har ansvaret for den daglige driften i en virksomhet",
+      "isKeyRole": true,
+      "urn": "urn:altinn:external-role:ccr:daglig-leder",
+      "legacyRoleCode": "DAGL",
+      "legacyUrn": "urn:altinn:rolecode:DAGL",
+      "provider": {
+        "id": "0195ea92-2080-758b-89db-7735c4f68320",
+        "name": "Enhetsregisteret",
+        "refId": null,
+        "logoUrl": null,
+        "code": "sys-ccr",
+        "typeId": "0195efb8-7c80-7bb5-a35c-11d58ea36695",
+        "type": {
+          "id": "0195efb8-7c80-7bb5-a35c-11d58ea36695",
+          "name": "Registerenhet"
+        }
+      }
+    },
+    "permissions": [
+      {
+        "from": {
+          "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "name": "DISKRET NÆR TIGER AS",
+          "type": "Organisasjon",
+          "variant": "AS",
+          "parent": null,
+          "children": [
+            {
+              "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+              "name": "DISKRET NÆR TIGER AS",
+              "type": "Organisasjon",
+              "variant": "BEDR",
+              "parent": {
+                "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+                "name": "DISKRET NÆR TIGER AS",
+                "type": "Organisasjon",
+                "variant": "AS",
+                "parent": null,
+                "children": null,
+                "keyValues": {
+                  "PartyId": "51329012",
+                  "OrganizationIdentifier": "310202398"
+                }
+              },
+              "children": null,
+              "keyValues": {
+                "PartyId": "51433301",
+                "OrganizationIdentifier": "311312294"
+              }
+            }
+          ],
+          "keyValues": {
+            "PartyId": "51329012",
+            "OrganizationIdentifier": "310202398"
+          }
+        },
+        "to": {
+          "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "name": "SITRONGUL MEDALJONG",
+          "type": "Person",
+          "variant": "Person",
+          "parent": null,
+          "children": null,
+          "keyValues": {
+            "PartyId": "50789533",
+            "DateOfBirth": "1981-03-20",
+            "PersonIdentifier": "20838198385"
+          }
+        },
+        "via": null,
+        "role": {
+          "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+          "code": "daglig-leder",
+          "children": []
+        },
+        "viaRole": null
+      }
+    ]
+  }
+]

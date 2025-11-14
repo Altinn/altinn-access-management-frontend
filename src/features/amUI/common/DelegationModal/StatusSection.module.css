@@ -25,6 +25,11 @@
   margin-right: 0.3rem;
 }
 
+.warningIcon {
+  color: var(--ds-color-warning-base-default);
+  margin-right: 0.3rem;
+}
+
 .hasPackageInfoIcon {
   color: var(--ds-color-success-base-default);
   margin-right: 0.3rem;

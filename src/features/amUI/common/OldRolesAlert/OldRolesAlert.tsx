@@ -23,21 +23,13 @@ export const OldRolesAlert = () => {
   return (
     <DsAlert data-color='info'>
       <div className={styles.container}>
-        <DsHeading
-          level={2}
-          data-size='xs'
-          className={styles.heading}
+        <DsParagraph>{t('a2Alerts.oldRolesContent')}</DsParagraph>
+        <DsLink
+          asChild
+          className={styles.link}
         >
-          {t('a2Alerts.launchAlertHeading')}
-        </DsHeading>
-
-        <DsParagraph>{t('a2Alerts.launchAlertContent')}</DsParagraph>
-        <DsLink asChild>
-          <Link
-            to={url}
-            className={styles.link}
-          >
-            {t('a2Alerts.launchAlertLinkText')}
+          <Link to={url}>
+            {t('a2Alerts.oldRolesLinkText')}
             <ExternalLinkIcon aria-hidden />
           </Link>
         </DsLink>
