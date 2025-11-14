@@ -311,15 +311,9 @@
   "role": {
     "provider_status": "This role is fetched from ",
     "current_roles_title": "{{count}} roles",
-    "roles_description": "Here you will find authorizations to manage access for the organization. No resources or services are associated with these accesses.",
-    "role_delegation_success": "{{name}} has been successfully granted power of attorney over {{role}}.",
-    "role_delegation_error": "Failed to grant power of attorney over {{role}} to {{name}}.",
-    "role_deletion_success": "Power of attorney over {{role}} has been successfully revoked for {{name}}.",
-    "role_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{role}}.",
-    "inherited_role_message": "<b>{{user_name}}</b> has access to this through their role {{role_name}}. Therefore, it cannot be deleted.",
-    "activeRolesLabel": "List of roles the user has been granted",
-    "availableRolesLabel": "List of roles available for the user",
-    "cant_delegate_generic": "You can't delegate this role"
+    "fetch_error_heading": "Unable to show roles for this user",
+    "fetch_error_description": "We can't fetch the roles right now. Please try again later. If the problem persists, contact Altinn user service.",
+    "no_roles_message": "This user has no roles."
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -499,7 +493,7 @@
     "launchAlertHeading": "We are renewing Altinn",
     "launchAlertContent": "This user may also have authorizations from the previous Altinn.",
     "launchAlertLinkText": "View authorizations from the previous Altinn",
-    "oldRolesContent": "Here you can see Altinn roles that may include services/resources already found in the \"new Altinn solution.\" These services will also be added to the new access packages. This user has the same roles in the old solution, but there they contain different and additional services.",
+    "oldRolesContent": "These Altinn roles may include services that already exist in the new Altinn solution. The services are being moved into the new access packages. The user has the same roles in the old solution, but there they include more and different services.",
     "oldRolesLinkText": "Go to the old solution",
     "legacyRoleContent": "This role will soon be removed. Use access packages instead."
   },

@@ -88,10 +88,7 @@ export const roleApi = createApi({
       { party: string; from?: string; to?: string }
     >({
       query: ({ party, from, to }) => {
-        const params = new URLSearchParams({ party });
-        if (from) params.append('from', from);
-        if (to) params.append('to', to);
-        return `/connections?${params.toString()}`;
+        return `/connections?party=${party}&from=${from}&to=${to}`;
       },
       providesTags: ['roles'],
     }),

@@ -310,15 +310,9 @@
   "role": {
     "provider_status": "Denne rollen er hentet fra ",
     "current_roles_title": "{{count}} roller",
-    "roles_description": "Her finner du fullmakter for å administrere tilganger for virksomheten. Det er ikke knyttet noen ressurser eller tjenester til disse tilgangene.",
-    "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
-    "role_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{role}}.",
-    "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",
-    "role_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{role}} fra {{name}}.",
-    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle <b>{{role_name}}</b>. Den kan derfor ikke slettes.",
-    "activeRolesLabel": "Liste over roller som er tildelt brukeren",
-    "availableRolesLabel": "Liste over roller som kan tildeles brukeren",
-    "cant_delegate_generic": "Du kan ikke delegere denne rollen"
+    "fetch_error_heading": "Kan ikke vise roller for denne brukeren",
+    "fetch_error_description": "Vi klarer ikke å hente rollene akkurat nå. Vennligst prøv igjen senere. Hvis problemet vedvarer, kontakt Altinn brukerservice.",
+    "no_roles_message": "Denne brukeren har ingen roller."
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -498,9 +492,9 @@
     "launchAlertHeading": "Vi fornyer Altinn",
     "launchAlertContent": "Denne brukeren kan også ha fullmakter fra tidligere Altinn.",
     "launchAlertLinkText": "Se fullmakter fra tidligere Altinn",
-    "oldRolesContent": "Her ser du Altinnroller som kan inneholde tjenester/ressurser som allerede ligger i \"ny Altinnløsning\". Disse tjenestene blir også lagt inn i de nye tilgangspakkene. Denne brukeren har de samme rollene i den gamle løsningen, men der inneholder de andre og flere tjenester.",
+    "oldRolesContent": "Disse Altinn-rollene kan inneholde tjenester som allerede finnes i den nye Altinn-løsningen. Tjenestene blir flyttet inn i de nye tilgangspakkene. Brukeren har de samme rollene i den gamle løsningen, men der inneholder de flere og andre tjenester.",
     "oldRolesLinkText": "Gå til gammel løsning",
-    "legacyRoleContent": "Denne rollen vil snart fjernes. Bruke heller tilgangspakker."
+    "legacyRoleContent": "Denne rollen vil snart fjernes. Bruk heller tilgangspakker."
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

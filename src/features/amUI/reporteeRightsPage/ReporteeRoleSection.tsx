@@ -28,7 +28,6 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
       >
         {t('role.current_roles_title', { count: numberOfAccesses ?? 0 })}
       </DsHeading>
-      <DsParagraph data-size='sm'>{t('role.roles_description')}</DsParagraph>
       <RoleList
         onSelect={(role) => {
           setModalItem(role);

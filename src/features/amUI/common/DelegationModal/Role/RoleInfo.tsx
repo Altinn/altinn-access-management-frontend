@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import classes from './RoleInfo.module.css';
 import { Role, useGetRoleByIdQuery } from '@/rtk/features/roleApi';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
-import { InformationSquareFillIcon } from '@navikt/aksel-icons';
+import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
 import statusClasses from '../StatusSection.module.css';
 
 export interface PackageInfoProps {
@@ -13,10 +13,10 @@ export interface PackageInfoProps {
 export const RoleInfo = ({ role }: PackageInfoProps) => {
   const { t } = useTranslation();
 
-  const { data: roleData, isLoading: roleDataIsLoading } = useGetRoleByIdQuery(role.id);
-  const isExternalRole = roleData?.provider?.code === 'sys-ccr';
+  const isExternalRole = role?.provider?.code === 'sys-ccr';
+  const isLegacyRole = role?.provider?.code === 'sys-altinn2';
 
-  // These queries are currently not available from the backend API, but should be implemented in the future.
+  // These queries are currently not available from the backend API. Use them to fetch additional data when they are.
   // const { data: rolePackages, isLoading: rolePackagesIsLoading } = useGetRolePackagesQuery(role.id);
   // const { data: roleResources, isLoading: roleResourcesIsLoading } = useGetRoleResourcesQuery(role.id);
 
@@ -30,6 +30,15 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
           {role?.name}
         </DsHeading>
       </div>
+      {isLegacyRole && (
+        <div className={statusClasses.infoLine}>
+          <ExclamationmarkTriangleFillIcon
+            fontSize='1.5rem'
+            className={statusClasses.warningIcon}
+          />
+          <DsParagraph data-size='xs'>{t('a2Alerts.legacyRoleContent')}</DsParagraph>
+        </div>
+      )}
       {isExternalRole && (
         <div className={statusClasses.infoLine}>
           <InformationSquareFillIcon
@@ -38,7 +47,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
           />
           <DsParagraph data-size='xs'>
             {t('role.provider_status')}
-            {roleData?.provider?.name}
+            {role?.provider?.name}
           </DsParagraph>
         </div>
       )}
