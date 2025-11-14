@@ -16,7 +16,7 @@ export class AccessManagementFrontPage {
     });
     this.apiAndSystemAccessLink = this.page
       .getByRole('group')
-      .getByRole('link', { name: 'API- og systemtilganger' });
+      .getByRole('link', { name: 'Systemtilganger' });
 
     this.usersLink = this.page.getByRole('link', { name: 'Brukere' });
     this.powersOfAttorneyLink = this.page.getByRole('link', { name: 'Fullmakter' });
