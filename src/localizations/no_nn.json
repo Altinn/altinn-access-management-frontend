@@ -87,7 +87,8 @@
     "part_of": "del av",
     "date_of_birth": "Født",
     "save_changes": "Lagre endringar",
-    "none": "ingen"
+    "none": "ingen",
+    "digdir": "Digitaliseringsdirektoratet"
   },
   "beta_banner": {
     "info": "Du ser no på ein betaversjon av dei nye sidene for tilgangsstyring i Altinn.",
@@ -117,7 +118,9 @@
     "shortcuts": "Snarvegar"
   },
   "footer": {
+    "digdir_address": "Postboks 1382 Vika, 0114 Oslo. Org.nr. 991 825 827",
     "about_altinn": "Om Altinn",
+    "help": "Hjelp og kontakt",
     "service_messages": "Driftsmeldingar",
     "privacy_policy": "Personvern",
     "accessibility": "Tilgjengeligheit"

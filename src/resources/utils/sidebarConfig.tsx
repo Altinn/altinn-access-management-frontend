@@ -1,5 +1,5 @@
 import React, { ComponentProps, JSX } from 'react';
-import { formatDisplayName, type MenuItemProps } from '@altinn/altinn-components';
+import { Badge, type MenuItemProps } from '@altinn/altinn-components';
 import {
   PersonGroupIcon,
   TenancyIcon,
@@ -10,6 +10,7 @@ import {
   LinkIcon,
   CogIcon,
   BellDotIcon,
+  PadlockLockedFillIcon,
 } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
@@ -35,13 +36,7 @@ export const getHeadingMenuItem = (
   return {
     id: '1',
     groupId: 1,
-    icon: {
-      name: formatDisplayName({
-        fullName: reportee?.name || '',
-        type: reportee?.type === 'Person' ? 'person' : 'company',
-      }),
-      type: reportee?.type === 'Person' ? 'person' : 'company',
-    },
+    icon: { svgElement: PadlockLockedFillIcon, theme: 'base' },
     size: 'lg',
     loading: isLoading,
     title: t('sidebar.access_management'),
