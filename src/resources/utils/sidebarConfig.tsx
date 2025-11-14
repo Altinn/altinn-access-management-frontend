@@ -31,10 +31,7 @@ export const getHeadingMenuItem = (pathname?: string, isLoading = false): MenuIt
   return {
     id: '1',
     groupId: 1,
-    icon: {
-      svgElement: PadlockLockedFillIcon,
-      theme: 'base',
-    },
+    icon: { svgElement: PadlockLockedFillIcon, theme: 'base' },
     size: 'lg',
     loading: isLoading,
     title: t('sidebar.access_management'),
@@ -51,10 +48,7 @@ export const getUsersMenuItem = (pathname?: string, isLoading = false): MenuItem
     loading: isLoading,
     title: t('sidebar.users'),
     selected: pathname?.includes(`/${amUIPath.Users}`),
-    icon: {
-      svgElement: PersonGroupIcon,
-      theme: 'default',
-    },
+    icon: { svgElement: PersonGroupIcon, theme: 'default' },
     as: (props) => getMenuLinkAs(props, `/${amUIPath.Users}`),
   };
 };
@@ -66,10 +60,7 @@ export const getPoaOverviewMenuItem = (pathname?: string, isLoading = false): Me
     size: 'md',
     loading: isLoading,
     title: t('sidebar.poa_overview'),
-    icon: {
-      svgElement: KeyVerticalIcon,
-      theme: 'default',
-    },
+    icon: { svgElement: KeyVerticalIcon, theme: 'default' },
     selected: pathname?.includes(`/${amUIPath.PoaOverview}`),
     as: (props) => getMenuLinkAs(props, `/${amUIPath.PoaOverview}`),
   };
@@ -83,11 +74,7 @@ export const getReporteesMenuItem = (pathname?: string, isLoading = false): Menu
     loading: isLoading,
     title: t('sidebar.reportees'),
     selected: pathname?.includes(`/${amUIPath.Reportees}`),
-
-    icon: {
-      svgElement: PadlockUnlockedIcon,
-      theme: 'default',
-    },
+    icon: { svgElement: PadlockUnlockedIcon, theme: 'default' },
     as: (props) => getMenuLinkAs(props, `/${amUIPath.Reportees}`),
   };
 };
@@ -99,11 +86,7 @@ export const getConsentMenuItem = (pathname?: string, isLoading = false): MenuIt
     size: 'md',
     loading: isLoading,
     title: t('sidebar.consent'),
-
-    icon: {
-      svgElement: HandshakeIcon,
-      theme: 'default',
-    },
+    icon: { svgElement: HandshakeIcon, theme: 'default' },
     selected: pathname?.includes(`/${ConsentPath.Consent}`),
     as: (props) => getMenuLinkAs(props, `/${ConsentPath.Consent}/${ConsentPath.Active}`),
   };
@@ -116,10 +99,7 @@ export const getSystemUserMenuItem = (pathname?: string, isLoading = false): Men
     size: 'md',
     loading: isLoading,
     title: t('sidebar.systemaccess'),
-    icon: {
-      svgElement: TenancyIcon,
-      theme: 'default',
-    },
+    icon: { svgElement: TenancyIcon, theme: 'default' },
     selected: pathname?.includes(`/${SystemUserPath.SystemUser}`),
     as: (props) => getMenuLinkAs(props, `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`),
   };
@@ -133,10 +113,7 @@ export const getSettingsMenuItem = (pathname?: string, isLoading = false): MenuI
     loading: isLoading,
     title: t('sidebar.settings'),
     selected: pathname?.includes(`/${amUIPath.Settings}`),
-    icon: {
-      svgElement: CogIcon,
-      theme: 'default',
-    },
+    icon: { svgElement: CogIcon, theme: 'default' },
     as: (props) => getMenuLinkAs(props, `/${amUIPath.Settings}`),
   };
 };
@@ -149,10 +126,7 @@ export const getRequestsMenuItem = (pathname?: string, isLoading = false): MenuI
     loading: isLoading,
     title: t('sidebar.requests'),
     selected: pathname?.includes(`/${amUIPath.Requests}`),
-    icon: {
-      svgElement: BellDotIcon,
-      theme: 'default',
-    },
+    icon: { svgElement: BellDotIcon, theme: 'default' },
     as: (props) => getMenuLinkAs(props, `/${amUIPath.Requests}`),
   };
 };
