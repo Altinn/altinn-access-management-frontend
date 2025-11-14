@@ -14,9 +14,10 @@ export class AccessManagementFrontPage {
     this.tryNewAccessManagementButton = this.page.getByRole('button', {
       name: 'Prøv ny tilgangsstyring',
     });
-    this.apiAndSystemAccessLink = this.page.getByRole('link', {
-      name: 'API- og systemtilganger',
-    });
+    this.apiAndSystemAccessLink = this.page
+      .getByRole('group')
+      .getByRole('link', { name: 'API- og systemtilganger' });
+
     this.usersLink = this.page.getByRole('link', { name: 'Brukere' });
     this.powersOfAttorneyLink = this.page.getByRole('link', { name: 'Fullmakter' });
     this.ourAccessAtOthersLink = this.page.getByRole('link', {
