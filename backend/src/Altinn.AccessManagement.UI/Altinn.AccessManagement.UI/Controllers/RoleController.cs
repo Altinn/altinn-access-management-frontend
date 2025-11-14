@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (HttpStatusException ex)
             {
-                _logger.LogError(ex, "Error getting role {RoleId}", roleId);
+                _logger.LogError(ex, "Error getting role");
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
         }
@@ -122,9 +122,9 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (string.IsNullOrWhiteSpace(roleCode))
+            if (string.IsNullOrWhiteSpace(roleCode) || variant == null)
             {
-                return BadRequest("roleCode query parameter must be provided.");
+                return BadRequest("roleCode and variant query parameters must be provided.");
             }
 
             try
@@ -135,8 +135,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (HttpStatusException ex)
             {
-                _logger.LogError(ex, "Error getting packages for role {RoleCode}", roleCode);
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
             }
         }
 
@@ -162,9 +161,9 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (string.IsNullOrWhiteSpace(roleCode))
+            if (string.IsNullOrWhiteSpace(roleCode) || variant == null)
             {
-                return BadRequest("roleCode query parameter must be provided.");
+                return BadRequest("roleCode and variant query parameters must be provided.");
             }
 
             try
@@ -175,8 +174,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (HttpStatusException ex)
             {
-                _logger.LogError(ex, "Error getting resources for role {RoleCode}", roleCode);
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
             }
         }
     }
