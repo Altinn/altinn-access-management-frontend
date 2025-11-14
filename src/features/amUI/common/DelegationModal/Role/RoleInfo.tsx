@@ -1,9 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import classes from './RoleInfo.module.css';
-import { Role, useGetRoleByIdQuery } from '@/rtk/features/roleApi';
+import {
+  Role,
+  useGetRoleByIdQuery,
+  useGetRolePackagesQuery,
+  useGetRoleResourcesQuery,
+} from '@/rtk/features/roleApi';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
 import statusClasses from '../StatusSection.module.css';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface PackageInfoProps {
   role: Role;
@@ -11,14 +17,26 @@ export interface PackageInfoProps {
 }
 
 export const RoleInfo = ({ role }: PackageInfoProps) => {
+  console.log('role: ', role);
   const { t } = useTranslation();
 
   const isExternalRole = role?.provider?.code === 'sys-ccr';
   const isLegacyRole = role?.provider?.code === 'sys-altinn2';
+  const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  console.log('actingParty: ', actingParty);
+  console.log('fromParty: ', fromParty);
+  console.log('toParty: ', toParty);
 
-  // These queries are currently not available from the backend API. Use them to fetch additional data when they are.
-  // const { data: rolePackages, isLoading: rolePackagesIsLoading } = useGetRolePackagesQuery(role.id);
-  // const { data: roleResources, isLoading: roleResourcesIsLoading } = useGetRoleResourcesQuery(role.id);
+  const { data: rolePackages, isLoading: rolePackagesIsLoading } = useGetRolePackagesQuery(
+    { roleId: role.id, variant: fromParty?.variant || '' },
+    { skip: !fromParty?.variant },
+  );
+  console.log('rolePackages: ', rolePackages);
+  const { data: roleResources, isLoading: roleResourcesIsLoading } = useGetRoleResourcesQuery(
+    { roleId: role.id, variant: fromParty?.variant || '' },
+    { skip: !fromParty?.variant },
+  );
+  console.log('roleResources: ', roleResources);
 
   return (
     <div className={classes.container}>

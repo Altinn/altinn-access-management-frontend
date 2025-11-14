@@ -78,37 +78,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<IEnumerable<AccessPackage>> GetRolePackages(Guid roleId, string variant, bool includeResources, string languageCode)
         {
-            try
-            {
-                string dataPath = Path.Combine(_dataFolder, "Roles", "Packages", $"{roleId}.json");
-                return Task.FromResult(Util.GetMockData<IEnumerable<AccessPackage>>(dataPath));
-            }
-            catch
-            {
-                throw new HttpStatusException(
-                    "StatusError",
-                    "Unexpected mockResponse status from Access Management",
-                    HttpStatusCode.BadRequest,
-                    string.Empty);
-            }
+            string dataPath = Path.Combine(_dataFolder, "Roles", "Packages", $"{roleId}.json");
+            return Task.FromResult(Util.GetMockData<IEnumerable<AccessPackage>>(dataPath));
         }
 
         /// <inheritdoc />
         public Task<IEnumerable<ResourceAM>> GetRoleResources(Guid roleId, string variant, bool includePackageResources, string languageCode)
         {
-            try
-            {
-                string dataPath = Path.Combine(_dataFolder, "Roles", "Resources", $"{roleId}.json");
-                return Task.FromResult(Util.GetMockData<IEnumerable<ResourceAM>>(dataPath));
-            }
-            catch
-            {
-                throw new HttpStatusException(
-                    "StatusError",
-                    "Unexpected mockResponse status from Access Management",
-                    HttpStatusCode.BadRequest,
-                    string.Empty);
-            }
+            string dataPath = Path.Combine(_dataFolder, "Roles", "Resources", $"{roleId}.json");
+            return Task.FromResult(Util.GetMockData<IEnumerable<ResourceAM>>(dataPath));
         }
     }
 }

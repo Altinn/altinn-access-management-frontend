@@ -74,7 +74,6 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
       <RoleInfoModal
         modalRef={modalRef}
         role={roleForModal}
-        isLoading={isModalLoading}
         onClose={onModalClose}
       />
     </>

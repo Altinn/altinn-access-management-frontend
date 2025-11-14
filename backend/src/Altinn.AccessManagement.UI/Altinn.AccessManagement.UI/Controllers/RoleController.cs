@@ -104,8 +104,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Gets the packages available for the specified role.
         /// </summary>
         /// <param name="roleId">The role identifier.</param>
-        /// <param name="variant">Optional variant filter.</param>
+        /// <param name="variant">Optional variant filter. Must match the entity type of the party offering the role (e.g., "person", "enterprise", "AS", "NUF", "ENK").</param>
         /// <param name="includeResources">Whether package resources should be included.</param>
+        /// <remarks>
+        /// The variant parameter should correspond to the entity type of the party offering the role.
+        /// Common values include: "person" for individuals, or organization types like "AS", "NUF", "ENK", etc.
+        /// </remarks>
         [HttpGet]
         [Authorize]
         [Route("{roleId:guid}/packages")]
@@ -136,8 +140,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Gets the resources available for the specified role.
         /// </summary>
         /// <param name="roleId">The role identifier.</param>
-        /// <param name="variant">Optional variant filter.</param>
+        /// <param name="variant">Optional variant filter. Must match the entity type of the party offering the role (e.g., "person", "enterprise", "AS", "NUF", "ENK").</param>
         /// <param name="includePackageResources">Whether to include resources inherited from packages.</param>
+        /// <remarks>
+        /// The variant parameter should correspond to the entity type of the party offering the role.
+        /// Common values include: "person" for individuals, or organization types like "AS", "NUF", "ENK", etc.
+        /// </remarks>
         [HttpGet]
         [Authorize]
         [Route("{roleId:guid}/resources")]

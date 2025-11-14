@@ -1,10 +1,18 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { CompactRole, Entity } from '@/dataObjects/dtos/Common';
 
 export interface ProviderType {
   id: string;
   name: string;
+}
+
+export interface Permissions {
+  to: Entity;
+  from: Entity;
+  via: Entity;
+  role: CompactRole | null;
+  viaRole: CompactRole | null;
 }
 
 export interface Provider {

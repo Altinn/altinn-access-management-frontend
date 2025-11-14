@@ -30,7 +30,6 @@ export const useGroupedRoleListEntries = ({
 
     roleConnections.forEach((connection) => {
       const providerCode = connection.role.provider?.code;
-      console.log('providerCode: ', providerCode);
 
       if (providerCode === 'sys-altinn2') {
         groups.altinn2Roles.push(connection);

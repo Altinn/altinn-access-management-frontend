@@ -9,7 +9,6 @@ interface RoleInfoModalProps {
   onClose?: () => void;
   availableActions?: DelegationAction[];
   openWithError?: ActionError | null;
-  isLoading?: boolean;
 }
 
 export const RoleInfoModal = ({
@@ -18,7 +17,6 @@ export const RoleInfoModal = ({
   onClose,
   availableActions,
   openWithError,
-  isLoading,
 }: RoleInfoModalProps) => {
   return (
     <EditModal
