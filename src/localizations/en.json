@@ -116,7 +116,7 @@
     "locale_title": "Choose language",
     "logged_in_as_name": "Logged in as {{name}}",
     "new_altinn_info": "About new Altinn",
-    "leave_beta": "Back to today's Altinn",
+    "leave_beta": "To old solution",
     "shortcuts": "Shortcuts"
   },
   "footer": {
@@ -129,7 +129,7 @@
     "access_management": "Access management",
     "users": "Users",
     "reportees": "Access to other companies",
-    "systemaccess": "API- and system access",
+    "systemaccess": "System access",
     "consent": "Consent and power of attorney agreements",
     "poa_overview": "Power of attorney",
     "settings": "Settings",

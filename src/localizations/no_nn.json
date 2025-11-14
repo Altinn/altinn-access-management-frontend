@@ -113,7 +113,7 @@
     "locale_title": "Vel språk",
     "logged_in_as_name": "Logga inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
-    "leave_beta": "Tilbake til dagens Altinn",
+    "leave_beta": "Til gammel løsning",
     "shortcuts": "Snarvegar"
   },
   "footer": {
@@ -125,8 +125,8 @@
   "sidebar": {
     "access_management": "Tilgangsstyring",
     "users": "Brukarar",
-    "reportees": "Våre tilgangar hos andre",
-    "systemaccess": "API- og systemtilgangar",
+    "reportees": "Fullmakter hos andre",
+    "systemaccess": "Systemtilgangar",
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
     "settings": "Innstillingar",
@@ -343,7 +343,7 @@
     "indirect_connections": "Brukarar utan fullmakt"
   },
   "reportees_page": {
-    "page_title": "Tilganger hos andre - Altinn",
+    "page_title": "Fullmakter hos andre - Altinn",
     "main_page_heading": "Fullmakter {{name}} har hos andre",
     "not_admin_alert": "Du har ikkje tilgang til å sjå denne sida hos {{name}}. Bytt side eller vel ein anna aktør."
   },
@@ -380,7 +380,7 @@
     "reportee_deletion_not_allowed_message": "<p>{{to_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{from_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p>"
   },
   "reportee_rights_page": {
-    "page_title": "Våre tilgangar hos andre - Altinn",
+    "page_title": "Fullmakter hos andre - Altinn",
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
