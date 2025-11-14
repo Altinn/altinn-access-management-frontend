@@ -13,6 +13,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     {
         private readonly string dataFolder;
 
+        private readonly Guid PENDING_CONSENT_ID = Guid.Parse("10fded43-fcd4-4f32-b31c-725fdaba6139");
         private readonly Guid PERSON_CONSENT_ID = Guid.Parse("e2071c55-6adf-487b-af05-9198a230ed44");
         private readonly Guid ORG_CONSENT_ID = Guid.Parse("7e540335-d82f-41e9-8b8f-619336d792b4");
         private readonly Guid ORG_CONSENT_WITHOUT_MESSAGE_ID = Guid.Parse("1a04a7fa-24c1-4e06-9217-8aee89239a9f");
@@ -57,11 +58,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<Result<bool>> RejectConsentRequest(Guid consentRequestId, CancellationToken cancellationToken)
         {
-            if (consentRequestId == PERSON_CONSENT_ID)
-            {
-                return Task.FromResult(new Result<bool>(true));
-            }
-            else if (consentRequestId == ORG_CONSENT_ID)
+            if (CanBeApproved(consentRequestId))
             {
                 return Task.FromResult(new Result<bool>(true));
             }
@@ -71,16 +68,17 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<Result<bool>> ApproveConsentRequest(Guid consentRequestId, ApproveConsentContext context, CancellationToken cancellationToken)
         {
-            if (consentRequestId == PERSON_CONSENT_ID)
-            {
-                return Task.FromResult(new Result<bool>(true));
-            }
-            else if (consentRequestId == ORG_CONSENT_ID)
+            if (CanBeApproved(consentRequestId))
             {
                 return Task.FromResult(new Result<bool>(true));
             }
 
             return Task.FromResult(new Result<bool>(ConsentProblem.ConsentCantBeAccepted));
+        }
+
+        private bool CanBeApproved(Guid consentRequestId)
+        {
+            return new List<Guid>() { PERSON_CONSENT_ID, ORG_CONSENT_ID, PENDING_CONSENT_ID, ORG_CONSENT_WITHOUT_MESSAGE_ID }.Contains(consentRequestId);
         }
 
         public Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken)

@@ -177,6 +177,7 @@
     "redirectUrl": "https://smartbank.no/consent",
     "templateId": "sblanesoknad",
     "templateVersion": 1,
+    "portalViewMode": "show",
     "consentRequestEvents": [
       {
         "consentEventID": "f39d05e1-efd7-4758-891b-265d72014395",
