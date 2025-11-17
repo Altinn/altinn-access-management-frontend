@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
 import { createContext, useContext } from 'react';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsLink, DsParagraph } from '@altinn/altinn-components';
 import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
@@ -16,6 +16,8 @@ import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessP
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useReporteeParty } from './useReporteeParty';
 import { useConnectedParty } from './useConnectedParty';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { getHostUrl } from '@/resources/utils/pathUtils';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -80,6 +82,7 @@ export const PartyRepresentationProvider = ({
 
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const { party: reportee, isLoading: reporteeIsLoading } = useReporteeParty();
+  const { data: authorizedPartyReportee } = useGetReporteeQuery();
 
   const { party: fromConnectedParty, isLoading: fromPartyIsLoading } = useConnectedParty({
     fromPartyUuid,
@@ -131,8 +134,10 @@ export const PartyRepresentationProvider = ({
     { skip: !fromPartyUuid || !toPartyUuid },
   );
 
-  const availableForUserType =
-    reporteeIsLoading || availableForUserTypeCheck(actingParty?.partyTypeName?.toString());
+  const notAvailableForUserType =
+    !reporteeIsLoading &&
+    !!actingParty &&
+    !availableForUserTypeCheck(actingParty?.partyTypeName?.toString());
 
   const isLoading =
     externalIsLoading ||
@@ -150,9 +155,29 @@ export const PartyRepresentationProvider = ({
 
   const isError = !fromParty && !toParty;
 
-  const shouldShowConnectionErrorAlert = !isLoading && invalidConnection;
+  const shouldShowUnsyncedConnectionAlert =
+    !isLoading &&
+    (invalidConnection || isError) &&
+    authorizedPartyReportee &&
+    authorizedPartyReportee?.partyUuid === actingPartyUuid;
+
+  const shouldShowConnectionErrorAlert =
+    !isLoading && invalidConnection && !shouldShowUnsyncedConnectionAlert;
+
   const shouldShowUserTypeRestrictionAlert =
-    !shouldShowConnectionErrorAlert && !isLoading && !availableForUserType && errorOnPriv;
+    !shouldShowConnectionErrorAlert &&
+    !isError &&
+    !isLoading &&
+    notAvailableForUserType &&
+    errorOnPriv;
+
+  const shouldShowTechnicalErrorAlert =
+    isError &&
+    !isLoading &&
+    !invalidConnection &&
+    !shouldShowUserTypeRestrictionAlert &&
+    !shouldShowConnectionErrorAlert &&
+    !shouldShowUnsyncedConnectionAlert;
 
   if (isLoading && loadingComponent) {
     return loadingComponent;
@@ -169,9 +194,10 @@ export const PartyRepresentationProvider = ({
         isError: isError,
       }}
     >
+      {shouldShowUnsyncedConnectionAlert && <UnsyncedConnectionAlert />}
       {shouldShowConnectionErrorAlert && connectionErrorAlert(error, returnToUrlOnError)}
       {shouldShowUserTypeRestrictionAlert && <NotAvailableForUserTypeAlert />}
-      {isError && !isLoading && !invalidConnection && (
+      {shouldShowTechnicalErrorAlert && (
         <DsAlert data-color='warning'>
           <DsParagraph>{t('error_page.acting_party_data_error')}</DsParagraph>
         </DsAlert>
@@ -213,6 +239,15 @@ const connectionErrorAlert = (
         {t('error_page.user_connection_error')}
         {returnToUrl && <Link to={returnToUrl}>{t('common.go_back')}</Link>}
       </DsParagraph>
+    </DsAlert>
+  );
+};
+
+const UnsyncedConnectionAlert = () => {
+  return (
+    <DsAlert data-color='warning'>
+      <DsParagraph>{t('error_page.unsynced_connection')}</DsParagraph>
+      <DsLink href={getHostUrl() + 'ui/profile'}>{t('error_page.unsynced_connection_link')}</DsLink>
     </DsAlert>
   );
 };
