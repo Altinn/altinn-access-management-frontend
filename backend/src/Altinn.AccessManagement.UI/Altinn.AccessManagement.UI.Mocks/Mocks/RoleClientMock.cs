@@ -32,12 +32,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<PaginatedResult<RolePermission>> GetRoleConnections(Guid party, Guid? from, Guid? to, string languageCode)
+        public Task<PaginatedResult<RolePermission>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode)
         {
             Util.ThrowExceptionIfTriggerParty(from?.ToString());
             try
             {
-                string dataPath = GetConnectionsDataPath(from, to);
+                string dataPath = GetRolePermissionsDataPath(from, to);
                 return Task.FromResult(Util.GetMockData<PaginatedResult<RolePermission>>(dataPath));
             }
             catch
@@ -50,9 +50,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
-        private string GetConnectionsDataPath(Guid? from, Guid? to)
+        private string GetRolePermissionsDataPath(Guid? from, Guid? to)
         {
-            string folder = Path.Combine(_dataFolder, "Roles", "Connections");
+            string folder = Path.Combine(_dataFolder, "Roles", "Permissions");
             string shortFileName = $"{ShortenIdentifier(from)}_{ShortenIdentifier(to)}.json";
             string shortPath = Path.Combine(folder, shortFileName);
 
@@ -65,10 +65,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Path.Combine(folder, legacyFileName);
         }
 
-        private static string ShortenIdentifier(Guid? id)
-        {
-            return id.HasValue ? id.Value.ToString("N")[..8] : "none";
-        }
+
         /// <inheritdoc />
         public Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode)
         {
@@ -106,6 +103,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             string dataPath = Path.Combine(_dataFolder, "Roles", "Resources", $"{roleCode}.json");
             return Task.FromResult(Util.GetMockData<IEnumerable<ResourceAM>>(dataPath));
+        }
+
+        private static string ShortenIdentifier(Guid? id)
+        {
+            return id.HasValue ? id.Value.ToString("N")[..8] : "none";
         }
     }
 }

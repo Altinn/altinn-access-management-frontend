@@ -11,13 +11,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
     public interface IRoleService
     {
         /// <summary>
-        /// Gets role connections for the given parties.
+        /// Gets permissions for the given parties.
         /// </summary>
         /// <param name="party">The party performing the lookup.</param>
         /// <param name="from">Optional right owner filter.</param>
         /// <param name="to">Optional right holder filter.</param>
         /// <param name="languageCode">Language code for localization.</param>
-        Task<List<RolePermission>> GetConnections(Guid party, Guid? from, Guid? to, string languageCode);
+        Task<List<RolePermission>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode);
 
         /// <summary>
         /// Gets role metadata by id.

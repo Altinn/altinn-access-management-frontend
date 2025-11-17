@@ -34,15 +34,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Gets role connections for the given parties.
+        /// Gets permissions for the given parties.
         /// </summary>
         /// <param name="party">The party performing the lookup.</param>
         /// <param name="from">Optional right owner to filter on.</param>
         /// <param name="to">Optional right holder to filter on.</param>
         [HttpGet]
         [Authorize]
-        [Route("connections")]
-        public async Task<ActionResult<List<RolePermission>>> GetConnections([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
+        [Route("permissions")]
+        public async Task<ActionResult<List<RolePermission>>> GetRolePermissions([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
         {
             if (!ModelState.IsValid)
             {
@@ -57,12 +57,12 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-                List<RolePermission> connections = await _roleService.GetConnections(party, from, to, languageCode);
-                return Ok(connections);
+                List<RolePermission> permissions = await _roleService.GetRolePermissions(party, from, to, languageCode);
+                return Ok(permissions);
             }
             catch (HttpStatusException ex)
             {
-                _logger.LogError(ex, "Error getting role connections");
+                _logger.LogError(ex, "Error getting role permissions");
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
         }

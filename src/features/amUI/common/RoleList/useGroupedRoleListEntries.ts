@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import type { RolePermission } from '@/rtk/features/roleApi';
 
 type UseGroupedRoleListEntriesParams = {
-  roleConnections?: RolePermission[];
+  permissions?: RolePermission[];
 };
 
 type UseGroupedRoleListEntriesResult = {
@@ -12,10 +12,10 @@ type UseGroupedRoleListEntriesResult = {
 };
 
 export const useGroupedRoleListEntries = ({
-  roleConnections,
+  permissions,
 }: UseGroupedRoleListEntriesParams): UseGroupedRoleListEntriesResult => {
   const { altinn2Roles, userRoles } = useMemo(() => {
-    if (!roleConnections) {
+    if (!permissions) {
       return {
         altinn2Roles: [],
         userRoles: [],
@@ -28,7 +28,7 @@ export const useGroupedRoleListEntries = ({
       userRoles: [] as RolePermission[],
     };
 
-    roleConnections.forEach((connection) => {
+    permissions.forEach((connection) => {
       const providerCode = connection.role.provider?.code;
 
       if (providerCode === 'sys-altinn2') {
@@ -42,7 +42,7 @@ export const useGroupedRoleListEntries = ({
     groups.userRoles.sort((a, b) => collator.compare(a.role.name, b.role.name));
 
     return groups;
-  }, [roleConnections]);
+  }, [permissions]);
 
   return {
     altinn2Roles,

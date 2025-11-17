@@ -38,43 +38,41 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         [Fact]
-        public async Task GetConnections_ReturnsExpectedConnections()
+        public async Task GetRolePermissions_ReturnsExpectedPermissions()
         {
             Guid party = new("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = new("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = new("167536b5-f8ed-4c5a-8f48-0279507e53ae");
 
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/connections?party={party}&from={from}&to={to}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/permissions?party={party}&from={from}&to={to}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<RolePermission> actual = JsonSerializer.Deserialize<List<RolePermission>>(await response.Content.ReadAsStringAsync(), _serializerOptions);
-            List<RolePermission> expected = Util.GetMockData<List<RolePermission>>($"{ExpectedDataPath}/Role/Connections/{ShortenIdentifier(from)}_{ShortenIdentifier(to)}.json");
+            List<RolePermission> expected = Util.GetMockData<List<RolePermission>>($"{ExpectedDataPath}/Role/Permissions/{ShortenIdentifier(from)}_{ShortenIdentifier(to)}.json");
 
             Assert.NotNull(actual);
             Assert.Equivalent(expected, actual);
         }
 
-        private static string ShortenIdentifier(Guid id) => id.ToString("N")[..8];
-
         [Fact]
-        public async Task GetConnections_RequiresFromOrTo()
+        public async Task GetRolePermissions_RequiresFromOrTo()
         {
             Guid party = Guid.NewGuid();
 
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/connections?party={party}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/permissions?party={party}");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
-        public async Task GetConnections_WhenClientReturnsError_ProvidesStatusFromException()
+        public async Task GetRolePermissions_WhenClientReturnsError_ProvidesStatusFromException()
         {
             Guid party = Guid.NewGuid();
             Guid from = Guid.NewGuid();
             Guid to = Guid.NewGuid();
 
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/connections?party={party}&from={from}&to={to}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/permissions?party={party}&from={from}&to={to}");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -180,5 +178,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Contains("roleCode and variant query parameters must be provided", message, StringComparison.OrdinalIgnoreCase);
         }
 
+        private static string ShortenIdentifier(Guid id) => id.ToString("N")[..8];
     }
 }

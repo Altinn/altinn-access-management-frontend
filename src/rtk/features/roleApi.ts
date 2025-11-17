@@ -88,12 +88,12 @@ export const roleApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getRoleConnections: builder.query<
+    getRolePermissions: builder.query<
       RolePermission[],
       { party: string; from?: string; to?: string }
     >({
       query: ({ party, from, to }) => {
-        return `/connections?party=${party}&from=${from}&to=${to}`;
+        return `/permissions?party=${party}&from=${from}&to=${to}`;
       },
       providesTags: ['roles'],
     }),
@@ -130,7 +130,7 @@ export const roleApi = createApi({
 });
 
 export const {
-  useGetRoleConnectionsQuery,
+  useGetRolePermissionsQuery,
   useGetRoleByIdQuery,
   useGetRolePackagesQuery,
   useGetRoleResourcesQuery,

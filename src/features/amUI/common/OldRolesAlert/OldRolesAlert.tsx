@@ -1,11 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Link } from 'react-router';
-import { DsAlert, DsParagraph, DsLink, DsHeading } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsLink } from '@altinn/altinn-components';
 
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
-import { useFetchRecipientInfo } from '@/resources/hooks/useFetchRecipientInfo';
-import { getHostUrl } from '@/resources/utils/pathUtils';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 

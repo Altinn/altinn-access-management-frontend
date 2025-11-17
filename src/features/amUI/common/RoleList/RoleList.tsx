@@ -1,5 +1,5 @@
 import type { Role } from '@/rtk/features/roleApi';
-import { useGetRoleConnectionsQuery } from '@/rtk/features/roleApi';
+import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { SkeletonRoleList } from './SkeletonRoleList';
@@ -21,24 +21,24 @@ interface RoleListProps {
 export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
   const { fromParty, toParty, actingParty, isLoading: partyIsLoading } = usePartyRepresentation();
   const {
-    data: roleConnections,
-    isLoading: roleConnectionsIsLoading,
-    error: roleConnectionsError,
-  } = useGetRoleConnectionsQuery({
+    data: permissions,
+    isLoading: permissionsIsLoading,
+    error: permissionsError,
+  } = useGetRolePermissionsQuery({
     party: actingParty?.partyUuid ?? '',
     from: fromParty?.partyUuid,
     to: toParty?.partyUuid,
   });
 
   const { altinn2Roles } = useGroupedRoleListEntries({
-    roleConnections,
+    permissions,
   });
 
-  if (roleConnectionsIsLoading || partyIsLoading || isLoading) {
+  if (permissionsIsLoading || partyIsLoading || isLoading) {
     return <SkeletonRoleList />;
   }
-  if (roleConnectionsError) {
-    const roleFetchErrorDetails = createErrorDetails(roleConnectionsError);
+  if (permissionsError) {
+    const roleFetchErrorDetails = createErrorDetails(permissionsError);
 
     return (
       <div className={classes.roleLists}>
