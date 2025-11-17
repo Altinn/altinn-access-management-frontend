@@ -13,11 +13,9 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 
 export interface PackageInfoProps {
   role: Role;
-  onDelegate?: () => void;
 }
 
 export const RoleInfo = ({ role }: PackageInfoProps) => {
-  console.log('role: ', role);
   const { t } = useTranslation();
 
   const isExternalRole = role?.provider?.code === 'sys-ccr';
