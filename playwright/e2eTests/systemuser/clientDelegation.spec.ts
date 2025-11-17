@@ -94,7 +94,7 @@ test.describe('Klientdelegering', () => {
 
     //Go to system user overview page via menu link
     const frontPage = new AccessManagementFrontPage(page);
-    await frontPage.apiAndSystemAccessLink.click();
+    await frontPage.systemAccessLink.click();
 
     await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
     await clientDelegationPage.systemUserLink(name).click();
