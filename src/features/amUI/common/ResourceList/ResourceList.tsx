@@ -41,16 +41,17 @@ export const ResourceList = ({
 
   return (
     <div className={classes.container}>
-      <DsSearch className={classes.searchBar}>
-        <DsSearch.Input
-          disabled={resources.length === 0}
-          aria-label={t('package_resource_list.resource_search_placeholder')}
-          placeholder={t('package_resource_list.resource_search_placeholder')}
-          value={search}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
-        />
-        {search && <DsSearch.Clear onClick={() => setSearch('')} />}
-      </DsSearch>
+      {resources.length > 0 && (
+        <DsSearch className={classes.searchBar}>
+          <DsSearch.Input
+            aria-label={t('package_resource_list.resource_search_placeholder')}
+            placeholder={t('package_resource_list.resource_search_placeholder')}
+            value={search}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
+          />
+          {search && <DsSearch.Clear onClick={() => setSearch('')} />}
+        </DsSearch>
+      )}
       {orgLoading || isLoading ? (
         <SkeletonResourceList />
       ) : (

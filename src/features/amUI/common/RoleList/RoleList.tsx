@@ -8,7 +8,7 @@ import {
   TechnicalErrorParagraphs,
 } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useGroupedRoleListEntries } from './useGroupedRoleListEntries';
-import { DsAlert, DsHeading, DsParagraph, List } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, Heading, List } from '@altinn/altinn-components';
 import { t } from 'i18next';
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
@@ -65,6 +65,12 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
   }
   return (
     <div className={classes.roleArea}>
+      <DsHeading
+        level={2}
+        data-size='xs'
+      >
+        {t('role.current_roles_title', { count: altinn2Roles.length })}
+      </DsHeading>
       {altinn2Roles.length === 0 ? (
         <DsParagraph data-size='sm'>{t('role.no_roles_message')}</DsParagraph>
       ) : (
