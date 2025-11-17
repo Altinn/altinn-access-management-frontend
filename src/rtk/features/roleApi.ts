@@ -1,36 +1,42 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { ErrorCode } from '@/resources/utils/errorCodeUtils';
+import { CompactRole, Entity } from '@/dataObjects/dtos/Common';
 
-interface EntityType {
+export interface ProviderType {
   id: string;
-  providerId: string;
   name: string;
 }
 
-interface Provider {
+export interface Permissions {
+  to: Entity;
+  from: Entity;
+  via: Entity;
+  role: CompactRole | null;
+  viaRole: CompactRole | null;
+}
+
+export interface Provider {
   id: string;
   name: string;
+  refId?: string | null;
+  logoUrl?: string | null;
+  code?: string;
+  typeId?: string;
+  type?: ProviderType | null;
 }
 
 export interface Role {
-  entityType: EntityType;
-  provider: Provider;
   id: string;
-  entityTypeId: string;
-  providerId: string;
   name: string;
   code: string;
   description: string;
-  urn: string;
-  area: Area;
-  isDelegable: boolean;
-}
-
-export interface ExtendedRole extends Role {
-  inherited: Role[];
-  assignmentId?: string;
+  urn?: string;
+  isKeyRole?: boolean;
+  legacyRoleCode?: string | null;
+  legacyUrn?: string | null;
+  provider?: Provider;
+  area?: Area;
+  isDelegable?: boolean;
 }
 
 interface Area {
@@ -40,27 +46,29 @@ interface Area {
   iconUrl: string;
 }
 
-export interface AreaFE extends Area {
-  roles: Role[];
-}
-
-export interface Assignment {
-  id: string;
-  roleId: string;
-  fromId: string;
-  toId: string;
+export interface RolePermission {
   role: Role;
-  inherited: Role[];
+  permissions: Permissions[];
 }
 
-interface RoleApiRequest {
-  from: string;
-  to: string;
+export interface RoleResourceMetadata {
+  id: string;
+  providerId: string;
+  typeId: string;
+  name: string;
+  description: string;
+  refId: string;
 }
 
-interface DelegationCheckResponse {
-  detailCode: ErrorCode;
-  canDelegate: boolean;
+export interface RolePackageMetadata {
+  id: string;
+  name: string;
+  urn: string;
+  description: string;
+  isDelegable: boolean;
+  isAssignable: boolean;
+  isResourcePolicyAvailable: boolean;
+  resources: RoleResourceMetadata[];
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/role`;
@@ -80,56 +88,52 @@ export const roleApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getRoles: builder.query<AreaFE[], void>({
-      query: () => '/search',
+    getRolePermissions: builder.query<
+      RolePermission[],
+      { party: string; from?: string; to?: string }
+    >({
+      query: ({ party, from, to }) => {
+        return `/permissions?party=${party}&from=${from}&to=${to}`;
+      },
       providesTags: ['roles'],
     }),
     getRoleById: builder.query<Role, string>({
       query: (id) => `/${id}`,
     }),
-    getRolesForUser: builder.query<Assignment[], RoleApiRequest>({
-      query: ({ from, to }) => `/assignments/${from}/${to}`,
-    }),
-    revoke: builder.mutation<void, { assignmentId: string }>({
-      query({ assignmentId }) {
-        return {
-          url: `/assignments/${assignmentId}`,
-          method: 'DELETE',
-        };
-      },
-      invalidatesTags: ['roles'],
-    }),
-    delegate: builder.mutation<void, { to: string; roleId: string }>({
-      invalidatesTags: ['roles'],
-      query: ({ to, roleId }) => {
-        const from = getCookie('AltinnPartyUuid');
-        return {
-          url: `delegate/${from}/${to}/${roleId}`,
-          method: 'POST',
-        };
-      },
-    }),
-    delegationCheck: builder.query<
-      DelegationCheckResponse,
-      { rightownerUuid: string; roleUuid: string }
+    getRolePackages: builder.query<
+      RolePackageMetadata[],
+      { roleCode: string; variant?: string; includeResources?: boolean }
     >({
-      query({ rightownerUuid, roleUuid }) {
-        return {
-          url: `/delegationcheck/${rightownerUuid}/${roleUuid}`,
-          method: 'GET',
-        };
+      query: ({ roleCode, variant, includeResources = false }) => {
+        const params = new URLSearchParams({
+          roleCode,
+          includeResources: includeResources.toString(),
+        });
+        if (variant) params.append('variant', variant);
+        return `/packages?${params.toString()}`;
+      },
+    }),
+    getRoleResources: builder.query<
+      RoleResourceMetadata[],
+      { roleCode: string; variant?: string; includePackageResources?: boolean }
+    >({
+      query: ({ roleCode, variant, includePackageResources = false }) => {
+        const params = new URLSearchParams({
+          roleCode,
+          includePackageResources: includePackageResources.toString(),
+        });
+        if (variant) params.append('variant', variant);
+        return `/resources?${params.toString()}`;
       },
     }),
   }),
 });
 
 export const {
-  useGetRolesForUserQuery,
+  useGetRolePermissionsQuery,
   useGetRoleByIdQuery,
-  useRevokeMutation,
-  useDelegateMutation,
-  useGetRolesQuery,
-  useDelegationCheckQuery,
+  useGetRolePackagesQuery,
+  useGetRoleResourcesQuery,
 } = roleApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = roleApi;
