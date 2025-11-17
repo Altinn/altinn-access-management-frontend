@@ -22,22 +22,18 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
 
   const isExternalRole = role?.provider?.code === 'sys-ccr';
   const isLegacyRole = role?.provider?.code === 'sys-altinn2';
-  const { fromParty, toParty, actingParty } = usePartyRepresentation();
-  console.log('actingParty: ', actingParty);
-  console.log('fromParty: ', fromParty);
-  console.log('toParty: ', toParty);
 
-  const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
-  const { data: rolePackages, isLoading: rolePackagesIsLoading } = useGetRolePackagesQuery(
-    { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
-    { skip: shouldSkipRoleRefs },
-  );
-  console.log('rolePackages: ', rolePackages);
-  const { data: roleResources, isLoading: roleResourcesIsLoading } = useGetRoleResourcesQuery(
-    { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
-    { skip: shouldSkipRoleRefs },
-  );
-  console.log('roleResources: ', roleResources);
+  // TODO: this is logic for fetching services and packages related to the role. This will be implemented in the next PR.
+  // const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  // const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
+  // const { data: rolePackages, isLoading: rolePackagesIsLoading } = useGetRolePackagesQuery(
+  //   { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
+  //   { skip: shouldSkipRoleRefs },
+  // );
+  // const { data: roleResources, isLoading: roleResourcesIsLoading } = useGetRoleResourcesQuery(
+  //   { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
+  //   { skip: shouldSkipRoleRefs },
+  // );
 
   return (
     <div className={classes.container}>
