@@ -3,7 +3,7 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Link } from 'react-router';
 import { DsAlert, DsParagraph, DsLink, DsHeading } from '@altinn/altinn-components';
 
-import { getRedirectToServicesAvailableForUserUrl } from '@/resources/utils';
+import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { useFetchRecipientInfo } from '@/resources/hooks/useFetchRecipientInfo';
 import { getHostUrl } from '@/resources/utils/pathUtils';
 
@@ -13,12 +13,9 @@ import styles from './OldRolesAlert.module.css';
 
 export const OldRolesAlert = () => {
   const { t } = useTranslation();
-  const { toParty } = usePartyRepresentation();
-  const { userID, partyID } = useFetchRecipientInfo(toParty?.partyUuid ?? '', null);
-  const url =
-    userID && partyID
-      ? getRedirectToServicesAvailableForUserUrl(userID, partyID)
-      : `${getHostUrl()}ui/profile/`;
+  const { fromParty, actingParty } = usePartyRepresentation();
+  const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8; // Section for "Users (A2)" in Profile is 9, for "Accesses for others (A2)" it is 8
+  const url = getRedirectToA2UsersListSectionUrl(sectionId);
 
   return (
     <DsAlert data-color='info'>
