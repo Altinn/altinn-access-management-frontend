@@ -28,6 +28,7 @@ import type { SystemUser } from '../types';
 import classes from './SystemUserOverviewPage.module.css';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
@@ -57,13 +58,15 @@ export const SystemUserOverviewPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
+        <Breadcrumbs />
+        <DsHeading
+          level={1}
+          data-size='sm'
+          className={classes.systemUserTopHeader}
+        >
+          {t('systemuser_overviewpage.banner_title')}
+        </DsHeading>
         <div className={classes.flexContainer}>
-          <DsHeading
-            level={1}
-            data-size='sm'
-          >
-            {t('systemuser_overviewpage.banner_title')}
-          </DsHeading>
           <DsParagraph
             data-size='sm'
             className={classes.systemUserIngress}

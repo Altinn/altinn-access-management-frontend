@@ -21,6 +21,7 @@ import { RoleSection } from './RoleSection/RoleSection';
 import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { UserRightsPageSkeleton } from './UserRightsPageSkeleton';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -49,6 +50,7 @@ export const UserRightsPage = () => {
           returnToUrlOnError={`/${amUIPath.Users}`}
         >
           <DelegationModalProvider>
+            <Breadcrumbs />
             <PageContainer
               backUrl={`/${amUIPath.Users}`}
               contentActions={<DeleteUserModal direction='to' />}

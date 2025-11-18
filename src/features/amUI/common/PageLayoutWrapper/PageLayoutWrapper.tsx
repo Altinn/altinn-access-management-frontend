@@ -18,6 +18,7 @@ import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
 
 import classes from './PageLayoutWrapper.module.css';
+import { BreadcrumbsProvider } from '../Breadcrumbs/BreadcrumbsContext';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -52,25 +53,27 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   return (
     <RootProvider languageCode={languageCode as LanguageCode}>
-      <Layout
-        useGlobalHeader={useNewHeaderFlag}
-        color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
-        theme='subtle'
-        header={header}
-        sidebar={{
-          menu: {
-            variant: 'subtle',
-            groups: menuGroups,
-            items: sidebarItems,
-          },
-        }}
-        content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
-        footer={footer}
-      >
-        <div className={classes.content}>{children}</div>
-        <InfoModal />
-      </Layout>
-      <Snackbar />
+      <BreadcrumbsProvider>
+        <Layout
+          useGlobalHeader={useNewHeaderFlag}
+          color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
+          theme='subtle'
+          header={header}
+          sidebar={{
+            menu: {
+              variant: 'subtle',
+              groups: menuGroups,
+              items: sidebarItems,
+            },
+          }}
+          content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
+          footer={footer}
+        >
+          <div className={classes.content}>{children}</div>
+          <InfoModal />
+        </Layout>
+        <Snackbar />
+      </BreadcrumbsProvider>
     </RootProvider>
   );
 };

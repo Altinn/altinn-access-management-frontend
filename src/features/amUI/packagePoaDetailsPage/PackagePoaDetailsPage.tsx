@@ -15,6 +15,7 @@ import { poaOverviewPageEnabled } from '@/resources/utils/featureFlagUtils';
 import { PackagePoaDetails } from './PackagePoaDetails';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { Navigate } from 'react-router';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 export const PackagePoaDetailsPage = () => {
   const { t } = useTranslation();
@@ -36,15 +37,16 @@ export const PackagePoaDetailsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <PageContainer backUrl={`/${amUIPath.PoaOverview}`}>
-          <PartyRepresentationProvider
-            fromPartyUuid={partyUuid}
-            actingPartyUuid={partyUuid}
-            returnToUrlOnError={`/${amUIPath.PoaOverview}`}
-          >
+        <PartyRepresentationProvider
+          fromPartyUuid={partyUuid}
+          actingPartyUuid={partyUuid}
+          returnToUrlOnError={`/${amUIPath.PoaOverview}`}
+        >
+          <Breadcrumbs />
+          <PageContainer backUrl={`/${amUIPath.PoaOverview}`}>
             <PackagePoaDetails />
-          </PartyRepresentationProvider>
-        </PageContainer>
+          </PageContainer>
+        </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>
   );

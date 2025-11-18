@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { DsSpinner, DsAlert, DsParagraph } from '@altinn/altinn-components';
@@ -21,6 +21,8 @@ import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserDetailsPage.module.css';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+import { useBreadcrumbs } from '../../common/Breadcrumbs/BreadcrumbsContext';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
@@ -55,6 +57,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
+        <DetailsBreadcrumbs title={systemUser?.integrationTitle} />
         <PageContainer
           onNavigateBack={handleNavigateBack}
           pageActions={
@@ -105,4 +108,13 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
       </PageLayoutWrapper>
     </PageWrapper>
   );
+};
+
+const DetailsBreadcrumbs = ({ title }: { title?: string }) => {
+  const { setLastBreadcrumb } = useBreadcrumbs();
+  useEffect(() => {
+    setLastBreadcrumb(title);
+  }, [title]);
+
+  return <Breadcrumbs />;
 };
