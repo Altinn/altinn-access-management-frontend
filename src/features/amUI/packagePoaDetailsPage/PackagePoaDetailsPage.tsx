@@ -36,15 +36,15 @@ export const PackagePoaDetailsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <PartyRepresentationProvider
-          fromPartyUuid={partyUuid}
-          actingPartyUuid={partyUuid}
-          returnToUrlOnError={`/${amUIPath.PoaOverview}`}
-        >
-          <PageContainer backUrl={`/${amUIPath.PoaOverview}`}>
+        <PageContainer backUrl={`/${amUIPath.PoaOverview}`}>
+          <PartyRepresentationProvider
+            fromPartyUuid={partyUuid}
+            actingPartyUuid={partyUuid}
+            returnToUrlOnError={`/${amUIPath.PoaOverview}`}
+          >
             <PackagePoaDetails />
-          </PageContainer>
-        </PartyRepresentationProvider>
+          </PartyRepresentationProvider>
+        </PageContainer>
       </PageLayoutWrapper>
     </PageWrapper>
   );
