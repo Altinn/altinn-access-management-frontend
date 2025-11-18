@@ -117,7 +117,6 @@ const calculateBreadcrumbsFromRoute = (path: string, lastName?: string) => {
 
 interface BreadcrumbsProps {
   lastBreadcrumbLabel?: string;
-  case?: 'systemuser' | 'agentsystemuser' | 'toparty' | 'fromparty' | 'accesspackage';
 }
 
 export const Breadcrumbs = ({ lastBreadcrumbLabel }: BreadcrumbsProps) => {
@@ -126,13 +125,12 @@ export const Breadcrumbs = ({ lastBreadcrumbLabel }: BreadcrumbsProps) => {
   const items = calculateBreadcrumbsFromRoute(pathname, lastBreadcrumbLabel);
 
   const breadcrumbItems = items.map((item) => {
-    const to = 'href' in item ? item.href : '';
     return {
       label: item.label ? t(item.label) : <DsSkeleton variant='text'>xxxxxxxxxxxxxx</DsSkeleton>,
       as: (props: ComponentPropsWithoutRef<typeof Link>) => (
         <Link
           {...props}
-          to={to ?? ''}
+          to={item.href ?? ''}
         />
       ),
     };
