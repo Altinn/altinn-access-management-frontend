@@ -21,13 +21,6 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
   return (
     <>
       <OldRolesAlert />
-      <DsHeading
-        level={2}
-        data-size='2xs'
-        id='access_packages_title'
-      >
-        {t('role.current_roles_title', { count: numberOfAccesses ?? 0 })}
-      </DsHeading>
       <RoleList
         onSelect={(role) => {
           setModalItem(role);

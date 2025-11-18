@@ -58,6 +58,8 @@ export interface RoleResourceMetadata {
   name: string;
   description: string;
   refId: string;
+  provider?: Provider | null;
+  type?: ProviderType | null;
 }
 
 export interface RolePackageMetadata {

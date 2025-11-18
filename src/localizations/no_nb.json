@@ -320,7 +320,12 @@
     "current_roles_title": "{{count}} roller",
     "fetch_error_heading": "Kan ikke vise roller for denne brukeren",
     "fetch_error_description": "Vi klarer ikke å hente rollene akkurat nå.",
-    "no_roles_message": "Denne brukeren har ingen roller."
+    "no_roles_message": "Denne brukeren har ingen roller.",
+    "resources_title": "Gir tilgang til {{count}} tjenester",
+    "resources_empty": "Denne rollen inneholder ingen tjenester.",
+    "resources_disclaimer": "Denne rollen kan fortsatt gi tilgang til tjenester som kun finnes i den gamle løsningen.",
+    "resources_disclaimer_link": "Se listen i den gamle løsningen",
+    "inherited_role_org_message": "{{user_name}} har tilgang til dette gjennom rollen sin i {{org_name}}."
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -840,7 +845,7 @@
       "no_resources": "Denne pakken inkluderer ingen tjenester"
     }
   },
-  "package_resource_list": {
+  "resource_list": {
     "resource_search_placeholder": "Søk etter tjenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
     "no_resources": "Ingen tjenester er tilgjengelige."

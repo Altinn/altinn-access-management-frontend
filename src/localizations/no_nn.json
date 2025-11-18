@@ -317,7 +317,12 @@
     "current_roles_title": "{{count}} roller",
     "fetch_error_heading": "Kan ikkje vise roller for denne brukaren",
     "fetch_error_description": "Vi klarer ikkje å hente rollene akkurat no.",
-    "no_roles_message": "Denne brukaren har ingen roller."
+    "no_roles_message": "Denne brukaren har ingen roller.",
+    "resources_title": "Gjev tilgang til {{count}} tenester",
+    "resources_empty": "Denne rolla har ingen tenester.",
+    "resources_disclaimer": "Denne rolla kan framleis gi tilgang til tenester som berre finst i den gamle løysinga.",
+    "resources_disclaimer_link": "Sjå lista i den gamle løysinga",
+    "inherited_role_org_message": "{{user_name}} har tilgang til dette gjennom rolla si i {{org_name}}."
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -837,7 +842,7 @@
       "no_resources": "Denne pakken inkluderer ingen tenester"
     }
   },
-  "package_resource_list": {
+  "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
     "no_resources": "Ingen tenester tilgjengelege."

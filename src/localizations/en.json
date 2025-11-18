@@ -321,7 +321,12 @@
     "current_roles_title": "{{count}} roles",
     "fetch_error_heading": "Unable to show roles for this user",
     "fetch_error_description": "We can't fetch the roles right now.",
-    "no_roles_message": "This user has no roles."
+    "no_roles_message": "This user has no roles.",
+    "resources_title": "Gives access to {{count}} services",
+    "resources_empty": "This role has no services.",
+    "resources_disclaimer": "This role might still grant access to services that only exist in the old solution.",
+    "resources_disclaimer_link": "See the list of services in the old solution",
+    "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}."
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -841,7 +846,7 @@
       "no_resources": "This package includes no services"
     }
   },
-  "package_resource_list": {
+  "resource_list": {
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
     "no_resources": "No resources available."
