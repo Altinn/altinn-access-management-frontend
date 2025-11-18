@@ -82,9 +82,9 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
 };
 
 const AgentDelegationBreadcrumbs = ({ title }: { title?: string }) => {
-  const { setLastBreadcrumb } = useBreadcrumbs();
+  const { setLastBreadcrumbLabel } = useBreadcrumbs();
   useEffect(() => {
-    setLastBreadcrumb(title);
+    setLastBreadcrumbLabel(title);
   }, [title]);
 
   return <Breadcrumbs />;

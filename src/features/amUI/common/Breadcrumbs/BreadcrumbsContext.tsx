@@ -7,7 +7,7 @@ export type BreadcrumbItem = { label?: string; href?: string };
 // Internal full context (Breadcrumbs consumes all)
 type BreadcrumbsContextValue = {
   items: BreadcrumbItem[];
-  setLastBreadcrumb: (name?: string) => void;
+  setLastBreadcrumbLabel: (name?: string) => void;
 };
 
 const root = { label: 'sidebar.access_management', href: '/' };
@@ -120,18 +120,18 @@ export interface BreadcrumbsProps {
 export const BreadcrumbsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { pathname } = useLocation();
   const [items, setItems] = useState<BreadcrumbItem[]>([]);
-  const [lastName, setLastName] = useState<string | undefined>('');
+  const [lastItemLabel, setLastItemLabel] = useState<string | undefined>('');
 
-  const setLastBreadcrumb = useCallback((name?: string) => {
-    setLastName(name);
+  const setLastBreadcrumbLabel = useCallback((name?: string) => {
+    setLastItemLabel(name);
   }, []);
 
   useEffect(() => {
-    setItems(calculateBreadcrumbsFromRoute(pathname, lastName));
-  }, [pathname, lastName]);
+    setItems(calculateBreadcrumbsFromRoute(pathname, lastItemLabel));
+  }, [pathname, lastItemLabel]);
 
   return (
-    <BreadcrumbsContext.Provider value={{ items, setLastBreadcrumb }}>
+    <BreadcrumbsContext.Provider value={{ items, setLastBreadcrumbLabel }}>
       {children}
     </BreadcrumbsContext.Provider>
   );

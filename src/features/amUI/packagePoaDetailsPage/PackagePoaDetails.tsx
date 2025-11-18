@@ -15,7 +15,7 @@ import { useBreadcrumbs } from '../common/Breadcrumbs/BreadcrumbsContext';
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
-  const { setLastBreadcrumb } = useBreadcrumbs();
+  const { setLastBreadcrumbLabel } = useBreadcrumbs();
   const { fromParty } = usePartyRepresentation();
 
   const {
@@ -32,7 +32,7 @@ export const PackagePoaDetails = () => {
   );
 
   useEffect(() => {
-    setLastBreadcrumb(accessPackage?.name);
+    setLastBreadcrumbLabel(accessPackage?.name);
   }, [accessPackage?.name]);
 
   const [chosenTab, setChosenTab] = useState('users');

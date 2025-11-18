@@ -37,7 +37,7 @@ export const UserPageHeader = ({
   displayRoles = true,
 }: UserPageHeaderProps) => {
   const { toParty, fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
-  const { setLastBreadcrumb } = useBreadcrumbs();
+  const { setLastBreadcrumbLabel } = useBreadcrumbs();
   const toPartyName = formatDisplayName({
     fullName: toParty?.name ?? '',
     type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
@@ -57,7 +57,7 @@ export const UserPageHeader = ({
   const secondaryUserName = direction === 'to' ? fromPartyName : toPartyName;
 
   useEffect(() => {
-    setLastBreadcrumb(userName);
+    setLastBreadcrumbLabel(userName);
   }, [userName]);
 
   const subHeading =

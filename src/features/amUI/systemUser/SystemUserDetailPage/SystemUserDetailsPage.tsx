@@ -111,9 +111,9 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
 };
 
 const DetailsBreadcrumbs = ({ title }: { title?: string }) => {
-  const { setLastBreadcrumb } = useBreadcrumbs();
+  const { setLastBreadcrumbLabel } = useBreadcrumbs();
   useEffect(() => {
-    setLastBreadcrumb(title);
+    setLastBreadcrumbLabel(title);
   }, [title]);
 
   return <Breadcrumbs />;
