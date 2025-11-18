@@ -1,4 +1,5 @@
 import { Connection } from '@/rtk/features/connectionApi';
+import { RolePermission } from '@/rtk/features/roleApi';
 
 export const RIGHTHOLDER_ROLE = 'rettighetshaver';
 
@@ -20,7 +21,7 @@ export interface DeletionStatus {
 }
 
 export const getDeletionStatus = (
-  connections: Connection[] | undefined,
+  rolePermissions: RolePermission[] | undefined,
   viewingYourself: boolean,
   reporteeView: boolean,
 ): DeletionStatus => {
@@ -30,20 +31,20 @@ export const getDeletionStatus = (
       ? DeletionTarget.Reportee
       : DeletionTarget.User;
 
-  const allRoles =
-    connections && connections?.length > 1
-      ? connections.reduce((acc, connection) => {
-          if (connection.roles && connection.roles.length > 0)
-            acc.push(...connection.roles.map((role) => role.code ?? ''));
-          return acc;
-        }, [] as string[])
-      : (connections?.[0]?.roles?.map((role) => role.code ?? '') ?? []);
-
   let level: DeletionLevel;
 
-  if (allRoles.length === 0 || allRoles.every((r) => r === RIGHTHOLDER_ROLE)) {
+  if (
+    rolePermissions?.length === 0 ||
+    rolePermissions?.every(
+      (r) => r.role.code === RIGHTHOLDER_ROLE && r.permissions.every((p) => p.via === null),
+    )
+  ) {
     level = DeletionLevel.Full;
-  } else if (allRoles.some((r) => r === RIGHTHOLDER_ROLE)) {
+  } else if (
+    rolePermissions?.some(
+      (r) => r.role.code === RIGHTHOLDER_ROLE && r.permissions.some((p) => p.via === null),
+    )
+  ) {
     level = DeletionLevel.Limited;
   } else {
     level = DeletionLevel.None;

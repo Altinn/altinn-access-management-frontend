@@ -18,8 +18,10 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
-  const { toParty, selfParty, isLoading } = usePartyRepresentation();
-  const isCurrentUser = selfParty?.partyUuid === toParty?.partyUuid;
+  const { toParty, selfParty, actingParty, isLoading } = usePartyRepresentation();
+  const canGiveAccess =
+    actingParty?.partyUuid !== selfParty?.partyUuid &&
+    actingParty?.partyUuid !== toParty?.partyUuid; // Can only give access to others (or to self if Hovedadmin acting on behalf of party)
   const { t } = useTranslation();
 
   return (
@@ -36,7 +38,7 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
         }}
         availableActions={[
           DelegationAction.REVOKE,
-          isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
+          canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
         ]}
         onDelegateError={(accessPackage, error) => {
           setActionError(error);
