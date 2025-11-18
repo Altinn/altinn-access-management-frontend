@@ -7,6 +7,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Test & Build
+    env:
+      CYPRESS_INSTALL_BINARY: 0
+      CYPRESS_BINARY_VERSION: 14.5.4
+      CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
     steps:
       - name: checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -18,12 +22,22 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: cache Cypress binary
+        uses: actions/cache@188dff4edb36608c8f3c979ae938b0e6fecab0c4 # v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ env.CYPRESS_BINARY_VERSION }}
+
       - name: clear yarn cache
         run: yarn cache clean
 
       - name: install dependencies
         working-directory: ./
         run: yarn --immutable
+
+      - name: install Cypress binary
+        run: |
+          npx cypress install --force || (echo "Retrying Cypress install" && sleep 10 && npx cypress install --force)
 
       - name: run eslint
         working-directory: ./
