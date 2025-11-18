@@ -17,6 +17,12 @@
   gap: 1rem;
 }
 
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
 .header {
   display: flex;
   gap: 0.5rem;

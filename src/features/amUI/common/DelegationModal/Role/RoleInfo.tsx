@@ -57,53 +57,54 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
           {role?.name}
         </DsHeading>
       </div>
-
-      {isLegacyRole && (
-        <div className={statusClasses.infoLine}>
-          <ExclamationmarkTriangleFillIcon
-            fontSize='1.5rem'
-            className={statusClasses.warningIcon}
-          />
-          <DsParagraph data-size='xs'>{t('a2Alerts.legacyRoleContent')}</DsParagraph>
-        </div>
-      )}
-      {isExternalRole && (
-        <div className={statusClasses.infoLine}>
-          <InformationSquareFillIcon
-            fontSize='1.5rem'
-            className={statusClasses.inheritedInfoIcon}
-          />
-          <DsParagraph data-size='xs'>
-            {t('role.provider_status')}
-            {role?.provider?.name}
-          </DsParagraph>
-        </div>
-      )}
-      {hasInheritedRole && (
-        <div className={statusClasses.infoLine}>
-          <InformationSquareFillIcon
-            fontSize='1.5rem'
-            className={statusClasses.inheritedInfoIcon}
-          />
-          <DsParagraph data-size='xs'>
-            <Trans
-              i18nKey='role.inherited_role_org_message'
-              values={{
-                user_name: formatDisplayName({
-                  fullName: toParty?.name || '',
-                  type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-                  reverseNameOrder: false,
-                }),
-                org_name: formatDisplayName({
-                  fullName: inheritedRoleFromEntity?.name ?? '',
-                  type: 'company',
-                  reverseNameOrder: false,
-                }),
-              }}
+      <div className={classes.infoContainer}>
+        {isLegacyRole && (
+          <div className={statusClasses.infoLine}>
+            <ExclamationmarkTriangleFillIcon
+              fontSize='1.5rem'
+              className={statusClasses.warningIcon}
             />
-          </DsParagraph>
-        </div>
-      )}
+            <DsParagraph data-size='xs'>{t('a2Alerts.legacyRoleContent')}</DsParagraph>
+          </div>
+        )}
+        {isExternalRole && (
+          <div className={statusClasses.infoLine}>
+            <InformationSquareFillIcon
+              fontSize='1.5rem'
+              className={statusClasses.inheritedInfoIcon}
+            />
+            <DsParagraph data-size='xs'>
+              {t('role.provider_status')}
+              {role?.provider?.name}
+            </DsParagraph>
+          </div>
+        )}
+        {hasInheritedRole && (
+          <div className={statusClasses.infoLine}>
+            <InformationSquareFillIcon
+              fontSize='1.5rem'
+              className={statusClasses.inheritedInfoIcon}
+            />
+            <DsParagraph data-size='xs'>
+              <Trans
+                i18nKey='role.inherited_role_org_message'
+                values={{
+                  user_name: formatDisplayName({
+                    fullName: toParty?.name || '',
+                    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+                    reverseNameOrder: false,
+                  }),
+                  org_name: formatDisplayName({
+                    fullName: inheritedRoleFromEntity?.name ?? '',
+                    type: 'company',
+                    reverseNameOrder: false,
+                  }),
+                }}
+              />
+            </DsParagraph>
+          </div>
+        )}
+      </div>
       <DsParagraph>{role?.description}</DsParagraph>
       <DsParagraph className={classes.oldRolesDisclaimer}>
         {t('role.resources_disclaimer')}{' '}
