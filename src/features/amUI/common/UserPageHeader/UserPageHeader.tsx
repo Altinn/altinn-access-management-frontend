@@ -14,8 +14,6 @@ import { UserRoles } from '../UserRoles/UserRoles';
 
 import classes from './UserPageHeader.module.css';
 import { UserPageHeaderSkeleton } from './UserPageHeaderSkeleton';
-import { useBreadcrumbs } from '../Breadcrumbs/BreadcrumbsContext';
-import { useEffect } from 'react';
 
 interface UserPageHeaderProps {
   direction: 'to' | 'from';
@@ -37,7 +35,6 @@ export const UserPageHeader = ({
   displayRoles = true,
 }: UserPageHeaderProps) => {
   const { toParty, fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
-  const { setLastBreadcrumbLabel } = useBreadcrumbs();
   const toPartyName = formatDisplayName({
     fullName: toParty?.name ?? '',
     type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
@@ -55,10 +52,6 @@ export const UserPageHeader = ({
   const userName = direction === 'to' ? toPartyName : fromPartyName;
   const secondaryParty = direction === 'to' ? fromParty : toParty;
   const secondaryUserName = direction === 'to' ? fromPartyName : toPartyName;
-
-  useEffect(() => {
-    setLastBreadcrumbLabel(userName);
-  }, [userName]);
 
   const subHeading =
     direction === 'to'

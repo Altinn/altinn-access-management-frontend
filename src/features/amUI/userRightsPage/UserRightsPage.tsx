@@ -12,15 +12,20 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import {
+  PartyRepresentationProvider,
+  usePartyRepresentation,
+} from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
 
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
-import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { UserRightsPageSkeleton } from './UserRightsPageSkeleton';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { formatDisplayName } from '@altinn/altinn-components';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -48,6 +53,7 @@ export const UserRightsPage = () => {
           toPartyUuid={id ?? undefined}
           returnToUrlOnError={`/${amUIPath.Users}`}
         >
+          <BreadcrumbsWrapper />
           <DelegationModalProvider>
             <PageContainer
               backUrl={`/${amUIPath.Users}`}
@@ -67,5 +73,17 @@ export const UserRightsPage = () => {
         </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>
+  );
+};
+
+const BreadcrumbsWrapper = () => {
+  const { toParty } = usePartyRepresentation();
+  return (
+    <Breadcrumbs
+      lastBreadcrumbLabel={formatDisplayName({
+        fullName: toParty?.name ?? '',
+        type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+      })}
+    />
   );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import headerClasses from './PackagePoaDetailsHeader.module.css';
 import { DsAlert, DsTabs } from '@altinn/altinn-components';
@@ -10,12 +10,10 @@ import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { ResourceList } from '../common/ResourceList/ResourceList';
 import { UsersTab } from './UsersTab';
-import { useBreadcrumbs } from '../common/Breadcrumbs/BreadcrumbsContext';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
-  const { setLastBreadcrumbLabel } = useBreadcrumbs();
   const { fromParty } = usePartyRepresentation();
 
   const {
@@ -30,10 +28,6 @@ export const PackagePoaDetails = () => {
     },
     { skip: !id || !fromParty?.partyUuid },
   );
-
-  useEffect(() => {
-    setLastBreadcrumbLabel(accessPackage?.name);
-  }, [accessPackage?.name]);
 
   const [chosenTab, setChosenTab] = useState('users');
 

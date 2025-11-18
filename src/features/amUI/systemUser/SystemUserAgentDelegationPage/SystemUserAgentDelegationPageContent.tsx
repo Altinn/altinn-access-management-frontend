@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
@@ -30,7 +30,6 @@ import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
-import { useBreadcrumbs } from '../../common/Breadcrumbs/BreadcrumbsContext';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -52,7 +51,6 @@ export const SystemUserAgentDelegationPageContent = ({
 }: SystemUserAgentDelegationPageContentProps): React.ReactNode => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { setLastBreadcrumbLabel } = useBreadcrumbs();
   const partyId = getCookie('AltinnPartyId');
   const partyUuid = getCookie('AltinnPartyUuid');
 
@@ -82,10 +80,6 @@ export const SystemUserAgentDelegationPageContent = ({
   const handleNavigateBack = (): void => {
     navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
   };
-
-  useEffect(() => {
-    setLastBreadcrumbLabel(systemUser.integrationTitle);
-  }, [systemUser.integrationTitle]);
 
   const [assignCustomer] = useAssignCustomerMutation();
   const [removeCustomer] = useRemoveCustomerMutation();

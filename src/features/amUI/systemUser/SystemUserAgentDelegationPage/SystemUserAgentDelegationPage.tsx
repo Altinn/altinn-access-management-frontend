@@ -14,6 +14,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 
 import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();
@@ -48,6 +49,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
+        <Breadcrumbs lastBreadcrumbLabel={systemUser?.integrationTitle} />
         {(isLoadingSystemUser || isLoadingCustomers || isLoadingAssignedCustomers) && (
           <DsSpinner aria-label={t('systemuser_detailpage.loading_systemuser')} />
         )}

@@ -8,13 +8,18 @@ import { PageContainer } from '../common/PageContainer/PageContainer';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import {
+  PartyRepresentationProvider,
+  usePartyRepresentation,
+} from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import { poaOverviewPageEnabled } from '@/resources/utils/featureFlagUtils';
 
 import { PackagePoaDetails } from './PackagePoaDetails';
 import { amUIPath } from '@/routes/paths/amUIPath';
-import { Navigate } from 'react-router';
+import { Navigate, useParams } from 'react-router';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 
 export const PackagePoaDetailsPage = () => {
   const { t } = useTranslation();
@@ -36,16 +41,32 @@ export const PackagePoaDetailsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <PageContainer backUrl={`/${amUIPath.PoaOverview}`}>
-          <PartyRepresentationProvider
-            fromPartyUuid={partyUuid}
-            actingPartyUuid={partyUuid}
-            returnToUrlOnError={`/${amUIPath.PoaOverview}`}
-          >
+        <PartyRepresentationProvider
+          fromPartyUuid={partyUuid}
+          actingPartyUuid={partyUuid}
+          returnToUrlOnError={`/${amUIPath.PoaOverview}`}
+        >
+          <BreadcrumbsWrapper />
+          <PageContainer backUrl={`/${amUIPath.PoaOverview}`}>
             <PackagePoaDetails />
-          </PartyRepresentationProvider>
-        </PageContainer>
+          </PageContainer>
+        </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>
   );
+};
+
+const BreadcrumbsWrapper = () => {
+  const { id } = useParams<{ id: string }>();
+  const { fromParty } = usePartyRepresentation();
+
+  const { data: accessPackage } = useGetPackagePermissionDetailsQuery(
+    {
+      from: fromParty?.partyUuid ?? '',
+      packageId: id || '',
+    },
+    { skip: !id || !fromParty?.partyUuid },
+  );
+
+  return <Breadcrumbs lastBreadcrumbLabel={accessPackage?.name} />;
 };

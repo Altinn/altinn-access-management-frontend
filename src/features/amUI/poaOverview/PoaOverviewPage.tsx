@@ -14,7 +14,7 @@ import classes from './PoaOverviewPage.module.css';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { AccessPackagePermissions } from './AccessPackagePermissions';
 import { useRerouteIfPoaOverviewPageDisabled } from '@/resources/utils/featureFlagUtils';
-import { formatDisplayName } from '@altinn/altinn-components';
+import { Breadcrumbs, formatDisplayName } from '@altinn/altinn-components';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
@@ -38,6 +38,7 @@ export const PoaOverviewPage = () => {
           actingPartyUuid={partyUuid ?? ''}
           errorOnPriv={true}
         >
+          <Breadcrumbs />
           <ReporteePageHeading
             title={t('poa_overview_page.heading', { name })}
             reportee={reportee}

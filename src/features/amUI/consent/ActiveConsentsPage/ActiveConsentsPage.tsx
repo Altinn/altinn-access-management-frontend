@@ -19,6 +19,7 @@ import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfo
 import { ConsentListItem } from './ConsentListItem';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -63,6 +64,7 @@ export const ActiveConsentsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
+        <Breadcrumbs />
         <DsHeading
           level={1}
           data-size='sm'
