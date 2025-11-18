@@ -1,7 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 import classes from './RoleInfo.module.css';
 import { Role, useGetRolePermissionsQuery, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
-import { DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
+import { DsHeading, DsLink, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import {
   ExclamationmarkTriangleFillIcon,
   InformationSquareFillIcon,
@@ -13,6 +13,7 @@ import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { Link } from 'react-router';
 import { useInheritedRoleInfo } from './useInheritedRoleInfo';
 import { RoleResourcesSection } from './RoleResourcesSection';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export interface PackageInfoProps {
   role: Role;
@@ -26,7 +27,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
 
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
-  const { data: roleResources } = useGetRoleResourcesQuery(
+  const { data: roleResources, isLoading: isRoleResourcesLoading } = useGetRoleResourcesQuery(
     { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
     { skip: shouldSkipRoleRefs },
   );
@@ -42,7 +43,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
   const oldSolutionUrl = getRedirectToA2UsersListSectionUrl(sectionId);
 
-  const { hasInheritedRole, inheritedRoleOrgName } = useInheritedRoleInfo({
+  const { hasInheritedRole, inheritedRoleFromEntity } = useInheritedRoleInfo({
     rolePermissions,
     role,
     toParty,
@@ -91,8 +92,16 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
             <Trans
               i18nKey='role.inherited_role_org_message'
               values={{
-                user_name: toParty?.name,
-                org_name: inheritedRoleOrgName ?? fromParty?.name,
+                user_name: formatDisplayName({
+                  fullName: toParty?.name || '',
+                  type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+                  reverseNameOrder: false,
+                }),
+                org_name: formatDisplayName({
+                  fullName: inheritedRoleFromEntity?.name ?? '',
+                  type: 'company',
+                  reverseNameOrder: false,
+                }),
               }}
             />
           </DsParagraph>
@@ -108,7 +117,12 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
           </Link>
         </DsLink>
       </DsParagraph>
-      {!shouldSkipRoleRefs && <RoleResourcesSection roleResources={roleResources} />}
+      {!shouldSkipRoleRefs && (
+        <RoleResourcesSection
+          roleResources={roleResources}
+          isLoading={isRoleResourcesLoading}
+        />
+      )}
     </div>
   );
 };

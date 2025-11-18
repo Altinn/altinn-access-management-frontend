@@ -839,7 +839,7 @@
       "no_resources": "Denne pakken inkluderer ingen tenester"
     }
   },
-  "package_resource_list": {
+  "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
     "no_resources": "Ingen tenester tilgjengelege."

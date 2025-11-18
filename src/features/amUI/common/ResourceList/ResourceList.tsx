@@ -44,8 +44,8 @@ export const ResourceList = ({
       {resources.length > 0 && (
         <DsSearch className={classes.searchBar}>
           <DsSearch.Input
-            aria-label={t('package_resource_list.resource_search_placeholder')}
-            placeholder={t('package_resource_list.resource_search_placeholder')}
+            aria-label={t('resource_list.resource_search_placeholder')}
+            placeholder={t('resource_list.resource_search_placeholder')}
             value={search}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
           />
@@ -58,12 +58,12 @@ export const ResourceList = ({
         <>
           {resources.length === 0 && (
             <DsParagraph data-size='md'>
-              {noResourcesText || t('package_resource_list.no_resources')}
+              {noResourcesText || t('resource_list.no_resources')}
             </DsParagraph>
           )}
           {resources.length > 0 && filtered.length === 0 && (
             <DsParagraph data-size='md'>
-              {t('package_resource_list.no_resources_filtered', { searchTerm: search })}
+              {t('resource_list.no_resources_filtered', { searchTerm: search })}
             </DsParagraph>
           )}
           {filtered.length > 0 && (

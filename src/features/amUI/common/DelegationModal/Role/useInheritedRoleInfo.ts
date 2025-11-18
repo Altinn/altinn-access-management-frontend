@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { Role, RolePermission } from '@/rtk/features/roleApi';
+import { Entity } from '@/dataObjects/dtos/Common';
 
 interface UseInheritedRoleInfoParams {
   rolePermissions?: RolePermission[];
@@ -12,7 +13,7 @@ interface UseInheritedRoleInfoParams {
 
 interface UseInheritedRoleInfoResult {
   hasInheritedRole: boolean;
-  inheritedRoleOrgName?: string;
+  inheritedRoleFromEntity?: Entity;
 }
 
 export const useInheritedRoleInfo = ({
@@ -23,17 +24,18 @@ export const useInheritedRoleInfo = ({
 }: UseInheritedRoleInfoParams): UseInheritedRoleInfoResult => {
   return useMemo(() => {
     if (!rolePermissions || !role?.id) {
-      return { hasInheritedRole: false, inheritedRoleOrgName: undefined };
+      return { hasInheritedRole: false, inheritedRoleFromEntity: undefined };
     }
 
     const matchingPermissions = rolePermissions.find(
       (permission) => permission.role.id === role.id,
     );
+
     if (matchingPermissions) {
-      const inheritedVia = matchingPermissions.permissions.find((p) => p.via && p.viaRole);
-      return { hasInheritedRole: !!inheritedVia, inheritedRoleOrgName: inheritedVia?.via?.name };
+      const inheritedVia = matchingPermissions.permissions.find((p) => !!p.via);
+      return { hasInheritedRole: !!inheritedVia, inheritedRoleFromEntity: inheritedVia?.via };
     }
 
-    return { hasInheritedRole: false, inheritedRoleOrgName: undefined };
+    return { hasInheritedRole: false, inheritedRoleFromEntity: undefined };
   }, [rolePermissions, role?.id, toParty?.partyUuid, fromParty?.partyUuid, fromParty?.name]);
 };

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsHeading, DsSearch } from '@altinn/altinn-components';
+import { DsHeading, DsParagraph, DsSearch } from '@altinn/altinn-components';
 
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import type { RoleResourceMetadata } from '@/rtk/features/roleApi';
@@ -9,12 +9,14 @@ import type { RoleResourceMetadata } from '@/rtk/features/roleApi';
 import { useResourceList } from '../AccessPackages/useResourceList';
 import { List } from '../../List';
 import classes from './RoleInfo.module.css';
+import { SkeletonResourceList } from '../../ResourceList/SkeletonResourceList';
 
 interface RoleResourcesSectionProps {
   roleResources?: RoleResourceMetadata[];
+  isLoading: boolean;
 }
 
-export const RoleResourcesSection = ({ roleResources }: RoleResourcesSectionProps) => {
+export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResourcesSectionProps) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
 
@@ -47,8 +49,9 @@ export const RoleResourcesSection = ({ roleResources }: RoleResourcesSectionProp
     });
   }, [roleResources]);
 
+  const trimmedSearchValue = searchValue.trim();
   const filteredRoleResources = useMemo(() => {
-    const normalizedSearch = searchValue.trim().toLowerCase();
+    const normalizedSearch = trimmedSearchValue.toLowerCase();
     if (!normalizedSearch) {
       return roleResourceList;
     }
@@ -59,17 +62,17 @@ export const RoleResourcesSection = ({ roleResources }: RoleResourcesSectionProp
 
       return resourceName.includes(normalizedSearch) || providerName.includes(normalizedSearch);
     });
-  }, [roleResourceList, searchValue]);
+  }, [roleResourceList, trimmedSearchValue]);
 
   const resources = useResourceList(filteredRoleResources);
-
-  const searchLabel = t('role.resources_search_placeholder', {
-    defaultValue: String(t('common.search')),
-  });
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
+
+  if (isLoading) {
+    return <SkeletonResourceList />;
+  }
 
   return (
     <>
@@ -78,28 +81,47 @@ export const RoleResourcesSection = ({ roleResources }: RoleResourcesSectionProp
         data-size='xs'
       >
         {t('role.resources_title', {
-          count: filteredRoleResources.length,
+          count: roleResources?.length ?? 0,
         })}
       </DsHeading>
-      <div className={classes.resourcesSection}>
-        <DsSearch className={classes.searchBar}>
-          <DsSearch.Input
-            aria-label={searchLabel}
-            placeholder={searchLabel}
-            onChange={handleSearchChange}
-          />
-          <DsSearch.Clear
-            onClick={() => {
-              setSearchValue('');
-            }}
-          />
-        </DsSearch>
-        <div className={classes.service_list}>
-          <div className={classes.services}>
-            <List>{resources}</List>
+      {roleResources && roleResources.length === 0 && (
+        <DsParagraph
+          data-size='xs'
+          className={classes.noResourcesMessage}
+        >
+          {t('role.resources_empty')}
+        </DsParagraph>
+      )}
+      {roleResources && roleResources.length > 0 && (
+        <div className={classes.resourcesSection}>
+          <DsSearch className={classes.searchBar}>
+            <DsSearch.Input
+              aria-label={t('resource_list.resource_search_placeholder')}
+              placeholder={t('resource_list.resource_search_placeholder')}
+              onChange={handleSearchChange}
+            />
+            <DsSearch.Clear
+              onClick={() => {
+                setSearchValue('');
+              }}
+            />
+          </DsSearch>
+          {filteredRoleResources.length === 0 && (
+            <DsParagraph
+              data-size='xs'
+              className={classes.noResourcesMessage}
+            >
+              {trimmedSearchValue &&
+                t('resource_list.no_resources_filtered', { searchTerm: trimmedSearchValue })}
+            </DsParagraph>
+          )}
+          <div className={classes.service_list}>
+            <div className={classes.services}>
+              <List>{resources}</List>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
