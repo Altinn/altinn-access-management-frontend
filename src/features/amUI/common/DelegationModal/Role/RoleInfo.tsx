@@ -9,9 +9,7 @@ import {
 } from '@navikt/aksel-icons';
 import statusClasses from '../StatusSection.module.css';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { useFetchRecipientInfo } from '@/resources/hooks/useFetchRecipientInfo';
-import { getRedirectToServicesAvailableForUserUrl } from '@/resources/utils';
-import { getHostUrl } from '@/resources/utils/pathUtils';
+import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { Link } from 'react-router';
 import { useInheritedRoleInfo } from './useInheritedRoleInfo';
 import { RoleResourcesSection } from './RoleResourcesSection';
@@ -40,11 +38,9 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
     },
     { skip: !actingParty?.partyUuid },
   );
-  const { userID, partyID } = useFetchRecipientInfo(toParty?.partyUuid ?? '', null);
-  const oldSolutionUrl =
-    userID && partyID
-      ? getRedirectToServicesAvailableForUserUrl(userID, partyID)
-      : `${getHostUrl()}ui/profile/`;
+
+  const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
+  const oldSolutionUrl = getRedirectToA2UsersListSectionUrl(sectionId);
 
   const { hasInheritedRole, inheritedRoleOrgName } = useInheritedRoleInfo({
     rolePermissions,
@@ -93,7 +89,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
           />
           <DsParagraph data-size='xs'>
             <Trans
-              i18nKey='delegation_modal.inherited_role_org_message'
+              i18nKey='role.inherited_role_org_message'
               values={{
                 user_name: toParty?.name,
                 org_name: inheritedRoleOrgName ?? fromParty?.name,
