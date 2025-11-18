@@ -56,7 +56,7 @@ const routeMap: RouteConfig[] = [
   },
   {
     pattern: `/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`,
-    breadcrumbs: () => [root, systemUserCreate],
+    breadcrumbs: () => [root, systemUserOverview, systemUserCreate],
   },
   {
     pattern: `/${SystemUserPath.SystemUser}/${SystemUserPath.Details}`,

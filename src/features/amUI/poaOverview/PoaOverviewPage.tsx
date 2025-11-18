@@ -14,7 +14,8 @@ import classes from './PoaOverviewPage.module.css';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { AccessPackagePermissions } from './AccessPackagePermissions';
 import { useRerouteIfPoaOverviewPageDisabled } from '@/resources/utils/featureFlagUtils';
-import { Breadcrumbs, formatDisplayName } from '@altinn/altinn-components';
+import { formatDisplayName } from '@altinn/altinn-components';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
