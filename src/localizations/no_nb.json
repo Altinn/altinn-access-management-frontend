@@ -133,7 +133,7 @@
     "locale_title": "Velg språk",
     "logged_in_as_name": "Logget inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
-    "leave_beta": "Tilbake til dagens Altinn",
+    "leave_beta": "Til gammel løsning",
     "shortcuts": "Snarveier"
   },
   "footer": {
@@ -147,8 +147,8 @@
   "sidebar": {
     "access_management": "Tilgangsstyring",
     "users": "Brukere",
-    "reportees": "Tilganger hos andre",
-    "systemaccess": "API- og systemtilganger",
+    "reportees": "Fullmakter hos andre",
+    "systemaccess": "Systemtilganger",
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
     "settings": "Innstillinger",
@@ -316,16 +316,10 @@
   },
   "role": {
     "provider_status": "Denne rollen er hentet fra ",
-    "current_roles_title": "{{count}} administratortilganger",
-    "roles_description": "Her finner du fullmakter for å administrere tilganger for virksomheten. Det er ikke knyttet noen ressurser eller tjenester til disse tilgangene.",
-    "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
-    "role_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{role}}.",
-    "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",
-    "role_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{role}} fra {{name}}.",
-    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle <b>{{role_name}}</b>. Den kan derfor ikke slettes.",
-    "activeRolesLabel": "Liste over roller som er tildelt brukeren",
-    "availableRolesLabel": "Liste over roller som kan tildeles brukeren",
-    "cant_delegate_generic": "Du kan ikke delegere denne rollen"
+    "current_roles_title": "{{count}} roller",
+    "fetch_error_heading": "Kan ikke vise roller for denne brukeren",
+    "fetch_error_description": "Vi klarer ikke å hente rollene akkurat nå.",
+    "no_roles_message": "Denne brukeren har ingen roller."
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -351,7 +345,7 @@
     "user_search_placeholder": "Søk etter person eller virksomhet"
   },
   "reportees_page": {
-    "page_title": "Tilganger hos andre - Altinn",
+    "page_title": "Fullmakter hos andre - Altinn",
     "main_page_heading": "Fullmakter {{name}} har hos andre",
     "not_admin_alert": "Du har ikke tilgang til å se denne siden hos {{name}}. Vennligst bytt side eller velg en annen aktør."
   },
@@ -359,7 +353,7 @@
     "page_title": "Brukertilganger - Altinn",
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
-    "roles_title": "Administratortilganger",
+    "roles_title": "Roller",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -388,7 +382,7 @@
     "reportee_deletion_not_allowed_message": "<p>{{to_name}} har kun fullmakter gjennom sine roller i Enhetsregisteret og kan derfor ikke slettes fra {{from_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjøre det via <erLink>Samordnet registermelding</erLink>.</p>"
   },
   "reportee_rights_page": {
-    "page_title": "Tilganger hos andre - Altinn",
+    "page_title": "Fullmakter hos andre - Altinn",
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
@@ -504,7 +498,10 @@
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyer Altinn",
     "launchAlertContent": "Denne brukeren kan også ha fullmakter fra tidligere Altinn.",
-    "launchAlertLinkText": "Se fullmakter fra tidligere Altinn"
+    "launchAlertLinkText": "Se fullmakter fra tidligere Altinn",
+    "oldRolesContent": "Disse Altinn-rollene kan inneholde tjenester som allerede finnes i den nye Altinn-løsningen. Tjenestene blir flyttet inn i de nye tilgangspakkene. Brukeren har de samme rollene i den gamle løsningen, men der inneholder de flere og andre tjenester.",
+    "oldRolesLinkText": "Gå til gammel løsning",
+    "legacyRoleContent": "Denne rollen vil snart fjernes. Bruk heller tilgangspakker."
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

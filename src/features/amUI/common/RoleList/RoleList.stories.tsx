@@ -23,7 +23,6 @@ export default {
         >
           <RoleList
             {...args}
-            onActionError={(error) => console.log(`onActionError`, error)}
             onSelect={(id) => console.log(`onselect: ${id}`)}
           />
         </PartyRepresentationProvider>

@@ -16,7 +16,7 @@ test.describe('System user deletion', () => {
     systemId = await api.createSystemSystemRegister();
 
     // Navigate to system user page via menu link
-    await accessManagementFrontPage.apiAndSystemAccessLink.click();
+    await accessManagementFrontPage.systemAccessLink.click();
 
     // this is assigned as a text in code base, will just add more confusion to import that than hardcoding this here
     await systemUserPage.CREATE_SYSTEM_USER_LINK.click();

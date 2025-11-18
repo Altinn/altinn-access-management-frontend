@@ -114,7 +114,7 @@
     "locale_title": "Vel språk",
     "logged_in_as_name": "Logga inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
-    "leave_beta": "Tilbake til dagens Altinn",
+    "leave_beta": "Til gammel løsning",
     "shortcuts": "Snarvegar"
   },
   "footer": {
@@ -128,8 +128,8 @@
   "sidebar": {
     "access_management": "Tilgangsstyring",
     "users": "Brukarar",
-    "reportees": "Våre tilgangar hos andre",
-    "systemaccess": "API- og systemtilgangar",
+    "reportees": "Fullmakter hos andre",
+    "systemaccess": "Systemtilgangar",
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
     "settings": "Innstillingar",
@@ -313,16 +313,10 @@
   },
   "role": {
     "provider_status": "Denne rolla er henta frå ",
-    "current_roles_title": "{{count}} administratortilgangar",
-    "roles_description": "Her finn du fullmakter for å administrere tilgangar for verksemda. Det er ikke knytta ressursar eller teenester til desse tilgangene.",
-    "role_delegation_success": "{{name}} har no fått fullmakt til {{role}}.",
-    "role_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{role}}.",
-    "role_deletion_success": "Fullmakta til {{role}} er fjerna frå {{name}}.",
-    "role_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{role}} frå {{name}}.",
-    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom rolla si <b>{{role_name}}</b>. Den kan derfor ikkje slettast.",
-    "activeRolesLabel": "Liste over roller som er tildelt brukaren",
-    "availableRolesLabel": "Liste over roller som kan tildelast brukaren",
-    "cant_delegate_generic": "Du kan ikkje delegere denne rolla"
+    "current_roles_title": "{{count}} roller",
+    "fetch_error_heading": "Kan ikkje vise roller for denne brukaren",
+    "fetch_error_description": "Vi klarer ikkje å hente rollene akkurat no.",
+    "no_roles_message": "Denne brukaren har ingen roller."
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -348,7 +342,7 @@
     "indirect_connections": "Brukarar utan fullmakt"
   },
   "reportees_page": {
-    "page_title": "Tilganger hos andre - Altinn",
+    "page_title": "Fullmakter hos andre - Altinn",
     "main_page_heading": "Fullmakter {{name}} har hos andre",
     "not_admin_alert": "Du har ikkje tilgang til å sjå denne sida hos {{name}}. Bytt side eller vel ein anna aktør."
   },
@@ -356,7 +350,7 @@
     "page_title": "Brukertilgang - Altinn",
     "access_packages_title": "Tilgangspakkar",
     "single_rights_title": "Tenester",
-    "roles_title": "Administratortilgangar",
+    "roles_title": "Roller",
     "resource_type_text": "Enkeltteneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -385,7 +379,7 @@
     "reportee_deletion_not_allowed_message": "<p>{{to_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{from_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p>"
   },
   "reportee_rights_page": {
-    "page_title": "Våre tilgangar hos andre - Altinn",
+    "page_title": "Fullmakter hos andre - Altinn",
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
@@ -501,7 +495,10 @@
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyar Altinn",
     "launchAlertContent": "Denne brukaren kan også ha fullmakter frå tidlegare Altinn.",
-    "launchAlertLinkText": "Sjå fullmakter frå tidlegare Altinn"
+    "launchAlertLinkText": "Sjå fullmakter frå tidlegare Altinn",
+    "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som allereie finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane. Brukaren har dei same rollene i den gamle løysinga, men der inneheld dei fleire og andre tenester.",
+    "oldRolesLinkText": "Gå til gammal løysing",
+  "legacyRoleContent": "Denne rolla vil snart fjernast. Bruk heller tilgangspakkar."
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

@@ -42,7 +42,7 @@ export const SidebarItems = (
   const items: MenuItemProps[] = [];
 
   if (!isSmall) {
-    items.push(getHeadingMenuItem(pathname, isLoading, reportee));
+    items.push(getHeadingMenuItem(pathname, isLoading));
   }
   if (displayRequestsPage) {
     items.push(getRequestsMenuItem(pathname, isLoading));

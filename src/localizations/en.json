@@ -117,7 +117,7 @@
     "locale_title": "Choose language",
     "logged_in_as_name": "Logged in as {{name}}",
     "new_altinn_info": "About new Altinn",
-    "leave_beta": "Back to today's Altinn",
+    "leave_beta": "To the old solution",
     "shortcuts": "Shortcuts"
   },
   "footer": {
@@ -131,10 +131,10 @@
   "sidebar": {
     "access_management": "Access management",
     "users": "Users",
-    "reportees": "Access to other companies",
-    "systemaccess": "API- and system access",
+    "reportees": "Powers of attorney from others",
+    "systemaccess": "System access",
     "consent": "Consent and power of attorney agreements",
-    "poa_overview": "Power of attorney",
+    "poa_overview": "Powers of attorney",
     "settings": "Settings",
     "requests": "Requests"
   },
@@ -317,16 +317,10 @@
   },
   "role": {
     "provider_status": "This role is fetched from ",
-    "current_roles_title": "{{count}} administrator accesses",
-    "roles_description": "Here you will find authorizations to manage access for the organization. No resources or services are associated with these accesses.",
-    "role_delegation_success": "{{name}} has been successfully granted power of attorney over {{role}}.",
-    "role_delegation_error": "Failed to grant power of attorney over {{role}} to {{name}}.",
-    "role_deletion_success": "Power of attorney over {{role}} has been successfully revoked for {{name}}.",
-    "role_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{role}}.",
-    "inherited_role_message": "<b>{{user_name}}</b> has access to this through their role {{role_name}}. Therefore, it cannot be deleted.",
-    "activeRolesLabel": "List of roles the user has been granted",
-    "availableRolesLabel": "List of roles available for the user",
-    "cant_delegate_generic": "You can't delegate this role"
+    "current_roles_title": "{{count}} roles",
+    "fetch_error_heading": "Unable to show roles for this user",
+    "fetch_error_description": "We can't fetch the roles right now.",
+    "no_roles_message": "This user has no roles."
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -352,7 +346,7 @@
     "user_search_placeholder": "Search for users"
   },
   "reportees_page": {
-    "page_title": "Access to other companies - Altinn",
+    "page_title": "Powers of attorney from others - Altinn",
     "main_page_heading": "Authorizations {{name}} has with others",
     "not_admin_alert": "You do not have access to this page for {{name}}. Please switch to a different page or change to a reportee you have sufficient rights for."
   },
@@ -360,7 +354,7 @@
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
     "single_rights_title": "Services",
-    "roles_title": "Administrative accesses",
+    "roles_title": "Roles",
     "resource_type_text": "Single right",
     "delete_confirm_message": "Are you sure you want to delete this?"
   },
@@ -389,7 +383,7 @@
     "reportee_deletion_not_allowed_message": "<p>{{to_name}} only has authorizations through their roles in the Central Coordinating Register for Legal Entities and therefore cannot be deleted from {{from_name}} in Altinn. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p>"
   },
   "reportee_rights_page": {
-    "page_title": "Access to other companies - Altinn",
+    "page_title": "Powers of attorney from others - Altinn",
     "heading_subtitle": "Power of attorney given to {{name}}"
   },
   "delegation_modal": {
@@ -505,7 +499,10 @@
   "a2Alerts": {
     "launchAlertHeading": "We are renewing Altinn",
     "launchAlertContent": "This user may also have authorizations from the previous Altinn.",
-    "launchAlertLinkText": "View authorizations from the previous Altinn"
+    "launchAlertLinkText": "View authorizations from the previous Altinn",
+    "oldRolesContent": "These Altinn roles may include services that already exist in the new Altinn solution. The services are being moved into the new access packages. The user has the same roles in the old solution, but there they include more and different services.",
+    "oldRolesLinkText": "Go to the old solution",
+    "legacyRoleContent": "This role will soon be removed. Use access packages instead."
   },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",
@@ -823,8 +820,8 @@
     "consent_is_not_accepted": "Consent/power of attorney is not approved"
   },
   "poa_overview_page": {
-    "page_title": "Power of attorney overview",
-    "heading": "Power of attorney overview for {{name}}"
+    "page_title": "Powers of attorney overview",
+    "heading": "Powers of attorney overview for {{name}}"
   },
   "package_poa_details_page": {
     "page_title": "Power of attorney details",

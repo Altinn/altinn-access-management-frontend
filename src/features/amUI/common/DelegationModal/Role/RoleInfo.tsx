@@ -1,67 +1,41 @@
-import { Avatar, DsAlert, DsParagraph, DsHeading } from '@altinn/altinn-components';
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import {
-  useDelegationCheckQuery,
-  useGetRolesForUserQuery,
-  type Role,
-} from '@/rtk/features/roleApi';
-
-import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
-import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
-import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
-import { DelegationAction } from '../EditModal';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { useDelegationModalContext } from '../DelegationModalContext';
-import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
-import { StatusSection } from '../StatusSection';
-
 import classes from './RoleInfo.module.css';
+import {
+  Role,
+  useGetRoleByIdQuery,
+  useGetRolePackagesQuery,
+  useGetRoleResourcesQuery,
+} from '@/rtk/features/roleApi';
+import { DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
+import statusClasses from '../StatusSection.module.css';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface PackageInfoProps {
   role: Role;
-  onDelegate?: () => void;
-  availableActions?: DelegationAction[];
 }
 
-export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
+export const RoleInfo = ({ role }: PackageInfoProps) => {
   const { t } = useTranslation();
 
-  const { fromParty, toParty } = usePartyRepresentation();
-  const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
-    from: fromParty?.partyUuid ?? '',
-    to: toParty?.partyUuid ?? '',
-  });
-  const { setActionError, actionError } = useDelegationModalContext();
-  const { data: delegationCheckResult } = useDelegationCheckQuery({
-    rightownerUuid: fromParty?.partyUuid ?? '',
-    roleUuid: role.id,
-  });
+  const isExternalRole = role?.provider?.code === 'sys-ccr';
+  const isLegacyRole = role?.provider?.code === 'sys-altinn2';
 
-  const assignment = useMemo(() => {
-    if (activeDelegations && !isFetching) {
-      return activeDelegations.find((assignment) => assignment.role.id === role.id);
-    }
-    return null;
-  }, [activeDelegations, isFetching, role.id]);
-
-  const userHasRole = !!assignment;
-  const userHasInheritedRole = assignment?.inherited && assignment.inherited.length > 0;
-  const inheritedFromRoleName = userHasInheritedRole ? assignment?.inherited[0]?.name : undefined;
+  // TODO: this is logic for fetching services and packages related to the role. This will be implemented in the next PR.
+  // const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  // const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
+  // const { data: rolePackages, isLoading: rolePackagesIsLoading } = useGetRolePackagesQuery(
+  //   { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
+  //   { skip: shouldSkipRoleRefs },
+  // );
+  // const { data: roleResources, isLoading: roleResourcesIsLoading } = useGetRoleResourcesQuery(
+  //   { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
+  //   { skip: shouldSkipRoleRefs },
+  // );
 
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <Avatar
-          size='md'
-          name={role?.name}
-          imageUrl={role?.area?.iconUrl}
-          imageUrlAlt={role?.area?.name}
-          type='company'
-        />
         <DsHeading
           level={3}
           data-size='sm'
@@ -69,84 +43,28 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
           {role?.name}
         </DsHeading>
       </div>
-
-      {!!actionError && (
-        <DsAlert
-          data-color='danger'
-          data-size='sm'
-        >
-          {userHasRole ? (
-            <DsHeading
-              level={4}
-              data-size='2xs'
-            >
-              {t('delegation_modal.general_error.revoke_heading')}
-            </DsHeading>
-          ) : (
-            <DsHeading
-              level={4}
-              data-size='2xs'
-            >
-              {t('delegation_modal.general_error.delegate_heading')}
-            </DsHeading>
-          )}
-          <TechnicalErrorParagraphs
-            size='xs'
-            status={actionError.httpStatus}
-            time={actionError.timestamp}
+      {isLegacyRole && (
+        <div className={statusClasses.infoLine}>
+          <ExclamationmarkTriangleFillIcon
+            fontSize='1.5rem'
+            className={statusClasses.warningIcon}
           />
-        </DsAlert>
+          <DsParagraph data-size='xs'>{t('a2Alerts.legacyRoleContent')}</DsParagraph>
+        </div>
       )}
-
-      <StatusSection
-        userHasAccess={userHasRole}
-        showMissingRightsMessage={!userHasRole && !delegationCheckResult?.canDelegate}
-        inheritedFrom={inheritedFromRoleName}
-        delegationCheckText={
-          delegationCheckResult?.detailCode !== ErrorCode.Unknown
-            ? getErrorCodeTextKey(delegationCheckResult?.detailCode)
-            : 'role.cant_delegate_generic'
-        }
-      />
-
+      {isExternalRole && (
+        <div className={statusClasses.infoLine}>
+          <InformationSquareFillIcon
+            fontSize='1.5rem'
+            className={statusClasses.inheritedInfoIcon}
+          />
+          <DsParagraph data-size='xs'>
+            {t('role.provider_status')}
+            {role?.provider?.name}
+          </DsParagraph>
+        </div>
+      )}
       <DsParagraph>{role?.description}</DsParagraph>
-
-      <div className={classes.actions}>
-        {!userHasRole && availableActions.includes(DelegationAction.REQUEST) && (
-          <RequestRoleButton
-            variant='solid'
-            size='md'
-            icon={false}
-          />
-        )}
-        {!userHasRole && availableActions.includes(DelegationAction.DELEGATE) && (
-          <DelegateRoleButton
-            accessRole={role}
-            fullText
-            disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
-            variant='solid'
-            size='md'
-            icon={false}
-            onDelegateError={(_role: Role, error: ActionError) => {
-              setActionError(error);
-            }}
-          />
-        )}
-        {userHasRole && role && availableActions.includes(DelegationAction.REVOKE) && (
-          <RevokeRoleButton
-            assignmentId={assignment.id}
-            accessRole={role}
-            fullText
-            disabled={isFetching || userHasInheritedRole}
-            variant='solid'
-            size='md'
-            icon={false}
-            onRevokeError={function (_role: Role, errorInfo: ActionError): void {
-              setActionError(errorInfo);
-            }}
-          />
-        )}
-      </div>
     </div>
   );
 };

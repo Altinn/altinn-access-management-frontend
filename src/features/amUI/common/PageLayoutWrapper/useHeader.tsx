@@ -5,13 +5,11 @@ import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/c
 import { GlobalSearchProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/GlobalSearch';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useTranslation } from 'react-i18next';
-import { useNewActorList, useNewHeader } from '@/resources/utils/featureFlagUtils';
-import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import {
   useGetReporteeQuery,
   useGetUserInfoQuery,
   useGetReporteeListForAuthorizedUserQuery,
-  useGetActorListForAuthorizedUserQuery,
   useGetFavoriteActorUuidsQuery,
   useAddFavoriteActorUuidMutation,
   useRemoveFavoriteActorUuidMutation,
@@ -111,7 +109,7 @@ export const useHeader = () => {
         ],
         onSelect: onChangeLocale,
       },
-      logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
+      logo: { href: getAltinnStartPageUrl(i18n.language), title: 'Altinn' },
       globalMenu: globalMenu,
       desktopMenu: desktopMenu,
       mobileMenu: mobileMenu,
@@ -164,7 +162,7 @@ export const useHeader = () => {
         ],
         onSelect: onChangeLocale,
       },
-      logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
+      logo: { href: getAltinnStartPageUrl(i18n.language), title: 'Altinn' },
       currentAccount: {
         name: currentAccountName,
         type: getAccountType(reportee?.type ?? ''),
