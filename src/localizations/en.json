@@ -151,7 +151,10 @@
     "unknown_error_description": "Please try reloading the page.",
     "if_persistent_contact_service": "If the error persists, you can go to Altinn's help page or contact support at 75 00 60 00",
     "user_connection_error": "Huh, looks like there's nothing here. ",
-    "acting_party_data_error": "A technical error occurred. Please try again later. If the problem persists, contact Altinn support at 75 00 60 00."
+    "acting_party_data_error": "A technical error occurred. Please try again later. If the problem persists, contact Altinn support at 75 00 60 00.",
+    "unsynced_connection_title": "Synchronization issue - our fault, not yours",
+    "unsynced_connection": "We have a synchronization issue between the new and old solution. This is something we are working on, but for now, you unfortunately cannot see your accesses here. We apologize for any inconvenience this may cause!",
+    "unsynced_connection_link": "Click here to view your accesses in the old solution"
   },
   "profile": {
     "received": "Received",
@@ -734,7 +737,7 @@
   },
   "page_not_available": {
     "title": "This page is not available",
-    "text": "The new access management pages are not quite ready for private individuals yet. If you meant to view the accesses for an organization, please switch to it in the menu."
+    "text": "The new access management pages are not quite ready for private individuals yet. If you meant to view the accesses for an organization, please switch representation."
   },
   "consent_request": {
     "page_title": "Approve consent/power of attorney - Altinn",
