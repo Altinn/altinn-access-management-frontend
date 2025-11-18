@@ -152,6 +152,7 @@
     "if_persistent_contact_service": "If the error persists, you can go to Altinn's help page or contact support at 75 00 60 00",
     "user_connection_error": "Huh, looks like there's nothing here. ",
     "acting_party_data_error": "A technical error occurred. Please try again later. If the problem persists, contact Altinn support at 75 00 60 00.",
+    "unsynced_connection_title": "Synchronization issue - our fault, not yours",
     "unsynced_connection": "We have a synchronization issue between the new and old solution. This is something we are working on, but for now, you unfortunately cannot see your accesses here. We apologize for any inconvenience this may cause!",
     "unsynced_connection_link": "Click here to view your accesses in the old solution"
   },

@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
 import { createContext, useContext } from 'react';
-import { DsAlert, DsLink, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
 import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
@@ -18,6 +18,8 @@ import { useReporteeParty } from './useReporteeParty';
 import { useConnectedParty } from './useConnectedParty';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { getHostUrl } from '@/resources/utils/pathUtils';
+import { ArrowRightIcon } from '@navikt/aksel-icons';
+import classes from './PartyRepresentationContext.module.css';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -159,7 +161,8 @@ export const PartyRepresentationProvider = ({
     !isLoading &&
     (invalidConnection || isError) &&
     authorizedPartyReportee &&
-    authorizedPartyReportee?.partyUuid === actingPartyUuid;
+    (authorizedPartyReportee?.partyUuid === actingPartyUuid ||
+      (fromPartyUuid && toPartyUuid && authorizedPartyReportee?.partyUuid === fromPartyUuid)); // The reportee is valid but the connection is unsynced (the user is either on their own page or acting on behalf of the reportee)
 
   const shouldShowConnectionErrorAlert =
     !isLoading && invalidConnection && !shouldShowUnsyncedConnectionAlert;
@@ -178,6 +181,14 @@ export const PartyRepresentationProvider = ({
     !shouldShowUserTypeRestrictionAlert &&
     !shouldShowConnectionErrorAlert &&
     !shouldShowUnsyncedConnectionAlert;
+
+  const shouldShowChildren =
+    !isError &&
+    !invalidConnection &&
+    !shouldShowUnsyncedConnectionAlert &&
+    !shouldShowConnectionErrorAlert &&
+    !shouldShowUserTypeRestrictionAlert &&
+    !shouldShowTechnicalErrorAlert;
 
   if (isLoading && loadingComponent) {
     return loadingComponent;
@@ -203,7 +214,7 @@ export const PartyRepresentationProvider = ({
         </DsAlert>
       )}
       <AccessPackageDelegationCheckProvider>
-        {!isError && !isLoading && !shouldShowUserTypeRestrictionAlert && children}
+        {shouldShowChildren && children}
       </AccessPackageDelegationCheckProvider>
     </PartyRepresentationContext.Provider>
   );
@@ -246,8 +257,27 @@ const connectionErrorAlert = (
 const UnsyncedConnectionAlert = () => {
   return (
     <DsAlert data-color='warning'>
-      <DsParagraph>{t('error_page.unsynced_connection')}</DsParagraph>
-      <DsLink href={getHostUrl() + 'ui/profile'}>{t('error_page.unsynced_connection_link')}</DsLink>
+      <div className={classes.unsyncedAlert}>
+        <DsHeading
+          level={3}
+          data-size='xs'
+        >
+          {t('error_page.unsynced_connection_title')}
+        </DsHeading>
+        <DsParagraph>{t('error_page.unsynced_connection')}</DsParagraph>
+        <DsLink asChild>
+          <Link
+            className={classes.link}
+            to={getHostUrl() + 'ui/profile'}
+          >
+            {t('error_page.unsynced_connection_link')}
+            <ArrowRightIcon
+              aria-hidden={true}
+              fontSize='1.3rem'
+            />
+          </Link>
+        </DsLink>
+      </div>
     </DsAlert>
   );
 };

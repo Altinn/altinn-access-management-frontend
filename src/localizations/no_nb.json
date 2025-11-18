@@ -110,7 +110,8 @@
     "if_persistent_contact_service": "Dersom feilen vedvarer kan du gå til Altinn sin hjelpeside eller kontakte brukerstøtte på telefon 75 00 60 00",
     "user_connection_error": "Ojsann, her var det visst ingenting.",
     "acting_party_data_error": "Det har oppstått en teknisk feil. Vennligst prøv igjen senere. Dersom problemet vedvarer, kontakt Altinn brukerstøtte på telefon 75 00 60 00.",
-    "unsynced_connection": "Her har vi en synkroniseringsfeil mellom ny og gammel løsning. Dette er noe vi jobber med, men for nå kan du dessverre ikke se tilgangene dine her. Vi beklager ulempen dette medfører!",
+    "unsynced_connection_title": "Synkroniseringsglipp - vår feil, ikke din",
+    "unsynced_connection": "Vi har en synkroniseringsfeil mellom ny og gammel løsning. Dette er noe vi jobber med, men for nå kan du dessverre ikke se tilgangene dine her. Vi beklager ulempen dette medfører!",
     "unsynced_connection_link": "Klikk her for å se tilgangene dine i gammel løsning"
   },
   "header": {

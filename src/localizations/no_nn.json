@@ -148,7 +148,8 @@
     "if_persistent_contact_service": "Dersom feilen held fram kan du finne svar på Altinn sine hjelpesider, eller kontakte brukarservice på telefon 75 00 60 00.",
     "user_connection_error": "Ojsann, her var det visst ingenting. ",
     "acting_party_data_error": "Det har oppstått ein teknisk feil. Prøv igjen seinare. Dersom problemet held fram, kontakt Altinn brukarservice på telefon 75 00 60 00.",
-    "unsynced_connection": "Her har vi ein synkroniseringsfeil mellom ny og gammal løysing. Dette er noko vi jobbar med, men for nå kan du dessverre ikkje sjå tilgangane dine her. Vi beklagar ulempa dette medfører!",
+    "unsynced_connection_title": "Synkroniseringsglipp - vår feil, ikkje din",
+    "unsynced_connection": "Vi har ein synkroniseringsfeil mellom ny og gammal løysing. Dette er noko vi jobbar med, men for nå kan du dessverre ikkje sjå tilgangane dine her. Vi beklagar ulempa dette medfører!",
     "unsynced_connection_link": "Klikk her for å sjå tilgangane dine i gammal løysing"
   },
   "profile": {
@@ -498,7 +499,7 @@
     "launchAlertLinkText": "Sjå fullmakter frå tidlegare Altinn",
     "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som allereie finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane. Brukaren har dei same rollene i den gamle løysinga, men der inneheld dei fleire og andre tenester.",
     "oldRolesLinkText": "Gå til gammal løysing",
-  "legacyRoleContent": "Denne rolla vil snart fjernast. Bruk heller tilgangspakkar."
+    "legacyRoleContent": "Denne rolla vil snart fjernast. Bruk heller tilgangspakkar."
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",
