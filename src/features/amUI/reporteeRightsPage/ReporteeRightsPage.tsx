@@ -18,7 +18,6 @@ import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
 
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
@@ -39,7 +38,6 @@ export const ReporteeRightsPage = () => {
           returnToUrlOnError={`/${amUIPath.Reportees}`}
         >
           <DelegationModalProvider>
-            <Breadcrumbs />
             <PageContainer
               backUrl={`/${amUIPath.Reportees}`}
               contentActions={<DeleteUserModal direction='from' />}

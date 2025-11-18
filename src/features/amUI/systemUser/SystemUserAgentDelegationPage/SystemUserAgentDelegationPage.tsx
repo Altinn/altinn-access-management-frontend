@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { SnackbarProvider, DsSpinner, DsAlert } from '@altinn/altinn-components';
@@ -14,8 +14,6 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 
 import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
-import { useBreadcrumbs } from '../../common/Breadcrumbs/BreadcrumbsContext';
 
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();
@@ -50,7 +48,6 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <AgentDelegationBreadcrumbs title={systemUser?.integrationTitle} />
         {(isLoadingSystemUser || isLoadingCustomers || isLoadingAssignedCustomers) && (
           <DsSpinner aria-label={t('systemuser_detailpage.loading_systemuser')} />
         )}
@@ -79,13 +76,4 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
       </PageLayoutWrapper>
     </PageWrapper>
   );
-};
-
-const AgentDelegationBreadcrumbs = ({ title }: { title?: string }) => {
-  const { setLastBreadcrumbLabel } = useBreadcrumbs();
-  useEffect(() => {
-    setLastBreadcrumbLabel(title);
-  }, [title]);
-
-  return <Breadcrumbs />;
 };

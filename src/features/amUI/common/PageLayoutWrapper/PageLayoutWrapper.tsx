@@ -19,6 +19,7 @@ import { useHeader } from './useHeader';
 
 import classes from './PageLayoutWrapper.module.css';
 import { BreadcrumbsProvider } from '../Breadcrumbs/BreadcrumbsContext';
+import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -69,7 +70,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
           footer={footer}
         >
-          <div className={classes.content}>{children}</div>
+          <div className={classes.content}>
+            <Breadcrumbs />
+            {children}
+          </div>
           <InfoModal />
         </Layout>
         <Snackbar />

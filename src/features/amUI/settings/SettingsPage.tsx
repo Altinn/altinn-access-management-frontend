@@ -7,7 +7,6 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SettingsPageContent } from './SettingsPageContent';
 import { settingsPageEnabled } from '@/resources/utils/featureFlagUtils';
 import { Navigate } from 'react-router';
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 export const SettingsPage = () => {
   const pageIsEnabled = settingsPageEnabled();
@@ -23,7 +22,6 @@ export const SettingsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <Breadcrumbs />
         <PartyRepresentationProvider
           fromPartyUuid={getCookie('AltinnPartyUuid')}
           actingPartyUuid={getCookie('AltinnPartyUuid')}

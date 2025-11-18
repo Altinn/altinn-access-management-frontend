@@ -21,5 +21,5 @@ export const Breadcrumbs = () => {
     };
   });
 
-  return <AcBreadcrumbs items={breadcrumbItems} />;
+  return items.length > 0 ? <AcBreadcrumbs items={breadcrumbItems} /> : <></>;
 };

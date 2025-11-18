@@ -13,7 +13,6 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
 import { UsersList } from './UsersList';
 import { ReporteePageHeading } from '../common/ReporteePageHeading';
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 export const UsersPage = () => {
   const { t } = useTranslation();
@@ -35,7 +34,6 @@ export const UsersPage = () => {
           actingPartyUuid={getCookie('AltinnPartyUuid')}
           errorOnPriv={true}
         >
-          <Breadcrumbs />
           <ReporteePageHeading
             title={t('users_page.main_page_heading', { name })}
             reportee={reportee}

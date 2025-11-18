@@ -12,7 +12,6 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 import { ReporteePageHeading } from '../common/ReporteePageHeading';
 
 import { ReporteesList } from './ReporteesList';
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();
@@ -38,7 +37,6 @@ export const ReporteesPage = () => {
             actingPartyUuid={getCookie('AltinnPartyUuid')}
             errorOnPriv={true}
           >
-            <Breadcrumbs />
             <ReporteePageHeading
               title={t('reportees_page.main_page_heading', { name })}
               reportee={reportee}

@@ -51,6 +51,10 @@ type RouteConfig = {
 
 const routeMap: RouteConfig[] = [
   {
+    pattern: '/',
+    breadcrumbs: () => [],
+  },
+  {
     pattern: `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
     breadcrumbs: () => [root, systemUserOverview],
   },

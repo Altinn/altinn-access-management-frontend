@@ -21,7 +21,6 @@ import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserDetailsPage.module.css';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 import { useBreadcrumbs } from '../../common/Breadcrumbs/BreadcrumbsContext';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
@@ -116,5 +115,5 @@ const DetailsBreadcrumbs = ({ title }: { title?: string }) => {
     setLastBreadcrumbLabel(title);
   }, [title]);
 
-  return <Breadcrumbs />;
+  return <></>;
 };
