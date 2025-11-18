@@ -1,20 +1,19 @@
 import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { useTranslation } from 'react-i18next';
 
-const infoPortalUrl = getAltinnStartPageUrl();
-
-const footerLinks = [
-  { href: infoPortalUrl + 'hjelp/', resourceId: 'footer.help' },
-  {
-    href: infoPortalUrl + 'om-altinn/',
-    resourceId: 'footer.about_altinn',
-  },
-  { href: infoPortalUrl + 'om-altinn/personvern/', resourceId: 'footer.privacy_policy' },
-  { href: infoPortalUrl + 'om-altinn/tilgjengelighet/', resourceId: 'footer.accessibility' },
-];
-
 export const useFooter = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const infoPortalUrl = getAltinnStartPageUrl(i18n.language);
+
+  const footerLinks = [
+    { href: infoPortalUrl + 'hjelp/', resourceId: 'footer.help' },
+    {
+      href: infoPortalUrl + 'om-altinn/',
+      resourceId: 'footer.about_altinn',
+    },
+    { href: infoPortalUrl + 'om-altinn/personvern/', resourceId: 'footer.privacy_policy' },
+    { href: infoPortalUrl + 'om-altinn/tilgjengelighet/', resourceId: 'footer.accessibility' },
+  ];
 
   const footer = {
     address: t('common.digdir') + ',',

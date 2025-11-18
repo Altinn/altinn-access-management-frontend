@@ -94,7 +94,7 @@ export const ConsentRequestPage = () => {
             onSelect: onChangeLocale,
           },
           logo: {
-            href: getAltinnStartPageUrl(),
+            href: getAltinnStartPageUrl(i18n.language),
             title: 'Altinn',
           },
           currentAccount: {
