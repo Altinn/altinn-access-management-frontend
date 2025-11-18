@@ -8,7 +8,7 @@ import {
   TechnicalErrorParagraphs,
 } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useGroupedRoleListEntries } from './useGroupedRoleListEntries';
-import { DsAlert, DsHeading, DsParagraph, Heading, List } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, List } from '@altinn/altinn-components';
 import { t } from 'i18next';
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
