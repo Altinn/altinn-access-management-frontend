@@ -11,6 +11,10 @@ const systemUserOverview = {
   href: `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
   label: 'sidebar.systemaccess',
 };
+const systemUserCreate = {
+  href: `/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`,
+  label: 'systemuser_overviewpage.new_system_user_button',
+};
 const users = {
   href: `/${amUIPath.Users}`,
   label: 'sidebar.users',
@@ -49,6 +53,10 @@ const routeMap: RouteConfig[] = [
   {
     pattern: `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
     breadcrumbs: () => [root, systemUserOverview],
+  },
+  {
+    pattern: `/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`,
+    breadcrumbs: () => [root, systemUserCreate],
   },
   {
     pattern: `/${SystemUserPath.SystemUser}/${SystemUserPath.Details}`,
