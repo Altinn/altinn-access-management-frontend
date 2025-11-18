@@ -46,8 +46,6 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
   const { hasInheritedRole, inheritedRoleFromEntity } = useInheritedRoleInfo({
     rolePermissions,
     role,
-    toParty,
-    fromParty,
   });
 
   return (

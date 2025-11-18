@@ -19,8 +19,6 @@ interface UseInheritedRoleInfoResult {
 export const useInheritedRoleInfo = ({
   rolePermissions,
   role,
-  toParty,
-  fromParty,
 }: UseInheritedRoleInfoParams): UseInheritedRoleInfoResult => {
   return useMemo(() => {
     if (!rolePermissions || !role?.id) {
@@ -37,5 +35,5 @@ export const useInheritedRoleInfo = ({
     }
 
     return { hasInheritedRole: false, inheritedRoleFromEntity: undefined };
-  }, [rolePermissions, role?.id, toParty?.partyUuid, fromParty?.partyUuid, fromParty?.name]);
+  }, [rolePermissions, role?.id]);
 };
