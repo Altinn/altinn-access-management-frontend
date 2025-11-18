@@ -10,7 +10,6 @@ import {
 import statusClasses from '../StatusSection.module.css';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
-import { Link } from 'react-router';
 import { useInheritedRoleInfo } from './useInheritedRoleInfo';
 import { RoleResourcesSection } from './RoleResourcesSection';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -109,10 +108,14 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
       <DsParagraph className={classes.oldRolesDisclaimer}>
         {t('role.resources_disclaimer')}{' '}
         <DsLink asChild>
-          <Link to={oldSolutionUrl}>
+          <a
+            href={oldSolutionUrl}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
             {t('role.resources_disclaimer_link')}
             <ExternalLinkIcon aria-hidden />
-          </Link>
+          </a>
         </DsLink>
       </DsParagraph>
       {!shouldSkipRoleRefs && (
