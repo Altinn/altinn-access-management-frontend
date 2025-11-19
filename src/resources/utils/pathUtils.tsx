@@ -34,25 +34,30 @@ export const getEnv = () => {
 };
 
 export const getAltinnStartPageUrl = (languageOverride?: string) => {
-  const env = getEnv();
   const lang = languageOverride ?? getCookie('selectedLanguage');
   const langKey = lang === 'en' ? 'en/' : lang === 'no_nn' ? 'nn/' : '';
 
+  return `${getAltinnInfoUrl}/${langKey}`;
+};
+
+export const getAltinnInfoUrl = () => {
+  const env = getEnv();
+
   switch (env) {
     case Environment.TT02:
-      return `https://info.tt02.altinn.no/${langKey}`;
+      return `https://info.tt02.altinn.no`;
     case Environment.AT21:
-      return `https://info.at21.altinn.cloud/${langKey}`;
+      return `https://info.at21.altinn.cloud`;
     case Environment.AT22:
-      return `https://info.at22.altinn.cloud/${langKey}`;
+      return `https://info.at22.altinn.cloud`;
     case Environment.AT23:
-      return `https://info.at23.altinn.cloud/${langKey}`;
+      return `https://info.at23.altinn.cloud`;
     case Environment.AT24:
-      return `https://info.at24.altinn.cloud/${langKey}`;
+      return `https://info.at24.altinn.cloud`;
     case Environment.PROD:
-      return `https://info.altinn.no/${langKey}`;
+      return `https://info.altinn.no`;
     default:
-      return `https://info.altinn.no/${langKey}`;
+      return `https://info.altinn.no`;
   }
 };
 

@@ -117,7 +117,7 @@
   "header": {
     "access_management": "Tilgangsstyring",
     "inbox": "Innboks",
-    "profile": "Min profil",
+    "profile": "Din profil",
     "menu-label": "Meny",
     "account_you": "Deg selv",
     "account_others": "Andre kontoer",
@@ -135,7 +135,10 @@
     "logged_in_as_name": "Logget inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
     "leave_beta": "Til gammel løsning",
-    "shortcuts": "Snarveier"
+    "shortcuts": "Snarveier",
+    "all_forms": "Alle skjema og tjenester",
+    "start_business": "Starte og drive virksomhet",
+    "help": "Trenger du hjelp?"
   },
   "footer": {
     "digdir_address": "Postboks 1382 Vika, 0114 Oslo. Org.nr. 991 825 827",

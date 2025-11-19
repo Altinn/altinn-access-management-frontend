@@ -3,7 +3,7 @@ import {
   useNewActorList,
   useNewHeader,
 } from '@/resources/utils/featureFlagUtils';
-import { getAfUrl, getHostUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
+import { getAfUrl, getAltinnInfoUrl, getHostUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { amUIPath } from '@/routes/paths';
 import {
@@ -20,24 +20,50 @@ import { Theme, MenuItemSize, MenuItemProps, formatDisplayName } from '@altinn/a
 import {
   InboxFillIcon,
   PersonCircleIcon,
-  HandshakeIcon,
   InformationSquareIcon,
-  LeaveIcon,
   PadlockLockedFillIcon,
+  MenuGridIcon,
+  Buildings2Icon,
+  ChatExclamationmarkIcon,
 } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { SidebarItems } from './SidebarItems';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 const getAccountType = (type: string): 'company' | 'person' => {
   return type === 'Organization' ? 'company' : 'person';
+};
+
+const linkUrls = {
+  forms: {
+    no_nb: 'skjemaoversikt',
+    no_nn: 'nn/skjemaoversikt/',
+    en: 'en/forms-overview/',
+  },
+  about: {
+    no_nb: 'nyheter/om-nye-altinn',
+    no_nn: 'nn/nyheiter/om-nye-altinn',
+    en: 'en/news/About-the-new-Altinn',
+  },
+  'start-business': {
+    no_nb: 'starte-og-drive',
+    no_nn: 'nn/starte-og-drive',
+    en: 'en/start-and-run-business',
+  },
+  help: {
+    no_nb: 'hjelp',
+    no_nn: 'nn/hjelp',
+    en: 'en/help',
+  },
 };
 
 export const useGlobalMenu = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const lang = getCookie('selectedLanguage') as 'no_nb' | 'no_nn' | 'en';
   const useNewHeaderFlag = useNewHeader();
   const useNewActorListFlag = useNewActorList();
   const isSm = useIsTabletOrSmaller();
@@ -61,7 +87,7 @@ export const useGlobalMenu = () => {
   const isLoadingMenu =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
 
-  const platformLinks = [
+  const headerLinks: MenuItemProps[] = [
     {
       groupId: 1,
       icon: { svgElement: InboxFillIcon, theme: 'subtle' },
@@ -77,23 +103,7 @@ export const useGlobalMenu = () => {
       badge: { label: t('common.beta') },
     },
     {
-      groupId: 'current-user',
-      icon: PersonCircleIcon,
-      id: 'profile',
-      size: 'sm',
-      title: t('header.profile'),
-      as: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-        <a
-          {...props}
-          href={`${getAfUrl()}profile`}
-        />
-      ),
-    },
-  ] as MenuItemProps[];
-
-  const headerLinks: MenuItemProps[] = [
-    {
-      groupId: 2,
+      groupId: 1,
       icon: { svgElement: PadlockLockedFillIcon, theme: 'subtle' },
       id: 'access_management',
       size: 'lg',
@@ -107,7 +117,19 @@ export const useGlobalMenu = () => {
       ),
       badge: { label: t('common.beta') },
     },
-    ...(crossPlatformLinksEnabled() ? platformLinks : []),
+    {
+      groupId: 1,
+      icon: { svgElement: MenuGridIcon, theme: 'subtle' },
+      id: 'all_forms',
+      size: 'lg',
+      title: t('header.all_forms'),
+      as: (props) => (
+        <Link
+          to={`${getAltinnInfoUrl()}/${linkUrls['forms'][lang] ?? linkUrls['forms']['no_nb']}`}
+          {...props}
+        />
+      ),
+    },
     ...(isSm
       ? SidebarItems(
           true,
@@ -124,28 +146,53 @@ export const useGlobalMenu = () => {
       groupId: 10,
       icon: InformationSquareIcon,
       title: t('header.new_altinn_info'),
-      size: 'lg',
+      size: 'sm',
       as: (props) => (
         <Link
-          to={`/${amUIPath.Info}`}
+          to={`${getAltinnInfoUrl()}/${linkUrls['about'][lang] ?? linkUrls['about']['no_nb']}`}
           {...props}
         />
       ),
     },
     {
-      id: 'leave_beta',
+      id: 'starte-og-drive',
       groupId: 10,
-      icon: LeaveIcon,
-      title: t('header.leave_beta'),
-      size: 'lg',
+      icon: Buildings2Icon,
+      title: t('header.start_business'),
+      size: 'sm',
       as: (props) => (
         <Link
-          to={getHostUrl() + 'ui/profile'}
+          to={`${getAltinnInfoUrl()}/${linkUrls['start-business'][lang] ?? linkUrls['start-business']['no_nb']}`}
           {...props}
         />
       ),
     },
-    { groupId: 'current-user', hidden: true },
+    {
+      id: 'trenger-du-hjelp',
+      groupId: 10,
+      icon: ChatExclamationmarkIcon,
+      title: t('header.help'),
+      size: 'sm',
+      as: (props) => (
+        <Link
+          to={`${getAltinnInfoUrl()}/${linkUrls['help'][lang] ?? linkUrls['help']['no_nb']}`}
+          {...props}
+        />
+      ),
+    },
+    {
+      groupId: 'current-user',
+      icon: PersonCircleIcon,
+      id: 'profile',
+      size: 'sm',
+      title: t('header.profile'),
+      as: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+        <a
+          {...props}
+          href={`${getAfUrl()}profile`}
+        />
+      ),
+    },
   ];
 
   const globalMenu = {
