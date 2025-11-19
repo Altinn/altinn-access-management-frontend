@@ -322,7 +322,11 @@
     "resources_empty": "Denne rolla har ingen tenester.",
     "resources_disclaimer": "Denne rolla kan framleis gi tilgang til tenester som berre finst i den gamle løysinga.",
     "resources_disclaimer_link": "Sjå lista i den gamle løysinga",
-    "inherited_role_org_message": "{{user_name}} har tilgang til dette gjennom rolla si i {{org_name}}."
+    "access_status": {
+      "via_role": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{org_name}}.",
+      "via_parent": "{{user_name}} har tilgang til dette fordi hovudeininga har ho.",
+      "via_agent": "{{user_name}} har tilgang til dette som agent via {{agent_name}}."
+    }
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",

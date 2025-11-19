@@ -326,7 +326,11 @@
     "resources_empty": "This role has no services.",
     "resources_disclaimer": "This role might still grant access to services that only exist in the old solution.",
     "resources_disclaimer_link": "See the list of services in the old solution",
-    "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}."
+    "access_status": {
+      "via_role": "{{user_name}} has access to this through the role they hold in {{org_name}}.",
+      "via_parent": "{{user_name}} has access to this because the main unit has it.",
+      "via_agent": "{{user_name}} has access to this as an agent via {{agent_name}}."
+    }
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
