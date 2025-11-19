@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-import { DsSkeleton, List, ListItem } from '@altinn/altinn-components';
+import { Badge, DsSkeleton, List, ListItem } from '@altinn/altinn-components';
 import { HandshakeIcon } from '@navikt/aksel-icons';
 
 import classes from './ActiveConsentsPage.module.css';
 
 interface ConsentListItemProps {
   title: string;
-  subItems: { id: string; title: string; badgeText: string }[];
+  subItems: { id: string; title: string; badgeText: string; isNew?: boolean }[];
   partyType?: string;
   isLoading?: boolean;
   onClick?: (consentId: string) => void;
@@ -51,14 +51,17 @@ export const ConsentListItem = ({
             onClick={onClick ? () => onClick(item.id) : undefined}
             badge={
               <div className={classes.consentBadge}>
-                {isLoading ? (
-                  <DsSkeleton
-                    variant='text'
-                    width={20}
-                  />
-                ) : (
-                  <>{item.badgeText}</>
-                )}
+                {item.isNew && <Badge label='Nylig samtykket' />}
+                <div className={classes.consentBadgeAction}>
+                  {isLoading ? (
+                    <DsSkeleton
+                      variant='text'
+                      width={20}
+                    />
+                  ) : (
+                    <>{item.badgeText}</>
+                  )}
+                </div>
               </div>
             }
             linkIcon

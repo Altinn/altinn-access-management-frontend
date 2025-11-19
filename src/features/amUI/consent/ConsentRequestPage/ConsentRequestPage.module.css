@@ -27,7 +27,7 @@
 
 .heading {
   font-weight: var(--ds-font-weight-semibold);
-  font-size: 1.125rem; /* should be --ds-body-md-font-size, but that is overridden to 1rem in Common.module.css */
+  font-size: var(--ds-body-md-font-size);
   margin-bottom: var(--ds-size-8);
 }
 
@@ -37,7 +37,7 @@
 
 .serviceIntro {
   font-weight: var(--ds-font-weight-medium);
-  font-size: 1.125rem; /* should be --ds-body-md-font-size, but that is overridden to 1rem in Common.module.css */
+  font-size: var(--ds-body-md-font-size);
   margin-bottom: var(--ds-size-8);
 }
 

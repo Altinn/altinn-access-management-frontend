@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
@@ -161,6 +161,7 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
   const [searchParams] = useSearchParams();
   const skipLogout = searchParams.get('skiplogout');
   const navigate = useNavigate();
+  const [isReceiptVisible, setIsReceiptVisible] = useState<boolean>(false);
 
   const [
     postApproveConsent,
@@ -189,7 +190,7 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
     if (!isActionButtonDisabled && request) {
       try {
         await postApproveConsent({ requestId: request.id, language }).unwrap();
-        redirectAfterAction();
+        redirectAfterAction(true);
       } catch {
         // Error is already tracked via approveConsentError
       }
@@ -200,15 +201,17 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
     if (!isActionButtonDisabled && request) {
       try {
         await postRejectConsent({ requestId: request.id }).unwrap();
-        redirectAfterAction();
+        redirectAfterAction(false);
       } catch {
         // Error is already tracked via rejectConsentError
       }
     }
   };
 
-  const redirectAfterAction = (): void => {
-    if (skipLogout) {
+  const redirectAfterAction = (isApproved: boolean): void => {
+    if (skipLogout && isApproved) {
+      setIsReceiptVisible(true);
+    } else if (skipLogout && !isApproved) {
       navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`);
     } else {
       window.location.assign(
@@ -216,6 +219,42 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
       );
     }
   };
+
+  if (isReceiptVisible) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: '2rem',
+          alignSelf: 'center',
+          height: '100%',
+          maxWidth: '25rem',
+          justifyContent: 'center',
+        }}
+      >
+        <DsHeading
+          level={1}
+          data-size='md'
+        >
+          Samtykket er registrert!
+        </DsHeading>
+        <DsParagraph>
+          Du kan når som helst trekke samtykket på samtykker og fullmakter-siden.
+        </DsParagraph>
+        <DsButton
+          onClick={() => {
+            navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`, {
+              state: { createdId: request.id },
+            });
+          }}
+        >
+          Tilbake til samtykker og fullmakter
+        </DsButton>
+      </div>
+    );
+  }
 
   return (
     <>

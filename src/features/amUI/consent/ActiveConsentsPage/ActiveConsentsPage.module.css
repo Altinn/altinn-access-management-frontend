@@ -24,12 +24,18 @@
   max-width: 50rem;
 }
 
+.consentBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-size-2);
+}
+
 @media only screen and (max-width: 769px) {
   .expandedListItem {
     padding: var(--ds-size-2);
   }
 
-  .consentBadge {
+  .consentBadgeAction {
     display: none;
   }
 }
