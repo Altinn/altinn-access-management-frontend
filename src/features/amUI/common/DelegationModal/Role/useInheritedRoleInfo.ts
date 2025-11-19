@@ -1,6 +1,5 @@
 import type { Party } from '@/rtk/features/lookupApi';
 import type { Permissions, Role, RolePermission } from '@/rtk/features/roleApi';
-import { ViaAgent } from './RoleInfo.stories';
 
 export enum RoleStatusType {
   ViaRole = 'via_role',
