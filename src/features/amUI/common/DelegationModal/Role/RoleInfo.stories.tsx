@@ -76,7 +76,7 @@ const meta: Meta<RoleInfoStoryProps> = {
   component: RoleInfo,
   args: {
     role: storyRole,
-    scenario: 'viaRoleFromParentEntity' as ScenarioKey,
+    scenario: 'viaRole',
   },
   argTypes: {
     role: {
