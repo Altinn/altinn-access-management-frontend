@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 type Entity = {
+  id: string;
   name: string;
   type: string;
   variant: string;
