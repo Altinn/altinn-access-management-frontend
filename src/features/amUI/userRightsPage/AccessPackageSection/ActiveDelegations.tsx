@@ -9,6 +9,7 @@ import { useDelegationModalContext } from '../../common/DelegationModal/Delegati
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 import { useTranslation } from 'react-i18next';
+import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 
 interface ActiveDelegationsProps {
   searchString?: string;
@@ -19,9 +20,10 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
   const { toParty, selfParty, actingParty, isLoading } = usePartyRepresentation();
+  const { data: isHovedadmin } = useGetIsHovedadminQuery();
   const canGiveAccess =
-    actingParty?.partyUuid !== selfParty?.partyUuid &&
-    actingParty?.partyUuid !== toParty?.partyUuid; // Can only give access to others (or to self if Hovedadmin acting on behalf of party)
+    actingParty?.partyUuid !== toParty?.partyUuid && // Acting party cannot grant access to itself
+    (toParty?.partyUuid !== selfParty?.partyUuid || isHovedadmin); // Only hovedadmin can give access to themselves
   const { t } = useTranslation();
 
   return (
