@@ -42,9 +42,9 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
 
   const direction = actingParty?.partyUuid === fromParty?.partyUuid ? 'from' : 'to';
   const formattedUserName = formatDisplayName({
-    fullName: (direction === 'from' ? fromParty?.name : toParty?.name) || '',
+    fullName: (direction === 'from' ? toParty?.name : fromParty?.name) || '',
     type:
-      (direction === 'from' ? fromParty?.partyTypeName : toParty?.partyTypeName) ===
+      (direction === 'from' ? toParty?.partyTypeName : fromParty?.partyTypeName) ===
       PartyType.Person
         ? 'person'
         : 'company',
