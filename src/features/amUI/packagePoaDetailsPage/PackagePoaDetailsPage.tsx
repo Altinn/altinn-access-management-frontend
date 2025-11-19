@@ -68,5 +68,10 @@ const BreadcrumbsWrapper = () => {
     { skip: !id || !fromParty?.partyUuid },
   );
 
-  return <Breadcrumbs lastBreadcrumbLabel={accessPackage?.name} />;
+  return (
+    <Breadcrumbs
+      items={['root', 'poa_overview']}
+      lastBreadcrumb={{ label: accessPackage?.name }}
+    />
+  );
 };

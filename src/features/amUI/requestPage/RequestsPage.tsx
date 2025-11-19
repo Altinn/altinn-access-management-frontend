@@ -10,7 +10,7 @@ export const RequestPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <Breadcrumbs />
+        <Breadcrumbs items={['root', 'requests']} />
         <div>Forespørsel-siden er under arbeid</div>
       </PageLayoutWrapper>
     </PageWrapper>

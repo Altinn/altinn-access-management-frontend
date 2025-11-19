@@ -49,7 +49,10 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <Breadcrumbs lastBreadcrumbLabel={systemUser?.integrationTitle} />
+        <Breadcrumbs
+          items={['root', 'systemuser_overview']}
+          lastBreadcrumb={{ label: systemUser?.integrationTitle }}
+        />
         {(isLoadingSystemUser || isLoadingCustomers || isLoadingAssignedCustomers) && (
           <DsSpinner aria-label={t('systemuser_detailpage.loading_systemuser')} />
         )}

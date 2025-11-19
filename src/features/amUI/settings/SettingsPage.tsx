@@ -28,7 +28,7 @@ export const SettingsPage = () => {
           actingPartyUuid={getCookie('AltinnPartyUuid')}
           returnToUrlOnError={`/${amUIPath.Users}`}
         >
-          <Breadcrumbs />
+          <Breadcrumbs items={['root', 'settings']} />
           <SettingsPageContent />
         </PartyRepresentationProvider>
       </PageLayoutWrapper>

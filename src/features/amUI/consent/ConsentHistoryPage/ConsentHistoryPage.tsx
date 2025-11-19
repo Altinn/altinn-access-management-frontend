@@ -52,7 +52,7 @@ export const ConsentHistoryPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <Breadcrumbs />
+        <Breadcrumbs items={['root', 'consent', 'consent_log']} />
         <DsHeading
           level={1}
           data-size='sm'

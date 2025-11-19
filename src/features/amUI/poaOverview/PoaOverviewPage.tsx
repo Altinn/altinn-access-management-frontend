@@ -39,7 +39,7 @@ export const PoaOverviewPage = () => {
           actingPartyUuid={partyUuid ?? ''}
           errorOnPriv={true}
         >
-          <Breadcrumbs />
+          <Breadcrumbs items={['root', 'poa_overview']} />
           <ReporteePageHeading
             title={t('poa_overview_page.heading', { name })}
             reportee={reportee}

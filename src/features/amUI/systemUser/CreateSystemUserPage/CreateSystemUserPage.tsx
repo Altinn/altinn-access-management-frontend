@@ -29,7 +29,7 @@ export const CreateSystemUserPage = (): React.ReactNode => {
     <div className='systemuser_combobox_workaround'>
       <PageWrapper>
         <PageLayoutWrapper>
-          <Breadcrumbs />
+          <Breadcrumbs items={['root', 'systemuser_overview', 'systemuser_create']} />
           {!isConfirmStep && (
             <SelectRegisteredSystem
               selectedSystem={selectedSystem}

@@ -64,7 +64,7 @@ export const ActiveConsentsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <Breadcrumbs />
+        <Breadcrumbs items={['root', 'consent']} />
         <DsHeading
           level={1}
           data-size='sm'

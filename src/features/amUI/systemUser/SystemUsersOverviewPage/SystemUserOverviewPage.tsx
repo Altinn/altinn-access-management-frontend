@@ -58,7 +58,7 @@ export const SystemUserOverviewPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <Breadcrumbs />
+        <Breadcrumbs items={['root', 'systemuser_overview']} />
         <DsHeading
           level={1}
           data-size='sm'

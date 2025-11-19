@@ -56,7 +56,10 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <Breadcrumbs lastBreadcrumbLabel={systemUser?.integrationTitle} />
+        <Breadcrumbs
+          items={['root', 'systemuser_overview']}
+          lastBreadcrumb={{ label: systemUser?.integrationTitle }}
+        />
         <PageContainer
           onNavigateBack={handleNavigateBack}
           pageActions={

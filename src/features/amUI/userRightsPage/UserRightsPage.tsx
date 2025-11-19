@@ -80,10 +80,13 @@ const BreadcrumbsWrapper = () => {
   const { toParty } = usePartyRepresentation();
   return (
     <Breadcrumbs
-      lastBreadcrumbLabel={formatDisplayName({
-        fullName: toParty?.name ?? '',
-        type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-      })}
+      items={['root', 'users']}
+      lastBreadcrumb={{
+        label: formatDisplayName({
+          fullName: toParty?.name ?? '',
+          type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+        }),
+      }}
     />
   );
 };

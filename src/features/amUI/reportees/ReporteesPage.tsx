@@ -38,7 +38,7 @@ export const ReporteesPage = () => {
             actingPartyUuid={getCookie('AltinnPartyUuid')}
             errorOnPriv={true}
           >
-            <Breadcrumbs />
+            <Breadcrumbs items={['root', 'reportees']} />
             <ReporteePageHeading
               title={t('reportees_page.main_page_heading', { name })}
               reportee={reportee}

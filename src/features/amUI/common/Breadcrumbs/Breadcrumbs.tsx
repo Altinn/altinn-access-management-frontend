@@ -1,130 +1,62 @@
 import React, { ComponentPropsWithoutRef } from 'react';
 import { Breadcrumbs as AcBreadcrumbs, DsSkeleton } from '@altinn/altinn-components';
-import { Link, matchPath, useLocation } from 'react-router';
+import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 
 export type BreadcrumbItem = { label?: string; href?: string };
 
-const root = { label: 'sidebar.access_management', href: '/' };
-const systemUserOverview = {
-  href: `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
-  label: 'sidebar.systemaccess',
-};
-const systemUserCreate = {
-  href: `/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`,
-  label: 'systemuser_overviewpage.new_system_user_button',
-};
-const users = {
-  href: `/${amUIPath.Users}`,
-  label: 'sidebar.users',
-};
-const reportees = {
-  href: `/${amUIPath.Reportees}`,
-  label: 'sidebar.reportees',
-};
-const poaOverview = {
-  href: `/${amUIPath.PoaOverview}`,
-  label: 'sidebar.poa_overview',
-};
-const consent = {
-  href: `/${ConsentPath.Consent}/${ConsentPath.Active}`,
-  label: 'sidebar.consent',
-};
-const consentLog = {
-  href: `/${ConsentPath.Consent}/${ConsentPath.Log}`,
-  label: 'consent_log.heading',
-};
-const settings = {
-  href: `/${amUIPath.Settings}`,
-  label: 'sidebar.settings',
-};
-const requests = {
-  href: `/${amUIPath.Requests}`,
-  label: 'sidebar.requests',
-};
-
-type RouteConfig = {
-  pattern: string;
-  breadcrumbs: (lastElement: BreadcrumbItem) => BreadcrumbItem[];
-};
-
-const routeMap: RouteConfig[] = [
-  {
-    pattern: `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
-    breadcrumbs: () => [root, systemUserOverview],
+const BreadcrumbConfig = {
+  root: { label: 'sidebar.access_management', href: '/' },
+  systemuser_overview: {
+    href: `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
+    label: 'sidebar.systemaccess',
   },
-  {
-    pattern: `/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`,
-    breadcrumbs: () => [root, systemUserOverview, systemUserCreate],
+  systemuser_create: {
+    href: `/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`,
+    label: 'systemuser_overviewpage.new_system_user_button',
   },
-  {
-    pattern: `/${SystemUserPath.SystemUser}/${SystemUserPath.Details}`,
-    breadcrumbs: (lastElement) => [root, systemUserOverview, lastElement],
+  users: {
+    href: `/${amUIPath.Users}`,
+    label: 'sidebar.users',
   },
-  {
-    pattern: `/${SystemUserPath.SystemUser}/${SystemUserPath.AgentDelegation}`,
-    breadcrumbs: (lastElement) => [root, systemUserOverview, lastElement],
+  reportees: {
+    href: `/${amUIPath.Reportees}`,
+    label: 'sidebar.reportees',
   },
-  {
-    pattern: `/${amUIPath.Users}`,
-    breadcrumbs: () => [root, users],
+  poa_overview: {
+    href: `/${amUIPath.PoaOverview}`,
+    label: 'sidebar.poa_overview',
   },
-  {
-    pattern: `/${amUIPath.UserRights}`,
-    breadcrumbs: (lastElement) => [root, users, lastElement],
+  consent: {
+    href: `/${ConsentPath.Consent}/${ConsentPath.Active}`,
+    label: 'sidebar.consent',
   },
-  {
-    pattern: `/${amUIPath.Reportees}`,
-    breadcrumbs: () => [root, reportees],
+  consent_log: {
+    href: `/${ConsentPath.Consent}/${ConsentPath.Log}`,
+    label: 'consent_log.heading',
   },
-  {
-    pattern: `/${amUIPath.ReporteeRights}`,
-    breadcrumbs: (lastElement) => [root, reportees, lastElement],
+  settings: {
+    href: `/${amUIPath.Settings}`,
+    label: 'sidebar.settings',
   },
-  {
-    pattern: `/${amUIPath.PoaOverview}`,
-    breadcrumbs: () => [root, poaOverview],
+  requests: {
+    href: `/${amUIPath.Requests}`,
+    label: 'sidebar.requests',
   },
-  {
-    pattern: `/${amUIPath.PackagePoaDetails}`,
-    breadcrumbs: (lastElement) => [root, poaOverview, lastElement],
-  },
-  {
-    pattern: `/${ConsentPath.Consent}/${ConsentPath.Active}`,
-    breadcrumbs: () => [root, consent],
-  },
-  {
-    pattern: `/${ConsentPath.Consent}/${ConsentPath.Log}`,
-    breadcrumbs: () => [root, consent, consentLog],
-  },
-  {
-    pattern: `/${amUIPath.Settings}`,
-    breadcrumbs: () => [root, settings],
-  },
-  {
-    pattern: `/${amUIPath.Requests}`,
-    breadcrumbs: () => [root, requests],
-  },
-];
-
-const calculateBreadcrumbsFromRoute = (path: string, lastName?: string) => {
-  const lastElement = { label: lastName };
-
-  const route = routeMap.find((route) => matchPath(route.pattern, path));
-  return route?.breadcrumbs(lastElement) ?? [];
 };
 
 interface BreadcrumbsProps {
-  lastBreadcrumbLabel?: string;
+  items: (keyof typeof BreadcrumbConfig)[];
+  lastBreadcrumb?: { label?: string };
 }
 
-export const Breadcrumbs = ({ lastBreadcrumbLabel }: BreadcrumbsProps) => {
+export const Breadcrumbs = ({ items, lastBreadcrumb }: BreadcrumbsProps) => {
   const { t } = useTranslation();
-  const { pathname } = useLocation();
-  const items = calculateBreadcrumbsFromRoute(pathname, lastBreadcrumbLabel);
 
-  const breadcrumbItems = items.map((item) => {
+  const last = lastBreadcrumb ? [lastBreadcrumb] : [];
+  const breadcrumbs: BreadcrumbItem[] = [...items.map((item) => BreadcrumbConfig[item]), ...last];
+  const breadcrumbItems = breadcrumbs.map((item) => {
     return {
       label: item.label ? t(item.label) : <DsSkeleton variant='text'>xxxxxxxxxxxxxx</DsSkeleton>,
       as: (props: ComponentPropsWithoutRef<typeof Link>) => (
@@ -136,5 +68,5 @@ export const Breadcrumbs = ({ lastBreadcrumbLabel }: BreadcrumbsProps) => {
     };
   });
 
-  return items.length > 0 ? <AcBreadcrumbs items={breadcrumbItems} /> : <></>;
+  return items.length > 0 ? <AcBreadcrumbs items={breadcrumbItems} /> : null;
 };
