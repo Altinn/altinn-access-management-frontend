@@ -60,11 +60,7 @@ export class LoginPage {
     await this.selectActor(this.searchBox, orgnummer);
   }
 
-  async chooseReportee(currentReportee: string, targetReportee: string) {
-    // Use test-data independent selector: match button containing "Født:" pattern for person actors
-    // Falls back to name-based selector if "Født:" pattern not found (for organizations)
-    console.log('currentReportee', currentReportee);
-    console.log('targetReportee', targetReportee);
+  async chooseReportee(currentReportee: string, targetReportee: string = '') {
     let selectReporteeButton = this.page.getByRole('button', { name: currentReportee });
 
     await selectReporteeButton.first().click();
