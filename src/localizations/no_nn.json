@@ -323,9 +323,9 @@
     "resources_disclaimer": "Denne rolla kan framleis gi tilgang til tenester som berre finst i den gamle løysinga.",
     "resources_disclaimer_link": "Sjå lista i den gamle løysinga",
     "access_status": {
-      "via_role": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{org_name}}.",
+      "via_role": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}.",
       "via_parent": "{{user_name}} har tilgang til dette fordi hovudeininga har ho.",
-      "via_agent": "{{user_name}} har tilgang til dette som agent via {{agent_name}}."
+      "via_agent": "{{user_name}} har tilgang til dette som agent via {{via_name}}."
     }
   },
   "users_page": {

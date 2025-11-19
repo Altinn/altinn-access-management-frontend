@@ -1,12 +1,8 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import statusClasses from '../StatusSection.module.css';
-import {
-  RoleStatusMessageType,
-  RoleStatusType,
-  useInheritedRoleInfo,
-} from './useInheritedRoleInfo';
+import { RoleStatusType, useInheritedRoleInfo } from './useInheritedRoleInfo';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -22,8 +18,6 @@ export interface RoleStatusMessageProps {
 }
 
 export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
-  const { t } = useTranslation();
-
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { data: rolePermissions } = useGetRolePermissionsQuery(
     {
@@ -45,15 +39,21 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
   if (!status) {
     return null;
   }
-  const isActingOnOwnBehalf =
-    actingParty?.partyUuid && toParty?.partyUuid && actingParty.partyUuid === toParty.partyUuid;
 
+  const direction = actingParty?.partyUuid === fromParty?.partyUuid ? 'from' : 'to';
   const formattedUserName = formatDisplayName({
-    fullName: (isActingOnOwnBehalf ? fromParty?.name : toParty?.name) || '',
+    fullName: (direction === 'from' ? fromParty?.name : toParty?.name) || '',
     type:
-      (isActingOnOwnBehalf ? fromParty?.partyTypeName : toParty?.partyTypeName) === PartyType.Person
+      (direction === 'from' ? fromParty?.partyTypeName : toParty?.partyTypeName) ===
+      PartyType.Person
         ? 'person'
         : 'company',
+    reverseNameOrder: false,
+  });
+
+  const formattedViaName = formatDisplayName({
+    fullName: status.via?.name || '',
+    type: status.via?.type.toLowerCase() === 'person' ? 'person' : 'company',
     reverseNameOrder: false,
   });
 
@@ -67,10 +67,8 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
         <Trans
           i18nKey={STATUS_TRANSLATION_KEYS[status.type]}
           values={{
-            user_name: isActingOnOwnBehalf ? (toParty?.name ?? '') : formattedUserName,
-            org_name: status.from?.name ?? fromParty?.name ?? '',
-            parent_name: status.via?.name ?? '',
-            agent_name: status.via?.name ?? '',
+            user_name: formattedUserName,
+            via_name: formattedViaName,
           }}
         />
       </DsParagraph>

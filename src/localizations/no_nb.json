@@ -326,9 +326,9 @@
     "resources_disclaimer": "Denne rollen kan fortsatt gi tilgang til tjenester som kun finnes i den gamle løsningen.",
     "resources_disclaimer_link": "Se listen i den gamle løsningen",
     "access_status": {
-      "via_role": "{{user_name}} har tilgang til dette gjennom rollen de har i {{org_name}}.",
+      "via_role": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}.",
       "via_parent": "{{user_name}} har tilgang til dette fordi hovedenheten har den.",
-      "via_agent": "{{user_name}} har tilgang til dette som agent via {{agent_name}}."
+      "via_agent": "{{user_name}} har tilgang til dette som agent via {{via_name}}."
     }
   },
   "users_page": {

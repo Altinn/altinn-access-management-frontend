@@ -1,5 +1,6 @@
 import type { Party } from '@/rtk/features/lookupApi';
 import type { Permissions, Role, RolePermission } from '@/rtk/features/roleApi';
+import { ViaAgent } from './RoleInfo.stories';
 
 export enum RoleStatusType {
   ViaRole = 'via_role',
@@ -9,10 +10,7 @@ export enum RoleStatusType {
 
 export interface RoleStatusMessageType {
   type: RoleStatusType;
-  viaRole?: Permissions['viaRole'];
   via?: Permissions['via'];
-  from?: Permissions['from'];
-  to?: Permissions['to'];
 }
 
 interface UseInheritedRoleInfoParams {
@@ -24,34 +22,26 @@ interface UseInheritedRoleInfoParams {
 }
 
 const getRoleStatus = (permission: Permissions, isActingTo: boolean, isActingFrom: boolean) => {
-  if (permission.viaRole && permission.via) {
+  if (!permission.via) {
+    return null;
+  }
+  if (permission.viaRole) {
     return {
       type: RoleStatusType.ViaRole,
-      viaRole: permission.viaRole,
-      from: permission.from,
       via: permission.via,
-      to: permission.to,
     };
   }
-  if (permission.via) {
-    if (isActingTo) {
-      return {
-        type: RoleStatusType.ViaParent,
-        viaRole: permission.viaRole,
-        from: permission.from,
-        via: permission.via,
-        to: permission.to,
-      };
-    }
-    if (isActingFrom) {
-      return {
-        type: RoleStatusType.ViaAgent,
-        viaRole: permission.viaRole,
-        from: permission.from,
-        via: permission.via,
-        to: permission.to,
-      };
-    }
+  if (isActingTo) {
+    return {
+      type: RoleStatusType.ViaParent,
+      via: permission.via,
+    };
+  }
+  if (isActingFrom) {
+    return {
+      type: RoleStatusType.ViaAgent,
+      via: permission.via,
+    };
   }
   return null;
 };
@@ -63,24 +53,22 @@ export const useInheritedRoleInfo = ({
   fromParty,
   actingParty,
 }: UseInheritedRoleInfoParams): RoleStatusMessageType | undefined => {
-  const matchingPermissions = rolePermissions?.find(
-    (permission) => permission.role.id === role?.id,
+  if (!role) {
+    return undefined;
+  }
+
+  const matchingPermissions = rolePermissions?.find((permission) => permission.role.id === role.id);
+
+  const relevantPermission = matchingPermissions?.permissions.find(
+    (permission) => !toParty?.partyUuid || permission.to?.id === toParty.partyUuid,
   );
 
-  const relevantPermission = matchingPermissions?.permissions.find((permission) => {
-    if (!toParty?.partyUuid) {
-      return true;
-    }
-    return permission.to?.id === toParty.partyUuid;
-  });
+  if (!relevantPermission) {
+    return undefined;
+  }
 
-  const status = relevantPermission
-    ? getRoleStatus(
-        relevantPermission,
-        !!actingParty?.partyUuid && actingParty.partyUuid === toParty?.partyUuid,
-        !!actingParty?.partyUuid && actingParty.partyUuid === fromParty?.partyUuid,
-      )
-    : undefined;
+  const isActingTo = !!actingParty?.partyUuid && actingParty.partyUuid === toParty?.partyUuid;
+  const isActingFrom = !!actingParty?.partyUuid && actingParty.partyUuid === fromParty?.partyUuid;
 
-  return !!status ? status : undefined;
+  return getRoleStatus(relevantPermission, isActingTo, isActingFrom) ?? undefined;
 };
