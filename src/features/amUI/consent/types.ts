@@ -48,6 +48,7 @@ export interface ConsentRequest {
 
 export interface ActiveConsentListItem {
   id: string;
+  isPendingConsent: boolean;
   isPoa: boolean;
   fromParty: ConsentParty;
   toParty: ConsentParty;
