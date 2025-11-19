@@ -7,11 +7,11 @@ test.describe('System Register', async () => {
   let system: string;
 
   test.beforeEach(async ({ page, login }) => {
-    const orgNumber = '310547891'; // Hardcoded org ID for testing
+    const orgNumber = '310547891';
     const api = new ApiRequests(orgNumber);
-    system = await api.createSystemSystemRegister(); // Create system before each test
+    system = await api.createSystemSystemRegister();
     await login.LoginWithUserFromFrontpage('14824497789');
-    await login.chooseReportee('AKTVERDIG RETORISK APE');
+    await login.chooseReportee('BLÅVEIS SKRAVLETE', 'AKTVERDIG RETORISK APE');
   });
 
   test('Create system user and verify landing page', async ({

@@ -23,7 +23,7 @@ test.describe('@slow API-Delegations to organization user', () => {
     };
 
     await login.LoginWithUserFromFrontpage(userThatDelegates.id);
-    await login.chooseReportee(userThatDelegates.reportee);
+    await login.chooseReportee(userThatDelegates.reportee, 'FIXME');
     await apiDelegations.deleteDelegatedAPIs();
 
     await apiDelegations.delegateAPI(standardApiDetails.name, userToDelegateTo.orgNumber);
