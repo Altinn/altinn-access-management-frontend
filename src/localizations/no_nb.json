@@ -585,8 +585,8 @@
     "hovedadministrator": "Hovedadministrator"
   },
   "systemuser_overviewpage": {
-    "page_title": "Systemtilgang - Altinn",
-    "banner_title": "Systemtilgang",
+    "page_title": "Systemtilganger - Altinn",
+    "banner_title": "Systemtilganger",
     "sub_title_text": "Ved å opprette en systemtilgang gir du et fagsystem tilgang til å løse oppgaver i Altinn på vegne av bedriften din.",
     "systemusers_load_error": "Kunne ikke laste systemtilganger",
     "agent_delegation_systemusers_load_error": "Kunne ikke laste systemtilganger for kunder",
@@ -828,11 +828,11 @@
     "consent_is_not_accepted": "Samtykket/fullmakten er ikke godkjent"
   },
   "poa_overview_page": {
-    "page_title": "Fullmaktsoversikt",
+    "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}"
   },
   "package_poa_details_page": {
-    "page_title": "Fullmaktsdetaljer",
+    "page_title": "Fullmaktsdetaljer - Altinn",
     "users_tab_title": "Brukere",
     "services_tab_title": "Tjenester",
     "load_error": "Oi! Noe gikk galt.",
