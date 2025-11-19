@@ -586,8 +586,8 @@
     "hovedadministrator": "Main administrator"
   },
   "systemuser_overviewpage": {
-    "page_title": "System access - Altinn",
-    "banner_title": "System access",
+    "page_title": "System accesses - Altinn",
+    "banner_title": "System accesses",
     "sub_title_text": "By creating a system access, you give a vendor system access to solve tasks in Altinn on behalf of your company.",
     "systemusers_load_error": "Failed to load system accesses",
     "agent_delegation_systemusers_load_error": "Failed to load system accesses for customers",
@@ -826,11 +826,11 @@
     "consent_is_not_accepted": "Consent/power of attorney is not approved"
   },
   "poa_overview_page": {
-    "page_title": "Powers of attorney overview",
+    "page_title": "Powers of attorney overview - Altinn",
     "heading": "Powers of attorney overview for {{name}}"
   },
   "package_poa_details_page": {
-    "page_title": "Power of attorney details",
+    "page_title": "Power of attorney details - Altinn",
     "users_tab_title": "Users",
     "services_tab_title": "Services",
     "load_error": "Oops! Something went wrong.",
