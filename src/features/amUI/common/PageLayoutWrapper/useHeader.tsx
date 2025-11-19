@@ -75,11 +75,13 @@ export const useHeader = () => {
     onToggleFavorite: onToggleFavorite,
 
     onSelectAccount: (accountId: string) => {
-      const redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
-      const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-      changeUrl.searchParams.set('P', accountId);
-      changeUrl.searchParams.set('goTo', redirectUrl);
-      (window as Window).open(changeUrl.toString(), '_self');
+      if (accountId !== reportee?.partyUuid) {
+        const redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
+        const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
+        changeUrl.searchParams.set('P', accountId);
+        changeUrl.searchParams.set('goTo', redirectUrl);
+        (window as Window).open(changeUrl.toString(), '_self');
+      }
     },
   });
 
