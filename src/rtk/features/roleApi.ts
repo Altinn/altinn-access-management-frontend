@@ -10,9 +10,9 @@ export interface ProviderType {
 export interface Permissions {
   to: Entity;
   from: Entity;
-  via: Entity;
+  via?: Entity;
   role: CompactRole | null;
-  viaRole: CompactRole | null;
+  viaRole?: CompactRole | null;
 }
 
 export interface Provider {

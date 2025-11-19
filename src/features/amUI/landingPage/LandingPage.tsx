@@ -176,7 +176,8 @@ export const LandingPage = () => {
             description={
               reportee?.type === 'Organization'
                 ? `${t('common.org_nr')} ${reportee?.organizationNumber?.match(/.{1,3}/g)?.join(' ') || ''}`
-                : `${t('common.date_of_birth')} ${formatDateToNorwegian(reportee?.dateOfBirth)}`
+                : reportee?.dateOfBirth &&
+                  `${t('common.date_of_birth')} ${formatDateToNorwegian(reportee?.dateOfBirth)}`
             }
             size='xl'
             loading={!reportee}
