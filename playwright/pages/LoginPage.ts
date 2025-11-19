@@ -60,19 +60,24 @@ export class LoginPage {
     await this.selectActor(this.searchBox, orgnummer);
   }
 
-  async chooseReportee(reportee: string) {
+  async chooseReportee(currentReportee: string, targetReportee: string) {
     // Use test-data independent selector: match button containing "Født:" pattern for person actors
     // Falls back to name-based selector if "Født:" pattern not found (for organizations)
-    let selectReporteeButton = this.page.getByRole('button').filter({ hasText: /Født:/ });
+    console.log('currentReportee', currentReportee);
+    console.log('targetReportee', targetReportee);
+    let selectReporteeButton = this.page.getByRole('button', { name: currentReportee });
+
     await selectReporteeButton.first().click();
 
-    // Search for reportee in the searchbox
+    // Search for target reportee in the searchbox
     const searchBox = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
-    await searchBox.fill(reportee);
+    await searchBox.fill(targetReportee);
 
     // Click on the marked/highlighted result
     // The mark element contains the highlighted text, find the button that contains it
-    const markedResult = this.page.locator('mark').filter({ hasText: new RegExp(reportee, 'i') });
+    const markedResult = this.page
+      .locator('mark')
+      .filter({ hasText: new RegExp(targetReportee, 'i') });
     //await expect(markedResult).toBeVisible();
     await markedResult.first().click();
   }
