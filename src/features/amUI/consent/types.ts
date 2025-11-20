@@ -1,7 +1,7 @@
 export type ConsentLocale = 'nb' | 'nn' | 'en';
 export type ConsentLanguage = Record<ConsentLocale, string>;
 
-interface ConsentParty {
+export interface ConsentParty {
   id: string;
   name: string;
   type: string;
@@ -48,6 +48,7 @@ export interface ConsentRequest {
 
 export interface ActiveConsentListItem {
   id: string;
+  isPendingConsent: boolean;
   isPoa: boolean;
   fromParty: ConsentParty;
   toParty: ConsentParty;

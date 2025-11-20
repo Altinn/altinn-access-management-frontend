@@ -154,5 +154,11 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// </summary>
         public static ProblemDescriptor SystemUser_FailedToGetDelegatedRights { get; }
             = _factory.Create(62, HttpStatusCode.InternalServerError, "Failed to get delegated rights");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor Request_UserIsNotAccessManager { get; }
+            = _factory.Create(66, HttpStatusCode.Forbidden, "The request requires logged in user to have accessmanager write.");
     }
 }

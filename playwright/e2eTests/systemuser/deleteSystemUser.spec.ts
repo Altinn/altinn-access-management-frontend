@@ -1,36 +1,22 @@
-import { expect, test } from '@playwright/test';
-
+import { expect, test } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { env } from 'playwright/util/helper';
-import { LoginPage } from 'playwright/pages/LoginPage';
-
-import { SystemUserPage } from '../../pages/systemuser/SystemUserPage';
-
-test.describe.configure({ timeout: 30000 }); // Set timeout for all tests in this file
 
 test.describe('System user deletion', () => {
   let systemId: string;
   let api: ApiRequests;
 
-  test.beforeEach(async ({ page }) => {
-    const orgNumber = '310547891'; // Hardcoded org ID for testing
+  test.beforeEach(async ({ page, login, systemUserPage, accessManagementFrontPage }) => {
+    const orgNumber = '310547891';
     api = new ApiRequests(orgNumber);
-    const login = new LoginPage(page);
-    await login.loginWithUser('14824497789');
-    await login.chooseReportee('AKTVERDIG RETORISK APE');
+    await login.LoginWithUserFromFrontpage('14824497789');
+    await login.chooseReportee('Blåveis Skravlete', 'AKTVERDIG RETORISK APE');
 
     //Create a system in your "system register" before each test
     systemId = await api.createSystemSystemRegister();
 
-    //Create a System user to be deleted later
-    const systemUserPage = new SystemUserPage(page);
-
-    // Navigate to system user page
-    await page.goto(`${env('SYSTEMUSER_URL')}/overview`);
-
-    // Intro to "new brukerflate"
-    await page.getByRole('button', { name: 'Prøv ny tilgangsstyring' }).click();
+    // Navigate to system user page via menu link
+    await accessManagementFrontPage.systemAccessLink.click();
 
     // this is assigned as a text in code base, will just add more confusion to import that than hardcoding this here
     await systemUserPage.CREATE_SYSTEM_USER_LINK.click();
@@ -39,9 +25,7 @@ test.describe('System user deletion', () => {
     await expect(page.getByText(systemId).first()).toBeVisible();
   });
 
-  test('Delete created system user', async ({ page }) => {
-    const systemUserPage = new SystemUserPage(page);
-
+  test('Delete created system user', async ({ page, systemUserPage }) => {
     // Delete system user
     await page.getByText(systemId).first().click();
     await systemUserPage.DELETE_SYSTEMUSER_BUTTON.click();

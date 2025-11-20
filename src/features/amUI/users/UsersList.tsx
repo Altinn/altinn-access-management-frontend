@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import { DsHeading, DsSearch } from '@altinn/altinn-components';
+import { DsHeading, DsParagraph, DsSearch } from '@altinn/altinn-components';
 
 import type { User } from '@/rtk/features/userInfoApi';
-import { useGetIsAdminQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   type Connection,
   ConnectionUserType,
@@ -19,6 +19,7 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
+import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 
 const extractFromList = (
   list: Connection[],
@@ -39,7 +40,7 @@ const extractFromList = (
 export const UsersList = () => {
   const { t } = useTranslation();
   const { fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
-  const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const shouldDisplayPrivDelegation = displayPrivDelegation();
   const navigate = useNavigate();
   const { data: isAdmin } = useGetIsAdminQuery();
 
@@ -67,7 +68,7 @@ export const UsersList = () => {
     }
     const remainingAfterExtraction = extractFromList(
       rightHolders || [],
-      displayLimitedPreviewLaunch ? 'nobody' : (currentUser?.party.id ?? 'loading'),
+      shouldDisplayPrivDelegation ? (currentUser?.party.id ?? 'loading') : 'nobody',
     );
     return remainingAfterExtraction;
   }, [rightHolders, currentUser]);
@@ -81,7 +82,7 @@ export const UsersList = () => {
 
   return (
     <div className={classes.usersList}>
-      {!displayLimitedPreviewLaunch && (
+      {shouldDisplayPrivDelegation && (
         <>
           <CurrentUserPageHeader
             currentUser={currentUser}
@@ -97,40 +98,62 @@ export const UsersList = () => {
               )
             }
           />
-          <DsHeading
-            level={2}
-            data-size='sm'
-            id='user_list_heading_id'
-            className={classes.usersListHeading}
-          >
-            {t('users_page.user_list_heading')}
-          </DsHeading>
+          {isAdmin && (
+            <DsHeading
+              level={2}
+              data-size='sm'
+              id='user_list_heading_id'
+              className={classes.usersListHeading}
+            >
+              {t('users_page.user_list_heading')}
+            </DsHeading>
+          )}
         </>
       )}
-      <div className={classes.searchAndAddUser}>
-        <DsSearch className={classes.searchBar}>
-          <DsSearch.Input
-            aria-label={t('users_page.user_search_placeholder')}
-            placeholder={t('users_page.user_search_placeholder')}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
+      {isAdmin ? (
+        <>
+          <div className={classes.searchAndAddUser}>
+            <DsSearch className={classes.searchBar}>
+              <DsSearch.Input
+                aria-label={t('users_page.user_search_placeholder')}
+                placeholder={t('users_page.user_search_placeholder')}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  onSearch(event.target.value)
+                }
+              />
+              <DsSearch.Clear
+                onClick={() => {
+                  setSearchString('');
+                }}
+              />
+            </DsSearch>
+            {isAdmin && <NewUserButton onComplete={handleNewUser} />}
+          </div>
+          <UserList
+            connections={userList ?? undefined}
+            searchString={searchString}
+            isLoading={!userList || loadingRightHolders || loadingPartyRepresentation}
+            listItemTitleAs='h2'
+            interactive={isAdmin}
+            onAddNewUser={handleNewUser}
           />
-          <DsSearch.Clear
-            onClick={() => {
-              setSearchString('');
-            }}
-          />
-        </DsSearch>
-        {isAdmin && <NewUserButton onComplete={handleNewUser} />}
-      </div>
-      {isAdmin && (
-        <UserList
-          connections={userList ?? undefined}
-          searchString={searchString}
-          isLoading={!userList || loadingRightHolders || loadingPartyRepresentation}
-          listItemTitleAs='h2'
-          interactive={isAdmin}
-          onAddNewUser={handleNewUser}
-        />
+        </>
+      ) : (
+        <div className={classes.noAccessContainer}>
+          <DsHeading
+            data-size='xs'
+            level={4}
+          >
+            {t('users_page.no_access_to_users_header')}
+          </DsHeading>
+
+          <DsParagraph>
+            <Trans
+              i18nKey='users_page.no_access_to_users_message'
+              components={{ br: <br /> }}
+            />
+          </DsParagraph>
+        </div>
       )}
     </div>
   );

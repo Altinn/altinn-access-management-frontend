@@ -23,6 +23,7 @@ import {
   HandshakeIcon,
   InformationSquareIcon,
   LeaveIcon,
+  PadlockLockedFillIcon,
 } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -63,7 +64,7 @@ export const useGlobalMenu = () => {
   const platformLinks = [
     {
       groupId: 1,
-      icon: InboxFillIcon,
+      icon: { svgElement: InboxFillIcon, theme: 'subtle' },
       id: 'inbox',
       size: 'lg',
       title: t('header.inbox'),
@@ -93,14 +94,14 @@ export const useGlobalMenu = () => {
   const headerLinks: MenuItemProps[] = [
     {
       groupId: 2,
-      icon: HandshakeIcon,
+      icon: { svgElement: PadlockLockedFillIcon, theme: 'subtle' },
       id: 'access_management',
       size: 'lg',
       title: t('header.access_management'),
       selected: true,
       as: (props) => (
         <Link
-          to={`/${amUIPath.Users}`}
+          to={'/'}
           {...props}
         />
       ),

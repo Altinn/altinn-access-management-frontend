@@ -56,9 +56,13 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage
     public class AccessPackageResourceType
     {
         /// <summary>
+        /// Id
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// Name
         /// </summary>
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public ResourceType Name { get; set; }
+        public string Name { get; set; }
     }
 }

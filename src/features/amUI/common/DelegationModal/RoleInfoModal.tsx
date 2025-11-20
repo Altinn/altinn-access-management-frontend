@@ -1,15 +1,14 @@
-import { useEffect } from 'react';
-
 import type { Role } from '@/rtk/features/roleApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
-import type { DelegationAction } from '../DelegationModal/EditModal';
-import { EditModal } from '../DelegationModal/EditModal';
+import { DelegationAction, EditModal } from './EditModal';
 
 interface RoleInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
   role?: Role;
   onClose?: () => void;
   availableActions?: DelegationAction[];
+  openWithError?: ActionError | null;
 }
 
 export const RoleInfoModal = ({
@@ -17,19 +16,15 @@ export const RoleInfoModal = ({
   role,
   onClose,
   availableActions,
+  openWithError,
 }: RoleInfoModalProps) => {
-  useEffect(() => {
-    const handleClose = () => onClose?.();
-
-    modalRef.current?.addEventListener('close', handleClose);
-    return () => modalRef.current?.removeEventListener('close', handleClose);
-  }, [onClose, modalRef]);
-
   return (
     <EditModal
       ref={modalRef}
       role={role}
       availableActions={availableActions}
+      openWithError={openWithError}
+      onClose={onClose}
     />
   );
 };

@@ -4,10 +4,9 @@ import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import type { Role } from '@/rtk/features/roleApi';
 
-import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
+import { RoleInfoModal } from '../common/DelegationModal/RoleInfoModal';
 import { RoleList } from '../common/RoleList/RoleList';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
-import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
 
 interface ReporteeRoleSectionProps {
@@ -18,36 +17,20 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
-  const { setActionError } = useDelegationModalContext();
 
   return (
     <>
       <OldRolesAlert />
-      <DsHeading
-        level={2}
-        data-size='2xs'
-        id='access_packages_title'
-      >
-        {t('role.current_roles_title', { count: numberOfAccesses ?? 0 })}
-      </DsHeading>
-      <DsParagraph data-size='sm'>{t('role.roles_description')}</DsParagraph>
       <RoleList
         onSelect={(role) => {
           setModalItem(role);
           modalRef.current?.showModal();
-        }}
-        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
-        onActionError={(role, error) => {
-          setModalItem(role);
-          modalRef.current?.showModal();
-          setActionError(error);
         }}
       />
       <RoleInfoModal
         modalRef={modalRef}
         role={modalItem}
         onClose={() => setModalItem(undefined)}
-        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
       />
     </>
   );

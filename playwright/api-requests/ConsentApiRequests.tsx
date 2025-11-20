@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import { Token } from './Token';
+import { MaskinportenToken } from './MaskinportenToken';
 import { env } from 'playwright/util/helper';
 
 export class ConsentApiRequests {
@@ -8,15 +9,23 @@ export class ConsentApiRequests {
   constructor(org?: string) {
     this.tokenClass = new Token(org);
   }
-  private async sendPostRequest<TPayload, TResponse>(
+
+  /**
+   * Unified helper method for POST requests that handles token acquisition and HTTP request logic.
+   * @param payload The request payload
+   * @param endpoint The API endpoint
+   * @param getToken Async function that returns the authentication token
+   * @returns The parsed JSON response
+   */
+  private async sendPostRequestInternal<TPayload, TResponse>(
     payload: TPayload,
     endpoint: string,
-    scopes: string,
+    getToken: () => Promise<string>,
   ): Promise<TResponse> {
     const baseUrl = env('API_BASE_URL');
     let url = baseUrl + endpoint;
 
-    const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
+    const token = await getToken();
 
     const response = await fetch(url, {
       method: 'POST',
@@ -36,20 +45,33 @@ export class ConsentApiRequests {
     return (await response.json()) as TResponse;
   }
 
-  //
+  private async sendPostRequest<TPayload, TResponse>(
+    payload: TPayload,
+    endpoint: string,
+    scopes: string,
+  ): Promise<TResponse> {
+    return this.sendPostRequestInternal<TPayload, TResponse>(payload, endpoint, () =>
+      this.tokenClass.getEnterpriseAltinnToken(scopes),
+    );
+  }
+
+  private async sendPostRequestWithMaskinporten<TPayload, TResponse>(
+    payload: TPayload,
+    endpoint: string,
+    scopes: string,
+    maskinportenToken: MaskinportenToken,
+  ): Promise<TResponse> {
+    return this.sendPostRequestInternal<TPayload, TResponse>(payload, endpoint, () =>
+      maskinportenToken.getMaskinportenToken(scopes),
+    );
+  }
+
   /**
-   * Generalized consent request supporting both person and org as 'from'.
-   * @param fromType 'person' or 'org'
-   * @param validToIsoUtc ISO UTC string for validity
+   * Builds the consent request payload from parameters.
+   * @param params The consent request parameters
+   * @returns The complete payload object for the consent request
    */
-  public async createConsentRequest({
-    from,
-    to,
-    validToIsoUtc,
-    resourceValue = 'enkelt-samtykke',
-    redirectUrl = 'https://vg.no',
-    metaData = { simpletag: 'playwright-e2e-metadata' },
-  }: CreateConsentRequestParams): Promise<{ viewUri: string }> {
+  private buildConsentRequestPayload(params: CreateConsentRequestParams) {
     const requestId = randomUUID();
 
     const urnPrefix: Record<FromParty['type'] | ToParty['type'], string> = {
@@ -57,14 +79,18 @@ export class ConsentApiRequests {
       org: 'urn:altinn:organization:identifier-no:',
     };
 
-    const fromUrn = `${urnPrefix[from.type]}${from.id}`;
-    const toUrn = `${urnPrefix[to.type]}${to.id}`; // to.type er 'org' per type-def
+    const fromUrn = `${urnPrefix[params.from.type]}${params.from.id}`;
+    const toUrn = `${urnPrefix[params.to.type]}${params.to.id}`;
 
-    const payload = {
+    const resourceValue = params.resourceValue || 'enkelt-samtykke';
+    const redirectUrl = params.redirectUrl || 'https://vg.no';
+    const metaData = params.metaData || { simpletag: 'playwright-e2e-metadata' };
+
+    return {
       id: requestId,
       from: fromUrn,
       to: toUrn,
-      validTo: validToIsoUtc,
+      validTo: params.validToIsoUtc,
       consentRights: [
         {
           action: ['consent'],
@@ -84,11 +110,64 @@ export class ConsentApiRequests {
         nn: 'Playwright ende-til-ende test request message nynorsk',
       },
     };
+  }
+
+  //
+  /**
+   * Generalized consent request supporting both person and org as 'from'.
+   * @param fromType 'person' or 'org'
+   * @param validToIsoUtc ISO UTC string for validity
+   */
+  public async createConsentRequest(
+    params: CreateConsentRequestParams,
+  ): Promise<{ viewUri: string }> {
+    const payload = this.buildConsentRequestPayload(params);
 
     const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
     const scopes = 'altinn:consentrequests.write';
 
     return this.sendPostRequest<typeof payload, { viewUri: string }>(payload, endpoint, scopes);
+  }
+
+  /**
+   * Create a consent request using Maskinporten authentication
+   * @param params Same as createConsentRequest
+   * @param maskinportenToken A MaskinportenToken instance
+   * @returns The view URI for the consent request
+   */
+  public async createConsentRequestWithMaskinporten(
+    params: CreateConsentRequestParams,
+    maskinportenToken: MaskinportenToken,
+  ): Promise<{ viewUri: string }> {
+    const payload = this.buildConsentRequestPayload(params);
+
+    const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
+    const scopes = 'altinn:consentrequests.write';
+
+    return this.sendPostRequestWithMaskinporten<typeof payload, { viewUri: string }>(
+      payload,
+      endpoint,
+      scopes,
+      maskinportenToken,
+    );
+  }
+
+  /**
+   * Get consent token using Maskinporten
+   * @param consentRequestId The ID of the approved consent request
+   * @param fromPersonId The person ID (not in URN format, just the ID)
+   * @param maskinportenToken A MaskinportenToken instance
+   * @returns The consent access token
+   */
+  async getConsentTokenWithMaskinporten(
+    consentRequestId: string,
+    fromPersonId: string,
+    maskinportenToken: MaskinportenToken,
+  ): Promise<string> {
+    // Convert person ID to URN format
+    const fromPersonUrn = `urn:altinn:person:identifier-no:${fromPersonId}`;
+
+    return await maskinportenToken.getConsentToken(consentRequestId, fromPersonUrn);
   }
 }
 

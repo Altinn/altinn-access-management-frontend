@@ -1,17 +1,15 @@
 import { getHostUrl, getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
-import { GeneralPath, ConsentPath, SystemUserPath } from '@/routes/paths';
+import { GeneralPath } from '@/routes/paths';
 import { formatDisplayName, HeaderProps, useAccountSelector } from '@altinn/altinn-components';
 import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/AccountSelector';
 import { GlobalSearchProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/GlobalSearch';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useTranslation } from 'react-i18next';
-import { useNewActorList, useNewHeader } from '@/resources/utils/featureFlagUtils';
-import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import {
   useGetReporteeQuery,
   useGetUserInfoQuery,
   useGetReporteeListForAuthorizedUserQuery,
-  useGetActorListForAuthorizedUserQuery,
   useGetFavoriteActorUuidsQuery,
   useAddFavoriteActorUuidMutation,
   useRemoveFavoriteActorUuidMutation,
@@ -19,6 +17,7 @@ import {
 import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader';
 import { useAccounts } from './useAccounts';
 import { ChangeEvent, useState } from 'react';
+import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 
 const getAccountType = (type: string): 'company' | 'person' => {
   return type === 'Organization' ? 'company' : 'person';
@@ -39,10 +38,12 @@ export const useHeader = () => {
   const [removeFavoriteActorUuid] = useRemoveFavoriteActorUuidMutation();
 
   const { globalMenu, desktopMenu, mobileMenu, menuGroups, isLoadingMenu } = useGlobalMenu();
+  const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
+    updateSelectedLanguage(newLocale);
   };
 
   // TODO: Add optimistic updates and error handling
@@ -74,24 +75,13 @@ export const useHeader = () => {
     onToggleFavorite: onToggleFavorite,
 
     onSelectAccount: (accountId: string) => {
-      // check if this is a person; then redirect to consents page
-      let redirectUrl = window.location.href;
-      const isPersonAccount =
-        reporteeList?.find((a) => a.partyUuid === accountId)?.type === 'person';
-      if (isPersonAccount) {
-        redirectUrl = new URL(
-          `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
-        ).toString();
-      } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
-        redirectUrl = new URL(
-          `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
-        ).toString();
+      if (accountId !== reportee?.partyUuid) {
+        const redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
+        const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
+        changeUrl.searchParams.set('P', accountId);
+        changeUrl.searchParams.set('goTo', redirectUrl);
+        (window as Window).open(changeUrl.toString(), '_self');
       }
-
-      const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-      changeUrl.searchParams.set('P', accountId);
-      changeUrl.searchParams.set('goTo', redirectUrl);
-      (window as Window).open(changeUrl.toString(), '_self');
     },
   });
 
@@ -121,7 +111,7 @@ export const useHeader = () => {
         ],
         onSelect: onChangeLocale,
       },
-      logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
+      logo: { href: getAltinnStartPageUrl(i18n.language), title: 'Altinn' },
       globalMenu: globalMenu,
       desktopMenu: desktopMenu,
       mobileMenu: mobileMenu,
@@ -149,18 +139,7 @@ export const useHeader = () => {
 
     const onSelectAccount = (accountId: string) => {
       // check if this is a person; then redirect to consents page
-      let redirectUrl = window.location.href;
-      const isPersonAccount = accounts.find((a) => a.id === accountId)?.type === 'person';
-      if (isPersonAccount) {
-        redirectUrl = new URL(
-          `${window.location.origin}${GeneralPath.BasePath}/${ConsentPath.Consent}/${ConsentPath.Active}`,
-        ).toString();
-      } else if (window.location.pathname.includes(`/${SystemUserPath.SystemUser}`)) {
-        redirectUrl = new URL(
-          `${window.location.origin}${GeneralPath.BasePath}/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`,
-        ).toString();
-      }
-
+      const redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
       const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
       changeUrl.searchParams.set('R', accountId);
       changeUrl.searchParams.set('goTo', redirectUrl);
@@ -185,7 +164,7 @@ export const useHeader = () => {
         ],
         onSelect: onChangeLocale,
       },
-      logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
+      logo: { href: getAltinnStartPageUrl(i18n.language), title: 'Altinn' },
       currentAccount: {
         name: currentAccountName,
         type: getAccountType(reportee?.type ?? ''),
