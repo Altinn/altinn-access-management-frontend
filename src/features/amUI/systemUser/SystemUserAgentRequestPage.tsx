@@ -96,7 +96,9 @@ export const SystemUserAgentRequestPage = () => {
         <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
       )}
       {(loadingRequestError || (request && !request.system)) && (
-        <SystemUserRequestLoadError error={(loadingRequestError as { data: ProblemDetail }).data} />
+        <SystemUserRequestLoadError
+          error={(loadingRequestError as { data: ProblemDetail })?.data}
+        />
       )}
       {(isLoadingRequest || isLoadingReportee) && (
         <DsSpinner aria-label={t('systemuser_request.loading_creation_request')} />

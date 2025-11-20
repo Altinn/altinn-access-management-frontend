@@ -98,7 +98,7 @@ export const SystemUserChangeRequestPage = () => {
       )}
       {(loadingChangeRequestError || (changeRequest && !changeRequest.system)) && (
         <SystemUserRequestLoadError
-          error={(loadingChangeRequestError as { data: ProblemDetail }).data}
+          error={(loadingChangeRequestError as { data: ProblemDetail })?.data}
         />
       )}
       {(isLoadingChangeRequest || isLoadingReportee) && (

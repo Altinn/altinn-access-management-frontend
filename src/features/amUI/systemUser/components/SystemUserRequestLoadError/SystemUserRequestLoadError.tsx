@@ -4,15 +4,15 @@ import { DsAlert } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 interface SystemUserRequestLoadErrorProps {
-  error: ProblemDetail;
+  error?: ProblemDetail;
 }
 
 export const SystemUserRequestLoadError = ({ error }: SystemUserRequestLoadErrorProps) => {
   const { t } = useTranslation();
-  let errorText = 'systemuser_request.load_creation_request_error';
-  if (error.code === 'AMUI-00010' || error.status === 404) {
+  let errorText = 'systemuser_request.load_request_error';
+  if (error?.code === 'AMUI-00010' || error?.status === 404) {
     errorText = 'systemuser_request.load_request_error_notfound';
-  } else if (error.code === 'AMUI-00066' || error.status === 403) {
+  } else if (error?.code === 'AMUI-00066' || error?.status === 403) {
     errorText = 'systemuser_request.load_request_missing_permissions';
   }
 
