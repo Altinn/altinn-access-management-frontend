@@ -20,6 +20,7 @@ import { getApiBaseUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/CreateSystemUserCheck';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
+import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
@@ -96,11 +97,9 @@ export const SystemUserChangeRequestPage = () => {
         <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
       )}
       {(loadingChangeRequestError || (changeRequest && !changeRequest.system)) && (
-        <DsAlert data-color='danger'>
-          {(loadingChangeRequestError as { data: ProblemDetail }).data.status === 404
-            ? t('systemuser_change_request.load_change_request_error_notfound')
-            : t('systemuser_change_request.load_change_request_error')}
-        </DsAlert>
+        <SystemUserRequestLoadError
+          error={(loadingChangeRequestError as { data: ProblemDetail }).data}
+        />
       )}
       {(isLoadingChangeRequest || isLoadingReportee) && (
         <DsSpinner aria-label={t('systemuser_change_request.loading_change_request')} />
