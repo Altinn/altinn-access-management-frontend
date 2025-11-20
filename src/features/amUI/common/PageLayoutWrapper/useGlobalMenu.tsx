@@ -30,7 +30,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { SidebarItems } from './SidebarItems';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 const getAccountType = (type: string): 'company' | 'person' => {
   return type === 'Organization' ? 'company' : 'person';
@@ -60,10 +59,10 @@ const linkUrls = {
 };
 
 export const useGlobalMenu = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  const lang = getCookie('selectedLanguage') as 'no_nb' | 'no_nn' | 'en';
+  const lang = i18n.language as 'no_nb' | 'no_nn' | 'en';
   const useNewHeaderFlag = useNewHeader();
   const useNewActorListFlag = useNewActorList();
   const isSm = useIsTabletOrSmaller();
