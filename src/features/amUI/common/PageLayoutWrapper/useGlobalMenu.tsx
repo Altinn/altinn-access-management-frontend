@@ -123,9 +123,9 @@ export const useGlobalMenu = () => {
       size: 'lg',
       title: t('header.all_forms'),
       as: (props) => (
-        <Link
-          to={`${getAltinnInfoUrl()}/${linkUrls['forms'][lang] ?? linkUrls['forms']['no_nb']}`}
+        <a
           {...props}
+          href={`${getAltinnInfoUrl()}/${linkUrls['forms'][lang] ?? linkUrls['forms']['no_nb']}`}
         />
       ),
     },
@@ -147,9 +147,9 @@ export const useGlobalMenu = () => {
       title: t('header.new_altinn_info'),
       size: 'sm',
       as: (props) => (
-        <Link
-          to={`${getAltinnInfoUrl()}/${linkUrls['about'][lang] ?? linkUrls['about']['no_nb']}`}
+        <a
           {...props}
+          href={`${getAltinnInfoUrl()}/${linkUrls['about'][lang] ?? linkUrls['about']['no_nb']}`}
         />
       ),
     },
@@ -160,9 +160,9 @@ export const useGlobalMenu = () => {
       title: t('header.start_business'),
       size: 'sm',
       as: (props) => (
-        <Link
-          to={`${getAltinnInfoUrl()}/${linkUrls['start-business'][lang] ?? linkUrls['start-business']['no_nb']}`}
+        <a
           {...props}
+          href={`${getAltinnInfoUrl()}/${linkUrls['start-business'][lang] ?? linkUrls['start-business']['no_nb']}`}
         />
       ),
     },
@@ -173,9 +173,9 @@ export const useGlobalMenu = () => {
       title: t('header.help'),
       size: 'sm',
       as: (props) => (
-        <Link
-          to={`${getAltinnInfoUrl()}/${linkUrls['help'][lang] ?? linkUrls['help']['no_nb']}`}
+        <a
           {...props}
+          href={`${getAltinnInfoUrl()}/${linkUrls['help'][lang] ?? linkUrls['help']['no_nb']}`}
         />
       ),
     },
