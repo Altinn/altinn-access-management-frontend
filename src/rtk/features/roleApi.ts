@@ -10,9 +10,9 @@ export interface ProviderType {
 export interface Permissions {
   to: Entity;
   from: Entity;
-  via: Entity;
+  via?: Entity;
   role: CompactRole | null;
-  viaRole: CompactRole | null;
+  viaRole?: CompactRole | null;
 }
 
 export interface Provider {
@@ -58,6 +58,8 @@ export interface RoleResourceMetadata {
   name: string;
   description: string;
   refId: string;
+  provider?: Provider | null;
+  type?: ProviderType | null;
 }
 
 export interface RolePackageMetadata {

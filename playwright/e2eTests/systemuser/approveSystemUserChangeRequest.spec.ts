@@ -79,7 +79,7 @@ test.describe('Systembruker endringsforespørsel', () => {
 
     // Verify rights given
     await login.LoginWithUserFromFrontpage('14824497789');
-    await login.chooseReportee('AKTVERDIG RETORISK APE');
+    await login.chooseReportee('Blåveis Skravlete', 'Aktverdig Retorisk Ape');
 
     const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
     await page.goto(systemUserUrl + '/' + systemUserId);

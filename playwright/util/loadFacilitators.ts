@@ -6,6 +6,7 @@ import { parse } from 'csv-parse/sync';
 
 export interface Facilitator {
   pid: string;
+  pidName: string;
   org: string;
   name: string;
 }
@@ -55,9 +56,9 @@ export function loadFacilitator(role: FacilitatorRole, pickRandom = false): Faci
     throw new Error(`No facilitator data found for role: ${role}`);
   }
 
-  const invalidRow = records.find((r) => !r.pid || !r.org);
+  const invalidRow = records.find((r) => !r.pid || !r.org || !r.pidName);
   if (invalidRow) {
-    throw new Error(`Invalid facilitator row in ${role}/facilitator.csv (missing pid/org)`);
+    throw new Error(`Invalid facilitator row in ${role}/facilitator.csv (missing pid/org/pidName)`);
   }
 
   // Validate name if present in CSV

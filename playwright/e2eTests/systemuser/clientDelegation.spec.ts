@@ -90,7 +90,7 @@ test.describe('Klientdelegering', () => {
     await login.LoginWithUserFromFrontpage(user.pid);
     // Use facilitator name if available, otherwise fallback to placeholder
     const reporteeName = user.name;
-    await login.chooseReportee(reporteeName);
+    await login.chooseReportee(user.pidName, reporteeName);
 
     //Go to system user overview page via menu link
     const frontPage = new AccessManagementFrontPage(page);

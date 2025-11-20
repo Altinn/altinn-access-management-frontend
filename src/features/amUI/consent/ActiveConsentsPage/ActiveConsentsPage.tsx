@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { DsAlert, DsDialog, DsHeading, DsLink, DsParagraph, List } from '@altinn/altinn-components';
 import { FolderFileIcon } from '@navikt/aksel-icons';
 
@@ -16,13 +16,15 @@ import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
 import classes from './ActiveConsentsPage.module.css';
 import { ConsentPath } from '@/routes/paths';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { ConsentListItem } from './ConsentListItem';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
+import { ConsentListItem } from './ConsentListItem';
 import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedConsentId, setSelectedConsentId] = useState<string>('');
 
@@ -42,18 +44,13 @@ export const ActiveConsentsPage = () => {
   const isLoading = isLoadingReportee || isLoadingIsAdmin || isLoadingActiveConsents;
 
   const groupedActiveConsents = useMemo(() => {
-    if (!activeConsents) {
-      return undefined;
-    }
-    const acc: Record<string, ActiveConsentListItem[]> = {};
-    for (const consent of activeConsents) {
-      const key = consent.toParty.id;
-      if (!acc[key]) {
-        acc[key] = [];
-      }
-      acc[key].push(consent);
-    }
-    return acc;
+    const acceptedConsents = activeConsents?.filter((x) => !x.isPendingConsent);
+    return groupConsents(acceptedConsents);
+  }, [activeConsents]);
+
+  const groupedPendingActiveConsents = useMemo(() => {
+    const pendingConsents = activeConsents?.filter((x) => x.isPendingConsent);
+    return groupConsents(pendingConsents);
   }, [activeConsents]);
 
   const showConsentDetails = (consentId: string): void => {
@@ -72,10 +69,44 @@ export const ActiveConsentsPage = () => {
         >
           {t('active_consents.heading')}
         </DsHeading>
+
         <OldConsentAlert
           heading='active_consents.altinn2_consent_alert_header'
           text='active_consents.altinn2_consent_alert_body'
         />
+        {groupedPendingActiveConsents && Object.keys(groupedPendingActiveConsents).length > 0 && (
+          <>
+            <div className={classes.activeConsentsSubHeading}>
+              <DsHeading
+                level={2}
+                data-size='xs'
+              >
+                {t('active_consents.pending_agreements')}
+              </DsHeading>
+            </div>
+            <List>
+              {Object.keys(groupedPendingActiveConsents).map((partyId) => (
+                <ConsentListItem
+                  key={partyId}
+                  title={groupedPendingActiveConsents[partyId][0].toParty.name}
+                  partyType={reportee?.type}
+                  subItems={groupedPendingActiveConsents[partyId].map((item) => ({
+                    id: item.id,
+                    title: item.toParty.name,
+                    badgeText: item.isPoa
+                      ? t('active_consents.see_pending_poa')
+                      : t('active_consents.see_pending_consent'),
+                  }))}
+                  onClick={(consentId: string) => {
+                    navigate(
+                      `/${ConsentPath.Consent}/${ConsentPath.Request}?id=${consentId}&skiplogout=true`,
+                    );
+                  }}
+                />
+              ))}
+            </List>
+          </>
+        )}
         <div className={classes.activeConsentsSubHeading}>
           <DsHeading
             level={2}
@@ -122,7 +153,9 @@ export const ActiveConsentsPage = () => {
                   subItems={groupedActiveConsents[partyId].map((item) => ({
                     id: item.id,
                     title: item.toParty.name,
-                    isPoa: item.isPoa,
+                    badgeText: item.isPoa
+                      ? t('active_consents.see_poa')
+                      : t('active_consents.see_consent'),
                   }))}
                   onClick={showConsentDetails}
                 />
@@ -149,9 +182,24 @@ const LoadingListItem = () => {
       isLoading
       title={'xxxxxxxxxxx'}
       subItems={[
-        { id: '1', title: 'xxxxxxxxxxx', isPoa: false },
-        { id: '2', title: 'xxxxxxxxxxx', isPoa: false },
+        { id: '1', title: 'xxxxxxxxxxx', badgeText: 'xxxxxxxxxxx' },
+        { id: '2', title: 'xxxxxxxxxxx', badgeText: 'xxxxxxxxxxx' },
       ]}
     />
   );
+};
+
+const groupConsents = (consents: ActiveConsentListItem[] | undefined) => {
+  if (!consents) {
+    return undefined;
+  }
+  const acc: Record<string, ActiveConsentListItem[]> = {};
+  for (const consent of consents) {
+    const key = consent.toParty.id;
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(consent);
+  }
+  return acc;
 };
