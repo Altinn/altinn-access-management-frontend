@@ -3,7 +3,12 @@ import {
   useNewActorList,
   useNewHeader,
 } from '@/resources/utils/featureFlagUtils';
-import { getAfUrl, getAltinnInfoUrl, getHostUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
+import {
+  getAfUrl,
+  getAltinnStartPageUrl,
+  getHostUrl,
+  getLogoutUrl,
+} from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { amUIPath } from '@/routes/paths';
 import {
@@ -38,23 +43,23 @@ const getAccountType = (type: string): 'company' | 'person' => {
 const linkUrls = {
   forms: {
     no_nb: 'skjemaoversikt',
-    no_nn: 'nn/skjemaoversikt/',
-    en: 'en/forms-overview/',
+    no_nn: 'skjemaoversikt',
+    en: 'forms-overview',
   },
   about: {
     no_nb: 'nyheter/om-nye-altinn',
-    no_nn: 'nn/nyheiter/om-nye-altinn',
-    en: 'en/news/About-the-new-Altinn',
+    no_nn: 'nyheiter/om-nye-altinn',
+    en: 'news/about-the-new-altinn',
   },
   'start-business': {
     no_nb: 'starte-og-drive',
-    no_nn: 'nn/starte-og-drive',
-    en: 'en/start-and-run-business',
+    no_nn: 'starte-og-drive',
+    en: 'start-and-run-business',
   },
   help: {
     no_nb: 'hjelp',
-    no_nn: 'nn/hjelp',
-    en: 'en/help',
+    no_nn: 'hjelp',
+    en: 'help',
   },
 };
 
@@ -125,7 +130,7 @@ export const useGlobalMenu = () => {
       as: (props) => (
         <a
           {...props}
-          href={`${getAltinnInfoUrl()}/${linkUrls['forms'][lang] ?? linkUrls['forms']['no_nb']}`}
+          href={`${getAltinnStartPageUrl()}${linkUrls['forms'][lang] ?? linkUrls['forms']['no_nb']}`}
         />
       ),
     },
@@ -149,7 +154,7 @@ export const useGlobalMenu = () => {
       as: (props) => (
         <a
           {...props}
-          href={`${getAltinnInfoUrl()}/${linkUrls['about'][lang] ?? linkUrls['about']['no_nb']}`}
+          href={`${getAltinnStartPageUrl()}${linkUrls['about'][lang] ?? linkUrls['about']['no_nb']}`}
         />
       ),
     },
@@ -162,7 +167,7 @@ export const useGlobalMenu = () => {
       as: (props) => (
         <a
           {...props}
-          href={`${getAltinnInfoUrl()}/${linkUrls['start-business'][lang] ?? linkUrls['start-business']['no_nb']}`}
+          href={`${getAltinnStartPageUrl()}${linkUrls['start-business'][lang] ?? linkUrls['start-business']['no_nb']}`}
         />
       ),
     },
@@ -175,7 +180,7 @@ export const useGlobalMenu = () => {
       as: (props) => (
         <a
           {...props}
-          href={`${getAltinnInfoUrl()}/${linkUrls['help'][lang] ?? linkUrls['help']['no_nb']}`}
+          href={`${getAltinnStartPageUrl()}${linkUrls['help'][lang] ?? linkUrls['help']['no_nb']}`}
         />
       ),
     },
