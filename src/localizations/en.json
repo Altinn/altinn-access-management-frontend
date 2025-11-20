@@ -100,7 +100,7 @@
   "header": {
     "access_management": "Access management",
     "inbox": "Inbox",
-    "profile": "My profile",
+    "profile": "Your profile",
     "account_you": "You",
     "account_others": "Other accounts",
     "account_orgs": "Organizations",
@@ -118,7 +118,10 @@
     "logged_in_as_name": "Logged in as {{name}}",
     "new_altinn_info": "About new Altinn",
     "leave_beta": "To the old solution",
-    "shortcuts": "Shortcuts"
+    "shortcuts": "Shortcuts",
+    "all_forms": "All forms and services",
+    "start_business": "Start and run business",
+    "help": "Do you need help?"
   },
   "footer": {
     "digdir_address": "PO box 1382 Vika, 0114 Oslo. Org.no. 991 825 827",
