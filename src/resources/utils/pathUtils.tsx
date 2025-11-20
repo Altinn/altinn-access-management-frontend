@@ -37,7 +37,7 @@ export const getAltinnStartPageUrl = (languageOverride?: string) => {
   const lang = languageOverride ?? getCookie('selectedLanguage');
   const langKey = lang === 'en' ? 'en/' : lang === 'no_nn' ? 'nn/' : '';
 
-  return `${getAltinnInfoUrl}/${langKey}`;
+  return `${getAltinnInfoUrl()}/${langKey}`;
 };
 
 export const getAltinnInfoUrl = () => {
