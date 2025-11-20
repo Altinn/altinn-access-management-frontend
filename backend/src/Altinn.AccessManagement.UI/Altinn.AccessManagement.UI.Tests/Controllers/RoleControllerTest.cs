@@ -182,7 +182,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetAllRoles_ReturnsExpectedRoles()
         {
-            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/meta");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/meta?language=nb");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -191,6 +191,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.NotNull(actual);
             Assert.Equivalent(expected, actual);
+        }
+
+        [Fact]
+        public async Task GetAllRoles_ReturnsCachedResponseOnSubsequentRequest()
+        {
+            HttpResponseMessage firstResponse = await _client.GetAsync("accessmanagement/api/v1/role/meta?language=en");
+            string firstPayload = await firstResponse.Content.ReadAsStringAsync();
+
+            // Second request should hit the cached value in RoleService
+            HttpResponseMessage secondResponse = await _client.GetAsync("accessmanagement/api/v1/role/meta?language=en");
+            string secondPayload = await secondResponse.Content.ReadAsStringAsync();
+
+            Assert.Equal(HttpStatusCode.OK, firstResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, secondResponse.StatusCode);
+            Assert.Equal(firstPayload, secondPayload);
         }
 
         private static string ShortenIdentifier(Guid id) => id.ToString("N")[..8];

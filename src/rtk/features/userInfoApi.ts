@@ -3,8 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
-import { Entity } from '@/dataObjects/dtos/Common';
-import { Connection } from './connectionApi';
+import type { Connection, RoleInfo } from './connectionApi';
 
 interface UserKeyValues {
   OrganizationIdentifier?: string;
@@ -27,13 +26,6 @@ export interface User {
   children: (User | ExtendedUser)[] | null;
   keyValues: UserKeyValues | null;
   parent?: ExtendedUser | null;
-}
-
-export interface RoleInfo {
-  id: string;
-  code?: string;
-  displayName?: string;
-  viaParty?: Entity;
 }
 
 interface UserInfoApiResponse {

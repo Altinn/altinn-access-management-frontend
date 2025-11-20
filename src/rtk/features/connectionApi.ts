@@ -2,9 +2,16 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
+import type { ExtendedUser } from './userInfoApi';
 import type { Party } from './lookupApi';
 import { Entity } from '@/dataObjects/dtos/Common';
-import { ExtendedUser } from './userInfoApi';
+
+export interface RoleInfo {
+  id: string;
+  code?: string;
+  displayName?: string;
+  viaParty?: Entity;
+}
 
 export enum ConnectionUserType {
   Person = 'Person',
@@ -16,13 +23,6 @@ interface UserKeyValues {
   OrganizationIdentifier?: string;
   PartyId?: string;
   DateOfBirth?: string;
-}
-
-export interface RoleInfo {
-  id: string;
-  code?: string;
-  displayName?: string;
-  viaParty?: Entity;
 }
 
 export interface Connection {

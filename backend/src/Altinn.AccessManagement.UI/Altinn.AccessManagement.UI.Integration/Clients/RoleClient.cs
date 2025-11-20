@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode)
         {
-            string endpointUrl = "meta/info/roles";
+            string endpointUrl = $"meta/info/roles?language={languageCode}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);

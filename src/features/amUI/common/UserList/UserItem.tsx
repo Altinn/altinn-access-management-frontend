@@ -88,6 +88,7 @@ export const UserItem = ({
     isExtendedUser(user) &&
     user.type === ConnectionUserType.Organization &&
     user.roles?.some((role) => role.code === 'hovedenhet');
+
   const hasSubUnitRole = isSubOrMainUnit && roleDirection === 'fromUser';
 
   const description = (user: ExtendedUser | User) => {
@@ -131,7 +132,9 @@ export const UserItem = ({
       id={user.id}
       name={type !== 'system' ? formatDisplayName({ fullName: user.name, type }) : user.name}
       description={!isExpanded ? description(user) : undefined}
-      roleNames={showRoles ? roleNames : undefined}
+      roleNames={
+        showRoles ? roleNames.filter((name): name is string => name !== undefined) : undefined
+      }
       type={type}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}

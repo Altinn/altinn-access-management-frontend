@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { useGetAllRolesQuery, type Role } from '@/rtk/features/roleApi';
 
 type RoleMetadataMap = Record<string, Role | undefined>;
@@ -8,7 +9,8 @@ type RoleMetadataMap = Record<string, Role | undefined>;
  * Fetches all role metadata once and provides a helper to look up metadata by role id.
  */
 export const useRoleMetadata = () => {
-  const { data: allRoles, isFetching } = useGetAllRolesQuery();
+  const { i18n } = useTranslation();
+  const { data: allRoles, isFetching } = useGetAllRolesQuery({ language: i18n.language });
 
   const roleMetadataMap = useMemo(() => {
     if (!allRoles) {

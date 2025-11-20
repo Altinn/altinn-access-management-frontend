@@ -96,7 +96,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode)
         {
             string dataPath = Path.Combine(_dataFolder, "Roles", "roles.json");
-            return Task.FromResult(Util.GetMockData<IEnumerable<RoleMetadata>>(dataPath));
+            try
+            {
+                return Task.FromResult(Util.GetMockData<IEnumerable<RoleMetadata>>(dataPath));
+            }
+            catch (FileNotFoundException)
+            {
+                return Task.FromResult(Enumerable.Empty<RoleMetadata>());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Unexpected error reading mock roles from {dataPath}", ex);
+            }
         }
 
         /// <inheritdoc />

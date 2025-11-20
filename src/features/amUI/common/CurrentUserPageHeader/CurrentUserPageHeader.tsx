@@ -14,7 +14,9 @@ interface CurrentUserPageHeaderProps {
 
 export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserPageHeaderProps) => {
   const { t } = useTranslation();
+
   const roles = currentUser?.roles?.map((role) => role?.displayName ?? role.code);
+
   const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.keyValues?.DateOfBirth);
 
   return (
@@ -28,7 +30,7 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
         description={
           formattedBirthDate ? t('common.date_of_birth') + ` ${formattedBirthDate}` : undefined
         }
-        roleNames={roles}
+        roleNames={roles?.filter((name): name is string => name !== undefined)}
         type='person'
         as={as}
         titleAs='h2'

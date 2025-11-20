@@ -105,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         [HttpGet("meta")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<RoleMetadata>>> GetAllRoles()
+        public async Task<ActionResult<IEnumerable<RoleMetadata>>> GetAllRoles([FromQuery] string? language = null)
         {
             if (!ModelState.IsValid)
             {
@@ -114,7 +114,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+                string languageCode = language ?? LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
                 IEnumerable<RoleMetadata> roles = await _roleService.GetAllRoles(languageCode);
                 return Ok(roles);
             }
