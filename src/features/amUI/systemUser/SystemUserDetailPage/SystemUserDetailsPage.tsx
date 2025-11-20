@@ -21,6 +21,7 @@ import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserDetailsPage.module.css';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
@@ -55,6 +56,10 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
+        <Breadcrumbs
+          items={['root', 'systemuser_overview']}
+          lastBreadcrumb={{ label: systemUser?.integrationTitle }}
+        />
         <PageContainer
           onNavigateBack={handleNavigateBack}
           pageActions={

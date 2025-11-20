@@ -13,11 +13,17 @@ import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import {
+  PartyRepresentationProvider,
+  usePartyRepresentation,
+} from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
 
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { formatDisplayName } from '@altinn/altinn-components';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
@@ -37,6 +43,7 @@ export const ReporteeRightsPage = () => {
           actingPartyUuid={getCookie('AltinnPartyUuid')}
           returnToUrlOnError={`/${amUIPath.Reportees}`}
         >
+          <BreadcrumbsWrapper />
           <DelegationModalProvider>
             <PageContainer
               backUrl={`/${amUIPath.Reportees}`}
@@ -57,5 +64,20 @@ export const ReporteeRightsPage = () => {
         </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>
+  );
+};
+
+const BreadcrumbsWrapper = () => {
+  const { fromParty } = usePartyRepresentation();
+  return (
+    <Breadcrumbs
+      items={['root', 'reportees']}
+      lastBreadcrumb={{
+        label: formatDisplayName({
+          fullName: fromParty?.name ?? '',
+          type: fromParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+        }),
+      }}
+    />
   );
 };

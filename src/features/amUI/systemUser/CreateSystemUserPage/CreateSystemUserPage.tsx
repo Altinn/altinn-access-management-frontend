@@ -9,6 +9,7 @@ import type { RegisteredSystem } from '../types';
 
 import { SelectRegisteredSystem } from './SelectRegisteredSystem';
 import { RightsIncluded } from './RightsIncluded';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 
 export const CreateSystemUserPage = (): React.ReactNode => {
   const { t } = useTranslation();
@@ -28,6 +29,7 @@ export const CreateSystemUserPage = (): React.ReactNode => {
     <div className='systemuser_combobox_workaround'>
       <PageWrapper>
         <PageLayoutWrapper>
+          <Breadcrumbs items={['root', 'systemuser_overview', 'systemuser_create']} />
           {!isConfirmStep && (
             <SelectRegisteredSystem
               selectedSystem={selectedSystem}
