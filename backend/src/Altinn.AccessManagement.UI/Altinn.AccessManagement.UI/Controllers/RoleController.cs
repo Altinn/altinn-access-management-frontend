@@ -101,6 +101,31 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        /// Gets metadata for all roles.
+        /// </summary>
+        [HttpGet("meta")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<RoleMetadata>>> GetAllRoles()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+                IEnumerable<RoleMetadata> roles = await _roleService.GetAllRoles(languageCode);
+                return Ok(roles);
+            }
+            catch (HttpStatusException ex)
+            {
+                _logger.LogError(ex, "Error getting all roles");
+                return StatusCode((int)ex.StatusCode, ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Gets the packages available for the specified role.
         /// </summary>
         /// <param name="roleCode">The role code.</param>

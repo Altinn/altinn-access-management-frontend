@@ -9,8 +9,6 @@ import { type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType } from '@/rtk/features/connectionApi';
 import { formatDateToNorwegian } from '@/resources/utils';
 
-import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
-
 import classes from './UserList.module.css';
 import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
 
@@ -71,14 +69,14 @@ export const UserItem = ({
     [user],
   );
 
-  const roleCodes =
+  const roleNames =
     isExtendedUser(user) && user.roles
-      ? getRoleCodesForKeyRoles(user.roles.filter((r) => !r.viaParty))
+      ? user.roles.filter((r) => !r.viaParty).map((role) => role?.displayName ?? role.code)
       : [];
 
-  const viaRoleCodes =
+  const viaRoleNames =
     isExtendedUser(user) && user.roles
-      ? getRoleCodesForKeyRoles(user.roles.filter((r) => r.viaParty))
+      ? user.roles.filter((r) => r.viaParty).map((role) => role?.displayName ?? role.code)
       : [];
 
   const viaEntity =
@@ -108,8 +106,8 @@ export const UserItem = ({
           ? ` (${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
           : '');
     }
-    if (viaRoleCodes.length > 0) {
-      descriptionString += ` | ${viaRoleCodes.map((r) => t(`${r}`)).join(', ')} for ${viaEntity}`;
+    if (viaRoleNames.length > 0) {
+      descriptionString += ` | ${viaRoleNames.join(', ')} for ${viaEntity}`;
     }
     if (descriptionString) {
       return descriptionString;
@@ -133,7 +131,7 @@ export const UserItem = ({
       id={user.id}
       name={type !== 'system' ? formatDisplayName({ fullName: user.name, type }) : user.name}
       description={!isExpanded ? description(user) : undefined}
-      roleNames={showRoles ? roleCodes.map((r) => t(`${r}`)) : undefined}
+      roleNames={showRoles ? roleNames : undefined}
       type={type}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}

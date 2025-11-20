@@ -27,6 +27,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode);
 
         /// <summary>
+        /// Gets metadata for all roles.
+        /// </summary>
+        /// <param name="languageCode">Language code for localization.</param>
+        Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode);
+
+        /// <summary>
         /// Gets package metadata for a role.
         /// </summary>
         /// <param name="roleCode">The role code.</param>

@@ -32,6 +32,7 @@ export interface User {
 export interface RoleInfo {
   id: string;
   code?: string;
+  displayName?: string;
   viaParty?: Entity;
 }
 

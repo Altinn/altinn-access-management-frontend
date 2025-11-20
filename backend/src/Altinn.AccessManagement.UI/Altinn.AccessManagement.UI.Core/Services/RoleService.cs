@@ -33,6 +33,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode) => _roleClient.GetRoleById(roleId, languageCode);
 
         /// <inheritdoc />
+        public Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode) => _roleClient.GetAllRoles(languageCode);
+
+        /// <inheritdoc />
         public Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
             => _roleClient.GetRolePackages(roleCode, variant, includeResources, languageCode);
 

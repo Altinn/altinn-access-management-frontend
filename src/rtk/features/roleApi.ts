@@ -102,6 +102,9 @@ export const roleApi = createApi({
     getRoleById: builder.query<Role, string>({
       query: (id) => `/${id}`,
     }),
+    getAllRoles: builder.query<Role[], void>({
+      query: () => `/meta`,
+    }),
     getRolePackages: builder.query<
       RolePackageMetadata[],
       { roleCode: string; variant?: string; includeResources?: boolean }
@@ -134,6 +137,7 @@ export const roleApi = createApi({
 export const {
   useGetRolePermissionsQuery,
   useGetRoleByIdQuery,
+  useGetAllRolesQuery,
   useGetRolePackagesQuery,
   useGetRoleResourcesQuery,
 } = roleApi;

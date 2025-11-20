@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +11,7 @@ import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPa
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
+import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
 
 const mapUserToParty = (user: User): Party => ({
   partyId: 0,
@@ -27,6 +30,7 @@ interface UsersTabProps {
 export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
+  const { mapRoles, loadingRoleMetadata } = useRoleMapper();
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -43,6 +47,23 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
   );
 
   const connections = usePackagePermissionConnections(accessPackage);
+  const connectionsWithRoles = useMemo(
+    () =>
+      connections.map((connection) => ({
+        ...connection,
+        roles: mapRoles(connection.roles),
+        connections: connection.connections?.map((child) => ({
+          ...child,
+          roles: mapRoles(child.roles),
+          connections: child.connections?.map(({ connections, roles, ...rest }) => ({
+            ...rest,
+            roles: mapRoles(roles),
+            connections,
+          })),
+        })),
+      })),
+    [connections, mapRoles],
+  );
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
     queueSnackbar(
@@ -110,9 +131,9 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
         </DsParagraph>
       )}
       <AdvancedUserSearch
-        connections={connections}
+        connections={connectionsWithRoles}
         indirectConnections={indirectConnections}
-        isLoading={isLoading || loadingIndirectConnections}
+        isLoading={isLoading || loadingIndirectConnections || loadingRoleMetadata}
         onDelegate={handleOnDelegate}
         onRevoke={handleOnRevoke}
         isActionLoading={
@@ -120,7 +141,8 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
           isLoading ||
           loadingIndirectConnections ||
           isFetching ||
-          isFetchingIndirectConnections
+          isFetchingIndirectConnections ||
+          loadingRoleMetadata
         }
       />
     </>

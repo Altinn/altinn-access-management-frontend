@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -89,6 +90,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     HttpStatusCode.BadRequest,
                     string.Empty);
             }
+        }
+
+        /// <inheritdoc />
+        public Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode)
+        {
+            string dataPath = Path.Combine(_dataFolder, "Roles", "roles.json");
+            return Task.FromResult(Util.GetMockData<IEnumerable<RoleMetadata>>(dataPath));
         }
 
         /// <inheritdoc />

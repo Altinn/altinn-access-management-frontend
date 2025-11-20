@@ -93,6 +93,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode)
+        {
+            string endpointUrl = "meta/info/roles";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<RoleMetadata>>(response, _logger, "RoleClient // GetAllRoles");
+        }
+
+        /// <inheritdoc />
         public async Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
         {
             string endpointUrl =

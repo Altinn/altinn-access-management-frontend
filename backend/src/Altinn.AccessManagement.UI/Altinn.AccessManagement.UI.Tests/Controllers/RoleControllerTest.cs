@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
@@ -176,6 +177,20 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             string message = await response.Content.ReadAsStringAsync();
             Assert.Contains("roleCode and variant query parameters must be provided", message, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public async Task GetAllRoles_ReturnsExpectedRoles()
+        {
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/meta");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<RoleMetadata> actual = JsonSerializer.Deserialize<List<RoleMetadata>>(await response.Content.ReadAsStringAsync(), _serializerOptions);
+            List<RoleMetadata> expected = Util.GetMockData<List<RoleMetadata>>($"{ExpectedDataPath}/Role/roles.json");
+
+            Assert.NotNull(actual);
+            Assert.Equivalent(expected, actual);
         }
 
         private static string ShortenIdentifier(Guid id) => id.ToString("N")[..8];

@@ -36,7 +36,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
       from: fromParty?.partyUuid,
       to: toParty?.partyUuid,
     },
-    { skip: !actingParty?.partyUuid },
+    { skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid },
   );
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;

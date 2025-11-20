@@ -21,6 +21,7 @@ interface UserKeyValues {
 export interface RoleInfo {
   id: string;
   code?: string;
+  displayName?: string;
   viaParty?: Entity;
 }
 
