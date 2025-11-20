@@ -11,9 +11,9 @@ export const SystemUserRequestLoadError = ({ error }: SystemUserRequestLoadError
   const { t } = useTranslation();
   let errorText = 'systemuser_request.load_creation_request_error';
   if (error.code === 'AMUI-00010' || error.status === 404) {
-    return 'systemuser_request.load_request_error_notfound';
+    errorText = 'systemuser_request.load_request_error_notfound';
   } else if (error.code === 'AMUI-00066' || error.status === 403) {
-    return 'systemuser_request.load_request_missing_permissions';
+    errorText = 'systemuser_request.load_request_missing_permissions';
   }
 
   return <DsAlert data-color='danger'>{t(errorText)}</DsAlert>;
