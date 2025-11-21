@@ -29,7 +29,7 @@ export const ReporteePageHeading: React.FC<Props> = ({
   const { t } = useTranslation();
   const orgNumber = reportee?.organizationNumber ?? '';
   const isMainUnit = (reportee?.subunits?.length ?? 0) > 0;
-  const isSubUnit = reportee?.type === 'BEDR' || reportee?.type === 'AAFY';
+  const isSubUnit = reportee?.unitType === 'BEDR' || reportee?.unitType === 'AAFY';
 
   if (isLoading) {
     return (
