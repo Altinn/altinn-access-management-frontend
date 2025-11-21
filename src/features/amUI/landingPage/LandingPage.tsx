@@ -171,7 +171,7 @@ export const LandingPage = () => {
     if (reportee?.type === 'Organization') {
       const orgNrString = `${t('common.org_nr')} ${reportee?.organizationNumber?.match(/.{1,3}/g)?.join(' ') || ''}`;
       if (isSubunit) {
-        return `↳ ${t('common.org_nr')} ${orgNrString}, ${t('common.subunit').toLowerCase()}`;
+        return `↳ ${orgNrString}, ${t('common.subunit').toLowerCase()}`;
       }
       return orgNrString;
     }
