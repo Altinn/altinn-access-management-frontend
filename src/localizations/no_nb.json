@@ -497,11 +497,8 @@
     "invalid_phone": "Ugyldig telefonnummer"
   },
   "info_modal": {
-    "title": "Prøv den nye tilgangsstyringsløsningen",
-    "info": "Vi pusser opp tilgangsstyring, og du får sniktitte på en tidlig versjon! Den er fortsatt under utvikling, så noen funksjoner mangler. Vi håper likevel du vil prøve.",
-    "close_button": "Prøv ny tilgangsstyring",
-    "back_button": "Gå tilbake til dagens Altinn",
-    "info_link": "Hvorfor oppdaterer vi Altinn?",
+    "back_button": "Gå til gammel løsning",
+    "help_pages": "Hjelpesider",
     "info_button": "Informasjon om ny løsning"
   },
   "a2Alerts": {

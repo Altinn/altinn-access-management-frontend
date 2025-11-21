@@ -494,11 +494,8 @@
     "invalid_phone": "Ugyldig telefonnummer"
   },
   "info_modal": {
-    "title": "Prøv den nye tilgangsstyringsløysinga",
-    "info": "Vi pussar opp tilgangsstyring og du får kikke på ein tidleg versjon! Sidene er framleis under utvikling, så nokre funksjonar manglar. Vi håpar likevel du vil prøve.",
-    "close_button": "Prøv ny tilgangsstyring",
-    "back_button": "Gå tilbake til dagens Altinn",
-    "info_link": "Kvifor oppdaterer vi Altinn?",
+    "back_button": "Gå til gammel løsning",
+    "help_pages": "Hjelpesider",
     "info_button": "Informasjon om ny løysing"
   },
   "a2Alerts": {
