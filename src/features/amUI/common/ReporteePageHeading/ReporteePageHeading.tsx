@@ -4,6 +4,7 @@ import { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { DsHeading, DsSkeleton } from '@altinn/altinn-components';
 
 import styles from './ReporteePageHeading.module.css';
+import { formatOrgNr, isSubUnit } from '@/resources/utils/reporteeUtils';
 
 type Props = {
   title: string;
@@ -28,8 +29,8 @@ export const ReporteePageHeading: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation();
   const orgNumber = reportee?.organizationNumber ?? '';
-  const isMainUnit = (reportee?.subunits?.length ?? 0) > 0;
-  const isSubUnit = reportee?.unitType === 'BEDR' || reportee?.unitType === 'AAFY';
+  const isReporteeMainUnit = (reportee?.subunits?.length ?? 0) > 0;
+  const isReporteeSubUnit = isSubUnit(reportee);
 
   if (isLoading) {
     return (
@@ -62,9 +63,9 @@ export const ReporteePageHeading: React.FC<Props> = ({
           level={subHeadingLevel}
           data-size={subHeadingDataSize}
         >
-          {t('common.org_nr_lowercase', { org_number: orgNumber.match(/.{1,3}/g)?.join(' ') })}{' '}
-          {isMainUnit ? `(${t('common.mainunit_lowercase')})` : ''}
-          {isSubUnit ? `(${t('common.subunit_lowercase')})` : ''}
+          {t('common.org_nr_lowercase', { org_number: formatOrgNr(orgNumber) })}{' '}
+          {isReporteeMainUnit ? `(${t('common.mainunit_lowercase')})` : ''}
+          {isReporteeSubUnit ? `(${t('common.subunit_lowercase')})` : ''}
         </DsHeading>
       )}
     </div>
