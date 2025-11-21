@@ -5,6 +5,16 @@
   padding: 1.5rem 0 0.5rem 0;
 }
 
+.noUsersAlert {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.noUsersAlertIcon {
+  color: var(--ds-color-warning-base-default);
+}
+
 @media (max-width: 768px) {
   .tabContent {
     padding: 1rem 4px;
