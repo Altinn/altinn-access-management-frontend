@@ -41,8 +41,6 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
-  const delegationAllowed = canDelegate !== false;
-  console.log('delegationAllowed: ', delegationAllowed);
 
   const filteredConnections = useMemo(() => filterAvailableUserTypes(connections), [connections]);
 
@@ -65,11 +63,10 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const indirectHasResults = (indirectUsers?.length ?? 0) > 0;
 
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
-  const showIndirectList = isQuery && indirectHasResults && delegationAllowed;
+  const showIndirectList = isQuery && indirectHasResults && canDelegate;
   const showEmptyState = !directHasResults && !indirectHasResults;
 
   const handleAddNewUser = async (user: User) => {
-    if (!delegationAllowed) return;
     if (onDelegate) {
       if (user?.id && user?.name) {
         onDelegate(user);
@@ -97,7 +94,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           />
           {query && <DsSearch.Clear onClick={() => setQuery('')} />}
         </DsSearch>
-        {delegationAllowed && (
+        {canDelegate && (
           <div className={classes.buttonRow}>
             <NewUserButton onComplete={handleAddNewUser} />
           </div>
@@ -132,7 +129,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
               hasNextPage={!!hasNextIndirectPage}
               goNextPage={goNextIndirectPage}
               availableAction={DelegationAction.DELEGATE}
-              onDelegate={delegationAllowed ? onDelegate : undefined}
+              onDelegate={canDelegate ? onDelegate : undefined}
               isActionLoading={isActionLoading}
             />
           </>
@@ -142,13 +139,13 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           <div className={classes.emptyState}>
             <DsParagraph data-size='md'>
               {t(
-                delegationAllowed
+                canDelegate
                   ? 'advanced_user_search.user_no_search_result_with_add_suggestion'
                   : 'advanced_user_search.user_no_search_result',
                 { searchTerm: trimmedQuery },
               )}
             </DsParagraph>
-            {delegationAllowed && (
+            {canDelegate && (
               <NewUserButton
                 isLarge
                 onComplete={handleAddNewUser}
