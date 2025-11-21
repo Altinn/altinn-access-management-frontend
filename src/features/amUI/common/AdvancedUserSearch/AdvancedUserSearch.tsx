@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { DsSearch, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { PlusIcon } from '@navikt/aksel-icons';
 
 import { ExtendedUser, User } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType, type Connection } from '@/rtk/features/connectionApi';

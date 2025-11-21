@@ -9,7 +9,7 @@ import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPa
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
-import { ExclamationmarkTriangleFillIcon, TriangleFillIcon } from '@navikt/aksel-icons';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 const mapUserToParty = (user: User): Party => ({
   partyId: 0,
