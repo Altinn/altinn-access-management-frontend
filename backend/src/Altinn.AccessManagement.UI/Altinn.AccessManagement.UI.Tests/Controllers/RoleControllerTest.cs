@@ -182,7 +182,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetAllRoles_ReturnsExpectedRoles()
         {
-            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/meta?language=nb");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/meta");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -196,11 +196,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetAllRoles_ReturnsCachedResponseOnSubsequentRequest()
         {
-            HttpResponseMessage firstResponse = await _client.GetAsync("accessmanagement/api/v1/role/meta?language=en");
+            HttpResponseMessage firstResponse = await _client.GetAsync("accessmanagement/api/v1/role/meta");
             string firstPayload = await firstResponse.Content.ReadAsStringAsync();
 
             // Second request should hit the cached value in RoleService
-            HttpResponseMessage secondResponse = await _client.GetAsync("accessmanagement/api/v1/role/meta?language=en");
+            HttpResponseMessage secondResponse = await _client.GetAsync("accessmanagement/api/v1/role/meta");
             string secondPayload = await secondResponse.Content.ReadAsStringAsync();
 
             Assert.Equal(HttpStatusCode.OK, firstResponse.StatusCode);

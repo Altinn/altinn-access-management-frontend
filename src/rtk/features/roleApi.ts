@@ -99,15 +99,14 @@ export const roleApi = createApi({
       },
       providesTags: ['role-permissions'],
     }),
-    getRoleById: builder.query<Role, string>({
-      query: (id) => `/${id}`,
-      keepUnusedDataFor: 3600, // 1 hour
-      providesTags: ['roles'],
-    }),
     getAllRoles: builder.query<Role[], { language: string }>({
-      query: ({ language }) => `/meta?language=${language}`,
+      query: () => `/meta`,
       keepUnusedDataFor: 3600, // 1 hour
       providesTags: ['roles'],
+      serializeQueryArgs: ({ queryArgs, endpointName }) => {
+        // Custom cache key with selected language to ensure refetching when language changes
+        return `${endpointName}(${queryArgs.language})`;
+      },
     }),
     getRolePackages: builder.query<
       RolePackageMetadata[],
@@ -140,7 +139,6 @@ export const roleApi = createApi({
 
 export const {
   useGetRolePermissionsQuery,
-  useGetRoleByIdQuery,
   useGetAllRolesQuery,
   useGetRolePackagesQuery,
   useGetRoleResourcesQuery,
