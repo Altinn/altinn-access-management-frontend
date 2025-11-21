@@ -9,6 +9,7 @@ import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPa
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
+import { ExclamationmarkTriangleFillIcon, TriangleFillIcon } from '@navikt/aksel-icons';
 
 const mapUserToParty = (user: User): Party => ({
   partyId: 0,
@@ -22,9 +23,16 @@ interface UsersTabProps {
   fromParty?: { partyUuid?: string; name?: string } | null;
   isLoading: boolean;
   isFetching: boolean;
+  canDelegate?: boolean;
 }
 
-export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: UsersTabProps) => {
+export const UsersTab = ({
+  accessPackage,
+  fromParty,
+  isLoading,
+  isFetching,
+  canDelegate = true,
+}: UsersTabProps) => {
   const { t } = useTranslation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const {
@@ -71,6 +79,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
   } = useAccessPackageActions({ onDelegateSuccess, onRevokeSuccess });
 
   const handleOnDelegate = (user: User) => {
+    if (!canDelegate) return;
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
       onDelegate(accessPackage, toParty);
@@ -84,21 +93,21 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     }
   };
 
-  if (connections.length === 0 && !isLoading && !loadingIndirectConnections) {
-    return (
-      <DsParagraph
-        data-size='md'
-        className={pageClasses.tabDescription}
-      >
-        {t('package_poa_details_page.users_tab.no_users', {
-          fromparty: fromParty?.name,
-        })}
-      </DsParagraph>
-    );
-  }
-
   return (
     <>
+      {connections.length === 0 && !isLoading && !loadingIndirectConnections && (
+        <div className={pageClasses.noUsersAlert}>
+          <ExclamationmarkTriangleFillIcon className={pageClasses.noUsersAlertIcon} />
+          <DsParagraph
+            data-size='sm'
+            className={pageClasses.tabDescription}
+          >
+            {t('package_poa_details_page.users_tab.no_users', {
+              fromparty: fromParty?.name,
+            })}
+          </DsParagraph>
+        </div>
+      )}
       {!isLoading && (
         <DsParagraph
           data-size='md'
@@ -109,11 +118,12 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
           })}
         </DsParagraph>
       )}
+
       <AdvancedUserSearch
         connections={connections}
         indirectConnections={indirectConnections}
         isLoading={isLoading || loadingIndirectConnections}
-        onDelegate={handleOnDelegate}
+        onDelegate={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         isActionLoading={
           isActionLoading ||
@@ -122,6 +132,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
           isFetching ||
           isFetchingIndirectConnections
         }
+        canDelegate={canDelegate}
       />
     </>
   );

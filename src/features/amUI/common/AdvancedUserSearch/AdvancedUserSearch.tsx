@@ -20,6 +20,7 @@ export interface AdvancedUserSearchProps {
   onRevoke?: (user: User) => void;
   isLoading?: boolean;
   isActionLoading?: boolean;
+  canDelegate?: boolean;
 }
 
 const filterAvailableUserTypes = (items?: Connection[]) =>
@@ -36,9 +37,12 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   onRevoke,
   isLoading = false,
   isActionLoading = false,
+  canDelegate = true,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
+  const delegationAllowed = canDelegate !== false;
+  console.log('delegationAllowed: ', delegationAllowed);
 
   const filteredConnections = useMemo(() => filterAvailableUserTypes(connections), [connections]);
 
@@ -61,10 +65,11 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const indirectHasResults = (indirectUsers?.length ?? 0) > 0;
 
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
-  const showIndirectList = isQuery && indirectHasResults;
+  const showIndirectList = isQuery && indirectHasResults && delegationAllowed;
   const showEmptyState = !directHasResults && !indirectHasResults;
 
   const handleAddNewUser = async (user: User) => {
+    if (!delegationAllowed) return;
     if (onDelegate) {
       if (user?.id && user?.name) {
         onDelegate(user);
@@ -92,9 +97,11 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           />
           {query && <DsSearch.Clear onClick={() => setQuery('')} />}
         </DsSearch>
-        <div className={classes.buttonRow}>
-          <NewUserButton onComplete={handleAddNewUser} />
-        </div>
+        {delegationAllowed && (
+          <div className={classes.buttonRow}>
+            <NewUserButton onComplete={handleAddNewUser} />
+          </div>
+        )}
       </div>
 
       <div className={classes.results}>
@@ -125,7 +132,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
               hasNextPage={!!hasNextIndirectPage}
               goNextPage={goNextIndirectPage}
               availableAction={DelegationAction.DELEGATE}
-              onDelegate={onDelegate}
+              onDelegate={delegationAllowed ? onDelegate : undefined}
               isActionLoading={isActionLoading}
             />
           </>
@@ -134,14 +141,19 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
         {showEmptyState && (
           <div className={classes.emptyState}>
             <DsParagraph data-size='md'>
-              {t('advanced_user_search.user_no_search_result_with_add_suggestion', {
-                searchTerm: trimmedQuery,
-              })}
+              {t(
+                delegationAllowed
+                  ? 'advanced_user_search.user_no_search_result_with_add_suggestion'
+                  : 'advanced_user_search.user_no_search_result',
+                { searchTerm: trimmedQuery },
+              )}
             </DsParagraph>
-            <NewUserButton
-              isLarge
-              onComplete={handleAddNewUser}
-            />
+            {delegationAllowed && (
+              <NewUserButton
+                isLarge
+                onComplete={handleAddNewUser}
+              />
+            )}
           </div>
         )}
       </div>
