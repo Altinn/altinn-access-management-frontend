@@ -79,7 +79,6 @@ export const UsersTab = ({
   } = useAccessPackageActions({ onDelegateSuccess, onRevokeSuccess });
 
   const handleOnDelegate = (user: User) => {
-    if (!canDelegate) return;
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
       onDelegate(accessPackage, toParty);

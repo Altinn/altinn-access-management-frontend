@@ -33,12 +33,8 @@ export const PackagePoaDetails = () => {
 
   const [chosenTab, setChosenTab] = useState('users');
 
-  const canDelegate = (() => {
-    const packageId = accessPackage?.id ?? id;
-    if (!packageId) return true;
-    const delegationCheck = canDelegatePackage(packageId);
-    return delegationCheck?.result !== false;
-  })();
+  const packageId = accessPackage?.id ?? id;
+  const canDelegate = packageId ? canDelegatePackage(packageId)?.result !== false : true;
 
   // Show error alert with link back to overview if error fetching the Package
   if (error) {
