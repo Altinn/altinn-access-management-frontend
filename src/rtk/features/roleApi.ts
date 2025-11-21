@@ -103,10 +103,11 @@ export const roleApi = createApi({
       query: () => `/meta`,
       keepUnusedDataFor: 3600, // 1 hour
       providesTags: ['roles'],
-      serializeQueryArgs: ({ queryArgs, endpointName }) => {
+      serializeQueryArgs: ({ queryArgs, endpointName }) => ({
         // Custom cache key with selected language to ensure refetching when language changes
-        return `${endpointName}(${queryArgs.language})`;
-      },
+        endpointName,
+        language: queryArgs.language,
+      }),
     }),
     getRolePackages: builder.query<
       RolePackageMetadata[],
