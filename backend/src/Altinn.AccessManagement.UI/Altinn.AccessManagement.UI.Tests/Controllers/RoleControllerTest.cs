@@ -89,31 +89,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         [Fact]
-        public async Task GetRoleById_ReturnsExpectedRole()
-        {
-            Guid roleId = new("55bd7d4d-08dd-46ee-ac8e-3a44d800d752");
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{roleId}");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            RoleMetadata actual = JsonSerializer.Deserialize<RoleMetadata>(await response.Content.ReadAsStringAsync(), _serializerOptions);
-            RoleMetadata expected = Util.GetMockData<RoleMetadata>($"{ExpectedDataPath}/Role/Details/{roleId}.json");
-
-            AssertionUtil.AssertEqual(expected, actual);
-        }
-
-        [Fact]
-        public async Task GetRoleById_WhenNotFound_ReturnsNotFound()
-        {
-            Guid missingRoleId = Guid.NewGuid();
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{missingRoleId}");
-
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        }
-
-        [Fact]
         public async Task GetRolePackages_ReturnsExpectedPackages()
         {
             const string roleCode = "daglig-leder";

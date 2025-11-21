@@ -43,9 +43,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode) => _roleClient.GetRoleById(roleId, languageCode);
-
-        /// <inheritdoc />
         public async Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode)
         {
             string cacheKey = $"allroles-{languageCode}";

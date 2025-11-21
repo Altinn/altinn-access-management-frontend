@@ -68,31 +68,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
 
         /// <inheritdoc />
-        public Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode)
-        {
-            string triggerValue = roleId.ToString();
-            Util.ThrowExceptionIfTriggerParty(triggerValue);
-
-            try
-            {
-                string dataPath = Path.Combine(_dataFolder, "Roles", "Details", $"{roleId}.json");
-                return Task.FromResult(Util.GetMockData<RoleMetadata>(dataPath));
-            }
-            catch (FileNotFoundException)
-            {
-                return Task.FromResult<RoleMetadata>(null);
-            }
-            catch
-            {
-                throw new HttpStatusException(
-                    "StatusError",
-                    "Unexpected mockResponse status from Access Management",
-                    HttpStatusCode.BadRequest,
-                    string.Empty);
-            }
-        }
-
-        /// <inheritdoc />
         public Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode)
         {
             string dataPath = Path.Combine(_dataFolder, "Roles", "roles.json");

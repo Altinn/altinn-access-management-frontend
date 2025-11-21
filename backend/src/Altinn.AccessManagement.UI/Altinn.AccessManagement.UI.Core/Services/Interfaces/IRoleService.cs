@@ -20,13 +20,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<List<RolePermission>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode);
 
         /// <summary>
-        /// Gets role metadata by id.
-        /// </summary>
-        /// <param name="roleId">The role identifier.</param>
-        /// <param name="languageCode">Language code for localization.</param>
-        Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode);
-
-        /// <summary>
         /// Gets metadata for all roles.
         /// </summary>
         /// <param name="languageCode">Language code for localization.</param>
