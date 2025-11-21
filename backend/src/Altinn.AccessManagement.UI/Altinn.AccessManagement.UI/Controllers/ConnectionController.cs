@@ -120,11 +120,6 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
-            {
-                return StatusCode(404, "Feature not available");
-            }
-
             try
             {
                 Guid? partyUuid = await _connectionService.ValidatePerson(validationInput.Ssn, validationInput.LastName);

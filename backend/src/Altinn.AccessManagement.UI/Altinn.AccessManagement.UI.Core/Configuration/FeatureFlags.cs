@@ -17,9 +17,9 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayConfettiPackage { get; set; }
 
         /// <summary>
-        /// Whether or not to display features related to the limited preview launch in the UI
+        /// Whether or not to display roles functionality in the UI
         /// </summary>
-        public bool DisplayLimitedPreviewLaunch { get; set; }
+        public bool DisplayRoles { get; set; }
 
         /// <summary>
         /// Whether or not to only display the service/resource delegation feature in the UI
@@ -60,6 +60,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to use the new header component
         /// </summary>
         public bool UseNewHeader { get; set; }
+
+        /// <summary>
+        /// Whether to display the requests page
+        /// </summary>
+        public bool DisplayRequestsPage { get; set; }
 
         /// <summary>
         /// Whether to display the PRIV delegation feature

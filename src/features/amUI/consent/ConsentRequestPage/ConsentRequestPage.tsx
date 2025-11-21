@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import React, { useMemo } from 'react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import {
   DsAlert,
   DsButton,
@@ -31,6 +31,7 @@ import { ConsentRights } from '../components/ConsentRights/ConsentRights';
 import classes from './ConsentRequestPage.module.css';
 import { ConsentRequestError } from './ConsentRequestError';
 import { ConsentStatus } from '../components/ConsentStatus/ConsentStatus';
+import { ConsentPath } from '@/routes/paths';
 
 export const ConsentRequestPage = () => {
   const { t, i18n } = useTranslation();
@@ -94,7 +95,7 @@ export const ConsentRequestPage = () => {
             onSelect: onChangeLocale,
           },
           logo: {
-            href: getAltinnStartPageUrl(),
+            href: getAltinnStartPageUrl(i18n.language),
             title: 'Altinn',
           },
           currentAccount: {
@@ -157,6 +158,9 @@ interface ConsentRequestContentProps {
 }
 const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps): ReactElement => {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const skipLogout = searchParams.get('skiplogout');
+  const navigate = useNavigate();
 
   const [
     postApproveConsent,
@@ -185,7 +189,7 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
     if (!isActionButtonDisabled && request) {
       try {
         await postApproveConsent({ requestId: request.id, language }).unwrap();
-        logoutAndRedirect();
+        redirectAfterAction();
       } catch {
         // Error is already tracked via approveConsentError
       }
@@ -196,17 +200,21 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
     if (!isActionButtonDisabled && request) {
       try {
         await postRejectConsent({ requestId: request.id }).unwrap();
-        logoutAndRedirect();
+        redirectAfterAction();
       } catch {
         // Error is already tracked via rejectConsentError
       }
     }
   };
 
-  const logoutAndRedirect = (): void => {
-    window.location.assign(
-      `${import.meta.env.BASE_URL}accessmanagement/api/v1/consent/request/${request?.id}/logout`,
-    );
+  const redirectAfterAction = (): void => {
+    if (skipLogout) {
+      navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`);
+    } else {
+      window.location.assign(
+        `${import.meta.env.BASE_URL}accessmanagement/api/v1/consent/request/${request?.id}/logout`,
+      );
+    }
   };
 
   return (

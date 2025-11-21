@@ -21,6 +21,7 @@ import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
 import { SystemUserPath } from '@/routes/paths';
 import { getApiBaseUrl } from './urlUtils';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
+import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
@@ -103,11 +104,9 @@ export const SystemUserRequestPage = () => {
         <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
       )}
       {(loadingRequestError || (request && !request.system)) && (
-        <DsAlert data-color='danger'>
-          {(loadingRequestError as { data: ProblemDetail }).data.status === 404
-            ? t('systemuser_request.load_creation_request_error_notfound')
-            : t('systemuser_request.load_creation_request_error')}
-        </DsAlert>
+        <SystemUserRequestLoadError
+          error={(loadingRequestError as { data: ProblemDetail })?.data}
+        />
       )}
       {(isLoadingRequest || isLoadingReportee) && (
         <DsSpinner aria-label={t('systemuser_request.loading_creation_request')} />

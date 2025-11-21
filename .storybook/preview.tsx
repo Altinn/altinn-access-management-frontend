@@ -10,7 +10,6 @@ declare global {
     featureFlags?: {
       displayPopularSingleRightsServices: boolean;
       displayConfettiPackage: boolean;
-      displayLimitedPreviewLaunch: boolean;
       displayResourceDelegation: boolean;
       restrictPrivUse: boolean;
       displaySettingsPage: boolean;
@@ -21,6 +20,7 @@ declare global {
       displayPrivDelegation: boolean;
       displayAccessRequest: boolean;
       displaySubConnections: boolean;
+      displayRoles: boolean;
     };
   }
 }
@@ -47,7 +47,6 @@ document.cookie = 'XSRF-TOKEN=mocked-xsrf-token; path=/; SameSite=Lax';
 window.featureFlags = {
   displayPopularSingleRightsServices: false,
   displayConfettiPackage: true,
-  displayLimitedPreviewLaunch: false,
   displayResourceDelegation: true,
   restrictPrivUse: false,
   displaySettingsPage: true,

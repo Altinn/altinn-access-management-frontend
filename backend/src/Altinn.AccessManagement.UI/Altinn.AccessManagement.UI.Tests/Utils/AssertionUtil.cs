@@ -681,6 +681,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.IsPendingConsent, actual.IsPendingConsent);
             Assert.Equal(expected.IsPoa, actual.IsPoa);
             AssertEqual(expected.ToParty, actual.ToParty);
             AssertEqual(expected.FromParty, actual.FromParty);

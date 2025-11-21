@@ -12,7 +12,10 @@
 .flexContainer {
   display: flex;
   flex-direction: column;
-  margin-top: var(--ds-size-4);
+}
+
+.systemUserTopHeader {
+  margin-top: 15px;
 }
 
 .systemUserTabs {

@@ -1,8 +1,26 @@
+.service_list {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 2px;
+  max-height: 282px;
+  justify-content: space-between;
+  overflow-y: auto;
+  overflow-x: visible;
+  gap: 10px;
+  scrollbar-width: thin;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 1rem;
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
 .header {
@@ -30,4 +48,14 @@
 .nonDelegableIcon {
   color: var(--ds-color-warning-base-default);
   margin-right: 0.3rem;
+}
+
+.resourcesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.searchBar {
+  max-width: 27rem;
 }

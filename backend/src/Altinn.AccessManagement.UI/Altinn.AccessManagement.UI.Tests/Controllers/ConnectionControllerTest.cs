@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
-using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
@@ -26,8 +25,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     {
         private readonly CustomWebApplicationFactory<ConnectionController> _factory;
         private readonly HttpClient _client;
-        private readonly HttpClient _client_feature_off;
-
         private string _testDataFolder;
 
         /// <summary>
@@ -38,7 +35,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             _factory = factory;
             _client = SetupUtils.GetTestClient(factory, null);
-            _client_feature_off = SetupUtils.GetTestClient(factory, new FeatureFlags { DisplayLimitedPreviewLaunch = false });
             _testDataFolder = Path.GetDirectoryName(new Uri(typeof(ConnectionControllerTest).Assembly.Location).LocalPath);
 
             // Reset the static counter in RegisterClientMock to avoid test interference
@@ -224,34 +220,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: ValidatePerson when feature is toggled off
-        ///    Expected: Returns a 404 - not found
-        /// </summary>
-        [Fact]
-        public async Task ValidatePerson_Feature_Toggle_Off()
-        {
-            // Arrange
-            var partyId = 51329012;
-            var ssn = "20838198385"; // valid input
-            var lastname = "Medaljong";
-
-            HttpClient client = _client_feature_off;
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
-            string jsonRights = JsonSerializer.Serialize(input);
-            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await client.PostAsync($"accessmanagement/api/v1/connection/reportee/{partyId}/rightholder/validateperson", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
         /// <summary>

@@ -1,15 +1,12 @@
-﻿using System.Net;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Altinn.AccessManagement.UI.Core.Configuration;
+using System.Collections.Generic;
+using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Role;
-using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -21,9 +18,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
-        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly IRoleService _roleService;
-        private readonly FeatureFlags _featureFlags;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleController"/> class
@@ -31,169 +26,155 @@ namespace Altinn.AccessManagement.UI.Controllers
         public RoleController(
             IHttpContextAccessor httpContextAccessor,
             ILogger<RoleController> logger,
-            IRoleService roleService,
-            IOptions<FeatureFlags> featureFlags)
+            IRoleService roleService)
         {
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _roleService = roleService;
-            _serializerOptions.Converters.Add(new JsonStringEnumConverter());
-            _featureFlags = featureFlags.Value;
         }
 
         /// <summary>
-        ///     Search through all roles and return matches
+        /// Gets permissions for the given parties.
         /// </summary>
-        /// <returns>All search results, sorted into areas</returns>
+        /// <param name="party">The party performing the lookup.</param>
+        /// <param name="from">Optional right owner to filter on.</param>
+        /// <param name="to">Optional right holder to filter on.</param>
         [HttpGet]
         [Authorize]
-        [Route("search")]
-        public async Task<ActionResult<List<RoleAreaFE>>> Search([FromQuery] string searchString)
+        [Route("permissions")]
+        public async Task<ActionResult<List<RolePermission>>> GetRolePermissions([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            if (!from.HasValue && !to.HasValue)
+            {
+                return BadRequest("Either 'from' or 'to' query parameter must be provided.");
+            }
+
             try
             {
-                return await _roleService.GetSearch(languageCode, searchString);
+                string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+                List<RolePermission> permissions = await _roleService.GetRolePermissions(party, from, to, languageCode);
+                return Ok(permissions);
             }
             catch (HttpStatusException ex)
             {
-                if (ex.StatusCode == HttpStatusCode.NoContent)
+                _logger.LogError(ex, "Error getting role permissions");
+                return StatusCode((int)ex.StatusCode, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Gets role metadata for the provided role id.
+        /// </summary>
+        /// <param name="roleId">The role identifier.</param>
+        [HttpGet]
+        [Authorize]
+        [Route("{roleId:guid}")]
+        public async Task<ActionResult<RoleMetadata>> GetRoleById([FromRoute] Guid roleId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+
+                RoleMetadata role = await _roleService.GetRoleById(roleId, languageCode);
+                if (role == null)
                 {
-                    return NoContent();
+                    return NotFound();
                 }
 
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
-        }
-
-        /// <summary>
-        ///     Gets meta data for a given role
-        /// </summary>
-        /// <returns>The role meta data for </returns>
-        [HttpGet]
-        [Authorize]
-        [Route("{id}")]
-        public async Task<ActionResult<Core.Models.Common.Role>> GetRoleMetaById([FromRoute] Guid id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            try
-            {
-                return await _roleService.GetRoleMetaById(languageCode, id);
+                return Ok(role);
             }
             catch (HttpStatusException ex)
             {
-                if (ex.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
-
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
-        }
-
-        /// <summary>
-        ///     Get roles for user
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Authorize]
-        [Route("assignments/{rightOwnerUuid}/{rightHolderUuid}")]
-        public async Task<ActionResult<List<RoleAssignment>>> GetRolesForUser(Guid rightOwnerUuid, Guid rightHolderUuid)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
-            {
-                return StatusCode(404, "Feature not available");
-            }
-
-            try
-            {
-                var httpContext = _httpContextAccessor.HttpContext;
-                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(httpContext);
-                return await _roleService.GetRolesForUser(languageCode, rightOwnerUuid, rightHolderUuid);
-            }
-            catch (HttpStatusException ex)
-            {
-                _logger.LogError(ex, "Error getting roles");
+                _logger.LogError(ex, "Error getting role");
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
         }
 
         /// <summary>
-        /// Delegate role to user
+        /// Gets the packages available for the specified role.
         /// </summary>
-        /// <returns></returns>
-        [HttpPost]
+        /// <param name="roleCode">The role code.</param>
+        /// <param name="variant">Optional variant filter. Must match the entity type of the party offering the role (e.g., "person", "enterprise", "AS", "NUF", "ENK").</param>
+        /// <param name="includeResources">Whether package resources should be included.</param>
+        /// <remarks>
+        /// The variant parameter should correspond to the entity type of the party offering the role.
+        /// Common values include: "person" for individuals, or organization types like "AS", "NUF", "ENK", etc.
+        /// </remarks>
+        [HttpGet("packages")]
         [Authorize]
-        [Route("delegate/{from}/{to}/{roleId}")]
-        public async Task<ActionResult> DelegateRoleToUser([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] Guid roleId)
+        public async Task<ActionResult<IEnumerable<AccessPackage>>> GetRolePackages(
+            [FromQuery(Name = "roleCode")] string roleCode,
+            [FromQuery] string variant = null,
+            [FromQuery] bool includeResources = false)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
+            if (string.IsNullOrWhiteSpace(roleCode) || string.IsNullOrWhiteSpace(variant))
             {
-                return StatusCode(404, "Feature not available");
+                return BadRequest("roleCode and variant query parameters must be provided.");
             }
 
             try
             {
-                var response = await _roleService.CreateRoleDelegation(from, to, roleId);
-                return StatusCode((int)response.StatusCode, response.Content);
+                string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+                IEnumerable<AccessPackage> packages = await _roleService.GetRolePackages(roleCode, variant, includeResources, languageCode);
+                return Ok(packages);
             }
             catch (HttpStatusException ex)
             {
-                _logger.LogError(ex, "Error delegating role");
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
             }
         }
 
         /// <summary>
-        /// Revoke role for user
+        /// Gets the resources available for the specified role.
         /// </summary>
-        /// <returns></returns>
-        [HttpDelete]
+        /// <param name="roleCode">The role code.</param>
+        /// <param name="variant">Optional variant filter. Must match the entity type of the party offering the role (e.g., "person", "enterprise", "AS", "NUF", "ENK").</param>
+        /// <param name="includePackageResources">Whether to include resources inherited from packages.</param>
+        /// <remarks>
+        /// The variant parameter should correspond to the entity type of the party offering the role.
+        /// Common values include: "person" for individuals, or organization types like "AS", "NUF", "ENK", etc.
+        /// </remarks>
+        [HttpGet("resources")]
         [Authorize]
-        [Route("assignments/{assignmentId}")]
-        public async Task<ActionResult> RevokeRoleForUser([FromRoute] Guid assignmentId)
+        public async Task<ActionResult<IEnumerable<ResourceAM>>> GetRoleResources(
+            [FromQuery(Name = "roleCode")] string roleCode,
+            [FromQuery] string variant = null,
+            [FromQuery(Name = "includePackageResources")] bool includePackageResources = false)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
+            if (string.IsNullOrWhiteSpace(roleCode) || string.IsNullOrWhiteSpace(variant))
             {
-                return StatusCode(404, "Feature not available");
+                return BadRequest("roleCode and variant query parameters must be provided.");
             }
 
             try
             {
-                var response = await _roleService.DeleteRoleDelegation(assignmentId);
-                return StatusCode((int)response.StatusCode, response.Content);
+                string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+                IEnumerable<ResourceAM> resources = await _roleService.GetRoleResources(roleCode, variant, includePackageResources, languageCode);
+                return Ok(resources);
             }
             catch (HttpStatusException ex)
             {
-                _logger.LogError(ex, "Error deleting assignment");
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
             }
         }
     }
