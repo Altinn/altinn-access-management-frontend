@@ -325,7 +325,11 @@
     "resources_empty": "Denne rolla har ingen tenester.",
     "resources_disclaimer": "Denne rolla kan framleis gi tilgang til tenester som berre finst i den gamle løysinga.",
     "resources_disclaimer_link": "Sjå lista i den gamle løysinga",
-    "inherited_role_org_message": "{{user_name}} har tilgang til dette gjennom rolla si i {{org_name}}."
+    "access_status": {
+      "via_role": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}.",
+      "via_parent": "{{user_name}} har tilgang til dette fordi hovudeininga har ho.",
+      "via_agent": "{{user_name}} har tilgang til dette som agent via {{via_name}}."
+    }
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -494,11 +498,8 @@
     "invalid_phone": "Ugyldig telefonnummer"
   },
   "info_modal": {
-    "title": "Prøv den nye tilgangsstyringsløysinga",
-    "info": "Vi pussar opp tilgangsstyring og du får kikke på ein tidleg versjon! Sidene er framleis under utvikling, så nokre funksjonar manglar. Vi håpar likevel du vil prøve.",
-    "close_button": "Prøv ny tilgangsstyring",
-    "back_button": "Gå tilbake til dagens Altinn",
-    "info_link": "Kvifor oppdaterer vi Altinn?",
+    "back_button": "Gå til gammel løsning",
+    "help_pages": "Hjelpesider",
     "info_button": "Informasjon om ny løysing"
   },
   "a2Alerts": {

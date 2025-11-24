@@ -175,22 +175,33 @@ export const LandingPage = () => {
     return items;
   };
 
+  const isSubunit =
+    (reportee?.unitType === 'BEDR' || reportee?.unitType === 'AAFY') &&
+    reportee?.type === 'Organization';
+
+  const getReporteeDescription = (): string => {
+    if (reportee?.type === 'Organization') {
+      const orgNrString = `${t('common.org_nr')} ${reportee?.organizationNumber?.match(/.{1,3}/g)?.join(' ') || ''}`;
+      if (isSubunit) {
+        return `↳ ${orgNrString}, ${t('common.subunit').toLowerCase()}`;
+      }
+      return orgNrString;
+    }
+    return `${t('common.date_of_birth')} ${formatDateToNorwegian(reportee?.dateOfBirth)}`;
+  };
+
   return (
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
           <ListItem
             icon={{
+              isParent: !isSubunit,
               type: reportee?.type === 'Organization' ? 'company' : 'person',
               name: reporteeName,
             }}
             title={reporteeName}
-            description={
-              reportee?.type === 'Organization'
-                ? `${t('common.org_nr')} ${reportee?.organizationNumber?.match(/.{1,3}/g)?.join(' ') || ''}`
-                : reportee?.dateOfBirth &&
-                  `${t('common.date_of_birth')} ${formatDateToNorwegian(reportee?.dateOfBirth)}`
-            }
+            description={getReporteeDescription()}
             size='xl'
             loading={!reportee}
             interactive={false}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { List, Button, Icon, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { List, Icon, DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { PackageIcon } from '@navikt/aksel-icons';
 import { useAccessPackageDelegationCheck } from '../../DelegationCheck/AccessPackageDelegationCheckContext';
@@ -188,34 +188,36 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
           <div className={classes.actions}>
             {userHasPackage && availableActions.includes(DelegationAction.REVOKE) ? (
               deletableStatus !== DeletableStatus.PartiallyDeletable ? (
-                <Button
+                <DsButton
                   disabled={accessIsInherited || accessPackage.isAssignable === false}
                   onClick={() => onRevoke(accessPackage)}
-                  color='danger'
+                  data-color='danger'
                 >
                   {t('common.delete_poa')}
-                </Button>
+                </DsButton>
               ) : (
                 <PackageIsPartiallyDeletableAlert
                   confirmAction={() => onRevoke(accessPackage)}
                   triggerButtonProps={{
-                    variant: 'solid',
+                    variant: 'primary',
                   }}
                 />
               )
             ) : null}
             {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
-              <Button
+              <DsButton
                 disabled={accessPackage.isAssignable === false || canDelegate?.result === false}
                 onClick={() => onDelegate(accessPackage)}
               >
                 {t('common.give_poa')}
-              </Button>
+              </DsButton>
             )}
             {!userHasPackage &&
               availableActions.includes(DelegationAction.REQUEST) &&
               // Todo: Implement request access package
-              displayAccessRequestFeature && <Button disabled>{t('common.request_poa')}</Button>}
+              displayAccessRequestFeature && (
+                <DsButton disabled>{t('common.request_poa')}</DsButton>
+              )}
           </div>
         </>
       )}

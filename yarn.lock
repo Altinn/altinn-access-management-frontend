@@ -19,9 +19,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:0.47.4":
-  version: 0.47.4
-  resolution: "@altinn/altinn-components@npm:0.47.4"
+"@altinn/altinn-components@npm:0.47.5":
+  version: 0.47.5
+  resolution: "@altinn/altinn-components@npm:0.47.5"
   dependencies:
     "@digdir/designsystemet-css": "npm:^1.0.6"
     "@digdir/designsystemet-react": "npm:^1.0.6"
@@ -34,7 +34,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/c2d241ec99bae0fe0392f7551492dee6c9fe33765f14ffd69fa0803a9ef5713a53bc139a4ef145fb02c608263a29549421992028d3c62924abd6aecee590a9d5
+  checksum: 10/1350afdaef3e778463a92c4a5172a831dd7b4a0ac89d42b62189849f95a09fcf5673e6bb351244a1cc681d7a7eca7f29fc1f4f098d852ee200f22dfca94f0a19
   languageName: node
   linkType: hard
 
@@ -3380,7 +3380,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:0.47.4"
+    "@altinn/altinn-components": "npm:0.47.5"
     "@axe-core/playwright": "npm:^4.10.2"
     "@navikt/aksel-icons": "npm:^7.33.3"
     "@playwright/test": "npm:^1.55.0"
