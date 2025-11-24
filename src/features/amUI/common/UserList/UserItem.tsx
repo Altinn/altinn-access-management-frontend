@@ -93,7 +93,7 @@ export const UserItem = ({
   const hasSubUnitRole = isSubOrMainUnit && roleDirection === 'fromUser';
 
   const description = (user: ExtendedUser | User) => {
-    let descriptionString = '';
+    let descriptionString = subUnit ? '↳ ' : '';
     if (user.type === ConnectionUserType.Person) {
       const formattedDate = formatDateToNorwegian(user.keyValues?.DateOfBirth);
       descriptionString += formattedDate
@@ -105,7 +105,7 @@ export const UserItem = ({
         ' ' +
         user.keyValues?.OrganizationIdentifier +
         (isSubOrMainUnit || subUnit
-          ? ` (${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
+          ? `, ${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')}`
           : '');
     }
     if (viaRoleCodes.length > 0) {
