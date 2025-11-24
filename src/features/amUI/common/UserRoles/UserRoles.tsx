@@ -5,7 +5,7 @@ import cn from 'classnames';
 import classes from './userRoles.module.css';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { RoleInfoModal } from '../DelegationModal/RoleInfoModal';
 import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries';
 import { useRoleMetadata } from './useRoleMetadata';

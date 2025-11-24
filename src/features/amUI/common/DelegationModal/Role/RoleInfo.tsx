@@ -23,20 +23,11 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
   const isExternalRole = role?.provider?.code === 'sys-ccr';
   const isLegacyRole = role?.provider?.code === 'sys-altinn2';
 
-  const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  const { fromParty, actingParty } = usePartyRepresentation();
   const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
   const { data: roleResources, isLoading: isRoleResourcesLoading } = useGetRoleResourcesQuery(
     { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
     { skip: shouldSkipRoleRefs },
-  );
-
-  const { data: rolePermissions } = useGetRolePermissionsQuery(
-    {
-      party: actingParty?.partyUuid ?? '',
-      from: fromParty?.partyUuid,
-      to: toParty?.partyUuid,
-    },
-    { skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid },
   );
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
