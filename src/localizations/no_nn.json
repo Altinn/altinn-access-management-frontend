@@ -313,6 +313,11 @@
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Ver venleg å kontakte Altinn brukarteneste om problemet held fram.",
       "delegation_check_error_message_plural": "En teknisk feil sperrer deg fra å gi fullmakt til ein eller fleire tilgangspakkar. Ver venleg å kontakte Altinn brukarteneste om problemet held fram."
+    },
+    "access_status": {
+      "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
+      "via_parent": "{{acting_party}} har denne tilgangspakken gjennom hovudeininga til {{from_party}}. Denne tilgangspakken kan difor ikkje slettast.",
+      "via_agent": "{{user_name}} har tilgang til denne tilgangspakken som agent via {{via_name}}. Denne tilgangspakken kan difor ikkje slettast."
     }
   },
   "role": {
@@ -327,7 +332,7 @@
     "resources_disclaimer_link": "Sjå lista i den gamle løysinga",
     "access_status": {
       "via_role": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}.",
-      "via_parent": "{{user_name}} har tilgang til dette fordi hovudeininga har ho.",
+      "via_parent": "{{acting_party}} har denne tilgangen gjennom hovudeininga til {{from_party}}.",
       "via_agent": "{{user_name}} har tilgang til dette som agent via {{via_name}}."
     }
   },

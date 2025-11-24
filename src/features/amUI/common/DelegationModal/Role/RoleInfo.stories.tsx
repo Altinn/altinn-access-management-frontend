@@ -8,7 +8,7 @@ import { RoleInfo } from './RoleInfo';
 import type { Party } from '@/rtk/features/lookupApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { PartyRepresentationContext } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { RoleStatusType } from './useInheritedRoleInfo';
+import { InheritedStatusType } from '../../useInheritedStatus';
 
 const storyRole: Role = {
   id: 'role-ccr-styreleder',
@@ -47,21 +47,21 @@ const scenarioConfigs = {
     toParty: createParty('party-via-role-employee', 'Fiona Økonom', PartyType.Person),
     acting: 'from',
     viaParty: createParty('org-aktiv-epoke', 'Aktiv Epoke AS'),
-    statusType: RoleStatusType.ViaRole,
+    statusType: InheritedStatusType.ViaRole,
   },
   viaParent: {
     fromParty: createParty('org-koncern', 'Nordic Holdings ASA'),
     toParty: createParty('party-via-parent', 'Aktiv Epoke AS'),
     acting: 'to',
     viaParty: createParty('org-koncern', 'Nordic Holdings ASA'),
-    statusType: RoleStatusType.ViaParent,
+    statusType: InheritedStatusType.ViaParent,
   },
   viaAgent: {
     fromParty: createParty('org-aktiv-epoke', 'Aktiv Epoke AS'),
     toParty: createParty('party-via-agent', 'Ola Agent', PartyType.Person),
     acting: 'from',
     viaParty: createParty('org-agent', 'Tall & Tid AS'),
-    statusType: RoleStatusType.ViaAgent,
+    statusType: InheritedStatusType.ViaAgent,
   },
 } as const;
 

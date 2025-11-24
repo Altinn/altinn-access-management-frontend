@@ -6,30 +6,68 @@ import {
 } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
 import { t } from 'i18next';
-import { DsParagraph } from '@altinn/altinn-components';
+import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { InheritedStatusType, type InheritedStatusMessageType } from '../useInheritedStatus';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 import classes from './StatusSection.module.css';
+
+const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
+  [InheritedStatusType.ViaRole]: 'access_packages.access_status.via_role',
+  [InheritedStatusType.ViaParent]: 'access_packages.access_status.via_parent',
+  [InheritedStatusType.ViaAgent]: 'access_packages.access_status.via_agent',
+};
 
 export const StatusSection = ({
   userHasAccess,
   showMissingRightsMessage,
-  inheritedFrom,
+  inheritedStatus,
   delegationCheckText,
   cannotDelegateHere = false,
 }: {
   userHasAccess: boolean;
   showMissingRightsMessage: boolean;
-  inheritedFrom?: string;
+  inheritedStatus?: InheritedStatusMessageType;
   delegationCheckText?: string;
   cannotDelegateHere?: boolean;
 }) => {
-  const { fromParty, toParty } = usePartyRepresentation();
+  const { fromParty, toParty, actingParty } = usePartyRepresentation();
 
-  if (!userHasAccess && !showMissingRightsMessage && !inheritedFrom && !cannotDelegateHere) {
+  if (!userHasAccess && !showMissingRightsMessage && !inheritedStatus && !cannotDelegateHere) {
     return null;
   }
+
+  const direction = actingParty?.partyUuid === fromParty?.partyUuid ? 'from' : 'to';
+
+  const formattedActingPartyName = formatDisplayName({
+    fullName: actingParty?.name || '',
+    type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    reverseNameOrder: false,
+  });
+
+  const formattedUserName = formatDisplayName({
+    fullName: (direction === 'from' ? toParty?.name : fromParty?.name) || '',
+    type:
+      (direction === 'from' ? toParty?.partyTypeName : fromParty?.partyTypeName) ===
+      PartyType.Person
+        ? 'person'
+        : 'company',
+    reverseNameOrder: false,
+  });
+
+  const formattedFromPartyName = formatDisplayName({
+    fullName: fromParty?.name || '',
+    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    reverseNameOrder: false,
+  });
+
+  const formattedViaName = formatDisplayName({
+    fullName: inheritedStatus?.via?.name || '',
+    type: inheritedStatus?.via?.type?.toLowerCase() === 'person' ? 'person' : 'company',
+    reverseNameOrder: false,
+  });
 
   return (
     <div
@@ -52,7 +90,7 @@ export const StatusSection = ({
           </DsParagraph>
         </div>
       )}
-      {inheritedFrom !== undefined && inheritedFrom.length > 0 && (
+      {inheritedStatus && (
         <div className={classes.infoLine}>
           <InformationSquareFillIcon
             fontSize='1.5rem'
@@ -60,10 +98,12 @@ export const StatusSection = ({
           />
           <DsParagraph data-size='xs'>
             <Trans
-              i18nKey='delegation_modal.inherited_role_org_message'
+              i18nKey={STATUS_TRANSLATION_KEYS[inheritedStatus.type]}
               values={{
-                user_name: toParty?.name,
-                org_name: inheritedFrom ?? fromParty?.name,
+                user_name: formattedUserName,
+                via_name: formattedViaName,
+                acting_party: formattedActingPartyName,
+                from_party: formattedFromPartyName,
               }}
             />
           </DsParagraph>

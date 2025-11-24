@@ -20,6 +20,7 @@ import {
   getDeletableStatus,
   isInherited,
 } from '../../AccessPackageList/useAreaPackageList';
+import { getInheritedStatus } from '../../useInheritedStatus';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
@@ -34,7 +35,7 @@ export interface PackageInfoProps {
 
 export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { fromParty, toParty } = usePartyRepresentation();
+  const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
   const displayAccessRequestFeature = displayAccessRequest();
 
@@ -80,6 +81,25 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
         isInherited(p, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
       )) ||
     false;
+
+  const inheritedStatus = React.useMemo(
+    () =>
+      accessPackage.inheritedStatus ??
+      getInheritedStatus({
+        permissions: delegationAccess?.permissions ?? accessPackage.permissions,
+        toParty,
+        fromParty,
+        actingParty,
+      }),
+    [
+      accessPackage.inheritedStatus,
+      delegationAccess?.permissions,
+      accessPackage.permissions,
+      toParty,
+      fromParty,
+      actingParty,
+    ],
+  );
 
   const resourceListItems = useResourceList(accessPackage.resources);
   const deletableStatus = React.useMemo(
@@ -161,12 +181,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             userHasAccess={userHasPackage}
             showMissingRightsMessage={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
-            inheritedFrom={
-              onlyPermissionTroughInheritance
-                ? (delegationAccess?.permissions[0].via?.name ??
-                  delegationAccess?.permissions[0].from.name)
-                : undefined
-            }
+            inheritedStatus={onlyPermissionTroughInheritance ? inheritedStatus : undefined}
           />
 
           <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
