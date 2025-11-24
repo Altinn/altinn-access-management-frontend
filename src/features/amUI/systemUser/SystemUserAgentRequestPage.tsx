@@ -19,6 +19,7 @@ import { getApiBaseUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/CreateSystemUserCheck';
 import { RightsList } from './components/RightsList/RightsList';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
+import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
@@ -95,11 +96,9 @@ export const SystemUserAgentRequestPage = () => {
         <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
       )}
       {(loadingRequestError || (request && !request.system)) && (
-        <DsAlert data-color='danger'>
-          {(loadingRequestError as { data: ProblemDetail }).data.status === 404
-            ? t('systemuser_request.load_creation_request_error_notfound')
-            : t('systemuser_request.load_creation_request_error')}
-        </DsAlert>
+        <SystemUserRequestLoadError
+          error={(loadingRequestError as { data: ProblemDetail })?.data}
+        />
       )}
       {(isLoadingRequest || isLoadingReportee) && (
         <DsSpinner aria-label={t('systemuser_request.loading_creation_request')} />

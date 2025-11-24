@@ -107,7 +107,7 @@ export const getSystemUserMenuItem = (pathname?: string, isLoading = false): Men
 
 export const getSettingsMenuItem = (pathname?: string, isLoading = false): MenuItemProps => {
   return {
-    groupId: 'settings-group',
+    groupId: 7,
     id: 'settings',
     size: 'md',
     loading: isLoading,
@@ -120,7 +120,7 @@ export const getSettingsMenuItem = (pathname?: string, isLoading = false): MenuI
 
 export const getRequestsMenuItem = (pathname?: string, isLoading = false): MenuItemProps => {
   return {
-    groupId: '2',
+    groupId: 2,
     id: '2.2',
     size: 'md',
     loading: isLoading,

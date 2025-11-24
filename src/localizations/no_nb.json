@@ -117,7 +117,7 @@
   "header": {
     "access_management": "Tilgangsstyring",
     "inbox": "Innboks",
-    "profile": "Min profil",
+    "profile": "Din profil",
     "menu-label": "Meny",
     "account_you": "Deg selv",
     "account_others": "Andre kontoer",
@@ -135,7 +135,10 @@
     "logged_in_as_name": "Logget inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
     "leave_beta": "Til gammel løsning",
-    "shortcuts": "Snarveier"
+    "shortcuts": "Snarveier",
+    "all_forms": "Alle skjema og tjenester",
+    "start_business": "Starte og drive bedrift",
+    "help": "Trenger du hjelp?"
   },
   "footer": {
     "digdir_address": "Postboks 1382 Vika, 0114 Oslo. Org.nr. 991 825 827",
@@ -325,7 +328,11 @@
     "resources_empty": "Denne rollen inneholder ingen tjenester.",
     "resources_disclaimer": "Denne rollen kan fortsatt gi tilgang til tjenester som kun finnes i den gamle løsningen.",
     "resources_disclaimer_link": "Se listen i den gamle løsningen",
-    "inherited_role_org_message": "{{user_name}} har tilgang til dette gjennom rollen sin i {{org_name}}."
+    "access_status": {
+      "via_role": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}.",
+      "via_parent": "{{user_name}} har tilgang til dette fordi hovedenheten har den.",
+      "via_agent": "{{user_name}} har tilgang til dette som agent via {{via_name}}."
+    }
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -494,11 +501,8 @@
     "invalid_phone": "Ugyldig telefonnummer"
   },
   "info_modal": {
-    "title": "Prøv den nye tilgangsstyringsløsningen",
-    "info": "Vi pusser opp tilgangsstyring, og du får sniktitte på en tidlig versjon! Den er fortsatt under utvikling, så noen funksjoner mangler. Vi håper likevel du vil prøve.",
-    "close_button": "Prøv ny tilgangsstyring",
-    "back_button": "Gå tilbake til dagens Altinn",
-    "info_link": "Hvorfor oppdaterer vi Altinn?",
+    "back_button": "Gå til gammel løsning",
+    "help_pages": "Hjelpesider",
     "info_button": "Informasjon om ny løsning"
   },
   "a2Alerts": {
@@ -582,8 +586,9 @@
     "reject": "Avvis",
     "org_nr": "{{systemName}} blir levert av {{vendorName}}, org.nr. {{vendorOrg}}",
     "loading_creation_request": "Laster forespørsel",
-    "load_creation_request_error_notfound": "Systemtilgang-forespørsel for valgt aktør finnes ikke. Er du sikker på at du har valgt riktig aktør?",
-    "load_creation_request_error": "Kunne ikke laste systemtilgang-forespørsel",
+    "load_request_error_notfound": "Systemtilgang-forespørsel for valgt aktør finnes ikke. Er du sikker på at du har valgt riktig aktør?",
+    "load_request_error": "Kunne ikke laste systemtilgang-forespørsel",
+    "load_request_missing_permissions": "Du har ikke tilstrekkelige tilganger til å godkjenne denne systemtilgang-forespørselen",
     "load_user_info_error": "Kunne ikke laste brukerinfo",
     "load_creation_request_no_id": "id må være med som query-parameter i url",
     "accept_error": "Kunne ikke godkjenne systemtilgang",
@@ -610,8 +615,6 @@
     "accept": "Godkjenn oppdatert systemtilgang",
     "reject": "Avvis",
     "loading_change_request": "Laster oppdaterings-forespørsel",
-    "load_change_request_error": "Kunne ikke laste oppdaterings-forespørsel",
-    "load_change_request_error_notfound": "Oppdaterings-forespørsel for valgt aktør finnes ikke. Er du sikker på at du har valgt riktig aktør?",
     "accept_error": "Kunne ikke godkjenne oppdatert systemtilgang",
     "reject_error": "Kunne ikke avvise oppdatert systemtilgang",
     "accept_loading": "Godkjenner oppdatert systemtilgang...",
