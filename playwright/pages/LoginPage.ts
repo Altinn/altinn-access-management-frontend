@@ -12,6 +12,7 @@ export class LoginPage {
   readonly profileLink: Locator;
   readonly velgAktoerHeading: Locator;
   readonly autentiserButton: Locator;
+  browserAlreadyUsed: boolean = false;
 
   constructor(page: Page) {
     this.page = page;
@@ -29,6 +30,7 @@ export class LoginPage {
       try {
         await this.navigateToLoginPage();
         await this.authenticateUser(pid);
+        await this.verifyLoginSuccess();
         return;
       } catch (error) {
         console.log(`Login attempt ${attempt} failed with error: ${error}`);
@@ -56,6 +58,7 @@ export class LoginPage {
 
     await expect(this.velgAktoerHeading).toBeVisible();
     await this.selectActor(this.searchBox, orgnummer);
+    await this.verifyLoginSuccess();
   }
 
   async chooseReportee(currentReportee: string, targetReportee: string = '') {
@@ -110,6 +113,20 @@ export class LoginPage {
     await input.click();
     await input.clear();
     await input.pressSequentially(party);
+  }
+
+  /**
+   * Verify login success by checking for and clicking the "Prøv ny tilgangsstyring" button
+   * This helps catch bugs where the landing page doesn't load properly after login
+   */
+  private async verifyLoginSuccess() {
+    // Skip button click if browser is already used (e.g., for access package delegation test)
+    if (this.browserAlreadyUsed) {
+      return;
+    }
+    const frontPage = new AccessManagementFrontPage(this.page);
+    await expect(frontPage.tryNewAccessManagementButton).toBeVisible();
+    await frontPage.tryNewAccessManagementButton.click();
   }
 }
 

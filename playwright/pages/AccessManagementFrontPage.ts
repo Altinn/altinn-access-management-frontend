@@ -7,6 +7,7 @@ export class AccessManagementFrontPage {
   readonly powersOfAttorneyLink: Locator;
   readonly ourAccessAtOthersLink: Locator;
   readonly consentAndPowerOfAttorneyAgreementsLink: Locator;
+  readonly tryNewAccessManagementButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -22,6 +23,9 @@ export class AccessManagementFrontPage {
     });
     this.consentAndPowerOfAttorneyAgreementsLink = this.page.getByRole('link', {
       name: 'Samtykke- og fullmaktsavtaler',
+    });
+    this.tryNewAccessManagementButton = this.page.getByRole('button', {
+      name: 'Prøv ny tilgangsstyring',
     });
   }
 }
