@@ -482,7 +482,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected?.Id, actual?.Id);
             Assert.Equal(expected?.Name, actual?.Name);
             Assert.Equal(expected?.OrganizationIdentifier, actual?.OrganizationIdentifier);
-            Assert.Equal(expected?.PersonIdentifier, actual?.PersonIdentifier);
             Assert.Equal(expected?.DateOfBirth, actual?.DateOfBirth);
             Assert.Equal(expected?.PartyId, actual?.PartyId);
         }
@@ -759,7 +758,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(actual.Type, expected.Type);
             Assert.Equal(expected.PartyId, actual.PartyId);
             Assert.Equal(expected.OrganizationIdentifier, actual.OrganizationIdentifier);
-            Assert.Equal(expected.PersonIdentifier, actual.PersonIdentifier);
             Assert.Equal(expected.DateOfBirth, actual.DateOfBirth);
             AssertCollections(expected.Children, actual.Children, AssertEqual);
         }

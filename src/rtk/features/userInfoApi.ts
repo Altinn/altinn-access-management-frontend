@@ -22,7 +22,6 @@ export interface User {
   parent?: ExtendedUser | null;
   partyId?: number | string | null;
   organizationIdentifier?: string | null;
-  personIdentifier?: string | null;
   dateOfBirth?: string | null;
   userId?: string | null;
   username?: string | null;

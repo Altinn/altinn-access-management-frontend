@@ -714,5 +714,32 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
+
+        /// <summary>
+        ///    Ensures personIdentifier is not exposed in the response payload for right holders.
+        ///    The mock data contains a personIdentifier, so absence confirms the BFF strips it.
+        /// </summary>
+        [Fact]
+        public async Task GetRightholders_DoesNotExposePersonIdentifier()
+        {
+            // Arrange
+            var party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/connection/rightholders?party={party}&from={party}&to=");
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            using var doc = JsonDocument.Parse(content);
+            foreach (var connection in doc.RootElement.EnumerateArray())
+            {
+                var partyElement = connection.GetProperty("party");
+                Assert.False(partyElement.TryGetProperty("personIdentifier", out _), "personIdentifier should not be returned from BFF");
+            }
+            Assert.DoesNotContain("personIdentifier", content, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

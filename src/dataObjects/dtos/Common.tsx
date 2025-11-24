@@ -5,7 +5,6 @@ export interface Entity {
   variant: string;
   partyId?: number | string | null;
   organizationIdentifier?: string | null;
-  personIdentifier?: string | null;
   dateOfBirth?: string | null;
   children?: Entity[] | null;
 }

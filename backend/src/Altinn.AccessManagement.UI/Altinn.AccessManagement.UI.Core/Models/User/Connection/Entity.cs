@@ -48,11 +48,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         public string OrganizationIdentifier { get; set; }
 
         /// <summary>
-        /// Gets or sets person identifier when the entity is a person.
-        /// </summary>
-        public string PersonIdentifier { get; set; }
-
-        /// <summary>
         /// Gets or sets date of birth for persons.
         /// </summary>
         public string DateOfBirth { get; set; }
