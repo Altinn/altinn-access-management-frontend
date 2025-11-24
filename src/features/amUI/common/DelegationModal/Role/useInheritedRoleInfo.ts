@@ -1,39 +1,73 @@
-import { useMemo } from 'react';
-
 import type { Party } from '@/rtk/features/lookupApi';
-import type { Role, RolePermission } from '@/rtk/features/roleApi';
-import { Entity } from '@/dataObjects/dtos/Common';
+import type { Permissions, Role, RolePermission } from '@/rtk/features/roleApi';
+
+export enum RoleStatusType {
+  ViaRole = 'via_role',
+  ViaParent = 'via_parent',
+  ViaAgent = 'via_agent',
+}
+
+export interface RoleStatusMessageType {
+  type: RoleStatusType;
+  via?: Permissions['via'];
+}
 
 interface UseInheritedRoleInfoParams {
   rolePermissions?: RolePermission[];
   role?: Role;
   toParty?: Party;
   fromParty?: Party;
+  actingParty?: Party;
 }
 
-interface UseInheritedRoleInfoResult {
-  hasInheritedRole: boolean;
-  inheritedRoleFromEntity?: Entity;
-}
+const getRoleStatus = (permission: Permissions, isActingTo: boolean, isActingFrom: boolean) => {
+  if (!permission.via) {
+    return null;
+  }
+  if (permission.viaRole) {
+    return {
+      type: RoleStatusType.ViaRole,
+      via: permission.via,
+    };
+  }
+  if (isActingTo) {
+    return {
+      type: RoleStatusType.ViaParent,
+      via: permission.via,
+    };
+  }
+  if (isActingFrom) {
+    return {
+      type: RoleStatusType.ViaAgent,
+      via: permission.via,
+    };
+  }
+  return null;
+};
 
 export const useInheritedRoleInfo = ({
   rolePermissions,
   role,
-}: UseInheritedRoleInfoParams): UseInheritedRoleInfoResult => {
-  return useMemo(() => {
-    if (!rolePermissions || !role?.id) {
-      return { hasInheritedRole: false, inheritedRoleFromEntity: undefined };
-    }
+  toParty,
+  fromParty,
+  actingParty,
+}: UseInheritedRoleInfoParams): RoleStatusMessageType | undefined => {
+  if (!role) {
+    return undefined;
+  }
 
-    const matchingPermissions = rolePermissions.find(
-      (permission) => permission.role.id === role.id,
-    );
+  const matchingPermissions = rolePermissions?.find((permission) => permission.role.id === role.id);
 
-    if (matchingPermissions) {
-      const inheritedVia = matchingPermissions.permissions.find((p) => !!p.via);
-      return { hasInheritedRole: !!inheritedVia, inheritedRoleFromEntity: inheritedVia?.via };
-    }
+  const relevantPermission = matchingPermissions?.permissions.find(
+    (permission) => !toParty?.partyUuid || permission.to?.id === toParty.partyUuid,
+  );
 
-    return { hasInheritedRole: false, inheritedRoleFromEntity: undefined };
-  }, [rolePermissions, role?.id]);
+  if (!relevantPermission) {
+    return undefined;
+  }
+
+  const isActingTo = !!actingParty?.partyUuid && actingParty.partyUuid === toParty?.partyUuid;
+  const isActingFrom = !!actingParty?.partyUuid && actingParty.partyUuid === fromParty?.partyUuid;
+
+  return getRoleStatus(relevantPermission, isActingTo, isActingFrom) ?? undefined;
 };
