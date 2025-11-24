@@ -92,19 +92,19 @@
           },
           "to": {
             "id": "21cc8752-4801-490d-a6ab-ab3266a0f748",
-            "name": "ALVORLIG INKLUDERENDE L\u00d8VE SAMEIE",
+            "name": "ALVORLIG INKLUDERENDE LØVE SAMEIE",
             "type": "Organisasjon",
             "variant": "ESEK",
             "parent": null,
             "children": [
               {
                 "id": "0470f9ac-9dc5-4c72-9b66-280df000ee5e",
-                "name": "ALVORLIG INKLUDERENDE L\u00d8VE SAMEIE",
+                "name": "ALVORLIG INKLUDERENDE LØVE SAMEIE",
                 "type": "Organisasjon",
                 "variant": "AAFY",
                 "parent": {
                   "id": "21cc8752-4801-490d-a6ab-ab3266a0f748",
-                  "name": "ALVORLIG INKLUDERENDE L\u00d8VE SAMEIE",
+                  "name": "ALVORLIG INKLUDERENDE LØVE SAMEIE",
                   "type": "Organisasjon",
                   "variant": "ESEK",
                   "parent": null,
