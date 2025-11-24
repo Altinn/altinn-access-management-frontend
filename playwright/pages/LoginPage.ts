@@ -12,7 +12,6 @@ export class LoginPage {
   readonly profileLink: Locator;
   readonly velgAktoerHeading: Locator;
   readonly autentiserButton: Locator;
-  browserAlreadyUsed: boolean = false;
 
   constructor(page: Page) {
     this.page = page;
@@ -87,13 +86,6 @@ export class LoginPage {
   private async authenticateUser(pid: string) {
     await this.pidInput.fill(pid);
     await this.autentiserButton.click();
-  }
-
-  private async verifyLoginSuccess() {
-    // Skip button click if browser is already used (e.g., for access package delegation test)
-    if (this.browserAlreadyUsed) {
-      return;
-    }
   }
 
   async selectActor(input: Locator, orgnummer: string) {
