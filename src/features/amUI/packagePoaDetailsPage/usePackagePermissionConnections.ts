@@ -30,7 +30,6 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
           type: e.type,
           variant: e.variant,
           children: null,
-          keyValues: e.keyValues,
           isInherited: false,
           roles: [],
         };
@@ -49,7 +48,6 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
             type: e.type,
             variant: e.variant,
             children: null,
-            keyValues: e.keyValues,
             roles: [],
             isInherited: false,
           },

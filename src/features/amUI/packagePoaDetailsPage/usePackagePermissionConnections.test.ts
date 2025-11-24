@@ -21,7 +21,6 @@ const org = (id: string, name: string) => ({
   variant: 'AS',
   parent: null,
   children: null,
-  keyValues: null,
 });
 const person = (id: string, name: string) => ({
   id,
@@ -30,7 +29,6 @@ const person = (id: string, name: string) => ({
   variant: 'Person',
   parent: null,
   children: null,
-  keyValues: null,
 });
 const role = (id: string, code: string) => ({ id, code, children: null });
 
