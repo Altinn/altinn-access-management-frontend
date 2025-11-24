@@ -4,7 +4,7 @@ import { ExternalLinkIcon, LeaveIcon, QuestionmarkIcon } from '@navikt/aksel-ico
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 import { useTranslation } from 'react-i18next';
 
-export const InfoModal = () => {
+export const FloatingInfoDropdown = () => {
   const { t, i18n } = useTranslation();
 
   const goToOldSolution = () => {

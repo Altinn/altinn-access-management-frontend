@@ -11,13 +11,14 @@ import {
 } from '@/rtk/features/userInfoApi';
 
 import { SidebarItems } from './SidebarItems';
-import { InfoModal } from './InfoModal';
+import { FloatingInfoDropdown } from './FloatingInfoDropdown';
 import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
 
 import classes from './PageLayoutWrapper.module.css';
+import { FirstTimeInfoModal } from './FirstTimeInfoModal';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -68,7 +69,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         footer={footer}
       >
         <div className={classes.content}>{children}</div>
-        <InfoModal />
+        <FloatingInfoDropdown />
+        <FirstTimeInfoModal />
       </Layout>
       <Snackbar />
     </RootProvider>

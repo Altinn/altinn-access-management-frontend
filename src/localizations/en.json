@@ -504,7 +504,11 @@
   "info_modal": {
     "back_button": "Go to the old solution",
     "help_pages": "Help pages",
-    "info_button": "Information about the new solution"
+    "info_button": "Information about the new solution",
+    "title": "Try the new access management solution",
+    "info": "We are renovating access management and you get a sneak peek at an early version! It is still under development, so some functions are missing. We still hope you will try.",
+    "close_button": "Try new access management",
+    "info_link": "Why are we updating Altinn?"
   },
   "a2Alerts": {
     "launchAlertHeading": "We are renewing Altinn",

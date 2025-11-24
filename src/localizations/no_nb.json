@@ -503,7 +503,11 @@
   "info_modal": {
     "back_button": "Gå til gammel løsning",
     "help_pages": "Hjelpesider",
-    "info_button": "Informasjon om ny løsning"
+    "info_button": "Informasjon om ny løsning",
+    "title": "Prøv den nye tilgangsstyringsløsningen",
+    "info": "Vi pusser opp tilgangsstyring, og du får sniktitte på en tidlig versjon! Den er fortsatt under utvikling, så noen funksjoner mangler. Vi håper likevel du vil prøve.",
+    "close_button": "Prøv ny tilgangsstyring",
+    "info_link": "Hvorfor oppdaterer vi Altinn?"
   },
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyer Altinn",
