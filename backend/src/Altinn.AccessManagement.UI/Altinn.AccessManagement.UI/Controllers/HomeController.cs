@@ -78,14 +78,15 @@ namespace Altinn.AccessManagement.UI.Controllers
                     SameSite = SameSiteMode.Strict
                 });
             }
-
+            
             if (await ShouldShowAppView())
             {
                 ViewBag.featureFlags = _featureFlags;
                 return View();
             }
 
-            string goToUrl = HttpUtility.UrlEncode($"{_generalSettings.FrontendBaseUrl}{Request.Path}{Request.QueryString}");
+            string queryString = Request.QueryString.HasValue ? $"{Request.QueryString.Value}&openAccountMenu=true" : "?openAccountMenu=true";
+            string goToUrl = HttpUtility.UrlEncode($"{_generalSettings.FrontendBaseUrl}{Request.Path}{queryString}");
             string redirectUrl = $"{_platformSettings.ApiAuthenticationEndpoint}authentication?goto={goToUrl}";
 
             return Redirect(redirectUrl);
