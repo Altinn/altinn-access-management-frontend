@@ -1,15 +1,12 @@
-interface UserKeyValues {
-  OrganizationIdentifier?: string;
-  PartyId?: string;
-  DateOfBirth?: string;
-}
-
 export interface Entity {
   id: string;
   name: string;
   type: string;
   variant: string;
-  keyValues: UserKeyValues | null;
+  partyId?: number | string | null;
+  organizationIdentifier?: string | null;
+  personIdentifier?: string | null;
+  dateOfBirth?: string | null;
   children?: Entity[] | null;
 }
 

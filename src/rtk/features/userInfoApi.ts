@@ -3,14 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
-import { Entity } from '@/dataObjects/dtos/Common';
 import { Connection } from './connectionApi';
-
-interface UserKeyValues {
-  OrganizationIdentifier?: string;
-  PartyId?: string;
-  DateOfBirth?: string;
-}
+import { Entity } from '@/dataObjects/dtos/Common';
 
 export interface ExtendedUser extends Omit<User, 'children'> {
   roles: RoleInfo[];
@@ -25,8 +19,13 @@ export interface User {
   type?: string;
   variant?: string;
   children: (User | ExtendedUser)[] | null;
-  keyValues: UserKeyValues | null;
   parent?: ExtendedUser | null;
+  partyId?: number | string | null;
+  organizationIdentifier?: string | null;
+  personIdentifier?: string | null;
+  dateOfBirth?: string | null;
+  userId?: string | null;
+  username?: string | null;
 }
 
 export interface RoleInfo {

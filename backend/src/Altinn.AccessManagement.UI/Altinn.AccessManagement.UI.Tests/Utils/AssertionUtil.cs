@@ -481,6 +481,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         {
             Assert.Equal(expected?.Id, actual?.Id);
             Assert.Equal(expected?.Name, actual?.Name);
+            Assert.Equal(expected?.OrganizationIdentifier, actual?.OrganizationIdentifier);
+            Assert.Equal(expected?.PersonIdentifier, actual?.PersonIdentifier);
+            Assert.Equal(expected?.DateOfBirth, actual?.DateOfBirth);
+            Assert.Equal(expected?.PartyId, actual?.PartyId);
         }
 
         public static void AssertEqual(Core.Models.Common.Role expected, Core.Models.Common.Role actual)
@@ -753,7 +757,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(actual.Children, expected.Children);
             Assert.Equal(actual.Id, expected.Id);
             Assert.Equal(actual.Type, expected.Type);
-            AssertCollections(expected.KeyValues, actual.KeyValues, Assert.Equal);
+            Assert.Equal(expected.PartyId, actual.PartyId);
+            Assert.Equal(expected.OrganizationIdentifier, actual.OrganizationIdentifier);
+            Assert.Equal(expected.PersonIdentifier, actual.PersonIdentifier);
+            Assert.Equal(expected.DateOfBirth, actual.DateOfBirth);
             AssertCollections(expected.Children, actual.Children, AssertEqual);
         }
 

@@ -17,7 +17,7 @@ interface CurrentUserPageHeaderProps {
 export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserPageHeaderProps) => {
   const { t } = useTranslation();
   const roles = currentUser?.roles ? getRoleCodesForKeyRoles(currentUser.roles) : [];
-  const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.keyValues?.DateOfBirth);
+  const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.dateOfBirth);
 
   return (
     <div className={classes.currentUser}>
