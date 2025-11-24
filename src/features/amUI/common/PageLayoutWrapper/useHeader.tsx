@@ -16,17 +16,18 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader';
 import { useAccounts } from './useAccounts';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 
 const getAccountType = (type: string): 'company' | 'person' => {
   return type === 'Organization' ? 'company' : 'person';
 };
 
-export const useHeader = () => {
+export const useHeader = ({ openAccountMenu = false }: { openAccountMenu?: boolean }) => {
   const { t, i18n } = useTranslation();
   const useNewHeaderFlag = useNewHeader();
   const [searchString, setSearchString] = useState<string>('');
+  const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(openAccountMenu);
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
@@ -37,8 +38,20 @@ export const useHeader = () => {
   const [addFavoriteActorUuid] = useAddFavoriteActorUuidMutation();
   const [removeFavoriteActorUuid] = useRemoveFavoriteActorUuidMutation();
 
-  const { globalMenu, desktopMenu, mobileMenu, menuGroups, isLoadingMenu } = useGlobalMenu();
+  const { globalMenu, desktopMenu, mobileMenu } = useGlobalMenu();
   const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
+
+  useEffect(() => {
+    if (openAccountMenu) {
+      setShouldOpenAccountMenu(true);
+    }
+  }, [openAccountMenu]);
+
+  useEffect(() => {
+    if (!isLoadingReporteeList && reporteeList && reporteeList.length === 1) {
+      setShouldOpenAccountMenu(false);
+    }
+  }, [isLoadingReporteeList, reporteeList]);
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -82,6 +95,7 @@ export const useHeader = () => {
         changeUrl.searchParams.set('goTo', redirectUrl);
         (window as Window).open(changeUrl.toString(), '_self');
       }
+      setShouldOpenAccountMenu(false);
     },
   });
 
@@ -98,7 +112,7 @@ export const useHeader = () => {
 
     const accountSelector: AccountSelectorProps = {
       ...accountSelectorData,
-      forceOpenFullScreen: false,
+      forceOpenFullScreen: shouldOpenAccountMenu,
     };
 
     header = {
