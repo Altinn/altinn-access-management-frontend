@@ -2,7 +2,6 @@ import type { Locator, Page } from '@playwright/test';
 
 export class AccessManagementFrontPage {
   readonly page: Page;
-  readonly tryNewAccessManagementButton: Locator;
   readonly systemAccessLink: Locator;
   readonly usersLink: Locator;
   readonly powersOfAttorneyLink: Locator;
@@ -11,9 +10,7 @@ export class AccessManagementFrontPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.tryNewAccessManagementButton = this.page.getByRole('button', {
-      name: 'Prøv ny tilgangsstyring',
-    });
+
     this.systemAccessLink = this.page
       .getByRole('group')
       .getByRole('link', { name: 'Systemtilganger' });

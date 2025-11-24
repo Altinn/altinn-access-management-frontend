@@ -30,7 +30,6 @@ export class LoginPage {
       try {
         await this.navigateToLoginPage();
         await this.authenticateUser(pid);
-        await this.verifyLoginSuccess();
         return;
       } catch (error) {
         console.log(`Login attempt ${attempt} failed with error: ${error}`);
@@ -95,9 +94,6 @@ export class LoginPage {
     if (this.browserAlreadyUsed) {
       return;
     }
-    const frontPage = new AccessManagementFrontPage(this.page);
-    await expect(frontPage.tryNewAccessManagementButton).toBeVisible();
-    await frontPage.tryNewAccessManagementButton.click();
   }
 
   async selectActor(input: Locator, orgnummer: string) {

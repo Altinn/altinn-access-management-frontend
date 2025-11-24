@@ -10,7 +10,7 @@ test.describe('System user deletion', () => {
     const orgNumber = '310547891';
     api = new ApiRequests(orgNumber);
     await login.LoginWithUserFromFrontpage('14824497789');
-    await login.chooseReportee('Blåveis Skravlete', 'AKTVERDIG RETORISK APE');
+    await login.chooseReportee('Skravlete Blåveis', 'AKTVERDIG RETORISK APE');
 
     //Create a system in your "system register" before each test
     systemId = await api.createSystemSystemRegister();
