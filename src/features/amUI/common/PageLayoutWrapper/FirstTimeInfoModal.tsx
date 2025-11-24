@@ -5,9 +5,10 @@ import classes from './FirstTimeInfoModal.module.css';
 import { getHostUrl } from '@/resources/utils/pathUtils';
 import { amUIPath } from '@/routes/paths';
 import { Link } from 'react-router';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export const FirstTimeInfoModal = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
