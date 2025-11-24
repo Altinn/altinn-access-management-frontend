@@ -55,11 +55,6 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
         connections: connection.connections?.map((child) => ({
           ...child,
           roles: mapRoles(child.roles),
-          connections: child.connections?.map(({ connections, roles, ...rest }) => ({
-            ...rest,
-            roles: mapRoles(roles),
-            connections,
-          })),
         })),
       })),
     [connections, mapRoles],

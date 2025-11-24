@@ -100,7 +100,7 @@ export const UsersList = () => {
         <>
           <CurrentUserPageHeader
             currentUser={currentUserWithRoles}
-            loading={!!(currentUserLoading || loadingPartyRepresentation)}
+            loading={!!(currentUserLoading || loadingPartyRepresentation || loadingRoleMetadata)}
             as={(props) =>
               currentUser ? (
                 <Link
