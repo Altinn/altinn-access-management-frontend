@@ -425,6 +425,7 @@
     },
     "validation_error": {
       "AM.VLD-00002": "Du manglar tilgang til å gi denne fullmakta.",
+      "AM.VLD-00028": "Tilgangspakken kan ikkje delegerast til denne typen eining.",
       "default": "Kunne ikkje gi fullmakta"
     },
     "partial_deletion_message": {

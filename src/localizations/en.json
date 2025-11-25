@@ -429,6 +429,7 @@
     },
     "validation_error": {
       "AM.VLD-00002": "You do not have permission to grant this authorization.",
+      "AM.VLD-00028": "This access package cannot be delegated to this type of unit.",
       "default": "Could not grant power of attorney"
     },
     "partial_deletion_message": {

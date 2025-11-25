@@ -3,7 +3,7 @@ import { DsParagraph } from '@altinn/altinn-components';
 import React from 'react';
 import { Trans } from 'react-i18next';
 
-const supportedErrorCodes = ['AM.VLD-00002'];
+const supportedErrorCodes = ['AM.VLD-00002', 'AM.VLD-00028'];
 
 export interface ValidationErrorMessageProps {
   /*** The error code returned from backend */
