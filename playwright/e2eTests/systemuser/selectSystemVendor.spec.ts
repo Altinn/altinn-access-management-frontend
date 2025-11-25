@@ -11,7 +11,7 @@ test.describe('System Register', async () => {
     const api = new ApiRequests(orgNumber);
     system = await api.createSystemSystemRegister();
     await login.LoginWithUserFromFrontpage('14824497789');
-    await login.chooseReportee('BLÅVEIS SKRAVLETE', 'AKTVERDIG RETORISK APE');
+    await login.chooseReportee('Skravlete Blåveis', 'Aktverdig Retorisk Ape');
   });
 
   test('Create system user and verify landing page', async ({

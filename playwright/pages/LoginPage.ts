@@ -58,6 +58,7 @@ export class LoginPage {
 
     await expect(this.velgAktoerHeading).toBeVisible();
     await this.selectActor(this.searchBox, orgnummer);
+    await this.verifyLoginSuccess();
   }
 
   async chooseReportee(currentReportee: string, targetReportee: string = '') {
@@ -90,16 +91,6 @@ export class LoginPage {
     await this.autentiserButton.click();
   }
 
-  private async verifyLoginSuccess() {
-    // Skip button click if browser is already used (e.g., for access package delegation test)
-    if (this.browserAlreadyUsed) {
-      return;
-    }
-    const frontPage = new AccessManagementFrontPage(this.page);
-    await expect(frontPage.tryNewAccessManagementButton).toBeVisible();
-    await frontPage.tryNewAccessManagementButton.click();
-  }
-
   async selectActor(input: Locator, orgnummer: string) {
     const page = input.page();
     const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`;
@@ -122,6 +113,20 @@ export class LoginPage {
     await input.click();
     await input.clear();
     await input.pressSequentially(party);
+  }
+
+  /**
+   * Verify login success by checking for and clicking the "Prøv ny tilgangsstyring" button
+   * This helps catch bugs where the landing page doesn't load properly after login
+   */
+  private async verifyLoginSuccess() {
+    // Skip button click if browser is already used (e.g., for access package delegation test)
+    if (this.browserAlreadyUsed) {
+      return;
+    }
+    const frontPage = new AccessManagementFrontPage(this.page);
+    await expect(frontPage.tryNewAccessManagementButton).toBeVisible();
+    await frontPage.tryNewAccessManagementButton.click();
   }
 }
 
