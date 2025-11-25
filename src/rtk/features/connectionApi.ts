@@ -15,6 +15,7 @@ export enum ConnectionUserType {
 export interface RoleInfo {
   id: string;
   code?: string;
+  displayName?: string;
   viaParty?: Entity;
 }
 
