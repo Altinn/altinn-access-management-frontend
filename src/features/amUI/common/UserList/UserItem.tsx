@@ -95,21 +95,24 @@ export const UserItem = ({
   const description = (user: ExtendedUser | User) => {
     let descriptionString = '';
     if (user.type === ConnectionUserType.Person) {
-      const formattedDate = formatDateToNorwegian(user.dateOfBirth);
-      descriptionString += formattedDate
-        ? t('common.date_of_birth') + ' ' + formattedDate
-        : undefined;
+      const formattedDate = formatDateToNorwegian(user.dateOfBirth ?? undefined);
+      if (formattedDate) {
+        descriptionString += `${t('common.date_of_birth')} ${formattedDate}`;
+      }
     } else if (user.type === ConnectionUserType.Organization) {
-      descriptionString +=
-        t('common.org_nr') +
-        ' ' +
-        user.organizationIdentifier +
-        (isSubOrMainUnit || subUnit
-          ? ` (${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
-          : '');
+      if (user.organizationIdentifier) {
+        descriptionString +=
+          `${t('common.org_nr')} ${user.organizationIdentifier}` +
+          (isSubOrMainUnit || subUnit
+            ? ` (${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
+            : '');
+      }
     }
     if (viaRoleCodes.length > 0) {
-      descriptionString += ` | ${viaRoleCodes.map((r) => t(`${r}`)).join(', ')} for ${viaEntity}`;
+      descriptionString += ` | ${viaRoleCodes.map((r) => t(`${r}`)).join(', ')}`;
+      if (viaEntity) {
+        descriptionString += ` for ${viaEntity}`;
+      }
     }
     if (descriptionString) {
       return descriptionString;
