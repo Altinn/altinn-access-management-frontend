@@ -38,6 +38,7 @@ import {
   getUsersMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { formatOrgNr, isSubUnit } from '@/resources/utils/reporteeUtils';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
@@ -175,14 +176,12 @@ export const LandingPage = () => {
     return items;
   };
 
-  const isSubunit =
-    (reportee?.unitType === 'BEDR' || reportee?.unitType === 'AAFY') &&
-    reportee?.type === 'Organization';
+  const isReporteeSubUnit = isSubUnit(reportee);
 
   const getReporteeDescription = (): string => {
     if (reportee?.type === 'Organization') {
-      const orgNrString = `${t('common.org_nr')} ${reportee?.organizationNumber?.match(/.{1,3}/g)?.join(' ') || ''}`;
-      if (isSubunit) {
+      const orgNrString = `${t('common.org_nr')} ${formatOrgNr(reportee?.organizationNumber)}`;
+      if (isReporteeSubUnit) {
         return `↳ ${orgNrString}, ${t('common.subunit').toLowerCase()}`;
       }
       return orgNrString;
@@ -196,7 +195,7 @@ export const LandingPage = () => {
         <div className={classes.landingPage}>
           <ListItem
             icon={{
-              isParent: !isSubunit,
+              isParent: !isReporteeSubUnit,
               type: reportee?.type === 'Organization' ? 'company' : 'person',
               name: reporteeName,
             }}

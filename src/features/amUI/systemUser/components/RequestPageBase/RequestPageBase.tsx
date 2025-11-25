@@ -8,6 +8,7 @@ import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import type { RegisteredSystem } from '../../types';
 
 import classes from './RequestPageBase.module.css';
+import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 
 interface RequestPageBaseProps {
   system?: RegisteredSystem;
@@ -55,7 +56,7 @@ export const RequestPageBase = ({
             {t('systemuser_request.org_nr', {
               systemName: system.name,
               vendorName: system.systemVendorOrgName,
-              vendorOrg: system.systemVendorOrgNumber.match(/.{1,3}/g)?.join(' '),
+              vendorOrg: formatOrgNr(system.systemVendorOrgNumber),
             })}
           </DsParagraph>
         )}
