@@ -39,8 +39,6 @@ export const StatusSection = ({
     return null;
   }
 
-  const direction = actingParty?.partyUuid === fromParty?.partyUuid ? 'from' : 'to';
-
   const formattedActingPartyName = formatDisplayName({
     fullName: actingParty?.name || '',
     type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
@@ -65,7 +63,7 @@ export const StatusSection = ({
     reverseNameOrder: false,
   });
 
-  const formattedUserName = direction === 'from' ? formattedToPartyName : formattedFromPartyName;
+  const formattedUserName = formattedToPartyName;
 
   return (
     <div
