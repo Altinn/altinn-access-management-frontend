@@ -44,24 +44,9 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
     return null;
   }
 
-  const direction = actingParty?.partyUuid === fromParty?.partyUuid ? 'from' : 'to';
-  const formattedActingPartyName = formatDisplayName({
-    fullName: actingParty?.name || '',
-    type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
   const formattedUserName = formatDisplayName({
-    fullName: (direction === 'from' ? toParty?.name : fromParty?.name) || '',
-    type:
-      (direction === 'from' ? toParty?.partyTypeName : fromParty?.partyTypeName) ===
-      PartyType.Person
-        ? 'person'
-        : 'company',
-    reverseNameOrder: false,
-  });
-  const formattedFromPartyName = formatDisplayName({
-    fullName: fromParty?.name || '',
-    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    fullName: toParty?.name || '',
+    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
     reverseNameOrder: false,
   });
 
