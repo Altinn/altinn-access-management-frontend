@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +11,7 @@ import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPa
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
+import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 const mapUserToParty = (user: User): Party => ({
@@ -35,6 +38,7 @@ export const UsersTab = ({
 }: UsersTabProps) => {
   const { t } = useTranslation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
+  const { mapRoles, loadingRoleMetadata } = useRoleMapper();
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -51,6 +55,18 @@ export const UsersTab = ({
   );
 
   const connections = usePackagePermissionConnections(accessPackage);
+  const connectionsWithRoles = useMemo(
+    () =>
+      connections.map((connection) => ({
+        ...connection,
+        roles: mapRoles(connection.roles),
+        connections: connection.connections?.map((child) => ({
+          ...child,
+          roles: mapRoles(child.roles),
+        })),
+      })),
+    [connections, mapRoles],
+  );
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
     queueSnackbar(
@@ -119,9 +135,9 @@ export const UsersTab = ({
       )}
 
       <AdvancedUserSearch
-        connections={connections}
+        connections={connectionsWithRoles}
         indirectConnections={indirectConnections}
-        isLoading={isLoading || loadingIndirectConnections}
+        isLoading={isLoading || loadingIndirectConnections || loadingRoleMetadata}
         onDelegate={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         isActionLoading={
@@ -129,7 +145,8 @@ export const UsersTab = ({
           isLoading ||
           loadingIndirectConnections ||
           isFetching ||
-          isFetchingIndirectConnections
+          isFetchingIndirectConnections ||
+          loadingRoleMetadata
         }
         canDelegate={canDelegate}
       />

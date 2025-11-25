@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next';
 import type { Connection } from '@/rtk/features/connectionApi';
 import { formatDateToNorwegian } from '@/resources/utils';
 
-import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
-
 import classes from './CurrentUserPageHeader.module.css';
 
 interface CurrentUserPageHeaderProps {
@@ -16,8 +14,9 @@ interface CurrentUserPageHeaderProps {
 
 export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserPageHeaderProps) => {
   const { t } = useTranslation();
-  const roles = currentUser?.roles ? getRoleCodesForKeyRoles(currentUser.roles) : [];
+
   const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.dateOfBirth || undefined);
+  const roles = currentUser?.roles?.map((role) => role.code);
 
   return (
     <div className={classes.currentUser}>
@@ -30,7 +29,7 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
         description={
           formattedBirthDate ? t('common.date_of_birth') + ` ${formattedBirthDate}` : undefined
         }
-        roleNames={roles.map((r) => t(`${r}`))}
+        roleNames={roles?.filter((name): name is string => name !== undefined)}
         type='person'
         as={as}
         titleAs='h2'

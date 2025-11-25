@@ -6,30 +6,64 @@ import {
 } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
 import { t } from 'i18next';
-import { DsParagraph } from '@altinn/altinn-components';
+import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { InheritedStatusType, type InheritedStatusMessageType } from '../useInheritedStatus';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 import classes from './StatusSection.module.css';
+
+const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
+  [InheritedStatusType.ViaRole]: 'access_packages.access_status.via_role',
+  [InheritedStatusType.ViaConnection]: 'access_packages.access_status.via_connection',
+  [InheritedStatusType.ViaKeyRole]: 'access_packages.access_status.via_keyrole',
+};
 
 export const StatusSection = ({
   userHasAccess,
   showMissingRightsMessage,
-  inheritedFrom,
+  inheritedStatus,
   delegationCheckText,
   cannotDelegateHere = false,
 }: {
   userHasAccess: boolean;
   showMissingRightsMessage: boolean;
-  inheritedFrom?: string;
+  inheritedStatus?: InheritedStatusMessageType;
   delegationCheckText?: string;
   cannotDelegateHere?: boolean;
 }) => {
-  const { fromParty, toParty } = usePartyRepresentation();
+  const { fromParty, toParty, actingParty } = usePartyRepresentation();
 
-  if (!userHasAccess && !showMissingRightsMessage && !inheritedFrom && !cannotDelegateHere) {
+  if (!userHasAccess && !showMissingRightsMessage && !inheritedStatus && !cannotDelegateHere) {
     return null;
   }
+
+  const formattedActingPartyName = formatDisplayName({
+    fullName: actingParty?.name || '',
+    type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    reverseNameOrder: false,
+  });
+
+  const formattedToPartyName = formatDisplayName({
+    fullName: toParty?.name || '',
+    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    reverseNameOrder: false,
+  });
+
+  const formattedFromPartyName = formatDisplayName({
+    fullName: fromParty?.name || '',
+    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    reverseNameOrder: false,
+  });
+
+  const formattedViaName = formatDisplayName({
+    fullName: inheritedStatus?.via?.name || '',
+    type: inheritedStatus?.via?.type?.toLowerCase() === 'person' ? 'person' : 'company',
+    reverseNameOrder: false,
+  });
+
+  const formattedUserName = formattedToPartyName;
 
   return (
     <div
@@ -46,13 +80,13 @@ export const StatusSection = ({
             <Trans
               i18nKey='delegation_modal.has_package_message'
               values={{
-                user_name: toParty?.name,
+                user_name: formattedUserName,
               }}
             />
           </DsParagraph>
         </div>
       )}
-      {inheritedFrom !== undefined && inheritedFrom.length > 0 && (
+      {inheritedStatus && (
         <div className={classes.infoLine}>
           <InformationSquareFillIcon
             fontSize='1.5rem'
@@ -60,10 +94,11 @@ export const StatusSection = ({
           />
           <DsParagraph data-size='xs'>
             <Trans
-              i18nKey='delegation_modal.inherited_role_org_message'
+              i18nKey={STATUS_TRANSLATION_KEYS[inheritedStatus.type]}
               values={{
-                user_name: toParty?.name,
-                org_name: inheritedFrom ?? fromParty?.name,
+                user_name: formattedUserName,
+                via_name: formattedViaName,
+                acting_party: formattedActingPartyName,
               }}
             />
           </DsParagraph>
@@ -79,7 +114,7 @@ export const StatusSection = ({
             <Trans
               i18nKey='delegation_modal.cannot_delegate_here'
               values={{
-                user_name: toParty?.name,
+                user_name: formattedUserName,
               }}
             />
           </DsParagraph>
@@ -97,7 +132,7 @@ export const StatusSection = ({
               components={{ b: <strong /> }}
               values={{
                 you: t('common.you_uppercase'),
-                reporteeorg: fromParty?.name,
+                reporteeorg: formattedFromPartyName,
               }}
             />
           </DsParagraph>

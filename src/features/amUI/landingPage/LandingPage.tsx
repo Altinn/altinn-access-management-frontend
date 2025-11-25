@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import classes from './LandingPage.module.css';
@@ -21,7 +21,7 @@ import {
 import { formatDateToNorwegian } from '@/resources/utils';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { amUIPath } from '@/routes/paths';
 import {
   hasConsentPermission,
@@ -38,9 +38,12 @@ import {
   getUsersMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { formatOrgNr, isSubUnit } from '@/resources/utils/reporteeUtils';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(false);
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
@@ -52,6 +55,16 @@ export const LandingPage = () => {
     fullName: reportee?.name || '',
     type: reportee?.type === 'Organization' ? 'company' : 'person',
   });
+
+  useEffect(() => {
+    // Remove the openAccountMenu query parameter after reading it the first time
+    if (searchParams.has('openAccountMenu')) {
+      setShouldOpenAccountMenu(true);
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('openAccountMenu');
+      setSearchParams(newSearchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const isLoading =
     isLoadingReportee ||
@@ -163,14 +176,12 @@ export const LandingPage = () => {
     return items;
   };
 
-  const isSubunit =
-    (reportee?.unitType === 'BEDR' || reportee?.unitType === 'AAFY') &&
-    reportee?.type === 'Organization';
+  const isReporteeSubUnit = isSubUnit(reportee);
 
   const getReporteeDescription = (): string => {
     if (reportee?.type === 'Organization') {
-      const orgNrString = `${t('common.org_nr')} ${reportee?.organizationNumber?.match(/.{1,3}/g)?.join(' ') || ''}`;
-      if (isSubunit) {
+      const orgNrString = `${t('common.org_nr')} ${formatOrgNr(reportee?.organizationNumber)}`;
+      if (isReporteeSubUnit) {
         return `↳ ${orgNrString}, ${t('common.subunit').toLowerCase()}`;
       }
       return orgNrString;
@@ -180,11 +191,11 @@ export const LandingPage = () => {
 
   return (
     <PageWrapper>
-      <PageLayoutWrapper>
+      <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
           <ListItem
             icon={{
-              isParent: !isSubunit,
+              isParent: !isReporteeSubUnit,
               type: reportee?.type === 'Organization' ? 'company' : 'person',
               name: reporteeName,
             }}
