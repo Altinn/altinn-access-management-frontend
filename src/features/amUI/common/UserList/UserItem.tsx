@@ -95,7 +95,7 @@ export const UserItem = ({
   const description = (user: ExtendedUser | User) => {
     let descriptionString = subUnit ? '↳ ' : '';
     if (user.type === ConnectionUserType.Person) {
-      const formattedDate = formatDateToNorwegian(user.keyValues?.DateOfBirth);
+      const formattedDate = formatDateToNorwegian(user.dateOfBirth || undefined);
       descriptionString += formattedDate
         ? t('common.date_of_birth') + ' ' + formattedDate
         : undefined;
@@ -103,7 +103,7 @@ export const UserItem = ({
       descriptionString +=
         t('common.org_nr') +
         ' ' +
-        user.keyValues?.OrganizationIdentifier +
+        user.organizationIdentifier +
         (isSubOrMainUnit || subUnit
           ? `, ${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')}`
           : '');

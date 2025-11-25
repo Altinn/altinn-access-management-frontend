@@ -7,9 +7,15 @@
       "variant": "Person",
       "parent": null,
       "children": null,
-      "keyValues": { "PartyId": "50789533", "DateOfBirth": "1981-03-20" }
+      "dateOfBirth": "1981-03-20",
+      "partyId": 50789533
     },
-    "roles": [{ "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4", "code": "styreleder" }],
+    "roles": [
+      {
+        "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+        "code": "styreleder"
+      }
+    ],
     "connections": []
   }
 ]
