@@ -10,6 +10,10 @@ export const isSubUnit = (reportee?: ReporteeInfo): boolean => {
   );
 };
 
+export const isSubUnitByType = (unitType?: string): boolean => {
+  return unitType === 'BEDR' || unitType === 'AAFY';
+};
+
 export const formatOrgNr = (orgNo?: string): string | undefined => {
   return orgNo?.match(/.{1,3}/g)?.join(' ');
 };

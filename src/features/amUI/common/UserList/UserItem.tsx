@@ -13,6 +13,7 @@ import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
 import classes from './UserList.module.css';
 import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
@@ -170,7 +171,11 @@ export const UserItem = ({
               user={{ ...child, children: null }} // do not allow further expansion of inheriting users
               size='xs'
               titleAs={userHeadingLevelForMapper(titleAs)}
-              subUnit={index !== 0 && child.type === ConnectionUserType.Organization}
+              subUnit={
+                index !== 0 &&
+                child.type === ConnectionUserType.Organization &&
+                isSubUnitByType(child.variant?.toString())
+              }
               roleDirection={roleDirection}
               showRoles={showRoles}
               interactive={interactive}
