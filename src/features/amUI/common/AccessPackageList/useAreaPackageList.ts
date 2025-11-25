@@ -10,6 +10,7 @@ import {
 } from '@/rtk/features/accessPackageApi';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { getInheritedStatus, type InheritedStatusMessageType } from '../useInheritedStatus';
 
 export interface ExtendedAccessArea extends AccessArea {
   packages: {
@@ -21,6 +22,7 @@ export interface ExtendedAccessArea extends AccessArea {
 export interface ExtendedAccessPackage extends AccessPackage {
   deletableStatus?: DeletableStatus;
   inherited?: boolean;
+  inheritedStatus?: InheritedStatusMessageType;
   permissions?: Permissions[];
 }
 
@@ -88,10 +90,18 @@ export const useAreaPackageList = ({
                   toParty?.partyUuid,
                   fromParty?.partyUuid,
                 );
+                const inheritedStatus = getInheritedStatus({
+                  permissions: pkgAccess.permissions,
+                  actingParty,
+                  toParty,
+                  fromParty,
+                });
                 const acquiredPkg = {
                   ...pkg,
                   deletableStatus,
-                  inherited: deletableStatus !== DeletableStatus.FullyDeletable,
+                  inherited:
+                    !!inheritedStatus || deletableStatus !== DeletableStatus.FullyDeletable,
+                  inheritedStatus,
                   permissions: pkgAccess.permissions ?? [],
                 };
                 pkgAcc.assigned.push(acquiredPkg);
@@ -122,7 +132,15 @@ export const useAreaPackageList = ({
         availableAreas: [] as ExtendedAccessArea[],
       },
     );
-  }, [allPackageAreas, activeDelegations, showAllAreas, showAllPackages]);
+  }, [
+    actingParty,
+    allPackageAreas,
+    activeDelegations,
+    fromParty,
+    showAllAreas,
+    showAllPackages,
+    toParty,
+  ]);
 
   return {
     loadingPackageAreas,

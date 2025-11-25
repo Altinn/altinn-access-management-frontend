@@ -9,7 +9,7 @@ interface AccessPackageInfoModalProps {
   modalItem: AccessPackage | undefined;
   onClose?: () => void;
   openWithError?: ActionError | null;
-  modalActions?: DelegationAction | DelegationAction[];
+  availableActions?: DelegationAction | DelegationAction[];
 }
 
 export const AccessPackageInfoModal = ({
@@ -17,10 +17,19 @@ export const AccessPackageInfoModal = ({
   modalItem,
   onClose,
   openWithError,
-  modalActions,
+  availableActions,
 }: AccessPackageInfoModalProps) => {
   const { selfParty, toParty } = usePartyRepresentation();
   const isCurrentUser = selfParty?.partyUuid === toParty?.partyUuid;
+
+  const actions = Array.isArray(availableActions)
+    ? availableActions
+    : availableActions !== undefined
+      ? [availableActions]
+      : [
+          !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+          DelegationAction.REVOKE,
+        ];
 
   return (
     <EditModal
@@ -28,16 +37,7 @@ export const AccessPackageInfoModal = ({
       accessPackage={modalItem}
       openWithError={openWithError}
       onClose={onClose}
-      availableActions={
-        Array.isArray(modalActions)
-          ? modalActions
-          : modalActions !== undefined
-            ? [modalActions]
-            : [
-                !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-                DelegationAction.REVOKE,
-              ]
-      }
+      availableActions={actions}
     />
   );
 };

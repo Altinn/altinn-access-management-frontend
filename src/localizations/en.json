@@ -317,6 +317,11 @@
       "delegation_check_error_heading": "Technical error",
       "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",
       "delegation_check_error_message_plural": "A technical error prevents you from giving the user one or more access packages. Please contact Altinn user service if the problem persists."
+    },
+    "access_status": {
+      "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
+      "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
+      "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted."
     }
   },
   "role": {
@@ -331,8 +336,8 @@
     "resources_disclaimer_link": "See the list of services in the old solution",
     "access_status": {
       "via_role": "{{user_name}} has access to this through the role they hold in {{via_name}}.",
-      "via_parent": "{{user_name}} has access to this because the main unit has it.",
-      "via_agent": "{{user_name}} has access to this as an agent via {{via_name}}."
+      "via_connection": "{{user_name}} has access to this through {{via_name}}.",
+      "via_keyrole": "{{user_name}} has access to this through their role in {{via_name}}."
     }
   },
   "users_page": {

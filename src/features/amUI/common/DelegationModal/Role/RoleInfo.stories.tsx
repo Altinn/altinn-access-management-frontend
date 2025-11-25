@@ -8,7 +8,7 @@ import { RoleInfo } from './RoleInfo';
 import type { Party } from '@/rtk/features/lookupApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { PartyRepresentationContext } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { RoleStatusType } from './useInheritedRoleInfo';
+import { InheritedStatusType } from '../../useInheritedStatus';
 
 const storyRole: Role = {
   id: 'role-ccr-styreleder',
@@ -47,21 +47,14 @@ const scenarioConfigs = {
     toParty: createParty('party-via-role-employee', 'Fiona Økonom', PartyType.Person),
     acting: 'from',
     viaParty: createParty('org-aktiv-epoke', 'Aktiv Epoke AS'),
-    statusType: RoleStatusType.ViaRole,
+    statusType: InheritedStatusType.ViaRole,
   },
-  viaParent: {
-    fromParty: createParty('org-koncern', 'Nordic Holdings ASA'),
-    toParty: createParty('party-via-parent', 'Aktiv Epoke AS'),
+  viaConnection: {
+    fromParty: createParty('org', 'Nordic Holdings ASA'),
+    toParty: createParty('party-via-connection', 'Aktiv Epoke AS'),
     acting: 'to',
-    viaParty: createParty('org-koncern', 'Nordic Holdings ASA'),
-    statusType: RoleStatusType.ViaParent,
-  },
-  viaAgent: {
-    fromParty: createParty('org-aktiv-epoke', 'Aktiv Epoke AS'),
-    toParty: createParty('party-via-agent', 'Ola Agent', PartyType.Person),
-    acting: 'from',
-    viaParty: createParty('org-agent', 'Tall & Tid AS'),
-    statusType: RoleStatusType.ViaAgent,
+    viaParty: createParty('org', 'Nordic Holdings ASA'),
+    statusType: InheritedStatusType.ViaConnection,
   },
 } as const;
 
@@ -122,14 +115,8 @@ export const ViaRole: Story = {
   },
 };
 
-export const ViaParent: Story = {
+export const ViaConnection: Story = {
   args: {
-    scenario: 'viaParent',
-  },
-};
-
-export const ViaAgent: Story = {
-  args: {
-    scenario: 'viaAgent',
+    scenario: 'viaConnection',
   },
 };
