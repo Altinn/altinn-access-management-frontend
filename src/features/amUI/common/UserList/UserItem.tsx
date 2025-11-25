@@ -95,7 +95,7 @@ export const UserItem = ({
   const description = (user: ExtendedUser | User) => {
     let descriptionString = '';
     if (user.type === ConnectionUserType.Person) {
-      const formattedDate = formatDateToNorwegian(user.dateOfBirth);
+      const formattedDate = formatDateToNorwegian(user.dateOfBirth || undefined);
       descriptionString += formattedDate
         ? t('common.date_of_birth') + ' ' + formattedDate
         : undefined;

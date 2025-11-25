@@ -104,6 +104,7 @@ export const SettingsPageContent = () => {
       <div className={classes.settingsListContainer}>
         <List size='sm'>
           <SettingsItem
+            id='settings-email-alerts'
             title={t('settings_page.alerts_on_email')}
             value={emailAddresses.join(', ')}
             icon={<PaperplaneIcon />}
@@ -123,6 +124,7 @@ export const SettingsPageContent = () => {
           />
           <Divider as='li' />
           <SettingsItem
+            id='settings-sms-alerts'
             title={t('settings_page.alerts_on_sms')}
             value={phoneNumbers.join(', ')}
             icon={<ChatIcon />}

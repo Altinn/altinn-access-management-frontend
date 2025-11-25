@@ -196,7 +196,7 @@ const getAccountFromConnection = (
       : `${dateOfBirthText}: ${actorConnection.party.dateOfBirth ?? ''}`;
 
   return {
-    id: actorConnection.party.partyId ?? actorConnection.party.id,
+    id: actorConnection.party.partyId?.toString() ?? actorConnection.party.id,
     icon: {
       name: partyName,
       type: accountType,
