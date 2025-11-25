@@ -12,6 +12,7 @@ import { DsAlert, DsHeading, DsParagraph, List } from '@altinn/altinn-components
 import { t } from 'i18next';
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
+import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 
 interface RoleListProps {
   onSelect: (role: Role) => void;
@@ -24,11 +25,18 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
     data: permissions,
     isLoading: permissionsIsLoading,
     error: permissionsError,
-  } = useGetRolePermissionsQuery({
-    party: actingParty?.partyUuid ?? '',
-    from: fromParty?.partyUuid,
-    to: toParty?.partyUuid,
-  });
+  } = useGetRolePermissionsQuery(
+    {
+      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.partyUuid,
+      to: toParty?.partyUuid,
+    },
+    {
+      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
+    },
+  );
+
+  const { getRoleMetadata } = useRoleMetadata();
 
   const { altinn2Roles } = useGroupedRoleListEntries({
     permissions,
@@ -76,10 +84,11 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
       ) : (
         <List>
           {altinn2Roles.map(({ role }) => {
+            const roleMetadata = getRoleMetadata(role.id);
             return (
               <RoleListItem
                 key={role.id}
-                role={role}
+                role={roleMetadata ?? role}
                 onClick={() => onSelect(role)}
               />
             );
