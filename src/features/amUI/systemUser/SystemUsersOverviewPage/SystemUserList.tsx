@@ -3,7 +3,7 @@ import { SystemUser } from '../types';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import classes from './SystemUserOverviewPage.module.css';
-import { BadgeProps, DsHeading, List, ListItem } from '@altinn/altinn-components';
+import { Badge, DsHeading, List, ListItem } from '@altinn/altinn-components';
 import { TenancyIcon } from '@navikt/aksel-icons';
 
 interface SystemUserListProps {
@@ -50,22 +50,28 @@ export const SystemUserList = ({
             href = `/systemuser/agentrequest?id=${systemUser.id}&skiplogout=true`;
           }
 
-          let badge: BadgeProps | ReactElement | undefined = undefined;
+          let badgeContent: ReactElement | string | undefined = undefined;
           if (isPendingRequestList && systemUser.userType === 'standard') {
-            badge = (
-              <div className={classes.systemUserBadge}>
-                {t('systemuser_overviewpage.pending_request_badge')}
-              </div>
-            );
+            badgeContent = t('systemuser_overviewpage.pending_request_badge');
           } else if (isPendingRequestList && systemUser.userType === 'agent') {
-            badge = (
-              <div className={classes.systemUserBadge}>
-                {t('systemuser_overviewpage.pending_agent_request_badge')}
-              </div>
-            );
-          } else if (newlyCreatedId === systemUser.id) {
-            badge = { label: t('systemuser_overviewpage.new_system_user'), color: 'info' };
+            badgeContent = t('systemuser_overviewpage.pending_agent_request_badge');
+          } else if (!isPendingRequestList && systemUser.userType === 'standard') {
+            badgeContent = t('systemuser_overviewpage.standard_system_user_badge');
+          } else if (!isPendingRequestList && systemUser.userType === 'agent') {
+            badgeContent = t('systemuser_overviewpage.agent_system_user_badge');
           }
+
+          const badge = (
+            <div className={classes.systemUserBadge}>
+              {newlyCreatedId == systemUser.id && (
+                <Badge
+                  label={t('systemuser_overviewpage.new_system_user')}
+                  color='info'
+                />
+              )}
+              {badgeContent}
+            </div>
+          );
 
           const refText =
             isPendingRequestList &&

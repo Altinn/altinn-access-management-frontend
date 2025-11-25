@@ -35,7 +35,9 @@
 }
 
 .systemUserBadge {
-  font-size: var(--ds-body-md-font-size);
+  font-size: var(--ds-body-sm-font-size);
+  display: flex;
+  gap: var(--ds-size-2);
 }
 
 @media only screen and (max-width: 769px) {
