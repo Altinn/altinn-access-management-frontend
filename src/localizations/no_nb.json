@@ -288,7 +288,10 @@
     "give_new_single_right": "Gi fullmakt",
     "current_services_title": "Fullmakt til {{count}} tjenester",
     "delete_singleRight_success_message": "Slettet tilgang til ",
-    "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
+    "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
+    "wip_title": "Fullmakter til enkelttjenester",
+    "wip_message": "Denne siden jobber vi fremdeles med! For å administrere enkelttjenester, må du gå til den gamle løsningen.",
+    "wip_link_text": "Gå til gammel løsning"
   },
   "access_packages": {
     "helptext_button": "Hva er tilgangspakker?",
