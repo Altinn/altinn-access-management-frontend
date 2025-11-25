@@ -75,10 +75,8 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
   const userHasPackage = delegationAccess !== null;
   const accessIsInherited = accessPackage.inherited;
-  console.log('accessIsInherited: ', accessIsInherited);
 
   const inheritedStatus = accessPackage.inheritedStatus;
-  console.log('inheritedStatus: ', inheritedStatus);
 
   const resourceListItems = useResourceList(accessPackage.resources);
   const deletableStatus = React.useMemo(
