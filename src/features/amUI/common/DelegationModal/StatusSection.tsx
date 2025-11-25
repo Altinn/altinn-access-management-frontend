@@ -101,7 +101,6 @@ export const StatusSection = ({
                 user_name: formattedUserName,
                 via_name: formattedViaName,
                 acting_party: formattedActingPartyName,
-                from_party: formattedFromPartyName,
               }}
             />
           </DsParagraph>
