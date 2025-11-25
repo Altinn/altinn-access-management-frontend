@@ -1,26 +1,26 @@
-name: 'Deploy: AT'
+name: "Deploy: AT"
 
-run-name: 'AT environments: ${{ github.sha }}'
+run-name: "AT environments: ${{ github.sha }}"
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
 
 jobs:
   containerize:
-    name: 'Containerize'
-    uses: './.github/workflows/template-build-and-push-container.yml'
+    name: "Containerize"
+    uses: "./.github/workflows/template-build-and-push-container.yml"
     with:
       tag: ${{ github.sha }}
 
   deploy-main:
-    name: 'Environment'
+    name: "Environment"
     needs: containerize
     strategy:
       fail-fast: false
       matrix:
         environment: [AT22, AT23, AT24]
-    uses: './.github/workflows/template-deploy-container.yml'
+    uses: "./.github/workflows/template-deploy-container.yml"
     secrets: inherit
     with:
       environment: ${{ matrix.environment }}
@@ -34,14 +34,14 @@ jobs:
       - run: sleep 180
 
   playwright-e2e-tests:
-    name: 'Playwright E2E-tests'
-    uses: './.github/workflows/template-playwright.yml'
+    name: "Playwright E2E-tests"
+    uses: "./.github/workflows/template-playwright.yml"
     needs: [deploy-main, sleep-before-tests]
     secrets: inherit
     strategy:
       fail-fast: false
       matrix:
-        environment: [AT24]
+        environment: [AT23]
         project: [e2e-tests]
     with:
       environment: ${{ matrix.environment }}

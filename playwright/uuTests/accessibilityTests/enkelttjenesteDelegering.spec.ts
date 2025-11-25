@@ -5,7 +5,7 @@ test.describe('New brukerflate - EnkelttjenesteDelegering', () => {
     login,
     runAccessibilityTest,
   }) => {
-    await login.LoginWithUserFromFrontpage('20838198385');
+    await login.LoginToAccessManagement('20838198385');
     await login.chooseReportee('Diskret Nær Tiger As');
 
     //await runAccessibilityTest.brukerflateEnkelttjenesteDelegering();
@@ -15,7 +15,7 @@ test.describe('New brukerflate - EnkelttjenesteDelegering', () => {
     login,
     runAccessibilityTest,
   }) => {
-    await login.LoginWithUserFromFrontpage('20838198385');
+    await login.LoginToAccessManagement('20838198385');
     await login.chooseReportee('Diskret Nær Tiger As');
 
     //await runAccessibilityTest.brukerflateEnkelttjenesteDelegering();
