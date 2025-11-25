@@ -49,18 +49,11 @@ const scenarioConfigs = {
     viaParty: createParty('org-aktiv-epoke', 'Aktiv Epoke AS'),
     statusType: InheritedStatusType.ViaRole,
   },
-  viaParent: {
-    fromParty: createParty('org-koncern', 'Nordic Holdings ASA'),
-    toParty: createParty('party-via-parent', 'Aktiv Epoke AS'),
+  viaConnection: {
+    fromParty: createParty('org', 'Nordic Holdings ASA'),
+    toParty: createParty('party-via-connection', 'Aktiv Epoke AS'),
     acting: 'to',
-    viaParty: createParty('org-koncern', 'Nordic Holdings ASA'),
-    statusType: InheritedStatusType.ViaConnection,
-  },
-  viaAgent: {
-    fromParty: createParty('org-aktiv-epoke', 'Aktiv Epoke AS'),
-    toParty: createParty('party-via-agent', 'Ola Agent', PartyType.Person),
-    acting: 'from',
-    viaParty: createParty('org-agent', 'Tall & Tid AS'),
+    viaParty: createParty('org', 'Nordic Holdings ASA'),
     statusType: InheritedStatusType.ViaConnection,
   },
 } as const;
@@ -122,14 +115,8 @@ export const ViaRole: Story = {
   },
 };
 
-export const ViaParent: Story = {
+export const ViaConnection: Story = {
   args: {
-    scenario: 'viaParent',
-  },
-};
-
-export const ViaAgent: Story = {
-  args: {
-    scenario: 'viaAgent',
+    scenario: 'viaConnection',
   },
 };

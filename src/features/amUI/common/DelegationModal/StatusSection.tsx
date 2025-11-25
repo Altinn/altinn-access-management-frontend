@@ -17,7 +17,7 @@ import classes from './StatusSection.module.css';
 const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
   [InheritedStatusType.ViaRole]: 'access_packages.access_status.via_role',
   [InheritedStatusType.ViaConnection]: 'access_packages.access_status.via_connection',
-  [InheritedStatusType.ViaActingPartyRole]: 'access_packages.access_status.via_acting_party_role',
+  [InheritedStatusType.ViaKeyRole]: 'access_packages.access_status.via_keyrole',
 };
 
 export const StatusSection = ({

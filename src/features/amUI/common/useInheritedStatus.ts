@@ -4,7 +4,7 @@ import type { Entity } from '@/dataObjects/dtos/Common';
 export enum InheritedStatusType {
   ViaRole = 'via_role',
   ViaConnection = 'via_connection',
-  ViaActingPartyRole = 'via_acting_party_role',
+  ViaKeyRole = 'via_keyrole',
 }
 
 export interface InheritedStatusMessageType {
@@ -38,7 +38,7 @@ const resolveInheritanceStatus = (
   }
   if (!permission.via && !permission.viaRole && !hasRightholderRole) {
     return {
-      type: InheritedStatusType.ViaActingPartyRole,
+      type: InheritedStatusType.ViaKeyRole,
     };
   }
   return null;

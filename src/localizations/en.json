@@ -321,7 +321,7 @@
     "access_status": {
       "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
       "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
-      "via_acting_party_role": "{{user_name}} has this access package through their role in {{acting_party}}. This access package cannot be deleted."
+      "via_keyrole": "{{user_name}} has this access package through their role in {{acting_party}}. This access package cannot be deleted."
     }
   },
   "role": {
@@ -337,7 +337,7 @@
     "access_status": {
       "via_role": "{{user_name}} has access to this through the role they hold in {{via_name}}.",
       "via_connection": "{{user_name}} has access to this through {{via_name}}.",
-      "via_acting_party_role": "{{user_name}} has access to this through their role in {{acting_party}}."
+      "via_keyrole": "{{user_name}} has access to this through their role in {{acting_party}}."
     }
   },
   "users_page": {

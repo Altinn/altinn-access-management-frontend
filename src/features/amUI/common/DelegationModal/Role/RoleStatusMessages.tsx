@@ -10,7 +10,7 @@ import { InheritedStatusType, useInheritedStatusInfo } from '../../useInheritedS
 const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
   [InheritedStatusType.ViaRole]: 'role.access_status.via_role',
   [InheritedStatusType.ViaConnection]: 'role.access_status.via_connection',
-  [InheritedStatusType.ViaActingPartyRole]: 'role.access_status.via_acting_party_role',
+  [InheritedStatusType.ViaKeyRole]: 'role.access_status.via_keyrole',
 };
 
 export interface RoleStatusMessageProps {
@@ -39,7 +39,7 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
 
   if (
     !status ||
-    (status.type === InheritedStatusType.ViaActingPartyRole && role.provider?.code === 'sys-ccr')
+    (status.type === InheritedStatusType.ViaKeyRole && role.provider?.code === 'sys-ccr')
   ) {
     return null;
   }
