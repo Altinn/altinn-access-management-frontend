@@ -50,9 +50,10 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
     reverseNameOrder: false,
   });
 
+  const safeViaType = status.via?.type ? String(status.via.type).toLowerCase() : '';
   const formattedViaName = formatDisplayName({
     fullName: status.via?.name || '',
-    type: status.via?.type.toLowerCase() === 'person' ? 'person' : 'company',
+    type: safeViaType === 'person' ? 'person' : 'company',
     reverseNameOrder: false,
   });
 
