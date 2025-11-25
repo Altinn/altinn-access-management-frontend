@@ -19,6 +19,9 @@ const org = (id: string, name: string) => ({
   name,
   type: 'Organisasjon',
   variant: 'AS',
+  organizationIdentifier: '123456789',
+  partyId: 'pid-' + id,
+  dateOfBirth: '1990-01-01',
   parent: null,
   children: null,
 });
@@ -27,6 +30,9 @@ const person = (id: string, name: string) => ({
   name,
   type: 'Person',
   variant: 'Person',
+  organizationIdentifier: '123456789',
+  partyId: 'pid-' + id,
+  dateOfBirth: '1990-01-01',
   parent: null,
   children: null,
 });
