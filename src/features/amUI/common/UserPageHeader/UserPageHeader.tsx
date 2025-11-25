@@ -14,6 +14,7 @@ import { UserRoles } from '../UserRoles/UserRoles';
 
 import classes from './UserPageHeader.module.css';
 import { UserPageHeaderSkeleton } from './UserPageHeaderSkeleton';
+import { isSubUnit, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 interface UserPageHeaderProps {
   direction: 'to' | 'from';
@@ -66,6 +67,7 @@ export const UserPageHeader = ({
             icon={{
               name: userName,
               type: isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person',
+              isParent: !isSubUnitByType(user?.variant?.toString()),
             }}
             size={'lg'}
           />
@@ -74,6 +76,7 @@ export const UserPageHeader = ({
             type={isOrganization(secondaryParty?.partyTypeName?.toString()) ? 'company' : 'person'}
             size={'lg'}
             className={classes.secondaryAvatar}
+            isParent={!isSubUnitByType(secondaryParty?.variant?.toString())}
           />
         </div>
       );
@@ -84,6 +87,7 @@ export const UserPageHeader = ({
           icon={{
             name: userName,
             type: isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person',
+            isParent: !isSubUnitByType(user?.variant?.toString()),
           }}
           size={'lg'}
         />

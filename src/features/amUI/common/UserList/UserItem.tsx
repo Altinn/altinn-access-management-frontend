@@ -13,6 +13,7 @@ import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
 import classes from './UserList.module.css';
 import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
@@ -93,7 +94,7 @@ export const UserItem = ({
   const hasSubUnitRole = isSubOrMainUnit && roleDirection === 'fromUser';
 
   const description = (user: ExtendedUser | User) => {
-    let descriptionString = '';
+    let descriptionString = subUnit ? '↳ ' : '';
     if (user.type === ConnectionUserType.Person) {
       const formattedDate = formatDateToNorwegian(user.keyValues?.DateOfBirth);
       descriptionString += formattedDate
@@ -105,7 +106,7 @@ export const UserItem = ({
         ' ' +
         user.keyValues?.OrganizationIdentifier +
         (isSubOrMainUnit || subUnit
-          ? ` (${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')})`
+          ? `, ${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')}`
           : '');
     }
     if (viaRoleCodes.length > 0) {
@@ -170,7 +171,11 @@ export const UserItem = ({
               user={{ ...child, children: null }} // do not allow further expansion of inheriting users
               size='xs'
               titleAs={userHeadingLevelForMapper(titleAs)}
-              subUnit={index !== 0 && child.type === ConnectionUserType.Organization}
+              subUnit={
+                index !== 0 &&
+                child.type === ConnectionUserType.Organization &&
+                isSubUnitByType(child.variant?.toString())
+              }
               roleDirection={roleDirection}
               showRoles={showRoles}
               interactive={interactive}
