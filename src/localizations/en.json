@@ -289,7 +289,10 @@
     "give_new_single_right": "Give power of attorney to new service",
     "current_services_title": "Power of attorney to {{count}} services",
     "delete_singleRight_success_message": "Deleted access to ",
-    "delete_singleRight_error_message": "Failed to delete access to "
+    "delete_singleRight_error_message": "Failed to delete access to ",
+    "wip_title": "Power of attorney to services",
+    "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
+    "wip_link_text": "Go to old solution"
   },
   "access_packages": {
     "helptext_button": "What are access packages?",

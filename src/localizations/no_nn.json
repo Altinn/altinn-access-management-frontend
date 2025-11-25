@@ -285,7 +285,10 @@
     "give_new_single_right": "Gi fullmakt til ny teneste",
     "current_services_title": "Fullmakt til {{count}} tenester",
     "delete_singleRight_success_message": "Slettet tilgang til ",
-    "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
+    "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
+    "wip_title": "Fullmakter til enkelttenester",
+    "wip_message": "Denne sida jobbar vi framleis med! For å administrere enkelttenester, må du gå til den gamle løysinga.",
+    "wip_link_text": "Gå til gammal løsning"
   },
   "access_packages": {
     "helptext_button": "Kva er tilgangspakkar?",
