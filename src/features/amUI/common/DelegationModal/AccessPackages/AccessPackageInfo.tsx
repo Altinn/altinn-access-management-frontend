@@ -15,11 +15,7 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../StatusSection';
 import type { ExtendedAccessPackage } from '../../AccessPackageList/useAreaPackageList';
-import {
-  DeletableStatus,
-  getDeletableStatus,
-  isInherited,
-} from '../../AccessPackageList/useAreaPackageList';
+import { DeletableStatus, getDeletableStatus } from '../../AccessPackageList/useAreaPackageList';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
