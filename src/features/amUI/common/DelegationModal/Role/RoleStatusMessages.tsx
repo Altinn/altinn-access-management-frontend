@@ -83,8 +83,6 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
           values={{
             user_name: formattedUserName,
             via_name: formattedViaName,
-            acting_party: formattedActingPartyName,
-            from_party: formattedFromPartyName,
           }}
         />
       </DsParagraph>

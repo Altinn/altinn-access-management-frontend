@@ -16,7 +16,7 @@ export type PermissionWithInheritance = {
   via?: Entity | null;
   viaRole?: { id: string } | null;
   to?: { id: string } | null;
-  from?: { id: string } | null;
+  from?: Entity | null;
   role?: { code?: string } | null;
 };
 
@@ -36,9 +36,10 @@ const resolveInheritanceStatus = (
       via: permission.via,
     };
   }
-  if (!permission.via && !permission.viaRole && !hasRightholderRole) {
+  if (!permission.via && !permission.viaRole && !hasRightholderRole && permission.from) {
     return {
       type: InheritedStatusType.ViaKeyRole,
+      via: permission.from,
     };
   }
   return null;

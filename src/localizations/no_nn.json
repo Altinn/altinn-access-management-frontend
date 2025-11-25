@@ -317,7 +317,7 @@
     "access_status": {
       "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
       "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
-      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{acting_party}}. Denne tilgangspakken kan difor ikkje slettast."
+      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast."
     }
   },
   "role": {
@@ -333,7 +333,7 @@
     "access_status": {
       "via_role": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}.",
       "via_connection": "{{user_name}} har tilgang til dette gjennom {{via_name}}.",
-      "via_keyrole": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{acting_party}}."
+      "via_keyrole": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}."
     }
   },
   "users_page": {

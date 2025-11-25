@@ -320,7 +320,7 @@
     "access_status": {
       "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
       "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rollen de har i {{acting_party}}. Denne tilgangspakken kan derfor ikke slettes."
+      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes."
     }
   },
   "role": {
@@ -336,7 +336,7 @@
     "access_status": {
       "via_role": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}.",
       "via_connection": "{{user_name}} har tilgang til dette gjennom {{via_name}}.",
-      "via_keyrole": "{{user_name}} har tilgang til dette gjennom rollen de har i {{acting_party}}."
+      "via_keyrole": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}."
     }
   },
   "users_page": {
