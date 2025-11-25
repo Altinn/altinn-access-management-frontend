@@ -47,7 +47,6 @@ export const NewPersonContent = ({
             id: toUuid,
             name: lastName,
             children: null,
-            personIdentifier: ssn,
           });
         }
         modalRef.current?.close();
