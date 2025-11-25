@@ -3,8 +3,8 @@ import type { Entity } from '@/dataObjects/dtos/Common';
 
 export enum InheritedStatusType {
   ViaRole = 'via_role',
-  ViaParent = 'via_parent',
-  ViaAgent = 'via_agent',
+  ViaConnection = 'via_connection',
+  ViaActingPartyRole = 'via_acting_party_role',
 }
 
 export interface InheritedStatusMessageType {
@@ -17,32 +17,28 @@ export type PermissionWithInheritance = {
   viaRole?: { id: string } | null;
   to?: { id: string } | null;
   from?: { id: string } | null;
+  role?: { code?: string } | null;
 };
 
 const resolveInheritanceStatus = (
   permission: PermissionWithInheritance,
-  isActingTo: boolean,
-  isActingFrom: boolean,
+  hasRightholderRole: boolean,
 ): InheritedStatusMessageType | null => {
-  if (!permission.via) {
-    return null;
-  }
-  if (permission.viaRole) {
+  if (permission.viaRole && permission.via) {
     return {
       type: InheritedStatusType.ViaRole,
       via: permission.via,
     };
   }
-  if (isActingTo) {
+  if (permission.via) {
     return {
-      type: InheritedStatusType.ViaParent,
+      type: InheritedStatusType.ViaConnection,
       via: permission.via,
     };
   }
-  if (isActingFrom) {
+  if (!permission.via && !permission.viaRole && !hasRightholderRole) {
     return {
-      type: InheritedStatusType.ViaAgent,
-      via: permission.via,
+      type: InheritedStatusType.ViaActingPartyRole,
     };
   }
   return null;
@@ -58,8 +54,8 @@ interface GetInheritedStatusParams {
 export const getInheritedStatus = ({
   permissions,
   toParty,
-  fromParty,
-  actingParty,
+  fromParty: _fromParty,
+  actingParty: _actingParty,
 }: GetInheritedStatusParams): InheritedStatusMessageType | undefined => {
   if (!permissions || permissions.length === 0) {
     return undefined;
@@ -68,15 +64,15 @@ export const getInheritedStatus = ({
   const relevantPermission = permissions.find(
     (permission) => !toParty?.partyUuid || permission.to?.id === toParty.partyUuid,
   );
+  const hasRightholderRole = permissions.some(
+    (permission) => permission.role?.code === 'rettighetshaver',
+  );
 
   if (!relevantPermission) {
     return undefined;
   }
 
-  const isActingTo = !!actingParty?.partyUuid && actingParty.partyUuid === toParty?.partyUuid;
-  const isActingFrom = !!actingParty?.partyUuid && actingParty.partyUuid === fromParty?.partyUuid;
-
-  return resolveInheritanceStatus(relevantPermission, isActingTo, isActingFrom) ?? undefined;
+  return resolveInheritanceStatus(relevantPermission, hasRightholderRole) ?? undefined;
 };
 
 export const useInheritedStatusInfo = (params: GetInheritedStatusParams) =>

@@ -20,7 +20,6 @@ import {
   getDeletableStatus,
   isInherited,
 } from '../../AccessPackageList/useAreaPackageList';
-import { getInheritedStatus } from '../../useInheritedStatus';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
@@ -75,31 +74,11 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   }, [activeDelegations, isFetching, accessPackage.id]);
 
   const userHasPackage = delegationAccess !== null;
-  const accessIsInherited =
-    (delegationAccess &&
-      delegationAccess.permissions.some((p) =>
-        isInherited(p, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
-      )) ||
-    false;
+  const accessIsInherited = accessPackage.inherited;
+  console.log('accessIsInherited: ', accessIsInherited);
 
-  const inheritedStatus = React.useMemo(
-    () =>
-      accessPackage.inheritedStatus ??
-      getInheritedStatus({
-        permissions: delegationAccess?.permissions ?? accessPackage.permissions,
-        toParty,
-        fromParty,
-        actingParty,
-      }),
-    [
-      accessPackage.inheritedStatus,
-      delegationAccess?.permissions,
-      accessPackage.permissions,
-      toParty,
-      fromParty,
-      actingParty,
-    ],
-  );
+  const inheritedStatus = accessPackage.inheritedStatus;
+  console.log('inheritedStatus: ', inheritedStatus);
 
   const resourceListItems = useResourceList(accessPackage.resources);
   const deletableStatus = React.useMemo(
@@ -109,12 +88,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
         : null,
     [delegationAccess, toParty, fromParty],
   );
-
-  const onlyPermissionTroughInheritance =
-    delegationAccess &&
-    delegationAccess.permissions.every((p) =>
-      isInherited(p, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
-    );
 
   const canDelegate = canDelegatePackage(accessPackage.id);
   const showMissingRightsMessage =
@@ -181,7 +154,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             userHasAccess={userHasPackage}
             showMissingRightsMessage={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
-            inheritedStatus={onlyPermissionTroughInheritance ? inheritedStatus : undefined}
+            inheritedStatus={inheritedStatus ?? undefined}
           />
 
           <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>

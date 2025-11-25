@@ -16,8 +16,8 @@ import classes from './StatusSection.module.css';
 
 const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
   [InheritedStatusType.ViaRole]: 'access_packages.access_status.via_role',
-  [InheritedStatusType.ViaParent]: 'access_packages.access_status.via_parent',
-  [InheritedStatusType.ViaAgent]: 'access_packages.access_status.via_agent',
+  [InheritedStatusType.ViaConnection]: 'access_packages.access_status.via_connection',
+  [InheritedStatusType.ViaActingPartyRole]: 'access_packages.access_status.via_acting_party_role',
 };
 
 export const StatusSection = ({
@@ -47,13 +47,9 @@ export const StatusSection = ({
     reverseNameOrder: false,
   });
 
-  const formattedUserName = formatDisplayName({
-    fullName: (direction === 'from' ? toParty?.name : fromParty?.name) || '',
-    type:
-      (direction === 'from' ? toParty?.partyTypeName : fromParty?.partyTypeName) ===
-      PartyType.Person
-        ? 'person'
-        : 'company',
+  const formattedToPartyName = formatDisplayName({
+    fullName: toParty?.name || '',
+    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
     reverseNameOrder: false,
   });
 
@@ -68,6 +64,8 @@ export const StatusSection = ({
     type: inheritedStatus?.via?.type?.toLowerCase() === 'person' ? 'person' : 'company',
     reverseNameOrder: false,
   });
+
+  const formattedUserName = direction === 'from' ? formattedToPartyName : formattedFromPartyName;
 
   return (
     <div
@@ -84,7 +82,7 @@ export const StatusSection = ({
             <Trans
               i18nKey='delegation_modal.has_package_message'
               values={{
-                user_name: toParty?.name,
+                user_name: formattedUserName,
               }}
             />
           </DsParagraph>
@@ -119,7 +117,7 @@ export const StatusSection = ({
             <Trans
               i18nKey='delegation_modal.cannot_delegate_here'
               values={{
-                user_name: toParty?.name,
+                user_name: formattedUserName,
               }}
             />
           </DsParagraph>
@@ -137,7 +135,7 @@ export const StatusSection = ({
               components={{ b: <strong /> }}
               values={{
                 you: t('common.you_uppercase'),
-                reporteeorg: fromParty?.name,
+                reporteeorg: formattedFromPartyName,
               }}
             />
           </DsParagraph>

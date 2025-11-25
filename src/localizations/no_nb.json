@@ -319,8 +319,8 @@
     },
     "access_status": {
       "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_parent": "{{acting_party}} har denne tilgangspakken gjennom hovedenheten til {{from_party}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_agent": "{{user_name}} har tilgang til denne tilgangspakken som agent via {{via_name}}. Denne tilgangspakken kan derfor ikke slettes."
+      "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
+      "via_acting_party_role": "{{user_name}} har denne tilgangspakken gjennom rollen de har i {{acting_party}}. Denne tilgangspakken kan derfor ikke slettes."
     }
   },
   "role": {
@@ -335,8 +335,8 @@
     "resources_disclaimer_link": "Se listen i den gamle løsningen",
     "access_status": {
       "via_role": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}.",
-      "via_parent": "{{acting_party}} har denne tilgangen gjennom hovedenheten til {{from_party}}.",
-      "via_agent": "{{user_name}} har tilgang til dette som agent via {{via_name}}."
+      "via_connection": "{{acting_party}} har denne tilgangen gjennom hovedenheten til {{from_party}}.",
+      "via_acting_party_role": "{{user_name}} har tilgang til dette gjennom rollen de har i {{acting_party}}."
     }
   },
   "users_page": {

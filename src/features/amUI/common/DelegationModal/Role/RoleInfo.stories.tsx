@@ -54,14 +54,14 @@ const scenarioConfigs = {
     toParty: createParty('party-via-parent', 'Aktiv Epoke AS'),
     acting: 'to',
     viaParty: createParty('org-koncern', 'Nordic Holdings ASA'),
-    statusType: InheritedStatusType.ViaParent,
+    statusType: InheritedStatusType.ViaConnection,
   },
   viaAgent: {
     fromParty: createParty('org-aktiv-epoke', 'Aktiv Epoke AS'),
     toParty: createParty('party-via-agent', 'Ola Agent', PartyType.Person),
     acting: 'from',
     viaParty: createParty('org-agent', 'Tall & Tid AS'),
-    statusType: InheritedStatusType.ViaAgent,
+    statusType: InheritedStatusType.ViaConnection,
   },
 } as const;
 
