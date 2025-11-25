@@ -26,6 +26,7 @@ import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/Packag
 import { useResourceList } from './useResourceList';
 import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -145,8 +146,16 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                   {t('delegation_modal.general_error.delegate_heading')}
                 </DsHeading>
               )}
-              {actionError.details?.detail ? (
-                <ValidationErrorMessage errorCode={actionError.details?.detail} />
+              {actionError.details?.detail || actionError.details?.errorCode ? (
+                <ValidationErrorMessage
+                  errorCode={actionError.details?.errorCode ?? actionError.details?.detail ?? ''}
+                  translationValues={{
+                    entity_type:
+                      toParty?.partyTypeName === PartyType.Person
+                        ? t('common.persons_lowercase')
+                        : t('common.organizations_lowercase'),
+                  }}
+                />
               ) : (
                 <TechnicalErrorParagraphs
                   size='xs'

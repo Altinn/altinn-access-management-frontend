@@ -57,6 +57,8 @@
     "finish_delegation": "Confirm delegation",
     "you_lowercase": "you",
     "you_uppercase": "You",
+    "persons_lowercase": "persons",
+    "organizations_lowercase": "organizations",
     "minid": "MinID",
     "bankid": "BankID",
     "commifides": "Commifides",
@@ -429,7 +431,7 @@
     },
     "validation_error": {
       "AM.VLD-00002": "You do not have permission to grant this authorization.",
-      "AM.VLD-00028": "This access package cannot be delegated to this type of unit.",
+      "AM.VLD-00028": "This access package cannot be given to {{entity_type}}.",
       "default": "Could not grant power of attorney"
     },
     "partial_deletion_message": {

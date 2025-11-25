@@ -10,9 +10,15 @@ export interface ValidationErrorMessageProps {
   errorCode: string;
   /*** The size of the paragraph text */
   size?: DsParagraphProps['data-size'];
+  /*** Values to be used in translation */
+  translationValues?: Record<string, string | number>;
 }
 
-export const ValidationErrorMessage = ({ size = 'sm', errorCode }: ValidationErrorMessageProps) => {
+export const ValidationErrorMessage = ({
+  size = 'sm',
+  errorCode,
+  translationValues = {},
+}: ValidationErrorMessageProps) => {
   const isSupported = supportedErrorCodes.includes(errorCode);
   const key = isSupported ? errorCode : 'default';
 
@@ -21,7 +27,10 @@ export const ValidationErrorMessage = ({ size = 'sm', errorCode }: ValidationErr
       data-size={size}
       variant='long'
     >
-      <Trans i18nKey={`delegation_modal.validation_error.${key}`} />
+      <Trans
+        i18nKey={`delegation_modal.validation_error.${key}`}
+        values={{ ...translationValues }}
+      />
     </DsParagraph>
   );
 };

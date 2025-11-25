@@ -56,6 +56,8 @@
     "finish_delegation": "Fullfør delegering",
     "you_lowercase": "du",
     "you_uppercase": "Du",
+    "persons_lowercase": "personar",
+    "organizations_lowercase": "verksemder",
     "minid": "MinID",
     "bankid": "BankID",
     "commfides": "Commfides",
@@ -425,7 +427,7 @@
     },
     "validation_error": {
       "AM.VLD-00002": "Du manglar tilgang til å gi denne fullmakta.",
-      "AM.VLD-00028": "Tilgangspakken kan ikkje delegerast til denne typen eining.",
+      "AM.VLD-00028": "Tilgangspakken kan ikkje delegerast til {{entity_type}}.",
       "default": "Kunne ikkje gi fullmakta"
     },
     "partial_deletion_message": {

@@ -2,11 +2,19 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useDelegatePackageMutation } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 
+export interface ValidationErrorDetail {
+  code: string;
+  description?: string;
+  context?: Record<string, string>;
+}
+
 export interface DelegationErrorDetails {
   title?: string;
   detail?: string;
   traceId?: string;
   errorCode?: string;
+  validationContext?: Record<string, string>;
+  validationErrors?: ValidationErrorDetail[];
 }
 
 export const useDelegateAccessPackage = () => {
