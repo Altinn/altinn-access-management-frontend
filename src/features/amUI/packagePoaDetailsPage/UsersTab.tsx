@@ -119,7 +119,6 @@ export const UsersTab = ({
   });
 
   const handleOnDelegate = (user: User) => {
-    console.log('user: ', user);
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
       setDelegateActionError(null);
