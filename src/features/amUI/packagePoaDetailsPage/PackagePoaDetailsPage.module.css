@@ -5,6 +5,31 @@
   padding: 1.5rem 0 0.5rem 0;
 }
 
+.delegateErrorAlert {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.delegateErrorHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.dismissButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.1rem;
+  color: inherit;
+}
+
+.dismissButton svg {
+  display: block;
+}
+
 .noUsersAlert {
   display: flex;
   align-items: center;
