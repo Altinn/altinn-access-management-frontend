@@ -6,9 +6,23 @@
 }
 
 .delegateErrorAlert {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    'header closebutton'
+    'message closebutton';
   gap: 0.25rem;
+}
+
+.delegateErrorCloseButton {
+  grid-area: closebutton;
+  align-self: start;
+  justify-self: end;
+}
+
+.delegateErrorMessage {
+  grid-area: message;
 }
 
 .delegateErrorHeader {
@@ -19,11 +33,13 @@
 }
 
 .dismissButton {
-  background: none;
-  border: none;
   cursor: pointer;
   padding: 0.1rem;
   color: inherit;
+  min-width: unset;
+  height: unset;
+  width: unset;
+  min-height: unset;
 }
 
 .dismissButton svg {

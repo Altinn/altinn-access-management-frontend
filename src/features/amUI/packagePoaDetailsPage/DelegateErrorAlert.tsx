@@ -30,37 +30,43 @@ export const DelegateErrorAlert = ({ error, targetParty, onClose }: DelegateErro
     <DsAlert
       data-color='danger'
       data-size='sm'
-      className={pageClasses.delegateErrorAlert}
     >
-      <div className={pageClasses.delegateErrorHeader}>
-        <DsHeading
-          level={2}
-          data-size='2xs'
-        >
-          {t('delegation_modal.general_error.delegate_heading')}
-        </DsHeading>
-        <DsButton
-          variant='tertiary'
-          icon
-          data-size='sm'
-          onClick={onClose}
-          aria-label={t('common.close')}
-        >
-          <XMarkIcon fontSize='1.2rem' />
-        </DsButton>
+      <div className={pageClasses.delegateErrorAlert}>
+        <div className={pageClasses.delegateErrorHeader}>
+          <DsHeading
+            level={2}
+            data-size='2xs'
+          >
+            {t('delegation_modal.general_error.delegate_heading')}
+          </DsHeading>
+        </div>
+        <div className={pageClasses.delegateErrorCloseButton}>
+          <DsButton
+            className={pageClasses.dismissButton}
+            variant='tertiary'
+            icon
+            data-size='sm'
+            onClick={onClose}
+            aria-label={t('common.close')}
+          >
+            <XMarkIcon fontSize='1.2rem' />
+          </DsButton>
+        </div>
+        <div className={pageClasses.delegateErrorMessage}>
+          {error.details?.detail || error.details?.errorCode ? (
+            <ValidationErrorMessage
+              errorCode={error.details?.errorCode ?? error.details?.detail ?? ''}
+              translationValues={{ entity_type: entityType }}
+            />
+          ) : (
+            <TechnicalErrorParagraphs
+              size='xs'
+              status={error.httpStatus}
+              time={error.timestamp}
+            />
+          )}
+        </div>
       </div>
-      {error.details?.detail || error.details?.errorCode ? (
-        <ValidationErrorMessage
-          errorCode={error.details?.errorCode ?? error.details?.detail ?? ''}
-          translationValues={{ entity_type: entityType }}
-        />
-      ) : (
-        <TechnicalErrorParagraphs
-          size='xs'
-          status={error.httpStatus}
-          time={error.timestamp}
-        />
-      )}
     </DsAlert>
   );
 };
