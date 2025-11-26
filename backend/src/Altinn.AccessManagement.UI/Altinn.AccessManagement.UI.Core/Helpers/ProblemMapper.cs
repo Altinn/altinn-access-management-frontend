@@ -35,6 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 "AUTH-00055" => Problem.AccessPackage_FailedToGetDelegatedPackages,
                 "AUTH-00057" => Problem.SystemUser_FailedToDeleteAccessPackage,
                 "AUTH-00062" => Problem.SystemUser_FailedToGetDelegatedRights,
+                "AUTH-00066" => Problem.Request_UserIsNotAccessManager,
 
                 _ => Problem.Generic_EndOfMethod,
             };

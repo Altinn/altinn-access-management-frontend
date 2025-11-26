@@ -121,8 +121,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             // filter consents to return only active consents
             IEnumerable<ConsentRequestDetails> activeConsents = consents.Value.Where(consent =>
-                !consent.ConsentRequestEvents.Any(e => excludedStatuses.Contains(e.EventType))
-                && consent.ConsentRequestEvents.Exists(e => e.EventType.Equals("accepted", StringComparison.OrdinalIgnoreCase)));
+            {
+                bool isTerminated = consent.ConsentRequestEvents.Any(e => excludedStatuses.Contains(e.EventType));
+                bool isAccepted = IsConsentAccepted(consent);
+                bool isShownInPortal = IsPortalModeConsent(consent);
+                return !isTerminated && (isAccepted || isShownInPortal);
+            });
 
             // look up all party names in one call instead of one by one
             IEnumerable<string> partyUuids = activeConsents
@@ -142,6 +146,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return new ActiveConsentItemFE()
                 {
                     Id = consent.Id,
+                    IsPendingConsent = !IsConsentAccepted(consent) && IsPortalModeConsent(consent),
                     IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
                     ToParty = GetConsentParty(consent.To, toParty?.Name),
                     FromParty = GetConsentParty(consent.From, fromParty?.Name),
@@ -237,6 +242,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static Dictionary<string, Party> PartyListToDict(IEnumerable<Party> parties)
         {
             return parties.Where(p => p != null && p.PartyUuid.HasValue).ToDictionary(p => p.PartyUuid.ToString(), p => p, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private static bool IsPortalModeConsent(ConsentRequestDetails consentRequest)
+        {
+            return string.Equals(consentRequest.PortalViewMode, "show", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsConsentAccepted(ConsentRequestDetails consentRequest)
+        {
+            return consentRequest.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase));
         }
 
         private static string GetUrnValue(string urn)

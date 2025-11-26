@@ -89,7 +89,9 @@
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
     "date_of_birth": "Born",
-    "save_changes": "Save changes"
+    "save_changes": "Save changes",
+    "none": "no",
+    "digdir": "The Norwegian Digitalisation Agency"
   },
   "beta_banner": {
     "info": "This is a beta version of the new access management pages in Altinn.",
@@ -98,7 +100,7 @@
   "header": {
     "access_management": "Access management",
     "inbox": "Inbox",
-    "profile": "My profile",
+    "profile": "Your profile",
     "account_you": "You",
     "account_others": "Other accounts",
     "account_orgs": "Organizations",
@@ -115,11 +117,16 @@
     "locale_title": "Choose language",
     "logged_in_as_name": "Logged in as {{name}}",
     "new_altinn_info": "About new Altinn",
-    "leave_beta": "Back to today's Altinn",
-    "shortcuts": "Shortcuts"
+    "leave_beta": "To the old solution",
+    "shortcuts": "Shortcuts",
+    "all_forms": "All forms and services",
+    "start_business": "Start and run business",
+    "help": "Do you need help?"
   },
   "footer": {
+    "digdir_address": "PO box 1382 Vika, 0114 Oslo. Org.no. 991 825 827",
     "about_altinn": "About Altinn",
+    "help": "Help and contact",
     "service_messages": "Service messages",
     "privacy_policy": "Privacy policy",
     "accessibility": "Accessibility"
@@ -127,11 +134,12 @@
   "sidebar": {
     "access_management": "Access management",
     "users": "Users",
-    "reportees": "Our access to other companies",
-    "systemaccess": "API- and system access",
+    "reportees": "Powers of attorney from others",
+    "systemaccess": "System access",
     "consent": "Consent and power of attorney agreements",
-    "poa_overview": "Power of attorney",
-    "settings": "Settings"
+    "poa_overview": "Powers of attorney",
+    "settings": "Settings",
+    "requests": "Requests"
   },
   "error_page": {
     "not_found_site_type": "Error 404",
@@ -146,7 +154,10 @@
     "unknown_error_description": "Please try reloading the page.",
     "if_persistent_contact_service": "If the error persists, you can go to Altinn's help page or contact support at 75 00 60 00",
     "user_connection_error": "Huh, looks like there's nothing here. ",
-    "acting_party_data_error": "A technical error occurred. Please try again later. If the problem persists, contact Altinn support at 75 00 60 00."
+    "acting_party_data_error": "A technical error occurred. Please try again later. If the problem persists, contact Altinn support at 75 00 60 00.",
+    "unsynced_connection_title": "Synchronization issue - our fault, not yours",
+    "unsynced_connection": "We have a synchronization issue between the new and old solution. This is something we are working on, but for now, you unfortunately cannot see your accesses here. We apologize for any inconvenience this may cause!",
+    "unsynced_connection_link": "Click here to view your accesses in the old solution"
   },
   "profile": {
     "received": "Received",
@@ -278,7 +289,10 @@
     "give_new_single_right": "Give power of attorney to new service",
     "current_services_title": "Power of attorney to {{count}} services",
     "delete_singleRight_success_message": "Deleted access to ",
-    "delete_singleRight_error_message": "Failed to delete access to "
+    "delete_singleRight_error_message": "Failed to delete access to ",
+    "wip_title": "Power of attorney to services",
+    "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
+    "wip_link_text": "Go to old solution"
   },
   "access_packages": {
     "helptext_button": "What are access packages?",
@@ -306,20 +320,28 @@
       "delegation_check_error_heading": "Technical error",
       "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",
       "delegation_check_error_message_plural": "A technical error prevents you from giving the user one or more access packages. Please contact Altinn user service if the problem persists."
+    },
+    "access_status": {
+      "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
+      "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
+      "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted."
     }
   },
   "role": {
     "provider_status": "This role is fetched from ",
-    "current_roles_title": "{{count}} administrator accesses",
-    "roles_description": "Here you will find authorizations to manage access for the organization. No resources or services are associated with these accesses.",
-    "role_delegation_success": "{{name}} has been successfully granted power of attorney over {{role}}.",
-    "role_delegation_error": "Failed to grant power of attorney over {{role}} to {{name}}.",
-    "role_deletion_success": "Power of attorney over {{role}} has been successfully revoked for {{name}}.",
-    "role_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{role}}.",
-    "inherited_role_message": "<b>{{user_name}}</b> has access to this through their role {{role_name}}. Therefore, it cannot be deleted.",
-    "activeRolesLabel": "List of roles the user has been granted",
-    "availableRolesLabel": "List of roles available for the user",
-    "cant_delegate_generic": "You can't delegate this role"
+    "current_roles_title": "{{count}} roles",
+    "fetch_error_heading": "Unable to show roles for this user",
+    "fetch_error_description": "We can't fetch the roles right now.",
+    "no_roles_message": "This user has no roles.",
+    "resources_title": "Gives access to {{count}} services",
+    "resources_empty": "This role has no services.",
+    "resources_disclaimer": "This role might still grant access to services that only exist in the old solution.",
+    "resources_disclaimer_link": "See the list of services in the old solution",
+    "access_status": {
+      "via_role": "{{user_name}} has access to this through the role they hold in {{via_name}}.",
+      "via_connection": "{{user_name}} has access to this through {{via_name}}.",
+      "via_keyrole": "{{user_name}} has access to this through their role in {{via_name}}."
+    }
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -331,7 +353,9 @@
     "only_you_have_access": "Only you have access here. Do you want to change this?",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
-    "indirect_connections": "Users without power of attorney"
+    "indirect_connections": "Users without power of attorney",
+    "no_access_to_users_header": "We are still working on this page!",
+    "no_access_to_users_message": "Only access managers can see the full list of users with powers of attorney in this organization. <br /> A list of key personnel (the board) will eventually be made available to users without access management."
   },
   "advanced_user_search": {
     "add_user_button": "Add user",
@@ -343,7 +367,7 @@
     "user_search_placeholder": "Search for users"
   },
   "reportees_page": {
-    "page_title": "Our access to other companies - Altinn",
+    "page_title": "Powers of attorney from others - Altinn",
     "main_page_heading": "Authorizations {{name}} has with others",
     "not_admin_alert": "You do not have access to this page for {{name}}. Please switch to a different page or change to a reportee you have sufficient rights for."
   },
@@ -351,36 +375,36 @@
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
     "single_rights_title": "Services",
-    "roles_title": "Administrative accesses",
+    "roles_title": "Roles",
     "resource_type_text": "Single right",
     "delete_confirm_message": "Are you sure you want to delete this?"
   },
   "delete_user": {
     "user_trigger_button": "Delete user",
     "user_heading": "Are you sure you want to delete this user?",
-    "user_message": "<p>{{to_name}} will lose all authorizations they have for {{from_name}}. <i>This action cannot be undone.</i></p>",
-    "user_limited_deletion_heading": "Do you want to delete permissions not linked to the Central Coordinating Register for Legal Entities?",
-    "user_limited_deletion_message": "<p>{{to_name}} has authorizations through their roles in the Central Coordinating Register for Legal Entities and therefore cannot be completely deleted from {{from_name}} in Altinn. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p><p>Do you want to delete all permissions not linked to the Central Coordinating Register for Legal Entities? <i>This action cannot be undone.</i></p>",
+    "user_message": "<p>{{to_name}} will lose all authorizations for {{from_name}} and will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
+    "user_limited_deletion_heading": "The user has access that cannot be deleted",
+    "user_limited_deletion_message": "<p>{{to_name}} has authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be completely deleted from {{from_name}}.</p><p>Do you want to delete all access that is not linked to such roles? <i>This action cannot be undone.</i></p>",
     "user_deletion_not_allowed_heading": "The user cannot be deleted",
-    "user_deletion_not_allowed_message": "<p>{{to_name}} only has authorizations through their roles in the Central Coordinating Register for Legal Entities and therefore cannot be deleted from {{from_name}} in Altinn. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p>",
+    "user_deletion_not_allowed_message": "<p>{{to_name}} only has authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be deleted here.</p>",
     "yes_button": "Yes, delete",
-    "yourself_trigger_button": "Delete all permissions",
-    "yourself_heading": "Are you sure you want to delete all your permissions?",
+    "yourself_trigger_button": "Delete all access",
+    "yourself_heading": "Are you sure you want to delete all your access?",
     "yourself_message": "<p>You will lose all authorizations you have for {{from_name}} and will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
-    "yourself_limited_deletion_heading": "Do you want to delete permissions not linked to the Central Coordinating Register for Legal Entities?",
-    "yourself_limited_deletion_message": "<p>Your rights cannot be completely removed from {{from_name}} in Altinn as they are linked to roles in the Central Coordinating Register for Legal Entities. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p><p>Do you want to delete all permissions not linked to the Central Coordinating Register for Legal Entities? <i>This action cannot be undone.</i></p>",
-    "yourself_deletion_not_allowed_heading": "Your permissions cannot be deleted",
-    "yourself_deletion_not_allowed_message": "<p>You only have authorizations through your roles in the Central Coordinating Register for Legal Entities and therefore cannot be deleted from {{from_name}} in Altinn. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p>",
-    "reportee_trigger_button": "Delete all permissions",
-    "reportee_heading": "Are you sure you want to delete all their permissions?",
-    "reportee_message": "<p>{{to_name}} will lose all their authorizations for {{from_name}}. They will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
-    "reportee_limited_deletion_heading": "Do you want to delete permissions not linked to the Central Coordinating Register for Legal Entities?",
-    "reportee_limited_deletion_message": "<p>{{to_name}}'s rights cannot be completely removed from {{from_name}} in Altinn as they are linked to roles in the Central Coordinating Register for Legal Entities. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p><p>Do you want to delete all permissions not linked to the Central Coordinating Register for Legal Entities? <i>This action cannot be undone.</i></p>",
-    "reportee_deletion_not_allowed_heading": "Their permissions cannot be deleted",
-    "reportee_deletion_not_allowed_message": "<p>{{to_name}} only has authorizations through their roles in the Central Coordinating Register for Legal Entities and therefore cannot be deleted from {{from_name}} in Altinn. If you wish to change this, you can do so via the <erLink>Coordinated Register Notification</erLink>.</p>"
+    "yourself_limited_deletion_heading": "You have access that cannot be deleted",
+    "yourself_limited_deletion_message": "<p>You have authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be completely deleted from {{from_name}}. </p><p>Do you want to delete all access that is not linked to such roles? <i>This action cannot be undone.</i></p>",
+    "yourself_deletion_not_allowed_heading": "Your access cannot be deleted",
+    "yourself_deletion_not_allowed_message": "<p>You only have authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be deleted here.</p>",
+    "reportee_trigger_button": "Delete all access",
+    "reportee_heading": "Are you sure you want to delete all their access?",
+    "reportee_message": "<p>{{to_name}} will lose all authorizations for {{from_name}} and will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
+    "reportee_limited_deletion_heading": "They have access that cannot be deleted",
+    "reportee_limited_deletion_message": "<p>{{to_name}} has authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be completely deleted from {{from_name}}.</p><p>Do you want to delete all access that is not linked to such roles? <i>This action cannot be undone.</i></p>",
+    "reportee_deletion_not_allowed_heading": "Their access cannot be deleted",
+    "reportee_deletion_not_allowed_message": "<p>{{to_name}} only has authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be deleted here.</p>"
   },
   "reportee_rights_page": {
-    "page_title": "Our access to other companies - Altinn",
+    "page_title": "Powers of attorney from others - Altinn",
     "heading_subtitle": "Power of attorney given to {{name}}"
   },
   "delegation_modal": {
@@ -441,7 +465,9 @@
     "trigger_button_large": "Give power of attorney to new user",
     "add_person_button": "Add person",
     "add_org_button": "Add organization",
-    "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future."
+    "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future.",
+    "ssn_format_error": "Social security number must consist of 11 digits",
+    "last_name_format_error": "Please enter a valid last name"
   },
   "info_page": {
     "page_title": "About new Altinn",
@@ -484,96 +510,21 @@
     "invalid_phone": "Invalid phone number"
   },
   "info_modal": {
-    "title": "Try the new access management solution",
-    "info": "We are renovating access management and you get a sneak peek at an early version! It is still under development, so some functions are missing. We still hope you will try.",
-    "close_button": "Try new access management",
-    "back_button": "Go back to today's Altinn",
-    "info_link": "Why are we updating Altinn?",
+    "back_button": "Go to the old solution",
+    "help_pages": "Help pages",
     "info_button": "Information about the new solution"
   },
   "a2Alerts": {
     "launchAlertHeading": "We are renewing Altinn",
     "launchAlertContent": "This user may also have authorizations from the previous Altinn.",
-    "launchAlertLinkText": "View authorizations from the previous Altinn"
-  },
-  "user_role": {
-    "SREVA": "Auditor registered in the registry of auditors",
-    "FGRP": "Part of enterprise group with",
-    "HFOR": "Main enterprise",
-    "HLSE": "Hospital Trust",
-    "INNH": "Owner",
-    "KDAT": "Has as subsidiary in the group",
-    "KGRL": "Has as the basis for the group",
-    "KIRK": "Part of Norw. Church Council",
-    "KMOR": "Has as chief of the group",
-    "KOMP": "General partner",
-    "KONT": "Representative",
-    "KTRF": "Part of joint office",
-    "LEDE": "Chairman of the board",
-    "MEDL": "Board member",
-    "NEST": "Deputy chairman of the board",
-    "OBS": "Observer",
-    "OPMV": "Specially sectioned VAT entity",
-    "ORGL": "Org. section in public sector",
-    "POFE": "Power of procuration jointly",
-    "POHV": "Authorised to sign separately",
-    "PROK": "Power of procuration",
-    "READ": "Auditor address",
-    "AAFY": "Has as registration entity",
-    "AVKL": "Forestår avvikling",
-    "BEDR": "Has as the registration entity",
-    "DTPR": "Partner with shared liability",
-    "DTSO": "Partner with full liability",
-    "EIKM": "The proprietor municipality",
-    "FEMV": "Inngår i felles- registrering",
-    "RFAD": "Accountant address",
-    "SAM": "Co-owners",
-    "SIFE": "Signature jointly",
-    "SIGN": "Signature",
-    "SIHV": "Signature separately",
-    "UTBG": "Er frivillig registrert utleiebygg for",
-    "VARA": "Deputy board member(s)",
-    "VIFE": "Er virksomhet drevet i fellesskap av",
-    "MVAU": "Utfyller MVA-oppgaver",
-    "MVAG": "Signerer MVA-oppgaver",
-    "KOMK": "Representative of municipality",
-    "KNUF": "Representative of NUF",
-    "KEMN": "Representative of adm. entity - public sector",
-    "FFØR": "General manager/manager",
-    "BEST": "Managing shipowner",
-    "REGN": "Accountant",
-    "REPR": "Norwegian representative",
-    "REVI": "Auditor",
-    "DAGL": "General manager",
-    "BOBE": "Official receiver",
-    "STFT": "Founder",
-    "KENK": "Personal bankruptcy concerns",
-    "KDEB": "Debitor/company in liquidation",
-    "HVAR": "Deputy member of the party's executive body",
-    "HNST": "Deputy leader of the party's executive body",
-    "HMDL": "Board member of the party's executive body",
-    "HLED": "Leader of the party's executive body",
-    "ESGR": "Electronic signing right",
-    "FUSJ": "Skal fusjoneres med",
-    "FISJ": "Skal fisjoneres med",
-    "ETDL": "Allocator of electronic signing rights",
-    "ADOS": "Administrative unit - public sector",
-    "innehaver": "Owner",
-    "styreleder": "Chairman of the board",
-    "varamedlem": "Deputy board member(s)",
-    "regnskapsforer": "Accountant",
-    "daglig-leder": "General manager",
-    "deltaker-delt-ansvar": "Partner with shared liability",
-    "deltaker-fullt-ansvar": "Partner with full liability",
-    "komplementar": "General partner",
-    "bestyrende-reder": "Managing shipowner",
-    "bostyrer": "Official receiver",
-    "revisor": "Auditor",
-    "hovedadministrator": "Main administrator"
+    "launchAlertLinkText": "View authorizations from the previous Altinn",
+    "oldRolesContent": "These Altinn roles may include services that already exist in the new Altinn solution. The services are being moved into the new access packages. The user has the same roles in the old solution, but there they include more and different services.",
+    "oldRolesLinkText": "Go to the old solution",
+    "legacyRoleContent": "This role will soon be removed. Use access packages instead."
   },
   "systemuser_overviewpage": {
-    "page_title": "System access - Altinn",
-    "banner_title": "System access",
+    "page_title": "System accesses - Altinn",
+    "banner_title": "System accesses",
     "sub_title_text": "By creating a system access, you give a vendor system access to solve tasks in Altinn on behalf of your company.",
     "systemusers_load_error": "Failed to load system accesses",
     "agent_delegation_systemusers_load_error": "Failed to load system accesses for customers",
@@ -644,8 +595,9 @@
     "reject": "Reject",
     "org_nr": "{{systemName}} is delivered by {{vendorName}}, org.nr. {{vendorOrg}}",
     "loading_creation_request": "Loading request",
-    "load_creation_request_error_notfound": "System access request for chosen party does not exist. Are you certain that you have chosen correct party?",
-    "load_creation_request_error": "Could not load system access request",
+    "load_request_error_notfound": "System access request for chosen party does not exist. Are you certain that you have chosen correct party?",
+    "load_request_error": "Could not load system access request",
+    "load_request_missing_permissions": "You have insufficient permissions to approve this system access request",
     "load_user_info_error": "Could not load user info",
     "load_creation_request_no_id": "id must be included as query-parameter in url",
     "accept_error": "Could not approve system access",
@@ -672,8 +624,6 @@
     "accept": "Approve updated system access",
     "reject": "Reject",
     "loading_change_request": "Loading update system access request",
-    "load_change_request_error": "Could not load update system access request",
-    "load_change_request_error_notfound": "Update system access request for chosen party does not exist. Are you certain that you have chosen correct party?",
     "accept_error": "Could not approve updated system access request",
     "reject_error": "Could not reject updated system access request",
     "accept_loading": "Approving updated system access...",
@@ -728,7 +678,7 @@
   },
   "page_not_available": {
     "title": "This page is not available",
-    "text": "The new access management pages are not quite ready for private individuals yet. If you meant to view the accesses for an organization, please switch to it in the menu."
+    "text": "The new access management pages are not quite ready for private individuals yet. If you meant to view the accesses for an organization, please switch representation."
   },
   "consent_request": {
     "page_title": "Approve consent/power of attorney - Altinn",
@@ -751,6 +701,7 @@
     "page_title": "Consent and power of attorney agreements - Altinn",
     "heading": "Consents and powers of attorney",
     "sub_heading": "Active agreements",
+    "pending_agreements": "Pending agreements",
     "loading_consents": "Loading active agreements...",
     "load_consents_error": "Could not load active agreements",
     "no_active_consents_permission": "You do not have permission to view the active agreements for this organization.",
@@ -758,6 +709,8 @@
     "no_active_consents": "No active agreements",
     "see_consent": "View/revoke consent",
     "see_poa": "View/revoke power of attorney",
+    "see_pending_consent": "View/give consent",
+    "see_pending_poa": "View/give power of attorney",
     "loading_consent": "Loading agreements",
     "load_consent_error": "Could not load consent/power of attorney",
     "revoke_consent": "Revoke consent",
@@ -812,11 +765,11 @@
     "consent_is_not_accepted": "Consent/power of attorney is not approved"
   },
   "poa_overview_page": {
-    "page_title": "Power of attorney overview",
-    "heading": "Power of attorney overview for {{name}}"
+    "page_title": "Powers of attorney overview - Altinn",
+    "heading": "Powers of attorney overview for {{name}}"
   },
   "package_poa_details_page": {
-    "page_title": "Power of attorney details",
+    "page_title": "Power of attorney details - Altinn",
     "users_tab_title": "Users",
     "services_tab_title": "Services",
     "load_error": "Oops! Something went wrong.",
@@ -832,9 +785,25 @@
       "no_resources": "This package includes no services"
     }
   },
-  "package_resource_list": {
+  "resource_list": {
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
     "no_resources": "No resources available."
+  },
+  "landing_page": {
+    "alert_heading": "Welcome to the new solution",
+    "alert_body": "These are the new pages for access management in Altinn. We don't have everything in place yet, so you may need to use the old solution for some tasks. Thank you for your patience!",
+    "alert_link": "Read all about the new solution",
+    "shortcut_links_heading": "Where do you want to go?",
+    "other_links_heading": "Other",
+    "users_item_description_org": "Overview of people and organisations that have been granted access in your organisation",
+    "users_item_description_person": "Overview of people and organisations that have been granted access for you",
+    "reportees_item_description_org": "Overview of everyone who has granted your organisation any access",
+    "reportees_item_description_person": "Overview of everyone who has granted you any access",
+    "poa_item_description": "Overview of access packages and individual services",
+    "consent_item_description": "Overview of active and pending consent and power of attorney agreements",
+    "systemuser_item_description": "Overview of system accesses",
+    "new_requests_single": "{{reportee}} has {{requestCount}} new request",
+    "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"
   }
 }

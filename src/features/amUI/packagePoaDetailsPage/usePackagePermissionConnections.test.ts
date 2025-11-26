@@ -19,18 +19,22 @@ const org = (id: string, name: string) => ({
   name,
   type: 'Organisasjon',
   variant: 'AS',
+  organizationIdentifier: '123456789',
+  partyId: 'pid-' + id,
+  dateOfBirth: '1990-01-01',
   parent: null,
   children: null,
-  keyValues: null,
 });
 const person = (id: string, name: string) => ({
   id,
   name,
   type: 'Person',
   variant: 'Person',
+  organizationIdentifier: '123456789',
+  partyId: 'pid-' + id,
+  dateOfBirth: '1990-01-01',
   parent: null,
   children: null,
-  keyValues: null,
 });
 const role = (id: string, code: string) => ({ id, code, children: null });
 

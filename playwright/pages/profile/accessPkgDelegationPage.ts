@@ -6,7 +6,6 @@ export class DelegationPage {
 
   readonly accessRightsLink: Locator;
   readonly newBrukerflateLink: Locator;
-  readonly tryNewAccessBtn: Locator;
   readonly addUserBtn: Locator;
   readonly addOrgBtn: Locator;
   readonly grantAccessBtn: Locator;
@@ -17,7 +16,6 @@ export class DelegationPage {
   readonly backBtn: Locator;
   readonly ourAcessButton: Locator;
   readonly rightsAccessLink: Locator;
-  readonly rightsNewBrukerFlateLink: Locator;
   readonly menubtn: Locator;
   readonly logoutBtn: Locator;
 
@@ -25,7 +23,6 @@ export class DelegationPage {
     this.page = page;
     this.accessRightsLink = page.getByRole('link', { name: 'Andre med rettigheter til' });
     this.newBrukerflateLink = page.getByRole('link', { name: 'Klikk her' });
-    this.tryNewAccessBtn = page.getByRole('button', { name: 'Prøv ny tilgangsstyring' });
     this.addUserBtn = page.getByRole('button', { name: 'Legg til Ny bruker' });
     this.addOrgBtn = page.getByRole('button', { name: 'Legg til virksomhet' });
     this.grantAccessBtn = page.getByRole('button', { name: 'Gi fullmakt' });
@@ -36,9 +33,8 @@ export class DelegationPage {
     this.backBtn = page.getByRole('button', { name: 'Tilbake' });
     this.ourAcessButton = page.getByRole('button', { name: 'Våre tilganger hos andre' });
     this.rightsAccessLink = page.getByRole('link', {
-      name: 'Rettigheter virksomheten har hos andre',
+      name: 'Våre tilganger hos andre',
     });
-    this.rightsNewBrukerFlateLink = page.getByRole('link', { name: 'Klikk her for å se disse' });
     this.menubtn = page.getByRole('button', { name: 'Meny' });
     this.logoutBtn = page.getByRole('button', { name: 'Logg ut' });
   }
@@ -49,21 +45,24 @@ export class DelegationPage {
 
     await expect(this.newBrukerflateLink).toBeVisible();
     await this.newBrukerflateLink.click();
-
-    await expect(this.tryNewAccessBtn).toBeVisible();
-    await this.tryNewAccessBtn.click();
   }
 
   async addUser() {
-    const addUserBtn = this.page.getByRole('button', { name: 'Legg til Ny bruker' });
+    const addUserBtn = this.page.getByRole('button', { name: 'Ny bruker' });
     await expect(addUserBtn).toBeVisible();
     await addUserBtn.click();
   }
 
   async addOrganization(orgNumber: string) {
-    const orgInput = this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
-    await orgInput.fill(orgNumber);
+    const orgTab = this.page.getByRole('tab', { name: 'Virksomhet' });
+    await expect(orgTab).toBeVisible();
+    await orgTab.click();
+    const orgField = this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
+    await expect(orgField).toBeVisible();
+    await orgField.fill(orgNumber);
+
     const addOrgBtn = this.page.getByRole('button', { name: 'Legg til virksomhet' });
+    await expect(addOrgBtn).toBeVisible();
     await addOrgBtn.click();
 
     const openModalButton = this.page.getByRole('button', { name: 'Gi fullmakt' });
@@ -72,7 +71,9 @@ export class DelegationPage {
   }
 
   async grantAccessPkgNameDirect(areaName: string, packageName: string, orgName: string) {
-    const searchBox = this.page.getByRole('searchbox', { name: 'Søk etter tilgangspakker' });
+    const searchBox = this.page
+      .getByRole('searchbox', { name: 'Søk etter tilgangspakker' })
+      .first();
     await expect(searchBox).toBeVisible();
     await searchBox.fill(areaName);
 
@@ -88,7 +89,9 @@ export class DelegationPage {
   }
 
   async grantAccessPkgName(areaName: string, packageName: string) {
-    const searchBox = this.page.getByRole('searchbox', { name: 'Søk etter tilgangspakker' });
+    const searchBox = this.page
+      .getByRole('searchbox', { name: 'Søk etter tilgangspakker' })
+      .first();
     await expect(searchBox).toBeVisible();
     await searchBox.fill(areaName);
 
@@ -179,12 +182,14 @@ export class DelegationPage {
   }
   async newAccessRights(orgName: string) {
     await this.rightsAccessLink.click();
-    await this.rightsNewBrukerFlateLink.click();
 
     //Click on Orgnization
-    const orgLink = this.page.getByRole('link', { name: orgName }).first();
-    await expect(orgLink).toBeVisible();
-    await orgLink.click();
+    const orgbButton = this.page.getByRole('button', { name: orgName }).first();
+    await expect(orgbButton).toBeVisible();
+    await orgbButton.click();
+
+    // TODO FIX THIS
+    await this.page.getByText('UUtgått Fleksibel Tiger ASOrg.nr. 312973367').click();
   }
 
   async chooseOrg(chooseorgName: string) {

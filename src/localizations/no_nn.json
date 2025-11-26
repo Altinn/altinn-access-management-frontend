@@ -86,7 +86,9 @@
     "org_no": "Org.nr",
     "part_of": "del av",
     "date_of_birth": "Født",
-    "save_changes": "Lagre endringar"
+    "save_changes": "Lagre endringar",
+    "none": "ingen",
+    "digdir": "Digitaliseringsdirektoratet"
   },
   "beta_banner": {
     "info": "Du ser no på ein betaversjon av dei nye sidene for tilgangsstyring i Altinn.",
@@ -95,7 +97,7 @@
   "header": {
     "access_management": "Tilgangsstyring",
     "inbox": "Innboks",
-    "profile": "Min profil",
+    "profile": "Din profil",
     "menu-label": "Meny",
     "change-label": "Bytt",
     "search-label": "Finn brukar",
@@ -112,11 +114,16 @@
     "locale_title": "Vel språk",
     "logged_in_as_name": "Logga inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
-    "leave_beta": "Tilbake til dagens Altinn",
-    "shortcuts": "Snarvegar"
+    "leave_beta": "Til gammel løsning",
+    "shortcuts": "Snarvegar",
+    "all_forms": "Alle skjema og tenester",
+    "start_business": "Starte og drive bedrift",
+    "help": "Treng du hjelp?"
   },
   "footer": {
+    "digdir_address": "Postboks 1382 Vika, 0114 Oslo. Org.nr. 991 825 827",
     "about_altinn": "Om Altinn",
+    "help": "Hjelp og kontakt",
     "service_messages": "Driftsmeldingar",
     "privacy_policy": "Personvern",
     "accessibility": "Tilgjengeligheit"
@@ -124,11 +131,12 @@
   "sidebar": {
     "access_management": "Tilgangsstyring",
     "users": "Brukarar",
-    "reportees": "Våre tilgangar hos andre",
-    "systemaccess": "API- og systemtilgangar",
+    "reportees": "Fullmakter hos andre",
+    "systemaccess": "Systemtilgangar",
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
-    "settings": "Innstillingar"
+    "settings": "Innstillingar",
+    "requests": "Forespørsler"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -142,7 +150,10 @@
     "unknown_error_description": "Prøv å laste inn sida på nytt.",
     "if_persistent_contact_service": "Dersom feilen held fram kan du finne svar på Altinn sine hjelpesider, eller kontakte brukarservice på telefon 75 00 60 00.",
     "user_connection_error": "Ojsann, her var det visst ingenting. ",
-    "acting_party_data_error": "Det har oppstått ein teknisk feil. Prøv igjen seinare. Dersom problemet held fram, kontakt Altinn brukarservice på telefon 75 00 60 00."
+    "acting_party_data_error": "Det har oppstått ein teknisk feil. Prøv igjen seinare. Dersom problemet held fram, kontakt Altinn brukarservice på telefon 75 00 60 00.",
+    "unsynced_connection_title": "Synkroniseringsglipp - vår feil, ikkje din",
+    "unsynced_connection": "Vi har ein synkroniseringsfeil mellom ny og gammal løysing. Dette er noko vi jobbar med, men for nå kan du dessverre ikkje sjå tilgangane dine her. Vi beklagar ulempa dette medfører!",
+    "unsynced_connection_link": "Klikk her for å sjå tilgangane dine i gammal løysing"
   },
   "profile": {
     "received": "Mottatt",
@@ -274,7 +285,10 @@
     "give_new_single_right": "Gi fullmakt til ny teneste",
     "current_services_title": "Fullmakt til {{count}} tenester",
     "delete_singleRight_success_message": "Slettet tilgang til ",
-    "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
+    "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
+    "wip_title": "Fullmakter til enkelttenester",
+    "wip_message": "Denne sida jobbar vi framleis med! For å administrere enkelttenester, må du gå til den gamle løysinga.",
+    "wip_link_text": "Gå til gammal løsning"
   },
   "access_packages": {
     "helptext_button": "Kva er tilgangspakkar?",
@@ -302,20 +316,28 @@
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Ver venleg å kontakte Altinn brukarteneste om problemet held fram.",
       "delegation_check_error_message_plural": "En teknisk feil sperrer deg fra å gi fullmakt til ein eller fleire tilgangspakkar. Ver venleg å kontakte Altinn brukarteneste om problemet held fram."
+    },
+    "access_status": {
+      "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
+      "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
+      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast."
     }
   },
   "role": {
     "provider_status": "Denne rolla er henta frå ",
-    "current_roles_title": "{{count}} administratortilgangar",
-    "roles_description": "Her finn du fullmakter for å administrere tilgangar for verksemda. Det er ikke knytta ressursar eller teenester til desse tilgangene.",
-    "role_delegation_success": "{{name}} har no fått fullmakt til {{role}}.",
-    "role_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{role}}.",
-    "role_deletion_success": "Fullmakta til {{role}} er fjerna frå {{name}}.",
-    "role_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{role}} frå {{name}}.",
-    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom rolla si <b>{{role_name}}</b>. Den kan derfor ikkje slettast.",
-    "activeRolesLabel": "Liste over roller som er tildelt brukaren",
-    "availableRolesLabel": "Liste over roller som kan tildelast brukaren",
-    "cant_delegate_generic": "Du kan ikkje delegere denne rolla"
+    "current_roles_title": "{{count}} roller",
+    "fetch_error_heading": "Kan ikkje vise roller for denne brukaren",
+    "fetch_error_description": "Vi klarer ikkje å hente rollene akkurat no.",
+    "no_roles_message": "Denne brukaren har ingen roller.",
+    "resources_title": "Gjev tilgang til {{count}} tenester",
+    "resources_empty": "Denne rolla har ingen tenester.",
+    "resources_disclaimer": "Denne rolla kan framleis gi tilgang til tenester som berre finst i den gamle løysinga.",
+    "resources_disclaimer_link": "Sjå lista i den gamle løysinga",
+    "access_status": {
+      "via_role": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}.",
+      "via_connection": "{{user_name}} har tilgang til dette gjennom {{via_name}}.",
+      "via_keyrole": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}."
+    }
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -327,7 +349,9 @@
     "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønskjer du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?",
-    "indirect_connections": "Brukarar utan fullmakt"
+    "indirect_connections": "Brukarar utan fullmakt",
+    "no_access_to_users_header": "Denne sida jobbar vi framleis med!",
+    "no_access_to_users_message": "Kun tilgangsstyrarar kan se full liste av brukarar med fullmakter i denne verksemda. <br /> Liste over nøkkelpersonar (styret) vil bli tilgjengeleg for brukarar utan tilgangsstyring etterhvert."
   },
   "advanced_user_search": {
     "add_user_button": "Ny brukar",
@@ -339,7 +363,7 @@
     "indirect_connections": "Brukarar utan fullmakt"
   },
   "reportees_page": {
-    "page_title": "Våre tilganger hos andre - Altinn",
+    "page_title": "Fullmakter hos andre - Altinn",
     "main_page_heading": "Fullmakter {{name}} har hos andre",
     "not_admin_alert": "Du har ikkje tilgang til å sjå denne sida hos {{name}}. Bytt side eller vel ein anna aktør."
   },
@@ -347,36 +371,36 @@
     "page_title": "Brukertilgang - Altinn",
     "access_packages_title": "Tilgangspakkar",
     "single_rights_title": "Tenester",
-    "roles_title": "Administratortilgangar",
+    "roles_title": "Roller",
     "resource_type_text": "Enkeltteneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
   "delete_user": {
     "user_trigger_button": "Slett brukar",
     "user_heading": "Er du sikker på at du vil slette denne brukaren?",
-    "user_message": "<p>{{to_name}} vil miste alle fullmakter dei har for {{from_name}}. <i>Denne handlinga kan ikkje angrast.</i></p>",
-    "user_limited_deletion_heading": "Ønsker du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
-    "user_limited_deletion_message": "<p>{{to_name}} har fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast fullstendig frå {{from_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p>Ønsker du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angrast.</i></p>",
+    "user_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikkje lenger ha tilgang til deres innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angrast.</i></p>",
+    "user_limited_deletion_heading": "Brukaren har tilgangar som ikkje kan slettast",
+    "user_limited_deletion_message": "<p>{{to_name}} har fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast fullstendig frå {{from_name}}.</p><p>Ønsker du å slette alle tilgangar som ikkje er knytt til slike roller? <i>Denne handlinga kan ikkje angrast.</i></p>",
     "user_deletion_not_allowed_heading": "Brukaren kan ikkje slettast",
-    "user_deletion_not_allowed_message": "<p>{{to_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{from_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p>",
+    "user_deletion_not_allowed_message": "<p>{{to_name}} har kun fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast her.</p>",
     "yes_button": "Ja, slett",
     "yourself_trigger_button": "Slett alle tilgangar",
-    "yourself_heading": "Er du sikker på at du vil slette alle tilgangane dine?",
-    "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikkje lenger ha tilgang til deira innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angrast.</i></p>",
-    "yourself_limited_deletion_heading": "Ønsker du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
-    "yourself_limited_deletion_message": "<p>Rettane dine kan ikkje fjernast heilt frå {{from_name}} i Altinn ettersom dei er knytte til roller i Einingsregisteret. Dersom du ønsker å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p>Ønsker du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angrast.</i></p>",
-    "yourself_deletion_not_allowed_heading": "Tilgangane dine kan ikkje slettast",
-    "yourself_deletion_not_allowed_message": "<p>Du har berre fullmakter gjennom dine roller i Einingsregisteret og kan difor ikkje slettast frå {{from_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p>",
+    "yourself_heading": "Er du sikker på at du vil slette alle dine tilgangar?",
+    "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikkje lenger ha tilgang til deres innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angrast.</i></p>",
+    "yourself_limited_deletion_heading": "Du har tilgangar som ikkje kan slettast",
+    "yourself_limited_deletion_message": "<p>Du har fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast fullstendig frå {{from_name}}. </p><p>Ønsker du å slette alle tilgangar som ikkje er knytt til slike roller? <i>Denne handlinga kan ikkje angrast.</i></p>",
+    "yourself_deletion_not_allowed_heading": "Dine tilgangar kan ikkje slettast",
+    "yourself_deletion_not_allowed_message": "<p>Du har kun fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast her.</p>",
     "reportee_trigger_button": "Slett alle tilgangar",
-    "reportee_heading": "Er du sikker på at du vil slette alle deira tilgangar?",
-    "reportee_message": "<p>{{to_name}} vil miste alle sine fullmakter for {{from_name}}. Dei vil ikkje lenger ha tilgang til deira innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angrast.</i></p>",
-    "reportee_limited_deletion_heading": "Ønskjer du å slette tilgangar som ikkje er knytte til Einingsregisteret?",
-    "reportee_limited_deletion_message": "<p>{{to_name}} sine rettar kan ikkje fjernast heilt frå {{from_name}} i Altinn ettersom dei er knytte til roller i Einingsregisteret. Dersom du ønsker å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p><p>Ønskjer du å slette alle tilgangar som ikkje er knytte til Einingsregisteret? <i>Denne handlinga kan ikkje angrast.</i></p>",
-    "reportee_deletion_not_allowed_heading": "Tilgangane deira kan ikkje slettast",
-    "reportee_deletion_not_allowed_message": "<p>{{to_name}} har berre fullmakter gjennom sine roller i Einingsregisteret og kan difor ikkje slettast frå {{from_name}} i Altinn. Dersom du ønsker å endre dette, kan du gjere det via <erLink>Samordna registermelding</erLink>.</p>"
+    "reportee_heading": "Er du sikker på at du vil slette alle deiras tilgangar?",
+    "reportee_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikkje lenger ha tilgang til deres innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angrast.</i></p>",
+    "reportee_limited_deletion_heading": "De har tilgangar som ikkje kan slettast",
+    "reportee_limited_deletion_message": "<p>{{to_name}} har fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast fullstendig frå {{from_name}}.</p><p>Ønsker du å slette alle tilgangar som ikkje er knytt til slike roller? <i>Denne handlinga kan ikkje angrast.</i></p>",
+    "reportee_deletion_not_allowed_heading": "Deiras tilgangar kan ikkje slettast",
+    "reportee_deletion_not_allowed_message": "<p>{{to_name}} har kun fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast her.</p>"
   },
   "reportee_rights_page": {
-    "page_title": "Våre tilgangar hos andre - Altinn",
+    "page_title": "Fullmakter hos andre - Altinn",
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
@@ -437,7 +461,9 @@
     "trigger_button_large": "Gi fullmakt til ny brukar",
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til verksemd",
-    "limited_preview_message": "Du kan diverre ikkje legge til personar heilt endå. Dette vil komme seinare."
+    "limited_preview_message": "Du kan diverre ikkje legge til personar heilt endå. Dette vil komme seinare.",
+    "ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
+    "last_name_format_error": "Vennligst fyll inn eit gyldig etternavn"
   },
   "info_page": {
     "page_title": "Om nye Altinn",
@@ -480,95 +506,20 @@
     "invalid_phone": "Ugyldig telefonnummer"
   },
   "info_modal": {
-    "title": "Prøv den nye tilgangsstyringsløysinga",
-    "info": "Vi pussar opp tilgangsstyring og du får kikke på ein tidleg versjon! Sidene er framleis under utvikling, så nokre funksjonar manglar. Vi håpar likevel du vil prøve.",
-    "close_button": "Prøv ny tilgangsstyring",
-    "back_button": "Gå tilbake til dagens Altinn",
-    "info_link": "Kvifor oppdaterer vi Altinn?",
+    "back_button": "Gå til gammel løsning",
+    "help_pages": "Hjelpesider",
     "info_button": "Informasjon om ny løysing"
   },
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyar Altinn",
     "launchAlertContent": "Denne brukaren kan også ha fullmakter frå tidlegare Altinn.",
-    "launchAlertLinkText": "Sjå fullmakter frå tidlegare Altinn"
-  },
-  "user_role": {
-    "SREVA": "Revisor registrert i revisorregisteret",
-    "FGRP": "Inngår i føretaksgruppe med",
-    "HFOR": "Hovudforetak",
-    "HLSE": "Helseforetak",
-    "INNH": "Innehavar",
-    "KDAT": "Har som dotter i konsern",
-    "KGRL": "Har som grunnlag for konsern",
-    "KIRK": "Inngår i kyrkjeleg fellesråd",
-    "KMOR": "Har som mor i konsern",
-    "KOMP": "Komplementar",
-    "KONT": "Kontaktperson",
-    "KTRF": "Inngår i kontorfellesskap",
-    "LEDE": "Styreleiar",
-    "MEDL": "Styremedlem",
-    "NEST": "Nestleiar",
-    "OBS": "Observatør",
-    "OPMV": "Er særskilt oppdelt eining til",
-    "ORGL": "Organisasjonsledd i offentleg sektor",
-    "POFE": "Prokura i fellesskap",
-    "POHV": "Prokura kvar for seg",
-    "PROK": "Prokura",
-    "READ": "Er revisoradresse for",
-    "AAFY": "Har som registreringseining",
-    "AVKL": "Forestår avvikling",
-    "BEDR": "Har som registreringseininga",
-    "DTPR": "Deltakar med delt ansvar",
-    "DTSO": "Deltakar med fullt ansvar",
-    "EIKM": "Eigarkommune",
-    "FEMV": "Inngår i felles- registrering",
-    "RFAD": "Er regnskapsføreradresse for",
-    "SAM": "Sameigarar",
-    "SIFE": "Signatur i fellesskap",
-    "SIGN": "Signatur",
-    "SIHV": "Signatur kvar for seg",
-    "UTBG": "Er frivillig registrert utleigebygg for",
-    "VARA": "Varamedlem",
-    "VIFE": "Er verksemd driven i fellesskap av",
-    "MVAU": "Utfyller MVA-oppgaver",
-    "MVAG": "Signerer MVA-oppgaver",
-    "KOMK": "Kontaktperson i kommune",
-    "KNUF": "Kontaktperson for NUF",
-    "KEMN": "Kontaktperson i Adm. eining - offentleg sektor",
-    "FFØR": "Forretningsførar",
-    "BEST": "Styrande reiar",
-    "REGN": "Rekneskapsførar",
-    "REPR": "Norsk repr. for utanl. eining",
-    "REVI": "Revisor",
-    "DAGL": "Dagleg leiar",
-    "BOBE": "Bustyrar",
-    "STFT": "Stiftar",
-    "KENK": "Den personlege konkursen gjeld",
-    "KDEB": "Konkursdebitor",
-    "HVAR": "Varamedlem i partiets utøvande organ",
-    "HNST": "Nestleiar i partiets utøvande organ",
-    "HMDL": "Styremedlem i partiets utøvande organ",
-    "HLED": "Leiar i partiets utøvande organ",
-    "ESGR": "Elektronisk signeringsrett",
-    "FUSJ": "Skal fusjonerast med",
-    "FISJ": "Skal fisjonerast med",
-    "ETDL": "Tildeler av elektronisk signeringsrett",
-    "ADOS": "Administrativ eining - offentleg sektor",
-    "innehaver": "Innehavar",
-    "styreleder": "Styreleiar",
-    "varamedlem": "Varamedlem",
-    "regnskapsforer": "Rekneskapsførar",
-    "daglig-leder": "Dagleg leiar",
-    "deltaker-delt-ansvar": "Deltakar med delt ansvar",
-    "deltaker-fullt-ansvar": "Deltakar med fullt ansvar",
-    "komplementar": "Komplementar",
-    "bestyrende-reder": "Styrande reiar",
-    "bostyrer": "Bustyrar",
-    "revisor": "Revisor",
-    "hovedadministrator": "Hovudadministrator"
+    "launchAlertLinkText": "Sjå fullmakter frå tidlegare Altinn",
+    "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som allereie finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane. Brukaren har dei same rollene i den gamle løysinga, men der inneheld dei fleire og andre tenester.",
+    "oldRolesLinkText": "Gå til gammal løysing",
+    "legacyRoleContent": "Denne rolla vil snart fjernast. Bruk heller tilgangspakkar."
   },
   "systemuser_overviewpage": {
-    "page_title": "Systemtilgang - Altinn",
+    "page_title": "Systemtilgangar - Altinn",
     "banner_title": "Systemtilgangar",
     "sub_title_text": "Ved å opprette ein systemtilgang gir du eit fagsystem tilgang til å løyse oppgåver i Altinn på vegne av bedrifta di.",
     "systemusers_load_error": "Kunne ikkje laste systemtilgangar",
@@ -640,8 +591,9 @@
     "reject": "Avvis",
     "org_nr": "{{systemName}} blir levert av {{vendorName}}, org.nr. {{vendorOrg}}",
     "loading_creation_request": "Lastar førespurnad",
-    "load_creation_request_error_notfound": "Systemtilgang-førespurnad for valgt aktør finst ikkje. Er du sikker på at du har valt rett aktør?",
-    "load_creation_request_error": "Kunne ikkje laste systemtilgang-førespurnad",
+    "load_request_error_notfound": "Systemtilgang-førespurnad for valgt aktør finst ikkje. Er du sikker på at du har valt rett aktør?",
+    "load_request_error": "Kunne ikkje laste systemtilgang-førespurnad",
+    "load_request_missing_permissions": "Du har ikkje tilstrekkelige tilganger til å godkjenne denne systemtilgang-forespørselen",
     "load_user_info_error": "Kunne ikkje laste brukarinfo",
     "load_creation_request_no_id": "id må vere med som query-parameter i url",
     "accept_error": "Kunne ikkje godkjenne systemtilgang",
@@ -668,8 +620,6 @@
     "accept": "Godkjenn oppdatert systemtilgang",
     "reject": "Avvis",
     "loading_change_request": "Lastar oppdaterings-førespurnad",
-    "load_change_request_error": "Kunne ikkje laste oppdaterings-førespurnad",
-    "load_change_request_error_notfound": "Oppdaterings-førespurnad for valt aktør finst ikkje. Er du sikker på at du har valt rett aktør?",
     "accept_error": "Kunne ikkje godkjenne oppdatert systemtilgang",
     "reject_error": "Kunne ikkje avvise oppdatert systemtilgang",
     "accept_loading": "Godkjenner oppdatert systemtilgang...",
@@ -724,7 +674,7 @@
   },
   "page_not_available": {
     "title": "Sida er ikkje tilgjengeleg",
-    "text": "Dei nye tilgangsstyringssidene er ikkje klare for privatpersonar heilt enno. Dersom du vil sjå tilgangane til ei verksemd, kan du bytte til denne i menyen."
+    "text": "Dei nye tilgangsstyringssidene er ikkje klare for privatpersonar heilt enno. Dersom du vil sjå tilgangane til ei verksemd, kan du bytte til denne."
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
@@ -747,6 +697,7 @@
     "page_title": "Samtykke- og fullmaktsavtaler - Altinn",
     "heading": "Samtykke og fullmakter",
     "sub_heading": "Aktive avtaler",
+    "pending_agreements": "Ventende avtalar",
     "loading_consents": "Laster aktive avtaler...",
     "load_consents_error": "Kunne ikkje laste aktive avtaler",
     "no_active_consents_permission": "Du har ikkje rettar til å sjå aktive avtaler for denne organisasjonen.",
@@ -754,6 +705,8 @@
     "no_active_consents": "Ingen aktive avtaler",
     "see_consent": "Sjå/trekk samtykke",
     "see_poa": "Sjå/trekk fullmakt",
+    "see_pending_consent": "Sjå/gi samtykke",
+    "see_pending_poa": "Sjå/gi fullmakt",
     "loading_consent": "Lastar avtale",
     "load_consent_error": "Kunne ikkje laste samtykke/fullmakt",
     "revoke_consent": "Trekk samtykke",
@@ -808,11 +761,11 @@
     "consent_is_not_accepted": "Samtykket/fullmakta er ikkje godkjend"
   },
   "poa_overview_page": {
-    "page_title": "Fullmaktsoversikt",
+    "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}"
   },
   "package_poa_details_page": {
-    "page_title": "Fullmaktsdetaljar",
+    "page_title": "Fullmaktsdetaljar - Altinn",
     "users_tab_title": "Brukarar",
     "services_tab_title": "Tenester",
     "load_error": "Oi! Noko gjekk gale.",
@@ -828,9 +781,25 @@
       "no_resources": "Denne pakken inkluderer ingen tenester"
     }
   },
-  "package_resource_list": {
+  "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
     "no_resources": "Ingen tenester tilgjengelege."
+  },
+  "landing_page": {
+    "alert_heading": "Velkomen til ny løysing",
+    "alert_body": "Dette er dei nye sidene for tilgangsstyring i Altinn. Me har dessverre ikkje alt på plass enno, så nokre ting må du kanskje gjera i den gamle løysinga. Takk for tolmodet!",
+    "alert_link": "Les alt om den nye løysinga",
+    "shortcut_links_heading": "Kvar vil du gå?",
+    "other_links_heading": "Anna",
+    "users_item_description_org": "Oversikt over personar og verksemder som har fått tilgangar hjå dykk",
+    "users_item_description_person": "Oversikt over personar og verksemder som har fått tilgangar hos deg",
+    "reportees_item_description_org": "Oversikt over alle som har gjeve dykk nokre tilgangar",
+    "reportees_item_description_person": "Oversikt over alle som har gjeve deg nokre tilgangar",
+    "poa_item_description": "Oversikt over tilgangspakkar og enkeltjenester",
+    "consent_item_description": "Oversikt over aktive og ventande samtykke- og fullmaktsavtalar",
+    "systemuser_item_description": "Oversikt over systemtilgangar",
+    "new_requests_single": "{{reportee}} har {{requestCount}} ny førespurnad",
+    "new_requests_plural": "{{reportee}} har {{requestCount}} nye førespurnader"
   }
 }

@@ -17,7 +17,10 @@ import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
 
+import classes from './PageLayoutWrapper.module.css';
+
 interface PageLayoutWrapperProps {
+  openAccountMenu?: boolean;
   children?: React.ReactNode;
 }
 
@@ -25,7 +28,10 @@ const getAccountType = (type: string): 'company' | 'person' => {
   return type === 'Organization' ? 'company' : 'person';
 };
 
-export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
+export const PageLayoutWrapper = ({
+  openAccountMenu = false,
+  children,
+}: PageLayoutWrapperProps): React.ReactNode => {
   const useNewHeaderFlag = useNewHeader();
   const { data: reportee } = useGetReporteeQuery();
   const { pathname } = useLocation();
@@ -36,7 +42,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   const { menuGroups, isLoadingMenu } = useGlobalMenu();
 
-  const { header, languageCode } = useHeader();
+  const { header, languageCode } = useHeader({ openAccountMenu });
   const footer = useFooter();
   const sidebarItems = SidebarItems(
     false,
@@ -65,7 +71,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
         footer={footer}
       >
-        {children}
+        <div className={classes.content}>{children}</div>
         <InfoModal />
       </Layout>
       <Snackbar />

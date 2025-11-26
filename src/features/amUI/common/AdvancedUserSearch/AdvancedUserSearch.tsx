@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { DsSearch, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { PlusIcon } from '@navikt/aksel-icons';
 
 import { ExtendedUser, User } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType, type Connection } from '@/rtk/features/connectionApi';
@@ -20,10 +19,15 @@ export interface AdvancedUserSearchProps {
   onRevoke?: (user: User) => void;
   isLoading?: boolean;
   isActionLoading?: boolean;
+  canDelegate?: boolean;
 }
 
-const filterSystemUsers = (items?: Connection[]) =>
-  items?.filter((item) => item.party.type !== ConnectionUserType.Systemuser);
+const filterAvailableUserTypes = (items?: Connection[]) =>
+  items?.filter(
+    (item) =>
+      item.party.type === ConnectionUserType.Person ||
+      item.party.type === ConnectionUserType.Organization,
+  ) || [];
 
 export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   connections,
@@ -32,14 +36,15 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   onRevoke,
   isLoading = false,
   isActionLoading = false,
+  canDelegate = true,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
 
-  const filteredConnections = useMemo(() => filterSystemUsers(connections), [connections]);
+  const filteredConnections = useMemo(() => filterAvailableUserTypes(connections), [connections]);
 
   const filteredIndirectConnections = useMemo(
-    () => filterSystemUsers(indirectConnections),
+    () => filterAvailableUserTypes(indirectConnections),
     [indirectConnections],
   );
 
@@ -57,7 +62,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const indirectHasResults = (indirectUsers?.length ?? 0) > 0;
 
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
-  const showIndirectList = isQuery && indirectHasResults;
+  const showIndirectList = isQuery && indirectHasResults && canDelegate;
   const showEmptyState = !directHasResults && !indirectHasResults;
 
   const handleAddNewUser = async (user: User) => {
@@ -88,9 +93,11 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           />
           {query && <DsSearch.Clear onClick={() => setQuery('')} />}
         </DsSearch>
-        <div className={classes.buttonRow}>
-          <NewUserButton onComplete={handleAddNewUser} />
-        </div>
+        {canDelegate && (
+          <div className={classes.buttonRow}>
+            <NewUserButton onComplete={handleAddNewUser} />
+          </div>
+        )}
       </div>
 
       <div className={classes.results}>
@@ -121,7 +128,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
               hasNextPage={!!hasNextIndirectPage}
               goNextPage={goNextIndirectPage}
               availableAction={DelegationAction.DELEGATE}
-              onDelegate={onDelegate}
+              onDelegate={canDelegate ? onDelegate : undefined}
               isActionLoading={isActionLoading}
             />
           </>
@@ -130,14 +137,19 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
         {showEmptyState && (
           <div className={classes.emptyState}>
             <DsParagraph data-size='md'>
-              {t('advanced_user_search.user_no_search_result_with_add_suggestion', {
-                searchTerm: trimmedQuery,
-              })}
+              {t(
+                canDelegate
+                  ? 'advanced_user_search.user_no_search_result_with_add_suggestion'
+                  : 'advanced_user_search.user_no_search_result',
+                { searchTerm: trimmedQuery },
+              )}
             </DsParagraph>
-            <NewUserButton
-              isLarge
-              onComplete={handleAddNewUser}
-            />
+            {canDelegate && (
+              <NewUserButton
+                isLarge
+                onComplete={handleAddNewUser}
+              />
+            )}
           </div>
         )}
       </div>

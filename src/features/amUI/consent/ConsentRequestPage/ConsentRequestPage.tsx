@@ -2,13 +2,14 @@ import type { ReactElement } from 'react';
 import React, { useMemo } from 'react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import {
   DsAlert,
   DsButton,
   DsHeading,
   DsParagraph,
   DsSpinner,
+  formatDisplayName,
   Layout,
   RootProvider,
 } from '@altinn/altinn-components';
@@ -21,6 +22,7 @@ import {
 } from '@/rtk/features/consentApi';
 import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 
 import type { ConsentLanguage, ConsentRequest, ProblemDetail } from '../types';
 import { getLanguage, isAccepted, isExpired, isRevoked, replaceStaticMetadata } from '../utils';
@@ -29,9 +31,11 @@ import { ConsentRights } from '../components/ConsentRights/ConsentRights';
 import classes from './ConsentRequestPage.module.css';
 import { ConsentRequestError } from './ConsentRequestError';
 import { ConsentStatus } from '../components/ConsentStatus/ConsentStatus';
+import { ConsentPath } from '@/routes/paths';
 
 export const ConsentRequestPage = () => {
   const { t, i18n } = useTranslation();
+  const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
   useDocumentTitle(t('consent_request.page_title'));
   const [searchParams] = useSearchParams();
@@ -67,6 +71,7 @@ export const ConsentRequestPage = () => {
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
+    updateSelectedLanguage(newLocale);
   };
 
   const account: { name: string; type: 'person' | 'company' } = {
@@ -90,7 +95,7 @@ export const ConsentRequestPage = () => {
             onSelect: onChangeLocale,
           },
           logo: {
-            href: getAltinnStartPageUrl(),
+            href: getAltinnStartPageUrl(i18n.language),
             title: 'Altinn',
           },
           currentAccount: {
@@ -114,7 +119,7 @@ export const ConsentRequestPage = () => {
               groups: {
                 'current-user': {
                   title: t('header.logged_in_as_name', {
-                    name: userData?.name || '',
+                    name: formatDisplayName({ fullName: userData?.name || '', type: 'person' }),
                   }),
                 },
               },
@@ -153,6 +158,9 @@ interface ConsentRequestContentProps {
 }
 const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps): ReactElement => {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const skipLogout = searchParams.get('skiplogout');
+  const navigate = useNavigate();
 
   const [
     postApproveConsent,
@@ -181,7 +189,7 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
     if (!isActionButtonDisabled && request) {
       try {
         await postApproveConsent({ requestId: request.id, language }).unwrap();
-        logoutAndRedirect();
+        redirectAfterAction();
       } catch {
         // Error is already tracked via approveConsentError
       }
@@ -192,17 +200,21 @@ const ConsentRequestContent = ({ request, language }: ConsentRequestContentProps
     if (!isActionButtonDisabled && request) {
       try {
         await postRejectConsent({ requestId: request.id }).unwrap();
-        logoutAndRedirect();
+        redirectAfterAction();
       } catch {
         // Error is already tracked via rejectConsentError
       }
     }
   };
 
-  const logoutAndRedirect = (): void => {
-    window.location.assign(
-      `${import.meta.env.BASE_URL}accessmanagement/api/v1/consent/request/${request?.id}/logout`,
-    );
+  const redirectAfterAction = (): void => {
+    if (skipLogout) {
+      navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`);
+    } else {
+      window.location.assign(
+        `${import.meta.env.BASE_URL}accessmanagement/api/v1/consent/request/${request?.id}/logout`,
+      );
+    }
   };
 
   return (

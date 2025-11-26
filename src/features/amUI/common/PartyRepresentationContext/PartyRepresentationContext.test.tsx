@@ -115,7 +115,7 @@ const mockConnection: Connection = {
     name: 'Connected Party',
     type: 'Organization',
     children: null,
-    keyValues: { OrganizationIdentifier: '123456789' },
+    organizationIdentifier: '123456789',
     roles: [],
   },
   roles: [],
@@ -409,7 +409,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
         name: mockReporteeParty.name,
         type: 'Organization',
         children: null,
-        keyValues: { OrganizationIdentifier: '987654321' },
+        organizationIdentifier: '987654321',
         roles: [],
       },
       roles: [],
@@ -604,12 +604,11 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     await waitFor(
       () => {
         // When there's an invalid connection, the alert is shown
-        // fromParty and toParty are undefined (shown as "none")
-        // but actingParty is still set (reportee in this case)
-        expect(screen.getByTestId('from-party')).toHaveTextContent('none');
-        expect(screen.getByTestId('to-party')).toHaveTextContent('none');
-        expect(screen.getByTestId('acting-party')).toHaveTextContent('Reportee Organization');
-        expect(screen.getByTestId('is-loading')).toHaveTextContent('false');
+        // instead of the content
+        expect(screen.queryByTestId('from-party')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('to-party')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('acting-party')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('is-loading')).not.toBeInTheDocument();
       },
       { timeout: 2000 },
     );

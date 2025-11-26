@@ -96,6 +96,7 @@ export const AreaItemContent = ({
                 controls={
                   !isSm &&
                   pkg.deletableStatus !== DeletableStatus.NotDeletable &&
+                  !pkg.inherited &&
                   revokeActionControl(pkg)
                 }
                 badge={

@@ -69,6 +69,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(expectedResources, actualResources, AssertionUtil.AssertEqual);
+
+            // Ensure resources without an owner name still surface with their organisational metadata intact.
+            ServiceResourceFE expectedMissingOwnerResource = expectedResources.Find(r => r.Identifier == "appid-520");
+            Assert.NotNull(expectedMissingOwnerResource);
+
+            ServiceResourceFE actualMissingOwnerResource = actualResources.Find(r => r.Identifier == expectedMissingOwnerResource.Identifier);
+            Assert.NotNull(actualMissingOwnerResource);
+            Assert.Null(actualMissingOwnerResource.ResourceOwnerName);
+            Assert.Equal(expectedMissingOwnerResource.ResourceOwnerOrgNumber, actualMissingOwnerResource.ResourceOwnerOrgNumber);
+            Assert.Equal(expectedMissingOwnerResource.ResourceOwnerOrgcode, actualMissingOwnerResource.ResourceOwnerOrgcode);
         }
 
         /// <summary>
@@ -300,10 +310,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             List<ResourceOwnerFE> actualResult = await response.Content.ReadFromJsonAsync<List<ResourceOwnerFE>>();
-            for (int i = 0; i < expectedResult.Count; i++)
-            {
-                Assert.Equal(expectedResult[i], actualResult[i]);
-            }
+            Assert.NotNull(actualResult);
+            Assert.Equal(expectedResult.Count, actualResult.Count);
+            AssertionUtil.AssertEqual(expectedResult, actualResult);
+            Assert.All(actualResult, owner => Assert.False(string.IsNullOrEmpty(owner.OrganisationCode)));
         }
 
         /// <summary>
@@ -330,6 +340,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 new ResourceOwnerFE("PÅFUNNSETATEN", "985399077"),
                 new ResourceOwnerFE("Skatteetaten", "974761076"),
                 new ResourceOwnerFE("Testdepartementet", "974760746"),
+                new ResourceOwnerFE(null, "123456789")
+                {
+                    OrganisationCode = "zzzdemo",
+                },
             };
 
             // Act

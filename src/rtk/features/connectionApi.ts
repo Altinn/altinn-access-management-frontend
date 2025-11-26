@@ -2,8 +2,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import type { Party } from './lookupApi';
 import { Entity } from '@/dataObjects/dtos/Common';
+import type { Party } from './lookupApi';
 import { ExtendedUser } from './userInfoApi';
 
 export enum ConnectionUserType {
@@ -12,15 +12,10 @@ export enum ConnectionUserType {
   Systemuser = 'Systembruker',
 }
 
-interface UserKeyValues {
-  OrganizationIdentifier?: string;
-  PartyId?: string;
-  DateOfBirth?: string;
-}
-
 export interface RoleInfo {
   id: string;
   code?: string;
+  displayName?: string;
   viaParty?: Entity;
 }
 
@@ -36,6 +31,11 @@ export interface UserInfo {
   party: Party;
 }
 
+export type PersonInput = {
+  personIdentifier: string;
+  lastName: string;
+};
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/connection`;
 
 export const connectionApi = createApi({
@@ -50,10 +50,14 @@ export const connectionApi = createApi({
   }),
   tagTypes: ['Connections'],
   endpoints: (builder) => ({
-    addRightHolder: builder.mutation<void, string>({
-      query: (partyUuidToBeAdded) => ({
+    addRightHolder: builder.mutation<
+      string,
+      { partyUuidToBeAdded?: string; personInput?: PersonInput }
+    >({
+      query: ({ partyUuidToBeAdded, personInput }) => ({
         url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder?rightholderPartyUuid=${partyUuidToBeAdded}`,
         method: 'POST',
+        body: personInput ? JSON.stringify(personInput) : undefined,
       }),
       transformErrorResponse: (response: {
         status: string | number;

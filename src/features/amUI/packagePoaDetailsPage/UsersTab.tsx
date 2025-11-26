@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +11,8 @@ import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPa
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
+import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 const mapUserToParty = (user: User): Party => ({
   partyId: 0,
@@ -22,11 +26,19 @@ interface UsersTabProps {
   fromParty?: { partyUuid?: string; name?: string } | null;
   isLoading: boolean;
   isFetching: boolean;
+  canDelegate?: boolean;
 }
 
-export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: UsersTabProps) => {
+export const UsersTab = ({
+  accessPackage,
+  fromParty,
+  isLoading,
+  isFetching,
+  canDelegate = true,
+}: UsersTabProps) => {
   const { t } = useTranslation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
+  const { mapRoles, loadingRoleMetadata } = useRoleMapper();
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -43,6 +55,18 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
   );
 
   const connections = usePackagePermissionConnections(accessPackage);
+  const connectionsWithRoles = useMemo(
+    () =>
+      connections.map((connection) => ({
+        ...connection,
+        roles: mapRoles(connection.roles),
+        connections: connection.connections?.map((child) => ({
+          ...child,
+          roles: mapRoles(child.roles),
+        })),
+      })),
+    [connections, mapRoles],
+  );
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
     queueSnackbar(
@@ -84,21 +108,21 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     }
   };
 
-  if (connections.length === 0 && !isLoading && !loadingIndirectConnections) {
-    return (
-      <DsParagraph
-        data-size='md'
-        className={pageClasses.tabDescription}
-      >
-        {t('package_poa_details_page.users_tab.no_users', {
-          fromparty: fromParty?.name,
-        })}
-      </DsParagraph>
-    );
-  }
-
   return (
     <>
+      {connections.length === 0 && !isLoading && !loadingIndirectConnections && (
+        <div className={pageClasses.noUsersAlert}>
+          <ExclamationmarkTriangleFillIcon className={pageClasses.noUsersAlertIcon} />
+          <DsParagraph
+            data-size='sm'
+            className={pageClasses.tabDescription}
+          >
+            {t('package_poa_details_page.users_tab.no_users', {
+              fromparty: fromParty?.name,
+            })}
+          </DsParagraph>
+        </div>
+      )}
       {!isLoading && (
         <DsParagraph
           data-size='md'
@@ -109,19 +133,22 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
           })}
         </DsParagraph>
       )}
+
       <AdvancedUserSearch
-        connections={connections}
+        connections={connectionsWithRoles}
         indirectConnections={indirectConnections}
-        isLoading={isLoading || loadingIndirectConnections}
-        onDelegate={handleOnDelegate}
+        isLoading={isLoading || loadingIndirectConnections || loadingRoleMetadata}
+        onDelegate={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         isActionLoading={
           isActionLoading ||
           isLoading ||
           loadingIndirectConnections ||
           isFetching ||
-          isFetchingIndirectConnections
+          isFetchingIndirectConnections ||
+          loadingRoleMetadata
         }
+        canDelegate={canDelegate}
       />
     </>
   );

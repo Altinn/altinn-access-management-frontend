@@ -11,15 +11,6 @@ export const useRerouteIfNotConfetti = () => {
   }, [navigate]);
 };
 
-export const useRerouteIfLimitedPreview = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (window.featureFlags?.displayLimitedPreviewLaunch === true) {
-      navigate('/not-found', { replace: true });
-    }
-  }, [navigate]);
-};
-
 export const useRerouteIfSettingsPageDisabled = () => {
   const navigate = useNavigate();
   useEffect(() => {
@@ -33,6 +24,15 @@ export const useRerouteIfPoaOverviewPageDisabled = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (window.featureFlags?.displayPoaOverviewPage === false) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [navigate]);
+};
+
+export const useRerouteIfRequestPageDisabled = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (window.featureFlags?.displayRequestsPage === false) {
       navigate('/not-found', { replace: true });
     }
   }, [navigate]);
@@ -66,4 +66,16 @@ export const useNewActorList = () => {
 
 export const useNewHeader = () => {
   return window.featureFlags?.useNewHeader === true;
+};
+
+export const displayPrivDelegation = () => {
+  return window.featureFlags?.displayPrivDelegation === true;
+};
+
+export const displayAccessRequest = () => {
+  return window.featureFlags?.displayAccessRequest === true;
+};
+
+export const displaySubConnections = () => {
+  return window.featureFlags?.displaySubConnections === true;
 };

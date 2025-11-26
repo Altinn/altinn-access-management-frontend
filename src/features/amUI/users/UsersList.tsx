@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import { DsHeading, DsSearch } from '@altinn/altinn-components';
+import { DsHeading, DsParagraph, DsSearch } from '@altinn/altinn-components';
 
 import type { User } from '@/rtk/features/userInfoApi';
-import { useGetIsAdminQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   type Connection,
   ConnectionUserType,
@@ -19,27 +19,13 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
-
-const extractFromList = (
-  list: Connection[],
-  uuidToRemove: string,
-  onRemove?: (removed: Connection) => void,
-): Connection[] => {
-  const remainingList = list.reduce<Connection[]>((acc, item) => {
-    if (item.party.id === uuidToRemove) {
-      onRemove?.(item);
-    } else if (item.party.type !== ConnectionUserType.Systemuser) {
-      acc.push(item);
-    }
-    return acc;
-  }, []);
-  return remainingList;
-};
+import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
+import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
 
 export const UsersList = () => {
   const { t } = useTranslation();
   const { fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
-  const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
+  const shouldDisplayPrivDelegation = displayPrivDelegation();
   const navigate = useNavigate();
   const { data: isAdmin } = useGetIsAdminQuery();
 
@@ -61,16 +47,45 @@ export const UsersList = () => {
 
   const [searchString, setSearchString] = useState<string>('');
 
-  const userList = useMemo(() => {
+  const { mapRoles, loadingRoleMetadata } = useRoleMapper();
+
+  const connectionsWithRoles = useMemo(() => {
     if (!rightHolders) {
-      return null;
+      return undefined;
     }
-    const remainingAfterExtraction = extractFromList(
-      rightHolders || [],
-      displayLimitedPreviewLaunch ? 'nobody' : (currentUser?.party.id ?? 'loading'),
-    );
-    return remainingAfterExtraction;
-  }, [rightHolders, currentUser]);
+
+    const removeUuid = shouldDisplayPrivDelegation ? currentUser?.party.id : undefined;
+
+    const mapConnection = (connection: Connection): Connection => {
+      return {
+        ...connection,
+        roles: mapRoles(connection.roles),
+        connections: connection.connections?.map(mapConnection) ?? [],
+      };
+    };
+
+    return rightHolders.reduce<Connection[]>((acc, connection) => {
+      if (
+        connection.party.id === removeUuid ||
+        connection.party.type === ConnectionUserType.Systemuser
+      ) {
+        return acc;
+      }
+      acc.push(mapConnection(connection));
+      return acc;
+    }, []);
+  }, [rightHolders, mapRoles, shouldDisplayPrivDelegation, currentUser?.party.id]);
+
+  const currentUserWithRoles = useMemo(() => {
+    if (!currentUser) {
+      return undefined;
+    }
+
+    return {
+      ...currentUser,
+      roles: mapRoles(currentUser.roles),
+    };
+  }, [currentUser, mapRoles]);
 
   const onSearch = useCallback(
     debounce((newSearchString: string) => {
@@ -81,11 +96,11 @@ export const UsersList = () => {
 
   return (
     <div className={classes.usersList}>
-      {!displayLimitedPreviewLaunch && (
+      {shouldDisplayPrivDelegation && (
         <>
           <CurrentUserPageHeader
-            currentUser={currentUser}
-            loading={!!(currentUserLoading || loadingPartyRepresentation)}
+            currentUser={currentUserWithRoles}
+            loading={!!(currentUserLoading || loadingPartyRepresentation || loadingRoleMetadata)}
             as={(props) =>
               currentUser ? (
                 <Link
@@ -97,40 +112,67 @@ export const UsersList = () => {
               )
             }
           />
-          <DsHeading
-            level={2}
-            data-size='sm'
-            id='user_list_heading_id'
-            className={classes.usersListHeading}
-          >
-            {t('users_page.user_list_heading')}
-          </DsHeading>
+          {isAdmin && (
+            <DsHeading
+              level={2}
+              data-size='sm'
+              id='user_list_heading_id'
+              className={classes.usersListHeading}
+            >
+              {t('users_page.user_list_heading')}
+            </DsHeading>
+          )}
         </>
       )}
-      <div className={classes.searchAndAddUser}>
-        <DsSearch className={classes.searchBar}>
-          <DsSearch.Input
-            aria-label={t('users_page.user_search_placeholder')}
-            placeholder={t('users_page.user_search_placeholder')}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
+      {isAdmin ? (
+        <>
+          <div className={classes.searchAndAddUser}>
+            <DsSearch className={classes.searchBar}>
+              <DsSearch.Input
+                aria-label={t('users_page.user_search_placeholder')}
+                placeholder={t('users_page.user_search_placeholder')}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  onSearch(event.target.value)
+                }
+              />
+              <DsSearch.Clear
+                onClick={() => {
+                  setSearchString('');
+                }}
+              />
+            </DsSearch>
+            {isAdmin && <NewUserButton onComplete={handleNewUser} />}
+          </div>
+          <UserList
+            connections={connectionsWithRoles}
+            searchString={searchString}
+            isLoading={
+              !connectionsWithRoles ||
+              loadingRightHolders ||
+              loadingPartyRepresentation ||
+              loadingRoleMetadata
+            }
+            listItemTitleAs='h2'
+            interactive={isAdmin}
+            onAddNewUser={handleNewUser}
           />
-          <DsSearch.Clear
-            onClick={() => {
-              setSearchString('');
-            }}
-          />
-        </DsSearch>
-        {isAdmin && <NewUserButton onComplete={handleNewUser} />}
-      </div>
-      {isAdmin && (
-        <UserList
-          connections={userList ?? undefined}
-          searchString={searchString}
-          isLoading={!userList || loadingRightHolders || loadingPartyRepresentation}
-          listItemTitleAs='h2'
-          interactive={isAdmin}
-          onAddNewUser={handleNewUser}
-        />
+        </>
+      ) : (
+        <div className={classes.noAccessContainer}>
+          <DsHeading
+            data-size='xs'
+            level={4}
+          >
+            {t('users_page.no_access_to_users_header')}
+          </DsHeading>
+
+          <DsParagraph>
+            <Trans
+              i18nKey='users_page.no_access_to_users_message'
+              components={{ br: <br /> }}
+            />
+          </DsParagraph>
+        </div>
       )}
     </div>
   );

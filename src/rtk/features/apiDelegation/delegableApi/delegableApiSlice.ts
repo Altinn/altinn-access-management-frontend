@@ -11,6 +11,7 @@ export interface DelegableApi {
   identifier: string;
   apiName: string;
   orgName: string;
+  orgCode?: string;
   rightDescription: string;
   description?: string;
   scopes: string[];

@@ -11,6 +11,7 @@ export class LoginPage {
   readonly profileLink: Locator;
   readonly velgAktoerHeading: Locator;
   readonly autentiserButton: Locator;
+  browserAlreadyUsed: boolean = false;
 
   constructor(page: Page) {
     this.page = page;
@@ -23,21 +24,10 @@ export class LoginPage {
     this.autentiserButton = this.page.getByRole('button', { name: 'Autentiser' });
   }
 
-  async loginWithUser(testUser: string) {
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      try {
-        await this.navigateToLoginPage();
-        await this.authenticateUser(testUser);
-        await this.verifyLoginSuccess();
-        return;
-      } catch (error) {
-        console.log(`Login attempt ${attempt} failed with error: ${error}`);
-        if (attempt === 3) {
-          throw new Error('Login failed after 3 retries');
-        }
-        await this.page.waitForTimeout(2000 * attempt);
-      }
-    }
+  //Requires you to be on the front page of "Info Portal"
+  async LoginToAccessManagement(pid: string) {
+    await this.clickLoginToAccessManagement();
+    await this.authenticateUser(pid);
   }
 
   async loginNotChoosingActor(pid: string) {
@@ -58,35 +48,28 @@ export class LoginPage {
     await this.selectActor(this.searchBox, orgnummer);
   }
 
-  async chooseReportee(reportee: string) {
-    const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
-    await chosenReportee.click();
+  async chooseReportee(currentReportee: string, targetReportee: string = '') {
+    let selectReporteeButton = this.page.getByRole('button', { name: currentReportee });
 
-    await this.page.goto(`${env('BASE_URL')}/ui/profile`);
-    await this.profileLink.click();
+    // Search for target reportee in the searchbox
+    const searchBox = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
+    await searchBox.fill(targetReportee);
 
-    const profileHeader = this.page.getByRole('heading', {
-      name: new RegExp(
-        `Profil for (.*${reportee}.*|.*${reportee.split(' ').reverse().join(' ')}.*)`,
-        'i',
-      ),
-    });
-    await expect(profileHeader).toBeVisible();
+    const markedResult = this.page
+      .locator('mark')
+      .filter({ hasText: new RegExp(targetReportee, 'i') });
+    await markedResult.first().click();
   }
 
-  private async navigateToLoginPage() {
-    await this.page.goto(env('BASE_URL'));
-    await this.loginButton.click();
+  private async clickLoginToAccessManagement() {
+    await this.page.getByRole('button', { name: 'Meny' }).click();
+    await this.page.getByRole('group').getByRole('link', { name: 'Tilgangsstyring' }).click();
     await this.testIdLink.click();
   }
 
   private async authenticateUser(pid: string) {
     await this.pidInput.fill(pid);
     await this.autentiserButton.click();
-  }
-
-  private async verifyLoginSuccess() {
-    await expect(this.velgAktoerHeading).toBeVisible();
   }
 
   async selectActor(input: Locator, orgnummer: string) {
