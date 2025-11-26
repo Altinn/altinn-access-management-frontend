@@ -31,7 +31,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     permissions,
   });
 
-  const { getRoleMetadata } = useRoleMetadata();
+  const { getRoleMetadata, isError: roleMetadataIsError } = useRoleMetadata();
 
   const roleForModal = selectedRoleId
     ? (getRoleMetadata(selectedRoleId) ??
@@ -48,7 +48,9 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
   const onModalClose = () => {
     setSelectedRoleId(null);
   };
-
+  if (!userRoles || roleMetadataIsError) {
+    return null;
+  }
   return (
     <>
       <div

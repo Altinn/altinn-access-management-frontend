@@ -14,7 +14,7 @@ import { UserRoles } from '../UserRoles/UserRoles';
 
 import classes from './UserPageHeader.module.css';
 import { UserPageHeaderSkeleton } from './UserPageHeaderSkeleton';
-import { isSubUnit, isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 interface UserPageHeaderProps {
   direction: 'to' | 'from';

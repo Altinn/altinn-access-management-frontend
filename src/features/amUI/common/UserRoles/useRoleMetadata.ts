@@ -10,7 +10,12 @@ type RoleMetadataMap = Record<string, Role | undefined>;
  */
 export const useRoleMetadata = () => {
   const { i18n } = useTranslation();
-  const { data: allRoles, isFetching, refetch } = useGetAllRolesQuery({ language: i18n.language });
+  const {
+    data: allRoles,
+    isFetching,
+    isError,
+    refetch,
+  } = useGetAllRolesQuery({ language: i18n.language });
 
   // Refetch when language changes to ensure fresh translated data
   useEffect(() => {
@@ -30,7 +35,7 @@ export const useRoleMetadata = () => {
 
   const getRoleMetadata = useCallback(
     (roleId?: string | null) => {
-      if (!roleId) {
+      if (!roleId || !roleMetadataMap) {
         return undefined;
       }
       return roleMetadataMap[roleId];
@@ -38,5 +43,5 @@ export const useRoleMetadata = () => {
     [roleMetadataMap],
   );
 
-  return { getRoleMetadata, isLoading: isFetching };
+  return { getRoleMetadata, isLoading: isFetching, isError };
 };

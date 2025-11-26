@@ -26,12 +26,14 @@ import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { UserRightsPageSkeleton } from './UserRightsPageSkeleton';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { formatDisplayName } from '@altinn/altinn-components';
+import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { data: isHovedadmin, isLoading: isHovedadminLoading } = useGetIsHovedadminQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
+  const { isError: roleMetadataIsError } = useRoleMetadata();
 
   const actingPartyUuid =
     !isHovedadminLoading && !isHovedadmin && !currentUserIsLoading && currentUser?.partyUuid === id
@@ -41,6 +43,7 @@ export const UserRightsPage = () => {
   useRerouteIfNotConfetti();
 
   const { displayRoles } = window.featureFlags;
+  const shouldDisplayRoles = displayRoles && !roleMetadataIsError;
 
   return (
     <PageWrapper>
@@ -61,12 +64,12 @@ export const UserRightsPage = () => {
             >
               <UserPageHeader
                 direction='to'
-                displayRoles={displayRoles}
+                displayRoles={shouldDisplayRoles}
               />
               <RightsTabs
                 packagesPanel={<AccessPackageSection />}
                 singleRightsPanel={<SingleRightsSection />}
-                roleAssignmentsPanel={<RoleSection />}
+                roleAssignmentsPanel={shouldDisplayRoles ? <RoleSection /> : null}
               />
             </PageContainer>
           </DelegationModalProvider>

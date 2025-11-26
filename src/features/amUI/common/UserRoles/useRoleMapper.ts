@@ -7,11 +7,15 @@ import { useRoleMetadata } from './useRoleMetadata';
 const ECC_PROVIDER_CODE = 'sys-ccr';
 
 export const useRoleMapper = () => {
-  const { getRoleMetadata, isLoading: loadingRoleMetadata } = useRoleMetadata();
+  const {
+    getRoleMetadata,
+    isLoading: loadingRoleMetadata,
+    isError: roleMetadataIsError,
+  } = useRoleMetadata();
 
   const mapRoles = useCallback(
     (roles?: Connection['roles']) => {
-      if (loadingRoleMetadata) {
+      if (loadingRoleMetadata || roleMetadataIsError) {
         return [];
       }
 
@@ -31,8 +35,8 @@ export const useRoleMapper = () => {
           .filter((role): role is NonNullable<typeof role> => role !== null) ?? []
       );
     },
-    [getRoleMetadata, loadingRoleMetadata],
+    [getRoleMetadata, loadingRoleMetadata, roleMetadataIsError],
   );
 
-  return { mapRoles, loadingRoleMetadata };
+  return { mapRoles, loadingRoleMetadata, roleMetadataIsError };
 };
