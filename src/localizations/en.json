@@ -794,7 +794,7 @@
     "alert_heading": "You are now in the new access management solution",
     "alert_heading_priv": "This is the new access management solution for private individuals",
     "alert_body": "Today's Altinn roles have been replaced by access packages with services. \n\nPlease note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
-    "alert_body_priv": "These are the new pages for access management in Altinn. Unfortunately we don't have everything in place yet, so you may need to do some things in the old solution. \n\nIf you want to go to access management for your organization, you can switch to your desired organization in the account selector at the top.",
+    "alert_body_priv": "Unfortunately we don't have everything in place yet, so you may need to do some things in the old solution. \n\nIf you want to go to access management for your organization, you can switch to your desired organization in the account selector at the top.",
     "alert_link": "Go to the old solution",
     "shortcut_links_heading": "Where do you want to go?",
     "other_links_heading": "Other",
