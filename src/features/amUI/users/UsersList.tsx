@@ -20,22 +20,7 @@ import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
-
-const extractFromList = (
-  list: Connection[],
-  uuidToRemove: string,
-  onRemove?: (removed: Connection) => void,
-): Connection[] => {
-  const remainingList = list.reduce<Connection[]>((acc, item) => {
-    if (item.party.id === uuidToRemove) {
-      onRemove?.(item);
-    } else if (item.party.type !== ConnectionUserType.Systemuser) {
-      acc.push(item);
-    }
-    return acc;
-  }, []);
-  return remainingList;
-};
+import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
 
 export const UsersList = () => {
   const { t } = useTranslation();
@@ -62,16 +47,45 @@ export const UsersList = () => {
 
   const [searchString, setSearchString] = useState<string>('');
 
-  const userList = useMemo(() => {
+  const { mapRoles, loadingRoleMetadata } = useRoleMapper();
+
+  const connectionsWithRoles = useMemo(() => {
     if (!rightHolders) {
-      return null;
+      return undefined;
     }
-    const remainingAfterExtraction = extractFromList(
-      rightHolders || [],
-      shouldDisplayPrivDelegation ? (currentUser?.party.id ?? 'loading') : 'nobody',
-    );
-    return remainingAfterExtraction;
-  }, [rightHolders, currentUser]);
+
+    const removeUuid = shouldDisplayPrivDelegation ? currentUser?.party.id : undefined;
+
+    const mapConnection = (connection: Connection): Connection => {
+      return {
+        ...connection,
+        roles: mapRoles(connection.roles),
+        connections: connection.connections?.map(mapConnection) ?? [],
+      };
+    };
+
+    return rightHolders.reduce<Connection[]>((acc, connection) => {
+      if (
+        connection.party.id === removeUuid ||
+        connection.party.type === ConnectionUserType.Systemuser
+      ) {
+        return acc;
+      }
+      acc.push(mapConnection(connection));
+      return acc;
+    }, []);
+  }, [rightHolders, mapRoles, shouldDisplayPrivDelegation, currentUser?.party.id]);
+
+  const currentUserWithRoles = useMemo(() => {
+    if (!currentUser) {
+      return undefined;
+    }
+
+    return {
+      ...currentUser,
+      roles: mapRoles(currentUser.roles),
+    };
+  }, [currentUser, mapRoles]);
 
   const onSearch = useCallback(
     debounce((newSearchString: string) => {
@@ -85,8 +99,8 @@ export const UsersList = () => {
       {shouldDisplayPrivDelegation && (
         <>
           <CurrentUserPageHeader
-            currentUser={currentUser}
-            loading={!!(currentUserLoading || loadingPartyRepresentation)}
+            currentUser={currentUserWithRoles}
+            loading={!!(currentUserLoading || loadingPartyRepresentation || loadingRoleMetadata)}
             as={(props) =>
               currentUser ? (
                 <Link
@@ -130,9 +144,14 @@ export const UsersList = () => {
             {isAdmin && <NewUserButton onComplete={handleNewUser} />}
           </div>
           <UserList
-            connections={userList ?? undefined}
+            connections={connectionsWithRoles}
             searchString={searchString}
-            isLoading={!userList || loadingRightHolders || loadingPartyRepresentation}
+            isLoading={
+              !connectionsWithRoles ||
+              loadingRightHolders ||
+              loadingPartyRepresentation ||
+              loadingRoleMetadata
+            }
             listItemTitleAs='h2'
             interactive={isAdmin}
             onAddNewUser={handleNewUser}

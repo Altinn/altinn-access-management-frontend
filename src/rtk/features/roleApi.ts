@@ -77,7 +77,7 @@ const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/role`;
 
 export const roleApi = createApi({
   reducerPath: 'roleApi',
-  tagTypes: ['roles'],
+  tagTypes: ['roles', 'role-permissions'],
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers: Headers): Headers => {
@@ -97,10 +97,17 @@ export const roleApi = createApi({
       query: ({ party, from, to }) => {
         return `/permissions?party=${party}&from=${from}&to=${to}`;
       },
-      providesTags: ['roles'],
+      providesTags: ['role-permissions'],
     }),
-    getRoleById: builder.query<Role, string>({
-      query: (id) => `/${id}`,
+    getAllRoles: builder.query<Role[], { language: string }>({
+      query: () => `/meta`,
+      keepUnusedDataFor: 3600, // 1 hour
+      providesTags: ['roles'],
+      serializeQueryArgs: ({ queryArgs, endpointName }) => ({
+        // Custom cache key with selected language to ensure refetching when language changes
+        endpointName,
+        language: queryArgs.language,
+      }),
     }),
     getRolePackages: builder.query<
       RolePackageMetadata[],
@@ -133,7 +140,7 @@ export const roleApi = createApi({
 
 export const {
   useGetRolePermissionsQuery,
-  useGetRoleByIdQuery,
+  useGetAllRolesQuery,
   useGetRolePackagesQuery,
   useGetRoleResourcesQuery,
 } = roleApi;

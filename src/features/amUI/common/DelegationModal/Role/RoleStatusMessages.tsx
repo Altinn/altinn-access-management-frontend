@@ -2,15 +2,15 @@ import { Trans } from 'react-i18next';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import statusClasses from '../StatusSection.module.css';
-import { RoleStatusType, useInheritedRoleInfo } from './useInheritedRoleInfo';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { InheritedStatusType, useInheritedStatusInfo } from '../../useInheritedStatus';
 
-const STATUS_TRANSLATION_KEYS: Record<RoleStatusType, string> = {
-  [RoleStatusType.ViaRole]: 'role.access_status.via_role',
-  [RoleStatusType.ViaParent]: 'role.access_status.via_parent',
-  [RoleStatusType.ViaAgent]: 'role.access_status.via_agent',
+const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
+  [InheritedStatusType.ViaRole]: 'role.access_status.via_role',
+  [InheritedStatusType.ViaConnection]: 'role.access_status.via_connection',
+  [InheritedStatusType.ViaKeyRole]: 'role.access_status.via_keyrole',
 };
 
 export interface RoleStatusMessageProps {
@@ -28,32 +28,32 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
     { skip: !actingParty?.partyUuid },
   );
 
-  const status = useInheritedRoleInfo({
-    rolePermissions,
-    role,
+  const matchingPermissions = rolePermissions?.find((permission) => permission.role.id === role.id);
+
+  const status = useInheritedStatusInfo({
+    permissions: matchingPermissions?.permissions,
     actingParty,
     fromParty,
     toParty,
   });
 
-  if (!status) {
+  if (
+    !status ||
+    (status.type === InheritedStatusType.ViaKeyRole && role.provider?.code === 'sys-ccr')
+  ) {
     return null;
   }
 
-  const direction = actingParty?.partyUuid === fromParty?.partyUuid ? 'from' : 'to';
   const formattedUserName = formatDisplayName({
-    fullName: (direction === 'from' ? toParty?.name : fromParty?.name) || '',
-    type:
-      (direction === 'from' ? toParty?.partyTypeName : fromParty?.partyTypeName) ===
-      PartyType.Person
-        ? 'person'
-        : 'company',
+    fullName: toParty?.name || '',
+    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
     reverseNameOrder: false,
   });
 
+  const safeViaType = status.via?.type ? String(status.via.type).toLowerCase() : '';
   const formattedViaName = formatDisplayName({
     fullName: status.via?.name || '',
-    type: status.via?.type.toLowerCase() === 'person' ? 'person' : 'company',
+    type: safeViaType === 'person' ? 'person' : 'company',
     reverseNameOrder: false,
   });
 

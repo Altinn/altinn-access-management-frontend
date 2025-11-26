@@ -190,13 +190,13 @@ const getAccountFromConnection = (
         ? actorConnection.party.parent?.id
         : actorConnection.party.id;
   const description = isSubUnit
-    ? `↪ ${orgNumberText}: ${actorConnection.party.keyValues?.OrganizationIdentifier}, ${partOfText} ${actorConnection.party.parent?.name}`
+    ? `↪ ${orgNumberText}: ${actorConnection.party.organizationIdentifier ?? ''}, ${partOfText} ${actorConnection.party.parent?.name}`
     : actorConnection.party.type === 'Organisasjon'
-      ? `${orgNumberText}: ${actorConnection.party.keyValues?.OrganizationIdentifier}`
-      : `${dateOfBirthText}: ${actorConnection.party.keyValues?.DateOfBirth}`;
+      ? `${orgNumberText}: ${actorConnection.party.organizationIdentifier ?? ''}`
+      : `${dateOfBirthText}: ${actorConnection.party.dateOfBirth ?? ''}`;
 
   return {
-    id: actorConnection.party.keyValues?.PartyId ?? actorConnection.party.id,
+    id: actorConnection.party.partyId?.toString() ?? actorConnection.party.id,
     icon: {
       name: partyName,
       type: accountType,

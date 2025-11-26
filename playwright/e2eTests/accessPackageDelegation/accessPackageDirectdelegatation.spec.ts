@@ -3,7 +3,7 @@ import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
   test.beforeEach(async ({ login, delegation }) => {
-    await login.LoginWithUserFromFrontpage('23926299794');
+    await login.LoginToAccessManagement('23926299794');
     await login.chooseReportee('Utgått Fleksibel Tiger AS');
   });
   test.skip('Org-A delegates access pacakge to Org-B', async ({
@@ -37,7 +37,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await delegation.logoutFromBrukerflate();
 
     // Step 6: Login with Org-2(Rettighetshaver) and select organization as reportee
-    await login.LoginWithUserFromFrontpage('06815597492');
+    await login.LoginToAccessManagement('06815597492');
     await login.chooseReportee('Lykkelig Rakrygget Puma BBL');
 
     await delegation.newAccessRights('Utgått Fleksibel Tiger AS');

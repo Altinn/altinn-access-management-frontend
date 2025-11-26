@@ -2,6 +2,7 @@ import { expect, test } from 'playwright/fixture/pomFixture';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
+import { env } from 'playwright/util/helper';
 
 test.describe('System Register', async () => {
   let system: string;
@@ -9,8 +10,9 @@ test.describe('System Register', async () => {
   test.beforeEach(async ({ page, login }) => {
     const orgNumber = '310547891';
     const api = new ApiRequests(orgNumber);
+    await page.goto(env('BASE_URL'));
     system = await api.createSystemSystemRegister();
-    await login.LoginWithUserFromFrontpage('14824497789');
+    await login.LoginToAccessManagement('14824497789');
     await login.chooseReportee('Skravlete Blåveis', 'Aktverdig Retorisk Ape');
   });
 

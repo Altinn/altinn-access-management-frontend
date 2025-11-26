@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
+
 import pageClasses from './PackagePoaDetailsPage.module.css';
-import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { type User, PartyType } from '@/rtk/features/userInfoApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
@@ -10,10 +11,10 @@ import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPa
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
-import { ExclamationmarkTriangleFillIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import { ActionError } from '@/resources/hooks/useActionError';
-import { ValidationErrorMessage } from '../common/ValidationErrorMessage';
-import { TechnicalErrorParagraphs } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
+import { DelegateErrorAlert } from './DelegateErrorAlert';
 
 const mapUserToParty = (user: User): Party => ({
   partyId: 0,
@@ -43,8 +44,8 @@ export const UsersTab = ({
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const [delegateError, setDelegateError] = useState<ActionError | null>(null);
   const [delegateTarget, setDelegateTarget] = useState<Party | null>(null);
-  const { mapRoles, loadingRoleMetadata, roleMetadataIsError } = useRoleMapper();
-  const roleMetadataUnavailable = loadingRoleMetadata || roleMetadataIsError;
+  const { mapRoles, loadingRoleMetadata } = useRoleMapper();
+  const roleMetadataUnavailable = loadingRoleMetadata;
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -63,17 +64,15 @@ export const UsersTab = ({
   const connections = usePackagePermissionConnections(accessPackage);
   const connectionsWithRoles = useMemo(
     () =>
-      roleMetadataUnavailable
-        ? connections
-        : connections.map((connection) => ({
-            ...connection,
-            roles: mapRoles(connection.roles),
-            connections: connection.connections?.map((child) => ({
-              ...child,
-              roles: mapRoles(child.roles),
-            })),
-          })),
-    [connections, mapRoles, roleMetadataUnavailable],
+      connections.map((connection) => ({
+        ...connection,
+        roles: mapRoles(connection.roles),
+        connections: connection.connections?.map((child) => ({
+          ...child,
+          roles: mapRoles(child.roles),
+        })),
+      })),
+    [connections, mapRoles],
   );
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
@@ -154,47 +153,11 @@ export const UsersTab = ({
         </DsParagraph>
       )}
 
-      {delegateError && (
-        <DsAlert
-          data-color='danger'
-          data-size='sm'
-          className={pageClasses.delegateErrorAlert}
-        >
-          <div className={pageClasses.delegateErrorHeader}>
-            <DsHeading
-              level={2}
-              data-size='2xs'
-            >
-              {t('delegation_modal.general_error.delegate_heading')}
-            </DsHeading>
-            <button
-              type='button'
-              className={pageClasses.dismissButton}
-              onClick={() => setDelegateError(null)}
-              aria-label={t('common.close')}
-            >
-              <XMarkIcon />
-            </button>
-          </div>
-          {delegateError.details?.detail || delegateError.details?.errorCode ? (
-            <ValidationErrorMessage
-              errorCode={delegateError.details?.errorCode ?? delegateError.details?.detail ?? ''}
-              translationValues={{
-                entity_type:
-                  delegateTarget?.partyTypeName === PartyType.Person
-                    ? t('common.persons_lowercase')
-                    : t('common.organizations_lowercase'),
-              }}
-            />
-          ) : (
-            <TechnicalErrorParagraphs
-              size='xs'
-              status={delegateError.httpStatus}
-              time={delegateError.timestamp}
-            />
-          )}
-        </DsAlert>
-      )}
+      <DelegateErrorAlert
+        error={delegateError}
+        targetParty={delegateTarget}
+        onClose={() => setDelegateError(null)}
+      />
 
       <AdvancedUserSearch
         connections={connectionsWithRoles}

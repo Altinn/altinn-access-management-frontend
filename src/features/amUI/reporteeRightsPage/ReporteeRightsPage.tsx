@@ -24,6 +24,7 @@ import { ReporteeRoleSection } from './ReporteeRoleSection';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { SingleRightsSection } from '../userRightsPage/SingleRightsSection/SingleRightsSection';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
@@ -56,7 +57,7 @@ export const ReporteeRightsPage = () => {
               />
               <RightsTabs
                 packagesPanel={<ReporteeAccessPackageSection />}
-                singleRightsPanel={<div>SingleRightsSection</div>}
+                singleRightsPanel={<SingleRightsSection />}
                 roleAssignmentsPanel={<ReporteeRoleSection />}
               />
             </PageContainer>

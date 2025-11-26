@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using Altinn.AccessManagement.UI.Core.Models.User;
+﻿using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Common
 {
@@ -96,12 +95,18 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common
         public List<CompactEntity> Children { get; set; }
 
         /// <summary>
-        /// Values from entityLookup. Allowed keys:
-        /// - OrganizationIdentifier
-        /// - PartyId
-        /// - DateOfBirth
+        /// Party id in Altinn 2/3.
         /// </summary>
-        [JsonConverter(typeof(AllowedKeysDictionaryConverter))]
-        public Dictionary<string, string> KeyValues { get; set; } = new();
+        public int? PartyId { get; set; }
+
+        /// <summary>
+        /// Organization identifier (orgnr) when entity is an organization.
+        /// </summary>
+        public string OrganizationIdentifier { get; set; }
+
+        /// <summary>
+        /// Date of birth for persons.
+        /// </summary>
+        public string DateOfBirth { get; set; }
     }
 }

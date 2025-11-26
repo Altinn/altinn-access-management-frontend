@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
-import { DsHeading } from '@altinn/altinn-components';
+import { Link, useParams } from 'react-router';
+import { DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
 
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -14,6 +14,7 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 
 import classes from './SingleRightsSection.module.css';
 import SingleRightItem from './SingleRightItem';
+import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 
 export const SingleRightsSection = () => {
   const { t } = useTranslation();
@@ -28,8 +29,32 @@ export const SingleRightsSection = () => {
     userId: id || '',
   });
 
-  const { toParty } = usePartyRepresentation();
+  const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights ?? [], 5);
+
+  const { displayResourceDelegation } = window.featureFlags;
+  const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8; // Section for "Users (A2)" in Profile is 9, for "Accesses for others (A2)" it is 8
+  const A2url = getRedirectToA2UsersListSectionUrl(sectionId);
+
+  if (!displayResourceDelegation) {
+    return (
+      <div className={classes.singleRightsSectionContainer}>
+        <DsHeading
+          level={2}
+          data-size='xs'
+          id='single_rights_title'
+        >
+          {t('single_rights.wip_title')}
+        </DsHeading>
+        <div className={classes.wipMessage}>
+          <DsParagraph>{t('single_rights.wip_message')}</DsParagraph>
+          <DsLink asChild>
+            <Link to={A2url}>{t('single_rights.wip_link_text')}</Link>
+          </DsLink>
+        </div>
+      </div>
+    );
+  }
 
   return (
     toParty && (

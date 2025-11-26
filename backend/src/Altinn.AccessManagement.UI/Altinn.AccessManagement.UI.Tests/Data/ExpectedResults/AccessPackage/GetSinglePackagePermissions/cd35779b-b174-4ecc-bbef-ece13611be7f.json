@@ -25,18 +25,26 @@
               "type": "Organisasjon",
               "variant": "AS",
               "parent": null,
-              "children": null
+              "children": null,
+              "organizationIdentifier": "310202398",
+              "partyId": 51329012
             },
-            "children": null
+            "children": null,
+            "organizationIdentifier": "311312294",
+            "partyId": 51433301
           }
-        ]
+        ],
+        "organizationIdentifier": "310202398",
+        "partyId": 51329012
       },
       "to": {
         "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
         "name": "Sitrongul Medaljong",
         "type": "Person",
+        "variant": "",
         "parent": null,
-        "children": null
+        "children": null,
+        "partyId": 50088610
       },
       "via": null,
       "role": {
