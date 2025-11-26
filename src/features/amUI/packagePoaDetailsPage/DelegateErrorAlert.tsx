@@ -1,4 +1,4 @@
-import { DsAlert, DsHeading } from '@altinn/altinn-components';
+import { DsAlert, DsButton, DsHeading } from '@altinn/altinn-components';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -12,14 +12,13 @@ import { TechnicalErrorParagraphs } from '../common/TechnicalErrorParagraphs/Tec
 import pageClasses from './PackagePoaDetailsPage.module.css';
 
 interface DelegateErrorAlertProps {
-  error: ActionError | null;
-  targetParty?: Party | null;
+  error: ActionError;
+  targetParty?: Party;
   onClose: () => void;
 }
 
 export const DelegateErrorAlert = ({ error, targetParty, onClose }: DelegateErrorAlertProps) => {
   const { t } = useTranslation();
-
   if (!error) return null;
 
   const entityType =
@@ -40,14 +39,15 @@ export const DelegateErrorAlert = ({ error, targetParty, onClose }: DelegateErro
         >
           {t('delegation_modal.general_error.delegate_heading')}
         </DsHeading>
-        <button
-          type='button'
-          className={pageClasses.dismissButton}
+        <DsButton
+          variant='tertiary'
+          icon
+          data-size='sm'
           onClick={onClose}
           aria-label={t('common.close')}
         >
-          <XMarkIcon />
-        </button>
+          <XMarkIcon fontSize='1.2rem' />
+        </DsButton>
       </div>
       {error.details?.detail || error.details?.errorCode ? (
         <ValidationErrorMessage

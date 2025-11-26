@@ -20,7 +20,8 @@ const mapUserToParty = (user: User): Party => ({
   partyId: 0,
   partyUuid: user.id,
   name: user.name,
-  partyTypeName: user.variant === 'organization' ? PartyType.Organization : PartyType.Person,
+  partyTypeName:
+    user.variant?.toLowerCase() === 'organization' ? PartyType.Organization : PartyType.Person,
 });
 
 interface UsersTabProps {
@@ -38,12 +39,15 @@ export const UsersTab = ({
   isLoading,
   isFetching,
   canDelegate = true,
-  onDelegateError: onDelegateErrorCallback,
 }: UsersTabProps) => {
   const { t } = useTranslation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
-  const [delegateError, setDelegateError] = useState<ActionError | null>(null);
-  const [delegateTarget, setDelegateTarget] = useState<Party | null>(null);
+
+  const [delegateActionError, setDelegateActionError] = useState<{
+    error: ActionError;
+    targetParty?: Party;
+  } | null>(null);
+
   const { mapRoles, loadingRoleMetadata } = useRoleMapper();
   const roleMetadataUnavailable = loadingRoleMetadata;
   const {
@@ -76,7 +80,7 @@ export const UsersTab = ({
   );
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
-    setDelegateError(null);
+    setDelegateActionError(null);
     queueSnackbar(
       t('package_poa_details_page.package_delegation_success', {
         name: toParty.name,
@@ -96,9 +100,12 @@ export const UsersTab = ({
     );
   };
 
-  const handleDelegateError = (_accessPackage: AccessPackage, errorInfo: ActionError) => {
-    setDelegateError(errorInfo);
-    onDelegateErrorCallback?.(errorInfo);
+  const handleDelegateError = (
+    _accessPackage: AccessPackage,
+    errorInfo: ActionError,
+    toParty?: Party,
+  ) => {
+    setDelegateActionError({ error: errorInfo, targetParty: toParty });
   };
 
   const {
@@ -114,8 +121,7 @@ export const UsersTab = ({
   const handleOnDelegate = (user: User) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
-      setDelegateError(null);
-      setDelegateTarget(toParty);
+      setDelegateActionError(null);
       onDelegate(accessPackage, toParty);
     }
   };
@@ -153,11 +159,13 @@ export const UsersTab = ({
         </DsParagraph>
       )}
 
-      <DelegateErrorAlert
-        error={delegateError}
-        targetParty={delegateTarget}
-        onClose={() => setDelegateError(null)}
-      />
+      {delegateActionError?.error && delegateActionError?.targetParty && (
+        <DelegateErrorAlert
+          error={delegateActionError?.error}
+          targetParty={delegateActionError?.targetParty}
+          onClose={() => setDelegateActionError(null)}
+        />
+      )}
 
       <AdvancedUserSearch
         connections={connectionsWithRoles}
