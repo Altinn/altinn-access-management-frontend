@@ -20,7 +20,7 @@ import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
-import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
+import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 
 export const UsersList = () => {
   const { t } = useTranslation();
@@ -47,7 +47,11 @@ export const UsersList = () => {
 
   const [searchString, setSearchString] = useState<string>('');
 
-  const { mapRoles, loadingRoleMetadata } = useRoleMapper();
+  const {
+    mapRoles,
+    isLoading: loadingRoleMetadata,
+    isError: roleMetadataError,
+  } = useRoleMetadata();
 
   const connectionsWithRoles = useMemo(() => {
     if (!rightHolders) {
@@ -59,7 +63,7 @@ export const UsersList = () => {
     const mapConnection = (connection: Connection): Connection => {
       return {
         ...connection,
-        roles: mapRoles(connection.roles),
+        roles: roleMetadataError || loadingRoleMetadata ? [] : mapRoles(connection.roles),
         connections: connection.connections?.map(mapConnection) ?? [],
       };
     };
@@ -74,7 +78,14 @@ export const UsersList = () => {
       acc.push(mapConnection(connection));
       return acc;
     }, []);
-  }, [rightHolders, mapRoles, shouldDisplayPrivDelegation, currentUser?.party.id]);
+  }, [
+    rightHolders,
+    mapRoles,
+    shouldDisplayPrivDelegation,
+    currentUser?.party.id,
+    roleMetadataError,
+    loadingRoleMetadata,
+  ]);
 
   const currentUserWithRoles = useMemo(() => {
     if (!currentUser) {
@@ -83,9 +94,9 @@ export const UsersList = () => {
 
     return {
       ...currentUser,
-      roles: mapRoles(currentUser.roles),
+      roles: roleMetadataError || loadingRoleMetadata ? [] : mapRoles(currentUser.roles),
     };
-  }, [currentUser, mapRoles]);
+  }, [currentUser, mapRoles, roleMetadataError, loadingRoleMetadata]);
 
   const onSearch = useCallback(
     debounce((newSearchString: string) => {

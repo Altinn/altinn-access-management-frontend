@@ -17,6 +17,7 @@ export interface RoleInfo {
   code?: string;
   displayName?: string;
   viaParty?: Entity;
+  description?: string;
 }
 
 export interface Connection {

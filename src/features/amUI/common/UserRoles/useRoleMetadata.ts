@@ -2,15 +2,24 @@ import { useCallback, useMemo, useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useGetAllRolesQuery, type Role } from '@/rtk/features/roleApi';
+import type { Connection } from '@/rtk/features/connectionApi';
 
 type RoleMetadataMap = Record<string, Role | undefined>;
+const ECC_PROVIDER_CODE = 'sys-ccr';
 
 /**
- * Fetches all role metadata once and provides a helper to look up metadata by role id.
+ * Fetches all role metadata once and provides helpers to look up and map metadata by role id.
  */
 export const useRoleMetadata = () => {
   const { i18n } = useTranslation();
-  const { data: allRoles, isFetching, refetch } = useGetAllRolesQuery({ language: i18n.language });
+  const {
+    data: allRoles,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetAllRolesQuery({
+    language: i18n.language,
+  });
 
   // Refetch when language changes to ensure fresh translated data
   useEffect(() => {
@@ -30,7 +39,7 @@ export const useRoleMetadata = () => {
 
   const getRoleMetadata = useCallback(
     (roleId?: string | null) => {
-      if (!roleId) {
+      if (!roleId || !roleMetadataMap) {
         return undefined;
       }
       return roleMetadataMap[roleId];
@@ -38,5 +47,30 @@ export const useRoleMetadata = () => {
     [roleMetadataMap],
   );
 
-  return { getRoleMetadata, isLoading: isFetching };
+  const mapRoles = useCallback(
+    (roles?: Connection['roles']) => {
+      if (isLoading || isError) {
+        return [];
+      }
+
+      return (
+        roles
+          ?.map((role) => {
+            const metadata = getRoleMetadata(role.id);
+            if (metadata?.provider?.code && metadata.provider.code !== ECC_PROVIDER_CODE) {
+              return null;
+            }
+            return {
+              ...role,
+              code: metadata?.code ?? role.code,
+              displayName: metadata?.name ?? role.displayName ?? role.code,
+            };
+          })
+          .filter((role): role is NonNullable<typeof role> => role !== null) ?? []
+      );
+    },
+    [getRoleMetadata, isError, isLoading],
+  );
+
+  return { getRoleMetadata, mapRoles, isLoading, isError };
 };

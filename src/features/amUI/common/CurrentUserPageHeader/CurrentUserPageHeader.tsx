@@ -16,7 +16,8 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
   const { t } = useTranslation();
 
   const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.dateOfBirth || undefined);
-  const roles = currentUser?.roles?.map((role) => role?.displayName ?? role.code);
+  const roles = currentUser?.roles?.map((role) => role?.displayName);
+  console.log('roles: ', roles);
 
   return (
     <div className={classes.currentUser}>
@@ -29,7 +30,7 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
         description={
           formattedBirthDate ? t('common.date_of_birth') + ` ${formattedBirthDate}` : undefined
         }
-        roleNames={roles?.filter((name): name is string => name !== undefined)}
+        roleNames={roles?.filter((name) => !!name) as string[]}
         type='person'
         as={as}
         titleAs='h2'

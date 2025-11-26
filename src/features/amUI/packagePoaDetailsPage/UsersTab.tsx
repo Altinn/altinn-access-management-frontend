@@ -11,7 +11,7 @@ import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPa
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
-import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
+import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 const mapUserToParty = (user: User): Party => ({
@@ -38,7 +38,11 @@ export const UsersTab = ({
 }: UsersTabProps) => {
   const { t } = useTranslation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
-  const { mapRoles, loadingRoleMetadata } = useRoleMapper();
+  const {
+    mapRoles,
+    isLoading: loadingRoleMetadata,
+    isError: roleMetadataError,
+  } = useRoleMetadata();
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -59,13 +63,13 @@ export const UsersTab = ({
     () =>
       connections.map((connection) => ({
         ...connection,
-        roles: mapRoles(connection.roles),
+        roles: loadingRoleMetadata || roleMetadataError ? [] : mapRoles(connection.roles),
         connections: connection.connections?.map((child) => ({
           ...child,
-          roles: mapRoles(child.roles),
+          roles: loadingRoleMetadata || roleMetadataError ? [] : mapRoles(child.roles),
         })),
       })),
-    [connections, mapRoles],
+    [connections, mapRoles, loadingRoleMetadata, roleMetadataError],
   );
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
