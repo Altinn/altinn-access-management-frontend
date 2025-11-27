@@ -521,7 +521,7 @@
     "oldRolesLinkText": "Gå til gammel løsning",
     "legacyRoleContent": "Denne rollen vil snart fjernes. Bruk heller tilgangspakker."
   },
-"systemuser_overviewpage": {
+  "systemuser_overviewpage": {
     "page_title": "Systemtilganger - Altinn",
     "banner_title": "Systemtilganger",
     "sub_title_text": "Ved å opprette en systemtilgang gir du et fagsystem tilgang til å løse oppgaver i Altinn på vegne av bedriften din.",
@@ -676,8 +676,9 @@
     "57_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systembruker."
   },
   "page_not_available": {
-    "title": "Siden er ikke tilgjengelig",
-    "text": "De nye tilgangsstyringssidene er ikke klare for privatpersoner helt enda. Dersom du mente å se på tilgangene til en virksomhet, vennligst bytt til denne."
+    "title": "Tilgangsstyring for privatpersoner er fortsatt under arbeid",
+    "text": "På denne siden vil det komme mer etterhvert. Du kan fortsatt tilgangsstyre på vegne av deg selv som privatperson i gammel løsning.",
+    "link_text": "Gå til gammel løsning"
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",

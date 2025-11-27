@@ -673,8 +673,9 @@
     "57_systemuser_failed_to_delete_accesspackage": "Kunne ikkje fjerne tilgangspakke-delegering for systemtilgangen."
   },
   "page_not_available": {
-    "title": "Sida er ikkje tilgjengeleg",
-    "text": "Dei nye tilgangsstyringssidene er ikkje klare for privatpersonar heilt enno. Dersom du vil sjå tilgangane til ei verksemd, kan du bytte til denne."
+    "title": "Tilgangsstyring for privatpersonar er framleis under arbeid",
+    "text": "På denne sida vil det komme meir etter kvart. Du kan framleis tilgangsstyre på vegne av deg sjølv som privatperson i gammal løysing.",
+    "link_text": "Gå til gammal løysing"
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
