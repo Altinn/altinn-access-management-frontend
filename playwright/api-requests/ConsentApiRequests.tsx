@@ -157,17 +157,19 @@ export class ConsentApiRequests {
    * @param consentRequestId The ID of the approved consent request
    * @param fromPersonId The person ID (not in URN format, just the ID)
    * @param maskinportenToken A MaskinportenToken instance
+   * @param consumerOrg Optional organization number for "behalf of" scenarios
    * @returns The consent access token
    */
   async getConsentTokenWithMaskinporten(
     consentRequestId: string,
     fromPersonId: string,
     maskinportenToken: MaskinportenToken,
+    consumerOrg?: string,
   ): Promise<string> {
     // Convert person ID to URN format
     const fromPersonUrn = `urn:altinn:person:identifier-no:${fromPersonId}`;
 
-    return await maskinportenToken.getConsentToken(consentRequestId, fromPersonUrn);
+    return await maskinportenToken.getConsentToken(consentRequestId, fromPersonUrn, consumerOrg);
   }
 }
 
