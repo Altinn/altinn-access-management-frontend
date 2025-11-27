@@ -4,8 +4,9 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import classes from './LandingPage.module.css';
 import {
   DsAlert,
+  DsButton,
   DsHeading,
-  DsLink,
+  DsSkeleton,
   formatDisplayName,
   List,
   ListItem,
@@ -20,9 +21,8 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { formatDateToNorwegian } from '@/resources/utils';
 import { useTranslation } from 'react-i18next';
-import { ArrowRightIcon } from '@navikt/aksel-icons';
-import { Link, useSearchParams } from 'react-router';
-import { amUIPath } from '@/routes/paths';
+import { LeaveIcon } from '@navikt/aksel-icons';
+import { useSearchParams } from 'react-router';
 import {
   hasConsentPermission,
   hasSystemUserClientAdminPermission,
@@ -38,7 +38,8 @@ import {
   getUsersMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
-import { formatOrgNr, isSubUnit } from '@/resources/utils/reporteeUtils';
+import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/reporteeUtils';
+import { getHostUrl } from '@/resources/utils/pathUtils';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
@@ -53,7 +54,7 @@ export const LandingPage = () => {
 
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
-    type: reportee?.type === 'Organization' ? 'company' : 'person',
+    type: isOrganization(reportee) ? 'company' : 'person',
   });
 
   useEffect(() => {
@@ -96,10 +97,9 @@ export const LandingPage = () => {
     if (displayConfettiPackage) {
       items.push({
         ...getUsersMenuItem(),
-        description:
-          reportee?.type === 'Organization'
-            ? t('landing_page.users_item_description_org')
-            : t('landing_page.users_item_description_person'),
+        description: isOrganization(reportee)
+          ? t('landing_page.users_item_description_org')
+          : t('landing_page.users_item_description_person'),
       });
     }
 
@@ -113,10 +113,9 @@ export const LandingPage = () => {
     if (displayConfettiPackage && isAdmin) {
       items.push({
         ...getReporteesMenuItem(),
-        description:
-          reportee?.type === 'Organization'
-            ? t('landing_page.reportees_item_description_org')
-            : t('landing_page.reportees_item_description_person'),
+        description: isOrganization(reportee)
+          ? t('landing_page.reportees_item_description_org')
+          : t('landing_page.reportees_item_description_person'),
       });
     }
 
@@ -179,7 +178,7 @@ export const LandingPage = () => {
   const isReporteeSubUnit = isSubUnit(reportee);
 
   const getReporteeDescription = (): string => {
-    if (reportee?.type === 'Organization') {
+    if (isOrganization(reportee)) {
       const orgNrString = `${t('common.org_nr')} ${formatOrgNr(reportee?.organizationNumber)}`;
       if (isReporteeSubUnit) {
         return `↳ ${orgNrString}, ${t('common.subunit').toLowerCase()}`;
@@ -196,7 +195,7 @@ export const LandingPage = () => {
           <ListItem
             icon={{
               isParent: !isReporteeSubUnit,
-              type: reportee?.type === 'Organization' ? 'company' : 'person',
+              type: isOrganization(reportee) ? 'company' : 'person',
               name: reporteeName,
             }}
             title={reporteeName}
@@ -206,20 +205,39 @@ export const LandingPage = () => {
             interactive={false}
           />
           <DsAlert data-color='info'>
-            <DsHeading
-              level={1}
-              data-size='xs'
-              color='info'
-            >
-              {t('landing_page.alert_heading')}
-            </DsHeading>
-            <div className={classes.landingPageAlert}>{t('landing_page.alert_body')}</div>
-            <DsLink asChild>
-              <Link to={`/${amUIPath.Info}`}>
-                {t('landing_page.alert_link')}
-                <ArrowRightIcon className={classes.arrowIcon} />
-              </Link>
-            </DsLink>
+            {isLoading ? (
+              <DsSkeleton
+                variant='rectangle'
+                height={150}
+                width='100%'
+              />
+            ) : (
+              <>
+                <DsHeading
+                  level={1}
+                  data-size='xs'
+                  color='info'
+                >
+                  {isOrganization(reportee)
+                    ? t('landing_page.alert_heading')
+                    : t('landing_page.alert_heading_priv')}
+                </DsHeading>
+                <div className={classes.landingPageAlert}>
+                  {isOrganization(reportee)
+                    ? t('landing_page.alert_body')
+                    : t('landing_page.alert_body_priv')}
+                  <DsButton
+                    asChild
+                    variant='secondary'
+                  >
+                    <a href={`${getHostUrl()}ui/profile`}>
+                      <LeaveIcon />
+                      {t('landing_page.alert_link')}
+                    </a>
+                  </DsButton>
+                </div>
+              </>
+            )}
           </DsAlert>
           <ListItemContainer
             heading={t('landing_page.shortcut_links_heading')}
