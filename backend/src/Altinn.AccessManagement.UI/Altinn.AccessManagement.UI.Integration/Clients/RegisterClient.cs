@@ -193,7 +193,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonSerializer.Deserialize<PartyNamesLookupResult>(responseContent, _serializerOptions)?.PartyNames.ToList();
+                    return JsonSerializer.Deserialize<PartyNamesLookupResult>(responseContent, _serializerOptions)?.PartyNames?.ToList();
                 }
 
                 _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyNames // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
