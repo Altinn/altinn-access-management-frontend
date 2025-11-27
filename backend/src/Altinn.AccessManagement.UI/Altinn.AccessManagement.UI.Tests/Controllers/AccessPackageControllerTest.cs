@@ -449,6 +449,33 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///    Test case: Create a new access package delegation that fails validation in backend with unsupported unit type
+        ///    Expected: Returns validation error code AM.VLD-00028 and mapped problem detail
+        /// </summary>
+        [Fact]
+        public async Task CreateAccessPackageDelegation_InvalidUnitTypeValidationErrorFromBackend()
+        {
+            // Arrange
+            var party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            var packageId = "fails_with_validation_error_00028";
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegations?party={party}&to={to}&from={from}&packageId={packageId}", null);
+
+            // Assert
+            var result = await response.Content.ReadAsStringAsync();
+            AltinnProblemDetails problemDetails = JsonSerializer.Deserialize<AltinnProblemDetails>(result, options);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal(400, problemDetails.Status);
+            Assert.Equal("AM.VLD-00028", problemDetails.Detail);
+            Assert.Equal("Validation error (Cannot delegate to the selected unit type.)", problemDetails.Title);
+        }
+
+        /// <summary>
         ///    Test case: Create a new access package delegation that fails validation in backend
         ///    Expected: Returns a not validation error code
         /// </summary>

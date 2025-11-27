@@ -12,9 +12,9 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 
 interface useAccessPackageActionsProps {
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onDelegateError?: (accessPackage: AccessPackage, errorInfo: ActionError) => void;
+  onDelegateError?: (accessPackage: AccessPackage, errorInfo: ActionError, toParty?: Party) => void;
   onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onRevokeError?: (accessPackage: AccessPackage, errorInfo: ActionError) => void;
+  onRevokeError?: (accessPackage: AccessPackage, errorInfo: ActionError, toParty?: Party) => void;
 }
 
 export const useAccessPackageActions = ({
@@ -51,7 +51,8 @@ export const useAccessPackageActions = ({
     timestamp: string,
     details?: DelegationErrorDetails,
   ) => {
-    if (onDelegateError) onDelegateError(accessPackage, { httpStatus, timestamp, details });
+    if (onDelegateError)
+      onDelegateError(accessPackage, { httpStatus, timestamp, details }, toParty);
     else {
       openSnackbar({
         message: t('access_packages.package_delegation_error', {
@@ -83,7 +84,7 @@ export const useAccessPackageActions = ({
     httpStatus: string,
     timestamp: string,
   ) => {
-    if (onRevokeError) onRevokeError(accessPackage, { httpStatus, timestamp });
+    if (onRevokeError) onRevokeError(accessPackage, { httpStatus, timestamp }, toParty);
     else {
       openSnackbar({
         message: t('access_packages.package_deletion_error', {

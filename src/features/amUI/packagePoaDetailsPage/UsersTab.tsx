@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph } from '@altinn/altinn-components';
@@ -11,14 +11,17 @@ import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPa
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
-import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+import { ActionError } from '@/resources/hooks/useActionError';
+import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
+import { DelegateErrorAlert } from './DelegateErrorAlert';
 
 const mapUserToParty = (user: User): Party => ({
   partyId: 0,
   partyUuid: user.id,
   name: user.name,
-  partyTypeName: user.variant === 'organization' ? PartyType.Organization : PartyType.Person,
+  partyTypeName:
+    user.type?.toLowerCase() === 'organisasjon' ? PartyType.Organization : PartyType.Person,
 });
 
 interface UsersTabProps {
@@ -27,6 +30,7 @@ interface UsersTabProps {
   isLoading: boolean;
   isFetching: boolean;
   canDelegate?: boolean;
+  onDelegateError?: (errorInfo: ActionError) => void;
 }
 
 export const UsersTab = ({
@@ -38,7 +42,14 @@ export const UsersTab = ({
 }: UsersTabProps) => {
   const { t } = useTranslation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
+
+  const [delegateActionError, setDelegateActionError] = useState<{
+    error: ActionError;
+    targetParty?: Party;
+  } | null>(null);
+
   const { mapRoles, loadingRoleMetadata } = useRoleMapper();
+  const roleMetadataUnavailable = loadingRoleMetadata;
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -69,6 +80,7 @@ export const UsersTab = ({
   );
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
+    setDelegateActionError(null);
     queueSnackbar(
       t('package_poa_details_page.package_delegation_success', {
         name: toParty.name,
@@ -88,15 +100,28 @@ export const UsersTab = ({
     );
   };
 
+  const handleDelegateError = (
+    _accessPackage: AccessPackage,
+    errorInfo: ActionError,
+    toParty?: Party,
+  ) => {
+    setDelegateActionError({ error: errorInfo, targetParty: toParty });
+  };
+
   const {
     onDelegate,
     onRevoke,
     isLoading: isActionLoading,
-  } = useAccessPackageActions({ onDelegateSuccess, onRevokeSuccess });
+  } = useAccessPackageActions({
+    onDelegateSuccess,
+    onRevokeSuccess,
+    onDelegateError: handleDelegateError,
+  });
 
   const handleOnDelegate = (user: User) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
+      setDelegateActionError(null);
       onDelegate(accessPackage, toParty);
     }
   };
@@ -134,10 +159,18 @@ export const UsersTab = ({
         </DsParagraph>
       )}
 
+      {delegateActionError?.error && delegateActionError?.targetParty && (
+        <DelegateErrorAlert
+          error={delegateActionError?.error}
+          targetParty={delegateActionError?.targetParty}
+          onClose={() => setDelegateActionError(null)}
+        />
+      )}
+
       <AdvancedUserSearch
         connections={connectionsWithRoles}
         indirectConnections={indirectConnections}
-        isLoading={isLoading || loadingIndirectConnections || loadingRoleMetadata}
+        isLoading={isLoading || loadingIndirectConnections || roleMetadataUnavailable}
         onDelegate={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         isActionLoading={
@@ -146,7 +179,7 @@ export const UsersTab = ({
           loadingIndirectConnections ||
           isFetching ||
           isFetchingIndirectConnections ||
-          loadingRoleMetadata
+          roleMetadataUnavailable
         }
         canDelegate={canDelegate}
       />
