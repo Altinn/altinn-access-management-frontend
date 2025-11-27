@@ -17,7 +17,6 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
 
   const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.dateOfBirth || undefined);
   const roles = currentUser?.roles?.map((role) => role?.displayName);
-  console.log('roles: ', roles);
 
   return (
     <div className={classes.currentUser}>

@@ -16,6 +16,7 @@ export const useRoleMetadata = () => {
     data: allRoles,
     isLoading,
     isError,
+    error,
     refetch,
   } = useGetAllRolesQuery({
     language: i18n.language,
@@ -48,7 +49,7 @@ export const useRoleMetadata = () => {
   );
 
   const mapRoles = useCallback(
-    (roles?: Connection['roles']) => {
+    (roles?: Array<Role | Connection['roles'][number]>) => {
       if (isLoading || isError) {
         return [];
       }
@@ -57,14 +58,7 @@ export const useRoleMetadata = () => {
         roles
           ?.map((role) => {
             const metadata = getRoleMetadata(role.id);
-            if (metadata?.provider?.code && metadata.provider.code !== ECC_PROVIDER_CODE) {
-              return null;
-            }
-            return {
-              ...role,
-              code: metadata?.code ?? role.code,
-              displayName: metadata?.name ?? role.displayName ?? role.code,
-            };
+            return metadata ?? null;
           })
           .filter((role): role is NonNullable<typeof role> => role !== null) ?? []
       );
@@ -72,5 +66,5 @@ export const useRoleMetadata = () => {
     [getRoleMetadata, isError, isLoading],
   );
 
-  return { getRoleMetadata, mapRoles, isLoading, isError };
+  return { getRoleMetadata, mapRoles, isLoading, isError, error };
 };
