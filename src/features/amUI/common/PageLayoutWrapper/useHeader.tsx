@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import {
   useGetReporteeQuery,
-  useGetUserInfoQuery,
+  useGetUserProfileQuery,
   useGetReporteeListForAuthorizedUserQuery,
   useGetFavoriteActorUuidsQuery,
   useAddFavoriteActorUuidMutation,
@@ -30,7 +30,7 @@ export const useHeader = ({ openAccountMenu = false }: { openAccountMenu?: boole
   const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(openAccountMenu);
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const { data: userinfo } = useGetUserInfoQuery();
+  const { data: userProfile, isLoading: isLoadingUserProfile } = useGetUserProfileQuery();
   const { data: reporteeList, isLoading: isLoadingReporteeList } =
     useGetReporteeListForAuthorizedUserQuery(undefined);
   const { data: favoriteAccountUuids, isLoading: isLoadingFavoriteAccounts } =
@@ -50,8 +50,14 @@ export const useHeader = ({ openAccountMenu = false }: { openAccountMenu?: boole
   useEffect(() => {
     if (!isLoadingReporteeList && reporteeList && reporteeList.length === 1) {
       setShouldOpenAccountMenu(false);
+    } else if (
+      !isLoadingUserProfile &&
+      userProfile?.profileSettingPreference?.preselectedPartyUuid &&
+      userProfile?.profileSettingPreference?.preselectedPartyUuid.length > 0
+    ) {
+      setShouldOpenAccountMenu(false);
     }
-  }, [isLoadingReporteeList, reporteeList]);
+  }, [isLoadingReporteeList, reporteeList, isLoadingUserProfile, userProfile]);
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -80,7 +86,7 @@ export const useHeader = ({ openAccountMenu = false }: { openAccountMenu?: boole
     partyListDTO: reporteeList ?? [],
     favoriteAccountUuids: favoriteAccountUuids ?? [],
     currentAccountUuid: reportee?.partyUuid,
-    selfAccountUuid: userinfo?.uuid,
+    selfAccountUuid: userProfile?.uuid,
     isVirtualized: reporteeList && reporteeList.length > 20,
     isLoading:
       !reporteeList || isLoadingReporteeList || isLoadingReportee || isLoadingFavoriteAccounts,

@@ -1,5 +1,4 @@
-﻿using Altinn.Platform.Models.Register;
-using Altinn.Platform.Register.Models;
+﻿using Altinn.Register.Contracts.V1;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -36,13 +35,13 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 Task<List<Party>> GetPartyList(List<Guid> uuidList);
 
                 /// <summary>
-                /// Looks up party information for a party of the provided uuid
+                /// Looks up party information for a party of the provided uuid, (new Register API endpoint and model)
                 /// </summary>
                 /// <param name="uuid">The uuids to be looked up</param>
                 /// <returns>
                 /// Party information corresponding to the provided uuid
                 /// </returns>
-                Task<PartyR> GetParty(Guid uuid);
+                Task<Altinn.Register.Contracts.Party> GetParty(Guid uuid);
 
                 /// <summary>
                 /// Looks up a person based on ssn and lastname.

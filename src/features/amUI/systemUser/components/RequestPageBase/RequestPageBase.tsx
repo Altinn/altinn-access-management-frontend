@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import AltinnLogo from '@/assets/AltinnTextLogo.svg?react';
-import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 
 import type { RegisteredSystem } from '../../types';
 
@@ -23,7 +23,7 @@ export const RequestPageBase = ({
   reporteeName,
   children,
 }: RequestPageBaseProps): React.ReactNode => {
-  const { data: userData } = useGetUserInfoQuery();
+  const { data: userData } = useGetUserProfileQuery();
 
   const { t } = useTranslation();
 

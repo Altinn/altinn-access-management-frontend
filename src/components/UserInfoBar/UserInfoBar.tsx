@@ -2,12 +2,12 @@ import * as React from 'react';
 import { Buildings3FillIcon } from '@navikt/aksel-icons';
 
 import AltinnTextLogo from '@/assets/AltinnTextLogo.svg?react';
-import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 
 import classes from './UserInfoBar.module.css';
 
 export const UserInfoBar = () => {
-  const { data: userData } = useGetUserInfoQuery();
+  const { data: userData } = useGetUserProfileQuery();
   const { data: reporteeData } = useGetReporteeQuery();
 
   return (

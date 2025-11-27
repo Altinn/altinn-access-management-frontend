@@ -19,7 +19,7 @@ import {
   useGetIsCompanyProfileAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
   useGetReporteeQuery,
-  useGetUserInfoQuery,
+  useGetUserProfileQuery,
 } from '@/rtk/features/userInfoApi';
 import { Theme, MenuItemSize, MenuItemProps, formatDisplayName } from '@altinn/altinn-components';
 import {
@@ -72,7 +72,7 @@ export const useGlobalMenu = () => {
   const useNewActorListFlag = useNewActorList();
   const isSm = useIsTabletOrSmaller();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const { data: userinfo } = useGetUserInfoQuery();
+  const { data: userinfo } = useGetUserProfileQuery();
   const { data: reporteeList, isLoading: isLoadingReporteeList } =
     useGetReporteeListForAuthorizedUserQuery(undefined, {
       skip: useNewActorListFlag,

@@ -3,7 +3,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.Platform.Register.Models;
+using Altinn.Register.Contracts.V1;
 using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services

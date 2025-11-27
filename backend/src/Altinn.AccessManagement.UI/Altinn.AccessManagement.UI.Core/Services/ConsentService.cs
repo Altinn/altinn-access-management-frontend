@@ -9,8 +9,7 @@ using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
-using Altinn.Platform.Register.Enums;
-using Altinn.Platform.Register.Models;
+using Altinn.Register.Contracts.V1;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 

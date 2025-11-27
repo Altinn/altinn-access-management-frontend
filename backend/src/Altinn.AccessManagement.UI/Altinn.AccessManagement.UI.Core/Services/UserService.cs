@@ -1,14 +1,9 @@
-﻿using System.Net;
-using System.Text.Json;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Helpers;
+﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services
