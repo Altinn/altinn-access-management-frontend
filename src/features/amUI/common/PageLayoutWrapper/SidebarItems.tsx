@@ -30,6 +30,7 @@ export const SidebarItems = (
   isAdmin: boolean | undefined,
   isClientAdmin: boolean | undefined,
   reportee: ReporteeInfo | undefined,
+  pendingSystemUsersCount: number,
   canAccessSettings: boolean = false,
 ) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
@@ -67,7 +68,17 @@ export const SidebarItems = (
     hasCreateSystemUserPermission(reportee) ||
     hasSystemUserClientAdminPermission(reportee, isClientAdmin)
   ) {
-    items.push(getSystemUserMenuItem(pathname, isLoading));
+    items.push({
+      ...getSystemUserMenuItem(pathname, isLoading),
+      badge:
+        pendingSystemUsersCount > 0
+          ? {
+              label: pendingSystemUsersCount.toString(),
+              color: 'danger',
+              variant: 'base',
+            }
+          : undefined,
+    });
   }
 
   if (canAccessSettings && displaySettingsPage) {

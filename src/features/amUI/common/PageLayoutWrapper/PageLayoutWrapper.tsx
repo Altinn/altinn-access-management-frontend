@@ -16,6 +16,7 @@ import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
+import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
 
 import classes from './PageLayoutWrapper.module.css';
 
@@ -40,6 +41,14 @@ export const PageLayoutWrapper = ({
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings } = useGetIsCompanyProfileAdminQuery();
 
+  const { data: pendingSystemUsers } = useGetPendingSystemUserRequestsQuery(
+    reportee?.partyUuid ?? '',
+    {
+      skip: !(reportee?.partyUuid && isAdmin),
+    },
+  );
+  const pendingSystemUsersCount = pendingSystemUsers?.length ?? 0;
+
   const { menuGroups, isLoadingMenu } = useGlobalMenu();
 
   const { header, languageCode } = useHeader({ openAccountMenu });
@@ -51,6 +60,7 @@ export const PageLayoutWrapper = ({
     isAdmin,
     isClientAdmin,
     reportee,
+    pendingSystemUsersCount,
     canAccessSettings ?? false,
   );
 
