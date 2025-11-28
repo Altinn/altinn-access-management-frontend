@@ -20,7 +20,7 @@ import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
-import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
+import { ECC_PROVIDER_CODE, useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 
 export const UsersList = () => {
   const { t } = useTranslation();
@@ -61,9 +61,14 @@ export const UsersList = () => {
     const removeUuid = shouldDisplayPrivDelegation ? currentUser?.party.id : undefined;
 
     const mapConnection = (connection: Connection): Connection => {
+      const connectionRoles =
+        roleMetadataError || loadingRoleMetadata
+          ? []
+          : (mapRoles(connection.roles).filter((r) => r.provider?.code === ECC_PROVIDER_CODE) ??
+            []);
       return {
         ...connection,
-        roles: roleMetadataError || loadingRoleMetadata ? [] : mapRoles(connection.roles),
+        roles: connectionRoles,
         connections: connection.connections?.map(mapConnection) ?? [],
       };
     };
@@ -92,9 +97,13 @@ export const UsersList = () => {
       return undefined;
     }
 
+    const connectionRoles =
+      roleMetadataError || loadingRoleMetadata
+        ? []
+        : (mapRoles(currentUser.roles).filter((r) => r.provider?.code === ECC_PROVIDER_CODE) ?? []);
     return {
       ...currentUser,
-      roles: roleMetadataError || loadingRoleMetadata ? [] : mapRoles(currentUser.roles),
+      roles: connectionRoles,
     };
   }, [currentUser, mapRoles, roleMetadataError, loadingRoleMetadata]);
 
@@ -111,6 +120,7 @@ export const UsersList = () => {
         <>
           <CurrentUserPageHeader
             currentUser={currentUserWithRoles}
+            roleNames={currentUserWithRoles?.roles?.map((role) => role?.name) ?? []}
             loading={!!(currentUserLoading || loadingPartyRepresentation || loadingRoleMetadata)}
             as={(props) =>
               currentUser ? (

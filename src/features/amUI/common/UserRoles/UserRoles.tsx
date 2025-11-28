@@ -38,8 +38,8 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     isError: roleMetadataError,
   } = useRoleMetadata();
 
-  const onChipClick = (role: RoleInfo) => {
-    setSelectedRole(mapToRole(role));
+  const onChipClick = (role: Role) => {
+    setSelectedRole(role);
     if (!modalRef.current?.open) {
       modalRef.current?.showModal();
     }
@@ -66,7 +66,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
               key={role.id}
               onClick={() => onChipClick(role)}
             >
-              {role.displayName}
+              {role.name}
             </DsChip.Button>
           );
         })}

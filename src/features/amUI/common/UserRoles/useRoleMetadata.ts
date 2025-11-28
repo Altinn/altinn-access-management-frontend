@@ -2,10 +2,12 @@ import { useCallback, useMemo, useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useGetAllRolesQuery, type Role } from '@/rtk/features/roleApi';
-import type { Connection } from '@/rtk/features/connectionApi';
+import type { RoleInfo } from '@/rtk/features/connectionApi';
 
 type RoleMetadataMap = Record<string, Role | undefined>;
-const ECC_PROVIDER_CODE = 'sys-ccr';
+
+export const ECC_PROVIDER_CODE = 'sys-ccr';
+export const A2_PROVIDER_CODE = 'sys-altinn2';
 
 /**
  * Fetches all role metadata once and provides helpers to look up and map metadata by role id.
@@ -49,7 +51,7 @@ export const useRoleMetadata = () => {
   );
 
   const mapRoles = useCallback(
-    (roles?: Array<Role | Connection['roles'][number]>) => {
+    (roles?: (Role | RoleInfo)[]) => {
       if (isLoading || isError) {
         return [];
       }

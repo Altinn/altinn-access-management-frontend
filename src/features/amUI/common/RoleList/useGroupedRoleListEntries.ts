@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import type { RolePermission } from '@/rtk/features/roleApi';
+import { A2_PROVIDER_CODE, ECC_PROVIDER_CODE } from '../UserRoles/useRoleMetadata';
 
 type UseGroupedRoleListEntriesParams = {
   permissions?: RolePermission[];
@@ -33,9 +34,9 @@ export const useGroupedRoleListEntries = ({
       if (!providerCode) {
         return;
       }
-      if (providerCode === 'sys-altinn2') {
+      if (providerCode === A2_PROVIDER_CODE) {
         groups.altinn2Roles.push(connection);
-      } else if (providerCode === 'sys-ccr') {
+      } else if (providerCode === ECC_PROVIDER_CODE) {
         groups.userRoles.push(connection);
       }
     });

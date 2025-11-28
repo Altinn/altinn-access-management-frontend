@@ -10,9 +10,15 @@ interface CurrentUserPageHeaderProps {
   currentUser?: Connection;
   as: React.ElementType;
   loading: boolean;
+  roleNames?: string[];
 }
 
-export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserPageHeaderProps) => {
+export const CurrentUserPageHeader = ({
+  currentUser,
+  as,
+  loading,
+  roleNames,
+}: CurrentUserPageHeaderProps) => {
   const { t } = useTranslation();
 
   const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.dateOfBirth || undefined);
@@ -29,7 +35,7 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
         description={
           formattedBirthDate ? t('common.date_of_birth') + ` ${formattedBirthDate}` : undefined
         }
-        roleNames={roles?.filter((name) => !!name) as string[]}
+        roleNames={roleNames}
         type='person'
         as={as}
         titleAs='h2'
