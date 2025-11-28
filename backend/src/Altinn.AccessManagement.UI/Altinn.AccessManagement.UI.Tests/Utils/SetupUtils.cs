@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
@@ -460,6 +461,11 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.AddTransient<IAuthenticationClient, AuthenticationMock>();
                     services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
+                    services.AddTransient<IConnectionClient, ConnectionClientMock>();
+                    services.AddTransient<IUserService, UserService>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
