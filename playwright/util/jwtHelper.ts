@@ -67,6 +67,7 @@ export function signJWT(
  * @param scope The requested scope
  * @param tokenEndpoint The Maskinporten token endpoint URL
  * @param privateKey The private key in JWK format
+ * @param consumerOrg Optional organization number for "behalf of" scenarios
  * @returns The signed JWT as a string
  */
 export function createMaskinportenGrantAssertion(
@@ -74,11 +75,12 @@ export function createMaskinportenGrantAssertion(
   scope: string,
   tokenEndpoint: string,
   privateKey: JsonWebKey,
+  consumerOrg?: string,
 ): string {
   const { iat, exp } = getCurrentTimestamps();
   const jti = generateJti();
 
-  const payload = {
+  const payload: Record<string, unknown> = {
     aud: tokenEndpoint,
     iss: clientId,
     scope,
@@ -86,6 +88,11 @@ export function createMaskinportenGrantAssertion(
     exp,
     jti,
   };
+
+  // Add consumer_orgno claim when provided (for "behalf of" scenarios)
+  if (consumerOrg) {
+    payload.consumer_org = consumerOrg;
+  }
 
   return signJWT(payload, privateKey);
 }
@@ -96,6 +103,7 @@ export function createMaskinportenGrantAssertion(
  * @param consentRequestId The ID of the consent request
  * @param fromPersonId The person ID in URN format (e.g., urn:altinn:person:identifier-no:21818297804)
  * @param privateKey The private key in JWK format
+ * @param consumerOrg Optional organization number for "behalf of" scenarios
  * @returns The signed JWT as a string
  */
 export function createConsentAuthorizationJWT(
@@ -103,14 +111,15 @@ export function createConsentAuthorizationJWT(
   consentRequestId: string,
   fromPersonId: string,
   privateKey: JsonWebKey,
+  consumerOrg?: string,
 ): string {
   const { iat, exp } = getCurrentTimestamps();
   const jti = generateJti();
 
-  const payload = {
+  const payload: Record<string, unknown> = {
     aud: 'https://test.maskinporten.no/', // Default Maskinporten audience
     iss: clientId,
-    scope: 'altinn:consentrequests.read',
+    scope: 'altinn:consentrequests.write',
     iat,
     exp,
     jti,
@@ -122,6 +131,10 @@ export function createConsentAuthorizationJWT(
       },
     ],
   };
+
+  if (consumerOrg) {
+    payload.consumer_org = consumerOrg;
+  }
 
   return signJWT(payload, privateKey);
 }

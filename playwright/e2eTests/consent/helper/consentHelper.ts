@@ -17,25 +17,25 @@ export interface ConsentScenario {
   consentPage: ConsentPage;
   resourceValue: string;
   metaData?: Record<string, string>;
+  clientIdEnv?: string;
+  jwkEnv?: string;
 }
 
 /**
  * Create and approve a consent using Maskinporten authentication
  */
 export async function createAndApproveConsent(opts: ConsentScenario) {
-  const { api, mpToken, fromPerson, toOrg, validTo, login, consentPage, resourceValue, metaData } =
-    opts;
+  const { api, fromPerson, toOrg, login, consentPage, clientIdEnv, jwkEnv } = opts;
+
+  // Use provided env var names, or default to standard Maskinporten client
+  const finalClientIdEnv = clientIdEnv || 'MASKINPORTEN_CLIENT_ID';
+  const finalJwkEnv = jwkEnv || 'MASKINPORTEN_JWK';
 
   const resp = await api.createConsentRequestWithMaskinporten(
-    {
-      from: { type: 'person', id: fromPerson },
-      to: { type: 'org', id: toOrg },
-      validToIsoUtc: validTo,
-      resourceValue,
-      redirectUrl: REDIRECT_URL,
-      metaData,
-    },
-    mpToken,
+    { type: 'person', id: fromPerson },
+    { type: 'org', id: toOrg },
+    finalClientIdEnv,
+    finalJwkEnv,
   );
 
   await consentPage.open(resp.viewUri);
