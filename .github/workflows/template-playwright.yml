@@ -52,6 +52,8 @@ jobs:
           PASSWORD_TEST_API: ${{ secrets.PASSWORD_TEST_API }}
           MASKINPORTEN_CLIENT_ID: ${{ secrets.MASKINPORTEN_CLIENT_ID }}
           MASKINPORTEN_JWK: ${{ secrets.MASKINPORTEN_JWK }}
+          MASKINPORTEN_BEHALF_OF_CLIENT_ID: ${{ secrets.MASKINPORTEN_BEHALF_OF_CLIENT_ID }}
+          MASKINPORTEN_BEHALF_OF_JWK: ${{ secrets.MASKINPORTEN_BEHALF_OF_JWK }}
         run: |
           yarn run env:${{ inputs.environment }} --project ${{ inputs.project }} --workers=4 --grep-invert @slow
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

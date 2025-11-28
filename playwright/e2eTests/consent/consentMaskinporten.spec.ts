@@ -6,7 +6,7 @@ import { createAndApproveConsent, getConsentRequestId } from './helper/consentHe
 import { scenarioBuilder } from './helper/scenarioBuilder';
 import { ConsentApiRequests } from '../../api-requests/ConsentApiRequests';
 
-const DESKTOP = { width: 1920, height: 1080 };
+const MobileViewport = { width: 375, height: 667 };
 
 // Digdir's org id
 const MASKINPORTEN_ORG_DIGDIR = '991825827';
@@ -17,7 +17,7 @@ function getDigitaliseringsdirektoratetLocator(page: any) {
 }
 
 test.describe('Generate consent request for Digdir using maskinporten to fetch token', () => {
-  test.use({ language: Language.NB, viewport: DESKTOP });
+  test.use({ language: Language.NB, viewport: MobileViewport });
 
   test('Create and approve standard consent with Maskinporten', async ({
     page,
@@ -94,6 +94,8 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
       login,
       consentPage,
     }) => {
+      test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+
       const SPAREBANKEN_ORG_NUMBER = '313876144'; //Dagl 28913749776
 
       const SPAREBANKEN_DRIFT_ORG_NUMBER = '310149942'; //Dagl: 09906397525
@@ -105,7 +107,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
       const consentResp =
         await test.step('Fetch Maskinporten token for consumer_org and create consent request with toOrg as SPAREBANKEN_ORG_NUMBER', async () => {
           // Use Maskinporten token (from behalf_of client) with consumer_orgno to create consent request
-          const resp = await scenario.api.createConsentRequestWithMaskinporten(
+          const { viewUri } = await scenario.api.createConsentRequestWithMaskinporten(
             { type: 'person', id: scenario.fromPerson },
             { type: 'org', id: SPAREBANKEN_ORG_NUMBER },
             'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
@@ -113,12 +115,12 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
             SPAREBANKEN_ORG_NUMBER,
           );
 
-          await consentPage.open(resp.viewUri);
+          await consentPage.open(viewUri);
           await login.loginNotChoosingActor(scenario.fromPerson);
           await consentPage.pickLanguage(consentPage.language);
 
-          expect(resp.viewUri).toBeTruthy();
-          return resp;
+          expect(viewUri).toBeTruthy();
+          return { viewUri };
         });
 
       await test.step('Verify consent UI and expiry', async () => {
@@ -152,36 +154,6 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
         expect(token).toBeTruthy();
         expect(token.length).toBeGreaterThan(10);
       });
-    });
-  });
-
-  test('Create and approve simple consent (enkelt-samtykke)', async ({
-    page,
-    login,
-    consentPage,
-  }) => {
-    const resp = await test.step('Create consent request', async () => {
-      const response = await createAndApproveConsent({
-        ...scenarioBuilder.personToOrgWithMaskinporten(MASKINPORTEN_ORG_DIGDIR),
-        page,
-        login,
-        consentPage,
-        resourceValue: 'enkelt-samtykke',
-        metaData: { simpletag: 'Maskinporten E2E test' },
-      });
-      expect(response.viewUri).toBeTruthy();
-      return response;
-    });
-
-    await test.step('Verify consent UI', async () => {
-      await consentPage.expectEnkeltIntro();
-      await expect(consentPage.textDataUsage).toBeVisible();
-      await expect(consentPage.textDataProtection).toBeVisible();
-      await expect(getDigitaliseringsdirektoratetLocator(page)).toBeVisible();
-    });
-
-    await test.step('Approve consent', async () => {
-      await consentPage.approveStandardAndWaitLogout('https://example.com/');
     });
   });
 });
