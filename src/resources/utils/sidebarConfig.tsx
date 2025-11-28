@@ -5,24 +5,29 @@ import {
   TenancyIcon,
   PadlockUnlockedIcon,
   HandshakeIcon,
-  InformationSquareIcon,
   LeaveIcon,
   CogIcon,
   BellDotIcon,
   PadlockLockedFillIcon,
   KeyVerticalIcon,
+  ExternalLinkIcon,
 } from '@navikt/aksel-icons';
-import { t } from 'i18next';
+import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
 
 import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
-import { getHostUrl } from '@/resources/utils/pathUtils';
+import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 
-const getMenuLinkAs = (props: ComponentProps<typeof Link>, toUrl: string): JSX.Element => {
+const getMenuLinkAs = (
+  props: ComponentProps<typeof Link>,
+  toUrl: string,
+  newTab?: boolean,
+): JSX.Element => {
   return (
     <Link
       {...props}
       to={toUrl}
+      target={newTab ? '_blank' : '_self'}
     />
   );
 };
@@ -160,6 +165,8 @@ export const getRequestsMenuItem = (
 };
 
 export const getShortcutsMenuItem = (pathname?: string, isLoading = false): MenuItemProps[] => {
+  const infoPortalUrl = getAltinnStartPageUrl(i18next.language);
+  const helpPageUrl = infoPortalUrl + 'help/tilgangsstyring/';
   return [
     {
       groupId: 'shortcuts',
@@ -167,9 +174,9 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
       size: 'md',
       loading: isLoading,
       title: t('header.help_pages'),
-      icon: InformationSquareIcon,
-      selected: pathname?.includes(`/${amUIPath.Info}`),
-      as: (props) => getMenuLinkAs(props, `/${amUIPath.Info}`),
+      icon: ExternalLinkIcon,
+      selected: false,
+      as: (props) => getMenuLinkAs(props, helpPageUrl, true),
     },
     {
       groupId: 'shortcuts',
