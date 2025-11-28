@@ -40,14 +40,17 @@ export class MaskinportenToken {
   /**
    * Fetch an access token from Maskinporten
    * @param scope The requested scope (e.g., 'altinn:consentrequests.write')
+   * @param consumerOrg Optional organization number for "behalf of" scenarios
    * @returns The access token as a string
    */
-  async getMaskinportenToken(scope: string): Promise<string> {
+  async getMaskinportenToken(scope: string, consumerOrg?: string): Promise<string> {
+    console.log('consumerOrg', consumerOrg);
     const assertion = createMaskinportenGrantAssertion(
       this.clientId,
       scope,
       this.tokenEndpoint,
       this.jwk,
+      consumerOrg,
     );
 
     const response = await fetch(this.tokenEndpoint, {
