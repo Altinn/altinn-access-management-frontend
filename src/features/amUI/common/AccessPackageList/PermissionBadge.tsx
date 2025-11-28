@@ -18,18 +18,19 @@ export const PermissionBadge = ({ permissions }: PermissionBadgeProps) => {
       const id = to?.id;
       if (!to || !id) continue;
       if (seen.has(id)) continue;
-      const isPerson = to?.type === 'Person' ? 'person' : 'company';
+      const isPerson = to?.type === 'Person';
+      const type = isPerson ? 'person' : 'company';
       const name = formatDisplayName({
         fullName: to?.name || '',
-        type: isPerson,
+        type,
       });
-      const isSubunit = to && !isPerson && isSubUnitByType(to.variant);
+      const isParent = !isPerson && !isSubUnitByType(to.variant);
       seen.add(id);
       result.push({
         name,
         size: 'md',
-        type: isPerson,
-        isParent: !isSubunit,
+        type,
+        isParent,
       });
     }
     return result;
