@@ -18,16 +18,17 @@ export const PermissionBadge = ({ permissions }: PermissionBadgeProps) => {
       const id = to?.id;
       if (!to || !id) continue;
       if (seen.has(id)) continue;
+      const isPerson = to?.type === 'Person' ? 'person' : 'company';
       const name = formatDisplayName({
         fullName: to?.name || '',
-        type: to?.type === 'Person' ? 'person' : 'company',
+        type: isPerson,
       });
-      const isSubunit = to && isSubUnitByType(to.variant);
+      const isSubunit = to && !isPerson && isSubUnitByType(to.variant);
       seen.add(id);
       result.push({
         name,
         size: 'md',
-        type: to.type.toLowerCase() === 'organisasjon' ? 'company' : 'person',
+        type: isPerson,
         isParent: !isSubunit,
       });
     }
