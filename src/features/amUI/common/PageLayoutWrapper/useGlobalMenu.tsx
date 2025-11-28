@@ -104,7 +104,7 @@ export const useGlobalMenu = () => {
           href={getAfUrl()}
         />
       ),
-      badge: { label: t('common.beta') },
+      badge: { label: t('common.beta'), variant: 'base', color: 'neutral' },
     },
     {
       groupId: 10,
@@ -119,7 +119,7 @@ export const useGlobalMenu = () => {
           {...props}
         />
       ),
-      badge: { label: t('common.beta') },
+      badge: { label: t('common.beta'), variant: 'base', color: 'neutral' },
     },
     ...(isSm
       ? SidebarItems(
