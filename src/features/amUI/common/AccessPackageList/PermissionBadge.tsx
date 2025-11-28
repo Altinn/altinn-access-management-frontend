@@ -1,6 +1,7 @@
-import { AvatarGroup, AvatarProps } from '@altinn/altinn-components';
+import { AvatarGroup, AvatarProps, formatDisplayName } from '@altinn/altinn-components';
 import { useMemo } from 'react';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 interface PermissionBadgeProps {
   permissions?: Permissions[];
@@ -13,15 +14,21 @@ export const PermissionBadge = ({ permissions }: PermissionBadgeProps) => {
     const result: AvatarProps[] = [];
 
     for (const perm of permissions) {
-      const to = perm?.to as { id?: string; name: string; type: string } | undefined;
+      const to = perm?.to;
       const id = to?.id;
       if (!to || !id) continue;
       if (seen.has(id)) continue;
+      const name = formatDisplayName({
+        fullName: to?.name || '',
+        type: to?.type === 'Person' ? 'person' : 'company',
+      });
+      const isSubunit = to && isSubUnitByType(to.variant);
       seen.add(id);
       result.push({
-        name: to.name,
+        name,
         size: 'md',
         type: to.type.toLowerCase() === 'organisasjon' ? 'company' : 'person',
+        isParent: !isSubunit,
       });
     }
     return result;
