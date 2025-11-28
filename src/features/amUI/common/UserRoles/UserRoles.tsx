@@ -79,10 +79,3 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     </>
   );
 };
-
-const mapToRole = (role: RoleInfo): Role => ({
-  id: role.id,
-  code: role.code ?? '',
-  name: role.displayName ?? role.code ?? '',
-  description: role.description ?? '',
-});
