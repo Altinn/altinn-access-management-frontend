@@ -76,14 +76,14 @@ export const UserItem = ({
   );
 
   const roleNames =
-    isExtendedUser(user) && user.roles && !roleMetadataError && !loadingRoleMetadata
+    isExtendedUser(user) && user.roles
       ? mapRoles(user.roles.filter((r) => !r.viaParty))
           .filter((r) => r.provider?.code === ECC_PROVIDER_CODE)
           .map((r) => r.name)
       : [];
 
   const viaRoleNames =
-    isExtendedUser(user) && user.roles && !roleMetadataError && !loadingRoleMetadata
+    isExtendedUser(user) && user.roles
       ? mapRoles(user.roles.filter((r) => r.viaParty))
           .filter((r) => r.provider?.code === ECC_PROVIDER_CODE)
           .map((r) => r.name)
