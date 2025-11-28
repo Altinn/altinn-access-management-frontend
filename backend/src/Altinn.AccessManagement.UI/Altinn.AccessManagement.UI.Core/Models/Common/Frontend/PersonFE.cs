@@ -27,6 +27,8 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// </summary>
         public string LastName { get; set; }
 
+        /* Filter out unused data
+
         /// <summary>
         /// Gets a persons telephone number
         /// </summary>
@@ -92,6 +94,8 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// </summary>
         public DateTime? DateOfDeath { get; set; }
 
+        */
+
         /// <summary>
         /// Default constructor for JSON deserialization
         /// </summary>
@@ -109,6 +113,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
             FirstName = person.FirstName;
             MiddleName = person.MiddleName;
             LastName = person.LastName;
+            /* Filter out unused data
             TelephoneNumber = person.TelephoneNumber;
             MobileNumber = person.MobileNumber;
             MailingAddress = person.MailingAddress;
@@ -122,6 +127,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
             AddressHouseLetter = person.AddressHouseLetter;
             AddressPostalCode = person.AddressPostalCode;
             DateOfDeath = person.DateOfDeath;
+            */
         }
     }
 }
