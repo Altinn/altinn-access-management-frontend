@@ -1,6 +1,6 @@
 import React from 'react';
 import type { LanguageCode } from '@altinn/altinn-components';
-import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
+import { Badge, Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
 
 import {
@@ -18,6 +18,7 @@ import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
 
 import classes from './PageLayoutWrapper.module.css';
+import { useTranslation } from 'react-i18next';
 
 interface PageLayoutWrapperProps {
   openAccountMenu?: boolean;
@@ -32,6 +33,7 @@ export const PageLayoutWrapper = ({
   openAccountMenu = false,
   children,
 }: PageLayoutWrapperProps): React.ReactNode => {
+  const { t } = useTranslation();
   const useNewHeaderFlag = useNewHeader();
   const { data: reportee } = useGetReporteeQuery();
   const { pathname } = useLocation();
@@ -67,6 +69,13 @@ export const PageLayoutWrapper = ({
             groups: menuGroups,
             items: sidebarItems,
           },
+          footer: (
+            <Badge
+              label={t('common.beta')}
+              variant='base'
+              color='neutral'
+            />
+          ),
         }}
         content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
         footer={footer}

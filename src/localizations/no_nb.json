@@ -56,6 +56,8 @@
     "finish_delegation": "Fullfør delegering",
     "you_lowercase": "du",
     "you_uppercase": "Du",
+    "persons_lowercase": "personer",
+    "organizations_lowercase": "virksomheter",
     "minid": "MinID",
     "bankid": "BankID",
     "commifides": "Commifides",
@@ -436,6 +438,7 @@
     },
     "validation_error": {
       "AM.VLD-00002": "Du mangler tilgang til å gi denne fullmakten.",
+      "AM.VLD-00028": "Tilgangspakken kan ikke gis til {{entity_type}}.",
       "default": "Kunne ikke gi fullmakt"
     },
     "partial_deletion_message": {
@@ -521,7 +524,7 @@
     "oldRolesLinkText": "Gå til gammel løsning",
     "legacyRoleContent": "Denne rollen vil snart fjernes. Bruk heller tilgangspakker."
   },
-"systemuser_overviewpage": {
+  "systemuser_overviewpage": {
     "page_title": "Systemtilganger - Altinn",
     "banner_title": "Systemtilganger",
     "sub_title_text": "Ved å opprette en systemtilgang gir du et fagsystem tilgang til å løse oppgaver i Altinn på vegne av bedriften din.",
@@ -676,8 +679,9 @@
     "57_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systembruker."
   },
   "page_not_available": {
-    "title": "Siden er ikke tilgjengelig",
-    "text": "De nye tilgangsstyringssidene er ikke klare for privatpersoner helt enda. Dersom du mente å se på tilgangene til en virksomhet, vennligst bytt til denne."
+    "title": "Tilgangsstyring for privatpersoner er fortsatt under arbeid",
+    "text": "På denne siden vil det komme mer etterhvert. Du kan fortsatt tilgangsstyre på vegne av deg selv som privatperson i gammel løsning.",
+    "link_text": "Gå til gammel løsning"
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
@@ -790,17 +794,19 @@
     "no_resources": "Ingen tjenester er tilgjengelige."
   },
   "landing_page": {
-    "alert_heading": "Velkommen til ny løsning",
-    "alert_body": "Dette er de nye sidene for tilgangsstyring i Altinn. Vi har dessverre ikke alt på plass helt enda, så noen ting må du kanskje gjøre i gammel løsning. Tusen takk for tålmodigheten!",
-    "alert_link": "Les alt om den nye løsningen",
+    "alert_heading": "Du er nå i den nye løsningen for tilgangsstyring",
+    "alert_heading_priv": "Dette er den nye løsningen for tilgangsstyring for privatperson",
+    "alert_body": "Her er dagens Altinn-roller erstattet av tilgangspakker med tjenester. \n\nVær oppmerksom på at det er noen tjenester du ikke kan gi tilgang til i den nye løsningen. Hvis du ikke finner tjenesten her, kan du gå til den gamle løsningen.",
+    "alert_body_priv": "Vi har dessverre ikke alt på plass enda, så noen ting må du gjøre i gammel løsning. \n\nØnsker du å gå til tilgangsstyring for virksomhet, kan du skifte til ønsket virksomhet i aktørvalget i toppen.",
+    "alert_link": "Gå til gammel løsning",
     "shortcut_links_heading": "Hvor vil du gå?",
     "other_links_heading": "Annet",
-    "users_item_description_org": "Oversikt over personer og virksomheter som har fått tilganger hos dere",
-    "users_item_description_person": "Oversikt over personer og virksomheter som har fått tilganger hos deg",
-    "reportees_item_description_org": "Oversikt over alle som har gitt dere noen tilganger",
-    "reportees_item_description_person": "Oversikt over alle som har gitt deg noen tilganger",
+    "users_item_description_org": "Oversikt over personer og virksomheter som har fått fullmakter hos dere",
+    "users_item_description_person": "Oversikt over personer og virksomheter som har fullmakter hos deg",
+    "reportees_item_description_org": "Oversikt over alle som har gitt fullmakter til dere",
+    "reportees_item_description_person": "Oversikt over alle som har gitt deg fullmakter",
     "poa_item_description": "Oversikt over alle tilgangspakker og enkelttjenester",
-    "consent_item_description": "Oversikt over aktive og ventende samtykke-og fullmaktsavtaler",
+    "consent_item_description": "Oversikt over alle inngåtte avtaler",
     "systemuser_item_description": "Oversikt over systemtilganger",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny forespørsel",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye forespørsler"
