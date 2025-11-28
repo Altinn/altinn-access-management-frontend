@@ -136,6 +136,7 @@
     "locale_title": "Velg språk",
     "logged_in_as_name": "Logget inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
+    "help_pages": "Hjelpesider",
     "leave_beta": "Til gammel løsning",
     "shortcuts": "Snarveier",
     "all_forms": "Alle skjema og tjenester",
@@ -470,19 +471,6 @@
     "limited_preview_message": "Du kan dessverre ikke legge til personer helt enda. Dette vil komme senere.",
     "ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
     "last_name_format_error": "Vennligst fyll inn et gyldig etternavn"
-  },
-  "info_page": {
-    "page_title": "Om nye Altinn",
-    "main_title": "Om Tilgangsstyring",
-    "paragraph_1": "Her ser du på et forenklet brukerflate for tilgangsstyring (Tilgangsstyring Beta). I denne vil du kunne gi tilgangspakker fra en virksomhet til en annen virksomhet, se hvilke fullmakter virksomheten din har hos andre og opprette systemtilgang mot fagsystem. I denne brukerflaten vil det komme mer og mer innhold og funksjonalitet etter hvert.",
-    "title_2": "Tilgangspakker",
-    "paragraph_2": "Tilgangspakker vil erstatte dagens altinn-roller. De nye tilgangspakkene vil være flere, men inneholde færre skjema og tjenester. De vil også ligge under kategorier som hører til spesifikke temaer. Nå i begynnelsen vil du se at tilgangspakkene kan inneholde veldig få tjenester, men de vil fylles opp etter hvert.",
-    "title_3": "Hvem kan bruke Tilgangsstyring Beta?",
-    "paragraph_3": "I tilgangsstyring Beta som vi kaller “forenklet brukerflate” er det kun virksomhetsdelegering som kan gjennomføres. Det vil si at det kun kan gis tilgangspakker fra en virksomhet til en annen virksomhet. I hovedsak så vil dette gjelde virksomheter som har revisor, regnskapsfører eller forretningsfører, og som har fått beskjed om å gjøre dette.",
-    "title_4": "Systemtilgang",
-    "paragraph_4": "En systemtilgang er en ny type upersonlig bruker i Altinn som opprettes for at et fagsystem (f.eks regnskapssystem eller lønnssystem) skal få fullmakt til å løse oppgaver på vegne av egen virksomhet eller for kundene til virksomheten.",
-    "title_5": "Hva er forskjellen på vanlig systemtilgang og systemtilgang for kunder?",
-    "paragraph_5": "Med en vanlig systemtilgang handler du på vegne av deg selv. F.eks om du eier en liten virksomhet og fører regnskapet ditt selv i Fiken. Da kan du opprette systemtilgang som en del av Fiken sin flyt, eller du kan gå inn på altinn.no og opprette den selv ved å trykke på “Lag ny systemtilgang”.<br /><br /> Er du regnskapsfører eller revisor kan du opprette systemtilgang som kan tildeles fullmakter på vegne av kundene dine. Da vil systemet kunne sende inn og hente ut kundenes data. Denne systemtilgangen kan kun opprettes ved at du godkjenner systemtilgangen i en flyt i fagsystemet du vil bruke. Når du har godkjent den, går du til altinn.no for å legge til kundene som er relevante for den systemtilgangen. <br /><br />Vi gleder oss til å vise deg det nye Altinn og setter stor pris på tålmodigheten din mens vi bygger om. Har du spørsmål eller tilbakemeldinger, kontakt oss på support@altinn.no."
   },
   "settings_page": {
     "page_title": "Innstillinger - Altinn",

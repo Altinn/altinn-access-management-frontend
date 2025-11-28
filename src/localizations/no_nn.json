@@ -116,6 +116,7 @@
     "locale_title": "Vel språk",
     "logged_in_as_name": "Logga inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
+    "help_pages": "Hjelpesider",
     "leave_beta": "Til gammel løsning",
     "shortcuts": "Snarvegar",
     "all_forms": "Alle skjema og tenester",
@@ -467,19 +468,6 @@
     "limited_preview_message": "Du kan diverre ikkje legge til personar heilt endå. Dette vil komme seinare.",
     "ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
     "last_name_format_error": "Vennligst fyll inn eit gyldig etternavn"
-  },
-  "info_page": {
-    "page_title": "Om nye Altinn",
-    "main_title": "Om Tilgangsstyring",
-    "paragraph_1": "Her ser du på eit forenkla brukargrensesnitt for tilgangsstyring (Tilgangsstyring Beta). I dette vil du kunne gi tilgangspakkar frå ei verksemd til ei anna verksemd, sjå kva fullmakter verksemda di har hos andre og opprette systemtilgang til fagsystem. I dette brukargrensesnittet vil det komme meir innhald og funksjonalitet etter kvart.",
-    "title_2": "Tilgangspakkar",
-    "paragraph_2": "Tilgangspakkar vil erstatte dagens Altinn-roller. Dei nye tilgangspakkane vil vere fleire, men innehalde færre skjema og tenester. Dei vil også ligge under kategoriar som høyrer til spesifikke tema. No i byrjinga vil du sjå at tilgangspakkane kan innehalde svært få tenester, men dei vil bli fylde opp etter kvart.",
-    "title_3": "Kven kan bruke Tilgangsstyring Beta?",
-    "paragraph_3": "I tilgangsstyring Beta som vi kallar «forenkla brukargrensesnitt» er det berre verksemdsdelegering som kan gjennomførast. Det vil seie at det berre kan givast tilgangspakkar frå ei verksemd til ei anna verksemd. I hovudsak vil dette gjelde verksemder som har revisor, rekneskapsførar eller forretningsførar, og som har fått beskjed om å gjere dette.",
-    "title_4": "Systemtilgang",
-    "paragraph_4": "Ein systemtilgang er ein ny type upersonleg brukar i Altinn som blir oppretta for at eit fagsystem (t.d. rekneskapsystem eller lønsystem) skal få fullmakt til å løyse oppgåver på vegne av eiga verksemd eller for kundane til verksemda.",
-    "title_5": "Kva er forskjellen på vanleg systemtilgang og systemtilgang for kundar?",
-    "paragraph_5": "Med ein vanleg systemtilgang handlar du på vegne av deg sjølv. T.d. om du eig ei lita verksemd og fører rekneskapet ditt sjølv i Fiken. Då kan du opprette systemtilgang som ein del av Fiken sin flyt, eller du kan gå inn på altinn.no og opprette den sjølv ved å trykke på «Lag ny systemtilgang».<br /><br /> Er du rekneskapsførar eller revisor kan du opprette systemtilgang som kan tildelast fullmakter på vegne av kundane dine. Då vil systemet kunne sende inn og hente ut kundedata. Denne systemtilgangen kan berre opprettast ved at du godkjenner systemtilgangen i ein flyt i fagsystemet du vil bruke. Når du har godkjent den, går du til altinn.no for å legge til kundane som er relevante for den systemtilgangen. <br /><br />Vi gler oss til å vise deg det nye Altinn og set stor pris på tolmodet ditt medan vi byggjer om. Har du spørsmål eller tilbakemeldingar, kontakt oss på support@altinn.no."
   },
   "settings_page": {
     "page_title": "Innstillingar - Altinn",

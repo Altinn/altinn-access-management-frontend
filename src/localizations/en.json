@@ -119,6 +119,7 @@
     "locale_title": "Choose language",
     "logged_in_as_name": "Logged in as {{name}}",
     "new_altinn_info": "About new Altinn",
+    "help_pages": "Help pages",
     "leave_beta": "To the old solution",
     "shortcuts": "Shortcuts",
     "all_forms": "All forms and services",
@@ -471,19 +472,6 @@
     "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future.",
     "ssn_format_error": "Social security number must consist of 11 digits",
     "last_name_format_error": "Please enter a valid last name"
-  },
-  "info_page": {
-    "page_title": "About new Altinn",
-    "main_title": "About Access Management",
-    "paragraph_1": "This is a simplified user interface for access management (Access Management Beta). Here, you will be able to give access packages from one organization to another, see what accesses your organization has with others, and create system access for professional systems. In this user interface, there will be more and more content and functionality over time.",
-    "title_2": "Access packages",
-    "paragraph_2": "Access packages will replace today's Altinn roles. The new access packages will be more numerous, but contain fewer forms and services. They will also be under categories that belong to specific topics. Initially, you will see that the access packages may contain very few services, but they will be filled up over time.",
-    "title_3": "Who can use Access Management Beta?",
-    "paragraph_3": "In Access Management Beta, which we call the \"simplified user interface\", only organization-to-organization delegation can be performed. This means that access packages can only be given from one organization to another. Mainly, this will apply to organizations that have auditors, accountants, or business managers, and who have been told to do this.",
-    "title_4": "System access",
-    "paragraph_4": "A system access is a new type of impersonal user in Altinn that is created so that a professional system (e.g. accounting system or payroll system) can get power of attorney to solve tasks on behalf of its own organization or for the organization's customers.",
-    "title_5": "What is the difference between regular system access and system access for customers?",
-    "paragraph_5": "With a regular system access, you act on behalf of yourself. For example, if you own a small business and keep your own accounting in Fiken, you can create system access as part of Fiken's flow, or you can go to altinn.no and create it yourself by clicking \"Create new system access\".<br /><br /> If you are an accountant or auditor, you can create system access that can be assigned powers of attorney on behalf of your customers. The system will then be able to submit and retrieve customer data. This system access can only be created by approving the system access in the professional system you want to use. When you have approved it, you go to altinn.no to add the customers that are relevant for that system access. <br /><br />We look forward to showing you the new Altinn and greatly appreciate your patience while we rebuild. If you have questions or feedback, contact us at support@altinn.no."
   },
   "settings_page": {
     "page_title": "Settings - Altinn",
