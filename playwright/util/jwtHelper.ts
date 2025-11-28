@@ -89,7 +89,6 @@ export function createMaskinportenGrantAssertion(
     jti,
   };
 
-  // Add consumer_orgno claim when provided (for "behalf of" scenarios)
   if (consumerOrg) {
     payload.consumer_org = consumerOrg;
   }
