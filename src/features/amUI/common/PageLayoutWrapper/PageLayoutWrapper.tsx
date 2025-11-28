@@ -37,7 +37,7 @@ export const PageLayoutWrapper = ({
   const { t } = useTranslation();
   const useNewHeaderFlag = useNewHeader();
   const { data: reportee } = useGetReporteeQuery();
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
 
   const { data: isAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
@@ -67,8 +67,8 @@ export const PageLayoutWrapper = ({
         skipLink={{
           href:
             pathname === '/'
-              ? `${GeneralPath.BasePath}#main-content`
-              : `${GeneralPath.BasePath}${pathname}#main-content`,
+              ? `${GeneralPath.BasePath}${search}#main-content`
+              : `${GeneralPath.BasePath}${pathname}${search}#main-content`,
           color: 'inherit',
           size: 'xs',
           children: t('common.skiplink'),
