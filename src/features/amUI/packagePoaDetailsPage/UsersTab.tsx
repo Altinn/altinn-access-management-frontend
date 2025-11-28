@@ -14,7 +14,6 @@ import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import { ActionError } from '@/resources/hooks/useActionError';
-import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
 import { DelegateErrorAlert } from './DelegateErrorAlert';
 
 const mapUserToParty = (user: User): Party => ({
@@ -43,11 +42,13 @@ export const UsersTab = ({
 }: UsersTabProps) => {
   const { t } = useTranslation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
-  const {
-    mapRoles,
-    isLoading: loadingRoleMetadata,
-    isError: roleMetadataError,
-  } = useRoleMetadata();
+
+  const [delegateActionError, setDelegateActionError] = useState<{
+    error: ActionError;
+    targetParty?: Party;
+  } | null>(null);
+
+  const { mapRoles, isLoading: roleMetadataIsLoading } = useRoleMetadata();
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -68,13 +69,13 @@ export const UsersTab = ({
     () =>
       connections.map((connection) => ({
         ...connection,
-        roles: loadingRoleMetadata || roleMetadataError ? [] : mapRoles(connection.roles),
+        roles: mapRoles(connection.roles),
         connections: connection.connections?.map((child) => ({
           ...child,
-          roles: loadingRoleMetadata || roleMetadataError ? [] : mapRoles(child.roles),
+          roles: mapRoles(child.roles),
         })),
       })),
-    [connections, mapRoles, loadingRoleMetadata, roleMetadataError],
+    [connections, mapRoles],
   );
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
@@ -168,7 +169,7 @@ export const UsersTab = ({
       <AdvancedUserSearch
         connections={connectionsWithRoles}
         indirectConnections={indirectConnections}
-        isLoading={isLoading || loadingIndirectConnections || roleMetadataUnavailable}
+        isLoading={isLoading || loadingIndirectConnections || roleMetadataIsLoading}
         onDelegate={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         isActionLoading={
@@ -177,7 +178,7 @@ export const UsersTab = ({
           loadingIndirectConnections ||
           isFetching ||
           isFetchingIndirectConnections ||
-          roleMetadataUnavailable
+          roleMetadataIsLoading
         }
         canDelegate={canDelegate}
       />
