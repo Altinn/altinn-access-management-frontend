@@ -57,6 +57,8 @@
     "finish_delegation": "Confirm delegation",
     "you_lowercase": "you",
     "you_uppercase": "You",
+    "persons_lowercase": "persons",
+    "organizations_lowercase": "organizations",
     "minid": "MinID",
     "bankid": "BankID",
     "commifides": "Commifides",
@@ -437,6 +439,7 @@
     },
     "validation_error": {
       "AM.VLD-00002": "You do not have permission to grant this authorization.",
+      "AM.VLD-00028": "This access package cannot be given to {{entity_type}}.",
       "default": "Could not grant power of attorney"
     },
     "partial_deletion_message": {
@@ -677,8 +680,9 @@
     "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system user."
   },
   "page_not_available": {
-    "title": "This page is not available",
-    "text": "The new access management pages are not quite ready for private individuals yet. If you meant to view the accesses for an organization, please switch representation."
+    "title": "Access management for private individuals is still under development",
+    "text": "More content will be added to this page over time. You can still manage access on behalf of yourself as a private individual in the old solution.",
+    "link_text": "Go to old solution"
   },
   "consent_request": {
     "page_title": "Approve consent/power of attorney - Altinn",
@@ -791,18 +795,20 @@
     "no_resources": "No resources available."
   },
   "landing_page": {
-    "alert_heading": "Welcome to the new solution",
-    "alert_body": "These are the new pages for access management in Altinn. We don't have everything in place yet, so you may need to use the old solution for some tasks. Thank you for your patience!",
-    "alert_link": "Read all about the new solution",
+    "alert_heading": "You are now in the new access management solution",
+    "alert_heading_priv": "This is the new access management solution for private individuals",
+    "alert_body": "Today's Altinn roles have been replaced by access packages with services. \n\nPlease note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
+    "alert_body_priv": "Unfortunately we don't have everything in place yet, so you may need to do some things in the old solution. \n\nIf you want to go to access management for your organization, you can switch to your desired organization in the account selector at the top.",
+    "alert_link": "Go to the old solution",
     "shortcut_links_heading": "Where do you want to go?",
     "other_links_heading": "Other",
-    "users_item_description_org": "Overview of people and organisations that have been granted access in your organisation",
-    "users_item_description_person": "Overview of people and organisations that have been granted access for you",
-    "reportees_item_description_org": "Overview of everyone who has granted your organisation any access",
-    "reportees_item_description_person": "Overview of everyone who has granted you any access",
-    "poa_item_description": "Overview of access packages and individual services",
-    "consent_item_description": "Overview of active and pending consent and power of attorney agreements",
-    "systemuser_item_description": "Overview of system accesses",
+    "users_item_description_org": "Overview of people and organizations that have been granted access in your organization",
+    "users_item_description_person": "Overview of people and organizations that have been granted access to you",
+    "reportees_item_description_org": "Overview of all who have granted access to your organization",
+    "reportees_item_description_person": "Overview of all who have granted you access",
+    "poa_item_description": "Overview of all access packages and individual services",
+    "consent_item_description": "Overview of all concluded agreements",
+    "systemuser_item_description": "Overview of system access",
     "new_requests_single": "{{reportee}} has {{requestCount}} new request",
     "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"
   }

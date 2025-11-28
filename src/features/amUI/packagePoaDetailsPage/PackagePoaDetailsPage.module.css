@@ -5,6 +5,47 @@
   padding: 1.5rem 0 0.5rem 0;
 }
 
+.delegateErrorAlert {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    'header closebutton'
+    'message closebutton';
+  gap: 0.25rem;
+}
+
+.delegateErrorCloseButton {
+  grid-area: closebutton;
+  align-self: start;
+  justify-self: end;
+}
+
+.delegateErrorMessage {
+  grid-area: message;
+}
+
+.delegateErrorHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.dismissButton {
+  cursor: pointer;
+  padding: 0.1rem;
+  color: inherit;
+  min-width: unset;
+  height: unset;
+  width: unset;
+  min-height: unset;
+}
+
+.dismissButton svg {
+  display: block;
+}
+
 .noUsersAlert {
   display: flex;
   align-items: center;

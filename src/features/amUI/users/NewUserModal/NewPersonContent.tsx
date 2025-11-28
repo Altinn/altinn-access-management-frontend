@@ -46,6 +46,7 @@ export const NewPersonContent = ({
           onComplete({
             id: toUuid,
             name: lastName,
+            type: 'person',
             children: null,
           });
         }

@@ -39,6 +39,7 @@ export const NewOrgContent = ({
             onComplete({
               id: orgData.partyUuid,
               name: orgData.name,
+              type: 'organisasjon',
               children: null,
               organizationIdentifier: orgData.orgNumber,
             });

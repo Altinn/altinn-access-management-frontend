@@ -56,6 +56,8 @@
     "finish_delegation": "Fullfør delegering",
     "you_lowercase": "du",
     "you_uppercase": "Du",
+    "persons_lowercase": "personar",
+    "organizations_lowercase": "verksemder",
     "minid": "MinID",
     "bankid": "BankID",
     "commfides": "Commfides",
@@ -433,6 +435,7 @@
     },
     "validation_error": {
       "AM.VLD-00002": "Du manglar tilgang til å gi denne fullmakta.",
+      "AM.VLD-00028": "Tilgangspakken kan ikkje gis til {{entity_type}}.",
       "default": "Kunne ikkje gi fullmakta"
     },
     "partial_deletion_message": {
@@ -573,7 +576,7 @@
     "accesspackage_resources_list_singular": "1 teneste",
     "accesspackage_resources_list_plural": "{{resourcesCount}} tenester",
     "accesspackage_resources_singular": "Gir tilgang til 1 teneste:",
-    "accesspackage_resources_plural": "Gir tilgang til {{resourcesCount}} tenestar:",
+    "accesspackage_resources_plural": "Gir tilgang til {{resourcesCount}} tenester:",
     "right_resource_singular": "1 enkeltteneste",
     "right_resource_plural": "{{resourcesCount}} enkelttenester",
     "right_accesspackage_singular": "1 tilgangspakke",
@@ -673,8 +676,9 @@
     "57_systemuser_failed_to_delete_accesspackage": "Kunne ikkje fjerne tilgangspakke-delegering for systemtilgangen."
   },
   "page_not_available": {
-    "title": "Sida er ikkje tilgjengeleg",
-    "text": "Dei nye tilgangsstyringssidene er ikkje klare for privatpersonar heilt enno. Dersom du vil sjå tilgangane til ei verksemd, kan du bytte til denne."
+    "title": "Tilgangsstyring for privatpersonar er framleis under arbeid",
+    "text": "På denne sida vil det komme meir etter kvart. Du kan framleis tilgangsstyre på vegne av deg sjølv som privatperson i gammal løysing.",
+    "link_text": "Gå til gammal løysing"
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
@@ -787,17 +791,19 @@
     "no_resources": "Ingen tenester tilgjengelege."
   },
   "landing_page": {
-    "alert_heading": "Velkomen til ny løysing",
-    "alert_body": "Dette er dei nye sidene for tilgangsstyring i Altinn. Me har dessverre ikkje alt på plass enno, så nokre ting må du kanskje gjera i den gamle løysinga. Takk for tolmodet!",
-    "alert_link": "Les alt om den nye løysinga",
+    "alert_heading": "Du er no i den nye løysinga for tilgangsstyring",
+    "alert_heading_priv": "Dette er den nye løysinga for tilgangsstyring for privatperson",
+    "alert_body": "Her er dagens Altinn-roller erstatta av tilgangspakker med tenester. \n\nVær oppmerksom på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Hvis du ikkje finn tenesten her, kan du gå til den gamle løysinga.",
+    "alert_body_priv": "Vi har dessverre ikkje alt på plass endå, så nokre ting må du gjere i gammal løysing. \n\nØnsker du å gå til tilgangsstyring for verksemd, kan du skifte til ønska verksemd i aktørvalget i toppen.",
+    "alert_link": "Gå til gammal løysing",
     "shortcut_links_heading": "Kvar vil du gå?",
     "other_links_heading": "Anna",
-    "users_item_description_org": "Oversikt over personar og verksemder som har fått tilgangar hjå dykk",
-    "users_item_description_person": "Oversikt over personar og verksemder som har fått tilgangar hos deg",
-    "reportees_item_description_org": "Oversikt over alle som har gjeve dykk nokre tilgangar",
-    "reportees_item_description_person": "Oversikt over alle som har gjeve deg nokre tilgangar",
-    "poa_item_description": "Oversikt over tilgangspakkar og enkeltjenester",
-    "consent_item_description": "Oversikt over aktive og ventande samtykke- og fullmaktsavtalar",
+    "users_item_description_org": "Oversikt over personar og verksemder som har fått fullmakter hos dykk",
+    "users_item_description_person": "Oversikt over personar og verksemder som har fullmakter hos deg",
+    "reportees_item_description_org": "Oversikt over alle som har gitt fullmakter til dykk",
+    "reportees_item_description_person": "Oversikt over alle som har gitt deg fullmakter",
+    "poa_item_description": "Oversikt over alle tilgangspakkar og enkelttenester",
+    "consent_item_description": "Oversikt over alle inngåtte avtalar",
     "systemuser_item_description": "Oversikt over systemtilgangar",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny førespurnad",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye førespurnader"
