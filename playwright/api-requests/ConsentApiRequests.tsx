@@ -38,7 +38,6 @@ export class ConsentApiRequests {
 
     if (!response.ok) {
       const errorBody = await response.text();
-      console.log(token);
       console.error(`HTTP Error! Status: ${response.status}, Body: ${errorBody}`);
       throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorBody}`);
     }
@@ -135,14 +134,16 @@ export class ConsentApiRequests {
    * Create a consent request using Maskinporten authentication
    * @param from The party creating the consent request
    * @param to The organization receiving the consent request
-   * @param maskinportenToken A MaskinportenToken instance
+   * @param clientIdEnv Environment variable name for the Maskinporten client ID
+   * @param jwkEnv Environment variable name for the JWK private key
    * @param consumerOrg Optional organization number for "behalf of" scenarios
    * @returns The view URI for the consent request
    */
   public async createConsentRequestWithMaskinporten(
     from: FromParty,
     to: ToParty,
-    maskinportenToken: MaskinportenToken,
+    clientIdEnv: string,
+    jwkEnv: string,
     consumerOrg?: string,
   ): Promise<{ viewUri: string }> {
     // Set default values for fields not needed in test
@@ -165,6 +166,8 @@ export class ConsentApiRequests {
     const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
     const scopes = 'altinn:consentrequests.write';
 
+    // Create MaskinportenToken instance to fetch the access token
+    const maskinportenToken = new MaskinportenToken(clientIdEnv, jwkEnv);
     return this.sendPostRequestWithMaskinporten<typeof payload, { viewUri: string }>(
       payload,
       endpoint,

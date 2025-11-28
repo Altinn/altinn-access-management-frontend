@@ -44,7 +44,6 @@ export class MaskinportenToken {
    * @returns The access token as a string
    */
   async getMaskinportenToken(scope: string, consumerOrg?: string): Promise<string> {
-    console.log('consumerOrg', consumerOrg);
     const assertion = createMaskinportenGrantAssertion(
       this.clientId,
       scope,

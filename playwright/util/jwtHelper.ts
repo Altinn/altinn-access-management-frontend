@@ -94,8 +94,6 @@ export function createMaskinportenGrantAssertion(
     payload.consumer_org = consumerOrg;
   }
 
-  console.log('payload', payload);
-
   return signJWT(payload, privateKey);
 }
 

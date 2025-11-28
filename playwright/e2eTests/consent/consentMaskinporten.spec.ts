@@ -108,7 +108,8 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
           const resp = await scenario.api.createConsentRequestWithMaskinporten(
             { type: 'person', id: scenario.fromPerson },
             { type: 'org', id: SPAREBANKEN_ORG_NUMBER },
-            scenario.mpToken,
+            'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
+            'MASKINPORTEN_BEHALF_OF_JWK',
             SPAREBANKEN_ORG_NUMBER,
           );
 
@@ -124,6 +125,14 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
         await consentPage.expectStandardIntro();
         await expect(consentPage.textIncomeData).toBeVisible();
         await consentPage.expectExpiry(formatUiDateTime(scenario.validTo));
+      });
+
+      await test.step('Verify behalf of text is displayed', async () => {
+        await expect(
+          consentPage.page.getByText(
+            'Jovial Konservativ Tiger AS foretar dette oppslaget på vegne av Nyttig Fredfull Struts Ltd.',
+          ),
+        ).toBeVisible();
       });
 
       await test.step('Approve consent', async () => {

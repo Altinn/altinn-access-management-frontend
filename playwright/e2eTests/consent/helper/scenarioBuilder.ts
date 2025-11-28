@@ -13,7 +13,15 @@ export const scenarioBuilder = {
     const validTo = addTimeToNowUtc({ days: 5 });
     const api = new ConsentApiRequests(toOrg);
     const mpToken = new MaskinportenToken('MASKINPORTEN_CLIENT_ID', 'MASKINPORTEN_JWK');
-    return { fromPerson, toOrg, validTo, api, mpToken };
+    return {
+      fromPerson,
+      toOrg,
+      validTo,
+      api,
+      mpToken,
+      clientIdEnv: 'MASKINPORTEN_CLIENT_ID',
+      jwkEnv: 'MASKINPORTEN_JWK',
+    };
   },
 
   /**
@@ -28,7 +36,15 @@ export const scenarioBuilder = {
       'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
       'MASKINPORTEN_BEHALF_OF_JWK',
     );
-    return { fromPerson, toOrg, validTo, api, mpToken };
+    return {
+      fromPerson,
+      toOrg,
+      validTo,
+      api,
+      mpToken,
+      clientIdEnv: 'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
+      jwkEnv: 'MASKINPORTEN_BEHALF_OF_JWK',
+    };
   },
 
   /**
