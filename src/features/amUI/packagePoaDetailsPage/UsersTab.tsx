@@ -11,9 +11,9 @@ import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPa
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
+import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import { ActionError } from '@/resources/hooks/useActionError';
-import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
 import { DelegateErrorAlert } from './DelegateErrorAlert';
 
 const mapUserToParty = (user: User): Party => ({
@@ -48,8 +48,7 @@ export const UsersTab = ({
     targetParty?: Party;
   } | null>(null);
 
-  const { mapRoles, loadingRoleMetadata } = useRoleMapper();
-  const roleMetadataUnavailable = loadingRoleMetadata;
+  const { mapRoles, isLoading: roleMetadataIsLoading } = useRoleMetadata();
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -170,7 +169,7 @@ export const UsersTab = ({
       <AdvancedUserSearch
         connections={connectionsWithRoles}
         indirectConnections={indirectConnections}
-        isLoading={isLoading || loadingIndirectConnections || roleMetadataUnavailable}
+        isLoading={isLoading || loadingIndirectConnections || roleMetadataIsLoading}
         onDelegate={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         isActionLoading={
@@ -179,7 +178,7 @@ export const UsersTab = ({
           loadingIndirectConnections ||
           isFetching ||
           isFetchingIndirectConnections ||
-          roleMetadataUnavailable
+          roleMetadataIsLoading
         }
         canDelegate={canDelegate}
       />

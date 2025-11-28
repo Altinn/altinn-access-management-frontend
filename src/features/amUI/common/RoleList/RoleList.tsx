@@ -36,17 +36,23 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
     },
   );
 
-  const { getRoleMetadata } = useRoleMetadata();
+  const {
+    mapRoles,
+    error: roleMetadataError,
+    isLoading: roleMetadataIsLoading,
+  } = useRoleMetadata();
 
   const { altinn2Roles } = useGroupedRoleListEntries({
     permissions,
   });
 
-  if (permissionsIsLoading || partyIsLoading || isLoading) {
+  const mappedRoles = mapRoles(altinn2Roles?.map(({ role }) => role ?? ([] as Role[])));
+
+  if (permissionsIsLoading || partyIsLoading || roleMetadataIsLoading || isLoading) {
     return <SkeletonRoleList />;
   }
-  if (permissionsError) {
-    const roleFetchErrorDetails = createErrorDetails(permissionsError);
+  if (permissionsError || roleMetadataError) {
+    const roleFetchErrorDetails = createErrorDetails(permissionsError || roleMetadataError);
 
     return (
       <div className={classes.roleLists}>
@@ -77,18 +83,17 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
         level={2}
         data-size='xs'
       >
-        {t('role.current_roles_title', { count: altinn2Roles.length })}
+        {t('role.current_roles_title', { count: mappedRoles.length })}
       </DsHeading>
-      {altinn2Roles.length === 0 ? (
+      {mappedRoles.length === 0 ? (
         <DsParagraph data-size='sm'>{t('role.no_roles_message')}</DsParagraph>
       ) : (
         <List>
-          {altinn2Roles.map(({ role }) => {
-            const roleMetadata = getRoleMetadata(role.id);
+          {mappedRoles.map((role) => {
             return (
               <RoleListItem
                 key={role.id}
-                role={roleMetadata ?? role}
+                role={role}
                 onClick={() => onSelect(role)}
               />
             );

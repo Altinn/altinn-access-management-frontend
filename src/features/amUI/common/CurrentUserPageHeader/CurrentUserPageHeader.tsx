@@ -10,13 +10,18 @@ interface CurrentUserPageHeaderProps {
   currentUser?: Connection;
   as: React.ElementType;
   loading: boolean;
+  roleNames?: string[];
 }
 
-export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserPageHeaderProps) => {
+export const CurrentUserPageHeader = ({
+  currentUser,
+  as,
+  loading,
+  roleNames,
+}: CurrentUserPageHeaderProps) => {
   const { t } = useTranslation();
 
   const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.dateOfBirth || undefined);
-  const roles = currentUser?.roles?.map((role) => role?.displayName ?? role.code);
 
   return (
     <div className={classes.currentUser}>
@@ -29,7 +34,7 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
         description={
           formattedBirthDate ? t('common.date_of_birth') + ` ${formattedBirthDate}` : undefined
         }
-        roleNames={roles?.filter((name): name is string => name !== undefined)}
+        roleNames={roleNames}
         type='person'
         as={as}
         titleAs='h2'

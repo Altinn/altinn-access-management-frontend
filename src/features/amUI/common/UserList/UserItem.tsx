@@ -12,6 +12,7 @@ import { formatDateToNorwegian } from '@/resources/utils';
 import classes from './UserList.module.css';
 import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { ECC_PROVIDER_CODE, useRoleMetadata } from '../UserRoles/useRoleMetadata';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
@@ -63,7 +64,11 @@ export const UserItem = ({
   const hasInheritingUsers = childrenToDisplay.length > 0 && shouldDisplaySubConnections;
   const [isExpanded, setExpanded] = useState(false);
   const { t } = useTranslation();
-
+  const {
+    mapRoles,
+    isLoading: loadingRoleMetadata,
+    isError: roleMetadataError,
+  } = useRoleMetadata();
   useEffect(
     () =>
       setExpanded((hasInheritingUsers && isExtendedUser(user) && user.matchInChildren) ?? false),
@@ -72,12 +77,16 @@ export const UserItem = ({
 
   const roleNames =
     isExtendedUser(user) && user.roles
-      ? user.roles.filter((r) => !r.viaParty).map((role) => role?.displayName ?? role.code)
+      ? mapRoles(user.roles.filter((r) => !r.viaParty))
+          .filter((r) => r.provider?.code === ECC_PROVIDER_CODE)
+          .map((r) => r.name)
       : [];
 
   const viaRoleNames =
     isExtendedUser(user) && user.roles
-      ? user.roles.filter((r) => r.viaParty).map((role) => role?.displayName ?? role.code)
+      ? mapRoles(user.roles.filter((r) => r.viaParty))
+          .filter((r) => r.provider?.code === ECC_PROVIDER_CODE)
+          .map((r) => r.name)
       : [];
 
   const viaEntity =

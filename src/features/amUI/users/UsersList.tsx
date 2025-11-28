@@ -20,7 +20,7 @@ import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
-import { useRoleMapper } from '../common/UserRoles/useRoleMapper';
+import { ECC_PROVIDER_CODE, useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 
 export const UsersList = () => {
   const { t } = useTranslation();
@@ -47,7 +47,11 @@ export const UsersList = () => {
 
   const [searchString, setSearchString] = useState<string>('');
 
-  const { mapRoles, loadingRoleMetadata } = useRoleMapper();
+  const {
+    mapRoles,
+    isLoading: loadingRoleMetadata,
+    isError: roleMetadataError,
+  } = useRoleMetadata();
 
   const connectionsWithRoles = useMemo(() => {
     if (!rightHolders) {
@@ -57,9 +61,13 @@ export const UsersList = () => {
     const removeUuid = shouldDisplayPrivDelegation ? currentUser?.party.id : undefined;
 
     const mapConnection = (connection: Connection): Connection => {
+      const connectionRoles = mapRoles(connection.roles).filter(
+        (r) => r.provider?.code === ECC_PROVIDER_CODE,
+      );
+
       return {
         ...connection,
-        roles: mapRoles(connection.roles),
+        roles: connectionRoles,
         connections: connection.connections?.map(mapConnection) ?? [],
       };
     };
@@ -74,16 +82,27 @@ export const UsersList = () => {
       acc.push(mapConnection(connection));
       return acc;
     }, []);
-  }, [rightHolders, mapRoles, shouldDisplayPrivDelegation, currentUser?.party.id]);
+  }, [
+    rightHolders,
+    mapRoles,
+    shouldDisplayPrivDelegation,
+    currentUser?.party.id,
+    roleMetadataError,
+    loadingRoleMetadata,
+  ]);
 
   const currentUserWithRoles = useMemo(() => {
     if (!currentUser) {
       return undefined;
     }
 
+    const connectionRoles = mapRoles(currentUser.roles).filter(
+      (r) => r.provider?.code === ECC_PROVIDER_CODE,
+    );
+
     return {
       ...currentUser,
-      roles: mapRoles(currentUser.roles),
+      roles: connectionRoles,
     };
   }, [currentUser, mapRoles]);
 
@@ -100,6 +119,7 @@ export const UsersList = () => {
         <>
           <CurrentUserPageHeader
             currentUser={currentUserWithRoles}
+            roleNames={currentUserWithRoles?.roles?.map((role) => role?.name) ?? []}
             loading={!!(currentUserLoading || loadingPartyRepresentation || loadingRoleMetadata)}
             as={(props) =>
               currentUser ? (

@@ -2,15 +2,27 @@ import { useCallback, useMemo, useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useGetAllRolesQuery, type Role } from '@/rtk/features/roleApi';
+import type { RoleInfo } from '@/rtk/features/connectionApi';
 
 type RoleMetadataMap = Record<string, Role | undefined>;
 
+export const ECC_PROVIDER_CODE = 'sys-ccr';
+export const A2_PROVIDER_CODE = 'sys-altinn2';
+
 /**
- * Fetches all role metadata once and provides a helper to look up metadata by role id.
+ * Fetches all role metadata once and provides helpers to look up and map metadata by role id.
  */
 export const useRoleMetadata = () => {
   const { i18n } = useTranslation();
-  const { data: allRoles, isFetching, refetch } = useGetAllRolesQuery({ language: i18n.language });
+  const {
+    data: allRoles,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetAllRolesQuery({
+    language: i18n.language,
+  });
 
   // Refetch when language changes to ensure fresh translated data
   useEffect(() => {
@@ -30,7 +42,7 @@ export const useRoleMetadata = () => {
 
   const getRoleMetadata = useCallback(
     (roleId?: string | null) => {
-      if (!roleId) {
+      if (!roleId || !roleMetadataMap) {
         return undefined;
       }
       return roleMetadataMap[roleId];
@@ -38,5 +50,23 @@ export const useRoleMetadata = () => {
     [roleMetadataMap],
   );
 
-  return { getRoleMetadata, isLoading: isFetching };
+  const mapRoles = useCallback(
+    (roles?: (Role | RoleInfo)[]) => {
+      if (isLoading || isError) {
+        return [];
+      }
+
+      return (
+        roles
+          ?.map((role) => {
+            const metadata = getRoleMetadata(role.id);
+            return metadata ?? null;
+          })
+          .filter((role): role is NonNullable<typeof role> => role !== null) ?? []
+      );
+    },
+    [getRoleMetadata, isError, isLoading],
+  );
+
+  return { getRoleMetadata, mapRoles, isLoading, isError, error };
 };

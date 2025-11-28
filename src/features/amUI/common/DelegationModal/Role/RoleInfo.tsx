@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import classes from './RoleInfo.module.css';
-import { Role, useGetRolePermissionsQuery, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
+import { Role, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
 import { DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
 import {
   ExclamationmarkTriangleFillIcon,

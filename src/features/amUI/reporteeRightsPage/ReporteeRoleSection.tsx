@@ -6,7 +6,6 @@ import type { Role } from '@/rtk/features/roleApi';
 
 import { RoleInfoModal } from '../common/DelegationModal/RoleInfoModal';
 import { RoleList } from '../common/RoleList/RoleList';
-import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
 
 interface ReporteeRoleSectionProps {
@@ -14,7 +13,6 @@ interface ReporteeRoleSectionProps {
 }
 
 export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionProps) => {
-  const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
 
