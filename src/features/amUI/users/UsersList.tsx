@@ -61,11 +61,10 @@ export const UsersList = () => {
     const removeUuid = shouldDisplayPrivDelegation ? currentUser?.party.id : undefined;
 
     const mapConnection = (connection: Connection): Connection => {
-      const connectionRoles =
-        roleMetadataError || loadingRoleMetadata
-          ? []
-          : (mapRoles(connection.roles).filter((r) => r.provider?.code === ECC_PROVIDER_CODE) ??
-            []);
+      const connectionRoles = mapRoles(connection.roles).filter(
+        (r) => r.provider?.code === ECC_PROVIDER_CODE,
+      );
+
       return {
         ...connection,
         roles: connectionRoles,
@@ -97,15 +96,15 @@ export const UsersList = () => {
       return undefined;
     }
 
-    const connectionRoles =
-      roleMetadataError || loadingRoleMetadata
-        ? []
-        : (mapRoles(currentUser.roles).filter((r) => r.provider?.code === ECC_PROVIDER_CODE) ?? []);
+    const connectionRoles = mapRoles(currentUser.roles).filter(
+      (r) => r.provider?.code === ECC_PROVIDER_CODE,
+    );
+
     return {
       ...currentUser,
       roles: connectionRoles,
     };
-  }, [currentUser, mapRoles, roleMetadataError, loadingRoleMetadata]);
+  }, [currentUser, mapRoles]);
 
   const onSearch = useCallback(
     debounce((newSearchString: string) => {

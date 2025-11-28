@@ -13,7 +13,6 @@ import { t } from 'i18next';
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
-import { RoleInfo } from '@/rtk/features/connectionApi';
 
 interface RoleListProps {
   onSelect: (role: Role) => void;

@@ -49,10 +49,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     setSelectedRole(null);
   };
 
-  const roles =
-    loadingRoleMetadata || roleMetadataError
-      ? []
-      : mapRoles(userRoles?.map(({ role }) => role) ?? ([] as RoleInfo[]));
+  const roles = mapRoles(userRoles?.map(({ role }) => role) ?? []);
 
   return (
     <>
