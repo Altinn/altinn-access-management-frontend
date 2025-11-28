@@ -1,12 +1,12 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
-using Altinn.AccessManagement.UI.Core.Models.Profile;
+using Altinn.Register.Contracts.V1;
 
-namespace Altinn.AccessManagement.UI.Core.Models
+namespace Altinn.AccessManagement.UI.Core.Models.Profile
 {
     /// <summary>
-    /// Class describing a user profile for use in the front end GUI. Notably, this model does not include the party's ssn
+    /// Class describing a user profile
     /// </summary>
-    public class UserProfileFE
+    public class UserProfile
     {
         /// <summary>
         /// Gets or sets the ID of the user
@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// <summary>
         /// Gets or sets the <see cref="Party"/>
         /// </summary>
-        public PartyFE Party { get; set; }
+        public Party Party { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="UserType"/>
@@ -62,31 +62,5 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// Gets or sets the <see cref="ProfileSettingPreference"/>
         /// </summary>
         public ProfileSettingPreference ProfileSettingPreference { get; set; }
-
-        /// <summary>
-        /// Creates a UserProfileFE object from a UserProfile object
-        /// </summary>
-        /// <param name="userProfile">A UserProfile object</param>
-        public UserProfileFE(UserProfile userProfile)
-        {
-            UserId = userProfile.UserId;
-            UserUuid = userProfile.UserUuid;
-            UserName = userProfile.UserName;
-            ExternalIdentity = userProfile.ExternalIdentity;
-            IsReserved = userProfile.IsReserved;
-            PhoneNumber = userProfile.PhoneNumber;
-            Email = userProfile.Email;
-            PartyId = userProfile.PartyId;
-            UserType = userProfile.UserType;
-            ProfileSettingPreference = userProfile.ProfileSettingPreference;
-            Party = new PartyFE(userProfile.Party);
-        }
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public UserProfileFE()
-        {
-        }
     }
 }

@@ -10,7 +10,7 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
 using Altinn.Platform.Models.Register;
-using Altinn.Platform.Register.Models;
+using Altinn.Register.Contracts.V1;
 using AltinnCore.Authentication.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -129,7 +129,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<PartyR> GetParty(Guid uuid)
+        public async Task<Altinn.Register.Contracts.Party> GetParty(Guid uuid)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    return JsonSerializer.Deserialize<PartyR>(responseContent, _serializerOptions);
+                    return JsonSerializer.Deserialize<Altinn.Register.Contracts.Party>(responseContent, _serializerOptions);
                 }
 
                 _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyByUuid // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
@@ -193,7 +193,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonSerializer.Deserialize<PartyNamesLookupResult>(responseContent, _serializerOptions)?.PartyNames;
+                    return JsonSerializer.Deserialize<PartyNamesLookupResult>(responseContent, _serializerOptions)?.PartyNames?.ToList();
                 }
 
                 _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyNames // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);

@@ -1,9 +1,8 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.Platform.Models.Register;
-using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
+using Altinn.Register.Contracts.V1;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -38,8 +37,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             // We fetch the party using the partyList endpoint because it has better performance than the one ment for singular party queries.
             // However, since we only ask for one uuid, we will still only get one party back.
-            List<Party> partyList = await _registerClient.GetPartyList(new List<Guid>() { uuid });
-            Party party = partyList?.FirstOrDefault();
+            List<Altinn.Register.Contracts.V1.Party> partyList = await _registerClient.GetPartyList(new List<Guid>() { uuid });
+            Altinn.Register.Contracts.V1.Party party = partyList?.FirstOrDefault();
 
             return party == null ? null : new PartyFE(party);
         }
@@ -47,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>        
         public async Task<PartyFE> GetPartyByUUID(Guid uuid)
         {
-            PartyR partyFromRegistry = await _registerClient.GetParty(uuid);
+            Altinn.Register.Contracts.Party partyFromRegistry = await _registerClient.GetParty(uuid);
 
             return partyFromRegistry == null ? null : new PartyFE(partyFromRegistry);
         }

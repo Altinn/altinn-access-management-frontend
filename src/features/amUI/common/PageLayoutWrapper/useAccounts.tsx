@@ -4,7 +4,7 @@ import {
   ReporteeInfo,
   useGetFavoriteActorUuidsQuery,
   useGetReporteeQuery,
-  useGetUserInfoQuery,
+  useGetUserProfileQuery,
 } from '@/rtk/features/userInfoApi';
 import { AccountMenuItemProps, formatDisplayName, MenuGroupProps } from '@altinn/altinn-components';
 import { useMemo } from 'react';
@@ -27,7 +27,7 @@ const getAccountTypeFromConnection = (type: string): 'company' | 'person' => {
 export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
   const { t } = useTranslation();
   const { data: actingParty } = useGetReporteeQuery();
-  const { data: currentUser } = useGetUserInfoQuery();
+  const { data: currentUser } = useGetUserProfileQuery();
   const { data: favoriteUuids } = useGetFavoriteActorUuidsQuery();
 
   const useNewActorListFlag = useNewActorList();

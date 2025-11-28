@@ -3,7 +3,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.Platform.Models.Register;
-using Altinn.Platform.Register.Models;
+using Altinn.Register.Contracts.V1;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
@@ -55,13 +55,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc/>
-        public Task<PartyR> GetParty(Guid uuid)
+        public Task<Altinn.Register.Contracts.Party> GetParty(Guid uuid)
         {
             string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Parties", "parties.json");
             if (File.Exists(testDataPath))
             {
                 string content = File.ReadAllText(testDataPath);
-                List<PartyR> partyList = JsonSerializer.Deserialize<List<PartyR>>(content, _options);
+                List<Altinn.Register.Contracts.Party> partyList = JsonSerializer.Deserialize<List<Altinn.Register.Contracts.Party>>(content, _options);
                 return Task.FromResult(partyList?.FirstOrDefault(p => p.Uuid == uuid));
             }
 
