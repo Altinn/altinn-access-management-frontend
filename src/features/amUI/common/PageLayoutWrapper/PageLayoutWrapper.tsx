@@ -19,6 +19,7 @@ import { useHeader } from './useHeader';
 
 import classes from './PageLayoutWrapper.module.css';
 import { useTranslation } from 'react-i18next';
+import { GeneralPath } from '@/routes/paths';
 
 interface PageLayoutWrapperProps {
   openAccountMenu?: boolean;
@@ -63,6 +64,15 @@ export const PageLayoutWrapper = ({
         color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
         theme='subtle'
         header={header}
+        skipLink={{
+          href:
+            pathname === '/'
+              ? `${GeneralPath.BasePath}#main-content`
+              : `${GeneralPath.BasePath}${pathname}#main-content`,
+          color: 'inherit',
+          size: 'xs',
+          children: t('common.skiplink'),
+        }}
         sidebar={{
           menu: {
             variant: 'subtle',

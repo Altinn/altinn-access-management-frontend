@@ -92,7 +92,8 @@
     "date_of_birth": "Født",
     "save_changes": "Lagre endringer",
     "none": "ingen",
-    "digdir": "Digitaliseringsdirektoratet"
+    "digdir": "Digitaliseringsdirektoratet",
+    "skiplink": "Hopp til hovedinnholdet"
   },
   "beta_banner": {
     "info": "Du ser nå på en betaversjon av de nye sidene for tilgangsstyring i Altinn.",
