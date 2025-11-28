@@ -166,7 +166,7 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
       id: 'beta-about',
       size: 'md',
       loading: isLoading,
-      title: t('header.new_altinn_info'),
+      title: t('header.help_pages'),
       icon: InformationSquareIcon,
       selected: pathname?.includes(`/${amUIPath.Info}`),
       as: (props) => getMenuLinkAs(props, `/${amUIPath.Info}`),
