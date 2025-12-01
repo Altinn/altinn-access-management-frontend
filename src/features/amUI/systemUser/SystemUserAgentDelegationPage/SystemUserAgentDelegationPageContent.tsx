@@ -197,7 +197,7 @@ export const SystemUserAgentDelegationPageContent = ({
             onRemoveCustomer={onRemoveCustomer}
           />
           <>
-            {customers.length === 0 && (
+            {customers.length === 0 && reporteeData?.name && (
               <DsAlert data-color='warning'>
                 {t('systemuser_agent_delegation.no_customers_warning', {
                   companyName: reporteeData?.name,
