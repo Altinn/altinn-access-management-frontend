@@ -2,11 +2,10 @@
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
-using Altinn.Platform.Register.Models;
+using Altinn.Register.Contracts.V1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
-using System.Runtime.Intrinsics.X86;
 using System.Text.Json;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks

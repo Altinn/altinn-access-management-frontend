@@ -23,7 +23,6 @@ const defaultEntity: Entity = {
   name: 'Entity Name',
   type: 'entity-type',
   variant: 'entity-variant',
-  keyValues: {},
 };
 
 const mockRolePermissions = (settings: rolePermissionSetting[]): RolePermission[] => {

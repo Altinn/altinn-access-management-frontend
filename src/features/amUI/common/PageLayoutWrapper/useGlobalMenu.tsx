@@ -19,7 +19,7 @@ import {
   useGetIsCompanyProfileAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
   useGetReporteeQuery,
-  useGetUserInfoQuery,
+  useGetUserProfileQuery,
 } from '@/rtk/features/userInfoApi';
 import { Theme, MenuItemSize, MenuItemProps, formatDisplayName } from '@altinn/altinn-components';
 import {
@@ -72,7 +72,7 @@ export const useGlobalMenu = () => {
   const useNewActorListFlag = useNewActorList();
   const isSm = useIsTabletOrSmaller();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const { data: userinfo } = useGetUserInfoQuery();
+  const { data: userinfo } = useGetUserProfileQuery();
   const { data: reporteeList, isLoading: isLoadingReporteeList } =
     useGetReporteeListForAuthorizedUserQuery(undefined, {
       skip: useNewActorListFlag,
@@ -94,7 +94,7 @@ export const useGlobalMenu = () => {
   const headerLinks: MenuItemProps[] = [
     {
       groupId: 1,
-      icon: { svgElement: InboxFillIcon, theme: 'subtle' },
+      icon: { svgElement: InboxFillIcon, theme: 'surface' },
       id: 'inbox',
       size: 'lg',
       title: t('header.inbox'),
@@ -104,11 +104,11 @@ export const useGlobalMenu = () => {
           href={getAfUrl()}
         />
       ),
-      badge: { label: t('common.beta') },
+      badge: { label: t('common.beta'), variant: 'base', color: 'neutral' },
     },
     {
-      groupId: 1,
-      icon: { svgElement: PadlockLockedFillIcon, theme: 'subtle' },
+      groupId: 10,
+      icon: { svgElement: PadlockLockedFillIcon, theme: 'surface' },
       id: 'access_management',
       size: 'lg',
       title: t('header.access_management'),
@@ -119,20 +119,7 @@ export const useGlobalMenu = () => {
           {...props}
         />
       ),
-      badge: { label: t('common.beta') },
-    },
-    {
-      groupId: 1,
-      icon: { svgElement: MenuGridIcon, theme: 'subtle' },
-      id: 'all_forms',
-      size: 'lg',
-      title: t('header.all_forms'),
-      as: (props) => (
-        <a
-          {...props}
-          href={`${getAltinnStartPageUrl()}${linkUrls['forms'][lang] ?? linkUrls['forms']['no_nb']}`}
-        />
-      ),
+      badge: { label: t('common.beta'), variant: 'base', color: 'neutral' },
     },
     ...(isSm
       ? SidebarItems(
@@ -146,8 +133,21 @@ export const useGlobalMenu = () => {
         )
       : []),
     {
+      groupId: 100,
+      icon: { svgElement: MenuGridIcon, theme: 'surface' },
+      id: 'all_forms',
+      size: 'lg',
+      title: t('header.all_forms'),
+      as: (props) => (
+        <a
+          {...props}
+          href={`${getAltinnStartPageUrl()}${linkUrls['forms'][lang] ?? linkUrls['forms']['no_nb']}`}
+        />
+      ),
+    },
+    {
       id: 'info',
-      groupId: 10,
+      groupId: 1000,
       icon: InformationSquareIcon,
       title: t('header.new_altinn_info'),
       size: 'sm',
@@ -160,7 +160,7 @@ export const useGlobalMenu = () => {
     },
     {
       id: 'starte-og-drive',
-      groupId: 10,
+      groupId: 1000,
       icon: Buildings2Icon,
       title: t('header.start_business'),
       size: 'sm',
@@ -173,7 +173,7 @@ export const useGlobalMenu = () => {
     },
     {
       id: 'trenger-du-hjelp',
-      groupId: 10,
+      groupId: 1000,
       icon: ChatExclamationmarkIcon,
       title: t('header.help'),
       size: 'sm',
@@ -220,6 +220,9 @@ export const useGlobalMenu = () => {
   };
 
   const groups = {
+    1: { divider: false },
+    10: { divider: false },
+    100: { divider: isSm },
     'current-user': {
       title: t('header.logged_in_as_name', {
         name: formatDisplayName({
@@ -228,6 +231,13 @@ export const useGlobalMenu = () => {
           reverseNameOrder: true,
         }),
       }),
+    },
+    1000: { divider: true },
+    shortcuts: {
+      divider: false,
+      title: t('header.shortcuts'),
+      defaultIconTheme: 'transparent' as Theme,
+      defaultItemSize: 'sm' as MenuItemSize,
     },
   };
 

@@ -3,8 +3,8 @@ import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
   test.beforeEach(async ({ login, delegation }) => {
-    await login.LoginWithUserFromFrontpage('23926299794');
-    await login.chooseReportee('UTGÅTT FLEKSIBEL TIGER AS');
+    await login.LoginToAccessManagement('23926299794');
+    await login.chooseReportee('Utgått Fleksibel Tiger AS');
   });
   test.skip('Org-A delegates access pacakge to Org-B', async ({
     login,
@@ -24,22 +24,21 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await delegation.grantAccessPkgNameDirect(
       'Transport og lagring',
       'Veitransport',
-      'LYKKELIG RAKRYGGET PUMA BBL',
+      'Lykkelig Rakrygget Puma BBL',
     );
     await delegation.grantAccessPkgName('Bygg, anlegg og eiendom', 'Byggesøknad');
     await delegation.grantAccessPkgNameDirect(
       'Oppvekst og utdanning',
       'Godkjenning av personell',
-      'LYKKELIG RAKRYGGET PUMA BBL',
+      'Lykkelig Rakrygget Puma BBL',
     );
 
     await delegation.closeAccessModal();
     await delegation.logoutFromBrukerflate();
 
     // Step 6: Login with Org-2(Rettighetshaver) and select organization as reportee
-    login.browserAlreadyUsed = true;
-    await login.LoginWithUserFromFrontpage('06815597492');
-    await login.chooseReportee('LYKKELIG RAKRYGGET PUMA BBL');
+    await login.LoginToAccessManagement('06815597492');
+    await login.chooseReportee('Lykkelig Rakrygget Puma BBL');
 
     await delegation.newAccessRights('Utgått Fleksibel Tiger AS');
 
@@ -58,7 +57,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
 
     // Step 2: Open delegation flow using Fullmakter menu link
     await accessManagementFrontPage.usersLink.click();
-    await delegation.chooseOrg('LYKKELIG RAKRYGGET PUMA BBL');
+    await delegation.chooseOrg('Lykkelig Rakrygget Puma BBL');
 
     //Step3 : Delete delegated pacakge directly from area list
     await delegation.deleteDelegatedPackage('Transport og lagring', 'Veitransport');

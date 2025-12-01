@@ -12,6 +12,7 @@ import { DsAlert, DsHeading, DsParagraph, List } from '@altinn/altinn-components
 import { t } from 'i18next';
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
+import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 
 interface RoleListProps {
   onSelect: (role: Role) => void;
@@ -24,21 +25,34 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
     data: permissions,
     isLoading: permissionsIsLoading,
     error: permissionsError,
-  } = useGetRolePermissionsQuery({
-    party: actingParty?.partyUuid ?? '',
-    from: fromParty?.partyUuid,
-    to: toParty?.partyUuid,
-  });
+  } = useGetRolePermissionsQuery(
+    {
+      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.partyUuid,
+      to: toParty?.partyUuid,
+    },
+    {
+      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
+    },
+  );
+
+  const {
+    mapRoles,
+    error: roleMetadataError,
+    isLoading: roleMetadataIsLoading,
+  } = useRoleMetadata();
 
   const { altinn2Roles } = useGroupedRoleListEntries({
     permissions,
   });
 
-  if (permissionsIsLoading || partyIsLoading || isLoading) {
+  const mappedRoles = mapRoles(altinn2Roles?.map(({ role }) => role ?? ([] as Role[])));
+
+  if (permissionsIsLoading || partyIsLoading || roleMetadataIsLoading || isLoading) {
     return <SkeletonRoleList />;
   }
-  if (permissionsError) {
-    const roleFetchErrorDetails = createErrorDetails(permissionsError);
+  if (permissionsError || roleMetadataError) {
+    const roleFetchErrorDetails = createErrorDetails(permissionsError || roleMetadataError);
 
     return (
       <div className={classes.roleLists}>
@@ -69,13 +83,13 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
         level={2}
         data-size='xs'
       >
-        {t('role.current_roles_title', { count: altinn2Roles.length })}
+        {t('role.current_roles_title', { count: mappedRoles.length })}
       </DsHeading>
-      {altinn2Roles.length === 0 ? (
+      {mappedRoles.length === 0 ? (
         <DsParagraph data-size='sm'>{t('role.no_roles_message')}</DsParagraph>
       ) : (
         <List>
-          {altinn2Roles.map(({ role }) => {
+          {mappedRoles.map((role) => {
             return (
               <RoleListItem
                 key={role.id}

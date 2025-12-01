@@ -9,8 +9,6 @@ using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Altinn.Platform.Profile.Enums;
-using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,6 +16,8 @@ using Microsoft.Extensions.Options;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Moq;
 using User = Altinn.AccessManagement.UI.Core.Models.User.User;
+using Altinn.AccessManagement.UI.Core.Models.Profile;
+using Altinn.AccessManagement.UI.Core.Enums;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {

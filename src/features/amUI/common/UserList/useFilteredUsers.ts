@@ -28,8 +28,8 @@ const mapToExtendedUsers = (connections: Connection[]): ExtendedUser[] => {
 const partyMatchesSearchTerm = (party: User | ExtendedUser, searchString: string): boolean => {
   const lowerCaseSearchTerm = searchString.toLocaleLowerCase();
   const nameMatch = party.name.toLowerCase().includes(lowerCaseSearchTerm);
-  const orgNumberMatch = party.keyValues?.OrganizationIdentifier
-    ? party.keyValues.OrganizationIdentifier?.includes(lowerCaseSearchTerm)
+  const orgNumberMatch = party.organizationIdentifier
+    ? party.organizationIdentifier.toString().toLowerCase().includes(lowerCaseSearchTerm)
     : false;
   return nameMatch || orgNumberMatch;
 };

@@ -2,18 +2,16 @@ import type { Locator, Page } from '@playwright/test';
 
 export class AccessManagementFrontPage {
   readonly page: Page;
-  readonly tryNewAccessManagementButton: Locator;
   readonly systemAccessLink: Locator;
   readonly usersLink: Locator;
   readonly powersOfAttorneyLink: Locator;
   readonly ourAccessAtOthersLink: Locator;
   readonly consentAndPowerOfAttorneyAgreementsLink: Locator;
+  readonly tryNewAccessManagementButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.tryNewAccessManagementButton = this.page.getByRole('button', {
-      name: 'Prøv ny tilgangsstyring',
-    });
+
     this.systemAccessLink = this.page
       .getByRole('group')
       .getByRole('link', { name: 'Systemtilganger' });
@@ -25,6 +23,9 @@ export class AccessManagementFrontPage {
     });
     this.consentAndPowerOfAttorneyAgreementsLink = this.page.getByRole('link', {
       name: 'Samtykke- og fullmaktsavtaler',
+    });
+    this.tryNewAccessManagementButton = this.page.getByRole('button', {
+      name: 'Prøv ny tilgangsstyring',
     });
   }
 }

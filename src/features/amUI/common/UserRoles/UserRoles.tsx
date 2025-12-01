@@ -4,55 +4,52 @@ import cn from 'classnames';
 
 import classes from './userRoles.module.css';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { useGetRoleByIdQuery } from '@/rtk/features/roleApi';
-import { useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { getRoleCodesAndIdsForKeyRoles } from './roleUtils';
+import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { useRef, useState } from 'react';
 import { RoleInfoModal } from '../DelegationModal/RoleInfoModal';
+import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries';
+import { useRoleMetadata } from './useRoleMetadata';
+import { RoleInfo } from '@/rtk/features/connectionApi';
 
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
-  const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
-  const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+
+  const { toParty, fromParty, actingParty } = usePartyRepresentation();
+
+  const { data: permissions } = useGetRolePermissionsQuery(
+    {
+      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.partyUuid,
+      to: toParty?.partyUuid,
+    },
+    {
+      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
+    },
+  );
+
+  const { userRoles } = useGroupedRoleListEntries({
+    permissions,
+  });
 
   const {
-    toParty,
-    fromParty,
-    actingParty,
-    isLoading: loadingPartyRepresentation,
-  } = usePartyRepresentation();
-  const { data: connectionData, isLoading: isConnectionLoading } = useGetRightHoldersQuery(
-    {
-      partyUuid: actingParty?.partyUuid ?? '',
-      toUuid: toParty?.partyUuid ?? '',
-      fromUuid: fromParty?.partyUuid ?? '',
-    },
-    { skip: !actingParty || (!toParty && !fromParty) },
-  );
-  const roleTextKeys = useMemo(() => {
-    if (isConnectionLoading || loadingPartyRepresentation || !connectionData?.length) {
-      return [];
-    }
-    return getRoleCodesAndIdsForKeyRoles(connectionData[0].roles) ?? [];
-  }, [connectionData, isConnectionLoading, loadingPartyRepresentation]);
+    mapRoles,
+    isLoading: loadingRoleMetadata,
+    isError: roleMetadataError,
+  } = useRoleMetadata();
 
-  const { data: selectedRole } = useGetRoleByIdQuery(selectedRoleId ?? '', {
-    skip: !selectedRoleId,
-  });
-  const isModalLoading = !!selectedRoleId && selectedRole?.id !== selectedRoleId;
-  const roleForModal = isModalLoading ? undefined : selectedRole;
-
-  const onChipClick = (roleId: string) => {
-    setSelectedRoleId(roleId);
+  const onChipClick = (role: Role) => {
+    setSelectedRole(role);
     if (!modalRef.current?.open) {
       modalRef.current?.showModal();
     }
   };
 
   const onModalClose = () => {
-    setSelectedRoleId(null);
+    setSelectedRole(null);
   };
+
+  const roles = mapRoles(userRoles?.map(({ role }) => role) ?? []);
 
   return (
     <>
@@ -60,20 +57,20 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
         className={cn(classes.userRoles, className)}
         {...props}
       >
-        {roleTextKeys?.map((roleTextKey) => {
+        {roles.map((role) => {
           return (
             <DsChip.Button
-              key={roleTextKey.id}
-              onClick={() => onChipClick(roleTextKey.id)}
+              key={role.id}
+              onClick={() => onChipClick(role)}
             >
-              {t(roleTextKey.code)}
+              {role.name}
             </DsChip.Button>
           );
         })}
       </div>
       <RoleInfoModal
         modalRef={modalRef}
-        role={roleForModal}
+        role={selectedRole || undefined}
         onClose={onModalClose}
       />
     </>

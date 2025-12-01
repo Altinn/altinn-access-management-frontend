@@ -57,6 +57,10 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
       <AccessPackageInfoModal
         modalRef={modalRef}
         modalItem={modalItem}
+        availableActions={[
+          DelegationAction.REVOKE,
+          canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+        ]}
       />
     </>
   );

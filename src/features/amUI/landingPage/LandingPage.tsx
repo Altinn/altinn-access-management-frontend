@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import classes from './LandingPage.module.css';
 import {
   DsAlert,
+  DsButton,
   DsHeading,
-  DsLink,
+  DsSkeleton,
   formatDisplayName,
   List,
   ListItem,
@@ -20,9 +21,8 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { formatDateToNorwegian } from '@/resources/utils';
 import { useTranslation } from 'react-i18next';
-import { ArrowRightIcon } from '@navikt/aksel-icons';
-import { Link } from 'react-router';
-import { amUIPath } from '@/routes/paths';
+import { LeaveIcon } from '@navikt/aksel-icons';
+import { useSearchParams } from 'react-router';
 import {
   hasConsentPermission,
   hasSystemUserClientAdminPermission,
@@ -38,9 +38,13 @@ import {
   getUsersMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/reporteeUtils';
+import { getHostUrl } from '@/resources/utils/pathUtils';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(false);
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
@@ -50,8 +54,18 @@ export const LandingPage = () => {
 
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
-    type: reportee?.type === 'Organization' ? 'company' : 'person',
+    type: isOrganization(reportee) ? 'company' : 'person',
   });
+
+  useEffect(() => {
+    // Remove the openAccountMenu query parameter after reading it the first time
+    if (searchParams.has('openAccountMenu')) {
+      setShouldOpenAccountMenu(true);
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('openAccountMenu');
+      setSearchParams(newSearchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const isLoading =
     isLoadingReportee ||
@@ -83,10 +97,9 @@ export const LandingPage = () => {
     if (displayConfettiPackage) {
       items.push({
         ...getUsersMenuItem(),
-        description:
-          reportee?.type === 'Organization'
-            ? t('landing_page.users_item_description_org')
-            : t('landing_page.users_item_description_person'),
+        description: isOrganization(reportee)
+          ? t('landing_page.users_item_description_org')
+          : t('landing_page.users_item_description_person'),
       });
     }
 
@@ -100,10 +113,9 @@ export const LandingPage = () => {
     if (displayConfettiPackage && isAdmin) {
       items.push({
         ...getReporteesMenuItem(),
-        description:
-          reportee?.type === 'Organization'
-            ? t('landing_page.reportees_item_description_org')
-            : t('landing_page.reportees_item_description_person'),
+        description: isOrganization(reportee)
+          ? t('landing_page.reportees_item_description_org')
+          : t('landing_page.reportees_item_description_person'),
       });
     }
 
@@ -163,41 +175,69 @@ export const LandingPage = () => {
     return items;
   };
 
+  const isReporteeSubUnit = isSubUnit(reportee);
+
+  const getReporteeDescription = (): string => {
+    if (isOrganization(reportee)) {
+      const orgNrString = `${t('common.org_nr')} ${formatOrgNr(reportee?.organizationNumber)}`;
+      if (isReporteeSubUnit) {
+        return `↳ ${orgNrString}, ${t('common.subunit').toLowerCase()}`;
+      }
+      return orgNrString;
+    }
+    return `${t('common.date_of_birth')} ${formatDateToNorwegian(reportee?.dateOfBirth)}`;
+  };
+
   return (
     <PageWrapper>
-      <PageLayoutWrapper>
+      <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
           <ListItem
             icon={{
-              type: reportee?.type === 'Organization' ? 'company' : 'person',
+              isParent: !isReporteeSubUnit,
+              type: isOrganization(reportee) ? 'company' : 'person',
               name: reporteeName,
             }}
             title={reporteeName}
-            description={
-              reportee?.type === 'Organization'
-                ? `${t('common.org_nr')} ${reportee?.organizationNumber?.match(/.{1,3}/g)?.join(' ') || ''}`
-                : reportee?.dateOfBirth &&
-                  `${t('common.date_of_birth')} ${formatDateToNorwegian(reportee?.dateOfBirth)}`
-            }
+            description={getReporteeDescription()}
             size='xl'
             loading={!reportee}
             interactive={false}
           />
           <DsAlert data-color='info'>
-            <DsHeading
-              level={1}
-              data-size='xs'
-              color='info'
-            >
-              {t('landing_page.alert_heading')}
-            </DsHeading>
-            <div className={classes.landingPageAlert}>{t('landing_page.alert_body')}</div>
-            <DsLink asChild>
-              <Link to={`/${amUIPath.Info}`}>
-                {t('landing_page.alert_link')}
-                <ArrowRightIcon className={classes.arrowIcon} />
-              </Link>
-            </DsLink>
+            {isLoading ? (
+              <DsSkeleton
+                variant='rectangle'
+                height={150}
+                width='100%'
+              />
+            ) : (
+              <>
+                <DsHeading
+                  level={1}
+                  data-size='xs'
+                  color='info'
+                >
+                  {isOrganization(reportee)
+                    ? t('landing_page.alert_heading')
+                    : t('landing_page.alert_heading_priv')}
+                </DsHeading>
+                <div className={classes.landingPageAlert}>
+                  {isOrganization(reportee)
+                    ? t('landing_page.alert_body')
+                    : t('landing_page.alert_body_priv')}
+                  <DsButton
+                    asChild
+                    variant='secondary'
+                  >
+                    <a href={`${getHostUrl()}ui/profile`}>
+                      <LeaveIcon />
+                      {t('landing_page.alert_link')}
+                    </a>
+                  </DsButton>
+                </div>
+              </>
+            )}
           </DsAlert>
           <ListItemContainer
             heading={t('landing_page.shortcut_links_heading')}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { List, Button, Icon, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { List, Icon, DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { PackageIcon } from '@navikt/aksel-icons';
 import { useAccessPackageDelegationCheck } from '../../DelegationCheck/AccessPackageDelegationCheckContext';
@@ -15,17 +15,14 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../StatusSection';
 import type { ExtendedAccessPackage } from '../../AccessPackageList/useAreaPackageList';
-import {
-  DeletableStatus,
-  getDeletableStatus,
-  isInherited,
-} from '../../AccessPackageList/useAreaPackageList';
+import { DeletableStatus, getDeletableStatus } from '../../AccessPackageList/useAreaPackageList';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
 import { useResourceList } from './useResourceList';
 import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -34,7 +31,7 @@ export interface PackageInfoProps {
 
 export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { fromParty, toParty } = usePartyRepresentation();
+  const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
   const displayAccessRequestFeature = displayAccessRequest();
 
@@ -74,12 +71,9 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   }, [activeDelegations, isFetching, accessPackage.id]);
 
   const userHasPackage = delegationAccess !== null;
-  const accessIsInherited =
-    (delegationAccess &&
-      delegationAccess.permissions.some((p) =>
-        isInherited(p, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
-      )) ||
-    false;
+  const accessIsInherited = accessPackage.inherited;
+
+  const inheritedStatus = accessPackage.inheritedStatus;
 
   const resourceListItems = useResourceList(accessPackage.resources);
   const deletableStatus = React.useMemo(
@@ -89,12 +83,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
         : null,
     [delegationAccess, toParty, fromParty],
   );
-
-  const onlyPermissionTroughInheritance =
-    delegationAccess &&
-    delegationAccess.permissions.every((p) =>
-      isInherited(p, toParty?.partyUuid ?? '', fromParty?.partyUuid ?? ''),
-    );
 
   const canDelegate = canDelegatePackage(accessPackage.id);
   const showMissingRightsMessage =
@@ -145,8 +133,16 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                   {t('delegation_modal.general_error.delegate_heading')}
                 </DsHeading>
               )}
-              {actionError.details?.detail ? (
-                <ValidationErrorMessage errorCode={actionError.details?.detail} />
+              {actionError.details?.detail || actionError.details?.errorCode ? (
+                <ValidationErrorMessage
+                  errorCode={actionError.details?.errorCode ?? actionError.details?.detail ?? ''}
+                  translationValues={{
+                    entity_type:
+                      toParty?.partyTypeName === PartyType.Person
+                        ? t('common.persons_lowercase')
+                        : t('common.organizations_lowercase'),
+                  }}
+                />
               ) : (
                 <TechnicalErrorParagraphs
                   size='xs'
@@ -161,12 +157,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             userHasAccess={userHasPackage}
             showMissingRightsMessage={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
-            inheritedFrom={
-              onlyPermissionTroughInheritance
-                ? (delegationAccess?.permissions[0].via?.name ??
-                  delegationAccess?.permissions[0].from.name)
-                : undefined
-            }
+            inheritedStatus={inheritedStatus ?? undefined}
           />
 
           <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
@@ -188,34 +179,36 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
           <div className={classes.actions}>
             {userHasPackage && availableActions.includes(DelegationAction.REVOKE) ? (
               deletableStatus !== DeletableStatus.PartiallyDeletable ? (
-                <Button
+                <DsButton
                   disabled={accessIsInherited || accessPackage.isAssignable === false}
                   onClick={() => onRevoke(accessPackage)}
-                  color='danger'
+                  data-color='danger'
                 >
                   {t('common.delete_poa')}
-                </Button>
+                </DsButton>
               ) : (
                 <PackageIsPartiallyDeletableAlert
                   confirmAction={() => onRevoke(accessPackage)}
                   triggerButtonProps={{
-                    variant: 'solid',
+                    variant: 'primary',
                   }}
                 />
               )
             ) : null}
             {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
-              <Button
+              <DsButton
                 disabled={accessPackage.isAssignable === false || canDelegate?.result === false}
                 onClick={() => onDelegate(accessPackage)}
               >
                 {t('common.give_poa')}
-              </Button>
+              </DsButton>
             )}
             {!userHasPackage &&
               availableActions.includes(DelegationAction.REQUEST) &&
               // Todo: Implement request access package
-              displayAccessRequestFeature && <Button disabled>{t('common.request_poa')}</Button>}
+              displayAccessRequestFeature && (
+                <DsButton disabled>{t('common.request_poa')}</DsButton>
+              )}
           </div>
         </>
       )}

@@ -57,6 +57,8 @@
     "finish_delegation": "Confirm delegation",
     "you_lowercase": "you",
     "you_uppercase": "You",
+    "persons_lowercase": "persons",
+    "organizations_lowercase": "organizations",
     "minid": "MinID",
     "bankid": "BankID",
     "commifides": "Commifides",
@@ -91,7 +93,8 @@
     "date_of_birth": "Born",
     "save_changes": "Save changes",
     "none": "no",
-    "digdir": "The Norwegian Digitalisation Agency"
+    "digdir": "The Norwegian Digitalisation Agency",
+    "skiplink": "Skip to main content"
   },
   "beta_banner": {
     "info": "This is a beta version of the new access management pages in Altinn.",
@@ -117,6 +120,7 @@
     "locale_title": "Choose language",
     "logged_in_as_name": "Logged in as {{name}}",
     "new_altinn_info": "About new Altinn",
+    "help_pages": "Help pages",
     "leave_beta": "To the old solution",
     "shortcuts": "Shortcuts",
     "all_forms": "All forms and services",
@@ -289,7 +293,10 @@
     "give_new_single_right": "Give power of attorney to new service",
     "current_services_title": "Power of attorney to {{count}} services",
     "delete_singleRight_success_message": "Deleted access to ",
-    "delete_singleRight_error_message": "Failed to delete access to "
+    "delete_singleRight_error_message": "Failed to delete access to ",
+    "wip_title": "Power of attorney to services",
+    "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
+    "wip_link_text": "Go to old solution"
   },
   "access_packages": {
     "helptext_button": "What are access packages?",
@@ -317,6 +324,11 @@
       "delegation_check_error_heading": "Technical error",
       "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",
       "delegation_check_error_message_plural": "A technical error prevents you from giving the user one or more access packages. Please contact Altinn user service if the problem persists."
+    },
+    "access_status": {
+      "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
+      "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
+      "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted."
     }
   },
   "role": {
@@ -329,7 +341,11 @@
     "resources_empty": "This role has no services.",
     "resources_disclaimer": "This role might still grant access to services that only exist in the old solution.",
     "resources_disclaimer_link": "See the list of services in the old solution",
-    "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}."
+    "access_status": {
+      "via_role": "{{user_name}} has access to this through the role they hold in {{via_name}}.",
+      "via_connection": "{{user_name}} has access to this through {{via_name}}.",
+      "via_keyrole": "{{user_name}} has access to this through their role in {{via_name}}."
+    }
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -425,6 +441,7 @@
     },
     "validation_error": {
       "AM.VLD-00002": "You do not have permission to grant this authorization.",
+      "AM.VLD-00028": "This access package cannot be given to {{entity_type}}.",
       "default": "Could not grant power of attorney"
     },
     "partial_deletion_message": {
@@ -457,19 +474,6 @@
     "ssn_format_error": "Social security number must consist of 11 digits",
     "last_name_format_error": "Please enter a valid last name"
   },
-  "info_page": {
-    "page_title": "About new Altinn",
-    "main_title": "About Access Management",
-    "paragraph_1": "This is a simplified user interface for access management (Access Management Beta). Here, you will be able to give access packages from one organization to another, see what accesses your organization has with others, and create system access for professional systems. In this user interface, there will be more and more content and functionality over time.",
-    "title_2": "Access packages",
-    "paragraph_2": "Access packages will replace today's Altinn roles. The new access packages will be more numerous, but contain fewer forms and services. They will also be under categories that belong to specific topics. Initially, you will see that the access packages may contain very few services, but they will be filled up over time.",
-    "title_3": "Who can use Access Management Beta?",
-    "paragraph_3": "In Access Management Beta, which we call the \"simplified user interface\", only organization-to-organization delegation can be performed. This means that access packages can only be given from one organization to another. Mainly, this will apply to organizations that have auditors, accountants, or business managers, and who have been told to do this.",
-    "title_4": "System access",
-    "paragraph_4": "A system access is a new type of impersonal user in Altinn that is created so that a professional system (e.g. accounting system or payroll system) can get power of attorney to solve tasks on behalf of its own organization or for the organization's customers.",
-    "title_5": "What is the difference between regular system access and system access for customers?",
-    "paragraph_5": "With a regular system access, you act on behalf of yourself. For example, if you own a small business and keep your own accounting in Fiken, you can create system access as part of Fiken's flow, or you can go to altinn.no and create it yourself by clicking \"Create new system access\".<br /><br /> If you are an accountant or auditor, you can create system access that can be assigned powers of attorney on behalf of your customers. The system will then be able to submit and retrieve customer data. This system access can only be created by approving the system access in the professional system you want to use. When you have approved it, you go to altinn.no to add the customers that are relevant for that system access. <br /><br />We look forward to showing you the new Altinn and greatly appreciate your patience while we rebuild. If you have questions or feedback, contact us at support@altinn.no."
-  },
   "settings_page": {
     "page_title": "Settings - Altinn",
     "page_heading": "Settings for {{name}}",
@@ -498,11 +502,8 @@
     "invalid_phone": "Invalid phone number"
   },
   "info_modal": {
-    "title": "Try the new access management solution",
-    "info": "We are renovating access management and you get a sneak peek at an early version! It is still under development, so some functions are missing. We still hope you will try.",
-    "close_button": "Try new access management",
-    "back_button": "Go back to today's Altinn",
-    "info_link": "Why are we updating Altinn?",
+    "back_button": "Go to the old solution",
+    "help_pages": "Help pages",
     "info_button": "Information about the new solution"
   },
   "a2Alerts": {
@@ -512,81 +513,6 @@
     "oldRolesContent": "These Altinn roles may include services that already exist in the new Altinn solution. The services are being moved into the new access packages. The user has the same roles in the old solution, but there they include more and different services.",
     "oldRolesLinkText": "Go to the old solution",
     "legacyRoleContent": "This role will soon be removed. Use access packages instead."
-  },
-  "user_role": {
-    "SREVA": "Auditor registered in the registry of auditors",
-    "FGRP": "Part of enterprise group with",
-    "HFOR": "Main enterprise",
-    "HLSE": "Hospital Trust",
-    "INNH": "Owner",
-    "KDAT": "Has as subsidiary in the group",
-    "KGRL": "Has as the basis for the group",
-    "KIRK": "Part of Norw. Church Council",
-    "KMOR": "Has as chief of the group",
-    "KOMP": "General partner",
-    "KONT": "Representative",
-    "KTRF": "Part of joint office",
-    "LEDE": "Chairman of the board",
-    "MEDL": "Board member",
-    "NEST": "Deputy chairman of the board",
-    "OBS": "Observer",
-    "OPMV": "Specially sectioned VAT entity",
-    "ORGL": "Org. section in public sector",
-    "POFE": "Power of procuration jointly",
-    "POHV": "Authorised to sign separately",
-    "PROK": "Power of procuration",
-    "READ": "Auditor address",
-    "AAFY": "Has as registration entity",
-    "AVKL": "Forestår avvikling",
-    "BEDR": "Has as the registration entity",
-    "DTPR": "Partner with shared liability",
-    "DTSO": "Partner with full liability",
-    "EIKM": "The proprietor municipality",
-    "FEMV": "Inngår i felles- registrering",
-    "RFAD": "Accountant address",
-    "SAM": "Co-owners",
-    "SIFE": "Signature jointly",
-    "SIGN": "Signature",
-    "SIHV": "Signature separately",
-    "UTBG": "Er frivillig registrert utleiebygg for",
-    "VARA": "Deputy board member(s)",
-    "VIFE": "Er virksomhet drevet i fellesskap av",
-    "MVAU": "Utfyller MVA-oppgaver",
-    "MVAG": "Signerer MVA-oppgaver",
-    "KOMK": "Representative of municipality",
-    "KNUF": "Representative of NUF",
-    "KEMN": "Representative of adm. entity - public sector",
-    "FFØR": "General manager/manager",
-    "BEST": "Managing shipowner",
-    "REGN": "Accountant",
-    "REPR": "Norwegian representative",
-    "REVI": "Auditor",
-    "DAGL": "General manager",
-    "BOBE": "Official receiver",
-    "STFT": "Founder",
-    "KENK": "Personal bankruptcy concerns",
-    "KDEB": "Debitor/company in liquidation",
-    "HVAR": "Deputy member of the party's executive body",
-    "HNST": "Deputy leader of the party's executive body",
-    "HMDL": "Board member of the party's executive body",
-    "HLED": "Leader of the party's executive body",
-    "ESGR": "Electronic signing right",
-    "FUSJ": "Skal fusjoneres med",
-    "FISJ": "Skal fisjoneres med",
-    "ETDL": "Allocator of electronic signing rights",
-    "ADOS": "Administrative unit - public sector",
-    "innehaver": "Owner",
-    "styreleder": "Chairman of the board",
-    "varamedlem": "Deputy board member(s)",
-    "regnskapsforer": "Accountant",
-    "daglig-leder": "General manager",
-    "deltaker-delt-ansvar": "Partner with shared liability",
-    "deltaker-fullt-ansvar": "Partner with full liability",
-    "komplementar": "General partner",
-    "bestyrende-reder": "Managing shipowner",
-    "bostyrer": "Official receiver",
-    "revisor": "Auditor",
-    "hovedadministrator": "Main administrator"
   },
   "systemuser_overviewpage": {
     "page_title": "System accesses - Altinn",
@@ -757,8 +683,9 @@
     "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system access."
   },
   "page_not_available": {
-    "title": "This page is not available",
-    "text": "The new access management pages are not quite ready for private individuals yet. If you meant to view the accesses for an organization, please switch representation."
+    "title": "Access management for private individuals is still under development",
+    "text": "More content will be added to this page over time. You can still manage access on behalf of yourself as a private individual in the old solution.",
+    "link_text": "Go to old solution"
   },
   "consent_request": {
     "page_title": "Approve consent/power of attorney - Altinn",
@@ -871,18 +798,20 @@
     "no_resources": "No resources available."
   },
   "landing_page": {
-    "alert_heading": "Welcome to the new solution",
-    "alert_body": "These are the new pages for access management in Altinn. We don't have everything in place yet, so you may need to use the old solution for some tasks. Thank you for your patience!",
-    "alert_link": "Read all about the new solution",
+    "alert_heading": "You are now in the new access management solution",
+    "alert_heading_priv": "This is the new access management solution for private individuals",
+    "alert_body": "Today's Altinn roles have been replaced by access packages with services. \n\nPlease note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
+    "alert_body_priv": "Unfortunately we don't have everything in place yet, so you may need to do some things in the old solution. \n\nIf you want to go to access management for your organization, you can switch to your desired organization in the account selector at the top.",
+    "alert_link": "Go to the old solution",
     "shortcut_links_heading": "Where do you want to go?",
     "other_links_heading": "Other",
-    "users_item_description_org": "Overview of people and organisations that have been granted access in your organisation",
-    "users_item_description_person": "Overview of people and organisations that have been granted access for you",
-    "reportees_item_description_org": "Overview of everyone who has granted your organisation any access",
-    "reportees_item_description_person": "Overview of everyone who has granted you any access",
-    "poa_item_description": "Overview of access packages and individual services",
-    "consent_item_description": "Overview of active and pending consent and power of attorney agreements",
-    "systemuser_item_description": "Overview of system accesses",
+    "users_item_description_org": "Overview of people and organizations that have been granted access in your organization",
+    "users_item_description_person": "Overview of people and organizations that have been granted access to you",
+    "reportees_item_description_org": "Overview of all who have granted access to your organization",
+    "reportees_item_description_person": "Overview of all who have granted you access",
+    "poa_item_description": "Overview of all access packages and individual services",
+    "consent_item_description": "Overview of all concluded agreements",
+    "systemuser_item_description": "Overview of system access",
     "new_requests_single": "{{reportee}} has {{requestCount}} new request",
     "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"
   }

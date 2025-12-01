@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -67,27 +68,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
 
         /// <inheritdoc />
-        public Task<RoleMetadata> GetRoleById(Guid roleId, string languageCode)
+        public Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode)
         {
-            string triggerValue = roleId.ToString();
-            Util.ThrowExceptionIfTriggerParty(triggerValue);
-
+            string dataPath = Path.Combine(_dataFolder, "Roles", "roles.json");
             try
             {
-                string dataPath = Path.Combine(_dataFolder, "Roles", "Details", $"{roleId}.json");
-                return Task.FromResult(Util.GetMockData<RoleMetadata>(dataPath));
+                return Task.FromResult(Util.GetMockData<IEnumerable<RoleMetadata>>(dataPath));
             }
             catch (FileNotFoundException)
             {
-                return Task.FromResult<RoleMetadata>(null);
+                return Task.FromResult(Enumerable.Empty<RoleMetadata>());
             }
-            catch
+            catch (Exception ex)
             {
-                throw new HttpStatusException(
-                    "StatusError",
-                    "Unexpected mockResponse status from Access Management",
-                    HttpStatusCode.BadRequest,
-                    string.Empty);
+                throw new Exception($"Unexpected error reading mock roles from {dataPath}", ex);
             }
         }
 

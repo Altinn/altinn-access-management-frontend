@@ -26,11 +26,17 @@
                   "type": "Organisasjon",
                   "variant": "AS",
                   "parent": null,
-                  "children": null
+                  "children": null,
+                  "organizationIdentifier": "310202398",
+                  "partyId": 51329012
                 },
-                "children": null
+                "children": null,
+                "organizationIdentifier": "311312294",
+                "partyId": 51433301
               }
-            ]
+            ],
+            "organizationIdentifier": "310202398",
+            "partyId": 51329012
           },
           "to": {
             "id": "21cc8752-4801-490d-a6ab-ab3266a0f748",
@@ -38,7 +44,10 @@
             "type": "Person",
             "variant": "Person",
             "parent": null,
-            "children": null
+            "children": null,
+            "personIdentifier": "20838198385",
+            "dateOfBirth": "1981-03-20",
+            "partyId": 50789533
           },
           "via": null,
           "role": {
@@ -67,11 +76,17 @@
                   "type": "Organisasjon",
                   "variant": "AS",
                   "parent": null,
-                  "children": null
+                  "children": null,
+                  "organizationIdentifier": "310202398",
+                  "partyId": 51329012
                 },
-                "children": null
+                "children": null,
+                "organizationIdentifier": "311312294",
+                "partyId": 51433301
               }
-            ]
+            ],
+            "organizationIdentifier": "310202398",
+            "partyId": 51329012
           },
           "to": {
             "id": "21cc8752-4801-490d-a6ab-ab3266a0f748",
@@ -91,11 +106,17 @@
                   "type": "Organisasjon",
                   "variant": "ESEK",
                   "parent": null,
-                  "children": null
+                  "children": null,
+                  "organizationIdentifier": "313416925",
+                  "partyId": 51630791
                 },
-                "children": null
+                "children": null,
+                "organizationIdentifier": "315179807",
+                "partyId": 51760179
               }
-            ]
+            ],
+            "organizationIdentifier": "313416925",
+            "partyId": 51630791
           },
           "via": null,
           "role": {

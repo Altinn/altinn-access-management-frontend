@@ -78,8 +78,8 @@ test.describe('Systembruker endringsforespørsel', () => {
     expect(statusApiRequest.status).toBe('Accepted');
 
     // Verify rights given
-    await login.LoginWithUserFromFrontpage('14824497789');
-    await login.chooseReportee('Blåveis Skravlete', 'Aktverdig Retorisk Ape');
+    await login.LoginToAccessManagement('14824497789');
+    await login.chooseReportee('Skravlete Blåveis', 'Aktverdig Retorisk Ape');
 
     const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
     await page.goto(systemUserUrl + '/' + systemUserId);

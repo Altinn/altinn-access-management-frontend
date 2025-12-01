@@ -115,6 +115,27 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     Content = new StringContent(problemDetailsJson)
                 });
             }
+            if (packageId == "fails_with_validation_error_00028") // Validation error from backend
+            {
+                var problemDetailsJson = @"
+                {
+                    ""status"": 400,
+                    ""title"": ""One or more validation errors occurred."",
+                    ""detail"": ""The provided data is invalid."",
+                    ""instance"": ""urn:altinn:error:instance:12345"",
+                    ""validationErrors"": [
+                        {
+                            ""code"": ""AM.VLD-00028"",
+                            ""description"": ""Delegation not allowed for the selected unit type.""
+                        }
+                    ]
+                }";
+
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(problemDetailsJson)
+                });
+            }
             else
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Created));
