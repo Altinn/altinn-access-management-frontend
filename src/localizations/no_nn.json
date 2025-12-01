@@ -684,7 +684,12 @@
     "already_approved": "Dette samtykket er allereie gitt",
     "already_approved_poa": "Denne fullmakta er allereie gitt",
     "already_rejected": "Dette samtykket er allereie avvist",
-    "already_rejected_poa": "Denne fullmakta er allereie avvist"
+    "already_rejected_poa": "Denne fullmakta er allereie avvist",
+    "receipt_header_consent": "Samtykket er registrert!",
+    "receipt_header_poa": "Fullmakten er registrert!",
+    "receipt_body_consent": "Du kan når som helst trekke samtykket på samtykker og fullmakter-sida.",
+    "receipt_body_poa": "Du kan når som helst trekke fullmakta på samtykker og fullmakter-sida.",
+    "receipt_back": "Tilbake til samtykker og fullmakter"
   },
   "active_consents": {
     "page_title": "Samtykke- og fullmaktsavtaler - Altinn",
@@ -717,7 +722,8 @@
     "confirm_revoke_consent": "Ja, trekk samtykke",
     "confirm_revoke_poa": "Ja, trekk fullmakt",
     "altinn2_consent_alert_header": "Du er no i ein ny versjon av Samtykke- og fullmaktsoversikten",
-    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle aktive samtykke- og fullmaktsavtaler her. Finn du ikkje det du ser etter, kan du gå til dei <a>gamle Altinn-sidene</a> og velje “Samtykker og fullmakter” i oversikten."
+    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle aktive samtykke- og fullmaktsavtaler her. Finn du ikkje det du ser etter, kan du gå til dei <a>gamle Altinn-sidene</a> og velje “Samtykker og fullmakter” i oversikten.",
+    "newly_consented": "Nylig samtykka"
   },
   "consent_log": {
     "page_title": "Avtalelogg - Altinn",
