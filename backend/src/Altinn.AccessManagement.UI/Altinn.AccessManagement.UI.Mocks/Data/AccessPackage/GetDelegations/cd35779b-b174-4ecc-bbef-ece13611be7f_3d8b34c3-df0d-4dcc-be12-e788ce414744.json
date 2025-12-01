@@ -1,5 +1,7 @@
 {
-  "links": { "next": null },
+  "links": {
+    "next": null
+  },
   "data": [
     {
       "package": {
@@ -28,22 +30,16 @@
                   "variant": "AS",
                   "parent": null,
                   "children": null,
-                  "keyValues": {
-                    "PartyId": "51329012",
-                    "OrganizationIdentifier": "310202398"
-                  }
+                  "organizationIdentifier": "310202398",
+                  "partyId": 51329012
                 },
                 "children": null,
-                "keyValues": {
-                  "PartyId": "51433301",
-                  "OrganizationIdentifier": "311312294"
-                }
+                "organizationIdentifier": "311312294",
+                "partyId": 51433301
               }
             ],
-            "keyValues": {
-              "PartyId": "51329012",
-              "OrganizationIdentifier": "310202398"
-            }
+            "organizationIdentifier": "310202398",
+            "partyId": 51329012
           },
           "to": {
             "id": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
@@ -52,10 +48,8 @@
             "variant": "ORGL",
             "parent": null,
             "children": null,
-            "keyValues": {
-              "PartyId": "50088610",
-              "OrganizationIdentifier": "991825827"
-            }
+            "organizationIdentifier": "991825827",
+            "partyId": 50088610
           },
           "via": null,
           "role": {
@@ -94,22 +88,16 @@
                   "variant": "AS",
                   "parent": null,
                   "children": null,
-                  "keyValues": {
-                    "PartyId": "51329012",
-                    "OrganizationIdentifier": "310202398"
-                  }
+                  "organizationIdentifier": "310202398",
+                  "partyId": 51329012
                 },
                 "children": null,
-                "keyValues": {
-                  "PartyId": "51433301",
-                  "OrganizationIdentifier": "311312294"
-                }
+                "organizationIdentifier": "311312294",
+                "partyId": 51433301
               }
             ],
-            "keyValues": {
-              "PartyId": "51329012",
-              "OrganizationIdentifier": "310202398"
-            }
+            "organizationIdentifier": "310202398",
+            "partyId": 51329012
           },
           "to": {
             "id": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
@@ -118,10 +106,8 @@
             "variant": "ORGL",
             "parent": null,
             "children": null,
-            "keyValues": {
-              "PartyId": "50088610",
-              "OrganizationIdentifier": "991825827"
-            }
+            "organizationIdentifier": "991825827",
+            "partyId": 50088610
           },
           "via": null,
           "role": {
@@ -160,22 +146,16 @@
                   "variant": "AS",
                   "parent": null,
                   "children": null,
-                  "keyValues": {
-                    "PartyId": "51329012",
-                    "OrganizationIdentifier": "310202398"
-                  }
+                  "organizationIdentifier": "310202398",
+                  "partyId": 51329012
                 },
                 "children": null,
-                "keyValues": {
-                  "PartyId": "51433301",
-                  "OrganizationIdentifier": "311312294"
-                }
+                "organizationIdentifier": "311312294",
+                "partyId": 51433301
               }
             ],
-            "keyValues": {
-              "PartyId": "51329012",
-              "OrganizationIdentifier": "310202398"
-            }
+            "organizationIdentifier": "310202398",
+            "partyId": 51329012
           },
           "to": {
             "id": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
@@ -184,10 +164,8 @@
             "variant": "ORGL",
             "parent": null,
             "children": null,
-            "keyValues": {
-              "PartyId": "50088610",
-              "OrganizationIdentifier": "991825827"
-            }
+            "organizationIdentifier": "991825827",
+            "partyId": 50088610
           },
           "via": null,
           "role": {
@@ -226,22 +204,16 @@
                   "variant": "AS",
                   "parent": null,
                   "children": null,
-                  "keyValues": {
-                    "PartyId": "51329012",
-                    "OrganizationIdentifier": "310202398"
-                  }
+                  "organizationIdentifier": "310202398",
+                  "partyId": 51329012
                 },
                 "children": null,
-                "keyValues": {
-                  "PartyId": "51433301",
-                  "OrganizationIdentifier": "311312294"
-                }
+                "organizationIdentifier": "311312294",
+                "partyId": 51433301
               }
             ],
-            "keyValues": {
-              "PartyId": "51329012",
-              "OrganizationIdentifier": "310202398"
-            }
+            "organizationIdentifier": "310202398",
+            "partyId": 51329012
           },
           "to": {
             "id": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
@@ -250,10 +222,8 @@
             "variant": "ORGL",
             "parent": null,
             "children": null,
-            "keyValues": {
-              "PartyId": "50088610",
-              "OrganizationIdentifier": "991825827"
-            }
+            "organizationIdentifier": "991825827",
+            "partyId": 50088610
           },
           "via": null,
           "role": {
@@ -292,22 +262,16 @@
                   "variant": "AS",
                   "parent": null,
                   "children": null,
-                  "keyValues": {
-                    "PartyId": "51329012",
-                    "OrganizationIdentifier": "310202398"
-                  }
+                  "organizationIdentifier": "310202398",
+                  "partyId": 51329012
                 },
                 "children": null,
-                "keyValues": {
-                  "PartyId": "51433301",
-                  "OrganizationIdentifier": "311312294"
-                }
+                "organizationIdentifier": "311312294",
+                "partyId": 51433301
               }
             ],
-            "keyValues": {
-              "PartyId": "51329012",
-              "OrganizationIdentifier": "310202398"
-            }
+            "organizationIdentifier": "310202398",
+            "partyId": 51329012
           },
           "to": {
             "id": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
@@ -316,10 +280,8 @@
             "variant": "ORGL",
             "parent": null,
             "children": null,
-            "keyValues": {
-              "PartyId": "50088610",
-              "OrganizationIdentifier": "991825827"
-            }
+            "organizationIdentifier": "991825827",
+            "partyId": 50088610
           },
           "via": null,
           "role": {
@@ -358,22 +320,16 @@
                   "variant": "AS",
                   "parent": null,
                   "children": null,
-                  "keyValues": {
-                    "PartyId": "51329012",
-                    "OrganizationIdentifier": "310202398"
-                  }
+                  "organizationIdentifier": "310202398",
+                  "partyId": 51329012
                 },
                 "children": null,
-                "keyValues": {
-                  "PartyId": "51433301",
-                  "OrganizationIdentifier": "311312294"
-                }
+                "organizationIdentifier": "311312294",
+                "partyId": 51433301
               }
             ],
-            "keyValues": {
-              "PartyId": "51329012",
-              "OrganizationIdentifier": "310202398"
-            }
+            "organizationIdentifier": "310202398",
+            "partyId": 51329012
           },
           "to": {
             "id": "3d8b34c3-df0d-4dcc-be12-e788ce414744",
@@ -382,10 +338,8 @@
             "variant": "ORGL",
             "parent": null,
             "children": null,
-            "keyValues": {
-              "PartyId": "50088610",
-              "OrganizationIdentifier": "991825827"
-            }
+            "organizationIdentifier": "991825827",
+            "partyId": 50088610
           },
           "via": {
             "id": "3d8b34c3-df0d-4dcc-be12-e788ce414745",
@@ -394,16 +348,14 @@
             "variant": "ORGL",
             "parent": null,
             "children": null,
-            "keyValues": {
-              "PartyId": "50088610",
-              "OrganizationIdentifier": "991825827"
-            },
             "role": null,
             "viaRole": {
               "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f828",
               "code": "fake-rolle",
               "children": null
-            }
+            },
+            "organizationIdentifier": "991825827",
+            "partyId": 50088610
           }
         }
       ]

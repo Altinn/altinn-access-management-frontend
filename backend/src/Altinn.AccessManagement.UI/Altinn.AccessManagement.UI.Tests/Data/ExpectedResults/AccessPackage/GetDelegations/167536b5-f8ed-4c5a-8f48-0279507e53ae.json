@@ -10,40 +10,48 @@
         {
           "from": {
             "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-            "name": "DISKRET NÆR TIGER AS",
-            "type": "Organisasjon",
-            "variant": "AS",
-            "parent": null,
-            "children": [
-              {
-                "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+          "name": "DISKRET NÆR TIGER AS",
+          "type": "Organisasjon",
+          "variant": "AS",
+          "parent": null,
+          "children": [
+            {
+              "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+              "name": "DISKRET NÆR TIGER AS",
+              "type": "Organisasjon",
+              "variant": "BEDR",
+              "parent": {
+                "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
                 "name": "DISKRET NÆR TIGER AS",
                 "type": "Organisasjon",
-                "variant": "BEDR",
-                "parent": {
-                  "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-                  "name": "DISKRET NÆR TIGER AS",
-                  "type": "Organisasjon",
-                  "variant": "AS",
-                  "parent": null,
-                  "children": null
-                },
-                "children": null
-              }
-            ]
-          },
-          "to": {
-            "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-            "name": "Sitrongul Medaljong",
-            "type": "Organisasjon",
-            "variant": "ORGL",
-            "parent": null,
-            "children": null
-          },
-          "via": null,
-          "role": {
-            "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
-            "code": "rettighetshaver",
+                "variant": "AS",
+                "parent": null,
+                "children": null,
+                "organizationIdentifier": "310202398",
+                "partyId": 51329012
+              },
+              "children": null,
+              "organizationIdentifier": "311312294",
+              "partyId": 51433301
+            }
+          ],
+          "organizationIdentifier": "310202398",
+          "partyId": 51329012
+        },
+        "to": {
+          "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "name": "Sitrongul Medaljong",
+          "type": "Organisasjon",
+          "variant": "ORGL",
+          "parent": null,
+          "children": null,
+          "organizationIdentifier": "991825827",
+          "partyId": 50088610
+        },
+        "via": null,
+        "role": {
+          "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+          "code": "rettighetshaver",
             "children": null
           },
           "viaRole": null
@@ -60,40 +68,48 @@
         {
           "from": {
             "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-            "name": "DISKRET NÆR TIGER AS",
-            "type": "Organisasjon",
-            "variant": "AS",
-            "parent": null,
-            "children": [
-              {
-                "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+          "name": "DISKRET NÆR TIGER AS",
+          "type": "Organisasjon",
+          "variant": "AS",
+          "parent": null,
+          "children": [
+            {
+              "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+              "name": "DISKRET NÆR TIGER AS",
+              "type": "Organisasjon",
+              "variant": "BEDR",
+              "parent": {
+                "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
                 "name": "DISKRET NÆR TIGER AS",
                 "type": "Organisasjon",
-                "variant": "BEDR",
-                "parent": {
-                  "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-                  "name": "DISKRET NÆR TIGER AS",
-                  "type": "Organisasjon",
-                  "variant": "AS",
-                  "parent": null,
-                  "children": null
-                },
-                "children": null
-              }
-            ]
-          },
-          "to": {
-            "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-            "name": "Sitrongul Medaljong",
-            "type": "Organisasjon",
-            "variant": "ORGL",
-            "parent": null,
-            "children": null
-          },
-          "via": null,
-          "role": {
-            "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
-            "code": "rettighetshaver",
+                "variant": "AS",
+                "parent": null,
+                "children": null,
+                "organizationIdentifier": "310202398",
+                "partyId": 51329012
+              },
+              "children": null,
+              "organizationIdentifier": "311312294",
+              "partyId": 51433301
+            }
+          ],
+          "organizationIdentifier": "310202398",
+          "partyId": 51329012
+        },
+        "to": {
+          "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "name": "Sitrongul Medaljong",
+          "type": "Organisasjon",
+          "variant": "ORGL",
+          "parent": null,
+          "children": null,
+          "organizationIdentifier": "991825827",
+          "partyId": 50088610
+        },
+        "via": null,
+        "role": {
+          "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+          "code": "rettighetshaver",
             "children": null
           },
           "viaRole": null
@@ -112,40 +128,48 @@
         {
           "from": {
             "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-            "name": "DISKRET NÆR TIGER AS",
-            "type": "Organisasjon",
-            "variant": "AS",
-            "parent": null,
-            "children": [
-              {
-                "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+          "name": "DISKRET NÆR TIGER AS",
+          "type": "Organisasjon",
+          "variant": "AS",
+          "parent": null,
+          "children": [
+            {
+              "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+              "name": "DISKRET NÆR TIGER AS",
+              "type": "Organisasjon",
+              "variant": "BEDR",
+              "parent": {
+                "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
                 "name": "DISKRET NÆR TIGER AS",
                 "type": "Organisasjon",
-                "variant": "BEDR",
-                "parent": {
-                  "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-                  "name": "DISKRET NÆR TIGER AS",
-                  "type": "Organisasjon",
-                  "variant": "AS",
-                  "parent": null,
-                  "children": null
-                },
-                "children": null
-              }
-            ]
-          },
-          "to": {
-            "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-            "name": "Sitrongul Medaljong",
-            "type": "Organisasjon",
-            "variant": "ORGL",
-            "parent": null,
-            "children": null
-          },
-          "via": null,
-          "role": {
-            "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
-            "code": "rettighetshaver",
+                "variant": "AS",
+                "parent": null,
+                "children": null,
+                "organizationIdentifier": "310202398",
+                "partyId": 51329012
+              },
+              "children": null,
+              "organizationIdentifier": "311312294",
+              "partyId": 51433301
+            }
+          ],
+          "organizationIdentifier": "310202398",
+          "partyId": 51329012
+        },
+        "to": {
+          "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "name": "Sitrongul Medaljong",
+          "type": "Organisasjon",
+          "variant": "ORGL",
+          "parent": null,
+          "children": null,
+          "organizationIdentifier": "991825827",
+          "partyId": 50088610
+        },
+        "via": null,
+        "role": {
+          "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+          "code": "rettighetshaver",
             "children": null
           },
           "viaRole": null

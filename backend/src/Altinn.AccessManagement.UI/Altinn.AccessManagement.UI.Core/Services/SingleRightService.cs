@@ -6,8 +6,6 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.Platform.Register.Models;
-using Azure;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {

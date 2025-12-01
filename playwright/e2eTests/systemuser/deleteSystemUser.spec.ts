@@ -1,6 +1,7 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
+import { env } from 'playwright/util/helper';
 
 test.describe('System user deletion', () => {
   let systemId: string;
@@ -9,8 +10,9 @@ test.describe('System user deletion', () => {
   test.beforeEach(async ({ page, login, systemUserPage, accessManagementFrontPage }) => {
     const orgNumber = '310547891';
     api = new ApiRequests(orgNumber);
-    await login.LoginWithUserFromFrontpage('14824497789');
-    await login.chooseReportee('Blåveis Skravlete', 'AKTVERDIG RETORISK APE');
+    await page.goto(env('BASE_URL'));
+    await login.LoginToAccessManagement('14824497789');
+    await login.chooseReportee('Skravlete Blåveis', 'Aktverdig Retorisk Ape');
 
     //Create a system in your "system register" before each test
     systemId = await api.createSystemSystemRegister();

@@ -1,5 +1,6 @@
-.activeConsentsPage {
-  margin-top: var(--ds-size-4);
+.consentsHeader {
+  margin-top: 15px;
+  padding-bottom: 1rem;
 }
 
 .activeConsentsSubHeading {

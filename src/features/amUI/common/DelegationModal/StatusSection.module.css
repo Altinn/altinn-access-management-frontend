@@ -7,6 +7,7 @@
 .inheritedInfoIcon {
   color: var(--ds-color-info-base-default);
   margin-right: 0.3rem;
+  min-width: 1.5rem;
 }
 
 .infoLine {

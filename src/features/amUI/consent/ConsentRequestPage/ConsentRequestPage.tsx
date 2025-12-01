@@ -21,7 +21,7 @@ import {
   useRejectConsentRequestMutation,
 } from '@/rtk/features/consentApi';
 import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
-import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 
 import type { ConsentLanguage, ConsentRequest, ProblemDetail } from '../types';
@@ -42,7 +42,7 @@ export const ConsentRequestPage = () => {
   const requestId = searchParams.get('id') ?? '';
   const language = getLanguage(i18n.language);
 
-  const { data: userData } = useGetUserInfoQuery();
+  const { data: userData } = useGetUserProfileQuery();
 
   const {
     data: request,

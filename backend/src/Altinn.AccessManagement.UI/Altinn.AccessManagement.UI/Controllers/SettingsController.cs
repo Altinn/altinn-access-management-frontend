@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -70,7 +71,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest("Unsupported language code.");
             }
 
-            CookieOptions cookieOptions = new CookieOptions
+            SetCookieHeaderValue cookie = new SetCookieHeaderValue("altinnPersistentContext", altinnStandardLanguage)
             {
                 Expires = DateTimeOffset.UtcNow.AddDays(1),
                 HttpOnly = true,
@@ -80,13 +81,10 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             if (!string.IsNullOrWhiteSpace(_generalSettings?.Hostname))
             {
-                cookieOptions.Domain = _generalSettings.Hostname;
+                cookie.Domain = _generalSettings.Hostname;
             }
 
-            Response.Cookies.Append(
-                "altinnPersistentContext",
-                altinnStandardLanguage,
-                cookieOptions);
+            Response.Headers.Append(HeaderNames.SetCookie, cookie.ToString());
 
             return Ok();
         }

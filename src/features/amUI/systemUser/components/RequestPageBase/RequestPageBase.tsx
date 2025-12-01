@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import AltinnLogo from '@/assets/AltinnTextLogo.svg?react';
-import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 
 import type { RegisteredSystem } from '../../types';
 
 import classes from './RequestPageBase.module.css';
+import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 
 interface RequestPageBaseProps {
   system?: RegisteredSystem;
@@ -22,7 +23,7 @@ export const RequestPageBase = ({
   reporteeName,
   children,
 }: RequestPageBaseProps): React.ReactNode => {
-  const { data: userData } = useGetUserInfoQuery();
+  const { data: userData } = useGetUserProfileQuery();
 
   const { t } = useTranslation();
 
@@ -55,7 +56,7 @@ export const RequestPageBase = ({
             {t('systemuser_request.org_nr', {
               systemName: system.name,
               vendorName: system.systemVendorOrgName,
-              vendorOrg: system.systemVendorOrgNumber.match(/.{1,3}/g)?.join(' '),
+              vendorOrg: formatOrgNr(system.systemVendorOrgNumber),
             })}
           </DsParagraph>
         )}

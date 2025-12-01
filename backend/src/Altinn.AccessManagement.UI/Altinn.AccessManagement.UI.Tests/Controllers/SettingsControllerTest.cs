@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string altinnCookie = cookieHeaders.FirstOrDefault(cookie => cookie.StartsWith("altinnPersistentContext=", StringComparison.OrdinalIgnoreCase));
             Assert.NotNull(altinnCookie);
             SetCookieHeaderValue parsedCookie = SetCookieHeaderValue.Parse(altinnCookie!);
-            string cookieValue = Uri.UnescapeDataString(parsedCookie.Value.ToString());
+            string cookieValue = parsedCookie.Value.ToString();
             Assert.Equal(expectedCookieValue, cookieValue);
             Assert.Equal("/", parsedCookie.Path.ToString());
             Assert.True(parsedCookie.HttpOnly);

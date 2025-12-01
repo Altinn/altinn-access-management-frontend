@@ -23,7 +23,7 @@ export default {
         >
           <RoleList
             {...args}
-            onSelect={(id) => console.log(`onselect: ${id}`)}
+            onSelect={(_role) => {}}
           />
         </PartyRepresentationProvider>
         <Snackbar />

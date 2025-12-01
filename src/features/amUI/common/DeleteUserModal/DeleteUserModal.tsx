@@ -29,9 +29,13 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 
 import classes from './DeleteUserModal.module.css';
 import { getDeletionStatus, getTextKeysForDeletionStatus } from './deletionModalUtils';
+import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
+import { roleApi, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 
 const srmLink =
   'https://www.altinn.no/Pages/ServiceEngine/Start/StartService.aspx?ServiceEditionCode=1&ServiceCode=3498&M=SP&DontChooseReportee=true&O=personal';
+
+const a2ProfileLink = getRedirectToA2UsersListSectionUrl(9);
 
 export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from' }) => {
   const [deleteUser, { isLoading, isError, error }] = useRemoveRightHolderMutation();
@@ -47,11 +51,11 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
     selfParty,
     isLoading: loadingPartyRepresentation,
   } = usePartyRepresentation();
-  const { data: connections, isLoading: isConnectionLoading } = useGetRightHoldersQuery(
+  const { data: rolePermissions, isLoading: isRolePermissionsLoading } = useGetRolePermissionsQuery(
     {
-      fromUuid: fromParty?.partyUuid ?? '',
-      toUuid: toParty?.partyUuid ?? '',
-      partyUuid: actingParty?.partyUuid ?? '',
+      from: fromParty?.partyUuid ?? '',
+      to: toParty?.partyUuid ?? '',
+      party: actingParty?.partyUuid ?? '',
     },
     { skip: !fromParty?.partyUuid || !toParty?.partyUuid || !actingParty?.partyUuid },
   );
@@ -64,8 +68,8 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
   const reporteeView = direction === 'from';
 
   const status = useMemo(
-    () => getDeletionStatus(connections, viewingYourself, reporteeView),
-    [connections, viewingYourself, reporteeView],
+    () => getDeletionStatus(rolePermissions, viewingYourself, reporteeView),
+    [rolePermissions, viewingYourself, reporteeView],
   );
 
   const textKeys = getTextKeysForDeletionStatus(status);
@@ -79,6 +83,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
       .unwrap()
       .then(() => {
         setIsSuccess(true);
+        dispatch(roleApi.util.invalidateTags(['roles'])); // Invalidate roles cache
         dispatch(accessPackageApi.util.invalidateTags(['AccessPackages'])); // Invalidate access packages cache
       })
       .catch((err) => {
@@ -109,7 +114,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
         closeButton={t('common.close')}
         className={classes.modal}
       >
-        {isLoading || isConnectionLoading || isSuccess ? (
+        {isLoading || isRolePermissionsLoading || isSuccess ? (
           <LoadingAnimation
             isLoading={isLoading}
             displaySuccess={isSuccess}
@@ -138,6 +143,13 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
                     rel='noopener noreferrer'
                   ></Link>
                 ),
+                a2Link: (
+                  <Link
+                    to={a2ProfileLink}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  ></Link>
+                ),
               }}
             />
             {isError && errorDetails && (
@@ -157,7 +169,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
                 <Button
                   color='danger'
                   onClick={onDeleteUser}
-                  disabled={isLoading || isConnectionLoading || loadingPartyRepresentation}
+                  disabled={isLoading || isRolePermissionsLoading || loadingPartyRepresentation}
                 >
                   {t('delete_user.yes_button')}
                 </Button>

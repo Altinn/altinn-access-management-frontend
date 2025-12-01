@@ -74,7 +74,7 @@ export const ReporteeAccessPackageSection = () => {
       <AccessPackageInfoModal
         modalRef={modalRef}
         modalItem={modalItem}
-        modalActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
       />
     </>
   );

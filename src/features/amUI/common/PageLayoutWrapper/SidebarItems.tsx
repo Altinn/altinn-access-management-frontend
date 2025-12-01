@@ -45,36 +45,36 @@ export const SidebarItems = (
     items.push(getHeadingMenuItem(pathname, isLoading));
   }
   if (displayRequestsPage) {
-    items.push(getRequestsMenuItem(pathname, isLoading));
+    items.push(getRequestsMenuItem(pathname, isLoading, isSmall));
   }
 
   if (displayConfettiPackage) {
-    items.push(getUsersMenuItem(pathname, isLoading));
+    items.push(getUsersMenuItem(pathname, isLoading, isSmall));
     if (isAdmin) {
-      items.push(getReporteesMenuItem(pathname, isLoading));
+      items.push(getReporteesMenuItem(pathname, isLoading, isSmall));
     }
   }
 
   if (displayPoaOverviewPage && isAdmin) {
-    items.push(getPoaOverviewMenuItem(pathname, isLoading));
+    items.push(getPoaOverviewMenuItem(pathname, isLoading, isSmall));
   }
 
   if (displayConsentGui && hasConsentPermission(reportee, isAdmin)) {
-    items.push(getConsentMenuItem(pathname, isLoading));
+    items.push(getConsentMenuItem(pathname, isLoading, isSmall));
   }
 
   if (
     hasCreateSystemUserPermission(reportee) ||
     hasSystemUserClientAdminPermission(reportee, isClientAdmin)
   ) {
-    items.push(getSystemUserMenuItem(pathname, isLoading));
+    items.push(getSystemUserMenuItem(pathname, isLoading, isSmall));
   }
 
   if (canAccessSettings && displaySettingsPage) {
-    items.push(getSettingsMenuItem(pathname, isLoading));
+    items.push(getSettingsMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (displayConfettiPackage && !isSmall) {
+  if (displayConfettiPackage) {
     items.push(...getShortcutsMenuItem(pathname, isLoading));
   }
 

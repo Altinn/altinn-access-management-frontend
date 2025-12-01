@@ -20,7 +20,7 @@ export const RightsTabs = ({
   const { t } = useTranslation();
   const [chosenTab, setChosenTab] = useState('packages');
 
-  const { displayResourceDelegation, displayRoles } = window.featureFlags;
+  const { displayRoles } = window.featureFlags;
 
   return (
     <DsTabs
@@ -41,7 +41,7 @@ export const RightsTabs = ({
           )}
           {t('user_rights_page.access_packages_title')}
         </DsTabs.Tab>
-        {displayResourceDelegation && singleRightsPanel && (
+        {singleRightsPanel && (
           <DsTabs.Tab value='singleRights'>
             {tabBadge && (
               <DsBadge
@@ -74,7 +74,7 @@ export const RightsTabs = ({
       >
         {packagesPanel}
       </DsTabs.Panel>
-      {displayResourceDelegation && singleRightsPanel && (
+      {singleRightsPanel && (
         <DsTabs.Panel
           className={classes.tabContent}
           value='singleRights'

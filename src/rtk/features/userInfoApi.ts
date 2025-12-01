@@ -3,14 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
-import { Entity } from '@/dataObjects/dtos/Common';
-import { Connection } from './connectionApi';
-
-interface UserKeyValues {
-  OrganizationIdentifier?: string;
-  PartyId?: string;
-  DateOfBirth?: string;
-}
+import { Connection, RoleInfo } from './connectionApi';
 
 export interface ExtendedUser extends Omit<User, 'children'> {
   roles: RoleInfo[];
@@ -25,25 +18,25 @@ export interface User {
   type?: string;
   variant?: string;
   children: (User | ExtendedUser)[] | null;
-  keyValues: UserKeyValues | null;
   parent?: ExtendedUser | null;
+  partyId?: number | string | null;
+  organizationIdentifier?: string | null;
+  dateOfBirth?: string | null;
+  userId?: string | null;
+  username?: string | null;
 }
 
-export interface RoleInfo {
-  id: string;
-  code?: string;
-  viaParty?: Entity;
-}
-
-interface UserInfoApiResponse {
+interface UserProfileApiResponse {
   party: Party;
   userUuid: string;
+  profileSettingPreference: ProfileSettingPreference;
 }
 
-export interface UserInfo {
+export interface UserProfile {
   name: string;
   uuid: string;
   party: Party;
+  profileSettingPreference: ProfileSettingPreference;
 }
 
 export interface ReporteeInfo {
@@ -74,6 +67,15 @@ export interface UserAccesses {
   roles: string[];
 }
 
+interface ProfileSettingPreference {
+  language: string;
+  preselectedPartyUuid: string | null;
+  showClientUnits: boolean;
+  shouldShowSubEntities: boolean;
+  shouldShowDeletedEntities: boolean;
+  doNotPromptForParty: boolean;
+}
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/user`;
 
 export const userInfoApi = createApi({
@@ -88,11 +90,16 @@ export const userInfoApi = createApi({
   }),
   tagTypes: ['UserInfo', 'Favorites'],
   endpoints: (builder) => ({
-    getUserInfo: builder.query<UserInfo, void>({
+    getUserProfile: builder.query<UserProfile, void>({
       query: () => 'profile',
       keepUnusedDataFor: 300,
-      transformResponse: (response: UserInfoApiResponse) => {
-        return { name: response.party.name, uuid: response.userUuid, party: response.party };
+      transformResponse: (response: UserProfileApiResponse) => {
+        return {
+          name: response.party.name,
+          uuid: response.userUuid,
+          party: response.party,
+          profileSettingPreference: response.profileSettingPreference,
+        };
       },
     }),
     getReportee: builder.query<ReporteeInfo, void>({
@@ -159,7 +166,7 @@ export const userInfoApi = createApi({
 });
 
 export const {
-  useGetUserInfoQuery,
+  useGetUserProfileQuery,
   useGetReporteeQuery,
   useGetReporteeListForPartyQuery,
   useGetReporteeListForAuthorizedUserQuery,
