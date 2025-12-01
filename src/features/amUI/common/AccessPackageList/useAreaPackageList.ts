@@ -172,13 +172,30 @@ export const useAreaPackageList = ({
  * @returns true if the permission is inherited, false if it is a direct "rettighetshaver" delegation
  */
 
-export const isInherited = (p: Permissions, toPartyUuid: string, fromPartyUuid: string) =>
-  !(
-    toPartyUuid === p.to.id &&
-    fromPartyUuid === p.from.id &&
-    p.role &&
-    p.role?.code === 'rettighetshaver'
-  );
+export const isInherited = (p: Permissions, toPartyUuid: string, fromPartyUuid: string) => {
+  console.log('p: ', p);
+  console.log(p.to.name);
+
+  if (toPartyUuid !== p.to.id && fromPartyUuid !== p.from.id) {
+    console.log(
+      'toPartyUuid !== p.to.id && fromPartyUuid !== p.from.id: ',
+      toPartyUuid !== p.to.id && fromPartyUuid !== p.from.id,
+    );
+    return true;
+  }
+  if (p.role && p.role?.code !== 'rettighetshaver') {
+    console.log(
+      'p.role && p.role?.code !== rettighetshaver: ',
+      p.role && p.role?.code !== 'rettighetshaver',
+    );
+    return true;
+  }
+  if (p.via || p.viaRole) {
+    console.log('p.via || p.viaRole: ', p.via || p.viaRole);
+    return true;
+  }
+  return false;
+};
 
 export const getDeletableStatus = (
   pkg: AccessPackageDelegation,
