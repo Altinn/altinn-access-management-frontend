@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using System.Linq.Expressions;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
@@ -58,8 +59,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>        
         public async Task<List<AuthorizedParty>> GetReporteeListForUser(Guid userUuid)
         {
-            var profile = await _profileClient.GetUserProfile(userUuid);
-            List<AuthorizedParty> parties = await _accessManagementClientV0.GetReporteeListForUser(profile.ProfileSettingPreference.ShowClientUnits);
+            UserProfile userProfile;
+            try
+            {
+                userProfile = await _profileClient.GetUserProfile(userUuid);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting user profile: {ex.Message}");
+                userProfile = null;
+            }
+
+            List<AuthorizedParty> parties = await _accessManagementClientV0.GetReporteeListForUser(userProfile?.ProfileSettingPreference?.ShowClientUnits ?? false);
             return parties;
         }
 
