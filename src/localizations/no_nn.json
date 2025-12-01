@@ -604,7 +604,7 @@
     "escalate_title": "Du manglar nødvendig fullmakt",
     "escalate_description": "For å opprette ein systemtilgang må du vere Tilgangsstyrar. Vil du senda førespurnaden vidare til Tilgangsstyraren i verksemda di?",
     "escalate_confirm_button": "Ja, send vidare",
-    "escalate_cancel_button": "Avbryt",
+    "escalate_cancel_button": "Lukk og logg ut",
     "escalate_error": "Kunne ikkje senda førespurnaden vidare",
     "escalate_sent_title": "Førespurnaden er videresendt",
     "escalate_sent_description": "Tilgangsstyraren i verksemda di skal no ha fått førespurnaden i Altinn.",

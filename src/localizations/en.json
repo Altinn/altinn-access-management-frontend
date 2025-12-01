@@ -608,7 +608,7 @@
     "escalate_title": "You lack required authorization",
     "escalate_description": "To create a system access you must be an Access Manager. Do you want to forward the request to the Access Manager in your organization?",
     "escalate_confirm_button": "Yes, forward request",
-    "escalate_cancel_button": "Cancel",
+    "escalate_cancel_button": "Close and log out",
     "escalate_error": "Could not forward the request",
     "escalate_sent_title": "Request forwarded",
     "escalate_sent_description": "The Access Manager in your organization should now have received the request in Altinn.",
