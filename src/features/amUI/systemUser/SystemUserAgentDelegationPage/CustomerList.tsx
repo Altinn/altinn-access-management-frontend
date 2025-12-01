@@ -7,7 +7,6 @@ import {
   DsValidationMessage,
   ListItem,
   DsCheckbox,
-  DsAlert,
 } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
@@ -109,12 +108,6 @@ export const CustomerList = ({
         )}
         {children}
       </div>
-      {list.length === 0 && (
-        <DsAlert data-color='warning'>
-          Det finnes ingen kunder enda. De må delegere tilgangspakkene som kreves av systemtilgangen
-          til DISKRET NÆR TIGER.
-        </DsAlert>
-      )}
       <List>
         {filteredSearchList.slice(startIndex, endIndex)?.map((customer) => (
           <ListItem
@@ -139,13 +132,15 @@ export const CustomerList = ({
           />
         ))}
       </List>
-      <AmPagination
-        totalPages={totalPages}
-        showPages={showPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        className={classes.pagingContainer}
-      />
+      {list.length > 0 && (
+        <AmPagination
+          totalPages={totalPages}
+          showPages={showPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          className={classes.pagingContainer}
+        />
+      )}
     </div>
   );
 };
