@@ -204,11 +204,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetReporteeListForUser_ReturnsList()
         {
+
             // Arrange
+            const int userId = 1234; // Matches mocked reportee list file (1234.json)
+            const int partyId = 50707389;
+            var partyUuid = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb"); // Valid profile entry for GetUserPartyUuid
+            var token = PrincipalUtil.GetToken(userId, partyId, partyUuid, 2);
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetReporteeListForUser", "reporteeList.json");
             List<AuthorizedParty> expectedResponse = Util.GetMockData<List<AuthorizedParty>>(path);
-            const int userId = 1234;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
@@ -228,10 +231,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetReporteeListForUser_Returns_404()
         {
             // Arrange
-            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetReporteeListForUser", "reporteeList.json");
-
-            const int userId = 404;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            const int userId = 20020252; // Valid profile entry without reportee list data -> 404
+            const int partyId = 50707389;
+            var partyUuid = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            var token = PrincipalUtil.GetToken(userId, partyId, partyUuid, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
