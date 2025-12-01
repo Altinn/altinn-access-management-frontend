@@ -1,26 +1,15 @@
-﻿using System.CodeDom.Compiler;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Data;
 using System.Net;
-using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.Delegation;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
-using Altinn.Common.PEP.Configuration;
-using Altinn.Platform.Register.Models;
 using Bogus;
-using Bogus.Extensions.Norway;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 

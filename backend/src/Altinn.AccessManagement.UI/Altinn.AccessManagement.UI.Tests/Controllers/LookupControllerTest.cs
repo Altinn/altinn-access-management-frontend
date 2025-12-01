@@ -1,15 +1,13 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Security.Claims;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using AltinnCore.Authentication.Constants;
+using Altinn.Register.Contracts.V1;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -69,9 +67,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             return httpClient;
         }
 
-        /// <summary>
-        /// Assert that an authenticated user is able to lookup an organization
-        /// </summary>
+        /// <summary>  
+        /// Assert that an authenticated user is able to lookup an organization  
+        /// </summary>  
         [Fact]
         public async Task GetPartyForOrganization_Success()
         {
@@ -85,7 +83,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
             Assert.Equal(lookupOrgNo, actualParty.OrgNumber);
             Assert.Equal(50004222, actualParty.PartyId);
-            Assert.Equal(PartyType.Organization, actualParty.PartyTypeName);
+            Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
             Assert.Equal("KARLSTAD OG ULOYBUKT", actualParty.Name);
         }
 
@@ -102,9 +100,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
-        /// <summary>
-        /// Assert that an authenticated user is able to lookup a party based on uuid, using the old Register data
-        /// </summary>
+        /// <summary>  
+        /// Assert that an authenticated user is able to lookup a party based on uuid, using the old Register data  
+        /// </summary>  
         [Fact]
         public async Task GetPartyByUUID_OldRegistry_Success()
         {
@@ -118,7 +116,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
             Assert.Equal(lookupUUID, actualParty.PartyUuid);
             Assert.Equal(51317934, actualParty.PartyId);
-            Assert.Equal(PartyType.Organization, actualParty.PartyTypeName);
+            Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
             Assert.Equal("RAKRYGGET UNG TIGER AS", actualParty.Name);
         }
 

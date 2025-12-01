@@ -26,7 +26,6 @@ import { ConsentRequestPage } from '@/features/amUI/consent/ConsentRequestPage/C
 import { ActiveConsentsPage } from '@/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPage';
 import { ConsentHistoryPage } from '@/features/amUI/consent/ConsentHistoryPage/ConsentHistoryPage';
 import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
-import { InfoPage } from '@/features/amUI/infoPage/InfoPage';
 
 import {
   GeneralPath,
@@ -38,6 +37,8 @@ import {
 } from '../paths';
 import { PackagePoaDetailsPage } from '@/features/amUI/packagePoaDetailsPage/PackagePoaDetailsPage';
 import { SettingsPage } from '@/features/amUI/settings/SettingsPage';
+import { LandingPage } from '@/features/amUI/landingPage/LandingPage';
+import { RequestPage } from '@/features/amUI/requestPage/RequestsPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,6 +46,10 @@ export const Router = createBrowserRouter(
       path='/'
       errorElement={<ErrorPage />}
     >
+      <Route
+        index
+        element={<LandingPage />}
+      />
       <Route
         path={ApiDelegationPath.OfferedApiDelegations}
         errorElement={<ErrorPage />}
@@ -176,12 +181,12 @@ export const Router = createBrowserRouter(
         />
       </Route>
       <Route
-        path={amUIPath.Info}
-        element={<InfoPage />}
-      />
-      <Route
         path={amUIPath.Settings}
         element={<SettingsPage />}
+      />
+      <Route
+        path={amUIPath.Requests}
+        element={<RequestPage />}
       />
     </Route>,
   ),

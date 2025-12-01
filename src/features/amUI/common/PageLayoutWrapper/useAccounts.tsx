@@ -4,9 +4,9 @@ import {
   ReporteeInfo,
   useGetFavoriteActorUuidsQuery,
   useGetReporteeQuery,
-  useGetUserInfoQuery,
+  useGetUserProfileQuery,
 } from '@/rtk/features/userInfoApi';
-import { AccountMenuItemProps, MenuGroupProps } from '@altinn/altinn-components';
+import { AccountMenuItemProps, formatDisplayName, MenuGroupProps } from '@altinn/altinn-components';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Connection } from '@/rtk/features/connectionApi';
@@ -27,7 +27,7 @@ const getAccountTypeFromConnection = (type: string): 'company' | 'person' => {
 export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
   const { t } = useTranslation();
   const { data: actingParty } = useGetReporteeQuery();
-  const { data: currentUser } = useGetUserInfoQuery();
+  const { data: currentUser } = useGetUserProfileQuery();
   const { data: favoriteUuids } = useGetFavoriteActorUuidsQuery();
 
   const useNewActorListFlag = useNewActorList();
@@ -94,13 +94,10 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
 
       const sortedAccounts =
         accountList.sort((a, b) => {
-          if (a.groupId === 'self') return -1;
-          if (b.groupId === 'self') return 1;
+          if (a.id === actingParty.partyUuid) return -1;
+          if (b.id === actingParty.partyUuid) return 1;
           if (a.type === 'company' && b.type === 'person') return 1;
-          if (b.type === 'company' && a.type === 'person') return -1;
-          if (b.groupId !== 'self' && a.groupId === 'favorites') return -1;
-          if (a.groupId !== 'self' && b.groupId === 'favorites') return 1;
-          return a.name.localeCompare(b.name);
+          return -1;
         }) ?? [];
 
       const firstCompany = sortedAccounts.find(
@@ -112,10 +109,6 @@ export const useAccounts = ({ reporteeList, actorList }: useAccountProps) => {
       );
 
       const accountGroups: Record<string, MenuGroupProps> = {
-        self: {
-          title: t('header.account_you'),
-          divider: true,
-        },
         [firstCompany?.groupId || 'company']: {
           title: t('header.account_orgs'),
           divider: true,
@@ -143,16 +136,19 @@ const getAccount = (
   partOfText: string,
   parent?: ReporteeInfo,
 ): AccountMenuItemProps => {
-  const lastToFirstName = (name: string) => {
-    const nameParts = name.split(' ');
-    return `${nameParts[nameParts.length - 1]} ${nameParts.slice(0, -1).join(' ')}`;
-  };
-  const name = reportee.type === 'Person' ? lastToFirstName(reportee.name) : reportee.name;
+  const name =
+    reportee.type === 'Person'
+      ? formatDisplayName({ fullName: reportee.name, type: 'person', reverseNameOrder: true })
+      : formatDisplayName({ fullName: reportee.name, type: 'company' });
   const isSubUnit = reportee.type === 'Organization' && !!parent;
   const group =
-    reportee.partyUuid === userUuid ? 'self' : isSubUnit ? parent?.partyUuid : reportee.partyUuid;
+    reportee.partyUuid === userUuid
+      ? 'favorites'
+      : isSubUnit
+        ? parent?.partyUuid
+        : reportee.partyUuid;
   const description = isSubUnit
-    ? `↪ ${orgNumberText}: ${reportee.organizationNumber}, ${partOfText} ${parent?.name}`
+    ? `↪ ${orgNumberText}: ${reportee.organizationNumber}, ${partOfText} ${formatDisplayName({ fullName: parent?.name, type: 'company' })}`
     : reportee.type === 'Organization'
       ? `${orgNumberText}: ${reportee.organizationNumber}`
       : '';
@@ -183,26 +179,30 @@ const getAccountFromConnection = (
 ): AccountMenuItemProps => {
   const accountType = getAccountTypeFromConnection(actorConnection?.party.type ?? '');
   const isSubUnit = actorConnection.party.type === 'Organisasjon' && !!actorConnection.party.parent;
+  const partyName = formatDisplayName({
+    fullName: actorConnection.party.name,
+    type: accountType,
+  });
   const group =
     actorConnection.party.id === userUuid
-      ? 'self'
+      ? 'favorites'
       : isSubUnit
         ? actorConnection.party.parent?.id
         : actorConnection.party.id;
   const description = isSubUnit
-    ? `↪ ${orgNumberText}: ${actorConnection.party.keyValues?.OrganizationIdentifier}, ${partOfText} ${actorConnection.party.parent?.name}`
+    ? `↪ ${orgNumberText}: ${actorConnection.party.organizationIdentifier ?? ''}, ${partOfText} ${actorConnection.party.parent?.name}`
     : actorConnection.party.type === 'Organisasjon'
-      ? `${orgNumberText}: ${actorConnection.party.keyValues?.OrganizationIdentifier}`
-      : `${dateOfBirthText}: ${actorConnection.party.keyValues?.DateOfBirth}`;
+      ? `${orgNumberText}: ${actorConnection.party.organizationIdentifier ?? ''}`
+      : `${dateOfBirthText}: ${actorConnection.party.dateOfBirth ?? ''}`;
 
   return {
-    id: actorConnection.party.keyValues?.PartyId ?? actorConnection.party.id,
+    id: actorConnection.party.partyId?.toString() ?? actorConnection.party.id,
     icon: {
-      name: actorConnection.party.name,
+      name: partyName,
       type: accountType,
       variant: isSubUnit ? 'outline' : 'solid',
     },
-    name: actorConnection.party.name,
+    name: partyName,
     description: description,
     groupId: group,
     type: accountType,

@@ -1,6 +1,4 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.Profile;
-using Altinn.Platform.Profile.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -50,5 +48,17 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <returns>A ProfileGroup containing the users favorite parties</returns>
         Task<ProfileGroup> GetFavoriteProfileGroup();
+
+        /// <summary>
+        /// Adds a partyUuid to the user's favorite profile group in altinn profile
+        /// </summary>
+        /// <returns></returns>
+        Task AddPartyUuidToFavorites(Guid partyUuid);
+
+        /// <summary>
+        /// Deletes a partyUuid from the user's favorite profile group in altinn profile
+        /// </summary>
+        /// <returns></returns>
+        Task DeletePartyUuidFromFavorites(Guid partyUuid);
     }
 }

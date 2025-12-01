@@ -17,3 +17,15 @@ export const hasCreateSystemUserPermission = (reporteeInfo?: ReporteeInfo): bool
   );
   return isOrganization && hasCorrectRole;
 };
+
+export const hasSystemUserClientAdminPermission = (
+  reporteeInfo?: ReporteeInfo,
+  isClientAdmin: boolean = false,
+): boolean | undefined => {
+  if (!reporteeInfo) {
+    return undefined;
+  }
+
+  const isOrganization = reporteeInfo.type === 'Organization';
+  return isOrganization && isClientAdmin;
+};

@@ -157,6 +157,58 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        /// Endpoint for adding a partyUuid to the favorite actors of the authenticated user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        [Authorize]
+        [Route("actorlist/favorites/{partyUuid}")]
+        public async Task<ActionResult> AddPartyUuidToFavorites(Guid partyUuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _userService.AddPartyUuidToFavorites(partyUuid);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AddPartyUuidToFavorites failed to add partyUuid");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for deleting a partyUuid from the favorite actors of the authenticated user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("actorlist/favorites/{partyUuid}")]
+        public async Task<ActionResult> DeletePartyUuidFromFavorites(Guid partyUuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _userService.DeletePartyUuidFromFavorites(partyUuid);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "DeletePartyUuidFromFavorites failed to delete partyUuid");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
         /// Endpoint for retrieving party if party exists in the authenticated users reporteelist.
         /// </summary>
         /// <param name="partyId">The partyId for the reportee to look up.</param>

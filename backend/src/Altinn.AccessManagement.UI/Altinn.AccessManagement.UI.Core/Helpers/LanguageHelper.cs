@@ -16,6 +16,26 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         };
 
         /// <summary>
+        /// Gets the Altinn 2 standard language code based on either backend or frontend standard.
+        /// </summary>
+        /// <param name="languageCode">The language code.</param>
+        /// <returns>The Altinn 2 standard language code if found; otherwise null.</returns>
+        public static string TryGetAltinn2StandardLanguage(string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+            {
+                return string.Empty;
+            }
+
+            var mapping = LanguageMappings.Find(m =>
+                languageCode.Contains(m.Altinn2Standard) ||
+                m.BackendStandard == languageCode ||
+                m.FrontendStandard == languageCode);
+
+            return mapping.Altinn2Standard;
+        }
+
+        /// <summary>
         /// Gets the backend standard language based on the either Altinn 2 or frontend standard.
         /// </summary>
         /// <param name="languageCode">The language code.</param>
@@ -32,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <returns>The frontend standard language code.</returns>
         public static string GetFrontendStandardLanguage(string languageCode)
         {
-            return LanguageMappings.Find(m => languageCode.Contains(m.Altinn2Standard) || m.BackendStandard == languageCode).FrontendStandard;
+            return LanguageMappings.Find(m => languageCode.Contains(m.Altinn2Standard) || m.BackendStandard == languageCode || m.FrontendStandard == languageCode).FrontendStandard;
         }
 
         /// <summary>
@@ -42,6 +62,11 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <returns>The value of the Altinn persistence cookie.</returns>
         public static string GetAltinnPersistenceCookieValueFrontendStandard(HttpContext httpContext)
         {
+            if (httpContext == null)
+            {
+                return string.Empty;
+            }
+
             var cookieValue = httpContext.Request.Cookies["altinnPersistentContext"];
 
             if (cookieValue == null)

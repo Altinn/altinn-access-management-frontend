@@ -9,6 +9,10 @@
   "isDeleted": false,
   "onlyHierarchyElementWithNoAccess": false,
   "person": null,
-  "organization": null,
+  "organization": {
+    "orgNumber": "991825827",
+    "name": "Digitaliseringsdirektoratet",
+    "unitType": "ORGL"
+  },
   "childParties": null
 }

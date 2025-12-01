@@ -1,130 +1,103 @@
-import { useMemo } from 'react';
-import { List } from '@altinn/altinn-components';
-
-import type { Role, ExtendedRole } from '@/rtk/features/roleApi';
-import { useGetRolesForUserQuery, useGetRolesQuery } from '@/rtk/features/roleApi';
+import type { Role } from '@/rtk/features/roleApi';
+import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-
-import { DelegationAction } from '../DelegationModal/EditModal';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-
+import { SkeletonRoleList } from './SkeletonRoleList';
+import {
+  createErrorDetails,
+  TechnicalErrorParagraphs,
+} from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { useGroupedRoleListEntries } from './useGroupedRoleListEntries';
+import { DsAlert, DsHeading, DsParagraph, List } from '@altinn/altinn-components';
+import { t } from 'i18next';
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
-import { SkeletonRoleList } from './SkeletonRoleList';
-import { RevokeRoleButton } from './RevokeRoleButton';
-import { DelegateRoleButton } from './DelegateRoleButton';
-import { RequestRoleButton } from './RequestRoleButton';
+import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 
 interface RoleListProps {
-  onSelect: (role: ExtendedRole) => void;
-  availableActions?: DelegationAction[];
+  onSelect: (role: Role) => void;
   isLoading?: boolean;
-  onActionError: (role: Role, error: ActionError) => void;
 }
 
-export const RoleList = ({
-  onSelect,
-  availableActions,
-  isLoading,
-  onActionError,
-}: RoleListProps) => {
-  const { fromParty, toParty, isLoading: partyIsLoading } = usePartyRepresentation();
-  const { data: roleAreas, isLoading: roleAreasIsLoading } = useGetRolesQuery();
-  const { data: userRoles, isLoading: userRolesIsLoading } = useGetRolesForUserQuery({
-    from: fromParty?.partyUuid ?? '',
-    to: toParty?.partyUuid ?? '',
+export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
+  const { fromParty, toParty, actingParty, isLoading: partyIsLoading } = usePartyRepresentation();
+  const {
+    data: permissions,
+    isLoading: permissionsIsLoading,
+    error: permissionsError,
+  } = useGetRolePermissionsQuery(
+    {
+      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.partyUuid,
+      to: toParty?.partyUuid,
+    },
+    {
+      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
+    },
+  );
+
+  const {
+    mapRoles,
+    error: roleMetadataError,
+    isLoading: roleMetadataIsLoading,
+  } = useRoleMetadata();
+
+  const { altinn2Roles } = useGroupedRoleListEntries({
+    permissions,
   });
 
-  const isSm = useIsMobileOrSmaller();
+  const mappedRoles = mapRoles(altinn2Roles?.map(({ role }) => role ?? ([] as Role[])));
 
-  const groupedRoles = useMemo(() => {
-    return roleAreas?.reduce(
-      (res, roleArea) => {
-        roleArea.roles.forEach((role) => {
-          const roleAssignment = userRoles?.find((userRole) => userRole.role.id === role.id);
-          if (roleAssignment) {
-            res.activeRoles.push({
-              ...role,
-              inherited: roleAssignment.inherited,
-              assignmentId: roleAssignment.id,
-            });
-          } else {
-            res.availableRoles.push({ ...role, inherited: [] });
-          }
-        });
-        return res;
-      },
-      {
-        activeRoles: [] as ExtendedRole[],
-        availableRoles: [] as ExtendedRole[],
-      },
-    );
-  }, [roleAreas, userRoles]);
-
-  if (partyIsLoading || roleAreasIsLoading || userRolesIsLoading || isLoading) {
+  if (permissionsIsLoading || partyIsLoading || roleMetadataIsLoading || isLoading) {
     return <SkeletonRoleList />;
   }
+  if (permissionsError || roleMetadataError) {
+    const roleFetchErrorDetails = createErrorDetails(permissionsError || roleMetadataError);
+
+    return (
+      <div className={classes.roleLists}>
+        <DsAlert
+          data-color='danger'
+          data-size='sm'
+        >
+          <DsHeading
+            level={3}
+            data-size='2xs'
+          >
+            {t('role.fetch_error_heading')}
+          </DsHeading>
+          <DsParagraph data-size='sm'>{t('role.fetch_error_description')}</DsParagraph>
+          <TechnicalErrorParagraphs
+            size='xs'
+            status={roleFetchErrorDetails?.status ?? ''}
+            time={roleFetchErrorDetails?.time ?? ''}
+            traceId={roleFetchErrorDetails?.traceId ?? ''}
+          />
+        </DsAlert>
+      </div>
+    );
+  }
   return (
-    <div className={classes.roleLists}>
-      {groupedRoles && groupedRoles.activeRoles.length > 0 && (
+    <div className={classes.roleArea}>
+      <DsHeading
+        level={2}
+        data-size='xs'
+      >
+        {t('role.current_roles_title', { count: mappedRoles.length })}
+      </DsHeading>
+      {mappedRoles.length === 0 ? (
+        <DsParagraph data-size='sm'>{t('role.no_roles_message')}</DsParagraph>
+      ) : (
         <List>
-          {groupedRoles.activeRoles.map((role) => (
-            <RoleListItem
-              key={role.id}
-              role={role}
-              active
-              onClick={() => {
-                onSelect(role);
-              }}
-              controls={
-                !isSm &&
-                availableActions?.includes(DelegationAction.REVOKE) && (
-                  <RevokeRoleButton
-                    key={role.id}
-                    assignmentId={role?.assignmentId ?? ''}
-                    accessRole={role}
-                    fullText={false}
-                    size='sm'
-                    disabled={role.inherited?.length > 0}
-                    onRevokeError={onActionError}
-                  />
-                )
-              }
-            />
-          ))}
-        </List>
-      )}
-      {groupedRoles && groupedRoles.availableRoles.length > 0 && (
-        <List>
-          {groupedRoles.availableRoles.map((role) => (
-            <RoleListItem
-              key={role.id}
-              role={role}
-              onClick={() => onSelect(role)}
-              controls={
-                !isSm && (
-                  <>
-                    {availableActions?.includes(DelegationAction.DELEGATE) && (
-                      <DelegateRoleButton
-                        accessRole={role}
-                        key={role.id}
-                        fullText={false}
-                        size='sm'
-                        onDelegateError={onActionError}
-                        onSelect={() => {
-                          onSelect(role);
-                        }}
-                        showSpinner={true}
-                        showWarning={true}
-                      />
-                    )}
-                    {availableActions?.includes(DelegationAction.REQUEST) && <RequestRoleButton />}
-                  </>
-                )
-              }
-            />
-          ))}
+          {mappedRoles.map((role) => {
+            return (
+              <RoleListItem
+                key={role.id}
+                role={role}
+                onClick={() => onSelect(role)}
+              />
+            );
+          })}
         </List>
       )}
     </div>

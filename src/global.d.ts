@@ -6,14 +6,18 @@ declare global {
       displayPopularSingleRightsServices: boolean;
       displayResourceDelegation: boolean;
       displayConfettiPackage: boolean;
-      displayLimitedPreviewLaunch: boolean;
       displayConsentGui: boolean;
       restrictPrivUse: boolean;
       crossPlatformLinks: boolean;
       displaySettingsPage: boolean;
       displayPoaOverviewPage: boolean;
       useNewActorsList: boolean;
-      useNewLogoutUrl: boolean;
+      useNewHeader: boolean;
+      displayRequestsPage: boolean;
+      displayPrivDelegation: boolean;
+      displayAccessRequest: boolean;
+      displaySubConnections: boolean;
+      displayRoles: boolean;
     };
   }
 }

@@ -17,6 +17,7 @@ import { AmPagination } from '@/components/Paginering';
 import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
+import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 
 const filterCustomerList = (
   list: AgentDelegationCustomer[],
@@ -121,7 +122,7 @@ export const CustomerList = ({
             id={customer.id}
             icon={{ type: 'company', name: customer.name }}
             title={{ children: customer.name, as: 'h3' }}
-            description={`${t('common.org_nr')} ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`}
+            description={`${t('common.org_nr')} ${formatOrgNr(customer.orgNo)}`}
             interactive={false}
             ariaLabel={customer.name}
             size='sm'

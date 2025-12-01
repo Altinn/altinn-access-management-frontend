@@ -16,7 +16,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { GeneralPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetUserInfoQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useGetUserProfileQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
@@ -29,7 +29,7 @@ export const ChooseServicePage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
 
-  const { data: userData } = useGetUserInfoQuery();
+  const { data: userData } = useGetUserProfileQuery();
   const { data: reporteeData } = useGetReporteeQuery();
 
   const requestee = reporteeData?.name || userData?.name || '';

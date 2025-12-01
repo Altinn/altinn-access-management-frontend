@@ -7,6 +7,7 @@
 .inheritedInfoIcon {
   color: var(--ds-color-info-base-default);
   margin-right: 0.3rem;
+  min-width: 1.5rem;
 }
 
 .infoLine {
@@ -22,6 +23,11 @@
 
 .dangerIcon {
   color: var(--ds-color-danger-base-default);
+  margin-right: 0.3rem;
+}
+
+.warningIcon {
+  color: var(--ds-color-warning-base-default);
   margin-right: 0.3rem;
 }
 

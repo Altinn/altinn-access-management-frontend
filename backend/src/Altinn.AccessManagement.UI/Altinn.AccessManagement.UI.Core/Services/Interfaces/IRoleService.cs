@@ -1,50 +1,46 @@
+using System.Collections.Generic;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Role;
-using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
+using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
-        /// <summary>
+    /// <summary>
         /// Service for access package logic
         /// </summary>
-        public interface IRoleService
-        {
-            /// <summary>
-            ///    Search through all roles and return matches
-            /// </summary>
-            /// <param name="languageCode">languageCode.</param>
-            /// <param name="searchString">the string to search for</param>
-            Task<List<RoleAreaFE>> GetSearch(string languageCode, string searchString);
+    public interface IRoleService
+    {
+        /// <summary>
+        /// Gets permissions for the given parties.
+        /// </summary>
+        /// <param name="party">The party performing the lookup.</param>
+        /// <param name="from">Optional right owner filter.</param>
+        /// <param name="to">Optional right holder filter.</param>
+        /// <param name="languageCode">Language code for localization.</param>
+        Task<List<RolePermission>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode);
 
-            /// <summary>
-            ///    Gets meta data for a given role
-            /// </summary>
-            /// <param name="languageCode">languageCode.</param>
-            /// <param name="id">id of the role.</param>
-            Task<Core.Models.Common.Role> GetRoleMetaById(string languageCode, Guid id);
+        /// <summary>
+        /// Gets metadata for all roles.
+        /// </summary>
+        /// <param name="languageCode">Language code for localization.</param>
+        Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode);
 
-            /// <summary>
-            ///     Gets the roles for a user
-            /// </summary>
-            /// <param name="languageCode">languageCode.</param>
-            /// <param name="rightOwnerUuid">the right owner to retrieve roles for</param>
-            /// <param name="rightHolderUuid">the right holder to retrieve roles for</param>
-            /// <returns></returns>
-            Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid);
+        /// <summary>
+        /// Gets package metadata for a role.
+        /// </summary>
+        /// <param name="roleCode">The role code.</param>
+        /// <param name="variant">Optional variant filter.</param>
+        /// <param name="includeResources">Whether to include resources for each package.</param>
+        /// <param name="languageCode">Language code for localization.</param>
+        Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode);
 
-            /// <summary>
-            /// Creates a role delegation
-            /// </summary>
-            /// <param name="from">the user to delegate the role from</param>
-            /// <param name="to">the user to delegate the role to</param>
-            /// <param name="roleId">the role to delegate</param>
-            /// <returns></returns>
-            Task<HttpResponseMessage> CreateRoleDelegation(Guid from, Guid to, Guid roleId);
-
-            /// <summary>
-            /// Deletes a role delegation
-            /// </summary>
-            /// <param name="assignmentId">the assignment id of the role delegation to delete</param>
-            /// <returns></returns>
-            Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId);
+        /// <summary>
+        /// Gets resource metadata for a role.
+        /// </summary>
+        /// <param name="roleCode">The role code.</param>
+        /// <param name="variant">Optional variant filter.</param>
+        /// <param name="includePackageResources">Whether to include resources assigned via packages.</param>
+        /// <param name="languageCode">Language code for localization.</param>
+        Task<IEnumerable<ResourceAM>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode);
     }
 }

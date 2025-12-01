@@ -1,9 +1,8 @@
-import { UserListItem } from '@altinn/altinn-components';
+import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+
 import type { Connection } from '@/rtk/features/connectionApi';
 import { formatDateToNorwegian } from '@/resources/utils';
-
-import { getRoleCodesForKeyRoles } from '../UserRoles/roleUtils';
 
 import classes from './CurrentUserPageHeader.module.css';
 
@@ -11,22 +10,31 @@ interface CurrentUserPageHeaderProps {
   currentUser?: Connection;
   as: React.ElementType;
   loading: boolean;
+  roleNames?: string[];
 }
 
-export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserPageHeaderProps) => {
+export const CurrentUserPageHeader = ({
+  currentUser,
+  as,
+  loading,
+  roleNames,
+}: CurrentUserPageHeaderProps) => {
   const { t } = useTranslation();
-  const roles = currentUser?.roles ? getRoleCodesForKeyRoles(currentUser.roles) : [];
-  const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.keyValues?.DateOfBirth);
+
+  const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.dateOfBirth || undefined);
 
   return (
     <div className={classes.currentUser}>
       <UserListItem
         id={currentUser?.party?.id || ''}
-        name={currentUser?.party?.name || ''}
+        name={formatDisplayName({
+          fullName: currentUser?.party?.name || '',
+          type: currentUser?.party?.type === 'Person' ? 'person' : 'company',
+        })}
         description={
           formattedBirthDate ? t('common.date_of_birth') + ` ${formattedBirthDate}` : undefined
         }
-        roleNames={roles.map((r) => t(`${r}`))}
+        roleNames={roleNames}
         type='person'
         as={as}
         titleAs='h2'

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsAlert, DsHeading, DsPopover } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsPopover, DsSearch } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
@@ -16,6 +16,8 @@ import { AccessPackageInfoAlert } from './AccessPackageInfoAlert';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import classes from './AccessPackageSection.module.css';
+import { debounce } from '@/resources/utils';
+import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 
 export const AccessPackageSection = () => {
   const { t } = useTranslation();
@@ -27,8 +29,10 @@ export const AccessPackageSection = () => {
     actingParty,
     isLoading: loadingPartyRepresentation,
   } = usePartyRepresentation();
+  const { data: isHovedadmin } = useGetIsHovedadminQuery();
   const isCurrentUser = selfParty?.partyUuid === id;
-  const displayLimitedPreviewLaunch = window.featureFlags.displayLimitedPreviewLaunch;
+  const canGiveAccess = !isCurrentUser || (isCurrentUser && isHovedadmin);
+  const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
     {
@@ -41,10 +45,27 @@ export const AccessPackageSection = () => {
 
   const numberOfAccesses = accesses ? Object.values(accesses).flat().length : 0;
 
+  // Local search state with debounce to avoid excessive backend calls
+  const [searchString, setSearchString] = useState<string>('');
+  const [debouncedSearchString, setDebouncedSearchString] = useState<string>('');
+
+  const debouncedUpdate = useCallback(
+    debounce((value: string) => {
+      setDebouncedSearchString(value);
+    }, 300),
+    [],
+  );
+
+  useEffect(() => {
+    return () => {
+      debouncedUpdate.cancel();
+    };
+  }, [debouncedUpdate]);
+
   return (
     <>
       <AccessPackageInfoAlert />
-      {toParty?.partyTypeName === PartyType.Person && (
+      {toParty?.partyTypeName === PartyType.Person && !shouldDisplayPrivDelegation && (
         <DsAlert data-color='warning'>{t('access_packages.person_info_alert')}</DsAlert>
       )}
       {loadingPartyRepresentation || loadingAccesses ? (
@@ -70,16 +91,44 @@ export const AccessPackageSection = () => {
               <DsPopover>{t('access_packages.helptext_content')}</DsPopover>
             </DsPopover.TriggerContext>
           </div>
-          {(toParty?.partyTypeName === PartyType.Organization || !displayLimitedPreviewLaunch) && (
-            <DelegationModal
-              delegationType={DelegationType.AccessPackage}
-              availableActions={[
-                DelegationAction.REVOKE,
-                isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
-              ]}
-            />
-          )}
-          <ActiveDelegations />
+          <div className={classes.inputs}>
+            {numberOfAccesses > 0 && (
+              <div className={classes.searchField}>
+                <DsSearch data-size='sm'>
+                  <DsSearch.Input
+                    aria-label={t('access_packages.search_label')}
+                    placeholder={t('access_packages.search_label')}
+                    value={searchString}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      const value = event.target.value;
+                      setSearchString(value);
+                      debouncedUpdate(value);
+                    }}
+                  />
+                  <DsSearch.Clear
+                    onClick={() => {
+                      debouncedUpdate.cancel();
+                      setSearchString('');
+                      setDebouncedSearchString('');
+                    }}
+                  />
+                </DsSearch>
+              </div>
+            )}
+            <div className={classes.delegateButton}>
+              {(toParty?.partyTypeName === PartyType.Organization ||
+                (shouldDisplayPrivDelegation && canGiveAccess)) && (
+                <DelegationModal
+                  delegationType={DelegationType.AccessPackage}
+                  availableActions={[
+                    DelegationAction.REVOKE,
+                    canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+                  ]}
+                />
+              )}
+            </div>
+          </div>
+          <ActiveDelegations searchString={debouncedSearchString} />
         </>
       )}
     </>

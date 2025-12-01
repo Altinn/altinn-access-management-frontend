@@ -1,8 +1,9 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.Platform.Register.Models;
+using Altinn.Register.Contracts.V1;
 using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -76,8 +77,37 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> AddReporteeRightHolderConnection(Guid partyUuid, Guid rightholderPartyUuid)
+        public async Task<Guid> AddReporteeRightHolderConnection(Guid partyUuid, Guid? rightholderPartyUuid, PersonInput personInput)
         {
+            if (personInput != null)
+            {
+                if (string.IsNullOrWhiteSpace(personInput.PersonIdentifier) || string.IsNullOrWhiteSpace(personInput.LastName))
+                {
+                    throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
+                }
+
+                // Check for bad input
+                string ssn_cleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
+                string lastname_cleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
+                if (ssn_cleaned.Length != 11 || !ssn_cleaned.All(char.IsDigit))
+                {
+                    throw new ArgumentException("Invalid SSN format");
+                }
+
+                PersonInput cleanedInput = new PersonInput
+                {
+                    LastName = lastname_cleaned,
+                    PersonIdentifier = ssn_cleaned
+                };
+
+                return await _connectionClient.PostNewRightHolderConnection(partyUuid, null, cleanedInput);
+            }
+
+            if (!rightholderPartyUuid.HasValue)
+            {
+                throw new ArgumentException("Either rightholderPartyUuid or personInput must be provided");
+            }
+
             return await _connectionClient.PostNewRightHolderConnection(partyUuid, rightholderPartyUuid);
         }
 

@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
 import { createContext, useContext } from 'react';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
 import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
@@ -16,6 +16,10 @@ import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessP
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useReporteeParty } from './useReporteeParty';
 import { useConnectedParty } from './useConnectedParty';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { getHostUrl } from '@/resources/utils/pathUtils';
+import { ArrowRightIcon } from '@navikt/aksel-icons';
+import classes from './PartyRepresentationContext.module.css';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -32,6 +36,8 @@ interface PartyRepresentationProviderProps {
   loadingComponent?: JSX.Element;
   /** Optional override for loading state */
   isLoading?: boolean;
+  /** If true, an error alert will be shown if the acting party has 'person' user type */
+  errorOnPriv?: boolean;
 }
 
 export interface PartyRepresentationContextOutput {
@@ -64,6 +70,7 @@ export const PartyRepresentationProvider = ({
   returnToUrlOnError,
   loadingComponent,
   isLoading: externalIsLoading,
+  errorOnPriv = false,
 }: PartyRepresentationProviderProps) => {
   if (!toPartyUuid && !fromPartyUuid) {
     throw new Error('PartyRepresentationProvider must be used with at least one party UUID');
@@ -77,6 +84,7 @@ export const PartyRepresentationProvider = ({
 
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const { party: reportee, isLoading: reporteeIsLoading } = useReporteeParty();
+  const { data: authorizedPartyReportee } = useGetReporteeQuery();
 
   const { party: fromConnectedParty, isLoading: fromPartyIsLoading } = useConnectedParty({
     fromPartyUuid,
@@ -128,8 +136,10 @@ export const PartyRepresentationProvider = ({
     { skip: !fromPartyUuid || !toPartyUuid },
   );
 
-  const availableForUserType =
-    reporteeIsLoading || availableForUserTypeCheck(actingParty?.partyTypeName?.toString());
+  const notAvailableForUserType =
+    !reporteeIsLoading &&
+    !!actingParty &&
+    !availableForUserTypeCheck(actingParty?.partyTypeName?.toString());
 
   const isLoading =
     externalIsLoading ||
@@ -145,7 +155,40 @@ export const PartyRepresentationProvider = ({
     !!toPartyUuid &&
     (connections?.length === 0 || connections === undefined);
 
-  const isError = (!fromParty && !toParty) || !availableForUserType;
+  const isError = !fromParty && !toParty;
+
+  const shouldShowUnsyncedConnectionAlert =
+    !isLoading &&
+    (invalidConnection || isError) &&
+    authorizedPartyReportee &&
+    (authorizedPartyReportee?.partyUuid === actingPartyUuid ||
+      (fromPartyUuid && toPartyUuid && authorizedPartyReportee?.partyUuid === fromPartyUuid)); // The reportee is valid but the connection is unsynced (the user is either on their own page or acting on behalf of the reportee)
+
+  const shouldShowConnectionErrorAlert =
+    !isLoading && invalidConnection && !shouldShowUnsyncedConnectionAlert;
+
+  const shouldShowUserTypeRestrictionAlert =
+    !shouldShowConnectionErrorAlert &&
+    !isError &&
+    !isLoading &&
+    notAvailableForUserType &&
+    errorOnPriv;
+
+  const shouldShowTechnicalErrorAlert =
+    isError &&
+    !isLoading &&
+    !invalidConnection &&
+    !shouldShowUserTypeRestrictionAlert &&
+    !shouldShowConnectionErrorAlert &&
+    !shouldShowUnsyncedConnectionAlert;
+
+  const shouldShowChildren =
+    !isError &&
+    !invalidConnection &&
+    !shouldShowUnsyncedConnectionAlert &&
+    !shouldShowConnectionErrorAlert &&
+    !shouldShowUserTypeRestrictionAlert &&
+    !shouldShowTechnicalErrorAlert;
 
   if (isLoading && loadingComponent) {
     return loadingComponent;
@@ -162,15 +205,16 @@ export const PartyRepresentationProvider = ({
         isError: isError,
       }}
     >
-      {!isLoading && invalidConnection && connectionErrorAlert(error, returnToUrlOnError)}
-      {!isLoading && !availableForUserType && <NotAvailableForUserTypeAlert />}
-      {isError && !isLoading && !invalidConnection && (
+      {shouldShowUnsyncedConnectionAlert && <UnsyncedConnectionAlert />}
+      {shouldShowConnectionErrorAlert && connectionErrorAlert(error, returnToUrlOnError)}
+      {shouldShowUserTypeRestrictionAlert && <NotAvailableForUserTypeAlert />}
+      {shouldShowTechnicalErrorAlert && (
         <DsAlert data-color='warning'>
           <DsParagraph>{t('error_page.acting_party_data_error')}</DsParagraph>
         </DsAlert>
       )}
       <AccessPackageDelegationCheckProvider>
-        {(!isError || isLoading) && children}
+        {shouldShowChildren && children}
       </AccessPackageDelegationCheckProvider>
     </PartyRepresentationContext.Provider>
   );
@@ -206,6 +250,34 @@ const connectionErrorAlert = (
         {t('error_page.user_connection_error')}
         {returnToUrl && <Link to={returnToUrl}>{t('common.go_back')}</Link>}
       </DsParagraph>
+    </DsAlert>
+  );
+};
+
+const UnsyncedConnectionAlert = () => {
+  return (
+    <DsAlert data-color='warning'>
+      <div className={classes.unsyncedAlert}>
+        <DsHeading
+          level={3}
+          data-size='xs'
+        >
+          {t('error_page.unsynced_connection_title')}
+        </DsHeading>
+        <DsParagraph>{t('error_page.unsynced_connection')}</DsParagraph>
+        <DsLink asChild>
+          <Link
+            className={classes.link}
+            to={getHostUrl() + 'ui/profile'}
+          >
+            {t('error_page.unsynced_connection_link')}
+            <ArrowRightIcon
+              aria-hidden={true}
+              fontSize='1.3rem'
+            />
+          </Link>
+        </DsLink>
+      </div>
     </DsAlert>
   );
 };

@@ -1,14 +1,9 @@
-﻿using System.Net;
-using System.Text.Json;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Helpers;
+﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -79,6 +74,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             ProfileGroup favoriteProfileGroup = await _profileClient.GetFavoriteProfileGroup();
             return favoriteProfileGroup?.Parties;
+        }
+
+        /// <inheritdoc/>
+        public async Task AddPartyUuidToFavorites(Guid partyUuid)
+        {
+            await _profileClient.AddPartyUuidToFavorites(partyUuid);
+        }
+
+        /// <inheritdoc/>
+        public async Task DeletePartyUuidFromFavorites(Guid partyUuid)
+        {
+            await _profileClient.DeletePartyUuidFromFavorites(partyUuid);
         }
 
         /// <inheritdoc/>

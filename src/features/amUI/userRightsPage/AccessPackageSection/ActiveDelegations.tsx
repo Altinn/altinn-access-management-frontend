@@ -9,13 +9,21 @@ import { useDelegationModalContext } from '../../common/DelegationModal/Delegati
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 import { useTranslation } from 'react-i18next';
+import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 
-export const ActiveDelegations = () => {
+interface ActiveDelegationsProps {
+  searchString?: string;
+}
+
+export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
-  const { toParty, selfParty, isLoading } = usePartyRepresentation();
-  const isCurrentUser = selfParty?.partyUuid === toParty?.partyUuid;
+  const { toParty, selfParty, actingParty, isLoading } = usePartyRepresentation();
+  const { data: isHovedadmin } = useGetIsHovedadminQuery();
+  const canGiveAccess =
+    actingParty?.partyUuid !== toParty?.partyUuid && // Acting party cannot grant access to itself
+    (toParty?.partyUuid !== selfParty?.partyUuid || isHovedadmin); // Only hovedadmin can give access to themselves
   const { t } = useTranslation();
 
   return (
@@ -24,14 +32,15 @@ export const ActiveDelegations = () => {
         isLoading={isLoading}
         showPackagesCount
         showAllPackages
-        minimizeAvailablePackages
+        minimizeAvailablePackages={!searchString}
+        searchString={searchString}
         onSelect={(accessPackage) => {
           setModalItem(accessPackage);
           modalRef.current?.showModal();
         }}
         availableActions={[
           DelegationAction.REVOKE,
-          isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
+          canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
         ]}
         onDelegateError={(accessPackage, error) => {
           setActionError(error);
@@ -48,6 +57,10 @@ export const ActiveDelegations = () => {
       <AccessPackageInfoModal
         modalRef={modalRef}
         modalItem={modalItem}
+        availableActions={[
+          DelegationAction.REVOKE,
+          canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+        ]}
       />
     </>
   );

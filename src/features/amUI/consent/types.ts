@@ -1,6 +1,12 @@
 export type ConsentLocale = 'nb' | 'nn' | 'en';
 export type ConsentLanguage = Record<ConsentLocale, string>;
 
+export interface ConsentParty {
+  id: string;
+  name: string;
+  type: string;
+}
+
 export interface ConsentRight {
   identifier: string;
   title: ConsentLanguage;
@@ -33,29 +39,27 @@ export interface ConsentRequest {
   consentMessage?: ConsentLanguage;
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
-  fromPartyName: string;
-  toPartyName: string;
-  handledByPartyName: string;
+  fromParty: ConsentParty;
+  toParty: ConsentParty;
+  handledByParty?: ConsentParty;
   validTo: string;
   consentRequestEvents: ConsentRequestEvent[];
 }
 
 export interface ActiveConsentListItem {
   id: string;
+  isPendingConsent: boolean;
   isPoa: boolean;
-  toPartyId: string;
-  toPartyName: string;
+  fromParty: ConsentParty;
+  toParty: ConsentParty;
 }
 
 export interface ConsentHistoryItem {
   id: string;
   isPoa: boolean;
-  toPartyId: string;
-  toPartyName: string;
-  fromPartyId: string;
-  fromPartyName: string;
-  handledByPartyId: string;
-  handledByPartyName: string;
+  fromParty: ConsentParty;
+  toParty: ConsentParty;
+  handledByParty?: ConsentParty;
   validTo: string;
   consentRequestEvents: ConsentRequestEvent[];
 }
@@ -66,14 +70,14 @@ export interface Consent {
   isPoa: boolean;
   titleAccepted: ConsentLanguage;
   serviceIntroAccepted: ConsentLanguage;
-  consentMessage: ConsentLanguage;
+  consentMessage?: ConsentLanguage;
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
   validTo: string;
   consentRequestEvents: ConsentRequestEvent[];
-  fromPartyName: string;
-  toPartyName: string;
-  handledByPartyName: string;
+  fromParty: ConsentParty;
+  toParty: ConsentParty;
+  handledByParty?: ConsentParty;
 }
 
 export interface ProblemDetail {

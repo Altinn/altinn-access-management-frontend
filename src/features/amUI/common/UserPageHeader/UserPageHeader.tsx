@@ -1,4 +1,10 @@
-import { DsParagraph, DsHeading, MenuItemIcon, Avatar } from '@altinn/altinn-components';
+import {
+  DsParagraph,
+  DsHeading,
+  MenuItemIcon,
+  Avatar,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 import { t } from 'i18next';
 
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -8,6 +14,7 @@ import { UserRoles } from '../UserRoles/UserRoles';
 
 import classes from './UserPageHeader.module.css';
 import { UserPageHeaderSkeleton } from './UserPageHeaderSkeleton';
+import { isSubUnit, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 interface UserPageHeaderProps {
   direction: 'to' | 'from';
@@ -29,18 +36,28 @@ export const UserPageHeader = ({
   displayRoles = true,
 }: UserPageHeaderProps) => {
   const { toParty, fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
+  const toPartyName = formatDisplayName({
+    fullName: toParty?.name ?? '',
+    type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+  });
+  const fromPartyName = formatDisplayName({
+    fullName: fromParty?.name ?? '',
+    type: fromParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+  });
 
   if (!toParty && !fromParty && !loadingPartyRepresentation) {
     return null;
   }
 
   const user = direction === 'to' ? toParty : fromParty;
+  const userName = direction === 'to' ? toPartyName : fromPartyName;
   const secondaryParty = direction === 'to' ? fromParty : toParty;
+  const secondaryUserName = direction === 'to' ? fromPartyName : toPartyName;
 
   const subHeading =
     direction === 'to'
-      ? `for ${fromParty?.name}`
-      : t('reportee_rights_page.heading_subtitle', { name: toParty?.name });
+      ? `for ${fromPartyName}`
+      : t('reportee_rights_page.heading_subtitle', { name: toPartyName });
 
   const avatar = () => {
     if (displayDirection) {
@@ -48,16 +65,18 @@ export const UserPageHeader = ({
         <div className={classes.avatar}>
           <MenuItemIcon
             icon={{
-              name: user?.name ?? '',
+              name: userName,
               type: isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person',
+              isParent: !isSubUnitByType(user?.variant?.toString()),
             }}
             size={'lg'}
           />
           <Avatar
-            name={secondaryParty?.name ?? ''}
+            name={secondaryUserName}
             type={isOrganization(secondaryParty?.partyTypeName?.toString()) ? 'company' : 'person'}
             size={'lg'}
             className={classes.secondaryAvatar}
+            isParent={!isSubUnitByType(secondaryParty?.variant?.toString())}
           />
         </div>
       );
@@ -66,8 +85,9 @@ export const UserPageHeader = ({
       <div className={classes.avatar}>
         <MenuItemIcon
           icon={{
-            name: user?.name ?? '',
+            name: userName,
             type: isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person',
+            isParent: !isSubUnitByType(user?.variant?.toString()),
           }}
           size={'lg'}
         />
@@ -85,7 +105,7 @@ export const UserPageHeader = ({
         data-size='sm'
         className={classes.heading}
       >
-        {user?.name}
+        {userName}
       </DsHeading>
       {subHeading && (
         <DsParagraph

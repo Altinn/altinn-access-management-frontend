@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DsSearch } from '@altinn/altinn-components';
 
 import { debounce } from '@/resources/utils';
-import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 import { UserList } from '../common/UserList/UserList';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -23,6 +23,12 @@ export const ReporteesList = () => {
     {
       skip: !toParty?.partyUuid || !actingParty?.partyUuid,
     },
+  );
+
+  const filterRightHolders = rightHolders?.filter(
+    (rh) =>
+      rh.party.type === ConnectionUserType.Person ||
+      rh.party.type === ConnectionUserType.Organization,
   );
 
   const [searchString, setSearchString] = useState<string>('');
@@ -51,7 +57,7 @@ export const ReporteesList = () => {
         </DsSearch>
       </div>
       <UserList
-        connections={rightHolders || []}
+        connections={filterRightHolders || []}
         searchString={searchString}
         isLoading={loadingRightHolders || loadingPartyRepresentation}
         listItemTitleAs='h2'
