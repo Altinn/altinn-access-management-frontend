@@ -79,7 +79,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                List<AuthorizedParty> reporteelist = await _userService.GetReporteeListForUser();
+                Guid userUuid = AuthenticationHelper.GetUserPartyUuid(_httpContextAccessor.HttpContext);
+                List<AuthorizedParty> reporteelist = await _userService.GetReporteeListForUser(userUuid);
 
                 if (reporteelist != null)
                 {

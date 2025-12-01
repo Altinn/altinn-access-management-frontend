@@ -56,9 +56,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>        
-        public async Task<List<AuthorizedParty>> GetReporteeListForUser()
+        public async Task<List<AuthorizedParty>> GetReporteeListForUser(Guid userUuid)
         {
-            List<AuthorizedParty> parties = await _accessManagementClientV0.GetReporteeListForUser();
+            var profile = await _profileClient.GetUserProfile(userUuid);
+            List<AuthorizedParty> parties = await _accessManagementClientV0.GetReporteeListForUser(profile.ProfileSettingPreference.ShowClientUnits);
             return parties;
         }
 

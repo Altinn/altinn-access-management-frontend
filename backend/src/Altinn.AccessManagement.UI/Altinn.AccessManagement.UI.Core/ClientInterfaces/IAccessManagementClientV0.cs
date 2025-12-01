@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// Gets a list of reportees a user can act on behalf of
                 /// </summary>
                 /// <returns>list of reportees</returns>
-                Task<List<AuthorizedParty>> GetReporteeListForUser();
+                Task<List<AuthorizedParty>> GetReporteeListForUser(bool includePartiesViaKeyRoles = false);
 
                 /// <summary>
                 /// Retrieve party if party exists in the authenticated users reporteelist

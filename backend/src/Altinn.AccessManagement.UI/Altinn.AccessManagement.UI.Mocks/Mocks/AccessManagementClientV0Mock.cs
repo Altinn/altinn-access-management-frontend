@@ -223,7 +223,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<AuthorizedParty>> GetReporteeListForUser()
+        public Task<List<AuthorizedParty>> GetReporteeListForUser(bool includePartiesViaKeyRoles = false)
         {
             try
             {
@@ -283,4 +283,3 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
     }
 }
-

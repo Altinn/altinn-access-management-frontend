@@ -77,11 +77,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<AuthorizedParty>> GetReporteeListForUser()
+        public async Task<List<AuthorizedParty>> GetReporteeListForUser(bool includePartiesViaKeyRoles = false)
         {
             try
             {
-                string endpointUrl = $"authorizedparties?includeAltinn2=true&includeRoles=false&includeAccessPackages=false&includeResources=false&includeInstances=false";
+                string endpointUrl = $"authorizedparties?includeAltinn2=true&includeRoles=false&includeAccessPackages=false&includeResources=false&includeInstances=false&includePartiesViaKeyRoles={includePartiesViaKeyRoles.ToString().ToLowerInvariant()}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);

@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Endpoint for reportees the authenticated user can act on behalf of
         /// </summary>
         /// <returns>List of reportees</returns>
-        Task<List<AuthorizedParty>> GetReporteeListForUser();
+        Task<List<AuthorizedParty>> GetReporteeListForUser(Guid userUuid);
 
         /// <summary>
         /// Endpoint for getting the parties the authenticated user can act on behalf of, with connection info
