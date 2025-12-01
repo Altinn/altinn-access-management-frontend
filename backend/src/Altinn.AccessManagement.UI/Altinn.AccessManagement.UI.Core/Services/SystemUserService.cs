@@ -119,14 +119,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<List<SystemUserFE>>> GetPendingSystemUserRequests(Guid partyUuid, CancellationToken cancellationToken)
         {
-            PartyR party = await _registerClient.GetParty(partyUuid);
+            Party party = (await _registerClient.GetPartyList([partyUuid])).First();
             if (party == null)
             {
                 return Problem.Reportee_Orgno_NotFound;
             }
             
-            Task<Result<List<SystemUserRequest>>> standardTask = _systemUserRequestClient.GetPendingSystemUserRequests((int)party.PartyId, party.OrganizationIdentifier, cancellationToken);
-            Task<Result<List<SystemUserRequest>>> agentTask = _systemUserAgentRequestClient.GetPendingAgentSystemUserRequests((int)party.PartyId, party.OrganizationIdentifier, cancellationToken);
+            Task<Result<List<SystemUserRequest>>> standardTask = _systemUserRequestClient.GetPendingSystemUserRequests(party.PartyId, party.OrgNumber, cancellationToken);
+            Task<Result<List<SystemUserRequest>>> agentTask = _systemUserAgentRequestClient.GetPendingAgentSystemUserRequests(party.PartyId, party.OrgNumber, cancellationToken);
             await Task.WhenAll(standardTask, agentTask);
 
             if (standardTask.Result.IsProblem)
