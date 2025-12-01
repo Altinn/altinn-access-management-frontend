@@ -1,6 +1,4 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.Profile;
-using Altinn.Platform.Profile.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {

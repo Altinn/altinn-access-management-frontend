@@ -20,22 +20,7 @@ import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
-
-const extractFromList = (
-  list: Connection[],
-  uuidToRemove: string,
-  onRemove?: (removed: Connection) => void,
-): Connection[] => {
-  const remainingList = list.reduce<Connection[]>((acc, item) => {
-    if (item.party.id === uuidToRemove) {
-      onRemove?.(item);
-    } else if (item.party.type !== ConnectionUserType.Systemuser) {
-      acc.push(item);
-    }
-    return acc;
-  }, []);
-  return remainingList;
-};
+import { ECC_PROVIDER_CODE, useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 
 export const UsersList = () => {
   const { t } = useTranslation();
@@ -62,16 +47,64 @@ export const UsersList = () => {
 
   const [searchString, setSearchString] = useState<string>('');
 
-  const userList = useMemo(() => {
+  const {
+    mapRoles,
+    isLoading: loadingRoleMetadata,
+    isError: roleMetadataError,
+  } = useRoleMetadata();
+
+  const connectionsWithRoles = useMemo(() => {
     if (!rightHolders) {
-      return null;
+      return undefined;
     }
-    const remainingAfterExtraction = extractFromList(
-      rightHolders || [],
-      shouldDisplayPrivDelegation ? (currentUser?.party.id ?? 'loading') : 'nobody',
+
+    const removeUuid = shouldDisplayPrivDelegation ? currentUser?.party.id : undefined;
+
+    const mapConnection = (connection: Connection): Connection => {
+      const connectionRoles = mapRoles(connection.roles).filter(
+        (r) => r.provider?.code === ECC_PROVIDER_CODE,
+      );
+
+      return {
+        ...connection,
+        roles: connectionRoles,
+        connections: connection.connections?.map(mapConnection) ?? [],
+      };
+    };
+
+    return rightHolders.reduce<Connection[]>((acc, connection) => {
+      if (
+        connection.party.id === removeUuid ||
+        connection.party.type === ConnectionUserType.Systemuser
+      ) {
+        return acc;
+      }
+      acc.push(mapConnection(connection));
+      return acc;
+    }, []);
+  }, [
+    rightHolders,
+    mapRoles,
+    shouldDisplayPrivDelegation,
+    currentUser?.party.id,
+    roleMetadataError,
+    loadingRoleMetadata,
+  ]);
+
+  const currentUserWithRoles = useMemo(() => {
+    if (!currentUser) {
+      return undefined;
+    }
+
+    const connectionRoles = mapRoles(currentUser.roles).filter(
+      (r) => r.provider?.code === ECC_PROVIDER_CODE,
     );
-    return remainingAfterExtraction;
-  }, [rightHolders, currentUser]);
+
+    return {
+      ...currentUser,
+      roles: connectionRoles,
+    };
+  }, [currentUser, mapRoles]);
 
   const onSearch = useCallback(
     debounce((newSearchString: string) => {
@@ -85,8 +118,9 @@ export const UsersList = () => {
       {shouldDisplayPrivDelegation && (
         <>
           <CurrentUserPageHeader
-            currentUser={currentUser}
-            loading={!!(currentUserLoading || loadingPartyRepresentation)}
+            currentUser={currentUserWithRoles}
+            roleNames={currentUserWithRoles?.roles?.map((role) => role?.name) ?? []}
+            loading={!!(currentUserLoading || loadingPartyRepresentation || loadingRoleMetadata)}
             as={(props) =>
               currentUser ? (
                 <Link
@@ -130,9 +164,14 @@ export const UsersList = () => {
             {isAdmin && <NewUserButton onComplete={handleNewUser} />}
           </div>
           <UserList
-            connections={userList ?? undefined}
+            connections={connectionsWithRoles}
             searchString={searchString}
-            isLoading={!userList || loadingRightHolders || loadingPartyRepresentation}
+            isLoading={
+              !connectionsWithRoles ||
+              loadingRightHolders ||
+              loadingPartyRepresentation ||
+              loadingRoleMetadata
+            }
             listItemTitleAs='h2'
             interactive={isAdmin}
             onAddNewUser={handleNewUser}

@@ -12,8 +12,39 @@ export const scenarioBuilder = {
     const toOrg = maskinportenOrgId;
     const validTo = addTimeToNowUtc({ days: 5 });
     const api = new ConsentApiRequests(toOrg);
-    const mpToken = new MaskinportenToken();
-    return { fromPerson, toOrg, validTo, api, mpToken };
+    const mpToken = new MaskinportenToken('MASKINPORTEN_CLIENT_ID', 'MASKINPORTEN_JWK');
+    return {
+      fromPerson,
+      toOrg,
+      validTo,
+      api,
+      mpToken,
+      clientIdEnv: 'MASKINPORTEN_CLIENT_ID',
+      jwkEnv: 'MASKINPORTEN_JWK',
+    };
+  },
+
+  /**
+   * Creates a person-to-org scenario for Maskinporten tests using behalf_of client
+   */
+  personToOrgWithMaskinportenBehalfOf(org: string) {
+    const fromPerson = pickRandom(fromPersons);
+    const toOrg = org;
+    const validTo = addTimeToNowUtc({ days: 5 });
+    const api = new ConsentApiRequests(toOrg);
+    const mpToken = new MaskinportenToken(
+      'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
+      'MASKINPORTEN_BEHALF_OF_JWK',
+    );
+    return {
+      fromPerson,
+      toOrg,
+      validTo,
+      api,
+      mpToken,
+      clientIdEnv: 'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
+      jwkEnv: 'MASKINPORTEN_BEHALF_OF_JWK',
+    };
   },
 
   /**

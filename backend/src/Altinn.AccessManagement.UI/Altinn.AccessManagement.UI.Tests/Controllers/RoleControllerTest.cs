@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using AltinnCore.Authentication.JwtCookie;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using Moq;
 using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 
 // ReSharper disable InconsistentNaming
@@ -22,6 +31,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     public class RoleControllerTest : IClassFixture<CustomWebApplicationFactory<RoleController>>
     {
         private readonly HttpClient _client;
+        private readonly CustomWebApplicationFactory<RoleController> _factory;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private const string ExpectedDataPath = "Data/ExpectedResults";
 
@@ -31,6 +41,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// <param name="factory">CustomWebApplicationFactory</param>
         public RoleControllerTest(CustomWebApplicationFactory<RoleController> factory)
         {
+            _factory = factory;
             _client = SetupUtils.GetTestClient(factory, new FeatureFlags());
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -75,31 +86,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/permissions?party={party}&from={from}&to={to}");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task GetRoleById_ReturnsExpectedRole()
-        {
-            Guid roleId = new("55bd7d4d-08dd-46ee-ac8e-3a44d800d752");
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{roleId}");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            RoleMetadata actual = JsonSerializer.Deserialize<RoleMetadata>(await response.Content.ReadAsStringAsync(), _serializerOptions);
-            RoleMetadata expected = Util.GetMockData<RoleMetadata>($"{ExpectedDataPath}/Role/Details/{roleId}.json");
-
-            AssertionUtil.AssertEqual(expected, actual);
-        }
-
-        [Fact]
-        public async Task GetRoleById_WhenNotFound_ReturnsNotFound()
-        {
-            Guid missingRoleId = Guid.NewGuid();
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/{missingRoleId}");
-
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
@@ -176,6 +162,56 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             string message = await response.Content.ReadAsStringAsync();
             Assert.Contains("roleCode and variant query parameters must be provided", message, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public async Task GetAllRoles_ReturnsExpectedRoles()
+        {
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/meta");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<RoleMetadata> actual = JsonSerializer.Deserialize<List<RoleMetadata>>(await response.Content.ReadAsStringAsync(), _serializerOptions);
+            List<RoleMetadata> expected = Util.GetMockData<List<RoleMetadata>>($"{ExpectedDataPath}/Role/roles.json");
+
+            Assert.NotNull(actual);
+            Assert.Equivalent(expected, actual);
+        }
+
+        [Fact]
+        public async Task GetAllRoles_ReturnsCachedResponseOnSubsequentRequest()
+        {
+            IEnumerable<RoleMetadata> roles = Util.GetMockData<IEnumerable<RoleMetadata>>($"{ExpectedDataPath}/Role/roles.json");
+            Mock<IRoleClient> roleClientMock = new(MockBehavior.Strict);
+            roleClientMock
+                .Setup(client => client.GetAllRoles(It.IsAny<string>()))
+                .ReturnsAsync(roles);
+
+            using HttpClient client = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                    services.RemoveAll<IRoleClient>();
+                    services.AddSingleton(roleClientMock.Object);
+                });
+            }).CreateClient();
+
+            string token = PrincipalUtil.GetAccessToken("sbl.authorization");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage firstResponse = await client.GetAsync("accessmanagement/api/v1/role/meta");
+            HttpResponseMessage secondResponse = await client.GetAsync("accessmanagement/api/v1/role/meta");
+
+            Assert.Equal(HttpStatusCode.OK, firstResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, secondResponse.StatusCode);
+
+            List<RoleMetadata> actual = JsonSerializer.Deserialize<List<RoleMetadata>>(await secondResponse.Content.ReadAsStringAsync(), _serializerOptions);
+
+            Assert.NotNull(actual);
+            Assert.Equivalent(roles, actual);
+            roleClientMock.Verify(rc => rc.GetAllRoles(It.IsAny<string>()), Times.Once);
         }
 
         private static string ShortenIdentifier(Guid id) => id.ToString("N")[..8];

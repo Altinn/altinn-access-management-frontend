@@ -56,6 +56,8 @@
     "finish_delegation": "Fullfør delegering",
     "you_lowercase": "du",
     "you_uppercase": "Du",
+    "persons_lowercase": "personer",
+    "organizations_lowercase": "virksomheter",
     "minid": "MinID",
     "bankid": "BankID",
     "commifides": "Commifides",
@@ -90,7 +92,8 @@
     "date_of_birth": "Født",
     "save_changes": "Lagre endringer",
     "none": "ingen",
-    "digdir": "Digitaliseringsdirektoratet"
+    "digdir": "Digitaliseringsdirektoratet",
+    "skiplink": "Hopp til hovedinnholdet"
   },
   "beta_banner": {
     "info": "Du ser nå på en betaversjon av de nye sidene for tilgangsstyring i Altinn.",
@@ -117,7 +120,7 @@
   "header": {
     "access_management": "Tilgangsstyring",
     "inbox": "Innboks",
-    "profile": "Min profil",
+    "profile": "Din profil",
     "menu-label": "Meny",
     "account_you": "Deg selv",
     "account_others": "Andre kontoer",
@@ -134,8 +137,12 @@
     "locale_title": "Velg språk",
     "logged_in_as_name": "Logget inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
+    "help_pages": "Hjelpesider",
     "leave_beta": "Til gammel løsning",
-    "shortcuts": "Snarveier"
+    "shortcuts": "Snarveier",
+    "all_forms": "Alle skjema og tjenester",
+    "start_business": "Starte og drive bedrift",
+    "help": "Trenger du hjelp?"
   },
   "footer": {
     "digdir_address": "Postboks 1382 Vika, 0114 Oslo. Org.nr. 991 825 827",
@@ -285,7 +292,10 @@
     "give_new_single_right": "Gi fullmakt",
     "current_services_title": "Fullmakt til {{count}} tjenester",
     "delete_singleRight_success_message": "Slettet tilgang til ",
-    "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
+    "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
+    "wip_title": "Fullmakter til enkelttjenester",
+    "wip_message": "Denne siden jobber vi fremdeles med! For å administrere enkelttjenester, må du gå til den gamle løsningen.",
+    "wip_link_text": "Gå til gammel løsning"
   },
   "access_packages": {
     "helptext_button": "Hva er tilgangspakker?",
@@ -313,6 +323,11 @@
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer.",
       "delegation_check_error_message_plural": "En teknisk feil sperrer deg fra å gi fullmakt til en eller flere tilgangspakker. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer."
+    },
+    "access_status": {
+      "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
+      "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
+      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes."
     }
   },
   "role": {
@@ -325,7 +340,11 @@
     "resources_empty": "Denne rollen inneholder ingen tjenester.",
     "resources_disclaimer": "Denne rollen kan fortsatt gi tilgang til tjenester som kun finnes i den gamle løsningen.",
     "resources_disclaimer_link": "Se listen i den gamle løsningen",
-    "inherited_role_org_message": "{{user_name}} har tilgang til dette gjennom rollen sin i {{org_name}}."
+    "access_status": {
+      "via_role": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}.",
+      "via_connection": "{{user_name}} har tilgang til dette gjennom {{via_name}}.",
+      "via_keyrole": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}."
+    }
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -421,6 +440,7 @@
     },
     "validation_error": {
       "AM.VLD-00002": "Du mangler tilgang til å gi denne fullmakten.",
+      "AM.VLD-00028": "Tilgangspakken kan ikke gis til {{entity_type}}.",
       "default": "Kunne ikke gi fullmakt"
     },
     "partial_deletion_message": {
@@ -453,19 +473,6 @@
     "ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
     "last_name_format_error": "Vennligst fyll inn et gyldig etternavn"
   },
-  "info_page": {
-    "page_title": "Om nye Altinn",
-    "main_title": "Om Tilgangsstyring",
-    "paragraph_1": "Her ser du på et forenklet brukerflate for tilgangsstyring (Tilgangsstyring Beta). I denne vil du kunne gi tilgangspakker fra en virksomhet til en annen virksomhet, se hvilke fullmakter virksomheten din har hos andre og opprette systemtilgang mot fagsystem. I denne brukerflaten vil det komme mer og mer innhold og funksjonalitet etter hvert.",
-    "title_2": "Tilgangspakker",
-    "paragraph_2": "Tilgangspakker vil erstatte dagens altinn-roller. De nye tilgangspakkene vil være flere, men inneholde færre skjema og tjenester. De vil også ligge under kategorier som hører til spesifikke temaer. Nå i begynnelsen vil du se at tilgangspakkene kan inneholde veldig få tjenester, men de vil fylles opp etter hvert.",
-    "title_3": "Hvem kan bruke Tilgangsstyring Beta?",
-    "paragraph_3": "I tilgangsstyring Beta som vi kaller “forenklet brukerflate” er det kun virksomhetsdelegering som kan gjennomføres. Det vil si at det kun kan gis tilgangspakker fra en virksomhet til en annen virksomhet. I hovedsak så vil dette gjelde virksomheter som har revisor, regnskapsfører eller forretningsfører, og som har fått beskjed om å gjøre dette.",
-    "title_4": "Systemtilgang",
-    "paragraph_4": "En systemtilgang er en ny type upersonlig bruker i Altinn som opprettes for at et fagsystem (f.eks regnskapssystem eller lønnssystem) skal få fullmakt til å løse oppgaver på vegne av egen virksomhet eller for kundene til virksomheten.",
-    "title_5": "Hva er forskjellen på vanlig systemtilgang og systemtilgang for kunder?",
-    "paragraph_5": "Med en vanlig systemtilgang handler du på vegne av deg selv. F.eks om du eier en liten virksomhet og fører regnskapet ditt selv i Fiken. Da kan du opprette systemtilgang som en del av Fiken sin flyt, eller du kan gå inn på altinn.no og opprette den selv ved å trykke på “Lag ny systemtilgang”.<br /><br /> Er du regnskapsfører eller revisor kan du opprette systemtilgang som kan tildeles fullmakter på vegne av kundene dine. Da vil systemet kunne sende inn og hente ut kundenes data. Denne systemtilgangen kan kun opprettes ved at du godkjenner systemtilgangen i en flyt i fagsystemet du vil bruke. Når du har godkjent den, går du til altinn.no for å legge til kundene som er relevante for den systemtilgangen. <br /><br />Vi gleder oss til å vise deg det nye Altinn og setter stor pris på tålmodigheten din mens vi bygger om. Har du spørsmål eller tilbakemeldinger, kontakt oss på support@altinn.no."
-  },
   "settings_page": {
     "page_title": "Innstillinger - Altinn",
     "page_heading": "Innstillinger for {{name}}",
@@ -494,11 +501,8 @@
     "invalid_phone": "Ugyldig telefonnummer"
   },
   "info_modal": {
-    "title": "Prøv den nye tilgangsstyringsløsningen",
-    "info": "Vi pusser opp tilgangsstyring, og du får sniktitte på en tidlig versjon! Den er fortsatt under utvikling, så noen funksjoner mangler. Vi håper likevel du vil prøve.",
-    "close_button": "Prøv ny tilgangsstyring",
-    "back_button": "Gå tilbake til dagens Altinn",
-    "info_link": "Hvorfor oppdaterer vi Altinn?",
+    "back_button": "Gå til gammel løsning",
+    "help_pages": "Hjelpesider",
     "info_button": "Informasjon om ny løsning"
   },
   "a2Alerts": {
@@ -508,81 +512,6 @@
     "oldRolesContent": "Disse Altinn-rollene kan inneholde tjenester som allerede finnes i den nye Altinn-løsningen. Tjenestene blir flyttet inn i de nye tilgangspakkene. Brukeren har de samme rollene i den gamle løsningen, men der inneholder de flere og andre tjenester.",
     "oldRolesLinkText": "Gå til gammel løsning",
     "legacyRoleContent": "Denne rollen vil snart fjernes. Bruk heller tilgangspakker."
-  },
-  "user_role": {
-    "SREVA": "Revisor registrert i revisorregisteret",
-    "FGRP": "Inngår i foretaksgruppe med",
-    "HFOR": "Hovedforetak",
-    "HLSE": "Helseforetak",
-    "INNH": "Innehaver",
-    "KDAT": "Har som datter i konsern",
-    "KGRL": "Har som grunnlag for konsern",
-    "KIRK": "Inngår i kirkelig fellesråd",
-    "KMOR": "Har som mor i konsern",
-    "KOMP": "Komplementar",
-    "KONT": "Kontaktperson",
-    "KTRF": "Inngår i kontorfellesskap",
-    "LEDE": "Styrets leder",
-    "MEDL": "Styremedlem",
-    "NEST": "Nestleder",
-    "OBS": "Observatør",
-    "OPMV": "Er særskilt oppdelt enhet til",
-    "ORGL": "Organisasjonsledd i offentlig sektor",
-    "POFE": "Prokura i fellesskap",
-    "POHV": "Prokura hver for seg",
-    "PROK": "Prokura",
-    "READ": "Er revisoradresse for",
-    "AAFY": "Har som registreringsenhet",
-    "AVKL": "Forestår avvikling",
-    "BEDR": "Har som registreringsenhet",
-    "DTPR": "Deltaker med delt ansvar",
-    "DTSO": "Deltaker med fullt ansvar",
-    "EIKM": "Eierkommune",
-    "FEMV": "Inngår i felles- registrering",
-    "RFAD": "Er regnskapsføreradresse for",
-    "SAM": "Sameiere",
-    "SIFE": "Signatur i fellesskap",
-    "SIGN": "Signatur",
-    "SIHV": "Signatur hver for seg",
-    "UTBG": "Er frivillig registrert utleiebygg for",
-    "VARA": "Varamedlem",
-    "VIFE": "Er virksomhet drevet i fellesskap av",
-    "MVAU": "Utfyller MVA-oppgaver",
-    "MVAG": "Signerer MVA-oppgaver",
-    "KOMK": "Kontaktperson i kommune",
-    "KNUF": "Kontaktperson for NUF",
-    "KEMN": "Kontaktperson i Adm. enhet - offentlig sektor",
-    "FFØR": "Forretningsfører",
-    "BEST": "Bestyrende reder",
-    "REGN": "Regnskapsfører",
-    "REPR": "Norsk representant for utenlandsk enhet",
-    "REVI": "Revisor",
-    "DAGL": "Daglig leder",
-    "BOBE": "Bostyrer",
-    "STFT": "Stifter",
-    "KENK": "Den personlige konkursen angår",
-    "KDEB": "Konkursdebitor",
-    "HVAR": "Varamedlem i partiets utøvende organ",
-    "HNST": "Nestleder i partiets utøvende organ",
-    "HMDL": "Styremedlem i partiets utøvende organ",
-    "HLED": "Leder i partiets utøvende organ",
-    "ESGR": "Elektronisk signeringsrett",
-    "FUSJ": "Skal fusjoneres med",
-    "FISJ": "Skal fisjoneres med",
-    "ETDL": "Tildeler av elektronisk signeringsrett",
-    "ADOS": "Administrativ enhet - offentlig sektor",
-    "innehaver": "Innehaver",
-    "styreleder": "Styrets leder",
-    "varamedlem": "Varamedlem",
-    "regnskapsforer": "Regnskapsfører",
-    "daglig-leder": "Daglig leder",
-    "deltaker-delt-ansvar": "Deltaker delt ansvar",
-    "deltaker-fullt-ansvar": "Deltaker fullt ansvar",
-    "komplementar": "Komplementar",
-    "bestyrende-reder": "Bestyrende reder",
-    "bostyrer": "Bobestyrer",
-    "revisor": "Revisor",
-    "hovedadministrator": "Hovedadministrator"
   },
   "systemuser_overviewpage": {
     "page_title": "Systemtilganger - Altinn",
@@ -739,8 +668,9 @@
     "57_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systembruker."
   },
   "page_not_available": {
-    "title": "Siden er ikke tilgjengelig",
-    "text": "De nye tilgangsstyringssidene er ikke klare for privatpersoner helt enda. Dersom du mente å se på tilgangene til en virksomhet, vennligst bytt til denne."
+    "title": "Tilgangsstyring for privatpersoner er fortsatt under arbeid",
+    "text": "På denne siden vil det komme mer etterhvert. Du kan fortsatt tilgangsstyre på vegne av deg selv som privatperson i gammel løsning.",
+    "link_text": "Gå til gammel løsning"
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
@@ -853,17 +783,19 @@
     "no_resources": "Ingen tjenester er tilgjengelige."
   },
   "landing_page": {
-    "alert_heading": "Velkommen til ny løsning",
-    "alert_body": "Dette er de nye sidene for tilgangsstyring i Altinn. Vi har dessverre ikke alt på plass helt enda, så noen ting må du kanskje gjøre i gammel løsning. Tusen takk for tålmodigheten!",
-    "alert_link": "Les alt om den nye løsningen",
+    "alert_heading": "Du er nå i den nye løsningen for tilgangsstyring",
+    "alert_heading_priv": "Dette er den nye løsningen for tilgangsstyring for privatperson",
+    "alert_body": "Her er dagens Altinn-roller erstattet av tilgangspakker med tjenester. \n\nVær oppmerksom på at det er noen tjenester du ikke kan gi tilgang til i den nye løsningen. Hvis du ikke finner tjenesten her, kan du gå til den gamle løsningen.",
+    "alert_body_priv": "Vi har dessverre ikke alt på plass enda, så noen ting må du gjøre i gammel løsning. \n\nØnsker du å gå til tilgangsstyring for virksomhet, kan du skifte til ønsket virksomhet i aktørvalget i toppen.",
+    "alert_link": "Gå til gammel løsning",
     "shortcut_links_heading": "Hvor vil du gå?",
     "other_links_heading": "Annet",
-    "users_item_description_org": "Oversikt over personer og virksomheter som har fått tilganger hos dere",
-    "users_item_description_person": "Oversikt over personer og virksomheter som har fått tilganger hos deg",
-    "reportees_item_description_org": "Oversikt over alle som har gitt dere noen tilganger",
-    "reportees_item_description_person": "Oversikt over alle som har gitt deg noen tilganger",
+    "users_item_description_org": "Oversikt over personer og virksomheter som har fått fullmakter hos dere",
+    "users_item_description_person": "Oversikt over personer og virksomheter som har fullmakter hos deg",
+    "reportees_item_description_org": "Oversikt over alle som har gitt fullmakter til dere",
+    "reportees_item_description_person": "Oversikt over alle som har gitt deg fullmakter",
     "poa_item_description": "Oversikt over alle tilgangspakker og enkelttjenester",
-    "consent_item_description": "Oversikt over aktive og ventende samtykke-og fullmaktsavtaler",
+    "consent_item_description": "Oversikt over alle inngåtte avtaler",
     "systemuser_item_description": "Oversikt over systemtilganger",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny forespørsel",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye forespørsler"

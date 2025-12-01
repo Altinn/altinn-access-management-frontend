@@ -43,7 +43,12 @@ export const NewPersonContent = ({
       .unwrap()
       .then((toUuid) => {
         if (onComplete) {
-          onComplete({ id: toUuid, name: lastName, children: null, keyValues: null });
+          onComplete({
+            id: toUuid,
+            name: lastName,
+            type: 'person',
+            children: null,
+          });
         }
         modalRef.current?.close();
       })

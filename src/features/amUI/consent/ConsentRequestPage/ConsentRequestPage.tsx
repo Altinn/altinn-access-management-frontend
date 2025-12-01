@@ -38,7 +38,7 @@ export const ConsentRequestPage = () => {
   useDocumentTitle(t('consent_request.page_title'));
   const [searchParams] = useSearchParams();
   const useNewHeaderFlag = useNewHeader();
-  const { header, languageCode: language } = useHeader();
+  const { header, languageCode: language } = useHeader({ openAccountMenu: false });
   const requestId = searchParams.get('id') ?? '';
 
   const {

@@ -52,6 +52,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 // Add more cases here when available
                 // "AM.VLD-00001" => AmProblem.InvalidPartyUrn.ToValidationError(),
                 "AM.VLD-00002" => AmProblem.InvalidResource.ToValidationError(),
+                "AM.VLD-00028" => AmProblem.InvalidUnitType.ToValidationError(),
                 _ => null
             };
         }

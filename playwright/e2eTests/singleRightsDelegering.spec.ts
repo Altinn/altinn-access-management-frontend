@@ -16,7 +16,7 @@ test.describe('@slow User with DAGL/HADM role without having resource access the
   }) => {
     test.setTimeout(400000);
 
-    await login.LoginWithUserFromFrontpage('04885299593');
+    await login.LoginToAccessManagement('04885299593');
     await login.chooseReportee('ULIK FLAT TIGER AS');
 
     //To delete rights - setup
@@ -40,7 +40,7 @@ test.describe('@slow User with DAGL/HADM role without having resource access the
 
     //Login with covereby User
 
-    await login.LoginWithUserFromFrontpage('19856097121');
+    await login.LoginToAccessManagement('19856097121');
     await login.chooseReportee('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
 
@@ -56,7 +56,7 @@ test.describe('@slow User with DAGL/HADM role without having resource access the
     await context.clearCookies();
 
     //Instantiate app to which user had got rights
-    await login.LoginWithUserFromFrontpage('04880748144');
+    await login.LoginToAccessManagement('04880748144');
     await login.chooseReportee('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
     await instantiateResources.instantiateApp('ULIK FLAT TIGER AS');
@@ -76,7 +76,7 @@ test.describe('@slow User with DAGL/HADM role without having resource access the
   }) => {
     test.setTimeout(400000);
 
-    await login.LoginWithUserFromFrontpage('04885299593');
+    await login.LoginToAccessManagement('04885299593');
     await login.chooseReportee('ULIK FLAT TIGER AS');
 
     //To delete rights - setup
@@ -101,7 +101,7 @@ test.describe('@slow User with DAGL/HADM role without having resource access the
 
     //Login with covereby User
 
-    await login.LoginWithUserFromFrontpage('21908498426');
+    await login.LoginToAccessManagement('21908498426');
     await login.chooseReportee('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
 
@@ -119,7 +119,7 @@ test.describe('@slow User with DAGL/HADM role without having resource access the
     await context.clearCookies();
 
     //Instantiate app to which user had got rights
-    await login.LoginWithUserFromFrontpage('20860898609');
+    await login.LoginToAccessManagement('20860898609');
     await login.chooseReportee('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
     await instantiateResources.instantiateApp('ULIK FLAT TIGER AS');
@@ -139,7 +139,7 @@ test.describe('@slow User with DAGL/HADM role without having resource access the
     test.setTimeout(60000 * 4);
 
     //Login with user who has tilgangstyrring rolle
-    await login.LoginWithUserFromFrontpage('04885299593');
+    await login.LoginToAccessManagement('04885299593');
     await login.chooseReportee('ULIK FLAT TIGER AS');
 
     //To delete rights - setup
@@ -154,7 +154,7 @@ test.describe('@slow User with DAGL/HADM role without having resource access the
     await context.clearCookies();
 
     //Login with another user who has SENS role
-    await login.LoginWithUserFromFrontpage('07922148605');
+    await login.LoginToAccessManagement('07922148605');
     await login.chooseReportee('ULIK FLAT TIGER AS');
     await deleteRights.revokeRightsSSN('STORARTET KORGSTOL');
     await new Promise((resolve) =>
@@ -171,7 +171,7 @@ test.describe('@slow User with DAGL/HADM role without having resource access the
     await context.clearCookies();
 
     //Login with covereby User
-    await login.LoginWithUserFromFrontpage('07885798378');
+    await login.LoginToAccessManagement('07885798378');
     await login.chooseReportee('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
   });
@@ -182,7 +182,7 @@ test.describe('@slow User with DAGL/HADM role without having resource access the
     delegateRights,
   }) => {
     test.setTimeout(60000 * 2);
-    await login.LoginWithUserFromFrontpage('04885299593');
+    await login.LoginToAccessManagement('04885299593');
     await login.chooseReportee('ULIK FLAT TIGER AS');
 
     await delegate.delegateToSSN('19856097121', 'GATE');

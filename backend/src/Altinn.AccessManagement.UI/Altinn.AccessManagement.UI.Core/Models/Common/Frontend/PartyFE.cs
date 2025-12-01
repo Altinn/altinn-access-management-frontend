@@ -1,6 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.Register;
-using Altinn.Platform.Models.Register;
-using Altinn.Platform.Register.Models;
+﻿using Altinn.Register.Contracts.V1;
 
 namespace Altinn.AccessManagement.UI.Core.Models
 {
@@ -47,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// <summary>
         /// Gets or sets the DateOfBirth
         /// </summary>
-        public string DateOfBirth { get; set; }
+        public DateOnly DateOfBirth { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether if the reportee in the list is only there for showing the hierarchy (a parent unit with no access)
@@ -85,23 +83,43 @@ namespace Altinn.AccessManagement.UI.Core.Models
             OnlyHierarchyElementWithNoAccess = party.OnlyHierarchyElementWithNoAccess;
             Person = party.Person == null ? null : new PersonFE(party.Person);
             Organization = party.Organization;
-            ChildParties = party.ChildParties == null ? null : MakeChildPartyFEList(party.ChildParties);
+            ChildParties = party.ChildParties == null ? null : MakeChildPartyFEList(party?.ChildParties.ToList());
         }
 
         /// <summary>
-        /// Creates a PartyFE object from a PartyR object
+        /// Creates a PartyFE object from the new Party model in Register.Contracts
         /// </summary>
-        /// <param name="party">A PartyR object</param>
-        public PartyFE(PartyR party)
+        /// <param name="party">A polymorphic Party object</param>
+        public PartyFE(Altinn.Register.Contracts.Party party)
         {
-            PartyId = (int)party.PartyId;
+            PartyId = party.PartyId.HasValue ? (int)party.PartyId.Value : 0;
             PartyUuid = party.Uuid;
-            PartyTypeName = (PartyType)(party.Type.IsWellKnown ? party.Type : PartyType.Person);
+            PartyTypeName = party.Type.IsWellKnown ? (PartyType)party.Type.Value : PartyType.Person;
             Name = (string)party.DisplayName;
-            IsDeleted = party.IsDeleted;
-            OrgNumber = party.OrganizationIdentifier;
-            UnitType = party.UnitType;
-            DateOfBirth = party.DateOfBirth;
+            IsDeleted = (bool)party.IsDeleted;
+            if (party is Altinn.Register.Contracts.Organization organization)
+            {
+                OrgNumber = organization.OrganizationIdentifier.ToString();
+                UnitType = organization.UnitType.ToString();
+                Organization = new Altinn.Register.Contracts.V1.Organization
+                {
+                    OrgNumber = organization.OrganizationIdentifier.ToString(),
+                    Name = organization.DisplayName.ToString(),
+                    UnitType = organization.UnitType.ToString(),
+                    TelephoneNumber = organization.TelephoneNumber.ToString(),
+                    MobileNumber = organization.MobileNumber.ToString(),
+                    FaxNumber = organization.FaxNumber.ToString(),
+                    EMailAddress = organization.EmailAddress.ToString(),
+                    InternetAddress = organization.InternetAddress.ToString(),
+                    MailingAddress = organization.MailingAddress.ToString(),
+                    BusinessAddress = organization.BusinessAddress.ToString(),
+                    UnitStatus = organization.UnitStatus.ToString()
+                };
+            }
+            else if (party is Altinn.Register.Contracts.Person person)
+            {
+                DateOfBirth = (DateOnly)person.DateOfBirth;
+            }
         }
 
         /// <summary>

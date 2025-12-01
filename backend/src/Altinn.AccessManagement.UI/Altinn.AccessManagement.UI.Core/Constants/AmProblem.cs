@@ -21,5 +21,11 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// </summary>
         public static ValidationErrorDescriptor InvalidResource { get; }
             = _factory.Create(2, $"Resource must be valid.");
+
+        /// <summary>
+        /// Gets a validation error descriptor for when delegation is attempted to an unsupported unit type.
+        /// </summary>
+        public static ValidationErrorDescriptor InvalidUnitType { get; }
+            = _factory.Create(28, "Cannot delegate to the selected unit type.");
     }
 }

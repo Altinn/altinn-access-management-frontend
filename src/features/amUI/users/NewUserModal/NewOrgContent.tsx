@@ -39,8 +39,9 @@ export const NewOrgContent = ({
             onComplete({
               id: orgData.partyUuid,
               name: orgData.name,
+              type: 'organisasjon',
               children: null,
-              keyValues: null,
+              organizationIdentifier: orgData.orgNumber,
             });
           }
           modalRef.current?.close();

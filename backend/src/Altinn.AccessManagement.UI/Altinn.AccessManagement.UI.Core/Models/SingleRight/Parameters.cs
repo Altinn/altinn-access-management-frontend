@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight
 {
     /// <summary>

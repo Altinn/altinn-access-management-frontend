@@ -68,13 +68,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Gets role metadata for the provided role id.
+        /// Gets metadata for all roles.
         /// </summary>
-        /// <param name="roleId">The role identifier.</param>
-        [HttpGet]
+        [HttpGet("meta")]
         [Authorize]
-        [Route("{roleId:guid}")]
-        public async Task<ActionResult<RoleMetadata>> GetRoleById([FromRoute] Guid roleId)
+        public async Task<ActionResult<IEnumerable<RoleMetadata>>> GetAllRoles()
         {
             if (!ModelState.IsValid)
             {
@@ -84,18 +82,12 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-
-                RoleMetadata role = await _roleService.GetRoleById(roleId, languageCode);
-                if (role == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(role);
+                IEnumerable<RoleMetadata> roles = await _roleService.GetAllRoles(languageCode);
+                return Ok(roles);
             }
             catch (HttpStatusException ex)
             {
-                _logger.LogError(ex, "Error getting role");
+                _logger.LogError(ex, "Error getting all roles");
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
         }
