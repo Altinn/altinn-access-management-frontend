@@ -9,7 +9,7 @@ import { Party } from '@/rtk/features/lookupApi';
 import AdvancedUserSearch from '../common/AdvancedUserSearch/AdvancedUserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { usePackagePermissionConnections } from './usePackagePermissionConnections';
+import useGroupPacagePermissions from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
@@ -64,19 +64,19 @@ export const UsersTab = ({
     },
   );
 
-  const connections = usePackagePermissionConnections(accessPackage);
-  const connectionsWithRoles = useMemo(
-    () =>
-      connections.map((connection) => ({
-        ...connection,
-        roles: mapRoles(connection.roles),
-        connections: connection.connections?.map((child) => ({
-          ...child,
-          roles: mapRoles(child.roles),
-        })),
-      })),
-    [connections, mapRoles],
-  );
+  const userGroups = useGroupPacagePermissions(accessPackage, fromParty?.partyUuid);
+  // const connectionsWithRoles = useMemo(
+  //   () =>
+  //     connections.map((connection) => ({
+  //       ...connection,
+  //       roles: mapRoles(connection.roles),
+  //       connections: connection.connections?.map((child) => ({
+  //         ...child,
+  //         roles: mapRoles(child.roles),
+  //       })),
+  //     })),
+  //   [connections, mapRoles],
+  // );
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
     setDelegateActionError(null);
@@ -134,7 +134,7 @@ export const UsersTab = ({
 
   return (
     <>
-      {connections.length === 0 && !isLoading && !loadingIndirectConnections && (
+      {userGroups.length === 0 && !isLoading && !loadingIndirectConnections && (
         <div className={pageClasses.noUsersAlert}>
           <ExclamationmarkTriangleFillIcon className={pageClasses.noUsersAlertIcon} />
           <DsParagraph
@@ -167,8 +167,8 @@ export const UsersTab = ({
       )}
 
       <AdvancedUserSearch
-        connections={connectionsWithRoles}
-        indirectConnections={indirectConnections}
+        connections={userGroups}
+        // indirectConnections={indirectConnections}
         isLoading={isLoading || loadingIndirectConnections || roleMetadataIsLoading}
         onDelegate={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}

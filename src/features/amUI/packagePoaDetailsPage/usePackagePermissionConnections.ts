@@ -3,8 +3,6 @@ import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { ExtendedUser } from '@/rtk/features/userInfoApi';
 import { Entity } from '@/dataObjects/dtos/Common';
 import { Connection } from '@/rtk/features/connectionApi';
-import { isInherited } from '../common/AccessPackageList/useAreaPackageList';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 /**
  * Temporary transformation hook.
@@ -16,14 +14,13 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
  * backend response and remove this file.
  */
 
-export const usePackagePermissionConnections = (accessPackage?: AccessPackage): Connection[] => {
-  const { fromParty } = usePartyRepresentation();
-  return useMemo(() => {
+export const usePackagePermissionConnections = (accessPackage?: AccessPackage): Connection[] =>
+  useMemo(() => {
     const permissions = accessPackage?.permissions;
     if (!permissions?.length) return [];
 
     const group: Record<string, Connection> = {};
-    // const inheritanceRelevant = new Set<string>();
+    const inheritanceRelevant = new Set<string>();
 
     const ensureRoot = (e: Entity): Connection => {
       if (!group[e.id]) {
@@ -71,7 +68,7 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
     const addRole = (conn: Connection, id: string, code: string, viaParty?: Entity) => {
       if (!conn.roles.some((r) => r.code === code)) {
         conn.roles.push(viaParty ? { id, code, viaParty } : { id, code });
-        // if (code !== 'rettighetshaver') inheritanceRelevant.add(conn.party.id);
+        if (code !== 'rettighetshaver') inheritanceRelevant.add(conn.party.id);
       }
     };
 
@@ -86,17 +83,13 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
       if (role) addRole(root, role.id, role.code);
     }
 
-    const addInheritance = (conn: Connection) => {
-      conn.party.isInherited =
-        accessPackage?.permissions?.some((p) =>
-          isInherited(p, conn.party.id, fromParty?.partyUuid || ''),
-        ) || false;
-      conn.connections.forEach(addInheritance);
+    const finalize = (conn: Connection) => {
+      conn.party.isInherited = inheritanceRelevant.has(conn.party.id);
+      conn.connections.forEach(finalize);
     };
 
-    Object.values(group).forEach(addInheritance);
+    Object.values(group).forEach(finalize);
     return Object.values(group);
-  }, [accessPackage?.permissions, fromParty?.partyUuid]);
-};
+  }, [accessPackage?.permissions]);
 
 export default usePackagePermissionConnections;

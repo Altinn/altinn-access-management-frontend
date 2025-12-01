@@ -6,8 +6,8 @@ import { Connection } from '@/rtk/features/connectionApi';
 const PAGE_SIZE = 10;
 
 interface useFilteredUsersProps {
-  connections?: Connection[];
-  indirectConnections?: Connection[];
+  connections?: ExtendedUser[];
+  indirectConnections?: ExtendedUser[];
   searchString: string;
 }
 
@@ -111,8 +111,8 @@ export const useFilteredUsers = ({
   const processedUsers = useMemo(() => {
     if (!connections || connections.length === 0) return [];
 
-    const extendedUsers = mapToExtendedUsers(connections);
-    const filtered = filterUsers(extendedUsers, searchString);
+    // const extendedUsers = mapToExtendedUsers(connections);
+    const filtered = filterUsers(connections, searchString);
     const sorted = sortUsers(filtered);
     return sorted;
   }, [connections, searchString]);
@@ -126,15 +126,13 @@ export const useFilteredUsers = ({
   const indirectUsers = useMemo(() => {
     if (!indirectConnections) return undefined;
 
-    const sortedUsers = sortUsers(
-      filterUsers(mapToExtendedUsers(indirectConnections), searchString),
-    ) as ExtendedUser[];
+    const sortedUsers = sortUsers(filterUsers(indirectConnections, searchString)) as ExtendedUser[];
 
     // Collect ids of all direct users for pruning
     const directUserIds = (() => {
       const ids = new Set<string>();
       connections?.forEach((connection) => {
-        ids.add(connection.party.id);
+        ids.add(connection.id);
       });
       return ids;
     })();

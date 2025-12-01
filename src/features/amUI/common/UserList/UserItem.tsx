@@ -64,11 +64,7 @@ export const UserItem = ({
   const hasInheritingUsers = childrenToDisplay.length > 0 && shouldDisplaySubConnections;
   const [isExpanded, setExpanded] = useState(false);
   const { t } = useTranslation();
-  const {
-    mapRoles,
-    isLoading: loadingRoleMetadata,
-    isError: roleMetadataError,
-  } = useRoleMetadata();
+  const { mapRoles } = useRoleMetadata();
   useEffect(
     () =>
       setExpanded((hasInheritingUsers && isExtendedUser(user) && user.matchInChildren) ?? false),

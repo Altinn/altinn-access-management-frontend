@@ -46,7 +46,7 @@ export const UserList = ({
 }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
-    connections: connections,
+    connections,
     searchString,
   });
 

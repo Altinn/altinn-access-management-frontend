@@ -13,8 +13,8 @@ import { UserList } from '../UserList/UserList';
 import { ConnectionsList } from './ConnectionsList';
 
 export interface AdvancedUserSearchProps {
-  connections?: Connection[];
-  indirectConnections?: Connection[];
+  connections?: ExtendedUser[];
+  indirectConnections?: ExtendedUser[];
   onDelegate?: (user: User) => void;
   onRevoke?: (user: User) => void;
   isLoading?: boolean;
@@ -22,11 +22,10 @@ export interface AdvancedUserSearchProps {
   canDelegate?: boolean;
 }
 
-const filterAvailableUserTypes = (items?: Connection[]) =>
+const filterAvailableUserTypes = (items?: ExtendedUser[]) =>
   items?.filter(
     (item) =>
-      item.party.type === ConnectionUserType.Person ||
-      item.party.type === ConnectionUserType.Organization,
+      item.type === ConnectionUserType.Person || item.type === ConnectionUserType.Organization,
   ) || [];
 
 export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
