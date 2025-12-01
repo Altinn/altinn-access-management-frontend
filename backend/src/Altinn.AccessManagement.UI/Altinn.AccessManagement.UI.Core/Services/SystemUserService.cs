@@ -119,7 +119,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<List<SystemUserFE>>> GetPendingSystemUserRequests(Guid partyUuid, CancellationToken cancellationToken)
         {
-            Party party = (await _registerClient.GetPartyList([partyUuid])).First();
+            Party party = (await _registerClient.GetPartyList([partyUuid])).FirstOrDefault();
             if (party == null)
             {
                 return Problem.Reportee_Orgno_NotFound;
