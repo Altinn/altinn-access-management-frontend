@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 
 import pageClasses from './PackagePoaDetailsPage.module.css';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { type User, PartyType } from '@/rtk/features/userInfoApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
