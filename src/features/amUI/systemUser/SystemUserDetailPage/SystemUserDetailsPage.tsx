@@ -79,7 +79,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
               {t('systemuser_detailpage.load_systemuser_error')}
             </DsAlert>
           )}
-          {!isLoadingSystemUser && (
+          {!isLoadSystemUserError && (
             <div className={classes.systemUserDetails}>
               <SystemUserHeader
                 title={systemUser?.integrationTitle ?? ''}
