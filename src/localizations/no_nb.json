@@ -644,6 +644,8 @@
     "add_customers": "Legg til kunder",
     "edit_customers": "Legg til eller fjern kunder",
     "customer_search": "Søk etter kunde",
+    "hide_assigned_customers": "Skjul kunder som er lagt til",
+    "no_customers_warning": "Det finnes ingen kunder enda. Kundene må gi fullmakt til tilgangspakkene som kreves av systemtilgangen til {{companyName}}.",
     "remove_from_system_user": "Fjern fra systemtilgang",
     "remove_from_system_user_aria": "Fjern {{customerName}} fra systemtilgang",
     "add_to_system_user": "Legg til i systemtilgang",

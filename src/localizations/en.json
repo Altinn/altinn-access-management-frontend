@@ -645,6 +645,8 @@
     "add_customers": "Add customers",
     "edit_customers": "Add or remove customers",
     "customer_search": "Search for customer",
+    "hide_assigned_customers": "Hide customers already added",
+    "no_customers_warning": "There are no customers yet. The customers must give power of attorney to the access packages required for this system access to {{companyName}}.",
     "remove_from_system_user": "Remove from system access",
     "remove_from_system_user_aria": "Remove {{customerName}} from system access",
     "add_to_system_user": "Add to system access",
