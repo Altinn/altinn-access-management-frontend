@@ -59,7 +59,7 @@ const person = (id: string, name: string) => ({
 const role = (id: string, code: string) => ({ id, code, children: null });
 
 /**
- * Helper to run the hook with given permissions and paerty context.
+ * Helper to run the hook with given permissions and party context.
  */
 const run = (
   permissions: any[],

@@ -65,7 +65,6 @@ export const UsersTab = ({
   );
 
   const connections = usePackagePermissionConnections(accessPackage);
-  // console.log('connections: ', connections);
   const connectionsWithRoles = useMemo(
     () =>
       connections.map((connection) => ({

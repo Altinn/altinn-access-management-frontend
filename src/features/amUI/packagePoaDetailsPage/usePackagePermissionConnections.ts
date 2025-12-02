@@ -113,7 +113,7 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
     const sortedPermissions = permissions?.toSorted((a: Permissions, b: Permissions) => {
       if ((a.via || a.viaRole) && !(b.via || b.viaRole)) return -1;
       if ((b.via || b.viaRole) && !(a.via || a.viaRole)) return 1;
-      return 1;
+      return 0;
     });
 
     // Process each permission and build the connection tree
@@ -143,6 +143,6 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
       }
     }
     return Object.values(group);
-  }, [accessPackage?.permissions]);
+  }, [accessPackage?.permissions, toParty?.partyUuid, fromParty?.partyUuid]);
 };
 export default usePackagePermissionConnections;
