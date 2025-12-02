@@ -185,7 +185,7 @@ export const SystemUserAgentDelegationPageContent = ({
           level={2}
           data-size='xs'
         >
-          {systemUser.accessPackages.length == 1
+          {systemUser.accessPackages.length === 1
             ? t('systemuser_agent_delegation.access_package_single')
             : t('systemuser_agent_delegation.access_package_plural', {
                 accessPackageCount: systemUser.accessPackages.length,

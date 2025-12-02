@@ -535,7 +535,7 @@
     "pending_request_badge": "Approve own system access",
     "pending_agent_request_badge": "Approve system access for customers",
     "pending_system_users_title": "Pending system access requests",
-    "standard_system_user_badge": "Se powers of attorney",
+    "standard_system_user_badge": "See powers of attorney",
     "agent_system_user_badge": "Manage customers"
   },
   "systemuser_creationpage": {

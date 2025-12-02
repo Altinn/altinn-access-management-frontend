@@ -63,7 +63,7 @@ export const SystemUserList = ({
 
           const badge = (
             <div className={classes.systemUserBadge}>
-              {newlyCreatedId == systemUser.id && (
+              {newlyCreatedId === systemUser.id && (
                 <Badge
                   label={t('systemuser_overviewpage.new_system_user')}
                   color='info'
