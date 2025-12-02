@@ -119,7 +119,11 @@ export const ConsentRequestPage = () => {
               groups: {
                 'current-user': {
                   title: t('header.logged_in_as_name', {
-                    name: formatDisplayName({ fullName: userData?.name || '', type: 'person' }),
+                    name: formatDisplayName({
+                      fullName: userData?.name || '',
+                      type: 'person',
+                      reverseNameOrder: true,
+                    }),
                   }),
                 },
               },

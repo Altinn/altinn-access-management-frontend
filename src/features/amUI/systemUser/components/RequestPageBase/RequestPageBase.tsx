@@ -34,7 +34,13 @@ export const RequestPageBase = ({
           <AltinnLogo />
           {userData && (
             <div>
-              <div>{formatDisplayName({ fullName: userData?.name, type: 'person' })}</div>
+              <div>
+                {formatDisplayName({
+                  fullName: userData?.name,
+                  type: 'person',
+                  reverseNameOrder: true,
+                })}
+              </div>
               <div>for {reporteeName}</div>
             </div>
           )}
