@@ -126,8 +126,8 @@ describe('useFilteredUsers', () => {
     );
 
     expect(result.current.users).toHaveLength(2);
-    expect(result.current.users[0].name).toBe('Alice');
-    expect(result.current.users[1].name).toBe('Lorem AS');
+    expect(result.current.users[0].name).toBe('Lorem AS'); // orgs sorted before persons
+    expect(result.current.users[1].name).toBe('Alice');
   });
 
   it('should return all users when search string is empty', () => {
@@ -200,6 +200,15 @@ describe('useFilteredUsers', () => {
     expect(result.current.users[0].children).toHaveLength(1);
     expect(result.current.users[0]?.name).toBe('Lorem AS');
     expect(result?.current?.users?.[0]?.children?.[0]?.name).toBe('InheritAlice');
+  });
+
+  it('sorts organizations before persons when listing users', () => {
+    const { result } = renderHook(() =>
+      useFilteredUsers({ connections: mockConnections, searchString: '' }),
+    );
+
+    expect(result.current.users.slice(0, 4).every((u) => u.type === 'Organisasjon')).toBe(true);
+    expect(result.current.users.at(-1)?.type).toBe('Person');
   });
 
   it('should keep all children when parent matches search string', () => {
