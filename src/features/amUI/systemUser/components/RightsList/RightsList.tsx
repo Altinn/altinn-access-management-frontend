@@ -7,6 +7,7 @@ import {
   DsHeading,
   ResourceListItem,
   List,
+  DsSkeleton,
 } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
@@ -23,6 +24,7 @@ interface RightsListProps {
   resources: ServiceResource[];
   accessPackages: SystemUserAccessPackage[];
   hideHeadings?: boolean;
+  isLoading?: boolean;
   headingLevel?: 2 | 3 | 4;
 }
 
@@ -30,6 +32,7 @@ export const RightsList = ({
   resources,
   accessPackages,
   hideHeadings,
+  isLoading,
   headingLevel,
 }: RightsListProps): React.ReactNode => {
   const { t } = useTranslation();
@@ -61,16 +64,17 @@ export const RightsList = ({
       {accessPackages.length > 0 && (
         <div>
           {!hideHeadings && (
-            <DsHeading
-              data-size='2xs'
-              level={headingLevel ?? 2}
-            >
-              {accessPackages.length === 1
-                ? t('systemuser_detailpage.right_accesspackage_singular')
-                : t('systemuser_detailpage.right_accesspackage_plural', {
-                    accessPackageCount: accessPackages.length,
-                  })}
-            </DsHeading>
+            <RightsListHeading
+              isLoading={isLoading}
+              headingLevel={headingLevel}
+              text={
+                accessPackages.length === 1
+                  ? t('systemuser_detailpage.right_accesspackage_singular')
+                  : t('systemuser_detailpage.right_accesspackage_plural', {
+                      accessPackageCount: accessPackages.length,
+                    })
+              }
+            />
           )}
           <List className={classes.rightsList}>
             {accessPackages.map((accessPackage) => (
@@ -79,6 +83,7 @@ export const RightsList = ({
                 id={accessPackage.id}
                 titleAs={listItemHeadingLevel}
                 size='md'
+                loading={isLoading}
                 name={accessPackage.name}
                 description={
                   accessPackage.resources.length === 1
@@ -96,16 +101,17 @@ export const RightsList = ({
       {resources.length > 0 && (
         <div>
           {!hideHeadings && (
-            <DsHeading
-              data-size='2xs'
-              level={headingLevel ?? 2}
-            >
-              {resources.length === 1
-                ? t('systemuser_detailpage.right_resource_singular')
-                : t('systemuser_detailpage.right_resource_plural', {
-                    resourcesCount: resources.length,
-                  })}
-            </DsHeading>
+            <RightsListHeading
+              isLoading={isLoading}
+              headingLevel={headingLevel}
+              text={
+                resources.length === 1
+                  ? t('systemuser_detailpage.right_resource_singular')
+                  : t('systemuser_detailpage.right_resource_plural', {
+                      resourcesCount: resources.length,
+                    })
+              }
+            />
           )}
           <List className={classes.rightsList}>
             {resources.map((resource) => (
@@ -115,6 +121,7 @@ export const RightsList = ({
                 as='button'
                 titleAs={listItemHeadingLevel}
                 size='md'
+                loading={isLoading}
                 ownerLogoUrl={resource.resourceOwnerLogoUrl}
                 ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
                 ownerName={resource.resourceOwnerName ?? ''}
@@ -151,5 +158,30 @@ export const RightsList = ({
         {selectedResource && <ResourceDetails resource={selectedResource} />}
       </DsDialog>
     </div>
+  );
+};
+
+interface RightsListHeadingProps {
+  isLoading?: boolean;
+  headingLevel?: 2 | 3 | 4;
+  text: string;
+}
+const RightsListHeading = ({ isLoading, headingLevel, text }: RightsListHeadingProps) => {
+  return (
+    <>
+      {isLoading ? (
+        <DsSkeleton
+          variant='text'
+          width={20}
+        />
+      ) : (
+        <DsHeading
+          data-size='2xs'
+          level={headingLevel ?? 2}
+        >
+          {text}
+        </DsHeading>
+      )}
+    </>
   );
 };
