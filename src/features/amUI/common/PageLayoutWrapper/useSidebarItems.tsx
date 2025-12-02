@@ -1,10 +1,7 @@
-import React from 'react';
-import { type MenuItemProps } from '@altinn/altinn-components';
-import { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import {
   hasConsentPermission,
-  hasSystemUserClientAdminPermission,
   hasCreateSystemUserPermission,
+  hasSystemUserClientAdminPermission,
 } from '@/resources/utils/permissionUtils';
 import {
   getConsentMenuItem,
@@ -17,27 +14,33 @@ import {
   getSystemUserMenuItem,
   getUsersMenuItem,
 } from '@/resources/utils/sidebarConfig';
-/**
- * Generates a list of sidebar items for the page layout.
- *
- * @returns {MenuItemProps[], } A list of sidebar items, including a heading,
- *                            and optionally a confetti package if the feature flag is enabled.
- */
-export const SidebarItems = (
-  isSmall: boolean = false,
-  isLoading: boolean = false,
-  pathname: string = '',
-  isAdmin: boolean | undefined,
-  isClientAdmin: boolean | undefined,
-  reportee: ReporteeInfo | undefined,
-  canAccessSettings: boolean = false,
-) => {
+import {
+  useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetIsCompanyProfileAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
+import { MenuItemProps } from '@altinn/altinn-components';
+import { useLocation } from 'react-router';
+
+export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const displayConsentGui = window.featureFlags?.displayConsentGui;
 
   const displaySettingsPage = window.featureFlags?.displaySettingsPage;
   const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
   const displayRequestsPage = window.featureFlags?.displayRequestsPage;
+
+  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
+  const { pathname } = useLocation();
+
+  const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
+  const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
+  const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
+    useGetIsCompanyProfileAdminQuery();
+
+  const isLoading =
+    isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
 
   const items: MenuItemProps[] = [];
 
@@ -78,7 +81,9 @@ export const SidebarItems = (
     items.push(...getShortcutsMenuItem(pathname, isLoading));
   }
 
-  return items.map((item) => {
+  const sidebarItems = items.map((item) => {
     return { ...item, description: '' };
   });
+
+  return { sidebarItems };
 };
