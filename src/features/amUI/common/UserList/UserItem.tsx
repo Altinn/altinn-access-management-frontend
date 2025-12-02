@@ -188,7 +188,7 @@ export const UserItem = ({
               size='xs'
               titleAs={userHeadingLevelForMapper(titleAs)}
               subUnit={
-                index !== 0 &&
+                (includeSelfAsChild ? index !== 0 : true) &&
                 child.type === ConnectionUserType.Organization &&
                 isSubUnitByType(child.variant?.toString())
               }
