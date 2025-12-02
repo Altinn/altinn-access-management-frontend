@@ -1,13 +1,7 @@
-import { useNewActorList } from '@/resources/utils/featureFlagUtils';
 import { getAfUrl, getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
-import {
-  PartyType,
-  useGetReporteeListForAuthorizedUserQuery,
-  useGetReporteeQuery,
-  useGetUserProfileQuery,
-} from '@/rtk/features/userInfoApi';
+import { PartyType, useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { Theme, MenuItemSize, MenuItemProps, formatDisplayName } from '@altinn/altinn-components';
 import {
   InboxFillIcon,
