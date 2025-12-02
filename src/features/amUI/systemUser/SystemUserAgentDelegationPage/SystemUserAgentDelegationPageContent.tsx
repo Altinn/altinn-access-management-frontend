@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
 import {
+  DsAlert,
   DsButton,
   DsDialog,
   DsHeading,
@@ -142,15 +143,16 @@ export const SystemUserAgentDelegationPageContent = ({
         onClose={onCloseModal}
         closedby='any'
       >
+        <DsHeading
+          level={1}
+          data-size='sm'
+          className={classes.dialogHeader}
+        >
+          {t('systemuser_agent_delegation.assign_customers', {
+            integrationTitle: systemUser?.integrationTitle,
+          })}
+        </DsHeading>
         <div className={classes.flexContainer}>
-          <DsHeading
-            level={1}
-            data-size='sm'
-          >
-            {t('systemuser_agent_delegation.assign_customers', {
-              integrationTitle: systemUser?.integrationTitle,
-            })}
-          </DsHeading>
           <CustomerList
             list={customers}
             delegations={delegations}
@@ -159,12 +161,21 @@ export const SystemUserAgentDelegationPageContent = ({
             onAddCustomer={onAddCustomer}
             onRemoveCustomer={onRemoveCustomer}
           />
-          <div>
-            <DsButton onClick={onCloseModal}>
-              {t('systemuser_agent_delegation.confirm_close')}
-            </DsButton>
-            <Snackbar className={classes.customerListSnackbar} />
-          </div>
+          <>
+            {customers.length === 0 && reporteeData?.name && (
+              <DsAlert data-color='warning'>
+                {t('systemuser_agent_delegation.no_customers_warning', {
+                  companyName: reporteeData?.name,
+                })}
+              </DsAlert>
+            )}
+            <div>
+              <DsButton onClick={onCloseModal}>
+                {t('systemuser_agent_delegation.confirm_close')}
+              </DsButton>
+              <Snackbar className={classes.customerListSnackbar} />
+            </div>
+          </>
         </div>
       </DsDialog>
       <div className={classes.flexContainer}>

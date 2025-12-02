@@ -20,19 +20,25 @@ export const SingleRightsSection = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const fromPartyId = getCookie('AltinnPartyId');
+  const { displayResourceDelegation } = window.featureFlags;
+
   const {
     data: singleRights,
     isError,
     isLoading,
-  } = useGetSingleRightsForRightholderQuery({
-    party: fromPartyId,
-    userId: id || '',
-  });
+  } = useGetSingleRightsForRightholderQuery(
+    {
+      party: fromPartyId,
+      userId: id || '',
+    },
+    {
+      skip: !displayResourceDelegation,
+    },
+  );
 
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights ?? [], 5);
 
-  const { displayResourceDelegation } = window.featureFlags;
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8; // Section for "Users (A2)" in Profile is 9, for "Accesses for others (A2)" it is 8
   const A2url = getRedirectToA2UsersListSectionUrl(sectionId);
 
