@@ -2,7 +2,15 @@ import React from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon } from '@navikt/aksel-icons';
-import { DsAlert, DsButton, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsButton,
+  DsHeading,
+  DsParagraph,
+  DsSkeleton,
+  List,
+  ListItem,
+} from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -78,7 +86,21 @@ export const SystemUserOverviewPage = () => {
           >
             {t('systemuser_overviewpage.sub_title_text')}
           </DsParagraph>
-          {isLoading && <DsSpinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />}
+          {isLoading && (
+            <>
+              <div className={classes.systemUserHeader}>
+                <DsSkeleton
+                  height={40}
+                  width={300}
+                />
+              </div>
+              <List>
+                <LoadingListItem />
+                <LoadingListItem />
+                <LoadingListItem />
+              </List>
+            </>
+          )}
           {!isLoading && (
             <>
               {isClientAdmin === false && hasCreateSystemUserPermission(reporteeData) === false && (
@@ -131,6 +153,26 @@ export const SystemUserOverviewPage = () => {
         </div>
       </PageLayoutWrapper>
     </PageWrapper>
+  );
+};
+
+const LoadingListItem = () => {
+  return (
+    <ListItem
+      loading
+      icon={PlusIcon}
+      title={'xxxxxxxxxxxxxxxxxxxx'}
+      size='lg'
+      interactive={false}
+      badge={
+        <div className={classes.systemUserBadge}>
+          <DsSkeleton
+            variant='text'
+            width={20}
+          />
+        </div>
+      }
+    />
   );
 };
 
