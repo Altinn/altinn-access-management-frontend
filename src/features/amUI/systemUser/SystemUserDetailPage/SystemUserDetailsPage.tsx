@@ -88,33 +88,21 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
             />
             <RightsList
               isLoading={isLoadingSystemUser}
-              resources={
-                systemUser
-                  ? systemUser.resources
-                  : [
-                      {
-                        title: 'xxxxxxxxxxxxxxxxxxxxx',
-                        resourceOwnerName: 'xxxxxxxx',
-                      } as ServiceResource,
-                      {
-                        title: 'xxxxxxxxxxxxxxxxxxxx',
-                        resourceOwnerName: 'xxxxxxxx',
-                      } as ServiceResource,
-                    ]
-              }
+              resources={systemUser ? systemUser.resources : []}
               accessPackages={systemUser ? systemUser.accessPackages : []}
             />
             <DsParagraph
               data-size='xs'
               className={classes.createdBy}
             >
-              {t('systemuser_detailpage.created_by', {
-                created: new Date(systemUser?.created ?? '').toLocaleDateString('no-NB', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit',
-                }),
-              })}
+              {systemUser?.created &&
+                t('systemuser_detailpage.created_by', {
+                  created: new Date(systemUser.created).toLocaleDateString('no-NB', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  }),
+                })}
             </DsParagraph>
           </div>
         </PageContainer>

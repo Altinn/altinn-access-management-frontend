@@ -59,13 +59,45 @@ export const RightsList = ({
 
   const listItemHeadingLevel = `h${Math.min(6, (headingLevel ?? 2) + 1)}` as 'h3' | 'h4' | 'h5';
 
+  if (isLoading) {
+    return (
+      <div className={classes.rightsListWrapper}>
+        <div>
+          {!hideHeadings && (
+            <DsSkeleton
+              variant='text'
+              width={20}
+            />
+          )}
+          <List className={classes.rightsList}>
+            <AccessPackageListItem
+              id='1'
+              size='md'
+              loading={true}
+              name='xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+              description={'xxxxxxxxx'}
+              interactive={false}
+            />
+            <AccessPackageListItem
+              id='2'
+              size='md'
+              loading={true}
+              name='xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+              description={'xxxxxxxxx'}
+              interactive={false}
+            />
+          </List>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={classes.rightsListWrapper}>
       {accessPackages.length > 0 && (
         <div>
           {!hideHeadings && (
             <RightsListHeading
-              isLoading={isLoading}
               headingLevel={headingLevel}
               text={
                 accessPackages.length === 1
@@ -83,7 +115,6 @@ export const RightsList = ({
                 id={accessPackage.id}
                 titleAs={listItemHeadingLevel}
                 size='md'
-                loading={isLoading}
                 name={accessPackage.name}
                 description={
                   accessPackage.resources.length === 1
@@ -102,7 +133,6 @@ export const RightsList = ({
         <div>
           {!hideHeadings && (
             <RightsListHeading
-              isLoading={isLoading}
               headingLevel={headingLevel}
               text={
                 resources.length === 1
@@ -121,7 +151,6 @@ export const RightsList = ({
                 as='button'
                 titleAs={listItemHeadingLevel}
                 size='md'
-                loading={isLoading}
                 ownerLogoUrl={resource.resourceOwnerLogoUrl}
                 ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
                 ownerName={resource.resourceOwnerName ?? ''}
@@ -162,26 +191,16 @@ export const RightsList = ({
 };
 
 interface RightsListHeadingProps {
-  isLoading?: boolean;
   headingLevel?: 2 | 3 | 4;
   text: string;
 }
-const RightsListHeading = ({ isLoading, headingLevel, text }: RightsListHeadingProps) => {
+const RightsListHeading = ({ headingLevel, text }: RightsListHeadingProps) => {
   return (
-    <>
-      {isLoading ? (
-        <DsSkeleton
-          variant='text'
-          width={20}
-        />
-      ) : (
-        <DsHeading
-          data-size='2xs'
-          level={headingLevel ?? 2}
-        >
-          {text}
-        </DsHeading>
-      )}
-    </>
+    <DsHeading
+      data-size='2xs'
+      level={headingLevel ?? 2}
+    >
+      {text}
+    </DsHeading>
   );
 };
