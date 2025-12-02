@@ -89,7 +89,13 @@ const sortUsers = (users: (ExtendedUser | User)[]): (ExtendedUser | User)[] => {
     }
     return userCopy;
   });
-  return processedUsers.sort((a, b) => a.name.localeCompare(b.name));
+  return processedUsers.sort((a, b) => {
+    if (a.type?.toLowerCase() === 'organisasjon' && b.type?.toLowerCase() !== 'organisasjon')
+      return -1;
+    if (b.type?.toLowerCase() === 'organisasjon' && a.type?.toLowerCase() !== 'organisasjon')
+      return 1;
+    return a.name.localeCompare(b.name);
+  });
 };
 
 export const useFilteredUsers = ({

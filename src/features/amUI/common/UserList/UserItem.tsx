@@ -24,6 +24,7 @@ interface UserItemProps
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
+  includeSelfAsChild?: boolean;
   controls?: (user: ExtendedUser | User) => ReactNode;
 }
 
@@ -51,6 +52,7 @@ export const UserItem = ({
   roleDirection = 'toUser',
   subUnit = false,
   disableLinks = false,
+  includeSelfAsChild = true,
   shadow,
   controls,
   ...props
@@ -133,7 +135,11 @@ export const UserItem = ({
         ? 'company'
         : 'system';
 
-  const subUsers = hasInheritingUsers ? [user as User, ...(childrenToDisplay ?? [])] : [];
+  const subUsers = hasInheritingUsers
+    ? includeSelfAsChild
+      ? [user as User, ...(childrenToDisplay ?? [])]
+      : childrenToDisplay
+    : [];
 
   return (
     <UserListItem

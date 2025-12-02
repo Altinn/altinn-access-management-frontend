@@ -65,6 +65,7 @@ export const UsersTab = ({
   );
 
   const connections = usePackagePermissionConnections(accessPackage);
+  // console.log('connections: ', connections);
   const connectionsWithRoles = useMemo(
     () =>
       connections.map((connection) => ({
@@ -167,6 +168,7 @@ export const UsersTab = ({
       )}
 
       <AdvancedUserSearch
+        includeSelfAsChild={false}
         connections={connectionsWithRoles}
         indirectConnections={indirectConnections}
         isLoading={isLoading || loadingIndirectConnections || roleMetadataIsLoading}
