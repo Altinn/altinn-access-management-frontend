@@ -95,26 +95,24 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
           }
         >
           {isLoading && (
-            <>
-              <div className={classes.flexContainer}>
-                <SystemUserHeader
-                  isLoading
-                  title=''
+            <div className={classes.flexContainer}>
+              <SystemUserHeader
+                isLoading
+                title=''
+              />
+              <DsHeading data-size='xs'>
+                <DsSkeleton
+                  variant='text'
+                  width={20}
                 />
-                <DsHeading data-size='xs'>
-                  <DsSkeleton
-                    variant='text'
-                    width={20}
-                  />
-                </DsHeading>
-                <RightsList
-                  isLoading
-                  resources={[]}
-                  accessPackages={[]}
-                  hideHeadings
-                />
-              </div>
-            </>
+              </DsHeading>
+              <RightsList
+                isLoading
+                resources={[]}
+                accessPackages={[]}
+                hideHeadings
+              />
+            </div>
           )}
           {isLoadSystemUserError && (
             <DsAlert data-color='danger'>

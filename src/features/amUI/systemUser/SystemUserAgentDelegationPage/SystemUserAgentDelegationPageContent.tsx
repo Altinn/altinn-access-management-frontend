@@ -161,21 +161,19 @@ export const SystemUserAgentDelegationPageContent = ({
             onAddCustomer={onAddCustomer}
             onRemoveCustomer={onRemoveCustomer}
           />
-          <>
-            {customers.length === 0 && reporteeData?.name && (
-              <DsAlert data-color='warning'>
-                {t('systemuser_agent_delegation.no_customers_warning', {
-                  companyName: reporteeData?.name,
-                })}
-              </DsAlert>
-            )}
-            <div>
-              <DsButton onClick={onCloseModal}>
-                {t('systemuser_agent_delegation.confirm_close')}
-              </DsButton>
-              <Snackbar className={classes.customerListSnackbar} />
-            </div>
-          </>
+          {customers.length === 0 && reporteeData?.name && (
+            <DsAlert data-color='warning'>
+              {t('systemuser_agent_delegation.no_customers_warning', {
+                companyName: reporteeData?.name,
+              })}
+            </DsAlert>
+          )}
+          <div>
+            <DsButton onClick={onCloseModal}>
+              {t('systemuser_agent_delegation.confirm_close')}
+            </DsButton>
+            <Snackbar className={classes.customerListSnackbar} />
+          </div>
         </div>
       </DsDialog>
       <div className={classes.flexContainer}>

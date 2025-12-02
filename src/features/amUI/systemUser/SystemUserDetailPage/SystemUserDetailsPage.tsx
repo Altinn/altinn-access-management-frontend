@@ -22,7 +22,6 @@ import { RightsList } from '../components/RightsList/RightsList';
 import classes from './SystemUserDetailsPage.module.css';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
@@ -80,31 +79,33 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
               {t('systemuser_detailpage.load_systemuser_error')}
             </DsAlert>
           )}
-          <div className={classes.systemUserDetails}>
-            <SystemUserHeader
-              title={systemUser?.integrationTitle ?? ''}
-              subTitle={reporteeData?.name}
-              isLoading={isLoadingSystemUser}
-            />
-            <RightsList
-              isLoading={isLoadingSystemUser}
-              resources={systemUser ? systemUser.resources : []}
-              accessPackages={systemUser ? systemUser.accessPackages : []}
-            />
-            <DsParagraph
-              data-size='xs'
-              className={classes.createdBy}
-            >
-              {systemUser?.created &&
-                t('systemuser_detailpage.created_by', {
-                  created: new Date(systemUser.created).toLocaleDateString('no-NB', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                  }),
-                })}
-            </DsParagraph>
-          </div>
+          {!isLoadingSystemUser && (
+            <div className={classes.systemUserDetails}>
+              <SystemUserHeader
+                title={systemUser?.integrationTitle ?? ''}
+                subTitle={reporteeData?.name}
+                isLoading={isLoadingSystemUser}
+              />
+              <RightsList
+                isLoading={isLoadingSystemUser}
+                resources={systemUser ? systemUser.resources : []}
+                accessPackages={systemUser ? systemUser.accessPackages : []}
+              />
+              <DsParagraph
+                data-size='xs'
+                className={classes.createdBy}
+              >
+                {systemUser?.created &&
+                  t('systemuser_detailpage.created_by', {
+                    created: new Date(systemUser.created).toLocaleDateString('no-NB', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                    }),
+                  })}
+              </DsParagraph>
+            </div>
+          )}
         </PageContainer>
       </PageLayoutWrapper>
     </PageWrapper>
