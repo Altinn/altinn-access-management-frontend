@@ -166,7 +166,7 @@ export const getRequestsMenuItem = (
 
 export const getShortcutsMenuItem = (pathname?: string, isLoading = false): MenuItemProps[] => {
   const infoPortalUrl = getAltinnStartPageUrl(i18next.language);
-  const helpPageUrl = infoPortalUrl + 'help/tilgangsstyring/';
+  const helpPageUrl = infoPortalUrl + 'hjelp/ny-tilgangsstyring/';
   return [
     {
       groupId: 'shortcuts',
