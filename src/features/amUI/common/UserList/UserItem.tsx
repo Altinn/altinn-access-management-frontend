@@ -119,8 +119,8 @@ export const UserItem = ({
           ? `, ${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')}`
           : '');
     }
-    if (viaRoleNames.length > 0) {
-      descriptionString += ` | ${viaRoleNames.join(', ')} for ${viaEntity}`;
+    if (viaRoleNames.length > 0 && viaEntity) {
+      descriptionString += ` | ${viaRoleNames.join(', ')} for ${formatDisplayName({ fullName: viaEntity, type: 'company' })}`;
     }
     if (descriptionString) {
       return descriptionString;
