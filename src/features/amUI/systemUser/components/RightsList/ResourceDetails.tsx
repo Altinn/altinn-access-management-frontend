@@ -19,6 +19,7 @@ export const ResourceDetails = ({ resource }: ResourceDetailsProps): React.React
           imageUrl={resource.resourceOwnerLogoUrl}
           imageUrlAlt={resource.resourceOwnerName}
           name={resource.resourceOwnerName ?? ''}
+          className={classes.resourceInfoAvatar}
         />
         <div>
           <DsHeading

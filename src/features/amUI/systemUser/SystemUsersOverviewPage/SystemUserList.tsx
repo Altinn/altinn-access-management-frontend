@@ -40,25 +40,19 @@ export const SystemUserList = ({
       <List>
         {systemUsers?.map((systemUser) => {
           let href: string = '';
+          let badgeContent: ReactElement | string | undefined = undefined;
           if (systemUser.userType === 'standard' && !isPendingRequestList) {
+            badgeContent = t('systemuser_overviewpage.standard_system_user_badge');
             href = `/systemuser/${systemUser.id}`;
           } else if (systemUser.userType === 'agent' && !isPendingRequestList) {
+            badgeContent = t('systemuser_overviewpage.agent_system_user_badge');
             href = `/systemuser/${systemUser.id}/agentdelegation`;
           } else if (systemUser.userType === 'standard' && isPendingRequestList) {
+            badgeContent = t('systemuser_overviewpage.pending_request_badge');
             href = `/systemuser/request?id=${systemUser.id}&skiplogout=true`;
           } else if (systemUser.userType === 'agent' && isPendingRequestList) {
-            href = `/systemuser/agentrequest?id=${systemUser.id}&skiplogout=true`;
-          }
-
-          let badgeContent: ReactElement | string | undefined = undefined;
-          if (isPendingRequestList && systemUser.userType === 'standard') {
-            badgeContent = t('systemuser_overviewpage.pending_request_badge');
-          } else if (isPendingRequestList && systemUser.userType === 'agent') {
             badgeContent = t('systemuser_overviewpage.pending_agent_request_badge');
-          } else if (!isPendingRequestList && systemUser.userType === 'standard') {
-            badgeContent = t('systemuser_overviewpage.standard_system_user_badge');
-          } else if (!isPendingRequestList && systemUser.userType === 'agent') {
-            badgeContent = t('systemuser_overviewpage.agent_system_user_badge');
+            href = `/systemuser/agentrequest?id=${systemUser.id}&skiplogout=true`;
           }
 
           const badge = (
