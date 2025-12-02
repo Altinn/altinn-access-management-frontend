@@ -20,15 +20,14 @@ export const isInherited = (p: Permissions, toPartyUuid: string, fromPartyUuid: 
 };
 
 /* 
-This hook maps the permissions in an AccessPackage to a tree structure of Connections.
-  Each Connection represents a user (party) and their roles, along with any nested connections.
-  It handles both direct and inherited permissions, ensuring that roles are aggregated correctly.
-  It also marks parties as inherited based on the isInherited function.
+  This hook maps the permissions in an AccessPackage to a tree structure of Connections.
   
-  If a user has arredy been added as a root connection and appears again in the permissions, 
-  we add it afgain as a child connection to enable proper display of inherited status.
-
+  - Each Connection represents a user (party) and their roles, along with any nested connections.
+  - It handles both direct and inherited permissions, ensuring that roles are aggregated correctly.
+  - It also marks parties as inherited based on the isInherited function.
   
+  - If a user has already been added as a root connection and appears again in the permissions, 
+    we add it again as a child connection to enable proper display of inherited status.
 */
 
 export const usePackagePermissionConnections = (accessPackage?: AccessPackage): Connection[] => {
@@ -37,14 +36,9 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
     const permissions = accessPackage?.permissions;
     if (!permissions?.length) return [];
 
-    const sortedPermissions = permissions?.toSorted((a: Permissions, b: Permissions) => {
-      if ((a.via || a.viaRole) && !(b.via || b.viaRole)) return -1;
-      if ((b.via || b.viaRole) && !(a.via || a.viaRole)) return 1;
-      return 1;
-    });
-
     const group: Record<string, Connection> = {};
 
+    // Add or update a parent connection that may or may not have children
     const ensureRoot = (e: Entity, isInheritedPermission: boolean): Connection => {
       if (!group[e.id]) {
         const party: ExtendedUser = {
@@ -72,6 +66,7 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
       return group[e.id];
     };
 
+    // Add or update a child connection under a parent connection
     const ensureChild = (
       parent: Connection,
       e: Entity,
@@ -107,18 +102,31 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
       }
     };
 
+    // Add a role to a connection if it doesn't already exist
     const addRole = (conn: Connection, id: string, code: string, viaParty?: Entity) => {
       if (!conn.roles.some((r) => r.code === code)) {
         conn.roles.push(viaParty ? { id, code, viaParty } : { id, code });
       }
     };
 
+    // Sort permissions to ensure we catch all the child connections first
+    const sortedPermissions = permissions?.toSorted((a: Permissions, b: Permissions) => {
+      if ((a.via || a.viaRole) && !(b.via || b.viaRole)) return -1;
+      if ((b.via || b.viaRole) && !(a.via || a.viaRole)) return 1;
+      return 1;
+    });
+
+    // Process each permission and build the connection tree
     for (const { to, from, role, via, viaRole } of sortedPermissions) {
+      // Determine if the permission is inherited
       const isInheritedPermission = isInherited(
         { to, from, via, role, viaRole },
         toParty?.partyUuid || '',
         fromParty?.partyUuid || '',
       );
+
+      // For each permission, if the 's via' is defined, we can assume this is a child connection.
+      // Otherwise, we add it as a root connection.
       if (via) {
         const viaConn = ensureRoot(via, false);
         const child = ensureChild(viaConn, to, isInheritedPermission);
@@ -126,6 +134,8 @@ export const usePackagePermissionConnections = (accessPackage?: AccessPackage): 
       } else {
         const root = ensureRoot(to, isInheritedPermission);
         if (role) addRole(root, role.id, role.code);
+        // In cases where a user appears both as a via, and as a direct permission, we also
+        // need to add them as a child to show inheritance and deletable status properly.
         if (root.connections.length > 0) {
           const child = ensureChild(root, to, isInheritedPermission);
           if (role) addRole(child, role.id, role.code);
