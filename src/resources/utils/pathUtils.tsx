@@ -33,6 +33,26 @@ export const getEnv = () => {
   return Environment.PROD;
 };
 
+export const getAmStartPageUrl = () => {
+  const env = getEnv();
+  switch (env) {
+    case Environment.TT02:
+      return 'https://am.ui.tt02.altinn.no/accessmanagement/ui/';
+    case Environment.AT21:
+      return 'https://am.ui.at21.altinn.cloud/accessmanagement/ui/';
+    case Environment.AT22:
+      return 'https://am.ui.at22.altinn.cloud/accessmanagement/ui/';
+    case Environment.AT23:
+      return 'https://am.ui.at23.altinn.cloud/accessmanagement/ui/';
+    case Environment.AT24:
+      return 'https://am.ui.at24.altinn.cloud/accessmanagement/ui/';
+    case Environment.PROD:
+      return 'https://am.ui.altinn.no/accessmanagement/ui/';
+    default:
+      return 'https://am.ui.altinn.no/accessmanagement/ui/';
+  }
+};
+
 export const getAltinnStartPageUrl = (languageOverride?: string) => {
   const env = getEnv();
   const lang = languageOverride ?? getCookie('selectedLanguage');

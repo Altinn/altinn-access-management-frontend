@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import axios from 'axios';
 import * as React from 'react';
+import { getAmStartPageUrl } from '../utils/pathUtils';
 
 export const RefreshToken = () => {
   const lastRefreshTokenTimestamp = React.useRef(0);
@@ -35,18 +36,14 @@ export const RefreshToken = () => {
     const domainSplitted: string[] = window.location.host.split('.');
     let encodedGoToUrl = '';
     if (domainSplitted.length === 5) {
-      encodedGoToUrl = encodeURIComponent(
-        `https://${domainSplitted[2]}.${domainSplitted[3]}.${domainSplitted[4]}/ui/Profile`,
-      ); // Return user to Profile after login
+      encodedGoToUrl = encodeURIComponent(getAmStartPageUrl()); // Go to landing page after login
       return (
         `https://platform.${domainSplitted[2]}.${domainSplitted[3]}.${domainSplitted[4]}` +
         `/authentication/api/v1/authentication?goto=${encodedGoToUrl}`
       );
     }
     if (domainSplitted.length === 4) {
-      encodedGoToUrl = encodeURIComponent(
-        `https://${domainSplitted[2]}.${domainSplitted[3]}/ui/Profile`,
-      ); // Return user to Profile after login
+      encodedGoToUrl = encodeURIComponent(getAmStartPageUrl()); // Go to landing page after login
       return (
         `https://platform.${domainSplitted[2]}.${domainSplitted[3]}` +
         `/authentication/api/v1/authentication?goto=${encodedGoToUrl}`
