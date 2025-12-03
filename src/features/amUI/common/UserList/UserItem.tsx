@@ -18,8 +18,10 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
 }
 
-interface UserItemProps
-  extends Pick<UserListItemProps, 'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'> {
+interface UserItemProps extends Pick<
+  UserListItemProps,
+  'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'
+> {
   user: ExtendedUser | User;
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
@@ -64,11 +66,7 @@ export const UserItem = ({
   const hasInheritingUsers = childrenToDisplay.length > 0 && shouldDisplaySubConnections;
   const [isExpanded, setExpanded] = useState(false);
   const { t } = useTranslation();
-  const {
-    mapRoles,
-    isLoading: loadingRoleMetadata,
-    isError: roleMetadataError,
-  } = useRoleMetadata();
+  const { mapRoles } = useRoleMetadata();
   useEffect(
     () =>
       setExpanded((hasInheritingUsers && isExtendedUser(user) && user.matchInChildren) ?? false),
@@ -168,7 +166,7 @@ export const UserItem = ({
       }
       controls={!hasInheritingUsers && controls && controls(user)}
       titleAs={titleAs}
-      subUnit={subUnit || hasSubUnitRole}
+      subUnit={subUnit || hasSubUnitRole || isSubUnitByType(user.variant?.toString())}
     >
       {hasInheritingUsers && isExpanded && (
         <List

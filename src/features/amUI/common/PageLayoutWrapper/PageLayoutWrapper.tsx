@@ -3,14 +3,8 @@ import type { LanguageCode } from '@altinn/altinn-components';
 import { Badge, Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
 
-import {
-  useGetIsAdminQuery,
-  useGetIsClientAdminQuery,
-  useGetIsCompanyProfileAdminQuery,
-  useGetReporteeQuery,
-} from '@/rtk/features/userInfoApi';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
-import { SidebarItems } from './SidebarItems';
 import { InfoModal } from './InfoModal';
 import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import { useGlobalMenu } from './useGlobalMenu';
@@ -21,6 +15,7 @@ import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserA
 import classes from './PageLayoutWrapper.module.css';
 import { useTranslation } from 'react-i18next';
 import { GeneralPath } from '@/routes/paths';
+import { useSidebarItems } from './useSidebarItems';
 
 interface PageLayoutWrapperProps {
   openAccountMenu?: boolean;
@@ -40,32 +35,11 @@ export const PageLayoutWrapper = ({
   const { data: reportee } = useGetReporteeQuery();
   const { pathname, search } = useLocation();
 
-  const { data: isAdmin } = useGetIsAdminQuery();
-  const { data: isClientAdmin } = useGetIsClientAdminQuery();
-  const { data: canAccessSettings } = useGetIsCompanyProfileAdminQuery();
-
-  const { data: pendingSystemUsers } = useGetPendingSystemUserRequestsQuery(
-    reportee?.partyUuid ?? '',
-    {
-      skip: !(reportee?.partyUuid && isAdmin),
-    },
-  );
-  const pendingSystemUsersCount = pendingSystemUsers?.length ?? 0;
-
-  const { menuGroups, isLoadingMenu } = useGlobalMenu();
+  const { menuGroups } = useGlobalMenu();
 
   const { header, languageCode } = useHeader({ openAccountMenu });
   const footer = useFooter();
-  const sidebarItems = SidebarItems(
-    false,
-    isLoadingMenu,
-    pathname,
-    isAdmin,
-    isClientAdmin,
-    reportee,
-    pendingSystemUsersCount,
-    canAccessSettings ?? false,
-  );
+  const { sidebarItems } = useSidebarItems({ isSmall: false });
 
   return (
     <RootProvider languageCode={languageCode as LanguageCode}>
