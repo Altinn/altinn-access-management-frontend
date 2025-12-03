@@ -10,7 +10,6 @@ import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
-import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
 
 import classes from './PageLayoutWrapper.module.css';
 import { useTranslation } from 'react-i18next';
