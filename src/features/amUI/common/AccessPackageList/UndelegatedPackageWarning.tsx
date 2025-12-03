@@ -1,6 +1,6 @@
-import { Typography } from '@altinn/altinn-components';
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import { useTranslation } from 'react-i18next';
+import { DsParagraph } from '@altinn/altinn-components';
+import { ExclamationmarkTriangleFillIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { Trans, useTranslation } from 'react-i18next';
 import React from 'react';
 import { ExtendedAccessPackage } from './useAreaPackageList';
 import classes from './UndelegatedPackageWarning.module.css';
@@ -12,18 +12,50 @@ export const isCriticalAndUndelegated = (pkg: ExtendedAccessPackage) => {
   return !pkg.permissions?.length && pkg.urn?.includes(CRITICAL_URN_SUBSTRING);
 };
 
-export const UndelegatedPackageWarning = () => {
+interface UndelegatedPackageWarningProps {
+  fulltext?: boolean;
+  packageName?: string;
+}
+
+export const UndelegatedPackageWarning = ({
+  fulltext = false,
+  packageName,
+}: UndelegatedPackageWarningProps) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
+  const warningTextKey = fulltext
+    ? 'access_packages.no_permissions_fulltext'
+    : !isSmall
+      ? 'access_packages.no_permissions'
+      : '';
 
   return (
-    <Typography
-      size='sm'
-      data-color='danger'
-      className={classes.criticalAndUndelegatedBadge}
+    <div
+      className={
+        fulltext ? classes.criticalAndUndelegatedBadge : classes.criticalAndUndelegatedBadgeCompact
+      }
     >
-      <ExclamationmarkTriangleIcon title={isSmall ? t('access_packages.no_permissions') : ''} />
-      {!isSmall && t('access_packages.no_permissions')}
-    </Typography>
+      {fulltext ? (
+        <ExclamationmarkTriangleFillIcon
+          className={classes.criticalAndUndelegatedBadgeIcon}
+          title={t('access_packages.no_permissions')}
+        />
+      ) : (
+        <ExclamationmarkTriangleIcon />
+      )}
+      <DsParagraph
+        variant={fulltext ? 'long' : undefined}
+        data-size='sm'
+        data-color='danger'
+      >
+        {warningTextKey && (
+          <Trans
+            i18nKey={warningTextKey}
+            values={{ pakkenavn: packageName, packageName }}
+            components={{ b: <strong /> }}
+          />
+        )}
+      </DsParagraph>
+    </div>
   );
 };

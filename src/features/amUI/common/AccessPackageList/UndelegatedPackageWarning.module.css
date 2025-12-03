@@ -1,7 +1,18 @@
 .criticalAndUndelegatedBadge {
-  color: var(--ds-color-danger-base-default);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.criticalAndUndelegatedBadgeCompact {
+  font-size: 0.8rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  white-space: nowrap;
+  color: var(--ds-color-danger-base-default);
+  gap: 0.4rem;
+}
+
+.criticalAndUndelegatedBadgeIcon {
+  font-size: 2rem;
+  color: var(--ds-color-warning-base-default);
 }

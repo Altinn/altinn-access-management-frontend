@@ -304,6 +304,7 @@
     "give_new_button": "Gi fullmakt",
     "search_label": "Søk etter tilgangspakkar",
     "no_permissions": "Du må gi fullmakt",
+    "no_permissions_fulltext": "Du kan ha innhald som ingen ser. Du må gi tilgang til <b>{{packageName}}</b> for at slike meldingar og tenester skal bli synlege.",
     "other_packages_in_area_title": "Andre tilgjengelige pakkar i området:",
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",

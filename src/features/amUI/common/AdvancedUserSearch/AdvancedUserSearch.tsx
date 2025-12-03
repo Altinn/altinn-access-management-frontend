@@ -11,6 +11,8 @@ import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
 import { ConnectionsList } from './ConnectionsList';
+// import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface AdvancedUserSearchProps {
   connections?: Connection[];
@@ -40,7 +42,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
-
+  const { fromParty } = usePartyRepresentation();
   const filteredConnections = useMemo(() => filterAvailableUserTypes(connections), [connections]);
 
   const filteredIndirectConnections = useMemo(
@@ -102,6 +104,19 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 
       <div className={classes.results}>
         <>
+          {connections && connections.length === 0 && !isLoading && !isLoading && (
+            <div className={classes.noUsersAlert}>
+              {/* <ExclamationmarkTriangleFillIcon className={classes.noUsersAlertIcon} /> */}
+              <DsParagraph
+                data-size='sm'
+                className={classes.tabDescription}
+              >
+                {t('package_poa_details_page.users_tab.no_users', {
+                  fromparty: fromParty?.name,
+                })}
+              </DsParagraph>
+            </div>
+          )}
           {showDirectNoResults && (
             <h3 className={classes.subHeader}>{t('advanced_user_search.direct_connections')}</h3>
           )}
