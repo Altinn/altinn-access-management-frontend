@@ -1,26 +1,7 @@
-import {
-  crossPlatformLinksEnabled,
-  useNewActorList,
-  useNewHeader,
-} from '@/resources/utils/featureFlagUtils';
-import {
-  getAfUrl,
-  getAltinnStartPageUrl,
-  getHostUrl,
-  getLogoutUrl,
-} from '@/resources/utils/pathUtils';
+import { getAfUrl, getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
-import { amUIPath } from '@/routes/paths';
-import {
-  PartyType,
-  useGetActorListForAuthorizedUserQuery,
-  useGetIsAdminQuery,
-  useGetIsClientAdminQuery,
-  useGetIsCompanyProfileAdminQuery,
-  useGetReporteeListForAuthorizedUserQuery,
-  useGetReporteeQuery,
-  useGetUserProfileQuery,
-} from '@/rtk/features/userInfoApi';
+
+import { PartyType, useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { Theme, MenuItemSize, MenuItemProps, formatDisplayName } from '@altinn/altinn-components';
 import {
   InboxFillIcon,
@@ -31,10 +12,9 @@ import {
   Buildings2Icon,
   ChatExclamationmarkIcon,
 } from '@navikt/aksel-icons';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useNavigate } from 'react-router';
-import { SidebarItems } from './SidebarItems';
+import { Link } from 'react-router';
+import { useSidebarItems } from './useSidebarItems';
 
 const getAccountType = (type: string): 'company' | 'person' => {
   return type === 'Organization' ? 'company' : 'person';
@@ -65,31 +45,13 @@ const linkUrls = {
 
 export const useGlobalMenu = () => {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
 
   const lang = i18n.language as 'no_nb' | 'no_nn' | 'en';
-  const useNewHeaderFlag = useNewHeader();
-  const useNewActorListFlag = useNewActorList();
   const isSm = useIsTabletOrSmaller();
-  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
+  const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserProfileQuery();
-  const { data: reporteeList, isLoading: isLoadingReporteeList } =
-    useGetReporteeListForAuthorizedUserQuery(undefined, {
-      skip: useNewActorListFlag,
-    });
-  const { data: actorList } = useGetActorListForAuthorizedUserQuery(undefined, {
-    skip: !useNewActorListFlag,
-  });
-  const { pathname } = useLocation();
-  const [searchString, setSearchString] = useState<string>('');
 
-  const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
-  const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
-  const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
-    useGetIsCompanyProfileAdminQuery();
-
-  const isLoadingMenu =
-    isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
+  const { sidebarItems } = useSidebarItems({ isSmall: true });
 
   const headerLinks: MenuItemProps[] = [
     {
@@ -121,17 +83,7 @@ export const useGlobalMenu = () => {
       ),
       badge: { label: t('common.beta'), variant: 'base', color: 'neutral' },
     },
-    ...(isSm
-      ? SidebarItems(
-          true,
-          isLoadingMenu,
-          pathname,
-          isAdmin,
-          isClientAdmin,
-          reportee,
-          canAccessSettings ?? false,
-        )
-      : []),
+    ...(isSm ? sidebarItems : []),
     {
       groupId: 100,
       icon: { svgElement: MenuGridIcon, theme: 'surface' },
@@ -263,5 +215,5 @@ export const useGlobalMenu = () => {
     },
   };
 
-  return { globalMenu, desktopMenu, mobileMenu, menuGroups, isLoadingMenu };
+  return { globalMenu, desktopMenu, mobileMenu, menuGroups };
 };
