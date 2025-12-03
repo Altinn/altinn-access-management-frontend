@@ -1,3 +1,4 @@
+import { usePendingSystemusersBadge } from '@/resources/hooks/usePendingSystemusersBadge';
 import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
@@ -14,7 +15,6 @@ import {
   getSystemUserMenuItem,
   getUsersMenuItem,
 } from '@/resources/utils/sidebarConfig';
-import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
@@ -40,13 +40,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
 
-  const { data: pendingSystemUsers } = useGetPendingSystemUserRequestsQuery(
-    reportee?.partyUuid ?? '',
-    {
-      skip: !(reportee?.partyUuid && isAdmin),
-    },
-  );
-  const pendingSystemUsersCount = pendingSystemUsers?.length ?? 0;
+  const { systemuserBadge } = usePendingSystemusersBadge();
 
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
@@ -81,14 +75,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   ) {
     items.push({
       ...getSystemUserMenuItem(pathname, isLoading, isSmall),
-      badge:
-        pendingSystemUsersCount > 0
-          ? {
-              label: pendingSystemUsersCount.toString(),
-              color: 'danger',
-              variant: 'base',
-            }
-          : undefined,
+      badge: systemuserBadge,
     });
   }
 
