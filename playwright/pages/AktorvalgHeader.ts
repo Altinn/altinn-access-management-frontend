@@ -45,9 +45,7 @@ export class AktorvalgHeader {
 
   async GoToSelectActor(actorName: string) {
     await this.page.getByRole('button', { name: actorName }).click();
-    await expect(
-      this.page.locator('a').filter({ hasText: 'HHåndfast PlasmaFødt: 11.08.' }),
-    ).toBeVisible();
+    await expect(this.page.locator('a').filter({ hasText: actorName }).first()).toBeVisible();
   }
 
   async SelectActor(actorName: string) {
