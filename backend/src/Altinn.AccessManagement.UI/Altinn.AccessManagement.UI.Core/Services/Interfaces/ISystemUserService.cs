@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all system users for specified party</returns>
         Task<Result<List<SystemUserFE>>> GetAllSystemUsersForParty(int partyId, CancellationToken cancellationToken);
-        
+
         /// <summary>
         /// Return a specific system user
         /// </summary>
@@ -72,5 +72,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean whether delete was successful or not</returns>
         Task<bool> DeleteSystemUser(int partyId, Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Return pending system user requests (both standard and agent) for a given party
+        /// </summary>
+        /// <param name="partyUuid">The party uuid of the party to retrieve</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of all pending system users for specified party</returns>
+        Task<Result<List<SystemUserFE>>> GetPendingSystemUserRequests(Guid partyUuid, CancellationToken cancellationToken);
     }
 }

@@ -34,7 +34,31 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
+        public Task<Result<List<SystemUserRequest>>> GetPendingSystemUserRequests(int partyId, string orgNo, CancellationToken cancellationToken)
+        {
+            List<SystemUserRequest> systemUserRequests = Util.GetMockData<List<SystemUserRequest>>($"{dataFolder}/SystemUser/pendingStandardRequests.json");
+            return Task.FromResult(new Result<List<SystemUserRequest>>([.. systemUserRequests]));
+        }
+
+        /// <inheritdoc />
         public Task<Result<bool>> ApproveSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        {
+            return ValidateAndExecuteAction(requestId);
+        }
+
+        /// <inheritdoc />
+        public Task<Result<bool>> RejectSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        {
+            return ValidateAndExecuteAction(requestId);
+        }        
+
+        /// <inheritdoc />
+        public Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        {
+            return ValidateAndExecuteAction(requestId);
+        }
+
+        private Task<Result<bool>> ValidateAndExecuteAction(Guid requestId)
         {
             SystemUserRequest systemUserRequest = Util.GetMockData<SystemUserRequest>($"{dataFolder}/SystemUser/systemUserRequest.json");
             if (requestId != systemUserRequest.Id)
@@ -43,17 +67,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             return Task.FromResult(new Result<bool>(true));
         }
-
-                /// <inheritdoc />
-        public Task<Result<bool>> RejectSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
-        {
-            SystemUserRequest systemUserRequest = Util.GetMockData<SystemUserRequest>($"{dataFolder}/SystemUser/systemUserRequest.json");
-            if (requestId != systemUserRequest.Id)
-            {
-                return Task.FromResult(new Result<bool>(TestErrors.RequestNotFound));
-            }
-            return Task.FromResult(new Result<bool>(true));
-        }        
 
         internal static class TestErrors
         {

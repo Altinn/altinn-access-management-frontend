@@ -18,8 +18,10 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
 }
 
-interface UserItemProps
-  extends Pick<UserListItemProps, 'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'> {
+interface UserItemProps extends Pick<
+  UserListItemProps,
+  'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'
+> {
   user: ExtendedUser | User;
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';

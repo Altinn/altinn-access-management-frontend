@@ -176,5 +176,47 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 Assert.Equal(expectedResponseUrl, values.First());
             }
         }
+
+        /// <summary>
+        ///     Test case: EscalateSystemUserRequest checks that the system user request is escalated
+        ///     Expected: EscalateSystemUserRequest returns true
+        /// </summary>
+        [Fact]
+        public async Task EscalateSystemUserRequest_ReturnsTrue()
+        {
+            // Arrange
+            int partyId = 51329012;
+            string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
+            bool expectedResponse = true;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}/escalate", null);
+            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: EscalateSystemUserRequest checks that an error is returned when system user request is not found
+        ///     Expected: EscalateSystemUserRequest returns error
+        /// </summary>
+        [Fact]
+        public async Task EscalateSystemUserRequest_ReturnsError()
+        {
+            // Arrange
+            int partyId = 51329012;
+            string requestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
+            string expectedResponse = "AUTH-00010";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}/escalate", null);
+            AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+            Assert.Equal(expectedResponse, actualResponse.ErrorCode.ToString());
+        }
     }
 }

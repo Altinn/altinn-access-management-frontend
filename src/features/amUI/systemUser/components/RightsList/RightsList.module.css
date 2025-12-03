@@ -12,6 +12,10 @@
   margin-bottom: var(--ds-size-4);
 }
 
+.resourceInfoAvatar {
+  font-size: var(--ds-heading-lg-font-size);
+}
+
 .accessPackages {
   display: flex;
   flex-direction: column;
