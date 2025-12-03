@@ -719,7 +719,8 @@
     "confirm_revoke_consent": "Ja, trekk samtykke",
     "confirm_revoke_poa": "Ja, trekk fullmakt",
     "altinn2_consent_alert_header": "Du er no i ein ny versjon av Samtykke- og fullmaktsoversikten",
-    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle aktive samtykke- og fullmaktsavtaler her. Finn du ikkje det du ser etter, kan du gå til dei <a>gamle Altinn-sidene</a> og velje “Samtykker og fullmakter” i oversikten."
+    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle aktive samtykke- og fullmaktsavtaler her. Finn du ikkje det du ser etter, kan du gå til dei <a>gamle Altinn-sidene</a> og velje “Samtykker og fullmakter” i oversikten.",
+    "loading_pending_consents": "Laster ventende avtalar"
   },
   "consent_log": {
     "page_title": "Avtalelogg - Altinn",

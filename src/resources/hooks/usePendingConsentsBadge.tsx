@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
 import { hasConsentPermission } from '../utils/permissionUtils';
@@ -7,6 +8,7 @@ import { BadgeProps, DsSpinner } from '@altinn/altinn-components';
 
 export const usePendingConsentsBadge = () => {
   const partyUuid = getCookie('AltinnPartyUuid');
+  const { t } = useTranslation();
 
   const { data: reportee } = useGetReporteeQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
@@ -22,7 +24,7 @@ export const usePendingConsentsBadge = () => {
     consentBadge = (
       <DsSpinner
         data-size='xs'
-        aria-label='laster'
+        aria-label={t('active_consents.loading_pending_consents')}
       />
     );
   } else if (pendingConsentsCount?.length) {
