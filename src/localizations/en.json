@@ -772,6 +772,11 @@
     "back_to_overview_link": "Go back to the overview",
     "package_delegation_success": "{{name}} has been granted power of attorney for {{accessPackage}}.",
     "package_revocation_success": "{{name}} no longer has power of attorney for {{accessPackage}}.",
+    "status": {
+      "no_permissions_fulltext": "You might have content that no one sees. You must grant access to {{packageName}} for such messages and services to be visible.",
+      "cannot_delegate_here": "Access to this package cannot be granted here.",
+      "delegation_check_not_delegable": "You cannot grant this access because you lack it yourself."
+    },
     "users_tab": {
       "description": "Search for users to grant or revoke permissions.",
       "user_search_placeholder": "Search for person or organization",

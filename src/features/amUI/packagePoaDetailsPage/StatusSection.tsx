@@ -5,10 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import {
-  UndelegatedPackageWarning,
-  isCriticalAndUndelegated,
-} from '../common/AccessPackageList/UndelegatedPackageWarning';
+import { isCriticalAndUndelegated } from '../common/AccessPackageList/UndelegatedPackageWarning';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import classes from '../common/DelegationModal/StatusSection.module.css';
 import type { ExtendedAccessPackage } from '../common/AccessPackageList/useAreaPackageList';
@@ -47,10 +44,19 @@ export const StatusSection = ({ accessPackage }: StatusSectionProps) => {
       aria-live='polite'
     >
       {showUndelegatedWarning && (
-        <UndelegatedPackageWarning
-          packageName={accessPackage?.name}
-          fulltext
-        />
+        <div className={classes.infoLine}>
+          <ExclamationmarkTriangleFillIcon
+            fontSize='1.5rem'
+            className={classes.warningIcon}
+          />
+          <DsParagraph data-size='xs'>
+            <Trans
+              i18nKey='package_poa_details_page.status.no_permissions_fulltext'
+              values={{ packageName: accessPackage?.name }}
+              components={{ b: <strong /> }}
+            />
+          </DsParagraph>
+        </div>
       )}
       {cannotDelegateHere && (
         <div className={classes.infoLine}>
@@ -58,7 +64,9 @@ export const StatusSection = ({ accessPackage }: StatusSectionProps) => {
             fontSize='1.5rem'
             className={classes.dangerIcon}
           />
-          <DsParagraph data-size='xs'>{t('delegation_modal.cannot_delegate_here')}</DsParagraph>
+          <DsParagraph data-size='xs'>
+            {t('package_poa_details_page.status.cannot_delegate_here')}
+          </DsParagraph>
         </div>
       )}
       {!cannotDelegateHere && showDelegationCheckWarning && (
@@ -69,7 +77,7 @@ export const StatusSection = ({ accessPackage }: StatusSectionProps) => {
           />
           <DsParagraph data-size='xs'>
             <Trans
-              i18nKey='delegation_modal.delegation_check_not_delegable'
+              i18nKey='package_poa_details_page.status.delegation_check_not_delegable'
               components={{ b: <strong /> }}
               values={{
                 you: t('common.you_uppercase'),

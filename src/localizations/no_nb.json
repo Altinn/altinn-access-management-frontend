@@ -771,6 +771,11 @@
     "back_to_overview_link": "Gå tilbake til oversikten",
     "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
     "package_revocation_success": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
+    "status": {
+      "no_permissions_fulltext": "Du kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlig",
+      "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
+      "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten fordi du mangler den selv."
+    },
     "users_tab": {
       "description": "Søk etter brukere for å gi eller slette fullmakter.",
       "user_search_placeholder": "Søk etter person eller virksomhet",
