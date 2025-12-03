@@ -40,6 +40,7 @@ import {
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/reporteeUtils';
 import { getHostUrl } from '@/resources/utils/pathUtils';
+import { usePendingConsentsBadge } from '@/resources/hooks/usePendingConsentsBadge';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
@@ -56,6 +57,8 @@ export const LandingPage = () => {
     fullName: reportee?.name || '',
     type: isOrganization(reportee) ? 'company' : 'person',
   });
+
+  const { consentBadge } = usePendingConsentsBadge();
 
   useEffect(() => {
     // Remove the openAccountMenu query parameter after reading it the first time
@@ -123,6 +126,7 @@ export const LandingPage = () => {
       items.push({
         ...getConsentMenuItem(),
         description: t('landing_page.consent_item_description'),
+        badge: consentBadge,
       });
     }
 
@@ -280,6 +284,7 @@ const ListItemContainer = ({ heading, items }: ListItemContainerProps) => {
             shadow='none'
             linkIcon
             loading={item.loading}
+            badge={item.badge}
             as={item.as}
           />
         ))}

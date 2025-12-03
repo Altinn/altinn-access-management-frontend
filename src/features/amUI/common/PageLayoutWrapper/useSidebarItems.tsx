@@ -1,3 +1,4 @@
+import { usePendingConsentsBadge } from '@/resources/hooks/usePendingConsentsBadge';
 import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
@@ -39,6 +40,8 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
 
+  const { consentBadge } = usePendingConsentsBadge();
+
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
 
@@ -63,7 +66,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   }
 
   if (displayConsentGui && hasConsentPermission(reportee, isAdmin)) {
-    items.push(getConsentMenuItem(pathname, isLoading, isSmall));
+    items.push({ ...getConsentMenuItem(pathname, isLoading, isSmall), badge: consentBadge });
   }
 
   if (
