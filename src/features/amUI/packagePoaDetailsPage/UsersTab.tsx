@@ -48,7 +48,7 @@ export const UsersTab = ({
     targetParty?: Party;
   } | null>(null);
 
-  const { mapRoles, isLoading: roleMetadataIsLoading } = useRoleMetadata();
+  const { isLoading: roleMetadataIsLoading } = useRoleMetadata();
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -65,18 +65,6 @@ export const UsersTab = ({
   );
 
   const connections = usePackagePermissionConnections(accessPackage);
-  const connectionsWithRoles = useMemo(
-    () =>
-      connections.map((connection) => ({
-        ...connection,
-        roles: mapRoles(connection.roles),
-        connections: connection.connections?.map((child) => ({
-          ...child,
-          roles: mapRoles(child.roles),
-        })),
-      })),
-    [connections, mapRoles],
-  );
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
     setDelegateActionError(null);
@@ -167,7 +155,8 @@ export const UsersTab = ({
       )}
 
       <AdvancedUserSearch
-        connections={connectionsWithRoles}
+        includeSelfAsChild={false}
+        connections={connections}
         indirectConnections={indirectConnections}
         isLoading={isLoading || loadingIndirectConnections || roleMetadataIsLoading}
         onDelegate={canDelegate ? handleOnDelegate : undefined}
