@@ -19,8 +19,9 @@ export const ResourceDetails = ({ resource }: ResourceDetailsProps): React.React
           imageUrl={resource.resourceOwnerLogoUrl}
           imageUrlAlt={resource.resourceOwnerName}
           name={resource.resourceOwnerName ?? ''}
+          className={classes.resourceInfoIcon}
         />
-        <div>
+        <div className={classes.resourceInfoText}>
           <DsHeading
             level={1}
             data-size='xs'
