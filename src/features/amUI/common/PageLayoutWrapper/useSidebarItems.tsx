@@ -25,7 +25,6 @@ import { useLocation } from 'react-router';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
-  const displayConsentGui = window.featureFlags?.displayConsentGui;
 
   const displaySettingsPage = window.featureFlags?.displaySettingsPage;
   const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
@@ -62,7 +61,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getPoaOverviewMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (displayConsentGui && hasConsentPermission(reportee, isAdmin)) {
+  if (hasConsentPermission(reportee, isAdmin)) {
     items.push(getConsentMenuItem(pathname, isLoading, isSmall));
   }
 

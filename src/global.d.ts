@@ -6,7 +6,6 @@ declare global {
       displayPopularSingleRightsServices: boolean;
       displayResourceDelegation: boolean;
       displayConfettiPackage: boolean;
-      displayConsentGui: boolean;
       restrictPrivUse: boolean;
       crossPlatformLinks: boolean;
       displaySettingsPage: boolean;
