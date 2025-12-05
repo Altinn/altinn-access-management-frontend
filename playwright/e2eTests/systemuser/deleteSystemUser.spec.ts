@@ -8,33 +8,47 @@ test.describe('System user deletion', () => {
   let api: ApiRequests;
 
   test.beforeEach(async ({ page, login, systemUserPage, accessManagementFrontPage }) => {
-    const orgNumber = '310547891';
-    api = new ApiRequests(orgNumber);
-    await page.goto(env('BASE_URL'));
-    await login.LoginToAccessManagement('14824497789');
-    await login.chooseReportee('Skravlete Blåveis', 'Aktverdig Retorisk Ape');
+    await test.step('Setup API client', async () => {
+      const orgNumber = '310547891';
+      api = new ApiRequests(orgNumber);
+    });
 
-    //Create a system in your "system register" before each test
-    systemId = await api.createSystemSystemRegister();
+    await test.step('Login and navigate to application', async () => {
+      await page.goto(env('BASE_URL'));
+      await login.LoginToAccessManagement('14824497789');
+      await login.chooseReportee('Skravlete Blåveis', 'Aktverdig Retorisk Ape');
+    });
 
-    // Navigate to system user page via menu link
-    await accessManagementFrontPage.systemAccessLink.click();
+    await test.step('Create system in system register', async () => {
+      systemId = await api.createSystemSystemRegister();
+    });
 
-    // this is assigned as a text in code base, will just add more confusion to import that than hardcoding this here
-    await systemUserPage.CREATE_SYSTEM_USER_LINK.click();
-    await systemUserPage.selectSystem(systemId);
-    await expect(systemUserPage.SYSTEMUSER_CREATED_HEADING).toBeVisible();
-    await expect(page.getByText(systemId).first()).toBeVisible();
+    await test.step('Navigate to system user page and create system user', async () => {
+      await accessManagementFrontPage.systemAccessLink.click();
+      // this is assigned as a text in code base, will just add more confusion to import that than hardcoding this here
+      await systemUserPage.CREATE_SYSTEM_USER_LINK.click();
+      await systemUserPage.selectSystem(systemId);
+    });
+
+    await test.step('Verify system user was created successfully', async () => {
+      await expect(systemUserPage.SYSTEMUSER_CREATED_HEADING).toBeVisible();
+      await expect(page.getByText(systemId).first()).toBeVisible();
+    });
   });
 
   test('Delete created system user', async ({ page, systemUserPage }) => {
-    // Delete system user
-    await page.getByText(systemId).first().click();
-    await systemUserPage.DELETE_SYSTEMUSER_BUTTON.click();
-    await systemUserPage.FINAL_DELETE_SYSTEMUSER_BUTTON.click();
+    await test.step('Select system user to delete', async () => {
+      await page.getByText(systemId).first().click();
+    });
 
-    // Confirm we are back on overview page
-    await expect(systemUserPage.MAIN_HEADER).toBeVisible();
+    await test.step('Delete system user', async () => {
+      await systemUserPage.DELETE_SYSTEMUSER_BUTTON.click();
+      await systemUserPage.FINAL_DELETE_SYSTEMUSER_BUTTON.click();
+    });
+
+    await test.step('Verify deletion and return to overview', async () => {
+      await expect(systemUserPage.MAIN_HEADER).toBeVisible();
+    });
   });
 
   test.afterEach(async () => {

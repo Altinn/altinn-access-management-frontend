@@ -28,64 +28,94 @@ test.describe('Systembruker endringsforespørsel', () => {
   });
 
   test('Avvis endringsforespørsel', async ({ page, login }): Promise<void> => {
-    //Generate confirmUrl from API
     const externalRef = TestdataApi.generateExternalRef();
-    const response = await api.postSystemuserRequest(externalRef, systemId);
 
-    await api.approveSystemuserRequest(response.id);
+    const response = await test.step('Create and approve system user request', async () => {
+      const response = await api.postSystemuserRequest(externalRef, systemId);
+      await api.approveSystemuserRequest(response.id);
+      return response;
+    });
 
-    const systemUserId = await api.getSystemUserByQuery(systemId, orgNumber, externalRef);
-    systemUserIds.push(systemUserId);
+    const systemUserId = await test.step('Get system user ID', async () => {
+      const systemUserId = await api.getSystemUserByQuery(systemId, orgNumber, externalRef);
+      systemUserIds.push(systemUserId);
+      return systemUserId;
+    });
 
-    const changeRequestResponse = await api.postSystemuserChangeRequest(systemUserId);
+    const changeRequestResponse = await test.step('Create change request', async () => {
+      return await api.postSystemuserChangeRequest(systemUserId);
+    });
 
-    await page.goto(changeRequestResponse.confirmUrl);
-    await login.loginNotChoosingActor('14824497789');
-    await page.getByRole('button', { name: 'Avvis' }).click();
+    await test.step('Navigate to change request confirmation page and login', async () => {
+      await page.goto(changeRequestResponse.confirmUrl);
+      await login.loginNotChoosingActor('14824497789');
+    });
 
-    //Look for login button
-    await expect(login.loginButton).toBeVisible();
+    await test.step('Reject change request', async () => {
+      await page.getByRole('button', { name: 'Avvis' }).click();
+    });
 
-    const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
-      changeRequestResponse.id,
-    );
+    await test.step('Verify rejection status', async () => {
+      //Look for login button
+      await expect(login.loginButton).toBeVisible();
 
-    expect(statusApiRequest.status).toBe('Rejected');
+      const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
+        changeRequestResponse.id,
+      );
+
+      expect(statusApiRequest.status).toBe('Rejected');
+    });
   });
 
   test('Godkjenn endringsforespørsel', async ({ page, login, systemUserPage }): Promise<void> => {
     const externalRef = TestdataApi.generateExternalRef();
-    const response = await api.postSystemuserRequest(externalRef, systemId);
 
-    await api.approveSystemuserRequest(response.id);
+    await test.step('Create and approve system user request', async () => {
+      const response = await api.postSystemuserRequest(externalRef, systemId);
+      await api.approveSystemuserRequest(response.id);
+    });
 
-    const systemUserId = await api.getSystemUserByQuery(systemId, orgNumber, externalRef);
-    systemUserIds.push(systemUserId); // Track for cleanup
+    const systemUserId = await test.step('Get system user ID', async () => {
+      const systemUserId = await api.getSystemUserByQuery(systemId, orgNumber, externalRef);
+      systemUserIds.push(systemUserId); // Track for cleanup
+      return systemUserId;
+    });
 
-    const changeRequestResponse = await api.postSystemuserChangeRequest(systemUserId);
-    await page.goto(changeRequestResponse.confirmUrl);
-    await login.loginNotChoosingActor('14824497789');
-    await page.getByRole('button', { name: 'Godkjenn' }).click();
+    const changeRequestResponse = await test.step('Create change request', async () => {
+      return await api.postSystemuserChangeRequest(systemUserId);
+    });
 
-    //Look for login button
+    await test.step('Navigate to change request confirmation page and login', async () => {
+      await page.goto(changeRequestResponse.confirmUrl);
+      await login.loginNotChoosingActor('14824497789');
+    });
 
-    await expect(login.loginButton).toBeVisible();
+    await test.step('Approve change request', async () => {
+      await page.getByRole('button', { name: 'Godkjenn' }).click();
+    });
 
-    //Read from status api to verify that status is not Accepted after clicking "Avvis"
-    const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
-      changeRequestResponse.id,
-    );
-    expect(statusApiRequest.status).toBe('Accepted');
+    await test.step('Verify acceptance status', async () => {
+      //Look for login button
+      await expect(login.loginButton).toBeVisible();
 
-    // Verify rights given
-    await login.LoginToAccessManagement('14824497789');
-    await login.chooseReportee('Skravlete Blåveis', 'Aktverdig Retorisk Ape');
+      //Read from status api to verify that status is not Accepted after clicking "Avvis"
+      const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
+        changeRequestResponse.id,
+      );
+      expect(statusApiRequest.status).toBe('Accepted');
+    });
 
-    const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
-    await page.goto(systemUserUrl + '/' + systemUserId);
+    await test.step('Verify rights changes are reflected', async () => {
+      // Verify rights given
+      await login.LoginToAccessManagement('14824497789');
+      await login.chooseReportee('Skravlete Blåveis', 'Aktverdig Retorisk Ape');
 
-    // Verify the reflected changes
-    await expect(page.getByText('Plansak')).toBeVisible();
-    await expect(page.getByText('Baerekraft')).not.toBeVisible();
+      const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
+      await page.goto(systemUserUrl + '/' + systemUserId);
+
+      // Verify the reflected changes
+      await expect(page.getByText('Plansak')).toBeVisible();
+      await expect(page.getByText('Baerekraft')).not.toBeVisible();
+    });
   });
 });
