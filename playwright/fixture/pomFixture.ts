@@ -6,6 +6,7 @@ import { AccessManagementFrontPage } from 'playwright/pages/AccessManagementFron
 import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { DelegationPage } from 'playwright/pages/profile/accessPkgDelegationPage';
 import { apiDelegation } from 'playwright/pages/profile/apidelegeringPage';
+import { AktorvalgHeader } from 'playwright/pages/AktorvalgHeader';
 import {
   delegateRightsToUser,
   delegateToUser,
@@ -36,6 +37,7 @@ type Fixtures = {
   runAccessibilityTest: runAccessibilityTests;
   delegation: DelegationPage;
   consentPage: ConsentPage;
+  aktorvalgHeader: AktorvalgHeader;
 };
 
 const test = baseTest.extend<Fixtures>({
@@ -85,6 +87,10 @@ const test = baseTest.extend<Fixtures>({
   // UPDATED: inject language into ConsentPage constructor
   consentPage: async ({ page, language }, use) => {
     await use(new ConsentPage(page, language));
+  },
+
+  aktorvalgHeader: async ({ page, language }, use) => {
+    await use(new AktorvalgHeader(page));
   },
 });
 
