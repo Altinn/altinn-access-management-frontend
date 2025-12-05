@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -56,7 +57,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<ServiceResource> GetResource(string resourceId)
         {
-            try 
+            try
             {
                 ServiceResource result = null;
                 string endpointUrl = $"resource/{resourceId}";
@@ -207,6 +208,34 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             return resources;
+        }
+        
+        /// <inheritdoc />
+        public async Task<ConsentTemplate> GetConsentTemplate(string templateId, int templateVersion, CancellationToken cancellationToken)
+        {
+            try
+            {
+                ConsentTemplate result = null;
+                string endpointUrl = $"consent-templates/{templateId}?version={templateVersion}";
+
+                HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl, cancellationToken);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    };
+                    string content = await response.Content.ReadAsStringAsync(cancellationToken);
+                    result = JsonSerializer.Deserialize<ConsentTemplate>(content, options);
+                }
+
+                return await Task.FromResult(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ResourceClient // GetConsentTemplate // Exception");
+                throw;
+            }
         }
     }
 }

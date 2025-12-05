@@ -81,12 +81,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return new List<Guid>() { PERSON_CONSENT_ID, ORG_CONSENT_ID, PENDING_CONSENT_ID, ORG_CONSENT_WITHOUT_MESSAGE_ID }.Contains(consentRequestId);
         }
 
-        public Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken)
-        {
-            List<ConsentTemplate> consentTemplates = Util.GetMockData<List<ConsentTemplate>>($"{dataFolder}/Consent/consentTemplates.json");
-            return Task.FromResult(consentTemplates);
-        }
-
         public Task<Result<List<ConsentRequestDetails>>> GetConsentList(Guid partyId, CancellationToken cancellationToken)
         {
             if (partyId == ORG_PARTY_ID)

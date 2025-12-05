@@ -1,4 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Enums;
+﻿using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 
@@ -39,5 +39,11 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <returns>List of resource owners in string format.</returns>
         Task<OrgList> GetAllResourceOwners();
+
+        /// <summary>
+        ///     Get a consent template by id and version
+        /// </summary>
+        /// <returns>A consent template</returns>
+        Task<ConsentTemplate> GetConsentTemplate(string templateId, int templateVersion, CancellationToken cancellationToken);
     }
 }

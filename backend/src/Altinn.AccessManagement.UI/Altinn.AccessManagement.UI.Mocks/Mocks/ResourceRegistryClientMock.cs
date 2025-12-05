@@ -1,6 +1,6 @@
-﻿using System.Text.Json;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -68,6 +68,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             return Task.FromResult<OrgList>(null);
+        }
+
+        /// <inheritdoc />
+        public Task<ConsentTemplate> GetConsentTemplate(string templateId, int templateVersion, CancellationToken cancellationToken)
+        {
+            string dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(ConsentClientMock).Assembly.Location).LocalPath), "Data");
+            List<ConsentTemplate> consentTemplates = Util.GetMockData<List<ConsentTemplate>>($"{dataFolder}/Consent/consentTemplates.json");
+            return Task.FromResult(consentTemplates.FirstOrDefault(template => template.Id.Equals(templateId)));
         }
 
         private static string GetResourcePath(string resourceRegistryId)

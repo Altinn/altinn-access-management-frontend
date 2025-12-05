@@ -1,6 +1,5 @@
 using System.Text;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -10,8 +9,6 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
 using Altinn.Register.Contracts.V1;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -21,8 +18,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IConsentClient _consentClient;
         private readonly IRegisterClient _registerClient;
         private readonly IResourceRegistryClient _resourceRegistryClient;
-        private readonly CacheConfig _cacheConfig;
-        private readonly IMemoryCache _memoryCache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsentService"/> class.
@@ -30,20 +25,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="consentClient">The consent client.</param>
         /// <param name="registerClient">The register client.</param>
         /// <param name="resourceRegistryClient">Resources client to load resources</param>
-        /// <param name="memoryCache">the handler for cache</param>
-        /// <param name="cacheConfig">the handler for cache configuration</param>
         public ConsentService(
             IConsentClient consentClient,
             IRegisterClient registerClient,
-            IResourceRegistryClient resourceRegistryClient,
-            IMemoryCache memoryCache,
-            IOptions<CacheConfig> cacheConfig)
+            IResourceRegistryClient resourceRegistryClient)
         {
             _consentClient = consentClient;
             _registerClient = registerClient;
             _resourceRegistryClient = resourceRegistryClient;
-            _memoryCache = memoryCache;
-            _cacheConfig = cacheConfig.Value;
         }
 
         /// <inheritdoc />
@@ -136,23 +125,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
             Dictionary<string, Party> partyByUuid = PartyListToDict(parties);
 
-            IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
-
-            IEnumerable<ActiveConsentItemFE> activeConsentsFE = activeConsents.Select(consent =>
+            IEnumerable<Task<ActiveConsentItemFE>> activeConsentsFE = activeConsents.Select(async consent =>
             {
                 partyByUuid.TryGetValue(GetUrnValue(consent.To), out Party toParty);
                 partyByUuid.TryGetValue(GetUrnValue(consent.From), out Party fromParty);
+                ConsentTemplate template = await GetConsentTemplate(consent.TemplateId, consent.TemplateVersion, cancellationToken);
                 return new ActiveConsentItemFE()
                 {
                     Id = consent.Id,
                     IsPendingConsent = !IsConsentAccepted(consent) && IsPortalModeConsent(consent),
-                    IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
+                    IsPoa = template.IsPoa,
                     ToParty = GetConsentParty(consent.To, toParty?.Name),
                     FromParty = GetConsentParty(consent.From, fromParty?.Name),
                 };
             });
 
-            return activeConsentsFE.ToList();
+            var result = await Task.WhenAll(activeConsentsFE);
+            return result.ToList();
         }
 
         /// <inheritdoc />
@@ -173,19 +162,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             IEnumerable<Party> parties = await GetConsentParties(partyUuids);
             Dictionary<string, Party> partyByUuid = PartyListToDict(parties);
-            IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
 
-            IEnumerable<ConsentLogItemFE> consentListItems = consents.Value.Select(consent =>
+            IEnumerable<Task<ConsentLogItemFE>> consentListItems = consents.Value.Select(async consent =>
             {
                 partyByUuid.TryGetValue(GetUrnValue(consent.To), out Party toParty);
                 partyByUuid.TryGetValue(GetUrnValue(consent.From), out Party fromParty);
                 string handledByPartyUuid = string.IsNullOrEmpty(consent.HandledBy) ? string.Empty : GetUrnValue(consent.HandledBy);
                 partyByUuid.TryGetValue(handledByPartyUuid, out Party handledByParty);
+                ConsentTemplate consentTemplate = await GetConsentTemplate(consent.TemplateId, consent.TemplateVersion, cancellationToken);
 
                 return new ConsentLogItemFE()
                 {
                     Id = consent.Id,
-                    IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
+                    IsPoa = consentTemplate.IsPoa,
                     ToParty = GetConsentParty(consent.To, toParty?.Name),
                     FromParty = GetConsentParty(consent.From, fromParty?.Name),
                     HandledByParty = GetConsentParty(consent.HandledBy, handledByParty?.Name),
@@ -194,7 +183,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 };
             });
 
-            return consentListItems.ToList();
+            var result = await Task.WhenAll(consentListItems);
+            return result.ToList();
         }
 
         /// <inheritdoc />
@@ -349,10 +339,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             // GET metadata template used in resource
-            IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
-            ConsentTemplate consentTemplate = consentTemplates.FirstOrDefault((template) =>
-                template.Id == request.TemplateId &&
-                template.Version == request.TemplateVersion);
+            ConsentTemplate consentTemplate = await GetConsentTemplate(request.TemplateId, request.TemplateVersion, cancellationToken);
 
             if (consentTemplate == null)
             {
@@ -414,30 +401,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
             };
         }
 
-        private async Task<IEnumerable<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken)
+        private async Task<ConsentTemplate> GetConsentTemplate(string templateId, int templateVersion, CancellationToken cancellationToken)
         {
-            string cacheKey = "consenttemplates";
-
-            if (!_memoryCache.TryGetValue(cacheKey, out IEnumerable<ConsentTemplate> consentTemplates))
-            {
-                consentTemplates = await _consentClient.GetConsentTemplates(cancellationToken);
-
-                if (consentTemplates is not null)
-                {
-                    MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                        .SetPriority(CacheItemPriority.High)
-                        .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
-
-                    _memoryCache.Set(cacheKey, consentTemplates, cacheEntryOptions);
-                }
-            }
-
-            return consentTemplates;
-        }
-
-        private static bool IsPoaTemplate(IEnumerable<ConsentTemplate> consentTemplates, string templateId)
-        {
-            return consentTemplates.Any((template) => template.Id.Equals(templateId) && template.IsPoa);
+            return await _resourceRegistryClient.GetConsentTemplate(templateId, templateVersion, cancellationToken);
         }
 
         private static AuthorizedPartyType GetPartyOrgType(string partyId)

@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
@@ -23,7 +22,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IHttpClientFactory _httpClientFactory;
         private readonly PlatformSettings _platformSettings;
         private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
@@ -33,18 +31,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="logger">The logger instance.</param>
         /// <param name="httpClient">The HTTP client instance.</param>
         /// <param name="httpContextAccessor">The HTTP context accessor instance.</param>
-        /// <param name="httpClientFactory">The HTTP client factory.</param>
         /// <param name="platformSettings">The platform settings.</param>
         public ConsentClient(
             ILogger<ConsentClient> logger,
             HttpClient httpClient,
             IHttpContextAccessor httpContextAccessor,
-            IHttpClientFactory httpClientFactory,
             IOptions<PlatformSettings> platformSettings)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
-            _httpClientFactory = httpClientFactory;
             _platformSettings = platformSettings.Value;
             httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint);
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
@@ -134,26 +129,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(ex, "AccessManagement.UI // ConsentClient // ApproveConsentRequest // Exception");
                 throw;
             }
-        }
-
-        /// <inheritdoc/>
-        public async Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken)
-        {
-            // Get consent templates from altinn-studio-docs. Will be moved to resource registry later.
-            string endpointUrl = "https://raw.githubusercontent.com/Altinn/altinn-studio-docs/master/content/authorization/architecture/resourceregistry/consent_templates.json";
-
-            // use new client so subscription key is not sent to github
-            using (HttpClient external = _httpClientFactory.CreateClient())
-            {
-                HttpResponseMessage response = await external.GetAsync(endpointUrl, cancellationToken);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    string content = await response.Content.ReadAsStringAsync(cancellationToken);
-                    return JsonSerializer.Deserialize<List<ConsentTemplate>>(content, _jsonSerializerOptions);
-                }
-            }
-
-            return null;
         }
 
         /// <inheritdoc/>
