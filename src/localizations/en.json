@@ -425,7 +425,7 @@
     "has_package_message": "{{user_name}} has this power of attorney.",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
     "cannot_delegate_here": "Access to this package cannot be granted here.",
-    "delegation_check_not_delegable": "You cannot grant this access because you lack it yourself.",
+    "delegation_check_not_delegable": "You cannot grant this access.",
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
@@ -775,7 +775,7 @@
     "status": {
       "no_permissions_fulltext": "You might have content that no one sees. You must grant access to {{packageName}} for such messages and services to be visible.",
       "cannot_delegate_here": "Access to this package cannot be granted here.",
-      "delegation_check_not_delegable": "You cannot grant this access because you lack it yourself."
+      "delegation_check_not_delegable": "You cannot grant this access."
     },
     "users_tab": {
       "description": "Search for users to grant or revoke permissions.",
