@@ -303,8 +303,6 @@
     "current_access_packages_title": "{{count}} tilgangspakkar",
     "give_new_button": "Gi fullmakt",
     "search_label": "Søk etter tilgangspakkar",
-    "no_permissions": "Du må gi fullmakt",
-    "no_permissions_fulltext": "Du kan ha innhald som ingen ser. Du må gi tilgang til <b>{{packageName}}</b> for at slike meldingar og tenester skal bli synlege.",
     "other_packages_in_area_title": "Andre tilgjengelige pakkar i området:",
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",
@@ -759,6 +757,12 @@
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}"
+  },    
+  "poa_status": {
+    "no_permissions": "Du må gi fullmakt",
+    "no_permissions_fulltext": "Du kan ha innhald som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldingar og tenester skal bli synlege.",
+    "cannot_delegate_here": "Tilgang til denne pakken kan ikkje bli gitt eller fjerna her.",
+    "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta."
   },
   "package_poa_details_page": {
     "page_title": "Fullmaktsdetaljar - Altinn",
@@ -768,11 +772,7 @@
     "back_to_overview_link": "Gå tilbake til oversikta",
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "package_revocation_success": "{{name}} har ikkje lenger fullmakt til {{accessPackage}}.",
-    "status": {
-      "no_permissions_fulltext": "Du kan ha innhald som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldingar og tenester skal bli synlege.",
-      "cannot_delegate_here": "Tilgang til denne pakken kan ikkje bli gitt eller fjerna her.",
-      "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta."
-    },
+
     "users_tab": {
       "description": "Søk etter brukarar for å gi eller slette fullmakter.",
       "user_search_placeholder": "Søk etter person eller verksemd",

@@ -306,8 +306,6 @@
     "current_access_packages_title": "{{count}} tilgangspakker",
     "give_new_button": "Gi fullmakt",
     "search_label": "Søk etter tilgangspakker",
-    "no_permissions": "Du må gi fullmakt",
-    "no_permissions_fulltext": "Du kan ha innhold som ingen ser. Du må gi tilgang til <b>{{packageName}}</b> for at slike meldinger og tjenester skal bli synlig",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
     "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{accessPackage}}.",
@@ -763,6 +761,12 @@
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}"
   },
+  "poa_status": {
+    "no_permissions": "Du må gi fullmakt.",
+    "no_permissions_fulltext": "Du kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlig",
+    "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
+    "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten."
+  },
   "package_poa_details_page": {
     "page_title": "Fullmaktsdetaljer - Altinn",
     "users_tab_title": "Brukere",
@@ -771,11 +775,6 @@
     "back_to_overview_link": "Gå tilbake til oversikten",
     "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
     "package_revocation_success": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
-    "status": {
-      "no_permissions_fulltext": "Du kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlig",
-      "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
-      "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten."
-    },
     "users_tab": {
       "description": "Søk etter brukere for å gi eller slette fullmakter.",
       "user_search_placeholder": "Søk etter person eller virksomhet",

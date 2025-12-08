@@ -51,7 +51,7 @@ export const StatusSection = ({ accessPackage }: StatusSectionProps) => {
           />
           <DsParagraph data-size='xs'>
             <Trans
-              i18nKey='package_poa_details_page.status.no_permissions_fulltext'
+              i18nKey='poa_status.no_permissions_fulltext'
               values={{ packageName: accessPackage?.name }}
               components={{ b: <strong /> }}
             />
@@ -64,9 +64,7 @@ export const StatusSection = ({ accessPackage }: StatusSectionProps) => {
             fontSize='1.5rem'
             className={classes.dangerIcon}
           />
-          <DsParagraph data-size='xs'>
-            {t('package_poa_details_page.status.cannot_delegate_here')}
-          </DsParagraph>
+          <DsParagraph data-size='xs'>{t('poa_status.cannot_delegate_here')}</DsParagraph>
         </div>
       )}
       {!cannotDelegateHere && showDelegationCheckWarning && (
@@ -77,7 +75,7 @@ export const StatusSection = ({ accessPackage }: StatusSectionProps) => {
           />
           <DsParagraph data-size='xs'>
             <Trans
-              i18nKey='package_poa_details_page.status.delegation_check_not_delegable'
+              i18nKey='poa_status.delegation_check_not_delegable'
               components={{ b: <strong /> }}
               values={{
                 you: t('common.you_uppercase'),
