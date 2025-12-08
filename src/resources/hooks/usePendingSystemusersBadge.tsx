@@ -13,7 +13,7 @@ export const usePendingSystemusersBadge = () => {
   const { data: reporteeData } = useGetReporteeQuery();
   const { data: pendingSystemUsers, isLoading: isLoadingPendingSystemUsers } =
     useGetPendingSystemUserRequestsQuery(partyUuid, {
-      skip: !hasCreateSystemUserPermission(reporteeData),
+      skip: hasCreateSystemUserPermission(reporteeData) !== true,
     });
 
   let systemuserBadge: BadgeProps | ReactElement | undefined = undefined;
