@@ -13,6 +13,7 @@ import { UserList } from '../UserList/UserList';
 import { ConnectionsList } from './ConnectionsList';
 
 export interface AdvancedUserSearchProps {
+  includeSelfAsChild: boolean;
   connections?: Connection[];
   indirectConnections?: Connection[];
   onDelegate?: (user: User) => void;
@@ -30,6 +31,7 @@ const filterAvailableUserTypes = (items?: Connection[]) =>
   ) || [];
 
 export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
+  includeSelfAsChild,
   connections,
   indirectConnections,
   onDelegate,
@@ -112,6 +114,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
             availableAction={DelegationAction.REVOKE}
             isActionLoading={isActionLoading}
             onRevoke={onRevoke}
+            includeSelfAsChild={includeSelfAsChild}
           />
           {showDirectNoResults && (
             <DsParagraph data-size='md'>

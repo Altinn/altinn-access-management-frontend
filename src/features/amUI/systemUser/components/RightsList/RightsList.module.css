@@ -11,6 +11,12 @@
   gap: var(--ds-size-4);
   margin-bottom: var(--ds-size-4);
 }
+.resourceInfoIcon {
+  font-size: var(--ds-font-size-8);
+}
+.resourceInfoText {
+  flex: 1;
+}
 
 .resourceInfoAvatar {
   font-size: var(--ds-heading-lg-font-size);

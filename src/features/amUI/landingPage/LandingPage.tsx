@@ -78,7 +78,6 @@ export const LandingPage = () => {
 
   const getMenuItems = (): MenuItemProps[] => {
     const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
-    const displayConsentGui = window.featureFlags?.displayConsentGui;
     const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
 
     if (isLoading) {
@@ -121,7 +120,7 @@ export const LandingPage = () => {
       });
     }
 
-    if (displayConsentGui && hasConsentPermission(reportee, isAdmin)) {
+    if (hasConsentPermission(reportee, isAdmin)) {
       items.push({
         ...getConsentMenuItem(),
         description: t('landing_page.consent_item_description'),

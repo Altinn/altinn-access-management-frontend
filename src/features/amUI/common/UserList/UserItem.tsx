@@ -26,6 +26,7 @@ interface UserItemProps extends Pick<
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
+  includeSelfAsChild?: boolean;
   controls?: (user: ExtendedUser | User) => ReactNode;
 }
 
@@ -53,6 +54,7 @@ export const UserItem = ({
   roleDirection = 'toUser',
   subUnit = false,
   disableLinks = false,
+  includeSelfAsChild = true,
   shadow,
   controls,
   ...props
@@ -115,8 +117,8 @@ export const UserItem = ({
           ? `, ${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')}`
           : '');
     }
-    if (viaRoleNames.length > 0) {
-      descriptionString += ` | ${viaRoleNames.join(', ')} for ${viaEntity}`;
+    if (viaRoleNames.length > 0 && viaEntity) {
+      descriptionString += ` | ${viaRoleNames.join(', ')} for ${formatDisplayName({ fullName: viaEntity, type: 'company' })}`;
     }
     if (descriptionString) {
       return descriptionString;
@@ -131,7 +133,11 @@ export const UserItem = ({
         ? 'company'
         : 'system';
 
-  const subUsers = hasInheritingUsers ? [user as User, ...(childrenToDisplay ?? [])] : [];
+  const subUsers = hasInheritingUsers
+    ? includeSelfAsChild
+      ? [user as User, ...(childrenToDisplay ?? [])]
+      : childrenToDisplay
+    : [];
 
   return (
     <UserListItem
@@ -180,7 +186,7 @@ export const UserItem = ({
               size='xs'
               titleAs={userHeadingLevelForMapper(titleAs)}
               subUnit={
-                index !== 0 &&
+                (includeSelfAsChild ? index !== 0 : true) &&
                 child.type === ConnectionUserType.Organization &&
                 isSubUnitByType(child.variant?.toString())
               }
