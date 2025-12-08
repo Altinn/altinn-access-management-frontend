@@ -763,7 +763,7 @@
   },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt.",
-    "no_permissions_fulltext": "Du kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlig",
+    "no_permissions_fulltext": "Du kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlige",
     "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
     "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten."
   },
