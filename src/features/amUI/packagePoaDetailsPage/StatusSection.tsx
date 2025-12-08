@@ -1,12 +1,10 @@
 import { ExclamationmarkTriangleFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
-import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsParagraph } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { isCriticalAndUndelegated } from '../common/AccessPackageList/UndelegatedPackageWarning';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import classes from '../common/DelegationModal/StatusSection.module.css';
 import type { ExtendedAccessPackage } from '../common/AccessPackageList/useAreaPackageList';
 
@@ -16,7 +14,6 @@ interface StatusSectionProps {
 
 export const StatusSection = ({ accessPackage }: StatusSectionProps) => {
   const { t } = useTranslation();
-  const { fromParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
   if (!accessPackage) {
@@ -31,12 +28,6 @@ export const StatusSection = ({ accessPackage }: StatusSectionProps) => {
   if (!showUndelegatedWarning && !cannotDelegateHere && !showDelegationCheckWarning) {
     return null;
   }
-
-  const formattedFromPartyName = formatDisplayName({
-    fullName: fromParty?.name || '',
-    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
 
   return (
     <div
@@ -77,10 +68,6 @@ export const StatusSection = ({ accessPackage }: StatusSectionProps) => {
             <Trans
               i18nKey='poa_status.delegation_check_not_delegable'
               components={{ b: <strong /> }}
-              values={{
-                you: t('common.you_uppercase'),
-                reporteeorg: formattedFromPartyName,
-              }}
             />
           </DsParagraph>
         </div>

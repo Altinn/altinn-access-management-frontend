@@ -104,7 +104,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 
       <div className={classes.results}>
         <>
-          {!hasDirectConnections && !isLoading && !isLoading && (
+          {!hasDirectConnections && !isLoading && (
             <div className={classes.noUsersAlert}>
               <DsParagraph
                 data-size='sm'
