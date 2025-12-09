@@ -53,8 +53,3 @@
   align-items: center;
   gap: var(--ds-spacing-2);
 }
-
-.noUsersAlertIcon {
-  font-size: 1.5rem;
-  color: var(--ds-color-warning-base-default);
-}
