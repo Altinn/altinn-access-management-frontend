@@ -43,27 +43,27 @@ export class AktorvalgHeader {
     this.menuLogout = this.page.getByRole('button', { name: 'Logg ut' });
   }
 
-  async GoToSelectActor(actorName: string) {
+  async goToSelectActor(actorName: string) {
     await this.page.getByRole('button', { name: actorName }).click();
     await expect(this.page.locator('a').filter({ hasText: actorName }).first()).toBeVisible();
   }
 
-  async SelectActor(actorName: string) {
+  async selectActor(actorName: string) {
     await this.page.locator('a').filter({ hasText: actorName }).first().click();
     await expect(this.page.getByRole('button', { name: actorName })).toBeVisible();
   }
 
-  async GoToInfoportal() {
+  async goToInfoportal() {
     await this.infoportalLogo.click();
     await expect(this.dummy).toBeVisible();
   }
 
-  async ClickSearchButton() {
+  async clickSearchButton() {
     await this.searchButton.click();
     await expect(this.searchBar).toBeVisible();
   }
 
-  async CheckAllMenuButtons() {
+  async checkAllMenuButtons() {
     await this.menuButton.click();
     await expect(this.menuInbox).toBeVisible();
     await expect(this.menuAccessManagement).toBeVisible();
@@ -76,7 +76,7 @@ export class AktorvalgHeader {
     await this.menuButton.click();
   }
 
-  async ClickFavorite(actorName: string) {
+  async clickFavorite(actorName: string) {
     await this.page
       .locator('span')
       .filter({ hasText: actorName })
@@ -90,5 +90,11 @@ export class AktorvalgHeader {
   async unfavoriteFirstActor() {
     await this.page.getByRole('button', { name: 'Fjern frå favorittar' }).first().click();
     await expect(this.page.getByRole('button', { name: 'Fjern frå favorittar' })).toHaveCount(0);
+  }
+
+  async chooseBokmalLanguage() {
+    await this.menuButton.click();
+    await this.menuLanguage.click();
+    await this.page.locator('a').filter({ hasText: 'Bokmål' }).click();
   }
 }
