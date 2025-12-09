@@ -47,9 +47,3 @@
   align-items: flex-start;
   gap: var(--ds-spacing-3);
 }
-
-.noUsersAlert {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ds-spacing-2);
-}

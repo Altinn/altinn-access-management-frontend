@@ -105,16 +105,14 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
       <div className={classes.results}>
         <>
           {!hasDirectConnections && !isLoading && (
-            <div className={classes.noUsersAlert}>
-              <DsParagraph
-                data-size='sm'
-                className={classes.tabDescription}
-              >
-                {t('package_poa_details_page.users_tab.no_users', {
-                  fromparty: fromParty?.name,
-                })}
-              </DsParagraph>
-            </div>
+            <DsParagraph
+              data-size='sm'
+              className={classes.tabDescription}
+            >
+              {t('package_poa_details_page.users_tab.no_users', {
+                fromparty: fromParty?.name,
+              })}
+            </DsParagraph>
           )}
           {showDirectNoResults && (
             <h3 className={classes.subHeader}>{t('advanced_user_search.direct_connections')}</h3>
