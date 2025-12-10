@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
-import statusClasses from '../../StatusSection/StatusSection.module.css';
+import classes from './RoleInfo.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -58,10 +58,10 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
   });
 
   return (
-    <div className={statusClasses.infoLine}>
+    <div className={classes.infoLine}>
       <InformationSquareFillIcon
         fontSize='1.5rem'
-        className={statusClasses.inheritedInfoIcon}
+        className={classes.inheritedInfoIcon}
       />
       <DsParagraph data-size='xs'>
         <Trans
