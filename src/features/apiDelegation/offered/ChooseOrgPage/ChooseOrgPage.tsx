@@ -102,24 +102,24 @@ export const ChooseOrgPage = () => {
                 {t('api_delegation.new_org_content_text')}
               </DsHeading>
 
-              <DsSearch
-                data-size='md'
-                className={classes.searchContainer}
-              >
-                <DsSearch.Input
-                  aria-label={t('api_delegation.search_for_buisness')}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    handleSearch(event.target.value);
-                  }}
-                  value={searchString}
-                />
-                <DsSearch.Clear
-                  aria-label={t('common.clear')}
-                  onClick={() => {
-                    handleSearch('');
-                  }}
-                />
-              </DsSearch>
+              <label>
+                {t('api_delegation.search_for_buisness')}:
+                <DsSearch data-size='md'>
+                  <DsSearch.Input
+                    aria-label={t('api_delegation.search_for_buisness')}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      handleSearch(event.target.value);
+                    }}
+                    value={searchString}
+                  />
+                  <DsSearch.Clear
+                    aria-label={t('common.clear')}
+                    onClick={() => {
+                      handleSearch('');
+                    }}
+                  />
+                </DsSearch>
+              </label>
               {viewLoading ? (
                 <div className={cn(common.spinnerContainer, classes.viewLoadingSection)}>
                   <DsSpinner aria-label={t('common.loading')} />
