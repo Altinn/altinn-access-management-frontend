@@ -458,7 +458,7 @@
     },
     "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
     "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten.",
-    "no_permissions_fulltext": "Virksomheten kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlige"
+    "no_permissions_fulltext": "Virksomheten kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlige."
   },
   "new_user_modal": {
     "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
