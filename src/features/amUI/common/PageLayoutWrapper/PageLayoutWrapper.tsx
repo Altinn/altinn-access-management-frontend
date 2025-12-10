@@ -6,7 +6,6 @@ import { useLocation } from 'react-router';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { InfoModal } from './InfoModal';
-import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
@@ -30,7 +29,6 @@ export const PageLayoutWrapper = ({
   children,
 }: PageLayoutWrapperProps): React.ReactNode => {
   const { t } = useTranslation();
-  const useNewHeaderFlag = useNewHeader();
   const { data: reportee } = useGetReporteeQuery();
   const { pathname, search } = useLocation();
 
@@ -43,7 +41,7 @@ export const PageLayoutWrapper = ({
   return (
     <RootProvider languageCode={languageCode as LanguageCode}>
       <Layout
-        useGlobalHeader={useNewHeaderFlag}
+        useGlobalHeader
         color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
         theme='subtle'
         header={header}

@@ -1,11 +1,10 @@
 import { getHostUrl, getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { GeneralPath } from '@/routes/paths';
-import { formatDisplayName, HeaderProps, useAccountSelector } from '@altinn/altinn-components';
+import { HeaderProps, useAccountSelector } from '@altinn/altinn-components';
 import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/AccountSelector';
 import { GlobalSearchProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/GlobalSearch';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useTranslation } from 'react-i18next';
-import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import {
   useGetReporteeQuery,
   useGetUserProfileQuery,
@@ -15,18 +14,21 @@ import {
   useRemoveFavoriteActorUuidMutation,
 } from '@/rtk/features/userInfoApi';
 import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader';
-import { useAccounts } from './useAccounts';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 
-const getAccountType = (type: string): 'company' | 'person' => {
-  return type === 'Organization' ? 'company' : 'person';
+export const handleSelectAccount = (accountUuid: string) => {
+  // always redirect to start-page when changing account
+  const redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
+  const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
+  const queryKey = 'P';
+  changeUrl.searchParams.set(queryKey, accountUuid);
+  changeUrl.searchParams.set('goTo', redirectUrl);
+  (window as Window).open(changeUrl.toString(), '_self');
 };
 
 export const useHeader = ({ openAccountMenu = false }: { openAccountMenu?: boolean }) => {
   const { t, i18n } = useTranslation();
-  const useNewHeaderFlag = useNewHeader();
-  const [searchString, setSearchString] = useState<string>('');
   const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(openAccountMenu);
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
@@ -95,107 +97,40 @@ export const useHeader = ({ openAccountMenu = false }: { openAccountMenu?: boole
 
     onSelectAccount: (accountId: string) => {
       if (accountId !== reportee?.partyUuid) {
-        const redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
-        const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-        changeUrl.searchParams.set('P', accountId);
-        changeUrl.searchParams.set('goTo', redirectUrl);
-        (window as Window).open(changeUrl.toString(), '_self');
+        handleSelectAccount(accountId);
       }
       setShouldOpenAccountMenu(false);
     },
   });
 
-  // For old header
-  const { accounts, accountGroups } = useAccounts({ reporteeList });
+  const search: GlobalSearchProps = {
+    onSearch: (value: string) => {
+      const encodedValue = encodeURIComponent(value);
+      window.location.href = `${getHostUrl()}sok?q=${encodedValue}`;
+    },
+  };
 
-  if (useNewHeaderFlag) {
-    const search: GlobalSearchProps = {
-      onSearch: (value: string) => {
-        const encodedValue = encodeURIComponent(value);
-        window.location.href = `${getHostUrl()}sok?q=${encodedValue}`;
-      },
-    };
+  const accountSelector: AccountSelectorProps = {
+    ...accountSelectorData,
+    forceOpenFullScreen: shouldOpenAccountMenu,
+  };
 
-    const accountSelector: AccountSelectorProps = {
-      ...accountSelectorData,
-      forceOpenFullScreen: shouldOpenAccountMenu,
-    };
-
-    header = {
-      locale: {
-        title: t('header.locale_title'),
-        options: [
-          { label: 'Norsk (bokmål)', value: 'no_nb', checked: i18n.language === 'no_nb' },
-          { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
-          { label: 'English', value: 'en', checked: i18n.language === 'en' },
-        ],
-        onSelect: onChangeLocale,
-      },
-      logo: { href: getAltinnStartPageUrl(i18n.language), title: 'Altinn' },
-      globalMenu: globalMenu,
-      desktopMenu: desktopMenu,
-      mobileMenu: mobileMenu,
-      globalSearch: search,
-      accountSelector: accountSelector,
-    };
-  } else {
-    const accountMenu = {
-      items: accounts,
-      groups: accountGroups,
-      search: {
-        name: 'account-search',
-        value: searchString,
-        onChange: (event: ChangeEvent<HTMLInputElement>) => {
-          setSearchString(event.target.value);
-        },
-        placeholder: t('header.search-label'),
-        hidden: false,
-        getResultsLabel: (hits: number) => {
-          return `${hits} ${t('header.search-hits')}`;
-        },
-      },
-      isVirtualized: true,
-    };
-
-    const onSelectAccount = (accountId: string) => {
-      // check if this is a person; then redirect to consents page
-      const redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
-      const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-      changeUrl.searchParams.set('R', accountId);
-      changeUrl.searchParams.set('goTo', redirectUrl);
-      (window as Window).open(changeUrl.toString(), '_self');
-    };
-
-    const globalMenuOld = { ...globalMenu, onSelectAccount, accountMenu };
-
-    const currentAccountName = formatDisplayName({
-      fullName: reportee?.name || '',
-      type: reportee?.type === 'Person' ? 'person' : 'company',
-      reverseNameOrder: reportee?.type === 'Person' ? true : false,
-    });
-
-    header = {
-      locale: {
-        title: t('header.locale_title'),
-        options: [
-          { label: 'Norsk (bokmål)', value: 'no_nb', checked: i18n.language === 'no_nb' },
-          { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
-          { label: 'English', value: 'en', checked: i18n.language === 'en' },
-        ],
-        onSelect: onChangeLocale,
-      },
-      logo: { href: getAltinnStartPageUrl(i18n.language), title: 'Altinn' },
-      currentAccount: {
-        name: currentAccountName,
-        type: getAccountType(reportee?.type ?? ''),
-        id: reportee?.partyId || '',
-        icon: { name: currentAccountName, type: getAccountType(reportee?.type ?? '') },
-      },
-      globalMenu: globalMenuOld,
-      desktopMenu: desktopMenu,
-      mobileMenu: mobileMenu,
-    };
-  }
-
+  header = {
+    locale: {
+      title: t('header.locale_title'),
+      options: [
+        { label: 'Norsk (bokmål)', value: 'no_nb', checked: i18n.language === 'no_nb' },
+        { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
+        { label: 'English', value: 'en', checked: i18n.language === 'en' },
+      ],
+      onSelect: onChangeLocale,
+    },
+    logo: { href: getAltinnStartPageUrl(i18n.language), title: 'Altinn' },
+    globalMenu: globalMenu,
+    desktopMenu: desktopMenu,
+    mobileMenu: mobileMenu,
+    globalSearch: search,
+    accountSelector: accountSelector,
+  };
   return { header, languageCode };
 };

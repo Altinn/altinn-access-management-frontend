@@ -64,10 +64,6 @@ export const useNewActorList = () => {
   return window.featureFlags?.useNewActorsList === true;
 };
 
-export const useNewHeader = () => {
-  return window.featureFlags?.useNewHeader === true;
-};
-
 export const displayPrivDelegation = () => {
   return window.featureFlags?.displayPrivDelegation === true;
 };
