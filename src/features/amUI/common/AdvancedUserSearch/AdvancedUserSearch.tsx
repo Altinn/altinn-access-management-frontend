@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { DsSearch, DsParagraph, DsButton } from '@altinn/altinn-components';
+import { DsSearch, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { ExtendedUser, User } from '@/rtk/features/userInfoApi';
@@ -11,6 +11,7 @@ import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
 import { ConnectionsList } from './ConnectionsList';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface AdvancedUserSearchProps {
   includeSelfAsChild: boolean;
@@ -42,7 +43,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
-
+  const { fromParty } = usePartyRepresentation();
   const filteredConnections = useMemo(() => filterAvailableUserTypes(connections), [connections]);
 
   const filteredIndirectConnections = useMemo(
@@ -60,12 +61,13 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
       searchString: trimmedQuery,
     });
 
+  const hasDirectConnections = (connections?.length ?? 0) > 0;
   const directHasResults = (users?.length ?? 0) > 0;
   const indirectHasResults = (indirectUsers?.length ?? 0) > 0;
 
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
   const showIndirectList = isQuery && indirectHasResults && canDelegate;
-  const showEmptyState = !directHasResults && !indirectHasResults;
+  const showEmptyState = !directHasResults && !indirectHasResults && hasDirectConnections;
 
   const handleAddNewUser = async (user: User) => {
     if (onDelegate) {
@@ -104,6 +106,16 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 
       <div className={classes.results}>
         <>
+          {!hasDirectConnections && !isLoading && (
+            <DsParagraph
+              data-size='sm'
+              className={classes.tabDescription}
+            >
+              {t('package_poa_details_page.users_tab.no_users', {
+                fromparty: fromParty?.name,
+              })}
+            </DsParagraph>
+          )}
           {showDirectNoResults && (
             <h3 className={classes.subHeader}>{t('advanced_user_search.direct_connections')}</h3>
           )}

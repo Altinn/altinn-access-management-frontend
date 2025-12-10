@@ -16,6 +16,10 @@
   align-items: center;
 }
 
+.infoLine svg {
+  min-width: 24px;
+}
+
 .delegationCheckInfoIcon {
   color: var(--ds-color-warning-base-default);
   margin-right: 0.3rem;

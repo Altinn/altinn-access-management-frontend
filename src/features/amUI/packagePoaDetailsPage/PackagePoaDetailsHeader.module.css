@@ -2,6 +2,7 @@
   display: grid;
   grid-template-areas:
     'icon heading'
+    'status status'
     'description description';
   grid-template-columns: auto 1fr;
   gap: 1rem;
@@ -23,6 +24,10 @@
   grid-area: heading;
   max-width: 100%;
   word-break: break-word;
+}
+
+.statusSection {
+  grid-area: status;
 }
 
 .pageDescription {
