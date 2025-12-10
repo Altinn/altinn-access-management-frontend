@@ -760,7 +760,7 @@
   },    
   "poa_status": {
     "no_permissions": "Du må gi fullmakt",
-    "no_permissions_fulltext": "Du kan ha innhald som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldingar og tenester skal bli synlege.",
+    "no_permissions_fulltext": "Virksemden kan ha innhald som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldingar og tenester skal bli synlege.",
     "cannot_delegate_here": "Tilgang til denne pakken kan ikkje bli gitt eller fjerna her.",
     "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta."
   },
