@@ -7,7 +7,7 @@ import {
   InformationSquareFillIcon,
   ExternalLinkIcon,
 } from '@navikt/aksel-icons';
-import statusClasses from '../StatusSection.module.css';
+import statusClasses from '../../StatusSection/StatusSection.module.css';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { RoleResourcesSection } from './RoleResourcesSection';

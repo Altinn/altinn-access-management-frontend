@@ -323,11 +323,6 @@
       "delegation_check_error_heading": "Technical error",
       "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",
       "delegation_check_error_message_plural": "A technical error prevents you from giving the user one or more access packages. Please contact Altinn user service if the problem persists."
-    },
-    "access_status": {
-      "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
-      "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
-      "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted."
     }
   },
   "role": {
@@ -420,10 +415,7 @@
     "error_message": "Failed to give power of attorney to {{name}}",
     "edit_success": "The power of attorney was updated",
     "package_services": "Grants access to {{count}} services",
-    "has_package_message": "{{user_name}} has this power of attorney.",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
-    "cannot_delegate_here": "Access to this package cannot be granted here.",
-    "delegation_check_not_delegable": "You cannot grant this access.",
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
@@ -457,6 +449,17 @@
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
       "missing_rights": "You cannot delegate this authorization to others because you do not have it yourself. The general manager or main administrator can help you with this."
     }
+  },
+  "status_section": {
+    "has_package_message": "{{user_name}} has this power of attorney.",
+    "access_status": {
+      "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
+      "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
+      "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted."
+    },
+    "cannot_delegate_here": "Access to this package cannot be granted here.",
+    "delegation_check_not_delegable": "You cannot grant this access.",
+    "no_permissions_fulltext": "Your organization might have content that no one sees. You must grant access to {{packageName}} for such messages and services to be visible."
   },
   "new_user_modal": {
     "not_found_error_person": "Did not find a user with the given name and national identity number. Please check that you entered the correct information.",
@@ -763,10 +766,7 @@
     "heading": "Powers of attorney overview for {{name}}"
   },
   "poa_status": {
-    "no_permissions": "You have to give power of attorney",
-    "no_permissions_fulltext": "Your organization might have content that no one sees. You must grant access to {{packageName}} for such messages and services to be visible.",
-    "cannot_delegate_here": "Access to this package cannot be granted here.",
-    "delegation_check_not_delegable": "You cannot grant this access."
+    "no_permissions": "You have to give power of attorney"
   },
   "package_poa_details_page": {
     "page_title": "Power of attorney details - Altinn",
