@@ -764,7 +764,7 @@
   },
   "poa_status": {
     "no_permissions": "You have to give power of attorney",
-    "no_permissions_fulltext": "You might have content that no one sees. You must grant access to {{packageName}} for such messages and services to be visible.",
+    "no_permissions_fulltext": "Your organization might have content that no one sees. You must grant access to {{packageName}} for such messages and services to be visible.",
     "cannot_delegate_here": "Access to this package cannot be granted here.",
     "delegation_check_not_delegable": "You cannot grant this access."
   },
