@@ -106,7 +106,6 @@ export const ChooseOrgPage = () => {
                 {t('api_delegation.search_for_buisness')}:
                 <DsSearch data-size='md'>
                   <DsSearch.Input
-                    aria-label={t('api_delegation.search_for_buisness')}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                       handleSearch(event.target.value);
                     }}
