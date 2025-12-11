@@ -16,12 +16,8 @@ export const A2ErrorPage = () => {
   const timestamp = new Date();
 
   const renderContent = () => {
-    switch (error.status) {
-      case 404:
-        return <PageNotFound />;
-      default:
-        return <UnknownError />;
-    }
+    if (error === null || error?.status === 404) return <PageNotFound />;
+    else return <UnknownError />;
   };
 
   return (
@@ -40,14 +36,14 @@ export const A2ErrorPage = () => {
                 data-size='sm'
                 className={classes.errorMessage}
               >
-                {t('common.error_status_code')}: {error.status}
+                {t('common.error_status_code')}: {error?.status}
               </DsParagraph>
               <DsParagraph
                 data-size='sm'
                 variant='long'
                 className={classes.errorMessage}
               >
-                {t('common.error_message')}: {error.error?.message ?? error?.message}
+                {t('common.error_message')}: {error?.error?.message ?? error?.message}
               </DsParagraph>
               {renderContent()}
             </div>
