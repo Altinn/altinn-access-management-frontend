@@ -208,6 +208,11 @@ export const Router = createBrowserRouter(
           path={amUIPath.Requests}
           element={<RequestPage />}
         />
+        {/* Catch-all for any unmatched routes under root */}
+        <Route
+          path='*'
+          element={<ErrorPage />}
+        />
       </Route>
     </>,
   ),
