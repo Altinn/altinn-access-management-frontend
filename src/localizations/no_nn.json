@@ -313,7 +313,7 @@
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakkar.",
     "no_packages": "Ingen tilgangspakkar tilgjengelege.",
     "no_matching_search": "Ingen treff på søket",
-    "info_alert_text": "Tilgangspakkar skal erstatte dagens Altinn-roller. Dei vil bli fylt med fleire tenester etter kvart. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/profil/tilgangspakker/'>hjelpesida om tilgangspakkar</a>.",
+    "info_alert_text": "Tilgangspakkar skal erstatte dagens Altinn-roller. Dei vil bli fylt med fleire tenester etter kvart. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
     "person_info_alert": "Det er ikkje mogleg å gi og fjerne fullmakter til personar heilt enno. Dette vil komme seinare.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
@@ -760,7 +760,7 @@
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}"
-  },    
+  },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt"
   },
@@ -772,7 +772,6 @@
     "back_to_overview_link": "Gå tilbake til oversikta",
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "package_revocation_success": "{{name}} har ikkje lenger fullmakt til {{accessPackage}}.",
-
     "users_tab": {
       "description": "Søk etter brukarar for å gi eller slette fullmakter.",
       "user_search_placeholder": "Søk etter person eller verksemd",
