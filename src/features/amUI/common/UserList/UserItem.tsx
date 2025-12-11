@@ -1,5 +1,5 @@
 import type { UserListItemProps } from '@altinn/altinn-components';
-import { formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
+import { formatDate, formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
 import type { ElementType, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 
 import { type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType } from '@/rtk/features/connectionApi';
-import { formatDateToNorwegian } from '@/resources/utils';
 
 import classes from './UserList.module.css';
 import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
@@ -18,8 +17,10 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
 }
 
-interface UserItemProps
-  extends Pick<UserListItemProps, 'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'> {
+interface UserItemProps extends Pick<
+  UserListItemProps,
+  'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'
+> {
   user: ExtendedUser | User;
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
@@ -102,7 +103,7 @@ export const UserItem = ({
   const description = (user: ExtendedUser | User) => {
     let descriptionString = subUnit ? '↳ ' : '';
     if (user.type === ConnectionUserType.Person) {
-      const formattedDate = formatDateToNorwegian(user.dateOfBirth || undefined);
+      const formattedDate = formatDate(user.dateOfBirth || undefined);
       descriptionString += formattedDate
         ? t('common.date_of_birth') + ' ' + formattedDate
         : undefined;

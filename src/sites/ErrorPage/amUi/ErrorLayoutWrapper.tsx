@@ -1,6 +1,5 @@
 import { InfoModal } from '@/features/amUI/common/PageLayoutWrapper/InfoModal';
 import { useFooter } from '@/features/amUI/common/PageLayoutWrapper/useFooter';
-import { useGlobalMenu } from '@/features/amUI/common/PageLayoutWrapper/useGlobalMenu';
 import { useHeader } from '@/features/amUI/common/PageLayoutWrapper/useHeader';
 import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import { GeneralPath } from '@/routes/paths';
