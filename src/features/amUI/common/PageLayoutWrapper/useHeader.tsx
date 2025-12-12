@@ -27,14 +27,20 @@ export const handleSelectAccount = (accountUuid: string) => {
   (window as Window).open(changeUrl.toString(), '_self');
 };
 
-export const useHeader = ({ openAccountMenu = false }: { openAccountMenu?: boolean }) => {
+export const useHeader = ({
+  openAccountMenu = false,
+  hideAccountSelector = false,
+}: {
+  openAccountMenu?: boolean;
+  hideAccountSelector?: boolean;
+}) => {
   const { t, i18n } = useTranslation();
   const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(openAccountMenu);
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: userProfile, isLoading: isLoadingUserProfile } = useGetUserProfileQuery();
   const { data: reporteeList, isLoading: isLoadingReporteeList } =
-    useGetReporteeListForAuthorizedUserQuery(undefined);
+    useGetReporteeListForAuthorizedUserQuery(undefined, { skip: hideAccountSelector });
   const { data: favoriteAccountUuids, isLoading: isLoadingFavoriteAccounts } =
     useGetFavoriteActorUuidsQuery();
   const [addFavoriteActorUuid] = useAddFavoriteActorUuidMutation();
@@ -91,7 +97,11 @@ export const useHeader = ({ openAccountMenu = false }: { openAccountMenu?: boole
     selfAccountUuid: userProfile?.uuid,
     isVirtualized: reporteeList && reporteeList.length > 20,
     isLoading:
-      !reporteeList || isLoadingReporteeList || isLoadingReportee || isLoadingFavoriteAccounts,
+      !reporteeList ||
+      isLoadingReporteeList ||
+      isLoadingReportee ||
+      isLoadingFavoriteAccounts ||
+      hideAccountSelector,
 
     onToggleFavorite: onToggleFavorite,
 

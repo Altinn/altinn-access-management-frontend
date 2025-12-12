@@ -4,7 +4,7 @@ import { DsHeading, DsParagraph, DsLink } from '@altinn/altinn-components';
 
 import SeagullIcon from '@/assets/Seagull.svg?react';
 
-import classes from '../ErrorPage.module.css';
+import classes from '../A2ErrorPage.module.css';
 
 export const UnknownError = () => {
   const { t } = useTranslation();
