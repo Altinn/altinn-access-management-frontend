@@ -1,3 +1,4 @@
+import { usePendingSystemusersBadge } from '@/resources/hooks/usePendingSystemusersBadge';
 import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
@@ -38,6 +39,8 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
 
+  const { systemuserBadge } = usePendingSystemusersBadge();
+
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
 
@@ -69,7 +72,10 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     hasCreateSystemUserPermission(reportee) ||
     hasSystemUserClientAdminPermission(reportee, isClientAdmin)
   ) {
-    items.push(getSystemUserMenuItem(pathname, isLoading, isSmall));
+    items.push({
+      ...getSystemUserMenuItem(pathname, isLoading, isSmall),
+      badge: systemuserBadge,
+    });
   }
 
   if (canAccessSettings && displaySettingsPage) {

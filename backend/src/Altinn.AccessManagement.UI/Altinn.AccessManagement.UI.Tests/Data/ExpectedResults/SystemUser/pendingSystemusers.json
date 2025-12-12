@@ -1,0 +1,32 @@
+[
+  {
+    "id": "8c53c02f-0b7b-4439-abc9-f9ea2356e0ea",
+    "integrationTitle": "Fiken light",
+    "partyId": 51329012,
+    "created": "0001-01-01T00:00:00",
+    "system": {
+      "systemId": "910493353_fiken_demo_product",
+      "systemVendorOrgNumber": "910493353",
+      "systemVendorOrgName": "LEPSØY OG TONSTAD",
+      "name": "N/A"
+    },
+    "userType": "Standard",
+    "resources": [],
+    "accessPackages": []
+  },
+  {
+    "id": "dbea3869-d863-47a3-b730-537a3a1336e7",
+    "integrationTitle": "Fiken supersystem",
+    "partyId": 51329012,
+    "created": "0001-01-01T00:00:00",
+    "system": {
+      "systemId": "910493353_fiken_demo_product",
+      "systemVendorOrgNumber": "910493353",
+      "systemVendorOrgName": "LEPSØY OG TONSTAD",
+      "name": "N/A"
+    },
+    "userType": "Agent",
+    "resources": [],
+    "accessPackages": []
+  }
+]

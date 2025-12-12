@@ -18,6 +18,7 @@ const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
 enum Tags {
   SystemUsers = 'Systemusers',
+  PendingSystemUsers = 'PendingSystemusers',
 }
 
 interface NewSystemUserRequest {
@@ -46,7 +47,7 @@ export const systemUserApi = createApi({
       return headers;
     },
   }),
-  tagTypes: [Tags.SystemUsers],
+  tagTypes: [Tags.SystemUsers, Tags.PendingSystemUsers],
   endpoints: (builder) => ({
     // system user reportee
     getSystemUserReportee: builder.query<ReporteeInfo, string>({
@@ -116,6 +117,18 @@ export const systemUserApi = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: [Tags.SystemUsers],
+    }),
+    getPendingSystemUserRequests: builder.query<SystemUser[], string>({
+      query: (partyUuid) => `systemuser/${partyUuid}/pending`,
+      providesTags: [Tags.PendingSystemUsers],
+      transformResponse: (response: SystemUser[]) => {
+        return response.map((x) => {
+          return {
+            ...x,
+            system: formatSystemVendorName(x.system),
+          };
+        });
+      },
     }),
 
     // agent delegation systemuser
@@ -217,14 +230,21 @@ export const systemUserApi = createApi({
         url: `systemuser/request/${partyId}/${requestId}/approve`,
         method: 'POST',
       }),
-      invalidatesTags: [Tags.SystemUsers],
+      invalidatesTags: [Tags.SystemUsers, Tags.PendingSystemUsers],
     }),
     rejectSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({
         url: `systemuser/request/${partyId}/${requestId}/reject`,
         method: 'POST',
       }),
-      invalidatesTags: [Tags.SystemUsers],
+      invalidatesTags: [Tags.SystemUsers, Tags.PendingSystemUsers],
+    }),
+    escalateRequest: builder.mutation<void, { partyId: string; requestId: string }>({
+      query: ({ partyId, requestId }) => ({
+        url: `systemuser/request/${partyId}/${requestId}/escalate`,
+        method: 'POST',
+      }),
+      invalidatesTags: [Tags.PendingSystemUsers],
     }),
 
     // change request
@@ -242,14 +262,14 @@ export const systemUserApi = createApi({
         url: `systemuser/changerequest/${partyId}/${changeRequestId}/approve`,
         method: 'POST',
       }),
-      invalidatesTags: [Tags.SystemUsers],
+      invalidatesTags: [Tags.SystemUsers, Tags.PendingSystemUsers],
     }),
     rejectChangeRequest: builder.mutation<void, { partyId: string; changeRequestId: string }>({
       query: ({ partyId, changeRequestId }) => ({
         url: `systemuser/changerequest/${partyId}/${changeRequestId}/reject`,
         method: 'POST',
       }),
-      invalidatesTags: [Tags.SystemUsers],
+      invalidatesTags: [Tags.SystemUsers, Tags.PendingSystemUsers],
     }),
 
     // agent request
@@ -267,20 +287,27 @@ export const systemUserApi = createApi({
         url: `systemuser/agentrequest/${partyId}/${requestId}/approve`,
         method: 'POST',
       }),
-      invalidatesTags: [Tags.SystemUsers],
+      invalidatesTags: [Tags.SystemUsers, Tags.PendingSystemUsers],
     }),
     rejectAgentSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({
         url: `systemuser/agentrequest/${partyId}/${requestId}/reject`,
         method: 'POST',
       }),
-      invalidatesTags: [Tags.SystemUsers],
+      invalidatesTags: [Tags.SystemUsers, Tags.PendingSystemUsers],
+    }),
+    escalateAgentRequest: builder.mutation<void, { partyId: string; requestId: string }>({
+      query: ({ partyId, requestId }) => ({
+        url: `systemuser/agentrequest/${partyId}/${requestId}/escalate`,
+        method: 'POST',
+      }),
+      invalidatesTags: [Tags.PendingSystemUsers],
     }),
   }),
 });
 
 const apiWithTag = systemUserApi.enhanceEndpoints({
-  addTagTypes: [Tags.SystemUsers],
+  addTagTypes: [Tags.SystemUsers, Tags.PendingSystemUsers],
 });
 
 export const {
@@ -308,6 +335,9 @@ export const {
   useGetAgentSystemUserRequestQuery,
   useApproveAgentSystemUserRequestMutation,
   useRejectAgentSystemUserRequestMutation,
+  useGetPendingSystemUserRequestsQuery,
+  useEscalateRequestMutation,
+  useEscalateAgentRequestMutation,
 } = apiWithTag;
 
 export const { endpoints, reducerPath, reducer, middleware } = apiWithTag;
