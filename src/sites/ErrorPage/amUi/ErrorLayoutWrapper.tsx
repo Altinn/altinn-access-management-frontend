@@ -1,7 +1,6 @@
 import { InfoModal } from '@/features/amUI/common/PageLayoutWrapper/InfoModal';
 import { useFooter } from '@/features/amUI/common/PageLayoutWrapper/useFooter';
 import { useHeader } from '@/features/amUI/common/PageLayoutWrapper/useHeader';
-import { useNewHeader } from '@/resources/utils/featureFlagUtils';
 import { GeneralPath } from '@/routes/paths';
 import { LanguageCode, Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +8,6 @@ import { useLocation } from 'react-router';
 
 export const ErrorLayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   const { t } = useTranslation();
-  const useNewHeaderFlag = useNewHeader();
   const { pathname, search } = useLocation();
 
   const { header, languageCode } = useHeader({ openAccountMenu: false, hideAccountSelector: true });
@@ -18,7 +16,7 @@ export const ErrorLayoutWrapper = ({ children }: { children: React.ReactNode }) 
   return (
     <RootProvider languageCode={languageCode as LanguageCode}>
       <Layout
-        useGlobalHeader={useNewHeaderFlag}
+        useGlobalHeader
         color={'neutral'}
         theme='default'
         header={header}
