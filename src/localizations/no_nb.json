@@ -306,7 +306,6 @@
     "current_access_packages_title": "{{count}} tilgangspakker",
     "give_new_button": "Gi fullmakt",
     "search_label": "Søk etter tilgangspakker",
-    "no_permissions": "Du må gi fullmakt",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
     "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{accessPackage}}.",
@@ -317,17 +316,12 @@
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
     "no_packages": "Ingen tilgangspakker er tilgjengelige.",
     "no_matching_search": "Ingen treff på søket",
-    "info_alert_text": "Tilgangspakker skal erstatte dagens Altinn-roller. De vil fylles med flere tjenester etterhvert. Les mer om dette på <a href='https://info.altinn.no/hjelp/profil/tilgangspakker/'>hjelpesiden om tilgangspakker</a>.",
+    "info_alert_text": "Tilgangspakker skal erstatte dagens Altinn-roller. De vil fylles med flere tjenester etterhvert. Les mer om dette på <a href='https://info.altinn.no/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
     "person_info_alert": "Det er ikke mulig å gi og fjerne fullmakter til personer helt enda. Dette vil komme senere.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer.",
       "delegation_check_error_message_plural": "En teknisk feil sperrer deg fra å gi fullmakt til en eller flere tilgangspakker. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer."
-    },
-    "access_status": {
-      "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes."
     }
   },
   "role": {
@@ -420,10 +414,7 @@
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tjenester",
-    "has_package_message": "{{user_name}} har denne fullmakten.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
-    "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
-    "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten fordi du mangler den selv.",
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
@@ -457,6 +448,17 @@
       "access_list_service": "Hvem som får benytte denne tjenesten bestemmes av {{resourceOwner}}, og {{reportee}} er ikke gitt den muligheten. Vi anbefaler dere å ta kontakt med {{resourceOwner}}.",
       "missing_rights": "Du får ikke gitt denne fullmakten til andre fordi du mangler den selv. Daglig leder eller hovedadministrator kan hjelpe deg med dette."
     }
+  },
+  "status_section": {
+    "has_package_message": "{{user_name}} har denne fullmakten.",
+    "access_status": {
+      "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
+      "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
+      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes."
+    },
+    "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
+    "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten.",
+    "no_permissions_fulltext": "Virksomheten kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlige."
   },
   "new_user_modal": {
     "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
@@ -761,6 +763,9 @@
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}"
+  },
+  "poa_status": {
+    "no_permissions": "Du må gi fullmakt."
   },
   "package_poa_details_page": {
     "page_title": "Fullmaktsdetaljer - Altinn",

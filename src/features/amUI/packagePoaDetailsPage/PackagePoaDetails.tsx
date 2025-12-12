@@ -10,13 +10,15 @@ import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { ResourceList } from '../common/ResourceList/ResourceList';
 import { UsersTab } from './UsersTab';
+import { StatusSection } from '../common/StatusSection/StatusSection';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
+import { isCriticalAndUndelegated } from '../common/AccessPackageList/UndelegatedPackageWarning';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
-  const { canDelegatePackage, isLoading: isDelegationLoading } = useAccessPackageDelegationCheck();
+  const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
   const {
     data: accessPackage,
@@ -33,8 +35,10 @@ export const PackagePoaDetails = () => {
 
   const [chosenTab, setChosenTab] = useState('users');
 
-  const packageId = accessPackage?.id ?? id;
-  const canDelegate = packageId ? canDelegatePackage(packageId)?.result !== false : true;
+  const cannotDelegateHere = !!(accessPackage && accessPackage.isAssignable === false);
+  const showUndelegatedWarning = !!(accessPackage && isCriticalAndUndelegated(accessPackage));
+  const showDelegationCheckWarning =
+    !!accessPackage && canDelegatePackage(accessPackage.id)?.result === false;
 
   // Show error alert with link back to overview if error fetching the Package
   if (error) {
@@ -55,6 +59,14 @@ export const PackagePoaDetails = () => {
           isLoading={isLoading}
           packageName={accessPackage?.name}
           packageDescription={accessPackage?.description}
+          statusSection={
+            <StatusSection
+              cannotDelegateHere={cannotDelegateHere}
+              showDelegationCheckWarning={showDelegationCheckWarning}
+              showUndelegatedWarning={showUndelegatedWarning}
+              undelegatedPackageName={accessPackage?.name}
+            />
+          }
         />
       </div>
       <DsTabs
@@ -76,9 +88,8 @@ export const PackagePoaDetails = () => {
           <UsersTab
             accessPackage={accessPackage}
             fromParty={fromParty}
-            isLoading={isLoading || isDelegationLoading}
+            isLoading={isLoading}
             isFetching={isFetching}
-            canDelegate={canDelegate}
           />
         </DsTabs.Panel>
         <DsTabs.Panel

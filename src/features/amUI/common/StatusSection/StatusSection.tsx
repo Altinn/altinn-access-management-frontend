@@ -4,9 +4,8 @@ import {
   InformationSquareFillIcon,
   XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
-import { Trans } from 'react-i18next';
-import { t } from 'i18next';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { InheritedStatusType, type InheritedStatusMessageType } from '../useInheritedStatus';
@@ -15,27 +14,42 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 import classes from './StatusSection.module.css';
 
 const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
-  [InheritedStatusType.ViaRole]: 'access_packages.access_status.via_role',
-  [InheritedStatusType.ViaConnection]: 'access_packages.access_status.via_connection',
-  [InheritedStatusType.ViaKeyRole]: 'access_packages.access_status.via_keyrole',
+  [InheritedStatusType.ViaRole]: 'status_section.access_status.via_role',
+  [InheritedStatusType.ViaConnection]: 'status_section.access_status.via_connection',
+  [InheritedStatusType.ViaKeyRole]: 'status_section.access_status.via_keyrole',
 };
 
-export const StatusSection = ({
-  userHasAccess,
-  showMissingRightsMessage,
-  inheritedStatus,
-  delegationCheckText,
-  cannotDelegateHere = false,
-}: {
-  userHasAccess: boolean;
-  showMissingRightsMessage: boolean;
+export interface StatusSectionProps {
+  userHasAccess?: boolean;
   inheritedStatus?: InheritedStatusMessageType;
-  delegationCheckText?: string;
   cannotDelegateHere?: boolean;
-}) => {
+  showDelegationCheckWarning?: boolean;
+  delegationCheckTranslationKey?: string;
+  delegationCheckValues?: Record<string, unknown>;
+  showUndelegatedWarning?: boolean;
+  undelegatedPackageName?: string;
+}
+
+export const StatusSection = ({
+  userHasAccess = false,
+  inheritedStatus,
+  cannotDelegateHere = false,
+  showDelegationCheckWarning = false,
+  delegationCheckTranslationKey = 'status_section.delegation_check_not_delegable',
+  delegationCheckValues,
+  showUndelegatedWarning = false,
+  undelegatedPackageName,
+}: StatusSectionProps) => {
+  const { t } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
 
-  if (!userHasAccess && !showMissingRightsMessage && !inheritedStatus && !cannotDelegateHere) {
+  if (
+    !userHasAccess &&
+    !inheritedStatus &&
+    !cannotDelegateHere &&
+    !showDelegationCheckWarning &&
+    !showUndelegatedWarning
+  ) {
     return null;
   }
 
@@ -64,12 +78,34 @@ export const StatusSection = ({
   });
 
   const formattedUserName = formattedToPartyName;
+  const shouldShowDelegationCheck = !cannotDelegateHere && showDelegationCheckWarning;
+
+  const delegationCheckValuesWithDefaults = {
+    you: t('common.you_uppercase'),
+    reporteeorg: formattedFromPartyName,
+    ...delegationCheckValues,
+  };
 
   return (
     <div
       className={classes.statusSection}
       aria-live='polite'
     >
+      {showUndelegatedWarning && (
+        <div className={classes.infoLine}>
+          <ExclamationmarkTriangleFillIcon
+            fontSize='1.5rem'
+            className={classes.warningIcon}
+          />
+          <DsParagraph data-size='xs'>
+            <Trans
+              i18nKey='status_section.no_permissions_fulltext'
+              values={{ packageName: undelegatedPackageName }}
+              components={{ b: <strong /> }}
+            />
+          </DsParagraph>
+        </div>
+      )}
       {userHasAccess && (
         <div className={classes.infoLine}>
           <CheckmarkCircleFillIcon
@@ -78,7 +114,7 @@ export const StatusSection = ({
           />
           <DsParagraph data-size='xs'>
             <Trans
-              i18nKey='delegation_modal.has_package_message'
+              i18nKey='status_section.has_package_message'
               values={{
                 user_name: formattedUserName,
               }}
@@ -112,7 +148,7 @@ export const StatusSection = ({
           />
           <DsParagraph data-size='xs'>
             <Trans
-              i18nKey='delegation_modal.cannot_delegate_here'
+              i18nKey='status_section.cannot_delegate_here'
               values={{
                 user_name: formattedUserName,
               }}
@@ -120,7 +156,7 @@ export const StatusSection = ({
           </DsParagraph>
         </div>
       )}
-      {!cannotDelegateHere && showMissingRightsMessage && (
+      {shouldShowDelegationCheck && (
         <div className={classes.infoLine}>
           <ExclamationmarkTriangleFillIcon
             fontSize='1.5rem'
@@ -128,12 +164,9 @@ export const StatusSection = ({
           />
           <DsParagraph data-size='xs'>
             <Trans
-              i18nKey={delegationCheckText ?? 'delegation_modal.delegation_check_not_delegable'}
+              i18nKey={delegationCheckTranslationKey}
               components={{ b: <strong /> }}
-              values={{
-                you: t('common.you_uppercase'),
-                reporteeorg: formattedFromPartyName,
-              }}
+              values={delegationCheckValuesWithDefaults}
             />
           </DsParagraph>
         </div>
