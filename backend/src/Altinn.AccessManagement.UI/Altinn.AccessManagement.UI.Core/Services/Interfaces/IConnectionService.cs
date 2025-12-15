@@ -16,12 +16,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<List<User>> GetReporteeConnections(int partyId);
 
         /// <summary>
-        /// Checks that a person with the provided ssn and lastname exists. If they do, the person's partyUuid is returned.
+        /// Checks that a person with the provided person identifier (SSN or username) and lastname exists. If they do, the person's partyUuid is returned.
         /// </summary>
-        /// <param name="ssn">The ssn of the user</param>
+        /// <param name="personIdentifier">The ssn or username of the user</param>
         /// <param name="lastname">The last name of the user</param>
-        /// <returns>The person's partyUuid if ssn and lastname correspond to the same person. Returns null if matching person is not found</returns>
-        Task<Guid?> ValidatePerson(string ssn, string lastname);
+        /// <returns>The person's partyUuid if personIdentifier and lastname correspond to the same person. Returns null if matching person is not found</returns>
+        Task<Guid?> ValidatePerson(string personIdentifier, string lastname);
 
         /// <summary>
         ///     Revokes all rights associated with a right holder by revoking their status as a right holder for another party.
@@ -37,7 +37,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="partyUuid">The uuid of the reportee party</param>
         /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder (only provided when rightholder is an org)</param>
-        /// <param name="personInput">The last name and ssn identifying the person to become a rightholder (only provided when rightolder is a person)</param>
+        /// <param name="personInput">The last name and person identifier (ssn or username) identifying the person to become a rightholder (only provided when rightolder is a person)</param>
         /// <returns>The guid of the newly added rightholder</returns>
         Task<Guid> AddReporteeRightHolderConnection(Guid partyUuid, Guid? rightholderPartyUuid, PersonInput personInput);
 

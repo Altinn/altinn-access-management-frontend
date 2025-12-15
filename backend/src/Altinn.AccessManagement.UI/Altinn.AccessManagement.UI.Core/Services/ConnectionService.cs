@@ -46,25 +46,33 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<Guid?> ValidatePerson(string ssn, string lastname)
+        public async Task<Guid?> ValidatePerson(string personIdentifier, string lastname)
         {
             // Check for bad input
-            string ssn_cleaned = ssn.Trim().Replace("\"", string.Empty);
+            string personIdentifierCleaned = personIdentifier.Trim().Replace("\"", string.Empty);
             string lastname_cleaned = lastname.Trim().Replace("\"", string.Empty);
-            if (ssn_cleaned.Length != 11 || !ssn_cleaned.All(char.IsDigit))
+            bool isSsn = IsValidSsn(personIdentifierCleaned);
+            bool isUsername = IsValidUsername(personIdentifierCleaned);
+            if (!isSsn && !isUsername)
             {
                 return null;
             }
 
-            // Check that a person with the provided ssn and last name exists 
-            Person person = await _registerClient.GetPerson(ssn_cleaned, lastname_cleaned);
+            if (!isSsn)
+            {
+                // We cannot validate usernames against the register, return null to signal not found
+                return null;
+            }
+
+            // Check that a person with the provided ssn and last name exists
+            Person person = await _registerClient.GetPerson(personIdentifierCleaned, lastname_cleaned);
 
             if (person == null)
             {
                 return null;
             }
 
-            Party personParty = await _registerClient.GetPartyForPerson(ssn_cleaned);
+            Party personParty = await _registerClient.GetPartyForPerson(personIdentifierCleaned);
 
             return personParty?.PartyUuid;
         }
@@ -87,17 +95,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 }
 
                 // Check for bad input
-                string ssn_cleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
+                string personIdentifierCleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
                 string lastname_cleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
-                if (ssn_cleaned.Length != 11 || !ssn_cleaned.All(char.IsDigit))
+                if (!IsValidSsn(personIdentifierCleaned) && !IsValidUsername(personIdentifierCleaned))
                 {
-                    throw new ArgumentException("Invalid SSN format");
+                    throw new ArgumentException("Invalid person identifier format");
                 }
 
                 PersonInput cleanedInput = new PersonInput
                 {
                     LastName = lastname_cleaned,
-                    PersonIdentifier = ssn_cleaned
+                    PersonIdentifier = personIdentifierCleaned
                 };
 
                 return await _connectionClient.PostNewRightHolderConnection(partyUuid, null, cleanedInput);
@@ -123,6 +131,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 _logger.LogError(ex, "Failed fetching rightholders for {PartyUuid}", partyUuid);
                 throw;
             }
+        }
+
+        private static bool IsValidSsn(string personIdentifier)
+        {
+            return personIdentifier.Length == 11 && personIdentifier.All(char.IsDigit);
+        }
+
+        private static bool IsValidUsername(string personIdentifier)
+        {
+            return personIdentifier.Length >= 6
+                && personIdentifier.All(char.IsLetterOrDigit)
+                && personIdentifier.Any(char.IsLetter);
         }
     }
 }

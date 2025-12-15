@@ -1,6 +1,6 @@
 import { Button, DsAlert, DsParagraph, DsTextfield } from '@altinn/altinn-components';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { User } from '@/rtk/features/userInfoApi';
 
@@ -12,6 +12,13 @@ import {
 } from '@/rtk/features/connectionApi';
 import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 
+const isValidSsnFormat = (personIdentifier: string) => /^\d{11}$/.test(personIdentifier);
+const isValidUsernameFormat = (personIdentifier: string) =>
+  /^[A-Za-z0-9]{6,}$/.test(personIdentifier);
+const containsLetter = (personIdentifier: string) => /[A-Za-z]/.test(personIdentifier);
+const isValidPersonIdentifierFormat = (personIdentifier: string) =>
+  isValidSsnFormat(personIdentifier) || isValidUsernameFormat(personIdentifier);
+
 export const NewPersonContent = ({
   onComplete,
   modalRef,
@@ -20,10 +27,12 @@ export const NewPersonContent = ({
   modalRef: React.RefObject<HTMLDialogElement | null>;
 }) => {
   const { t } = useTranslation();
-  const [ssn, setSsn] = useState('');
+  const [personIdentifier, setPersonIdentifier] = useState('');
   const [lastName, setLastName] = useState('');
   const [errorTime, setErrorTime] = useState<string>('');
-  const [ssnFormatError, setSsnFormatError] = useState<string>('');
+  const [personIdentifierFormatErrorKey, setPersonIdentifierFormatErrorKey] = useState<
+    string | null
+  >(null);
   const [lastNameFormatError, setLastNameFormatError] = useState<string>('');
 
   const [addRightHolder, { error, isError, isLoading }] = useAddRightHolderMutation();
@@ -38,7 +47,7 @@ export const NewPersonContent = ({
       : null;
 
   const navigateIfValidPerson = () => {
-    const personInput = { personIdentifier: ssn, lastName: lastName };
+    const personInput = { personIdentifier, lastName };
     addRightHolder({ personInput })
       .unwrap()
       .then((toUuid) => {
@@ -61,7 +70,6 @@ export const NewPersonContent = ({
     return <DsAlert data-color='info'>{t('new_user_modal.limited_preview_message')}</DsAlert>;
   }
 
-  const isValidSsnFormat = () => ssn.length === 11 && /^\d{11}$/.test(ssn);
   const isValidLastnameFormat = () => lastName.length >= 1;
 
   return (
@@ -74,13 +82,33 @@ export const NewPersonContent = ({
       )}
       <DsTextfield
         className={classes.textField}
-        label={t('common.ssn')}
+        label={t('new_user_modal.person_identifier')}
         data-size='sm'
-        onChange={(e) => setSsn(e.target.value)}
-        error={ssnFormatError}
+        onChange={(e) => setPersonIdentifier(e.target.value)}
+        error={
+          !isValidPersonIdentifierFormat(personIdentifier) && personIdentifierFormatErrorKey ? (
+            <Trans
+              i18nKey={personIdentifierFormatErrorKey}
+              components={{ br: <br /> }}
+            />
+          ) : null
+        }
         onBlur={() => {
-          const error = isValidSsnFormat() ? '' : t('new_user_modal.ssn_format_error');
-          setSsnFormatError(error);
+          const trimmedIdentifier = personIdentifier.trim();
+          if (!trimmedIdentifier.length) {
+            setPersonIdentifierFormatErrorKey(null);
+            return;
+          }
+          const hasLetter = containsLetter(trimmedIdentifier);
+          const errorKey = hasLetter
+            ? !isValidUsernameFormat(trimmedIdentifier)
+              ? 'new_user_modal.person_identifier_username_format_error'
+              : null
+            : !isValidSsnFormat(trimmedIdentifier)
+              ? 'new_user_modal.person_identifier_ssn_format_error'
+              : null;
+
+          setPersonIdentifierFormatErrorKey(errorKey);
         }}
       />
       <DsTextfield
@@ -96,7 +124,7 @@ export const NewPersonContent = ({
       />
       <div className={classes.validationButton}>
         <Button
-          disabled={!isValidSsnFormat() || !isValidLastnameFormat()}
+          disabled={!isValidPersonIdentifierFormat(personIdentifier) || !isValidLastnameFormat()}
           loading={isLoading}
           onClick={navigateIfValidPerson}
         >

@@ -465,7 +465,7 @@
     "no_permissions_fulltext": "Virksomheten kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlige."
   },
   "new_user_modal": {
-    "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_person": "Fant ingen bruker med dette fødselsnr./brukernavnet og navnet. Vennligst sjekk at informasjonen er korrekt.",
     "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
     "too_many_requests_error": "Du er blitt sperret pga for mange feilende forsøk. Du kan prøve igjen om en time.",
     "person": "Person",
@@ -476,7 +476,9 @@
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til virksomhet",
     "limited_preview_message": "Du kan dessverre ikke legge til personer helt enda. Dette vil komme senere.",
-    "ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
+    "person_identifier": "Fødselsnr./brukernavn",
+    "person_identifier_ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
+    "person_identifier_username_format_error": "Må være over 6 tegn og inneholde bokstaver og/eller tall.<br /> Kun bokstavene a-z er tillatt.<br /> Mellomrom kan ikke brukes.",
     "last_name_format_error": "Vennligst fyll inn et gyldig etternavn"
   },
   "settings_page": {

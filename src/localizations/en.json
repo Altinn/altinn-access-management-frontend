@@ -466,7 +466,7 @@
     "no_permissions_fulltext": "Your organization might have content that no one sees. You must grant access to {{packageName}} for such messages and services to be visible."
   },
   "new_user_modal": {
-    "not_found_error_person": "Did not find a user with the given name and national identity number. Please check that you entered the correct information.",
+    "not_found_error_person": "Did not find a user with the given name and national identity number or username. Please check that you entered the correct information.",
     "not_found_error_org": "Did not find an organization with the given number. Please check that you entered the correct information.",
     "too_many_requests_error": "You have been blocked due to too many failing attempts. Try again in an hour.",
     "person": "Person",
@@ -477,7 +477,9 @@
     "add_person_button": "Add person",
     "add_org_button": "Add organization",
     "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future.",
-    "ssn_format_error": "Social security number must consist of 11 digits",
+    "person_identifier": "SSN/username",
+    "person_identifier_ssn_format_error": "Social security number must consist of 11 digits",
+    "person_identifier_username_format_error": "Must be at least 6 characters and contain letters and/or digits. Only letters a-z are allowed. Spaces are not allowed.",
     "last_name_format_error": "Please enter a valid last name"
   },
   "settings_page": {

@@ -101,12 +101,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for validating a new rightholder through an ssn and last name combination.
-        /// If the ssn and last name does not match, the endpoint will return 404.
+        /// Endpoint for validating a new rightholder through a person identifier (ssn or username) and last name combination.
+        /// If the ssn and last name does not match, the endpoint will return 404. Usernames cannot be validated and will return 404.
         /// If the endpont is called with unmatching input too many times, the user calling the endpoint will be blocked for an hour and the request will return 429.
         /// If the combination is valid, the endpoint will return the partyUuid of the person.
         /// </summary>
-        /// <param name="validationInput">The ssn and last name of the person to be looked up</param>
+        /// <param name="validationInput">The person identifier and last name of the person to be looked up</param>
         /// <returns>The partyUuid of the person</returns>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
@@ -122,7 +122,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                Guid? partyUuid = await _connectionService.ValidatePerson(validationInput.Ssn, validationInput.LastName);
+                Guid? partyUuid = await _connectionService.ValidatePerson(validationInput.PersonIdentifier, validationInput.LastName);
 
                 if (partyUuid != null)
                 {
