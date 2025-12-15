@@ -33,7 +33,7 @@ export const ActiveConsentsPage = () => {
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
-  const hasPermission = hasConsentPermission(reportee, isAdmin);
+  const hasPermission = hasConsentPermission(isAdmin);
 
   const {
     data: activeConsents,

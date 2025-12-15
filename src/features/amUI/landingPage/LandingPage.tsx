@@ -118,7 +118,7 @@ export const LandingPage = () => {
       });
     }
 
-    if (hasConsentPermission(reportee, isAdmin)) {
+    if (hasConsentPermission(isAdmin)) {
       items.push({
         ...getConsentMenuItem(),
         description: t('landing_page.consent_item_description'),
