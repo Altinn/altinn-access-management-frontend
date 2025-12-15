@@ -32,9 +32,8 @@ export const ConsentHistoryPage = () => {
   useDocumentTitle(t('consent_log.page_title'));
   const partyUuid = getCookie('AltinnPartyUuid');
 
-  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
-  const hasPermission = hasConsentPermission(reportee, isAdmin);
+  const hasPermission = hasConsentPermission(isAdmin);
 
   const {
     data: consentLog,
@@ -42,7 +41,7 @@ export const ConsentHistoryPage = () => {
     error: loadConsentLogError,
   } = useGetConsentLogQuery({ partyId: partyUuid }, { skip: !partyUuid || !hasPermission });
 
-  const isLoading = isLoadingReportee || isLoadingIsAdmin || isLoadingConsentLog;
+  const isLoading = isLoadingIsAdmin || isLoadingConsentLog;
 
   const showConsentDetails = (consentId: string): void => {
     setSelectedConsentId(consentId);
