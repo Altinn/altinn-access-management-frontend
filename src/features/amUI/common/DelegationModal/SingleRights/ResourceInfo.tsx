@@ -325,13 +325,6 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                 >
                   {resource.title}
                 </DsHeading>
-                {hasAccess && (
-                  <Badge
-                    label={t('common.has_poa')}
-                    theme='base'
-                    data-color='success'
-                  />
-                )}
               </div>
 
               <DsParagraph>{resource.resourceOwnerName}</DsParagraph>

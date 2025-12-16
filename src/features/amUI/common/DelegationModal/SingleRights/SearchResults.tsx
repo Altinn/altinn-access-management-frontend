@@ -107,7 +107,7 @@ export const SearchResults = ({
             currentPage={currentPage}
             totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
             setCurrentPage={setCurrentPage}
-            size='sm'
+            size='xs'
             hideLabels={true}
           />
         )}

@@ -22,23 +22,27 @@ export const ResourceDetailsContent = ({
     ('name' in resource && resource.name) ||
     ('resourceName' in resource ? (resource as { resourceName?: string }).resourceName : undefined);
 
-  const description =
-    ('description' in resource && resource.description) ||
-    ('rightDescription' in resource
+  const serviceDescription =
+    'description' in resource && resource.description
+      ? (resource as { description?: string }).description
+      : undefined;
+
+  const rightDescription =
+    'rightDescription' in resource
       ? (resource as { rightDescription?: string }).rightDescription
-      : undefined);
+      : undefined;
 
   return (
     <div className={classes.dialogContentWrapper}>
       <div className={classes.resourceContent}>
         <div className={classes.headerRow}>
-          <Avatar
-            size='xl'
-            type='company'
-            imageUrl={providerLogoUrl}
-            imageUrlAlt={ownerName}
-            name={ownerName ?? ''}
-          />
+          <div className={classes.resourceIcon}>
+            <Avatar
+              type='company'
+              imageUrl={providerLogoUrl ?? resource.resourceOwnerLogoUrl}
+              name={resource.resourceOwnerName ?? ''}
+            />
+          </div>
           <div>
             <DsHeading
               level={2}
@@ -49,7 +53,8 @@ export const ResourceDetailsContent = ({
             {ownerName && <DsParagraph data-size='xs'>{ownerName}</DsParagraph>}
           </div>
         </div>
-        {description && <DsParagraph data-size='sm'>{description}</DsParagraph>}
+        {serviceDescription && <DsParagraph data-size='sm'>{serviceDescription}</DsParagraph>}
+        {rightDescription && <DsParagraph data-size='sm'>{rightDescription}</DsParagraph>}
       </div>
     </div>
   );
