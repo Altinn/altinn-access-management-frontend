@@ -27,3 +27,9 @@
   display: flex;
   gap: 1rem;
 }
+
+.wipMessage {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

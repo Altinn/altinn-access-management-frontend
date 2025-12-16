@@ -28,8 +28,8 @@ const mapToExtendedUsers = (connections: Connection[]): ExtendedUser[] => {
 const partyMatchesSearchTerm = (party: User | ExtendedUser, searchString: string): boolean => {
   const lowerCaseSearchTerm = searchString.toLocaleLowerCase();
   const nameMatch = party.name.toLowerCase().includes(lowerCaseSearchTerm);
-  const orgNumberMatch = party.keyValues?.OrganizationIdentifier
-    ? party.keyValues.OrganizationIdentifier?.includes(lowerCaseSearchTerm)
+  const orgNumberMatch = party.organizationIdentifier
+    ? party.organizationIdentifier.toString().toLowerCase().includes(lowerCaseSearchTerm)
     : false;
   return nameMatch || orgNumberMatch;
 };
@@ -89,7 +89,13 @@ const sortUsers = (users: (ExtendedUser | User)[]): (ExtendedUser | User)[] => {
     }
     return userCopy;
   });
-  return processedUsers.sort((a, b) => a.name.localeCompare(b.name));
+  return processedUsers.sort((a, b) => {
+    if (a.type?.toLowerCase() === 'organisasjon' && b.type?.toLowerCase() !== 'organisasjon')
+      return -1;
+    if (b.type?.toLowerCase() === 'organisasjon' && a.type?.toLowerCase() !== 'organisasjon')
+      return 1;
+    return a.name.localeCompare(b.name);
+  });
 };
 
 export const useFilteredUsers = ({

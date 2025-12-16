@@ -1,5 +1,5 @@
-import type { ButtonProps } from '@altinn/altinn-components';
-import { Button, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import type { DsButtonProps } from '@altinn/altinn-components';
+import { DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { t } from 'i18next';
 import { Trans } from 'react-i18next';
 import { useState } from 'react';
@@ -10,7 +10,7 @@ import classes from './PackageIsPartiallyDeletableAlert.module.css';
 
 interface PackageIsPartiallyDeletableAlertProps {
   confirmAction: () => void;
-  triggerButtonProps: ButtonProps;
+  triggerButtonProps: DsButtonProps;
 }
 
 export const PackageIsPartiallyDeletableAlert = ({
@@ -21,12 +21,12 @@ export const PackageIsPartiallyDeletableAlert = ({
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button
+      <DsButton
         {...triggerButtonProps}
         onClick={() => setOpen(!open)}
       >
         {t('common.delete_poa')}
-      </Button>
+      </DsButton>
       <DsDialog
         open={open}
         closedby='any'
@@ -47,19 +47,19 @@ export const PackageIsPartiallyDeletableAlert = ({
             />
           </div>
           <div className={classes.buttons}>
-            <Button
-              color='danger'
+            <DsButton
+              data-color='danger'
               onClick={confirmAction}
             >
               {t('common.delete')}
-            </Button>
-            <Button
-              color='neutral'
-              variant='text'
+            </DsButton>
+            <DsButton
+              data-color='neutral'
+              variant='tertiary'
               onClick={() => setOpen(false)}
             >
               {t('common.cancel')}
-            </Button>
+            </DsButton>
           </div>
         </div>
       </DsDialog>

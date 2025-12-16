@@ -1,20 +1,21 @@
 import React from 'react';
 import classes from './PackagePoaDetailsHeader.module.css';
-import { Avatar, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { PackageIcon } from '@navikt/aksel-icons';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { PackagePoaDetailsHeaderSkeleton } from './PackagePoaDetailsHeaderSkeleton';
 
 interface PackagePoaDetailsHeaderProps {
   packageName?: string;
   packageDescription?: string;
   isLoading?: boolean;
+  statusSection?: React.ReactNode;
 }
 
 export const PackagePoaDetailsHeader: React.FC<PackagePoaDetailsHeaderProps> = ({
   packageName = '',
   packageDescription = '',
   isLoading = false,
+  statusSection,
 }) => {
   return isLoading ? (
     <PackagePoaDetailsHeaderSkeleton />
@@ -28,6 +29,7 @@ export const PackagePoaDetailsHeader: React.FC<PackagePoaDetailsHeaderProps> = (
       >
         {packageName}
       </DsHeading>
+      {statusSection && <div className={classes.statusSection}>{statusSection}</div>}
       <DsParagraph
         variant='long'
         className={classes.pageDescription}

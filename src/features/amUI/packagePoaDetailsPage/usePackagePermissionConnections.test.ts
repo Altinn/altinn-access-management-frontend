@@ -1,8 +1,28 @@
-import { describe, it, expect } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { PartyRepresentationContextOutput } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { Party } from '@/rtk/features/lookupApi';
+
+const usePartyRepresentationMock = vi.fn<() => PartyRepresentationContextOutput>();
+
+vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({
+  usePartyRepresentation: () => usePartyRepresentationMock(),
+}));
+
+const setPartyContext = ({
+  fromPartyUuid = '123',
+  toPartyUuid = '456',
+}: {
+  fromPartyUuid?: string;
+  toPartyUuid?: string;
+} = {}) =>
+  usePartyRepresentationMock.mockReturnValue({
+    fromParty: fromPartyUuid ? ({ partyUuid: fromPartyUuid } as Party) : undefined,
+    toParty: toPartyUuid ? ({ partyUuid: toPartyUuid } as Party) : undefined,
+  });
 
 // Minimal AccessPackage shape for the tests (augment if underlying type changes)
 const basePkg: Partial<AccessPackage> = {
@@ -19,29 +39,42 @@ const org = (id: string, name: string) => ({
   name,
   type: 'Organisasjon',
   variant: 'AS',
+  organizationIdentifier: '123456789',
+  partyId: 'pid-' + id,
+  dateOfBirth: '1990-01-01',
   parent: null,
   children: null,
-  keyValues: null,
 });
 const person = (id: string, name: string) => ({
   id,
   name,
   type: 'Person',
   variant: 'Person',
+  organizationIdentifier: '123456789',
+  partyId: 'pid-' + id,
+  dateOfBirth: '1990-01-01',
   parent: null,
   children: null,
-  keyValues: null,
 });
 const role = (id: string, code: string) => ({ id, code, children: null });
 
 /**
- * Helper to run the hook with given permissions.
+ * Helper to run the hook with given permissions and party context.
  */
-const run = (permissions: any[]) => {
+const run = (
+  permissions: any[],
+  partyContext?: { fromPartyUuid?: string; toPartyUuid?: string },
+) => {
+  if (partyContext) setPartyContext(partyContext);
   const pkg = { ...basePkg, permissions } as AccessPackage;
   const { result } = renderHook(() => usePackagePermissionConnections(pkg));
   return result.current;
 };
+
+beforeEach(() => {
+  usePartyRepresentationMock.mockReset();
+  setPartyContext();
+});
 
 describe('usePackagePermissionConnections', () => {
   it('returns empty array when no permissions', () => {
@@ -53,7 +86,7 @@ describe('usePackagePermissionConnections', () => {
     const target = org('org1', 'Org 1');
     const permissions = [
       {
-        from: org('src', 'Src'),
+        from: org('123', '123'),
         to: target,
         via: null,
         role: role('r1', 'rettighetshaver'),
@@ -71,7 +104,7 @@ describe('usePackagePermissionConnections', () => {
     const target = org('org2', 'Org 2');
     const permissions = [
       {
-        from: org('src', 'Src'),
+        from: org('123', '123'),
         to: target,
         via: null,
         role: role('r2', 'styreleder'),
@@ -82,12 +115,27 @@ describe('usePackagePermissionConnections', () => {
     expect(res[0].party.isInherited).toBe(true);
   });
 
+  it('marks permission as inherited when it is not between the selected parties', () => {
+    const target = org('org2b', 'Org 2B');
+    const permissions = [
+      {
+        from: org('123', '123'),
+        to: target,
+        via: null,
+        role: role('r2b', 'rettighetshaver'),
+        viaRole: null,
+      },
+    ];
+    const res = run(permissions, { fromPartyUuid: 'other', toPartyUuid: 'else' });
+    expect(res[0].party.isInherited).toBe(true);
+  });
+
   it('marks child party as inherited when it has a non-excluded viaRole', () => {
     const parent = org('parent1', 'Parent');
     const child = person('person1', 'Person 1');
     const permissions = [
       {
-        from: org('src', 'Src'),
+        from: org('123', '123'),
         to: child,
         via: parent,
         role: role('ret1', 'rettighetshaver'),
@@ -109,14 +157,14 @@ describe('usePackagePermissionConnections', () => {
     const target = org('org3', 'Org 3');
     const permissions = [
       {
-        from: org('src', 'Src'),
+        from: org('123', '123'),
         to: target,
         via: null,
         role: role('r1', 'rettighetshaver'),
         viaRole: null,
       },
       {
-        from: org('src', 'Src'),
+        from: org('123', '123'),
         to: target,
         via: null,
         role: role('r1', 'rettighetshaver'),
@@ -132,14 +180,14 @@ describe('usePackagePermissionConnections', () => {
     const target = org('org4', 'Org 4');
     const permissions = [
       {
-        from: org('src', 'Src'),
+        from: org('123', '123'),
         to: target,
         via: null,
         role: role('r1', 'rettighetshaver'),
         viaRole: null,
       },
       {
-        from: org('src', 'Src'),
+        from: org('123', '123'),
         to: target,
         via: null,
         role: role('r2', 'daglig-leder'),
@@ -158,7 +206,7 @@ describe('usePackagePermissionConnections', () => {
     const child = person('person5', 'Person 5');
     const permissions = [
       {
-        from: org('src', 'Src'),
+        from: org('123', '123'),
         to: child,
         via: parent,
         role: role('r1', 'rettighetshaver'),

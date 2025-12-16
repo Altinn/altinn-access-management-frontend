@@ -13,27 +13,12 @@ export const SkeletonRoleList = () => {
 
   return (
     <div className={classes.areas}>
-      <DsHeading data-size='md'>
-        <DsSkeleton variant='text'>
-          <DsSkeleton
-            variant='text'
-            width={40}
-          />
-        </DsSkeleton>
-      </DsHeading>
-      <DsParagraph data-size='md'>
-        <DsSkeleton
-          variant='text'
-          width={100}
-        />
-      </DsParagraph>
       <List>
         {listSkeleton.map((role) => (
           <ListItem
             key={role.id}
             title={role.name}
             data-color='neutral'
-            variant='tinted'
             loading
           />
         ))}

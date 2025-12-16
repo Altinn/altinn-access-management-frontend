@@ -122,5 +122,31 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             // Assert
             Assert.Equal(expectedValue, result);
         }
+
+        [Theory]
+        [InlineData("no_nb", "UL=1044")]
+        [InlineData("no_nn", "UL=2068")]
+        [InlineData("en", "UL=1033")]
+        [InlineData("nb", "UL=1044")]
+        [InlineData("nn", "UL=2068")]
+        [InlineData("UL=1033&LM=17", "UL=1033")]
+        public void TryGetAltinn2StandardLanguage_ShouldReturnExpectedValue(string languageCode, string expectedValue)
+        {
+            // Act
+            var result = LanguageHelper.TryGetAltinn2StandardLanguage(languageCode);
+
+            // Assert
+            Assert.Equal(expectedValue, result);
+        }
+
+        [Fact]
+        public void TryGetAltinn2StandardLanguage_ShouldReturnNull_WhenLanguageNotSupported()
+        {
+            // Act
+            var result = LanguageHelper.TryGetAltinn2StandardLanguage("de");
+
+            // Assert
+            Assert.Null(result);
+        }
     }
 }

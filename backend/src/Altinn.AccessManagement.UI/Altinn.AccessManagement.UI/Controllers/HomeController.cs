@@ -2,10 +2,8 @@
 using Altinn.AccessManagement.Models;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
-using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -35,27 +33,27 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="antiforgery">the anti forgery service</param>
         /// <param name="platformSettings">settings related to the platform</param>
         /// <param name="env">the current environment</param>
-        /// <param name="userService">service implementation for user profile</param>
         /// <param name="httpContextAccessor">http context</param>
         /// <param name="generalSettings">general settings</param>
         /// <param name="featureFlags">feature flags</param>
+        /// <param name="userService">user service to look up things about the user</param>
         public HomeController(
             IOptions<FrontEndEntryPointOptions> frontEndEntrypoints,
             IAntiforgery antiforgery,
             IOptions<PlatformSettings> platformSettings,
             IWebHostEnvironment env,
-            IUserService userService,
             IHttpContextAccessor httpContextAccessor,
             IOptions<GeneralSettings> generalSettings,
-            IOptions<FeatureFlags> featureFlags)
+            IOptions<FeatureFlags> featureFlags,
+            IUserService userService)
         {
             _antiforgery = antiforgery;
             _platformSettings = platformSettings.Value;
             _env = env;
-            _userService = userService;
             _httpContextAccessor = httpContextAccessor;
             _generalSettings = generalSettings.Value;
             _featureFlags = featureFlags.Value;
+            _userService = userService;
         }
 
         /// <summary>
@@ -91,34 +89,120 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return View();
             }
 
-            string goToUrl = HttpUtility.UrlEncode($"{_generalSettings.FrontendBaseUrl}{Request.Path}{Request.QueryString}");
+            string queryString = Request.QueryString.HasValue ? $"{Request.QueryString.Value}&openAccountMenu=true" : "?openAccountMenu=true";
+            string goToUrl = HttpUtility.UrlEncode($"{_generalSettings.FrontendBaseUrl}{Request.Path}{queryString}");
             string redirectUrl = $"{_platformSettings.ApiAuthenticationEndpoint}authentication?goto={goToUrl}";
 
             return Redirect(redirectUrl);
         }
 
-        private async Task SetLanguageCookie()
+        private Task SetLanguageCookie()
         {
-            if (HttpContext.Request.Cookies.ContainsKey("selectedLanguage") == false)
-            {
-                // Get the language code from the Altinn persistence cookie
-                string languageCode = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(_httpContextAccessor.HttpContext);
+            var httpContext = _httpContextAccessor.HttpContext;
 
-                // If the language code is not found in the Altinn persistence cookie, get the language code from user profile.
-                if (string.IsNullOrEmpty(languageCode))
+            string languageCode = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(httpContext);
+
+            if (string.IsNullOrEmpty(languageCode))
+            {
+                languageCode = httpContext?.Request.Cookies["selectedLanguage"];
+            }
+
+            if (string.IsNullOrEmpty(languageCode))
+            {
+                languageCode = "no_nb";
+            }
+
+            string frontendLanguage = LanguageHelper.GetFrontendStandardLanguage(languageCode);
+
+            if (string.IsNullOrEmpty(frontendLanguage))
+            {
+                frontendLanguage = "no_nb";
+            }
+
+            HttpContext.Response.Cookies.Append("selectedLanguage", frontendLanguage, new CookieOptions
+            {
+                // Make this cookie readable by Javascript.
+                HttpOnly = false,
+            });
+
+            return Task.CompletedTask;
+        }
+
+        private async Task CheckAndSetPartyRepresentationCookies()
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+
+            string partyUuid = httpContext?.Request.Cookies["AltinnPartyUuid"];
+            string partyId = httpContext?.Request.Cookies["AltinnPartyId"];
+
+            if (string.IsNullOrEmpty(partyId))
+            {
+                // PartyIdCookie is missing -> set it to match partyUuid if available or default to current user
+                string setPartyId;
+
+                if (!string.IsNullOrEmpty(partyUuid) && Guid.TryParse(partyUuid, out Guid partyGuid))
                 {
-                    int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-                    UserProfileFE user = await _userService.GetUserProfile(userId);
-                    languageCode = LanguageHelper.GetFrontendStandardLanguage(user?.ProfileSettingPreference?.Language);
+                    var actorList = await _userService.GetReporteeListForUser();
+                    var reporteeParty = actorList.FirstOrDefault(party => party.PartyUuid == partyGuid);
+                    setPartyId = reporteeParty?.PartyId > 0 ? reporteeParty.PartyId.ToString() : AuthenticationHelper.GetUserPartyId(httpContext);
+                }
+                else
+                {
+                    setPartyId = AuthenticationHelper.GetUserPartyId(httpContext);
                 }
 
-                HttpContext.Response.Cookies.Append("selectedLanguage", languageCode ?? "no_nb", new CookieOptions
+                CookieOptions cookieOptions = new CookieOptions
                 {
                     // Make this cookie readable by Javascript.
                     HttpOnly = false,
-                    SameSite = SameSiteMode.Strict
-                });
+                    Secure = false,
+                    Path = "/",
+                    SameSite = SameSiteMode.Lax
+                };
+
+                // Set domain only if we have a hostname configured
+                if (!string.IsNullOrWhiteSpace(_generalSettings?.Hostname))
+                {
+                    cookieOptions.Domain = _generalSettings.Hostname;
+                }
+
+                HttpContext.Response.Cookies.Append("AltinnPartyId", setPartyId.ToString(), cookieOptions);
             }
+
+            if (string.IsNullOrEmpty(partyUuid))
+            {
+                // PartyUuidCookie is missing -> set it to match partyId if available or default to current user
+                Guid setPartyUuid;
+
+                if (!string.IsNullOrEmpty(partyId) && int.TryParse(partyId, out int partyIdInt))
+                {
+                    var reporteeParty = await _userService.GetPartyFromReporteeListIfExists(partyIdInt);
+                    setPartyUuid = reporteeParty?.PartyUuid ?? AuthenticationHelper.GetUserPartyUuid(httpContext);
+                }
+                else
+                {
+                    setPartyUuid = AuthenticationHelper.GetUserPartyUuid(httpContext);
+                }
+
+                CookieOptions cookieOptions = new CookieOptions
+                {
+                    // Make this cookie readable by Javascript.
+                    HttpOnly = false,
+                    Secure = false,
+                    Path = "/",
+                    SameSite = SameSiteMode.Lax
+                };
+
+                // Set domain only if we have a hostname configured
+                if (!string.IsNullOrWhiteSpace(_generalSettings?.Hostname))
+                {
+                    cookieOptions.Domain = _generalSettings.Hostname;
+                }
+
+                HttpContext.Response.Cookies.Append("AltinnPartyUuid", setPartyUuid.ToString(), cookieOptions);
+            }
+
+            return;
         }
 
         private async Task<bool> ShouldShowAppView()
@@ -126,6 +210,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 await SetLanguageCookie();
+                await CheckAndSetPartyRepresentationCookies();
                 return true;
             }
 

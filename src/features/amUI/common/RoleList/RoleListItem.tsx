@@ -1,22 +1,13 @@
 import { ListItem } from '@altinn/altinn-components';
-
-import type { ExtendedRole } from '@/rtk/features/roleApi';
+import type { Role } from '@/rtk/features/roleApi';
 
 interface RoleLIstItemProps {
-  role: ExtendedRole;
+  role: Role;
   onClick: () => void;
-  active?: boolean;
-  controls: React.ReactNode;
   loading?: boolean;
 }
 
-export const RoleListItem = ({
-  role,
-  onClick,
-  active = false,
-  loading,
-  controls,
-}: RoleLIstItemProps) => {
+export const RoleListItem = ({ role, onClick, loading }: RoleLIstItemProps) => {
   return (
     <ListItem
       id={role.id}
@@ -24,10 +15,7 @@ export const RoleListItem = ({
       as='button'
       title={{ as: 'h3', children: role.name }}
       size='sm'
-      color={active ? 'company' : 'neutral'}
-      variant='tinted'
       loading={loading}
-      controls={controls}
     />
   );
 };

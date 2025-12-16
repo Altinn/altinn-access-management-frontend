@@ -6,7 +6,7 @@ import { OverviewPage as OfferedOverviewPage } from '@/features/apiDelegation/of
 import { OverviewPage as ReceivedOverviewPage } from '@/features/apiDelegation/received/OverviewPage';
 import { ChooseOrgPage } from '@/features/apiDelegation/offered/ChooseOrgPage';
 import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
-import { ErrorPage } from '@/sites/ErrorPage';
+import { A2ErrorPage, ErrorPage } from '@/sites/ErrorPage';
 import { ChooseServicePage as DelegateChooseServicePage } from '@/features/singleRight/delegate/ChooseServicePage/ChooseServicePage';
 import { ChooseServicePage as RequestChooseServicePage } from '@/features/singleRight/request/ChooseServicePage/ChooseServicePage';
 import { ChooseRightsPage } from '@/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage';
@@ -26,7 +26,6 @@ import { ConsentRequestPage } from '@/features/amUI/consent/ConsentRequestPage/C
 import { ActiveConsentsPage } from '@/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPage';
 import { ConsentHistoryPage } from '@/features/amUI/consent/ConsentHistoryPage/ConsentHistoryPage';
 import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
-import { InfoPage } from '@/features/amUI/infoPage/InfoPage';
 
 import {
   GeneralPath,
@@ -38,16 +37,16 @@ import {
 } from '../paths';
 import { PackagePoaDetailsPage } from '@/features/amUI/packagePoaDetailsPage/PackagePoaDetailsPage';
 import { SettingsPage } from '@/features/amUI/settings/SettingsPage';
+import { LandingPage } from '@/features/amUI/landingPage/LandingPage';
+import { RequestPage } from '@/features/amUI/requestPage/RequestsPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
-    <Route
-      path='/'
-      errorElement={<ErrorPage />}
-    >
+    <>
+      {/* API Delegation routes */}
       <Route
         path={ApiDelegationPath.OfferedApiDelegations}
-        errorElement={<ErrorPage />}
+        errorElement={<A2ErrorPage />}
       >
         <Route
           path={ApiDelegationPath.Overview}
@@ -65,19 +64,31 @@ export const Router = createBrowserRouter(
           path={ApiDelegationPath.Confirmation}
           element={<ConfirmationPage />}
         />
+        {/* Catch-all for any unmatched routes under offered-api-delegations */}
+        <Route
+          path='*'
+          element={<A2ErrorPage />}
+        />
       </Route>
       <Route
         path={ApiDelegationPath.ReceivedApiDelegations}
-        errorElement={<ErrorPage />}
+        errorElement={<A2ErrorPage />}
       >
         <Route
           path={ApiDelegationPath.Overview}
           element={<ReceivedOverviewPage />}
         />
+        {/* Catch-all for any unmatched routes under received-api-delegations */}
+        <Route
+          path='*'
+          element={<A2ErrorPage />}
+        />
       </Route>
+
+      {/* Single Rights routes */}
       <Route
         path={SingleRightPath.DelegateSingleRights}
-        errorElement={<ErrorPage />}
+        errorElement={<A2ErrorPage />}
       >
         <Route
           path={SingleRightPath.ChooseService}
@@ -91,99 +102,119 @@ export const Router = createBrowserRouter(
           path={SingleRightPath.Receipt}
           element={<SingleRightReceiptPage />}
         />
+        {/* Catch-all for any unmatched routes under delegate-single-rights */}
+        <Route
+          path='*'
+          element={<A2ErrorPage />}
+        />
       </Route>
       <Route
         path={SingleRightPath.RequestSingleRights}
-        errorElement={<ErrorPage />}
+        errorElement={<A2ErrorPage />}
       >
         <Route
           path={SingleRightPath.ChooseService}
           element={<RequestChooseServicePage />}
         />
+        {/* Catch-all for any unmatched routes under request-single-rights */}
+        <Route
+          path='*'
+          element={<A2ErrorPage />}
+        />
       </Route>
+
+      {/* A3 user interface routes */}
       <Route
-        path={amUIPath.Users}
-        element={<UsersPage />}
-      />
-      <Route
-        path={amUIPath.UserRights}
-        element={<UserRightsPage />}
-      />
-      <Route
-        path={amUIPath.Reportees}
-        element={<ReporteesPage />}
-      />
-      <Route
-        path={amUIPath.ReporteeRights}
-        element={<ReporteeRightsPage />}
-      />
-      <Route
-        path={amUIPath.PoaOverview}
-        element={<PoaOverviewPage />}
-      />
-      <Route
-        path={amUIPath.PackagePoaDetails}
-        element={<PackagePoaDetailsPage />}
-      />
-      <Route
-        path={SystemUserPath.SystemUser}
+        path='/'
         errorElement={<ErrorPage />}
       >
         <Route
-          path={SystemUserPath.Overview}
-          element={<SystemUserOverviewPage />}
+          index
+          element={<LandingPage />}
         />
         <Route
-          path={SystemUserPath.Create}
-          element={<CreateSystemUserPage />}
+          path={amUIPath.Users}
+          element={<UsersPage />}
         />
         <Route
-          path={SystemUserPath.Details}
-          element={<SystemUserDetailsPage />}
+          path={amUIPath.UserRights}
+          element={<UserRightsPage />}
         />
         <Route
-          path={SystemUserPath.AgentDelegation}
-          element={<SystemUserAgentDelegationPage />}
+          path={amUIPath.Reportees}
+          element={<ReporteesPage />}
         />
         <Route
-          path={SystemUserPath.Request}
-          element={<SystemUserRequestPage />}
+          path={amUIPath.ReporteeRights}
+          element={<ReporteeRightsPage />}
         />
         <Route
-          path={SystemUserPath.ChangeRequest}
-          element={<SystemUserChangeRequestPage />}
+          path={amUIPath.PoaOverview}
+          element={<PoaOverviewPage />}
         />
         <Route
-          path={SystemUserPath.AgentRequest}
-          element={<SystemUserAgentRequestPage />}
+          path={amUIPath.PackagePoaDetails}
+          element={<PackagePoaDetailsPage />}
+        />
+        <Route path={SystemUserPath.SystemUser}>
+          <Route
+            path={SystemUserPath.Overview}
+            element={<SystemUserOverviewPage />}
+          />
+          <Route
+            path={SystemUserPath.Create}
+            element={<CreateSystemUserPage />}
+          />
+          <Route
+            path={SystemUserPath.Details}
+            element={<SystemUserDetailsPage />}
+          />
+          <Route
+            path={SystemUserPath.AgentDelegation}
+            element={<SystemUserAgentDelegationPage />}
+          />
+          <Route
+            path={SystemUserPath.Request}
+            element={<SystemUserRequestPage />}
+          />
+          <Route
+            path={SystemUserPath.ChangeRequest}
+            element={<SystemUserChangeRequestPage />}
+          />
+          <Route
+            path={SystemUserPath.AgentRequest}
+            element={<SystemUserAgentRequestPage />}
+          />
+        </Route>
+        <Route path={ConsentPath.Consent}>
+          <Route
+            path={ConsentPath.Request}
+            element={<ConsentRequestPage />}
+          />
+          <Route
+            path={ConsentPath.Active}
+            element={<ActiveConsentsPage />}
+          />
+          <Route
+            path={ConsentPath.Log}
+            element={<ConsentHistoryPage />}
+          />
+        </Route>
+        <Route
+          path={amUIPath.Settings}
+          element={<SettingsPage />}
+        />
+        <Route
+          path={amUIPath.Requests}
+          element={<RequestPage />}
+        />
+        {/* Catch-all for any unmatched routes under root */}
+        <Route
+          path='*'
+          element={<ErrorPage />}
         />
       </Route>
-      <Route
-        path={ConsentPath.Consent}
-        errorElement={<ErrorPage />}
-      >
-        <Route
-          path={ConsentPath.Request}
-          element={<ConsentRequestPage />}
-        />
-        <Route
-          path={ConsentPath.Active}
-          element={<ActiveConsentsPage />}
-        />
-        <Route
-          path={ConsentPath.Log}
-          element={<ConsentHistoryPage />}
-        />
-      </Route>
-      <Route
-        path={amUIPath.Info}
-        element={<InfoPage />}
-      />
-      <Route
-        path={amUIPath.Settings}
-        element={<SettingsPage />}
-      />
-    </Route>,
+    </>,
   ),
   { basename: GeneralPath.BasePath },
 );

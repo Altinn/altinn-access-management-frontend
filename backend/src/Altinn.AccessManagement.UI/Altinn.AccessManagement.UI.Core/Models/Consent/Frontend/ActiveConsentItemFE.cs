@@ -11,18 +11,23 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         public Guid Id { get; set; }
 
         /// <summary>
+        /// If consent can be consented to. True if PortalViewMode is Show and consent is not yet accepted.
+        /// </summary>
+        public bool IsPendingConsent { get; set; }
+
+        /// <summary>
         /// If consent is a power of attorney or a consent
         /// </summary>
         public bool IsPoa { get; set; }
 
         /// <summary>
-        /// Id of party that requested the consent
+        /// Party that requested the consent
         /// </summary>
-        public string ToPartyId { get; set; }
+        public ConsentPartyFE ToParty { get; set; }
 
         /// <summary>
-        /// Name of party that requested the consent
+        /// Party that requested the consent
         /// </summary>
-        public string ToPartyName { get; set; }
+        public ConsentPartyFE FromParty { get; set; }
     }
 }

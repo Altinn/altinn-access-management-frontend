@@ -1,3 +1,5 @@
+import { useMemo, useState } from 'react';
+
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -9,12 +11,17 @@ import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPa
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
+import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
+import { ActionError } from '@/resources/hooks/useActionError';
+import { DelegateErrorAlert } from './DelegateErrorAlert';
+import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
 
 const mapUserToParty = (user: User): Party => ({
   partyId: 0,
   partyUuid: user.id,
   name: user.name,
-  partyTypeName: user.variant === 'organization' ? PartyType.Organization : PartyType.Person,
+  partyTypeName:
+    user.type?.toLowerCase() === 'organisasjon' ? PartyType.Organization : PartyType.Person,
 });
 
 interface UsersTabProps {
@@ -22,11 +29,24 @@ interface UsersTabProps {
   fromParty?: { partyUuid?: string; name?: string } | null;
   isLoading: boolean;
   isFetching: boolean;
+  onDelegateError?: (errorInfo: ActionError) => void;
 }
 
 export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
+  const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
+    useAccessPackageDelegationCheck();
+  const canDelegate = accessPackage?.id
+    ? canDelegatePackage(accessPackage.id)?.result !== false
+    : true;
+
+  const [delegateActionError, setDelegateActionError] = useState<{
+    error: ActionError;
+    targetParty?: Party;
+  } | null>(null);
+
+  const { isLoading: roleMetadataIsLoading } = useRoleMetadata();
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -45,6 +65,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
   const connections = usePackagePermissionConnections(accessPackage);
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
+    setDelegateActionError(null);
     queueSnackbar(
       t('package_poa_details_page.package_delegation_success', {
         name: toParty.name,
@@ -64,15 +85,28 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     );
   };
 
+  const handleDelegateError = (
+    _accessPackage: AccessPackage,
+    errorInfo: ActionError,
+    toParty?: Party,
+  ) => {
+    setDelegateActionError({ error: errorInfo, targetParty: toParty });
+  };
+
   const {
     onDelegate,
     onRevoke,
     isLoading: isActionLoading,
-  } = useAccessPackageActions({ onDelegateSuccess, onRevokeSuccess });
+  } = useAccessPackageActions({
+    onDelegateSuccess,
+    onRevokeSuccess,
+    onDelegateError: handleDelegateError,
+  });
 
   const handleOnDelegate = (user: User) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
+      setDelegateActionError(null);
       onDelegate(accessPackage, toParty);
     }
   };
@@ -83,19 +117,6 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
       onRevoke(accessPackage, toParty);
     }
   };
-
-  if (connections.length === 0 && !isLoading && !loadingIndirectConnections) {
-    return (
-      <DsParagraph
-        data-size='md'
-        className={pageClasses.tabDescription}
-      >
-        {t('package_poa_details_page.users_tab.no_users', {
-          fromparty: fromParty?.name,
-        })}
-      </DsParagraph>
-    );
-  }
 
   return (
     <>
@@ -109,19 +130,37 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
           })}
         </DsParagraph>
       )}
+
+      {delegateActionError?.error && delegateActionError?.targetParty && (
+        <DelegateErrorAlert
+          error={delegateActionError?.error}
+          targetParty={delegateActionError?.targetParty}
+          onClose={() => setDelegateActionError(null)}
+        />
+      )}
+
       <AdvancedUserSearch
+        includeSelfAsChild={false}
         connections={connections}
         indirectConnections={indirectConnections}
-        isLoading={isLoading || loadingIndirectConnections}
-        onDelegate={handleOnDelegate}
+        isLoading={
+          isLoading ||
+          loadingIndirectConnections ||
+          roleMetadataIsLoading ||
+          isDelegationCheckLoading
+        }
+        onDelegate={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         isActionLoading={
           isActionLoading ||
           isLoading ||
           loadingIndirectConnections ||
           isFetching ||
-          isFetchingIndirectConnections
+          isFetchingIndirectConnections ||
+          roleMetadataIsLoading ||
+          isDelegationCheckLoading
         }
+        canDelegate={canDelegate}
       />
     </>
   );

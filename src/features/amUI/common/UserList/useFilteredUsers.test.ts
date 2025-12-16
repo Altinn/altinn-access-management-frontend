@@ -14,7 +14,8 @@ const mockConnections: Connection[] = [
       type: 'Person',
       variant: 'Person',
       children: null,
-      keyValues: { PartyId: '00000000', DateOfBirth: '1981-03-20' },
+      partyId: '00000000',
+      dateOfBirth: '1981-03-20',
       roles: [],
     },
     roles: [
@@ -37,10 +38,12 @@ const mockConnections: Connection[] = [
           name: 'InheritAlice',
           type: 'Person',
           children: null,
-          keyValues: { PartyId: '51256682', DateOfBirth: '01-02-03' },
+          partyId: '51256682',
+          dateOfBirth: '01-02-03',
         },
       ],
-      keyValues: { PartyId: '00000000', OrganizationIdentifier: '123456789' },
+      partyId: '00000000',
+      organizationIdentifier: '123456789',
       roles: [],
     },
     roles: [
@@ -59,7 +62,8 @@ const mockConnections: Connection[] = [
       type: 'Organisasjon',
       variant: 'ORGL',
       children: null,
-      keyValues: { PartyId: '50088610', OrganizationIdentifier: '991825827' },
+      partyId: '50088610',
+      organizationIdentifier: '991825827',
       roles: [],
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
@@ -78,10 +82,12 @@ const mockConnections: Connection[] = [
           type: 'Organisasjon',
           variant: 'BEDR',
           children: null,
-          keyValues: { PartyId: '51467911', OrganizationIdentifier: '311567330' },
+          partyId: '51467911',
+          organizationIdentifier: '311567330',
         },
       ],
-      keyValues: { PartyId: '51325818', OrganizationIdentifier: '310167010' },
+      partyId: '51325818',
+      organizationIdentifier: '310167010',
       roles: [],
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
@@ -100,10 +106,12 @@ const mockConnections: Connection[] = [
           type: 'Organisasjon',
           variant: 'BEDR',
           children: null,
-          keyValues: { PartyId: '51480388', OrganizationIdentifier: '311657348' },
+          partyId: '51480388',
+          organizationIdentifier: '311657348',
         },
       ],
-      keyValues: { PartyId: '51480407', OrganizationIdentifier: '314081544' },
+      partyId: '51480407',
+      organizationIdentifier: '314081544',
       roles: [],
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
@@ -118,8 +126,8 @@ describe('useFilteredUsers', () => {
     );
 
     expect(result.current.users).toHaveLength(2);
-    expect(result.current.users[0].name).toBe('Alice');
-    expect(result.current.users[1].name).toBe('Lorem AS');
+    expect(result.current.users[0].name).toBe('Lorem AS'); // orgs sorted before persons
+    expect(result.current.users[1].name).toBe('Alice');
   });
 
   it('should return all users when search string is empty', () => {
@@ -194,6 +202,15 @@ describe('useFilteredUsers', () => {
     expect(result?.current?.users?.[0]?.children?.[0]?.name).toBe('InheritAlice');
   });
 
+  it('sorts organizations before persons when listing users', () => {
+    const { result } = renderHook(() =>
+      useFilteredUsers({ connections: mockConnections, searchString: '' }),
+    );
+
+    expect(result.current.users.slice(0, 4).every((u) => u.type === 'Organisasjon')).toBe(true);
+    expect(result.current.users.at(-1)?.type).toBe('Person');
+  });
+
   it('should keep all children when parent matches search string', () => {
     const { result } = renderHook(() =>
       useFilteredUsers({ connections: mockConnections, searchString: 'Lorem' }),
@@ -216,7 +233,7 @@ describe('useFilteredUsers', () => {
           type: 'Person',
           variant: 'Person',
           children: null,
-          keyValues: { PartyId: '00000000' },
+          partyId: '00000000',
           roles: [],
         },
         roles: [],
@@ -229,7 +246,7 @@ describe('useFilteredUsers', () => {
           type: 'Organisasjon',
           variant: 'AS',
           children: null,
-          keyValues: { PartyId: '11111111' },
+          partyId: '11111111',
           roles: [],
         },
         roles: [],
@@ -256,7 +273,7 @@ describe('useFilteredUsers', () => {
           type: 'Organisasjon',
           variant: 'AS',
           children: null,
-          keyValues: { PartyId: `${i + 1}` },
+          partyId: `${i + 1}`,
           roles: [],
         },
         roles: [],

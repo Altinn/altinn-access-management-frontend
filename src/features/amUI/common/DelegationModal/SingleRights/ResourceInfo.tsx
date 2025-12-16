@@ -37,10 +37,10 @@ import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
-import { StatusSection } from '../StatusSection';
 
 import classes from './ResourceInfo.module.css';
 import { ResourceAlert } from './ResourceAlert';
+import { StatusSection } from '../../StatusSection/StatusSection';
 
 export type ChipRight = {
   action: string;
@@ -337,6 +337,11 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
               <DsParagraph>{resource.resourceOwnerName}</DsParagraph>
             </div>
           </div>
+          <StatusSection
+            userHasAccess={hasAccess}
+            showDelegationCheckWarning={showMissingRightsStatus}
+            cannotDelegateHere={cannotDelegateHere}
+          />
           {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
           {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
           {displayResourceAlert ? (
@@ -371,11 +376,6 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                   {missingAccessMessage}
                 </DsAlert>
               )}
-              <StatusSection
-                userHasAccess={hasAccess}
-                showMissingRightsMessage={showMissingRightsStatus}
-                cannotDelegateHere={cannotDelegateHere}
-              />
               <div className={classes.rightsSection}>
                 <DsHeading
                   level={4}

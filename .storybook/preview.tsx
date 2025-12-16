@@ -10,14 +10,16 @@ declare global {
     featureFlags?: {
       displayPopularSingleRightsServices: boolean;
       displayConfettiPackage: boolean;
-      displayLimitedPreviewLaunch: boolean;
       displayResourceDelegation: boolean;
       restrictPrivUse: boolean;
       displaySettingsPage: boolean;
       displayPoaOverviewPage: boolean;
       crossPlatformLinks: boolean;
-      displayConsentGui: boolean;
       useNewActorsList: boolean;
+      displayPrivDelegation: boolean;
+      displayAccessRequest: boolean;
+      displaySubConnections: boolean;
+      displayRoles: boolean;
     };
   }
 }
@@ -44,14 +46,15 @@ document.cookie = 'XSRF-TOKEN=mocked-xsrf-token; path=/; SameSite=Lax';
 window.featureFlags = {
   displayPopularSingleRightsServices: false,
   displayConfettiPackage: true,
-  displayLimitedPreviewLaunch: false,
   displayResourceDelegation: true,
   restrictPrivUse: false,
   displaySettingsPage: true,
   displayPoaOverviewPage: true,
   crossPlatformLinks: false,
-  displayConsentGui: false,
   useNewActorsList: false,
+  displayPrivDelegation: false,
+  displayAccessRequest: false,
+  displaySubConnections: false,
 };
 
 // Initialise i18next;

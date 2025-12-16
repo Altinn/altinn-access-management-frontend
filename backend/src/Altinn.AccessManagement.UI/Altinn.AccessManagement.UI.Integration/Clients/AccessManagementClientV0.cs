@@ -81,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"authorizedparties?includeAltinn2=true";
+                string endpointUrl = $"authorizedparties?includeAltinn2=true&includeRoles=false&includeAccessPackages=false&includeResources=false&includeInstances=false";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);

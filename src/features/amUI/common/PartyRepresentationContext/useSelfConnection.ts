@@ -37,11 +37,9 @@ export const useSelfConnection = (): {
         id: currentUser.partyUuid,
         name: currentUser.name,
         type: currentUser.partyTypeName?.toString(),
-        keyValues: {
-          OrganizationIdentifier: currentUser.orgNumber,
-          PartyId: currentUser.partyId.toString(),
-          DateOfBirth: currentUser.dateOfBirth,
-        },
+        organizationIdentifier: currentUser.orgNumber,
+        partyId: currentUser.partyId,
+        dateOfBirth: currentUser.dateOfBirth,
         roles: existingConn?.roles ?? [],
         children: [],
       }

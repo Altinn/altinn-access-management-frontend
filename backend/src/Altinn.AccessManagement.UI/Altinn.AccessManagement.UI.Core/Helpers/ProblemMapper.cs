@@ -35,6 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 "AUTH-00055" => Problem.AccessPackage_FailedToGetDelegatedPackages,
                 "AUTH-00057" => Problem.SystemUser_FailedToDeleteAccessPackage,
                 "AUTH-00062" => Problem.SystemUser_FailedToGetDelegatedRights,
+                "AUTH-00066" => Problem.Request_UserIsNotAccessManager,
 
                 _ => Problem.Generic_EndOfMethod,
             };
@@ -51,6 +52,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 // Add more cases here when available
                 // "AM.VLD-00001" => AmProblem.InvalidPartyUrn.ToValidationError(),
                 "AM.VLD-00002" => AmProblem.InvalidResource.ToValidationError(),
+                "AM.VLD-00028" => AmProblem.InvalidUnitType.ToValidationError(),
                 _ => null
             };
         }

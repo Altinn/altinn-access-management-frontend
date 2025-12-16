@@ -60,8 +60,9 @@ export const ResourceSearch = ({ onSelect, toParty }: ResourceSearchProps) => {
 
   const filterOptions = ROdata
     ? ROdata.map((ro) => {
+        const label = ro.organisationName || ro.organisationCode;
         return {
-          label: ro.organisationName,
+          label,
           value: ro.organisationNumber,
         };
       })

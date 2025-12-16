@@ -8,7 +8,6 @@ import { UserListActions } from '../UserList/UserListActions';
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AdvancedUserSearch.module.css';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export interface ConnectionsListProps {
   users: ExtendedUser[];
@@ -18,6 +17,7 @@ export interface ConnectionsListProps {
   onRevoke?: (user: ExtendedUser) => void;
   onDelegate?: (user: ExtendedUser) => void;
   isActionLoading?: boolean;
+  includeSelfAsChild?: boolean;
 }
 
 export const ConnectionsList: React.FC<ConnectionsListProps> = ({
@@ -28,6 +28,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
   onRevoke,
   onDelegate,
   isActionLoading = false,
+  includeSelfAsChild = true,
 }) => {
   const { t } = useTranslation();
 
@@ -36,6 +37,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
       <List spacing={2}>
         {users.map((user) => (
           <UserItem
+            includeSelfAsChild={includeSelfAsChild}
             key={user.id}
             user={user}
             size='md'

@@ -6,6 +6,7 @@ import { AdvancedUserSearch } from './AdvancedUserSearch';
 import { Provider } from 'react-redux';
 import store from '@/rtk/app/store';
 import { Connection } from '@/rtk/features/connectionApi';
+import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 const mockAllConnections: Connection[] = [
   {
@@ -15,7 +16,7 @@ const mockAllConnections: Connection[] = [
       type: 'Person',
       variant: 'person',
       children: null,
-      keyValues: { DateOfBirth: '1990-04-15' },
+      dateOfBirth: '1990-04-15',
       roles: [],
     },
     roles: [],
@@ -28,7 +29,7 @@ const mockAllConnections: Connection[] = [
       type: 'Person',
       variant: 'person',
       children: null,
-      keyValues: { DateOfBirth: '1985-11-30' },
+      dateOfBirth: '1985-11-30',
       roles: [],
     },
     roles: [],
@@ -41,7 +42,7 @@ const mockAllConnections: Connection[] = [
       type: 'Person',
       variant: 'person',
       children: null,
-      keyValues: { DateOfBirth: '2000-01-20' },
+      dateOfBirth: '2000-01-20',
       roles: [],
     },
     roles: [],
@@ -54,7 +55,7 @@ const mockAllConnections: Connection[] = [
       type: 'Person',
       variant: 'person',
       children: null,
-      keyValues: { DateOfBirth: '1975-07-07' },
+      dateOfBirth: '1975-07-07',
       roles: [],
     },
     roles: [],
@@ -67,7 +68,7 @@ const mockAllConnections: Connection[] = [
       type: 'Person',
       variant: 'person',
       children: null,
-      keyValues: { DateOfBirth: '2010-12-12' },
+      dateOfBirth: '2010-12-12',
       roles: [],
     },
     roles: [],
@@ -83,7 +84,7 @@ const mockConnections: Connection[] = [
       type: 'Person',
       variant: 'person',
       children: null,
-      keyValues: { DateOfBirth: '1990-04-15' },
+      dateOfBirth: '1990-04-15',
       roles: [],
     },
     roles: [],
@@ -96,7 +97,7 @@ const mockConnections: Connection[] = [
       type: 'Person',
       variant: 'person',
       children: null,
-      keyValues: { DateOfBirth: '1985-11-30' },
+      dateOfBirth: '1985-11-30',
       roles: [],
     },
     roles: [],
@@ -111,9 +112,14 @@ const meta = {
     (Story) => (
       <Provider store={store}>
         <RootProvider>
-          <div style={{ padding: 24, maxWidth: 800 }}>
-            <Story />
-          </div>
+          <PartyRepresentationProvider
+            fromPartyUuid='test-uuid'
+            actingPartyUuid='test-uuid'
+          >
+            <div style={{ padding: 24, maxWidth: 800 }}>
+              <Story />
+            </div>
+          </PartyRepresentationProvider>
         </RootProvider>
       </Provider>
     ),

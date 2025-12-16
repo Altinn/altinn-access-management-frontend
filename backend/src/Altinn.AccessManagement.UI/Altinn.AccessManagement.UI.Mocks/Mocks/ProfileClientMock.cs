@@ -1,16 +1,10 @@
 ﻿using System.Net;
-using System.Net.Http.Headers;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
-using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
-using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Utils;
-using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -201,6 +195,28 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             };
 
             return await Task.FromResult(response);
+        }
+
+        /// <inheritdoc/>
+        public async Task AddPartyUuidToFavorites(Guid partyUuid)
+        {
+            if (partyUuid == Guid.Empty)
+            {
+                throw new HttpRequestException("Internal server error");
+            }
+
+            await Task.CompletedTask;
+        }
+
+        /// <inheritdoc/>
+        public async Task DeletePartyUuidFromFavorites(Guid partyUuid)
+        {
+            if (partyUuid == Guid.Empty)
+            {
+                throw new HttpRequestException("Internal server error");
+            }
+
+            await Task.CompletedTask;
         }
 
         private static string GetDataPathForProfiles()

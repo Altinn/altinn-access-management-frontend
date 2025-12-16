@@ -1,5 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+﻿using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
@@ -37,9 +36,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Endpoint for adding a new party as a right holder to reportee party.
         /// </summary>
         /// <param name="partyUuid">The uuid of the reportee party</param>
-        /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder</param>
-        /// <returns>The result of the adding</returns>
-        Task<HttpResponseMessage> AddReporteeRightHolderConnection(Guid partyUuid, Guid rightholderPartyUuid);
+        /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder (only provided when rightholder is an org)</param>
+        /// <param name="personInput">The last name and ssn identifying the person to become a rightholder (only provided when rightolder is a person)</param>
+        /// <returns>The guid of the newly added rightholder</returns>
+        Task<Guid> AddReporteeRightHolderConnection(Guid partyUuid, Guid? rightholderPartyUuid, PersonInput personInput);
 
         /// <summary>
         /// Endpoint for getting all right holders for a given party, from a given party to a given party.

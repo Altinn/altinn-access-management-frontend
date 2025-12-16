@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Models;
@@ -119,11 +120,6 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!_featureFlags.DisplayLimitedPreviewLaunch)
-            {
-                return StatusCode(404, "Feature not available");
-            }
-
             try
             {
                 Guid? partyUuid = await _connectionService.ValidatePerson(validationInput.Ssn, validationInput.LastName);
@@ -156,18 +152,52 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for adding a new party as a right holder to reportee party.
+        /// Endpoint for adding a new party as a right holder to reportee party. Note that a body of type PersonInput is expected when no rightholderPartyUuid is provided.
         /// </summary>
         /// <param name="partyUuid">The uuid of the reportee party</param>
-        /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder</param>
-        /// <returns>The result of the adding</returns>
+        /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder (only provided when rightholder is an org)</param>
+        /// <returns>The uuid of the added party</returns>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
+        /// <response code="429">TooManyRequests</response>
         [HttpPost]
         [Authorize]
         [Route("reportee/{partyUuid}/rightholder")]
-        public async Task<ActionResult<HttpResponseMessage>> AddReporteeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid rightholderPartyUuid)
+        public async Task<ActionResult<Guid>> AddReporteeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid? rightholderPartyUuid)
         {
+            PersonInput personInput = null;
+
+            // Try to read personInput from body if rightholderPartyUuid is not provided
+            if (!rightholderPartyUuid.HasValue || rightholderPartyUuid == Guid.Empty)
+            {
+                try
+                {
+                    personInput = await HttpContext.Request.ReadFromJsonAsync<PersonInput>();
+                }
+                catch
+                {
+                    // If we can't read the body or it's invalid, personInput remains null
+                }
+            }
+
+            // Clear model state errors for rightholderPartyUuid if personInput is provided (they are mutually exclusive)
+            if (personInput != null && ModelState.ContainsKey("rightholderPartyUuid"))
+            {
+                ModelState.Remove("rightholderPartyUuid");
+            }
+
+            if ((rightholderPartyUuid == null || rightholderPartyUuid == Guid.Empty) && personInput == null)
+            {
+                return BadRequest("Either rightholderPartyUuid or personInput must be provided.");
+            }
+
+            // Validate personInput specifically if it's provided
+            if (personInput != null && !TryValidateModel(personInput))
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Check for any remaining model state errors
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -175,12 +205,28 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                var response = await _connectionService.AddReporteeRightHolderConnection(partyUuid, rightholderPartyUuid);
-                return Ok();
+                var rightHolderUuid = await _connectionService.AddReporteeRightHolderConnection(partyUuid, rightholderPartyUuid, personInput);
+                return Ok(rightHolderUuid);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (HttpStatusException ex)
             {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
+                if (ex.StatusCode == HttpStatusCode.TooManyRequests)
+                {
+                    return StatusCode(429);
+                }
+                else
+                {
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AddReporteeRightHolder failed unexpectedly");
+                return StatusCode(500);
             }
         }
 

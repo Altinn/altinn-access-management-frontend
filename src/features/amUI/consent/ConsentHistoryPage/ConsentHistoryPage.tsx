@@ -1,16 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import {
   DsAlert,
   DsDialog,
   DsHeading,
-  DsLink,
   Timeline,
   TimelineActivity,
   TimelineSegment,
 } from '@altinn/altinn-components';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -22,10 +19,10 @@ import classes from './ConsentHistoryPage.module.css';
 import { useGetConsentLogQuery } from '@/rtk/features/consentApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ConsentTimeline } from './ConsentTimeline';
-import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { ConsentPath } from '@/routes/paths';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 
 export const ConsentHistoryPage = () => {
   const { t } = useTranslation();
@@ -35,9 +32,8 @@ export const ConsentHistoryPage = () => {
   useDocumentTitle(t('consent_log.page_title'));
   const partyUuid = getCookie('AltinnPartyUuid');
 
-  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
-  const hasPermission = hasConsentPermission(reportee, isAdmin);
+  const hasPermission = hasConsentPermission(isAdmin);
 
   const {
     data: consentLog,
@@ -45,7 +41,7 @@ export const ConsentHistoryPage = () => {
     error: loadConsentLogError,
   } = useGetConsentLogQuery({ partyId: partyUuid }, { skip: !partyUuid || !hasPermission });
 
-  const isLoading = isLoadingReportee || isLoadingIsAdmin || isLoadingConsentLog;
+  const isLoading = isLoadingIsAdmin || isLoadingConsentLog;
 
   const showConsentDetails = (consentId: string): void => {
     setSelectedConsentId(consentId);
@@ -55,34 +51,19 @@ export const ConsentHistoryPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
+        <Breadcrumbs items={['root', 'consent', 'consent_log']} />
+        <DsHeading
+          level={1}
+          data-size='sm'
+          className={classes.consentLogTopHeader}
+        >
+          {t('consent_log.heading')}
+        </DsHeading>
+        <OldConsentAlert
+          heading='consent_log.altinn2_consent_alert_header'
+          text='consent_log.altinn2_consent_alert_body'
+        />
         <div className={classes.consentHistoryPage}>
-          <div>
-            <DsLink
-              asChild={true}
-              data-size='md'
-              data-color='neutral'
-            >
-              <Link to={`/${ConsentPath.Consent}/${ConsentPath.Active}`}>
-                <ArrowLeftIcon
-                  aria-hidden={true}
-                  fontSize='1.3rem'
-                />
-                {t('common.back')}
-              </Link>
-            </DsLink>
-          </div>
-          <div>
-            <DsHeading
-              level={1}
-              data-size='sm'
-            >
-              {t('consent_log.heading')}
-            </DsHeading>
-            <OldConsentAlert
-              heading='consent_log.altinn2_consent_alert_header'
-              text='consent_log.altinn2_consent_alert_body'
-            />
-          </div>
           {!isLoading && !hasPermission && <div>{t('consent_log.no_consent_log_permission')}</div>}
           {isLoading && <LoadingTimeline />}
           {loadConsentLogError && (

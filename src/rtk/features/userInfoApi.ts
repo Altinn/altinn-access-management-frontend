@@ -3,14 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
-import { Entity } from '@/dataObjects/dtos/Common';
-import { Connection } from './connectionApi';
-
-interface UserKeyValues {
-  OrganizationIdentifier?: string;
-  PartyId?: string;
-  DateOfBirth?: string;
-}
+import { Connection, RoleInfo } from './connectionApi';
 
 export interface ExtendedUser extends Omit<User, 'children'> {
   roles: RoleInfo[];
@@ -25,36 +18,40 @@ export interface User {
   type?: string;
   variant?: string;
   children: (User | ExtendedUser)[] | null;
-  keyValues: UserKeyValues | null;
   parent?: ExtendedUser | null;
+  partyId?: number | string | null;
+  organizationIdentifier?: string | null;
+  dateOfBirth?: string | null;
+  userId?: string | null;
+  username?: string | null;
 }
 
-export interface RoleInfo {
-  id: string;
-  code?: string;
-  viaParty?: Entity;
-}
-
-interface UserInfoApiResponse {
+interface UserProfileApiResponse {
   party: Party;
   userUuid: string;
+  profileSettingPreference: ProfileSettingPreference;
 }
 
-export interface UserInfo {
+export interface UserProfile {
   name: string;
   uuid: string;
   party: Party;
+  profileSettingPreference: ProfileSettingPreference;
 }
 
 export interface ReporteeInfo {
+  partyUuid: string;
   name: string;
   organizationNumber?: string;
-  type?: string;
-  partyUuid: string;
+  dateOfBirth?: string;
   partyId: string;
+  type?: string;
+  unitType?: string;
+  isDeleted: boolean;
+  onlyHierarchyElementWithNoAccess: boolean;
+  authorizedResources: string[];
   authorizedRoles: string[];
   subunits?: ReporteeInfo[];
-  onlyHierarchyElementWithNoAccess: boolean;
 }
 
 export enum PartyType {
@@ -70,6 +67,15 @@ export interface UserAccesses {
   roles: string[];
 }
 
+interface ProfileSettingPreference {
+  language: string;
+  preselectedPartyUuid: string | null;
+  showClientUnits: boolean;
+  shouldShowSubEntities: boolean;
+  shouldShowDeletedEntities: boolean;
+  doNotPromptForParty: boolean;
+}
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/user`;
 
 export const userInfoApi = createApi({
@@ -82,13 +88,18 @@ export const userInfoApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['UserInfo', 'RightHolders'],
+  tagTypes: ['UserInfo', 'Favorites'],
   endpoints: (builder) => ({
-    getUserInfo: builder.query<UserInfo, void>({
+    getUserProfile: builder.query<UserProfile, void>({
       query: () => 'profile',
       keepUnusedDataFor: 300,
-      transformResponse: (response: UserInfoApiResponse) => {
-        return { name: response.party.name, uuid: response.userUuid, party: response.party };
+      transformResponse: (response: UserProfileApiResponse) => {
+        return {
+          name: response.party.name,
+          uuid: response.userUuid,
+          party: response.party,
+          profileSettingPreference: response.profileSettingPreference,
+        };
       },
     }),
     getReportee: builder.query<ReporteeInfo, void>({
@@ -119,6 +130,25 @@ export const userInfoApi = createApi({
         return '/actorlist/favorites';
       },
       keepUnusedDataFor: 300,
+      providesTags: ['Favorites'],
+    }),
+    addFavoriteActorUuid: builder.mutation<void, string>({
+      query: (actorUuid) => {
+        return {
+          url: `/actorlist/favorites/${actorUuid}`,
+          method: 'PUT',
+        };
+      },
+      invalidatesTags: ['Favorites'],
+    }),
+    removeFavoriteActorUuid: builder.mutation<void, string>({
+      query: (actorUuid) => {
+        return {
+          url: `/actorlist/favorites/${actorUuid}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['Favorites'],
     }),
     getIsAdmin: builder.query<boolean, void>({
       query: () => `isAdmin?party=${getCookie('AltinnPartyUuid')}`,
@@ -136,12 +166,14 @@ export const userInfoApi = createApi({
 });
 
 export const {
-  useGetUserInfoQuery,
+  useGetUserProfileQuery,
   useGetReporteeQuery,
   useGetReporteeListForPartyQuery,
   useGetReporteeListForAuthorizedUserQuery,
   useGetActorListForAuthorizedUserQuery,
   useGetFavoriteActorUuidsQuery,
+  useAddFavoriteActorUuidMutation,
+  useRemoveFavoriteActorUuidMutation,
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
   useGetIsCompanyProfileAdminQuery,

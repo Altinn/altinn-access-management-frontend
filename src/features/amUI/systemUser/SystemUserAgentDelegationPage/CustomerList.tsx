@@ -6,6 +6,7 @@ import {
   List,
   DsValidationMessage,
   ListItem,
+  DsCheckbox,
 } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
@@ -15,15 +16,21 @@ import { AmPagination } from '@/components/Paginering';
 import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
+import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 
 const filterCustomerList = (
   list: AgentDelegationCustomer[],
+  delegations: AgentDelegation[],
+  isHideAssignedChecked: boolean,
   searchString: string,
 ): AgentDelegationCustomer[] => {
   return list.filter((customer) => {
     const isOrgNoMatch = customer.orgNo.indexOf(searchString.replace(' ', '')) > -1;
     const isNameMatch = customer.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
-    return isOrgNoMatch || isNameMatch;
+    const isAssigned = delegations?.find((x) => x.customerId === customer.id);
+    const isVisible = !(isHideAssignedChecked && isAssigned);
+
+    return (isOrgNoMatch || isNameMatch) && isVisible;
   });
 };
 
@@ -53,8 +60,14 @@ export const CustomerList = ({
 
   const [searchValue, setSearchValue] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isHideAssignedChecked, setIsHideAssignedChecked] = useState<boolean>(false);
 
-  const filteredSearchList = filterCustomerList(list, searchValue);
+  const filteredSearchList = filterCustomerList(
+    list,
+    delegations ?? [],
+    isHideAssignedChecked,
+    searchValue,
+  );
 
   const totalPages = Math.ceil(filteredSearchList.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -86,6 +99,13 @@ export const CustomerList = ({
           />
           <DsSearch.Clear />
         </DsSearch>
+        {onAddCustomer && (
+          <DsCheckbox
+            label={t('systemuser_agent_delegation.hide_assigned_customers')}
+            checked={isHideAssignedChecked}
+            onChange={() => setIsHideAssignedChecked((prev) => !prev)}
+          />
+        )}
         {children}
       </div>
       <List>
@@ -95,7 +115,7 @@ export const CustomerList = ({
             id={customer.id}
             icon={{ type: 'company', name: customer.name }}
             title={{ children: customer.name, as: 'h3' }}
-            description={`${t('common.org_nr')} ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`}
+            description={`${t('common.org_nr')} ${formatOrgNr(customer.orgNo)}`}
             interactive={false}
             ariaLabel={customer.name}
             size='sm'
@@ -112,13 +132,15 @@ export const CustomerList = ({
           />
         ))}
       </List>
-      <AmPagination
-        totalPages={totalPages}
-        showPages={showPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        className={classes.pagingContainer}
-      />
+      {list.length > 0 && (
+        <AmPagination
+          totalPages={totalPages}
+          showPages={showPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          className={classes.pagingContainer}
+        />
+      )}
     </div>
   );
 };

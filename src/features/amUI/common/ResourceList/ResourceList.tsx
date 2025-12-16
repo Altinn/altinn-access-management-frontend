@@ -138,15 +138,11 @@ export const ResourceList = <
   searchPlaceholder,
   onSelect,
   showDetails,
-  getResourceName,
-  getOwnerName,
-  getDescription,
   size,
   titleAs,
   interactive,
   as,
   showMoreButton = true,
-  skeletonCount,
   resolveLogos = true,
   renderControls,
   getBadge,
@@ -196,26 +192,30 @@ export const ResourceList = <
 
   return (
     <div className={classes.container}>
-      {enableSearch && (
+      {enableSearch && resources.length > 0 && (
         <DsSearch className={classes.searchBar}>
           <DsSearch.Input
-            disabled={resources.length === 0}
-            aria-label={searchLabel}
-            placeholder={searchLabel}
+            aria-label={t('resource_list.resource_search_placeholder')}
+            placeholder={t('resource_list.resource_search_placeholder')}
             value={search}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearch(event.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
           />
           {search && <DsSearch.Clear onClick={() => setSearch('')} />}
         </DsSearch>
       )}
 
       {isSkeletonVisible ? (
-        <SkeletonResourceList count={skeletonCount} />
+        <SkeletonResourceList />
       ) : (
         <>
           {resources.length === 0 && (
             <DsParagraph data-size='md'>
-              {noResourcesText ?? t('package_resource_list.no_resources')}
+              {noResourcesText ?? t('resource_list.no_resources')}
+            </DsParagraph>
+          )}
+          {resources.length > 0 && filtered.length === 0 && (
+            <DsParagraph data-size='md'>
+              {t('resource_list.no_resources_filtered', { searchTerm: search })}
             </DsParagraph>
           )}
 
@@ -292,8 +292,9 @@ export const ResourceList = <
           providerLogoUrl={
             selected
               ? resolveLogos
-                ? (logoResolver(resolveOrgCode(selected) ?? '') ?? resolveLogoUrl(selected))
-                : resolveLogoUrl(selected)
+                ? (logoResolver(selected.resourceOwnerOrgcode ?? '') ??
+                  selected.resourceOwnerLogoUrl)
+                : selected.resourceOwnerLogoUrl
               : undefined
           }
         />

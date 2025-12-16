@@ -48,10 +48,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(3, cookieHeaders.Count());
+            Assert.Equal(5, cookieHeaders.Count());
             Assert.StartsWith("AS-", cookieHeaders.ElementAt(0));
             Assert.StartsWith("XSR", cookieHeaders.ElementAt(1));
             Assert.StartsWith("selectedLanguage", cookieHeaders.ElementAt(2));
+            Assert.StartsWith("AltinnPartyId", cookieHeaders.ElementAt(3));
+            Assert.StartsWith("AltinnPartyUuid", cookieHeaders.ElementAt(4));
             Assert.StartsWith("deny", xframeHeaders.ElementAt(0));
             Assert.StartsWith("nosniff", contentTypeHeaders.ElementAt(0));
             Assert.StartsWith("0", xxsProtectionHeaders.ElementAt(0));
@@ -67,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             HttpClient client = SetupUtils.GetTestClient(_factory, true);
-            string requestUrl = "http://localhost:5101/authentication/api/v1/authentication?goto=http%3a%2f%2flocalhost%3a5101%2faccessmanagement%2f";
+            string requestUrl = "http://localhost:5101/authentication/api/v1/authentication?goto=http%3a%2f%2flocalhost%3a5101%2faccessmanagement%2f%3fopenAccountMenu%3dtrue";
 
             // Act
             HttpResponseMessage response = await client.GetAsync($"accessmanagement/");
@@ -97,13 +99,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _ = await response.Content.ReadAsStringAsync();
             IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
 
-        
+
             // Verify that 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(3, cookieHeaders.Count());
+            Assert.Equal(5, cookieHeaders.Count());
             Assert.StartsWith("AS-", cookieHeaders.ElementAt(0));
             Assert.StartsWith("XSR", cookieHeaders.ElementAt(1));
             Assert.StartsWith("selectedLanguage", cookieHeaders.ElementAt(2));
+            Assert.StartsWith("AltinnPartyId", cookieHeaders.ElementAt(3));
+            Assert.StartsWith("AltinnPartyUuid", cookieHeaders.ElementAt(4));
         }
 
 
@@ -123,10 +127,144 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SetupUtils.AddAuthCookie(httpRequestMessage, token, "AltinnStudioRuntime");
 
             HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
-            string requestUrl = "http://localhost:5101/authentication/api/v1/authentication?goto=http%3a%2f%2flocalhost%3a5101%2faccessmanagement%2f";
+            string requestUrl = "http://localhost:5101/authentication/api/v1/authentication?goto=http%3a%2f%2flocalhost%3a5101%2faccessmanagement%2f%3fopenAccountMenu%3dtrue";
 
             // Verify that 
             Assert.Equal(requestUrl, response.RequestMessage.RequestUri.ToString());
+        }
+
+        /// <summary>
+        /// Test case: Both AltinnPartyId and AltinnPartyUuid cookies are present with valid values
+        /// Expected: No new cookies are added or modified
+        /// </summary>
+        [Fact]
+        public async Task Index_BothPartyCookiesPresent_NoCookiesAdded()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1234, 50005545);
+            HttpClient client = SetupUtils.GetTestClient(_factory, false);
+
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/");
+            SetupUtils.AddLanguageCookie(httpRequestMessage);
+            SetupUtils.AddAuthCookie(httpRequestMessage, token, "AltinnStudioRuntime");
+            httpRequestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            // Add both party cookies with valid values
+            httpRequestMessage.Headers.Add("Cookie", "AltinnPartyId=50005545");
+            httpRequestMessage.Headers.Add("Cookie", "AltinnPartyUuid=00000000-0000-0000-0005-000000005545");
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(3, cookieHeaders.Count()); // Only XSR, selectedLanguage, and AS- cookies should be set
+            Assert.Single(cookieHeaders, c => c.StartsWith("AS-"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("XSR"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("selectedLanguage"));
+            // Verify that no AltinnPartyId or AltinnPartyUuid cookies are in the response
+            Assert.DoesNotContain(cookieHeaders, c => c.StartsWith("AltinnPartyId"));
+            Assert.DoesNotContain(cookieHeaders, c => c.StartsWith("AltinnPartyUuid"));
+        }
+
+        /// <summary>
+        /// Test case: AltinnPartyId cookie is missing but AltinnPartyUuid is present
+        /// Expected: AltinnPartyId cookie is created based on the provided AltinnPartyUuid
+        /// </summary>
+        [Fact]
+        public async Task Index_PartyIdCookieMissing_PartyIdCookieCreated()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1234, 50005545);
+            HttpClient client = SetupUtils.GetTestClient(_factory, false);
+
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/");
+            SetupUtils.AddLanguageCookie(httpRequestMessage);
+            SetupUtils.AddAuthCookie(httpRequestMessage, token, "AltinnStudioRuntime");
+            httpRequestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            // Add only AltinnPartyUuid cookie
+            httpRequestMessage.Headers.Add("Cookie", "AltinnPartyUuid=00000000-0000-0000-0005-000000005545");
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(4, cookieHeaders.Count()); // XSR, selectedLanguage, AS-, and AltinnPartyId cookies
+            Assert.Single(cookieHeaders, c => c.StartsWith("AS-"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("XSR"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("selectedLanguage"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("AltinnPartyId"));
+            // Verify that no AltinnPartyUuid cookie is set (since it was already present)
+            Assert.DoesNotContain(cookieHeaders, c => c.StartsWith("AltinnPartyUuid"));
+        }
+
+        /// <summary>
+        /// Test case: AltinnPartyUuid cookie is missing but AltinnPartyId is present
+        /// Expected: AltinnPartyUuid cookie is created based on the provided AltinnPartyId
+        /// </summary>
+        [Fact]
+        public async Task Index_PartyUuidCookieMissing_PartyUuidCookieCreated()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1234, 50005545);
+            HttpClient client = SetupUtils.GetTestClient(_factory, false);
+
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/");
+            SetupUtils.AddLanguageCookie(httpRequestMessage);
+            SetupUtils.AddAuthCookie(httpRequestMessage, token, "AltinnStudioRuntime");
+            httpRequestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            // Add only AltinnPartyId cookie
+            httpRequestMessage.Headers.Add("Cookie", "AltinnPartyId=50005545");
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(4, cookieHeaders.Count()); // XSR, selectedLanguage, AS-, and AltinnPartyUuid cookies
+            Assert.Single(cookieHeaders, c => c.StartsWith("AS-"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("XSR"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("selectedLanguage"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("AltinnPartyUuid"));
+            // Verify that no AltinnPartyId cookie is set (since it was already present)
+            Assert.DoesNotContain(cookieHeaders, c => c.StartsWith("AltinnPartyId"));
+        }
+
+        /// <summary>
+        /// Test case: Both AltinnPartyId and AltinnPartyUuid cookies are missing
+        /// Expected: Both cookies are created with the logged-in user's party information
+        /// </summary>
+        [Fact]
+        public async Task Index_BothPartyCookiesMissing_BothCookiesCreated()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1234, 50005545);
+            HttpClient client = SetupUtils.GetTestClient(_factory, false);
+
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/");
+            SetupUtils.AddLanguageCookie(httpRequestMessage);
+            SetupUtils.AddAuthCookie(httpRequestMessage, token, "AltinnStudioRuntime");
+            httpRequestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            // No party cookies added
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(5, cookieHeaders.Count()); // XSR, selectedLanguage, AS-, AltinnPartyId, and AltinnPartyUuid cookies
+            Assert.Single(cookieHeaders, c => c.StartsWith("AS-"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("XSR"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("selectedLanguage"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("AltinnPartyId"));
+            Assert.Single(cookieHeaders, c => c.StartsWith("AltinnPartyUuid"));
         }
     }
 }

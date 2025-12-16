@@ -2,8 +2,11 @@
 import { test as baseTest, expect } from '@playwright/test';
 import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
 import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
+import { AccessManagementFrontPage } from 'playwright/pages/AccessManagementFrontPage';
+import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { DelegationPage } from 'playwright/pages/profile/accessPkgDelegationPage';
 import { apiDelegation } from 'playwright/pages/profile/apidelegeringPage';
+import { AktorvalgHeader } from 'playwright/pages/AktorvalgHeader';
 import {
   delegateRightsToUser,
   delegateToUser,
@@ -21,6 +24,8 @@ type Fixtures = {
   language: Language;
 
   login: LoginPage;
+  accessManagementFrontPage: AccessManagementFrontPage;
+  systemUserPage: SystemUserPage;
   delegate: delegateToUser;
   delegateRights: delegateRightsToUser;
   deleteRights: revokeRights;
@@ -32,6 +37,7 @@ type Fixtures = {
   runAccessibilityTest: runAccessibilityTests;
   delegation: DelegationPage;
   consentPage: ConsentPage;
+  aktorvalgHeader: AktorvalgHeader;
 };
 
 const test = baseTest.extend<Fixtures>({
@@ -40,6 +46,12 @@ const test = baseTest.extend<Fixtures>({
 
   login: async ({ page }, use) => {
     await use(new LoginPage(page));
+  },
+  accessManagementFrontPage: async ({ page }, use) => {
+    await use(new AccessManagementFrontPage(page));
+  },
+  systemUserPage: async ({ page }, use) => {
+    await use(new SystemUserPage(page));
   },
   delegate: async ({ page }, use) => {
     await use(new delegateToUser(page));
@@ -75,6 +87,10 @@ const test = baseTest.extend<Fixtures>({
   // UPDATED: inject language into ConsentPage constructor
   consentPage: async ({ page, language }, use) => {
     await use(new ConsentPage(page, language));
+  },
+
+  aktorvalgHeader: async ({ page, language }, use) => {
+    await use(new AktorvalgHeader(page));
   },
 });
 

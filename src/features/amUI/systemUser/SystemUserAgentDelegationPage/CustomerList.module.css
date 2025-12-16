@@ -5,6 +5,7 @@
 .listHeader {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: var(--ds-size-2);
 }
 

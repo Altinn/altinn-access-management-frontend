@@ -1,6 +1,8 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.Register.Contracts.V1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
@@ -13,6 +15,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// </summary>
     public class ConnectionClientMock : IConnectionClient
     {
+        private static int _numberOfFaliedPersonLookups = 0;
         private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string dataFolder;
 
@@ -69,14 +72,53 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc/>
-        public Task<HttpResponseMessage> PostNewRightHolderConnection(Guid party, Guid to, CancellationToken cancellationToken = default)
+        public Task<Guid> PostNewRightHolderConnection(Guid party, Guid? to, PersonInput personInput = null, CancellationToken cancellationToken = default)
         {
+            if (personInput != null && personInput.LastName == "BadRequest")
+            {
+                throw new HttpStatusException("Test", "Mock bad request error", HttpStatusCode.BadRequest, null);
+            }
+
             if (party == Guid.Empty)
             {
                 throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
             }
-            var response = new HttpResponseMessage(HttpStatusCode.OK);
-            return Task.FromResult(response);
+
+            if (personInput != null)
+            {
+                Person person = null;
+
+                string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Persons", $"{personInput.PersonIdentifier}.json");
+                if (File.Exists(testDataPath))
+                {
+                    string content = File.ReadAllText(testDataPath);
+                    Person personContent = JsonSerializer.Deserialize<Person>(content, options);
+                    if (personContent.LastName.ToLower() == personInput.LastName.ToLower())
+                    {
+                        person = personContent;
+                    }
+                }
+
+                if (person == null)
+                {
+                    _numberOfFaliedPersonLookups++;
+                    if (_numberOfFaliedPersonLookups > 3)
+                    {
+                        throw new HttpStatusException("Status Error", "Too many failed person lookups", HttpStatusCode.TooManyRequests, null);
+                    }
+                    else
+                    {
+                        throw new HttpStatusException("Status Error", "Person not found", HttpStatusCode.NotFound, null);
+                    }
+                }
+
+                if (person != null)
+                {
+                    return Task.FromResult(Guid.NewGuid());
+                }
+            }
+
+            return to.HasValue ? Task.FromResult(to.Value) : Task.FromException<Guid>(new InvalidOperationException("No valid Guid provided."));
         }
     }
 }
