@@ -121,7 +121,7 @@
     "logged_in_as_name": "Logged in as {{name}}",
     "new_altinn_info": "About new Altinn",
     "help_pages": "Help pages",
-    "leave_beta": "To the old solution",
+    "leave_beta": "Go to old Altinn",
     "shortcuts": "Shortcuts",
     "all_forms": "All forms and services",
     "start_business": "Start and run business",
@@ -300,7 +300,7 @@
     "delete_singleRight_error_message": "Failed to delete access to ",
     "wip_title": "Power of attorney to services",
     "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
-    "wip_link_text": "Go to old solution"
+    "wip_link_text": "Go to old Altinn"
   },
   "access_packages": {
     "helptext_button": "What are access packages?",
@@ -508,7 +508,7 @@
     "invalid_phone": "Invalid phone number"
   },
   "info_modal": {
-    "back_button": "Go to the old solution",
+    "back_button": "Go to old Altinn",
     "help_pages": "Help pages",
     "info_button": "Information about the new solution"
   },
@@ -517,7 +517,7 @@
     "launchAlertContent": "This user may also have authorizations from the previous Altinn.",
     "launchAlertLinkText": "View authorizations from the previous Altinn",
     "oldRolesContent": "These Altinn roles may include services that already exist in the new Altinn solution. The services are being moved into the new access packages. The user has the same roles in the old solution, but there they include more and different services.",
-    "oldRolesLinkText": "Go to the old solution",
+    "oldRolesLinkText": "Go to old Altinn",
     "legacyRoleContent": "This role will soon be removed. Use access packages instead."
   },
   "systemuser_overviewpage": {
@@ -679,7 +679,7 @@
   "page_not_available": {
     "title": "Access management for private individuals is still under development",
     "text": "More content will be added to this page over time. You can still manage access on behalf of yourself as a private individual in the old solution.",
-    "link_text": "Go to old solution"
+    "link_text": "Go to old Altinn"
   },
   "consent_request": {
     "page_title": "Approve consent/power of attorney - Altinn",
@@ -799,7 +799,7 @@
     "alert_heading_priv": "This is the new access management solution for private individuals",
     "alert_body": "Today's Altinn roles have been replaced by access packages with services. \n\nPlease note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
     "alert_body_priv": "Unfortunately we don't have everything in place yet, so you may need to do some things in the old solution. \n\nIf you want to go to access management for your organization, you can switch to your desired organization in the account selector at the top.",
-    "alert_link": "Go to the old solution",
+    "alert_link": "Go to old Altinn",
     "shortcut_links_heading": "Where do you want to go?",
     "other_links_heading": "Other",
     "users_item_description_org": "Overview of people and organizations that have been granted access in your organization",

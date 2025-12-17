@@ -118,7 +118,7 @@
     "logged_in_as_name": "Logga inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
     "help_pages": "Hjelpesider",
-    "leave_beta": "Til gammel løsning",
+    "leave_beta": "Til gamle Altinn",
     "shortcuts": "Snarvegar",
     "all_forms": "Alle skjema og tenester",
     "start_business": "Starte og drive bedrift",
@@ -297,7 +297,7 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttenester",
     "wip_message": "Denne sida jobbar vi framleis med! For å administrere enkelttenester, må du gå til den gamle løysinga.",
-    "wip_link_text": "Gå til gammal løsning"
+    "wip_link_text": "Gå til gamle Altinn"
   },
   "access_packages": {
     "helptext_button": "Kva er tilgangspakkar?",
@@ -505,7 +505,7 @@
     "invalid_phone": "Ugyldig telefonnummer"
   },
   "info_modal": {
-    "back_button": "Gå til gammel løsning",
+    "back_button": "Gå til gamle Altinn",
     "help_pages": "Hjelpesider",
     "info_button": "Informasjon om ny løysing"
   },
@@ -514,7 +514,7 @@
     "launchAlertContent": "Denne brukaren kan også ha fullmakter frå tidlegare Altinn.",
     "launchAlertLinkText": "Sjå fullmakter frå tidlegare Altinn",
     "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som allereie finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane. Brukaren har dei same rollene i den gamle løysinga, men der inneheld dei fleire og andre tenester.",
-    "oldRolesLinkText": "Gå til gammal løysing",
+    "oldRolesLinkText": "Gå til gamle Altinn",
     "legacyRoleContent": "Denne rolla vil snart fjernast. Bruk heller tilgangspakkar."
   },
   "systemuser_overviewpage": {
@@ -676,7 +676,7 @@
   "page_not_available": {
     "title": "Tilgangsstyring for privatpersonar er framleis under arbeid",
     "text": "På denne sida vil det komme meir etter kvart. Du kan framleis tilgangsstyre på vegne av deg sjølv som privatperson i gammal løysing.",
-    "link_text": "Gå til gammal løysing"
+    "link_text": "Gå til gamle Altinn"
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
@@ -796,7 +796,7 @@
     "alert_heading_priv": "Dette er den nye løysinga for tilgangsstyring for privatperson",
     "alert_body": "Her er dagens Altinn-roller erstatta av tilgangspakker med tenester. \n\nVær oppmerksom på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Hvis du ikkje finn tenesten her, kan du gå til den gamle løysinga.",
     "alert_body_priv": "Vi har dessverre ikkje alt på plass endå, så nokre ting må du gjere i gammal løysing. \n\nØnsker du å gå til tilgangsstyring for verksemd, kan du skifte til ønska verksemd i aktørvalget i toppen.",
-    "alert_link": "Gå til gammal løysing",
+    "alert_link": "Gå til gamle Altinn",
     "shortcut_links_heading": "Kvar vil du gå?",
     "other_links_heading": "Anna",
     "users_item_description_org": "Oversikt over personar og verksemder som har fått fullmakter hos dykk",
