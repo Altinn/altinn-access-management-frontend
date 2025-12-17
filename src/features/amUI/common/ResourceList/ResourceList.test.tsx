@@ -95,7 +95,7 @@ describe('ResourceList', () => {
 
     await user.type(
       screen.getByRole('searchbox', {
-        name: /package_resource_list\.resource_search_placeholder/i,
+        name: /resource_list\.resource_search_placeholder/i,
       }),
       'Beta',
     );
