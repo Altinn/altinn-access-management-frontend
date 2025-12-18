@@ -40,7 +40,6 @@ import {
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/reporteeUtils';
 import { getHostUrl } from '@/resources/utils/pathUtils';
-import { usePendingSystemusersBadge } from '@/resources/hooks/usePendingSystemusersBadge';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
@@ -57,7 +56,6 @@ export const LandingPage = () => {
     fullName: reportee?.name || '',
     type: isOrganization(reportee) ? 'company' : 'person',
   });
-  const { systemuserBadge } = usePendingSystemusersBadge();
 
   useEffect(() => {
     // Remove the openAccountMenu query parameter after reading it the first time
@@ -134,7 +132,6 @@ export const LandingPage = () => {
       items.push({
         ...getSystemUserMenuItem(),
         description: t('landing_page.systemuser_item_description'),
-        badge: systemuserBadge,
       });
     }
     return items;
