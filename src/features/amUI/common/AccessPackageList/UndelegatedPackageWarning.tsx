@@ -22,8 +22,8 @@ export const UndelegatedPackageWarning = () => {
       data-color='danger'
       className={classes.criticalAndUndelegatedBadge}
     >
-      <ExclamationmarkTriangleIcon title={isSmall ? t('access_packages.no_permissions') : ''} />
-      {!isSmall && t('access_packages.no_permissions')}
+      <ExclamationmarkTriangleIcon title={isSmall ? t('poa_status.no_permissions') : ''} />
+      {!isSmall && t('poa_status.no_permissions')}
     </Typography>
   );
 };

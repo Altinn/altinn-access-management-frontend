@@ -13,7 +13,6 @@ import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
-import { StatusSection } from '../StatusSection';
 import type { ExtendedAccessPackage } from '../../AccessPackageList/useAreaPackageList';
 import { DeletableStatus, getDeletableStatus } from '../../AccessPackageList/useAreaPackageList';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
@@ -23,6 +22,7 @@ import { useResourceList } from './useResourceList';
 import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { StatusSection } from '../../StatusSection/StatusSection';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -155,7 +155,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
           <StatusSection
             userHasAccess={userHasPackage}
-            showMissingRightsMessage={showMissingRightsMessage}
+            showDelegationCheckWarning={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
             inheritedStatus={inheritedStatus ?? undefined}
           />

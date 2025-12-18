@@ -14,7 +14,7 @@
     "error_message": "Feilmelding",
     "loading": "Lastar",
     "success": "Fullført",
-    "error_status_code": "Statuskode på feilmelding",
+    "error_status_code": "Statuskode",
     "error_time_stamp": "Tidsstempel",
     "date": "Dato",
     "time": "Tidspunkt",
@@ -118,7 +118,7 @@
     "logged_in_as_name": "Logga inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
     "help_pages": "Hjelpesider",
-    "leave_beta": "Til gammel løsning",
+    "leave_beta": "Til gamle Altinn",
     "shortcuts": "Snarvegar",
     "all_forms": "Alle skjema og tenester",
     "start_business": "Starte og drive bedrift",
@@ -144,12 +144,17 @@
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
-    "not_found_site_header": "Oi! Du prøvde å komme til ei side vi ikkje veit om",
+    "not_found_site_header": "Oi! Du har prøvd å kome til ei side vi ikkje veit om.",
     "not_found_site_upper_text": "Vi veit ikkje kvar du eigentleg skulle, men kanskje du kan finne det du leitar etter på nokre av desse sidene:",
     "not_found_site_lower_text": "Om dette ikkje var til hjelp kan du finne svar på Altinn sine hjelpesider, eller kontakte Altinn brukarservice på telefon 75 00 60 00",
     "go_to_inbox": "Gå til innboks",
     "go_to_profile": "Gå til profilsida",
     "go_to_help": "Gå til hjelpesida",
+    "find_and_submit_scheme": "Finne og sende inn nytt skjema",
+    "not_found_site_description": "Mange kommer til Altinn for å gjøre ein av desse tinga:",
+    "see_messages": "Sjå meldingar eller oppgåver i innboksen",
+    "find_a_form": "Finne og sende inn eit skjema",
+    "start_or_run_business": "Lese om rettigheiter og plikter for næringsdrivande",
     "unknown_error_header": "Oi! Det har visst skjedd ein feil",
     "unknown_error_description": "Prøv å laste inn sida på nytt.",
     "if_persistent_contact_service": "Dersom feilen held fram kan du finne svar på Altinn sine hjelpesider, eller kontakte brukarservice på telefon 75 00 60 00.",
@@ -292,7 +297,7 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttenester",
     "wip_message": "Denne sida jobbar vi framleis med! For å administrere enkelttenester, må du gå til den gamle løysinga.",
-    "wip_link_text": "Gå til gammal løsning"
+    "wip_link_text": "Gå til gamle Altinn"
   },
   "access_packages": {
     "helptext_button": "Kva er tilgangspakkar?",
@@ -303,7 +308,6 @@
     "current_access_packages_title": "{{count}} tilgangspakkar",
     "give_new_button": "Gi fullmakt",
     "search_label": "Søk etter tilgangspakkar",
-    "no_permissions": "Du må gi fullmakt",
     "other_packages_in_area_title": "Andre tilgjengelige pakkar i området:",
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",
@@ -314,17 +318,12 @@
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakkar.",
     "no_packages": "Ingen tilgangspakkar tilgjengelege.",
     "no_matching_search": "Ingen treff på søket",
-    "info_alert_text": "Tilgangspakkar skal erstatte dagens Altinn-roller. Dei vil bli fylt med fleire tenester etter kvart. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/profil/tilgangspakker/'>hjelpesida om tilgangspakkar</a>.",
+    "info_alert_text": "Tilgangspakkar skal erstatte dagens Altinn-roller. Dei vil bli fylt med fleire tenester etter kvart. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
     "person_info_alert": "Det er ikkje mogleg å gi og fjerne fullmakter til personar heilt enno. Dette vil komme seinare.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Ver venleg å kontakte Altinn brukarteneste om problemet held fram.",
       "delegation_check_error_message_plural": "En teknisk feil sperrer deg fra å gi fullmakt til ein eller fleire tilgangspakkar. Ver venleg å kontakte Altinn brukarteneste om problemet held fram."
-    },
-    "access_status": {
-      "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
-      "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
-      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast."
     }
   },
   "role": {
@@ -417,10 +416,7 @@
     "error_message": "Kunne ikkje gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tenester",
-    "has_package_message": "{{user_name}} har denne fullmakta.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom rolla si i {{org_name}}. Den kan derfor ikkje slettast.",
-    "cannot_delegate_here": "Tilgang til denne pakken kan ikkje bli gitt eller fjerna her.",
-    "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta fordi du manglar den sjølv.",
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ønsker å endre dette."
@@ -454,6 +450,17 @@
       "access_list_service": "Kven som får bruke denne tenesta blir bestemt av {{resourceOwner}}, og {{reportee}} har ikkje fått den moglegheita. Vi tilrår å ta kontakt med {{resourceOwner}}.",
       "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar den sjølv. Dagleg leiar eller hovudadministrator kan hjelpe deg med dette."
     }
+  },
+  "status_section": {
+    "has_package_message": "{{user_name}} har denne fullmakta.",
+    "access_status": {
+      "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
+      "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
+      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast."
+    },
+    "cannot_delegate_here": "Tilgang til denne pakken kan ikkje bli gitt eller fjerna her.",
+    "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta.",
+    "no_permissions_fulltext": "Virksemden kan ha innhald som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldingar og tenester skal bli synlege."
   },
   "new_user_modal": {
     "not_found_error_person": "Fann ingen brukar med dette fødselsnummeret og namnet. Sjekk at informasjonen er korrekt.",
@@ -498,7 +505,7 @@
     "invalid_phone": "Ugyldig telefonnummer"
   },
   "info_modal": {
-    "back_button": "Gå til gammel løsning",
+    "back_button": "Gå til gamle Altinn",
     "help_pages": "Hjelpesider",
     "info_button": "Informasjon om ny løysing"
   },
@@ -507,7 +514,7 @@
     "launchAlertContent": "Denne brukaren kan også ha fullmakter frå tidlegare Altinn.",
     "launchAlertLinkText": "Sjå fullmakter frå tidlegare Altinn",
     "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som allereie finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane. Brukaren har dei same rollene i den gamle løysinga, men der inneheld dei fleire og andre tenester.",
-    "oldRolesLinkText": "Gå til gammal løysing",
+    "oldRolesLinkText": "Gå til gamle Altinn",
     "legacyRoleContent": "Denne rolla vil snart fjernast. Bruk heller tilgangspakkar."
   },
   "systemuser_overviewpage": {
@@ -683,7 +690,7 @@
   "page_not_available": {
     "title": "Tilgangsstyring for privatpersonar er framleis under arbeid",
     "text": "På denne sida vil det komme meir etter kvart. Du kan framleis tilgangsstyre på vegne av deg sjølv som privatperson i gammal løysing.",
-    "link_text": "Gå til gammal løysing"
+    "link_text": "Gå til gamle Altinn"
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
@@ -773,6 +780,9 @@
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}"
   },
+  "poa_status": {
+    "no_permissions": "Du må gi fullmakt"
+  },
   "package_poa_details_page": {
     "page_title": "Fullmaktsdetaljar - Altinn",
     "users_tab_title": "Brukarar",
@@ -800,7 +810,7 @@
     "alert_heading_priv": "Dette er den nye løysinga for tilgangsstyring for privatperson",
     "alert_body": "Her er dagens Altinn-roller erstatta av tilgangspakker med tenester. \n\nVær oppmerksom på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Hvis du ikkje finn tenesten her, kan du gå til den gamle løysinga.",
     "alert_body_priv": "Vi har dessverre ikkje alt på plass endå, så nokre ting må du gjere i gammal løysing. \n\nØnsker du å gå til tilgangsstyring for verksemd, kan du skifte til ønska verksemd i aktørvalget i toppen.",
-    "alert_link": "Gå til gammal løysing",
+    "alert_link": "Gå til gamle Altinn",
     "shortcut_links_heading": "Kvar vil du gå?",
     "other_links_heading": "Anna",
     "users_item_description_org": "Oversikt over personar og verksemder som har fått fullmakter hos dykk",

@@ -5,6 +5,7 @@ import {
   DsHeading,
   DsParagraph,
   DsSkeleton,
+  formatDisplayName,
 } from '@altinn/altinn-components';
 import { t } from 'i18next';
 import { useMemo, useRef, useState } from 'react';
@@ -31,6 +32,8 @@ import classes from './DeleteUserModal.module.css';
 import { getDeletionStatus, getTextKeysForDeletionStatus } from './deletionModalUtils';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { roleApi, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { handleSelectAccount } from '../PageLayoutWrapper/useHeader';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 const srmLink =
   'https://www.altinn.no/Pages/ServiceEngine/Start/StartService.aspx?ServiceEditionCode=1&ServiceCode=3498&M=SP&DontChooseReportee=true&O=personal';
@@ -85,6 +88,9 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
         setIsSuccess(true);
         dispatch(roleApi.util.invalidateTags(['roles'])); // Invalidate roles cache
         dispatch(accessPackageApi.util.invalidateTags(['AccessPackages'])); // Invalidate access packages cache
+        if (toParty.partyUuid === selfParty?.partyUuid) {
+          handleSelectAccount(selfParty.partyUuid);
+        }
       })
       .catch((err) => {
         // Error is already captured by RTK Query's isError and error states
@@ -97,6 +103,18 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
   const errorDetails = isError ? createErrorDetails(error) : null;
 
   const isDeletionNotAllowed = status.level === 'none';
+
+  const formattedToPartyName = formatDisplayName({
+    fullName: toParty?.name || '',
+    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    reverseNameOrder: false,
+  });
+
+  const formattedFromPartyName = formatDisplayName({
+    fullName: fromParty?.name || '',
+    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    reverseNameOrder: false,
+  });
 
   return (
     <DsDialog.TriggerContext>
@@ -131,8 +149,8 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
             <Trans
               i18nKey={textKeys.messageKey}
               values={{
-                to_name: toParty?.name,
-                from_name: fromParty?.name,
+                to_name: formattedToPartyName,
+                from_name: formattedFromPartyName,
               }}
               components={{
                 p: <DsParagraph data-size='sm'></DsParagraph>,

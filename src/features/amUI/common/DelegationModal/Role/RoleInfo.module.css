@@ -43,6 +43,7 @@
 .inheritedInfoIcon {
   color: var(--ds-color-info-base-default);
   margin-right: 0.3rem;
+  min-width: 1.5rem;
 }
 
 .nonDelegableIcon {
@@ -58,4 +59,19 @@
 
 .searchBar {
   max-width: 27rem;
+}
+
+.infoLine {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.infoLine svg {
+  min-width: 24px;
+}
+
+.warningIcon {
+  color: var(--ds-color-warning-base-default);
+  margin-right: 0.3rem;
 }

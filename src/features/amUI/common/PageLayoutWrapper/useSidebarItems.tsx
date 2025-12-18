@@ -64,7 +64,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getPoaOverviewMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (hasConsentPermission(reportee, isAdmin)) {
+  if (hasConsentPermission(isAdmin)) {
     items.push(getConsentMenuItem(pathname, isLoading, isSmall));
   }
 

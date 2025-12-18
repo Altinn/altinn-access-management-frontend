@@ -7,6 +7,7 @@ import {
   DsButton,
   DsHeading,
   DsSkeleton,
+  formatDate,
   formatDisplayName,
   List,
   ListItem,
@@ -19,7 +20,6 @@ import {
   useGetIsCompanyProfileAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
-import { formatDateToNorwegian } from '@/resources/utils';
 import { useTranslation } from 'react-i18next';
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { useSearchParams } from 'react-router';
@@ -120,7 +120,7 @@ export const LandingPage = () => {
       });
     }
 
-    if (hasConsentPermission(reportee, isAdmin)) {
+    if (hasConsentPermission(isAdmin)) {
       items.push({
         ...getConsentMenuItem(),
         description: t('landing_page.consent_item_description'),
@@ -187,7 +187,7 @@ export const LandingPage = () => {
       }
       return orgNrString;
     }
-    return `${t('common.date_of_birth')} ${formatDateToNorwegian(reportee?.dateOfBirth)}`;
+    return `${t('common.date_of_birth')} ${formatDate(reportee?.dateOfBirth)}`;
   };
 
   return (

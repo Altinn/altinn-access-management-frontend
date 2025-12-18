@@ -25,7 +25,7 @@ import { SystemUserPath } from '@/routes/paths';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 
 import classes from './SystemUserOverviewPage.module.css';
-import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { SystemUserList } from './SystemUserList';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
@@ -37,21 +37,28 @@ export const SystemUserOverviewPage = () => {
   const partyId = getCookie('AltinnPartyId');
   const partyUuid = getCookie('AltinnPartyUuid') || '';
 
+  const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin, isLoading: isLoadingClientAdmin } = useGetIsClientAdminQuery();
   const { data: reporteeData, isLoading: isLoadingReportee } =
     useGetSystemUserReporteeQuery(partyId);
 
+  // load only for isAdmin
   const {
     data: systemUsers,
     isLoading: isLoadingSystemUsers,
     isError: isLoadSystemUsersError,
-  } = useGetSystemUsersQuery(partyId);
+  } = useGetSystemUsersQuery(partyId, {
+    skip: !isAdmin,
+  });
 
+  // load for isAdmin and isClientAdmin
   const {
     data: agentSystemUsers,
     isLoading: isLoadingAgentSystemUsers,
     isError: isLoadAgentSystemUsersError,
-  } = useGetAgentSystemUsersQuery(partyId);
+  } = useGetAgentSystemUsersQuery(partyId, {
+    skip: !isAdmin && !isClientAdmin,
+  });
 
   const {
     data: pendingSystemUsers,
@@ -66,7 +73,8 @@ export const SystemUserOverviewPage = () => {
     isLoadingAgentSystemUsers ||
     isLoadingReportee ||
     isLoadingClientAdmin ||
-    isLoadingPendingSystemUsers;
+    isLoadingPendingSystemUsers ||
+    isLoadingIsAdmin;
 
   return (
     <PageWrapper>
