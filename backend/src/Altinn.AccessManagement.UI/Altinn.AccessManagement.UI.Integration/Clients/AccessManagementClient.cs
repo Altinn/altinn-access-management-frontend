@@ -223,7 +223,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"role/search/term={searchString}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
 
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<Role>>(response, _logger, "AccessPackageClient // GetRoleSearchMatches");
         }
@@ -236,7 +236,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 var endpointUrl = $"/assignment?from={rightOwnerUuid}&to={rightHolderUuid}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
                 string responseContent = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == HttpStatusCode.OK)
                 {

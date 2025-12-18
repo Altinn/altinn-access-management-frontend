@@ -9,6 +9,7 @@ import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageLis
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 
+import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -18,7 +19,6 @@ import { DeletableStatus, getDeletableStatus } from '../../AccessPackageList/use
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
-import { useResourceList } from './useResourceList';
 import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -75,7 +75,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
   const inheritedStatus = accessPackage.inheritedStatus;
 
-  const resourceListItems = useResourceList(accessPackage.resources);
   const deletableStatus = React.useMemo(
     () =>
       delegationAccess
@@ -172,7 +171,15 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               })}
             </DsHeading>
             <div className={classes.service_list}>
-              <List>{resourceListItems}</List>
+              <ResourceList
+                resources={accessPackage.resources}
+                enableSearch={false}
+                showMoreButton={false}
+                showDetails={false}
+                interactive={false}
+                size='xs'
+                as='div'
+              />
             </div>
           </div>
 

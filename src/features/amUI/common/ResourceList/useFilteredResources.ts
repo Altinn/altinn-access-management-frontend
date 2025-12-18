@@ -1,13 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import type { PackageResource } from '@/rtk/features/accessPackageApi';
-
-interface UseFilteredResourcesProps {
-  resources?: PackageResource[];
+interface UseFilteredResourcesProps<TResource> {
+  resources?: TResource[];
   searchString: string;
+  getResourceName: (resource: TResource) => string;
+  getOwnerName: (resource: TResource) => string;
+  getDescription?: (resource: TResource) => string;
 }
 
-export const useFilteredResources = ({ resources, searchString }: UseFilteredResourcesProps) => {
+export const useFilteredResources = <TResource>({
+  resources,
+  searchString,
+  getResourceName,
+  getOwnerName,
+  getDescription,
+}: UseFilteredResourcesProps<TResource>) => {
   const PAGE_SIZE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const normalizedSearch = searchString.trim().toLowerCase();
@@ -15,17 +22,17 @@ export const useFilteredResources = ({ resources, searchString }: UseFilteredRes
   const filteredResources = useMemo(() => {
     const list = resources ?? [];
     if (!normalizedSearch) return list;
-    return list.filter((r) => {
-      const nameOrTitle = (r.name || r.title || '').toLowerCase();
-      const ownerName = (r.provider?.name || r.resourceOwnerName || '').toLowerCase();
-      const description = (r.description || '').toLowerCase();
+    return list.filter((resource) => {
+      const nameOrTitle = getResourceName(resource).toLowerCase();
+      const ownerName = getOwnerName(resource).toLowerCase();
+      const description = getDescription?.(resource)?.toLowerCase() ?? '';
       return (
         nameOrTitle.includes(normalizedSearch) ||
         ownerName.includes(normalizedSearch) ||
         description.includes(normalizedSearch)
       );
     });
-  }, [resources, normalizedSearch]);
+  }, [resources, normalizedSearch, getDescription, getOwnerName, getResourceName]);
 
   useEffect(() => {
     setCurrentPage(1);
