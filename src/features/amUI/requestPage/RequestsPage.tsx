@@ -71,10 +71,10 @@ export const RequestPage = () => {
             <List>
               {isLoadingRequests ? (
                 <>
-                  <LoadingUserListItem />
-                  <LoadingUserListItem />
-                  <LoadingUserListItem />
-                  <LoadingUserListItem />
+                  <LoadingRequestListItem />
+                  <LoadingRequestListItem />
+                  <LoadingRequestListItem />
+                  <LoadingRequestListItem />
                 </>
               ) : (
                 <PendingConsents pendingConsents={pendingConsents} />
@@ -126,7 +126,7 @@ const PendingConsents = ({ pendingConsents }: PendingConsentProps) => {
   );
 };
 
-const LoadingUserListItem = () => {
+const LoadingRequestListItem = () => {
   return (
     <UserListItem
       id={''}
