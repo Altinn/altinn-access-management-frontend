@@ -808,5 +808,16 @@
     "systemuser_item_description": "Oversikt over systemtilgangar",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny førespurnad",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye førespurnader"
+  },
+  "request_page": {
+    "page_title": "Førespurnader - Altinn",
+    "heading": "Førespurnader for {{name}}",
+    "incoming_requests": "Mottatte førespurnader",
+    "sent_requests": "Sendte førespurnader",
+    "no_received_requests": "Ingen mottatte førespurnader",
+    "no_sent_requests": "Ingen sendte førespurnader",
+    "process_request": "Behandle førespurnad",
+    "request_consent": "Ber om samtykke",
+    "request_poa": "Ber om fullmakt"
   }
 }

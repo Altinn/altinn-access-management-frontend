@@ -1,3 +1,4 @@
+import { useRequests } from '@/resources/hooks/useRequests';
 import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
@@ -20,7 +21,7 @@ import {
   useGetIsCompanyProfileAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
-import { MenuItemProps } from '@altinn/altinn-components';
+import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
@@ -37,6 +38,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
+  const { pendingConsents } = useRequests();
 
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
@@ -47,7 +49,18 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getHeadingMenuItem(pathname, isLoading));
   }
   if (displayRequestsPage) {
-    items.push(getRequestsMenuItem(pathname, isLoading, isSmall));
+    const requestsBadge =
+      pendingConsents && pendingConsents.length > 0
+        ? {
+            label: pendingConsents.length,
+            color: 'warning' as Color,
+            variant: 'base' as BadgeVariant,
+          }
+        : undefined;
+    items.push({
+      ...getRequestsMenuItem(pathname, isLoading, isSmall),
+      badge: requestsBadge,
+    });
   }
 
   if (displayConfettiPackage) {
