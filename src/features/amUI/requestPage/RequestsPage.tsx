@@ -107,6 +107,7 @@ const PendingConsents = ({ pendingConsents }: PendingConsentProps) => {
           : t('request_page.request_consent');
         return (
           <UserListItem
+            key={consent.id}
             id={consent.id}
             name={consent.toParty.name}
             type={'company'}

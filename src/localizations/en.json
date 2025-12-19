@@ -818,7 +818,7 @@
     "incoming_requests": "Received requests",
     "sent_requests": "Sent requests",
     "no_received_requests": "No received requests",
-    "no_sent_requests": "Ingen sent requests",
+    "no_sent_requests": "No sent requests",
     "process_request": "Process request",
     "request_consent": "Requests consent",
     "request_poa": "Requests power of attorney"
