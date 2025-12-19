@@ -81,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// used to determine if the Request is still valid.
         /// </summary>
         [JsonPropertyName("created")]
-        public DateTime Created { get; set; }
+        public DateTimeOffset Created { get; set; }
 
         /// <summary>
         /// The set of Access Packages requested for this agent system user. Must be equal to or less than the set defined in the Registered System.

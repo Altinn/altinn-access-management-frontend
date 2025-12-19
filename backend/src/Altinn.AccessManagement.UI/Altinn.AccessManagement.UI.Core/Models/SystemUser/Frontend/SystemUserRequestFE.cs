@@ -69,6 +69,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// used to determine if the Request is still valid.
         /// </summary>
         [JsonPropertyName("created")]
-        public DateTime Created { get; set; }
+        public DateTimeOffset Created { get; set; }
     }
 }
