@@ -63,5 +63,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// </summary>
         [JsonPropertyName("accessPackages")]
         public List<AccessPackageFE> AccessPackages { get; set; } = new List<AccessPackageFE>();
+
+        /// <summary>
+        /// The date and time the Request was created,
+        /// used to determine if the Request is still valid.
+        /// </summary>
+        [JsonPropertyName("created")]
+        public DateTime Created { get; set; }
     }
 }
