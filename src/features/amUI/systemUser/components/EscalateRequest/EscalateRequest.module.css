@@ -1,0 +1,6 @@
+.escalateAlert {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-2);
+  max-width: 35rem;
+}

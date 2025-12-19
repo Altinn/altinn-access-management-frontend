@@ -274,6 +274,7 @@ const ListItemContainer = ({ heading, items }: ListItemContainerProps) => {
             icon={item.icon}
             title={item.title}
             description={item.description}
+            badge={item.badge}
             size='xs'
             border='none'
             shadow='none'

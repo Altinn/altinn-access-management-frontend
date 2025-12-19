@@ -524,6 +524,7 @@
     "banner_title": "Systemtilganger",
     "sub_title_text": "Ved å opprette en systemtilgang gir du et fagsystem tilgang til å løse oppgaver i Altinn på vegne av bedriften din.",
     "systemusers_load_error": "Kunne ikke laste systemtilganger",
+    "pending_systemusers_load_error": "Kunne ikke laste ventende systemtilgang-forespørsler",
     "agent_delegation_systemusers_load_error": "Kunne ikke laste systemtilganger for kunder",
     "new_system_user_button": "Lag ny systemtilgang",
     "existing_system_users_title": "Egne systemtilganger",
@@ -535,7 +536,12 @@
     "no_key_role2": "For å lage en systemtilgang trenger du rollen Tilgangsstyrer, Hovedadministrator eller Daglig leder.",
     "new_system_user": "NY",
     "systemuser_tab": "Systemtilganger",
-    "api_tab": "API-tilganger"
+    "api_tab": "API-tilganger",
+    "pending_request_badge": "Godkjenn egen systemtilgang",
+    "pending_agent_request_badge": "Godkjenn systemtilgang for kunder",
+    "pending_system_users_title": "Ventende systemtilgang-forespørsler",
+    "standard_system_user_badge": "Se fullmakter",
+    "agent_system_user_badge": "Administrere kunder"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
@@ -603,7 +609,15 @@
     "reject_loading": "Avviser systemtilgang...",
     "request_accepted": "Denne forespørselen er allerede godkjent",
     "request_rejected": "Denne forespørselen er allerede avvist",
-    "request_expired": "Denne forespørselen har utløpt"
+    "request_expired": "Denne forespørselen har utløpt",
+    "escalate_title": "Du mangler nødvendig fullmakt",
+    "escalate_description": "For å lage en systemtilgang må du være Tilgangsstyrer. Vil du sende forespørselen videre til Tilgangsstyrer i din virksomhet?",
+    "escalate_confirm_button": "Ja, send videre",
+    "escalate_cancel_button": "Lukk og logg ut",
+    "escalate_error": "Kunne ikke sende forespørsel videre",
+    "escalate_sent_title": "Forespørselen er videresendt",
+    "escalate_sent_description": "Tilgangsstyrer i virksomheten din skal nå ha fått forespørselen i Altinn.",
+    "escalate_close_button": "Avslutt"
   },
   "systemuser_change_request": {
     "page_title": "Oppdater systemtilgang - Altinn",
@@ -661,7 +675,7 @@
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",
-    "02_rights_failed_to_delegate": "Kunne ikke delegere tjenester til systembruker.",
+    "02_rights_failed_to_delegate": "Kunne ikke delegere tjenester til systemtilgang.",
     "03_systemuser_failed_to_create": "Kunne ikke opprette systemtilgang.",
     "04_system_user_already_exists": "Kunne ikke opprette systemtilgang, eksisterende systemtilgang finnes allerede for valgt system.",
     "11_system_not_found": "Valgt system finnes ikke",
@@ -670,10 +684,10 @@
     "18_delegation_right_missing_delegation_access": "Delegering av tjenester feilet: du har ikke rettigheter til å direkte delegere tjenester.",
     "19_delegation_right_missing_srr_right_access": "Delegering av tjenester feilet: en eller flere tjenester bruker tilgangslister der virksomhet ikke har tilgang.",
     "20_delegation_right_insufficient_authentication_level": "Delegering av tjenester feilet: en eller flere tjenester krever eksplisitt tilgangsnivå.",
-    "51_accesspackage_delegation_failed": "Delegering av tilgangspakker til systembrukeren feilet.",
+    "51_accesspackage_delegation_failed": "Delegering av tilgangspakker til systemtilgang feilet.",
     "53_accesspackage_delegation_missing_required_access": "Du har ikke tilstrekkelige tilganger for å delegere disse tilgangspakkene.",
     "55_accesspackage_failed_to_get_delegated_packages": "Kunne ikke hente delegerte tilgangspakker.",
-    "57_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systembruker."
+    "57_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systemtilgang."
   },
   "page_not_available": {
     "title": "Tilgangsstyring for privatpersoner er fortsatt under arbeid",
