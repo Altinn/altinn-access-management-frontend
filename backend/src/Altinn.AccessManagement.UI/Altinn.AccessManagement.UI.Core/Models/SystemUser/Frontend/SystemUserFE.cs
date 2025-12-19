@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// Nice to have for debugging and logging.
         /// </summary>
         [JsonPropertyName("created")]
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset Created { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// System information from the system register
