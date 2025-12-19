@@ -1,14 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import {
-  Badge,
-  DsBadge,
-  DsTabs,
-  formatDisplayName,
-  List,
-  UserListItem,
-} from '@altinn/altinn-components';
+import { Badge, DsTabs, formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { useRerouteIfRequestPageDisabled } from '@/resources/utils/featureFlagUtils';

@@ -52,7 +52,7 @@ export const LandingPage = () => {
   const { data: canAccessSettings, isLoading: isLoadingCanAccessSettings } =
     useGetIsCompanyProfileAdminQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
-  const { pendingConsents } = useRequests();
+  const { pendingConsents, isLoadingRequests } = useRequests();
 
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
@@ -74,7 +74,8 @@ export const LandingPage = () => {
     isLoadingIsAdmin ||
     isLoadingIsClientAdmin ||
     isLoadingCanAccessSettings ||
-    currentUserIsLoading;
+    currentUserIsLoading ||
+    isLoadingRequests;
 
   const getMenuItems = (): MenuItemProps[] => {
     const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
