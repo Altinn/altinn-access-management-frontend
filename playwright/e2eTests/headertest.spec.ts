@@ -2,7 +2,7 @@ import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from './../fixture/pomFixture';
 
-test.describe('Basic test for Aktorvalg header', () => {
+test.describe('Aktørvalg, valg og visning av avgiver', () => {
   test('Check that all buttons are visible and clickable', async ({ page, aktorvalgHeader }) => {
     const login = new LoginPage(page);
     await test.step('Log in', async () => {
@@ -34,6 +34,26 @@ test.describe('Basic test for Aktorvalg header', () => {
       await aktorvalgHeader.selectActor('Kunnskapsrik Kry Ape');
     });
 
+    await test.step('Chosen actor persists on infoportal', async () => {
+      await aktorvalgHeader.goToInfoportal();
+      await aktorvalgHeader.currentlySelectedActor('Kunnskapsrik Kry Ape');
+    });
+
+    await test.step('Chosen actor persists on inbox', async () => {
+      await aktorvalgHeader.goToInbox();
+      await aktorvalgHeader.currentlySelectedActor('Kunnskapsrik Kry Ape');
+    });
+
+    await test.step('Chosen actor persists on access management', async () => {
+      await aktorvalgHeader.goToAccessManagement();
+      await aktorvalgHeader.currentlySelectedActor('Kunnskapsrik Kry Ape');
+    });
+
+    await test.step('Chosen actor persists on profile', async () => {
+      await aktorvalgHeader.goToProfile();
+      await aktorvalgHeader.currentlySelectedActor('Kunnskapsrik Kry Ape');
+    });
+
     //sett favoritt
     await test.step('Add actor as favorites', async () => {
       await aktorvalgHeader.goToSelectActor('Kunnskapsrik Kry Ape');
@@ -45,6 +65,21 @@ test.describe('Basic test for Aktorvalg header', () => {
       await aktorvalgHeader.selectActor('Håndfast Plasma');
       await aktorvalgHeader.goToSelectActor('Håndfast Plasma');
       await aktorvalgHeader.unfavoriteFirstActor();
+    });
+
+    // søk
+    await test.step('search for name, date of birth, org name, and org number', async () => {
+      await aktorvalgHeader.typeInSearchField('hånd');
+      await aktorvalgHeader.actorIsListed('Håndfast Plasma');
+
+      await aktorvalgHeader.typeInSearchField('1965');
+      await aktorvalgHeader.actorIsListed('Håndfast Plasma');
+
+      await aktorvalgHeader.typeInSearchField('kunnskap');
+      await aktorvalgHeader.actorIsListed('Kunnskapsrik Kry Ape');
+
+      await aktorvalgHeader.typeInSearchField('310470422');
+      await aktorvalgHeader.actorIsListed('Kunnskapsrik Kry Ape');
     });
   });
 });
