@@ -94,7 +94,7 @@ export class AktorvalgHeader {
   }
 
   async actorIsListed(name: string) {
-    await this.page.locator('a').filter({ hasText: name }).first().isVisible();
+    await expect(this.page.locator('a').filter({ hasText: name }).first()).toBeVisible();
   }
 
   async checkAllMenuButtons() {

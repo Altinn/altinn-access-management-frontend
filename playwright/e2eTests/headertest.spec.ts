@@ -2,7 +2,7 @@ import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from './../fixture/pomFixture';
 
-test.describe('Basic test for Aktorvalg header', () => {
+test.describe('Aktørvalg, valg og visning av avgiver', () => {
   test('Check that all buttons are visible and clickable', async ({ page, aktorvalgHeader }) => {
     const login = new LoginPage(page);
     await test.step('Log in', async () => {
