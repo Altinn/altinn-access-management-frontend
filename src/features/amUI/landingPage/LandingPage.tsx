@@ -52,7 +52,7 @@ export const LandingPage = () => {
   const { data: canAccessSettings, isLoading: isLoadingCanAccessSettings } =
     useGetIsCompanyProfileAdminQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
-  const { pendingConsents, isLoadingRequests } = useRequests();
+  const { pendingRequests, isLoadingRequests } = useRequests();
 
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
@@ -159,7 +159,7 @@ export const LandingPage = () => {
   const getOtherItems = (): MenuItemProps[] => {
     const displaySettingsPage = window.featureFlags?.displaySettingsPage;
     const displayRequestsPage = window.featureFlags?.displayRequestsPage;
-    const requestCount = pendingConsents ? pendingConsents.length : 0;
+    const requestCount = pendingRequests ? pendingRequests.length : 0;
     const items: MenuItemProps[] = [];
 
     if (displayRequestsPage) {

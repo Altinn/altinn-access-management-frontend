@@ -12,7 +12,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { formatDateToNorwegian } from '@/resources/utils';
 import { useRequests } from '@/resources/hooks/useRequests';
 import classes from './RequestPage.module.css';
-import { ActiveConsentListItem } from '../consent/types';
+import { Request } from './types';
 
 export const RequestPage = () => {
   const { t } = useTranslation();
@@ -22,14 +22,14 @@ export const RequestPage = () => {
   useDocumentTitle(t('request_page.page_title'));
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const { pendingConsents, isLoadingRequests } = useRequests();
+  const { pendingRequests, isLoadingRequests } = useRequests();
 
   const name = formatDisplayName({
     fullName: reportee?.name || '',
     type: reportee?.type === 'Person' ? 'person' : 'company',
   });
 
-  const totalRequests = pendingConsents ? pendingConsents.length : 0;
+  const totalRequests = pendingRequests ? pendingRequests.length : 0;
 
   return (
     <PageWrapper>
@@ -70,7 +70,7 @@ export const RequestPage = () => {
                   <LoadingRequestListItem />
                 </>
               ) : (
-                <PendingConsents pendingConsents={pendingConsents} />
+                <PendingRequests pendingRequests={pendingRequests} />
               )}
               {!isLoadingRequests && totalRequests === 0 && (
                 <div>{t('request_page.no_received_requests')}</div>
@@ -86,29 +86,26 @@ export const RequestPage = () => {
   );
 };
 
-interface PendingConsentProps {
-  pendingConsents: ActiveConsentListItem[] | undefined;
+interface PendingRequestsProps {
+  pendingRequests: Request[] | undefined;
 }
 
-const PendingConsents = ({ pendingConsents }: PendingConsentProps) => {
+const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
   const { t } = useTranslation();
   return (
     <>
-      {pendingConsents?.map((consent) => {
-        const actionText = consent.isPoa
-          ? t('request_page.request_poa')
-          : t('request_page.request_consent');
+      {pendingRequests?.map((request) => {
         return (
           <UserListItem
-            key={consent.id}
-            id={consent.id}
-            name={consent.toParty.name}
-            type={consent.toParty.type === 'Person' ? 'person' : 'company'}
+            key={request.id}
+            id={request.id}
+            name={request.fromPartyName}
+            type={request.fromPartyType}
             linkIcon
-            description={`${actionText} (${formatDateToNorwegian(consent.createdDate)})`}
+            description={`${t(request.description)} (${formatDateToNorwegian(request.createdDate)})`}
             as={(props) => (
               <Link
-                to={`/consent/request?id=${consent.id}`}
+                to={`/consent/request?id=${request.id}`}
                 {...props}
               />
             )}

@@ -3,6 +3,7 @@ import { getCookie } from '../Cookie/CookieMethods';
 import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '../utils/permissionUtils';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
+import { Request } from '@/features/amUI/requestPage/types';
 
 export const useRequests = () => {
   const partyUuid = getCookie('AltinnPartyUuid');
@@ -15,14 +16,24 @@ export const useRequests = () => {
     { skip: !partyUuid || !hasPermission },
   );
 
-  const pendingConsents = useMemo(() => {
-    return activeConsents
-      ?.filter((x) => x.isPendingConsent)
-      .sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime());
+  const pendingRequests: Request[] = useMemo(() => {
+    const consents = (activeConsents || [])
+      .filter((x) => x.isPendingConsent)
+      .map<Request>((consent) => ({
+        id: consent.id,
+        type: 'consent',
+        createdDate: consent.createdDate,
+        fromPartyName: consent.fromParty.name,
+        fromPartyType: consent.fromParty.type === 'Person' ? 'person' : 'company',
+        description: consent.isPoa ? 'request_page.request_poa' : 'request_page.request_consent',
+      }));
+    return consents.sort(
+      (a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime(),
+    );
   }, [activeConsents]);
 
   return {
-    pendingConsents,
+    pendingRequests,
     isLoadingRequests: isLoadingIsAdmin || isLoadingActiveConsents,
   };
 };

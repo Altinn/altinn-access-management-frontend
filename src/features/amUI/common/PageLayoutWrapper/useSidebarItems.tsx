@@ -38,7 +38,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
-  const { pendingConsents } = useRequests();
+  const { pendingRequests } = useRequests();
 
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
@@ -50,9 +50,9 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   }
   if (displayRequestsPage) {
     const requestsBadge =
-      pendingConsents && pendingConsents.length > 0
+      pendingRequests && pendingRequests.length > 0
         ? {
-            label: pendingConsents.length,
+            label: pendingRequests.length,
             color: 'warning' as Color,
             variant: 'base' as BadgeVariant,
           }
