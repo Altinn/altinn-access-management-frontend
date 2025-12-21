@@ -60,6 +60,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Status = agentRequest.Value.Status,
                 RedirectUrl = agentRequest.Value.RedirectUrl,
                 AccessPackages = enrichedRights.AccessPackages,
+                Created = agentRequest.Value.Created,
                 System = systemFE
             };
         }
