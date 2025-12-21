@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// Nice to have for debugging and logging.
         /// </summary>
         [JsonPropertyName("created")]
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset Created { get; set; } = DateTimeOffset.UtcNow;
 
         /// <summary>
         /// The organization number for the Supplier of the Product 
