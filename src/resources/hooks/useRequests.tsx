@@ -23,8 +23,8 @@ export const useRequests = () => {
         id: consent.id,
         type: 'consent',
         createdDate: consent.createdDate,
-        fromPartyName: consent.fromParty.name,
-        fromPartyType: consent.fromParty.type === 'Person' ? 'person' : 'company',
+        fromPartyName: consent.toParty.name,
+        fromPartyType: consent.toParty.type === 'Person' ? 'person' : 'company',
         description: consent.isPoa ? 'request_page.request_poa' : 'request_page.request_consent',
       }));
     return consents.sort(
