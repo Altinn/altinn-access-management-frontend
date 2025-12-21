@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { getCookie } from '../Cookie/CookieMethods';
 import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '../utils/permissionUtils';
@@ -15,7 +15,11 @@ export const useRequests = () => {
     { skip: !partyUuid || !hasPermission },
   );
 
-  const pendingConsents = activeConsents?.filter((x) => x.isPendingConsent);
+  const pendingConsents = useMemo(() => {
+    return activeConsents
+      ?.filter((x) => x.isPendingConsent)
+      .sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime());
+  }, [activeConsents]);
 
   return {
     pendingConsents,
