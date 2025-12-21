@@ -821,6 +821,7 @@
     "no_sent_requests": "No sent requests",
     "process_request": "Process request",
     "request_consent": "Requests consent",
-    "request_poa": "Requests power of attorney"
+    "request_poa": "Requests power of attorney",
+    "error_loading_requests": "Could not load received requests"
   }
 }

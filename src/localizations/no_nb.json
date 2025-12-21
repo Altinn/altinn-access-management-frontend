@@ -820,6 +820,7 @@
     "no_sent_requests": "Ingen sendte forespørsler",
     "process_request": "Behandle forespørsel",
     "request_consent": "Ber om samtykke",
-    "request_poa": "Ber om fullmakt"
+    "request_poa": "Ber om fullmakt",
+    "error_loading_requests": "Kunne ikke laste mottatte forespørsler"
   }
 }

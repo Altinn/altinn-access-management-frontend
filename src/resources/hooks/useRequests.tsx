@@ -8,13 +8,18 @@ import { Request } from '@/features/amUI/requestPage/types';
 export const useRequests = () => {
   const partyUuid = getCookie('AltinnPartyUuid');
 
-  const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
+  const {
+    data: isAdmin,
+    isLoading: isLoadingIsAdmin,
+    isError: isAdminError,
+  } = useGetIsAdminQuery();
 
   const hasPermission = hasConsentPermission(isAdmin);
-  const { data: activeConsents, isLoading: isLoadingActiveConsents } = useGetActiveConsentsQuery(
-    { partyId: partyUuid },
-    { skip: !partyUuid || !hasPermission },
-  );
+  const {
+    data: activeConsents,
+    isLoading: isLoadingActiveConsents,
+    isError: isLoadingConsentsError,
+  } = useGetActiveConsentsQuery({ partyId: partyUuid }, { skip: !partyUuid || !hasPermission });
 
   const pendingRequests: Request[] = useMemo(() => {
     const consents = (activeConsents || [])
@@ -34,6 +39,7 @@ export const useRequests = () => {
 
   return {
     pendingRequests,
+    isError: isAdminError || isLoadingConsentsError,
     isLoadingRequests: isLoadingIsAdmin || isLoadingActiveConsents,
   };
 };

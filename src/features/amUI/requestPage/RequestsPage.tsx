@@ -1,7 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Badge, DsTabs, formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
+import {
+  Badge,
+  DsAlert,
+  DsTabs,
+  formatDisplayName,
+  List,
+  UserListItem,
+} from '@altinn/altinn-components';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { useRerouteIfRequestPageDisabled } from '@/resources/utils/featureFlagUtils';
@@ -22,7 +29,7 @@ export const RequestPage = () => {
   useDocumentTitle(t('request_page.page_title'));
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const { pendingRequests, isLoadingRequests } = useRequests();
+  const { pendingRequests, isLoadingRequests, isError } = useRequests();
 
   const name = formatDisplayName({
     fullName: reportee?.name || '',
@@ -76,6 +83,9 @@ export const RequestPage = () => {
                 <div>{t('request_page.no_received_requests')}</div>
               )}
             </List>
+            {isError && (
+              <DsAlert data-color='danger'>{t('request_page.error_loading_requests')}</DsAlert>
+            )}
           </DsTabs.Panel>
           <DsTabs.Panel value='sentRequests'>
             <div>{t('request_page.no_sent_requests')}</div>

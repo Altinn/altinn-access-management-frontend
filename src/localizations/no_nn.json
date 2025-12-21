@@ -818,6 +818,7 @@
     "no_sent_requests": "Ingen sendte førespurnader",
     "process_request": "Behandle førespurnad",
     "request_consent": "Ber om samtykke",
-    "request_poa": "Ber om fullmakt"
+    "request_poa": "Ber om fullmakt",
+    "error_loading_requests": "Kunne ikkje laste mottatte førespurnader"
   }
 }
