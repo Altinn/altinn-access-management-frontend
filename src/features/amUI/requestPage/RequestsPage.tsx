@@ -103,7 +103,7 @@ const PendingConsents = ({ pendingConsents }: PendingConsentProps) => {
             key={consent.id}
             id={consent.id}
             name={consent.toParty.name}
-            type={'company'}
+            type={consent.toParty.type === 'Person' ? 'person' : 'company'}
             linkIcon
             description={`${actionText} (${formatDateToNorwegian(consent.createdDate)})`}
             as={(props) => (
