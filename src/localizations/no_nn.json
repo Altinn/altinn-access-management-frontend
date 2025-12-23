@@ -789,7 +789,8 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tenester tilgjengelege."
+    "no_resources": "Ingen tenester tilgjengelege.",
+    "filter_by_serviceowner": "Filtrer på tjenesteeier"
   },
   "landing_page": {
     "alert_heading": "Du er no i den nye løysinga for tilgangsstyring",

@@ -791,7 +791,8 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tjenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tjenester er tilgjengelige."
+    "no_resources": "Ingen tjenester er tilgjengelige.",
+    "filter_by_serviceowner": "Filtrer på tjenesteeier"
   },
   "landing_page": {
     "alert_heading": "Du er nå i den nye løsningen for tilgangsstyring",

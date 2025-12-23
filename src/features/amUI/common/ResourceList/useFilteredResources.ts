@@ -5,27 +5,36 @@ import type { PackageResource } from '@/rtk/features/accessPackageApi';
 interface UseFilteredResourcesProps {
   resources?: PackageResource[];
   searchString: string;
+  serviceOwnerFilter?: string;
 }
 
-export const useFilteredResources = ({ resources, searchString }: UseFilteredResourcesProps) => {
+export const useFilteredResources = ({
+  resources,
+  searchString,
+  serviceOwnerFilter,
+}: UseFilteredResourcesProps) => {
   const PAGE_SIZE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const normalizedSearch = searchString.trim().toLowerCase();
 
   const filteredResources = useMemo(() => {
     const list = resources ?? [];
-    if (!normalizedSearch) return list;
+    if (!normalizedSearch && !serviceOwnerFilter) return list;
     return list.filter((r) => {
       const nameOrTitle = (r.name || r.title || '').toLowerCase();
       const ownerName = (r.provider?.name || r.resourceOwnerName || '').toLowerCase();
       const description = (r.description || '').toLowerCase();
+      const serviceOwnerMatch = serviceOwnerFilter
+        ? r.resourceOwnerOrgcode === serviceOwnerFilter
+        : true;
       return (
-        nameOrTitle.includes(normalizedSearch) ||
-        ownerName.includes(normalizedSearch) ||
-        description.includes(normalizedSearch)
+        (nameOrTitle.includes(normalizedSearch) ||
+          ownerName.includes(normalizedSearch) ||
+          description.includes(normalizedSearch)) &&
+        serviceOwnerMatch
       );
     });
-  }, [resources, normalizedSearch]);
+  }, [resources, normalizedSearch, serviceOwnerFilter]);
 
   useEffect(() => {
     setCurrentPage(1);
