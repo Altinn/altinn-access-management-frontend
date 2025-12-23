@@ -38,7 +38,7 @@ export const useFilteredResources = ({
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [resources, searchString]);
+  }, [resources, searchString, serviceOwnerFilter]);
 
   const paginatedResources = useMemo(() => {
     return filteredResources.slice(0, PAGE_SIZE * currentPage);
