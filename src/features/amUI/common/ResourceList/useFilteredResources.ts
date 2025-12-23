@@ -25,7 +25,7 @@ export const useFilteredResources = ({
       const ownerName = (r.provider?.name || r.resourceOwnerName || '').toLowerCase();
       const description = (r.description || '').toLowerCase();
       const serviceOwnerMatch = serviceOwnerFilter
-        ? r.resourceOwnerOrgcode === serviceOwnerFilter
+        ? r.resourceOwnerOrgcode.toLowerCase() === serviceOwnerFilter.toLowerCase()
         : true;
       return (
         (nameOrTitle.includes(normalizedSearch) ||
