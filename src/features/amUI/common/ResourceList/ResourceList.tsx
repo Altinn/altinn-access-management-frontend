@@ -51,6 +51,7 @@ export const ResourceList = ({
             onChange: (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value),
             label: t('resource_list.resource_search_placeholder'),
             placeholder: t('resource_list.resource_search_placeholder'),
+            clearButtonAltText: t('resource_list.resource_search_clear'),
             onClear: () => setSearch(''),
           }}
           filterState={filterState}
@@ -62,6 +63,7 @@ export const ResourceList = ({
             );
           }}
           addFilterButtonLabel={t('resource_list.filter_by_serviceowner')}
+          removeButtonAltText={t('resource_list.remove_filter')}
           filters={[
             {
               name: 'owner',

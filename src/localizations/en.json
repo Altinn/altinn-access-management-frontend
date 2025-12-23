@@ -793,7 +793,9 @@
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
     "no_resources": "No resources available.",
-    "filter_by_serviceowner": "Filter by service owner"
+    "filter_by_serviceowner": "Filter by service owner",
+    "resource_search_clear": "Clear search",
+    "remove_filter": "Remove filter"
   },
   "landing_page": {
     "alert_heading": "You are now in the new access management solution",
