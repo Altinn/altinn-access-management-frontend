@@ -40,6 +40,7 @@ interface SystemUserRequestBase {
   status: RequestStatus;
   redirectUrl?: string;
   system: RegisteredSystem;
+  created: string;
 }
 export interface SystemUserRequest extends SystemUserRequestBase {
   resources: ServiceResource[];

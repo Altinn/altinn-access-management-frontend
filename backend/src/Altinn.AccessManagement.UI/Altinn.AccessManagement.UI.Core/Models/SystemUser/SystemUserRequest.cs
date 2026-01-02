@@ -99,12 +99,14 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// The date and time the Request was created,
         /// used to determine if the Request is still valid.
         /// </summary>
+        [JsonPropertyName("created")]
         public DateTime Created { get; set; }
 
         /// <summary>
         /// Tracks if the original user creating the Request have escalated the Approval of this Request
         /// to somebody else in the organisation with AccessManager (Package:Tilgangsstyring)
         /// </summary>
+        [JsonPropertyName("escalated")]
         public bool Escalated { get; set; }
     }
 }
