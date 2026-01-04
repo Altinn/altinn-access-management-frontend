@@ -100,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// used to determine if the Request is still valid.
         /// </summary>
         [JsonPropertyName("created")]
-        public DateTime Created { get; set; }
+        public DateTimeOffset Created { get; set; }
 
         /// <summary>
         /// Tracks if the original user creating the Request have escalated the Approval of this Request
