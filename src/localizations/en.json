@@ -82,6 +82,8 @@
     "error_status": "HttpStatus: {{status}}",
     "ssn": "National identity number",
     "last_name": "Last name",
+    "org_number": "Organization number",
+    "org_name": "Organization name",
     "subunit": "Subunit",
     "subunit_lowercase": "subunit",
     "mainunit_lowercase": "main unit",
