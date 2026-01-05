@@ -620,7 +620,8 @@
     "escalate_error": "Could not forward the request",
     "escalate_sent_title": "Request forwarded",
     "escalate_sent_description": "The Access Manager in your organization should now have received the request in Altinn.",
-    "escalate_close_button": "Finish"
+    "escalate_close_button": "Finish",
+    "escalate_already_escalated": "This request is already forwarded"
   },
   "systemuser_change_request": {
     "page_title": "Update system access - Altinn",

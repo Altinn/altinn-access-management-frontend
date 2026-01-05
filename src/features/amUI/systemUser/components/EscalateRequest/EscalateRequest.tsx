@@ -15,20 +15,15 @@ import {
 } from '@/rtk/features/systemUserApi';
 import { useTranslation } from 'react-i18next';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
+import { SystemUserRequest } from '../../types';
 
 interface EscalateRequestProps {
-  requestId: string;
-  redirectUrl: string | undefined;
-  partyId: string;
+  request: SystemUserRequest;
   isAgentRequest?: boolean;
 }
 
-export const EscalateRequest = ({
-  requestId,
-  redirectUrl,
-  partyId,
-  isAgentRequest,
-}: EscalateRequestProps) => {
+export const EscalateRequest = ({ request, isAgentRequest }: EscalateRequestProps) => {
+  const { t } = useTranslation();
   const [isStepTwo, setIsStepTwo] = useState<boolean>(false);
 
   const [postEscalateRequest, { isError: escalateRequestError, isLoading: isEscalatingRequest }] =
@@ -40,16 +35,24 @@ export const EscalateRequest = ({
   ] = useEscalateAgentRequestMutation();
 
   const redirectAndLogout = (): void => {
-    const url = redirectUrl ? `${getApiBaseUrl()}/request/${requestId}/logout` : getLogoutUrl();
+    const url = request.redirectUrl
+      ? `${getApiBaseUrl()}/request/${request.id}/logout`
+      : getLogoutUrl();
     window.location.assign(url);
   };
 
   const onEscalate = (): void => {
     const promise = isAgentRequest ? postEscalateAgentRequest : postEscalateRequest;
-    promise({ partyId, requestId })
+    promise({ partyId: request.partyId, requestId: request.id })
       .unwrap()
       .then(() => setIsStepTwo(true));
   };
+
+  if (request.escalated) {
+    return (
+      <DsAlert data-color='info'>{t('systemuser_request.escalate_already_escalated')}</DsAlert>
+    );
+  }
 
   return (
     <DsAlert

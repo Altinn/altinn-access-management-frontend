@@ -617,7 +617,8 @@
     "escalate_error": "Kunne ikke sende forespørsel videre",
     "escalate_sent_title": "Forespørselen er videresendt",
     "escalate_sent_description": "Tilgangsstyrer i virksomheten din skal nå ha fått forespørselen i Altinn.",
-    "escalate_close_button": "Avslutt"
+    "escalate_close_button": "Avslutt",
+    "escalate_already_escalated": "Denne forespørselen er allerede videresendt"
   },
   "systemuser_change_request": {
     "page_title": "Oppdater systemtilgang - Altinn",
