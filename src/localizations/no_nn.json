@@ -81,6 +81,8 @@
     "error_status": "HttpStatus: {{status}}",
     "ssn": "Fødselsnummer",
     "last_name": "Etternamn",
+    "org_number": "Organisasjonsnummer",
+    "org_name": "Organisasjonsnamn",
     "subunit": "Undereining",
     "subunit_lowercase": "undereining",
     "mainunit_lowercase": "hovudeining",
