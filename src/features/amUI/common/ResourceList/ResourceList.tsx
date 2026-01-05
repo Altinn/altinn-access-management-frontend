@@ -86,10 +86,6 @@ const extractOrgCode = (resource: ResourceListItemResource): string | undefined 
     return resource.resourceOwnerOrgcode;
   }
 
-  if ('resourceOwnerOrgNumber' in resource && resource.resourceOwnerOrgNumber) {
-    return resource.resourceOwnerOrgNumber;
-  }
-
   return undefined;
 };
 
@@ -115,14 +111,6 @@ const extractResourceId = (resource: ResourceListItemResource): string | undefin
 
   if ('identifier' in resource && resource.identifier) {
     return resource.identifier;
-  }
-
-  if ('title' in resource && resource.title) {
-    return resource.title;
-  }
-
-  if ('name' in resource && resource.name) {
-    return resource.name;
   }
 
   return undefined;
@@ -208,25 +196,16 @@ export const ResourceList = <
         <SkeletonResourceList />
       ) : (
         <>
-          {resources.length === 0 && (
+          {resources.length === 0 && !search && (
             <DsParagraph data-size='md'>
               {noResourcesText ?? t('resource_list.no_resources')}
             </DsParagraph>
           )}
-          {resources.length > 0 && filtered.length === 0 && (
+          {enableSearch && search.length > 0 && filtered.length === 0 && (
             <DsParagraph data-size='md'>
               {t('resource_list.no_resources_filtered', { searchTerm: search })}
             </DsParagraph>
           )}
-
-          {resources.length > 0 &&
-            enableSearch &&
-            search.trim().length > 0 &&
-            filtered.length === 0 && (
-              <DsParagraph data-size='md'>
-                {t('package_resource_list.no_resources_filtered', { searchTerm: search })}
-              </DsParagraph>
-            )}
 
           {filtered.length > 0 && (
             <List>

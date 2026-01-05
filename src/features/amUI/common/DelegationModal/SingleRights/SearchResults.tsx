@@ -12,6 +12,7 @@ interface SearchResultsProps {
   isFetching: boolean;
   error: any;
   resources?: ServiceResource[];
+  searchString?: string;
   delegatedResources?: any[];
   totalNumberOfResults?: number;
   displayPopularResources: boolean;
@@ -25,6 +26,7 @@ export const SearchResults = ({
   isFetching,
   error,
   resources,
+  searchString,
   delegatedResources,
   totalNumberOfResults,
   displayPopularResources,
@@ -75,7 +77,7 @@ export const SearchResults = ({
           </DsParagraph>
         )}
       </div>
-      {resources && (
+      {resources && resources.length > 0 && (
         <div className={classes.resourceList}>
           <ResourceList
             resources={resources}
@@ -98,6 +100,11 @@ export const SearchResults = ({
             }}
           />
         </div>
+      )}
+      {resources && resources.length === 0 && (
+        <DsParagraph data-size='md'>
+          {t('resource_list.no_resources_filtered', { searchTerm: searchString })}
+        </DsParagraph>
       )}
       {totalNumberOfResults !== undefined &&
         totalNumberOfResults > searchResultsPerPage &&

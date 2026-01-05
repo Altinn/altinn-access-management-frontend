@@ -89,7 +89,7 @@ export const SingleRightsSection = () => {
         <div className={classes.singleRightsList}>
           <ResourceList
             resources={resources}
-            enableSearch={false}
+            enableSearch={true}
             showMoreButton={false}
             showDetails={false}
             onSelect={(resource) => {

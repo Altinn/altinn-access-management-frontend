@@ -143,6 +143,7 @@ export const ResourceSearch = ({ onSelect, toParty }: ResourceSearchProps) => {
             isFetching={isFetching}
             error={error}
             resources={resources}
+            searchString={searchString}
             delegatedResources={delegatedResources}
             totalNumberOfResults={totalNumberOfResults}
             displayPopularResources={displayPopularResources}
