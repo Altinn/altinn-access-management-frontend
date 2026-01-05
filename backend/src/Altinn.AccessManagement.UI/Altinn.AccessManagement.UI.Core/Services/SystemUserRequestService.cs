@@ -62,6 +62,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Resources = enrichedRights.Resources,
                 AccessPackages = enrichedRights.AccessPackages,
                 Created = request.Value.Created,
+                Escalated = request.Value.Escalated,
                 System = systemFE
             };
         }
