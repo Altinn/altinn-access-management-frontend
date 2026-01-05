@@ -37,8 +37,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<SystemUserAgentRequestFE>> GetSystemUserAgentRequest(Guid agentRequestId, string languageCode, CancellationToken cancellationToken)
         {
-            Result<SystemUserAgentRequest> agentRequest = await _systemUserAgentRequestClient.GetSystemUserAgentRequest(agentRequestId, cancellationToken);
-            
+            Result<SystemUserRequest> agentRequest = await _systemUserAgentRequestClient.GetSystemUserAgentRequest(agentRequestId, cancellationToken);
+
             if (agentRequest.IsProblem)
             {
                 return new Result<SystemUserAgentRequestFE>(agentRequest.Problem);
@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             var orgNames = await _registerClient.GetPartyNames([system.SystemVendorOrgNumber], cancellationToken);
             RegisteredSystemFE systemFE = SystemRegisterUtils.MapToRegisteredSystemFE(languageCode, system, orgNames);
 
-            return new SystemUserAgentRequestFE() 
+            return new SystemUserAgentRequestFE()
             {
                 Id = agentRequest.Value.Id,
                 PartyId = agentRequest.Value.PartyId,
@@ -75,6 +75,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Result<bool>> RejectSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
             return await _systemUserAgentRequestClient.RejectSystemUserAgentRequest(partyId, agentRequestId, cancellationToken);
+        }
+        
+        /// <inheritdoc />
+        public async Task<Result<bool>> EscalateSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        {
+            return await _systemUserAgentRequestClient.EscalateSystemUserAgentRequest(partyId, agentRequestId, cancellationToken);
         }
     }
 }

@@ -2,7 +2,7 @@ import { expect } from 'vitest';
 import '@testing-library/jest-dom';
 import * as matchers from '@testing-library/jest-dom/matchers';
 
-import { TEST_BASE_URL, TEST_PARTY_ID } from './consts';
+import { TEST_BASE_URL, TEST_PARTY_ID, TEST_PARTY_UUID } from './consts';
 
 expect.extend(matchers);
 
@@ -34,4 +34,6 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
-beforeEach(() => (document.cookie = `AltinnPartyId=${TEST_PARTY_ID}`));
+beforeEach(
+  () => (document.cookie = `AltinnPartyId=${TEST_PARTY_ID}; AltinnPartyUuid=${TEST_PARTY_UUID}`),
+);

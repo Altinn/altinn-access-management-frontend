@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
 import {
   DsAlert,
@@ -12,25 +12,18 @@ import {
   useSnackbar,
 } from '@altinn/altinn-components';
 
-import { SystemUserPath } from '@/routes/paths';
-import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import {
   useAssignCustomerMutation,
-  useDeleteAgentSystemuserMutation,
   useGetSystemUserReporteeQuery,
   useRemoveCustomerMutation,
 } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 import type { AgentDelegation, AgentDelegationCustomer, SystemUser } from '../types';
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
 import { RightsList } from '../components/RightsList/RightsList';
-
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
-import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -50,7 +43,6 @@ export const SystemUserAgentDelegationPageContent = ({
   customers,
   existingAgentDelegations,
 }: SystemUserAgentDelegationPageContentProps): React.ReactNode => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const partyId = getCookie('AltinnPartyId');
   const partyUuid = getCookie('AltinnPartyUuid');
@@ -68,19 +60,6 @@ export const SystemUserAgentDelegationPageContent = ({
 
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
   const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
-
-  const [deleteAgentSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
-    useDeleteAgentSystemuserMutation();
-
-  const handleDeleteSystemUser = (): void => {
-    deleteAgentSystemUser({ partyId, systemUserId: id || '', partyUuid })
-      .unwrap()
-      .then(() => handleNavigateBack());
-  };
-
-  const handleNavigateBack = (): void => {
-    navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
-  };
 
   const [assignCustomer] = useAssignCustomerMutation();
   const [removeCustomer] = useRemoveCustomerMutation();
@@ -157,21 +136,7 @@ export const SystemUserAgentDelegationPageContent = ({
   }, [customers, delegations]);
 
   return (
-    <PageContainer
-      onNavigateBack={handleNavigateBack}
-      pageActions={
-        systemUser &&
-        hasCreateSystemUserPermission(reporteeData) && (
-          <DeleteSystemUserPopover
-            integrationTitle={systemUser.integrationTitle}
-            isDeleteError={isDeleteError}
-            isDeletingSystemUser={isDeletingSystemUser}
-            handleDeleteSystemUser={handleDeleteSystemUser}
-            hasAgentDelegation={assignedCustomers.length > 0}
-          />
-        )
-      }
-    >
+    <>
       <DsDialog
         ref={modalRef}
         className={classes.delegationModal}
@@ -196,93 +161,89 @@ export const SystemUserAgentDelegationPageContent = ({
             onAddCustomer={onAddCustomer}
             onRemoveCustomer={onRemoveCustomer}
           />
-          <>
-            {customers.length === 0 && reporteeData?.name && (
-              <DsAlert data-color='warning'>
-                {t('systemuser_agent_delegation.no_customers_warning', {
-                  companyName: reporteeData?.name,
-                })}
-              </DsAlert>
-            )}
-            <div>
-              <DsButton onClick={onCloseModal}>
-                {t('systemuser_agent_delegation.confirm_close')}
-              </DsButton>
-              <Snackbar className={classes.customerListSnackbar} />
-            </div>
-          </>
+          {customers.length === 0 && reporteeData?.name && (
+            <DsAlert data-color='warning'>
+              {t('systemuser_agent_delegation.no_customers_warning', {
+                companyName: reporteeData?.name,
+              })}
+            </DsAlert>
+          )}
+          <div>
+            <DsButton onClick={onCloseModal}>
+              {t('systemuser_agent_delegation.confirm_close')}
+            </DsButton>
+            <Snackbar className={classes.customerListSnackbar} />
+          </div>
         </div>
       </DsDialog>
-      {systemUser && (
-        <div className={classes.flexContainer}>
-          <SystemUserHeader
-            title={systemUser.integrationTitle}
-            subTitle={reporteeData?.name}
-          />
-          <DsHeading
-            level={2}
-            data-size='xs'
-          >
-            {systemUser.accessPackages.length == 1
-              ? t('systemuser_agent_delegation.access_package_single')
-              : t('systemuser_agent_delegation.access_package_plural', {
-                  accessPackageCount: systemUser.accessPackages.length,
-                })}
-          </DsHeading>
-          <RightsList
-            resources={[]}
-            accessPackages={systemUser.accessPackages}
-            hideHeadings
-          />
-          <DsHeading
-            level={2}
-            data-size='xs'
-            className={classes.customerHeading}
-          >
-            {t('systemuser_agent_delegation.assigned_customers_header')}
-          </DsHeading>
-          {assignedCustomers.length === 0 ? (
-            <>
-              <DsParagraph>{t('systemuser_agent_delegation.no_assigned_customers')}</DsParagraph>
-              {isClientAdmin && (
-                <div>
-                  <DsButton
-                    variant='secondary'
-                    onClick={enableAddCustomers}
-                  >
-                    <PlusIcon />
-                    {t('systemuser_agent_delegation.add_customers')}
-                  </DsButton>
-                </div>
-              )}
-            </>
-          ) : (
-            <CustomerList list={assignedCustomers}>
-              {isClientAdmin && (
+      <div className={classes.flexContainer}>
+        <SystemUserHeader
+          title={systemUser.integrationTitle}
+          subTitle={reporteeData?.name}
+        />
+        <DsHeading
+          level={2}
+          data-size='xs'
+        >
+          {systemUser.accessPackages.length === 1
+            ? t('systemuser_agent_delegation.access_package_single')
+            : t('systemuser_agent_delegation.access_package_plural', {
+                accessPackageCount: systemUser.accessPackages.length,
+              })}
+        </DsHeading>
+        <RightsList
+          resources={[]}
+          accessPackages={systemUser.accessPackages}
+          hideHeadings
+        />
+        <DsHeading
+          level={2}
+          data-size='xs'
+          className={classes.customerHeading}
+        >
+          {t('systemuser_agent_delegation.assigned_customers_header')}
+        </DsHeading>
+        {assignedCustomers.length === 0 ? (
+          <>
+            <DsParagraph>{t('systemuser_agent_delegation.no_assigned_customers')}</DsParagraph>
+            {isClientAdmin && (
+              <div>
                 <DsButton
                   variant='secondary'
                   onClick={enableAddCustomers}
                 >
-                  <PencilIcon />
-                  {t('systemuser_agent_delegation.edit_customers')}
+                  <PlusIcon />
+                  {t('systemuser_agent_delegation.add_customers')}
                 </DsButton>
-              )}
-            </CustomerList>
-          )}
-          <DsParagraph
-            data-size='xs'
-            className={classes.createdBy}
-          >
-            {t('systemuser_detailpage.created_by', {
-              created: new Date(systemUser.created).toLocaleDateString('no-NB', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-              }),
-            })}
-          </DsParagraph>
-        </div>
-      )}
-    </PageContainer>
+              </div>
+            )}
+          </>
+        ) : (
+          <CustomerList list={assignedCustomers}>
+            {isClientAdmin && (
+              <DsButton
+                variant='secondary'
+                onClick={enableAddCustomers}
+              >
+                <PencilIcon />
+                {t('systemuser_agent_delegation.edit_customers')}
+              </DsButton>
+            )}
+          </CustomerList>
+        )}
+        <DsParagraph
+          data-size='xs'
+          className={classes.createdBy}
+        >
+          {t('systemuser_detailpage.created_by', {
+            created: new Date(systemUser.created).toLocaleDateString('no-NB', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            }),
+          })}
+        </DsParagraph>
+      </div>
+    </>
   );
 };
