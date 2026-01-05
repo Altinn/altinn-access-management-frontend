@@ -1,3 +1,4 @@
+import { TransformStream } from 'node:stream/web';
 import { expect, beforeAll, afterEach, afterAll } from 'vitest';
 import '@testing-library/jest-dom';
 import * as matchers from '@testing-library/jest-dom/matchers';
@@ -9,6 +10,13 @@ import { TEST_BASE_URL, TEST_PARTY_ID } from './consts';
 expect.extend(matchers);
 
 import.meta.env.BASE_URL = TEST_BASE_URL;
+
+// msw@2.12+ expects TransformStream to exist on the global object; Vitest's jsdom
+// environment does not provide it, so polyfill from Node's web streams implementation.
+if (typeof globalThis.TransformStream === 'undefined') {
+  (globalThis as typeof globalThis & { TransformStream: typeof TransformStream }).TransformStream =
+    TransformStream;
+}
 
 // Workaround for the known issue. For more info, see this: https://github.com/jsdom/jsdom/issues/3294#issuecomment-1268330372
 HTMLDialogElement.prototype.showModal = function mock(this: HTMLDialogElement) {
