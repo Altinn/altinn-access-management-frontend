@@ -23,6 +23,8 @@ import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { StatusSection } from '../../StatusSection/StatusSection';
+import { AccessPackageResourceToolbar } from '../../AccessPackageResourceToolbar/AccessPackageResourceToolbar';
+import { useFilteredResources } from '../../ResourceList/useFilteredResources';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -34,6 +36,15 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
   const displayAccessRequestFeature = displayAccessRequest();
+
+  const [search, setSearch] = React.useState('');
+  const [filterState, setFilterState] = React.useState<{ owner?: string[] }>({});
+
+  const { resources: filteredResources } = useFilteredResources({
+    resources: accessPackage.resources,
+    searchString: search,
+    serviceOwnerFilter: filterState?.['owner']?.[0],
+  });
 
   const {
     onDelegate,
@@ -75,7 +86,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
   const inheritedStatus = accessPackage.inheritedStatus;
 
-  const resourceListItems = useResourceList(accessPackage.resources);
+  const resourceListItems = useResourceList(filteredResources);
   const deletableStatus = React.useMemo(
     () =>
       delegationAccess
@@ -171,6 +182,18 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 name: accessPackage?.name,
               })}
             </DsHeading>
+            <AccessPackageResourceToolbar
+              search={search}
+              setSearch={setSearch}
+              filterState={filterState}
+              setFilterState={setFilterState}
+              resources={accessPackage.resources}
+            />
+            {search && filteredResources.length === 0 && (
+              <DsParagraph data-size='md'>
+                {t('resource_list.no_resources_filtered', { searchTerm: search })}
+              </DsParagraph>
+            )}
             <div className={classes.service_list}>
               <List>{resourceListItems}</List>
             </div>

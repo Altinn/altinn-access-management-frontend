@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 
@@ -13,8 +13,6 @@ export const useFilteredResources = ({
   searchString,
   serviceOwnerFilter,
 }: UseFilteredResourcesProps) => {
-  const PAGE_SIZE = 10;
-  const [currentPage, setCurrentPage] = useState(1);
   const normalizedSearch = searchString.trim().toLowerCase();
 
   const filteredResources = useMemo(() => {
@@ -24,8 +22,9 @@ export const useFilteredResources = ({
       const nameOrTitle = (r.name || r.title || '').toLowerCase();
       const ownerName = (r.provider?.name || r.resourceOwnerName || '').toLowerCase();
       const description = (r.description || '').toLowerCase();
+      const serviceOwnerOrgCode = r.provider?.code || r.resourceOwnerOrgcode || '';
       const serviceOwnerMatch = serviceOwnerFilter
-        ? r.resourceOwnerOrgcode.toLowerCase() === serviceOwnerFilter.toLowerCase()
+        ? serviceOwnerOrgCode.toLowerCase() === serviceOwnerFilter.toLowerCase()
         : true;
       return (
         (nameOrTitle.includes(normalizedSearch) ||
@@ -36,26 +35,8 @@ export const useFilteredResources = ({
     });
   }, [resources, normalizedSearch, serviceOwnerFilter]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [resources, searchString, serviceOwnerFilter]);
-
-  const paginatedResources = useMemo(() => {
-    return filteredResources.slice(0, PAGE_SIZE * currentPage);
-  }, [filteredResources, currentPage]);
-
-  const hasNextPage = filteredResources.length > PAGE_SIZE * currentPage;
-
-  const loadNextPage = () => {
-    if (hasNextPage) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
   return {
-    resources: paginatedResources,
-    hasNextPage,
-    loadNextPage,
+    resources: filteredResources,
     totalFilteredCount: filteredResources.length,
   };
 };

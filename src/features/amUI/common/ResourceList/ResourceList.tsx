@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ResourceListItem, DsParagraph, Button, Toolbar } from '@altinn/altinn-components';
+import { List, ResourceListItem, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
@@ -7,6 +7,7 @@ import { ResourceDetails } from './ResourceDetails';
 import classes from './ResourceList.module.css';
 import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
+import { AccessPackageResourceToolbar } from '../AccessPackageResourceToolbar/AccessPackageResourceToolbar';
 
 interface PackageResourceListProps {
   resources: PackageResource[];
@@ -31,11 +32,7 @@ export const ResourceList = ({
 
   const onClose = () => setSelected(null);
 
-  const {
-    resources: filtered,
-    hasNextPage,
-    loadNextPage,
-  } = useFilteredResources({
+  const { resources: filteredResources } = useFilteredResources({
     resources,
     searchString: search,
     serviceOwnerFilter: filterState?.['owner']?.[0],
@@ -44,45 +41,12 @@ export const ResourceList = ({
   return (
     <div className={classes.container}>
       {resources.length > 0 && (
-        <Toolbar
-          search={{
-            name: 'search',
-            value: search,
-            onChange: (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value),
-            label: t('resource_list.resource_search_placeholder'),
-            placeholder: t('resource_list.resource_search_placeholder'),
-            clearButtonAltText: t('resource_list.resource_search_clear'),
-            onClear: () => setSearch(''),
-          }}
+        <AccessPackageResourceToolbar
+          search={search}
+          setSearch={setSearch}
           filterState={filterState}
-          onFilterStateChange={setFilterState}
-          getFilterLabel={(_name, value) => {
-            return (
-              resources.find((res) => res.resourceOwnerOrgcode === value?.[0])?.resourceOwnerName ||
-              ''
-            );
-          }}
-          addFilterButtonLabel={t('resource_list.filter_by_serviceowner')}
-          removeButtonAltText={t('resource_list.remove_filter')}
-          filters={[
-            {
-              name: 'owner',
-              label: t('resource_list.filter_by_serviceowner'),
-              optionType: 'radio',
-              removable: true,
-              options: Array.from(
-                new Map(
-                  resources.map((resource) => [
-                    resource.resourceOwnerOrgcode,
-                    {
-                      value: resource.resourceOwnerOrgcode,
-                      label: resource.resourceOwnerName,
-                    },
-                  ]),
-                ).values(),
-              ),
-            },
-          ]}
+          setFilterState={setFilterState}
+          resources={resources}
         />
       )}
       {orgLoading || isLoading ? (
@@ -94,14 +58,14 @@ export const ResourceList = ({
               {noResourcesText || t('resource_list.no_resources')}
             </DsParagraph>
           )}
-          {resources.length > 0 && filtered.length === 0 && (
+          {resources.length > 0 && filteredResources.length === 0 && (
             <DsParagraph data-size='md'>
               {t('resource_list.no_resources_filtered', { searchTerm: search })}
             </DsParagraph>
           )}
-          {filtered.length > 0 && (
+          {filteredResources.length > 0 && (
             <List>
-              {filtered.map((resource) => {
+              {filteredResources.map((resource) => {
                 const emblem = getProviderLogoUrl(
                   resource.provider?.code ?? resource.resourceOwnerOrgcode ?? '',
                 );
@@ -123,18 +87,6 @@ export const ResourceList = ({
                 );
               })}
             </List>
-          )}
-          {hasNextPage && (
-            <div className={classes.showMoreButtonContainer}>
-              <Button
-                className={classes.showMoreButton}
-                onClick={loadNextPage}
-                variant='outline'
-                size='md'
-              >
-                {t('common.show_more')}
-              </Button>
-            </div>
           )}
         </>
       )}
