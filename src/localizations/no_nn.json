@@ -139,6 +139,7 @@
     "users": "Brukarar",
     "reportees": "Fullmakter hos andre",
     "systemaccess": "Systemtilgangar",
+    "client_administration": "Klientadministrasjon",
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
     "settings": "Innstillingar",
@@ -542,6 +543,11 @@
     "pending_system_users_title": "Ventende systemtilgang-førespurnader",
     "standard_system_user_badge": "Se fullmakter",
     "agent_system_user_badge": "Administrere kunder"
+  },
+  "client_administration_page": {
+    "no_access_title": "Du har ikkje tilgang til klientadministrasjon",
+    "no_access_body": "For å administrere klientar treng du rolla klientadministrator. Gå tilbake til startsida for å halde fram.",
+    "back_to_start": "Til startsida"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",

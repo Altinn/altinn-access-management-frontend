@@ -130,6 +130,23 @@ export const getSystemUserMenuItem = (
   };
 };
 
+export const getClientAdministrationMenuItem = (
+  pathname?: string,
+  isLoading = false,
+  isSmall = false,
+): MenuItemProps => {
+  return {
+    groupId: 16,
+    id: 'client-admin',
+    size: 'md',
+    loading: isLoading,
+    title: t('sidebar.client_administration'),
+    icon: { svgElement: KeyVerticalIcon, theme: isSmall ? 'surface' : 'default' },
+    selected: pathname?.includes(`/${amUIPath.ClientAdministration}`),
+    as: (props) => getMenuLinkAs(props, `/${amUIPath.ClientAdministration}`),
+  };
+};
+
 export const getSettingsMenuItem = (
   pathname?: string,
   isLoading = false,
