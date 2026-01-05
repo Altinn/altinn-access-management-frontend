@@ -69,8 +69,22 @@ export const AccessPackageResourceToolbar = ({
 };
 
 const getResourceOwnerOrgcode = (resource: PackageResource): string => {
-  return resource.provider?.code || resource.resourceOwnerOrgcode || '';
+  const code = resource.provider?.code || resource.resourceOwnerOrgcode;
+  if (!code) {
+    console.error(
+      'Misconfigured resource: missing both provider.code and resourceOwnerOrgcode',
+      resource,
+    );
+  }
+  return code || '';
 };
 const getResourceOwnerName = (resource: PackageResource): string => {
-  return resource.provider?.name || resource.resourceOwnerName || '';
+  const name = resource.provider?.name || resource.resourceOwnerName;
+  if (!name) {
+    console.error(
+      'Misconfigured resource: missing both provider.name and resourceOwnerName',
+      resource,
+    );
+  }
+  return name || '';
 };
