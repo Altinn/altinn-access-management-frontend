@@ -38,9 +38,10 @@ export const AccessPackageResourceToolbar = ({
       filterState={filterState}
       onFilterStateChange={setFilterState}
       getFilterLabel={(_name, value) => {
-        return (
-          resources.find((res) => res.resourceOwnerOrgcode === value?.[0])?.resourceOwnerName || ''
+        const resourceWithOwner = resources.find(
+          (res) => getResourceOwnerOrgcode(res) === value?.[0],
         );
+        return resourceWithOwner ? getResourceOwnerName(resourceWithOwner) : '';
       }}
       addFilterButtonLabel={t('resource_list.filter_by_serviceowner')}
       removeButtonAltText={t('resource_list.remove_filter')}
@@ -53,10 +54,10 @@ export const AccessPackageResourceToolbar = ({
           options: Array.from(
             new Map(
               resources.map((resource) => [
-                resource.provider?.code || resource.resourceOwnerOrgcode || '',
+                getResourceOwnerOrgcode(resource),
                 {
-                  value: resource.provider?.code || resource.resourceOwnerOrgcode || '',
-                  label: resource.provider?.name || resource.resourceOwnerName || '',
+                  value: getResourceOwnerOrgcode(resource),
+                  label: getResourceOwnerName(resource),
                 },
               ]),
             ).values(),
@@ -65,4 +66,11 @@ export const AccessPackageResourceToolbar = ({
       ]}
     />
   );
+};
+
+const getResourceOwnerOrgcode = (resource: PackageResource): string => {
+  return resource.provider?.code || resource.resourceOwnerOrgcode || '';
+};
+const getResourceOwnerName = (resource: PackageResource): string => {
+  return resource.provider?.name || resource.resourceOwnerName || '';
 };
