@@ -18,6 +18,10 @@
   flex: 1;
 }
 
+.resourceInfoAvatar {
+  font-size: var(--ds-heading-lg-font-size);
+}
+
 .accessPackages {
   display: flex;
   flex-direction: column;

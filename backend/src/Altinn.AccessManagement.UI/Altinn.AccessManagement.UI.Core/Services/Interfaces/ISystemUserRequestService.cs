@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The system user request</returns>
         Task<Result<SystemUserRequestFE>> GetSystemUserRequest(Guid requestId, string languageCode, CancellationToken cancellationToken);
-        
+
         /// <summary>
         /// Approve a system user request to create a new system user
         /// </summary>
@@ -25,7 +25,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the create system user operation, or a ProblemDetails result with error</returns>
         Task<Result<bool>> ApproveSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken);
-        
+
         /// <summary>
         /// Reject a system user request
         /// </summary>
@@ -34,5 +34,14 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the rejest system user operation, or a ProblemDetails result with error</returns>
         Task<Result<bool>> RejectSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken);
+        
+        /// <summary>
+        /// Escalates a system user request
+        /// </summary>
+        /// <param name="partyId">Used to identify the party the system user request is for.</param>
+        /// <param name="requestId">The id of the system user request</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Boolean, result of the escalate system user operation, or a ProblemDetails result with error</returns>
+        Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken);
     }
 }

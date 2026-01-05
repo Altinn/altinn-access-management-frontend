@@ -70,5 +70,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// </summary>
         [JsonPropertyName("created")]
         public DateTimeOffset Created { get; set; }
+
+        /// <summary>
+        /// Tracks if the original user creating the Request have escalated the Approval of this Request
+        /// to somebody else in the organisation with AccessManager (Package:Tilgangsstyring)
+        /// </summary>
+        [JsonPropertyName("escalated")]
+        public bool Escalated { get; set; }
     }
 }

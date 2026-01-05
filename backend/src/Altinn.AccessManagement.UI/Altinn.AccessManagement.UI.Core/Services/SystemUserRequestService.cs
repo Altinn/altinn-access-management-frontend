@@ -62,6 +62,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Resources = enrichedRights.Resources,
                 AccessPackages = enrichedRights.AccessPackages,
                 Created = request.Value.Created,
+                Escalated = request.Value.Escalated,
                 System = systemFE
             };
         }
@@ -76,6 +77,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Result<bool>> RejectSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
         {
             return await _systemUserRequestClient.RejectSystemUserRequest(partyId, requestId, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        {
+            return await _systemUserRequestClient.EscalateSystemUserRequest(partyId, requestId, cancellationToken);
         }
     }
 }

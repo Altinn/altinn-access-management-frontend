@@ -1,12 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
-import { SnackbarProvider, DsSpinner, DsAlert } from '@altinn/altinn-components';
+import { useNavigate, useParams } from 'react-router';
+import { SnackbarProvider, DsAlert, DsHeading, DsSkeleton } from '@altinn/altinn-components';
 
 import {
   useGetAssignedCustomersQuery,
   useGetAgentSystemUserQuery,
   useGetCustomersQuery,
+  useDeleteAgentSystemuserMutation,
+  useGetSystemUserReporteeQuery,
 } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageWrapper } from '@/components';
@@ -15,10 +17,18 @@ import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 
 import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+import { RightsList } from '../components/RightsList/RightsList';
+import classes from './SystemUserAgentDelegationPage.module.css';
+import { PageContainer } from '../../common/PageContainer/PageContainer';
+import { SystemUserPath } from '@/routes/paths';
+import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
+import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
 
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const partyId = getCookie('AltinnPartyId');
   const partyUuid = getCookie('AltinnPartyUuid');
 
@@ -45,6 +55,22 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     systemUserId: id || '',
     partyUuid,
   });
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
+
+  const [deleteAgentSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
+    useDeleteAgentSystemuserMutation();
+
+  const handleDeleteSystemUser = (): void => {
+    deleteAgentSystemUser({ partyId, systemUserId: id || '', partyUuid })
+      .unwrap()
+      .then(() => handleNavigateBack());
+  };
+
+  const handleNavigateBack = (): void => {
+    navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+  };
+
+  const isLoading = isLoadingSystemUser || isLoadingCustomers || isLoadingAssignedCustomers;
 
   return (
     <PageWrapper>
@@ -53,31 +79,66 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
           items={['root', 'systemuser_overview']}
           lastBreadcrumb={{ label: systemUser?.integrationTitle }}
         />
-        {(isLoadingSystemUser || isLoadingCustomers || isLoadingAssignedCustomers) && (
-          <DsSpinner aria-label={t('systemuser_detailpage.loading_systemuser')} />
-        )}
-        {isLoadSystemUserError && (
-          <DsAlert data-color='danger'>{t('systemuser_detailpage.load_systemuser_error')}</DsAlert>
-        )}
-        {isLoadCustomersError && (
-          <DsAlert data-color='danger'>
-            {t('systemuser_agent_delegation.load_customers_error')}
-          </DsAlert>
-        )}
-        {isLoadAssignedCustomersError && (
-          <DsAlert data-color='danger'>
-            {t('systemuser_agent_delegation.load_assigned_customers_error')}
-          </DsAlert>
-        )}
-        {systemUser && customers && agentDelegations && (
-          <SnackbarProvider>
-            <SystemUserAgentDelegationPageContent
-              systemUser={systemUser}
-              customers={customers}
-              existingAgentDelegations={agentDelegations}
-            />
-          </SnackbarProvider>
-        )}
+        <PageContainer
+          onNavigateBack={handleNavigateBack}
+          pageActions={
+            systemUser &&
+            hasCreateSystemUserPermission(reporteeData) && (
+              <DeleteSystemUserPopover
+                integrationTitle={systemUser.integrationTitle}
+                isDeleteError={isDeleteError}
+                isDeletingSystemUser={isDeletingSystemUser}
+                handleDeleteSystemUser={handleDeleteSystemUser}
+                hasAgentDelegation={!!agentDelegations?.length}
+              />
+            )
+          }
+        >
+          {isLoading && (
+            <div className={classes.flexContainer}>
+              <SystemUserHeader
+                isLoading
+                title=''
+              />
+              <DsHeading data-size='xs'>
+                <DsSkeleton
+                  variant='text'
+                  width={20}
+                />
+              </DsHeading>
+              <RightsList
+                isLoading
+                resources={[]}
+                accessPackages={[]}
+                hideHeadings
+              />
+            </div>
+          )}
+          {isLoadSystemUserError && (
+            <DsAlert data-color='danger'>
+              {t('systemuser_detailpage.load_systemuser_error')}
+            </DsAlert>
+          )}
+          {isLoadCustomersError && (
+            <DsAlert data-color='danger'>
+              {t('systemuser_agent_delegation.load_customers_error')}
+            </DsAlert>
+          )}
+          {isLoadAssignedCustomersError && (
+            <DsAlert data-color='danger'>
+              {t('systemuser_agent_delegation.load_assigned_customers_error')}
+            </DsAlert>
+          )}
+          {systemUser && customers && agentDelegations && (
+            <SnackbarProvider>
+              <SystemUserAgentDelegationPageContent
+                systemUser={systemUser}
+                customers={customers}
+                existingAgentDelegations={agentDelegations}
+              />
+            </SnackbarProvider>
+          )}
+        </PageContainer>
       </PageLayoutWrapper>
     </PageWrapper>
   );
