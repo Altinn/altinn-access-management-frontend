@@ -33,7 +33,6 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: vi.fn(),
   })),
 });
-
 beforeEach(
   () => (document.cookie = `AltinnPartyId=${TEST_PARTY_ID}; AltinnPartyUuid=${TEST_PARTY_UUID}`),
 );
