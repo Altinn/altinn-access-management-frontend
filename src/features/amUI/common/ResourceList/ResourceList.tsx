@@ -7,7 +7,7 @@ import { ResourceDetails } from './ResourceDetails';
 import classes from './ResourceList.module.css';
 import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
-import { AccessPackageResourceToolbar } from '../AccessPackageResourceToolbar/AccessPackageResourceToolbar';
+import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
 
 interface PackageResourceListProps {
   resources: PackageResource[];
@@ -41,12 +41,17 @@ export const ResourceList = ({
   return (
     <div className={classes.container}>
       {resources.length > 0 && (
-        <AccessPackageResourceToolbar
+        <ResourceFilterToolbar
           search={search}
           setSearch={setSearch}
           filterState={filterState}
           setFilterState={setFilterState}
-          resources={resources}
+          resourceOptions={resources.map((res) => {
+            return {
+              value: res.provider?.code || res.resourceOwnerOrgcode,
+              label: res.provider?.name || res.resourceOwnerName,
+            };
+          })}
         />
       )}
       {orgLoading || isLoading ? (

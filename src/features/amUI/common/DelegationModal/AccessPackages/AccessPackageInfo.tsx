@@ -23,8 +23,8 @@ import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { StatusSection } from '../../StatusSection/StatusSection';
-import { AccessPackageResourceToolbar } from '../../AccessPackageResourceToolbar/AccessPackageResourceToolbar';
 import { useFilteredResources } from '../../ResourceList/useFilteredResources';
+import { ResourceFilterToolbar } from '../../ResourceFilterToolbar/ResourceFilterToolbar';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -182,12 +182,17 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 name: accessPackage?.name,
               })}
             </DsHeading>
-            <AccessPackageResourceToolbar
+            <ResourceFilterToolbar
               search={search}
               setSearch={setSearch}
               filterState={filterState}
               setFilterState={setFilterState}
-              resources={accessPackage.resources}
+              resourceOptions={accessPackage.resources.map((res) => {
+                return {
+                  value: res.provider?.code || res.resourceOwnerOrgcode,
+                  label: res.provider?.name || res.resourceOwnerName,
+                };
+              })}
             />
             {search && filteredResources.length === 0 && (
               <DsParagraph data-size='md'>

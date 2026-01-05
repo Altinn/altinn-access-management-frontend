@@ -3,24 +3,24 @@ import { PackageResource } from '@/rtk/features/accessPackageApi';
 import { Toolbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-interface AccessPackageResourceToolbarProps {
+interface ResourceFilterToolbarProps {
   search: string;
   setSearch: (search: string) => void;
   filterState: { owner?: string[] };
   setFilterState: (state: { owner?: string[] }) => void;
-  resources: PackageResource[];
+  resourceOptions: { value: string; label: string }[];
 }
 
-export const AccessPackageResourceToolbar = ({
+export const ResourceFilterToolbar = ({
   search,
   setSearch,
   filterState,
   setFilterState,
-  resources,
-}: AccessPackageResourceToolbarProps) => {
+  resourceOptions,
+}: ResourceFilterToolbarProps) => {
   const { t } = useTranslation();
 
-  if (resources.length === 0) {
+  if (resourceOptions.length === 0) {
     return null;
   }
 
@@ -38,10 +38,8 @@ export const AccessPackageResourceToolbar = ({
       filterState={filterState}
       onFilterStateChange={setFilterState}
       getFilterLabel={(_name, value) => {
-        const resourceWithOwner = resources.find(
-          (res) => getResourceOwnerOrgcode(res) === value?.[0],
-        );
-        return resourceWithOwner ? getResourceOwnerName(resourceWithOwner) : '';
+        const resourceWithOwner = resourceOptions.find((res) => res.value === value?.[0]);
+        return resourceWithOwner ? resourceWithOwner.label : '';
       }}
       addFilterButtonLabel={t('resource_list.filter_by_serviceowner')}
       removeButtonAltText={t('resource_list.remove_filter')}
@@ -53,11 +51,11 @@ export const AccessPackageResourceToolbar = ({
           removable: true,
           options: Array.from(
             new Map(
-              resources.map((resource) => [
-                getResourceOwnerOrgcode(resource),
+              resourceOptions.map((option) => [
+                option.value,
                 {
-                  value: getResourceOwnerOrgcode(resource),
-                  label: getResourceOwnerName(resource),
+                  value: option.value,
+                  label: option.label,
                 },
               ]),
             ).values(),
@@ -66,25 +64,4 @@ export const AccessPackageResourceToolbar = ({
       ]}
     />
   );
-};
-
-const getResourceOwnerOrgcode = (resource: PackageResource): string => {
-  const code = resource.provider?.code || resource.resourceOwnerOrgcode;
-  if (!code) {
-    console.error(
-      'Misconfigured resource: missing both provider.code and resourceOwnerOrgcode',
-      resource,
-    );
-  }
-  return code || '';
-};
-const getResourceOwnerName = (resource: PackageResource): string => {
-  const name = resource.provider?.name || resource.resourceOwnerName;
-  if (!name) {
-    console.error(
-      'Misconfigured resource: missing both provider.name and resourceOwnerName',
-      resource,
-    );
-  }
-  return name || '';
 };
