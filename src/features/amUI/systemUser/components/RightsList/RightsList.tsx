@@ -7,6 +7,7 @@ import {
   DsHeading,
   ResourceListItem,
   List,
+  DsSkeleton,
 } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
@@ -24,6 +25,7 @@ interface RightsListProps {
   resources: ServiceResource[];
   accessPackages: SystemUserAccessPackage[];
   hideHeadings?: boolean;
+  isLoading?: boolean;
   headingLevel?: 2 | 3 | 4;
 }
 
@@ -31,6 +33,7 @@ export const RightsList = ({
   resources,
   accessPackages,
   hideHeadings,
+  isLoading,
   headingLevel,
 }: RightsListProps): React.ReactNode => {
   const { t } = useTranslation();
@@ -58,21 +61,54 @@ export const RightsList = ({
 
   const listItemHeadingLevel = `h${Math.min(6, (headingLevel ?? 2) + 1)}` as 'h3' | 'h4' | 'h5';
 
+  if (isLoading) {
+    return (
+      <div className={classes.rightsListWrapper}>
+        <div>
+          {!hideHeadings && (
+            <DsSkeleton
+              variant='text'
+              width={20}
+            />
+          )}
+          <List className={classes.rightsList}>
+            <AccessPackageListItem
+              id='1'
+              size='md'
+              loading={true}
+              name='xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+              description={'xxxxxxxxx'}
+              interactive={false}
+            />
+            <AccessPackageListItem
+              id='2'
+              size='md'
+              loading={true}
+              name='xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+              description={'xxxxxxxxx'}
+              interactive={false}
+            />
+          </List>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={classes.rightsListWrapper}>
       {accessPackages.length > 0 && (
         <div>
           {!hideHeadings && (
-            <DsHeading
-              data-size='2xs'
-              level={headingLevel ?? 2}
-            >
-              {accessPackages.length === 1
-                ? t('systemuser_detailpage.right_accesspackage_singular')
-                : t('systemuser_detailpage.right_accesspackage_plural', {
-                    accessPackageCount: accessPackages.length,
-                  })}
-            </DsHeading>
+            <RightsListHeading
+              headingLevel={headingLevel}
+              text={
+                accessPackages.length === 1
+                  ? t('systemuser_detailpage.right_accesspackage_singular')
+                  : t('systemuser_detailpage.right_accesspackage_plural', {
+                      accessPackageCount: accessPackages.length,
+                    })
+              }
+            />
           )}
           <List className={classes.rightsList}>
             {accessPackages.map((accessPackage) => (
@@ -98,16 +134,16 @@ export const RightsList = ({
       {resources.length > 0 && (
         <div>
           {!hideHeadings && (
-            <DsHeading
-              data-size='2xs'
-              level={headingLevel ?? 2}
-            >
-              {resources.length === 1
-                ? t('systemuser_detailpage.right_resource_singular')
-                : t('systemuser_detailpage.right_resource_plural', {
-                    resourcesCount: resources.length,
-                  })}
-            </DsHeading>
+            <RightsListHeading
+              headingLevel={headingLevel}
+              text={
+                resources.length === 1
+                  ? t('systemuser_detailpage.right_resource_singular')
+                  : t('systemuser_detailpage.right_resource_plural', {
+                      resourcesCount: resources.length,
+                    })
+              }
+            />
           )}
           <List className={classes.rightsList}>
             {resources.map((resource) => {
@@ -156,5 +192,20 @@ export const RightsList = ({
         {selectedResource && <ResourceDetails resource={selectedResource} />}
       </DsDialog>
     </div>
+  );
+};
+
+interface RightsListHeadingProps {
+  headingLevel?: 2 | 3 | 4;
+  text: string;
+}
+const RightsListHeading = ({ headingLevel, text }: RightsListHeadingProps) => {
+  return (
+    <DsHeading
+      data-size='2xs'
+      level={headingLevel ?? 2}
+    >
+      {text}
+    </DsHeading>
   );
 };

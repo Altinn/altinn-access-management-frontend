@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
+using Altinn.Platform.Models.Register;
 using Altinn.Register.Contracts.V1;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -14,6 +15,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class SystemUserService : ISystemUserService
     {
         private readonly ISystemUserClient _systemUserClient;
+        private readonly ISystemUserRequestClient _systemUserRequestClient;
+        private readonly ISystemUserAgentRequestClient _systemUserAgentRequestClient;
+        private readonly ISystemRegisterClient _systemRegisterClient;
         private readonly IRegisterClient _registerClient;
         private readonly ResourceHelper _resourceHelper;
 
@@ -21,14 +25,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Initializes a new instance of the <see cref="SystemUserService"/> class.
         /// </summary>
         /// <param name="systemUserClient">The system user client.</param>
+        /// <param name="systemUserRequestClient">The system user request client.</param>
+        /// <param name="systemUserAgentRequestClient">The system user agent request client.</param>
+        /// <param name="systemRegisterClient">The system register client.</param>
         /// <param name="registerClient">The register client.</param>
         /// <param name="resourceHelper">Resources helper to enrich resources</param>
         public SystemUserService(
             ISystemUserClient systemUserClient,
+            ISystemUserRequestClient systemUserRequestClient,
+            ISystemUserAgentRequestClient systemUserAgentRequestClient,
+            ISystemRegisterClient systemRegisterClient,
             IRegisterClient registerClient,
             ResourceHelper resourceHelper)
         {
             _systemUserClient = systemUserClient;
+            _systemUserRequestClient = systemUserRequestClient;
+            _systemUserAgentRequestClient = systemUserAgentRequestClient;
+            _systemRegisterClient = systemRegisterClient;
             _registerClient = registerClient;
             _resourceHelper = resourceHelper;
         }
@@ -103,7 +116,58 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return createdSystemUser;
         }
 
-        private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, CancellationToken cancellationToken)
+        /// <inheritdoc />
+        public async Task<Result<List<SystemUserFE>>> GetPendingSystemUserRequests(Guid partyUuid, CancellationToken cancellationToken)
+        {
+            Party party = (await _registerClient.GetPartyList([partyUuid])).FirstOrDefault();
+            if (party == null)
+            {
+                return Problem.Reportee_Orgno_NotFound;
+            }
+            
+            Task<Result<List<SystemUserRequest>>> standardTask = _systemUserRequestClient.GetPendingSystemUserRequests(party.PartyId, party.OrgNumber, cancellationToken);
+            Task<Result<List<SystemUserRequest>>> agentTask = _systemUserAgentRequestClient.GetPendingAgentSystemUserRequests(party.PartyId, party.OrgNumber, cancellationToken);
+            await Task.WhenAll(standardTask, agentTask);
+
+            if (standardTask.Result.IsProblem)
+            {
+                return standardTask.Result.Problem;
+            }
+
+            if (agentTask.Result.IsProblem)
+            {
+                return agentTask.Result.Problem;
+            }
+
+            IEnumerable<SystemUser> requestsAsSystemUsers = await MapRequestsToPendingSystemUsers(standardTask.Result.Value, "standard", cancellationToken);
+            IEnumerable<SystemUser> agentRequestsAsSystemUsers = await MapRequestsToPendingSystemUsers(agentTask.Result.Value, "agent", cancellationToken);
+            List<SystemUserFE> pendingSystemUsers = await MapToSystemUsersFE([.. requestsAsSystemUsers, .. agentRequestsAsSystemUsers], cancellationToken);
+            return pendingSystemUsers;
+        }
+
+        private async Task<IEnumerable<SystemUser>> MapRequestsToPendingSystemUsers(IEnumerable<SystemUserRequest> requests, string userType, CancellationToken cancellationToken)
+        {
+            IEnumerable<Task<SystemUser>> tasks = requests.Where(r => r.Escalated).Select(async r =>
+            {
+                RegisteredSystem system = await _systemRegisterClient.GetSystem(r.SystemId, cancellationToken);
+
+                return new SystemUser
+                {
+                    Id = r.Id.ToString(),
+                    IntegrationTitle = r.IntegrationTitle,
+                    PartyId = r.PartyId.ToString(),
+                    Created = r.Created,
+                    SupplierOrgNo = system?.SystemVendorOrgNumber ?? "0",
+                    UserType = userType,
+                    SystemId = r.SystemId,
+                    ReporteeOrgNo = r.PartyOrgNo
+                };
+            });
+
+            return await Task.WhenAll(tasks);
+        }
+
+        private async Task<List<SystemUserFE>> MapToSystemUsersFE(IEnumerable<SystemUser> systemUsers, CancellationToken cancellationToken)
         {
             List<PartyName> partyNames = await _registerClient.GetPartyNames(systemUsers.Select(x => x.SupplierOrgNo).Distinct(), cancellationToken);
             Dictionary<string, string> nameByOrgNo = partyNames.ToDictionary(p => p.OrgNo, p => p.Name);
@@ -127,7 +191,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     PartyId = systemUser.PartyId,
                     Created = systemUser.Created,
                     System = systemFE,
-                    SystemUserType = systemUser.SystemUserType,
+                    UserType = systemUser.UserType,
                 });
             }
 

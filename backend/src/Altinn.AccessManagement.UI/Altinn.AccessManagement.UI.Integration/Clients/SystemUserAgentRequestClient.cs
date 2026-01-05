@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<SystemUserAgentRequest>> GetSystemUserAgentRequest(Guid agentRequestId, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserRequest>> GetSystemUserAgentRequest(Guid agentRequestId, CancellationToken cancellationToken)
         {        
             try
             {
@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 if (response.IsSuccessStatusCode) 
                 {
-                    return JsonSerializer.Deserialize<SystemUserAgentRequest>(responseContent, _jsonSerializerOptions);
+                    return JsonSerializer.Deserialize<SystemUserRequest>(responseContent, _jsonSerializerOptions);
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserAgentRequestClient // GetSystemUserAgentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
@@ -130,6 +130,60 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentRequestClient // RejectSystemUserAgentRequest // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<List<SystemUserRequest>>> GetPendingAgentSystemUserRequests(int partyId, string orgNo, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpoint = $"systemuser/request/agent/{partyId}/{orgNo}/pending";
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode) 
+                {
+                    return JsonSerializer.Deserialize<List<SystemUserRequest>>(responseContent, _jsonSerializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentRequestClient // GetPendingAgentSystemUserRequests // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                
+                AltinnProblemDetails pendingProblemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ProblemMapper.MapToAuthUiError(pendingProblemDetails?.ErrorCode.ToString());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentRequestClient // GetPendingAgentSystemUserRequests // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<bool>> EscalateSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpoint = $"systemuser/request/agent/{partyId}/{agentRequestId}/escalate";
+                HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentRequestClient // EscalateSystemUserAgentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+
+                AltinnProblemDetails escalateProblemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ProblemMapper.MapToAuthUiError(escalateProblemDetails?.ErrorCode.ToString());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentRequestClient // EscalateSystemUserAgentRequest // Exception");
                 throw;
             }
         }

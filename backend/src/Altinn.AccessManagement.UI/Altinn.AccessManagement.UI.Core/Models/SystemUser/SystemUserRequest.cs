@@ -17,6 +17,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         public Guid Id { get; set; }
 
         /// <summary>
+        /// An optional name used only in display on UI. If not set by the request it will default to the System-Name. 
+        /// </summary>
+        [JsonPropertyName("integrationTitle")]
+        public string IntegrationTitle { get; set; }
+
+        /// <summary>
         /// PartyId of the SystemUser's Party (the customer that delegates rights to the systemuser).
         /// </summary>
         [Required]
@@ -58,14 +64,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// The set of Rights requested for this system user. Must be equal to or less than the set defined in the Registered System.
         /// Must be a minimum of 1 selected Right.
         /// </summary>
-        [Required]
         [JsonPropertyName("rights")]
         public List<Right> Rights { get; set; }
 
         /// <summary>
         /// The set of Access Packages requested for this system user. Must be equal to or less than the set defined in the Registered System.
         /// </summary>
-        [Required]
         [JsonPropertyName("accessPackages")]
         public List<RegisteredSystemAccessPackage> AccessPackages { get; set; }
 
@@ -95,7 +99,14 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// The date and time the Request was created,
         /// used to determine if the Request is still valid.
         /// </summary>
-        [JsonIgnore]
-        public DateTime Created { get; set; }
+        [JsonPropertyName("created")]
+        public DateTimeOffset Created { get; set; }
+
+        /// <summary>
+        /// Tracks if the original user creating the Request have escalated the Approval of this Request
+        /// to somebody else in the organisation with AccessManager (Package:Tilgangsstyring)
+        /// </summary>
+        [JsonPropertyName("escalated")]
+        public bool Escalated { get; set; }
     }
 }

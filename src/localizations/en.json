@@ -82,6 +82,8 @@
     "error_status": "HttpStatus: {{status}}",
     "ssn": "National identity number",
     "last_name": "Last name",
+    "org_number": "Organization number",
+    "org_name": "Organization name",
     "subunit": "Subunit",
     "subunit_lowercase": "subunit",
     "mainunit_lowercase": "main unit",
@@ -121,7 +123,7 @@
     "logged_in_as_name": "Logged in as {{name}}",
     "new_altinn_info": "About new Altinn",
     "help_pages": "Help pages",
-    "leave_beta": "To the old solution",
+    "leave_beta": "Go to old Altinn",
     "shortcuts": "Shortcuts",
     "all_forms": "All forms and services",
     "start_business": "Start and run business",
@@ -300,7 +302,7 @@
     "delete_singleRight_error_message": "Failed to delete access to ",
     "wip_title": "Power of attorney to services",
     "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
-    "wip_link_text": "Go to old solution"
+    "wip_link_text": "Go to old Altinn"
   },
   "access_packages": {
     "helptext_button": "What are access packages?",
@@ -508,7 +510,7 @@
     "invalid_phone": "Invalid phone number"
   },
   "info_modal": {
-    "back_button": "Go to the old solution",
+    "back_button": "Go to old Altinn",
     "help_pages": "Help pages",
     "info_button": "Information about the new solution"
   },
@@ -517,7 +519,7 @@
     "launchAlertContent": "This user may also have authorizations from the previous Altinn.",
     "launchAlertLinkText": "View authorizations from the previous Altinn",
     "oldRolesContent": "These Altinn roles may include services that already exist in the new Altinn solution. The services are being moved into the new access packages. The user has the same roles in the old solution, but there they include more and different services.",
-    "oldRolesLinkText": "Go to the old solution",
+    "oldRolesLinkText": "Go to old Altinn",
     "legacyRoleContent": "This role will soon be removed. Use access packages instead."
   },
   "systemuser_overviewpage": {
@@ -525,6 +527,7 @@
     "banner_title": "System accesses",
     "sub_title_text": "By creating a system access, you give a vendor system access to solve tasks in Altinn on behalf of your company.",
     "systemusers_load_error": "Failed to load system accesses",
+    "pending_systemusers_load_error": "Failed to load pending system access requests",
     "agent_delegation_systemusers_load_error": "Failed to load system accesses for customers",
     "new_system_user_button": "Create new system access",
     "existing_system_users_title": "Own system accesses",
@@ -533,10 +536,15 @@
     "loading_systemusers": "Loading system accesses",
     "no_permissions_warning": "You do not have sufficient rights to create a system access or manage customers for system accesses.",
     "no_key_role1": "You do not have sufficient rights.",
-    "no_key_role2": "To create a system access you need the role Access controller, Main administrator or General manager",
+    "no_key_role2": "To create a system access you need the role Access manager, Main administrator or General manager",
     "new_system_user": "NEW",
     "systemuser_tab": "System accesses",
-    "api_tab": "API-accesses"
+    "api_tab": "API-accesses",
+    "pending_request_badge": "Approve own system access",
+    "pending_agent_request_badge": "Approve system access for customers",
+    "pending_system_users_title": "Pending system access requests",
+    "standard_system_user_badge": "See powers of attorney",
+    "agent_system_user_badge": "Manage customers"
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",
@@ -604,7 +612,16 @@
     "reject_loading": "Rejecting system access...",
     "request_accepted": "This request is already approved",
     "request_rejected": "This request is already rejected",
-    "request_expired": "This request has expired"
+    "request_expired": "This request has expired",
+    "escalate_title": "You lack required authorization",
+    "escalate_description": "To create a system access you must be an Access Manager. Do you want to forward the request to the Access Manager in your organization?",
+    "escalate_confirm_button": "Yes, forward request",
+    "escalate_cancel_button": "Close and log out",
+    "escalate_error": "Could not forward the request",
+    "escalate_sent_title": "Request forwarded",
+    "escalate_sent_description": "The Access Manager in your organization should now have received the request in Altinn.",
+    "escalate_close_button": "Finish",
+    "escalate_already_escalated": "This request is already forwarded"
   },
   "systemuser_change_request": {
     "page_title": "Update system access - Altinn",
@@ -662,7 +679,7 @@
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "One or more services do not exist, or cannot be delegated.",
-    "02_rights_failed_to_delegate": "Could not delegate services to the system user.",
+    "02_rights_failed_to_delegate": "Could not delegate services to the system access.",
     "03_systemuser_failed_to_create": "Could not create system access.",
     "04_system_user_already_exists": "Could not create system access; existing system access already exists for the selected system.",
     "11_system_not_found": "Chosen system does not exist",
@@ -671,15 +688,15 @@
     "18_delegation_right_missing_delegation_access": "Delegation of services failed: you do not have the rights to directly delegate services.",
     "19_delegation_right_missing_srr_right_access": "Delegation of services failed: one or more services use access lists where the organization does not have access.",
     "20_delegation_right_insufficient_authentication_level": "Delegation of services failed: one or more services require an explicit access level.",
-    "51_accesspackage_delegation_failed": "Delegation of access packages to the system user failed.",
+    "51_accesspackage_delegation_failed": "Delegation of access packages to the system access failed.",
     "53_accesspackage_delegation_missing_required_access": "You do not have sufficient access rights to delegate the requested access packages.",
     "55_accesspackage_failed_to_get_delegated_packages": "Unable to retrieve delegated access packages.",
-    "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system user."
+    "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system access."
   },
   "page_not_available": {
     "title": "Access management for private individuals is still under development",
     "text": "More content will be added to this page over time. You can still manage access on behalf of yourself as a private individual in the old solution.",
-    "link_text": "Go to old solution"
+    "link_text": "Go to old Altinn"
   },
   "consent_request": {
     "page_title": "Approve consent/power of attorney - Altinn",
@@ -799,7 +816,7 @@
     "alert_heading_priv": "This is the new access management solution for private individuals",
     "alert_body": "Today's Altinn roles have been replaced by access packages with services. \n\nPlease note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
     "alert_body_priv": "Unfortunately we don't have everything in place yet, so you may need to do some things in the old solution. \n\nIf you want to go to access management for your organization, you can switch to your desired organization in the account selector at the top.",
-    "alert_link": "Go to the old solution",
+    "alert_link": "Go to old Altinn",
     "shortcut_links_heading": "Where do you want to go?",
     "other_links_heading": "Other",
     "users_item_description_org": "Overview of people and organizations that have been granted access in your organization",
