@@ -193,9 +193,7 @@ export const SystemUserAgentRequestPage = () => {
             )}
             {hasCreateSystemUserPermission(reporteeData) === false && request.status === 'New' && (
               <EscalateRequest
-                requestId={request.id}
-                partyId={request.partyId}
-                redirectUrl={request.redirectUrl}
+                request={request}
                 isAgentRequest
               />
             )}

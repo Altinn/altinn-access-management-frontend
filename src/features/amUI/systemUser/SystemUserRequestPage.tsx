@@ -193,12 +193,8 @@ export const SystemUserRequestPage = () => {
                 </DsButton>
               </ButtonRow>
             )}
-            {hasCreateSystemUserPermission(reporteeData) === false && request.status === 'New' && (
-              <EscalateRequest
-                requestId={request.id}
-                partyId={request.partyId}
-                redirectUrl={request.redirectUrl}
-              />
+            {hasCreateSystemUserPermission(reporteeData) === true && request.status === 'New' && (
+              <EscalateRequest request={request} />
             )}
           </div>
         </>

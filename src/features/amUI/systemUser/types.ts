@@ -41,6 +41,7 @@ interface SystemUserRequestBase {
   redirectUrl?: string;
   system: RegisteredSystem;
   created: string;
+  escalated: boolean;
 }
 export interface SystemUserRequest extends SystemUserRequestBase {
   resources: ServiceResource[];
