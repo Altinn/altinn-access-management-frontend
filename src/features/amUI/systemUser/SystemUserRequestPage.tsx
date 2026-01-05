@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -16,15 +16,19 @@ import type { ProblemDetail } from './types';
 import { RightsList } from './components/RightsList/RightsList';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
+import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
+import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
+import { SystemUserPath } from '@/routes/paths';
 import { getApiBaseUrl } from './urlUtils';
-import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/CreateSystemUserCheck';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   useDocumentTitle(t('systemuser_request.page_title'));
   const [searchParams] = useSearchParams();
+  const skipLogout = searchParams.get('skiplogout');
   const requestId = searchParams.get('id') ?? '';
 
   const {
@@ -77,10 +81,14 @@ export const SystemUserRequestPage = () => {
   };
 
   const onRejectOrApprove = (): void => {
-    const url = request?.redirectUrl
-      ? `${getApiBaseUrl()}/request/${request?.id}/logout`
-      : getLogoutUrl();
-    window.location.assign(url);
+    if (skipLogout) {
+      navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+    } else {
+      const url = request?.redirectUrl
+        ? `${getApiBaseUrl()}/request/${request?.id}/logout`
+        : getLogoutUrl();
+      window.location.assign(url);
+    }
   };
 
   return (
@@ -161,7 +169,7 @@ export const SystemUserRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck reporteeData={reporteeData}>
+            {hasCreateSystemUserPermission(reporteeData) && (
               <ButtonRow>
                 <DsButton
                   variant='primary'
@@ -184,7 +192,14 @@ export const SystemUserRequestPage = () => {
                     : t('systemuser_request.reject')}
                 </DsButton>
               </ButtonRow>
-            </CreateSystemUserCheck>
+            )}
+            {hasCreateSystemUserPermission(reporteeData) === false && request.status === 'New' && (
+              <EscalateRequest
+                requestId={request.id}
+                partyId={request.partyId}
+                redirectUrl={request.redirectUrl}
+              />
+            )}
           </div>
         </>
       )}

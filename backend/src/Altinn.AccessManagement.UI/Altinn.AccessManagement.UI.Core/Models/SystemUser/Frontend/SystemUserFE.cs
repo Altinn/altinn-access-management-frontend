@@ -45,10 +45,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         public RegisteredSystemFE System { get; set; }
 
         /// <summary>
-        /// Either Agent or Default
+        /// Either agent or standard
         /// </summary>
-        [JsonPropertyName("systemUserType")]
-        public string SystemUserType { get; set; }
+        [JsonPropertyName("userType")]
+        public string UserType { get; set; }
 
         /// <summary>
         /// List of resources information

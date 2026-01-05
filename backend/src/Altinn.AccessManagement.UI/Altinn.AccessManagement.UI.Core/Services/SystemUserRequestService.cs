@@ -77,5 +77,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             return await _systemUserRequestClient.RejectSystemUserRequest(partyId, requestId, cancellationToken);
         }
+
+        /// <inheritdoc />
+        public async Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        {
+            return await _systemUserRequestClient.EscalateSystemUserRequest(partyId, requestId, cancellationToken);
+        }
     }
 }
