@@ -1,3 +1,4 @@
+import React from 'react';
 import { PackageResource } from '@/rtk/features/accessPackageApi';
 import { Toolbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
