@@ -187,7 +187,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               setSearch={setSearch}
               filterState={filterState}
               setFilterState={setFilterState}
-              resourceOptions={accessPackage.resources.map((res) => {
+              serviceOwnerOptions={accessPackage.resources.map((res) => {
                 return {
                   value: res.provider?.code || res.resourceOwnerOrgcode,
                   label: res.provider?.name || res.resourceOwnerName,

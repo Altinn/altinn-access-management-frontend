@@ -46,7 +46,7 @@ export const ResourceList = ({
           setSearch={setSearch}
           filterState={filterState}
           setFilterState={setFilterState}
-          resourceOptions={resources.map((res) => {
+          serviceOwnerOptions={resources.map((res) => {
             return {
               value: res.provider?.code || res.resourceOwnerOrgcode,
               label: res.provider?.name || res.resourceOwnerName,

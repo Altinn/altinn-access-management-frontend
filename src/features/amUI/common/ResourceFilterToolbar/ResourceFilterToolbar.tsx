@@ -7,7 +7,7 @@ interface ResourceFilterToolbarProps {
   setSearch: (search: string) => void;
   filterState: { owner?: string[] };
   setFilterState: (state: { owner?: string[] }) => void;
-  resourceOptions: { value: string; label: string }[];
+  serviceOwnerOptions: { value: string; label: string }[];
 }
 
 export const ResourceFilterToolbar = ({
@@ -15,11 +15,11 @@ export const ResourceFilterToolbar = ({
   setSearch,
   filterState,
   setFilterState,
-  resourceOptions,
+  serviceOwnerOptions,
 }: ResourceFilterToolbarProps) => {
   const { t } = useTranslation();
 
-  if (resourceOptions.length === 0) {
+  if (serviceOwnerOptions.length === 0) {
     return null;
   }
 
@@ -37,8 +37,8 @@ export const ResourceFilterToolbar = ({
       filterState={filterState}
       onFilterStateChange={setFilterState}
       getFilterLabel={(_name, value) => {
-        const resourceWithOwner = resourceOptions.find((res) => res.value === value?.[0]);
-        return resourceWithOwner ? resourceWithOwner.label : '';
+        const serviceOwner = serviceOwnerOptions.find((owner) => owner.value === value?.[0]);
+        return serviceOwner ? serviceOwner.label : '';
       }}
       addFilterButtonLabel={t('resource_list.filter_by_serviceowner')}
       removeButtonAltText={t('resource_list.remove_filter')}
@@ -50,7 +50,7 @@ export const ResourceFilterToolbar = ({
           removable: true,
           options: Array.from(
             new Map(
-              resourceOptions.map((option) => [
+              serviceOwnerOptions.map((option) => [
                 option.value,
                 {
                   value: option.value,
