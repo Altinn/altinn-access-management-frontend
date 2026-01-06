@@ -13,11 +13,11 @@ export interface AccessArea {
 
 export interface PackageResource {
   id: string;
-  identifier: string;
+  identifier?: string;
   name: string;
   title: string;
   description: string;
-  refId: string;
+  refId?: string;
   provider: ResourceProvider;
   resourceOwnerName: string;
   resourceOwnerLogoUrl: string;
