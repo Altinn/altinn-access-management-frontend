@@ -137,7 +137,7 @@ export const getClientAdministrationMenuItem = (
   isSmall = false,
 ): MenuItemProps => {
   return {
-    groupId: 16,
+    groupId: 14,
     id: 'client-admin',
     size: 'md',
     loading: isLoading,
