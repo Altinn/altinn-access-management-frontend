@@ -22,6 +22,7 @@ import { RightsList } from '../components/RightsList/RightsList';
 import classes from './SystemUserDetailsPage.module.css';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
@@ -31,6 +32,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   const partyId = getCookie('AltinnPartyId');
 
   const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const {
     data: systemUser,
@@ -63,7 +65,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
         <PageContainer
           onNavigateBack={handleNavigateBack}
           pageActions={
-            hasCreateSystemUserPermission(reporteeData) &&
+            hasCreateSystemUserPermission(reporteeData, isAdmin) &&
             systemUser && (
               <DeleteSystemUserPopover
                 integrationTitle={systemUser?.integrationTitle ?? ''}

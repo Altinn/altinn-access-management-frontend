@@ -8,15 +8,17 @@ import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils
 
 interface CreateSystemUserCheckProps {
   reporteeData: ReporteeInfo | undefined;
+  isAdmin: boolean | undefined;
   children: React.ReactNode;
 }
 export const CreateSystemUserCheck = ({
   reporteeData,
+  isAdmin,
   children,
 }: CreateSystemUserCheckProps): React.ReactNode => {
   const { t } = useTranslation();
 
-  const canCreate = hasCreateSystemUserPermission(reporteeData);
+  const canCreate = hasCreateSystemUserPermission(reporteeData, isAdmin);
 
   return (
     <>
