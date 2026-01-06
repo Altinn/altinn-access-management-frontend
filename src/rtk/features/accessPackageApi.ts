@@ -11,13 +11,14 @@ export interface AccessArea {
   accessPackages: AccessPackage[];
 }
 
+// either indentifier or refId contains resource.identifier, the other is undefined
 export interface PackageResource {
   id: string;
-  identifier?: string;
+  identifier: string;
   name: string;
   title: string;
   description: string;
-  refId?: string;
+  refId: string;
   provider: ResourceProvider;
   resourceOwnerName: string;
   resourceOwnerLogoUrl: string;
