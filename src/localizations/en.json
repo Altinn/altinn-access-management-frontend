@@ -831,6 +831,7 @@
     "poa_item_description": "Overview of all access packages and individual services",
     "consent_item_description": "Overview of all concluded agreements",
     "systemuser_item_description": "Overview of system access",
+    "client_admin_item_description": "Delegate power of attorney from clients to users in your organization.",
     "new_requests_single": "{{reportee}} has {{requestCount}} new request",
     "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"
   }
