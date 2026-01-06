@@ -74,8 +74,8 @@ export const ResourceList = ({
                 );
                 return (
                   <ResourceListItem
-                    key={resource.id}
-                    id={resource.id}
+                    key={resource.identifier || resource.refId}
+                    id={resource.identifier || resource.refId}
                     as='button'
                     size='xs'
                     resourceName={resource.name || resource.title}
