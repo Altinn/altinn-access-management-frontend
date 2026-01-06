@@ -10,8 +10,9 @@ export const useProviderLogoUrl = () => {
 
   const getProviderLogoUrl = React.useCallback(
     (orgCode: string | null | undefined): string | undefined => {
+      const lowercaseOrgCode = orgCode?.toLowerCase();
       if (!orgData || isLoading) return undefined;
-      const org = orgCode ? orgData[orgCode] : undefined;
+      const org = lowercaseOrgCode ? orgData[lowercaseOrgCode] : undefined;
       return org?.emblem ?? org?.logo ?? undefined;
     },
     [orgData, isLoading],

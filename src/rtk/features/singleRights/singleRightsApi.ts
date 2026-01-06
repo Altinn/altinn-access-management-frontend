@@ -17,6 +17,7 @@ export interface ServiceResource {
   resourceOwnerName: string;
   resourceOwnerLogoUrl: string;
   resourceOwnerOrgNumber: string;
+  resourceOwnerOrgcode: string;
   rightDescription: string;
   description?: string;
   resourceReferences: resourceReference[];

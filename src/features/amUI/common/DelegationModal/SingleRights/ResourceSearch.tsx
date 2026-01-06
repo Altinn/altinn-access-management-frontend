@@ -2,15 +2,7 @@ import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router';
-import {
-  DsAlert,
-  DsChip,
-  DsHeading,
-  DsParagraph,
-  DsSearch,
-  DsSpinner,
-  ResourceListItem,
-} from '@altinn/altinn-components';
+import { DsHeading, DsSearch } from '@altinn/altinn-components';
 import { useCallback } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -20,23 +12,24 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
-import { Filter, List } from '@/components';
+import { Filter } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { AmPagination } from '@/components/Paginering/AmPaginering';
 import type { Party } from '@/rtk/features/lookupApi';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
+import { SearchResults } from './SearchResults';
+import { FilterChips } from './FilterChips';
 
 import classes from './ResourceSearch.module.css';
 
 export interface ResourceSearchProps {
-  onSelection: (resource: ServiceResource) => void;
+  onSelect: (resource: ServiceResource) => void;
   toParty?: Party;
 }
 
 const searchResultsPerPage = 7;
 
-export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) => {
+export const ResourceSearch = ({ onSelect, toParty }: ResourceSearchProps) => {
   const { t } = useTranslation();
   const { id } = useParams();
 
@@ -79,111 +72,6 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
     setFilters((prevState: string[]) => prevState.filter((f) => f !== filter));
     setCurrentPage(1);
   };
-
-  const getFilterLabel = (value: string) => {
-    const option = filterOptions.find((option) => option.value === value);
-    return option ? option.label : '';
-  };
-
-  const filterChips = () => (
-    <div className={classes.filterChips}>
-      {filters.map((filterValue: string) => (
-        <DsChip.Removable
-          data-size='sm'
-          key={filterValue}
-          aria-label={`${t('common.remove')} ${String(getFilterLabel(filterValue))}`}
-          onClick={() => {
-            unCheckFilter(filterValue);
-          }}
-        >
-          {getFilterLabel(filterValue)}
-        </DsChip.Removable>
-      ))}
-    </div>
-  );
-
-  const searchResults = () => {
-    if (isFetching) {
-      return (
-        <div className={classes.spinner}>
-          <DsSpinner
-            aria-label={t('common.loading')}
-            data-size='md'
-          />
-        </div>
-      );
-    }
-    if (error) {
-      return (
-        <DsAlert
-          role='alert'
-          className={classes.searchError}
-          data-color='danger'
-        >
-          <DsHeading
-            level={2}
-            data-size='xs'
-          >
-            {t('common.general_error_title')}
-          </DsHeading>
-          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-        </DsAlert>
-      );
-    }
-    return (
-      <>
-        <div className={classes.resultCountAndChips}>
-          {totalNumberOfResults !== undefined && (
-            <DsParagraph>
-              {displayPopularResources
-                ? t('single_rights.popular_services')
-                : `${String(totalNumberOfResults)} ${t('single_rights.search_hits')}`}
-            </DsParagraph>
-          )}
-          {filterChips()}
-        </div>
-        <List className={classes.resourceList}>{listedResources}</List>
-        {totalNumberOfResults !== undefined &&
-          totalNumberOfResults > searchResultsPerPage &&
-          !displayPopularResources && (
-            <AmPagination
-              className={classes.pagination}
-              currentPage={currentPage}
-              totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
-              setCurrentPage={setCurrentPage}
-              size='sm'
-              hideLabels={true}
-            />
-          )}
-      </>
-    );
-  };
-
-  const listedResources = resources?.map((resource: ServiceResource, index: number) => {
-    const hasPoa =
-      !!delegatedResources &&
-      delegatedResources.some(
-        (delegation) => delegation.resource?.identifier === resource.identifier,
-      );
-    return (
-      <li
-        key={resource.identifier ?? index}
-        className={classes.resourceItem}
-      >
-        <ResourceListItem
-          id={resource.identifier}
-          ownerName={resource.resourceOwnerName ?? ''}
-          resourceName={resource.title}
-          ownerLogoUrl={resource.resourceOwnerLogoUrl}
-          ownerLogoUrlAlt={resource.resourceOwnerName}
-          onClick={() => onSelection(resource)}
-          badge={
-            hasPoa ? { label: t('common.has_poa'), theme: 'base', color: 'success' } : undefined
-          }
-        />
-      </li>
-    );
-  });
 
   const debouncedSearch = useCallback(
     debounce((searchString: string) => {
@@ -245,7 +133,26 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
             }}
           />
         </div>
-        <div className={classes.searchResults}>{searchResults()}</div>
+        <FilterChips
+          filters={filters}
+          filterOptions={filterOptions}
+          onRemoveFilter={unCheckFilter}
+        />
+        <div className={classes.searchResults}>
+          <SearchResults
+            isFetching={isFetching}
+            error={error}
+            resources={resources}
+            searchString={searchString}
+            delegatedResources={delegatedResources}
+            totalNumberOfResults={totalNumberOfResults}
+            displayPopularResources={displayPopularResources}
+            currentPage={currentPage}
+            searchResultsPerPage={searchResultsPerPage}
+            onSelect={onSelect}
+            setCurrentPage={setCurrentPage}
+          />
+        </div>
       </search>
     </>
   );
