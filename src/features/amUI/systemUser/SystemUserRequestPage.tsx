@@ -22,6 +22,7 @@ import { SystemUserPath } from '@/routes/paths';
 import { getApiBaseUrl } from './urlUtils';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
@@ -48,6 +49,7 @@ export const SystemUserRequestPage = () => {
   } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
     skip: !request?.partyId,
   });
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const [
     postAcceptCreationRequest,
@@ -169,7 +171,7 @@ export const SystemUserRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </DsAlert>
             )}
-            {hasCreateSystemUserPermission(reporteeData) && (
+            {hasCreateSystemUserPermission(reporteeData, isAdmin) && (
               <ButtonRow>
                 <DsButton
                   variant='primary'
@@ -193,9 +195,8 @@ export const SystemUserRequestPage = () => {
                 </DsButton>
               </ButtonRow>
             )}
-            {hasCreateSystemUserPermission(reporteeData) === false && request.status === 'New' && (
-              <EscalateRequest request={request} />
-            )}
+            {hasCreateSystemUserPermission(reporteeData, isAdmin) === false &&
+              request.status === 'New' && <EscalateRequest request={request} />}
           </div>
         </>
       )}

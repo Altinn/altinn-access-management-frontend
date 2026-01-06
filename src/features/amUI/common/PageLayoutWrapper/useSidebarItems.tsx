@@ -66,7 +66,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   }
 
   if (
-    hasCreateSystemUserPermission(reportee) ||
+    hasCreateSystemUserPermission(reportee, isAdmin) ||
     hasSystemUserClientAdminPermission(reportee, isClientAdmin)
   ) {
     items.push(getSystemUserMenuItem(pathname, isLoading, isSmall));

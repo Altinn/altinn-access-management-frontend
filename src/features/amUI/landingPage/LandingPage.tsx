@@ -126,7 +126,7 @@ export const LandingPage = () => {
     }
 
     if (
-      hasCreateSystemUserPermission(reportee) ||
+      hasCreateSystemUserPermission(reportee, isAdmin) ||
       hasSystemUserClientAdminPermission(reportee, isClientAdmin)
     ) {
       items.push({

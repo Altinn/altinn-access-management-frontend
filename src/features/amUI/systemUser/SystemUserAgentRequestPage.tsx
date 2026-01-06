@@ -22,6 +22,7 @@ import { SystemUserPath } from '@/routes/paths';
 import { RightsList } from './components/RightsList/RightsList';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
@@ -48,6 +49,7 @@ export const SystemUserAgentRequestPage = () => {
   } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
     skip: !request?.partyId,
   });
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const [
     postAcceptCreationRequest,
@@ -167,7 +169,7 @@ export const SystemUserAgentRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </DsAlert>
             )}
-            {hasCreateSystemUserPermission(reporteeData) && (
+            {hasCreateSystemUserPermission(reporteeData, isAdmin) && (
               <ButtonRow>
                 <DsButton
                   variant='primary'
@@ -191,12 +193,13 @@ export const SystemUserAgentRequestPage = () => {
                 </DsButton>
               </ButtonRow>
             )}
-            {hasCreateSystemUserPermission(reporteeData) === false && request.status === 'New' && (
-              <EscalateRequest
-                request={request}
-                isAgentRequest
-              />
-            )}
+            {hasCreateSystemUserPermission(reporteeData, isAdmin) === false &&
+              request.status === 'New' && (
+                <EscalateRequest
+                  request={request}
+                  isAgentRequest
+                />
+              )}
           </div>
         </>
       )}
