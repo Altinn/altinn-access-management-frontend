@@ -147,7 +147,7 @@ export const RightsList = ({
           )}
           <List className={classes.rightsList}>
             {resources.map((resource) => {
-              const emblem = getProviderLogoUrl(resource.resourceOwnerOrgNumber ?? '');
+              const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
               return (
                 <ResourceListItem
                   key={resource.identifier}

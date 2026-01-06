@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, DsButton, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
@@ -21,6 +21,7 @@ export const DeleteResourceButton = ({ resource, fullText = false }: DeleteResou
   const { openSnackbar } = useSnackbar();
   const { fromParty, toParty } = usePartyRepresentation();
   const revoke = useRevokeResource();
+  const [isLoading, setIsLoading] = useState(false);
 
   const snackbar = (isSuccessful: boolean) => {
     const color: 'success' | 'danger' = isSuccessful ? 'success' : 'danger';
@@ -44,16 +45,24 @@ export const DeleteResourceButton = ({ resource, fullText = false }: DeleteResou
         variant='text'
         icon={MinusCircleIcon}
         className={classes.deleteButton}
-        onClick={() =>
+        disabled={isLoading}
+        onClick={() => {
+          setIsLoading(true);
           revoke(
             resource.identifier,
             fromParty.partyUuid,
 
             toParty.partyUuid,
-            () => snackbar(true),
-            () => snackbar(false),
-          )
-        }
+            () => {
+              setIsLoading(false);
+              snackbar(true);
+            },
+            () => {
+              setIsLoading(false);
+              snackbar(false);
+            },
+          );
+        }}
       >
         {fullText ? t('common.delete_poa') : t('common.delete')}
       </Button>
