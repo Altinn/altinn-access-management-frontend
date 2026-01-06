@@ -49,15 +49,7 @@ export const ResourceFilterToolbar = ({
           optionType: 'radio',
           removable: true,
           options: Array.from(
-            new Map(
-              serviceOwnerOptions.map((option) => [
-                option.value,
-                {
-                  value: option.value,
-                  label: option.label,
-                },
-              ]),
-            ).values(),
+            new Map(serviceOwnerOptions.map((option) => [option.value, option])).values(),
           ),
         },
       ]}
