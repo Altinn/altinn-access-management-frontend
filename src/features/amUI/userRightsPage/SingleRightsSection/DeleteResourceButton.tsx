@@ -13,7 +13,6 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 interface DeleteResourceButton {
   resource: ServiceResource;
-  toParty: Party;
   fullText?: boolean;
 }
 

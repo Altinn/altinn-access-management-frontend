@@ -101,7 +101,6 @@ export const SingleRightsSection = () => {
             renderControls={(resource) => (
               <DeleteResourceButton
                 resource={resource}
-                toParty={toParty}
                 fullText
               />
             )}

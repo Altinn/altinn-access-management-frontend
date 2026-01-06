@@ -45,7 +45,7 @@ export const AccessPackageInfo = ({
       </DsHeading>
       <List>
         {accessPackage.resources.map((resource) => {
-          const emblem = getProviderLogoUrl(resource.resourceOwnerOrgNumber ?? '');
+          const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
           return (
             <ResourceListItem
               key={resource.identifier}

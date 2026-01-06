@@ -211,7 +211,7 @@ export const ResourceList = <
             <List>
               {filtered.map((resource, index) => {
                 const derivedId = extractResourceId(resource);
-                const resourceId = String(derivedId ?? index);
+                const resourceId = derivedId ? String(derivedId) : `resource-${index}`;
                 const resourceName = extractResourceName(resource);
                 const ownerName = extractOwnerName(resource);
                 const orgCode = extractOrgCode(resource);
@@ -271,9 +271,8 @@ export const ResourceList = <
           providerLogoUrl={
             selected
               ? resolveLogos
-                ? (logoResolver(selected.resourceOwnerOrgcode ?? '') ??
-                  selected.resourceOwnerLogoUrl)
-                : selected.resourceOwnerLogoUrl
+                ? (logoResolver(extractOrgCode(selected) ?? '') ?? selected.resourceOwnerLogoUrl)
+                : extractOrgCode(selected)
               : undefined
           }
         />
