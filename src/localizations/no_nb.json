@@ -546,7 +546,7 @@
   },
   "client_administration_page": {
     "no_access_title": "Du har ikke tilgang til klientadministrasjon",
-    "back_to_start": "Til startsiden"
+    "page_heading": "Klientadministrasjon"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",

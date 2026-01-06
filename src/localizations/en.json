@@ -549,7 +549,7 @@
   },
   "client_administration_page": {
     "no_access_title": "You do not have access to client administration",
-    "back_to_start": "Back to start"
+    "page_heading": "Client administration"
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",

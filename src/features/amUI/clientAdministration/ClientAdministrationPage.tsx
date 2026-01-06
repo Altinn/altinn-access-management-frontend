@@ -32,7 +32,7 @@ export const ClientAdministrationPage = () => {
       <PageWrapper>
         <PageLayoutWrapper>
           <DsHeading data-size='lg'>
-            <DsSkeleton variant='text'>{t('sidebar.client_administration')}</DsSkeleton>
+            <DsSkeleton variant='text'>{t('client_administration_page.page_heading')}</DsSkeleton>
           </DsHeading>
           <DsParagraph data-size='lg'>
             <DsSkeleton
@@ -45,7 +45,7 @@ export const ClientAdministrationPage = () => {
     );
   }
 
-  if (isClientAdmin === false && !isLoadingIsClientAdmin) {
+  if (isClientAdmin === false) {
     return (
       <PageWrapper>
         <PageLayoutWrapper>
@@ -58,7 +58,7 @@ export const ClientAdministrationPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <DsHeading data-size='lg'>{t('sidebar.client_administration')}</DsHeading>
+        <DsHeading data-size='lg'>{t('client_administration_page.page_heading')}</DsHeading>
       </PageLayoutWrapper>
     </PageWrapper>
   );
