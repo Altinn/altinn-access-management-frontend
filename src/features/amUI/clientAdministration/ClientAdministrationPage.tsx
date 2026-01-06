@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, Navigate } from 'react-router';
-import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { Navigate } from 'react-router';
+import { DsAlert } from '@altinn/altinn-components';
 
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -26,23 +26,7 @@ export const ClientAdministrationPage = () => {
     return (
       <PageWrapper>
         <PageLayoutWrapper>
-          <DsAlert data-color='warning'>
-            <DsHeading
-              level={1}
-              data-size='xs'
-            >
-              {t('client_administration_page.no_access_title')}
-            </DsHeading>
-            <DsParagraph data-size='sm'>
-              {t('client_administration_page.no_access_body')}
-            </DsParagraph>
-            <DsButton
-              asChild
-              variant='secondary'
-            >
-              <Link to='/'>{t('client_administration_page.back_to_start')}</Link>
-            </DsButton>
-          </DsAlert>
+          <DsAlert data-color='warning'>{t('client_administration_page.no_access_title')}</DsAlert>
         </PageLayoutWrapper>
       </PageWrapper>
     );

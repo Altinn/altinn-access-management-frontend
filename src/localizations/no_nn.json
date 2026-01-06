@@ -546,7 +546,6 @@
   },
   "client_administration_page": {
     "no_access_title": "Du har ikkje tilgang til klientadministrasjon",
-    "no_access_body": "For å administrere klientar treng du rolla klientadministrator. Gå tilbake til startsida for å halde fram.",
     "back_to_start": "Til startsida"
   },
   "systemuser_creationpage": {

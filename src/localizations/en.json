@@ -549,7 +549,6 @@
   },
   "client_administration_page": {
     "no_access_title": "You do not have access to client administration",
-    "no_access_body": "To manage client administration you need the client administrator role. Return to the start page to continue.",
     "back_to_start": "Back to start"
   },
   "systemuser_creationpage": {
