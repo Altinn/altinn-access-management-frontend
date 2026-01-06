@@ -56,6 +56,10 @@ export const settingsPageEnabled = () => {
   return window.featureFlags?.displaySettingsPage === true;
 };
 
+export const clientAdministrationPageEnabled = () => {
+  return window.featureFlags?.displayClientAdministrationPage === true;
+};
+
 export const poaOverviewPageEnabled = () => {
   return window.featureFlags?.displayPoaOverviewPage === true;
 };

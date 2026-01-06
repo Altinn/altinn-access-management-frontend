@@ -6,6 +6,7 @@ import {
 import {
   getConsentMenuItem,
   getHeadingMenuItem,
+  getClientAdministrationMenuItem,
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
   getRequestsMenuItem,
@@ -29,6 +30,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displaySettingsPage = window.featureFlags?.displaySettingsPage;
   const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
   const displayRequestsPage = window.featureFlags?.displayRequestsPage;
+  const displayClientAdministrationPage = window.featureFlags?.displayClientAdministrationPage;
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { pathname } = useLocation();
@@ -70,6 +72,10 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     hasSystemUserClientAdminPermission(reportee, isClientAdmin)
   ) {
     items.push(getSystemUserMenuItem(pathname, isLoading, isSmall));
+  }
+
+  if (isClientAdmin && displayClientAdministrationPage) {
+    items.push(getClientAdministrationMenuItem(pathname, isLoading, isSmall));
   }
 
   if (canAccessSettings && displaySettingsPage) {
