@@ -18,6 +18,8 @@ export class DelegationPage {
   readonly rightsAccessLink: Locator;
   readonly menubtn: Locator;
   readonly logoutBtn: Locator;
+  readonly packageSearchBox: Locator;
+  readonly clearSearchButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -37,6 +39,8 @@ export class DelegationPage {
     });
     this.menubtn = page.getByRole('button', { name: 'Meny' });
     this.logoutBtn = page.getByRole('button', { name: 'Logg ut' });
+    this.packageSearchBox = page.locator('role=search >> input[type="search"]').first();
+    this.clearSearchButton = page.getByRole('button', { name: /Tøm/ });
   }
 
   async openDelegationFlow() {
@@ -54,13 +58,9 @@ export class DelegationPage {
   }
 
   async addOrganization(orgNumber: string) {
-    const orgTab = this.page.getByRole('tab', { name: 'Virksomhet' });
-    await expect(orgTab).toBeVisible();
-    await orgTab.click();
-    const orgField = this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
-    await expect(orgField).toBeVisible();
-    await orgField.fill(orgNumber);
-
+    await this.page.getByRole('tab', { name: 'Virksomhet' }).click();
+    const orgInput = this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
+    await orgInput.fill(orgNumber);
     const addOrgBtn = this.page.getByRole('button', { name: 'Legg til virksomhet' });
     await expect(addOrgBtn).toBeVisible();
     await addOrgBtn.click();
@@ -70,52 +70,50 @@ export class DelegationPage {
     await openModalButton.click();
   }
 
-  async grantAccessPkgNameDirect(areaName: string, packageName: string, orgName: string) {
-    const searchBox = this.page
-      .getByRole('searchbox', { name: 'Søk etter tilgangspakker' })
-      .first();
-    await expect(searchBox).toBeVisible();
-    await searchBox.fill(areaName);
+  async grantAccessPkgNameDirect(packageName: string) {
+    const searchBox = this.packageSearchBox;
 
-    // Step 2: Find the list item containing the package name and click on packageName
+    await searchBox.click();
+    await searchBox.fill(packageName);
+
     const grantButton = this.page.getByRole('button', { name: `Gi fullmakt for ${packageName}` });
+
+    await expect(grantButton).toBeVisible({ timeout: 10000 });
     await grantButton.click();
 
-    // Step 3: Verify the alert message appears inside the dialog
-    /* const dialog = this.page.getByRole('dialog');
-     const expectedMsg = `${orgName} har nå fått tilgang til ${packageName}`;
-     const alertMsg = dialog.locator(`text=${expectedMsg}`);
-     await expect(alertMsg).toBeVisible({ timeout: 5000 }); */
+    // Clear search so the next package starts fresh
+    await expect(this.clearSearchButton).toBeVisible();
+    await this.clearSearchButton.click();
   }
 
-  async grantAccessPkgName(areaName: string, packageName: string) {
-    const searchBox = this.page
-      .getByRole('searchbox', { name: 'Søk etter tilgangspakker' })
-      .first();
-    await expect(searchBox).toBeVisible();
-    await searchBox.fill(areaName);
+  async grantAccessPkgName(packageName: string) {
+    const searchBox = this.packageSearchBox;
 
-    const modal = this.page.locator('dialog[open]');
+    await searchBox.waitFor({ state: 'visible', timeout: 15000 });
+    await searchBox.click();
+    await searchBox.fill(packageName);
+
+    const packageButton = this.page.getByRole('button', { name: packageName, exact: true });
+
+    await expect(packageButton).toBeVisible({ timeout: 10000 });
+    await packageButton.click();
+
+    const modal = this.page.getByRole('dialog').first();
     await expect(modal).toBeVisible({ timeout: 10000 });
 
-    // Find the package container inside modal
-    const packageItem = modal.getByRole('button', { name: packageName, exact: true });
-    await expect(packageItem).toBeVisible({ timeout: 10000 });
-    await packageItem.click();
-
-    // Find the "Gi fullmakt" button inside package container
-    const grantBtn = modal.getByRole('button').filter({ hasText: 'Gi fullmakt' }).first();
+    const grantBtn = modal.getByRole('button', { name: 'Gi fullmakt' });
     await expect(grantBtn).toBeVisible({ timeout: 10000 });
     await grantBtn.click();
 
-    const lukkButton = this.page.getByRole('button', { name: 'Tilbake', exact: true });
-    await lukkButton.click();
+    // "Tilbake" from the result screen
+    const tilbakeButton = this.page.getByRole('button', { name: 'Tilbake', exact: true });
+    await expect(tilbakeButton).toBeVisible({ timeout: 10000 });
+    await tilbakeButton.click();
   }
 
   async closeAccessModal(buttonName: string = 'Lukk') {
-    const closeBtn = this.page.getByRole('button', { name: buttonName });
-    await expect(closeBtn).toBeVisible();
-    await closeBtn.click();
+    await expect(this.closeModalBtn).toBeVisible();
+    await this.closeModalBtn.click();
   }
 
   async logoutFromBrukerflate() {
@@ -193,17 +191,60 @@ export class DelegationPage {
   }
 
   async chooseOrg(chooseorgName: string) {
-    const orgLink = this.page.getByRole('link', { name: chooseorgName }).first();
-    await expect(orgLink).toBeVisible();
-    await orgLink.click();
+    const nameRegex = new RegExp(chooseorgName, 'i');
+
+    // Stage 1: Try clicking button
+    const orgButton = this.page.getByRole('button', { name: nameRegex }).first();
+    if (await orgButton.isVisible().catch(() => false)) {
+      await orgButton.click();
+    }
+
+    // Stage 2: Try clicking link inside (after expanding the button)
+    const orgLink = this.page.getByRole('link', { name: nameRegex }).first();
+    if (await orgLink.isVisible().catch(() => false)) {
+      await orgLink.click();
+      return;
+    }
+
+    throw new Error(`Org "${chooseorgName}" not found as button or link.`);
   }
 
-  async verifyDelegatedPacakge(areanames: string, pacakageName: string) {
-    const areaBtn = this.page.getByRole('button', { name: areanames });
+  async verifyDelegatedPackage(areaName: string, pacakageName: string) {
+    const areaBtn = this.page.getByRole('list').getByRole('button', { name: areaName }).first();
     await expect(areaBtn).toBeVisible();
     await areaBtn.click();
 
     const packageBtn = this.page.getByRole('button', { name: pacakageName, exact: true });
     await expect(packageBtn).toBeVisible();
+  }
+
+  async verifyDelegatedPackages(expectations: { areaName: string; packageName: string }[]) {
+    for (const { areaName, packageName } of expectations) {
+      await this.verifyDelegatedPackage(areaName, packageName);
+    }
+  }
+
+  async verifyKeyRoleUserHasDelegatedPackages(
+    orgButtonName: string,
+    keyRoleUserName: string,
+    expectations: { areaName: string; packageName: string }[],
+  ) {
+    // 1. Back to brukerpanel
+    const backLink = this.page.getByRole('link', { name: 'Tilbake' });
+    await expect(backLink).toBeVisible();
+    await backLink.click();
+
+    // 2. Click org button
+    const orgButton = this.page.getByRole('button', { name: orgButtonName });
+    await expect(orgButton).toBeVisible({ timeout: 10_000 });
+    await orgButton.click();
+
+    // 3. Click key role user
+    const keyUserLink = this.page.getByRole('link', { name: keyRoleUserName });
+    await expect(keyUserLink).toBeVisible({ timeout: 10_000 });
+    await keyUserLink.click();
+
+    // 4. Verify all expected packages
+    await this.verifyDelegatedPackages(expectations);
   }
 }

@@ -16,6 +16,8 @@ import {
   instantiateResource,
 } from 'playwright/pages/profile/delegationPage';
 import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/delegeringHelper';
+import { withTimeout } from 'playwright/util/asyncUtils';
+import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 
 const defaultLang = Language.NB;
 
@@ -95,3 +97,18 @@ const test = baseTest.extend<Fixtures>({
 });
 
 export { test, expect };
+
+test.afterEach(async ({}, testInfo) => {
+  const title = testInfo.title ?? 'unknown-test';
+
+  try {
+    await withTimeout(
+      DelegationApiUtil.cleanupAllDelegations(title),
+      15_000, // cleanup budget
+      `cleanupAllDelegations(${title})`,
+    );
+  } catch (err) {
+    // Do not fail tests because cleanup is slow/flaky
+    console.warn(`[afterEach] cleanup skipped/failed: ${title}`, err);
+  }
+});

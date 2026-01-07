@@ -1,0 +1,5 @@
+TestTitle,FromCategory,ToCategory
+Org-A delegates access package to Org-B,Org-A,Org-B
+Org-A revokes all delegated rights from org-B,Org-A,Org-B
+Org-C delegates access package to Org-D,Org-C,Org-D
+Org-C revokes all delegated rights from org-D,Org-C,Org-D

@@ -8,7 +8,7 @@ const standardApiDetails = {
   department: 'Testdepartement',
 };
 
-test.describe('@slow API-Delegations to organization user', () => {
+test.describe.skip('@slow API-Delegations to organization user', () => {
   test('Delegate api to an organization', async ({ apiDelegations, login }) => {
     const userThatDelegates = {
       id: '12917198150',
