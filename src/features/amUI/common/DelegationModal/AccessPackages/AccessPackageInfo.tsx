@@ -173,7 +173,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             <div className={classes.service_list}>
               <ResourceList
                 resources={accessPackage.resources}
-                enableSearch={false}
+                enableMaxHeight={true}
                 showDetails={false}
                 interactive={false}
                 size='xs'

@@ -14,3 +14,9 @@
 .showMoreButton {
   width: 100%;
 }
+
+.resourceListContainerMaxHeight {
+  max-height: 282px;
+  overflow-y: auto;
+  overflow-x: visible;
+}

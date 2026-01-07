@@ -33,6 +33,7 @@ export interface ResourceListProps<
   showMoreButton?: boolean;
   skeletonCount?: number;
   resolveLogos?: boolean;
+  enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
 }
@@ -129,6 +130,7 @@ export const ResourceList = <
   interactive,
   as,
   resolveLogos = true,
+  enableMaxHeight = false,
   renderControls,
   getBadge,
 }: ResourceListProps<TResource>) => {
@@ -187,7 +189,7 @@ export const ResourceList = <
 
   return (
     <div className={classes.container}>
-      {resources.length > 0 && (
+      {enableSearch && resources.length > 0 && (
         <ResourceFilterToolbar
           search={search}
           setSearch={setSearch}
@@ -211,48 +213,49 @@ export const ResourceList = <
               {t('resource_list.no_resources_filtered', { searchTerm: search })}
             </DsParagraph>
           )}
+          <div {...(enableMaxHeight && { className: classes.resourceListContainerMaxHeight })}>
+            {filteredResources.length > 0 && (
+              <List>
+                {filteredResources.map((resource, index) => {
+                  const derivedId = extractResourceId(resource);
+                  const resourceId = derivedId ? String(derivedId) : `resource-${index}`;
+                  const resourceName = extractResourceName(resource);
+                  const ownerName = extractOwnerName(resource);
+                  const orgCode = extractOrgCode(resource);
+                  const providerLogo = resolveLogos && orgCode ? logoResolver(orgCode) : undefined;
+                  const fallbackLogoUrl = extractLogoUrl(resource);
+                  const ownerLogoUrl = providerLogo ?? fallbackLogoUrl;
+                  const ownerLogoAlt = extractLogoAlt(resource) ?? ownerName;
+                  const itemInteractive = derivedInteractive;
+                  const itemAs = as ?? (itemInteractive ? 'button' : 'div');
+                  const itemSize = size ?? 'xs';
+                  const itemTitleAs = titleAs ?? 'h3';
+                  const handleClick = itemInteractive ? () => handleSelect(resource) : undefined;
+                  const itemShadow = itemInteractive ? undefined : 'none';
 
-          {filteredResources.length > 0 && (
-            <List>
-              {filteredResources.map((resource, index) => {
-                const derivedId = extractResourceId(resource);
-                const resourceId = derivedId ? String(derivedId) : `resource-${index}`;
-                const resourceName = extractResourceName(resource);
-                const ownerName = extractOwnerName(resource);
-                const orgCode = extractOrgCode(resource);
-                const providerLogo = resolveLogos && orgCode ? logoResolver(orgCode) : undefined;
-                const fallbackLogoUrl = extractLogoUrl(resource);
-                const ownerLogoUrl = providerLogo ?? fallbackLogoUrl;
-                const ownerLogoAlt = extractLogoAlt(resource) ?? ownerName;
-                const itemInteractive = derivedInteractive;
-                const itemAs = as ?? (itemInteractive ? 'button' : 'div');
-                const itemSize = size ?? 'xs';
-                const itemTitleAs = titleAs ?? 'h3';
-                const handleClick = itemInteractive ? () => handleSelect(resource) : undefined;
-                const itemShadow = itemInteractive ? undefined : 'none';
-
-                return (
-                  <ResourceListItem
-                    key={resourceId}
-                    id={resourceId}
-                    resourceName={resourceName}
-                    ownerName={ownerName}
-                    ownerLogoUrl={ownerLogoUrl}
-                    ownerLogoUrlAlt={ownerLogoAlt}
-                    as={itemAs}
-                    size={itemSize}
-                    titleAs={itemTitleAs}
-                    interactive={itemInteractive}
-                    onClick={handleClick}
-                    badge={getBadge?.(resource, index)}
-                    controls={renderControls?.(resource)}
-                    loading={false}
-                    shadow={itemShadow}
-                  />
-                );
-              })}
-            </List>
-          )}
+                  return (
+                    <ResourceListItem
+                      key={resourceId}
+                      id={resourceId}
+                      resourceName={resourceName}
+                      ownerName={ownerName}
+                      ownerLogoUrl={ownerLogoUrl}
+                      ownerLogoUrlAlt={ownerLogoAlt}
+                      as={itemAs}
+                      size={itemSize}
+                      titleAs={itemTitleAs}
+                      interactive={itemInteractive}
+                      onClick={handleClick}
+                      badge={getBadge?.(resource, index)}
+                      controls={renderControls?.(resource)}
+                      loading={false}
+                      shadow={itemShadow}
+                    />
+                  );
+                })}
+              </List>
+            )}
+          </div>
         </>
       )}
 

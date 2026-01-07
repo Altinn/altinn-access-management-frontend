@@ -19,10 +19,6 @@ export const ResourceFilterToolbar = ({
 }: ResourceFilterToolbarProps) => {
   const { t } = useTranslation();
 
-  if (serviceOwnerOptions.length === 0) {
-    return null;
-  }
-
   return (
     <Toolbar
       search={{
@@ -42,15 +38,19 @@ export const ResourceFilterToolbar = ({
       }}
       addFilterButtonLabel={t('resource_list.filter_by_serviceowner')}
       removeButtonAltText={t('resource_list.remove_filter')}
-      filters={[
-        {
-          name: 'owner',
-          label: t('resource_list.filter_by_serviceowner'),
-          optionType: 'radio',
-          removable: true,
-          options: serviceOwnerOptions,
-        },
-      ]}
+      filters={
+        serviceOwnerOptions.length > 0
+          ? [
+              {
+                name: 'owner',
+                label: t('resource_list.filter_by_serviceowner'),
+                optionType: 'radio',
+                removable: true,
+                options: serviceOwnerOptions,
+              },
+            ]
+          : []
+      }
     />
   );
 };
