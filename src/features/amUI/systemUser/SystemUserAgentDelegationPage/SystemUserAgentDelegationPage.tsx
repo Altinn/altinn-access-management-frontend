@@ -24,6 +24,7 @@ import { PageContainer } from '../../common/PageContainer/PageContainer';
 import { SystemUserPath } from '@/routes/paths';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();
@@ -56,6 +57,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     partyUuid,
   });
   const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const [deleteAgentSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
     useDeleteAgentSystemuserMutation();
@@ -83,7 +85,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
           onNavigateBack={handleNavigateBack}
           pageActions={
             systemUser &&
-            hasCreateSystemUserPermission(reporteeData) && (
+            hasCreateSystemUserPermission(reporteeData, isAdmin) && (
               <DeleteSystemUserPopover
                 integrationTitle={systemUser.integrationTitle}
                 isDeleteError={isDeleteError}

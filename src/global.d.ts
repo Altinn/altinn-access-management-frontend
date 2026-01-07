@@ -9,6 +9,7 @@ declare global {
       restrictPrivUse: boolean;
       crossPlatformLinks: boolean;
       displaySettingsPage: boolean;
+      displayClientAdministrationPage: boolean;
       displayPoaOverviewPage: boolean;
       useNewActorsList: boolean;
       displayRequestsPage: boolean;

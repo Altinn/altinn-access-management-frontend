@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { List, Icon, DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import { Icon, DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { PackageIcon } from '@navikt/aksel-icons';
 import { useAccessPackageDelegationCheck } from '../../DelegationCheck/AccessPackageDelegationCheckContext';
@@ -9,6 +9,7 @@ import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageLis
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 
+import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -18,13 +19,10 @@ import { DeletableStatus, getDeletableStatus } from '../../AccessPackageList/use
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
-import { useResourceList } from './useResourceList';
 import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { StatusSection } from '../../StatusSection/StatusSection';
-import { useFilteredResources } from '../../ResourceList/useFilteredResources';
-import { ResourceFilterToolbar } from '../../ResourceFilterToolbar/ResourceFilterToolbar';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -36,15 +34,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
   const displayAccessRequestFeature = displayAccessRequest();
-
-  const [search, setSearch] = React.useState('');
-  const [filterState, setFilterState] = React.useState<{ owner?: string[] }>({});
-
-  const { resources: filteredResources } = useFilteredResources({
-    resources: accessPackage.resources,
-    searchString: search,
-    serviceOwnerFilter: filterState?.['owner']?.[0],
-  });
 
   const {
     onDelegate,
@@ -86,7 +75,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
   const inheritedStatus = accessPackage.inheritedStatus;
 
-  const resourceListItems = useResourceList(filteredResources);
   const deletableStatus = React.useMemo(
     () =>
       delegationAccess
@@ -182,25 +170,15 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 name: accessPackage?.name,
               })}
             </DsHeading>
-            <ResourceFilterToolbar
-              search={search}
-              setSearch={setSearch}
-              filterState={filterState}
-              setFilterState={setFilterState}
-              serviceOwnerOptions={accessPackage.resources.map((res) => {
-                return {
-                  value: res.provider?.code || res.resourceOwnerOrgcode,
-                  label: res.provider?.name || res.resourceOwnerName,
-                };
-              })}
-            />
-            {search && filteredResources.length === 0 && (
-              <DsParagraph data-size='md'>
-                {t('resource_list.no_resources_filtered', { searchTerm: search })}
-              </DsParagraph>
-            )}
             <div className={classes.service_list}>
-              <List>{resourceListItems}</List>
+              <ResourceList
+                resources={accessPackage.resources}
+                enableSearch={false}
+                showDetails={false}
+                interactive={false}
+                size='xs'
+                as='div'
+              />
             </div>
           </div>
 

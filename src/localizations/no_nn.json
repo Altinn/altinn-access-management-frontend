@@ -139,6 +139,7 @@
     "users": "Brukarar",
     "reportees": "Fullmakter hos andre",
     "systemaccess": "Systemtilgangar",
+    "client_administration": "Klientadministrasjon",
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
     "settings": "Innstillingar",
@@ -543,6 +544,10 @@
     "standard_system_user_badge": "Se fullmakter",
     "agent_system_user_badge": "Administrere kunder"
   },
+  "client_administration_page": {
+    "no_access_title": "Du har ikkje tilgang til klientadministrasjon",
+    "page_heading": "Klientadministrasjon"
+  },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
     "sub_title": "Knyt systemtilgang til systemleverandør",
@@ -826,6 +831,7 @@
     "poa_item_description": "Oversikt over alle tilgangspakkar og enkelttenester",
     "consent_item_description": "Oversikt over alle inngåtte avtalar",
     "systemuser_item_description": "Oversikt over systemtilgangar",
+    "client_admin_item_description": "Deleger fullmakter frå klientar til brukarar i verksemda.",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny førespurnad",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye førespurnader"
   }

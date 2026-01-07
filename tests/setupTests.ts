@@ -1,8 +1,6 @@
-import { expect, beforeAll, afterEach, afterAll } from 'vitest';
+import { expect } from 'vitest';
 import '@testing-library/jest-dom';
 import * as matchers from '@testing-library/jest-dom/matchers';
-
-import { server } from '@mock/node';
 
 import { TEST_BASE_URL, TEST_PARTY_ID, TEST_PARTY_UUID } from './consts';
 
@@ -35,10 +33,6 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: vi.fn(),
   })),
 });
-
-beforeAll(() => server.listen());
 beforeEach(
   () => (document.cookie = `AltinnPartyId=${TEST_PARTY_ID}; AltinnPartyUuid=${TEST_PARTY_UUID}`),
 );
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());

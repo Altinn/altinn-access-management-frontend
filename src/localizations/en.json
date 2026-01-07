@@ -142,6 +142,7 @@
     "users": "Users",
     "reportees": "Powers of attorney from others",
     "systemaccess": "System access",
+    "client_administration": "Client Administration",
     "consent": "Consent and power of attorney agreements",
     "poa_overview": "Powers of attorney",
     "settings": "Settings",
@@ -546,6 +547,10 @@
     "standard_system_user_badge": "See powers of attorney",
     "agent_system_user_badge": "Manage customers"
   },
+  "client_administration_page": {
+    "no_access_title": "You do not have access to client administration",
+    "page_heading": "Client administration"
+  },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",
     "sub_title": "Select vendor system",
@@ -829,6 +834,7 @@
     "poa_item_description": "Overview of all access packages and individual services",
     "consent_item_description": "Overview of all concluded agreements",
     "systemuser_item_description": "Overview of system access",
+    "client_admin_item_description": "Delegate power of attorney from clients to users in your organization.",
     "new_requests_single": "{{reportee}} has {{requestCount}} new request",
     "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"
   }

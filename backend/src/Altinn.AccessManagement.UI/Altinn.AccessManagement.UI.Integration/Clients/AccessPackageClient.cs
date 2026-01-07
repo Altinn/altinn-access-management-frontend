@@ -62,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"meta/info/accesspackages/package/{packageId}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
@@ -92,7 +92,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"meta/info/accesspackages/search/?term={safeSearchTerm}&searchInResources=true";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
 
             if (response.StatusCode == HttpStatusCode.NoContent)
             {
@@ -119,7 +119,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
 
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<PackagePermission>>(response);
         }

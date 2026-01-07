@@ -11,6 +11,7 @@ import {
   PadlockLockedFillIcon,
   KeyVerticalIcon,
   ExternalLinkIcon,
+  DatabaseIcon,
 } from '@navikt/aksel-icons';
 import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
@@ -127,6 +128,23 @@ export const getSystemUserMenuItem = (
     icon: { svgElement: TenancyIcon, theme: isSmall ? 'surface' : 'default' },
     selected: pathname?.includes(`/${SystemUserPath.SystemUser}`),
     as: (props) => getMenuLinkAs(props, `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`),
+  };
+};
+
+export const getClientAdministrationMenuItem = (
+  pathname?: string,
+  isLoading = false,
+  isSmall = false,
+): MenuItemProps => {
+  return {
+    groupId: 14,
+    id: 'client-admin',
+    size: 'md',
+    loading: isLoading,
+    title: t('sidebar.client_administration'),
+    icon: { svgElement: DatabaseIcon, theme: isSmall ? 'surface' : 'default' },
+    selected: pathname?.includes(`/${amUIPath.ClientAdministration}`),
+    as: (props) => getMenuLinkAs(props, `/${amUIPath.ClientAdministration}`),
   };
 };
 
