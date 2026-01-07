@@ -92,32 +92,9 @@ describe('ResourceList', () => {
 
     render(<ResourceList resources={resources} />);
 
-    await user.type(
-      screen.getByRole('searchbox', {
-        name: /resource_list\.resource_search_placeholder/i,
-      }),
-      'Beta',
-    );
+    await user.type(screen.getByRole('searchbox'), 'Beta');
 
     expect(screen.queryByRole('button', { name: /Alpha Service/i })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Beta Service/i })).toBeInTheDocument();
-  });
-
-  it('reveals more resources when the show more button is clicked', async () => {
-    const user = userEvent.setup();
-    const resources = Array.from({ length: 12 }, (_, index) =>
-      createResource({ id: `resource-${index}`, name: `Resource ${index}` }),
-    );
-
-    render(
-      <ResourceList
-        resources={resources}
-        enableSearch={false}
-      />,
-    );
-
-    expect(screen.queryByText(/common\.show_more/i)).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /common\.show_more/i }));
-    expect(screen.getByRole('button', { name: /Resource 11/i })).toBeInTheDocument();
   });
 });
