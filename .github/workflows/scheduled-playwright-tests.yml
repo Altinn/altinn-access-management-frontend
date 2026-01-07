@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [AT24, TT02]
+        environment: [AT23, TT02]
         project: [e2e-tests]
     uses: ./.github/workflows/template-playwright.yml
     secrets: inherit
