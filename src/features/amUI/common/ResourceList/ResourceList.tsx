@@ -122,7 +122,6 @@ export const ResourceList = <
   isLoading,
   noResourcesText,
   enableSearch = true,
-  searchPlaceholder,
   onSelect,
   showDetails,
   size,
@@ -174,6 +173,18 @@ export const ResourceList = <
 
   const isSkeletonVisible = isLoading || (resolveLogos && orgLoading);
 
+  const serviceOwnerOptions = React.useMemo(() => {
+    const uniqueOwners = new Map<string, { value: string; label: string }>();
+    resources.forEach((res) => {
+      const code = extractOrgCode(res);
+      const name = extractOwnerName(res);
+      if (code && !uniqueOwners.has(code)) {
+        uniqueOwners.set(code, { value: code, label: name });
+      }
+    });
+    return Array.from(uniqueOwners.values());
+  }, [resources]);
+
   return (
     <div className={classes.container}>
       {resources.length > 0 && (
@@ -182,12 +193,7 @@ export const ResourceList = <
           setSearch={setSearch}
           filterState={filterState}
           setFilterState={setFilterState}
-          serviceOwnerOptions={resources.map((res) => {
-            return {
-              value: extractOrgCode(res),
-              label: extractOwnerName(res),
-            };
-          })}
+          serviceOwnerOptions={serviceOwnerOptions}
         />
       )}
 

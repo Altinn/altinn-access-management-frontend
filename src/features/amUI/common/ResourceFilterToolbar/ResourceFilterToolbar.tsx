@@ -48,9 +48,7 @@ export const ResourceFilterToolbar = ({
           label: t('resource_list.filter_by_serviceowner'),
           optionType: 'radio',
           removable: true,
-          options: Array.from(
-            new Map(serviceOwnerOptions.map((option) => [option.value, option])).values(),
-          ),
+          options: serviceOwnerOptions,
         },
       ]}
     />
