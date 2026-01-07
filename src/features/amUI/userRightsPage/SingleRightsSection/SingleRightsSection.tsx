@@ -90,7 +90,6 @@ export const SingleRightsSection = () => {
           <ResourceList
             resources={resources}
             enableSearch={true}
-            showMoreButton={false}
             showDetails={false}
             onSelect={(resource) => {
               setSelectedResource(resource);

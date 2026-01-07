@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { List, Icon, DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import { Icon, DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { PackageIcon } from '@navikt/aksel-icons';
 import { useAccessPackageDelegationCheck } from '../../DelegationCheck/AccessPackageDelegationCheckContext';
@@ -173,8 +173,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             <div className={classes.service_list}>
               <ResourceList
                 resources={accessPackage.resources}
-                enableSearch={false}
-                showMoreButton={false}
+                enableMaxHeight={true}
                 showDetails={false}
                 interactive={false}
                 size='xs'

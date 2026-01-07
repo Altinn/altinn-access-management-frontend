@@ -82,7 +82,6 @@ export const SearchResults = ({
           <ResourceList
             resources={resources}
             enableSearch={false}
-            showMoreButton={false}
             showDetails={false}
             onSelect={onSelect}
             size='sm'
