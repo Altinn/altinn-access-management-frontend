@@ -23,6 +23,7 @@ import type { RegisteredSystem } from '../types';
 import { CreateSystemUserCheck } from '../components/CreateSystemUserCheck/CreateSystemUserCheck';
 
 import classes from './CreateSystemUser.module.css';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 const isStringMatch = (inputString: string, matchString = ''): boolean => {
   return matchString.toLowerCase().indexOf(inputString.toLowerCase()) >= 0;
@@ -50,6 +51,7 @@ export const SelectRegisteredSystem = ({
     isLoading: isLoadingRegisteredSystems,
     isError: isLoadRegisteredSystemsError,
   } = useGetRegisteredSystemsQuery();
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const onSelectSystem = (newValue: string[]) => {
     setSelectedSystem(registeredSystems?.find((system) => system.systemId === newValue[0]));
@@ -69,7 +71,10 @@ export const SelectRegisteredSystem = ({
         {isLoadingReportee && (
           <DsSpinner aria-label={t('systemuser_creationpage.loading_systems')} />
         )}
-        <CreateSystemUserCheck reporteeData={reporteeData}>
+        <CreateSystemUserCheck
+          reporteeData={reporteeData}
+          isAdmin={isAdmin}
+        >
           <DsParagraph
             data-size='sm'
             className={classes.systemDescription}

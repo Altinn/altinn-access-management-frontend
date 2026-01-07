@@ -65,7 +65,7 @@ export const SystemUserOverviewPage = () => {
     isLoading: isLoadingPendingSystemUsers,
     isError: isLoadPendingSystemUsersError,
   } = useGetPendingSystemUserRequestsQuery(partyUuid, {
-    skip: !hasCreateSystemUserPermission(reporteeData),
+    skip: !hasCreateSystemUserPermission(reporteeData, isAdmin),
   });
 
   const isLoading =
@@ -111,14 +111,15 @@ export const SystemUserOverviewPage = () => {
           )}
           {!isLoading && (
             <>
-              {isClientAdmin === false && hasCreateSystemUserPermission(reporteeData) === false && (
-                <DsAlert
-                  data-color='warning'
-                  className={classes.noPermissionsWarning}
-                >
-                  {t('systemuser_overviewpage.no_permissions_warning')}
-                </DsAlert>
-              )}
+              {isClientAdmin === false &&
+                hasCreateSystemUserPermission(reporteeData, isAdmin) === false && (
+                  <DsAlert
+                    data-color='warning'
+                    className={classes.noPermissionsWarning}
+                  >
+                    {t('systemuser_overviewpage.no_permissions_warning')}
+                  </DsAlert>
+                )}
               {pendingSystemUsers && pendingSystemUsers.length > 0 && (
                 <SystemUserList
                   systemUsers={pendingSystemUsers}
@@ -136,7 +137,9 @@ export const SystemUserOverviewPage = () => {
                   systemUsers={systemUsers}
                   listHeading={t('systemuser_overviewpage.existing_system_users_title')}
                   headerContent={
-                    hasCreateSystemUserPermission(reporteeData) && <CreateSystemUserButton />
+                    hasCreateSystemUserPermission(reporteeData, isAdmin) && (
+                      <CreateSystemUserButton />
+                    )
                   }
                 />
               )}

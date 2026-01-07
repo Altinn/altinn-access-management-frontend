@@ -42,6 +42,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplaySettingsPage { get; set; }
 
         /// <summary>
+        /// Whether to display the client administration page in the sidebar
+        /// </summary>
+        public bool DisplayClientAdministrationPage { get; set; }
+
+        /// <summary>
         /// Whether to display the POA overview page in the sidebar
         /// </summary>
         public bool DisplayPoaOverviewPage { get; set; }

@@ -311,7 +311,7 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     {
         services.AddTransient<IPDP, MockPDP>();
     }
-    else 
+    else
     {
         services.AddTransient<IPDP, PDPAppSI>();
     }

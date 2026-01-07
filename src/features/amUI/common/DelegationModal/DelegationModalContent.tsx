@@ -102,7 +102,7 @@ export const DelegationModalContent = ({
     default:
       searchViewContent = (
         <ResourceSearch
-          onSelection={onResourceSelection}
+          onSelect={onResourceSelection}
           toParty={toParty}
         />
       );

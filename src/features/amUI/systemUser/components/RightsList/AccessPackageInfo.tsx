@@ -4,6 +4,7 @@ import { PackageIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 import type { SystemUserAccessPackage } from '../../types';
 
@@ -18,6 +19,7 @@ export const AccessPackageInfo = ({
   onSelectResource,
 }: AccessPackageInfoProps): React.ReactElement => {
   const { t } = useTranslation();
+  const { getProviderLogoUrl } = useProviderLogoUrl();
 
   return (
     <div className={classes.accessPackages}>
@@ -42,20 +44,23 @@ export const AccessPackageInfo = ({
             })}
       </DsHeading>
       <List>
-        {accessPackage.resources.map((resource) => (
-          <ResourceListItem
-            key={resource.identifier}
-            id={resource.identifier}
-            as='button'
-            titleAs='h3'
-            size='xs'
-            ownerLogoUrl={resource.resourceOwnerLogoUrl}
-            ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
-            ownerName={resource.resourceOwnerName ?? ''}
-            resourceName={resource.title}
-            onClick={() => onSelectResource(resource)}
-          />
-        ))}
+        {accessPackage.resources.map((resource) => {
+          const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
+          return (
+            <ResourceListItem
+              key={resource.identifier}
+              id={resource.identifier}
+              as='button'
+              titleAs='h3'
+              size='xs'
+              ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
+              ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
+              ownerName={resource.resourceOwnerName ?? ''}
+              resourceName={resource.title}
+              onClick={() => onSelectResource(resource)}
+            />
+          );
+        })}
       </List>
     </div>
   );
