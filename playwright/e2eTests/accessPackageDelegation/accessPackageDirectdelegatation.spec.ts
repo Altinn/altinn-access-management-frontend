@@ -1,75 +1,65 @@
 import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 
-test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
-  test.beforeEach(async ({ login, delegation }) => {
-    await login.LoginToAccessManagement('23926299794');
-    await login.chooseReportee('Utgått Fleksibel Tiger AS');
-  });
-  test.skip('Org-A delegates access pacakge to Org-B', async ({
-    login,
-    delegation,
-    accessManagementFrontPage,
-  }) => {
-    // Step 2: Open delegation flow using Fullmakter menu link
-    await accessManagementFrontPage.usersLink.click();
+test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {});
+test('Org-A delegates access package to Org-B', async ({ delegation, login }) => {
+  await login.loginWithUserInA3('04856996188');
+  await login.chooseAktøriA3('SUBJEKTIV ELASTISK TIGER AS');
+  // Step 3: Add new user
+  await delegation.addUser();
 
-    // Step 3: Add new user
-    await delegation.addUser();
+  // Step 4: Add organization
+  await delegation.addOrganization('213091492');
 
-    // Step 4: Add organization
-    await delegation.addOrganization('310021199');
+  // Step 5: Grant access to multiple packages
+  await delegation.grantAccessPkgNameDirect('Veitransport');
+  await delegation.grantAccessPkgName('Byggesøknad');
+  await delegation.grantAccessPkgNameDirect('Godkjenning av personell');
+  await delegation.closeAccessModal();
 
-    // Step 5: Grant access to multiple packages
-    await delegation.grantAccessPkgNameDirect(
-      'Transport og lagring',
-      'Veitransport',
-      'Lykkelig Rakrygget Puma BBL',
-    );
-    await delegation.grantAccessPkgName('Bygg, anlegg og eiendom', 'Byggesøknad');
-    await delegation.grantAccessPkgNameDirect(
-      'Oppvekst og utdanning',
-      'Godkjenning av personell',
-      'Lykkelig Rakrygget Puma BBL',
-    );
+  // 4) Verify delegated packages for the current org / view
+  await delegation.verifyDelegatedPackages([
+    { areaName: 'Bygg, anlegg og eiendom', packageName: 'Byggesøknad' },
+    { areaName: 'Oppvekst og utdanning', packageName: 'Godkjenning av personell' },
+    { areaName: 'Transport og lagring', packageName: 'Veitransport' },
+  ]);
 
-    await delegation.closeAccessModal();
-    await delegation.logoutFromBrukerflate();
+  await delegation.verifyKeyRoleUserHasDelegatedPackages(
+    'Sivilisert Trygg Tiger AS',
+    'Moderne Analyse',
+    [
+      { areaName: 'Bygg, anlegg og eiendom', packageName: 'Byggesøknad' },
+      { areaName: 'Oppvekst og utdanning', packageName: 'Godkjenning av personell' },
+      { areaName: 'Transport og lagring', packageName: 'Veitransport' },
+    ],
+  );
 
-    // Step 6: Login with Org-2(Rettighetshaver) and select organization as reportee
-    await login.LoginToAccessManagement('06815597492');
-    await login.chooseReportee('Lykkelig Rakrygget Puma BBL');
+  await delegation.logoutFromBrukerflate();
+});
 
-    await delegation.newAccessRights('Utgått Fleksibel Tiger AS');
+test('Org-C revokes all delegated rights from Org-D', async ({ delegation, page, login }) => {
+  await login.loginWithUserInA3('22875997754');
+  await login.chooseAktøriA3('DRIFTIG LOGISK TIGER AS');
+  await DelegationApiUtil.addOrgToDelegate('Org-C', 'Org-D');
+  await DelegationApiUtil.delegateAccessPackage('Org-C', 'Org-D', [
+    'urn:altinn:accesspackage:byggesoknad',
+    'urn:altinn:accesspackage:godkjenning-av-personell',
+    'urn:altinn:accesspackage:veitransport',
+  ]);
+  await page.reload();
+  await page.waitForLoadState('networkidle');
 
-    //Verify Org-2(Rettighetshaver) has got rights on accesspkg from Org-1(Avgiver) under "Våre tilganger hos andre"
-    await delegation.verifyDelegatedPacakge('Bygg, anlegg og eiendom', 'Byggesøknad');
-    await delegation.verifyDelegatedPacakge('Transport og lagring', 'Veitransport');
-    await delegation.verifyDelegatedPacakge('Oppvekst og utdanning', 'Godkjenning av personell');
-  });
+  // Step 2: Open delegation flow
 
-  test.skip('Org-A revokes all delegated access package rights from Org-2', async ({
-    delegation,
-    accessManagementFrontPage,
-  }) => {
-    await DelegationApiUtil.addOrgToDelegate();
-    await DelegationApiUtil.delegateAccessPacakage();
+  await delegation.chooseOrg('Skyfri Oksydert Katt Klemme');
 
-    // Step 2: Open delegation flow using Fullmakter menu link
-    await accessManagementFrontPage.usersLink.click();
-    await delegation.chooseOrg('Lykkelig Rakrygget Puma BBL');
+  //Step3 : Delete delegated pacakge directly from area list
+  await delegation.deleteDelegatedPackage('Transport og lagring', 'Veitransport');
+  await delegation.deleteDelegatedPackage('Oppvekst og utdanning', 'Godkjenning av personell');
 
-    //Step3 : Delete delegated pacakge directly from area list
-    await delegation.deleteDelegatedPackage('Transport og lagring', 'Veitransport');
-    await delegation.deleteDelegatedPackage('Oppvekst og utdanning', 'Godkjenning av personell');
-
-    //Delete package by opening the package first
-    await delegation.deletePackageInside('Bygg, anlegg og eiendom', 'Byggesøknad');
-    //Delete user from rettighetshaver list
-    await delegation.deleteDelegatedUser();
-  });
-
-  test.afterAll(async () => {
-    await DelegationApiUtil.cleanupDelegations();
-  });
+  //Delete package by opening the package first
+  await delegation.deletePackageInside('Bygg, anlegg og eiendom', 'Byggesøknad');
+  //Delete user from rettighetshaver list
+  await delegation.deleteDelegatedUser();
+  await delegation.logoutFromBrukerflate();
 });

@@ -3374,6 +3374,7 @@ __metadata:
     axios: "npm:^1.13.2"
     classnames: "npm:^2.5.1"
     cross-env: "npm:^10.1.0"
+    csv-parser: "npm:^3.2.0"
     cypress: "npm:^14.5.4"
     cypress-real-events: "npm:^1.15.0"
     cypress-recurse: "npm:^1.37.1"
@@ -4435,6 +4436,15 @@ __metadata:
   version: 5.6.0
   resolution: "csv-parse@npm:5.6.0"
   checksum: 10/4c82e11f50ae0ccbac2aed716ef2502d0468bf96552083561db789fc0258ee4bb0a30106fcfb2684f153cb4042f0413e0eac3645d5466874803b7ccdeba67ac8
+  languageName: node
+  linkType: hard
+
+"csv-parser@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "csv-parser@npm:3.2.0"
+  bin:
+    csv-parser: bin/csv-parser
+  checksum: 10/09a63fa8b6e9c0b75cf5a12cc53abecbe696b8b6ebfdf7ddb0a1e3a97e8f3f19a77d2ffa434810958fd4841682ea8d1a9c08f6fb84f1c0ec393cecdb72131735
   languageName: node
   linkType: hard
 
