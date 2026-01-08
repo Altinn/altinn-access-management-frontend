@@ -16,6 +16,8 @@ import { useFilteredResources } from './useFilteredResources';
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
 import type { ResourceListItemResource } from './types';
 
+import cn from 'classnames';
+
 export interface ResourceListProps<
   TResource extends ResourceListItemResource = ResourceListItemResource,
 > {
@@ -165,7 +167,7 @@ export const ResourceList = <
 
   const { resources: filteredResources } = useFilteredResources<TResource>({
     resources,
-    serviceOwnerFilter: filterState?.['owner']?.[0],
+    serviceOwnerFilter: filterState?.['owner'] ?? [],
     searchString: enableSearch ? search : '',
     getResourceName: extractResourceName,
     getOwnerName: extractOwnerName,
@@ -213,7 +215,9 @@ export const ResourceList = <
               {t('resource_list.no_resources_filtered', { searchTerm: search })}
             </DsParagraph>
           )}
-          <div {...(enableMaxHeight && { className: classes.resourceListContainerMaxHeight })}>
+          <div
+            className={cn(classes.resourceListContainer, { [classes.maxHeight]: enableMaxHeight })}
+          >
             {filteredResources.length > 0 && (
               <List>
                 {filteredResources.map((resource, index) => {

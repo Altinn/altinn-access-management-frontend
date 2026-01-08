@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 interface UseFilteredResourcesProps<TResource> {
   resources?: TResource[];
   searchString: string;
-  serviceOwnerFilter?: string;
+  serviceOwnerFilter?: string[];
   getResourceName: (resource: TResource) => string;
   getOwnerName: (resource: TResource) => string;
   getOwnerOrgCode: (resource: TResource) => string;
@@ -28,9 +28,10 @@ export const useFilteredResources = <TResource>({
       const nameOrTitle = getResourceName(resource).toLowerCase();
       const ownerName = getOwnerName(resource).toLowerCase();
       const description = getDescription?.(resource)?.toLowerCase() ?? '';
-      const serviceOwnerMatch = serviceOwnerFilter
-        ? getOwnerOrgCode(resource).toLowerCase() === serviceOwnerFilter.toLowerCase()
-        : true;
+      const serviceOwnerMatch =
+        serviceOwnerFilter && serviceOwnerFilter.length > 0
+          ? serviceOwnerFilter.includes(getOwnerOrgCode(resource).toLowerCase())
+          : true;
       return (
         (nameOrTitle.includes(normalizedSearch) ||
           ownerName.includes(normalizedSearch) ||
