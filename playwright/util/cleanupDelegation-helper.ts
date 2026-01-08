@@ -8,11 +8,7 @@ export type CleanupRow = {
   ToCategory: string;
 };
 
-const FILE = path.join(
-  process.cwd(),
-  __dirname,
-  '../e2eTests/testdata/accesspkgdelegation/cleanup-data.csv',
-);
+const FILE = path.resolve(__dirname, '../e2eTests/testdata/accesspkgdelegation/cleanup-data.csv');
 
 export async function getCleanupRows(): Promise<CleanupRow[]> {
   return new Promise((resolve, reject) => {
