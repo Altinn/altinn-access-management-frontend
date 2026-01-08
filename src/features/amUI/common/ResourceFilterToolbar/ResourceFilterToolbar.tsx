@@ -33,8 +33,10 @@ export const ResourceFilterToolbar = ({
       filterState={filterState}
       onFilterStateChange={setFilterState}
       getFilterLabel={(_name, value) => {
-        const serviceOwner = serviceOwnerOptions.find((owner) => owner.value === value?.[0]);
-        return serviceOwner ? serviceOwner.label : '';
+        const serviceOwners = serviceOwnerOptions
+          .filter((owner) => value?.includes(owner.value))
+          .map((owner) => owner.label);
+        return serviceOwners ? serviceOwners.join(', ') : '';
       }}
       addFilterButtonLabel={t('resource_list.filter_by_serviceowner')}
       removeButtonAltText={t('resource_list.remove_filter')}
@@ -44,8 +46,8 @@ export const ResourceFilterToolbar = ({
               {
                 name: 'owner',
                 label: t('resource_list.filter_by_serviceowner'),
-                optionType: 'radio',
-                removable: true,
+                optionType: 'checkbox',
+                removable: false,
                 options: serviceOwnerOptions,
               },
             ]

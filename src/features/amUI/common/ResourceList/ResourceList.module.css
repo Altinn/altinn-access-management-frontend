@@ -15,7 +15,12 @@
   width: 100%;
 }
 
-.resourceListContainerMaxHeight {
+.resourceListContainer {
+  padding-top: 4px;
+}
+
+.resourceListContainer.maxHeight {
+  min-height: 120px;
   max-height: 282px;
   overflow-y: auto;
   overflow-x: visible;
