@@ -89,7 +89,7 @@ export class DelegationApiRequest {
 
   public async cleanupDelegations(fromOrg: any, toOrg: any, authPerson: any) {
     const tokenClass = new Token();
-    const token = await tokenClass.getPersonalAltinnToken({
+    const token = await tokenClass.getPersonalCleanupAltinnToken({
       PID: authPerson.PID,
       UserId: authPerson.UserId,
       PartyId: authPerson.PartyId,

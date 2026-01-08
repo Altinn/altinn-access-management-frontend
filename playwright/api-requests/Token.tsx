@@ -46,18 +46,13 @@ export class Token {
    * Used for fetching an Altinn test token for a specific role
    * @returns The Altinn test token as a string
    */
-  public async getPersonalAltinnToken(person: {
-    PID?: string;
-    UserId?: string;
-    PartyId?: string;
-    PartyUUID?: string;
-  }): Promise<string> {
+  public async getPersonalAltinnToken(): Promise<string> {
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${this.environment}` +
-      `&pid=${person.PID || ''}` +
-      `&userid=${person.UserId || ''}` +
-      `&partyid=${person.PartyId || ''}` +
-      `&partyUuid=${person.PartyUUID || ''}` +
+      `&pid=${env('PID')}` +
+      `&userid=${env('ALTINN_USER_ID')}` +
+      `&partyid=${env('ALTINN_PARTY_ID')}` +
+      `&partyUuid=${env('ALTINN_PARTY_UUID')}` +
       `&authLvl=3&ttl=3000` +
       `&scopes=altinn:portal/enduser`;
 
@@ -110,5 +105,32 @@ export class Token {
   catch(err: unknown) {
     console.error('Error retrieving Altinn token:', err);
     throw err;
+  }
+
+  public async getPersonalCleanupAltinnToken(person: {
+    PID?: string;
+    UserId?: string;
+    PartyId?: string;
+    PartyUUID?: string;
+  }): Promise<string> {
+    const url =
+      `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${this.environment}` +
+      `&pid=${person.PID || ''}` +
+      `&userid=${person.UserId || ''}` +
+      `&partyid=${person.PartyId || ''}` +
+      `&partyUuid=${person.PartyUUID || ''}` +
+      `&authLvl=3&ttl=3000` +
+      `&scopes=altinn:portal/enduser`;
+
+    const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
+    const headers = {
+      Authorization: `Basic ${auth}`,
+    };
+
+    const token = await this.getAltinnToken(url, headers);
+    if (!token) {
+      throw new Error('Token retrieval failed for Altinn token');
+    }
+    return token;
   }
 }
