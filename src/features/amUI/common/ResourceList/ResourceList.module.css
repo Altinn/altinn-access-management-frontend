@@ -16,7 +16,7 @@
 }
 
 .resourceListContainer {
-  padding-top: 4px;
+  padding-top: var(--ds-size-1);
 }
 
 .resourceListContainer.maxHeight {
