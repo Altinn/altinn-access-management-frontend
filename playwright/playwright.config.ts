@@ -2,6 +2,7 @@ import type { PlaywrightTestConfig } from '@playwright/test';
 // eslint-disable-next-line import/default
 import dotenv from 'dotenv';
 
+// Load env from playwright/config to match repo layout
 dotenv.config({
   path: [
     `config/.env`,
