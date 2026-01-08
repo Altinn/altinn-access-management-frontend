@@ -33,21 +33,9 @@ export class LoginPage {
     });
   }
 
-  async loginWithUser(testUser: string) {
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      try {
-        await this.navigateToLoginPage();
-        await this.authenticateUser(testUser);
-        await this.verifyLoginSuccess();
-        return;
-      } catch (error) {
-        console.log(`Login attempt ${attempt} failed with error: ${error}`);
-        if (attempt === 3) {
-          throw new Error('Login failed after 3 retries');
-        }
-        await this.page.waitForTimeout(2000 * attempt);
-      }
-    }
+  async LoginToAccessManagement(pid: string) {
+    await this.clickLoginToAccessManagement();
+    await this.authenticateUser(pid);
   }
 
   async loginWithUserInA3(testUser: string) {
@@ -80,20 +68,17 @@ export class LoginPage {
     await this.selectActor(this.searchBox, orgnummer);
   }
 
-  async chooseReportee(reportee: string) {
-    const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
-    await chosenReportee.click();
+  async chooseReportee(currentReportee: string, targetReportee: string = '') {
+    let selectReporteeButton = this.page.getByRole('button', { name: currentReportee });
 
-    await this.page.goto(`${process.env.BASE_URL}/ui/profile`);
-    await this.profileLink.click();
+    // Search for target reportee in the searchbox
+    const searchBox = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
+    await searchBox.fill(targetReportee);
 
-    const profileHeader = this.page.getByRole('heading', {
-      name: new RegExp(
-        `Profil for (.*${reportee}.*|.*${reportee.split(' ').reverse().join(' ')}.*)`,
-        'i',
-      ),
-    });
-    await expect(profileHeader).toBeVisible();
+    const markedResult = this.page
+      .locator('mark')
+      .filter({ hasText: new RegExp(targetReportee, 'i') });
+    await markedResult.first().click();
   }
 
   async chooseAktøriA3(reportee: string) {
