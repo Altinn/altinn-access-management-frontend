@@ -90,37 +90,61 @@ export const SystemUserAgentDelegationPageContent = ({
   };
 
   const onAddAllCustomers = async (): Promise<void> => {
-    // find all customers to add
+    const FIRST_BATCH_SIZE = 1; // first batch size must be 1 to create relationship in backend
+    const BATCH_SIZE = 5; // add customers in batches of 5 to avoid overloading the backend
+
     const unAssignedCustomers = customers.filter((customer) => {
       const isAssigned = delegations?.find((x) => x.customerId === customer.id);
       return !isAssigned;
     });
 
-    // set add all state to initial values
     setAddAllState({
       maxCount: unAssignedCustomers.length,
       progress: 0,
       errors: [],
     });
 
-    // add all customers
-    for (const customer of unAssignedCustomers) {
-      try {
-        const delegation = await assignCustomer({
+    let index = 0;
+    let isFirstBatch = true;
+
+    while (index < unAssignedCustomers.length) {
+      const size = isFirstBatch ? FIRST_BATCH_SIZE : BATCH_SIZE;
+      const batch = unAssignedCustomers.slice(index, index + size);
+      index += batch.length;
+      isFirstBatch = false;
+
+      const promises = batch.map((customer) =>
+        assignCustomer({
           partyId,
           systemUserId: id ?? '',
-          customer: customer,
+          customer,
           partyUuid,
-        }).unwrap();
-        setAddAllState((oldState) => ({ ...oldState, progress: oldState.progress + 1 }));
-        setDelegations((oldDelegations) => [...oldDelegations, delegation]);
-      } catch {
-        setAddAllState((oldState) => ({
-          ...oldState,
-          progress: oldState.progress + 1,
-          errors: [...oldState.errors, customer],
-        }));
+        }).unwrap(),
+      );
+
+      const results = await Promise.allSettled(promises);
+
+      const successfulDelegations: AgentDelegation[] = [];
+      const batchErrors: AgentDelegationCustomer[] = [];
+
+      results.forEach((res, idx) => {
+        const customer = batch[idx];
+        if (res.status === 'fulfilled') {
+          successfulDelegations.push(res.value as AgentDelegation);
+        } else {
+          batchErrors.push(customer);
+        }
+      });
+
+      if (successfulDelegations.length > 0) {
+        setDelegations((old) => [...old, ...successfulDelegations]);
       }
+
+      setAddAllState((old) => ({
+        ...old,
+        progress: old.progress + batch.length,
+        errors: [...old.errors, ...batchErrors],
+      }));
     }
   };
 
