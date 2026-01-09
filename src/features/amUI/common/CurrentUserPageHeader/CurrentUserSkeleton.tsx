@@ -5,7 +5,7 @@ export const CurrentUserSkeleton = () => {
     <UserListItem
       interactive={false}
       loading
-      size='xl'
+      size='lg'
       name='xxxxxxxx xxxxxxxx'
       description='xxxxxxx, xxxxxxx'
       type='person'

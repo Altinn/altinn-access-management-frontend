@@ -37,7 +37,7 @@ export const CurrentUserPageHeader = ({
         type='person'
         as={as}
         titleAs='h2'
-        size='xl'
+        size='lg'
         loading={loading}
       />
     </div>

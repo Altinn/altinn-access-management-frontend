@@ -114,7 +114,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         <div className={classes.spinner}>
           <DsSpinner
             aria-label={t('common.loading')}
-            data-size='xl'
+            data-size='lg'
           />
         </div>
       );
