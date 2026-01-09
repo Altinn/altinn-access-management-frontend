@@ -44,6 +44,7 @@ interface CustomerListProps {
   errorIds?: string[];
   onAddCustomer?: (customer: AgentDelegationCustomer) => void;
   onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
+  onAddAllCustomers?: () => void;
   children?: React.ReactNode;
 }
 
@@ -54,6 +55,7 @@ export const CustomerList = ({
   errorIds,
   onAddCustomer,
   onRemoveCustomer,
+  onAddAllCustomers,
   children,
 }: CustomerListProps) => {
   const { t } = useTranslation();
@@ -87,25 +89,36 @@ export const CustomerList = ({
   return (
     <div>
       <div className={classes.listHeader}>
-        <DsSearch
-          className={classes.searchBar}
-          data-size='sm'
-        >
-          <DsSearch.Input
-            aria-label={t('systemuser_agent_delegation.customer_search')}
-            value={searchValue}
-            onChange={onSearch}
-            placeholder={t('systemuser_agent_delegation.customer_search')}
-          />
-          <DsSearch.Clear />
-        </DsSearch>
-        {onAddCustomer && (
-          <DsCheckbox
-            label={t('systemuser_agent_delegation.hide_assigned_customers')}
-            checked={isHideAssignedChecked}
-            onChange={() => setIsHideAssignedChecked((prev) => !prev)}
-          />
+        <div className={classes.listSearchAndFilter}>
+          <DsSearch
+            className={classes.searchBar}
+            data-size='sm'
+          >
+            <DsSearch.Input
+              aria-label={t('systemuser_agent_delegation.customer_search')}
+              value={searchValue}
+              onChange={onSearch}
+              placeholder={t('systemuser_agent_delegation.customer_search')}
+            />
+            <DsSearch.Clear />
+          </DsSearch>
+          {onAddCustomer && (
+            <DsCheckbox
+              label={t('systemuser_agent_delegation.hide_assigned_customers')}
+              checked={isHideAssignedChecked}
+              onChange={() => setIsHideAssignedChecked((prev) => !prev)}
+            />
+          )}
+        </div>
+        {onAddAllCustomers && (
+          <DsButton
+            variant='secondary'
+            onClick={onAddAllCustomers}
+          >
+            Legg til alle kunder
+          </DsButton>
         )}
+
         {children}
       </div>
       <List>

@@ -8,6 +8,12 @@
   align-items: center;
   margin-bottom: var(--ds-size-2);
 }
+.listSearchAndFilter {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: var(--ds-size-2);
+}
 
 .searchBar {
   max-width: 20rem;

@@ -277,6 +277,7 @@ export const SystemUserAgentDelegationPageContent = ({
                 errorIds={errorIds}
                 onAddCustomer={onAddCustomer}
                 onRemoveCustomer={onRemoveCustomer}
+                onAddAllCustomers={onAddAllCustomers}
               />
               {customers.length === 0 && reporteeData?.name && (
                 <DsAlert data-color='warning'>
@@ -289,12 +290,6 @@ export const SystemUserAgentDelegationPageContent = ({
                 <div>
                   <DsButton onClick={onCloseModal}>
                     {t('systemuser_agent_delegation.confirm_close')}
-                  </DsButton>
-                  <DsButton
-                    onClick={onAddAllCustomers}
-                    variant='secondary'
-                  >
-                    {'Legg til alle kunder'}
                   </DsButton>
                   <DsButton
                     onClick={onRemoveAllCustomers}
