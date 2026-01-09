@@ -39,15 +39,20 @@ export class LoginPage {
   }
 
   async loginWithUserInA3(testUser: string) {
+    let lastError: unknown;
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
         await this.navigateToTilgangstyrringLoginPage();
         await this.authenticateUser(testUser);
         return;
       } catch (error) {
+        lastError = error;
         throw new Error(`[A3 login] Login failed for user "${testUser}". Reason: ${error}`);
       }
     }
+    throw new Error(
+      `[A3 login] Login failed for user "${testUser}" after 3 attempts. Last error: ${lastError}`,
+    );
   }
 
   async loginNotChoosingActor(pid: string) {

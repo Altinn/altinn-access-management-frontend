@@ -12,6 +12,7 @@ const envPaths = [
   path.join(__dirname, `config/.env.${envName}.local`),
 ];
 
+// Load env from playwright/config to match repo layout
 dotenv.config({
   path: envPaths,
   override: true,
