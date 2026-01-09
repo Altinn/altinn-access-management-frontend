@@ -9,10 +9,10 @@ export type TestPerson = {
   UserId?: string;
   PID?: string;
 };
-
+const TEST_ENV = (process.env.environment ?? 'at23').toLowerCase();
 const TEST_PERSON_CSV = path.resolve(
   __dirname,
-  '../e2eTests/testdata/accesspkgdelegation/test-person.csv',
+  `../e2eTests/testdata/accesspkgdelegation/${TEST_ENV}/test-person.csv`,
 );
 
 export async function getTestPersonForCategory(category: string): Promise<TestPerson> {
