@@ -56,6 +56,11 @@ export const SystemUserAgentDelegationPageContent = ({
   const [assignedCustomers, setAssignedCustomers] = useState<AgentDelegationCustomer[]>(
     getAssignedCustomers(customers, existingAgentDelegations),
   );
+  const [addAllState, setAddAllState] = useState<{
+    maxCount: number;
+    progress: number;
+    errors: AgentDelegationCustomer[];
+  }>({ maxCount: -1, progress: 0, errors: [] });
   const { openSnackbar, dismissSnackbar } = useSnackbar();
 
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
@@ -63,6 +68,8 @@ export const SystemUserAgentDelegationPageContent = ({
 
   const [assignCustomer] = useAssignCustomerMutation();
   const [removeCustomer] = useRemoveCustomerMutation();
+
+  const isAddingAllCustomers = addAllState.maxCount > -1;
 
   const resetLoadingId = (customerId: string): void => {
     setLoadingIds((oldLoadingIds) => oldLoadingIds.filter((id) => id !== customerId));
@@ -80,6 +87,78 @@ export const SystemUserAgentDelegationPageContent = ({
       dismissable: false,
       className: classes.customerListSnackbar,
     });
+  };
+
+  const onAddAllCustomers = async (): Promise<void> => {
+    // find all customers to add
+    const unAssignedCustomers = customers.filter((customer) => {
+      const isAssigned = delegations?.find((x) => x.customerId === customer.id);
+      return !isAssigned;
+    });
+
+    // set add all state to initial values
+    setAddAllState({
+      maxCount: unAssignedCustomers.length,
+      progress: 0,
+      errors: [],
+    });
+
+    // add all customers
+    for (const customer of unAssignedCustomers) {
+      try {
+        const delegation = await assignCustomer({
+          partyId,
+          systemUserId: id ?? '',
+          customer: customer,
+          partyUuid,
+        }).unwrap();
+        setAddAllState((oldState) => ({ ...oldState, progress: oldState.progress + 1 }));
+        setDelegations((oldDelegations) => [...oldDelegations, delegation]);
+      } catch {
+        setAddAllState((oldState) => ({
+          ...oldState,
+          progress: oldState.progress + 1,
+          errors: [...oldState.errors, customer],
+        }));
+      }
+    }
+  };
+
+  const onRemoveAllCustomers = async (): Promise<void> => {
+    // reset states
+    setAddAllState({
+      maxCount: delegations.length,
+      progress: 0,
+      errors: [],
+    });
+
+    // remove all customers
+    for (const delegation of delegations) {
+      try {
+        await removeCustomer({
+          partyId,
+          systemUserId: id ?? '',
+          delegationId: delegation.delegationId,
+          partyUuid,
+        }).unwrap();
+
+        setAddAllState((oldState) => ({ ...oldState, progress: oldState.progress + 1 }));
+        setDelegations((oldDelegations) =>
+          oldDelegations.filter(
+            (delegation) => delegation.delegationId !== delegation.delegationId,
+          ),
+        );
+      } catch {
+        setAddAllState((oldState) => ({
+          ...oldState,
+          progress: oldState.progress + 1,
+          errors: [
+            ...oldState.errors,
+            { id: delegation.customerId, name: 'test' } as AgentDelegationCustomer,
+          ],
+        }));
+      }
+    }
   };
 
   const onAddCustomer = (customer: AgentDelegationCustomer): void => {
@@ -132,6 +211,11 @@ export const SystemUserAgentDelegationPageContent = ({
   // need to use useCallback to get updated assignedIds in onClose
   const onCloseModal = useCallback(() => {
     modalRef.current?.close();
+    setAddAllState({
+      maxCount: -1,
+      progress: 0,
+      errors: [],
+    });
     setAssignedCustomers(getAssignedCustomers(customers, delegations));
   }, [customers, delegations]);
 
@@ -141,7 +225,8 @@ export const SystemUserAgentDelegationPageContent = ({
         ref={modalRef}
         className={classes.delegationModal}
         onClose={onCloseModal}
-        closedby='any'
+        closeButton={isAddingAllCustomers ? false : undefined}
+        closedby={isAddingAllCustomers ? 'none' : 'any'}
       >
         <DsHeading
           level={1}
@@ -153,27 +238,50 @@ export const SystemUserAgentDelegationPageContent = ({
           })}
         </DsHeading>
         <div className={classes.flexContainer}>
-          <CustomerList
-            list={customers}
-            delegations={delegations}
-            loadingIds={loadingIds}
-            errorIds={errorIds}
-            onAddCustomer={onAddCustomer}
-            onRemoveCustomer={onRemoveCustomer}
-          />
-          {customers.length === 0 && reporteeData?.name && (
-            <DsAlert data-color='warning'>
-              {t('systemuser_agent_delegation.no_customers_warning', {
-                companyName: reporteeData?.name,
-              })}
-            </DsAlert>
+          {isAddingAllCustomers ? (
+            <AddAllCustomers
+              addAllState={addAllState}
+              onCloseModal={onCloseModal}
+            />
+          ) : (
+            <>
+              <CustomerList
+                list={customers}
+                delegations={delegations}
+                loadingIds={loadingIds}
+                errorIds={errorIds}
+                onAddCustomer={onAddCustomer}
+                onRemoveCustomer={onRemoveCustomer}
+              />
+              {customers.length === 0 && reporteeData?.name && (
+                <DsAlert data-color='warning'>
+                  {t('systemuser_agent_delegation.no_customers_warning', {
+                    companyName: reporteeData?.name,
+                  })}
+                </DsAlert>
+              )}
+              <div>
+                <div>
+                  <DsButton onClick={onCloseModal}>
+                    {t('systemuser_agent_delegation.confirm_close')}
+                  </DsButton>
+                  <DsButton
+                    onClick={onAddAllCustomers}
+                    variant='secondary'
+                  >
+                    {'Legg til alle kunder'}
+                  </DsButton>
+                  <DsButton
+                    onClick={onRemoveAllCustomers}
+                    variant='tertiary'
+                  >
+                    {'Fjern til alle kunder'}
+                  </DsButton>
+                  <Snackbar className={classes.customerListSnackbar} />
+                </div>
+              </div>
+            </>
           )}
-          <div>
-            <DsButton onClick={onCloseModal}>
-              {t('systemuser_agent_delegation.confirm_close')}
-            </DsButton>
-            <Snackbar className={classes.customerListSnackbar} />
-          </div>
         </div>
       </DsDialog>
       <div className={classes.flexContainer}>
@@ -245,5 +353,68 @@ export const SystemUserAgentDelegationPageContent = ({
         </DsParagraph>
       </div>
     </>
+  );
+};
+
+interface AddAllCustomersProps {
+  addAllState: {
+    maxCount: number;
+    progress: number;
+    errors: AgentDelegationCustomer[];
+  };
+  onCloseModal: () => void;
+}
+
+const AddAllCustomers = ({ addAllState, onCloseModal }: AddAllCustomersProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <div>
+      <div aria-live='polite'>
+        {addAllState.maxCount === addAllState.progress && (
+          <div>
+            {addAllState.errors.length > 0 ? (
+              <div>
+                <div>
+                  {addAllState.progress - addAllState.errors.length} av {addAllState.maxCount}{' '}
+                  kunder ble lagt til
+                </div>
+                <div>Følgende kunder kunne ikke legges til:</div>
+                <ul>
+                  {addAllState.errors.map((customer) => (
+                    <ul key={customer.id}>{customer.name}</ul>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <div>Alle kunder er lagt til.</div>
+            )}
+            <DsButton onClick={onCloseModal}>
+              {t('systemuser_agent_delegation.confirm_close')}
+            </DsButton>
+          </div>
+        )}
+      </div>
+      {addAllState.maxCount > addAllState.progress && (
+        <div>
+          <DsAlert
+            data-color='info'
+            data-size='sm'
+          >
+            Ikke lukk denne nettsiden før alle kundene er lagt til.
+          </DsAlert>
+          <div className={classes.progressContainer}>
+            <progress
+              className={classes.progressBar}
+              max={100}
+              value={(addAllState.progress / addAllState.maxCount) * 100}
+            >{`${addAllState.progress} / ${addAllState.maxCount}`}</progress>
+            <div>
+              Legger til kunde {addAllState.progress} av {addAllState.maxCount}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };

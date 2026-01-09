@@ -26,3 +26,15 @@
   align-self: flex-end;
   max-width: 20rem;
 }
+
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: var(--ds-size-14);
+  margin-bottom: var(--ds-size-12);
+}
+.progressBar {
+  accent-color: var(--ds-color-primary);
+  height: var(--ds-size-8);
+}
