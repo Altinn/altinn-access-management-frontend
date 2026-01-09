@@ -24,6 +24,7 @@ import { RightsList } from '../components/RightsList/RightsList';
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { AddAllCustomers } from './AddAllCustomers';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -388,57 +389,3 @@ interface AddAllCustomersProps {
   };
   onCloseModal: () => void;
 }
-
-const AddAllCustomers = ({ addAllState, onCloseModal }: AddAllCustomersProps) => {
-  const { t } = useTranslation();
-
-  return (
-    <div>
-      <div aria-live='polite'>
-        {addAllState.maxCount === addAllState.progress && (
-          <div>
-            {addAllState.errors.length > 0 ? (
-              <div>
-                <div>
-                  {addAllState.progress - addAllState.errors.length} av {addAllState.maxCount}{' '}
-                  kunder ble lagt til
-                </div>
-                <div>Følgende kunder kunne ikke legges til:</div>
-                <ul>
-                  {addAllState.errors.map((customer) => (
-                    <ul key={customer.id}>{customer.name}</ul>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <div>Alle kunder er lagt til.</div>
-            )}
-            <DsButton onClick={onCloseModal}>
-              {t('systemuser_agent_delegation.confirm_close')}
-            </DsButton>
-          </div>
-        )}
-      </div>
-      {addAllState.maxCount > addAllState.progress && (
-        <div>
-          <DsAlert
-            data-color='info'
-            data-size='sm'
-          >
-            Ikke lukk denne nettsiden før alle kundene er lagt til.
-          </DsAlert>
-          <div className={classes.progressContainer}>
-            <progress
-              className={classes.progressBar}
-              max={100}
-              value={(addAllState.progress / addAllState.maxCount) * 100}
-            >{`${addAllState.progress} / ${addAllState.maxCount}`}</progress>
-            <div>
-              Legger til kunde {addAllState.progress} av {addAllState.maxCount}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};

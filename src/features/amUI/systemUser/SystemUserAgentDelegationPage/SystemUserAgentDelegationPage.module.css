@@ -27,6 +27,12 @@
   max-width: 20rem;
 }
 
+.addAllContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-4);
+}
+
 .progressContainer {
   display: flex;
   flex-direction: column;
