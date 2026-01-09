@@ -85,22 +85,26 @@ export const PackagePoaDetails = () => {
           className={pageClasses.tabContent}
           value='users'
         >
-          <UsersTab
-            accessPackage={accessPackage}
-            fromParty={fromParty}
-            isLoading={isLoading}
-            isFetching={isFetching}
-          />
+          <div className={pageClasses.innerTabContent}>
+            <UsersTab
+              accessPackage={accessPackage}
+              fromParty={fromParty}
+              isLoading={isLoading}
+              isFetching={isFetching}
+            />
+          </div>
         </DsTabs.Panel>
         <DsTabs.Panel
           className={pageClasses.tabContent}
           value='services'
         >
-          <ResourceList
-            isLoading={isLoading}
-            resources={accessPackage?.resources ?? []}
-            noResourcesText={t('package_poa_details_page.services_tab.no_resources')}
-          />
+          <div className={pageClasses.innerTabContent}>
+            <ResourceList
+              isLoading={isLoading}
+              resources={accessPackage?.resources ?? []}
+              noResourcesText={t('package_poa_details_page.services_tab.no_resources')}
+            />
+          </div>
         </DsTabs.Panel>
       </DsTabs>
     </>
