@@ -19,14 +19,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:0.50.6":
-  version: 0.50.6
-  resolution: "@altinn/altinn-components@npm:0.50.6"
+"@altinn/altinn-components@npm:0.52.3":
+  version: 0.52.3
+  resolution: "@altinn/altinn-components@npm:0.52.3"
   dependencies:
     "@digdir/designsystemet-css": "npm:^1.0.6"
     "@digdir/designsystemet-react": "npm:^1.0.6"
     "@digdir/designsystemet-theme": "npm:^1.0.6"
-    "@navikt/aksel-icons": "npm:^7.30.1"
+    "@navikt/aksel-icons": "npm:^7.37.0"
     "@tanstack/react-virtual": "npm:^3.13.9"
     classnames: "npm:^2.5.1"
     react: "npm:^19.1.0"
@@ -34,7 +34,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/50357f9351afc2816960f4310417e8a965a79bfabb8ebed81a3eb91f6bc342332f6655482cdec26b944581ef08d14d81043cdf69100346cdf880926948784f5a
+  checksum: 10/f1de8d92223f9f2eca63c773161866abb8f34103c79566f83e43da9eba869f9586a57d31a6b26ff983a4b98a490e644352bdb75e9f9451860e92eac151f57103
   languageName: node
   linkType: hard
 
@@ -1393,10 +1393,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^7.25.1, @navikt/aksel-icons@npm:^7.30.1, @navikt/aksel-icons@npm:^7.33.3":
+"@navikt/aksel-icons@npm:^7.25.1, @navikt/aksel-icons@npm:^7.33.3":
   version: 7.36.0
   resolution: "@navikt/aksel-icons@npm:7.36.0"
   checksum: 10/85625f0b31a7c12bcd528706b753cb936a212d8703684ac09f8b11fa971a452775049db8752aa0e0a80416373c48545b2b0bac3b8493d1d227036a139a37d089
+  languageName: node
+  linkType: hard
+
+"@navikt/aksel-icons@npm:^7.37.0":
+  version: 7.38.0
+  resolution: "@navikt/aksel-icons@npm:7.38.0"
+  checksum: 10/917aa335e229baa363311a19fee595a89af08b5a19c2b1da12bf75963519dd8d207586ffbb6267c428b493c125f7729ba99fa1eaec6d8519eab43478d1475a5b
   languageName: node
   linkType: hard
 
@@ -3351,7 +3358,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:0.50.6"
+    "@altinn/altinn-components": "npm:0.52.3"
     "@axe-core/playwright": "npm:^4.10.2"
     "@navikt/aksel-icons": "npm:^7.33.3"
     "@playwright/test": "npm:^1.55.0"
