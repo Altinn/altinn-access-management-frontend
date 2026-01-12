@@ -149,43 +149,6 @@ export const SystemUserAgentDelegationPageContent = ({
     }
   };
 
-  const onRemoveAllCustomers = async (): Promise<void> => {
-    // reset states
-    setAddAllState({
-      maxCount: delegations.length,
-      progress: 0,
-      errors: [],
-    });
-
-    // remove all customers
-    for (const delegation of delegations) {
-      try {
-        await removeCustomer({
-          partyId,
-          systemUserId: id ?? '',
-          delegationId: delegation.delegationId,
-          partyUuid,
-        }).unwrap();
-
-        setAddAllState((oldState) => ({ ...oldState, progress: oldState.progress + 1 }));
-        setDelegations((oldDelegations) =>
-          oldDelegations.filter(
-            (delegation) => delegation.delegationId !== delegation.delegationId,
-          ),
-        );
-      } catch {
-        setAddAllState((oldState) => ({
-          ...oldState,
-          progress: oldState.progress + 1,
-          errors: [
-            ...oldState.errors,
-            { id: delegation.customerId, name: 'test' } as AgentDelegationCustomer,
-          ],
-        }));
-      }
-    }
-  };
-
   const onAddCustomer = (customer: AgentDelegationCustomer): void => {
     setLoadingIds((oldLoadingIds) => [...oldLoadingIds, customer.id]);
     const onAddSuccess = (delegation: AgentDelegation) => {
@@ -290,12 +253,6 @@ export const SystemUserAgentDelegationPageContent = ({
                 <div>
                   <DsButton onClick={onCloseModal}>
                     {t('systemuser_agent_delegation.confirm_close')}
-                  </DsButton>
-                  <DsButton
-                    onClick={onRemoveAllCustomers}
-                    variant='tertiary'
-                  >
-                    {'Fjern til alle kunder'}
                   </DsButton>
                   <Snackbar className={classes.customerListSnackbar} />
                 </div>
