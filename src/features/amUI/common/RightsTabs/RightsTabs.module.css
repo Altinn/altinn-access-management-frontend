@@ -1,10 +1,10 @@
+.tabContent {
+  padding: 1.5rem 0 0.5rem 0;
+}
 @media (max-width: 768px) {
   .tabContent {
     padding: 1rem 4px;
   }
-}
-.tabContent {
-  padding: 1.5rem 0 0.5rem 0;
 }
 .innerTabContent {
   display: flex;
