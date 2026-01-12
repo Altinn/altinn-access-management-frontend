@@ -549,7 +549,12 @@
   },
   "client_administration_page": {
     "no_access_title": "You do not have access to client administration",
-    "page_heading": "Client administration"
+    "page_heading": "Client administration",
+    "clients_tab_title": "Clients",
+    "agents_tab_title": "Users",
+    "add_agent_button": "Add agent",
+    "no_clients": "The organization has no registered clients",
+    "no_agents": "There are no users registered as agents for this organization"
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",

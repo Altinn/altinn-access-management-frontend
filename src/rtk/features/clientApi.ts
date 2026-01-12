@@ -1,0 +1,78 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { Entity } from '@/dataObjects/dtos/Common';
+import { Role } from './roleApi';
+import { AccessPackage } from './accessPackageApi';
+import { PersonInput } from './connectionApi';
+
+export interface ClientAccess {
+  role: Role;
+  packages: AccessPackage[];
+}
+
+export interface Client {
+  client: Entity;
+  access: ClientAccess[];
+}
+
+export interface AssignmentDto {
+  id: string;
+  roleId: string;
+  fromId: string;
+  toId: string;
+}
+
+const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/clientdelegations`;
+
+export const clientApi = createApi({
+  reducerPath: 'clientApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: baseUrl,
+    prepareHeaders: (headers) => {
+      headers.set('content-type', 'application/json; charset=utf-8');
+      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
+      return headers;
+    },
+  }),
+  tagTypes: ['Clients'],
+  endpoints: (builder) => ({
+    getClients: builder.query<Client[], void>({
+      query: () => `clients?party=${getCookie('AltinnPartyUuid')}`,
+      keepUnusedDataFor: 3,
+      providesTags: ['Clients'],
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
+      },
+    }),
+    getAgents: builder.query<Client[], void>({
+      query: () => `agents?party=${getCookie('AltinnPartyUuid')}`,
+      keepUnusedDataFor: 3,
+      providesTags: ['Clients'],
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
+      },
+    }),
+    addAgent: builder.mutation<AssignmentDto, { to?: string; personInput?: PersonInput }>({
+      query: ({ to, personInput }) => ({
+        url: `agents?party=${getCookie('AltinnPartyUuid')}${to ? `&to=${to}` : ''}`,
+        method: 'POST',
+        body: personInput ? JSON.stringify(personInput) : undefined,
+      }),
+      invalidatesTags: ['Clients'],
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
+      },
+    }),
+  }),
+});
+
+export const { useGetClientsQuery, useGetAgentsQuery, useAddAgentMutation } = clientApi;
+
+export const { endpoints, reducerPath, reducer, middleware } = clientApi;
