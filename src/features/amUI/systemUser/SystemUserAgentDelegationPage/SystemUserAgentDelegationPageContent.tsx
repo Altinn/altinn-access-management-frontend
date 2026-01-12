@@ -375,12 +375,3 @@ export const SystemUserAgentDelegationPageContent = ({
     </>
   );
 };
-
-interface AddAllCustomersProps {
-  addAllState: {
-    maxCount: number;
-    progress: number;
-    errors: AgentDelegationCustomer[];
-  };
-  onCloseModal: () => void;
-}
