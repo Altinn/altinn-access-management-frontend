@@ -168,7 +168,12 @@ export const SystemUserAgentRequestPage = () => {
                 error={acceptCreationRequestError as { data: ProblemDetail }}
               />
             )}
-            {isEscalationPossible && <EscalateRequest request={request} />}
+            {isEscalationPossible && (
+              <EscalateRequest
+                request={request}
+                isAgentRequest
+              />
+            )}
             {isRejectCreationRequestError && (
               <DsAlert
                 data-color='danger'
