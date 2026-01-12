@@ -15,7 +15,7 @@ import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
-import { getApiBaseUrl } from './urlUtils';
+import { getApiBaseUrl, isPermissionErrorWhichCanBeEscalated } from './requestUtils';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
 import { SystemUserPath } from '@/routes/paths';
@@ -61,8 +61,15 @@ export const SystemUserAgentRequestPage = () => {
     { isError: isRejectCreationRequestError, isLoading: isRejectingSystemUser },
   ] = useRejectAgentSystemUserRequestMutation();
 
+  const isEscalationPossible = isPermissionErrorWhichCanBeEscalated(
+    (acceptCreationRequestError as { data: ProblemDetail })?.data,
+  );
+
   const isActionButtonDisabled =
-    isAcceptingSystemUser || isRejectingSystemUser || request?.status !== 'New';
+    isAcceptingSystemUser ||
+    isRejectingSystemUser ||
+    request?.status !== 'New' ||
+    isEscalationPossible;
 
   const acceptSystemUser = (): void => {
     if (!isActionButtonDisabled) {
@@ -155,12 +162,13 @@ export const SystemUserAgentRequestPage = () => {
             hideHeadings
           />
           <div>
-            {acceptCreationRequestError && (
+            {acceptCreationRequestError && !isEscalationPossible && (
               <DelegationCheckError
                 defaultError='systemuser_includedrightspage.create_systemuser_error'
                 error={acceptCreationRequestError as { data: ProblemDetail }}
               />
             )}
+            {isEscalationPossible && <EscalateRequest request={request} />}
             {isRejectCreationRequestError && (
               <DsAlert
                 data-color='danger'
@@ -193,13 +201,6 @@ export const SystemUserAgentRequestPage = () => {
                 </DsButton>
               </ButtonRow>
             )}
-            {hasCreateSystemUserPermission(reporteeData, isAdmin) === false &&
-              request.status === 'New' && (
-                <EscalateRequest
-                  request={request}
-                  isAgentRequest
-                />
-              )}
           </div>
         </>
       )}

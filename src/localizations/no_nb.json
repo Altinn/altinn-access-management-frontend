@@ -616,7 +616,7 @@
     "request_rejected": "Denne forespørselen er allerede avvist",
     "request_expired": "Denne forespørselen har utløpt",
     "escalate_title": "Du mangler nødvendig fullmakt",
-    "escalate_description": "For å lage en systemtilgang må du være Tilgangsstyrer. Vil du sende forespørselen videre til Tilgangsstyrer i din virksomhet?",
+    "escalate_description": "Du har ikke tilstrekkelige fullmakter til å godkjenne forespørselen. Vil du sende forespørselen videre til tilgangsstyrer i din virksomhet?",
     "escalate_confirm_button": "Ja, send videre",
     "escalate_cancel_button": "Lukk og logg ut",
     "escalate_error": "Kunne ikke sende forespørsel videre",
