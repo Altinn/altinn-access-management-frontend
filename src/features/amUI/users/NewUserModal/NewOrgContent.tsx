@@ -2,63 +2,39 @@ import { Button, TextField, DsParagraph, DsSpinner } from '@altinn/altinn-compon
 import { useState } from 'react';
 import { t } from 'i18next';
 
-import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
-import { User } from '@/rtk/features/userInfoApi';
+import { Organization, useGetOrganizationQuery } from '@/rtk/features/lookupApi';
 
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
 
 export const NewOrgContent = ({
-  onComplete,
-  modalRef,
+  addOrg,
+  errorDetails,
+  isLoading,
 }: {
-  onComplete?: (user: User) => void;
-  modalRef: React.RefObject<HTMLDialogElement | null>;
+  addOrg?: (orgData: Organization) => void;
+  errorDetails?: { status: string; time: string } | null;
+  isLoading?: boolean;
 }) => {
   const [orgNumber, setOrgNumber] = useState('');
 
   const {
     data: orgData,
-    isLoading,
+    isLoading: orgDataLoading,
     error: getOrgError,
     isError: isGetOrgError,
   } = useGetOrganizationQuery(orgNumber, { skip: orgNumber.length !== 9 });
 
-  const [addRightHolder, { isError: isAddError, error: addError }] = useAddRightHolderMutation();
-  const isError = isGetOrgError || isAddError;
-
-  const onAdd = () => {
-    if (orgData?.partyUuid) {
-      addRightHolder({ partyUuidToBeAdded: orgData.partyUuid })
-        .unwrap()
-        .then(() => {
-          if (onComplete) {
-            onComplete({
-              id: orgData.partyUuid,
-              name: orgData.name,
-              type: 'organisasjon',
-              children: null,
-              organizationIdentifier: orgData.orgNumber,
-            });
-          }
-          modalRef.current?.close();
-        });
-    }
-  };
+  const isError = isGetOrgError || !!errorDetails;
 
   return (
     <div className={classes.newOrgContent}>
       {isError && (
         <NewUserAlert
           userType='org'
-          error={
-            isGetOrgError
-              ? createErrorDetails(getOrgError)
-              : addError && createErrorDetails(addError)
-          }
+          error={isGetOrgError ? createErrorDetails(getOrgError) : errorDetails && errorDetails}
         />
       )}
       <TextField
@@ -67,7 +43,7 @@ export const NewOrgContent = ({
         size='sm'
         onChange={(e) => setOrgNumber((e.target as HTMLInputElement).value.replace(/ /g, ''))}
       />
-      {!isGetOrgError && !isLoading && orgData && orgData.orgNumber === orgNumber && (
+      {!isGetOrgError && !orgDataLoading && orgData && orgData.orgNumber === orgNumber && (
         <div className={classes.searchResult}>
           <DsParagraph>
             <strong>{orgData.name}</strong>
@@ -83,7 +59,7 @@ export const NewOrgContent = ({
       <div className={classes.validationButton}>
         <Button
           disabled={isGetOrgError || isLoading || !orgData || orgData.orgNumber !== orgNumber}
-          onClick={onAdd}
+          onClick={() => addOrg && orgData && addOrg(orgData)}
         >
           <span className={classes.addButton}>
             {isLoading && (
