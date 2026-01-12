@@ -115,7 +115,7 @@ export const CustomerList = ({
             variant='secondary'
             onClick={onAddAllCustomers}
           >
-            Legg til alle kunder
+            {t('systemuser_agent_delegation.add_all_customers')}
           </DsButton>
         )}
 

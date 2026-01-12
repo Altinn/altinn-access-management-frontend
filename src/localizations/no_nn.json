@@ -671,13 +671,19 @@
     "edit_customers": "Legg til eller fjern kundar",
     "customer_search": "Søk etter kunde",
     "hide_assigned_customers": "Gøym kundar som er lagde til",
+    "add_all_customers": "Legg til alle kunder",
     "no_customers_warning": "Det finst ingen kundar enda. Kundane må gi fullmakt til tilgangspakkane som kreves av systemtilgangen til {{companyName}}.",
     "remove_from_system_user": "Fjern frå systemtilgang",
     "remove_from_system_user_aria": "Fjern {{customerName}} frå systemtilgang",
     "add_to_system_user": "Legg til i systemtilgang",
     "add_to_system_user_aria": "Legg til {{customerName}} i systemtilgang",
     "add_system_user_error": "Kunne ikkje legge til kunde",
-    "remove_system_user_error": "Kunne ikkje fjerne kunde"
+    "remove_system_user_error": "Kunne ikkje fjerne kunde",
+    "add_all_customers_success": "Alle kundar er lagde til.",
+    "add_all_customers_partial": "Berre {{successCount}} av {{totalCount}} kundar vart lagde til.",
+    "add_all_customers_failed_list": "Følgjande kundar kunne ikkje leggjast til:",
+    "add_all_customers_in_progress_warning": "Ikkje lukk denne nettsida før alle kundar er lagde til.",
+    "add_all_customers_progress": "Legg til kunde {{progress}} av {{totalCount}}"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",

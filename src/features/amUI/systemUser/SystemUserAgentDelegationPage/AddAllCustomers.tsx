@@ -26,10 +26,12 @@ const CompletionState = ({ addAllState, onCloseModal }: AddAllCustomersProps) =>
     return (
       <div className={classes.addAllContainer}>
         <DsAlert data-color='warning'>
-          Kun {addAllState.progress - addAllState.errors.length} av {addAllState.maxCount} kunder
-          ble lagt til.
+          {t('systemuser_agent_delegation.add_all_customers_partial', {
+            successCount: addAllState.progress - addAllState.errors.length,
+            totalCount: addAllState.maxCount,
+          })}
         </DsAlert>
-        <div>Følgende kunder kunne ikke legges til:</div>
+        <div>{t('systemuser_agent_delegation.add_all_customers_failed_list')}</div>
         <DsListUnordered>
           {addAllState.errors.map((customer) => (
             <DsListItem key={customer.id}>{customer.name}</DsListItem>
@@ -46,7 +48,7 @@ const CompletionState = ({ addAllState, onCloseModal }: AddAllCustomersProps) =>
         data-color='success'
         data-size='sm'
       >
-        Alle kunder er lagt til.
+        {t('systemuser_agent_delegation.add_all_customers_success')}
       </DsAlert>
       {closeButton}
     </div>
@@ -54,13 +56,15 @@ const CompletionState = ({ addAllState, onCloseModal }: AddAllCustomersProps) =>
 };
 
 const ProgressState = ({ addAllState }: Omit<AddAllCustomersProps, 'onCloseModal'>) => {
+  const { t } = useTranslation();
+
   return (
     <div>
       <DsAlert
         data-color='info'
         data-size='sm'
       >
-        Ikke lukk denne nettsiden før alle kundene er lagt til.
+        {t('systemuser_agent_delegation.add_all_customers_in_progress_warning')}
       </DsAlert>
       <div className={classes.progressContainer}>
         <progress
@@ -69,7 +73,10 @@ const ProgressState = ({ addAllState }: Omit<AddAllCustomersProps, 'onCloseModal
           value={(addAllState.progress / addAllState.maxCount) * 100}
         >{`${addAllState.progress} / ${addAllState.maxCount}`}</progress>
         <div>
-          Legger til kunde {addAllState.progress} av {addAllState.maxCount}
+          {t('systemuser_agent_delegation.add_all_customers_progress', {
+            progress: addAllState.progress,
+            totalCount: addAllState.maxCount,
+          })}
         </div>
       </div>
     </div>
