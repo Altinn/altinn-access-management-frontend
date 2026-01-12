@@ -193,20 +193,47 @@ export class DelegationPage {
   async chooseOrg(chooseorgName: string) {
     const nameRegex = new RegExp(chooseorgName, 'i');
 
-    // Stage 1: Try clicking button
     const orgButton = this.page.getByRole('button', { name: nameRegex }).first();
-    if (await orgButton.isVisible().catch(() => false)) {
-      await orgButton.click();
-    }
-
-    // Stage 2: Try clicking link inside (after expanding the button)
     const orgLink = this.page.getByRole('link', { name: nameRegex }).first();
+
+    // 1) Wait until either button is visible
+    await expect
+      .poll(
+        async () => ({
+          button: await orgButton.isVisible().catch(() => false),
+          link: await orgLink.isVisible().catch(() => false),
+        }),
+        {
+          timeout: 30_000,
+          message: `Org "${chooseorgName}" not visible as button or link`,
+        },
+      )
+      .toMatchObject({});
+
+    // 2) If link is visible, click it directly
     if (await orgLink.isVisible().catch(() => false)) {
       await orgLink.click();
       return;
     }
 
-    throw new Error(`Org "${chooseorgName}" not found as button or link.`);
+    // 3) Otherwise click button, then wait for link and click it
+    await orgButton.click();
+
+    if (await orgLink.isVisible().catch(() => false)) {
+      await orgLink.click();
+      return;
+    }
+
+    await this.page.waitForLoadState('domcontentloaded');
+
+    if (await orgLink.isVisible().catch(() => false)) {
+      await orgLink.click();
+      return;
+    }
+
+    throw new Error(
+      `Org "${chooseorgName}" found but could not be activated (button/link flow failed).`,
+    );
   }
 
   async verifyDelegatedPackage(areaName: string, pacakageName: string) {

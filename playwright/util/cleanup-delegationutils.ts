@@ -14,9 +14,10 @@ export type CleanupResolved = {
   authPerson: any; // Daglig leder used only for token
 };
 
+const TEST_ENV = (process.env.environment ?? 'at23').toLowerCase();
 const CLEANUP_CSV = path.resolve(
   __dirname,
-  '../e2eTests/testdata/accesspkgdelegation/cleanup-data.csv',
+  `../e2eTests/testdata/accesspkgdelegation/${TEST_ENV}/cleanup-data.csv`,
 );
 
 function normalizeOrgCategory(category: string): string {

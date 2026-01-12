@@ -130,7 +130,7 @@ export class LoginPage {
     await this.page.goto(process.env.BASE_URL as string);
     // New entry flow: go via "Tilgangsstyring" and TestID link
     if (await this.tilgangsstyringLink.count()) {
-      await this.tilgangsstyringLink.click();
+      await this.tilgangsstyringLink.first().click();
     }
 
     const testIdLink = (await this.testIdLinkText.count()) ? this.testIdLinkText : this.testIdLink;
