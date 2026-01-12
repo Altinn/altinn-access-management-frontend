@@ -17,6 +17,7 @@ import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
 import { formatOrgNr } from '@/resources/utils/reporteeUtils';
+import { addAllSystemuserCustomers } from '@/resources/utils/featureFlagUtils';
 
 const filterCustomerList = (
   list: AgentDelegationCustomer[],
@@ -110,7 +111,7 @@ export const CustomerList = ({
             />
           )}
         </div>
-        {onAddAllCustomers && (
+        {onAddAllCustomers && addAllSystemuserCustomers() && (
           <DsButton
             variant='secondary'
             onClick={onAddAllCustomers}
