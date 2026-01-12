@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { DsAlert, DsDialog, DsHeading, DsLink, DsParagraph, List } from '@altinn/altinn-components';
 import { FolderFileIcon } from '@navikt/aksel-icons';
 
@@ -24,12 +24,15 @@ import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const routerLocation = useLocation();
 
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedConsentId, setSelectedConsentId] = useState<string>('');
 
   useDocumentTitle(t('active_consents.page_title'));
   const partyUuid = getCookie('AltinnPartyUuid');
+
+  const newlyCreatedId = routerLocation?.state?.createdId;
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
@@ -153,6 +156,7 @@ export const ActiveConsentsPage = () => {
                   subItems={groupedActiveConsents[partyId].map((item) => ({
                     id: item.id,
                     title: item.toParty.name,
+                    isNew: newlyCreatedId === item.id,
                     badgeText: item.isPoa
                       ? t('active_consents.see_poa')
                       : t('active_consents.see_consent'),
