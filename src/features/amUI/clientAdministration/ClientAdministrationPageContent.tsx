@@ -7,19 +7,38 @@ import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUt
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
-import { useGetAgentsQuery, useGetClientsQuery } from '@/rtk/features/clientApi';
-import type { Connection } from '@/rtk/features/connectionApi';
+import {
+  useAddAgentMutation,
+  useGetAgentsQuery,
+  useGetClientsQuery,
+} from '@/rtk/features/clientApi';
+import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 export const ClientAdministrationPageContent = () => {
   const { t } = useTranslation();
   const pageIsEnabled = clientAdministrationPageEnabled();
   const [activeTab, setActiveTab] = useState('users');
+  const { fromParty } = usePartyRepresentation();
   const { data: agents, isLoading: isAgentsLoading, isError: isAgentsError } = useGetAgentsQuery();
+  const [addAgent, { isLoading: isAddingAgent, error: addAgentError }] = useAddAgentMutation();
   const {
     data: clients,
     isLoading: isClientsLoading,
     isError: isClientsError,
   } = useGetClientsQuery();
+  const {
+    data: indirectConnections,
+    isLoading: isIndirectLoading,
+    isFetching: isIndirectFetching,
+  } = useGetRightHoldersQuery(
+    {
+      partyUuid: fromParty?.partyUuid ?? '',
+      fromUuid: fromParty?.partyUuid ?? '',
+      toUuid: '',
+    },
+    { skip: !fromParty?.partyUuid },
+  );
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const agentConnections = useMemo<Connection[]>(
     () =>
@@ -106,8 +125,12 @@ export const ClientAdministrationPageContent = () => {
             <AdvancedUserSearch
               includeSelfAsChild={false}
               connections={agentConnections}
-              isLoading={isAgentsLoading}
+              indirectConnections={indirectConnections}
+              isLoading={isAgentsLoading || isIndirectLoading}
+              isActionLoading={isIndirectFetching}
               AddUserButton={AddAgentButton}
+              onDelegate={(user) => addAgent({ to: user.id })}
+              canDelegate={true}
               noUsersText={t('client_administration_page.no_agents')}
             />
           )}
@@ -124,7 +147,9 @@ export const ClientAdministrationPageContent = () => {
             <AdvancedUserSearch
               includeSelfAsChild={false}
               connections={clientConnections}
-              isLoading={isClientsLoading}
+              // indirectConnections={indirectConnections}
+              isLoading={isClientsLoading || isIndirectLoading}
+              // isActionLoading={isIndirectFetching}
               canDelegate={false}
               noUsersText={t('client_administration_page.no_clients')}
             />
