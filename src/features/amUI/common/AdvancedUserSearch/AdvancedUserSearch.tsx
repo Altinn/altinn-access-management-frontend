@@ -22,6 +22,8 @@ export interface AdvancedUserSearchProps {
   isLoading?: boolean;
   isActionLoading?: boolean;
   canDelegate?: boolean;
+  AddUserButton?: React.ComponentType<{ isLarge?: boolean; onComplete?: (user: User) => void }>;
+  noUsersText?: string;
 }
 
 const filterAvailableUserTypes = (items?: Connection[]) =>
@@ -40,6 +42,8 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   isLoading = false,
   isActionLoading = false,
   canDelegate = true,
+  AddUserButton = NewUserButton,
+  noUsersText,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
@@ -97,9 +101,9 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           />
           {query && <DsSearch.Clear onClick={() => setQuery('')} />}
         </DsSearch>
-        {canDelegate && (
+        {canDelegate && AddUserButton && (
           <div className={classes.buttonRow}>
-            <NewUserButton onComplete={handleAddNewUser} />
+            <AddUserButton onComplete={handleAddNewUser} />
           </div>
         )}
       </div>
@@ -111,9 +115,10 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
               data-size='sm'
               className={classes.tabDescription}
             >
-              {t('package_poa_details_page.users_tab.no_users', {
-                fromparty: fromParty?.name,
-              })}
+              {noUsersText ??
+                t('package_poa_details_page.users_tab.no_users', {
+                  fromparty: fromParty?.name,
+                })}
             </DsParagraph>
           )}
           {showDirectNoResults && (
@@ -159,8 +164,8 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
                 { searchTerm: trimmedQuery },
               )}
             </DsParagraph>
-            {canDelegate && (
-              <NewUserButton
+            {canDelegate && AddUserButton && (
+              <AddUserButton
                 isLarge
                 onComplete={handleAddNewUser}
               />

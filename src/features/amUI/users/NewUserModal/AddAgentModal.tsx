@@ -6,12 +6,13 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { NewPersonContent, personInput } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { AssignmentDto, useAddAgentMutation } from '@/rtk/features/clientApi';
+import { useAddAgentMutation } from '@/rtk/features/clientApi';
+import { User } from '@/rtk/features/userInfoApi';
 
 interface AddAgentButtonProps {
   /*** Render a larger version of the trigger button */
   isLarge?: boolean;
-  onComplete?: (assignment: AssignmentDto) => void;
+  onComplete?: (user: User) => void;
 }
 
 export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ isLarge, onComplete }) => {
@@ -37,7 +38,7 @@ export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ isLarge, onCompl
 
 interface AddAgentModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
-  onComplete?: (assignment: AssignmentDto) => void;
+  onComplete?: (user: User) => void;
 }
 
 const AddAgentModal: React.FC<AddAgentModalProps> = ({ modalRef, onComplete }) => {
@@ -57,7 +58,13 @@ const AddAgentModal: React.FC<AddAgentModalProps> = ({ modalRef, onComplete }) =
       .unwrap()
       .then((assignment) => {
         if (onComplete) {
-          onComplete(assignment);
+          const newUser: User = {
+            id: assignment.toId || assignment.id,
+            name: personInput.lastName,
+            type: 'person',
+            children: null,
+          };
+          onComplete(newUser);
         }
         modalRef.current?.close();
       });
