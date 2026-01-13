@@ -1,5 +1,6 @@
 .modalDialog {
   max-width: 992px;
+  max-height: fit-content;
 }
 
 .triggerButton {

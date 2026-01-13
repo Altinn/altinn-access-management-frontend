@@ -81,6 +81,8 @@
     "error_status": "HttpStatus: {{status}}",
     "ssn": "Fødselsnummer",
     "last_name": "Etternamn",
+    "org_number": "Organisasjonsnummer",
+    "org_name": "Organisasjonsnamn",
     "subunit": "Undereining",
     "subunit_lowercase": "undereining",
     "mainunit_lowercase": "hovudeining",
@@ -137,6 +139,7 @@
     "users": "Brukarar",
     "reportees": "Fullmakter hos andre",
     "systemaccess": "Systemtilgangar",
+    "client_administration": "Klientadministrasjon",
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
     "settings": "Innstillingar",
@@ -522,6 +525,7 @@
     "banner_title": "Systemtilgangar",
     "sub_title_text": "Ved å opprette ein systemtilgang gir du eit fagsystem tilgang til å løyse oppgåver i Altinn på vegne av bedrifta di.",
     "systemusers_load_error": "Kunne ikkje laste systemtilgangar",
+    "pending_systemusers_load_error": "Kunne ikkje laste ventende systemtilgang-førespurnader",
     "agent_delegation_systemusers_load_error": "Kunne ikkje laste systemtilganger for kunder",
     "new_system_user_button": "Lag ny systemtilgang",
     "existing_system_users_title": "Egne systemtilgangar",
@@ -533,7 +537,16 @@
     "no_key_role2": "For å lage ein systemtilgang treng du rolla Tilgangsstyrar, Hovudadministrator eller Dagleg leiar.",
     "new_system_user": "NY",
     "systemuser_tab": "Systemtilganger",
-    "api_tab": "API-tilgangar"
+    "api_tab": "API-tilgangar",
+    "pending_request_badge": "Godkjenn eiga systemtilgang",
+    "pending_agent_request_badge": "Godkjenn systemtilgang for kundar",
+    "pending_system_users_title": "Ventende systemtilgang-førespurnader",
+    "standard_system_user_badge": "Se fullmakter",
+    "agent_system_user_badge": "Administrere kunder"
+  },
+  "client_administration_page": {
+    "no_access_title": "Du har ikkje tilgang til klientadministrasjon",
+    "page_heading": "Klientadministrasjon"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
@@ -601,7 +614,16 @@
     "reject_loading": "Avviser systemtilgang...",
     "request_accepted": "Denne førespurnaden er allereie godkjend",
     "request_rejected": "Denne førespurnaden er allereie avvist",
-    "request_expired": "Denne førespurnaden har gått ut"
+    "request_expired": "Denne førespurnaden har gått ut",
+    "escalate_title": "Du manglar nødvendig fullmakt",
+    "escalate_description": "For å opprette ein systemtilgang må du vere Tilgangsstyrar. Vil du senda førespurnaden vidare til Tilgangsstyraren i verksemda di?",
+    "escalate_confirm_button": "Ja, send vidare",
+    "escalate_cancel_button": "Lukk og logg ut",
+    "escalate_error": "Kunne ikkje senda førespurnaden vidare",
+    "escalate_sent_title": "Førespurnaden er videresendt",
+    "escalate_sent_description": "Tilgangsstyraren i verksemda di skal no ha fått førespurnaden i Altinn.",
+    "escalate_close_button": "Avslutt",
+    "escalate_already_escalated": "Denne førespurnaden er allereie videresendt"
   },
   "systemuser_change_request": {
     "page_title": "Oppdater systemtilgang - Altinn",
@@ -680,7 +702,7 @@
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
-    "loading_consent": "Laster forespørsel...",
+    "loading_consent": "Laster førespurnad...",
     "load_consent_error": "Kunne ikkje laste samtykke/fullmakt",
     "approve_consent": "Ja, eg gir samtykke",
     "reject_consent": "Nei, eg gir ikkje samtykke",
@@ -789,7 +811,10 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tenester tilgjengelege."
+    "no_resources": "Ingen tenester tilgjengelege.",
+    "filter_by_serviceowner": "Filtrer på tjenesteeier",
+    "resource_search_clear": "Tøm søk",
+    "remove_filter": "Fjern filter"
   },
   "landing_page": {
     "alert_heading": "Du er no i den nye løysinga for tilgangsstyring",
@@ -806,6 +831,7 @@
     "poa_item_description": "Oversikt over alle tilgangspakkar og enkelttenester",
     "consent_item_description": "Oversikt over alle inngåtte avtalar",
     "systemuser_item_description": "Oversikt over systemtilgangar",
+    "client_admin_item_description": "Deleger fullmakter frå klientar til brukarar i verksemda.",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny førespurnad",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye førespurnader"
   },

@@ -123,6 +123,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     resourceReferences: resource.ResourceReferences,
                     resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
                     resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
+                    resourceOwnerOrgcode: resource.HasCompetentAuthority?.Orgcode,
                     rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
                     description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
                     visible: resource.Visible,

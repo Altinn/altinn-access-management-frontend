@@ -26,7 +26,7 @@ export interface SystemUser {
   integrationTitle: string;
   created: string;
   system: RegisteredSystem;
-  systemUserType: string;
+  userType: string;
   resources: ServiceResource[];
   accessPackages: SystemUserAccessPackage[];
 }
@@ -41,6 +41,7 @@ interface SystemUserRequestBase {
   redirectUrl?: string;
   system: RegisteredSystem;
   created: string;
+  escalated: boolean;
 }
 export interface SystemUserRequest extends SystemUserRequestBase {
   resources: ServiceResource[];

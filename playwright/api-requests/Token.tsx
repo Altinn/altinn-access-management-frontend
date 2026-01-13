@@ -106,4 +106,31 @@ export class Token {
     console.error('Error retrieving Altinn token:', err);
     throw err;
   }
+
+  public async getPersonalCleanupAltinnToken(person: {
+    PID?: string;
+    UserId?: string;
+    PartyId?: string;
+    PartyUUID?: string;
+  }): Promise<string> {
+    const url =
+      `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${this.environment}` +
+      `&pid=${person.PID || ''}` +
+      `&userid=${person.UserId || ''}` +
+      `&partyid=${person.PartyId || ''}` +
+      `&partyUuid=${person.PartyUUID || ''}` +
+      `&authLvl=3&ttl=3000` +
+      `&scopes=altinn:portal/enduser`;
+
+    const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
+    const headers = {
+      Authorization: `Basic ${auth}`,
+    };
+
+    const token = await this.getAltinnToken(url, headers);
+    if (!token) {
+      throw new Error('Token retrieval failed for Altinn token');
+    }
+    return token;
+  }
 }

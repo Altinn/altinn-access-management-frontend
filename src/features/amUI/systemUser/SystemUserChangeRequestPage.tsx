@@ -21,6 +21,7 @@ import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/Create
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
@@ -45,6 +46,7 @@ export const SystemUserChangeRequestPage = () => {
   } = useGetSystemUserReporteeQuery(changeRequest?.partyId ?? '', {
     skip: !changeRequest?.partyId,
   });
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const [
     postAcceptChangeRequest,
@@ -165,7 +167,10 @@ export const SystemUserChangeRequestPage = () => {
                 {t('systemuser_change_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck reporteeData={reporteeData}>
+            <CreateSystemUserCheck
+              reporteeData={reporteeData}
+              isAdmin={isAdmin}
+            >
               <ButtonRow>
                 <DsButton
                   variant='primary'

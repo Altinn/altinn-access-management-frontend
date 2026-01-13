@@ -33,6 +33,7 @@ import {
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
   getRequestsMenuItem,
+  getClientAdministrationMenuItem,
   getSettingsMenuItem,
   getSystemUserMenuItem,
   getUsersMenuItem,
@@ -80,6 +81,7 @@ export const LandingPage = () => {
   const getMenuItems = (): MenuItemProps[] => {
     const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
     const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
+    const displayClientAdministrationPage = window.featureFlags?.displayClientAdministrationPage;
 
     if (isLoading) {
       const loadingMenuItem: MenuItemProps = {
@@ -127,9 +129,14 @@ export const LandingPage = () => {
         description: t('landing_page.consent_item_description'),
       });
     }
-
+    if (isClientAdmin && displayClientAdministrationPage) {
+      items.push({
+        ...getClientAdministrationMenuItem(),
+        description: t('landing_page.client_admin_item_description'),
+      });
+    }
     if (
-      hasCreateSystemUserPermission(reportee) ||
+      hasCreateSystemUserPermission(reportee, isAdmin) ||
       hasSystemUserClientAdminPermission(reportee, isClientAdmin)
     ) {
       items.push({
@@ -277,6 +284,7 @@ const ListItemContainer = ({ heading, items }: ListItemContainerProps) => {
             icon={item.icon}
             title={item.title}
             description={item.description}
+            badge={item.badge}
             size='xs'
             border='none'
             shadow='none'

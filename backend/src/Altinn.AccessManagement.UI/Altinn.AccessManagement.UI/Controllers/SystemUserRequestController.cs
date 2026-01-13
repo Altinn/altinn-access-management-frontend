@@ -75,6 +75,23 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return Ok(req.Value);
         }
+
+        /// <summary>
+        /// Escalate VendorRequest by Id
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("{partyId}/{requestId}/escalate")]
+        public async Task<ActionResult> EscalateSystemUserRequest([FromRoute] int partyId, [FromRoute] Guid requestId, CancellationToken cancellationToken)
+        {
+            Result<bool> req = await _systemUserRequestService.EscalateSystemUserRequest(partyId, requestId, cancellationToken);
+            if (req.IsProblem)
+            {
+                return req.Problem.ToActionResult();
+            }
+
+            return Ok(req.Value);
+        }
         
         /// <summary>
         /// Logout
