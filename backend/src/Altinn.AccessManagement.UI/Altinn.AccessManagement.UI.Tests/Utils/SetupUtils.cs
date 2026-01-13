@@ -502,5 +502,30 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             factory.Server.AllowSynchronousIO = true;
             return factory.CreateClient(opts);
         }
+
+        /// <summary>
+        /// Gets a HttpClient for unittests testing for AltinnCdnController
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for AltinnCdnController tests</param>
+        /// <param name="value">An object to be used in the setup, can be null</param>
+        /// <returns>HttpClient</returns>
+        internal static HttpClient GetTestClient(CustomWebApplicationFactory<ClientController> customFactory)
+        {
+            WebApplicationFactory<ClientController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddSingleton<IClientDelegationClient, ClientClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
+        }
     }
 }
