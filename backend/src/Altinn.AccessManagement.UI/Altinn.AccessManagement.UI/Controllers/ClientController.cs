@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
@@ -47,8 +48,8 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                PaginatedResult<ClientDelegation> clients = await _clientService.GetClients(party, cancellationToken);
-                return Ok(clients.Items);
+                List<ClientDelegation> clients = await _clientService.GetClients(party, cancellationToken);
+                return Ok(clients);
             }
             catch (HttpStatusException ex)
             {
@@ -71,7 +72,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("agents")]
-        public async Task<ActionResult<IEnumerable<ClientDelegation>>> GetAgents([FromQuery] Guid party, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<AgentDelegation>>> GetAgents([FromQuery] Guid party, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -80,8 +81,8 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                PaginatedResult<ClientDelegation> agents = await _clientService.GetAgents(party, cancellationToken);
-                return Ok(agents.Items);
+                List<AgentDelegation> agents = await _clientService.GetAgents(party, cancellationToken);
+                return Ok(agents);
             }
             catch (HttpStatusException ex)
             {

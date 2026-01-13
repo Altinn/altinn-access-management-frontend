@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Common;
@@ -15,16 +16,16 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <param name="party">The party uuid to query for.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>A paginated result of clients.</returns>
-        Task<PaginatedResult<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default);
+        /// <returns>A list of clients.</returns>
+        Task<List<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the agents that can act on behalf of the specified party.
         /// </summary>
         /// <param name="party">The party uuid to query for.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>A paginated result of agents.</returns>
-        Task<PaginatedResult<ClientDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default);
+        /// <returns>A list of agents.</returns>
+        Task<List<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds a new agent for the specified party.

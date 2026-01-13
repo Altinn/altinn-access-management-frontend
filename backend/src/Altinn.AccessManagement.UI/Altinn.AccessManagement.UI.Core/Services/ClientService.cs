@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
@@ -30,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default)
+        public async Task<List<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -44,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<ClientDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
+        public async Task<List<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
         {
             try
             {

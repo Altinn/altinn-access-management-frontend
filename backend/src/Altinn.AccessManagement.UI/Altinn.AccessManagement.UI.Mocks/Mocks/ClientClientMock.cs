@@ -29,7 +29,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<PaginatedResult<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default)
+        public Task<List<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
@@ -46,17 +46,17 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     Guid.Parse("33333333-3333-3333-3333-333333333333"))
             ];
 
-            return Task.FromResult(PaginatedResult.Create(clients, null));
+            return Task.FromResult(clients);
         }
 
         /// <inheritdoc />
-        public Task<PaginatedResult<ClientDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
+        public Task<List<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
-            List<ClientDelegation> agents =
+            List<AgentDelegation> agents =
             [
-                CreateClient(
+                CreateAgent(
                     "Agent Partner AS",
                     "987654321",
                     Guid.Parse("88888888-8888-8888-8888-888888888888"),
@@ -67,7 +67,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     Guid.Parse("66666666-6666-6666-6666-666666666666"))
             ];
 
-            return Task.FromResult(PaginatedResult.Create(agents, null));
+            return Task.FromResult(agents);
         }
 
         /// <inheritdoc />
@@ -160,6 +160,33 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                         ]
                     }
                 ]
+            };
+        }
+
+        private static AgentDelegation CreateAgent(
+            string name,
+            string orgNumber,
+            Guid agentId,
+            Guid roleId,
+            string roleCode,
+            Guid packageId,
+            string packageUrn,
+            Guid areaId)
+        {
+            var client = CreateClient(
+                name,
+                orgNumber,
+                agentId,
+                roleId,
+                roleCode,
+                packageId,
+                packageUrn,
+                areaId);
+
+            return new AgentDelegation
+            {
+                Agent = client.Client,
+                Access = client.Access,
             };
         }
     }

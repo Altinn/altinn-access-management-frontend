@@ -16,6 +16,11 @@ export interface Client {
   access: ClientAccess[];
 }
 
+export interface Agent {
+  agent: Entity;
+  access: ClientAccess[];
+}
+
 export interface AssignmentDto {
   id: string;
   roleId: string;
@@ -41,21 +46,11 @@ export const clientApi = createApi({
       query: () => `clients?party=${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 3,
       providesTags: ['Clients'],
-      transformErrorResponse: (response: {
-        status: string | number;
-      }): { status: string | number; data: string } => {
-        return { status: response.status, data: new Date().toISOString() };
-      },
     }),
-    getAgents: builder.query<Client[], void>({
+    getAgents: builder.query<Agent[], void>({
       query: () => `agents?party=${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 3,
       providesTags: ['Clients'],
-      transformErrorResponse: (response: {
-        status: string | number;
-      }): { status: string | number; data: string } => {
-        return { status: response.status, data: new Date().toISOString() };
-      },
     }),
     addAgent: builder.mutation<AssignmentDto, { to?: string; personInput?: PersonInput }>({
       query: ({ to, personInput }) => ({
@@ -64,11 +59,6 @@ export const clientApi = createApi({
         body: personInput ? JSON.stringify(personInput) : undefined,
       }),
       invalidatesTags: ['Clients'],
-      transformErrorResponse: (response: {
-        status: string | number;
-      }): { status: string | number; data: string } => {
-        return { status: response.status, data: new Date().toISOString() };
-      },
     }),
   }),
 });
