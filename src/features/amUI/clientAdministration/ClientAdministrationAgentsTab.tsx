@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
@@ -19,7 +19,7 @@ export const ClientAdministrationAgentsTab = () => {
   const { t } = useTranslation();
   const { fromParty } = usePartyRepresentation();
   const { data: agents, isLoading: isAgentsLoading, isError: isAgentsError } = useGetAgentsQuery();
-  const [addAgent] = useAddAgentMutation();
+  const [addAgent, { error: addAgentError }] = useAddAgentMutation();
   const {
     data: indirectConnections,
     isLoading: isIndirectLoading,
@@ -59,16 +59,27 @@ export const ClientAdministrationAgentsTab = () => {
   }
 
   return (
-    <AdvancedUserSearch
-      includeSelfAsChild={false}
-      connections={agentConnections}
-      indirectConnections={indirectConnections}
-      isLoading={isAgentsLoading || isIndirectLoading}
-      isActionLoading={isIndirectFetching}
-      AddUserButton={AddAgentButton}
-      onDelegate={(user) => addAgent({ to: user.id })}
-      canDelegate={true}
-      noUsersText={t('client_administration_page.no_agents')}
-    />
+    <>
+      {addAgentError && (
+        <DsAlert
+          role='alert'
+          data-color='danger'
+          data-size='sm'
+        >
+          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+        </DsAlert>
+      )}
+      <AdvancedUserSearch
+        includeSelfAsChild={false}
+        connections={agentConnections}
+        indirectConnections={indirectConnections}
+        isLoading={isAgentsLoading || isIndirectLoading}
+        isActionLoading={isIndirectFetching}
+        AddUserButton={AddAgentButton}
+        onDelegate={(user) => addAgent({ to: user.id })}
+        canDelegate={true}
+        noUsersText={t('client_administration_page.no_agents')}
+      />
+    </>
   );
 };

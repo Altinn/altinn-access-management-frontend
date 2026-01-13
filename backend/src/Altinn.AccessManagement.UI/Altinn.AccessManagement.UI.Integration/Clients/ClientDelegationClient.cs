@@ -58,6 +58,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             PaginatedResult<ClientDelegation> clients =
                 await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<ClientDelegation>>(response, _logger, "ClientDelegationClient.GetClients");
 
+            if (clients?.Items == null)
+            {
+                return new List<ClientDelegation>();
+            }
+
             return clients.Items.ToList();
         }
 
@@ -70,6 +75,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
             PaginatedResult<AgentDelegation> agents =
                 await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<AgentDelegation>>(response, _logger, "ClientDelegationClient.GetAgents");
+
+            if (agents?.Items == null)
+            {
+                return new List<AgentDelegation>();
+            }
 
             return agents.Items.ToList();
         }

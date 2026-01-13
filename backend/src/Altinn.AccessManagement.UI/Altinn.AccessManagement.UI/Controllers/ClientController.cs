@@ -78,6 +78,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             try
             {
                 List<AgentDelegation> agents = await _clientService.GetAgents(party, cancellationToken);
@@ -115,8 +116,10 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     personInput = await HttpContext.Request.ReadFromJsonAsync<PersonInput>();
                 }
-                catch
+                catch (Exception ex)
                 {
+                    _logger.LogWarning(ex, "Failed to read PersonInput in AddAgent for party {Party}", party);
+                    return BadRequest("Failed to read PersonInput.");
                 }
             }
 
@@ -295,7 +298,12 @@ namespace Altinn.AccessManagement.UI.Controllers
                 }
 
                 string responseContent = await response.Content.ReadAsStringAsync();
-                return Ok(responseContent);
+                return new ContentResult
+                {
+                    Content = responseContent,
+                    ContentType = "application/json",
+                    StatusCode = (int)response.StatusCode,
+                };
             }
 
             string errorContent = await response.Content.ReadAsStringAsync();
