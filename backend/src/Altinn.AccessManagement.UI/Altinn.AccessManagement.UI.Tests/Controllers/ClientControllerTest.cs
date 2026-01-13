@@ -1,12 +1,11 @@
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
-using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Moq;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -16,7 +15,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     [Collection("ClientController Tests")]
     public class ClientControllerTest : IClassFixture<CustomWebApplicationFactory<ClientController>>
     {
-        private readonly CustomWebApplicationFactory<ClientController> _factory;
         private readonly string _testDataFolder;
         private readonly HttpClient _client;
 
@@ -26,7 +24,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// <param name="factory">CustomWebApplicationFactory</param>
         public ClientControllerTest(CustomWebApplicationFactory<ClientController> factory)
         {
-            _factory = factory;
             _client = SetupUtils.GetTestClient(factory);
             _testDataFolder = Path.Combine(
                 Path.GetDirectoryName(new Uri(typeof(ClientControllerTest).Assembly.Location).LocalPath),
@@ -47,6 +44,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             return Util.GetMockData<List<AgentDelegation>>(path);
         }
 
+        private void SetAuthHeader()
+        {
+            string token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
         /// <summary>
         /// Test case: GetClients returns the expected list of client delegations.
         /// </summary>
@@ -55,6 +58,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             List<ClientDelegation> expectedResponse = LoadClients();
+            SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/clients?party={party}");
             List<ClientDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<ClientDelegation>>();
@@ -70,22 +74,24 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetClients_InvalidParty_ReturnsBadRequest()
         {
+            SetAuthHeader();
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/clientdelegations/clients?party=not-a-guid");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         /// <summary>
-        /// Test case: GetClients returns problem details when service throws HttpStatusException.
+        /// Test case: GetClients returns internal server error when service throws.
         /// </summary>
         [Fact]
-        public async Task GetClients_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        public async Task GetClients_ServiceThrowsException_ReturnsInternalServerError()
         {
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid party = Guid.Empty;
+            SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/clients?party={party}");
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
 
         /// <summary>
@@ -96,6 +102,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             List<AgentDelegation> expectedResponse = LoadAgents();
+            SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/agents?party={party}");
             List<AgentDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<AgentDelegation>>();
@@ -111,7 +118,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetAgents_ServiceThrowsException_ReturnsInternalServerError()
         {
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid party = Guid.Empty;
+            SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/agents?party={party}");
 
@@ -133,6 +141,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 FromId = party,
                 ToId = to,
             };
+            SetAuthHeader();
 
             HttpResponseMessage response = await _client.PostAsync(
                 $"accessmanagement/api/v1/clientdelegations/agents?party={party}&to={to}",
@@ -152,7 +161,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAgent_MissingToAndBody_ReturnsBadRequest()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            var clientServiceMock = new Mock<IClientService>(MockBehavior.Strict);
+            SetAuthHeader();
 
             HttpResponseMessage response = await _client.PostAsync(
                 $"accessmanagement/api/v1/clientdelegations/agents?party={party}",
@@ -168,6 +177,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAgent_InvalidPersonInput_ReturnsBadRequest()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            SetAuthHeader();
 
             const string payload = "{\"personIdentifier\":\"123\"}";
             HttpContent content = new StringContent(payload, Encoding.UTF8, "application/json");
@@ -179,19 +189,20 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: AddAgent returns problem details when service throws HttpStatusException.
+        /// Test case: AddAgent returns internal server error when service throws.
         /// </summary>
         [Fact]
-        public async Task AddAgent_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        public async Task AddAgent_ServiceThrowsException_ReturnsInternalServerError()
         {
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid party = Guid.Empty;
             Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
 
             HttpResponseMessage response = await _client.PostAsync(
                 $"accessmanagement/api/v1/clientdelegations/agents?party={party}&to={to}",
                 null);
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
     }
 }

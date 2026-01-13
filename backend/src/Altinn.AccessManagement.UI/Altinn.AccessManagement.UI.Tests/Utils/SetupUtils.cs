@@ -504,10 +504,9 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Gets a HttpClient for unittests testing for AltinnCdnController
+        /// Gets a HttpClient for unittests testing for ClientController
         /// </summary>
-        /// <param name="customFactory">Web app factory to configure test services for AltinnCdnController tests</param>
-        /// <param name="value">An object to be used in the setup, can be null</param>
+        /// <param name="customFactory">Web app factory to configure test services for ClientController tests</param>
         /// <returns>HttpClient</returns>
         internal static HttpClient GetTestClient(CustomWebApplicationFactory<ClientController> customFactory)
         {
@@ -515,7 +514,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddSingleton<IClientDelegationClient, ClientClientMock>();
+                    services.AddTransient<IClientDelegationClient, ClientClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
