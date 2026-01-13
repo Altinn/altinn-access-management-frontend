@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { DsButton, DsDialog, DsHeading, DsTabs } from '@altinn/altinn-components';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { PlusIcon } from '@navikt/aksel-icons';
 
 import { NewPersonContent, personInput } from './NewPersonContent';
@@ -17,6 +17,7 @@ interface AddAgentButtonProps {
 
 export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ isLarge, onComplete }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -64,8 +65,8 @@ const AddAgentModal: React.FC<AddAgentModalProps> = ({ modalRef, onComplete }) =
           children: null,
         };
         onComplete(newUser);
-        modalRef.current?.close();
       }
+      modalRef.current?.close();
     } catch {
       // Error handling is done in useEffect
     }
