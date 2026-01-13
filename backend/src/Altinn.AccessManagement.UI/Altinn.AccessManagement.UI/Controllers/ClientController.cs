@@ -78,7 +78,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             try
             {
                 List<AgentDelegation> agents = await _clientService.GetAgents(party, cancellationToken);
