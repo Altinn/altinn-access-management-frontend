@@ -122,58 +122,5 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _logger.LogError("AccessManagement.UI // ClientDelegationClient.RemoveAgent // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
         }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> GetDelegatedAccessPackagesToAgentsViaParty(Guid party, Guid to, CancellationToken cancellationToken = default)
-        {
-            string endpointUrl = $"enduser/clientdelegations/agents/accesspackages?party={party}&to={to}";
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-            return await _client.GetAsync(token, endpointUrl);
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> GetDelegatedAccessPackagesFromClientsViaParty(Guid party, Guid from, CancellationToken cancellationToken = default)
-        {
-            string endpointUrl = $"enduser/clientdelegations/clients/accesspackages?party={party}&from={from}";
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-            return await _client.GetAsync(token, endpointUrl);
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> AddAgentAccessPackage(Guid party, Guid from, Guid to, Guid? packageId, string package, CancellationToken cancellationToken = default)
-        {
-            string endpointUrl = BuildAgentAccessPackageUrl(party, from, to, packageId, package);
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-            return await _client.PostAsync(token, endpointUrl, null);
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> DeleteAgentAccessPackage(Guid party, Guid from, Guid to, Guid? packageId, string package, CancellationToken cancellationToken = default)
-        {
-            string endpointUrl = BuildAgentAccessPackageUrl(party, from, to, packageId, package);
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-            return await _client.DeleteAsync(token, endpointUrl);
-        }
-
-        private static string BuildAgentAccessPackageUrl(Guid party, Guid from, Guid to, Guid? packageId, string package)
-        {
-            var endpointBuilder = new StringBuilder($"enduser/clientdelegations/agents/accesspackages?party={party}&from={from}&to={to}");
-
-            if (packageId.HasValue)
-            {
-                endpointBuilder.Append($"&packageId={packageId}");
-            }
-
-            if (!string.IsNullOrWhiteSpace(package))
-            {
-                endpointBuilder.Append($"&package={Uri.EscapeDataString(package)}");
-            }
-
-            return endpointBuilder.ToString();
-        }
     }
 }

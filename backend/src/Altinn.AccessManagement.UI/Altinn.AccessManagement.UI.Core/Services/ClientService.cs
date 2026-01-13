@@ -1,11 +1,8 @@
-using System.Collections.Generic;
-using System.Net.Http;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
-using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Microsoft.Extensions.Logging;
+
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -33,113 +30,25 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                return await _clientDelegationClient.GetClients(party, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed fetching clients for {Party}", party);
-                throw;
-            }
+            return await _clientDelegationClient.GetClients(party, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task<List<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                return await _clientDelegationClient.GetAgents(party, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed fetching agents for {Party}", party);
-                throw;
-            }
+            return await _clientDelegationClient.GetAgents(party, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task<AssignmentDto> AddAgent(Guid party, Guid? to, PersonInput personInput = null, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                return await _clientDelegationClient.AddAgent(party, to, personInput, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed adding agent for {Party}", party);
-                throw;
-            }
+            return await _clientDelegationClient.AddAgent(party, to, personInput, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task RemoveAgent(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                await _clientDelegationClient.RemoveAgent(party, to, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed removing agent for {Party}", party);
-                throw;
-            }
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> GetDelegatedAccessPackagesToAgentsViaParty(Guid party, Guid to, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                return await _clientDelegationClient.GetDelegatedAccessPackagesToAgentsViaParty(party, to, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed fetching agent access packages for {Party}", party);
-                throw;
-            }
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> GetDelegatedAccessPackagesFromClientsViaParty(Guid party, Guid from, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                return await _clientDelegationClient.GetDelegatedAccessPackagesFromClientsViaParty(party, from, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed fetching client access packages for {Party}", party);
-                throw;
-            }
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> AddAgentAccessPackage(Guid party, Guid from, Guid to, Guid? packageId, string package, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                return await _clientDelegationClient.AddAgentAccessPackage(party, from, to, packageId, package, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed adding agent access package for {Party}", party);
-                throw;
-            }
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> DeleteAgentAccessPackage(Guid party, Guid from, Guid to, Guid? packageId, string package, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                return await _clientDelegationClient.DeleteAgentAccessPackage(party, from, to, packageId, package, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed deleting agent access package for {Party}", party);
-                throw;
-            }
+            return await _clientDelegationClient.RemoveAgent(party, to, cancellationToken);
         }
     }
 }

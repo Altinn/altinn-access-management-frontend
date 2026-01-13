@@ -6,6 +6,8 @@ using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using Microsoft.AspNetCore.Http;
+
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -17,6 +19,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     {
         private readonly string _testDataFolder;
         private readonly HttpClient _client;
+        private readonly CustomWebApplicationFactory<ClientController> _factory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientControllerTest"/> class.
@@ -24,6 +27,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// <param name="factory">CustomWebApplicationFactory</param>
         public ClientControllerTest(CustomWebApplicationFactory<ClientController> factory)
         {
+            _factory = factory;
             _client = SetupUtils.GetTestClient(factory);
             _testDataFolder = Path.Combine(
                 Path.GetDirectoryName(new Uri(typeof(ClientControllerTest).Assembly.Location).LocalPath),
@@ -44,10 +48,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             return Util.GetMockData<List<AgentDelegation>>(path);
         }
 
-        private void SetAuthHeader()
+        private void SetAuthHeader(HttpClient client = null)
         {
             string token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            (client ?? _client).DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
         /// <summary>
@@ -203,6 +207,22 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 null);
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveAgent returns no content for valid inputs.
+        /// </summary>
+        [Fact]
+        public async Task RemoveAgent_ReturnsNoContent()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party={party}&to={to}");
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
     }
 }

@@ -44,25 +44,5 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="to">The agent party uuid.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         Task RemoveAgent(Guid party, Guid to, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Gets delegated access packages to agents via a party.
-        /// </summary>
-        Task<HttpResponseMessage> GetDelegatedAccessPackagesToAgentsViaParty(Guid party, Guid to, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Gets delegated access packages from clients via a party.
-        /// </summary>
-        Task<HttpResponseMessage> GetDelegatedAccessPackagesFromClientsViaParty(Guid party, Guid from, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Adds an agent access package.
-        /// </summary>
-        Task<HttpResponseMessage> AddAgentAccessPackage(Guid party, Guid from, Guid to, Guid? packageId, string package, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Deletes an agent access package.
-        /// </summary>
-        Task<HttpResponseMessage> DeleteAgentAccessPackage(Guid party, Guid from, Guid to, Guid? packageId, string package, CancellationToken cancellationToken = default);
     }
 }
