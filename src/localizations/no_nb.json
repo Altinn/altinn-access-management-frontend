@@ -845,6 +845,8 @@
     "process_request": "Behandle forespørsel",
     "request_consent": "Ber om samtykke",
     "request_poa": "Ber om fullmakt",
-    "error_loading_requests": "Kunne ikke laste mottatte forespørsler"
+    "request_systemuser": "Ber om å opprette systembruker",
+    "error_loading_requests": "Kunne ikke laste mottatte forespørsler",
+    "error_partial_loading_requests": "Kunne ikke laste alle mottatte forespørsler"
   }
 }

@@ -848,6 +848,8 @@
     "process_request": "Process request",
     "request_consent": "Requests consent",
     "request_poa": "Requests power of attorney",
-    "error_loading_requests": "Could not load received requests"
+    "request_systemuser": "Requests to create system user",
+    "error_loading_requests": "Could not load received requests",
+    "error_partial_loading_requests": "Could not load all received requests"
   }
 }

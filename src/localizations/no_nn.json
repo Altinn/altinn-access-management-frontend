@@ -845,6 +845,8 @@
     "process_request": "Behandle førespurnad",
     "request_consent": "Ber om samtykke",
     "request_poa": "Ber om fullmakt",
-    "error_loading_requests": "Kunne ikkje laste mottatte førespurnader"
+    "request_systemuser": "Ber om å opprette systembruker",
+    "error_loading_requests": "Kunne ikkje laste mottatte førespurnader",
+    "error_partial_loading_requests": "Kunne ikkje laste alle mottatte førespurnader"
   }
 }

@@ -7,3 +7,7 @@
   display: flex;
   gap: var(--ds-size-2);
 }
+
+.errorWrapper {
+  margin-bottom: var(--ds-size-4);
+}
