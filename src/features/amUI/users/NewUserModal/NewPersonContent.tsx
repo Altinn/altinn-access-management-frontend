@@ -14,7 +14,7 @@ export const NewPersonContent = ({
   isLoading,
 }: {
   errorDetails?: { status: string; time: string } | null;
-  addPerson?: (personInput: personInput) => void;
+  addPerson: (personInput: personInput) => void;
   isLoading?: boolean;
 }) => {
   const { t } = useTranslation();
@@ -26,9 +26,7 @@ export const NewPersonContent = ({
 
   const navigateIfValidPerson = () => {
     const personInput = { personIdentifier: ssn, lastName: lastName };
-    if (addPerson) {
-      addPerson(personInput);
-    }
+    addPerson(personInput);
   };
 
   if (!shouldDisplayPrivDelegation) {

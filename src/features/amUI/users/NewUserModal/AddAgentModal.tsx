@@ -54,17 +54,21 @@ const AddAgentModal: React.FC<AddAgentModalProps> = ({ modalRef, onComplete }) =
 
   const handleAddAgent = async (personInput: personInput) => {
     setErrorDetail(null);
-    const assignment = await addAgent({ personInput }).unwrap();
-    if (onComplete) {
-      const newUser: User = {
-        id: assignment.toId || assignment.id,
-        name: personInput.lastName,
-        type: 'person',
-        children: null,
-      };
-      onComplete(newUser);
+    try {
+      const assignment = await addAgent({ personInput }).unwrap();
+      if (onComplete) {
+        const newUser: User = {
+          id: assignment.toId || assignment.id,
+          name: personInput.lastName,
+          type: 'person',
+          children: null,
+        };
+        onComplete(newUser);
+        modalRef.current?.close();
+      }
+    } catch {
+      // Error handling is done in useEffect
     }
-    modalRef.current?.close();
   };
 
   return (
