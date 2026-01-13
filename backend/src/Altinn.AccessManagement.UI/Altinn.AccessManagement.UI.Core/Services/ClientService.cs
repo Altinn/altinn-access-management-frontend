@@ -2,7 +2,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-
+using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task RemoveAgent(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
-            return await _clientDelegationClient.RemoveAgent(party, to, cancellationToken);
+            await _clientDelegationClient.RemoveAgent(party, to, cancellationToken);
         }
     }
 }
