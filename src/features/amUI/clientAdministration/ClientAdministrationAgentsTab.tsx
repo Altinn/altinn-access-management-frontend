@@ -26,6 +26,14 @@ export const ClientAdministrationAgentsTab = () => {
     { skip: !fromParty?.partyUuid },
   );
 
+  const filteredIndirectConnections = useMemo<Connection[]>(
+    () =>
+      indirectConnections?.filter((connection) => {
+        return connection.party.type === 'Person';
+      }) ?? [],
+    [indirectConnections],
+  );
+
   const agentConnections = useMemo<Connection[]>(
     () =>
       agents?.map((agent) => ({
@@ -66,13 +74,14 @@ export const ClientAdministrationAgentsTab = () => {
       <AdvancedUserSearch
         includeSelfAsChild={false}
         connections={agentConnections}
-        indirectConnections={indirectConnections}
+        indirectConnections={filteredIndirectConnections}
         isLoading={isAgentsLoading || isIndirectLoading}
         isActionLoading={isIndirectFetching}
         AddUserButton={AddAgentButton}
         onDelegate={(user) => addAgent({ to: user.id })}
         canDelegate={true}
         noUsersText={t('client_administration_page.no_agents')}
+        searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
       />
     </>
   );

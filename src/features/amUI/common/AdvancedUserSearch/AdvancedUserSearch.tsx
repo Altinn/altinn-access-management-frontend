@@ -24,6 +24,7 @@ export interface AdvancedUserSearchProps {
   canDelegate?: boolean;
   AddUserButton?: React.ComponentType<{ isLarge?: boolean; onComplete?: (user: User) => void }>;
   noUsersText?: string;
+  searchPlaceholder?: string;
 }
 
 const filterAvailableUserTypes = (items?: Connection[]) =>
@@ -44,6 +45,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   canDelegate = true,
   AddUserButton = NewUserButton,
   noUsersText,
+  searchPlaceholder,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
@@ -95,7 +97,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
         <DsSearch className={classes.searchBar}>
           <DsSearch.Input
             aria-label={t('common.search')}
-            placeholder={t('advanced_user_search.user_search_placeholder')}
+            placeholder={searchPlaceholder ?? t('advanced_user_search.user_search_placeholder')}
             value={query}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)}
           />

@@ -550,6 +550,7 @@
     "clients_tab_title": "Klientar",
     "agents_tab_title": "Brukarar",
     "add_agent_button": "Legg til agent",
+    "agent_search_placeholder": "Søk etter person",
     "no_clients": "Organisasjonen har ingen klientar",
     "no_agents": "Det er ingen brukarar registrert som agentar for denne organisasjonen"
   },

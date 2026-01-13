@@ -45,6 +45,7 @@ interface AddAgentModalProps {
 const AddAgentModal: React.FC<AddAgentModalProps> = ({ modalRef, onComplete }) => {
   const [errorDetail, setErrorDetail] = useState<{ status: string; time: string } | null>(null);
   const [addAgent, { isLoading, error }] = useAddAgentMutation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (error) {
