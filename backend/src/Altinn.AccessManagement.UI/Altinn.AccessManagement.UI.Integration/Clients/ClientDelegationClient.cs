@@ -71,13 +71,21 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             string endpointUrl = $"enduser/clientdelegations/agents?party={party}" + (to != null ? $"&to={to}" : string.Empty);
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            
-            HttpContent requestBody = personInput != null
-                ? new StringContent(JsonSerializer.Serialize(personInput, _serializerOptions), Encoding.UTF8, "application/json")
-                : new StringContent(string.Empty, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<AssignmentDto>(response, _logger, "ClientDelegationClient.AddAgent");
+            StringContent requestBody = personInput != null ? new StringContent(JsonSerializer.Serialize(personInput, _serializerOptions), Encoding.UTF8, "application/json") : null;
+
+            var httpResponse = await _client.PostAsync(token, endpointUrl, requestBody);
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Unexpected http response. Status code: {httpResponse.StatusCode}, Reason: {httpResponse.ReasonPhrase}");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
+            }
+
+            AssignmentDto response = JsonSerializer.Deserialize<AssignmentDto>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return response;
         }
 
         /// <inheritdoc />
