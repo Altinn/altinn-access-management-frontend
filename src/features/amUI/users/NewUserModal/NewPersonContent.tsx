@@ -26,7 +26,9 @@ export const NewPersonContent = ({
 
   const navigateIfValidPerson = () => {
     const personInput = { personIdentifier: ssn, lastName: lastName };
-    addPerson && addPerson(personInput);
+    if (addPerson) {
+      addPerson(personInput);
+    }
   };
 
   if (!shouldDisplayPrivDelegation) {

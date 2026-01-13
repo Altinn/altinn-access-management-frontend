@@ -11,19 +11,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// </summary>
     public class ClientService : IClientService
     {
-        private readonly ILogger _logger;
         private readonly IClientDelegationClient _clientDelegationClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientService"/> class.
         /// </summary>
-        /// <param name="logger">Logger instance.</param>
         /// <param name="clientDelegationClient">Client delegation client.</param>
         public ClientService(
-            ILogger<ClientService> logger,
             IClientDelegationClient clientDelegationClient)
         {
-            _logger = logger;
             _clientDelegationClient = clientDelegationClient;
         }
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
@@ -7,13 +7,6 @@ import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSea
 import { useAddAgentMutation, useGetAgentsQuery, type Agent } from '@/rtk/features/clientApi';
 import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-
-type AgentEntity = Agent['agent'];
-
-const stripParentAndChildren = (entity: AgentEntity): Omit<AgentEntity, 'parent' | 'children'> => {
-  const { parent, children, ...rest } = entity;
-  return rest;
-};
 
 export const ClientAdministrationAgentsTab = () => {
   const { t } = useTranslation();
@@ -37,8 +30,9 @@ export const ClientAdministrationAgentsTab = () => {
     () =>
       agents?.map((agent) => ({
         party: {
-          ...stripParentAndChildren(agent.agent),
+          ...agent.agent,
           children: null,
+          parent: null,
           roles: [],
         },
         roles: [],

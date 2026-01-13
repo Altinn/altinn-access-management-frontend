@@ -67,34 +67,5 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             Util.ThrowExceptionIfTriggerParty(party.ToString());
             return Task.CompletedTask;
         }
-
-        /// <inheritdoc />
-        public Task<HttpResponseMessage> GetDelegatedAccessPackagesToAgentsViaParty(Guid party, Guid to, CancellationToken cancellationToken = default)
-        {
-            Util.ThrowExceptionIfTriggerParty(party.ToString());
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotImplemented));
-        }
-
-        /// <inheritdoc />
-        public Task<HttpResponseMessage> GetDelegatedAccessPackagesFromClientsViaParty(Guid party, Guid from, CancellationToken cancellationToken = default)
-        {
-            Util.ThrowExceptionIfTriggerParty(party.ToString());
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotImplemented));
-        }
-
-        /// <inheritdoc />
-        public Task<HttpResponseMessage> AddAgentAccessPackage(Guid party, Guid from, Guid to, Guid? packageId, string package, CancellationToken cancellationToken = default)
-        {
-            Util.ThrowExceptionIfTriggerParty(party.ToString());
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotImplemented));
-        }
-
-        /// <inheritdoc />
-        public Task<HttpResponseMessage> DeleteAgentAccessPackage(Guid party, Guid from, Guid to, Guid? packageId, string package, CancellationToken cancellationToken = default)
-        {
-            Util.ThrowExceptionIfTriggerParty(party.ToString());
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotImplemented));
-        }
-
     }
 }

@@ -34,7 +34,7 @@ export const NewOrgContent = ({
       {isError && (
         <NewUserAlert
           userType='org'
-          error={isGetOrgError ? createErrorDetails(getOrgError) : errorDetails && errorDetails}
+          error={isGetOrgError ? createErrorDetails(getOrgError) : errorDetails}
         />
       )}
       <TextField
