@@ -28,6 +28,8 @@ export interface AdvancedUserSearchProps {
   noUsersText?: string;
   searchPlaceholder?: string;
   addUserButtonLabel?: string;
+  directConnectionsHeading?: string;
+  indirectConnectionsHeading?: string;
 }
 
 const filterAvailableUserTypes = (items?: Connection[]) =>
@@ -52,6 +54,8 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   noUsersText,
   searchPlaceholder,
   addUserButtonLabel,
+  directConnectionsHeading,
+  indirectConnectionsHeading,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
@@ -129,8 +133,10 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
                 })}
             </DsParagraph>
           )}
-          {showDirectNoResults && (
-            <h3 className={classes.subHeader}>{t('advanced_user_search.direct_connections')}</h3>
+          {isQuery && (
+            <h3 className={classes.subHeader}>
+              {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
+            </h3>
           )}
           <ConnectionsList
             users={users as ExtendedUser[]}
@@ -150,7 +156,9 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 
         {showIndirectList && (
           <>
-            <h3 className={classes.subHeader}>{t('advanced_user_search.indirect_connections')}</h3>
+            <h3 className={classes.subHeader}>
+              {indirectConnectionsHeading ?? t('advanced_user_search.indirect_connections')}
+            </h3>
             <ConnectionsList
               users={indirectUsers as ExtendedUser[]}
               hasNextPage={!!hasNextIndirectPage}

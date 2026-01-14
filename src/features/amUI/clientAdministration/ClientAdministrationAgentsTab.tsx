@@ -29,7 +29,7 @@ export const ClientAdministrationAgentsTab = () => {
   const filteredIndirectConnections = useMemo<Connection[]>(
     () =>
       indirectConnections?.filter((connection) => {
-        return connection.party.type === 'Person' || true;
+        return connection.party.type === 'Person';
       }) ?? [],
     [indirectConnections],
   );
@@ -86,6 +86,8 @@ export const ClientAdministrationAgentsTab = () => {
         canDelegate={true}
         noUsersText={t('client_administration_page.no_agents')}
         searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+        directConnectionsHeading={t('client_administration_page.direct_connections_heading')}
+        indirectConnectionsHeading={t('client_administration_page.indirect_connections_heading')}
       />
     </>
   );
