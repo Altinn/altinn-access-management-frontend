@@ -7,6 +7,7 @@ import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSea
 import { useAddAgentMutation, useGetAgentsQuery, type Agent } from '@/rtk/features/clientApi';
 import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import classes from './ClientAdministrationAgentsTab.module.css';
 
 export const ClientAdministrationAgentsTab = () => {
   const { t } = useTranslation();
@@ -61,7 +62,7 @@ export const ClientAdministrationAgentsTab = () => {
   }
 
   return (
-    <>
+    <div className={classes.agentTabContainer}>
       {addAgentError && (
         <DsAlert
           role='alert'
@@ -89,6 +90,6 @@ export const ClientAdministrationAgentsTab = () => {
         directConnectionsHeading={t('client_administration_page.direct_connections_heading')}
         indirectConnectionsHeading={t('client_administration_page.indirect_connections_heading')}
       />
-    </>
+    </div>
   );
 };
