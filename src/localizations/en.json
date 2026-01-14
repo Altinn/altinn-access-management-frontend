@@ -619,7 +619,7 @@
     "request_rejected": "This request is already rejected",
     "request_expired": "This request has expired",
     "escalate_title": "You lack required authorization",
-    "escalate_description": "To create a system access you must be an Access Manager. Do you want to forward the request to the Access Manager in your organization?",
+    "escalate_description": "You do not have sufficient powers of attorney to approve the request. Do you want to forward the request to the Access Manager in your organization?",
     "escalate_confirm_button": "Yes, forward request",
     "escalate_cancel_button": "Close and log out",
     "escalate_error": "Could not forward the request",

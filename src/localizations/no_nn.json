@@ -616,7 +616,7 @@
     "request_rejected": "Denne førespurnaden er allereie avvist",
     "request_expired": "Denne førespurnaden har gått ut",
     "escalate_title": "Du manglar nødvendig fullmakt",
-    "escalate_description": "For å opprette ein systemtilgang må du vere Tilgangsstyrar. Vil du senda førespurnaden vidare til Tilgangsstyraren i verksemda di?",
+    "escalate_description": "Du har ikkje tilstrekkelige fullmakter til å godkjenne førespurnaden. Vil du senda førespurnaden vidare til Tilgangsstyraren i verksemda di?",
     "escalate_confirm_button": "Ja, send vidare",
     "escalate_cancel_button": "Lukk og logg ut",
     "escalate_error": "Kunne ikkje senda førespurnaden vidare",
