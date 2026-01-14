@@ -98,7 +98,9 @@ const AddAgentModal: React.FC<AddAgentModalProps> = ({ modalRef, onComplete }) =
         data-size='sm'
       >
         <DsTabs.List>
-          <DsTabs.Tab value='user'>{t('client_administration_page.agents_tab_title')}</DsTabs.Tab>
+          <DsTabs.Tab value='user'>
+            {t('client_administration_page.add_agentModal_agent_tab_title')}
+          </DsTabs.Tab>
         </DsTabs.List>
         <DsTabs.Panel value='user'>
           <NewPersonContent

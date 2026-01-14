@@ -29,7 +29,7 @@ export const ClientAdministrationAgentsTab = () => {
   const filteredIndirectConnections = useMemo<Connection[]>(
     () =>
       indirectConnections?.filter((connection) => {
-        return connection.party.type === 'Person';
+        return connection.party.type === 'Person' || true;
       }) ?? [],
     [indirectConnections],
   );
@@ -73,12 +73,16 @@ export const ClientAdministrationAgentsTab = () => {
       )}
       <AdvancedUserSearch
         includeSelfAsChild={false}
+        includeSelfAsChildOnIndirect={false}
         connections={agentConnections}
         indirectConnections={filteredIndirectConnections}
         isLoading={isAgentsLoading || isIndirectLoading}
         isActionLoading={isIndirectFetching}
         AddUserButton={AddAgentButton}
-        onDelegate={(user) => addAgent({ to: user.id })}
+        addUserButtonLabel={t('client_administration_page.add_agent_button_short')}
+        onDelegate={(user) => {
+          addAgent({ to: user.id });
+        }}
         canDelegate={true}
         noUsersText={t('client_administration_page.no_agents')}
         searchPlaceholder={t('client_administration_page.agent_search_placeholder')}

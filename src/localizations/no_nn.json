@@ -549,7 +549,9 @@
     "page_heading": "Klientadministrasjon",
     "clients_tab_title": "Klientar",
     "agents_tab_title": "Brukarar",
-    "add_agent_button": "Legg til agent",
+    "add_agent_button": "Legg til brukar",
+    "add_agent_button_short": "Legg til",
+    "add_agentModal_agent_tab_title": "Person",
     "agent_search_placeholder": "Søk etter person",
     "no_clients": "Organisasjonen har ingen klientar",
     "no_agents": "Det er ingen brukarar registrert som agentar for denne organisasjonen"

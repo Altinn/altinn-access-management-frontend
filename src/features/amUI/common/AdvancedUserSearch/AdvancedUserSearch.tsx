@@ -15,9 +15,11 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 
 export interface AdvancedUserSearchProps {
   includeSelfAsChild: boolean;
+  includeSelfAsChildOnIndirect?: boolean;
   connections?: Connection[];
   indirectConnections?: Connection[];
   onDelegate?: (user: User) => void;
+  onAddNewUser?: (user: User) => void;
   onRevoke?: (user: User) => void;
   isLoading?: boolean;
   isActionLoading?: boolean;
@@ -25,6 +27,7 @@ export interface AdvancedUserSearchProps {
   AddUserButton?: React.ComponentType<{ isLarge?: boolean; onComplete?: (user: User) => void }>;
   noUsersText?: string;
   searchPlaceholder?: string;
+  addUserButtonLabel?: string;
 }
 
 const filterAvailableUserTypes = (items?: Connection[]) =>
@@ -36,9 +39,11 @@ const filterAvailableUserTypes = (items?: Connection[]) =>
 
 export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   includeSelfAsChild,
+  includeSelfAsChildOnIndirect = true,
   connections,
   indirectConnections,
   onDelegate,
+  onAddNewUser,
   onRevoke,
   isLoading = false,
   isActionLoading = false,
@@ -46,6 +51,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   AddUserButton = NewUserButton,
   noUsersText,
   searchPlaceholder,
+  addUserButtonLabel,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
@@ -76,9 +82,9 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const showEmptyState = !directHasResults && !indirectHasResults && hasDirectConnections;
 
   const handleAddNewUser = async (user: User) => {
-    if (onDelegate) {
+    if (onAddNewUser) {
       if (user?.id && user?.name) {
-        onDelegate(user);
+        onAddNewUser(user);
       }
     }
   };
@@ -152,6 +158,8 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
               availableAction={DelegationAction.DELEGATE}
               onDelegate={canDelegate ? onDelegate : undefined}
               isActionLoading={isActionLoading}
+              includeSelfAsChild={includeSelfAsChildOnIndirect}
+              delegateLabel={addUserButtonLabel}
             />
           </>
         )}
