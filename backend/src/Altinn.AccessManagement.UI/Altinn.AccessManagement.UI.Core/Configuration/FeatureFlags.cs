@@ -75,5 +75,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to display sub-connections feature
         /// </summary>
         public bool DisplaySubConnections { get; set; }
+
+        /// <summary>
+        /// Whether to show the button to add all customers for agent system user
+        /// </summary>
+        public bool AddAllSystemuserCustomers { get; set; }
     }
 }

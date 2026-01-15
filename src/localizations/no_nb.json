@@ -671,13 +671,19 @@
     "edit_customers": "Legg til eller fjern kunder",
     "customer_search": "Søk etter kunde",
     "hide_assigned_customers": "Skjul kunder som er lagt til",
+    "add_all_customers": "Legg til alle kunder",
     "no_customers_warning": "Det finnes ingen kunder enda. Kundene må gi fullmakt til tilgangspakkene som kreves av systemtilgangen til {{companyName}}.",
     "remove_from_system_user": "Fjern fra systemtilgang",
     "remove_from_system_user_aria": "Fjern {{customerName}} fra systemtilgang",
     "add_to_system_user": "Legg til i systemtilgang",
     "add_to_system_user_aria": "Legg til {{customerName}} i systemtilgang",
     "add_system_user_error": "Kunne ikke legge til kunde",
-    "remove_system_user_error": "Kunne ikke fjerne kunde"
+    "remove_system_user_error": "Kunne ikke fjerne kunde",
+    "add_all_customers_success": "Alle kunder er lagt til.",
+    "add_all_customers_partial": "Kun {{successCount}} av {{totalCount}} kunder ble lagt til.",
+    "add_all_customers_failed_list": "Følgende kunder kunne ikke legges til:",
+    "add_all_customers_in_progress_warning": "Ikke lukk denne nettsiden før alle kundene er lagt til.",
+    "add_all_customers_progress": "Legger til kunde {{progress}} av {{totalCount}}"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",
