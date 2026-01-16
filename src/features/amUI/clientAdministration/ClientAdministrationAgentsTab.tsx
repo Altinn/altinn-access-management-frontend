@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
@@ -11,9 +11,14 @@ import classes from './ClientAdministrationAgentsTab.module.css';
 
 export const ClientAdministrationAgentsTab = () => {
   const { t } = useTranslation();
+  const { openSnackbar } = useSnackbar();
   const { fromParty } = usePartyRepresentation();
-  const { data: agents, isLoading: isAgentsLoading, isError: isAgentsError } = useGetAgentsQuery();
-  const [addAgent, { error: addAgentError }] = useAddAgentMutation();
+  const {
+    data: agents,
+    isLoading: isAgentsLoading,
+    isError: isGetAgentsError,
+  } = useGetAgentsQuery();
+  const [addAgent] = useAddAgentMutation();
   const {
     data: indirectConnections,
     isLoading: isIndirectLoading,
@@ -50,7 +55,26 @@ export const ClientAdministrationAgentsTab = () => {
     [agents],
   );
 
-  if (isAgentsError) {
+  const handleAddAgent = (userId: string) => {
+    console.log('userId: ', userId);
+    addAgent({ to: userId })
+      .unwrap()
+      .then(() => {
+        openSnackbar({
+          message: t('client_administration_page.add_agent_success_snackbar'),
+          color: 'success',
+        });
+      })
+      .catch(() => {
+        openSnackbar({
+          message: t('client_administration_page.add_agent_error'),
+          color: 'danger',
+          duration: SnackbarDuration.infinite,
+        });
+      });
+  };
+
+  if (isGetAgentsError) {
     return (
       <DsAlert
         role='alert'
@@ -63,15 +87,6 @@ export const ClientAdministrationAgentsTab = () => {
 
   return (
     <div className={classes.agentTabContainer}>
-      {addAgentError && (
-        <DsAlert
-          role='alert'
-          data-color='danger'
-          data-size='sm'
-        >
-          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-        </DsAlert>
-      )}
       <AdvancedUserSearch
         includeSelfAsChild={false}
         includeSelfAsChildOnIndirect={false}
@@ -82,7 +97,7 @@ export const ClientAdministrationAgentsTab = () => {
         AddUserButton={AddAgentButton}
         addUserButtonLabel={t('client_administration_page.add_agent_button_short')}
         onDelegate={(user) => {
-          addAgent({ to: user.id });
+          handleAddAgent(user.id);
         }}
         canDelegate={true}
         noUsersText={t('client_administration_page.no_agents')}
