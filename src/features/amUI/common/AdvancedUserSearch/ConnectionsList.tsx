@@ -18,6 +18,7 @@ export interface ConnectionsListProps {
   onDelegate?: (user: ExtendedUser) => void;
   isActionLoading?: boolean;
   includeSelfAsChild?: boolean;
+  delegateLabel?: string;
 }
 
 export const ConnectionsList: React.FC<ConnectionsListProps> = ({
@@ -29,6 +30,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
   onDelegate,
   isActionLoading = false,
   includeSelfAsChild = true,
+  delegateLabel,
 }) => {
   const { t } = useTranslation();
 
@@ -52,6 +54,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
                 availableAction={availableAction}
                 onRevoke={onRevoke ? () => onRevoke(user as ExtendedUser) : undefined}
                 onDelegate={onDelegate ? () => onDelegate(user as ExtendedUser) : undefined}
+                delegateLabel={delegateLabel}
               />
             )}
           />

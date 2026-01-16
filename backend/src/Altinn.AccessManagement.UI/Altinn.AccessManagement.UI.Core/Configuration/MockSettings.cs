@@ -36,6 +36,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool RightHolder { get; set; }
 
         /// <summary>
+        /// Set to mock ClientDelegationClient during runtime
+        /// </summary>
+        public bool ClientDelegation { get; set; }
+
+        /// <summary>
         /// Set to mock ProfileClient during runtime
         /// </summary>
         public bool Profile { get; set; }
@@ -93,7 +98,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// <param name="value">The boolean value to which all memebers will be set</param>
         public MockSettings(bool value)
         {
-            AccessManagement = AccessManagement_V0 = AccessPackage = Profile = Register = ResourceRegistry = KeyVault = value;
+            AccessManagement = AccessManagement_V0 = AccessPackage = Profile = Register = ResourceRegistry = KeyVault = ClientDelegation = value;
         }
     }
 }
