@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
@@ -84,6 +85,30 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             return userProfile;
+        }
+
+        /// <inheritdoc/>
+        public async Task<ProfileSettingPreference> PatchCurrentUserProfileSetting(ProfileSettingPreference settingsChange)
+        {
+            try
+            {
+                string endpointUrl = $"users/current/profilesettings";
+                string token = AltinnCore.Authentication.Utils.JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                StringContent requestBody = new StringContent(JsonSerializer.Serialize(settingsChange, _serializerOptions), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _client.PatchAsync(token, endpointUrl, requestBody, accessToken);
+
+                var resString = await response.Content.ReadAsStringAsync();
+                ProfileSettingPreference newSetting = await ClientUtils.DeserializeIfSuccessfullStatusCode<ProfileSettingPreference>(response);
+                return newSetting;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ProfileClient // PostNewOrganisationNotificationAddress // Exception");
+                throw;
+            }
         }
 
         /// <inheritdoc/>

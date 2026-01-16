@@ -1,7 +1,9 @@
-﻿namespace Altinn.AccessManagement.UI.Core.Models.Profile
+﻿#nullable enable
+namespace Altinn.AccessManagement.UI.Core.Models.Profile
 {
     /// <summary>
-    /// Class describing a users profile setting preferences.
+    /// Class describing a users profile setting preferences. This is lifted from the Profile API, but modified to have nullable properties
+    /// to allow for partial updates.
     /// </summary>
     public class ProfileSettingPreference
     {
@@ -12,7 +14,7 @@
             "Design",
             "S2376:Write-only properties should not be used",
             Justification = "Write-only alias used to support incoming JSON 'languageType' while avoiding duplicate serialization output. Value is stored in Language.")]
-        public string LanguageType
+        public string? LanguageType
         {
             set
             {
@@ -23,7 +25,7 @@
         /// <summary>
         /// Gets or sets the user's language preference in Altinn.
         /// </summary>
-        public string Language { get; set; }
+        public string? Language { get; set; }
 
         /// <summary>
         /// Gets or sets the user's preselected party.
@@ -31,13 +33,13 @@
         /// <remarks>
         /// This is being phased out in favor of PreselectedPartyUuid.
         /// </remarks>
-        public int PreSelectedPartyId { get; set; }
+        public int? PreSelectedPartyId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the users want
         /// to be asked for the party on every form submission.
         /// </summary>
-        public bool DoNotPromptForParty { get; set; }
+        public bool? DoNotPromptForParty { get; set; }
 
         /// <summary>
         /// The UUID of the preselected party. Optional.
@@ -47,7 +49,7 @@
         /// <summary>
         /// Indicates whether client units should be shown.
         /// </summary>
-        public bool ShowClientUnits { get; set; }
+        public bool? ShowClientUnits { get; set; }
 
         /// <summary>
         /// Indicates whether sub-entities should be shown.
@@ -57,6 +59,8 @@
         /// <summary>
         /// Indicates whether deleted entities should be shown.
         /// </summary>
-        public bool ShouldShowDeletedEntities { get; set; }
+        public bool? ShouldShowDeletedEntities { get; set; }
     }
 }
+
+#nullable restore

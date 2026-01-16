@@ -12,6 +12,7 @@ import {
   useGetFavoriteActorUuidsQuery,
   useAddFavoriteActorUuidMutation,
   useRemoveFavoriteActorUuidMutation,
+  useUpdateShowDeletedMutation,
 } from '@/rtk/features/userInfoApi';
 import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader';
 import { useEffect, useState } from 'react';
@@ -45,6 +46,7 @@ export const useHeader = ({
     useGetFavoriteActorUuidsQuery();
   const [addFavoriteActorUuid] = useAddFavoriteActorUuidMutation();
   const [removeFavoriteActorUuid] = useRemoveFavoriteActorUuidMutation();
+  const [updateShowDeleted] = useUpdateShowDeletedMutation();
 
   const { globalMenu, desktopMenu, mobileMenu } = useGlobalMenu();
   const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
@@ -82,6 +84,17 @@ export const useHeader = ({
     }
   };
 
+  const onShowDeletedUnitsChange = (shouldShowDeleted: boolean) => {
+    console.log('Updating show deleted units to: ', shouldShowDeleted);
+    console.log('Timestamp before: ', new Date().toISOString());
+    updateShowDeleted(shouldShowDeleted)
+      .unwrap()
+      .then(() => {
+        console.log('Show deleted units updated on server');
+        console.log('Timestamp after: ', new Date().toISOString());
+      });
+  };
+
   const languageFromi18n = i18n.language;
   const languageCode =
     languageFromi18n === 'no_nn' ? 'nn' : languageFromi18n === 'en' ? 'en' : 'nb';
@@ -102,8 +115,10 @@ export const useHeader = ({
       isLoadingReportee ||
       isLoadingFavoriteAccounts ||
       hideAccountSelector,
+    showDeletedUnits: userProfile?.profileSettingPreference?.shouldShowDeletedEntities ?? undefined,
 
     onToggleFavorite: onToggleFavorite,
+    onShowDeletedUnitsChange: onShowDeletedUnitsChange,
 
     onSelectAccount: (accountId: string) => {
       if (accountId !== reportee?.partyUuid) {
