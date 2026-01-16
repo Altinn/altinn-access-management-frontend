@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import {
@@ -43,6 +44,7 @@ export const useAreaPackageList = ({
   showAllAreas,
   showAllPackages,
 }: useAreaPackagesProps) => {
+  const { i18n } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
 
   const {
@@ -50,7 +52,7 @@ export const useAreaPackageList = ({
     isLoading: loadingPackageAreas,
     isFetching: fetchingSearch,
     error: searchError,
-  } = useSearchQuery(searchString ?? '');
+  } = useSearchQuery({ searchString: searchString ?? '', language: i18n.language });
 
   const {
     data: activeDelegations,

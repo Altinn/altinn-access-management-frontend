@@ -17,9 +17,10 @@ import { FilesIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { fromParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
+  const shouldSkip = !id || !fromParty?.partyUuid;
 
   const {
     data: accessPackage,
@@ -30,8 +31,9 @@ export const PackagePoaDetails = () => {
     {
       from: fromParty?.partyUuid ?? '',
       packageId: id || '',
+      language: i18n.language,
     },
-    { skip: !id || !fromParty?.partyUuid },
+    { skip: shouldSkip },
   );
 
   const [chosenTab, setChosenTab] = useState('users');
