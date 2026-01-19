@@ -514,7 +514,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddTransient<IClientDelegationClient, ClientClientMock>();
+                    services.AddTransient<IClientDelegationClient, ClientDelegationClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });

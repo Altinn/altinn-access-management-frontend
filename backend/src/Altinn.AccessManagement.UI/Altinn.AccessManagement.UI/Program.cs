@@ -373,7 +373,7 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 
     if (mockSettings.ClientDelegation)
     {
-        services.AddHttpClient<IClientDelegationClient, ClientClientMock>();
+        services.AddHttpClient<IClientDelegationClient, ClientDelegationClientMock>();
     }
     else
     {

@@ -15,16 +15,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// <summary>
     /// Mock class for <see cref="IClientDelegationClient"/> interface.
     /// </summary>
-    public class ClientClientMock : IClientDelegationClient
+    public class ClientDelegationClientMock : IClientDelegationClient
     {
         private readonly string dataFolder;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClientClientMock"/> class.
+        /// Initializes a new instance of the <see cref="ClientDelegationClientMock"/> class.
         /// </summary>
-        public ClientClientMock(
+        public ClientDelegationClientMock(
             HttpClient httpClient,
-            ILogger<ClientClientMock> logger,
+            ILogger<ClientDelegationClientMock> logger,
             IHttpContextAccessor httpContextAccessor)
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
