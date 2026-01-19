@@ -17,6 +17,7 @@ import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
 import { formatOrgNr } from '@/resources/utils/reporteeUtils';
+import { addAllSystemuserCustomers } from '@/resources/utils/featureFlagUtils';
 
 const filterCustomerList = (
   list: AgentDelegationCustomer[],
@@ -44,6 +45,7 @@ interface CustomerListProps {
   errorIds?: string[];
   onAddCustomer?: (customer: AgentDelegationCustomer) => void;
   onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
+  onAddAllCustomers?: () => void;
   children?: React.ReactNode;
 }
 
@@ -54,6 +56,7 @@ export const CustomerList = ({
   errorIds,
   onAddCustomer,
   onRemoveCustomer,
+  onAddAllCustomers,
   children,
 }: CustomerListProps) => {
   const { t } = useTranslation();
@@ -106,6 +109,17 @@ export const CustomerList = ({
             onChange={() => setIsHideAssignedChecked((prev) => !prev)}
           />
         )}
+        {onAddAllCustomers && addAllSystemuserCustomers() && list.length > 0 && (
+          <div className={classes.addAllCustomers}>
+            <DsButton
+              variant='secondary'
+              onClick={onAddAllCustomers}
+            >
+              {t('systemuser_agent_delegation.add_all_customers')}
+            </DsButton>
+          </div>
+        )}
+
         {children}
       </div>
       <List>

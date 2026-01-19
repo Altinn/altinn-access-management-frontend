@@ -549,7 +549,19 @@
   },
   "client_administration_page": {
     "no_access_title": "You do not have access to client administration",
-    "page_heading": "Client administration"
+    "page_heading": "Client administration",
+    "clients_tab_title": "Clients",
+    "agents_tab_title": "Users",
+    "add_agent_button": "Add new user",
+    "add_agent_button_short": "Add",
+    "add_agentModal_agent_tab_title": "Person",
+    "add_agent_error": "Could not add user.",
+    "add_agent_success_snackbar": "User added.",
+    "agent_search_placeholder": "Search for person",
+    "direct_connections_heading": "Users with client access",
+    "indirect_connections_heading": "Other users",
+    "no_clients": "The organization has no registered clients",
+    "no_agents": "Found no users with client access for this organization"
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",
@@ -674,13 +686,19 @@
     "edit_customers": "Add or remove customers",
     "customer_search": "Search for customer",
     "hide_assigned_customers": "Hide customers already added",
+    "add_all_customers": "Add all customers",
     "no_customers_warning": "There are no customers yet. The customers must give power of attorney to the access packages required for this system access to {{companyName}}.",
     "remove_from_system_user": "Remove from system access",
     "remove_from_system_user_aria": "Remove {{customerName}} from system access",
     "add_to_system_user": "Add to system access",
     "add_to_system_user_aria": "Add {{customerName}} to system access",
     "add_system_user_error": "Could not add customer",
-    "remove_system_user_error": "Could not remove customer"
+    "remove_system_user_error": "Could not remove customer",
+    "add_all_customers_success": "All customers have been added.",
+    "add_all_customers_partial": "Only {{successCount}} out of {{totalCount}} customers were added.",
+    "add_all_customers_failed_list": "The following customers could not be added:",
+    "add_all_customers_in_progress_warning": "Do not close this website before all customers are added.",
+    "add_all_customers_progress": "Adding customer {{progress}} of {{totalCount}}"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "One or more services do not exist, or cannot be delegated.",

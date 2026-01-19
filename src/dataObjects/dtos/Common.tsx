@@ -3,6 +3,7 @@ export interface Entity {
   name: string;
   type: string;
   variant: string;
+  parent?: Entity | null;
   partyId?: number | string | null;
   organizationIdentifier?: string | null;
   dateOfBirth?: string | null;

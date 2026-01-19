@@ -13,10 +13,11 @@ import { UsersTab } from './UsersTab';
 import { StatusSection } from '../common/StatusSection/StatusSection';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
 import { isCriticalAndUndelegated } from '../common/AccessPackageList/UndelegatedPackageWarning';
+import { FilesIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { fromParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
@@ -29,6 +30,7 @@ export const PackagePoaDetails = () => {
     {
       from: fromParty?.partyUuid ?? '',
       packageId: id || '',
+      language: i18n.language,
     },
     { skip: !id || !fromParty?.partyUuid },
   );
@@ -76,8 +78,12 @@ export const PackagePoaDetails = () => {
         onChange={setChosenTab}
       >
         <DsTabs.List>
-          <DsTabs.Tab value='users'>{t('package_poa_details_page.users_tab_title')}</DsTabs.Tab>
+          <DsTabs.Tab value='users'>
+            <PersonGroupIcon aria-hidden='true' />
+            {t('package_poa_details_page.users_tab_title')}
+          </DsTabs.Tab>
           <DsTabs.Tab value='services'>
+            <FilesIcon aria-hidden='true' />
             {t('package_poa_details_page.services_tab_title')}
           </DsTabs.Tab>
         </DsTabs.List>

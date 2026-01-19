@@ -76,8 +76,8 @@ export const accessPackageApi = createApi({
   }),
   tagTypes: ['AccessPackages'],
   endpoints: (builder) => ({
-    search: builder.query<AccessArea[], string>({
-      query: (searchString) => {
+    search: builder.query<AccessArea[], { searchString: string; language: string }>({
+      query: ({ searchString }) => {
         return `search?&searchString=${searchString}`;
       },
     }),
@@ -93,7 +93,7 @@ export const accessPackageApi = createApi({
     }),
     getPackagePermissionDetails: builder.query<
       AccessPackage,
-      { from?: string; to?: string; party?: string; packageId: string }
+      { from?: string; to?: string; party?: string; packageId: string; language: string }
     >({
       query: ({ from, to, party = getCookie('AltinnPartyUuid'), packageId }) => {
         return `permission/${packageId}?from=${from ?? ''}&to=${to ?? ''}&party=${party}`;
