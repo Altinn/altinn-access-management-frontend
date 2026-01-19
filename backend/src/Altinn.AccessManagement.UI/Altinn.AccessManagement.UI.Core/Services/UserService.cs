@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<ProfileSettingPreference> SetShowDeletedProfileSettin(bool shouldShowDeletedEntities)
+        public async Task<ProfileSettingPreference> SetShowDeletedProfileSetting(bool shouldShowDeletedEntities)
         {
             ProfileSettingPreference change = new ProfileSettingPreference
             {

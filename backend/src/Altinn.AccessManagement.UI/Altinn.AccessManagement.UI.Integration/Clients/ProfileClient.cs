@@ -106,7 +106,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // ProfileClient // PostNewOrganisationNotificationAddress // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // ProfileClient // PatchCurrentUserProfileSetting // Exception");
                 throw;
             }
         }

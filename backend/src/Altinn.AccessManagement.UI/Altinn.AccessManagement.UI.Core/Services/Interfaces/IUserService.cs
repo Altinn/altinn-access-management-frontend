@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="shouldShowDeletedEntities">The new value of the field in the profile settings</param>
         /// <returns>users new profile preferences</returns>
-        Task<ProfileSettingPreference> SetShowDeletedProfileSettin(bool shouldShowDeletedEntities);
+        Task<ProfileSettingPreference> SetShowDeletedProfileSetting(bool shouldShowDeletedEntities);
 
         /// <summary>
         /// Get the reportees for the user 

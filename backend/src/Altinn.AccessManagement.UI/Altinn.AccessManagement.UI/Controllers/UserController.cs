@@ -85,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                ProfileSettingPreference newsettings = await _userService.SetShowDeletedProfileSettin(shouldShowDeleted);
+                ProfileSettingPreference newsettings = await _userService.SetShowDeletedProfileSetting(shouldShowDeleted);
                 return newsettings;
             }
             catch (Exception ex)
