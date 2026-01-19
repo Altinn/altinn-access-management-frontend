@@ -855,5 +855,17 @@
     "client_admin_item_description": "Delegate power of attorney from clients to users in your organization.",
     "new_requests_single": "{{reportee}} has {{requestCount}} new request",
     "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"
+  },
+  "request_page": {
+    "page_title": "Requests - Altinn",
+    "heading": "Requests for {{name}}",
+    "incoming_requests": "Received requests",
+    "sent_requests": "Sent requests",
+    "no_received_requests": "No received requests",
+    "no_sent_requests": "No sent requests",
+    "process_request": "Process request",
+    "request_consent": "Requests consent",
+    "request_poa": "Requests power of attorney",
+    "error_loading_requests": "Could not load received requests"
   }
 }
