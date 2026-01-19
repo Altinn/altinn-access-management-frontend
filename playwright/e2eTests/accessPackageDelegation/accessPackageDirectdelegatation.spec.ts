@@ -3,8 +3,8 @@ import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 import { withTimeout } from 'playwright/util/asyncUtils';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
-  test.afterEach(async (_, testInfo) => {
-    const title = testInfo.title ?? 'unknown-test';
+  test.afterEach(async ({}, testInfo) => {
+    const title = testInfo.title || 'unknown-test';
 
     try {
       await withTimeout(
@@ -13,8 +13,8 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
         `cleanupAllDelegations(${title})`,
       );
     } catch (err) {
-      // Do not fail tests because cleanup is slow/flaky
-      console.warn(`[afterEach] cleanup skipped/failed: ${title}`, err);
+      // Don't fail tests if cleanup is flaky or slow
+      console.warn(`[afterEach] Cleanup failed or timed out for: ${title}`, err);
     }
   });
 

@@ -65,11 +65,6 @@ export class ClientDelegationPage {
     await this.page.keyboard.press('Escape');
   }
 
-  // Backwards-compatible alias (typo kept because older specs referenced it)
-  async openSystemUSer(accessPackage: string) {
-    await this.openSystemUser(accessPackage);
-  }
-
   async addCustomer(
     customerLabel: string,
     confirmationText: string,
