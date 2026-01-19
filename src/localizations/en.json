@@ -561,7 +561,7 @@
     "direct_connections_heading": "Users with client access",
     "indirect_connections_heading": "Other users",
     "no_clients": "The organization has no registered clients",
-    "no_agents": "There are no users registered as agents for this organization"
+    "no_agents": "Found no users with client access for this organization"
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",

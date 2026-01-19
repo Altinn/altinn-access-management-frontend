@@ -40,17 +40,17 @@ export const clientApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Clients'],
+  tagTypes: ['clients', 'agents'],
   endpoints: (builder) => ({
     getClients: builder.query<Client[], void>({
       query: () => `clients?party=${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 3,
-      providesTags: ['Clients'],
+      providesTags: ['clients'],
     }),
     getAgents: builder.query<Agent[], void>({
       query: () => `agents?party=${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 3,
-      providesTags: ['Clients'],
+      providesTags: ['agents'],
     }),
     addAgent: builder.mutation<AssignmentDto, { to?: string; personInput?: PersonInput }>({
       query: ({ to, personInput }) => ({
@@ -58,7 +58,7 @@ export const clientApi = createApi({
         method: 'POST',
         body: personInput ? JSON.stringify(personInput) : undefined,
       }),
-      invalidatesTags: ['Clients'],
+      invalidatesTags: ['agents'],
     }),
   }),
 });

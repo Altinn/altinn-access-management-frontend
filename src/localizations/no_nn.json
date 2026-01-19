@@ -558,7 +558,7 @@
     "direct_connections_heading": "Brukarar med klienttilgang",
     "indirect_connections_heading": "Andre brukarar",
     "no_clients": "Organisasjonen har ingen klientar",
-    "no_agents": "Det er ingen brukarar registrert som agentar for denne organisasjonen"
+    "no_agents": "Fann ingen brukarar med klienttilgang for denne organisasjonen"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
