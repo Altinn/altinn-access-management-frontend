@@ -1,6 +1,6 @@
 import React from 'react';
 import { TenancyIcon } from '@navikt/aksel-icons';
-import { DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
+import { Avatar, DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 
 import classes from './SystemUserHeader.module.css';
 
@@ -17,7 +17,11 @@ export const SystemUserHeader = ({
 }: SystemUserHeaderProps): React.ReactNode => {
   return (
     <div className={classes.systemUserDetailsHeader}>
-      <TenancyIcon fontSize={60} />
+      <Avatar
+        type='system'
+        className={classes.systemUserDetailsHeaderAvatar}
+        name={title}
+      />
       <div className={classes.headingContainer}>
         <DsHeading
           level={1}
