@@ -8,6 +8,8 @@ export class ClientDelegationPage {
 
   readonly confirmButton: Locator;
   readonly customersButton: Locator;
+  readonly addAllCustomersButton: Locator;
+  readonly addAllCustomersSuccessText: Locator;
   readonly confirmAndCloseButton: Locator;
   readonly deleteSystemAccessButtons: Locator;
   readonly clientSearchBox: Locator;
@@ -20,6 +22,12 @@ export class ClientDelegationPage {
     });
 
     // Scope modal-specific locators to the open dialog to avoid strict mode violations
+    this.addAllCustomersButton = page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Legg til alle kunder' });
+    this.addAllCustomersSuccessText = page
+      .getByRole('dialog')
+      .getByText(/Alle kunder er lagt til\.?/);
     this.confirmAndCloseButton = page
       .getByRole('dialog')
       .getByRole('button', { name: 'Bekreft og lukk' });
@@ -52,12 +60,17 @@ export class ClientDelegationPage {
     await this.confirmButton.click();
   }
 
-  async openAccessPackage(accessPackage: string) {
+  async openSystemUser(accessPackage: string) {
     const label = accessPackage.replace(/-/g, ' ');
     const button = this.page.getByRole('button', { name: label });
     await expect(button).toBeVisible();
     await button.click();
     await this.page.keyboard.press('Escape');
+  }
+
+  // Backwards-compatible alias (typo kept because older specs referenced it)
+  async openSystemUSer(accessPackage: string) {
+    await this.openSystemUser(accessPackage);
   }
 
   async addCustomer(
@@ -83,6 +96,17 @@ export class ClientDelegationPage {
     //Close customers modal
     await expect(this.confirmAndCloseButton).toBeVisible();
     await this.confirmAndCloseButton.click();
+  }
+
+  async addAllCustomers() {
+    await expect(this.customersButton).toBeVisible();
+    await this.customersButton.click();
+
+    await expect(this.addAllCustomersButton).toBeVisible();
+    await this.addAllCustomersButton.click();
+
+    await expect(this.addAllCustomersSuccessText).toBeVisible();
+    await expect(this.confirmAndCloseButton).toBeVisible();
   }
 
   async removeCustomer(name: string) {

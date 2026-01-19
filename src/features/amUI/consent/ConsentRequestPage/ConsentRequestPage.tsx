@@ -135,7 +135,7 @@ export const ConsentRequestPage = () => {
           {isLoadingRequest && (
             <DsSpinner
               aria-label={t('consent_request.loading_consent')}
-              data-size='xl'
+              data-size='lg'
             />
           )}
           {loadRequestError && (

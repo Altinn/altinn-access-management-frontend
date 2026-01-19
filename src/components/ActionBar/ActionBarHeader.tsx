@@ -21,28 +21,23 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
     const { open, toggleOpen, contentId, headerId, color, size } = useActionBarContext();
 
     let paragraphSize: 'sm' | 'md' | 'lg' | 'xs';
-    let headingSize: 'sm' | 'md' | 'lg';
     switch (size) {
       case 'large':
         headingLevel = headingLevel || 3;
         paragraphSize = 'lg';
-        headingSize = 'lg';
         break;
       case 'medium':
         headingLevel = headingLevel || 4;
         paragraphSize = 'sm';
-        headingSize = 'md';
         break;
       case 'small':
         headingLevel = headingLevel || 5;
         paragraphSize = 'xs';
-        headingSize = 'sm';
         break;
     }
     return (
       <DsHeading
         level={headingLevel}
-        data-size={headingSize}
         ref={ref}
         className={cn(classes.actionBar, classes[color], classes[size], {
           [classes.subtitle]: subtitle,

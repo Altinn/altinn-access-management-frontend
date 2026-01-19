@@ -7,7 +7,7 @@ import {
 } from '@altinn/altinn-components';
 import React, { useState } from 'react';
 import { ButtonRow } from '../ButtonRow/ButtonRow';
-import { getApiBaseUrl } from '../../urlUtils';
+import { getApiBaseUrl } from '../../requestUtils';
 import classes from './EscalateRequest.module.css';
 import {
   useEscalateAgentRequestMutation,

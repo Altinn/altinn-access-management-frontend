@@ -1,7 +1,23 @@
 import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
+import { withTimeout } from 'playwright/util/asyncUtils';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
+  test.afterEach(async ({}, testInfo) => {
+    const title = testInfo.title ?? 'unknown-test';
+
+    try {
+      await withTimeout(
+        DelegationApiUtil.cleanupAllDelegations(title),
+        15_000, // cleanup budget
+        `cleanupAllDelegations(${title})`,
+      );
+    } catch (err) {
+      // Do not fail tests because cleanup is slow/flaky
+      console.warn(`[afterEach] cleanup skipped/failed: ${title}`, err);
+    }
+  });
+
   test('Org-A delegates access package to Org-B', async ({ delegation, login }) => {
     await login.loginWithUserInA3('04856996188');
     await login.chooseAktøriA3('SUBJEKTIV ELASTISK TIGER AS');
@@ -47,7 +63,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
       'urn:altinn:accesspackage:veitransport',
     ]);
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
 
     // Step 2: Open delegation flow
 

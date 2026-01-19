@@ -14,7 +14,7 @@ export const ResourceDetails = ({ resource }: ResourceDetailsProps): React.React
     <>
       <div className={classes.resourceInfoHeader}>
         <Avatar
-          size='xl'
+          size='lg'
           type='company'
           imageUrl={resource.resourceOwnerLogoUrl}
           imageUrlAlt={resource.resourceOwnerName}

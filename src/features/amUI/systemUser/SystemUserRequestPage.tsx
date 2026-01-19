@@ -19,7 +19,7 @@ import { DelegationCheckError } from './components/DelegationCheckError/Delegati
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
 import { SystemUserPath } from '@/routes/paths';
-import { getApiBaseUrl } from './urlUtils';
+import { getApiBaseUrl, isPermissionErrorWhichCanBeEscalated } from './requestUtils';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
@@ -61,8 +61,15 @@ export const SystemUserRequestPage = () => {
     { isError: isRejectCreationRequestError, isLoading: isRejectingSystemUser },
   ] = useRejectSystemUserRequestMutation();
 
+  const isEscalationPossible = isPermissionErrorWhichCanBeEscalated(
+    (acceptCreationRequestError as { data: ProblemDetail })?.data,
+  );
+
   const isActionButtonDisabled =
-    isAcceptingSystemUser || isRejectingSystemUser || request?.status !== 'New';
+    isAcceptingSystemUser ||
+    isRejectingSystemUser ||
+    request?.status !== 'New' ||
+    isEscalationPossible;
 
   const acceptSystemUser = (): void => {
     if (!isActionButtonDisabled) {
@@ -157,12 +164,13 @@ export const SystemUserRequestPage = () => {
           />
           <DsParagraph>{t('systemuser_request.withdraw_consent_info')}</DsParagraph>
           <div>
-            {acceptCreationRequestError && (
+            {acceptCreationRequestError && !isEscalationPossible && (
               <DelegationCheckError
                 defaultError='systemuser_includedrightspage.create_systemuser_error'
                 error={acceptCreationRequestError as { data: ProblemDetail }}
               />
             )}
+            {isEscalationPossible && <EscalateRequest request={request} />}
             {isRejectCreationRequestError && (
               <DsAlert
                 data-color='danger'
@@ -195,8 +203,6 @@ export const SystemUserRequestPage = () => {
                 </DsButton>
               </ButtonRow>
             )}
-            {hasCreateSystemUserPermission(reporteeData, isAdmin) === false &&
-              request.status === 'New' && <EscalateRequest request={request} />}
           </div>
         </>
       )}

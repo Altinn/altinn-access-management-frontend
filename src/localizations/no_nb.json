@@ -546,7 +546,19 @@
   },
   "client_administration_page": {
     "no_access_title": "Du har ikke tilgang til klientadministrasjon",
-    "page_heading": "Klientadministrasjon"
+    "page_heading": "Klientadministrasjon",
+    "clients_tab_title": "Klienter",
+    "agents_tab_title": "Brukere",
+    "add_agent_button": "Legg til ny bruker",
+    "add_agent_button_short": "Legg til",
+    "add_agentModal_agent_tab_title": "Person",
+    "add_agent_error": "Kunne ikke legge til bruker.",
+    "add_agent_success_snackbar": "Bruker lagt til.",
+    "agent_search_placeholder": "Søk etter person",
+    "direct_connections_heading": "Brukere med klienttilgang",
+    "indirect_connections_heading": "Andre brukere",
+    "no_clients": "Organisasjonen har ingen klienter",
+    "no_agents": "Fant ingen brukere med klienttilgang for denne organisasjonen"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
@@ -616,7 +628,7 @@
     "request_rejected": "Denne forespørselen er allerede avvist",
     "request_expired": "Denne forespørselen har utløpt",
     "escalate_title": "Du mangler nødvendig fullmakt",
-    "escalate_description": "For å lage en systemtilgang må du være Tilgangsstyrer. Vil du sende forespørselen videre til Tilgangsstyrer i din virksomhet?",
+    "escalate_description": "Du har ikke tilstrekkelige fullmakter til å godkjenne forespørselen. Vil du sende forespørselen videre til tilgangsstyrer i din virksomhet?",
     "escalate_confirm_button": "Ja, send videre",
     "escalate_cancel_button": "Lukk og logg ut",
     "escalate_error": "Kunne ikke sende forespørsel videre",
@@ -671,13 +683,19 @@
     "edit_customers": "Legg til eller fjern kunder",
     "customer_search": "Søk etter kunde",
     "hide_assigned_customers": "Skjul kunder som er lagt til",
+    "add_all_customers": "Legg til alle kunder",
     "no_customers_warning": "Det finnes ingen kunder enda. Kundene må gi fullmakt til tilgangspakkene som kreves av systemtilgangen til {{companyName}}.",
     "remove_from_system_user": "Fjern fra systemtilgang",
     "remove_from_system_user_aria": "Fjern {{customerName}} fra systemtilgang",
     "add_to_system_user": "Legg til i systemtilgang",
     "add_to_system_user_aria": "Legg til {{customerName}} i systemtilgang",
     "add_system_user_error": "Kunne ikke legge til kunde",
-    "remove_system_user_error": "Kunne ikke fjerne kunde"
+    "remove_system_user_error": "Kunne ikke fjerne kunde",
+    "add_all_customers_success": "Alle kunder er lagt til.",
+    "add_all_customers_partial": "Kun {{successCount}} av {{totalCount}} kunder ble lagt til.",
+    "add_all_customers_failed_list": "Følgende kunder kunne ikke legges til:",
+    "add_all_customers_in_progress_warning": "Ikke lukk denne nettsiden før alle kundene er lagt til.",
+    "add_all_customers_progress": "Legger til kunde {{progress}} av {{totalCount}}"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",

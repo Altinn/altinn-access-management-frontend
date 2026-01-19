@@ -24,6 +24,7 @@ import { RightsList } from '../components/RightsList/RightsList';
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { AddAllCustomers } from './AddAllCustomers';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -56,6 +57,11 @@ export const SystemUserAgentDelegationPageContent = ({
   const [assignedCustomers, setAssignedCustomers] = useState<AgentDelegationCustomer[]>(
     getAssignedCustomers(customers, existingAgentDelegations),
   );
+  const [addAllState, setAddAllState] = useState<{
+    maxCount: number;
+    progress: number;
+    errors: AgentDelegationCustomer[];
+  }>({ maxCount: -1, progress: 0, errors: [] });
   const { openSnackbar, dismissSnackbar } = useSnackbar();
 
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
@@ -64,12 +70,18 @@ export const SystemUserAgentDelegationPageContent = ({
   const [assignCustomer] = useAssignCustomerMutation();
   const [removeCustomer] = useRemoveCustomerMutation();
 
+  const isAddingAllCustomers = addAllState.maxCount > -1;
+
   const resetLoadingId = (customerId: string): void => {
     setLoadingIds((oldLoadingIds) => oldLoadingIds.filter((id) => id !== customerId));
   };
 
   const setErrorId = (customerId: string): void => {
     setErrorIds((oldErrorIds) => [...oldErrorIds, customerId]);
+  };
+
+  const removeErrorId = (customerId: string): void => {
+    setErrorIds((oldErrorIds) => oldErrorIds.filter((errorId) => errorId !== customerId));
   };
 
   const showConfirmationSnackbar = (message: string, color: 'success' | 'info'): void => {
@@ -82,10 +94,70 @@ export const SystemUserAgentDelegationPageContent = ({
     });
   };
 
+  const onAddAllCustomers = async (): Promise<void> => {
+    const FIRST_BATCH_SIZE = 1; // first batch size must be 1 to create relationship in backend
+    const BATCH_SIZE = 5; // add customers in batches of 5 to avoid overloading the backend
+
+    const unAssignedCustomers = customers.filter((customer) => {
+      const isAssigned = delegations?.find((x) => x.customerId === customer.id);
+      return !isAssigned;
+    });
+
+    setAddAllState({
+      maxCount: unAssignedCustomers.length,
+      progress: 0,
+      errors: [],
+    });
+
+    let index = 0;
+    let isFirstBatch = true;
+
+    while (index < unAssignedCustomers.length) {
+      const size = isFirstBatch ? FIRST_BATCH_SIZE : BATCH_SIZE;
+      const batch = unAssignedCustomers.slice(index, index + size);
+      index += batch.length;
+      isFirstBatch = false;
+
+      const promises = batch.map((customer) =>
+        assignCustomer({
+          partyId,
+          systemUserId: id ?? '',
+          customer,
+          partyUuid,
+        }).unwrap(),
+      );
+
+      const results = await Promise.allSettled(promises);
+
+      const successfulDelegations: AgentDelegation[] = [];
+      const batchErrors: AgentDelegationCustomer[] = [];
+
+      results.forEach((res, idx) => {
+        const customer = batch[idx];
+        if (res.status === 'fulfilled') {
+          successfulDelegations.push(res.value as AgentDelegation);
+        } else {
+          batchErrors.push(customer);
+        }
+      });
+
+      if (successfulDelegations.length > 0) {
+        setDelegations((old) => [...old, ...successfulDelegations]);
+      }
+
+      setAddAllState((old) => ({
+        ...old,
+        progress: old.progress + batch.length,
+        errors: [...old.errors, ...batchErrors],
+      }));
+    }
+  };
+
   const onAddCustomer = (customer: AgentDelegationCustomer): void => {
     setLoadingIds((oldLoadingIds) => [...oldLoadingIds, customer.id]);
     const onAddSuccess = (delegation: AgentDelegation) => {
       setDelegations((oldDelegations) => [...oldDelegations, delegation]);
+      removeErrorId(customer.id);
       showConfirmationSnackbar(
         t('systemuser_agent_delegation.customer_added', {
           customerName: customer.name,
@@ -106,6 +178,7 @@ export const SystemUserAgentDelegationPageContent = ({
       setDelegations((oldDelegations) =>
         oldDelegations.filter((delegation) => delegation.delegationId !== toRemove.delegationId),
       );
+      removeErrorId(toRemove.customerId);
       showConfirmationSnackbar(
         t('systemuser_agent_delegation.customer_removed', {
           customerName,
@@ -132,6 +205,11 @@ export const SystemUserAgentDelegationPageContent = ({
   // need to use useCallback to get updated assignedIds in onClose
   const onCloseModal = useCallback(() => {
     modalRef.current?.close();
+    setAddAllState({
+      maxCount: -1,
+      progress: 0,
+      errors: [],
+    });
     setAssignedCustomers(getAssignedCustomers(customers, delegations));
   }, [customers, delegations]);
 
@@ -141,7 +219,8 @@ export const SystemUserAgentDelegationPageContent = ({
         ref={modalRef}
         className={classes.delegationModal}
         onClose={onCloseModal}
-        closedby='any'
+        closeButton={isAddingAllCustomers ? false : undefined}
+        closedby={isAddingAllCustomers ? 'none' : 'any'}
       >
         <DsHeading
           level={1}
@@ -153,27 +232,39 @@ export const SystemUserAgentDelegationPageContent = ({
           })}
         </DsHeading>
         <div className={classes.flexContainer}>
-          <CustomerList
-            list={customers}
-            delegations={delegations}
-            loadingIds={loadingIds}
-            errorIds={errorIds}
-            onAddCustomer={onAddCustomer}
-            onRemoveCustomer={onRemoveCustomer}
-          />
-          {customers.length === 0 && reporteeData?.name && (
-            <DsAlert data-color='warning'>
-              {t('systemuser_agent_delegation.no_customers_warning', {
-                companyName: reporteeData?.name,
-              })}
-            </DsAlert>
+          {isAddingAllCustomers ? (
+            <AddAllCustomers
+              addAllState={addAllState}
+              onCloseModal={onCloseModal}
+            />
+          ) : (
+            <>
+              <CustomerList
+                list={customers}
+                delegations={delegations}
+                loadingIds={loadingIds}
+                errorIds={errorIds}
+                onAddCustomer={onAddCustomer}
+                onRemoveCustomer={onRemoveCustomer}
+                onAddAllCustomers={onAddAllCustomers}
+              />
+              {customers.length === 0 && reporteeData?.name && (
+                <DsAlert data-color='warning'>
+                  {t('systemuser_agent_delegation.no_customers_warning', {
+                    companyName: reporteeData?.name,
+                  })}
+                </DsAlert>
+              )}
+              <div>
+                <div>
+                  <DsButton onClick={onCloseModal}>
+                    {t('systemuser_agent_delegation.confirm_close')}
+                  </DsButton>
+                  <Snackbar className={classes.customerListSnackbar} />
+                </div>
+              </div>
+            </>
           )}
-          <div>
-            <DsButton onClick={onCloseModal}>
-              {t('systemuser_agent_delegation.confirm_close')}
-            </DsButton>
-            <Snackbar className={classes.customerListSnackbar} />
-          </div>
         </div>
       </DsDialog>
       <div className={classes.flexContainer}>
