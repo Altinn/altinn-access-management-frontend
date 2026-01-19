@@ -66,7 +66,7 @@ export const PageContainer = ({
           ) : onNavigateBack ? (
             <Button
               onClick={onNavigateBack}
-              variant='text'
+              variant='tertiary'
               icon={ArrowLeftIcon}
               data-color='neutral'
             >

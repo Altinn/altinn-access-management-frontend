@@ -62,6 +62,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayRequestsPage { get; set; }
 
         /// <summary>
+        /// Whether to display the deleted account toggle feature
+        /// </summary>
+        public bool DisplayDeletedAccountToggle { get; set; }
+
+        /// <summary>
         /// Whether to display the PRIV delegation feature
         /// </summary>
         public bool DisplayPrivDelegation { get; set; }

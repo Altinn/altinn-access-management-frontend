@@ -13,6 +13,7 @@ declare global {
       displayPoaOverviewPage: boolean;
       useNewActorsList: boolean;
       displayRequestsPage: boolean;
+      displayDeletedAccountToggle: boolean;
       displayPrivDelegation: boolean;
       displayAccessRequest: boolean;
       displaySubConnections: boolean;

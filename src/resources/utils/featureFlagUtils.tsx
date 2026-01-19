@@ -79,6 +79,11 @@ export const displayAccessRequest = () => {
 export const displaySubConnections = () => {
   return window.featureFlags?.displaySubConnections === true;
 };
+
+export const displayDeletedAccountToggle = () => {
+  return window.featureFlags?.displayDeletedAccountToggle === true;
+};
+
 export const addAllSystemuserCustomers = () => {
   return window.featureFlags?.addAllSystemuserCustomers === true;
 };

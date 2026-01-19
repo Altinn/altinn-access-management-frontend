@@ -407,7 +407,6 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
             {hasAccess && toParty && (
               <DeleteResourceButton
                 resource={resource}
-                toParty={toParty}
                 fullText
               />
             )}
