@@ -4,15 +4,13 @@
 
 .listHeader {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
-  margin-bottom: var(--ds-size-2);
+  gap: var(--ds-size-4);
+  margin-bottom: var(--ds-size-8);
 }
-.listSearchAndFilter {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  gap: var(--ds-size-2);
+.addAllCustomers {
+  margin-left: auto;
 }
 
 .searchBar {
@@ -28,4 +26,10 @@
   display: flex;
   align-items: center;
   gap: var(--ds-size-2);
+}
+
+@media only screen and (max-width: 769px) {
+  .listControls {
+    white-space: pre-line;
+  }
 }

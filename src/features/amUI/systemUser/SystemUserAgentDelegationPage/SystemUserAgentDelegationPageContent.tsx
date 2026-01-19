@@ -80,6 +80,10 @@ export const SystemUserAgentDelegationPageContent = ({
     setErrorIds((oldErrorIds) => [...oldErrorIds, customerId]);
   };
 
+  const removeErrorId = (customerId: string): void => {
+    setErrorIds((oldErrorIds) => oldErrorIds.filter((errorId) => errorId !== customerId));
+  };
+
   const showConfirmationSnackbar = (message: string, color: 'success' | 'info'): void => {
     dismissSnackbar();
     openSnackbar({
@@ -153,6 +157,7 @@ export const SystemUserAgentDelegationPageContent = ({
     setLoadingIds((oldLoadingIds) => [...oldLoadingIds, customer.id]);
     const onAddSuccess = (delegation: AgentDelegation) => {
       setDelegations((oldDelegations) => [...oldDelegations, delegation]);
+      removeErrorId(customer.id);
       showConfirmationSnackbar(
         t('systemuser_agent_delegation.customer_added', {
           customerName: customer.name,

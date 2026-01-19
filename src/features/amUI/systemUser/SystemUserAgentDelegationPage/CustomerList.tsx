@@ -90,34 +90,34 @@ export const CustomerList = ({
   return (
     <div>
       <div className={classes.listHeader}>
-        <div className={classes.listSearchAndFilter}>
-          <DsSearch
-            className={classes.searchBar}
-            data-size='sm'
-          >
-            <DsSearch.Input
-              aria-label={t('systemuser_agent_delegation.customer_search')}
-              value={searchValue}
-              onChange={onSearch}
-              placeholder={t('systemuser_agent_delegation.customer_search')}
-            />
-            <DsSearch.Clear />
-          </DsSearch>
-          {onAddCustomer && (
-            <DsCheckbox
-              label={t('systemuser_agent_delegation.hide_assigned_customers')}
-              checked={isHideAssignedChecked}
-              onChange={() => setIsHideAssignedChecked((prev) => !prev)}
-            />
-          )}
-        </div>
-        {onAddAllCustomers && addAllSystemuserCustomers() && (
-          <DsButton
-            variant='secondary'
-            onClick={onAddAllCustomers}
-          >
-            {t('systemuser_agent_delegation.add_all_customers')}
-          </DsButton>
+        <DsSearch
+          className={classes.searchBar}
+          data-size='sm'
+        >
+          <DsSearch.Input
+            aria-label={t('systemuser_agent_delegation.customer_search')}
+            value={searchValue}
+            onChange={onSearch}
+            placeholder={t('systemuser_agent_delegation.customer_search')}
+          />
+          <DsSearch.Clear />
+        </DsSearch>
+        {onAddCustomer && (
+          <DsCheckbox
+            label={t('systemuser_agent_delegation.hide_assigned_customers')}
+            checked={isHideAssignedChecked}
+            onChange={() => setIsHideAssignedChecked((prev) => !prev)}
+          />
+        )}
+        {onAddAllCustomers && addAllSystemuserCustomers() && list.length > 0 && (
+          <div className={classes.addAllCustomers}>
+            <DsButton
+              variant='secondary'
+              onClick={onAddAllCustomers}
+            >
+              {t('systemuser_agent_delegation.add_all_customers')}
+            </DsButton>
+          </div>
         )}
 
         {children}
