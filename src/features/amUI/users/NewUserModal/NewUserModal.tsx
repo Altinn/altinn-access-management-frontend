@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DsButton, DsDialog, DsHeading, DsTabs } from '@altinn/altinn-components';
 import { t } from 'i18next';
 import { PlusIcon } from '@navikt/aksel-icons';
@@ -8,6 +8,9 @@ import classes from './NewUserModal.module.css';
 import { NewOrgContent } from './NewOrgContent';
 import { User } from '@/rtk/features/userInfoApi';
 import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
+import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
+import { Organization } from '@/rtk/features/lookupApi';
+import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 /**
  * NewUserButton component renders a button that, when clicked, opens a modal to add a new user.
@@ -21,7 +24,6 @@ interface NewUserButtonProps {
 
 export const NewUserButton: React.FC<NewUserButtonProps> = ({ isLarge, onComplete }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
-
   return (
     <>
       <DsButton
@@ -47,11 +49,61 @@ interface NewUserModalProps {
 
 const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => {
   const shouldDisplayPrivDelegation = displayPrivDelegation();
+
+  const [errorDetail, setErrorDetail] = useState<{ status: string; time: string } | null>(null);
+  const [addRightHolder, { isLoading, error }] = useAddRightHolderMutation();
+  useEffect(() => {
+    if (error) {
+      const details = createErrorDetails(error);
+      setErrorDetail(details);
+    }
+  }, [error]);
+
+  const addPerson = (personInput: { personIdentifier: string; lastName: string }) => {
+    setErrorDetail(null);
+    addRightHolder({ personInput })
+      .unwrap()
+      .then((toUuid) => {
+        if (onComplete) {
+          onComplete({
+            id: toUuid,
+            name: personInput.lastName,
+            type: 'person',
+            children: null,
+          });
+        }
+        modalRef.current?.close();
+      });
+  };
+
+  const addOrg = (orgData: Organization) => {
+    setErrorDetail(null);
+    if (orgData?.partyUuid) {
+      addRightHolder({ partyUuidToBeAdded: orgData.partyUuid })
+        .unwrap()
+        .then(() => {
+          if (onComplete) {
+            onComplete({
+              id: orgData.partyUuid,
+              name: orgData.name,
+              type: 'organisasjon',
+              children: null,
+              organizationIdentifier: orgData.orgNumber,
+            });
+          }
+          modalRef.current?.close();
+        });
+    }
+  };
+
   return (
     <DsDialog
       ref={modalRef}
       closedby='any'
       aria-labelledby='newUserModal'
+      onClose={() => {
+        setErrorDetail(null);
+      }}
     >
       <DsHeading
         data-size='xs'
@@ -62,6 +114,9 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => 
         {t('new_user_modal.modal_title')}
       </DsHeading>
       <DsTabs
+        onChange={() => {
+          setErrorDetail(null);
+        }}
         defaultValue={shouldDisplayPrivDelegation ? 'person' : 'org'}
         data-size='sm'
       >
@@ -71,14 +126,16 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => 
         </DsTabs.List>
         <DsTabs.Panel value='person'>
           <NewPersonContent
-            onComplete={onComplete}
-            modalRef={modalRef}
+            isLoading={isLoading}
+            errorDetails={errorDetail}
+            addPerson={addPerson}
           />
         </DsTabs.Panel>
         <DsTabs.Panel value='org'>
           <NewOrgContent
-            onComplete={onComplete}
-            modalRef={modalRef}
+            isLoading={isLoading}
+            addOrg={addOrg}
+            errorDetails={errorDetail}
           />
         </DsTabs.Panel>
       </DsTabs>

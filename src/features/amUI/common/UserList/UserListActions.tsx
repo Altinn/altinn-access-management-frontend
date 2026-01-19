@@ -12,6 +12,7 @@ export const UserListActions = ({
   onRequest,
   availableAction,
   isLoading,
+  delegateLabel,
 }: {
   user: ExtendedUser;
   onDelegate?: (user: ExtendedUser) => void;
@@ -19,6 +20,7 @@ export const UserListActions = ({
   onRequest?: (user: ExtendedUser) => void;
   availableAction?: DelegationAction;
   isLoading?: boolean;
+  delegateLabel?: string;
 }) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
@@ -53,7 +55,7 @@ export const UserListActions = ({
           aria-label={t('common.give_poa')}
         >
           <PlusCircleIcon />
-          {!isSmall && t('common.give_poa')}
+          {!isSmall && (delegateLabel ?? t('common.give_poa'))}
         </DsButton>
       )}
       {availableAction === DelegationAction.REQUEST && onRequest && !user.isInherited && (

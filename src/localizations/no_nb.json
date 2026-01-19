@@ -546,7 +546,19 @@
   },
   "client_administration_page": {
     "no_access_title": "Du har ikke tilgang til klientadministrasjon",
-    "page_heading": "Klientadministrasjon"
+    "page_heading": "Klientadministrasjon",
+    "clients_tab_title": "Klienter",
+    "agents_tab_title": "Brukere",
+    "add_agent_button": "Legg til ny bruker",
+    "add_agent_button_short": "Legg til",
+    "add_agentModal_agent_tab_title": "Person",
+    "add_agent_error": "Kunne ikke legge til bruker.",
+    "add_agent_success_snackbar": "Bruker lagt til.",
+    "agent_search_placeholder": "Søk etter person",
+    "direct_connections_heading": "Brukere med klienttilgang",
+    "indirect_connections_heading": "Andre brukere",
+    "no_clients": "Organisasjonen har ingen klienter",
+    "no_agents": "Fant ingen brukere med klienttilgang for denne organisasjonen"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
