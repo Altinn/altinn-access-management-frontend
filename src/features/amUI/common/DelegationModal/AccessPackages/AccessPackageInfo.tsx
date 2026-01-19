@@ -93,7 +93,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     <div className={classes.container}>
       <div className={classes.header}>
         <Icon
-          size='xl'
+          size='lg'
           svgElement={PackageIcon}
           className={classes.headerIcon}
         />

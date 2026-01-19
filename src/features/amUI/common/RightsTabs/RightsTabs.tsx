@@ -72,14 +72,14 @@ export const RightsTabs = ({
         className={classes.tabContent}
         value='packages'
       >
-        {packagesPanel}
+        <div className={classes.innerTabContent}>{packagesPanel}</div>
       </DsTabs.Panel>
       {singleRightsPanel && (
         <DsTabs.Panel
           className={classes.tabContent}
           value='singleRights'
         >
-          {singleRightsPanel}
+          <div className={classes.innerTabContent}>{singleRightsPanel}</div>
         </DsTabs.Panel>
       )}
       {displayRoles && roleAssignmentsPanel && (
@@ -87,7 +87,7 @@ export const RightsTabs = ({
           className={classes.tabContent}
           value='roleAssignments'
         >
-          {roleAssignmentsPanel}
+          <div className={classes.innerTabContent}>{roleAssignmentsPanel}</div>
         </DsTabs.Panel>
       )}
     </DsTabs>

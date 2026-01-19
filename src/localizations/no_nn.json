@@ -546,7 +546,19 @@
   },
   "client_administration_page": {
     "no_access_title": "Du har ikkje tilgang til klientadministrasjon",
-    "page_heading": "Klientadministrasjon"
+    "page_heading": "Klientadministrasjon",
+    "clients_tab_title": "Klientar",
+    "agents_tab_title": "Brukarar",
+    "add_agent_button": "Legg til ny brukar",
+    "add_agent_button_short": "Legg til",
+    "add_agentModal_agent_tab_title": "Person",
+    "add_agent_error": "Kunne ikkje leggje til brukar.",
+    "add_agent_success_snackbar": "Brukar lagt til.",
+    "agent_search_placeholder": "Søk etter person",
+    "direct_connections_heading": "Brukarar med klienttilgang",
+    "indirect_connections_heading": "Andre brukarar",
+    "no_clients": "Organisasjonen har ingen klientar",
+    "no_agents": "Fann ingen brukarar med klienttilgang for denne organisasjonen"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
@@ -616,7 +628,7 @@
     "request_rejected": "Denne førespurnaden er allereie avvist",
     "request_expired": "Denne førespurnaden har gått ut",
     "escalate_title": "Du manglar nødvendig fullmakt",
-    "escalate_description": "For å opprette ein systemtilgang må du vere Tilgangsstyrar. Vil du senda førespurnaden vidare til Tilgangsstyraren i verksemda di?",
+    "escalate_description": "Du har ikkje tilstrekkelige fullmakter til å godkjenne førespurnaden. Vil du senda førespurnaden vidare til Tilgangsstyraren i verksemda di?",
     "escalate_confirm_button": "Ja, send vidare",
     "escalate_cancel_button": "Lukk og logg ut",
     "escalate_error": "Kunne ikkje senda førespurnaden vidare",
@@ -671,13 +683,19 @@
     "edit_customers": "Legg til eller fjern kundar",
     "customer_search": "Søk etter kunde",
     "hide_assigned_customers": "Gøym kundar som er lagde til",
+    "add_all_customers": "Legg til alle kunder",
     "no_customers_warning": "Det finst ingen kundar enda. Kundane må gi fullmakt til tilgangspakkane som kreves av systemtilgangen til {{companyName}}.",
     "remove_from_system_user": "Fjern frå systemtilgang",
     "remove_from_system_user_aria": "Fjern {{customerName}} frå systemtilgang",
     "add_to_system_user": "Legg til i systemtilgang",
     "add_to_system_user_aria": "Legg til {{customerName}} i systemtilgang",
     "add_system_user_error": "Kunne ikkje legge til kunde",
-    "remove_system_user_error": "Kunne ikkje fjerne kunde"
+    "remove_system_user_error": "Kunne ikkje fjerne kunde",
+    "add_all_customers_success": "Alle kundar er lagde til.",
+    "add_all_customers_partial": "Berre {{successCount}} av {{totalCount}} kundar vart lagde til.",
+    "add_all_customers_failed_list": "Følgjande kundar kunne ikkje leggjast til:",
+    "add_all_customers_in_progress_warning": "Ikkje lukk denne nettsida før alle kundar er lagde til.",
+    "add_all_customers_progress": "Legg til kunde {{progress}} av {{totalCount}}"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",

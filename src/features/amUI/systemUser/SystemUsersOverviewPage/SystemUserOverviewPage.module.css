@@ -35,7 +35,7 @@
 }
 
 .systemUserBadge {
-  font-size: var(--ds-body-sm-font-size);
+  font-size: var(--ds-body-xs-font-size);
   display: flex;
   gap: var(--ds-size-2);
 }

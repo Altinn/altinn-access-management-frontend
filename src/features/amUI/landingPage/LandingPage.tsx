@@ -209,7 +209,7 @@ export const LandingPage = () => {
             }}
             title={reporteeName}
             description={getReporteeDescription()}
-            size='xl'
+            size='lg'
             loading={!reportee}
             interactive={false}
           />
