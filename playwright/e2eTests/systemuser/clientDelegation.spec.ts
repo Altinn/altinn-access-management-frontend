@@ -5,7 +5,7 @@ import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
 import { AccessManagementFrontPage } from '../../pages/AccessManagementFrontPage';
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
-test.describe('Klientdelegering', () => {
+test.describe('Delegering av klienter til Systembruker', () => {
   let api: ApiRequests;
 
   test.beforeEach(() => {
@@ -13,172 +13,187 @@ test.describe('Klientdelegering', () => {
     api = new ApiRequests(orgNumber);
   });
 
-  test('Ansvarlig revisor', async ({ page, login }) => {
+  test.describe('Ansvarlig revisor', () => {
     const role = FacilitatorRole.Revisor;
     const accessPackageApiName = 'ansvarlig-revisor';
     const accessPackageDisplayName = 'Ansvarlig revisor';
 
-    const user = loadFacilitator(role);
-    const name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
+    let user: ReturnType<typeof loadFacilitator>;
+    let name: string;
+    let clientDelegationPage: ClientDelegationPage;
+    let response: { confirmUrl: string };
 
-    const clientDelegationPage = new ClientDelegationPage(page);
+    test.beforeEach(async ({ page }) => {
+      user = loadFacilitator(role);
+      name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
+      clientDelegationPage = new ClientDelegationPage(page);
 
-    const systemId = await test.step('Create system with access packages', async () => {
-      return await api.createSystemInSystemregisterWithAccessPackages(name);
+      const systemId = await test.step('Create system with access packages', async () => {
+        return await api.createSystemInSystemregisterWithAccessPackages(name);
+      });
+
+      response = await test.step('Create client delegation agent request', async () => {
+        return await api.postClientDelegationAgentRequest(systemId, accessPackageApiName, user.org);
+      });
     });
 
-    const response = await test.step('Create client delegation agent request', async () => {
-      return await api.postClientDelegationAgentRequest(systemId, accessPackageApiName, user.org);
-    });
+    test('Ansvarlig revisor - add all customers with one click', async ({ page, login }) => {
+      await test.step('Approve system user request', async () => {
+        await page.goto(response.confirmUrl);
+        await login.loginNotChoosingActor(user.pid);
+        await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
+        await expect(login.loginButton).toBeVisible();
+      });
 
-    await test.step('Approve system user request', async () => {
-      // Navigate to approve system user request URL returned by API
-      await page.goto(response.confirmUrl);
-      await login.loginNotChoosingActor(user.pid);
+      await test.step('Login and navigate to system user', async () => {
+        await login.LoginToAccessManagement(user.pid);
+        const reporteeName = user.name;
+        await login.chooseReportee(user.pidName, reporteeName);
 
-      // Approve system user and click it
-      await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
+        const frontPage = new AccessManagementFrontPage(page);
+        await frontPage.systemAccessLink.click();
 
-      // Verify logout by checking for login page elements
-      await expect(login.loginButton).toBeVisible();
-    });
+        await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
+        await clientDelegationPage.systemUserLink(name).click();
+      });
 
-    await test.step('Login and navigate to system user', async () => {
-      // Navigate to system user login page
-      await login.LoginToAccessManagement(user.pid);
-      const reporteeName = user.name;
-      await login.chooseReportee(user.pidName, reporteeName);
+      await test.step('Open system user and delegate all customers with one click', async () => {
+        await clientDelegationPage.openSystemUser(accessPackageDisplayName);
+        await clientDelegationPage.addAllCustomers();
+        await clientDelegationPage.confirmAndCloseButton.click();
+      });
 
-      // Go to system user overview page via menu link
-      const frontPage = new AccessManagementFrontPage(page);
-      await frontPage.systemAccessLink.click();
-
-      await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
-      await clientDelegationPage.systemUserLink(name).click();
-    });
-
-    await test.step('Open System User and delegate customers', async () => {
-      await clientDelegationPage.openSystemUser(accessPackageDisplayName);
-
-      // Add customers using "Legg til alle kunder"
-      await clientDelegationPage.addAllCustomers();
-
-      // Close modal
-      await clientDelegationPage.confirmAndCloseButton.click();
-    });
-
-    await test.step('Cleanup: Delete system user', async () => {
-      await clientDelegationPage.deleteSystemUser(name);
+      await test.step('Cleanup: Delete system user', async () => {
+        await clientDelegationPage.deleteSystemUser(name);
+      });
     });
   });
 
-  test('Regnskapsfører', async ({ page, login }) => {
+  test.describe('Regnskapsfører', () => {
     const role = FacilitatorRole.Regnskapsfoerer;
     const accessPackageApiName = 'regnskapsforer-lonn';
     const accessPackageDisplayName = 'Regnskapsfører lønn';
 
-    const user = loadFacilitator(role);
-    const customers = loadCustomers(role);
-    const name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
+    let user: ReturnType<typeof loadFacilitator>;
+    let customers: ReturnType<typeof loadCustomers>;
+    let name: string;
+    let clientDelegationPage: ClientDelegationPage;
+    let response: { confirmUrl: string };
 
-    const clientDelegationPage = new ClientDelegationPage(page);
+    test.beforeEach(async ({ page }) => {
+      user = loadFacilitator(role);
+      customers = loadCustomers(role);
+      name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
+      clientDelegationPage = new ClientDelegationPage(page);
 
-    const systemId = await test.step('Create system with access packages', async () => {
-      return await api.createSystemInSystemregisterWithAccessPackages(name);
+      const systemId = await test.step('Create system with access packages', async () => {
+        return await api.createSystemInSystemregisterWithAccessPackages(name);
+      });
+
+      response = await test.step('Create client delegation agent request', async () => {
+        return await api.postClientDelegationAgentRequest(systemId, accessPackageApiName, user.org);
+      });
     });
 
-    const response = await test.step('Create client delegation agent request', async () => {
-      return await api.postClientDelegationAgentRequest(systemId, accessPackageApiName, user.org);
-    });
+    test('Regnskapsfører', async ({ page, login }) => {
+      await test.step('Approve system user request', async () => {
+        await page.goto(response.confirmUrl);
+        await login.loginNotChoosingActor(user.pid);
+        await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
+        await expect(login.loginButton).toBeVisible();
+      });
 
-    await test.step('Approve system user request', async () => {
-      await page.goto(response.confirmUrl);
-      await login.loginNotChoosingActor(user.pid);
-      await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
-      await expect(login.loginButton).toBeVisible();
-    });
+      await test.step('Login and navigate to system user', async () => {
+        await login.LoginToAccessManagement(user.pid);
+        const reporteeName = user.name;
+        await login.chooseReportee(user.pidName, reporteeName);
 
-    await test.step('Login and navigate to system user', async () => {
-      await login.LoginToAccessManagement(user.pid);
-      const reporteeName = user.name;
-      await login.chooseReportee(user.pidName, reporteeName);
+        const frontPage = new AccessManagementFrontPage(page);
+        await frontPage.systemAccessLink.click();
 
-      const frontPage = new AccessManagementFrontPage(page);
-      await frontPage.systemAccessLink.click();
+        await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
+        await clientDelegationPage.systemUserLink(name).click();
+      });
 
-      await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
-      await clientDelegationPage.systemUserLink(name).click();
-    });
+      await test.step('Open system user and delegate customers', async () => {
+        await clientDelegationPage.openSystemUser(accessPackageDisplayName);
 
-    await test.step('Open system user and delegate customers', async () => {
-      await clientDelegationPage.openSystemUser(accessPackageDisplayName);
+        for (const customer of customers) {
+          await clientDelegationPage.addCustomer(
+            customer.label,
+            customer.confirmation,
+            customer.orgnummer,
+          );
+        }
+      });
 
-      for (const customer of customers) {
-        await clientDelegationPage.addCustomer(
-          customer.label,
-          customer.confirmation,
-          customer.orgnummer,
-        );
-      }
-    });
-
-    await test.step('Cleanup: Delete system user', async () => {
-      await clientDelegationPage.deleteSystemUser(name);
+      await test.step('Cleanup: Delete system user', async () => {
+        await clientDelegationPage.deleteSystemUser(name);
+      });
     });
   });
 
-  test('Forretningsfører', async ({ page, login }) => {
+  test.describe('Forretningsfører', () => {
     const role = FacilitatorRole.Forretningsfoerer;
     const accessPackageApiName = 'forretningsforer-eiendom';
     const accessPackageDisplayName = 'Forretningsforer eiendom';
 
-    const user = loadFacilitator(role);
-    const customers = loadCustomers(role);
-    const name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
+    let user: ReturnType<typeof loadFacilitator>;
+    let customers: ReturnType<typeof loadCustomers>;
+    let name: string;
+    let clientDelegationPage: ClientDelegationPage;
+    let response: { confirmUrl: string };
 
-    const clientDelegationPage = new ClientDelegationPage(page);
+    test.beforeEach(async ({ page }) => {
+      user = loadFacilitator(role);
+      customers = loadCustomers(role);
+      name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
+      clientDelegationPage = new ClientDelegationPage(page);
 
-    const systemId = await test.step('Create system with access packages', async () => {
-      return await api.createSystemInSystemregisterWithAccessPackages(name);
+      const systemId = await test.step('Create system with access packages', async () => {
+        return await api.createSystemInSystemregisterWithAccessPackages(name);
+      });
+
+      response = await test.step('Create client delegation agent request', async () => {
+        return await api.postClientDelegationAgentRequest(systemId, accessPackageApiName, user.org);
+      });
     });
 
-    const response = await test.step('Create client delegation agent request', async () => {
-      return await api.postClientDelegationAgentRequest(systemId, accessPackageApiName, user.org);
-    });
+    test('Forretningsfører', async ({ page, login }) => {
+      await test.step('Approve system user request', async () => {
+        await page.goto(response.confirmUrl);
+        await login.loginNotChoosingActor(user.pid);
+        await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
+        await expect(login.loginButton).toBeVisible();
+      });
 
-    await test.step('Approve system user request', async () => {
-      await page.goto(response.confirmUrl);
-      await login.loginNotChoosingActor(user.pid);
-      await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
-      await expect(login.loginButton).toBeVisible();
-    });
+      await test.step('Login and navigate to system user', async () => {
+        await login.LoginToAccessManagement(user.pid);
+        const reporteeName = user.name;
+        await login.chooseReportee(user.pidName, reporteeName);
 
-    await test.step('Login and navigate to system user', async () => {
-      await login.LoginToAccessManagement(user.pid);
-      const reporteeName = user.name;
-      await login.chooseReportee(user.pidName, reporteeName);
+        const frontPage = new AccessManagementFrontPage(page);
+        await frontPage.systemAccessLink.click();
 
-      const frontPage = new AccessManagementFrontPage(page);
-      await frontPage.systemAccessLink.click();
+        await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
+        await clientDelegationPage.systemUserLink(name).click();
+      });
 
-      await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
-      await clientDelegationPage.systemUserLink(name).click();
-    });
+      await test.step('Open system user and delegate customers', async () => {
+        await clientDelegationPage.openSystemUser(accessPackageDisplayName);
 
-    await test.step('Open system user and delegate customers', async () => {
-      await clientDelegationPage.openSystemUser(accessPackageDisplayName);
+        for (const customer of customers) {
+          await clientDelegationPage.addCustomer(
+            customer.label,
+            customer.confirmation,
+            customer.orgnummer,
+          );
+        }
+      });
 
-      for (const customer of customers) {
-        await clientDelegationPage.addCustomer(
-          customer.label,
-          customer.confirmation,
-          customer.orgnummer,
-        );
-      }
-    });
-
-    await test.step('Cleanup: Delete system user', async () => {
-      await clientDelegationPage.deleteSystemUser(name);
+      await test.step('Cleanup: Delete system user', async () => {
+        await clientDelegationPage.deleteSystemUser(name);
+      });
     });
   });
 });
