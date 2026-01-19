@@ -21,17 +21,14 @@ export class ClientDelegationPage {
       name: /^(Legg til kunder|Legg til eller fjern kunder)$/,
     });
 
-    // Scope modal-specific locators to the open dialog to avoid strict mode violations
-    this.addAllCustomersButton = page
-      .getByRole('dialog')
-      .getByRole('button', { name: 'Legg til alle kunder' });
-    this.addAllCustomersSuccessText = page
-      .getByRole('dialog')
-      .getByText(/Alle kunder er lagt til\.?/);
-    this.confirmAndCloseButton = page
-      .getByRole('dialog')
-      .getByRole('button', { name: 'Bekreft og lukk' });
+    this.addAllCustomersButton = page.getByRole('button', { name: 'Legg til alle kunder' });
+
+    this.addAllCustomersSuccessText = page.getByText(/Alle kunder er lagt til\.?/);
+
+    this.confirmAndCloseButton = page.getByRole('button', { name: 'Bekreft og lukk' });
+
     this.deleteSystemAccessButtons = page.getByRole('button', { name: 'Slett systemtilgang' });
+
     this.clientSearchBox = page
       .getByRole('dialog')
       .getByRole('searchbox', { name: 'Søk etter kunde' });
