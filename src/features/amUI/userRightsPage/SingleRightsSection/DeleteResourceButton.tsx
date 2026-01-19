@@ -42,7 +42,7 @@ export const DeleteResourceButton = ({ resource, fullText = false }: DeleteResou
     fromParty &&
     toParty && (
       <Button
-        variant='text'
+        variant='tertiary'
         icon={MinusCircleIcon}
         className={classes.deleteButton}
         disabled={isLoading}

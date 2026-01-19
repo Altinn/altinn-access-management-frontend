@@ -195,7 +195,7 @@ export const DeleteUserModal = ({ direction = 'to' }: { direction?: 'to' | 'from
               {!isDeletionNotAllowed && (
                 <Button
                   color='neutral'
-                  variant='text'
+                  variant='tertiary'
                   onClick={() => dialogRef.current?.close()}
                 >
                   {t('common.cancel')}

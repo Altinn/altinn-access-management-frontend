@@ -28,17 +28,15 @@ export const RevokeAccessPackageActionControl = ({
         <PackageIsPartiallyDeletableAlert
           confirmAction={onRevoke}
           triggerButtonProps={{
-            size: 'sm',
-            variant: 'text',
-            icon: MinusCircleIcon,
+            'data-size': 'sm',
+            variant: 'tertiary',
           }}
         />
       );
     }
     return (
       <Button
-        icon={MinusCircleIcon}
-        variant='text'
+        variant='tertiary'
         size='sm'
         onClick={onRevoke}
         aria-label={t('common.delete_poa_for', { poa_object: pkg.name })}
@@ -49,7 +47,10 @@ export const RevokeAccessPackageActionControl = ({
             data-size='sm'
           />
         ) : (
-          t('common.delete_poa')
+          <>
+            <MinusCircleIcon />
+            {t('common.delete_poa')}
+          </>
         )}
       </Button>
     );
