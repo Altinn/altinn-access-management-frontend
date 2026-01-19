@@ -16,7 +16,11 @@ export const useRequests = () => {
     isLoading: isLoadingIsAdmin,
     isError: isAdminError,
   } = useGetIsAdminQuery();
-  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
+  const {
+    data: reportee,
+    isLoading: isLoadingReportee,
+    isLoading: isReporteeError,
+  } = useGetReporteeQuery();
 
   const hasApproveConsentPermission = hasConsentPermission(isAdmin);
   const {
@@ -50,7 +54,8 @@ export const useRequests = () => {
 
   return {
     pendingRequests,
-    isError: isAdminError || isLoadingConsentsError || isLoadingPendingSystemUsersError,
+    isError:
+      isAdminError || isReporteeError || isLoadingConsentsError || isLoadingPendingSystemUsersError,
     isLoadingRequests:
       isLoadingIsAdmin ||
       isLoadingReportee ||
