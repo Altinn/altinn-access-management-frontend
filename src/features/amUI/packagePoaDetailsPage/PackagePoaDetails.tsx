@@ -19,7 +19,6 @@ export const PackagePoaDetails = () => {
   const { t, i18n } = useTranslation();
   const { fromParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
-  const shouldSkip = !id || !fromParty?.partyUuid;
 
   const {
     data: accessPackage,
@@ -32,7 +31,7 @@ export const PackagePoaDetails = () => {
       packageId: id || '',
       language: i18n.language,
     },
-    { skip: shouldSkip },
+    { skip: !id || !fromParty?.partyUuid },
   );
 
   const [chosenTab, setChosenTab] = useState('users');
