@@ -129,8 +129,8 @@ const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
             description={`${t(request.description)} (${formatDateToNorwegian(request.createdDate)})`}
             as={(props) => (
               <Link
-                to={toUrl}
                 {...props}
+                to={toUrl}
               />
             )}
             controls={t('request_page.process_request')}
