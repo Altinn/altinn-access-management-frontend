@@ -17,6 +17,7 @@ import {
 import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader';
 import { useEffect, useState } from 'react';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
+import { profile } from 'console';
 
 export const handleSelectAccount = (accountUuid: string) => {
   // always redirect to start-page when changing account
@@ -37,6 +38,9 @@ export const useHeader = ({
 }) => {
   const { t, i18n } = useTranslation();
   const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(openAccountMenu);
+  const [shouldShowDeletedUnits, setShouldShowDeletedUnits] = useState<boolean | undefined>(
+    undefined,
+  );
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: userProfile, isLoading: isLoadingUserProfile } = useGetUserProfileQuery();
@@ -69,6 +73,15 @@ export const useHeader = ({
     }
   }, [isLoadingReporteeList, reporteeList, isLoadingUserProfile, userProfile]);
 
+  useEffect(() => {
+    if (
+      !isLoadingUserProfile &&
+      userProfile?.profileSettingPreference?.shouldShowDeletedEntities !== undefined
+    ) {
+      setShouldShowDeletedUnits(userProfile?.profileSettingPreference?.shouldShowDeletedEntities);
+    }
+  }, [isLoadingUserProfile, userProfile]);
+
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
@@ -85,13 +98,10 @@ export const useHeader = ({
   };
 
   const onShowDeletedUnitsChange = (shouldShowDeleted: boolean) => {
-    console.log('Updating show deleted units to: ', shouldShowDeleted);
-    console.log('Timestamp before: ', new Date().toISOString());
     updateShowDeleted(shouldShowDeleted)
       .unwrap()
-      .then(() => {
-        console.log('Show deleted units updated on server');
-        console.log('Timestamp after: ', new Date().toISOString());
+      .then((response) => {
+        setShouldShowDeletedUnits(response.shouldShowDeletedEntities);
       });
   };
 
@@ -115,7 +125,7 @@ export const useHeader = ({
       isLoadingReportee ||
       isLoadingFavoriteAccounts ||
       hideAccountSelector,
-    showDeletedUnits: userProfile?.profileSettingPreference?.shouldShowDeletedEntities ?? undefined,
+    showDeletedUnits: shouldShowDeletedUnits ?? undefined,
 
     onToggleFavorite: onToggleFavorite,
     onShowDeletedUnitsChange: onShowDeletedUnitsChange,
