@@ -90,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AddPartyUuidToFavorites failed to add partyUuid");
+                _logger.LogError(ex, "UpdateShouldShowDeletedPreference failed to update parameter");
                 return StatusCode(500);
             }
         }

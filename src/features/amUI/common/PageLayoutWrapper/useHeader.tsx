@@ -17,7 +17,7 @@ import {
 import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader';
 import { useEffect, useState } from 'react';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
-import { profile } from 'console';
+import { displayDeletedAccountToggle } from '@/resources/utils/featureFlagUtils';
 
 export const handleSelectAccount = (accountUuid: string) => {
   // always redirect to start-page when changing account
@@ -75,6 +75,7 @@ export const useHeader = ({
 
   useEffect(() => {
     if (
+      displayDeletedAccountToggle() &&
       !isLoadingUserProfile &&
       userProfile?.profileSettingPreference?.shouldShowDeletedEntities !== undefined
     ) {

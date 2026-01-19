@@ -65,7 +65,19 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public async Task<ProfileSettingPreference> PatchCurrentUserProfileSetting(ProfileSettingPreference settingsChange)
         {
-            // Use fallback userUuid as suggested
+            // Check authentication context for special test scenarios
+            var httpContext = _httpContextAccessor?.HttpContext;
+            if (httpContext?.User?.Identity?.IsAuthenticated == true)
+            {
+                var userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+                // Special test scenario for 500 - internal server error
+                if (userId == 500)
+                {
+                    throw new HttpRequestException("Internal server error");
+                }
+            }
+
+            // static userId for testing
             var userUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
 
             string path = GetDataPathForProfiles();
@@ -100,8 +112,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                         result.PreselectedPartyUuid = settingsChange.PreselectedPartyUuid;
                     if (settingsChange.ShowClientUnits.HasValue)
                         result.ShowClientUnits = settingsChange.ShowClientUnits;
-                    // ShouldShowSubEntities is not nullable, so always apply
-                    result.ShouldShowSubEntities = settingsChange.ShouldShowSubEntities;
+                    result.ShouldShowSubEntities = settingsChange.ShouldShowSubEntities; // ShouldShowSubEntities is not nullable, so always apply
                     if (settingsChange.ShouldShowDeletedEntities.HasValue)
                         result.ShouldShowDeletedEntities = settingsChange.ShouldShowDeletedEntities;
 
