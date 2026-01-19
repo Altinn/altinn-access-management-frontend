@@ -13,8 +13,9 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         ///     Integration point for retrieving a single resoure by it's resource id
         /// </summary>
         /// <param name="resourceId">The identifier of the resource in the Resource Registry</param>
+        /// <param name="versionId">The version of the resource in the Resource Registry</param>
         /// <returns>The resource if exists</returns>
-        Task<ServiceResource> GetResource(string resourceId);
+        Task<ServiceResource> GetResource(string resourceId, int? versionId = null);
 
         /// <summary>
         /// Integration point for retrieving a list of resources. Weird enough it's not possible to filter on AltinnApp or Altinn2Service for this endpoint.

@@ -54,12 +54,17 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<ServiceResource> GetResource(string resourceId)
+        public async Task<ServiceResource> GetResource(string resourceId, int? versionId = null)
         {
             try 
             {
                 ServiceResource result = null;
                 string endpointUrl = $"resource/{resourceId}";
+
+                if (versionId.HasValue)
+                {
+                    endpointUrl += $"?versionId={versionId.Value}";
+                }
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
                 if (response.StatusCode == HttpStatusCode.OK)

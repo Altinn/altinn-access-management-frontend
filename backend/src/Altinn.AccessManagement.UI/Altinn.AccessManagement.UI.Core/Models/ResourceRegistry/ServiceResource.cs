@@ -141,6 +141,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
         public bool IsOneTimeConsent { get; set; }
 
         /// <summary>
+        /// Gets or sets the unique identifier for the version of the entity.
+        /// </summary>
+        public int VersionId { get; set; }
+
+        /// <summary>
         /// Writes key information when this object is written to Log.
         /// </summary>
         /// <returns></returns>
