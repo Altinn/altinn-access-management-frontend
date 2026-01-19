@@ -14,5 +14,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// The value of the resource attribute
         /// </summary>
         public required string Value { get; set; }
+
+        /// <summary>
+        /// The version of the resource attribute
+        /// </summary>
+        public int? Version { get; set; }
     }
 }
