@@ -178,6 +178,7 @@ export const SystemUserAgentDelegationPageContent = ({
       setDelegations((oldDelegations) =>
         oldDelegations.filter((delegation) => delegation.delegationId !== toRemove.delegationId),
       );
+      removeErrorId(toRemove.customerId);
       showConfirmationSnackbar(
         t('systemuser_agent_delegation.customer_removed', {
           customerName,
