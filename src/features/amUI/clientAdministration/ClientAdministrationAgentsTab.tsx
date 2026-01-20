@@ -56,7 +56,6 @@ export const ClientAdministrationAgentsTab = () => {
   );
 
   const handleAddAgent = (userId: string) => {
-    console.log('userId: ', userId);
     addAgent({ to: userId })
       .unwrap()
       .then(() => {
@@ -92,6 +91,7 @@ export const ClientAdministrationAgentsTab = () => {
         includeSelfAsChildOnIndirect={false}
         connections={agentConnections}
         indirectConnections={filteredIndirectConnections}
+        getUserLink={(user) => `/clientadministration/agent/${user.id}`}
         isLoading={isAgentsLoading || isIndirectLoading}
         isActionLoading={isIndirectFetching}
         AddUserButton={AddAgentButton}

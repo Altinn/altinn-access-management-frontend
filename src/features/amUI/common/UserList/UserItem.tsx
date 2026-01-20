@@ -26,6 +26,7 @@ interface UserItemProps extends Pick<
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
   includeSelfAsChild?: boolean;
+  linkTo?: string;
   controls?: (user: ExtendedUser | User) => ReactNode;
 }
 
@@ -54,6 +55,7 @@ export const UserItem = ({
   subUnit = false,
   disableLinks = false,
   includeSelfAsChild = true,
+  linkTo,
   shadow,
   controls,
   ...props
@@ -165,7 +167,7 @@ export const UserItem = ({
             : (props) => (
                 <Link
                   {...props}
-                  to={user.id}
+                  to={linkTo ?? user.id}
                 />
               )
       }
