@@ -4,15 +4,11 @@ import { DsAlert, DsHeading, DsParagraph, formatDisplayName } from '@altinn/alti
 import { useParams } from 'react-router';
 
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { amUIPath } from '@/routes/paths';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PageContainer } from '../common/PageContainer/PageContainer';
-import {
-  PartyRepresentationProvider,
-  usePartyRepresentation,
-} from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
 import { PartyType } from '@/rtk/features/userInfoApi';
