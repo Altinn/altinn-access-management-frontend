@@ -7,20 +7,18 @@ import {
   DsSkeleton,
   formatDisplayName,
 } from '@altinn/altinn-components';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { amUIPath } from '@/routes/paths';
+import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
-import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 
-export const ClientAdministrationAgentDetails = () => {
+export const ClientAdministrationClientDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const navigate = useNavigate();
   const { toParty } = usePartyRepresentation();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
 
@@ -47,7 +45,7 @@ export const ClientAdministrationAgentDetails = () => {
   }
 
   const backUrl = `/${amUIPath.ClientAdministration}`;
-  const userName = formatDisplayName({
+  const clientName = formatDisplayName({
     fullName: toParty?.name || '',
     type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
   });
@@ -57,22 +55,11 @@ export const ClientAdministrationAgentDetails = () => {
       <Breadcrumbs
         items={['root', 'client_administration']}
         lastBreadcrumb={{
-          label: toParty?.name ? userName : '',
+          label: clientName,
         }}
       />
-      <PageContainer
-        backUrl={backUrl}
-        contentActions={
-          id ? (
-            <ClientAdministrationAgentDeleteModal
-              agentId={id}
-              backUrl={backUrl}
-            />
-          ) : null
-        }
-      >
-        <DsHeading data-size='lg'>{userName}</DsHeading>
-
+      <PageContainer backUrl={backUrl}>
+        <DsHeading data-size='lg'>{clientName}</DsHeading>
         {!id && (
           <DsAlert data-color='warning'>
             <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
