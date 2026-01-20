@@ -18,6 +18,7 @@ export interface AdvancedUserSearchProps {
   includeSelfAsChildOnIndirect?: boolean;
   connections?: Connection[];
   indirectConnections?: Connection[];
+  getUserLink?: (user: ExtendedUser) => string;
   onDelegate?: (user: User) => void;
   onAddNewUser?: (user: User) => void;
   onRevoke?: (user: User) => void;
@@ -44,6 +45,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   includeSelfAsChildOnIndirect = true,
   connections,
   indirectConnections,
+  getUserLink,
   onDelegate,
   onAddNewUser,
   onRevoke,
@@ -146,6 +148,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
             isActionLoading={isActionLoading}
             onRevoke={onRevoke}
             includeSelfAsChild={includeSelfAsChild}
+            getUserLink={getUserLink}
           />
           {showDirectNoResults && (
             <DsParagraph data-size='md'>

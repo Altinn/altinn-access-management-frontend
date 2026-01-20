@@ -8,4 +8,5 @@ export enum amUIPath {
   Settings = 'settings',
   Requests = 'requests',
   ClientAdministration = 'clientadministration',
+  ClientAdministrationAgent = 'clientadministration/agent/:id',
 }

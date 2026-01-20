@@ -5,6 +5,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { ClientAdministrationPageContent } from './ClientAdministrationPageContent';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 export const ClientAdministrationPage = () => {
   return (
@@ -15,6 +16,7 @@ export const ClientAdministrationPage = () => {
           actingPartyUuid={getCookie('AltinnPartyUuid')}
           errorOnPriv={true}
         >
+          <Breadcrumbs items={['root', 'client_administration']} />
           <ClientAdministrationPageContent />
         </PartyRepresentationProvider>
       </PageLayoutWrapper>
