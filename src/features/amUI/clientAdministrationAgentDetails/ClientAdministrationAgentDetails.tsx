@@ -7,7 +7,7 @@ import {
   DsSkeleton,
   formatDisplayName,
 } from '@altinn/altinn-components';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { amUIPath } from '@/routes/paths';
 
@@ -20,7 +20,6 @@ import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi'
 export const ClientAdministrationAgentDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const navigate = useNavigate();
   const { toParty } = usePartyRepresentation();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
 
