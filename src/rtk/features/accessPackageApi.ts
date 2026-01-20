@@ -76,9 +76,12 @@ export const accessPackageApi = createApi({
   }),
   tagTypes: ['AccessPackages'],
   endpoints: (builder) => ({
-    search: builder.query<AccessArea[], { searchString: string; language: string }>({
-      query: ({ searchString }) => {
-        return `search?&searchString=${searchString}`;
+    search: builder.query<
+      AccessArea[],
+      { searchString: string; language: string; typeName: string }
+    >({
+      query: ({ searchString, typeName }) => {
+        return `search?&searchString=${searchString}&typeName=${typeName}`;
       },
     }),
     getUserDelegations: builder.query<
