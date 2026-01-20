@@ -24,6 +24,7 @@ export interface User {
   dateOfBirth?: string | null;
   userId?: string | null;
   username?: string | null;
+  sortKey?: string;
 }
 
 interface UserProfileApiResponse {

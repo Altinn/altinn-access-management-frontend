@@ -5,18 +5,45 @@ import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
 import { type Client, useGetClientsQuery } from '@/rtk/features/clientApi';
 import { type Connection } from '@/rtk/features/connectionApi';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
-const buildClientConnections = (clients?: Client[]): Connection[] =>
-  clients?.map((client) => ({
-    party: {
-      ...client.client,
-      children: null,
-      parent: null,
+const buildClientSortKey = (client: Client, parentNameById: Map<string, string>): string => {
+  const parentId = client.client.parent?.id;
+  const isSubUnit = Boolean(parentId) && isSubUnitByType(client.client.variant);
+  const parentName =
+    (parentId ? parentNameById.get(parentId) : undefined) ??
+    client.client.parent?.name ??
+    client.client.name;
+  const groupName = isSubUnit ? parentName : client.client.name;
+  const groupId = isSubUnit && parentId ? parentId : client.client.id;
+  return `${groupName}|${groupId}|${isSubUnit ? '1' : '0'}|${client.client.name}`;
+};
+
+const buildClientConnections = (clients?: Client[]): Connection[] => {
+  if (!clients?.length) return [];
+
+  const parentNameById = new Map<string, string>();
+  clients.forEach((client) => {
+    if (client.client?.id) {
+      parentNameById.set(client.client.id, client.client.name);
+    }
+  });
+
+  return clients.map((client) => {
+    const sortKey = buildClientSortKey(client, parentNameById);
+    return {
+      party: {
+        ...client.client,
+        children: null,
+        parent: null,
+        roles: [],
+      },
+      sortKey,
       roles: [],
-    },
-    roles: [],
-    connections: [],
-  })) ?? [];
+      connections: [],
+    };
+  });
+};
 
 export const ClientAdministrationClientsTab = () => {
   const { t } = useTranslation();

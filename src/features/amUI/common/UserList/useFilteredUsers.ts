@@ -21,6 +21,7 @@ const mapToExtendedUsers = (connections: Connection[]): ExtendedUser[] => {
       ...connection.party,
       roles: connection.roles,
       children,
+      sortKey: connection.sortKey,
     };
   });
 };
@@ -94,7 +95,9 @@ const sortUsers = (users: (ExtendedUser | User)[]): (ExtendedUser | User)[] => {
       return -1;
     if (b.type?.toLowerCase() === 'organisasjon' && a.type?.toLowerCase() !== 'organisasjon')
       return 1;
-    return a.name.localeCompare(b.name);
+    const aSortKey = a.sortKey ?? a.name;
+    const bSortKey = b.sortKey ?? b.name;
+    return aSortKey.localeCompare(bSortKey);
   });
 };
 
