@@ -557,7 +557,7 @@
     "agent_search_placeholder": "Søk etter person",
     "agent_delete_button": "Slett brukar",
     "agent_delete_heading": "Du slettar denne brukaren",
-    "agent_delete_body": "Denne personen og alle fullmaktene hos klientane dine vil bli sletta.",
+    "agent_delete_body": "Denne personen og alle deira fullmakter hos klientane dine vil bli sletta.",
     "agent_delete_confirm": "Slett brukar",
     "direct_connections_heading": "Brukarar med klienttilgang",
     "indirect_connections_heading": "Andre brukarar",
