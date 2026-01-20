@@ -5,14 +5,17 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { Navigate, useParams } from 'react-router';
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
-import { DsAlert } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 import { t } from 'i18next';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { PageWrapper } from '@/components';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
 export const ClientAdministrationAgentDetailsPage = () => {
   const { id } = useParams();
-  const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
+
   const pageIsEnabled = clientAdministrationPageEnabled();
+
   if (!pageIsEnabled) {
     return (
       <Navigate
@@ -22,20 +25,18 @@ export const ClientAdministrationAgentDetailsPage = () => {
     );
   }
 
-  if (isClientAdmin === false) {
-    return (
-      <DsAlert data-color='warning'>{t('client_administration_page.no_access_title')}</DsAlert>
-    );
-  }
-
   return (
-    <PartyRepresentationProvider
-      fromPartyUuid={getCookie('AltinnPartyUuid')}
-      actingPartyUuid={getCookie('AltinnPartyUuid')}
-      toPartyUuid={id}
-      errorOnPriv={true}
-    >
-      <ClientAdministrationAgentDetails />
-    </PartyRepresentationProvider>
+    <PageWrapper>
+      <PageLayoutWrapper>
+        <PartyRepresentationProvider
+          fromPartyUuid={getCookie('AltinnPartyUuid')}
+          actingPartyUuid={getCookie('AltinnPartyUuid')}
+          toPartyUuid={id}
+          errorOnPriv={true}
+        >
+          <ClientAdministrationAgentDetails />
+        </PartyRepresentationProvider>
+      </PageLayoutWrapper>
+    </PageWrapper>
   );
 };
