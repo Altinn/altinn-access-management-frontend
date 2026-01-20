@@ -135,7 +135,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
                 })}
             </DsParagraph>
           )}
-          {isQuery && (
+          {isQuery && showIndirectList && (
             <h3 className={classes.subHeader}>
               {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
             </h3>
