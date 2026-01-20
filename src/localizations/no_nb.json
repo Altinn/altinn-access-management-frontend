@@ -555,8 +555,6 @@
     "add_agent_error": "Kunne ikke legge til bruker.",
     "add_agent_success_snackbar": "Bruker lagt til.",
     "agent_search_placeholder": "Søk etter person",
-    "agent_details_heading": "Brukerdetaljer",
-    "agent_access_packages_heading": "Tilgangspakker for denne brukeren",
     "agent_delete_button": "Slett bruker",
     "agent_delete_heading": "Du sletter denne brukeren",
     "agent_delete_body": "Denne personen og alle dens fullmakter hos dine klienter vil bli slettet.",

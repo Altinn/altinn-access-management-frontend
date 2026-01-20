@@ -10,15 +10,19 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
+import { ClientAdministrationAgentDeleteModal } from '../clientAdministration/ClientAdministrationAgentDeleteModal';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 export const ClientAdministrationAgentDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
+  const { toParty } = usePartyRepresentation();
 
   const backUrl = `/${amUIPath.ClientAdministration}`;
-  const { toParty } = usePartyRepresentation();
+  const userName = formatDisplayName({
+    fullName: toParty?.name || '',
+    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  });
   return (
     <PageWrapper>
       <PageLayoutWrapper>
@@ -36,18 +40,16 @@ export const ClientAdministrationAgentDetails = () => {
         <PageContainer
           backUrl={backUrl}
           contentActions={
-            <ClientAdministrationAgentDeleteModal
-              agentId={id}
-              backUrl={backUrl}
-            />
+            id ? (
+              <ClientAdministrationAgentDeleteModal
+                agentId={id}
+                backUrl={backUrl}
+              />
+            ) : null
           }
         >
-          <DsHeading data-size='lg'>
-            {t('client_administration_page.agent_details_heading')}
-          </DsHeading>
-          <DsHeading data-size='sm'>
-            {t('client_administration_page.agent_access_packages_heading')}
-          </DsHeading>
+          <DsHeading data-size='lg'>{userName}</DsHeading>
+
           {!id && (
             <DsAlert data-color='warning'>
               <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
