@@ -1,17 +1,18 @@
 import React from 'react';
-import { TenancyIcon } from '@navikt/aksel-icons';
 import { Avatar, DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 
 import classes from './SystemUserHeader.module.css';
 
 interface SystemUserHeaderProps {
   title: string;
+  avatarTitle?: string;
   subTitle?: string;
   isLoading?: boolean;
 }
 
 export const SystemUserHeader = ({
   title,
+  avatarTitle,
   subTitle,
   isLoading,
 }: SystemUserHeaderProps): React.ReactNode => {
@@ -20,7 +21,7 @@ export const SystemUserHeader = ({
       <Avatar
         type='system'
         className={classes.systemUserDetailsHeaderAvatar}
-        name={title}
+        name={avatarTitle || title}
       />
       <div className={classes.headingContainer}>
         <DsHeading
