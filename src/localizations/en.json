@@ -835,7 +835,9 @@
     "no_resources": "No resources available.",
     "filter_by_serviceowner": "Filter by service owner",
     "resource_search_clear": "Clear search",
-    "remove_filter": "Remove filter"
+    "remove_filter": "Remove filter",
+    "service_owner_filter": "Search for service owner",
+    "service_owner_filter_clear": "Clear search field"
   },
   "landing_page": {
     "alert_heading": "You are now in the new access management solution",
