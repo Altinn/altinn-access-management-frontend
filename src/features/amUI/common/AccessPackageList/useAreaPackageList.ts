@@ -12,6 +12,7 @@ import {
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { getInheritedStatus, type InheritedStatusMessageType } from '../useInheritedStatus';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export interface ExtendedAccessArea extends AccessArea {
   packages: {
@@ -46,13 +47,27 @@ export const useAreaPackageList = ({
 }: useAreaPackagesProps) => {
   const { i18n } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  const typeName = actingParty
+    ? actingParty.partyTypeName === PartyType.Organization
+      ? 'organisasjon'
+      : 'person'
+    : undefined;
 
   const {
     data: allPackageAreas,
     isLoading: loadingPackageAreas,
     isFetching: fetchingSearch,
     error: searchError,
-  } = useSearchQuery({ searchString: searchString ?? '', language: i18n.language });
+  } = useSearchQuery(
+    {
+      searchString: searchString ?? '',
+      language: i18n.language,
+      typeName,
+    },
+    {
+      skip: !actingParty,
+    },
+  );
 
   const {
     data: activeDelegations,

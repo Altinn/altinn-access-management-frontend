@@ -79,7 +79,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
 
             if (accessPackageIds.Any())
             {
-                var accessPackageSearchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty);
+                var accessPackageSearchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty, null);
                 IEnumerable<AccessPackage> accessPackages = accessPackageSearchMatches.Select(x => x.Object);
 
                 IEnumerable<AccessPackage> usedAccessPackages = accessPackages.Where(package => accessPackageIds.Contains(package.Urn));
