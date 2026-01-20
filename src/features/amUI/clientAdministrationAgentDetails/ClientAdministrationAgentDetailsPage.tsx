@@ -5,9 +5,6 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { Navigate, useParams } from 'react-router';
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
-import { DsAlert, DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
-import { t } from 'i18next';
-import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 

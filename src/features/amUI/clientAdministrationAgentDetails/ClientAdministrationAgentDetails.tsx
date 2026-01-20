@@ -9,10 +9,8 @@ import {
 } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 
-import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { amUIPath } from '@/routes/paths';
 
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
