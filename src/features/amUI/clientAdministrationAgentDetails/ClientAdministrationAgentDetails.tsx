@@ -56,7 +56,7 @@ export const ClientAdministrationAgentDetails = () => {
       <Breadcrumbs
         items={['root', 'client_administration']}
         lastBreadcrumb={{
-          label: toParty?.name ? userName : '',
+          label: userName,
         }}
       />
       <PageContainer
