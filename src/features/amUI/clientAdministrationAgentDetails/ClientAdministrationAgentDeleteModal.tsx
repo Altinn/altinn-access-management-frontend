@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 
 import { useRemoveAgentMutation } from '@/rtk/features/clientApi';
 import classes from './ClientAdministrationAgentDeleteModal.module.css';
-import { TrashFillIcon } from '@navikt/aksel-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 interface ClientAdministrationAgentDeleteModalProps {
   agentId?: string;
@@ -28,7 +28,7 @@ export const ClientAdministrationAgentDeleteModal = ({
         onClick={() => setDeleteOpen(true)}
         disabled={!agentId}
       >
-        <TrashFillIcon />
+        <TrashIcon />
         {t('client_administration_page.agent_delete_button')}
       </DsButton>
       <DsDialog
