@@ -47,17 +47,27 @@ export const useAreaPackageList = ({
 }: useAreaPackagesProps) => {
   const { i18n } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  const typeName = actingParty
+    ? actingParty.partyTypeName === PartyType.Organization
+      ? 'organisasjon'
+      : 'person'
+    : undefined;
 
   const {
     data: allPackageAreas,
     isLoading: loadingPackageAreas,
     isFetching: fetchingSearch,
     error: searchError,
-  } = useSearchQuery({
-    searchString: searchString ?? '',
-    language: i18n.language,
-    typeName: actingParty?.partyTypeName === PartyType.Organization ? 'organisasjon' : 'person',
-  });
+  } = useSearchQuery(
+    {
+      searchString: searchString ?? '',
+      language: i18n.language,
+      typeName,
+    },
+    {
+      skip: !actingParty,
+    },
+  );
 
   const {
     data: activeDelegations,

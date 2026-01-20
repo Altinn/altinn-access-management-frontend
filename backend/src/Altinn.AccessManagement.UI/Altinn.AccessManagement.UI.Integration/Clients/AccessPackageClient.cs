@@ -95,6 +95,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string safeTypeName = Uri.EscapeDataString(typeName);
                 endpointUrl = $"{endpointUrl}&typeName={safeTypeName}";
             }
+            
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);

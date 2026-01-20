@@ -78,10 +78,11 @@ export const accessPackageApi = createApi({
   endpoints: (builder) => ({
     search: builder.query<
       AccessArea[],
-      { searchString: string; language: string; typeName: string }
+      { searchString: string; language: string; typeName?: string }
     >({
       query: ({ searchString, typeName }) => {
-        return `search?&searchString=${searchString}&typeName=${typeName}`;
+        const typeNameParam = typeName ? `&typeName=${typeName}` : '';
+        return `search?searchString=${searchString}${typeNameParam}`;
       },
     }),
     getUserDelegations: builder.query<
