@@ -48,6 +48,24 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             return Util.GetMockData<List<AgentDelegation>>(path);
         }
 
+        private List<ClientDelegation> LoadAgentAccessPackages()
+        {
+            string path = Path.Combine(_testDataFolder, "agentsAccessPackages.json");
+            return Util.GetMockData<List<ClientDelegation>>(path);
+        }
+
+        private List<AgentDelegation> LoadClientAccessPackages()
+        {
+            string path = Path.Combine(_testDataFolder, "clientsAccessPackages.json");
+            return Util.GetMockData<List<AgentDelegation>>(path);
+        }
+
+        private List<DelegationDto> LoadAgentAccessPackageDelegations()
+        {
+            string path = Path.Combine(_testDataFolder, "agentsAccessPackagesDelegations.json");
+            return Util.GetMockData<List<DelegationDto>>(path);
+        }
+
         private void SetAuthHeader(HttpClient client = null)
         {
             string token = PrincipalUtil.GetToken(1234, 1234, 2);
@@ -128,6 +146,110 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/agents?party={party}");
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetAgentAccessPackages returns the expected list of client delegations.
+        /// </summary>
+        [Fact]
+        public async Task GetAgentAccessPackages_ReturnsClients()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            List<ClientDelegation> expectedResponse = LoadAgentAccessPackages();
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party={party}&to={to}");
+            List<ClientDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<ClientDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Equivalent(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        /// Test case: GetClientAccessPackages returns the expected list of agent delegations.
+        /// </summary>
+        [Fact]
+        public async Task GetClientAccessPackages_ReturnsAgents()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            List<AgentDelegation> expectedResponse = LoadClientAccessPackages();
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/clients/accesspackages?party={party}&from={from}");
+            List<AgentDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<AgentDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Equivalent(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        /// Test case: AddAgentAccessPackages returns the expected list of delegations.
+        /// </summary>
+        [Fact]
+        public async Task AddAgentAccessPackages_ReturnsDelegations()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            List<DelegationDto> expectedResponse = LoadAgentAccessPackageDelegations();
+            DelegationBatchInputDto payload = new DelegationBatchInputDto
+            {
+                Values =
+                [
+                    new DelegationBatchInputDto.Permission
+                    {
+                        Role = "DAGL",
+                        Packages = ["urn:altinn:accesspackage:demo"]
+                    }
+                ]
+            };
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsJsonAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party={party}&from={from}&to={to}",
+                payload);
+            List<DelegationDto> actualResponse = await response.Content.ReadFromJsonAsync<List<DelegationDto>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Equivalent(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        /// Test case: RemoveAgentAccessPackages returns no content on valid input.
+        /// </summary>
+        [Fact]
+        public async Task RemoveAgentAccessPackages_ReturnsNoContent()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            DelegationBatchInputDto payload = new DelegationBatchInputDto
+            {
+                Values =
+                [
+                    new DelegationBatchInputDto.Permission
+                    {
+                        Role = "DAGL",
+                        Packages = ["urn:altinn:accesspackage:demo"]
+                    }
+                ]
+            };
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party={party}&from={from}&to={to}")
+            {
+                Content = JsonContent.Create(payload)
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
         /// <summary>

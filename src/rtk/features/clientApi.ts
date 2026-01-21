@@ -28,6 +28,23 @@ export interface AssignmentDto {
   toId: string;
 }
 
+export interface DelegationBatchPermission {
+  role: string;
+  package: string[];
+}
+
+export interface DelegationBatchInput {
+  values: DelegationBatchPermission[];
+}
+
+export interface DelegationDto {
+  roleId: string;
+  packageId: string;
+  viaId: string;
+  fromId: string;
+  toId: string;
+}
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/clientdelegations`;
 
 export const clientApi = createApi({
@@ -40,7 +57,7 @@ export const clientApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['clients', 'agents'],
+  tagTypes: ['clients', 'agents', 'agentAccessPackages', 'clientAccessPackages'],
   endpoints: (builder) => ({
     getClients: builder.query<Client[], void>({
       query: () => `clients?party=${getCookie('AltinnPartyUuid')}`,
@@ -51,6 +68,40 @@ export const clientApi = createApi({
       query: () => `agents?party=${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 3,
       providesTags: ['agents'],
+    }),
+    getAgentAccessPackages: builder.query<Client[], { to: string; party?: string }>({
+      query: ({ to, party = getCookie('AltinnPartyUuid') }) =>
+        `agents/accesspackages?party=${party}&to=${to}`,
+      keepUnusedDataFor: 3,
+      providesTags: ['agentAccessPackages'],
+    }),
+    getClientAccessPackages: builder.query<Agent[], { from: string; party?: string }>({
+      query: ({ from, party = getCookie('AltinnPartyUuid') }) =>
+        `clients/accesspackages?party=${party}&from=${from}`,
+      keepUnusedDataFor: 3,
+      providesTags: ['clientAccessPackages'],
+    }),
+    addAgentAccessPackages: builder.mutation<
+      DelegationDto[],
+      { from: string; to: string; payload: DelegationBatchInput; party?: string }
+    >({
+      query: ({ from, to, payload, party = getCookie('AltinnPartyUuid') }) => ({
+        url: `agents/accesspackages?party=${party}&from=${from}&to=${to}`,
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: ['agentAccessPackages', 'clientAccessPackages'],
+    }),
+    removeAgentAccessPackages: builder.mutation<
+      void,
+      { from: string; to: string; payload: DelegationBatchInput; party?: string }
+    >({
+      query: ({ from, to, payload, party = getCookie('AltinnPartyUuid') }) => ({
+        url: `agents/accesspackages?party=${party}&from=${from}&to=${to}`,
+        method: 'DELETE',
+        body: payload,
+      }),
+      invalidatesTags: ['agentAccessPackages', 'clientAccessPackages'],
     }),
     addAgent: builder.mutation<AssignmentDto, { to?: string; personInput?: PersonInput }>({
       query: ({ to, personInput }) => ({
@@ -73,6 +124,10 @@ export const clientApi = createApi({
 export const {
   useGetClientsQuery,
   useGetAgentsQuery,
+  useGetAgentAccessPackagesQuery,
+  useGetClientAccessPackagesQuery,
+  useAddAgentAccessPackagesMutation,
+  useRemoveAgentAccessPackagesMutation,
   useAddAgentMutation,
   useRemoveAgentMutation,
 } = clientApi;
