@@ -42,12 +42,9 @@ export class DelegationApiRequest {
     if (!response.ok()) {
       throw new Error(`Delegation creation failed: ${response.status()} ${await response.text()}`);
     }
-
-    console.log(`Delegation created: ${fromPerson.PartyUUID} → ${toPerson.PartyUUID}`);
   }
 
   //Delegate access pacakge to 'Rettighetshaver'
-
   public async delegateAccessPkg(fromPerson: any, toPerson: any, pkg: string): Promise<void> {
     const headers = await this.authHeaders(fromPerson);
 
@@ -80,10 +77,6 @@ export class DelegationApiRequest {
           `Delegating package "${pkgName}" failed: ${response.status()} ${await response.text()}`,
         );
       }
-
-      console.log(
-        `Access package delegated: ${fromPerson.PartyUUID} → ${toPerson.PartyUUID} : ${pkgName}`,
-      );
     }
   }
 
@@ -119,7 +112,5 @@ export class DelegationApiRequest {
         `Delegation cleanup failed: status=${response.status()} url=${url} body=${body}`,
       );
     }
-
-    console.log(`Delegation cleaned: ${fromOrg.PartyUUID} → ${toOrg.PartyUUID}`);
   }
 }

@@ -1,7 +1,23 @@
 import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
+import { withTimeout } from 'playwright/util/asyncUtils';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
+  test.afterEach(async ({}, testInfo) => {
+    const title = testInfo.title || 'unknown-test';
+
+    try {
+      await withTimeout(
+        DelegationApiUtil.cleanupAllDelegations(title),
+        15_000, // cleanup budget
+        `cleanupAllDelegations(${title})`,
+      );
+    } catch (err) {
+      // Don't fail tests if cleanup is flaky or slow
+      console.warn(`[afterEach] Cleanup failed or timed out for: ${title}`, err);
+    }
+  });
+
   test('Org-A delegates access package to Org-B', async ({ delegation, login }) => {
     await login.loginWithUserInA3('04856996188');
     await login.chooseAktøriA3('SUBJEKTIV ELASTISK TIGER AS');
