@@ -190,7 +190,7 @@ export const ClientAdministrationAgentDetails = () => {
                                             values: [
                                               {
                                                 role: access.role.code,
-                                                package: [pkg.urn ?? pkg.id],
+                                                packages: [pkg.urn ?? ''],
                                               },
                                             ],
                                           },

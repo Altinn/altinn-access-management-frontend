@@ -30,7 +30,7 @@ export interface AssignmentDto {
 
 export interface DelegationBatchPermission {
   role: string;
-  package: string[];
+  packages: string[];
 }
 
 export interface DelegationBatchInput {

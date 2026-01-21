@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
             /// <summary>
             /// Gets or sets the package identifiers.
             /// </summary>
-            [JsonPropertyName("package")]
+            [JsonPropertyName("packages")]
             public List<string> Packages { get; set; } = new();
         }
     }
