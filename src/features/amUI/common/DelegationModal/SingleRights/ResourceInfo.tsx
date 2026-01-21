@@ -44,6 +44,7 @@ import classes from './ResourceInfo.module.css';
 import { ResourceAlert } from './ResourceAlert';
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
+import { mapRightsToChipRights } from './ActionUtils';
 
 export type ChipRight = {
   action: string;
@@ -151,38 +152,27 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
     return null;
   };
 
-  const mapRightsToChipRights = (
-    rights: DelegationCheckedRight[],
-    checked: (right: DelegationCheckedRight) => boolean,
-  ): ChipRight[] => {
-    return rights.map((right: DelegationCheckedRight) => ({
-      action: right.rightKey,
-      rightKey: right.rightKey,
-      delegable:
-        right.status === RightStatus.Delegable || right.status === BFFDelegatedStatus.Delegated,
-      checked: checked(right) || false,
-      delegationReason: right.reasonCodes[0],
-    }));
-  };
-
   useEffect(() => {
     if (delegationCheckedRights) {
       setMissingAccessMessage(getMissingAccessMessage(delegationCheckedRights));
 
       if (hasAccess) {
-        const chipRights: ChipRight[] = mapRightsToChipRights(delegationCheckedRights, (right) =>
-          currentRights.some((key) => key === right.rightKey),
+        const chipRights: ChipRight[] = mapRightsToChipRights(
+          delegationCheckedRights,
+          (right) => currentRights.some((key) => key === right.rightKey),
+          resource.resourceOwnerOrgcode,
         );
         setRights(chipRights);
       } else {
         const chipRights: ChipRight[] = mapRightsToChipRights(
           delegationCheckedRights,
           (right) => right.status === RightStatus.Delegable,
+          resource.resourceOwnerOrgcode,
         );
         setRights(chipRights);
       }
     }
-  }, [delegationCheckedRights]);
+  }, [delegationCheckedRights, resource.identifier, hasAccess, currentRights]);
 
   const saveEditedRights = () => {
     const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
@@ -388,7 +378,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                   icon={CheckmarkCircleIcon}
                   collapsible={true}
                   title={
-                    undelegableActions.length > 0
+                    rights.filter((r) => r.checked).length !== rights.length
                       ? t('delegation_modal.actions.partial_access', {
                           count: rights.filter((r) => r.checked).length,
                           total: rights.length,
@@ -404,17 +394,19 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                   <div className={classes.rightExpandableContent}>
                     <DsParagraph>{t('delegation_modal.actions.action_description')}</DsParagraph>
                     <div className={classes.rightChips}>{chips()}</div>
-                    <div className={classes.cannotGiveSection}>
-                      <DsHeading
-                        level={5}
-                        data-size='2xs'
-                      >
-                        {t('delegation_modal.actions.cannot_give_header')}
-                      </DsHeading>
-                      <div className={classes.undelegableActions}>
-                        {undelegableActions.map((action) => action).join(', ')}
+                    {undelegableActions.length > 0 && (
+                      <div className={classes.undelegableSection}>
+                        <DsHeading
+                          level={5}
+                          data-size='2xs'
+                        >
+                          {t('delegation_modal.actions.cannot_give_header')}
+                        </DsHeading>
+                        <div className={classes.undelegableActions}>
+                          {undelegableActions.map((action) => action).join(', ')}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </ListItem>
               </div>

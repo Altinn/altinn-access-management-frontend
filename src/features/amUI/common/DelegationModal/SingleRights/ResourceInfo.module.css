@@ -38,14 +38,13 @@
   flex-direction: column;
 }
 
-.cannotGiveSection {
+.undelegableSection {
   display: flex;
   gap: 10px;
 }
 
 .undelegableActions {
-  font-family: 'Courier New', Courier, monospace;
-  line-height: 1.4;
+  font-family: monospace;
 }
 
 .rightChips {
@@ -55,8 +54,7 @@
 }
 
 .chip {
-  font-family: 'Courier New', Courier, monospace;
-  line-height: 1.4;
+  font-family: monospace;
   font-weight: bold;
 }
 
