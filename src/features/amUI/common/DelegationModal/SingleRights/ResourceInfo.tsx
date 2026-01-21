@@ -10,6 +10,8 @@ import {
   DsChip,
   DsHeading,
   DsParagraph,
+  formatDisplayName,
+  ListItem,
   SnackbarDuration,
   useSnackbar,
 } from '@altinn/altinn-components';
@@ -29,7 +31,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { arraysEqualUnordered } from '@/resources/utils/arrayUtils';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
 import { useEditResource } from '@/resources/hooks/useEditResource';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
@@ -41,6 +43,7 @@ import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSectio
 import classes from './ResourceInfo.module.css';
 import { ResourceAlert } from './ResourceAlert';
 import { StatusSection } from '../../StatusSection/StatusSection';
+import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 
 export type ChipRight = {
   action: string;
@@ -62,6 +65,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
   const editResource = useEditResource();
   const [currentRights, setCurrentRights] = useState<string[]>([]);
   const [rights, setRights] = useState<ChipRight[]>([]);
+  const [rightsExpanded, setRightsExpanded] = useState(false);
   const { openSnackbar } = useSnackbar();
   const { id } = useParams();
   const { getProviderLogoUrl } = useProviderLogoUrl();
@@ -152,7 +156,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
     checked: (right: DelegationCheckedRight) => boolean,
   ): ChipRight[] => {
     return rights.map((right: DelegationCheckedRight) => ({
-      action: right.action,
+      action: right.rightKey,
       rightKey: right.rightKey,
       delegable:
         right.status === RightStatus.Delegable || right.status === BFFDelegatedStatus.Delegated,
@@ -246,29 +250,18 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
     );
   };
 
+  const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.action);
   const chips = () =>
-    resource?.resourceType === 'AltinnApp' ? (
-      <DsChip.Checkbox
-        data-size='sm'
-        checked={rights.some((r) => r.checked === true)}
-        disabled={!rights.some((r) => r.delegable === true)}
-        onClick={() => {
-          setRights(rights.map((r) => ({ ...r, checked: r.delegable ? !r.checked : r.checked })));
-        }}
-      >
-        {t('common.action_access')}
-      </DsChip.Checkbox>
-    ) : (
-      rights.map((right: ChipRight) => {
-        const actionText = Object.values(LocalizedAction).includes(right.action as LocalizedAction)
-          ? t(`common.action_${right.action}`)
-          : right.action;
+    rights
+      .filter((right: ChipRight) => right.delegable)
+      .map((right: ChipRight) => {
+        const actionText = right.action;
         return (
           <div key={right.rightKey}>
             <DsChip.Checkbox
+              className={classes.chip}
               data-size='sm'
               checked={right.checked}
-              disabled={!right.delegable}
               onClick={() => {
                 setRights(
                   rights.map((r) => {
@@ -284,14 +277,17 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
             </DsChip.Checkbox>
           </div>
         );
-      })
-    );
+      });
 
   const hasDelegableRights = rights.some((r) => r.delegable);
   const showMissingRightsStatus =
     !hasAccess && ((rights.length > 0 && !hasDelegableRights) || !!missingAccessMessage);
   const cannotDelegateHere = resource?.delegable === false;
   const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
+  const toName = formatDisplayName({
+    fullName: toParty?.name ?? '',
+    type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+  });
 
   return (
     <>
@@ -377,18 +373,50 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                   {hasAccess && !hasUnsavedChanges ? (
                     <Trans
                       i18nKey='delegation_modal.name_has_the_following'
-                      values={{ name: toParty?.name }}
+                      values={{ name: toName }}
                       components={{ strong: <strong /> }}
                     />
                   ) : (
                     <Trans
                       i18nKey='delegation_modal.name_will_receive'
-                      values={{ name: toParty?.name }}
+                      values={{ name: toName }}
                       components={{ strong: <strong /> }}
                     />
                   )}
                 </DsHeading>
-                <div className={classes.rightChips}>{chips()}</div>
+                <ListItem
+                  icon={CheckmarkCircleIcon}
+                  collapsible={true}
+                  title={
+                    undelegableActions.length > 0
+                      ? t('delegation_modal.actions.partial_access', {
+                          count: rights.filter((r) => r.checked).length,
+                          total: rights.length,
+                        })
+                      : t('delegation_modal.actions.access_to_all')
+                  }
+                  onClick={() => setRightsExpanded(!rightsExpanded)}
+                  expanded={rightsExpanded}
+                  as='button'
+                  border='solid'
+                  shadow='none'
+                >
+                  <div className={classes.rightExpandableContent}>
+                    <DsParagraph>{t('delegation_modal.actions.action_description')}</DsParagraph>
+                    <div className={classes.rightChips}>{chips()}</div>
+                    <div className={classes.cannotGiveSection}>
+                      <DsHeading
+                        level={5}
+                        data-size='2xs'
+                      >
+                        {t('delegation_modal.actions.cannot_give_header')}
+                      </DsHeading>
+                      <div className={classes.undelegableActions}>
+                        {undelegableActions.map((action) => action).join(', ')}
+                      </div>
+                    </div>
+                  </div>
+                </ListItem>
               </div>
             </>
           )}
