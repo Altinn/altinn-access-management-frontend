@@ -15,7 +15,6 @@ declare global {
       displaySettingsPage: boolean;
       displayPoaOverviewPage: boolean;
       crossPlatformLinks: boolean;
-      displayConsentGui: boolean;
       useNewActorsList: boolean;
       displayPrivDelegation: boolean;
       displayAccessRequest: boolean;
@@ -52,7 +51,6 @@ window.featureFlags = {
   displaySettingsPage: true,
   displayPoaOverviewPage: true,
   crossPlatformLinks: false,
-  displayConsentGui: false,
   useNewActorsList: false,
   displayPrivDelegation: false,
   displayAccessRequest: false,

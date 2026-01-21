@@ -12,9 +12,9 @@ import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import { ActionError } from '@/resources/hooks/useActionError';
 import { DelegateErrorAlert } from './DelegateErrorAlert';
+import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
 
 const mapUserToParty = (user: User): Party => ({
   partyId: 0,
@@ -29,26 +29,24 @@ interface UsersTabProps {
   fromParty?: { partyUuid?: string; name?: string } | null;
   isLoading: boolean;
   isFetching: boolean;
-  canDelegate?: boolean;
   onDelegateError?: (errorInfo: ActionError) => void;
 }
 
-export const UsersTab = ({
-  accessPackage,
-  fromParty,
-  isLoading,
-  isFetching,
-  canDelegate = true,
-}: UsersTabProps) => {
+export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
+  const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
+    useAccessPackageDelegationCheck();
+  const canDelegate = accessPackage?.id
+    ? canDelegatePackage(accessPackage.id)?.result !== false
+    : true;
 
   const [delegateActionError, setDelegateActionError] = useState<{
     error: ActionError;
     targetParty?: Party;
   } | null>(null);
 
-  const { mapRoles, isLoading: roleMetadataIsLoading } = useRoleMetadata();
+  const { isLoading: roleMetadataIsLoading } = useRoleMetadata();
   const {
     data: indirectConnections,
     isLoading: loadingIndirectConnections,
@@ -65,18 +63,6 @@ export const UsersTab = ({
   );
 
   const connections = usePackagePermissionConnections(accessPackage);
-  const connectionsWithRoles = useMemo(
-    () =>
-      connections.map((connection) => ({
-        ...connection,
-        roles: mapRoles(connection.roles),
-        connections: connection.connections?.map((child) => ({
-          ...child,
-          roles: mapRoles(child.roles),
-        })),
-      })),
-    [connections, mapRoles],
-  );
 
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
     setDelegateActionError(null);
@@ -134,19 +120,6 @@ export const UsersTab = ({
 
   return (
     <>
-      {connections.length === 0 && !isLoading && !loadingIndirectConnections && (
-        <div className={pageClasses.noUsersAlert}>
-          <ExclamationmarkTriangleFillIcon className={pageClasses.noUsersAlertIcon} />
-          <DsParagraph
-            data-size='sm'
-            className={pageClasses.tabDescription}
-          >
-            {t('package_poa_details_page.users_tab.no_users', {
-              fromparty: fromParty?.name,
-            })}
-          </DsParagraph>
-        </div>
-      )}
       {!isLoading && (
         <DsParagraph
           data-size='md'
@@ -167,9 +140,15 @@ export const UsersTab = ({
       )}
 
       <AdvancedUserSearch
-        connections={connectionsWithRoles}
+        includeSelfAsChild={false}
+        connections={connections}
         indirectConnections={indirectConnections}
-        isLoading={isLoading || loadingIndirectConnections || roleMetadataIsLoading}
+        isLoading={
+          isLoading ||
+          loadingIndirectConnections ||
+          roleMetadataIsLoading ||
+          isDelegationCheckLoading
+        }
         onDelegate={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         isActionLoading={
@@ -178,7 +157,8 @@ export const UsersTab = ({
           loadingIndirectConnections ||
           isFetching ||
           isFetchingIndirectConnections ||
-          roleMetadataIsLoading
+          roleMetadataIsLoading ||
+          isDelegationCheckLoading
         }
         canDelegate={canDelegate}
       />

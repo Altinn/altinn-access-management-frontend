@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { List, Icon, DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import { Icon, DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { PackageIcon } from '@navikt/aksel-icons';
 import { useAccessPackageDelegationCheck } from '../../DelegationCheck/AccessPackageDelegationCheckContext';
@@ -9,20 +9,20 @@ import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageLis
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 
+import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
-import { StatusSection } from '../StatusSection';
 import type { ExtendedAccessPackage } from '../../AccessPackageList/useAreaPackageList';
 import { DeletableStatus, getDeletableStatus } from '../../AccessPackageList/useAreaPackageList';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
-import { useResourceList } from './useResourceList';
 import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { StatusSection } from '../../StatusSection/StatusSection';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -75,7 +75,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
   const inheritedStatus = accessPackage.inheritedStatus;
 
-  const resourceListItems = useResourceList(accessPackage.resources);
   const deletableStatus = React.useMemo(
     () =>
       delegationAccess
@@ -94,7 +93,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     <div className={classes.container}>
       <div className={classes.header}>
         <Icon
-          size='xl'
+          size='lg'
           svgElement={PackageIcon}
           className={classes.headerIcon}
         />
@@ -155,7 +154,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
           <StatusSection
             userHasAccess={userHasPackage}
-            showMissingRightsMessage={showMissingRightsMessage}
+            showDelegationCheckWarning={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
             inheritedStatus={inheritedStatus ?? undefined}
           />
@@ -172,7 +171,14 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               })}
             </DsHeading>
             <div className={classes.service_list}>
-              <List>{resourceListItems}</List>
+              <ResourceList
+                resources={accessPackage.resources}
+                enableMaxHeight={true}
+                showDetails={false}
+                interactive={false}
+                size='xs'
+                as='div'
+              />
             </div>
           </div>
 

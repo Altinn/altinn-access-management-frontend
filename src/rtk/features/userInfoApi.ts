@@ -24,6 +24,7 @@ export interface User {
   dateOfBirth?: string | null;
   userId?: string | null;
   username?: string | null;
+  sortKey?: string;
 }
 
 interface UserProfileApiResponse {
@@ -88,7 +89,7 @@ export const userInfoApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['UserInfo', 'Favorites'],
+  tagTypes: ['UserProfile', 'Favorites'],
   endpoints: (builder) => ({
     getUserProfile: builder.query<UserProfile, void>({
       query: () => 'profile',
@@ -101,6 +102,17 @@ export const userInfoApi = createApi({
           profileSettingPreference: response.profileSettingPreference,
         };
       },
+      providesTags: ['UserProfile'],
+    }),
+    updateShowDeleted: builder.mutation<ProfileSettingPreference, boolean>({
+      query: (shouldShowDeleted) => {
+        return {
+          url: `profile/settingspreferences/showdeleted`,
+          method: 'PUT',
+          body: JSON.stringify(shouldShowDeleted),
+        };
+      },
+      invalidatesTags: ['UserProfile'],
     }),
     getReportee: builder.query<ReporteeInfo, void>({
       query: () => `reportee/${getCookie('AltinnPartyId')}`,
@@ -167,6 +179,7 @@ export const userInfoApi = createApi({
 
 export const {
   useGetUserProfileQuery,
+  useUpdateShowDeletedMutation,
   useGetReporteeQuery,
   useGetReporteeListForPartyQuery,
   useGetReporteeListForAuthorizedUserQuery,

@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// Nice to have for debugging and logging.
         /// </summary>
         [JsonPropertyName("created")]
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset Created { get; set; } = DateTimeOffset.UtcNow;
 
         /// <summary>
         /// System information from the system register
@@ -45,10 +45,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         public RegisteredSystemFE System { get; set; }
 
         /// <summary>
-        /// Either Agent or Default
+        /// Either agent or standard
         /// </summary>
-        [JsonPropertyName("systemUserType")]
-        public string SystemUserType { get; set; }
+        [JsonPropertyName("userType")]
+        public string UserType { get; set; }
 
         /// <summary>
         /// List of resources information

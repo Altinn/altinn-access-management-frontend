@@ -33,3 +33,15 @@
   max-width: 35rem;
   margin-top: var(--ds-size-4);
 }
+
+.systemUserBadge {
+  font-size: var(--ds-body-xs-font-size);
+  display: flex;
+  gap: var(--ds-size-2);
+}
+
+@media only screen and (max-width: 769px) {
+  .systemUserBadge {
+    display: none;
+  }
+}

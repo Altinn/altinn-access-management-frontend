@@ -1,44 +1,56 @@
 import { request } from '@playwright/test';
+import { Token } from '../api-requests/Token';
 import { DelegationApiRequest } from 'playwright/api-requests/delegation-tilgangspakke/delegationApiRequest';
+import { getTestPersonForCategory } from './testDelegationdatautil';
+import { CleanupResolved, getCleanupDataForTest } from 'playwright/util/cleanup-delegationutils';
 
 export class DelegationApiUtil {
-  /**
-   * Delete all delegations for the test user
-   */
-  public static async cleanupDelegations() {
+  static async addOrgToDelegate(fromCategory: string, toCategory: string) {
     const apiContext = await request.newContext();
+    const token = new Token();
+    const api = new DelegationApiRequest(apiContext, token);
 
-    try {
-      const api = new DelegationApiRequest();
-      await api.deleteAllDelegations();
-    } finally {
-      await apiContext.dispose();
-    }
-  }
-  /**
-   * Add org for delegating access pacakage
-   */
+    const fromPerson = await getTestPersonForCategory(fromCategory);
+    const toPerson = await getTestPersonForCategory(toCategory);
 
-  public static async addOrgToDelegate() {
-    const apiContext = await request.newContext();
-
-    try {
-      const api = new DelegationApiRequest();
-      await api.addOrgForDelegation();
-    } finally {
-      await apiContext.dispose();
-    }
+    await api.addOrgForDelegation(fromPerson, toPerson);
+    await apiContext.dispose();
   }
 
-  /**
-   * Delegate access pacakage
-   */
-  public static async delegateAccessPacakage() {
+  static async delegateAccessPackage(fromCategory: string, toCategory: string, packages: string[]) {
     const apiContext = await request.newContext();
+    const token = new Token();
+    const api = new DelegationApiRequest(apiContext, token);
+
+    const fromPerson = await getTestPersonForCategory(fromCategory);
+    const toPerson = await getTestPersonForCategory(toCategory);
+
+    for (const pkg of packages) {
+      await api.delegateAccessPkg(fromPerson, toPerson, pkg);
+    }
+    await apiContext.dispose();
+  }
+
+  static async cleanupAllDelegations(testTitle?: string) {
+    const title = (testTitle ?? '').trim();
+    if (!title) return;
+
+    const apiContext = await request.newContext({ timeout: 10_000 });
 
     try {
-      const api = new DelegationApiRequest();
-      await api.delegateAccessPkg();
+      const tokenClass = new Token();
+      const api = new DelegationApiRequest(apiContext, tokenClass);
+
+      const items: CleanupResolved[] = await getCleanupDataForTest(title);
+
+      if (!items.length) {
+        console.warn(`[cleanupAllDelegations] No cleanup pairs for title="${title}"`);
+        return;
+      }
+
+      for (const { fromOrg, toOrg, authPerson } of items) {
+        await api.cleanupDelegations(fromOrg, toOrg, authPerson);
+      }
     } finally {
       await apiContext.dispose();
     }

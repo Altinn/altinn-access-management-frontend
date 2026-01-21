@@ -29,5 +29,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// Party that requested the consent
         /// </summary>
         public ConsentPartyFE FromParty { get; set; }
+
+        /// <summary>
+        /// Date when consent request was created
+        /// </summary>
+        public DateTimeOffset CreatedDate { get; set; }
     }
 }

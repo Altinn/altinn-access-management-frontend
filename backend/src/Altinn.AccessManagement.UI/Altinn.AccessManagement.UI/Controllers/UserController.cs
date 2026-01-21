@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -65,6 +66,32 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception e)
             {
                 return StatusCode(500, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for updating the current user's preference for showing deleted parties.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        [Authorize]
+        [Route("profile/settingspreferences/showdeleted")]
+        public async Task<ActionResult<ProfileSettingPreference>> UpdateShouldShowDeletedPreference([FromBody] bool shouldShowDeleted)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                ProfileSettingPreference newsettings = await _userService.SetShowDeletedProfileSetting(shouldShowDeleted);
+                return newsettings;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateShouldShowDeletedPreference failed to update parameter");
+                return StatusCode(500);
             }
         }
 

@@ -1,5 +1,5 @@
 import type { UserListItemProps } from '@altinn/altinn-components';
-import { formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
+import { formatDate, formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
 import type { ElementType, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 
 import { type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType } from '@/rtk/features/connectionApi';
-import { formatDateToNorwegian } from '@/resources/utils';
 
 import classes from './UserList.module.css';
 import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
@@ -18,12 +17,16 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
 }
 
-interface UserItemProps
-  extends Pick<UserListItemProps, 'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'> {
+interface UserItemProps extends Pick<
+  UserListItemProps,
+  'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'
+> {
   user: ExtendedUser | User;
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
+  includeSelfAsChild?: boolean;
+  linkTo?: string;
   controls?: (user: ExtendedUser | User) => ReactNode;
 }
 
@@ -51,6 +54,8 @@ export const UserItem = ({
   roleDirection = 'toUser',
   subUnit = false,
   disableLinks = false,
+  includeSelfAsChild = true,
+  linkTo,
   shadow,
   controls,
   ...props
@@ -64,11 +69,7 @@ export const UserItem = ({
   const hasInheritingUsers = childrenToDisplay.length > 0 && shouldDisplaySubConnections;
   const [isExpanded, setExpanded] = useState(false);
   const { t } = useTranslation();
-  const {
-    mapRoles,
-    isLoading: loadingRoleMetadata,
-    isError: roleMetadataError,
-  } = useRoleMetadata();
+  const { mapRoles } = useRoleMetadata();
   useEffect(
     () =>
       setExpanded((hasInheritingUsers && isExtendedUser(user) && user.matchInChildren) ?? false),
@@ -104,7 +105,7 @@ export const UserItem = ({
   const description = (user: ExtendedUser | User) => {
     let descriptionString = subUnit ? '↳ ' : '';
     if (user.type === ConnectionUserType.Person) {
-      const formattedDate = formatDateToNorwegian(user.dateOfBirth || undefined);
+      const formattedDate = formatDate(user.dateOfBirth || undefined);
       descriptionString += formattedDate
         ? t('common.date_of_birth') + ' ' + formattedDate
         : undefined;
@@ -117,8 +118,8 @@ export const UserItem = ({
           ? `, ${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')}`
           : '');
     }
-    if (viaRoleNames.length > 0) {
-      descriptionString += ` | ${viaRoleNames.join(', ')} for ${viaEntity}`;
+    if (viaRoleNames.length > 0 && viaEntity) {
+      descriptionString += ` | ${viaRoleNames.join(', ')} for ${formatDisplayName({ fullName: viaEntity, type: 'company' })}`;
     }
     if (descriptionString) {
       return descriptionString;
@@ -133,7 +134,11 @@ export const UserItem = ({
         ? 'company'
         : 'system';
 
-  const subUsers = hasInheritingUsers ? [user as User, ...(childrenToDisplay ?? [])] : [];
+  const subUsers = hasInheritingUsers
+    ? includeSelfAsChild
+      ? [user as User, ...(childrenToDisplay ?? [])]
+      : childrenToDisplay
+    : [];
 
   return (
     <UserListItem
@@ -148,7 +153,7 @@ export const UserItem = ({
       type={type}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}
-      interactive={interactive}
+      interactive={!!hasInheritingUsers || interactive}
       shadow={shadow}
       linkIcon={!hasInheritingUsers && !disableLinks}
       onClick={() => {
@@ -162,13 +167,13 @@ export const UserItem = ({
             : (props) => (
                 <Link
                   {...props}
-                  to={user.id}
+                  to={linkTo ?? user.id}
                 />
               )
       }
       controls={!hasInheritingUsers && controls && controls(user)}
       titleAs={titleAs}
-      subUnit={subUnit || hasSubUnitRole}
+      subUnit={subUnit || hasSubUnitRole || isSubUnitByType(user.variant?.toString())}
     >
       {hasInheritingUsers && isExpanded && (
         <List
@@ -182,7 +187,7 @@ export const UserItem = ({
               size='xs'
               titleAs={userHeadingLevelForMapper(titleAs)}
               subUnit={
-                index !== 0 &&
+                (includeSelfAsChild ? index !== 0 : true) &&
                 child.type === ConnectionUserType.Organization &&
                 isSubUnitByType(child.variant?.toString())
               }

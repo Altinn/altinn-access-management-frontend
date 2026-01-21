@@ -1,8 +1,7 @@
-import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
+import { formatDate, formatDisplayName, UserListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Connection } from '@/rtk/features/connectionApi';
-import { formatDateToNorwegian } from '@/resources/utils';
 
 import classes from './CurrentUserPageHeader.module.css';
 
@@ -21,7 +20,7 @@ export const CurrentUserPageHeader = ({
 }: CurrentUserPageHeaderProps) => {
   const { t } = useTranslation();
 
-  const formattedBirthDate = formatDateToNorwegian(currentUser?.party?.dateOfBirth || undefined);
+  const formattedBirthDate = formatDate(currentUser?.party?.dateOfBirth || undefined);
 
   return (
     <div className={classes.currentUser}>
@@ -38,7 +37,7 @@ export const CurrentUserPageHeader = ({
         type='person'
         as={as}
         titleAs='h2'
-        size='xl'
+        size='lg'
         loading={loading}
       />
     </div>

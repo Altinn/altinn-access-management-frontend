@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
@@ -96,7 +97,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                         options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                         options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                         options.DisplayRoles = flags?.DisplayRoles ?? true;
-                        options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                     });
                 });
             });
@@ -126,7 +126,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                         options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                         options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                         options.DisplayRoles = flags?.DisplayRoles ?? true;
-                        options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                         options.UseNewActorsList = flags?.UseNewActorsList ?? false;
                     });
                 });
@@ -157,7 +156,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                        options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                        options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                        options.DisplayRoles = flags?.DisplayRoles ?? true;
-                       options.DisplayConsentGui = flags?.DisplayConsentGui ?? true;
                        options.RestrictPrivUse = flags?.RestrictPrivUse ?? false;
                        options.CrossPlatformLinks = flags?.CrossPlatformLinks ?? false;
                    });
@@ -460,6 +458,11 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.AddTransient<IAuthenticationClient, AuthenticationMock>();
                     services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
+                    services.AddTransient<IConnectionClient, ConnectionClientMock>();
+                    services.AddTransient<IUserService, UserService>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
@@ -488,6 +491,30 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton<IAltinnCdnClient, AltinnCdnClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
+        }
+
+        /// <summary>
+        /// Gets a HttpClient for unittests testing for ClientController
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for ClientController tests</param>
+        /// <returns>HttpClient</returns>
+        internal static HttpClient GetTestClient(CustomWebApplicationFactory<ClientController> customFactory)
+        {
+            WebApplicationFactory<ClientController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<IClientDelegationClient, ClientDelegationClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });

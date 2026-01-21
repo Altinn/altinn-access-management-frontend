@@ -1,8 +1,10 @@
 .tabContent {
+  padding: 1.5rem 0 0.5rem 0;
+}
+.innerTabContent {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 1.5rem 0 0.5rem 0;
 }
 
 .delegateErrorAlert {
@@ -44,16 +46,6 @@
 
 .dismissButton svg {
   display: block;
-}
-
-.noUsersAlert {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.noUsersAlertIcon {
-  color: var(--ds-color-warning-base-default);
 }
 
 @media (max-width: 768px) {

@@ -7,7 +7,6 @@ import {
   InformationSquareFillIcon,
   ExternalLinkIcon,
 } from '@navikt/aksel-icons';
-import statusClasses from '../StatusSection.module.css';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { RoleResourcesSection } from './RoleResourcesSection';
@@ -45,19 +44,19 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
       </div>
       <div className={classes.infoContainer}>
         {isLegacyRole && (
-          <div className={statusClasses.infoLine}>
+          <div className={classes.infoLine}>
             <ExclamationmarkTriangleFillIcon
               fontSize='1.5rem'
-              className={statusClasses.warningIcon}
+              className={classes.warningIcon}
             />
             <DsParagraph data-size='xs'>{t('a2Alerts.legacyRoleContent')}</DsParagraph>
           </div>
         )}
         {isExternalRole && (
-          <div className={statusClasses.infoLine}>
+          <div className={classes.infoLine}>
             <InformationSquareFillIcon
               fontSize='1.5rem'
-              className={statusClasses.inheritedInfoIcon}
+              className={classes.inheritedInfoIcon}
             />
             <DsParagraph data-size='xs'>
               {t('role.provider_status')}

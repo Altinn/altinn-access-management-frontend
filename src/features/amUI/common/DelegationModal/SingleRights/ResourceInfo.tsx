@@ -33,12 +33,14 @@ import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
 
 import classes from './ResourceInfo.module.css';
 import { ResourceAlert } from './ResourceAlert';
+import { StatusSection } from '../../StatusSection/StatusSection';
 
 export type ChipRight = {
   action: string;
@@ -62,6 +64,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
   const [rights, setRights] = useState<ChipRight[]>([]);
   const { openSnackbar } = useSnackbar();
   const { id } = useParams();
+  const { getProviderLogoUrl } = useProviderLogoUrl();
 
   const { toParty, fromParty } = usePartyRepresentation();
   const hasUnsavedChanges = !arraysEqualUnordered(
@@ -284,6 +287,12 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
       })
     );
 
+  const hasDelegableRights = rights.some((r) => r.delegable);
+  const showMissingRightsStatus =
+    !hasAccess && ((rights.length > 0 && !hasDelegableRights) || !!missingAccessMessage);
+  const cannotDelegateHere = resource?.delegable === false;
+  const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
+
   return (
     <>
       <StatusMessageForScreenReader politenessSetting='assertive'>
@@ -292,12 +301,22 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
       {!!resource && (
         <div className={classes.infoView}>
           <div className={classes.infoHeading}>
-            <Avatar
-              size='lg'
-              type='company'
-              imageUrl={resource.resourceOwnerLogoUrl}
-              name={resource.resourceOwnerName ?? ''}
-            />
+            <div className={classes.resourceIcon}>
+              {emblem || resource.resourceOwnerLogoUrl ? (
+                <img
+                  src={emblem ?? resource.resourceOwnerLogoUrl}
+                  alt={resource.resourceOwnerName ?? ''}
+                  width={40}
+                  height={40}
+                />
+              ) : (
+                <Avatar
+                  type='company'
+                  imageUrl={resource.resourceOwnerLogoUrl}
+                  name={resource.resourceOwnerName ?? ''}
+                />
+              )}
+            </div>
             <div className={classes.resource}>
               <div className={classes.infoHeading}>
                 <DsHeading
@@ -306,18 +325,16 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                 >
                   {resource.title}
                 </DsHeading>
-                {hasAccess && (
-                  <Badge
-                    label={t('common.has_poa')}
-                    theme='base'
-                    data-color='success'
-                  />
-                )}
               </div>
 
               <DsParagraph>{resource.resourceOwnerName}</DsParagraph>
             </div>
           </div>
+          <StatusSection
+            userHasAccess={hasAccess}
+            showDelegationCheckWarning={showMissingRightsStatus}
+            cannotDelegateHere={cannotDelegateHere}
+          />
           {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
           {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
           {displayResourceAlert ? (
@@ -390,7 +407,6 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
             {hasAccess && toParty && (
               <DeleteResourceButton
                 resource={resource}
-                toParty={toParty}
                 fullText
               />
             )}

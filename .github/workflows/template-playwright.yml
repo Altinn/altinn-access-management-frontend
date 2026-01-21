@@ -32,12 +32,13 @@ on:
 jobs:
   e2e-tests:
     name: Playwright end to end tests
+    environment: ${{ inputs.environment }}
     permissions:
       id-token: write
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: lts/*
@@ -67,9 +68,9 @@ jobs:
         uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2
         if: always()
         with:
-          client-id: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
-          tenant-id: ${{ secrets.AZCOPY_TENANT_ID }}
-          subscription-id: ${{ secrets.AZCOPY_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Upload HTML report to Azure
         uses: azure/cli@9f7ce6f37c31b777ec6c6b6d1dfe7db79f497956 # v2

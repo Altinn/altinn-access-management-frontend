@@ -1,14 +1,20 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 // eslint-disable-next-line import/default
 import dotenv from 'dotenv';
+import path from 'path';
 
+// Load env from playwright/config to match repo layout
+const envName = process.env.environment ?? 'at23';
+const envPaths = [
+  path.join(__dirname, 'config/.env'),
+  path.join(__dirname, `config/.env.${envName}`),
+  path.join(__dirname, 'config/.env.local'),
+  path.join(__dirname, `config/.env.${envName}.local`),
+];
+
+// Load env from playwright/config to match repo layout
 dotenv.config({
-  path: [
-    `config/.env`,
-    `config/.env.${process.env.environment ?? 'at22'}`,
-    `config/.env.local`,
-    `config/.env.${process.env.environment ?? 'at22'}.local`,
-  ],
+  path: envPaths,
   override: true,
 });
 

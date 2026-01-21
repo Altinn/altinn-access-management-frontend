@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import {
@@ -15,16 +15,21 @@ import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
-import { getApiBaseUrl } from './urlUtils';
-import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/CreateSystemUserCheck';
+import { getApiBaseUrl, isPermissionErrorWhichCanBeEscalated } from './requestUtils';
+import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
+import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
+import { SystemUserPath } from '@/routes/paths';
 import { RightsList } from './components/RightsList/RightsList';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   useDocumentTitle(t('systemuser_agent_request.page_title'));
   const [searchParams] = useSearchParams();
+  const skipLogout = searchParams.get('skiplogout');
   const requestId = searchParams.get('id') ?? '';
 
   const {
@@ -44,6 +49,7 @@ export const SystemUserAgentRequestPage = () => {
   } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
     skip: !request?.partyId,
   });
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const [
     postAcceptCreationRequest,
@@ -55,8 +61,15 @@ export const SystemUserAgentRequestPage = () => {
     { isError: isRejectCreationRequestError, isLoading: isRejectingSystemUser },
   ] = useRejectAgentSystemUserRequestMutation();
 
+  const isEscalationPossible = isPermissionErrorWhichCanBeEscalated(
+    (acceptCreationRequestError as { data: ProblemDetail })?.data,
+  );
+
   const isActionButtonDisabled =
-    isAcceptingSystemUser || isRejectingSystemUser || request?.status !== 'New';
+    isAcceptingSystemUser ||
+    isRejectingSystemUser ||
+    request?.status !== 'New' ||
+    isEscalationPossible;
 
   const acceptSystemUser = (): void => {
     if (!isActionButtonDisabled) {
@@ -77,10 +90,14 @@ export const SystemUserAgentRequestPage = () => {
   };
 
   const onRejectOrApprove = (): void => {
-    const url = request?.redirectUrl
-      ? `${getApiBaseUrl()}/agentrequest/${request?.id}/logout`
-      : getLogoutUrl();
-    window.location.assign(url);
+    if (skipLogout) {
+      navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+    } else {
+      const url = request?.redirectUrl
+        ? `${getApiBaseUrl()}/agentrequest/${request?.id}/logout`
+        : getLogoutUrl();
+      window.location.assign(url);
+    }
   };
 
   return (
@@ -145,10 +162,16 @@ export const SystemUserAgentRequestPage = () => {
             hideHeadings
           />
           <div>
-            {acceptCreationRequestError && (
+            {acceptCreationRequestError && !isEscalationPossible && (
               <DelegationCheckError
                 defaultError='systemuser_includedrightspage.create_systemuser_error'
                 error={acceptCreationRequestError as { data: ProblemDetail }}
+              />
+            )}
+            {isEscalationPossible && (
+              <EscalateRequest
+                request={request}
+                isAgentRequest
               />
             )}
             {isRejectCreationRequestError && (
@@ -159,7 +182,7 @@ export const SystemUserAgentRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </DsAlert>
             )}
-            <CreateSystemUserCheck reporteeData={reporteeData}>
+            {hasCreateSystemUserPermission(reporteeData, isAdmin) && (
               <ButtonRow>
                 <DsButton
                   variant='primary'
@@ -182,7 +205,7 @@ export const SystemUserAgentRequestPage = () => {
                     : t('systemuser_request.reject')}
                 </DsButton>
               </ButtonRow>
-            </CreateSystemUserCheck>
+            )}
           </div>
         </>
       )}

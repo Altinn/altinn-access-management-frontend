@@ -11,15 +11,16 @@ export const useResourceList = (list: PackageResource[]) => {
     const emblem = getProviderLogoUrl(
       resource.provider?.code ?? resource.resourceOwnerOrgcode ?? '',
     );
+
     return (
       <ResourceListItem
-        key={resource.id}
-        id={resource.id}
+        key={resource.identifier || resource.refId}
+        id={resource.identifier || resource.refId}
         loading={isLoading}
         resourceName={resource.name || resource.title}
-        ownerName={resource.provider?.name}
+        ownerName={resource.provider?.name || resource.resourceOwnerName}
         ownerLogoUrl={emblem ?? resource.provider?.logoUrl}
-        ownerLogoUrlAlt={resource.provider?.name}
+        ownerLogoUrlAlt={resource.provider?.name || resource.resourceOwnerName}
         as='div'
         size='xs'
         interactive={false}

@@ -8,7 +8,6 @@ import { UserListActions } from '../UserList/UserListActions';
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AdvancedUserSearch.module.css';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export interface ConnectionsListProps {
   users: ExtendedUser[];
@@ -18,6 +17,9 @@ export interface ConnectionsListProps {
   onRevoke?: (user: ExtendedUser) => void;
   onDelegate?: (user: ExtendedUser) => void;
   isActionLoading?: boolean;
+  includeSelfAsChild?: boolean;
+  delegateLabel?: string;
+  getUserLink?: (user: ExtendedUser) => string;
 }
 
 export const ConnectionsList: React.FC<ConnectionsListProps> = ({
@@ -28,21 +30,27 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
   onRevoke,
   onDelegate,
   isActionLoading = false,
+  includeSelfAsChild = true,
+  delegateLabel,
+  getUserLink,
 }) => {
   const { t } = useTranslation();
+  const isInteractive = !!getUserLink;
 
   return (
     <>
       <List spacing={2}>
         {users.map((user) => (
           <UserItem
+            includeSelfAsChild={includeSelfAsChild}
             key={user.id}
             user={user}
             size='md'
             titleAs='h4'
-            interactive={false}
+            interactive={isInteractive}
+            linkTo={getUserLink ? getUserLink(user) : undefined}
             roleDirection='toUser'
-            disableLinks
+            disableLinks={!isInteractive}
             controls={(user) => (
               <UserListActions
                 isLoading={isActionLoading}
@@ -50,6 +58,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
                 availableAction={availableAction}
                 onRevoke={onRevoke ? () => onRevoke(user as ExtendedUser) : undefined}
                 onDelegate={onDelegate ? () => onDelegate(user as ExtendedUser) : undefined}
+                delegateLabel={delegateLabel}
               />
             )}
           />

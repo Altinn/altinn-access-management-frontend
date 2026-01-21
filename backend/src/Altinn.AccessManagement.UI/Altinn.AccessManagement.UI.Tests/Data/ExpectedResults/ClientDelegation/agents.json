@@ -1,0 +1,71 @@
+[
+  {
+    "agent": {
+      "id": "4136a76b-095e-4d4f-b271-36d898b0478a",
+      "name": "ESTETISK SKÅL",
+      "type": "Person",
+      "variant": "Person",
+      "parent": null,
+      "children": null,
+      "partyId": 50758618,
+      "organizationIdentifier": null,
+      "dateOfBirth": "1928-01-11"
+    },
+    "access": [
+      {
+        "role": {
+          "id": "ff4c33f5-03f7-4445-85ed-1e60b8aafb30",
+          "code": "agent",
+          "children": null
+        },
+        "packages": []
+      }
+    ]
+  },
+  {
+    "agent": {
+      "id": "4aa1b6e1-609e-4e0e-af13-1074d62b3283",
+      "name": "KURSIV FOSSEKALL",
+      "type": "Person",
+      "variant": "Person",
+      "parent": null,
+      "children": null,
+      "partyId": 50367406,
+      "organizationIdentifier": null,
+      "dateOfBirth": "1980-11-07"
+    },
+    "access": [
+      {
+        "role": {
+          "id": "ff4c33f5-03f7-4445-85ed-1e60b8aafb30",
+          "code": "agent",
+          "children": null
+        },
+        "packages": []
+      }
+    ]
+  },
+  {
+    "agent": {
+      "id": "d5f54925-effe-42c6-9168-d79bb47e697f",
+      "name": "GILD KANNE",
+      "type": "Person",
+      "variant": "Person",
+      "parent": null,
+      "children": null,
+      "partyId": 50837995,
+      "organizationIdentifier": null,
+      "dateOfBirth": "1966-12-25"
+    },
+    "access": [
+      {
+        "role": {
+          "id": "ff4c33f5-03f7-4445-85ed-1e60b8aafb30",
+          "code": "agent",
+          "children": null
+        },
+        "packages": []
+      }
+    ]
+  }
+]

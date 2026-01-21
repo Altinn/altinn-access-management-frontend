@@ -14,13 +14,14 @@ export const ResourceDetails = ({ resource }: ResourceDetailsProps): React.React
     <>
       <div className={classes.resourceInfoHeader}>
         <Avatar
-          size='xl'
+          size='lg'
           type='company'
           imageUrl={resource.resourceOwnerLogoUrl}
           imageUrlAlt={resource.resourceOwnerName}
           name={resource.resourceOwnerName ?? ''}
+          className={classes.resourceInfoIcon}
         />
-        <div>
+        <div className={classes.resourceInfoText}>
           <DsHeading
             level={1}
             data-size='xs'

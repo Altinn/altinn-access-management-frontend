@@ -10,13 +10,16 @@ import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { ResourceList } from '../common/ResourceList/ResourceList';
 import { UsersTab } from './UsersTab';
+import { StatusSection } from '../common/StatusSection/StatusSection';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
+import { isCriticalAndUndelegated } from '../common/AccessPackageList/UndelegatedPackageWarning';
+import { FilesIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { fromParty } = usePartyRepresentation();
-  const { canDelegatePackage, isLoading: isDelegationLoading } = useAccessPackageDelegationCheck();
+  const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
   const {
     data: accessPackage,
@@ -27,14 +30,17 @@ export const PackagePoaDetails = () => {
     {
       from: fromParty?.partyUuid ?? '',
       packageId: id || '',
+      language: i18n.language,
     },
     { skip: !id || !fromParty?.partyUuid },
   );
 
   const [chosenTab, setChosenTab] = useState('users');
 
-  const packageId = accessPackage?.id ?? id;
-  const canDelegate = packageId ? canDelegatePackage(packageId)?.result !== false : true;
+  const cannotDelegateHere = !!(accessPackage && accessPackage.isAssignable === false);
+  const showUndelegatedWarning = !!(accessPackage && isCriticalAndUndelegated(accessPackage));
+  const showDelegationCheckWarning =
+    !!accessPackage && canDelegatePackage(accessPackage.id)?.result === false;
 
   // Show error alert with link back to overview if error fetching the Package
   if (error) {
@@ -55,6 +61,14 @@ export const PackagePoaDetails = () => {
           isLoading={isLoading}
           packageName={accessPackage?.name}
           packageDescription={accessPackage?.description}
+          statusSection={
+            <StatusSection
+              cannotDelegateHere={cannotDelegateHere}
+              showDelegationCheckWarning={showDelegationCheckWarning}
+              showUndelegatedWarning={showUndelegatedWarning}
+              undelegatedPackageName={accessPackage?.name}
+            />
+          }
         />
       </div>
       <DsTabs
@@ -64,8 +78,12 @@ export const PackagePoaDetails = () => {
         onChange={setChosenTab}
       >
         <DsTabs.List>
-          <DsTabs.Tab value='users'>{t('package_poa_details_page.users_tab_title')}</DsTabs.Tab>
+          <DsTabs.Tab value='users'>
+            <PersonGroupIcon aria-hidden='true' />
+            {t('package_poa_details_page.users_tab_title')}
+          </DsTabs.Tab>
           <DsTabs.Tab value='services'>
+            <FilesIcon aria-hidden='true' />
             {t('package_poa_details_page.services_tab_title')}
           </DsTabs.Tab>
         </DsTabs.List>
@@ -73,23 +91,26 @@ export const PackagePoaDetails = () => {
           className={pageClasses.tabContent}
           value='users'
         >
-          <UsersTab
-            accessPackage={accessPackage}
-            fromParty={fromParty}
-            isLoading={isLoading || isDelegationLoading}
-            isFetching={isFetching}
-            canDelegate={canDelegate}
-          />
+          <div className={pageClasses.innerTabContent}>
+            <UsersTab
+              accessPackage={accessPackage}
+              fromParty={fromParty}
+              isLoading={isLoading}
+              isFetching={isFetching}
+            />
+          </div>
         </DsTabs.Panel>
         <DsTabs.Panel
           className={pageClasses.tabContent}
           value='services'
         >
-          <ResourceList
-            isLoading={isLoading}
-            resources={accessPackage?.resources ?? []}
-            noResourcesText={t('package_poa_details_page.services_tab.no_resources')}
-          />
+          <div className={pageClasses.innerTabContent}>
+            <ResourceList
+              isLoading={isLoading}
+              resources={accessPackage?.resources ?? []}
+              noResourcesText={t('package_poa_details_page.services_tab.no_resources')}
+            />
+          </div>
         </DsTabs.Panel>
       </DsTabs>
     </>

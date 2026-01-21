@@ -9,7 +9,7 @@ export interface AmPaginationProps extends DsPaginationProps {
   setCurrentPage?: (page: number) => void;
   currentPage: number;
   hideLabels?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
 export const AmPagination = ({

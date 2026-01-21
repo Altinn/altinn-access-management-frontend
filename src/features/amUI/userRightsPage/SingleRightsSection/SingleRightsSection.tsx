@@ -3,17 +3,19 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
 
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { List } from '@/features/amUI/common/List/List';
+import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import usePagination from '@/resources/hooks/usePagination';
 import { AmPagination } from '@/components/Paginering';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { EditModal } from '../../common/DelegationModal/EditModal';
 
 import classes from './SingleRightsSection.module.css';
-import SingleRightItem from './SingleRightItem';
+import { DeleteResourceButton } from './DeleteResourceButton';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 
 export const SingleRightsSection = () => {
@@ -25,6 +27,7 @@ export const SingleRightsSection = () => {
   const {
     data: singleRights,
     isError,
+    error,
     isLoading,
   } = useGetSingleRightsForRightholderQuery(
     {
@@ -38,6 +41,13 @@ export const SingleRightsSection = () => {
 
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights ?? [], 5);
+  const modalRef = React.useRef<HTMLDialogElement>(null);
+  const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
+
+  const resources = React.useMemo(
+    () => paginatedData.map((delegation) => delegation.resource).filter(Boolean),
+    [paginatedData],
+  ) as ServiceResource[];
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8; // Section for "Users (A2)" in Profile is 9, for "Accesses for others (A2)" it is 8
   const A2url = getRedirectToA2UsersListSectionUrl(sectionId);
@@ -76,20 +86,25 @@ export const SingleRightsSection = () => {
         {isError && <div>{t('user_rights_page.error')}</div>}
         {isLoading && <div>{t('user_rights_page.loading')}</div>}
 
-        <List
-          className={classes.singleRightsList}
-          aria-labelledby='single_rights_title'
-          spacing
-          background
-        >
-          {paginatedData.map((delegation) => (
-            <SingleRightItem
-              key={delegation.resource?.identifier}
-              toParty={toParty}
-              resource={delegation.resource}
-            />
-          ))}
-        </List>
+        <div className={classes.singleRightsList}>
+          <ResourceList
+            resources={resources}
+            enableSearch={true}
+            showDetails={false}
+            onSelect={(resource) => {
+              setSelectedResource(resource);
+              modalRef.current?.showModal();
+            }}
+            size='md'
+            titleAs='h3'
+            renderControls={(resource) => (
+              <DeleteResourceButton
+                resource={resource}
+                fullText
+              />
+            )}
+          />
+        </div>
         <div className={classes.tools}>
           {totalPages > 1 && (
             <AmPagination
@@ -102,6 +117,11 @@ export const SingleRightsSection = () => {
             />
           )}
         </div>
+        <EditModal
+          ref={modalRef}
+          resource={selectedResource ?? undefined}
+          onClose={() => setSelectedResource(null)}
+        />
       </div>
     )
   );

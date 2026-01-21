@@ -6,6 +6,7 @@ import { AdvancedUserSearch } from './AdvancedUserSearch';
 import { Provider } from 'react-redux';
 import store from '@/rtk/app/store';
 import { Connection } from '@/rtk/features/connectionApi';
+import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 const mockAllConnections: Connection[] = [
   {
@@ -111,9 +112,14 @@ const meta = {
     (Story) => (
       <Provider store={store}>
         <RootProvider>
-          <div style={{ padding: 24, maxWidth: 800 }}>
-            <Story />
-          </div>
+          <PartyRepresentationProvider
+            fromPartyUuid='test-uuid'
+            actingPartyUuid='test-uuid'
+          >
+            <div style={{ padding: 24, maxWidth: 800 }}>
+              <Story />
+            </div>
+          </PartyRepresentationProvider>
         </RootProvider>
       </Provider>
     ),

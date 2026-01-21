@@ -102,7 +102,7 @@ export const DelegationModalContent = ({
     default:
       searchViewContent = (
         <ResourceSearch
-          onSelection={onResourceSelection}
+          onSelect={onResourceSelection}
           toParty={toParty}
         />
       );
@@ -131,7 +131,7 @@ export const DelegationModalContent = ({
           {infoView && (
             <Button
               className={classes.backButton}
-              variant='text'
+              variant='tertiary'
               data-color='neutral'
               onClick={() => setInfoView(false)}
               icon={ArrowLeftIcon}

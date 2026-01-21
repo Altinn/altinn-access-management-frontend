@@ -14,7 +14,7 @@
     "error_message": "Error message",
     "loading": "Loading",
     "success": "Success",
-    "error_status_code": "Error status code",
+    "error_status_code": "Status code",
     "error_time_stamp": "Time stamp",
     "date": "Date",
     "time": "Time",
@@ -82,6 +82,8 @@
     "error_status": "HttpStatus: {{status}}",
     "ssn": "National identity number",
     "last_name": "Last name",
+    "org_number": "Organization number",
+    "org_name": "Organization name",
     "subunit": "Subunit",
     "subunit_lowercase": "subunit",
     "mainunit_lowercase": "main unit",
@@ -121,7 +123,7 @@
     "logged_in_as_name": "Logged in as {{name}}",
     "new_altinn_info": "About new Altinn",
     "help_pages": "Help pages",
-    "leave_beta": "To the old solution",
+    "leave_beta": "Go to old Altinn",
     "shortcuts": "Shortcuts",
     "all_forms": "All forms and services",
     "start_business": "Start and run business",
@@ -140,6 +142,7 @@
     "users": "Users",
     "reportees": "Powers of attorney from others",
     "systemaccess": "System access",
+    "client_administration": "Client Administration",
     "consent": "Consent and power of attorney agreements",
     "poa_overview": "Powers of attorney",
     "settings": "Settings",
@@ -147,13 +150,17 @@
   },
   "error_page": {
     "not_found_site_type": "Error 404",
-    "not_found_site_header": "Oops! You have tried to reach a page we do not know",
+    "not_found_site_header": "Oops! The page you're trying to find is unknown to us.",
     "not_found_site_upper_text": "We do not know where you really intended to go, but perhaps you can find what you are looking for on some of these pages:",
     "not_found_site_lower_text": "If this was not helpful you are free to contact Altinn support on telephone 75 00 60 00",
     "go_to_inbox": "Go to inbox",
     "go_to_profile": "Go to profile page",
     "go_to_help": "Go to help page",
     "find_and_submit_scheme": "Find and submit a new form",
+    "not_found_site_description": "Many come to Altinn to do one of these things:",
+    "see_messages": "See messages or tasks in the inbox",
+    "find_a_form": "Find and submit a form",
+    "start_or_run_business": "Read about rights and obligations for entrepreneurs",
     "unknown_error_header": "Oops! An error seems to have occurred",
     "unknown_error_description": "Please try reloading the page.",
     "if_persistent_contact_service": "If the error persists, you can go to Altinn's help page or contact support at 75 00 60 00",
@@ -296,7 +303,7 @@
     "delete_singleRight_error_message": "Failed to delete access to ",
     "wip_title": "Power of attorney to services",
     "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
-    "wip_link_text": "Go to old solution"
+    "wip_link_text": "Go to old Altinn"
   },
   "access_packages": {
     "helptext_button": "What are access packages?",
@@ -307,7 +314,6 @@
     "current_access_packages_title": "{{count}} access packages",
     "give_new_button": "Give new power of attorney",
     "search_label": "Search for access packages",
-    "no_permissions": "You have to give power of attorney",
     "other_packages_in_area_title": "Other available packages in this area:",
     "package_delegation_success": "{{name}} has been successfully granted power of attorney over {{accessPackage}}.",
     "package_delegation_error": "Failed to grant power of attorney over {{accessPackage}} to {{name}}.",
@@ -318,17 +324,12 @@
     "user_has_no_packages": "This user has no access packages.",
     "no_packages": "No access packages available.",
     "no_matching_search": "No matches for your search",
-    "info_alert_text": "Access packages will replace today's Altinn roles. They will be filled with more services over time. Read more on the <a href='https://info.altinn.no/en/help/profile/access-packages/'>help page about access packages</a>.",
+    "info_alert_text": "Access packages will replace today's Altinn roles. They will be filled with more services over time. Read more on the <a href='https://info.altinn.no/en/help/ny-tilgangsstyring/'>help pages</a>.",
     "person_info_alert": "Giving powers of attorney to individuals is currently not supported. This will come later.",
     "delegation_check": {
       "delegation_check_error_heading": "Technical error",
       "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",
       "delegation_check_error_message_plural": "A technical error prevents you from giving the user one or more access packages. Please contact Altinn user service if the problem persists."
-    },
-    "access_status": {
-      "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
-      "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
-      "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted."
     }
   },
   "role": {
@@ -421,10 +422,7 @@
     "error_message": "Failed to give power of attorney to {{name}}",
     "edit_success": "The power of attorney was updated",
     "package_services": "Grants access to {{count}} services",
-    "has_package_message": "{{user_name}} has this power of attorney.",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
-    "cannot_delegate_here": "Access to this package cannot be granted here.",
-    "delegation_check_not_delegable": "You cannot grant this access because you lack it yourself.",
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
@@ -458,6 +456,17 @@
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
       "missing_rights": "You cannot delegate this authorization to others because you do not have it yourself. The general manager or main administrator can help you with this."
     }
+  },
+  "status_section": {
+    "has_package_message": "{{user_name}} has this power of attorney.",
+    "access_status": {
+      "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
+      "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
+      "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted."
+    },
+    "cannot_delegate_here": "Access to this package cannot be granted here.",
+    "delegation_check_not_delegable": "You cannot grant this access.",
+    "no_permissions_fulltext": "Your organization might have content that no one sees. You must grant access to {{packageName}} for such messages and services to be visible."
   },
   "new_user_modal": {
     "not_found_error_person": "Did not find a user with the given name and national identity number. Please check that you entered the correct information.",
@@ -502,7 +511,7 @@
     "invalid_phone": "Invalid phone number"
   },
   "info_modal": {
-    "back_button": "Go to the old solution",
+    "back_button": "Go to old Altinn",
     "help_pages": "Help pages",
     "info_button": "Information about the new solution"
   },
@@ -511,7 +520,7 @@
     "launchAlertContent": "This user may also have authorizations from the previous Altinn.",
     "launchAlertLinkText": "View authorizations from the previous Altinn",
     "oldRolesContent": "These Altinn roles may include services that already exist in the new Altinn solution. The services are being moved into the new access packages. The user has the same roles in the old solution, but there they include more and different services.",
-    "oldRolesLinkText": "Go to the old solution",
+    "oldRolesLinkText": "Go to old Altinn",
     "legacyRoleContent": "This role will soon be removed. Use access packages instead."
   },
   "systemuser_overviewpage": {
@@ -519,6 +528,7 @@
     "banner_title": "System accesses",
     "sub_title_text": "By creating a system access, you give a vendor system access to solve tasks in Altinn on behalf of your company.",
     "systemusers_load_error": "Failed to load system accesses",
+    "pending_systemusers_load_error": "Failed to load pending system access requests",
     "agent_delegation_systemusers_load_error": "Failed to load system accesses for customers",
     "new_system_user_button": "Create new system access",
     "existing_system_users_title": "Own system accesses",
@@ -527,10 +537,35 @@
     "loading_systemusers": "Loading system accesses",
     "no_permissions_warning": "You do not have sufficient rights to create a system access or manage customers for system accesses.",
     "no_key_role1": "You do not have sufficient rights.",
-    "no_key_role2": "To create a system access you need the role Access controller, Main administrator or General manager",
+    "no_key_role2": "To create a system access you need the role Access manager, Main administrator or General manager",
     "new_system_user": "NEW",
     "systemuser_tab": "System accesses",
-    "api_tab": "API-accesses"
+    "api_tab": "API-accesses",
+    "pending_request_badge": "Approve own system access",
+    "pending_agent_request_badge": "Approve system access for customers",
+    "pending_system_users_title": "Pending system access requests",
+    "standard_system_user_badge": "See powers of attorney",
+    "agent_system_user_badge": "Manage customers"
+  },
+  "client_administration_page": {
+    "no_access_title": "You do not have access to client administration",
+    "page_heading": "Client administration",
+    "clients_tab_title": "Clients",
+    "agents_tab_title": "Users",
+    "add_agent_button": "Add new user",
+    "add_agent_button_short": "Add",
+    "add_agentModal_agent_tab_title": "Person",
+    "add_agent_error": "Could not add user.",
+    "add_agent_success_snackbar": "User added.",
+    "agent_search_placeholder": "Search for person",
+    "agent_delete_button": "Delete user",
+    "agent_delete_heading": "You are deleting this user",
+    "agent_delete_body": "This person and all of their powers of attorney with your clients will be deleted.",
+    "agent_delete_confirm": "Delete user",
+    "direct_connections_heading": "Users with client access",
+    "indirect_connections_heading": "Other users",
+    "no_clients": "The organization has no registered clients",
+    "no_agents": "Found no users with client access for this organization"
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",
@@ -598,7 +633,16 @@
     "reject_loading": "Rejecting system access...",
     "request_accepted": "This request is already approved",
     "request_rejected": "This request is already rejected",
-    "request_expired": "This request has expired"
+    "request_expired": "This request has expired",
+    "escalate_title": "You lack required authorization",
+    "escalate_description": "You do not have sufficient powers of attorney to approve the request. Do you want to forward the request to the Access Manager in your organization?",
+    "escalate_confirm_button": "Yes, forward request",
+    "escalate_cancel_button": "Close and log out",
+    "escalate_error": "Could not forward the request",
+    "escalate_sent_title": "Request forwarded",
+    "escalate_sent_description": "The Access Manager in your organization should now have received the request in Altinn.",
+    "escalate_close_button": "Finish",
+    "escalate_already_escalated": "This request is already forwarded"
   },
   "systemuser_change_request": {
     "page_title": "Update system access - Altinn",
@@ -645,16 +689,24 @@
     "add_customers": "Add customers",
     "edit_customers": "Add or remove customers",
     "customer_search": "Search for customer",
+    "hide_assigned_customers": "Hide customers already added",
+    "add_all_customers": "Add all customers",
+    "no_customers_warning": "There are no customers yet. The customers must give power of attorney to the access packages required for this system access to {{companyName}}.",
     "remove_from_system_user": "Remove from system access",
     "remove_from_system_user_aria": "Remove {{customerName}} from system access",
     "add_to_system_user": "Add to system access",
     "add_to_system_user_aria": "Add {{customerName}} to system access",
     "add_system_user_error": "Could not add customer",
-    "remove_system_user_error": "Could not remove customer"
+    "remove_system_user_error": "Could not remove customer",
+    "add_all_customers_success": "All customers have been added.",
+    "add_all_customers_partial": "Only {{successCount}} out of {{totalCount}} customers were added.",
+    "add_all_customers_failed_list": "The following customers could not be added:",
+    "add_all_customers_in_progress_warning": "Do not close this website before all customers are added.",
+    "add_all_customers_progress": "Adding customer {{progress}} of {{totalCount}}"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "One or more services do not exist, or cannot be delegated.",
-    "02_rights_failed_to_delegate": "Could not delegate services to the system user.",
+    "02_rights_failed_to_delegate": "Could not delegate services to the system access.",
     "03_systemuser_failed_to_create": "Could not create system access.",
     "04_system_user_already_exists": "Could not create system access; existing system access already exists for the selected system.",
     "11_system_not_found": "Chosen system does not exist",
@@ -663,15 +715,15 @@
     "18_delegation_right_missing_delegation_access": "Delegation of services failed: you do not have the rights to directly delegate services.",
     "19_delegation_right_missing_srr_right_access": "Delegation of services failed: one or more services use access lists where the organization does not have access.",
     "20_delegation_right_insufficient_authentication_level": "Delegation of services failed: one or more services require an explicit access level.",
-    "51_accesspackage_delegation_failed": "Delegation of access packages to the system user failed.",
+    "51_accesspackage_delegation_failed": "Delegation of access packages to the system access failed.",
     "53_accesspackage_delegation_missing_required_access": "You do not have sufficient access rights to delegate the requested access packages.",
     "55_accesspackage_failed_to_get_delegated_packages": "Unable to retrieve delegated access packages.",
-    "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system user."
+    "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system access."
   },
   "page_not_available": {
     "title": "Access management for private individuals is still under development",
     "text": "More content will be added to this page over time. You can still manage access on behalf of yourself as a private individual in the old solution.",
-    "link_text": "Go to old solution"
+    "link_text": "Go to old Altinn"
   },
   "consent_request": {
     "page_title": "Approve consent/power of attorney - Altinn",
@@ -767,6 +819,9 @@
     "page_title": "Powers of attorney overview - Altinn",
     "heading": "Powers of attorney overview for {{name}}"
   },
+  "poa_status": {
+    "no_permissions": "You have to give power of attorney"
+  },
   "package_poa_details_page": {
     "page_title": "Power of attorney details - Altinn",
     "users_tab_title": "Users",
@@ -787,14 +842,17 @@
   "resource_list": {
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
-    "no_resources": "No resources available."
+    "no_resources": "No resources available.",
+    "filter_by_serviceowner": "Filter by service owner",
+    "resource_search_clear": "Clear search",
+    "remove_filter": "Remove filter"
   },
   "landing_page": {
     "alert_heading": "You are now in the new access management solution",
     "alert_heading_priv": "This is the new access management solution for private individuals",
     "alert_body": "Today's Altinn roles have been replaced by access packages with services. \n\nPlease note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
     "alert_body_priv": "Unfortunately we don't have everything in place yet, so you may need to do some things in the old solution. \n\nIf you want to go to access management for your organization, you can switch to your desired organization in the account selector at the top.",
-    "alert_link": "Go to the old solution",
+    "alert_link": "Go to old Altinn",
     "shortcut_links_heading": "Where do you want to go?",
     "other_links_heading": "Other",
     "users_item_description_org": "Overview of people and organizations that have been granted access in your organization",
@@ -804,7 +862,20 @@
     "poa_item_description": "Overview of all access packages and individual services",
     "consent_item_description": "Overview of all concluded agreements",
     "systemuser_item_description": "Overview of system access",
+    "client_admin_item_description": "Delegate power of attorney from clients to users in your organization.",
     "new_requests_single": "{{reportee}} has {{requestCount}} new request",
     "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"
+  },
+  "request_page": {
+    "page_title": "Requests - Altinn",
+    "heading": "Requests for {{name}}",
+    "incoming_requests": "Received requests",
+    "sent_requests": "Sent requests",
+    "no_received_requests": "No received requests",
+    "no_sent_requests": "No sent requests",
+    "process_request": "Process request",
+    "request_consent": "Requests consent",
+    "request_poa": "Requests power of attorney",
+    "error_loading_requests": "Could not load received requests"
   }
 }

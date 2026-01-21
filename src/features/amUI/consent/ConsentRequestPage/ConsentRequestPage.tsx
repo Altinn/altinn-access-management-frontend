@@ -101,7 +101,11 @@ export const ConsentRequestPage = () => {
               groups: {
                 'current-user': {
                   title: t('header.logged_in_as_name', {
-                    name: formatDisplayName({ fullName: userData?.name || '', type: 'person' }),
+                    name: formatDisplayName({
+                      fullName: userData?.name || '',
+                      type: 'person',
+                      reverseNameOrder: true,
+                    }),
                   }),
                 },
               },
@@ -113,7 +117,7 @@ export const ConsentRequestPage = () => {
           {isLoadingRequest && (
             <DsSpinner
               aria-label={t('consent_request.loading_consent')}
-              data-size='xl'
+              data-size='lg'
             />
           )}
           {loadRequestError && (
