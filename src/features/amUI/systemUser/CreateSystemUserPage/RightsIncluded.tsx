@@ -78,6 +78,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
                 companyName: reporteeData?.name,
               },
             )}
+            avatarTitle={selectedSystem.name}
           />
         </div>
         <div>
