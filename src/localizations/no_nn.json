@@ -563,6 +563,8 @@
     "load_delegations_error": "Kunne ikkje laste delegeringar.",
     "no_delegations": "Fann ingen delegeringar.",
     "delegate_package_button": "Deleger tilgangspakke",
+    "agent_has_clients_tab": "Har desse klientane",
+    "agent_can_get_clients_tab": "Kan få desse klientane",
     "direct_connections_heading": "Brukarar med klienttilgang",
     "indirect_connections_heading": "Andre brukarar",
     "no_clients": "Organisasjonen har ingen klientar",

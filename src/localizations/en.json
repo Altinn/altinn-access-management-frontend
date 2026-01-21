@@ -566,6 +566,8 @@
     "load_delegations_error": "Could not load delegations.",
     "no_delegations": "No delegations found.",
     "delegate_package_button": "Delegate package",
+    "agent_has_clients_tab": "Has these clients",
+    "agent_can_get_clients_tab": "Can get these clients",
     "direct_connections_heading": "Users with client access",
     "indirect_connections_heading": "Other users",
     "no_clients": "The organization has no registered clients",
