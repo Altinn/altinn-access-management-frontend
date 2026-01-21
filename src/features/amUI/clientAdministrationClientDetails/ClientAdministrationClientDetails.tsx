@@ -19,7 +19,7 @@ import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 export const ClientAdministrationClientDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const { toParty } = usePartyRepresentation();
+  const { fromParty } = usePartyRepresentation();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
 
   if (isLoadingIsClientAdmin) {
@@ -46,8 +46,8 @@ export const ClientAdministrationClientDetails = () => {
 
   const backUrl = `/${amUIPath.ClientAdministration}`;
   const clientName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    fullName: fromParty?.name || '',
+    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
   });
 
   return (
