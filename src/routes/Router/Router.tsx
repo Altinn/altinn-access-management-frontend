@@ -41,6 +41,7 @@ import { LandingPage } from '@/features/amUI/landingPage/LandingPage';
 import { RequestPage } from '@/features/amUI/requestPage/RequestsPage';
 import { ClientAdministrationPage } from '@/features/amUI/clientAdministration/ClientAdministrationPage';
 import { ClientAdministrationAgentDetailsPage } from '@/features/amUI/clientAdministrationAgentDetails/ClientAdministrationAgentDetailsPage';
+import { ClientAdministrationClientDetailsPage } from '@/features/amUI/clientAdministrationClientDetails/ClientAdministrationClientDetailsPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -195,6 +196,10 @@ export const Router = createBrowserRouter(
         <Route
           path={amUIPath.ClientAdministrationAgent}
           element={<ClientAdministrationAgentDetailsPage />}
+        />
+        <Route
+          path={amUIPath.ClientAdministrationClient}
+          element={<ClientAdministrationClientDetailsPage />}
         />
         <Route path={ConsentPath.Consent}>
           <Route

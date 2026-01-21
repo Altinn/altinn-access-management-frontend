@@ -9,4 +9,5 @@ export enum amUIPath {
   Requests = 'requests',
   ClientAdministration = 'clientadministration',
   ClientAdministrationAgent = 'clientadministration/agent/:id',
+  ClientAdministrationClient = 'clientadministration/client/:id',
 }

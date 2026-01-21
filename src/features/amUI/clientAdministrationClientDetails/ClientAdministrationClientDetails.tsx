@@ -10,17 +10,16 @@ import {
 import { useParams } from 'react-router';
 
 import { amUIPath } from '@/routes/paths';
+import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
-import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 
-export const ClientAdministrationAgentDetails = () => {
+export const ClientAdministrationClientDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const { toParty } = usePartyRepresentation();
+  const { fromParty } = usePartyRepresentation();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
 
   if (isLoadingIsClientAdmin) {
@@ -46,9 +45,9 @@ export const ClientAdministrationAgentDetails = () => {
   }
 
   const backUrl = `/${amUIPath.ClientAdministration}`;
-  const userName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  const clientName = formatDisplayName({
+    fullName: fromParty?.name || '',
+    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
   });
 
   return (
@@ -56,22 +55,11 @@ export const ClientAdministrationAgentDetails = () => {
       <Breadcrumbs
         items={['root', 'client_administration']}
         lastBreadcrumb={{
-          label: userName,
+          label: clientName,
         }}
       />
-      <PageContainer
-        backUrl={backUrl}
-        contentActions={
-          id ? (
-            <ClientAdministrationAgentDeleteModal
-              agentId={id}
-              backUrl={backUrl}
-            />
-          ) : null
-        }
-      >
-        <DsHeading data-size='lg'>{userName}</DsHeading>
-
+      <PageContainer backUrl={backUrl}>
+        <DsHeading data-size='lg'>{clientName}</DsHeading>
         {!id && (
           <DsAlert data-color='warning'>
             <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>

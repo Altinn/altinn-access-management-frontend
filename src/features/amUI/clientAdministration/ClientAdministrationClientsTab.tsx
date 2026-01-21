@@ -73,6 +73,7 @@ export const ClientAdministrationClientsTab = () => {
       isLoading={isClientsLoading}
       canDelegate={false}
       noUsersText={t('client_administration_page.no_clients')}
+      getUserLink={(user) => `/clientadministration/client/${user.id}`}
     />
   );
 };
