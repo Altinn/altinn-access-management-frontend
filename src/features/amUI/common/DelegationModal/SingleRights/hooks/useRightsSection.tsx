@@ -5,8 +5,7 @@ import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlic
 import { SnackbarDuration, DsChip, useSnackbar } from '@altinn/altinn-components';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { mapRightsToChipRights } from './ActionUtils';
-import { ChipRight } from './ResourceInfo';
+import { ChipRight, mapRightsToChipRights } from './rightsUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
   DelegationCheckedRight,
@@ -16,10 +15,11 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { arraysEqualUnordered } from '@/resources/utils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
-import classes from './ResourceInfo.module.css';
+import classes from '../ResourceInfo.module.css';
+import { useRightChips } from './useRightChips';
 
 export const useRightsSection = ({
   resource,
@@ -207,33 +207,7 @@ export const useRightsSection = ({
     );
   };
 
-  const chips = () =>
-    rights
-      .filter((right: ChipRight) => right.delegable)
-      .map((right: ChipRight) => {
-        const actionText = right.action;
-        return (
-          <div key={right.rightKey}>
-            <DsChip.Checkbox
-              className={classes.chip}
-              data-size='sm'
-              checked={right.checked}
-              onClick={() => {
-                setRights(
-                  rights.map((r) => {
-                    if (r.rightKey === right.rightKey && r.delegable) {
-                      return { ...r, checked: !r.checked };
-                    }
-                    return r;
-                  }),
-                );
-              }}
-            >
-              {actionText}
-            </DsChip.Checkbox>
-          </div>
-        );
-      });
+  const { chips } = useRightChips(rights, setRights, classes.chip);
 
   return {
     chips,

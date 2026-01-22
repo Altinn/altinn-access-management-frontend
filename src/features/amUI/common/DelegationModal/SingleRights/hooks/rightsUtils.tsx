@@ -1,7 +1,14 @@
 import { RightStatus } from '@/dataObjects/dtos/resourceDelegation';
 import { DelegationCheckedRight } from '@/rtk/features/singleRights/singleRightsApi';
-import { ChipRight } from './ResourceInfo';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
+
+export type ChipRight = {
+  action: string;
+  rightKey: string;
+  delegable: boolean;
+  checked: boolean;
+  delegationReason: string;
+};
 
 export const mapRightsToChipRights = (
   rights: DelegationCheckedRight[],

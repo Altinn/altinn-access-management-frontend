@@ -12,8 +12,7 @@ import {
 } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { LocalizedAction } from '@/resources/utils/localizedActions';
-import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
@@ -24,15 +23,7 @@ import classes from './ResourceInfo.module.css';
 import { ResourceAlert } from './ResourceAlert';
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
-import { useRightsSection } from './useRightsSection';
-
-export type ChipRight = {
-  action: string;
-  rightKey: string;
-  delegable: boolean;
-  checked: boolean;
-  delegationReason: string;
-};
+import { useRightsSection } from './hooks/useRightsSection';
 
 export interface ResourceInfoProps {
   resource: ServiceResource;
