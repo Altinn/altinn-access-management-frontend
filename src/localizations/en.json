@@ -743,9 +743,9 @@
     "already_rejected_poa": "This power of attorney is already rejected",
     "receipt_header_consent": "The consent has been registered!",
     "receipt_header_poa": "The power of attorney has been registered!",
-    "receipt_body_consent": "You can withdraw this consent at any time on the consents and powers of attorney page.",
-    "receipt_body_poa": "You can withdraw this power of attorney at any time on the consents and powers of attorney page.",
-    "receipt_back": "Back to consents and powers of attorney"
+    "receipt_body_consent": "You can withdraw this consent at any time in the overview below Consent and power of attorney agreements.",
+    "receipt_body_poa": "You can withdraw this power of attorney at any time in the overview below Consent and power of attorney agreements.",
+    "receipt_back": "Back to overview"
   },
   "active_consents": {
     "page_title": "Consent and power of attorney agreements - Altinn",

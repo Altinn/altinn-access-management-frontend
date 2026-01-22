@@ -740,9 +740,9 @@
     "already_rejected_poa": "Denne fullmakta er allereie avvist",
     "receipt_header_consent": "Samtykket er registrert!",
     "receipt_header_poa": "Fullmakten er registrert!",
-    "receipt_body_consent": "Du kan når som helst trekke samtykket på samtykker og fullmakter-sida.",
-    "receipt_body_poa": "Du kan når som helst trekke fullmakta på samtykker og fullmakter-sida.",
-    "receipt_back": "Tilbake til samtykker og fullmakter"
+    "receipt_body_consent": "Du kan når som helst trekke tilbake samtykket i oversikten under Samtykke- og fullmaktsavtaler",
+    "receipt_body_poa": "Du kan når som helst trekke tilbake fullmakta i oversikten under Samtykke- og fullmaktsavtaler",
+    "receipt_back": "Tilbake til oversikten"
   },
   "active_consents": {
     "page_title": "Samtykke- og fullmaktsavtaler - Altinn",
