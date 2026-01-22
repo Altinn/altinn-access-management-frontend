@@ -562,7 +562,7 @@
     "delegations_heading": "Delegerte tilgangspakker",
     "load_delegations_error": "Kunne ikke laste delegeringer.",
     "no_delegations": "Fant ingen delegeringer.",
-    "delegate_package_button": "Deleger tilgangspakke",
+    "delegate_package_button": "Gi fullmakt",
     "agent_has_clients_tab": "Har disse klientene",
     "agent_can_get_clients_tab": "Kan få disse klientene",
     "direct_connections_heading": "Brukere med klienttilgang",

@@ -565,7 +565,7 @@
     "delegations_heading": "Delegated access packages",
     "load_delegations_error": "Could not load delegations.",
     "no_delegations": "No delegations found.",
-    "delegate_package_button": "Delegate package",
+    "delegate_package_button": "Give power of attorney",
     "agent_has_clients_tab": "Has these clients",
     "agent_can_get_clients_tab": "Can get these clients",
     "direct_connections_heading": "Users with client access",

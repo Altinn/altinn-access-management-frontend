@@ -17,6 +17,7 @@ import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
+import { ClientAdministrationAgentClientsList } from './ClientAdministrationAgentClientsList';
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   useAddAgentAccessPackagesMutation,
@@ -39,7 +40,8 @@ export const ClientAdministrationAgentDetails = () => {
     data: clients,
     isLoading: isLoadingClients,
     isError: isErrorClients,
-  } = useGetClientsQuery(undefined, { skip: !id });
+  } = useGetClientsQuery();
+
   const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
     useAddAgentAccessPackagesMutation();
 
@@ -119,18 +121,6 @@ export const ClientAdministrationAgentDetails = () => {
               <DsHeading data-size='sm'>
                 {t('client_administration_page.delegations_heading')}
               </DsHeading>
-              {isLoadingAgentAccessPackages && (
-                <DsParagraph data-size='sm'>
-                  <DsSkeleton variant='text' />
-                </DsParagraph>
-              )}
-              {isErrorAgentAccessPackages && (
-                <DsAlert data-color='warning'>
-                  <DsParagraph>
-                    {t('client_administration_page.load_delegations_error')}
-                  </DsParagraph>
-                </DsAlert>
-              )}
               {!isLoadingAgentAccessPackages &&
                 !isErrorAgentAccessPackages &&
                 agentAccessPackages &&
@@ -157,74 +147,24 @@ export const ClientAdministrationAgentDetails = () => {
                   <DsSkeleton variant='text' />
                 </DsParagraph>
               )}
+              {/* 
               {isErrorClients && (
                 <DsAlert data-color='warning'>
                   <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
                 </DsAlert>
-              )}
+              )} 
+               */}
               {!isLoadingClients && !isErrorClients && clients && clients.length === 0 && (
                 <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
               )}
               {!isLoadingClients && !isErrorClients && clients && clients.length > 0 && (
-                <div>
-                  {clients.map((client) => (
-                    <details key={client.client.id}>
-                      <summary>{client.client.name}</summary>
-                      {client.access.length === 0 && (
-                        <DsParagraph data-size='sm'>
-                          {t('client_administration_page.no_delegations')}
-                        </DsParagraph>
-                      )}
-                      {client.access.length > 0 && (
-                        <ul>
-                          {client.access.map((access) => (
-                            <li key={`${client.client.id}-${access.role.id}`}>
-                              <span>{access.role.code}</span>
-                              {access.packages.length > 0 && (
-                                <ul>
-                                  {access.packages.map((pkg) => (
-                                    <li key={`${client.client.id}-${access.role.id}-${pkg.id}`}>
-                                      <span>{pkg.urn ?? pkg.id}</span>
-                                      <button
-                                        type='button'
-                                        disabled={
-                                          isAddingAgentAccessPackages ||
-                                          !toPartyUuid ||
-                                          !actingPartyUuid
-                                        }
-                                        onClick={() => {
-                                          if (!toPartyUuid || !actingPartyUuid) {
-                                            return;
-                                          }
-
-                                          void addAgentAccessPackages({
-                                            from: client.client.id,
-                                            to: toPartyUuid,
-                                            party: actingPartyUuid,
-                                            payload: {
-                                              values: [
-                                                {
-                                                  role: access.role.code,
-                                                  packages: [pkg.id],
-                                                },
-                                              ],
-                                            },
-                                          });
-                                        }}
-                                      >
-                                        {t('client_administration_page.delegate_package_button')}
-                                      </button>
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </details>
-                  ))}
-                </div>
+                <ClientAdministrationAgentClientsList
+                  clients={clients}
+                  isAddingAgentAccessPackages={isAddingAgentAccessPackages}
+                  toPartyUuid={toPartyUuid}
+                  actingPartyUuid={actingPartyUuid}
+                  addAgentAccessPackages={addAgentAccessPackages}
+                />
               )}
             </DsTabs.Panel>
           </DsTabs>

@@ -1,0 +1,11 @@
+.poaList {
+  padding: var(--ds-spacing-2) 0;
+}
+
+.accessRoleItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+  padding: var(--ds-spacing-2);
+  margin-left: var(--ds-spacing-10);
+}
