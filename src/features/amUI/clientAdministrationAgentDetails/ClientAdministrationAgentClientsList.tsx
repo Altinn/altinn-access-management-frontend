@@ -12,6 +12,8 @@ import { AccessPackageListItems, type AccessPackageListItemData } from './Access
 import { UserListItems } from './UserListItems';
 
 type AddAgentAccessPackages = ReturnType<typeof useAddAgentAccessPackagesMutation>[0];
+type ClientAccessItem = Client['access'][number];
+type UserListItemType = 'company' | 'person';
 
 type ClientAdministrationAgentClientsListProps = {
   clients: Client[];
@@ -20,6 +22,21 @@ type ClientAdministrationAgentClientsListProps = {
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackages;
 };
+
+const getUserListItemType = (clientType: string): UserListItemType => {
+  return clientType.toLowerCase() === 'organisasjon' ? 'company' : 'person';
+};
+
+const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>): Client[] => {
+  return clients
+    .map((client) => ({
+      client,
+      sortKey: buildClientSortKey(client, parentNameById),
+    }))
+    .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
+    .map(({ client }) => client);
+};
+
 export const ClientAdministrationAgentClientsList = ({
   clients,
   isAddingAgentAccessPackages,
@@ -29,6 +46,9 @@ export const ClientAdministrationAgentClientsList = ({
 }: ClientAdministrationAgentClientsListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
+  const noDelegationsText = t('client_administration_page.no_delegations');
+  const delegateLabel = t('client_administration_page.delegate_package_button');
+  const delegateDisabled = isAddingAgentAccessPackages || !toPartyUuid || !actingPartyUuid;
 
   const addAgentAccessPackageHandler = (clientId: string, roleCode: string, packageId: string) => {
     if (!toPartyUuid || !actingPartyUuid) {
@@ -51,70 +71,70 @@ export const ClientAdministrationAgentClientsList = ({
   };
 
   const parentNameById = buildClientParentNameById(clients);
-  const sortedClients = clients
-    .map((client) => ({
-      client,
-      sortKey: buildClientSortKey(client, parentNameById),
-    }))
-    .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
-    .map(({ client }) => client);
+  const sortedClients = sortClientsByKey(clients, parentNameById);
+
+  const buildAccessPackageItems = (
+    clientId: string,
+    access: ClientAccessItem,
+  ): AccessPackageListItemData[] => {
+    return access.packages.map((pkg) => {
+      const accessPackage = getAccessPackageById(pkg.id);
+      return {
+        id: accessPackage?.id ?? pkg.id,
+        size: 'sm',
+        name: accessPackage?.name ?? pkg.name,
+        controls: (
+          <Button
+            variant='tertiary'
+            disabled={delegateDisabled}
+            onClick={() => {
+              addAgentAccessPackageHandler(clientId, access.role.code, pkg.urn ?? pkg.id);
+            }}
+          >
+            <PlusCircleIcon />
+            {delegateLabel}
+          </Button>
+        ),
+      };
+    });
+  };
+
+  const renderAccessContent = (client: Client) => {
+    if (client.access.length === 0) {
+      return <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>;
+    }
+
+    return client.access.map((access) => {
+      const accessPackageItems = buildAccessPackageItems(client.client.id, access);
+
+      return (
+        <React.Fragment key={`${client.client.id}-${access.role.id}`}>
+          <DsHeading>{access.role.code}</DsHeading>
+          {accessPackageItems.length === 0 ? (
+            <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>
+          ) : (
+            <AccessPackageListItems items={accessPackageItems} />
+          )}
+        </React.Fragment>
+      );
+    });
+  };
 
   const userListItems = sortedClients.map((client) => {
     const clientId = client.client.id;
-    const noDelegationsText = t('client_administration_page.no_delegations');
     const isSubUnit = Boolean(client.client.parent?.id) && isSubUnitByType(client.client.variant);
-
-    const accessContent =
-      client.access.length === 0 ? (
-        <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>
-      ) : (
-        client.access.map((access) => {
-          const accessPackageItems: AccessPackageListItemData[] = access.packages.map((pkg) => {
-            const accessPackage = getAccessPackageById(pkg.id);
-            return {
-              id: accessPackage?.id ?? pkg.id,
-              size: 'sm',
-              name: accessPackage?.name ?? pkg.name,
-              controls: (
-                <Button
-                  variant='tertiary'
-                  disabled={isAddingAgentAccessPackages || !toPartyUuid || !actingPartyUuid}
-                  onClick={() => {
-                    addAgentAccessPackageHandler(clientId, access.role.code, pkg.urn ?? pkg.id);
-                  }}
-                >
-                  <PlusCircleIcon />
-                  {t('client_administration_page.delegate_package_button')}
-                </Button>
-              ),
-            };
-          });
-
-          return (
-            <>
-              <DsHeading>{access.role.code}</DsHeading>
-              {accessPackageItems.length === 0 ? (
-                <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>
-              ) : (
-                <AccessPackageListItems items={accessPackageItems} />
-              )}
-            </>
-          );
-        })
-      );
-
-    console.log('client.client.type: ', client.client.type);
+    const userType = getUserListItemType(client.client.type);
     return {
       id: clientId,
       name: formatDisplayName({
         fullName: client.client.name,
-        type: client.client.type.toLowerCase() === 'organisasjon' ? 'company' : 'person',
+        type: userType,
       }),
-      type: client.client.type.toLowerCase() === 'organisasjon' ? 'company' : 'person',
+      type: userType,
       subUnit: isSubUnit,
       collapsible: true,
       as: Button,
-      children: accessContent,
+      children: renderAccessContent(client),
     };
   });
 

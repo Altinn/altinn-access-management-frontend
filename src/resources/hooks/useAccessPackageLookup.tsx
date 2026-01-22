@@ -31,7 +31,6 @@ export const useAccessPackageLookup = () => {
 
     return map;
   }, [accessAreas]);
-  console.log('packageMap: ', packageMap);
 
   const getAccessPackageById = React.useCallback(
     (packageId?: string | null): AccessPackage | undefined => {
