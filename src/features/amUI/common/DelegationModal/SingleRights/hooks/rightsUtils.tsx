@@ -28,7 +28,7 @@ export const mapRightsToChipRights = (
       delegable:
         right.status === RightStatus.Delegable || right.status === BFFDelegatedStatus.Delegated,
       checked: checked(right) || false,
-      delegationReason: right.reasonCodes[0],
+      delegationReason: right.reasonCodes.length > 0 ? right.reasonCodes[0] : '',
     };
   });
 };

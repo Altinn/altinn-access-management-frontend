@@ -3,7 +3,7 @@ import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
 import { useEditResource } from '@/resources/hooks/useEditResource';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { SnackbarDuration, DsChip, useSnackbar } from '@altinn/altinn-components';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -114,32 +114,36 @@ export const useRightsSection = ({
 
   /// Functions
 
-  const getMissingAccessMessage = (response: DelegationCheckedRight[]) => {
-    const hasMissingRoleAccess = response.some((right) =>
-      right.reasonCodes.some(
-        (code) => code === ErrorCode.MissingRoleAccess || code === ErrorCode.MissingRightAccess,
-      ),
-    );
-    const hasMissingSrrRightAccess = response.some(
-      (right) =>
-        !hasMissingRoleAccess &&
+  const getMissingAccessMessage = useCallback(
+    (response: DelegationCheckedRight[]) => {
+      const hasMissingRoleAccess = response.some((right) =>
         right.reasonCodes.some(
-          (code) =>
-            code === ErrorCode.MissingSrrRightAccess || code === ErrorCode.AccessListValidationFail,
+          (code) => code === ErrorCode.MissingRoleAccess || code === ErrorCode.MissingRightAccess,
         ),
-    );
+      );
+      const hasMissingSrrRightAccess = response.some(
+        (right) =>
+          !hasMissingRoleAccess &&
+          right.reasonCodes.some(
+            (code) =>
+              code === ErrorCode.MissingSrrRightAccess ||
+              code === ErrorCode.AccessListValidationFail,
+          ),
+      );
 
-    if (hasMissingRoleAccess) {
-      return t('delegation_modal.specific_rights.missing_role_message');
-    }
-    if (hasMissingSrrRightAccess) {
-      return t('delegation_modal.specific_rights.missing_srr_right_message', {
-        resourceOwner: resource?.resourceOwnerName,
-        reportee: reportee?.name,
-      });
-    }
-    return null;
-  };
+      if (hasMissingRoleAccess) {
+        return t('delegation_modal.specific_rights.missing_role_message');
+      }
+      if (hasMissingSrrRightAccess) {
+        return t('delegation_modal.specific_rights.missing_srr_right_message', {
+          resourceOwner: resource?.resourceOwnerName,
+          reportee: reportee?.name,
+        });
+      }
+      return null;
+    },
+    [t, resource?.resourceOwnerName, reportee?.name],
+  );
 
   const saveEditedRights = () => {
     const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);

@@ -1,3 +1,4 @@
+import React from 'react';
 import { DsChip } from '@altinn/altinn-components';
 import { ChipRight } from './rightsUtils';
 
