@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Text;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
+using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 using Microsoft.AspNetCore.Http;
