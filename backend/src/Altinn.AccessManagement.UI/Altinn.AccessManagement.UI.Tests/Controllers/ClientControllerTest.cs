@@ -36,36 +36,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 "ClientDelegation");
         }
 
-        private List<ClientDelegation> LoadClients()
-        {
-            string path = Path.Combine(_testDataFolder, "clients.json");
-            return Util.GetMockData<List<ClientDelegation>>(path);
-        }
-
-        private List<AgentDelegation> LoadAgents()
-        {
-            string path = Path.Combine(_testDataFolder, "agents.json");
-            return Util.GetMockData<List<AgentDelegation>>(path);
-        }
-
-        private List<ClientDelegation> LoadAgentAccessPackages()
-        {
-            string path = Path.Combine(_testDataFolder, "agentsAccessPackages.json");
-            return Util.GetMockData<List<ClientDelegation>>(path);
-        }
-
-        private List<AgentDelegation> LoadClientAccessPackages()
-        {
-            string path = Path.Combine(_testDataFolder, "clientsAccessPackages.json");
-            return Util.GetMockData<List<AgentDelegation>>(path);
-        }
-
-        private List<DelegationDto> LoadAgentAccessPackageDelegations()
-        {
-            string path = Path.Combine(_testDataFolder, "agentsAccessPackagesDelegations.json");
-            return Util.GetMockData<List<DelegationDto>>(path);
-        }
-
         private void SetAuthHeader(HttpClient client = null)
         {
             string token = PrincipalUtil.GetToken(1234, 1234, 2);
@@ -79,7 +49,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetClients_ReturnsClients()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            List<ClientDelegation> expectedResponse = LoadClients();
+            string path = Path.Combine(_testDataFolder, "clients.json");
+            List<ClientDelegation> expectedResponse = Util.GetMockData<List<ClientDelegation>>(path);
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/clients?party={party}");
@@ -123,7 +94,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetAgents_ReturnsAgents()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            List<AgentDelegation> expectedResponse = LoadAgents();
+            string path = Path.Combine(_testDataFolder, "agents.json");
+            List<AgentDelegation> expectedResponse = Util.GetMockData<List<AgentDelegation>>(path);
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/agents?party={party}");
@@ -156,7 +128,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
-            List<ClientDelegation> expectedResponse = LoadAgentAccessPackages();
+            string path = Path.Combine(_testDataFolder, "agentsAccessPackages.json");
+            List<ClientDelegation> expectedResponse = Util.GetMockData<List<ClientDelegation>>(path);
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party={party}&to={to}");
@@ -175,7 +148,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
-            List<AgentDelegation> expectedResponse = LoadClientAccessPackages();
+            string path = Path.Combine(_testDataFolder, "clientsAccessPackages.json");
+            List<AgentDelegation> expectedResponse = Util.GetMockData<List<AgentDelegation>>(path);
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/clients/accesspackages?party={party}&from={from}");
@@ -195,7 +169,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
             Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
-            List<DelegationDto> expectedResponse = LoadAgentAccessPackageDelegations();
+            string path = Path.Combine(_testDataFolder, "agentsAccessPackagesDelegations.json");
+            List<DelegationDto> expectedResponse = Util.GetMockData<List<DelegationDto>>(path);
             DelegationBatchInputDto payload = new DelegationBatchInputDto
             {
                 Values =
