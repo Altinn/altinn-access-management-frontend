@@ -31,6 +31,7 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     // velg aktør
     await test.step('Choose an org as actor', async () => {
       await aktorvalgHeader.goToSelectActor('Håndfast Plasma');
+      await aktorvalgHeader.removeAllFavorites();
       await aktorvalgHeader.selectActor('Kunnskapsrik Kry Ape');
     });
 

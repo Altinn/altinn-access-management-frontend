@@ -121,6 +121,15 @@ export class AktorvalgHeader {
     ).toBeVisible();
   }
 
+  async removeAllFavorites() {
+    var unfavoriteButtons = await this.page
+      .getByRole('button', { name: 'Fjern frå favorittar' })
+      .all();
+    for (const button of unfavoriteButtons) {
+      await button.click();
+    }
+  }
+
   async unfavoriteFirstActor() {
     await this.page.getByRole('button', { name: 'Fjern frå favorittar' }).first().click();
     await expect(this.page.getByRole('button', { name: 'Fjern frå favorittar' })).toHaveCount(0);
