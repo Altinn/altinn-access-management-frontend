@@ -195,6 +195,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: AddAgentAccessPackages returns bad request when payload is null.
+        /// </summary>
+        [Fact]
+        public async Task AddAgentAccessPackages_NullPayload_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpContent content = new StringContent("null", Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party={party}&from={from}&to={to}",
+                content);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
         /// Test case: RemoveAgentAccessPackages returns no content on valid input.
         /// </summary>
         [Fact]
@@ -228,6 +247,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: RemoveAgentAccessPackages returns bad request when payload is null.
+        /// </summary>
+        [Fact]
+        public async Task RemoveAgentAccessPackages_NullPayload_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party={party}&from={from}&to={to}")
+            {
+                Content = new StringContent("null", Encoding.UTF8, "application/json")
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
         /// Test case: AddAgent returns an assignment for a valid query.
         /// </summary>
         [Fact]
@@ -256,6 +297,32 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: AddAgent returns an assignment when valid person input is provided.
+        /// </summary>
+        [Fact]
+        public async Task AddAgent_ValidPersonInput_ReturnsAssignment()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            PersonInput personInput = new PersonInput
+            {
+                PersonIdentifier = "20838198385",
+                LastName = "Medaljong"
+            };
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party={party}",
+                JsonContent.Create(personInput));
+
+            AssignmentDto assignment = await response.Content.ReadFromJsonAsync<AssignmentDto>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(assignment);
+            Assert.Equal(Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), assignment.ToId);
+            Assert.Equal(party, assignment.FromId);
+        }
+
+        /// <summary>
         /// Test case: AddAgent returns bad request when no to or person input is provided.
         /// </summary>
         [Fact]
@@ -267,6 +334,23 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage response = await _client.PostAsync(
                 $"accessmanagement/api/v1/clientdelegations/agents?party={party}",
                 null);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddAgent returns bad request when person input cannot be deserialized.
+        /// </summary>
+        [Fact]
+        public async Task AddAgent_InvalidJson_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            SetAuthHeader();
+
+            HttpContent content = new StringContent("{invalid json", Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party={party}",
+                content);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -320,6 +404,22 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 $"accessmanagement/api/v1/clientdelegations/agents?party={party}&to={to}");
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveAgent returns internal server error when service throws.
+        /// </summary>
+        [Fact]
+        public async Task RemoveAgent_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            Guid party = Guid.Empty;
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party={party}&to={to}");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
     }
 }
