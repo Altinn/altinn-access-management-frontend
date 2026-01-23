@@ -51,11 +51,6 @@ namespace Altinn.AccessManagement.UI.Controllers
                 List<ClientDelegation> clients = await _clientService.GetClients(party, cancellationToken);
                 return Ok(clients);
             }
-            catch (HttpStatusException ex)
-            {
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetClients failed unexpectedly");
@@ -83,11 +78,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 List<AgentDelegation> agents = await _clientService.GetAgents(party, cancellationToken);
                 return Ok(agents);
-            }
-            catch (HttpStatusException ex)
-            {
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
@@ -118,11 +108,6 @@ namespace Altinn.AccessManagement.UI.Controllers
                 List<ClientDelegation> clients = await _clientService.GetAgentAccessPackages(party, to, cancellationToken);
                 return Ok(clients);
             }
-            catch (HttpStatusException ex)
-            {
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetAgentAccessPackages failed unexpectedly");
@@ -151,11 +136,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 List<AgentDelegation> agents = await _clientService.GetClientAccessPackages(party, from, cancellationToken);
                 return Ok(agents);
-            }
-            catch (HttpStatusException ex)
-            {
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
@@ -198,11 +178,6 @@ namespace Altinn.AccessManagement.UI.Controllers
                 List<DelegationDto> delegations = await _clientService.AddAgentAccessPackages(party, from, to, payload, cancellationToken);
                 return Ok(delegations);
             }
-            catch (HttpStatusException ex)
-            {
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AddAgentAccessPackages failed unexpectedly");
@@ -243,11 +218,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 await _clientService.RemoveAgentAccessPackages(party, from, to, payload, cancellationToken);
                 return NoContent();
-            }
-            catch (HttpStatusException ex)
-            {
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
@@ -303,11 +273,6 @@ namespace Altinn.AccessManagement.UI.Controllers
                 AssignmentDto assignment = await _clientService.AddAgent(party, to, personInput, cancellationToken);
                 return Ok(assignment);
             }
-            catch (HttpStatusException ex)
-            {
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AddAgent failed unexpectedly");
@@ -335,11 +300,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 await _clientService.RemoveAgent(party, to, cancellationToken);
                 return NoContent();
-            }
-            catch (HttpStatusException ex)
-            {
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
