@@ -5,9 +5,11 @@ import { env, addTimeToNowUtc } from 'playwright/util/helper';
 
 export class ConsentApiRequests {
   private tokenClass: Token;
+  private readonly consentRequestScopes: string;
 
-  constructor(org?: string) {
+  constructor(org?: string, consentRequestScopes = 'altinn:consentrequests.write') {
     this.tokenClass = new Token(org);
+    this.consentRequestScopes = consentRequestScopes;
   }
 
   /**
@@ -125,7 +127,7 @@ export class ConsentApiRequests {
     const payload = this.buildConsentRequestPayload(params);
 
     const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
-    const scopes = 'altinn:consentrequests.write';
+    const scopes = this.consentRequestScopes;
 
     return this.sendPostRequest<typeof payload, { viewUri: string }>(payload, endpoint, scopes);
   }
