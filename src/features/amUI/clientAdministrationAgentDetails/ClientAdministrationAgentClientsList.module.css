@@ -2,6 +2,23 @@
   padding: var(--ds-spacing-2) 0;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-4);
+  padding: var(--ds-spacing-2) 0;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+
+.searchBar {
+  max-width: 27rem;
+}
+
 .accessRoleItem {
   display: flex;
   flex-direction: column;

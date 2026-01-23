@@ -24,6 +24,7 @@ import {
   useGetAgentAccessPackagesQuery,
   useGetClientsQuery,
 } from '@/rtk/features/clientApi';
+import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 
 export const ClientAdministrationAgentDetails = () => {
   const { t } = useTranslation();
@@ -86,89 +87,76 @@ export const ClientAdministrationAgentDetails = () => {
       <PageContainer
         backUrl={backUrl}
         contentActions={
-          id ? (
-            <ClientAdministrationAgentDeleteModal
-              agentId={id}
-              backUrl={backUrl}
-            />
-          ) : null
+          <ClientAdministrationAgentDeleteModal
+            agentId={id}
+            backUrl={backUrl}
+          />
         }
       >
-        <DsHeading data-size='lg'>{userName}</DsHeading>
+        <UserPageHeader
+          direction='to'
+          displayDirection={false}
+          displayRoles={false}
+        />
 
-        {!id && (
-          <DsAlert data-color='warning'>
-            <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-          </DsAlert>
-        )}
-
-        {id && (
-          <DsTabs
-            defaultValue='has-clients'
-            data-size='sm'
-            value={activeTab}
-            onChange={setActiveTab}
-          >
-            <DsTabs.List>
-              <DsTabs.Tab value='has-clients'>
-                {t('client_administration_page.agent_has_clients_tab')}
-              </DsTabs.Tab>
-              <DsTabs.Tab value='can-get-clients'>
-                {t('client_administration_page.agent_can_get_clients_tab')}
-              </DsTabs.Tab>
-            </DsTabs.List>
-            <DsTabs.Panel value='has-clients'>
-              <DsHeading data-size='sm'>
-                {t('client_administration_page.delegations_heading')}
-              </DsHeading>
-              {!isLoadingAgentAccessPackages &&
-                !isErrorAgentAccessPackages &&
-                agentAccessPackages &&
-                agentAccessPackages.length > 0 && (
-                  <ul>
-                    {agentAccessPackages.map((client) => (
-                      <li key={client.client.id}>{client.client.name}</li>
-                    ))}
-                  </ul>
-                )}
-              {!isLoadingAgentAccessPackages &&
-                !isErrorAgentAccessPackages &&
-                agentAccessPackages &&
-                agentAccessPackages.length === 0 && (
-                  <DsParagraph>{t('client_administration_page.no_delegations')}</DsParagraph>
-                )}
-            </DsTabs.Panel>
-            <DsTabs.Panel value='can-get-clients'>
-              <DsHeading data-size='sm'>
-                {t('client_administration_page.clients_tab_title')}
-              </DsHeading>
-              {isLoadingClients && (
-                <DsParagraph data-size='sm'>
-                  <DsSkeleton variant='text' />
-                </DsParagraph>
+        <DsTabs
+          defaultValue='has-clients'
+          data-size='sm'
+          value={activeTab}
+          onChange={setActiveTab}
+        >
+          <DsTabs.List>
+            <DsTabs.Tab value='has-clients'>
+              {t('client_administration_page.agent_has_clients_tab')}
+            </DsTabs.Tab>
+            <DsTabs.Tab value='can-get-clients'>
+              {t('client_administration_page.agent_can_get_clients_tab')}
+            </DsTabs.Tab>
+          </DsTabs.List>
+          <DsTabs.Panel value='has-clients'>
+            <DsHeading data-size='sm'>
+              {t('client_administration_page.delegations_heading')}
+            </DsHeading>
+            {!isLoadingAgentAccessPackages &&
+              !isErrorAgentAccessPackages &&
+              agentAccessPackages &&
+              agentAccessPackages.length > 0 && (
+                <ul>
+                  {agentAccessPackages.map((client) => (
+                    <li key={client.client.id}>{client.client.name}</li>
+                  ))}
+                </ul>
               )}
-              {/* 
-              {isErrorClients && (
-                <DsAlert data-color='warning'>
-                  <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-                </DsAlert>
-              )} 
-               */}
-              {!isLoadingClients && !isErrorClients && clients && clients.length === 0 && (
-                <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
+            {!isLoadingAgentAccessPackages &&
+              !isErrorAgentAccessPackages &&
+              agentAccessPackages &&
+              agentAccessPackages.length === 0 && (
+                <DsParagraph>{t('client_administration_page.no_delegations')}</DsParagraph>
               )}
-              {!isLoadingClients && !isErrorClients && clients && clients.length > 0 && (
-                <ClientAdministrationAgentClientsList
-                  clients={clients}
-                  isAddingAgentAccessPackages={isAddingAgentAccessPackages}
-                  toPartyUuid={toPartyUuid}
-                  actingPartyUuid={actingPartyUuid}
-                  addAgentAccessPackages={addAgentAccessPackages}
-                />
-              )}
-            </DsTabs.Panel>
-          </DsTabs>
-        )}
+          </DsTabs.Panel>
+          <DsTabs.Panel value='can-get-clients'>
+            {/* <DsHeading data-size='sm'>
+              {t('client_administration_page.clients_tab_title')}
+            </DsHeading> */}
+            {isLoadingClients && (
+              <DsParagraph data-size='sm'>
+                <DsSkeleton variant='text' />
+              </DsParagraph>
+            )}
+            {!isLoadingClients && !isErrorClients && clients && clients.length === 0 && (
+              <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
+            )}
+            {!isLoadingClients && !isErrorClients && clients && clients.length > 0 && (
+              <ClientAdministrationAgentClientsList
+                clients={clients}
+                isAddingAgentAccessPackages={isAddingAgentAccessPackages}
+                toPartyUuid={toPartyUuid}
+                actingPartyUuid={actingPartyUuid}
+                addAgentAccessPackages={addAgentAccessPackages}
+              />
+            )}
+          </DsTabs.Panel>
+        </DsTabs>
       </PageContainer>
     </>
   );

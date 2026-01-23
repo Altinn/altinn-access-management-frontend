@@ -1,6 +1,9 @@
-import React, { type ReactNode, useMemo, useState } from 'react';
-import type { UserListItemProps } from '@altinn/altinn-components';
-import { List, UserListItem } from '@altinn/altinn-components';
+import React, { type ReactNode, useCallback, useMemo, useState } from 'react';
+import { DsSearch, List, UserListItem, type UserListItemProps } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
+
+import { debounce } from '@/resources/utils';
+
 import classes from './ClientAdministrationAgentClientsList.module.css';
 
 export type UserListItemData = UserListItemProps & {
@@ -12,9 +15,25 @@ interface UserListItemsProps {
 }
 
 export const UserListItems = ({ items }: UserListItemsProps) => {
-  const [expandedIds, setExpandedIds] = useState<string[]>(() =>
-    items.filter((item) => item.expanded).map((item) => item.id),
+  const { t } = useTranslation();
+  const [searchString, setSearchString] = useState<string>('');
+  const [expandedIds, setExpandedIds] = useState<string[]>([]);
+
+  const onSearch = useCallback(
+    debounce((newSearchString: string) => {
+      setSearchString(newSearchString);
+    }, 300),
+    [],
   );
+
+  const filteredItems = useMemo(() => {
+    if (!searchString) {
+      return items;
+    }
+    return items.filter((item) => {
+      return item.name.toLowerCase().includes(searchString.trim().toLowerCase());
+    });
+  }, [items, searchString]);
 
   const expandedIdsSet = useMemo(() => new Set(expandedIds), [expandedIds]);
 
@@ -27,29 +46,38 @@ export const UserListItems = ({ items }: UserListItemsProps) => {
   };
 
   return (
-    <List>
-      {items.map(({ children, ...item }) => {
-        const collapsible = item.collapsible ?? !!children;
-        const expanded = collapsible ? expandedIdsSet.has(item.id) : item.expanded;
-        const handleClick = () => {
-          item.onClick?.();
-          if (collapsible) {
+    <div className={classes.container}>
+      <div className={classes.search}>
+        <DsSearch className={classes.searchBar}>
+          <DsSearch.Input
+            aria-label={t('client_administration_page.client_search_placeholder')}
+            placeholder={t('client_administration_page.client_search_placeholder')}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
+          />
+          <DsSearch.Clear onClick={() => setSearchString('')} />
+        </DsSearch>
+      </div>
+      <List>
+        {filteredItems.map(({ children, ...item }) => {
+          const collapsible = item.collapsible ?? !!children;
+          const expanded = expandedIdsSet.has(item.id);
+          const handleClick = () => {
             toggleExpanded(item.id);
-          }
-        };
+          };
 
-        return (
-          <UserListItem
-            key={item.id}
-            {...item}
-            collapsible={collapsible}
-            expanded={expanded}
-            onClick={collapsible ? handleClick : item.onClick}
-          >
-            <div className={classes.accessRoleItem}>{children}</div>
-          </UserListItem>
-        );
-      })}
-    </List>
+          return (
+            <UserListItem
+              key={item.id}
+              {...item}
+              collapsible={collapsible}
+              expanded={expanded}
+              onClick={collapsible ? handleClick : item.onClick}
+            >
+              <div className={classes.accessRoleItem}>{children}</div>
+            </UserListItem>
+          );
+        })}
+      </List>
+    </div>
   );
 };

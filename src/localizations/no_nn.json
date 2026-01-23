@@ -568,7 +568,8 @@
     "direct_connections_heading": "Brukarar med klienttilgang",
     "indirect_connections_heading": "Andre brukarar",
     "no_clients": "Organisasjonen har ingen klientar",
-    "no_agents": "Fann ingen brukarar med klienttilgang for denne organisasjonen"
+    "no_agents": "Ingen brukarar har fått klienttilgangar enno. Du kan søkje etter brukarar som allereie har nokre tilgangar hos dykk, eller registrere ny.",
+    "client_search_placeholder": "Søk etter klient"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",

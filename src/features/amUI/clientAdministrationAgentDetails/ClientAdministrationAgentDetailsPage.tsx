@@ -7,6 +7,7 @@ import { Navigate, useParams } from 'react-router';
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { amUIPath } from '@/routes/paths';
 
 export const ClientAdministrationAgentDetailsPage = () => {
   const { id } = useParams();

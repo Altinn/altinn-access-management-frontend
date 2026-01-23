@@ -27,15 +27,10 @@ const getUserListItemType = (clientType: string): UserListItemType => {
   return clientType.toLowerCase() === 'organisasjon' ? 'company' : 'person';
 };
 
-const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>): Client[] => {
-  return clients
-    .map((client) => ({
-      client,
-      sortKey: buildClientSortKey(client, parentNameById),
-    }))
-    .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
-    .map(({ client }) => client);
-};
+const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>): Client[] =>
+  [...clients].sort((a, b) =>
+    buildClientSortKey(a, parentNameById).localeCompare(buildClientSortKey(b, parentNameById)),
+  );
 
 export const ClientAdministrationAgentClientsList = ({
   clients,
@@ -122,7 +117,7 @@ export const ClientAdministrationAgentClientsList = ({
 
   const userListItems = sortedClients.map((client) => {
     const clientId = client.client.id;
-    const isSubUnit = Boolean(client.client.parent?.id) && isSubUnitByType(client.client.variant);
+    const isSubUnit = isSubUnitByType(client.client.variant);
     const userType = getUserListItemType(client.client.type);
     return {
       id: clientId,
