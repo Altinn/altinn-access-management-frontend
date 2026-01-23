@@ -92,7 +92,7 @@ describe('ResourceList', () => {
 
     render(<ResourceList resources={resources} />);
 
-    await user.type(screen.getByRole('searchbox'), 'Beta');
+    await user.type(screen.getAllByRole('searchbox')[0], 'Beta');
 
     expect(screen.queryByRole('button', { name: /Alpha Service/i })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Beta Service/i })).toBeInTheDocument();

@@ -842,7 +842,9 @@
     "no_resources": "Ingen tenester tilgjengelege.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
-    "remove_filter": "Fjern filter"
+    "remove_filter": "Fjern filter",
+    "service_owner_filter": "Søk etter tjenesteeier",
+    "service_owner_filter_clear": "Tøm søkefelt"
   },
   "landing_page": {
     "alert_heading": "Du er no i den nye løysinga for tilgangsstyring",
