@@ -1,6 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, DsHeading, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import {
+  Button,
+  DsHeading,
+  DsParagraph,
+  formatDisplayName,
+  SnackbarDuration,
+  useSnackbar,
+} from '@altinn/altinn-components';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { Client, useAddAgentAccessPackagesMutation } from '@/rtk/features/clientApi';
@@ -40,29 +47,54 @@ export const ClientAdministrationAgentClientsList = ({
   addAgentAccessPackages,
 }: ClientAdministrationAgentClientsListProps) => {
   const { t } = useTranslation();
+  const { openSnackbar } = useSnackbar();
   const { getAccessPackageById } = useAccessPackageLookup();
   const noDelegationsText = t('client_administration_page.no_delegations');
   const delegateLabel = t('client_administration_page.delegate_package_button');
   const delegateDisabled = isAddingAgentAccessPackages || !toPartyUuid || !actingPartyUuid;
 
-  const addAgentAccessPackageHandler = (clientId: string, roleCode: string, packageId: string) => {
+  const addAgentAccessPackageHandler = async (
+    clientId: string,
+    roleCode: string,
+    packageId: string,
+    clientName: string,
+    accessPackageName: string,
+  ) => {
     if (!toPartyUuid || !actingPartyUuid) {
       return;
     }
 
-    addAgentAccessPackages({
-      from: clientId,
-      to: toPartyUuid,
-      party: actingPartyUuid,
-      payload: {
-        values: [
-          {
-            role: roleCode,
-            packages: [packageId],
-          },
-        ],
-      },
-    });
+    try {
+      await addAgentAccessPackages({
+        from: clientId,
+        to: toPartyUuid,
+        party: actingPartyUuid,
+        payload: {
+          values: [
+            {
+              role: roleCode,
+              packages: [packageId],
+            },
+          ],
+        },
+      }).unwrap();
+      openSnackbar({
+        message: t('client_administration_page.delegate_package_success_snackbar', {
+          name: clientName,
+          accessPackage: accessPackageName,
+        }),
+        color: 'success',
+      });
+    } catch (error) {
+      openSnackbar({
+        message: t('client_administration_page.delegate_package_error', {
+          name: clientName,
+          accessPackage: accessPackageName,
+        }),
+        color: 'danger',
+        duration: SnackbarDuration.infinite,
+      });
+    }
   };
 
   const parentNameById = buildClientParentNameById(clients);
@@ -70,20 +102,28 @@ export const ClientAdministrationAgentClientsList = ({
 
   const buildAccessPackageItems = (
     clientId: string,
+    clientName: string,
     access: ClientAccessItem,
   ): AccessPackageListItemData[] => {
     return access.packages.map((pkg) => {
       const accessPackage = getAccessPackageById(pkg.id);
+      const accessPackageName = accessPackage?.name ?? pkg.name;
       return {
         id: accessPackage?.id ?? pkg.id,
         size: 'sm',
-        name: accessPackage?.name ?? pkg.name,
+        name: accessPackageName,
         controls: (
           <Button
             variant='tertiary'
             disabled={delegateDisabled}
             onClick={() => {
-              addAgentAccessPackageHandler(clientId, access.role.code, pkg.urn ?? pkg.id);
+              addAgentAccessPackageHandler(
+                clientId,
+                access.role.code,
+                pkg.urn ?? pkg.id,
+                clientName,
+                accessPackageName,
+              );
             }}
           >
             <PlusCircleIcon />
@@ -100,7 +140,11 @@ export const ClientAdministrationAgentClientsList = ({
     }
 
     return client.access.map((access) => {
-      const accessPackageItems = buildAccessPackageItems(client.client.id, access);
+      const clientName = formatDisplayName({
+        fullName: client.client.name,
+        type: getUserListItemType(client.client.type),
+      });
+      const accessPackageItems = buildAccessPackageItems(client.client.id, clientName, access);
 
       return (
         <React.Fragment key={`${client.client.id}-${access.role.id}`}>

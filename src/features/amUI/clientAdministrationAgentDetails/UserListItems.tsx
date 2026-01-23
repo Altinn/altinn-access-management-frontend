@@ -54,7 +54,12 @@ export const UserListItems = ({ items }: UserListItemsProps) => {
             placeholder={t('client_administration_page.client_search_placeholder')}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
           />
-          <DsSearch.Clear onClick={() => setSearchString('')} />
+          <DsSearch.Clear
+            onClick={() => {
+              onSearch.cancel();
+              setSearchString('');
+            }}
+          />
         </DsSearch>
       </div>
       <List>

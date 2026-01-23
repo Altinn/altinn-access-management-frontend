@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
+  DsButton,
   DsHeading,
   DsParagraph,
   DsSkeleton,
@@ -18,6 +19,10 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
 import { ClientAdministrationAgentClientsList } from './ClientAdministrationAgentClientsList';
+import {
+  createErrorDetails,
+  TechnicalErrorParagraphs,
+} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   useAddAgentAccessPackagesMutation,
@@ -41,6 +46,7 @@ export const ClientAdministrationAgentDetails = () => {
     data: clients,
     isLoading: isLoadingClients,
     isError: isErrorClients,
+    error: clientsError,
   } = useGetClientsQuery();
 
   const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
@@ -75,6 +81,7 @@ export const ClientAdministrationAgentDetails = () => {
   });
   const toPartyUuid = toParty?.partyUuid;
   const actingPartyUuid = actingParty?.partyUuid;
+  const clientsErrorDetails = createErrorDetails(clientsError);
 
   return (
     <>
@@ -117,6 +124,11 @@ export const ClientAdministrationAgentDetails = () => {
             <DsHeading data-size='sm'>
               {t('client_administration_page.delegations_heading')}
             </DsHeading>
+            {!isLoadingAgentAccessPackages && isErrorAgentAccessPackages && (
+              <DsAlert data-color='danger'>
+                <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
+              </DsAlert>
+            )}
             {!isLoadingAgentAccessPackages &&
               !isErrorAgentAccessPackages &&
               agentAccessPackages &&
@@ -142,6 +154,19 @@ export const ClientAdministrationAgentDetails = () => {
               <DsParagraph data-size='sm'>
                 <DsSkeleton variant='text' />
               </DsParagraph>
+            )}
+            {!isLoadingClients && isErrorClients && (
+              <DsAlert data-color='danger'>
+                <DsParagraph>{t('client_administration_page.error_loading_clients')}</DsParagraph>
+                {clientsErrorDetails && (
+                  <TechnicalErrorParagraphs
+                    size='sm'
+                    status={clientsErrorDetails.status}
+                    time={clientsErrorDetails.time}
+                    traceId={clientsErrorDetails.traceId}
+                  />
+                )}
+              </DsAlert>
             )}
             {!isLoadingClients && !isErrorClients && clients && clients.length === 0 && (
               <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
