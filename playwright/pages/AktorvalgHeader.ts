@@ -124,7 +124,7 @@ export class AktorvalgHeader {
   async removeAllFavorites() {
     var thing = await this.page.getByRole('button', { name: 'Fjern frå favorittar' }).all();
     for (const item of thing) {
-      item.click();
+      await item.click();
     }
   }
 
