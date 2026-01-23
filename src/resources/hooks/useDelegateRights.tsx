@@ -1,7 +1,7 @@
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useDelegateRightsMutation } from '@/rtk/features/singleRights/singleRightsApi';
-import type { ChipRight } from '@/features/amUI/common/DelegationModal/SingleRights/ResourceInfo';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
+import { ChipRight } from '@/features/amUI/common/DelegationModal/SingleRights/hooks/rightsUtils';
 
 export const useDelegateRights = () => {
   const [delegate] = useDelegateRightsMutation();

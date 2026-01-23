@@ -420,6 +420,12 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tjenester",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
+    "actions": {
+      "access_to_all": "Tilgang til hele tjenesten",
+      "partial_access": "Tilgang til {{count}} av {{total}} handlinger",
+      "action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan gi fullmakt til hele tjenesten eller velge spesifikke handlinger.",
+      "cannot_give_header": "Du kan ikke gi tilgang til:"
+    },
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",

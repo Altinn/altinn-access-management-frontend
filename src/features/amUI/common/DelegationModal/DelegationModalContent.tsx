@@ -134,8 +134,8 @@ export const DelegationModalContent = ({
               variant='tertiary'
               data-color='neutral'
               onClick={() => setInfoView(false)}
-              icon={ArrowLeftIcon}
             >
+              <ArrowLeftIcon />
               {t('common.back')}
             </Button>
           )}
