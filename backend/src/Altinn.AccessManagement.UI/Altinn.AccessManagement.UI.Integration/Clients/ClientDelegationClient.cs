@@ -136,7 +136,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, response.ReasonPhrase);
             }
 
-            return JsonSerializer.Deserialize<List<DelegationDto>>(responseContent, _serializerOptions);
+            List<DelegationDto> result = JsonSerializer.Deserialize<List<DelegationDto>>(responseContent, _serializerOptions);
+            return result ?? new List<DelegationDto>();
         }
 
         /// <inheritdoc />
