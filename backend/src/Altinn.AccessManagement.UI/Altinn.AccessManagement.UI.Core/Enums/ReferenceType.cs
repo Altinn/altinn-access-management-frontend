@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Core.Enums
         ApplicationId = 6,
 
         /// <summary>
-        /// ServiceEditionVersionId
+        /// ServiceEditionVersion
         /// </summary>
         [EnumMember(Value = "ServiceEditionVersion")]
         ServiceEditionVersion = 7
