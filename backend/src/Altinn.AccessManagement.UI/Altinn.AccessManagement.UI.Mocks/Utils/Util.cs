@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Altinn.AccessManagement.UI.Core.Helpers;
 
 namespace Altinn.AccessManagement.UI.Mocks.Utils
 {
@@ -60,6 +61,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Utils
         // A helper for testing handling of exceptions in clients
         public static void ThrowExceptionIfTriggerParty(string id)
         {
+            if (id == "bad00000-0000-0000-0000-000000000000")
+            {
+                throw new HttpStatusException(
+                    "StatusError",
+                    "Unexpected response status from Access Management",
+                    HttpStatusCode.BadRequest,
+                    null,
+                    "Test error");
+            }
+
             if (id == "********" || id == "00000000-0000-0000-0000-000000000000")
             {
                 throw new Exception();

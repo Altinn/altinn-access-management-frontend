@@ -7,8 +7,6 @@ using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Microsoft.AspNetCore.Http;
-
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -105,6 +103,18 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(actualResponse);
             Assert.Equivalent(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        /// Test case: GetAgents with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task GetAgents_InvalidParty_ReturnsBadRequest()
+        {
+            SetAuthHeader();
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/clientdelegations/agents?party=not-a-guid");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         /// <summary>
@@ -245,6 +255,38 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage response = await _client.SendAsync(request);
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveAgentAccessPackages returns internal server error when client throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task RemoveAgentAccessPackages_ClientThrowsHttpStatusException_ReturnsInternalServerError()
+        {
+            Guid party = Guid.Parse("bad00000-0000-0000-0000-000000000000");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            DelegationBatchInputDto payload = new DelegationBatchInputDto
+            {
+                Values =
+                [
+                    new DelegationBatchInputDto.Permission
+                    {
+                        Role = "DAGL",
+                        Packages = ["urn:altinn:accesspackage:demo"]
+                    }
+                ]
+            };
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party={party}&from={from}&to={to}")
+            {
+                Content = JsonContent.Create(payload)
+            };
+            SetAuthHeader();
+            HttpResponseMessage response = await _client.SendAsync(request);
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
 
         /// <summary>
