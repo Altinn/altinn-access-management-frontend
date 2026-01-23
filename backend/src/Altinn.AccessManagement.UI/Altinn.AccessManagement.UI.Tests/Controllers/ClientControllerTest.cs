@@ -152,6 +152,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: GetAgentAccessPackages with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task GetAgentAccessPackages_InvalidParty_ReturnsBadRequest()
+        {
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party=not-a-guid&to={to}");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
         /// Test case: GetClientAccessPackages returns the expected list of agent delegations.
         /// </summary>
         [Fact]
@@ -169,6 +184,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(actualResponse);
             Assert.Equivalent(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        /// Test case: GetClientAccessPackages with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task GetClientAccessPackages_InvalidParty_ReturnsBadRequest()
+        {
+            Guid from = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/clients/accesspackages?party=not-a-guid&from={from}");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         /// <summary>
@@ -203,6 +233,34 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(actualResponse);
             Assert.Equivalent(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        /// Test case: AddAgentAccessPackages with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task AddAgentAccessPackages_InvalidParty_ReturnsBadRequest()
+        {
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            DelegationBatchInputDto payload = new DelegationBatchInputDto
+            {
+                Values =
+                [
+                    new DelegationBatchInputDto.Permission
+                    {
+                        Role = "DAGL",
+                        Packages = ["urn:altinn:accesspackage:demo"]
+                    }
+                ]
+            };
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsJsonAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party=not-a-guid&from={from}&to={to}",
+                payload);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         /// <summary>
@@ -258,12 +316,44 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: RemoveAgentAccessPackages with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task RemoveAgentAccessPackages_InvalidParty_ReturnsBadRequest()
+        {
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            DelegationBatchInputDto payload = new DelegationBatchInputDto
+            {
+                Values =
+                [
+                    new DelegationBatchInputDto.Permission
+                    {
+                        Role = "DAGL",
+                        Packages = ["urn:altinn:accesspackage:demo"]
+                    }
+                ]
+            };
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party=not-a-guid&from={from}&to={to}")
+            {
+                Content = JsonContent.Create(payload)
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
         /// Test case: RemoveAgentAccessPackages returns internal server error when client throws HttpStatusException.
         /// </summary>
         [Fact]
         public async Task RemoveAgentAccessPackages_ClientThrowsHttpStatusException_ReturnsInternalServerError()
         {
-            Guid party = Guid.Parse("bad00000-0000-0000-0000-000000000000");
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
             Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
             Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
             DelegationBatchInputDto payload = new DelegationBatchInputDto
@@ -337,6 +427,22 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(assignment);
             Assert.Equivalent(expectedAssignment, assignment);
+        }
+
+        /// <summary>
+        /// Test case: AddAgent with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task AddAgent_InvalidParty_ReturnsBadRequest()
+        {
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party=not-a-guid&to={to}",
+                null);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         /// <summary>
@@ -447,6 +553,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 $"accessmanagement/api/v1/clientdelegations/agents?party={party}&to={to}");
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveAgent with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task RemoveAgent_InvalidParty_ReturnsBadRequest()
+        {
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party=not-a-guid&to={to}");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         /// <summary>
