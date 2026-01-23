@@ -18,6 +18,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent
         /// <summary>
         /// The version of the resource attribute
         /// </summary>
-        public int? Version { get; set; }
+        public string Version { get; set; }
     }
 }
