@@ -51,5 +51,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         /// Gets or sets date of birth for persons.
         /// </summary>
         public string DateOfBirth { get; set; }
+
+        /// <summary>
+        /// Wheather or not the party is deleted
+        /// </summary>
+        public bool IsDeleted { get; set; }
     }
 }
