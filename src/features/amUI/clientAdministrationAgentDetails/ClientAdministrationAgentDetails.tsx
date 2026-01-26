@@ -41,21 +41,28 @@ export const ClientAdministrationAgentDetails = () => {
   const {
     data: agentAccessPackages,
     isLoading: isLoadingAgentAccessPackages,
-    isError: isErrorAgentAccessPackages,
+    error: agentAccessPackagesError,
   } = useGetAgentAccessPackagesQuery(id ? { to: id } : skipToken);
-  const {
-    data: clients,
-    isLoading: isLoadingClients,
-    isError: isErrorClients,
-    error: clientsError,
-  } = useGetClientsQuery();
+  const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
 
   const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
     useAddAgentAccessPackagesMutation();
   const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
     useRemoveAgentAccessPackagesMutation();
 
-  if (isLoadingIsClientAdmin) {
+  const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentAccessClientLists({
+    agentAccessPackages,
+    clients,
+  });
+  const backUrl = `/${amUIPath.ClientAdministration}`;
+  const userName = formatDisplayName({
+    fullName: toParty?.name || '',
+    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  });
+  const toPartyUuid = toParty?.partyUuid;
+  const actingPartyUuid = actingParty?.partyUuid;
+
+  if (isLoadingIsClientAdmin || isLoadingAgentAccessPackages || isLoadingClients) {
     return (
       <>
         <DsHeading data-size='lg'>
@@ -77,127 +84,34 @@ export const ClientAdministrationAgentDetails = () => {
     );
   }
 
-  const backUrl = `/${amUIPath.ClientAdministration}`;
-  const userName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
-  const toPartyUuid = toParty?.partyUuid;
-  const actingPartyUuid = actingParty?.partyUuid;
-  const clientsErrorDetails = createErrorDetails(clientsError);
-  const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentAccessClientLists({
-    agentAccessPackages,
-    clients,
-  });
-
-  const hasClientsContent = (
-    <>
-      <DsHeading data-size='sm'>{t('client_administration_page.delegations_heading')}</DsHeading>
-      {(isLoadingAgentAccessPackages || isLoadingClients) && (
-        <DsParagraph data-size='sm'>
-          <DsSkeleton variant='text' />
-        </DsParagraph>
-      )}
-      {!isLoadingAgentAccessPackages && !isLoadingClients && isErrorAgentAccessPackages && (
-        <DsAlert data-color='danger'>
-          <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
-        </DsAlert>
-      )}
-      {!isLoadingAgentAccessPackages &&
-        !isLoadingClients &&
-        !isErrorAgentAccessPackages &&
-        isErrorClients && (
+  if (agentAccessPackagesError || clientsError) {
+    const agentAccessPackagesErrorDetails = createErrorDetails(agentAccessPackagesError);
+    const clientsErrorDetails = createErrorDetails(clientsError);
+    return (
+      <>
+        {!!agentAccessPackagesErrorDetails && (
           <DsAlert data-color='danger'>
-            <DsParagraph>{t('client_administration_page.error_loading_clients')}</DsParagraph>
-            {clientsErrorDetails && (
-              <TechnicalErrorParagraphs
-                size='sm'
-                status={clientsErrorDetails.status}
-                time={clientsErrorDetails.time}
-                traceId={clientsErrorDetails.traceId}
-              />
-            )}
+            <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
+            <TechnicalErrorParagraphs
+              status={agentAccessPackagesErrorDetails.status}
+              time={agentAccessPackagesErrorDetails.time}
+              traceId={agentAccessPackagesErrorDetails.traceId}
+            />
           </DsAlert>
         )}
-      {!isLoadingAgentAccessPackages &&
-        !isLoadingClients &&
-        !isErrorAgentAccessPackages &&
-        !isErrorClients &&
-        clientsWithAgentAccess.length > 0 && (
-          <ClientAdministrationAgentClientsList
-            clients={clientsWithAgentAccess}
-            agentAccessPackages={agentAccessPackages ?? []}
-            isAddingAgentAccessPackages={isAddingAgentAccessPackages}
-            isRemovingAgentAccessPackages={isRemovingAgentAccessPackages}
-            toPartyUuid={toPartyUuid}
-            actingPartyUuid={actingPartyUuid}
-            addAgentAccessPackages={addAgentAccessPackages}
-            removeAgentAccessPackages={removeAgentAccessPackages}
-          />
-        )}
-      {!isLoadingAgentAccessPackages &&
-        !isLoadingClients &&
-        !isErrorAgentAccessPackages &&
-        !isErrorClients &&
-        clientsWithAgentAccess.length === 0 && (
-          <DsParagraph>{t('client_administration_page.no_delegations')}</DsParagraph>
-        )}
-    </>
-  );
-
-  const canGetClientsContent = (
-    <>
-      {(isLoadingClients || isLoadingAgentAccessPackages) && (
-        <DsParagraph data-size='sm'>
-          <DsSkeleton variant='text' />
-        </DsParagraph>
-      )}
-      {!isLoadingClients && !isLoadingAgentAccessPackages && isErrorClients && (
-        <DsAlert data-color='danger'>
-          <DsParagraph>{t('client_administration_page.error_loading_clients')}</DsParagraph>
-          {clientsErrorDetails && (
+        {!!clientsErrorDetails && (
+          <DsAlert data-color='danger'>
+            <DsParagraph>{t('client_administration_page.error_loading_clients')}</DsParagraph>
             <TechnicalErrorParagraphs
-              size='sm'
               status={clientsErrorDetails.status}
               time={clientsErrorDetails.time}
               traceId={clientsErrorDetails.traceId}
             />
-          )}
-        </DsAlert>
-      )}
-      {!isLoadingClients &&
-        !isLoadingAgentAccessPackages &&
-        !isErrorClients &&
-        isErrorAgentAccessPackages && (
-          <DsAlert data-color='danger'>
-            <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
           </DsAlert>
         )}
-      {!isLoadingClients &&
-        !isLoadingAgentAccessPackages &&
-        !isErrorClients &&
-        !isErrorAgentAccessPackages &&
-        clientsWithoutAgentAccess.length === 0 && (
-          <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
-        )}
-      {!isLoadingClients &&
-        !isLoadingAgentAccessPackages &&
-        !isErrorClients &&
-        !isErrorAgentAccessPackages &&
-        clientsWithoutAgentAccess.length > 0 && (
-          <ClientAdministrationAgentClientsList
-            clients={clientsWithoutAgentAccess}
-            agentAccessPackages={agentAccessPackages ?? []}
-            isAddingAgentAccessPackages={isAddingAgentAccessPackages}
-            isRemovingAgentAccessPackages={isRemovingAgentAccessPackages}
-            toPartyUuid={toPartyUuid}
-            actingPartyUuid={actingPartyUuid}
-            addAgentAccessPackages={addAgentAccessPackages}
-            removeAgentAccessPackages={removeAgentAccessPackages}
-          />
-        )}
-    </>
-  );
+      </>
+    );
+  }
 
   return (
     <>
@@ -224,8 +138,38 @@ export const ClientAdministrationAgentDetails = () => {
         <ClientAdministrationAgentTabs
           activeTab={activeTab}
           onChange={setActiveTab}
-          hasClientsContent={hasClientsContent}
-          canGetClientsContent={canGetClientsContent}
+          hasClientsContent={
+            clientsWithAgentAccess.length > 0 ? (
+              <ClientAdministrationAgentClientsList
+                clients={clientsWithAgentAccess}
+                agentAccessPackages={agentAccessPackages ?? []}
+                isAddingAgentAccessPackages={isAddingAgentAccessPackages}
+                isRemovingAgentAccessPackages={isRemovingAgentAccessPackages}
+                toPartyUuid={toPartyUuid}
+                actingPartyUuid={actingPartyUuid}
+                addAgentAccessPackages={addAgentAccessPackages}
+                removeAgentAccessPackages={removeAgentAccessPackages}
+              />
+            ) : (
+              <DsParagraph>{t('client_administration_page.no_delegations')}</DsParagraph>
+            )
+          }
+          canGetClientsContent={
+            clientsWithoutAgentAccess.length > 0 ? (
+              <ClientAdministrationAgentClientsList
+                clients={clientsWithoutAgentAccess}
+                agentAccessPackages={agentAccessPackages ?? []}
+                isAddingAgentAccessPackages={isAddingAgentAccessPackages}
+                isRemovingAgentAccessPackages={isRemovingAgentAccessPackages}
+                toPartyUuid={toPartyUuid}
+                actingPartyUuid={actingPartyUuid}
+                addAgentAccessPackages={addAgentAccessPackages}
+                removeAgentAccessPackages={removeAgentAccessPackages}
+              />
+            ) : (
+              <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
+            )
+          }
         />
       </PageContainer>
     </>

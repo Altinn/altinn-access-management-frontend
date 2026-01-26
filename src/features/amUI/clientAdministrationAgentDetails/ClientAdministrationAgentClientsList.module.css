@@ -26,3 +26,14 @@
   padding: var(--ds-spacing-2);
   margin-left: var(--ds-spacing-10);
 }
+
+.showMoreButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--ds-spacing-4);
+  width: 100%;
+}
+
+.showMoreButton {
+  width: 100%;
+}

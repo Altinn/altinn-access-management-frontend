@@ -1,5 +1,11 @@
-import React, { type ReactNode, useCallback, useMemo, useState } from 'react';
-import { DsSearch, List, UserListItem, type UserListItemProps } from '@altinn/altinn-components';
+import React, { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  Button,
+  DsSearch,
+  List,
+  UserListItem,
+  type UserListItemProps,
+} from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { debounce } from '@/resources/utils';
@@ -14,10 +20,13 @@ interface UserListItemsProps {
   items: UserListItemData[];
 }
 
+const PAGE_SIZE = 10;
+
 export const UserListItems = ({ items }: UserListItemsProps) => {
   const { t } = useTranslation();
   const [searchString, setSearchString] = useState<string>('');
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const onSearch = useCallback(
     debounce((newSearchString: string) => {
@@ -34,6 +43,21 @@ export const UserListItems = ({ items }: UserListItemsProps) => {
       return item.name.toLowerCase().includes(searchString.trim().toLowerCase());
     });
   }, [items, searchString]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [items, searchString]);
+
+  const paginatedItems = useMemo(() => {
+    return filteredItems.slice(0, PAGE_SIZE * currentPage);
+  }, [filteredItems, currentPage]);
+
+  const hasNextPage = filteredItems.length > PAGE_SIZE * currentPage;
+  const goNextPage = () => {
+    if (hasNextPage) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
 
   const expandedIdsSet = useMemo(() => new Set(expandedIds), [expandedIds]);
 
@@ -63,7 +87,7 @@ export const UserListItems = ({ items }: UserListItemsProps) => {
         </DsSearch>
       </div>
       <List>
-        {filteredItems.map(({ children, ...item }) => {
+        {paginatedItems.map(({ children, ...item }) => {
           const collapsible = item.collapsible ?? !!children;
           const expanded = expandedIdsSet.has(item.id);
           const handleClick = () => {
@@ -83,6 +107,18 @@ export const UserListItems = ({ items }: UserListItemsProps) => {
           );
         })}
       </List>
+      {hasNextPage && (
+        <div className={classes.showMoreButtonContainer}>
+          <Button
+            className={classes.showMoreButton}
+            onClick={goNextPage}
+            variant='outline'
+            size='md'
+          >
+            {t('common.show_more')}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
