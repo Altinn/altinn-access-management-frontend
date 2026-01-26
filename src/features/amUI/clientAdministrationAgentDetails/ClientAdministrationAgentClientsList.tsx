@@ -1,12 +1,17 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import {
+  Button,
+  DsParagraph,
+  formatDisplayName,
+  type UserListItemProps,
+} from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type {
+  AddAgentAccessPackagesFn,
   Client,
-  useAddAgentAccessPackagesMutation,
-  useRemoveAgentAccessPackagesMutation,
+  RemoveAgentAccessPackagesFn,
 } from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
@@ -14,12 +19,9 @@ import { buildClientParentNameById, buildClientSortKey } from '../common/clientS
 
 import { AccessPackageListItems, type AccessPackageListItemData } from './AccessPackageListItems';
 import { useAgentAccessPackageActions } from './useAgentAccessPackageActions';
-import { UserListItems } from './UserListItems';
+import { UserListItems, type UserListItemData } from './UserListItems';
 
-type AddAgentAccessPackages = ReturnType<typeof useAddAgentAccessPackagesMutation>[0];
-type RemoveAgentAccessPackages = ReturnType<typeof useRemoveAgentAccessPackagesMutation>[0];
 type ClientAccessItem = Client['access'][number];
-type UserListItemType = 'company' | 'person';
 
 type ClientAdministrationAgentClientsListProps = {
   clients: Client[];
@@ -27,11 +29,11 @@ type ClientAdministrationAgentClientsListProps = {
   isLoading: boolean;
   toPartyUuid?: string;
   actingPartyUuid?: string;
-  addAgentAccessPackages: AddAgentAccessPackages;
-  removeAgentAccessPackages: RemoveAgentAccessPackages;
+  addAgentAccessPackages: AddAgentAccessPackagesFn;
+  removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
 };
 
-const getUserListItemType = (clientType: string): UserListItemType => {
+const getUserListItemType = (clientType: string): UserListItemProps['type'] => {
   return clientType.toLowerCase() === 'organisasjon' ? 'company' : 'person';
 };
 
@@ -51,9 +53,7 @@ export const ClientAdministrationAgentClientsList = ({
 }: ClientAdministrationAgentClientsListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
-  const noDelegationsText = t('client_administration_page.no_delegations');
-  const delegateLabel = t('client_administration_page.delegate_package_button');
-  const removeLabel = t('client_administration_page.remove_package_button');
+
   const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
 
@@ -130,7 +130,7 @@ export const ClientAdministrationAgentClientsList = ({
               }}
             >
               <MinusCircleIcon />
-              {removeLabel}
+              {t('client_administration_page.remove_package_button')}
             </Button>
           ) : (
             <Button
@@ -147,7 +147,7 @@ export const ClientAdministrationAgentClientsList = ({
               }}
             >
               <PlusCircleIcon />
-              {delegateLabel}
+              {t('client_administration_page.delegate_package_button')}
             </Button>
           ),
         } as AccessPackageListItemData;
@@ -195,7 +195,9 @@ export const ClientAdministrationAgentClientsList = ({
 
     if (result.nodes.length === 0) {
       return {
-        nodes: <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>,
+        nodes: (
+          <DsParagraph data-size='sm'>{t('client_administration_page.no_delegations')}</DsParagraph>
+        ),
         totalDelegable: result.totalDelegable,
         totalDelegated: result.totalDelegated,
       };
@@ -204,7 +206,7 @@ export const ClientAdministrationAgentClientsList = ({
     return result;
   };
 
-  const userListItems = sortedClients.map((client) => {
+  const userListItems: UserListItemData[] = sortedClients.map((client) => {
     const clientId = client.client.id;
     const isSubUnit = isSubUnitByType(client.client.variant);
     const userType = getUserListItemType(client.client.type);

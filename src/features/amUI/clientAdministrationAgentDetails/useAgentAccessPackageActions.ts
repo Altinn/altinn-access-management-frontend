@@ -3,18 +3,15 @@ import { SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type {
-  useAddAgentAccessPackagesMutation,
-  useRemoveAgentAccessPackagesMutation,
+  AddAgentAccessPackagesFn,
+  RemoveAgentAccessPackagesFn,
 } from '@/rtk/features/clientApi';
-
-type AddAgentAccessPackages = ReturnType<typeof useAddAgentAccessPackagesMutation>[0];
-type RemoveAgentAccessPackages = ReturnType<typeof useRemoveAgentAccessPackagesMutation>[0];
 
 type UseAgentAccessPackageActionsParams = {
   toPartyUuid?: string;
   actingPartyUuid?: string;
-  addAgentAccessPackages: AddAgentAccessPackages;
-  removeAgentAccessPackages: RemoveAgentAccessPackages;
+  addAgentAccessPackages: AddAgentAccessPackagesFn;
+  removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
 };
 
 export const useAgentAccessPackageActions = ({

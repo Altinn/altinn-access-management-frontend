@@ -132,4 +132,9 @@ export const {
   useRemoveAgentMutation,
 } = clientApi;
 
+export type AddAgentAccessPackagesFn = ReturnType<typeof useAddAgentAccessPackagesMutation>[0];
+export type RemoveAgentAccessPackagesFn = ReturnType<
+  typeof useRemoveAgentAccessPackagesMutation
+>[0];
+
 export const { endpoints, reducerPath, reducer, middleware } = clientApi;
