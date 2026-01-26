@@ -6,7 +6,6 @@ import {
   DsHeading,
   DsParagraph,
   DsSkeleton,
-  DsTabs,
   formatDisplayName,
 } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
@@ -31,6 +30,8 @@ import {
   useGetClientsQuery,
 } from '@/rtk/features/clientApi';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
+import { ClientAdministrationAgentTabs } from './ClientAdministrationAgentTabs';
+import { useAgentClientTabSnapshots } from './useAgentClientTabSnapshots';
 
 export const ClientAdministrationAgentDetails = () => {
   const { t } = useTranslation();
@@ -92,6 +93,120 @@ export const ClientAdministrationAgentDetails = () => {
     clients?.filter((client) => agentAccessClientIds.has(client.client.id)) ?? [];
   const clientsWithoutAgentAccess =
     clients?.filter((client) => !agentAccessClientIds.has(client.client.id)) ?? [];
+  const {
+    hasTabClients,
+    canTabClients,
+    hasTabSnapshotReady,
+    canTabSnapshotReady,
+    showHasTabLoading,
+    showCanTabLoading,
+  } = useAgentClientTabSnapshots({
+    activeTab,
+    isLoadingAgentAccessPackages,
+    isLoadingClients,
+    isErrorAgentAccessPackages,
+    isErrorClients,
+    clientsWithAgentAccess,
+    clientsWithoutAgentAccess,
+  });
+
+  const hasClientsContent = (
+    <>
+      <DsHeading data-size='sm'>{t('client_administration_page.delegations_heading')}</DsHeading>
+      {showHasTabLoading && (
+        <DsParagraph data-size='sm'>
+          <DsSkeleton variant='text' />
+        </DsParagraph>
+      )}
+      {!hasTabSnapshotReady &&
+        !isLoadingAgentAccessPackages &&
+        !isLoadingClients &&
+        isErrorAgentAccessPackages && (
+          <DsAlert data-color='danger'>
+            <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
+          </DsAlert>
+        )}
+      {!hasTabSnapshotReady &&
+        !isLoadingAgentAccessPackages &&
+        !isLoadingClients &&
+        !isErrorAgentAccessPackages &&
+        isErrorClients && (
+          <DsAlert data-color='danger'>
+            <DsParagraph>{t('client_administration_page.error_loading_clients')}</DsParagraph>
+            {clientsErrorDetails && (
+              <TechnicalErrorParagraphs
+                size='sm'
+                status={clientsErrorDetails.status}
+                time={clientsErrorDetails.time}
+                traceId={clientsErrorDetails.traceId}
+              />
+            )}
+          </DsAlert>
+        )}
+      {hasTabSnapshotReady && hasTabClients.length > 0 && (
+        <ClientAdministrationAgentClientsList
+          clients={hasTabClients}
+          isAddingAgentAccessPackages={isAddingAgentAccessPackages}
+          toPartyUuid={toPartyUuid}
+          actingPartyUuid={actingPartyUuid}
+          addAgentAccessPackages={addAgentAccessPackages}
+        />
+      )}
+      {hasTabSnapshotReady && hasTabClients.length === 0 && (
+        <DsParagraph>{t('client_administration_page.no_delegations')}</DsParagraph>
+      )}
+    </>
+  );
+
+  const canGetClientsContent = (
+    <>
+      {/* <DsHeading data-size='sm'>
+        {t('client_administration_page.clients_tab_title')}
+      </DsHeading> */}
+      {showCanTabLoading && (
+        <DsParagraph data-size='sm'>
+          <DsSkeleton variant='text' />
+        </DsParagraph>
+      )}
+      {!canTabSnapshotReady &&
+        !isLoadingClients &&
+        !isLoadingAgentAccessPackages &&
+        isErrorClients && (
+          <DsAlert data-color='danger'>
+            <DsParagraph>{t('client_administration_page.error_loading_clients')}</DsParagraph>
+            {clientsErrorDetails && (
+              <TechnicalErrorParagraphs
+                size='sm'
+                status={clientsErrorDetails.status}
+                time={clientsErrorDetails.time}
+                traceId={clientsErrorDetails.traceId}
+              />
+            )}
+          </DsAlert>
+        )}
+      {!canTabSnapshotReady &&
+        !isLoadingClients &&
+        !isLoadingAgentAccessPackages &&
+        !isErrorClients &&
+        isErrorAgentAccessPackages && (
+          <DsAlert data-color='danger'>
+            <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
+          </DsAlert>
+        )}
+      {canTabSnapshotReady && canTabClients.length === 0 && (
+        <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
+      )}
+      {canTabSnapshotReady && canTabClients.length > 0 && (
+        <ClientAdministrationAgentClientsList
+          clients={canTabClients}
+          isAddingAgentAccessPackages={isAddingAgentAccessPackages}
+          toPartyUuid={toPartyUuid}
+          actingPartyUuid={actingPartyUuid}
+          addAgentAccessPackages={addAgentAccessPackages}
+        />
+      )}
+    </>
+  );
 
   return (
     <>
@@ -116,125 +231,12 @@ export const ClientAdministrationAgentDetails = () => {
           displayRoles={false}
         />
 
-        <DsTabs
-          defaultValue='has-clients'
-          data-size='sm'
-          value={activeTab}
+        <ClientAdministrationAgentTabs
+          activeTab={activeTab}
           onChange={setActiveTab}
-        >
-          <DsTabs.List>
-            <DsTabs.Tab value='has-clients'>
-              {t('client_administration_page.agent_has_clients_tab')}
-            </DsTabs.Tab>
-            <DsTabs.Tab value='can-get-clients'>
-              {t('client_administration_page.agent_can_get_clients_tab')}
-            </DsTabs.Tab>
-          </DsTabs.List>
-          <DsTabs.Panel value='has-clients'>
-            <DsHeading data-size='sm'>
-              {t('client_administration_page.delegations_heading')}
-            </DsHeading>
-            {(isLoadingAgentAccessPackages || isLoadingClients) && (
-              <DsParagraph data-size='sm'>
-                <DsSkeleton variant='text' />
-              </DsParagraph>
-            )}
-            {!isLoadingAgentAccessPackages && !isLoadingClients && isErrorAgentAccessPackages && (
-              <DsAlert data-color='danger'>
-                <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
-              </DsAlert>
-            )}
-            {!isLoadingAgentAccessPackages &&
-              !isLoadingClients &&
-              !isErrorAgentAccessPackages &&
-              isErrorClients && (
-                <DsAlert data-color='danger'>
-                  <DsParagraph>{t('client_administration_page.error_loading_clients')}</DsParagraph>
-                  {clientsErrorDetails && (
-                    <TechnicalErrorParagraphs
-                      size='sm'
-                      status={clientsErrorDetails.status}
-                      time={clientsErrorDetails.time}
-                      traceId={clientsErrorDetails.traceId}
-                    />
-                  )}
-                </DsAlert>
-              )}
-            {!isLoadingAgentAccessPackages &&
-              !isLoadingClients &&
-              !isErrorAgentAccessPackages &&
-              !isErrorClients &&
-              clientsWithAgentAccess.length > 0 && (
-                <ClientAdministrationAgentClientsList
-                  clients={clientsWithAgentAccess}
-                  isAddingAgentAccessPackages={isAddingAgentAccessPackages}
-                  toPartyUuid={toPartyUuid}
-                  actingPartyUuid={actingPartyUuid}
-                  addAgentAccessPackages={addAgentAccessPackages}
-                />
-              )}
-            {!isLoadingAgentAccessPackages &&
-              !isLoadingClients &&
-              !isErrorAgentAccessPackages &&
-              !isErrorClients &&
-              clientsWithAgentAccess.length === 0 && (
-                <DsParagraph>{t('client_administration_page.no_delegations')}</DsParagraph>
-              )}
-          </DsTabs.Panel>
-          <DsTabs.Panel value='can-get-clients'>
-            {/* <DsHeading data-size='sm'>
-              {t('client_administration_page.clients_tab_title')}
-            </DsHeading> */}
-            {(isLoadingClients || isLoadingAgentAccessPackages) && (
-              <DsParagraph data-size='sm'>
-                <DsSkeleton variant='text' />
-              </DsParagraph>
-            )}
-            {!isLoadingClients && !isLoadingAgentAccessPackages && isErrorClients && (
-              <DsAlert data-color='danger'>
-                <DsParagraph>{t('client_administration_page.error_loading_clients')}</DsParagraph>
-                {clientsErrorDetails && (
-                  <TechnicalErrorParagraphs
-                    size='sm'
-                    status={clientsErrorDetails.status}
-                    time={clientsErrorDetails.time}
-                    traceId={clientsErrorDetails.traceId}
-                  />
-                )}
-              </DsAlert>
-            )}
-            {!isLoadingClients &&
-              !isLoadingAgentAccessPackages &&
-              !isErrorClients &&
-              isErrorAgentAccessPackages && (
-                <DsAlert data-color='danger'>
-                  <DsParagraph>
-                    {t('client_administration_page.load_delegations_error')}
-                  </DsParagraph>
-                </DsAlert>
-              )}
-            {!isLoadingClients &&
-              !isLoadingAgentAccessPackages &&
-              !isErrorClients &&
-              !isErrorAgentAccessPackages &&
-              clientsWithoutAgentAccess.length === 0 && (
-                <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
-              )}
-            {!isLoadingClients &&
-              !isLoadingAgentAccessPackages &&
-              !isErrorClients &&
-              !isErrorAgentAccessPackages &&
-              clientsWithoutAgentAccess.length > 0 && (
-                <ClientAdministrationAgentClientsList
-                  clients={clientsWithoutAgentAccess}
-                  isAddingAgentAccessPackages={isAddingAgentAccessPackages}
-                  toPartyUuid={toPartyUuid}
-                  actingPartyUuid={actingPartyUuid}
-                  addAgentAccessPackages={addAgentAccessPackages}
-                />
-              )}
-          </DsTabs.Panel>
-        </DsTabs>
+          hasClientsContent={hasClientsContent}
+          canGetClientsContent={canGetClientsContent}
+        />
       </PageContainer>
     </>
   );
