@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 
-import { DsSkeleton, List, ListItem } from '@altinn/altinn-components';
+import { Badge, DsSkeleton, List, ListItem } from '@altinn/altinn-components';
 import { HandshakeIcon } from '@navikt/aksel-icons';
 
 import classes from './ActiveConsentsPage.module.css';
+import { useTranslation } from 'react-i18next';
 
 interface ConsentListItemProps {
   title: string;
-  subItems: { id: string; title: string; badgeText: string }[];
+  subItems: { id: string; title: string; badgeText: string; isNew?: boolean }[];
   partyType?: string;
   isLoading?: boolean;
   onClick?: (consentId: string) => void;
@@ -19,6 +20,7 @@ export const ConsentListItem = ({
   isLoading,
   onClick,
 }: ConsentListItemProps): React.ReactNode => {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const partyColor = partyType === 'Person' ? 'person' : 'company';
 
@@ -51,14 +53,17 @@ export const ConsentListItem = ({
             onClick={onClick ? () => onClick(item.id) : undefined}
             badge={
               <div className={classes.consentBadge}>
-                {isLoading ? (
-                  <DsSkeleton
-                    variant='text'
-                    width={20}
-                  />
-                ) : (
-                  <>{item.badgeText}</>
-                )}
+                {item.isNew && <Badge label={t('active_consents.newly_consented')} />}
+                <div className={classes.consentBadgeAction}>
+                  {isLoading ? (
+                    <DsSkeleton
+                      variant='text'
+                      width={20}
+                    />
+                  ) : (
+                    <>{item.badgeText}</>
+                  )}
+                </div>
               </div>
             }
             linkIcon
