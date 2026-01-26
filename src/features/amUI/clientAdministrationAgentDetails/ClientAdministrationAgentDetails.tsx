@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
-  DsButton,
   DsHeading,
   DsParagraph,
   DsSkeleton,
@@ -26,12 +25,12 @@ import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi'
 import {
   type Client,
   useAddAgentAccessPackagesMutation,
+  useRemoveAgentAccessPackagesMutation,
   useGetAgentAccessPackagesQuery,
   useGetClientsQuery,
 } from '@/rtk/features/clientApi';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { ClientAdministrationAgentTabs } from './ClientAdministrationAgentTabs';
-import { useAgentClientTabSnapshots } from './useAgentClientTabSnapshots';
 
 export const ClientAdministrationAgentDetails = () => {
   const { t } = useTranslation();
@@ -53,6 +52,8 @@ export const ClientAdministrationAgentDetails = () => {
 
   const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
     useAddAgentAccessPackagesMutation();
+  const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
+    useRemoveAgentAccessPackagesMutation();
 
   if (isLoadingIsClientAdmin) {
     return (
@@ -93,41 +94,21 @@ export const ClientAdministrationAgentDetails = () => {
     clients?.filter((client) => agentAccessClientIds.has(client.client.id)) ?? [];
   const clientsWithoutAgentAccess =
     clients?.filter((client) => !agentAccessClientIds.has(client.client.id)) ?? [];
-  const {
-    hasTabClients,
-    canTabClients,
-    hasTabSnapshotReady,
-    canTabSnapshotReady,
-    showHasTabLoading,
-    showCanTabLoading,
-  } = useAgentClientTabSnapshots({
-    activeTab,
-    isLoadingAgentAccessPackages,
-    isLoadingClients,
-    isErrorAgentAccessPackages,
-    isErrorClients,
-    clientsWithAgentAccess,
-    clientsWithoutAgentAccess,
-  });
 
   const hasClientsContent = (
     <>
       <DsHeading data-size='sm'>{t('client_administration_page.delegations_heading')}</DsHeading>
-      {showHasTabLoading && (
+      {(isLoadingAgentAccessPackages || isLoadingClients) && (
         <DsParagraph data-size='sm'>
           <DsSkeleton variant='text' />
         </DsParagraph>
       )}
-      {!hasTabSnapshotReady &&
-        !isLoadingAgentAccessPackages &&
-        !isLoadingClients &&
-        isErrorAgentAccessPackages && (
-          <DsAlert data-color='danger'>
-            <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
-          </DsAlert>
-        )}
-      {!hasTabSnapshotReady &&
-        !isLoadingAgentAccessPackages &&
+      {!isLoadingAgentAccessPackages && !isLoadingClients && isErrorAgentAccessPackages && (
+        <DsAlert data-color='danger'>
+          <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
+        </DsAlert>
+      )}
+      {!isLoadingAgentAccessPackages &&
         !isLoadingClients &&
         !isErrorAgentAccessPackages &&
         isErrorClients && (
@@ -143,49 +124,53 @@ export const ClientAdministrationAgentDetails = () => {
             )}
           </DsAlert>
         )}
-      {hasTabSnapshotReady && hasTabClients.length > 0 && (
-        <ClientAdministrationAgentClientsList
-          clients={hasTabClients}
-          isAddingAgentAccessPackages={isAddingAgentAccessPackages}
-          toPartyUuid={toPartyUuid}
-          actingPartyUuid={actingPartyUuid}
-          addAgentAccessPackages={addAgentAccessPackages}
-        />
-      )}
-      {hasTabSnapshotReady && hasTabClients.length === 0 && (
-        <DsParagraph>{t('client_administration_page.no_delegations')}</DsParagraph>
-      )}
+      {!isLoadingAgentAccessPackages &&
+        !isLoadingClients &&
+        !isErrorAgentAccessPackages &&
+        !isErrorClients &&
+        clientsWithAgentAccess.length > 0 && (
+          <ClientAdministrationAgentClientsList
+            clients={clientsWithAgentAccess}
+            agentAccessPackages={agentAccessPackages ?? []}
+            isAddingAgentAccessPackages={isAddingAgentAccessPackages}
+            isRemovingAgentAccessPackages={isRemovingAgentAccessPackages}
+            toPartyUuid={toPartyUuid}
+            actingPartyUuid={actingPartyUuid}
+            addAgentAccessPackages={addAgentAccessPackages}
+            removeAgentAccessPackages={removeAgentAccessPackages}
+          />
+        )}
+      {!isLoadingAgentAccessPackages &&
+        !isLoadingClients &&
+        !isErrorAgentAccessPackages &&
+        !isErrorClients &&
+        clientsWithAgentAccess.length === 0 && (
+          <DsParagraph>{t('client_administration_page.no_delegations')}</DsParagraph>
+        )}
     </>
   );
 
   const canGetClientsContent = (
     <>
-      {/* <DsHeading data-size='sm'>
-        {t('client_administration_page.clients_tab_title')}
-      </DsHeading> */}
-      {showCanTabLoading && (
+      {(isLoadingClients || isLoadingAgentAccessPackages) && (
         <DsParagraph data-size='sm'>
           <DsSkeleton variant='text' />
         </DsParagraph>
       )}
-      {!canTabSnapshotReady &&
-        !isLoadingClients &&
-        !isLoadingAgentAccessPackages &&
-        isErrorClients && (
-          <DsAlert data-color='danger'>
-            <DsParagraph>{t('client_administration_page.error_loading_clients')}</DsParagraph>
-            {clientsErrorDetails && (
-              <TechnicalErrorParagraphs
-                size='sm'
-                status={clientsErrorDetails.status}
-                time={clientsErrorDetails.time}
-                traceId={clientsErrorDetails.traceId}
-              />
-            )}
-          </DsAlert>
-        )}
-      {!canTabSnapshotReady &&
-        !isLoadingClients &&
+      {!isLoadingClients && !isLoadingAgentAccessPackages && isErrorClients && (
+        <DsAlert data-color='danger'>
+          <DsParagraph>{t('client_administration_page.error_loading_clients')}</DsParagraph>
+          {clientsErrorDetails && (
+            <TechnicalErrorParagraphs
+              size='sm'
+              status={clientsErrorDetails.status}
+              time={clientsErrorDetails.time}
+              traceId={clientsErrorDetails.traceId}
+            />
+          )}
+        </DsAlert>
+      )}
+      {!isLoadingClients &&
         !isLoadingAgentAccessPackages &&
         !isErrorClients &&
         isErrorAgentAccessPackages && (
@@ -193,18 +178,29 @@ export const ClientAdministrationAgentDetails = () => {
             <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
           </DsAlert>
         )}
-      {canTabSnapshotReady && canTabClients.length === 0 && (
-        <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
-      )}
-      {canTabSnapshotReady && canTabClients.length > 0 && (
-        <ClientAdministrationAgentClientsList
-          clients={canTabClients}
-          isAddingAgentAccessPackages={isAddingAgentAccessPackages}
-          toPartyUuid={toPartyUuid}
-          actingPartyUuid={actingPartyUuid}
-          addAgentAccessPackages={addAgentAccessPackages}
-        />
-      )}
+      {!isLoadingClients &&
+        !isLoadingAgentAccessPackages &&
+        !isErrorClients &&
+        !isErrorAgentAccessPackages &&
+        clientsWithoutAgentAccess.length === 0 && (
+          <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
+        )}
+      {!isLoadingClients &&
+        !isLoadingAgentAccessPackages &&
+        !isErrorClients &&
+        !isErrorAgentAccessPackages &&
+        clientsWithoutAgentAccess.length > 0 && (
+          <ClientAdministrationAgentClientsList
+            clients={clientsWithoutAgentAccess}
+            agentAccessPackages={agentAccessPackages ?? []}
+            isAddingAgentAccessPackages={isAddingAgentAccessPackages}
+            isRemovingAgentAccessPackages={isRemovingAgentAccessPackages}
+            toPartyUuid={toPartyUuid}
+            actingPartyUuid={actingPartyUuid}
+            addAgentAccessPackages={addAgentAccessPackages}
+            removeAgentAccessPackages={removeAgentAccessPackages}
+          />
+        )}
     </>
   );
 
@@ -230,7 +226,6 @@ export const ClientAdministrationAgentDetails = () => {
           displayDirection={false}
           displayRoles={false}
         />
-
         <ClientAdministrationAgentTabs
           activeTab={activeTab}
           onChange={setActiveTab}

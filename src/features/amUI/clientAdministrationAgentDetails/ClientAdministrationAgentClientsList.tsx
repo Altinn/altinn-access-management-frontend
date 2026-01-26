@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -8,9 +8,13 @@ import {
   SnackbarDuration,
   useSnackbar,
 } from '@altinn/altinn-components';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
-import type { Client, useAddAgentAccessPackagesMutation } from '@/rtk/features/clientApi';
+import type {
+  Client,
+  useAddAgentAccessPackagesMutation,
+  useRemoveAgentAccessPackagesMutation,
+} from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
@@ -19,15 +23,19 @@ import { AccessPackageListItems, type AccessPackageListItemData } from './Access
 import { UserListItems } from './UserListItems';
 
 type AddAgentAccessPackages = ReturnType<typeof useAddAgentAccessPackagesMutation>[0];
+type RemoveAgentAccessPackages = ReturnType<typeof useRemoveAgentAccessPackagesMutation>[0];
 type ClientAccessItem = Client['access'][number];
 type UserListItemType = 'company' | 'person';
 
 type ClientAdministrationAgentClientsListProps = {
   clients: Client[];
+  agentAccessPackages: Client[];
   isAddingAgentAccessPackages: boolean;
+  isRemovingAgentAccessPackages: boolean;
   toPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackages;
+  removeAgentAccessPackages: RemoveAgentAccessPackages;
 };
 
 const getUserListItemType = (clientType: string): UserListItemType => {
@@ -41,17 +49,40 @@ const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>
 
 export const ClientAdministrationAgentClientsList = ({
   clients,
+  agentAccessPackages,
   isAddingAgentAccessPackages,
+  isRemovingAgentAccessPackages,
   toPartyUuid,
   actingPartyUuid,
   addAgentAccessPackages,
+  removeAgentAccessPackages,
 }: ClientAdministrationAgentClientsListProps) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
   const { getAccessPackageById } = useAccessPackageLookup();
   const noDelegationsText = t('client_administration_page.no_delegations');
   const delegateLabel = t('client_administration_page.delegate_package_button');
-  const delegateDisabled = isAddingAgentAccessPackages || !toPartyUuid || !actingPartyUuid;
+  const removeLabel = t('client_administration_page.remove_package_button');
+
+  const delegatedPackagesByClientRole = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+    agentAccessPackages.forEach((client) => {
+      client.access.forEach((access) => {
+        const key = `${client.client.id}-${access.role.code}`;
+        const existing = map.get(key) ?? new Set<string>();
+        access.packages.forEach((pkg) => {
+          if (pkg.id) {
+            existing.add(pkg.id);
+          }
+          if (pkg.urn) {
+            existing.add(pkg.urn);
+          }
+        });
+        map.set(key, existing);
+      });
+    });
+    return map;
+  }, [agentAccessPackages]);
 
   const addAgentAccessPackageHandler = async (
     clientId: string,
@@ -97,6 +128,50 @@ export const ClientAdministrationAgentClientsList = ({
     }
   };
 
+  const removeAgentAccessPackageHandler = async (
+    clientId: string,
+    roleCode: string,
+    packageId: string,
+    clientName: string,
+    accessPackageName: string,
+  ) => {
+    if (!toPartyUuid || !actingPartyUuid) {
+      return;
+    }
+
+    try {
+      await removeAgentAccessPackages({
+        from: clientId,
+        to: toPartyUuid,
+        party: actingPartyUuid,
+        payload: {
+          values: [
+            {
+              role: roleCode,
+              packages: [packageId],
+            },
+          ],
+        },
+      }).unwrap();
+      openSnackbar({
+        message: t('client_administration_page.remove_package_success_snackbar', {
+          name: clientName,
+          accessPackage: accessPackageName,
+        }),
+        color: 'success',
+      });
+    } catch (error) {
+      openSnackbar({
+        message: t('client_administration_page.remove_package_error', {
+          name: clientName,
+          accessPackage: accessPackageName,
+        }),
+        color: 'danger',
+        duration: SnackbarDuration.infinite,
+      });
+    }
+  };
+
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
 
@@ -105,22 +180,45 @@ export const ClientAdministrationAgentClientsList = ({
     clientName: string,
     access: ClientAccessItem,
   ): AccessPackageListItemData[] => {
+    const delegatedKey = `${clientId}-${access.role.code}`;
+    const delegatedPackageIds = delegatedPackagesByClientRole.get(delegatedKey);
     return access.packages.map((pkg) => {
       const accessPackage = getAccessPackageById(pkg.id);
       const accessPackageName = accessPackage?.name ?? pkg.name;
+      const packageId = pkg.urn ?? pkg.id;
+      const isDelegated =
+        delegatedPackageIds?.has(packageId) ||
+        delegatedPackageIds?.has(pkg.id) ||
+        (pkg.urn ? delegatedPackageIds?.has(pkg.urn) : false);
       return {
         id: accessPackage?.id ?? pkg.id,
         size: 'sm',
         name: accessPackageName,
-        controls: (
+        color: isDelegated ? 'company' : undefined,
+        controls: isDelegated ? (
           <Button
             variant='tertiary'
-            disabled={delegateDisabled}
+            onClick={() => {
+              removeAgentAccessPackageHandler(
+                clientId,
+                access.role.code,
+                packageId,
+                clientName,
+                accessPackageName,
+              );
+            }}
+          >
+            <MinusCircleIcon />
+            {removeLabel}
+          </Button>
+        ) : (
+          <Button
+            variant='tertiary'
             onClick={() => {
               addAgentAccessPackageHandler(
                 clientId,
                 access.role.code,
-                pkg.urn ?? pkg.id,
+                packageId,
                 clientName,
                 accessPackageName,
               );
