@@ -150,6 +150,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
           isDelegationCheckLoading
         }
         onDelegate={canDelegate ? handleOnDelegate : undefined}
+        onAddNewUser={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         isActionLoading={
           isActionLoading ||
