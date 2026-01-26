@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         public string DateOfBirth { get; set; }
 
         /// <summary>
-        /// Wheather or not the party is deleted
+        /// Whether or not the party is deleted
         /// </summary>
         public bool IsDeleted { get; set; }
     }
