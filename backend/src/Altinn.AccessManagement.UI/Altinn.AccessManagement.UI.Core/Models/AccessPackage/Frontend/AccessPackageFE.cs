@@ -33,6 +33,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         public string Description { get; set; }
 
         /// <summary>
+        /// Access type ("Organisasjon" or "Person")
+        /// </summary>
+        public bool AccessType { get; set; }
+
+        /// <summary>
         /// Resources
         /// </summary>
         public List<AccessPackageResourceFE> Resources { get; set; }
