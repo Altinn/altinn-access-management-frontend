@@ -36,6 +36,12 @@ export interface ResourceProvider {
   typeId: string;
 }
 
+export interface AccessPackageType {
+  id: string;
+  providerId: string;
+  name: string;
+}
+
 export interface AccessPackage {
   id: string;
   name: string;
@@ -45,6 +51,7 @@ export interface AccessPackage {
   area: AccessArea;
   urn?: string;
   permissions?: Permissions[];
+  type: AccessPackageType;
 }
 
 export interface AccessPackageDelegation {

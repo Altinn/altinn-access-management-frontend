@@ -36,7 +36,7 @@ export const PoaOverviewPage = () => {
         <PartyRepresentationProvider
           fromPartyUuid={partyUuid}
           actingPartyUuid={partyUuid ?? ''}
-          errorOnPriv={true}
+          errorOnPriv={false}
         >
           <Breadcrumbs items={['root', 'poa_overview']} />
           <ReporteePageHeading

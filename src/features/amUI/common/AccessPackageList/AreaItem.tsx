@@ -35,13 +35,16 @@ export const AreaItem = ({
   const showPermissionsBadge = showPermissions;
   const showUndelegatedPackageWarning =
     showPermissions && area.packages.available.some((pkg) => isCriticalAndUndelegated(pkg));
+  const colorTheme = area.accessPackages.every((pkg) => pkg.type?.name === 'Person')
+    ? 'person'
+    : 'company';
 
   return (
     <AccessAreaListItem
       key={area.id}
       id={area.id}
       name={area.name}
-      colorTheme='company'
+      colorTheme={colorTheme}
       iconUrl={area.iconUrl}
       badge={
         showPackagesCountBadge || showPermissionsBadge || showUndelegatedPackageWarning ? (
@@ -52,7 +55,7 @@ export const AreaItem = ({
                   delegated: area.packages.assigned.length,
                   total: area.packages.assigned.length + area.packages.available.length,
                 })}
-                color='company'
+                color={colorTheme}
               />
             )}
             {showPermissionsBadge && <PermissionBadge permissions={permissions} />}
