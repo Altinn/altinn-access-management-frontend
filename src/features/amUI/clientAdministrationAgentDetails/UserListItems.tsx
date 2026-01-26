@@ -2,6 +2,7 @@ import React, { type ReactNode, useCallback, useEffect, useMemo, useState } from
 import {
   Button,
   DsSearch,
+  formatDisplayName,
   List,
   UserListItem,
   type UserListItemProps,
@@ -98,6 +99,10 @@ export const UserListItems = ({ items }: UserListItemsProps) => {
             <UserListItem
               key={item.id}
               {...item}
+              name={formatDisplayName({
+                fullName: item.name,
+                type: item.type,
+              })}
               collapsible={collapsible}
               expanded={expanded}
               onClick={collapsible ? handleClick : item.onClick}

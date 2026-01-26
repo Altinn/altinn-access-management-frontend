@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, DsHeading, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { Button, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type {
@@ -91,90 +91,118 @@ export const ClientAdministrationAgentClientsList = ({
     clientId: string,
     clientName: string,
     access: ClientAccessItem,
-  ): AccessPackageListItemData[] => {
+  ): {
+    items: AccessPackageListItemData[];
+    delegableCount: number;
+    delegatedCount: number;
+  } => {
     const delegatedKey = `${clientId}-${access.role.code}`;
     const delegatedPackageIds = delegatedPackagesByClientRole.get(delegatedKey);
-    return access.packages.map((pkg) => {
-      const accessPackage = getAccessPackageById(pkg.id);
-      const accessPackageName = accessPackage?.name ?? pkg.name;
-      const packageId = pkg.urn ?? pkg.id;
-      const isDelegated =
-        delegatedPackageIds?.has(packageId) ||
-        delegatedPackageIds?.has(pkg.id) ||
-        (pkg.urn ? delegatedPackageIds?.has(pkg.urn) : false);
-      return {
-        id: accessPackage?.id ?? pkg.id,
-        size: 'sm',
-        name: accessPackageName,
-        color: isDelegated ? 'company' : undefined,
-        controls: isDelegated ? (
-          <Button
-            variant='tertiary'
-            disabled={removeDisabled}
-            onClick={() => {
-              removeAgentAccessPackage(
-                clientId,
-                access.role.code,
-                packageId,
-                clientName,
-                accessPackageName,
-              );
-            }}
-          >
-            <MinusCircleIcon />
-            {removeLabel}
-          </Button>
-        ) : (
-          <Button
-            variant='tertiary'
-            disabled={delegateDisabled}
-            onClick={() => {
-              addAgentAccessPackage(
-                clientId,
-                access.role.code,
-                packageId,
-                clientName,
-                accessPackageName,
-              );
-            }}
-          >
-            <PlusCircleIcon />
-            {delegateLabel}
-          </Button>
-        ),
-      };
-    });
+    const items = access.packages
+      .map((pkg) => {
+        const packageId = pkg.urn ?? pkg.id;
+        if (!packageId) {
+          return null;
+        }
+        const accessPackage = getAccessPackageById(pkg.id);
+        const accessPackageName = accessPackage?.name ?? pkg.name;
+        const isDelegated =
+          delegatedPackageIds?.has(packageId) ||
+          delegatedPackageIds?.has(pkg.id) ||
+          (pkg.urn ? delegatedPackageIds?.has(pkg.urn) : false);
+        return {
+          id: accessPackage?.id ?? pkg.id,
+          size: 'sm',
+          name: accessPackageName,
+          color: isDelegated ? 'company' : undefined,
+          controls: isDelegated ? (
+            <Button
+              variant='tertiary'
+              disabled={removeDisabled}
+              onClick={() => {
+                removeAgentAccessPackage(
+                  clientId,
+                  access.role.code,
+                  packageId,
+                  clientName,
+                  accessPackageName,
+                );
+              }}
+            >
+              <MinusCircleIcon />
+              {removeLabel}
+            </Button>
+          ) : (
+            <Button
+              variant='tertiary'
+              disabled={delegateDisabled}
+              onClick={() => {
+                addAgentAccessPackage(
+                  clientId,
+                  access.role.code,
+                  packageId,
+                  clientName,
+                  accessPackageName,
+                );
+              }}
+            >
+              <PlusCircleIcon />
+              {delegateLabel}
+            </Button>
+          ),
+        };
+      })
+      .filter((item): item is AccessPackageListItemData => item !== null);
+    const delegableCount = items.length;
+    const delegatedCount = items.filter((item) => item.color === 'company').length;
+    return { items, delegableCount, delegatedCount };
   };
 
   const renderAccessContent = (client: Client) => {
     if (client.access.length === 0) {
-      return <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>;
+      return {
+        nodes: <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>,
+        totalDelegable: 0,
+        totalDelegated: 0,
+      };
     }
 
-    return client.access.map((access) => {
-      const clientName = formatDisplayName({
-        fullName: client.client.name,
-        type: getUserListItemType(client.client.type),
-      });
-      const accessPackageItems = buildAccessPackageItems(client.client.id, clientName, access);
+    let totalDelegable = 0;
+    let totalDelegated = 0;
+    const nodes = client.access
+      .filter((access) => access.packages && access.packages.length > 0)
+      .map((access) => {
+        const clientName = formatDisplayName({
+          fullName: client.client.name,
+          type: getUserListItemType(client.client.type),
+        });
+        const { items, delegableCount, delegatedCount } = buildAccessPackageItems(
+          client.client.id,
+          clientName,
+          access,
+        );
+        totalDelegable += delegableCount;
+        totalDelegated += delegatedCount;
 
-      return (
-        <React.Fragment key={`${client.client.id}-${access.role.id}`}>
-          <DsHeading>{access.role.code}</DsHeading>
-          {accessPackageItems.length === 0 ? (
-            <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>
-          ) : (
-            <AccessPackageListItems items={accessPackageItems} />
-          )}
-        </React.Fragment>
-      );
-    });
+        return (
+          <React.Fragment key={`${client.client.id}-${access.role.id}`}>
+            {items.length === 0 ? (
+              <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>
+            ) : (
+              <AccessPackageListItems items={items} />
+            )}
+          </React.Fragment>
+        );
+      });
+    return { nodes, totalDelegable, totalDelegated };
   };
 
   const userListItems = sortedClients.map((client) => {
     const clientId = client.client.id;
     const isSubUnit = isSubUnitByType(client.client.variant);
     const userType = getUserListItemType(client.client.type);
+    const { nodes, totalDelegable, totalDelegated } = renderAccessContent(client);
+    const tagText = totalDelegable > 0 ? `${totalDelegated} av ${totalDelegable}` : undefined;
     return {
       id: clientId,
       name: formatDisplayName({
@@ -185,7 +213,8 @@ export const ClientAdministrationAgentClientsList = ({
       subUnit: isSubUnit,
       collapsible: true,
       as: Button,
-      children: renderAccessContent(client),
+      children: nodes,
+      roleNames: tagText ? [tagText] : undefined,
     };
   });
 

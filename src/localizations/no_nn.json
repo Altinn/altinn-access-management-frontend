@@ -568,7 +568,7 @@
     "remove_package_success_snackbar": "{{name}} har ikkje lenger fullmakt til {{accessPackage}}.",
     "remove_package_error": "Kunne ikkje slette fullmakt til {{accessPackage}} for {{name}}.",
     "agent_has_clients_tab": "Har desse klientane",
-    "agent_can_get_clients_tab": "Kan få desse klientane",
+    "agent_can_get_clients_tab": "Alle klientar",
     "direct_connections_heading": "Brukarar med klienttilgang",
     "indirect_connections_heading": "Andre brukarar",
     "no_clients": "Organisasjonen har ingen klientar",

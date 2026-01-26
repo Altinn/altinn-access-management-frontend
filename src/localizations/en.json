@@ -571,7 +571,7 @@
     "remove_package_success_snackbar": "{{name}} no longer has power of attorney for {{accessPackage}}.",
     "remove_package_error": "Could not remove {{name}} power of attorney for {{accessPackage}}.",
     "agent_has_clients_tab": "Has these clients",
-    "agent_can_get_clients_tab": "Can get these clients",
+    "agent_can_get_clients_tab": "All clients",
     "direct_connections_heading": "Users with client access",
     "indirect_connections_heading": "Other users",
     "no_clients": "The organization has no registered clients",
