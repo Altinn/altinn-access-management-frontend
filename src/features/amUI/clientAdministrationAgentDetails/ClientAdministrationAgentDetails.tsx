@@ -23,7 +23,6 @@ import {
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import {
-  type Client,
   useAddAgentAccessPackagesMutation,
   useRemoveAgentAccessPackagesMutation,
   useGetAgentAccessPackagesQuery,
@@ -31,6 +30,7 @@ import {
 } from '@/rtk/features/clientApi';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { ClientAdministrationAgentTabs } from './ClientAdministrationAgentTabs';
+import { useAgentAccessClientLists } from './useAgentAccessClientLists';
 
 export const ClientAdministrationAgentDetails = () => {
   const { t } = useTranslation();
@@ -85,15 +85,10 @@ export const ClientAdministrationAgentDetails = () => {
   const toPartyUuid = toParty?.partyUuid;
   const actingPartyUuid = actingParty?.partyUuid;
   const clientsErrorDetails = createErrorDetails(clientsError);
-  const agentAccessClientIds = new Set(
-    (agentAccessPackages ?? [])
-      .filter((client: Client) => client.access.some((access) => access.packages.length > 0))
-      .map((client) => client.client.id),
-  );
-  const clientsWithAgentAccess =
-    clients?.filter((client) => agentAccessClientIds.has(client.client.id)) ?? [];
-  const clientsWithoutAgentAccess =
-    clients?.filter((client) => !agentAccessClientIds.has(client.client.id)) ?? [];
+  const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentAccessClientLists({
+    agentAccessPackages,
+    clients,
+  });
 
   const hasClientsContent = (
     <>

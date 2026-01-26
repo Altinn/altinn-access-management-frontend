@@ -1,13 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  DsHeading,
-  DsParagraph,
-  formatDisplayName,
-  SnackbarDuration,
-  useSnackbar,
-} from '@altinn/altinn-components';
+import { Button, DsHeading, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type {
@@ -20,6 +13,7 @@ import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
 
 import { AccessPackageListItems, type AccessPackageListItemData } from './AccessPackageListItems';
+import { useAgentAccessPackageActions } from './useAgentAccessPackageActions';
 import { UserListItems } from './UserListItems';
 
 type AddAgentAccessPackages = ReturnType<typeof useAddAgentAccessPackagesMutation>[0];
@@ -58,11 +52,19 @@ export const ClientAdministrationAgentClientsList = ({
   removeAgentAccessPackages,
 }: ClientAdministrationAgentClientsListProps) => {
   const { t } = useTranslation();
-  const { openSnackbar } = useSnackbar();
   const { getAccessPackageById } = useAccessPackageLookup();
   const noDelegationsText = t('client_administration_page.no_delegations');
   const delegateLabel = t('client_administration_page.delegate_package_button');
   const removeLabel = t('client_administration_page.remove_package_button');
+  const delegateDisabled = isAddingAgentAccessPackages || !toPartyUuid || !actingPartyUuid;
+  const removeDisabled = isRemovingAgentAccessPackages || !toPartyUuid || !actingPartyUuid;
+
+  const { addAgentAccessPackage, removeAgentAccessPackage } = useAgentAccessPackageActions({
+    toPartyUuid,
+    actingPartyUuid,
+    addAgentAccessPackages,
+    removeAgentAccessPackages,
+  });
 
   const delegatedPackagesByClientRole = useMemo(() => {
     const map = new Map<string, Set<string>>();
@@ -83,94 +85,6 @@ export const ClientAdministrationAgentClientsList = ({
     });
     return map;
   }, [agentAccessPackages]);
-
-  const addAgentAccessPackageHandler = async (
-    clientId: string,
-    roleCode: string,
-    packageId: string,
-    clientName: string,
-    accessPackageName: string,
-  ) => {
-    if (!toPartyUuid || !actingPartyUuid) {
-      return;
-    }
-
-    try {
-      await addAgentAccessPackages({
-        from: clientId,
-        to: toPartyUuid,
-        party: actingPartyUuid,
-        payload: {
-          values: [
-            {
-              role: roleCode,
-              packages: [packageId],
-            },
-          ],
-        },
-      }).unwrap();
-      openSnackbar({
-        message: t('client_administration_page.delegate_package_success_snackbar', {
-          name: clientName,
-          accessPackage: accessPackageName,
-        }),
-        color: 'success',
-      });
-    } catch (error) {
-      openSnackbar({
-        message: t('client_administration_page.delegate_package_error', {
-          name: clientName,
-          accessPackage: accessPackageName,
-        }),
-        color: 'danger',
-        duration: SnackbarDuration.infinite,
-      });
-    }
-  };
-
-  const removeAgentAccessPackageHandler = async (
-    clientId: string,
-    roleCode: string,
-    packageId: string,
-    clientName: string,
-    accessPackageName: string,
-  ) => {
-    if (!toPartyUuid || !actingPartyUuid) {
-      return;
-    }
-
-    try {
-      await removeAgentAccessPackages({
-        from: clientId,
-        to: toPartyUuid,
-        party: actingPartyUuid,
-        payload: {
-          values: [
-            {
-              role: roleCode,
-              packages: [packageId],
-            },
-          ],
-        },
-      }).unwrap();
-      openSnackbar({
-        message: t('client_administration_page.remove_package_success_snackbar', {
-          name: clientName,
-          accessPackage: accessPackageName,
-        }),
-        color: 'success',
-      });
-    } catch (error) {
-      openSnackbar({
-        message: t('client_administration_page.remove_package_error', {
-          name: clientName,
-          accessPackage: accessPackageName,
-        }),
-        color: 'danger',
-        duration: SnackbarDuration.infinite,
-      });
-    }
-  };
 
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
@@ -198,8 +112,9 @@ export const ClientAdministrationAgentClientsList = ({
         controls: isDelegated ? (
           <Button
             variant='tertiary'
+            disabled={removeDisabled}
             onClick={() => {
-              removeAgentAccessPackageHandler(
+              removeAgentAccessPackage(
                 clientId,
                 access.role.code,
                 packageId,
@@ -214,8 +129,9 @@ export const ClientAdministrationAgentClientsList = ({
         ) : (
           <Button
             variant='tertiary'
+            disabled={delegateDisabled}
             onClick={() => {
-              addAgentAccessPackageHandler(
+              addAgentAccessPackage(
                 clientId,
                 access.role.code,
                 packageId,

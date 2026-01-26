@@ -148,12 +148,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, requestBody);
+            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 return;
             }
 
-            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
             _logger.LogError("AccessManagement.UI // ClientDelegationClient.RemoveAgentAccessPackages // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
         }
