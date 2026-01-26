@@ -3,6 +3,36 @@ import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from './../fixture/pomFixture';
 
 test.describe('Aktørvalg, valg og visning av avgiver', () => {
+  test('Sjekk at slettede enheter kan vises/skjules', async ({ page, aktorvalgHeader }) => {
+    const login = new LoginPage(page);
+    await test.step('Log in', async () => {
+      await page.goto(env('BASE_URL'));
+      await login.LoginToAccessManagement('19846999968');
+    });
+
+    await test.step('Go to actor selector', async () => {
+      await aktorvalgHeader.goToInfoportal();
+      await aktorvalgHeader.goToSelectActor('Pratsom Skole');
+    });
+
+    await test.step('Expect three actors to be visible', async () => {
+      await aktorvalgHeader.uncheckShowDeletedSwitch();
+      await aktorvalgHeader.expectedNumberOfActors(3);
+    });
+
+    await test.step('Click the "show deleted" switch', async () => {
+      await aktorvalgHeader.checkShowDeletedSwitch();
+    });
+
+    await test.step('Expect four actors to be visible', async () => {
+      await aktorvalgHeader.expectedNumberOfActors(4);
+    });
+
+    await test.step('Expect one of them to be a deleted actor', async () => {
+      await aktorvalgHeader.expectDeletedActorToBeVisible('Sjelden Ren Katt Konjakk');
+    });
+  });
+
   test('Check that all buttons are visible and clickable', async ({ page, aktorvalgHeader }) => {
     const login = new LoginPage(page);
     await test.step('Log in', async () => {
