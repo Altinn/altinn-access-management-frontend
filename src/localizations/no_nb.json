@@ -574,7 +574,7 @@
     "organization_identifier": "Org. nr.",
     "no_clients": "Organisasjonen har ingen klienter",
     "error_loading_clients": "Kunne ikke laste klienter.",
-    "no_agents": "Ingen brukere har fått klienttilganger ennå. Du kan søke etter brukere som allerede har noen tilganger hos dere, eller registrere ny.",
+    "no_agents": "Ingen brukere har fått klienttilganger ennå. Du kan søke etter brukere som allerede har noen tilganger hos dere, eller registrere en ny bruker.",
     "client_search_placeholder": "Søk etter klient"
   },
   "systemuser_creationpage": {
