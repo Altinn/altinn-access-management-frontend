@@ -109,6 +109,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
       setDelegateActionError(null);
       onDelegate(accessPackage, toParty);
     }
+    console.log('Delegating to user:', user);
   };
 
   const handleOnRevoke = (user: User) => {
@@ -150,6 +151,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
           isDelegationCheckLoading
         }
         onDelegate={canDelegate ? handleOnDelegate : undefined}
+        onAddNewUser={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         isActionLoading={
           isActionLoading ||
