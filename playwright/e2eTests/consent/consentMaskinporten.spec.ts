@@ -60,7 +60,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
    * Krever scopet "altinn:consentrequests.org" for å kunne gjøre det og det sjekkes eksplisitt på at samtykkeressursen eies av samme org som henter
    * maskinporten-tokenet.
    */
-  test(`e-bevis (org scope)`, async ({ consentPage, login }) => {
+  test(`E-bevis (org scope)`, async ({ consentPage, login }) => {
     const scenario = scenarioBuilder.personToOrg('altinn:consentrequests.org');
 
     const consentResponse = await test.step('Create consent request', async () => {
