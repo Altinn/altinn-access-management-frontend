@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { DsSearch, DsParagraph } from '@altinn/altinn-components';
+import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { ExtendedUser, User } from '@/rtk/features/userInfoApi';
@@ -131,7 +131,10 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
             >
               {noUsersText ??
                 t('package_poa_details_page.users_tab.no_users', {
-                  fromparty: fromParty?.name,
+                  fromparty: formatDisplayName({
+                    fullName: fromParty?.name ?? '',
+                    type: fromParty?.unitType === 'Person' ? 'person' : 'company',
+                  }),
                 })}
             </DsParagraph>
           )}
