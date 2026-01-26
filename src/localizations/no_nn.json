@@ -571,9 +571,10 @@
     "agent_can_get_clients_tab": "Alle klientar",
     "direct_connections_heading": "Brukarar med klienttilgang",
     "indirect_connections_heading": "Andre brukarar",
+    "organization_identifier": "Org. nr.",
     "no_clients": "Organisasjonen har ingen klientar",
     "error_loading_clients": "Kunne ikkje laste klientar.",
-    "no_agents": "Ingen brukarar har fått klienttilgangar enno. Du kan søkje etter brukarar som allereie har nokre tilgangar hos dykk, eller registrere ny.",
+    "no_agents": "Ingen brukarar har fått klienttilgangar enno. Du kan søkje etter brukarar som allereie har nokre tilgangar hos dykk, eller registrere ein ny brukar.",
     "client_search_placeholder": "Søk etter klient"
   },
   "systemuser_creationpage": {

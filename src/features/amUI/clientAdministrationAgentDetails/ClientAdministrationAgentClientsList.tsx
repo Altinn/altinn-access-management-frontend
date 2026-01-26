@@ -112,7 +112,7 @@ export const ClientAdministrationAgentClientsList = ({
           (pkg.urn ? delegatedPackageIds?.has(pkg.urn) : false);
         return {
           id: accessPackage?.id ?? pkg.id,
-          size: 'sm',
+          size: 'sm' as const,
           name: accessPackageName,
           color: isDelegated ? 'company' : undefined,
           controls: isDelegated ? (
@@ -150,7 +150,7 @@ export const ClientAdministrationAgentClientsList = ({
               {delegateLabel}
             </Button>
           ),
-        };
+        } as AccessPackageListItemData;
       })
       .filter((item): item is AccessPackageListItemData => item !== null);
     const delegableCount = items.length;
@@ -159,19 +159,16 @@ export const ClientAdministrationAgentClientsList = ({
   };
 
   const renderAccessContent = (client: Client) => {
-    if (client.access.length === 0) {
-      return {
-        nodes: <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>,
-        totalDelegable: 0,
-        totalDelegated: 0,
-      };
-    }
+    const result = client.access.reduce<{
+      nodes: React.ReactNode[];
+      totalDelegable: number;
+      totalDelegated: number;
+    }>(
+      (acc, access) => {
+        if (!access.packages || access.packages.length === 0) {
+          return acc;
+        }
 
-    let totalDelegable = 0;
-    let totalDelegated = 0;
-    const nodes = client.access
-      .filter((access) => access.packages && access.packages.length > 0)
-      .map((access) => {
         const clientName = formatDisplayName({
           fullName: client.client.name,
           type: getUserListItemType(client.client.type),
@@ -181,20 +178,30 @@ export const ClientAdministrationAgentClientsList = ({
           clientName,
           access,
         );
-        totalDelegable += delegableCount;
-        totalDelegated += delegatedCount;
+        acc.totalDelegable += delegableCount;
+        acc.totalDelegated += delegatedCount;
 
-        return (
-          <React.Fragment key={`${client.client.id}-${access.role.id}`}>
-            {items.length === 0 ? (
-              <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>
-            ) : (
+        if (items.length > 0) {
+          acc.nodes.push(
+            <React.Fragment key={`${client.client.id}-${access.role.id}`}>
               <AccessPackageListItems items={items} />
-            )}
-          </React.Fragment>
-        );
-      });
-    return { nodes, totalDelegable, totalDelegated };
+            </React.Fragment>,
+          );
+        }
+        return acc;
+      },
+      { nodes: [], totalDelegable: 0, totalDelegated: 0 },
+    );
+
+    if (result.nodes.length === 0) {
+      return {
+        nodes: <DsParagraph data-size='sm'>{noDelegationsText}</DsParagraph>,
+        totalDelegable: result.totalDelegable,
+        totalDelegated: result.totalDelegated,
+      };
+    }
+
+    return result;
   };
 
   const userListItems = sortedClients.map((client) => {
@@ -215,6 +222,9 @@ export const ClientAdministrationAgentClientsList = ({
       as: Button,
       children: nodes,
       roleNames: tagText ? [tagText] : undefined,
+      description: t('client_administration_page.organization_identifier', {
+        organizationIdentifier: client.client.organizationIdentifier,
+      }),
     };
   });
 

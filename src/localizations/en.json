@@ -574,6 +574,7 @@
     "agent_can_get_clients_tab": "All clients",
     "direct_connections_heading": "Users with client access",
     "indirect_connections_heading": "Other users",
+    "organization_identifier": "Org. nr.",
     "no_clients": "The organization has no registered clients",
     "error_loading_clients": "Could not load clients.",
     "no_agents": "No users have been given client access yet. You can search for users who already have some access with you, or register a new one.",
