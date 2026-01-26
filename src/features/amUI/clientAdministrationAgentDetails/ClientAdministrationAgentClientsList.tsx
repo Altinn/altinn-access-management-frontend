@@ -24,8 +24,7 @@ type UserListItemType = 'company' | 'person';
 type ClientAdministrationAgentClientsListProps = {
   clients: Client[];
   agentAccessPackages: Client[];
-  isAddingAgentAccessPackages: boolean;
-  isRemovingAgentAccessPackages: boolean;
+  isLoading: boolean;
   toPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackages;
@@ -44,8 +43,7 @@ const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>
 export const ClientAdministrationAgentClientsList = ({
   clients,
   agentAccessPackages,
-  isAddingAgentAccessPackages,
-  isRemovingAgentAccessPackages,
+  isLoading,
   toPartyUuid,
   actingPartyUuid,
   addAgentAccessPackages,
@@ -56,8 +54,8 @@ export const ClientAdministrationAgentClientsList = ({
   const noDelegationsText = t('client_administration_page.no_delegations');
   const delegateLabel = t('client_administration_page.delegate_package_button');
   const removeLabel = t('client_administration_page.remove_package_button');
-  const delegateDisabled = isAddingAgentAccessPackages || !toPartyUuid || !actingPartyUuid;
-  const removeDisabled = isRemovingAgentAccessPackages || !toPartyUuid || !actingPartyUuid;
+  const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
+  const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
 
   const { addAgentAccessPackage, removeAgentAccessPackage } = useAgentAccessPackageActions({
     toPartyUuid,

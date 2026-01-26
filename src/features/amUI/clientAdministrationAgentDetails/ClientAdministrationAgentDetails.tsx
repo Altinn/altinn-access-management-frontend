@@ -143,8 +143,7 @@ export const ClientAdministrationAgentDetails = () => {
               <ClientAdministrationAgentClientsList
                 clients={clientsWithAgentAccess}
                 agentAccessPackages={agentAccessPackages ?? []}
-                isAddingAgentAccessPackages={isAddingAgentAccessPackages}
-                isRemovingAgentAccessPackages={isRemovingAgentAccessPackages}
+                isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
                 toPartyUuid={toPartyUuid}
                 actingPartyUuid={actingPartyUuid}
                 addAgentAccessPackages={addAgentAccessPackages}
@@ -159,10 +158,9 @@ export const ClientAdministrationAgentDetails = () => {
               <ClientAdministrationAgentClientsList
                 clients={clientsWithoutAgentAccess}
                 agentAccessPackages={agentAccessPackages ?? []}
-                isAddingAgentAccessPackages={isAddingAgentAccessPackages}
-                isRemovingAgentAccessPackages={isRemovingAgentAccessPackages}
                 toPartyUuid={toPartyUuid}
                 actingPartyUuid={actingPartyUuid}
+                isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
                 addAgentAccessPackages={addAgentAccessPackages}
                 removeAgentAccessPackages={removeAgentAccessPackages}
               />
