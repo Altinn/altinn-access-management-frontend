@@ -420,6 +420,12 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tenester",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom rolla si i {{org_name}}. Den kan derfor ikkje slettast.",
+    "actions": {
+      "access_to_all": "Tilgang til heile tenesten",
+      "partial_access": "Tilgang til {{count}} av {{total}} handlingar",
+      "action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan gi fullmakt til heile tenesta eller velje spesifikke handlingar.",
+      "cannot_give_header": "Du kan ikkje gi tilgang til:"
+    },
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ønsker å endre dette."
@@ -555,6 +561,10 @@
     "add_agent_error": "Kunne ikkje leggje til brukar.",
     "add_agent_success_snackbar": "Brukar lagt til.",
     "agent_search_placeholder": "Søk etter person",
+    "agent_delete_button": "Slett brukar",
+    "agent_delete_heading": "Du slettar denne brukaren",
+    "agent_delete_body": "Denne personen og alle deira fullmakter hos klientane dine vil bli sletta.",
+    "agent_delete_confirm": "Slett brukar",
     "direct_connections_heading": "Brukarar med klienttilgang",
     "indirect_connections_heading": "Andre brukarar",
     "no_clients": "Organisasjonen har ingen klientar",
@@ -733,7 +743,12 @@
     "already_approved": "Dette samtykket er allereie gitt",
     "already_approved_poa": "Denne fullmakta er allereie gitt",
     "already_rejected": "Dette samtykket er allereie avvist",
-    "already_rejected_poa": "Denne fullmakta er allereie avvist"
+    "already_rejected_poa": "Denne fullmakta er allereie avvist",
+    "receipt_header_consent": "Samtykket er registrert!",
+    "receipt_header_poa": "Fullmakta er registrert!",
+    "receipt_body_consent": "Du kan når som helst trekke tilbake samtykket i oversikten under Samtykke- og fullmaktsavtaler.",
+    "receipt_body_poa": "Du kan når som helst trekke tilbake fullmakta i oversikten under Samtykke- og fullmaktsavtaler.",
+    "receipt_back": "Tilbake til oversikten"
   },
   "active_consents": {
     "page_title": "Samtykke- og fullmaktsavtaler - Altinn",
@@ -766,7 +781,8 @@
     "confirm_revoke_consent": "Ja, trekk samtykke",
     "confirm_revoke_poa": "Ja, trekk fullmakt",
     "altinn2_consent_alert_header": "Du er no i ein ny versjon av Samtykke- og fullmaktsoversikten",
-    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle aktive samtykke- og fullmaktsavtaler her. Finn du ikkje det du ser etter, kan du gå til dei <a>gamle Altinn-sidene</a> og velje “Samtykker og fullmakter” i oversikten."
+    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle aktive samtykke- og fullmaktsavtaler her. Finn du ikkje det du ser etter, kan du gå til dei <a>gamle Altinn-sidene</a> og velje “Samtykker og fullmakter” i oversikten.",
+    "newly_consented": "Nyleg samtykka"
   },
   "consent_log": {
     "page_title": "Avtalelogg - Altinn",
@@ -832,7 +848,9 @@
     "no_resources": "Ingen tenester tilgjengelege.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
-    "remove_filter": "Fjern filter"
+    "remove_filter": "Fjern filter",
+    "service_owner_filter": "Søk etter tjenesteeier",
+    "service_owner_filter_clear": "Tøm søkefelt"
   },
   "landing_page": {
     "alert_heading": "Du er no i den nye løysinga for tilgangsstyring",

@@ -30,7 +30,9 @@ export const useFilteredResources = <TResource>({
       const description = getDescription?.(resource)?.toLowerCase() ?? '';
       const serviceOwnerMatch =
         serviceOwnerFilter && serviceOwnerFilter.length > 0
-          ? serviceOwnerFilter.includes(getOwnerOrgCode(resource).toLowerCase())
+          ? serviceOwnerFilter
+              .map((owner) => owner.toLowerCase())
+              .includes(getOwnerOrgCode(resource).toLowerCase())
           : true;
       return (
         (nameOrTitle.includes(normalizedSearch) ||

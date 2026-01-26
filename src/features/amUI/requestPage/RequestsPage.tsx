@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   Badge,
+  BadgeVariant,
+  Color,
   DsAlert,
   DsTabs,
   formatDisplayName,
@@ -21,8 +23,21 @@ import { useRequests } from '@/resources/hooks/useRequests';
 import classes from './RequestPage.module.css';
 import { Request } from './types';
 
+const selectedTabProps = {
+  'data-size': 'sm',
+  variant: 'base' as BadgeVariant,
+};
+
+const unselectedTabProps = {
+  'data-size': 'sm',
+  color: 'neutral' as Color,
+};
+const INCOMING_REQUESTS_TAB = 'incomingRequests';
+const SENT_REQUESTS_TAB = 'sentRequests';
+
 export const RequestPage = () => {
   const { t } = useTranslation();
+  const [selectedTab, setSelectedTab] = useState<string>(INCOMING_REQUESTS_TAB);
 
   useRerouteIfRequestPageDisabled();
 
@@ -48,26 +63,37 @@ export const RequestPage = () => {
           isLoading={isLoadingReportee}
         />
         <DsTabs
-          defaultValue='incomingRequests'
+          value={selectedTab}
+          onChange={setSelectedTab}
           data-size='sm'
         >
           <DsTabs.List className={classes.requestPageTabs}>
             <DsTabs.Tab
-              value='incomingRequests'
+              value={INCOMING_REQUESTS_TAB}
               className={classes.requestTab}
             >
               {!!totalRequests && (
                 <Badge
-                  data-size='sm'
-                  variant='base'
+                  {...(selectedTab === INCOMING_REQUESTS_TAB
+                    ? selectedTabProps
+                    : unselectedTabProps)}
                   label={totalRequests}
                 />
               )}
               {t('request_page.incoming_requests')}
             </DsTabs.Tab>
-            <DsTabs.Tab value='sentRequests'>{t('request_page.sent_requests')}</DsTabs.Tab>
+            <DsTabs.Tab
+              value={SENT_REQUESTS_TAB}
+              className={classes.requestTab}
+            >
+              <Badge
+                {...(selectedTab === SENT_REQUESTS_TAB ? selectedTabProps : unselectedTabProps)}
+                label={'0'} // endre tall her når "Be om tilgang" implementeres
+              />
+              {t('request_page.sent_requests')}
+            </DsTabs.Tab>
           </DsTabs.List>
-          <DsTabs.Panel value='incomingRequests'>
+          <DsTabs.Panel value={INCOMING_REQUESTS_TAB}>
             {isError && (
               <div className={classes.errorWrapper}>
                 <DsAlert data-color='danger'>
@@ -93,7 +119,7 @@ export const RequestPage = () => {
               )}
             </List>
           </DsTabs.Panel>
-          <DsTabs.Panel value='sentRequests'>
+          <DsTabs.Panel value={SENT_REQUESTS_TAB}>
             <div>{t('request_page.no_sent_requests')}</div>
           </DsTabs.Panel>
         </DsTabs>

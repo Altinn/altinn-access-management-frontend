@@ -27,7 +27,7 @@
 
 .heading {
   font-weight: var(--ds-font-weight-semibold);
-  font-size: 1.125rem; /* should be --ds-body-md-font-size, but that is overridden to 1rem in Common.module.css */
+  font-size: var(--ds-body-md-font-size);
   margin-bottom: var(--ds-size-8);
 }
 
@@ -37,7 +37,7 @@
 
 .serviceIntro {
   font-weight: var(--ds-font-weight-medium);
-  font-size: 1.125rem; /* should be --ds-body-md-font-size, but that is overridden to 1rem in Common.module.css */
+  font-size: var(--ds-body-md-font-size);
   margin-bottom: var(--ds-size-8);
 }
 
@@ -56,6 +56,17 @@
   gap: var(--ds-size-4);
   margin-top: var(--ds-size-13);
   margin-bottom: var(--ds-size-6);
+}
+
+.consentReceipt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--ds-size-8);
+  align-self: center;
+  height: 100%;
+  max-width: 27rem;
 }
 
 @media only screen and (max-width: 769px) {

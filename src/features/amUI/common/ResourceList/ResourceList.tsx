@@ -178,12 +178,17 @@ export const ResourceList = <
   const isSkeletonVisible = isLoading || (resolveLogos && orgLoading);
 
   const serviceOwnerOptions = React.useMemo(() => {
-    const uniqueOwners = new Map<string, { value: string; label: string }>();
+    const uniqueOwners = new Map<string, { value: string; label: string; count: number }>();
     resources.forEach((res) => {
       const code = extractOrgCode(res);
       const name = extractOwnerName(res);
-      if (code && !uniqueOwners.has(code)) {
-        uniqueOwners.set(code, { value: code, label: name });
+      if (code) {
+        const existing = uniqueOwners.get(code);
+        if (existing) {
+          existing.count = (existing.count ?? 1) + 1;
+        } else {
+          uniqueOwners.set(code, { value: code, label: name, count: 1 });
+        }
       }
     });
     return Array.from(uniqueOwners.values());

@@ -19,6 +19,7 @@ export interface ConnectionsListProps {
   isActionLoading?: boolean;
   includeSelfAsChild?: boolean;
   delegateLabel?: string;
+  getUserLink?: (user: ExtendedUser) => string;
 }
 
 export const ConnectionsList: React.FC<ConnectionsListProps> = ({
@@ -31,8 +32,10 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
   isActionLoading = false,
   includeSelfAsChild = true,
   delegateLabel,
+  getUserLink,
 }) => {
   const { t } = useTranslation();
+  const isInteractive = !!getUserLink;
 
   return (
     <>
@@ -44,9 +47,10 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
             user={user}
             size='md'
             titleAs='h4'
-            interactive={false}
+            interactive={isInteractive}
+            linkTo={getUserLink ? getUserLink(user) : undefined}
             roleDirection='toUser'
-            disableLinks
+            disableLinks={!isInteractive}
             controls={(user) => (
               <UserListActions
                 isLoading={isActionLoading}

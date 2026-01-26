@@ -423,6 +423,12 @@
     "edit_success": "The power of attorney was updated",
     "package_services": "Grants access to {{count}} services",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
+    "actions": {
+      "access_to_all": "Access to the full service",
+      "partial_access": "Access to {{count}} of {{total}} actions",
+      "action_description": "These are the technical actions that the service offers. You can grant power of attorney to the entire service or choose specific actions.",
+      "cannot_give_header": "You cannot grant access to:"
+    },
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
@@ -558,6 +564,10 @@
     "add_agent_error": "Could not add user.",
     "add_agent_success_snackbar": "User added.",
     "agent_search_placeholder": "Search for person",
+    "agent_delete_button": "Delete user",
+    "agent_delete_heading": "You are deleting this user",
+    "agent_delete_body": "This person and all of their powers of attorney with your clients will be deleted.",
+    "agent_delete_confirm": "Delete user",
     "direct_connections_heading": "Users with client access",
     "indirect_connections_heading": "Other users",
     "no_clients": "The organization has no registered clients",
@@ -736,7 +746,12 @@
     "already_approved": "This consent is already given",
     "already_approved_poa": "This power of attorney is already given",
     "already_rejected": "This consent is already rejected",
-    "already_rejected_poa": "This power of attorney is already rejected"
+    "already_rejected_poa": "This power of attorney is already rejected",
+    "receipt_header_consent": "The consent has been registered!",
+    "receipt_header_poa": "The power of attorney has been registered!",
+    "receipt_body_consent": "You can withdraw this consent at any time in the overview below Consent and power of attorney agreements.",
+    "receipt_body_poa": "You can withdraw this power of attorney at any time in the overview below Consent and power of attorney agreements.",
+    "receipt_back": "Back to overview"
   },
   "active_consents": {
     "page_title": "Consent and power of attorney agreements - Altinn",
@@ -769,7 +784,8 @@
     "confirm_revoke_consent": "Yes, revoke consent",
     "confirm_revoke_poa": "Yes, revoke power of attorney",
     "altinn2_consent_alert_header": "You are now in a new version of the Consent- and power of attorney overview",
-    "altinn2_consent_alert_body": "Soon you will find an overview of all active consents and powers of attorney here. If you cannot find what you are looking for, you can go to the <a>old Altinn-pages</a> and choose “Consents and Authorizations” in the overview."
+    "altinn2_consent_alert_body": "Soon you will find an overview of all active consents and powers of attorney here. If you cannot find what you are looking for, you can go to the <a>old Altinn-pages</a> and choose “Consents and Authorizations” in the overview.",
+    "newly_consented": "Newly consented"
   },
   "consent_log": {
     "page_title": "Agreement log - Altinn",
@@ -835,7 +851,9 @@
     "no_resources": "No resources available.",
     "filter_by_serviceowner": "Filter by service owner",
     "resource_search_clear": "Clear search",
-    "remove_filter": "Remove filter"
+    "remove_filter": "Remove filter",
+    "service_owner_filter": "Search for service owner",
+    "service_owner_filter_clear": "Clear search field"
   },
   "landing_page": {
     "alert_heading": "You are now in the new access management solution",

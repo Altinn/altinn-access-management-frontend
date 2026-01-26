@@ -20,6 +20,13 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<UserProfile> GetUserProfile(Guid uuid);
 
         /// <summary>
+        /// Updates the current user's profile settings in altinn profile
+        /// </summary>
+        /// <param name="settingsChange">the settings to be changed. Can be the full object or a partial one</param>
+        /// <returns>users profile settings</returns>
+        Task<ProfileSettingPreference> PatchCurrentUserProfileSetting(ProfileSettingPreference settingsChange);
+
+        /// <summary>
         /// Gets the organization's notification addresses from altinn profile
         /// </summary>
         /// <returns>A list of addresses</returns>

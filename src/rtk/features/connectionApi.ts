@@ -22,6 +22,7 @@ export interface Connection {
   party: ExtendedUser;
   roles: RoleInfo[];
   connections: Connection[];
+  sortKey?: string;
 }
 
 export interface UserInfo {

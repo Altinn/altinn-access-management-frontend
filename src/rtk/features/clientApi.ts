@@ -60,9 +60,21 @@ export const clientApi = createApi({
       }),
       invalidatesTags: ['agents'],
     }),
+    removeAgent: builder.mutation<void, { to: string; party?: string }>({
+      query: ({ to, party = getCookie('AltinnPartyUuid') }) => ({
+        url: `agents?party=${party}&to=${to}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['agents'],
+    }),
   }),
 });
 
-export const { useGetClientsQuery, useGetAgentsQuery, useAddAgentMutation } = clientApi;
+export const {
+  useGetClientsQuery,
+  useGetAgentsQuery,
+  useAddAgentMutation,
+  useRemoveAgentMutation,
+} = clientApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = clientApi;

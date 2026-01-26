@@ -420,6 +420,12 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tjenester",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
+    "actions": {
+      "access_to_all": "Tilgang til hele tjenesten",
+      "partial_access": "Tilgang til {{count}} av {{total}} handlinger",
+      "action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan gi fullmakt til hele tjenesten eller velge spesifikke handlinger.",
+      "cannot_give_header": "Du kan ikke gi tilgang til:"
+    },
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
@@ -555,6 +561,10 @@
     "add_agent_error": "Kunne ikke legge til bruker.",
     "add_agent_success_snackbar": "Bruker lagt til.",
     "agent_search_placeholder": "Søk etter person",
+    "agent_delete_button": "Slett bruker",
+    "agent_delete_heading": "Du sletter denne brukeren",
+    "agent_delete_body": "Denne personen og alle dens fullmakter hos dine klienter vil bli slettet.",
+    "agent_delete_confirm": "Slett bruker",
     "direct_connections_heading": "Brukere med klienttilgang",
     "indirect_connections_heading": "Andre brukere",
     "no_clients": "Organisasjonen har ingen klienter",
@@ -733,7 +743,12 @@
     "already_approved": "Dette samtykket er allerede gitt",
     "already_approved_poa": "Denne fullmakten er allerede gitt",
     "already_rejected": "Dette samtykket er allerede avvist",
-    "already_rejected_poa": "Denne fullmakten er allerede avvist"
+    "already_rejected_poa": "Denne fullmakten er allerede avvist",
+    "receipt_header_consent": "Samtykket er registrert!",
+    "receipt_header_poa": "Fullmakten er registrert!",
+    "receipt_body_consent": "Du kan når som helst trekke tilbake samtykket i oversikten under Samtykke- og fullmaktsavtaler.",
+    "receipt_body_poa": "Du kan når som helst trekke tilbake fullmakten i oversikten under Samtykke- og fullmaktsavtaler.",
+    "receipt_back": "Tilbake til oversikten"
   },
   "active_consents": {
     "page_title": "Samtykke- og fullmaktsavtaler - Altinn",
@@ -766,7 +781,8 @@
     "confirm_revoke_consent": "Ja, trekk samtykke",
     "confirm_revoke_poa": "Ja, trekk fullmakt",
     "altinn2_consent_alert_header": "Du er nå i en ny versjon av Samtykke- og fullmaktsoversikten",
-    "altinn2_consent_alert_body": "Etterhvert vil du finne oversikt over alle aktive samtykke- og fullmaktsavtaler her. Finner du ikke det du ser etter, kan du gå til de <a>gamle Altinn-sidene</a> og velge “Samtykker og fullmakter” i oversikten."
+    "altinn2_consent_alert_body": "Etterhvert vil du finne oversikt over alle aktive samtykke- og fullmaktsavtaler her. Finner du ikke det du ser etter, kan du gå til de <a>gamle Altinn-sidene</a> og velge “Samtykker og fullmakter” i oversikten.",
+    "newly_consented": "Nylig samtykket"
   },
   "consent_log": {
     "page_title": "Avtalelogg - Altinn",
@@ -832,7 +848,9 @@
     "no_resources": "Ingen tjenester er tilgjengelige.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
-    "remove_filter": "Fjern filter"
+    "remove_filter": "Fjern filter",
+    "service_owner_filter": "Søk etter tjenesteeier",
+    "service_owner_filter_clear": "Tøm søkefelt"
   },
   "landing_page": {
     "alert_heading": "Du er nå i den nye løsningen for tilgangsstyring",

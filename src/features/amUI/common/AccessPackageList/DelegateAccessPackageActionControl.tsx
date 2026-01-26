@@ -38,13 +38,13 @@ export const DelegateAccessPackageActionControl = ({
   if (availableActions?.includes(DelegationAction.DELEGATE) && canDelegate) {
     return (
       <Button
-        icon={PlusCircleIcon}
-        variant='text'
+        variant='tertiary'
         size='sm'
         onClick={onDelegate}
         disabled={disabled}
         aria-label={t('common.give_poa_for', { poa_object: accessPackageName })}
       >
+        <PlusCircleIcon />
         {t('common.give_poa')}
       </Button>
     );
@@ -52,13 +52,13 @@ export const DelegateAccessPackageActionControl = ({
   if (availableActions?.includes(DelegationAction.REQUEST) && displayAccessRequestFeature) {
     return (
       <Button
-        icon={PlusCircleIcon}
-        variant='text'
+        variant='tertiary'
         size='sm'
         disabled={disabled}
         onClick={onRequest}
         aria-label={t('common.request_poa_for', { poa_object: accessPackageName })}
       >
+        <PlusCircleIcon />
         {t('common.request_poa')}
       </Button>
     );

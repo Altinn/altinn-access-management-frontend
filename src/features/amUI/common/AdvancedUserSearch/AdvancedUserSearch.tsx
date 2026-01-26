@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import { DsSearch, DsParagraph } from '@altinn/altinn-components';
+import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import { ExtendedUser, PartyType, User } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType, type Connection } from '@/rtk/features/connectionApi';
 import { NewUserButton } from '@/features/amUI/users/NewUserModal/NewUserModal';
 
@@ -18,6 +18,7 @@ export interface AdvancedUserSearchProps {
   includeSelfAsChildOnIndirect?: boolean;
   connections?: Connection[];
   indirectConnections?: Connection[];
+  getUserLink?: (user: ExtendedUser) => string;
   onDelegate?: (user: User) => void;
   onAddNewUser?: (user: User) => void;
   onRevoke?: (user: User) => void;
@@ -44,6 +45,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   includeSelfAsChildOnIndirect = true,
   connections,
   indirectConnections,
+  getUserLink,
   onDelegate,
   onAddNewUser,
   onRevoke,
@@ -129,11 +131,14 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
             >
               {noUsersText ??
                 t('package_poa_details_page.users_tab.no_users', {
-                  fromparty: fromParty?.name,
+                  fromparty: formatDisplayName({
+                    fullName: fromParty?.name ?? '',
+                    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+                  }),
                 })}
             </DsParagraph>
           )}
-          {isQuery && (
+          {isQuery && showIndirectList && (
             <h3 className={classes.subHeader}>
               {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
             </h3>
@@ -146,6 +151,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
             isActionLoading={isActionLoading}
             onRevoke={onRevoke}
             includeSelfAsChild={includeSelfAsChild}
+            getUserLink={getUserLink}
           />
           {showDirectNoResults && (
             <DsParagraph data-size='md'>

@@ -62,6 +62,68 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult<UserProfile>(null);
         }
 
+        /// <inheritdoc />
+        public async Task<ProfileSettingPreference> PatchCurrentUserProfileSetting(ProfileSettingPreference settingsChange)
+        {
+            // Check authentication context for special test scenarios
+            var httpContext = _httpContextAccessor?.HttpContext;
+            if (httpContext?.User?.Identity?.IsAuthenticated == true)
+            {
+                var userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+                // Special test scenario for 500 - internal server error
+                if (userId == 500)
+                {
+                    throw new HttpRequestException("Internal server error");
+                }
+            }
+
+            // static userId for testing
+            var userUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            string path = GetDataPathForProfiles();
+            if (File.Exists(path))
+            {
+                string content = File.ReadAllText(path);
+                List<UserProfile> allProfiles = (List<UserProfile>)JsonSerializer.Deserialize(content, typeof(List<UserProfile>), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                var userProfile = allProfiles.FirstOrDefault(p => p.UserUuid == userUuid);
+                if (userProfile?.ProfileSettingPreference != null)
+                {
+                    // Create a copy of the existing ProfileSettingPreference
+                    var result = new ProfileSettingPreference
+                    {
+                        Language = userProfile.ProfileSettingPreference.Language,
+                        PreSelectedPartyId = userProfile.ProfileSettingPreference.PreSelectedPartyId,
+                        DoNotPromptForParty = userProfile.ProfileSettingPreference.DoNotPromptForParty,
+                        PreselectedPartyUuid = userProfile.ProfileSettingPreference.PreselectedPartyUuid,
+                        ShowClientUnits = userProfile.ProfileSettingPreference.ShowClientUnits,
+                        ShouldShowSubEntities = userProfile.ProfileSettingPreference.ShouldShowSubEntities,
+                        ShouldShowDeletedEntities = userProfile.ProfileSettingPreference.ShouldShowDeletedEntities
+                    };
+
+                    // Apply changes (overwrite existing values)
+                    if (settingsChange.Language != null)
+                        result.Language = settingsChange.Language;
+                    if (settingsChange.PreSelectedPartyId.HasValue)
+                        result.PreSelectedPartyId = settingsChange.PreSelectedPartyId;
+                    if (settingsChange.DoNotPromptForParty.HasValue)
+                        result.DoNotPromptForParty = settingsChange.DoNotPromptForParty;
+                    if (settingsChange.PreselectedPartyUuid.HasValue)
+                        result.PreselectedPartyUuid = settingsChange.PreselectedPartyUuid;
+                    if (settingsChange.ShowClientUnits.HasValue)
+                        result.ShowClientUnits = settingsChange.ShowClientUnits;
+                    result.ShouldShowSubEntities = settingsChange.ShouldShowSubEntities; // ShouldShowSubEntities is not nullable, so always apply
+                    if (settingsChange.ShouldShowDeletedEntities.HasValue)
+                        result.ShouldShowDeletedEntities = settingsChange.ShouldShowDeletedEntities;
+
+                    return await Task.FromResult(result);
+                }
+            }
+
+            // Return the settingsChange as-is if no existing profile found
+            return await Task.FromResult(settingsChange);
+        }
+
         /// <inheritdoc/>
         public async Task<List<NotificationAddressResponse>> GetOrgNotificationAddresses(string orgNumber)
         {

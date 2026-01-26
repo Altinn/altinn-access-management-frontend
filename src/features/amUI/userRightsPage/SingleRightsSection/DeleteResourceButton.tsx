@@ -42,8 +42,7 @@ export const DeleteResourceButton = ({ resource, fullText = false }: DeleteResou
     fromParty &&
     toParty && (
       <Button
-        variant='text'
-        icon={MinusCircleIcon}
+        variant='tertiary'
         className={classes.deleteButton}
         disabled={isLoading}
         onClick={() => {
@@ -64,6 +63,7 @@ export const DeleteResourceButton = ({ resource, fullText = false }: DeleteResou
           );
         }}
       >
+        <MinusCircleIcon />
         {fullText ? t('common.delete_poa') : t('common.delete')}
       </Button>
     )

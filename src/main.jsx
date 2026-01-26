@@ -58,13 +58,13 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById('root')).render(
   // if you ever wonder why the components render twice it's because of React.StrictMode
   // comment it out if it causes trouble: https://react.dev/reference/react/StrictMode
-  <React.StrictMode>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <ReloadAlert />
-        <RefreshToken />
-        <RouterProvider router={Router}></RouterProvider>
-      </QueryClientProvider>
-    </Provider>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
+      <ReloadAlert />
+      <RefreshToken />
+      <RouterProvider router={Router}></RouterProvider>
+    </QueryClientProvider>
+  </Provider>,
+  // </React.StrictMode>,
 );

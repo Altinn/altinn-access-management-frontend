@@ -26,6 +26,7 @@ import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { UserRightsPageSkeleton } from './UserRightsPageSkeleton';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { formatDisplayName } from '@altinn/altinn-components';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -37,6 +38,8 @@ export const UserRightsPage = () => {
     !isHovedadminLoading && !isHovedadmin && !currentUserIsLoading && currentUser?.partyUuid === id
       ? currentUser?.partyUuid
       : getCookie('AltinnPartyUuid');
+
+  useDocumentTitle(t('user_rights_page.page_title'));
 
   useRerouteIfNotConfetti();
 

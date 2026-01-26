@@ -7,7 +7,7 @@ interface ResourceFilterToolbarProps {
   setSearch: (search: string) => void;
   filterState: { owner?: string[] };
   setFilterState: (state: { owner?: string[] }) => void;
-  serviceOwnerOptions: { value: string; label: string }[];
+  serviceOwnerOptions: { value: string; label: string; count?: number }[];
 }
 
 export const ResourceFilterToolbar = ({
@@ -49,6 +49,11 @@ export const ResourceFilterToolbar = ({
                 optionType: 'checkbox',
                 removable: false,
                 options: serviceOwnerOptions,
+                search: {
+                  placeholder: t('resource_list.service_owner_filter'),
+                  name: 'search-service-owner',
+                  clearButtonAltText: t('resource_list.service_owner_filter_clear'),
+                },
               },
             ]
           : []

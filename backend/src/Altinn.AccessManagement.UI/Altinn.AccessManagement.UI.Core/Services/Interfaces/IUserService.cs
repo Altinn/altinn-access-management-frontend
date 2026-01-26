@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
@@ -15,6 +16,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="userId">Id of user</param>
         /// <returns>users preferred settings</returns>
         Task<UserProfileFE> GetUserProfile(int userId);
+
+        /// <summary>
+        /// Updates the current user's profile settings in altinn profile
+        /// </summary>
+        /// <param name="shouldShowDeletedEntities">The new value of the field in the profile settings</param>
+        /// <returns>users new profile preferences</returns>
+        Task<ProfileSettingPreference> SetShowDeletedProfileSetting(bool shouldShowDeletedEntities);
 
         /// <summary>
         /// Get the reportees for the user 

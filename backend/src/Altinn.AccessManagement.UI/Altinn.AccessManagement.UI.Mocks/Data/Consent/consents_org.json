@@ -8,7 +8,9 @@
     "consentRights": [
       {
         "action": ["read"],
-        "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource-poa" }],
+        "resource": [
+          { "type": "urn:altinn:resource", "value": "consent-test-resource-poa", "version": "203" }
+        ],
         "metadata": null
       }
     ],

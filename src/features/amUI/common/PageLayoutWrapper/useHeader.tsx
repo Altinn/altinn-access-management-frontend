@@ -12,10 +12,12 @@ import {
   useGetFavoriteActorUuidsQuery,
   useAddFavoriteActorUuidMutation,
   useRemoveFavoriteActorUuidMutation,
+  useUpdateShowDeletedMutation,
 } from '@/rtk/features/userInfoApi';
 import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader';
 import { useEffect, useState } from 'react';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
+import { displayDeletedAccountToggle } from '@/resources/utils/featureFlagUtils';
 
 export const handleSelectAccount = (accountUuid: string) => {
   // always redirect to start-page when changing account
@@ -36,6 +38,9 @@ export const useHeader = ({
 }) => {
   const { t, i18n } = useTranslation();
   const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(openAccountMenu);
+  const [shouldShowDeletedUnits, setShouldShowDeletedUnits] = useState<boolean | undefined>(
+    undefined,
+  );
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: userProfile, isLoading: isLoadingUserProfile } = useGetUserProfileQuery();
@@ -45,6 +50,7 @@ export const useHeader = ({
     useGetFavoriteActorUuidsQuery();
   const [addFavoriteActorUuid] = useAddFavoriteActorUuidMutation();
   const [removeFavoriteActorUuid] = useRemoveFavoriteActorUuidMutation();
+  const [updateShowDeleted] = useUpdateShowDeletedMutation();
 
   const { globalMenu, desktopMenu, mobileMenu } = useGlobalMenu();
   const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
@@ -67,6 +73,16 @@ export const useHeader = ({
     }
   }, [isLoadingReporteeList, reporteeList, isLoadingUserProfile, userProfile]);
 
+  useEffect(() => {
+    if (
+      displayDeletedAccountToggle() &&
+      !isLoadingUserProfile &&
+      userProfile?.profileSettingPreference?.shouldShowDeletedEntities !== undefined
+    ) {
+      setShouldShowDeletedUnits(userProfile?.profileSettingPreference?.shouldShowDeletedEntities);
+    }
+  }, [isLoadingUserProfile, userProfile]);
+
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
@@ -80,6 +96,14 @@ export const useHeader = ({
     } else {
       addFavoriteActorUuid(accountId);
     }
+  };
+
+  const onShowDeletedUnitsChange = (shouldShowDeleted: boolean) => {
+    updateShowDeleted(shouldShowDeleted)
+      .unwrap()
+      .then((response) => {
+        setShouldShowDeletedUnits(response.shouldShowDeletedEntities);
+      });
   };
 
   const languageFromi18n = i18n.language;
@@ -102,8 +126,10 @@ export const useHeader = ({
       isLoadingReportee ||
       isLoadingFavoriteAccounts ||
       hideAccountSelector,
+    showDeletedUnits: shouldShowDeletedUnits ?? undefined,
 
     onToggleFavorite: onToggleFavorite,
+    onShowDeletedUnitsChange: onShowDeletedUnitsChange,
 
     onSelectAccount: (accountId: string) => {
       if (accountId !== reportee?.partyUuid) {

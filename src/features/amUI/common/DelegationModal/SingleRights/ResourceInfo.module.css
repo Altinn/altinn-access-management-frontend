@@ -31,10 +31,31 @@
   padding: 10px 15px 20px 0px;
 }
 
+.rightExpandableContent {
+  padding: 10px 20px;
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+}
+
+.undelegableSection {
+  display: flex;
+  gap: 10px;
+}
+
+.undelegableActions {
+  font-family: monospace;
+}
+
 .rightChips {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.chip {
+  font-family: monospace;
+  font-weight: bold;
 }
 
 .editButtons {

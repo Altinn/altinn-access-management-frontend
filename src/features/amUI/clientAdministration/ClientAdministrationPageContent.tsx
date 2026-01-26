@@ -6,7 +6,7 @@ import { DsAlert, DsHeading, DsParagraph, DsSkeleton, DsTabs } from '@altinn/alt
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { ClientAdministrationAgentsTab } from './ClientAdministrationAgentsTab';
-// import { ClientAdministrationClientsTab } from './ClientAdministrationClientsTab';
+import { ClientAdministrationClientsTab } from './ClientAdministrationClientsTab';
 
 export const ClientAdministrationPageContent = () => {
   const { t } = useTranslation();
@@ -63,7 +63,7 @@ export const ClientAdministrationPageContent = () => {
         <DsTabs.Panel value='users'>
           <ClientAdministrationAgentsTab />
         </DsTabs.Panel>
-        <DsTabs.Panel value='clients'>{/* <ClientAdministrationClientsTab /> */}</DsTabs.Panel>
+        <DsTabs.Panel value='clients'>{<ClientAdministrationClientsTab />}</DsTabs.Panel>
       </DsTabs>
     </>
   );

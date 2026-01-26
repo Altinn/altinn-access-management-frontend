@@ -50,11 +50,13 @@ export const scenarioBuilder = {
   /**
    * Creates a person-to-org scenario for standard tests
    */
-  personToOrg() {
+  personToOrg(consentRequestScope?: string) {
     const fromPerson = pickRandom(fromPersons);
     const toOrg = pickRandom(toOrgs);
     const validTo = addTimeToNowUtc({ days: 2 });
-    const api = new ConsentApiRequests(toOrg);
+    const api = consentRequestScope
+      ? new ConsentApiRequests(toOrg, consentRequestScope)
+      : new ConsentApiRequests(toOrg);
     return { fromPerson, toOrg, validTo, api };
   },
 

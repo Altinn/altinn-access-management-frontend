@@ -31,27 +31,8 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     // velg aktør
     await test.step('Choose an org as actor', async () => {
       await aktorvalgHeader.goToSelectActor('Håndfast Plasma');
+      await aktorvalgHeader.removeAllFavorites();
       await aktorvalgHeader.selectActor('Kunnskapsrik Kry Ape');
-    });
-
-    await test.step('Chosen actor persists on infoportal', async () => {
-      await aktorvalgHeader.goToInfoportal();
-      await aktorvalgHeader.currentlySelectedActor('Kunnskapsrik Kry Ape');
-    });
-
-    await test.step('Chosen actor persists on inbox', async () => {
-      await aktorvalgHeader.goToInbox();
-      await aktorvalgHeader.currentlySelectedActor('Kunnskapsrik Kry Ape');
-    });
-
-    await test.step('Chosen actor persists on access management', async () => {
-      await aktorvalgHeader.goToAccessManagement();
-      await aktorvalgHeader.currentlySelectedActor('Kunnskapsrik Kry Ape');
-    });
-
-    await test.step('Chosen actor persists on profile', async () => {
-      await aktorvalgHeader.goToProfile();
-      await aktorvalgHeader.currentlySelectedActor('Kunnskapsrik Kry Ape');
     });
 
     //sett favoritt

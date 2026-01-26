@@ -85,7 +85,10 @@ export const SystemUserList = ({
                   {...props}
                 />
               )}
-              icon={TenancyIcon}
+              icon={{
+                type: 'system',
+                name: systemUser.integrationTitle,
+              }}
               linkIcon
               badge={badge}
             />

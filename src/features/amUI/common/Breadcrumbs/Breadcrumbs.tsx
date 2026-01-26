@@ -20,6 +20,10 @@ const BreadcrumbConfig = {
     href: `/${amUIPath.Users}`,
     label: 'sidebar.users',
   },
+  client_administration: {
+    href: `/${amUIPath.ClientAdministration}`,
+    label: 'sidebar.client_administration',
+  },
   reportees: {
     href: `/${amUIPath.Reportees}`,
     label: 'sidebar.reportees',
