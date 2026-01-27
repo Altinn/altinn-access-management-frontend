@@ -47,8 +47,8 @@ export const useAreaPackageList = ({
 }: useAreaPackagesProps) => {
   const { i18n } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
-  const typeName = actingParty
-    ? actingParty.partyTypeName === PartyType.Organization
+  const typeName = fromParty
+    ? fromParty?.partyTypeName === PartyType.Organization
       ? 'organisasjon'
       : 'person'
     : undefined;
