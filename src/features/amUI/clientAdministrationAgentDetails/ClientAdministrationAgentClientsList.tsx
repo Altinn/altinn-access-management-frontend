@@ -74,7 +74,7 @@ export const ClientAdministrationAgentClientsList = ({
     const nodes = client.access.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
 
-      const packages = access.packages?.map((pkg) => {
+      const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
         const hasAccess = agentAccessPackages.some((aap) => {
           return (
             aap.client.id === clientId &&
@@ -129,7 +129,7 @@ export const ClientAdministrationAgentClientsList = ({
       });
 
       if (packages) {
-        acc.push(...packages.filter((p) => p !== undefined));
+        acc.push(...packages);
       }
 
       return acc;
