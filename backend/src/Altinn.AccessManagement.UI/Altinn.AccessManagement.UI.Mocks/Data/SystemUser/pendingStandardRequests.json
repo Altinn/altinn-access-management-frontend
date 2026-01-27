@@ -8,6 +8,7 @@
     "partyId": 51329012,
     "partyUuid": "cd35779b-b174-4ecc-bbef-ece13611be7f",
     "escalated": true,
+    "created": "2024-12-04T11:11:24.9535551+00:00",
     "redirectUrl": "https://smartcloudaltinn.azurewebsites.net/receipt",
     "rights": [
       {

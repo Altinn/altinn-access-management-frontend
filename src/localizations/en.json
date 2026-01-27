@@ -746,7 +746,12 @@
     "already_approved": "This consent is already given",
     "already_approved_poa": "This power of attorney is already given",
     "already_rejected": "This consent is already rejected",
-    "already_rejected_poa": "This power of attorney is already rejected"
+    "already_rejected_poa": "This power of attorney is already rejected",
+    "receipt_header_consent": "The consent has been registered!",
+    "receipt_header_poa": "The power of attorney has been registered!",
+    "receipt_body_consent": "You can withdraw this consent at any time in the overview below Consent and power of attorney agreements.",
+    "receipt_body_poa": "You can withdraw this power of attorney at any time in the overview below Consent and power of attorney agreements.",
+    "receipt_back": "Back to overview"
   },
   "active_consents": {
     "page_title": "Consent and power of attorney agreements - Altinn",
@@ -779,7 +784,8 @@
     "confirm_revoke_consent": "Yes, revoke consent",
     "confirm_revoke_poa": "Yes, revoke power of attorney",
     "altinn2_consent_alert_header": "You are now in a new version of the Consent- and power of attorney overview",
-    "altinn2_consent_alert_body": "Soon you will find an overview of all active consents and powers of attorney here. If you cannot find what you are looking for, you can go to the <a>old Altinn-pages</a> and choose “Consents and Authorizations” in the overview."
+    "altinn2_consent_alert_body": "Soon you will find an overview of all active consents and powers of attorney here. If you cannot find what you are looking for, you can go to the <a>old Altinn-pages</a> and choose “Consents and Authorizations” in the overview.",
+    "newly_consented": "Newly consented"
   },
   "consent_log": {
     "page_title": "Agreement log - Altinn",
@@ -878,6 +884,8 @@
     "process_request": "Process request",
     "request_consent": "Requests consent",
     "request_poa": "Requests power of attorney",
-    "error_loading_requests": "Could not load received requests"
+    "request_systemuser": "Requests to create system user",
+    "error_loading_requests": "Could not load received requests",
+    "error_partial_loading_requests": "Could not load all received requests"
   }
 }
