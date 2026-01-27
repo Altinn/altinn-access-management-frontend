@@ -34,7 +34,6 @@ interface AccessPackageListProps {
   onRevokeError?: (accessPackage: AccessPackage, error: ActionError) => void;
   packageAs?: React.ElementType;
   noPackagesText?: string;
-  loadBothOrgAndPrivPackages?: boolean;
 }
 
 export const AccessPackageList = ({
@@ -54,7 +53,6 @@ export const AccessPackageList = ({
   showPackagesCount,
   packageAs,
   noPackagesText,
-  loadBothOrgAndPrivPackages,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
 
@@ -71,7 +69,6 @@ export const AccessPackageList = ({
     showAllAreas,
     showAllPackages,
     searchString,
-    loadBothOrgAndPrivPackages,
   });
 
   const {

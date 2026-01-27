@@ -71,7 +71,6 @@ export const ReporteeAccessPackageSection = () => {
           modalRef.current?.showModal();
         }}
         noPackagesText={t('access_packages.user_has_no_packages')}
-        loadBothOrgAndPrivPackages
       />
       <AccessPackageInfoModal
         modalRef={modalRef}

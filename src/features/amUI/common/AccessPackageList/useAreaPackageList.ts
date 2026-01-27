@@ -32,7 +32,6 @@ interface useAreaPackagesProps {
   showAllAreas?: boolean;
   showAllPackages?: boolean;
   searchString?: string;
-  loadBothOrgAndPrivPackages?: boolean;
 }
 
 export enum DeletableStatus {
@@ -45,16 +44,14 @@ export const useAreaPackageList = ({
   searchString,
   showAllAreas,
   showAllPackages,
-  loadBothOrgAndPrivPackages,
 }: useAreaPackagesProps) => {
   const { i18n } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
-  const typeName =
-    actingParty && !loadBothOrgAndPrivPackages
-      ? actingParty.partyTypeName === PartyType.Organization
-        ? 'organisasjon'
-        : 'person'
-      : undefined;
+  const typeName = fromParty
+    ? fromParty?.partyTypeName === PartyType.Organization
+      ? 'organisasjon'
+      : 'person'
+    : undefined;
 
   const {
     data: allPackageAreas,
