@@ -47,7 +47,7 @@ export const UserListItems = ({ items }: UserListItemsProps) => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [items, searchString]);
+  }, [searchString]);
 
   const paginatedItems = useMemo(() => {
     return filteredItems.slice(0, PAGE_SIZE * currentPage);

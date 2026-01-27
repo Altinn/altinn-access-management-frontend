@@ -16,6 +16,7 @@ import type {
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
+import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 
 import { useAgentAccessPackageActions } from './useAgentAccessPackageActions';
 import { UserListItems, type UserListItemData } from './UserListItems';
@@ -52,6 +53,7 @@ export const ClientAdministrationAgentClientsList = ({
 }: ClientAdministrationAgentClientsListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
+  const { getRoleMetadata } = useRoleMetadata();
 
   const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
@@ -74,6 +76,7 @@ export const ClientAdministrationAgentClientsList = ({
     const nodes = client.access.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
 
+      const roleName = getRoleMetadata(access.role.id)?.name ?? access.role.name;
       const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
         const hasAccess = agentAccessPackages.some((aap) => {
           return (
@@ -88,6 +91,8 @@ export const ClientAdministrationAgentClientsList = ({
           type: client.client.type.toLowerCase() === 'organisasjon' ? 'company' : 'person',
           isSubUnit,
           interactive: false,
+          description:
+            access.role.code !== 'rettighetshaver' ? t('client_administration_page.via_role') : '',
           as: 'div',
           color: (hasAccess ? 'company' : 'neutral') as Color,
           controls: hasAccess ? (
@@ -147,7 +152,7 @@ export const ClientAdministrationAgentClientsList = ({
       as: Button,
       children: <AccessPackageListItems items={nodes} />,
       description: t('client_administration_page.organization_identifier', {
-        organizationIdentifier: client.client.organizationIdentifier,
+        orgnr: client.client.organizationIdentifier,
       }),
     };
   });
