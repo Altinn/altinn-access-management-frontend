@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
   Button,
-  formatDisplayName,
   type UserListItemProps,
   type Color,
 } from '@altinn/altinn-components';
@@ -92,7 +91,9 @@ export const ClientAdministrationAgentClientsList = ({
           isSubUnit,
           interactive: false,
           description:
-            access.role.code !== 'rettighetshaver' ? t('client_administration_page.via_role') : '',
+            access.role.code !== 'rettighetshaver'
+              ? t('client_administration_page.via_role', { role: roleName })
+              : '',
           as: 'div',
           color: (hasAccess ? 'company' : 'neutral') as Color,
           controls: hasAccess ? (
@@ -134,7 +135,7 @@ export const ClientAdministrationAgentClientsList = ({
       });
 
       if (packages) {
-        acc.push(...packages);
+        acc.push(...packages.filter((pkg): pkg is AccessPackageListItemProps => pkg !== null));
       }
 
       return acc;
@@ -142,10 +143,7 @@ export const ClientAdministrationAgentClientsList = ({
 
     return {
       id: clientId,
-      name: formatDisplayName({
-        fullName: client.client.name,
-        type: userType,
-      }),
+      name: client.client.name,
       type: userType,
       subUnit: isSubUnit,
       collapsible: true,
