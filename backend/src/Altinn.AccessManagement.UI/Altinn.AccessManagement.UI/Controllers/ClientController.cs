@@ -34,12 +34,16 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Endpoint for retrieving clients for a party.
         /// </summary>
         /// <param name="party">The uuid for the party.</param>
+        /// <param name="roles">Optional list of role identifiers to filter by.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>List of clients.</returns>
         [HttpGet]
         [Authorize]
         [Route("clients")]
-        public async Task<ActionResult<IEnumerable<ClientDelegation>>> GetClients([FromQuery] Guid party, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<ClientDelegation>>> GetClients(
+            [FromQuery] Guid party,
+            [FromQuery] List<string> roles = null,
+            CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -48,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                List<ClientDelegation> clients = await _clientService.GetClients(party, cancellationToken);
+                List<ClientDelegation> clients = await _clientService.GetClients(party, roles, cancellationToken);
                 return Ok(clients);
             }
             catch (HttpStatusException ex)
