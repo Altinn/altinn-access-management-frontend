@@ -19,6 +19,7 @@ export class AktorvalgHeader {
   readonly menuProfile: Locator;
   readonly menuLogout: Locator;
   readonly aktorvalgSearch: Locator;
+  readonly showDeletedSwitch: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -43,6 +44,7 @@ export class AktorvalgHeader {
     this.menuProfile = this.page.getByRole('link', { name: 'Din profil' });
     this.menuLogout = this.page.getByRole('button', { name: 'Logg ut' });
     this.aktorvalgSearch = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
+    this.showDeletedSwitch = this.page.getByRole('switch', { name: 'Vis slettede' });
   }
 
   async goToSelectActor(actorName: string) {
@@ -135,10 +137,43 @@ export class AktorvalgHeader {
     await expect(this.page.getByRole('button', { name: 'Fjern frå favorittar' })).toHaveCount(0);
   }
 
+  async checkShowDeletedSwitch() {
+    const isChecked = await this.showDeletedSwitch.isChecked();
+    if (!isChecked) {
+      await this.showDeletedSwitch.click();
+    }
+  }
+
+  async uncheckShowDeletedSwitch() {
+    const isChecked = await this.showDeletedSwitch.isChecked();
+    if (isChecked) {
+      await this.showDeletedSwitch.click();
+    }
+  }
+
   async chooseBokmalLanguage() {
     await this.menuButton.click();
     await this.menuLanguage.click();
     await this.page.locator('a').filter({ hasText: 'Bokmål' }).click();
+  }
+
+  async expectedNumberOfActors(number: number) {
+    await expect(this.page.getByRole('group').locator('a')).toHaveCount(number);
+  }
+
+  async expectActorToBeVisible(name: string) {
+    await expect(this.page.getByRole('group').locator('a').filter({ hasText: name })).toBeVisible();
+  }
+
+  async expectDeletedActorToBeVisible(name: string) {
+    await expect(
+      this.page
+        .locator('a')
+        .filter({ hasText: name })
+        .locator('span')
+        .filter({ hasText: 'Slettet' })
+        .first(),
+    ).toBeVisible();
   }
 
   async closePopups() {
