@@ -5,6 +5,10 @@ import { Link, useLocation } from 'react-router';
 import classes from './SystemUserOverviewPage.module.css';
 import { Badge, DsHeading, List, ListItem } from '@altinn/altinn-components';
 import { TenancyIcon } from '@navikt/aksel-icons';
+import {
+  getSystemUserAgentRequestUrl,
+  getSystemUserRequestUrl,
+} from '@/routes/paths/systemUserPath';
 
 interface SystemUserListProps {
   systemUsers: SystemUser[];
@@ -49,10 +53,10 @@ export const SystemUserList = ({
             href = `/systemuser/${systemUser.id}/agentdelegation`;
           } else if (systemUser.userType === 'standard' && isPendingRequestList) {
             badgeContent = t('systemuser_overviewpage.pending_request_badge');
-            href = `/systemuser/request?id=${systemUser.id}&skiplogout=true`;
+            href = getSystemUserRequestUrl(systemUser.id);
           } else if (systemUser.userType === 'agent' && isPendingRequestList) {
             badgeContent = t('systemuser_overviewpage.pending_agent_request_badge');
-            href = `/systemuser/agentrequest?id=${systemUser.id}&skiplogout=true`;
+            href = getSystemUserAgentRequestUrl(systemUser.id);
           }
 
           const badge = (

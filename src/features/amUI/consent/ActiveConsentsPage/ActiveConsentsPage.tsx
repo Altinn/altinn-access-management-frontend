@@ -20,6 +20,7 @@ import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { ConsentListItem } from './ConsentListItem';
 import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+import { getConsentRequestUrl } from '@/routes/paths/consentPath';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -101,9 +102,8 @@ export const ActiveConsentsPage = () => {
                       : t('active_consents.see_pending_consent'),
                   }))}
                   onClick={(consentId: string) => {
-                    navigate(
-                      `/${ConsentPath.Consent}/${ConsentPath.Request}?id=${consentId}&skiplogout=true`,
-                    );
+                    const consentRequestUrl = getConsentRequestUrl(consentId);
+                    navigate(consentRequestUrl);
                   }}
                 />
               ))}
