@@ -28,6 +28,11 @@ export interface AssignmentDto {
   toId: string;
 }
 
+export interface GetClientsArgs {
+  roles?: string[];
+  party?: string;
+}
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/clientdelegations`;
 
 export const clientApi = createApi({
@@ -42,8 +47,16 @@ export const clientApi = createApi({
   }),
   tagTypes: ['clients', 'agents'],
   endpoints: (builder) => ({
-    getClients: builder.query<Client[], void>({
-      query: () => `clients?party=${getCookie('AltinnPartyUuid')}`,
+    getClients: builder.query<Client[], GetClientsArgs | void>({
+      query: (args) => {
+        const party = args?.party ?? getCookie('AltinnPartyUuid');
+        const roles = args?.roles?.filter((role) => role?.trim());
+        const roleQuery =
+          roles && roles.length > 0
+            ? `&${roles.map((role) => `roles=${encodeURIComponent(role)}`).join('&')}`
+            : '';
+        return `clients?party=${party}${roleQuery}`;
+      },
       keepUnusedDataFor: 3,
       providesTags: ['clients'],
     }),

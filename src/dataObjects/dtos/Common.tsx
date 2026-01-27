@@ -7,6 +7,7 @@ export interface Entity {
   partyId?: number | string | null;
   organizationIdentifier?: string | null;
   dateOfBirth?: string | null;
+  isDeleted?: boolean | null;
   children?: Entity[] | null;
 }
 
