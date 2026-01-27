@@ -60,9 +60,9 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="from">The party on which the delegation would be on behalf of</param>
         /// <param name="to">The one that will receive access to the resource</param>
         /// <param name="resource">The id of the resource to be delegated</param>
-        /// <param name="rights">List of keys for the specific rights that are to be delegated on the resource</param>
+        /// <param name="actionKeys">List of keys for the specific rights/actions that are to be delegated on the resource</param>
         /// <returns> List of rightkeys, representing failed delegations </returns>
-        Task<DelegationOutput> Delegate(Guid from, Guid to, string resource, List<string> rights);
+        Task<DelegationOutput> Delegate(Guid from, Guid to, string resource, List<string> actionKeys);
 
         /// <summary>
         ///     Gets the single-rights for a given rightholder

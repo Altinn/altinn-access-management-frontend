@@ -19,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// <summary>
     ///     Mock class for <see cref="IAccessPackageClient"></see> interface
     /// </summary>
-    public class AccessPackageClientMock : IAccessPackageClient
+    public class SingleRightClientMock : ISingleRightClient
     {
         private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string dataFolder;
@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <summary>
         ///     Initializes a new instance of the <see cref="AccessManagementClientMock" /> class
         /// </summary>
-        public AccessPackageClientMock(
+        public SingleRightClientMock(
             HttpClient httpClient,
             ILogger<AccessManagementClientMock> logger,
             IHttpContextAccessor httpContextAccessor)
@@ -36,178 +36,28 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName)
+        public async Task<HttpResponseMessage> CreateSingleRightsAccess(Guid party, Guid to, Guid from, string resourceId, List<string> actionKeys)
         {
-
-            IEnumerable<SearchObject<AccessPackage>> searchResults = Util.GetMockData<IEnumerable<SearchObject<AccessPackage>>>($"{dataFolder}/AccessPackage/packages.json");
-
-            return searchString != null ? Task.FromResult(searchResults.Where(sr => sr.Object.Name.ToLower().Contains(searchString.ToLower()))) : Task.FromResult(searchResults);
-        }
-
-        /// <inheritdoc />
-        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, string languageCode)
-        {
-            Util.ThrowExceptionIfTriggerParty(from.ToString());
+            ThrowExceptionIfTriggerParty(from.ToString());
 
             try
             {
-                string dataPath = Path.Combine(dataFolder, "AccessPackage", "GetDelegations", $"{from}_{to}.json");
-                return await Task.FromResult(Util.GetMockData<PaginatedResult<PackagePermission>>(dataPath));
+                string dataPath = Path.Combine(dataFolder, "SingleRight", "CreateDelegation", $"{resource}.json");
+                return new HttpResponseMessage(); // await Task.FromResult(Util.GetMockData<DelegationOutput>(dataPath));
             }
             catch
             {
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
             }
         }
+    }
 
-        /// <inheritdoc />
-        public Task<HttpResponseMessage> CreateAccessPackageDelegation(Guid party, Guid to, Guid from, string packageId)
+    // A helper for testing handling of exceptions in client
+        private static void ThrowExceptionIfTriggerParty(string id)
         {
-            Util.ThrowExceptionIfTriggerParty(party.ToString());
-
-            if (packageId == string.Empty || packageId == null)
+            if (id == "********" || id == "00000000-0000-0000-0000-000000000000")
             {
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
-            }
-            else if (packageId == "5eb07bdc-5c3c-4c85-add3-5405b214b8a3") // Package is Renovasjon
-            {
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
-            }
-            if (packageId == "fails_with_validation_error_00002") // Validation error from backend
-            {
-                var problemDetailsJson = @"
-                {
-                    ""status"": 400,
-                    ""title"": ""One or more validation errors occurred."",
-                    ""detail"": ""The provided data is invalid."",
-                    ""instance"": ""urn:altinn:error:instance:12345"",
-                    ""validationErrors"": [
-                        {
-                            ""code"": ""AM.VLD-00002"",
-                            ""description"": ""The value for 'field' is not valid.""
-                        }
-                    ]
-                }";
-
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(problemDetailsJson)
-                });
-            }
-            if (packageId == "fails_with_validation_error_00003") // Validation error from backend
-            {
-                var problemDetailsJson = @"
-                {
-                    ""status"": 400,
-                    ""title"": ""One or more validation errors occurred."",
-                    ""detail"": ""The provided data is invalid."",
-                    ""instance"": ""urn:altinn:error:instance:12345"",
-                    ""validationErrors"": [
-                        {
-                            ""code"": ""unhandled_validation_error"",
-                            ""description"": "".""
-                        }
-                    ]
-                }";
-
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(problemDetailsJson)
-                });
-            }
-            if (packageId == "fails_with_validation_error_00028") // Validation error from backend
-            {
-                var problemDetailsJson = @"
-                {
-                    ""status"": 400,
-                    ""title"": ""One or more validation errors occurred."",
-                    ""detail"": ""The provided data is invalid."",
-                    ""instance"": ""urn:altinn:error:instance:12345"",
-                    ""validationErrors"": [
-                        {
-                            ""code"": ""AM.VLD-00028"",
-                            ""description"": ""Delegation not allowed for the selected unit type.""
-                        }
-                    ]
-                }";
-
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(problemDetailsJson)
-                });
-            }
-            else
-            {
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Created));
-            }
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string resourceId)
-        {
-            string dataPath = Path.Combine(dataFolder, "AccessPackage", "RevokeDelegation");
-
-            var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
-            if (mockResponse.IsSuccessStatusCode)
-            {
-                return new HttpResponseMessage(HttpStatusCode.NoContent);
-            }
-            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
-        }
-
-        /// <inheritdoc />
-        public async Task<PaginatedResult<DelegationCheck>> AccessPackageDelegationCheck(Guid party)
-        {
-            // Special GUID triggers backend style error for tests
-            if (party == Guid.Parse("00000000-0000-0000-0000-00000000DEAD"))
-            {
-                throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", HttpStatusCode.InternalServerError, string.Empty);
-            }
-            string dataPath = Path.Combine(dataFolder, "AccessPackage", "DelegationCheck", "DelegationCheck.json");
-            try
-            {
-                var mock = Util.GetMockData<PaginatedResult<DelegationCheck>>(dataPath);
-                return await Task.FromResult(mock);
-            }
-            catch
-            {
-                // Fallback to in-memory defaults if file not found
-                var fallback = PaginatedResult.Create(Array.Empty<DelegationCheck>(), null);
-                return await Task.FromResult(fallback);
-            }
-        }
-        
-        /// <inheritdoc />
-        public Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
-        {
-            // Trigger internal server error
-            if (packageId.Equals(new Guid("d98ac728-d127-4a4c-96e1-738f856e5332")))
-            {
-                throw new HttpStatusException(
-                    "InternalServerError",
-                    "InternalServerError",
-                    HttpStatusCode.InternalServerError,
-                    "");
-            }
-            try
-            {
-                string dataPath = Path.Combine(dataFolder, "AccessPackage", "packages.json");
-                IEnumerable<SearchObject<AccessPackage>> searchResults =
-                    Util.GetMockData<IEnumerable<SearchObject<AccessPackage>>>(dataPath);
-
-                AccessPackage result = searchResults?.FirstOrDefault(sr => sr?.Object?.Id == packageId)?.Object;
-
-                return Task.FromResult(result);
-            }
-            catch
-            {
-
-                throw new HttpStatusException(
-                    "Not found",
-                    "Not found",
-                    HttpStatusCode.NotFound,
-                    "");
+                throw new Exception();
             }
         }
     }
-}

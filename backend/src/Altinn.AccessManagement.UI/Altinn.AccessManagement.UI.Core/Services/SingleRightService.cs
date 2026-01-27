@@ -16,6 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IAccessManagementClientV0 _accessManagementClientV0;
         private readonly IResourceService _resourceService;
         private readonly IResourceRegistryClient _resourceRegistryClient;
+        private readonly ISingleRightClient _singleRightClient;
 
         private readonly JsonSerializerOptions options = new JsonSerializerOptions
         {
@@ -80,9 +81,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<DelegationOutput> Delegate(Guid from, Guid to, string resource, List<string> rights)
+        public async Task<DelegationOutput> Delegate(Guid party, Guid from, Guid to, string resource, List<string> actionKeys)
         {
-            return await _accessManagementClient.DelegateResource(from, to, resource, rights);
+            await _singleRightClient.CreateSingleRightsAccess(party, from, to, resource, actionKeys);
+            return new DelegationOutput();
         }
 
         /// <inheritdoc />

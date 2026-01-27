@@ -353,6 +353,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
         services.AddHttpClient<IAccessPackageClient, AccessPackageClient>();
     }
 
+    if (mockSettings.SingleRights)
+    {
+        services.AddHttpClient<ISingleRightClient, SingleRightClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<ISingleRightClient, SingleRightClient>();
+    }
+
     if (mockSettings.Role)
     {
         services.AddHttpClient<IRoleClient, RoleClientMock>();
