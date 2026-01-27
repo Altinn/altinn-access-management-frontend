@@ -162,7 +162,7 @@ export class AktorvalgHeader {
   }
 
   async expectActorToBeVisible(name: string) {
-    await expect(this.page.getByRole('group').locator('a')).toHaveText(name);
+    await expect(this.page.getByRole('group').locator('a').filter({ hasText: name })).toBeVisible();
   }
 
   async expectDeletedActorToBeVisible(name: string) {
