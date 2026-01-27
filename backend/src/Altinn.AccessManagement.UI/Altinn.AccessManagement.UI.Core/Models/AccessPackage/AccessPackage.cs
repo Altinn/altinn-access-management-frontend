@@ -41,11 +41,6 @@
         public AccessArea Area { get; set; }
 
         /// <summary>
-        /// The type of party the package is intended for
-        /// </summary>
-        public AccessType Type { get; set; }
-
-        /// <summary>
         /// Gets or sets the collection of resources linked to the package.
         /// </summary>
         public IEnumerable<ResourceAM> Resources { get; set; }

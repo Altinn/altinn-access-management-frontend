@@ -65,6 +65,7 @@ export const AccessPackageList = ({
     allPackageAreas,
     searchError,
     activeDelegationsError,
+    partyType,
   } = useAreaPackageList({
     showAllAreas,
     showAllPackages,
@@ -162,6 +163,7 @@ export const AccessPackageList = ({
                 toggleExpandedArea={toggleExpandedArea}
                 showPackagesCount={showPackagesCount}
                 showPermissions={showPermissions}
+                partyType={partyType}
               >
                 <AreaItemContent
                   area={area}
