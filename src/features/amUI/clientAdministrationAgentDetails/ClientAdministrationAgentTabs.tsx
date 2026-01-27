@@ -28,12 +28,12 @@ export const ClientAdministrationAgentTabs = ({
         <DsTabs.Tab value='has-clients'>
           {t('client_administration_page.agent_has_clients_tab')}
         </DsTabs.Tab>
-        <DsTabs.Tab value='can-get-clients'>
+        <DsTabs.Tab value='all-clients'>
           {t('client_administration_page.agent_can_get_clients_tab')}
         </DsTabs.Tab>
       </DsTabs.List>
       <DsTabs.Panel value='has-clients'>{hasClientsContent}</DsTabs.Panel>
-      <DsTabs.Panel value='can-get-clients'>{canGetClientsContent}</DsTabs.Panel>
+      <DsTabs.Panel value='all-clients'>{canGetClientsContent}</DsTabs.Panel>
     </DsTabs>
   );
 };
