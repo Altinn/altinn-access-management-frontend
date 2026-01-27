@@ -20,8 +20,8 @@ export const useAgentAccessClientLists = ({
 
     const clientsWithAgentAccess =
       clients?.filter((client) => agentAccessClientIds.has(client.client.id)) ?? [];
-    const clientsWithoutAgentAccess = clients ?? [];
+    const allClients = clients ?? [];
 
-    return { clientsWithAgentAccess, clientsWithoutAgentAccess };
+    return { clientsWithAgentAccess, allClients };
   }, [agentAccessPackages, clients]);
 };

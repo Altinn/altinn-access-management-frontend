@@ -50,7 +50,7 @@ export const ClientAdministrationAgentDetails = () => {
   const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
     useRemoveAgentAccessPackagesMutation();
 
-  const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentAccessClientLists({
+  const { clientsWithAgentAccess, allClients } = useAgentAccessClientLists({
     agentAccessPackages,
     clients,
   });
@@ -154,9 +154,9 @@ export const ClientAdministrationAgentDetails = () => {
             )
           }
           canGetClientsContent={
-            clientsWithoutAgentAccess.length > 0 ? (
+            allClients.length > 0 ? (
               <ClientAdministrationAgentClientsList
-                clients={clientsWithoutAgentAccess}
+                clients={allClients}
                 agentAccessPackages={agentAccessPackages ?? []}
                 toPartyUuid={toPartyUuid}
                 actingPartyUuid={actingPartyUuid}

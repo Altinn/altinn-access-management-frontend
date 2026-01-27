@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  AccessPackageListItemProps,
   Button,
-  DsParagraph,
   formatDisplayName,
   type UserListItemProps,
+  type Color,
 } from '@altinn/altinn-components';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type {
   AddAgentAccessPackagesFn,
@@ -17,11 +17,10 @@ import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
 
-import { AccessPackageListItems, type AccessPackageListItemData } from './AccessPackageListItems';
 import { useAgentAccessPackageActions } from './useAgentAccessPackageActions';
 import { UserListItems, type UserListItemData } from './UserListItems';
-
-type ClientAccessItem = Client['access'][number];
+import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { AccessPackageListItems } from './AccessPackageListItems';
 
 type ClientAdministrationAgentClientsListProps = {
   clients: Client[];
@@ -64,58 +63,34 @@ export const ClientAdministrationAgentClientsList = ({
     removeAgentAccessPackages,
   });
 
-  const delegatedPackagesByClientRole = useMemo(() => {
-    const map = new Map<string, Set<string>>();
-    agentAccessPackages.forEach((client) => {
-      client.access.forEach((access) => {
-        const key = `${client.client.id}-${access.role.code}`;
-        const existing = map.get(key) ?? new Set<string>();
-        access.packages.forEach((pkg) => {
-          if (pkg.id) {
-            existing.add(pkg.id);
-          }
-          if (pkg.urn) {
-            existing.add(pkg.urn);
-          }
-        });
-        map.set(key, existing);
-      });
-    });
-    return map;
-  }, [agentAccessPackages]);
-
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
 
-  const buildAccessPackageItems = (
-    clientId: string,
-    clientName: string,
-    access: ClientAccessItem,
-  ): {
-    items: AccessPackageListItemData[];
-    delegableCount: number;
-    delegatedCount: number;
-  } => {
-    const delegatedKey = `${clientId}-${access.role.code}`;
-    const delegatedPackageIds = delegatedPackagesByClientRole.get(delegatedKey);
-    const items = access.packages
-      .map((pkg) => {
-        const packageId = pkg.urn ?? pkg.id;
-        if (!packageId) {
-          return null;
-        }
+  const userListItems: UserListItemData[] = sortedClients.map((client) => {
+    const clientId = client.client.id;
+    const isSubUnit = isSubUnitByType(client.client.variant);
+    const userType = getUserListItemType(client.client.type);
+
+    const nodes = client.access.reduce((acc, access) => {
+      if (access.packages.length === 0) return acc;
+
+      const packages = access.packages?.map((pkg) => {
+        const hasAccess = agentAccessPackages.some((aap) => {
+          return (
+            aap.client.id === clientId &&
+            aap.access.some((p) => p.packages.some((ap) => ap.id === pkg.id))
+          );
+        });
         const accessPackage = getAccessPackageById(pkg.id);
-        const accessPackageName = accessPackage?.name ?? pkg.name;
-        const isDelegated =
-          delegatedPackageIds?.has(packageId) ||
-          delegatedPackageIds?.has(pkg.id) ||
-          (pkg.urn ? delegatedPackageIds?.has(pkg.urn) : false);
         return {
-          id: accessPackage?.id ?? pkg.id,
-          size: 'sm' as const,
-          name: accessPackageName,
-          color: isDelegated ? 'company' : undefined,
-          controls: isDelegated ? (
+          id: pkg.id,
+          name: accessPackage?.name || t('client_administration_page.unknown_access_package'),
+          type: client.client.type.toLowerCase() === 'organisasjon' ? 'company' : 'person',
+          isSubUnit,
+          interactive: false,
+          as: 'div',
+          color: (hasAccess ? 'company' : 'neutral') as Color,
+          controls: hasAccess ? (
             <Button
               variant='tertiary'
               disabled={removeDisabled}
@@ -123,9 +98,9 @@ export const ClientAdministrationAgentClientsList = ({
                 removeAgentAccessPackage(
                   clientId,
                   access.role.code,
-                  packageId,
-                  clientName,
-                  accessPackageName,
+                  pkg.urn ?? '',
+                  client.client.name,
+                  accessPackage?.name || t('client_administration_page.unknown_access_package'),
                 );
               }}
             >
@@ -140,9 +115,9 @@ export const ClientAdministrationAgentClientsList = ({
                 addAgentAccessPackage(
                   clientId,
                   access.role.code,
-                  packageId,
-                  clientName,
-                  accessPackageName,
+                  pkg.urn ?? '',
+                  client.client.name,
+                  accessPackage?.name || t('client_administration_page.unknown_access_package'),
                 );
               }}
             >
@@ -150,68 +125,16 @@ export const ClientAdministrationAgentClientsList = ({
               {t('client_administration_page.delegate_package_button')}
             </Button>
           ),
-        } as AccessPackageListItemData;
-      })
-      .filter((item): item is AccessPackageListItemData => item !== null);
-    const delegableCount = items.length;
-    const delegatedCount = items.filter((item) => item.color === 'company').length;
-    return { items, delegableCount, delegatedCount };
-  };
+        };
+      });
 
-  const renderAccessContent = (client: Client) => {
-    const result = client.access.reduce<{
-      nodes: React.ReactNode[];
-      totalDelegable: number;
-      totalDelegated: number;
-    }>(
-      (acc, access) => {
-        if (!access.packages || access.packages.length === 0) {
-          return acc;
-        }
+      if (packages) {
+        acc.push(...packages.filter((p) => p !== undefined));
+      }
 
-        const clientName = formatDisplayName({
-          fullName: client.client.name,
-          type: getUserListItemType(client.client.type),
-        });
-        const { items, delegableCount, delegatedCount } = buildAccessPackageItems(
-          client.client.id,
-          clientName,
-          access,
-        );
-        acc.totalDelegable += delegableCount;
-        acc.totalDelegated += delegatedCount;
+      return acc;
+    }, [] as AccessPackageListItemProps[]);
 
-        if (items.length > 0) {
-          acc.nodes.push(
-            <React.Fragment key={`${client.client.id}-${access.role.id}`}>
-              <AccessPackageListItems items={items} />
-            </React.Fragment>,
-          );
-        }
-        return acc;
-      },
-      { nodes: [], totalDelegable: 0, totalDelegated: 0 },
-    );
-
-    if (result.nodes.length === 0) {
-      return {
-        nodes: (
-          <DsParagraph data-size='sm'>{t('client_administration_page.no_delegations')}</DsParagraph>
-        ),
-        totalDelegable: result.totalDelegable,
-        totalDelegated: result.totalDelegated,
-      };
-    }
-
-    return result;
-  };
-
-  const userListItems: UserListItemData[] = sortedClients.map((client) => {
-    const clientId = client.client.id;
-    const isSubUnit = isSubUnitByType(client.client.variant);
-    const userType = getUserListItemType(client.client.type);
-    const { nodes, totalDelegable, totalDelegated } = renderAccessContent(client);
-    const tagText = totalDelegable > 0 ? `${totalDelegated} av ${totalDelegable}` : undefined;
     return {
       id: clientId,
       name: formatDisplayName({
@@ -222,8 +145,7 @@ export const ClientAdministrationAgentClientsList = ({
       subUnit: isSubUnit,
       collapsible: true,
       as: Button,
-      children: nodes,
-      roleNames: tagText ? [tagText] : undefined,
+      children: <AccessPackageListItems items={nodes} />,
       description: t('client_administration_page.organization_identifier', {
         organizationIdentifier: client.client.organizationIdentifier,
       }),
