@@ -1,8 +1,8 @@
 export interface Request {
   id: string;
-  type: 'consent' | 'systemuser' | 'accessrequest';
+  type: 'consent' | 'systemuser' | 'agentsystemuser' | 'accessrequest';
   createdDate: string;
   fromPartyName: string;
-  fromPartyType: 'person' | 'company';
+  fromPartyType: 'person' | 'company' | 'system';
   description: string;
 }

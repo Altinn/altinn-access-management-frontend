@@ -302,11 +302,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
 
             string path = Path.Combine(_expectedDataPath, "SystemUser", "pendingSystemusers.json");
-            List<SystemUserRequestFE> expectedResponse = Util.GetMockData<List<SystemUserRequestFE>>(path);
+            List<SystemUserFE> expectedResponse = Util.GetMockData<List<SystemUserFE>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyUuid}/pending");
-            List<SystemUserRequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SystemUserRequestFE>>();
+            List<SystemUserFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SystemUserFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);

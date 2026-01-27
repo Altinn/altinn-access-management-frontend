@@ -94,6 +94,15 @@ export const RequestPage = () => {
             </DsTabs.Tab>
           </DsTabs.List>
           <DsTabs.Panel value={INCOMING_REQUESTS_TAB}>
+            {isError && (
+              <div className={classes.errorWrapper}>
+                <DsAlert data-color='danger'>
+                  {totalRequests > 0
+                    ? t('request_page.error_partial_loading_requests')
+                    : t('request_page.error_loading_requests')}
+                </DsAlert>
+              </div>
+            )}
             <List>
               {isLoadingRequests ? (
                 <>
@@ -105,13 +114,10 @@ export const RequestPage = () => {
               ) : (
                 <PendingRequests pendingRequests={pendingRequests} />
               )}
-              {!isLoadingRequests && totalRequests === 0 && (
+              {!isError && !isLoadingRequests && totalRequests === 0 && (
                 <div>{t('request_page.no_received_requests')}</div>
               )}
             </List>
-            {isError && (
-              <DsAlert data-color='danger'>{t('request_page.error_loading_requests')}</DsAlert>
-            )}
           </DsTabs.Panel>
           <DsTabs.Panel value={SENT_REQUESTS_TAB}>
             <div>{t('request_page.no_sent_requests')}</div>
@@ -131,6 +137,14 @@ const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
   return (
     <>
       {pendingRequests?.map((request) => {
+        let toUrl = '';
+        if (request.type === 'consent') {
+          toUrl = `/consent/request?id=${request.id}`;
+        } else if (request.type === 'systemuser') {
+          toUrl = `/systemuser/request?id=${request.id}`;
+        } else if (request.type === 'agentsystemuser') {
+          toUrl = `/systemuser/agentrequest?id=${request.id}`;
+        }
         return (
           <UserListItem
             key={request.id}
@@ -141,8 +155,8 @@ const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
             description={`${t(request.description)} (${formatDateToNorwegian(request.createdDate)})`}
             as={(props) => (
               <Link
-                to={`/consent/request?id=${request.id}`}
                 {...props}
+                to={toUrl}
               />
             )}
             controls={t('request_page.process_request')}
