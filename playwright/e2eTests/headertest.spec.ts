@@ -3,7 +3,9 @@ import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from './../fixture/pomFixture';
 
 test.describe('Aktørvalg, valg og visning av avgiver', () => {
+  const ENV = env('environment')?.toUpperCase();
   test('Sjekk at slettede enheter kan vises/skjules', async ({ page, aktorvalgHeader }) => {
+    test.skip(ENV == 'TT02', 'The "Show Deleted" button is currently feature toggled off in TT02');
     const login = new LoginPage(page);
     await test.step('Log in', async () => {
       await page.goto(env('BASE_URL'));
