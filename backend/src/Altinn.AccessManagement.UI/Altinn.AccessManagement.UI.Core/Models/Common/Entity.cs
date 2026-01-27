@@ -108,5 +108,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common
         /// Date of birth for persons.
         /// </summary>
         public string DateOfBirth { get; set; }
+
+        /// <summary>
+        /// Indicates if the entity is deleted.
+        /// </summary>
+        public bool IsDeleted { get; set; }
     }
 }
