@@ -8,3 +8,11 @@ export enum SystemUserPath {
   ChangeRequest = 'changerequest',
   AgentRequest = 'agentrequest',
 }
+
+export const getSystemUserRequestUrl = (requestId: string) => {
+  return `/${SystemUserPath.SystemUser}/${SystemUserPath.Request}?id=${requestId}&skiplogout=true`;
+};
+
+export const getSystemUserAgentRequestUrl = (requestId: string) => {
+  return `/${SystemUserPath.SystemUser}/${SystemUserPath.AgentRequest}?id=${requestId}&skiplogout=true`;
+};
