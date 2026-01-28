@@ -345,6 +345,10 @@
       "via_keyrole": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}."
     }
   },
+  "user_roles": {
+    "has_client_access": "Har klienttilgang",
+    "has_client_access_description": "Denne brukeren har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at de har tilgang til virksomhetens eget innhold, men at de kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter de har tilgang til kan administreres under <a>klientadministrasjon</a>."
+  },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
     "main_page_heading": "Brukere med fullmakter i {{name}}",

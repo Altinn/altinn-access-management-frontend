@@ -1,4 +1,5 @@
 import { DsChip } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
 
 import cn from 'classnames';
 
@@ -9,11 +10,13 @@ import { useRef, useState } from 'react';
 import { RoleInfoModal } from '../DelegationModal/RoleInfoModal';
 import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries';
 import { useRoleMetadata } from './useRoleMetadata';
-import { RoleInfo } from '@/rtk/features/connectionApi';
+import { ClientAccessInfoModal } from './ClientAccessInfoModal';
 
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+  const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [isClientAccessModalOpen, setIsClientAccessModalOpen] = useState(false);
 
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
 
@@ -28,7 +31,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     },
   );
 
-  const { userRoles } = useGroupedRoleListEntries({
+  const { userRoles, altinn3Roles } = useGroupedRoleListEntries({
     permissions,
   });
 
@@ -50,6 +53,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
   };
 
   const roles = mapRoles(userRoles?.map(({ role }) => role) ?? []);
+  const isAgent = altinn3Roles.some((rolePermission) => rolePermission.role.code === 'agent');
 
   return (
     <>
@@ -57,6 +61,11 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
         className={cn(classes.userRoles, className)}
         {...props}
       >
+        {isAgent && (
+          <DsChip.Button onClick={() => setIsClientAccessModalOpen(true)}>
+            {t('user_roles.has_client_access')}
+          </DsChip.Button>
+        )}
         {roles.map((role) => {
           return (
             <DsChip.Button
@@ -73,6 +82,12 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
         role={selectedRole || undefined}
         onClose={onModalClose}
       />
+      {isAgent && (
+        <ClientAccessInfoModal
+          open={isClientAccessModalOpen}
+          onClose={() => setIsClientAccessModalOpen(false)}
+        />
+      )}
     </>
   );
 };
