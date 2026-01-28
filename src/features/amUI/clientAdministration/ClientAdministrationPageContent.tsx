@@ -16,15 +16,9 @@ export const ClientAdministrationPageContent = () => {
   const activeTab = params.get('tab') === 'clients' ? 'clients' : 'users';
 
   const handleTabChange = (value: string) => {
-    setParams(
-      (prev) => {
-        const next = new URLSearchParams(prev);
-        next.set('tab', value);
-        return next;
-      },
-      { replace: false },
-    );
+    setParams({ tab: value }, { replace: true });
   };
+
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
 
   if (!pageIsEnabled) {
