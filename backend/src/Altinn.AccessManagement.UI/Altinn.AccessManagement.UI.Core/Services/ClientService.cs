@@ -24,9 +24,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default)
+        public async Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
         {
-            return await _clientDelegationClient.GetClients(party, cancellationToken);
+            return await _clientDelegationClient.GetClients(party, roles, cancellationToken);
         }
 
         /// <inheritdoc />

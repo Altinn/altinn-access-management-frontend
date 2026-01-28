@@ -50,6 +50,16 @@ export const useRoleMetadata = () => {
     [roleMetadataMap],
   );
 
+  const getRoleByCode = useCallback(
+    (roleCode?: string | null) => {
+      if (!roleCode || !allRoles) {
+        return undefined;
+      }
+      return allRoles.find((role) => role.code === roleCode);
+    },
+    [allRoles],
+  );
+
   const mapRoles = useCallback(
     (roles?: (Role | RoleInfo)[]) => {
       if (isLoading || isError) {
@@ -68,5 +78,5 @@ export const useRoleMetadata = () => {
     [getRoleMetadata, isError, isLoading],
   );
 
-  return { getRoleMetadata, mapRoles, isLoading, isError, error };
+  return { getRoleMetadata, getRoleByCode, mapRoles, isLoading, isError, error };
 };

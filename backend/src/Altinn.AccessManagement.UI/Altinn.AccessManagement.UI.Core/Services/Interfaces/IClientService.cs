@@ -15,9 +15,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Gets the clients for the specified party.
         /// </summary>
         /// <param name="party">The party uuid to query for.</param>
+        /// <param name="roles">Optional list of role identifiers to filter by.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A list of clients.</returns>
-        Task<List<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default);
+        Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the agents for the specified party.
