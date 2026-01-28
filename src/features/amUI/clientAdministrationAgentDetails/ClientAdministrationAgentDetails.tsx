@@ -54,7 +54,7 @@ export const ClientAdministrationAgentDetails = () => {
     agentAccessPackages,
     clients,
   });
-  const backUrl = `/${amUIPath.ClientAdministration}`;
+  const backUrl = `/${amUIPath.ClientAdministration}?tab=users`;
   const userName = formatDisplayName({
     fullName: toParty?.name || '',
     type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
