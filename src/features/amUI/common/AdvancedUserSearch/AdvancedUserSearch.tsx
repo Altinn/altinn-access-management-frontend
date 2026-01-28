@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { DsSearch, DsParagraph, formatDisplayName, Toolbar } from '@altinn/altinn-components';
+import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { ExtendedUser, PartyType, User } from '@/rtk/features/userInfoApi';
@@ -31,6 +31,7 @@ export interface AdvancedUserSearchProps {
   addUserButtonLabel?: string;
   directConnectionsHeading?: string;
   indirectConnectionsHeading?: string;
+  additionalFilters?: React.ReactNode;
 }
 
 const filterAvailableUserTypes = (items?: Connection[]) =>
@@ -58,6 +59,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   addUserButtonLabel,
   directConnectionsHeading,
   indirectConnectionsHeading,
+  additionalFilters,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
@@ -106,19 +108,16 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   return (
     <div className={classes.container}>
       <div className={classes.controls}>
-        <Toolbar>
-          <DsSearch className={classes.searchBar}>
-            <DsSearch.Input
-              aria-label={t('common.search')}
-              placeholder={searchPlaceholder ?? t('advanced_user_search.user_search_placeholder')}
-              value={query}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                setQuery(event.target.value)
-              }
-            />
-            {query && <DsSearch.Clear onClick={() => setQuery('')} />}
-          </DsSearch>
-        </Toolbar>
+        <DsSearch className={classes.searchBar}>
+          <DsSearch.Input
+            aria-label={t('common.search')}
+            placeholder={searchPlaceholder ?? t('advanced_user_search.user_search_placeholder')}
+            value={query}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)}
+          />
+          {query && <DsSearch.Clear onClick={() => setQuery('')} />}
+        </DsSearch>
+        {additionalFilters}
         {canDelegate && AddUserButton && (
           <div className={classes.buttonRow}>
             <AddUserButton onComplete={handleAddNewUser} />

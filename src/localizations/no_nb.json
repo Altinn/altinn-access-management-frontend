@@ -572,7 +572,11 @@
     "clients_filter_label": "Vis klienter fra",
     "clients_filter_register": "Fra enhetsregisteret",
     "clients_filter_other": "Andre",
-    "clients_show_deleted": "Vis slettede"
+    "clients_show_deleted": "Vis slettede",
+    "show_deleted_clients": "Vis slettede",
+    "ecc_role": "Roller fra enhetsregisteret",
+    "altinn_role": "Altinn-roller",
+    "rettighetshaver": "Andre klientforhold"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
