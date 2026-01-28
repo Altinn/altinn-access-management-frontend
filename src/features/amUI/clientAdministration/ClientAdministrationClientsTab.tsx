@@ -7,7 +7,7 @@ import { type Client, useGetClientsQuery } from '@/rtk/features/clientApi';
 import { type Connection } from '@/rtk/features/connectionApi';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
 import { SelectRoleFilter } from './SelectRoleFilter';
-import classes from './ClientAdministrationClientsTab.module.css';
+import classes from './ClientAdministrationAgentsTab.module.css';
 
 const buildClientConnections = (clients?: Client[]): Connection[] => {
   if (!clients?.length) return [];

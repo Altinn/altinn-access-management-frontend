@@ -583,7 +583,7 @@
     "indirect_connections_heading": "Other users",
     "organization_identifier": "Org.nr. {{orgnr}}",
     "no_clients": "The organization has no registered clients",
-    "clients_filter_label": "Show clients from",
+    "clients_filter_label": "Client relationships",
     "clients_filter_register": "From the Central Coordinating Register",
     "clients_filter_other": "Other",
     "clients_show_deleted": "Show deleted",

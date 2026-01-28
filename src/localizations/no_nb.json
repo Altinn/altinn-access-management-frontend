@@ -580,7 +580,7 @@
     "indirect_connections_heading": "Andre brukere",
     "organization_identifier": "Org.nr. {{orgnr}}",
     "no_clients": "Organisasjonen har ingen klienter",
-    "clients_filter_label": "Vis klienter fra",
+    "clients_filter_label": "Klientforhold",
     "clients_filter_register": "Fra Enhetsregisteret",
     "clients_filter_other": "Andre",
     "clients_show_deleted": "Vis slettede",
