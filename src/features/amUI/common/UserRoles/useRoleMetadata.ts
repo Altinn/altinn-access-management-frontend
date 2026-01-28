@@ -8,6 +8,7 @@ type RoleMetadataMap = Record<string, Role | undefined>;
 
 export const ECC_PROVIDER_CODE = 'sys-ccr';
 export const A2_PROVIDER_CODE = 'sys-altinn2';
+export const A3_PROVIDER_CODE = 'sys-altinn3';
 
 /**
  * Fetches all role metadata once and provides helpers to look up and map metadata by role id.
