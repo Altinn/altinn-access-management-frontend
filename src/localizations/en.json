@@ -576,7 +576,7 @@
     "remove_package_button": "Remove power of attorney",
     "remove_package_success_snackbar": "{{name}} no longer has power of attorney for {{accessPackage}}.",
     "remove_package_error": "Could not remove {{name}} power of attorney for {{accessPackage}}.",
-    "via_role": "Access through enhetsregisteret",
+    "via_role": "Access through Central Coordinating Register",
     "agent_has_clients_tab": "Has these clients",
     "agent_can_get_clients_tab": "All clients",
     "direct_connections_heading": "Users with client access",
