@@ -63,6 +63,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     endpointUrl = $"{endpointUrl}&{roleQuery}";
                 }
             }
+            
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
