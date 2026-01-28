@@ -20,15 +20,15 @@ export const SelectRoleFilter = ({ roleFilter, setRoleFilter }: SelectRoleFilter
   const optionsList = useMemo<Record<string, MenuOptionProps>>(
     () => ({
       revisor: {
-        label: getRoleByCode('revisor')?.name ?? '',
+        label: getRoleByCode('revisor')?.name ?? 'revisor',
         value: 'revisor',
       },
       regnskapsforer: {
-        label: getRoleByCode('regnskapsforer')?.name ?? '',
+        label: getRoleByCode('regnskapsforer')?.name ?? 'regnskapsforer',
         value: 'regnskapsforer',
       },
       forretningsforer: {
-        label: getRoleByCode('forretningsforer')?.name ?? '',
+        label: getRoleByCode('forretningsforer')?.name ?? 'forretningsforer',
         value: 'forretningsforer',
       },
       rettighetshaver: {
