@@ -5,6 +5,7 @@ import {
   Button,
   type UserListItemProps,
   type Color,
+  formatDate,
 } from '@altinn/altinn-components';
 
 import type {
@@ -149,9 +150,14 @@ export const ClientAdministrationAgentClientsList = ({
       collapsible: true,
       as: Button,
       children: <AccessPackageListItems items={nodes} />,
-      description: t('client_administration_page.organization_identifier', {
-        orgnr: client.client.organizationIdentifier,
-      }),
+      description:
+        userType === 'company'
+          ? t('client_administration_page.organization_identifier', {
+              orgnr: client.client.organizationIdentifier,
+            })
+          : userType === 'person'
+            ? `${t('common.date_of_birth')} ${formatDate(client.client.dateOfBirth ?? '')}`
+            : undefined,
     };
   });
 
