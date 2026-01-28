@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate } from 'react-router';
+import { Navigate, useSearchParams } from 'react-router';
 import { DsAlert, DsHeading, DsParagraph, DsSkeleton, DsTabs } from '@altinn/altinn-components';
 
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
@@ -11,7 +11,20 @@ import { ClientAdministrationClientsTab } from './ClientAdministrationClientsTab
 export const ClientAdministrationPageContent = () => {
   const { t } = useTranslation();
   const pageIsEnabled = clientAdministrationPageEnabled();
-  const [activeTab, setActiveTab] = useState('users');
+
+  const [params, setParams] = useSearchParams();
+  const activeTab = params.get('tab') === 'clients' ? 'clients' : 'users';
+
+  const handleTabChange = (value: string) => {
+    setParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.set('tab', value);
+        return next;
+      },
+      { replace: false },
+    );
+  };
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
 
   if (!pageIsEnabled) {
@@ -52,7 +65,7 @@ export const ClientAdministrationPageContent = () => {
         defaultValue='users'
         data-size='sm'
         value={activeTab}
-        onChange={setActiveTab}
+        onChange={handleTabChange}
       >
         <DsTabs.List>
           <DsTabs.Tab value='users'>{t('client_administration_page.agents_tab_title')}</DsTabs.Tab>
