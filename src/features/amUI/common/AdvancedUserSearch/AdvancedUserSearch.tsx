@@ -108,16 +108,20 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   return (
     <div className={classes.container}>
       <div className={classes.controls}>
-        <DsSearch className={classes.searchBar}>
-          <DsSearch.Input
-            aria-label={t('common.search')}
-            placeholder={searchPlaceholder ?? t('advanced_user_search.user_search_placeholder')}
-            value={query}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)}
-          />
-          {query && <DsSearch.Clear onClick={() => setQuery('')} />}
-        </DsSearch>
-        {additionalFilters}
+        <div className={classes.searchAndFilters}>
+          <DsSearch className={classes.searchBar}>
+            <DsSearch.Input
+              aria-label={t('common.search')}
+              placeholder={searchPlaceholder ?? t('advanced_user_search.user_search_placeholder')}
+              value={query}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                setQuery(event.target.value)
+              }
+            />
+            {query && <DsSearch.Clear onClick={() => setQuery('')} />}
+          </DsSearch>
+          {additionalFilters}
+        </div>
         {canDelegate && AddUserButton && (
           <div className={classes.buttonRow}>
             <AddUserButton onComplete={handleAddNewUser} />

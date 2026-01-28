@@ -11,6 +11,13 @@
 .controls {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3);
+}
+
+.searchAndFilters {
+  display: flex;
+  align-items: center;
   justify-content: flex-start;
   gap: var(--ds-spacing-3);
 }
