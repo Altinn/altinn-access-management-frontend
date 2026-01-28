@@ -5,31 +5,14 @@ import { DsAlert, DsParagraph, Switch } from '@altinn/altinn-components';
 import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
 import { type Client, useGetClientsQuery } from '@/rtk/features/clientApi';
 import { type Connection } from '@/rtk/features/connectionApi';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
 import { SelectRoleFilter } from './SelectRoleFilter';
-import classes from './ClientAdministrationAgentsTab.module.css';
-
-const buildClientSortKey = (client: Client, parentNameById: Map<string, string>): string => {
-  const parentId = client.client.parent?.id;
-  const isSubUnit = Boolean(parentId) && isSubUnitByType(client.client.variant);
-  const parentName =
-    (parentId ? parentNameById.get(parentId) : undefined) ??
-    client.client.parent?.name ??
-    client.client.name;
-  const groupName = isSubUnit ? parentName : client.client.name;
-  const groupId = isSubUnit && parentId ? parentId : client.client.id;
-  return `${groupName}|${groupId}|${isSubUnit ? '1' : '0'}|${client.client.name}`;
-};
+import classes from './ClientAdministrationClientsTab.module.css';
 
 const buildClientConnections = (clients?: Client[]): Connection[] => {
   if (!clients?.length) return [];
 
-  const parentNameById = new Map<string, string>();
-  clients.forEach((client) => {
-    if (client.client?.id) {
-      parentNameById.set(client.client.id, client.client.name);
-    }
-  });
+  const parentNameById = buildClientParentNameById(clients);
 
   return clients.map((client) => {
     const sortKey = buildClientSortKey(client, parentNameById);
