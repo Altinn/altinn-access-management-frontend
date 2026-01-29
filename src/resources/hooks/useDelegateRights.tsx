@@ -9,18 +9,22 @@ export const useDelegateRights = () => {
   const delegateRights = (
     rights: ChipRight[],
     toPartyUuid: string,
-    resource: ServiceResource,
+    fromPartyUuid: string,
+    actingPartyUuid: string,
+    resourceId: string,
     onSuccess?: (response: DelegationResult) => void,
     onError?: (status: string | number) => void,
   ) => {
     delegate({
+      partyUuid: actingPartyUuid,
+      fromUuid: fromPartyUuid,
       toUuid: toPartyUuid,
-      resourceId: resource.identifier,
-      rightKeys: rights.map((r) => r.rightKey),
+      resourceId: resourceId,
+      actionKeys: rights.map((r) => r.rightKey),
     })
       .unwrap()
       .then((response) => {
-        onSuccess?.(response);
+        if (response) onSuccess?.(response);
       })
       .catch((status) => {
         onError?.(status);

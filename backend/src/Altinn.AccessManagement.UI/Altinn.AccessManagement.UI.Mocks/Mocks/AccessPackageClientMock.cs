@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             try
             {
-                string dataPath = Path.Combine(dataFolder, "SingleRight", "CreateDelegation", $"{resource}.json");
+                string dataPath = Path.Combine(dataFolder, "SingleRight", "CreateDelegation", $"{resourceId}.json");
                 return new HttpResponseMessage(); // await Task.FromResult(Util.GetMockData<DelegationOutput>(dataPath));
             }
             catch
@@ -50,9 +50,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
             }
         }
-    }
 
-    // A helper for testing handling of exceptions in client
+        // A helper for testing handling of exceptions in client
         private static void ThrowExceptionIfTriggerParty(string id)
         {
             if (id == "********" || id == "00000000-0000-0000-0000-000000000000")
@@ -61,3 +60,4 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
     }
+}

@@ -182,21 +182,22 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         ///     Endpoint for delegating a given set of rights on a resource
         /// </summary>
-        /// <param name="from">The party from which the resource would be delegated</param>
+        /// <param name="from">The party from which the resource will be delegated (The owner of the delegated content)</param>
         /// <param name="to">To whom the resource will be delegted</param>
-        /// <param name="resource">The id of the resource which will be delegated</param>
-        /// <param name="rightKeys">The identifiers of the rights that are to be delegated</param>
+        /// <param name="party">The party that is performing the delegation</param>
+        /// <param name="resourceId">The id of the resource which will be delegated</param>
+        /// <param name="actionKeys">The identifiers of the rights/actions that are to be delegated</param>
         /// <response code="200">OK</response>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("{from}/{to}/delegate/{resource}")]
-        public async Task<ActionResult<DelegationOutput>> DelegateResource([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] string resource, [FromBody] List<string> rightKeys)
+        [Route("delegate")]
+        public async Task<ActionResult<DelegationOutput>> DelegateResource([FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] Guid party, [FromQuery] string resourceId, [FromBody] List<string> actionKeys)
         {
             try
             {
-                DelegationOutput result = await _singleRightService.Delegate(from, to, resource, rightKeys);
+                DelegationOutput result = await _singleRightService.Delegate(party, from, to, resourceId, actionKeys);
                 return Ok(result);
             }
             catch (HttpStatusException statusEx)
@@ -206,7 +207,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected exception occurred while retrieving single rights for right holder: {Message}", ex.Message);
+                _logger.LogError(ex, "Unexpected exception occurred while adding single rights for right holder: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

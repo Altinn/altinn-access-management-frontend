@@ -106,12 +106,18 @@ export const singleRightsApi = createApi({
     }),
     delegateRights: builder.mutation<
       DelegationResult,
-      { toUuid: string; resourceId: string; rightKeys: string[] }
+      {
+        partyUuid: string;
+        fromUuid: string;
+        toUuid: string;
+        resourceId: string;
+        actionKeys: string[];
+      }
     >({
-      query: ({ toUuid, resourceId, rightKeys }) => ({
-        url: `singleright/${getCookie('AltinnPartyUuid')}/${toUuid}/delegate/${resourceId}`,
+      query: ({ partyUuid, fromUuid, toUuid, resourceId, actionKeys }) => ({
+        url: `singleright/delegate?party=${partyUuid}&from=${fromUuid}&to=${toUuid}&resourceId=${resourceId}`,
         method: 'POST',
-        body: JSON.stringify(rightKeys),
+        body: JSON.stringify(actionKeys),
       }),
       transformErrorResponse: (response: { status: string | number }) => {
         return response.status;

@@ -43,7 +43,7 @@ export const useRightsSection = ({
   /// Hooks and data fetching
 
   const { openSnackbar } = useSnackbar();
-  const { toParty, fromParty } = usePartyRepresentation();
+  const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const { data: delegatedResources, isFetching } = useGetSingleRightsForRightholderQuery(
     {
       party: getCookie('AltinnPartyId'),
@@ -174,11 +174,15 @@ export const useRightsSection = ({
 
   const delegateChosenRights = () => {
     const rightsToDelegate = rights.filter((right: ChipRight) => right.checked);
+    console.log('Delegating rights:', rightsToDelegate);
+    console.log('resource:', resource.identifier);
 
     delegateRights(
       rightsToDelegate,
       toParty?.partyUuid ?? '',
-      resource,
+      fromParty?.partyUuid ?? '',
+      actingParty?.partyUuid ?? '',
+      resource.identifier,
       (response: DelegationResult) => {
         setDelegationError(null);
 

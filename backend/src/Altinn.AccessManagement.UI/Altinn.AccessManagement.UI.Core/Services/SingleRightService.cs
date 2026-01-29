@@ -30,12 +30,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="accessManagementClientV0">The old access management client, used to access the old am endpoints.</param>
         /// <param name="resourceService">The resource service.</param>
         /// <param name="resourceRegistryClient">The resource registry client.</param>
-        public SingleRightService(IAccessManagementClient accessManagementClient, IAccessManagementClientV0 accessManagementClientV0, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient)
+        /// <param name="singleRightClient">The single rights client.</param>
+        public SingleRightService(IAccessManagementClient accessManagementClient, IAccessManagementClientV0 accessManagementClientV0, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient)
         {
             _accessManagementClient = accessManagementClient;
             _accessManagementClientV0 = accessManagementClientV0;
             _resourceService = resourceService;
             _resourceRegistryClient = resourceRegistryClient;
+            _singleRightClient = singleRightClient;
         }
 
         /// <inheritdoc />
@@ -83,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<DelegationOutput> Delegate(Guid party, Guid from, Guid to, string resource, List<string> actionKeys)
         {
-            await _singleRightClient.CreateSingleRightsAccess(party, from, to, resource, actionKeys);
+            await _singleRightClient.CreateSingleRightsAccess(party, to, from, resource, actionKeys);
             return new DelegationOutput();
         }
 
