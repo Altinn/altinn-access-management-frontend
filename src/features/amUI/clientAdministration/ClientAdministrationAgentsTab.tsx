@@ -8,10 +8,12 @@ import { useAddAgentMutation, useGetAgentsQuery, type Agent } from '@/rtk/featur
 import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import classes from './ClientAdministrationAgentsTab.module.css';
+import { useNavigate } from 'react-router';
 
 export const ClientAdministrationAgentsTab = () => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
+  const navigate = useNavigate();
   const { fromParty } = usePartyRepresentation();
   const {
     data: agents,
@@ -92,6 +94,7 @@ export const ClientAdministrationAgentsTab = () => {
         connections={agentConnections}
         indirectConnections={filteredIndirectConnections}
         getUserLink={(user) => `/clientadministration/agent/${user.id}`}
+        onAddNewUser={(user) => navigate(`/clientadministration/agent/${user.id}`)}
         isLoading={isAgentsLoading || isIndirectLoading}
         isActionLoading={isIndirectFetching}
         AddUserButton={AddAgentButton}
