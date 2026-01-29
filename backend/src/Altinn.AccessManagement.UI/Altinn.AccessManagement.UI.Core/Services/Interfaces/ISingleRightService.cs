@@ -62,8 +62,8 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="to">The one that will receive access to the resource</param>
         /// <param name="resource">The id of the resource to be delegated</param>
         /// <param name="actionKeys">List of keys for the specific rights/actions that are to be delegated on the resource</param>
-        /// <returns> List of rightkeys, representing failed delegations </returns>
-        Task<DelegationOutput> Delegate(Guid party, Guid from, Guid to, string resource, List<string> actionKeys);
+        /// <returns> The Http response from backend </returns>
+        Task<HttpResponseMessage> Delegate(Guid party, Guid from, Guid to, string resource, List<string> actionKeys);
 
         /// <summary>
         ///     Gets the single-rights for a given rightholder
@@ -92,11 +92,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Makes requested changes to the rights on a resource that has been granted from one party to another.
         /// </summary>
+        /// <param name="party">The party that is performing the edit</param>
         /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
         /// <param name="to">The right holder that has been granted access to the resource.</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
-        /// <param name="rightsUpdate">The changes in right accesses that is to be made</param>
-        /// <returns>A list of right keys whose edits failed, if any</returns>
-        Task<List<string>> EditResourceAccess(Guid from, Guid to, string resourceId, RightChanges rightsUpdate);
+        /// <param name="actionKeys">The updated list of actions that the toParty should hold on the resource</param>
+        /// <returns>The http response from backend</returns>
+        Task<HttpResponseMessage> UpdateResourceAccess(Guid party, Guid from, Guid to, string resourceId, List<string> actionKeys);
     }
 }

@@ -1,6 +1,5 @@
 import { RightStatus, DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
-import { useEditResource } from '@/resources/hooks/useEditResource';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { SnackbarDuration, DsChip, useSnackbar } from '@altinn/altinn-components';
 import { useCallback, useEffect, useState } from 'react';
@@ -20,6 +19,7 @@ import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
 import classes from '../ResourceInfo.module.css';
 import { useRightChips } from './useRightChips';
+import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 
 export const useRightsSection = ({
   resource,
@@ -30,7 +30,7 @@ export const useRightsSection = ({
 }) => {
   const { t } = useTranslation();
   const delegateRights = useDelegateRights();
-  const editResource = useEditResource();
+  const updateResource = useUpdateResource();
 
   /// State variables
 
@@ -146,25 +146,24 @@ export const useRightsSection = ({
   );
 
   const saveEditedRights = () => {
-    const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
+    const actionKeysToDelegate = rights
+      .filter((right: ChipRight) => right.checked)
+      .map((r) => r.rightKey);
     if (fromParty && toParty) {
       setDelegationError(null);
-      editResource(
+      updateResource(
         resource.identifier,
-        fromParty?.partyUuid,
-        toParty?.partyUuid,
-        currentRights,
-        newRights,
+        actionKeysToDelegate,
         () => {
           openSnackbar({
-            message: t('delegation_modal.edit_success', { name: toParty?.name }),
+            message: t('delegation_modal.edit_success', { name: toParty.name }),
             color: 'success',
           });
           onDelegate?.();
         },
         () =>
           openSnackbar({
-            message: t('delegation_modal.error_message', { name: toParty?.name }),
+            message: t('delegation_modal.error_message', { name: toParty.name }),
             color: 'danger',
             duration: SnackbarDuration.infinite,
           }),
@@ -173,46 +172,31 @@ export const useRightsSection = ({
   };
 
   const delegateChosenRights = () => {
-    const rightsToDelegate = rights.filter((right: ChipRight) => right.checked);
-    console.log('Delegating rights:', rightsToDelegate);
+    const actionKeysToDelegate = rights
+      .filter((right: ChipRight) => right.checked)
+      .map((r) => r.rightKey);
+    console.log('Delegating rights:', actionKeysToDelegate);
     console.log('resource:', resource.identifier);
 
-    delegateRights(
-      rightsToDelegate,
-      toParty?.partyUuid ?? '',
-      fromParty?.partyUuid ?? '',
-      actingParty?.partyUuid ?? '',
-      resource.identifier,
-      (response: DelegationResult) => {
-        setDelegationError(null);
+    if (fromParty && toParty) {
+      delegateRights(
+        actionKeysToDelegate,
+        resource.identifier,
+        () => {
+          setDelegationError(null);
 
-        openSnackbar({
-          message: t('delegation_modal.success_message', { name: toParty?.name }),
-          color: 'success',
-        });
-
-        const notDelegatedActions = response.rightDelegationResults.filter(
-          (result) =>
-            rightsToDelegate.find((r) => r.rightKey === result.rightKey) &&
-            result.status === BFFDelegatedStatus.NotDelegated,
-        );
-
-        if (notDelegatedActions.length > 0) {
+          openSnackbar({
+            message: t('delegation_modal.success_message', { name: toParty.name }),
+            color: 'success',
+          });
+        },
+        () => {
           setDelegationError(
-            t('delegation_modal.technical_error_message.some_failed', {
-              actions: notDelegatedActions.map((action) => action.action).join(', '),
-            }),
+            t('delegation_modal.technical_error_message.all_failed', { name: toParty.name }),
           );
-        } else {
-          onDelegate?.();
-        }
-      },
-      () => {
-        setDelegationError(
-          t('delegation_modal.technical_error_message.all_failed', { name: toParty?.name }),
-        );
-      },
-    );
+        },
+      );
+    }
   };
 
   const { chips } = useRightChips(rights, setRights, classes.chip);

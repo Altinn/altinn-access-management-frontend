@@ -48,16 +48,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 Task<List<DelegationCheckedRight>> GetDelegationCheck(Guid party, string resource);
 
                 /// <summary>
-                ///    Delegates the specified rights on a specified resource to someone on behalf of a specified party
-                /// </summary>
-                /// <param name="from">The party on which the delegation would be on behalf of</param>
-                /// <param name="to">The one that will receive access to the resource</param>
-                /// <param name="resource">The id of the resource to be delegated</param>
-                /// <param name="rights">List of keys for the specific rights that are to be delegated on the resource</param>
-                /// <returns> List of rightkeys, representing failed delegations </returns>
-                Task<DelegationOutput> DelegateResource(Guid from, Guid to, string resource, List<string> rights);
-
-                /// <summary>
                 ///     Retrieves the single rights for a specific right holder.
                 /// </summary>
                 /// <param name="party">The party identifier.</param>
@@ -84,15 +74,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// <returns></returns>
                 Task<HttpResponseMessage> RevokeRightDelegation(Guid from, Guid to, string resourceId, string rightKey);
 
-                /// <summary>
-                /// Revokes a single right on a resource that has been granted from one party to another.
-                /// </summary>
-                /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
-                /// <param name="to">The right holder that has been granted access to the resource.</param>
-                /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
-                /// <param name="rightKeys">List of identifiers for the rights to be delegated</param>
-                /// <returns></returns>
-                Task<HttpResponseMessage> DelegateResourceRights(string from, string to, string resourceId, List<string> rightKeys);
 
                 //// Access packages (handled by IAccessPackageClient)
 

@@ -59,9 +59,27 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string requestBody = JsonSerializer.Serialize(actionKeys, _serializerOptions);
                 StringContent content = new StringContent(requestBody, System.Text.Encoding.UTF8, "application/json");
                 var httpResponse = await _client.PostAsync(token, endpointUrl, content);
-                var response = await httpResponse.Content.ReadAsStringAsync();
                 return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SingleRightClient // AccessPackageDelegationCheck // Exception");
+                throw;
+            }
+        }
 
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> UpdateSingleRightsAccess(Guid party, Guid to, Guid from, string resourceId, List<string> actionKeys)
+        {
+            try
+            {
+                string endpointUrl = $"enduser/connections/resources?party={party}&to={to}&from={from}&resource={resourceId}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                string requestBody = JsonSerializer.Serialize(actionKeys, _serializerOptions);
+                StringContent content = new StringContent(requestBody, System.Text.Encoding.UTF8, "application/json");
+                var httpResponse = await _client.PutAsync(token, endpointUrl, content);
+                return httpResponse;
             }
             catch (Exception ex)
             {

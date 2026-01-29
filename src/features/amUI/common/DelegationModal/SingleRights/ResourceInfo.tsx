@@ -215,7 +215,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                 !rights.some((r) => r.checked === true) ||
                 !hasUnsavedChanges
               }
-              onClick={hasAccess ? delegateChosenRights : delegateChosenRights}
+              onClick={hasAccess ? saveEditedRights : delegateChosenRights}
             >
               {hasAccess ? t('common.update_poa') : t('common.give_poa')}
             </Button>

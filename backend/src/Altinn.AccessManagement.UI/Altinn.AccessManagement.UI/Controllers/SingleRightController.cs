@@ -193,12 +193,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("delegate")]
-        public async Task<ActionResult<DelegationOutput>> DelegateResource([FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] Guid party, [FromQuery] string resourceId, [FromBody] List<string> actionKeys)
+        public async Task<ActionResult<HttpResponseMessage>> DelegateResource([FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] Guid party, [FromQuery] string resourceId, [FromBody] List<string> actionKeys)
         {
             try
             {
-                DelegationOutput result = await _singleRightService.Delegate(party, from, to, resourceId, actionKeys);
-                return Ok(result);
+                return await _singleRightService.Delegate(party, from, to, resourceId, actionKeys);
             }
             catch (HttpStatusException statusEx)
             {
@@ -266,25 +265,30 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         ///     Endpoint for editing what rights are granted from one party to another on a specific resource.
         /// </summary>
+        /// <param name="party">The party that is performing the edit</param>
         /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
         /// <param name="to">The right holder that has been granted access to the resource.</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
-        /// <param name="update">The rights to be edited (delegated and deleted)</param>
+        /// <param name="actionKeys">The updated list of actions that the toParty should hold on the resource</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("{from}/{to}/{resourceId}/edit")]
-        public async Task<ActionResult> EditResourceAccess([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] string resourceId, [FromBody] RightChanges update)
+        [Route("update")]
+        public async Task<ActionResult<HttpResponseMessage>> EditResourceAccess([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resourceId, [FromBody] List<string> actionKeys)
         {
             try
             {
-                var response = await _singleRightService.EditResourceAccess(from, to, resourceId, update);
-                return Ok(response);
+                return await _singleRightService.UpdateResourceAccess(party, to, from, resourceId, actionKeys);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected exception occurred during revoke of single right");
+                _logger.LogError(ex, "Unexpected exception occurred during update of single right");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

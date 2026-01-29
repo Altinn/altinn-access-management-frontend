@@ -136,15 +136,15 @@ export const singleRightsApi = createApi({
       },
       invalidatesTags: ['overview', 'delegationCheck'],
     }),
-    editResource: builder.mutation<
+    updateResource: builder.mutation<
       string[],
-      { from: string; to: string; resourceId: string; edits: RightChangesDto }
+      { party: string; from: string; to: string; resourceId: string; actionKeys: string[] }
     >({
-      query({ from, to, resourceId, edits }) {
+      query({ party, from, to, resourceId, actionKeys }) {
         return {
-          url: `singleright/${from}/${to}/${resourceId}/edit`,
+          url: `singleright/update?party=${party}&from=${from}&to=${to}&resourceId=${resourceId}`,
           method: 'POST',
-          body: JSON.stringify(edits),
+          body: JSON.stringify(actionKeys),
         };
       },
       invalidatesTags: ['overview', 'delegationCheck'],
@@ -159,7 +159,7 @@ export const {
   useDelegationCheckQuery,
   useDelegateRightsMutation,
   useRevokeResourceMutation,
-  useEditResourceMutation,
+  useUpdateResourceMutation,
 } = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;

@@ -148,7 +148,9 @@ export const UserItem = ({
       name={type !== 'system' ? formatDisplayName({ fullName: user.name, type }) : user.name}
       description={!isExpanded ? description(user) : undefined}
       roleNames={
-        showRoles ? roleNames.filter((name): name is string => name !== undefined) : undefined
+        showRoles && !isExpanded
+          ? roleNames.filter((name): name is string => name !== undefined)
+          : undefined
       }
       type={type}
       expanded={isExpanded}
