@@ -1,11 +1,13 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, Switch } from '@altinn/altinn-components';
 
 import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
 import { type Client, useGetClientsQuery } from '@/rtk/features/clientApi';
 import { type Connection } from '@/rtk/features/connectionApi';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
+import { SelectRoleFilter } from './SelectRoleFilter';
+import classes from './ClientAdministrationAgentsTab.module.css';
 
 const buildClientConnections = (clients?: Client[]): Connection[] => {
   if (!clients?.length) return [];
@@ -30,13 +32,25 @@ const buildClientConnections = (clients?: Client[]): Connection[] => {
 
 export const ClientAdministrationClientsTab = () => {
   const { t } = useTranslation();
+  const [roleFilter, setRoleFilter] = useState<string[]>([]);
+  const [showDeleted, setShowDeleted] = useState(false);
+
   const {
     data: clients,
     isLoading: isClientsLoading,
     isError: isClientsError,
-  } = useGetClientsQuery();
+  } = useGetClientsQuery({ roles: roleFilter });
 
-  const clientConnections = useMemo<Connection[]>(() => buildClientConnections(clients), [clients]);
+  const filteredClients = useMemo(() => {
+    if (!clients || showDeleted) {
+      return clients;
+    }
+    return clients.filter((client) => !client.client?.isDeleted);
+  }, [clients, showDeleted]);
+  const clientConnections = useMemo<Connection[]>(
+    () => buildClientConnections(filteredClients),
+    [filteredClients],
+  );
 
   if (isClientsError) {
     return (
@@ -50,13 +64,28 @@ export const ClientAdministrationClientsTab = () => {
   }
 
   return (
-    <AdvancedUserSearch
-      includeSelfAsChild={true}
-      connections={clientConnections}
-      isLoading={isClientsLoading}
-      canDelegate={false}
-      noUsersText={t('client_administration_page.no_clients')}
-      getUserLink={(user) => `/clientadministration/client/${user.id}`}
-    />
+    <>
+      <AdvancedUserSearch
+        includeSelfAsChild={true}
+        connections={clientConnections}
+        isLoading={isClientsLoading}
+        canDelegate={false}
+        noUsersText={t('client_administration_page.no_clients')}
+        getUserLink={(user) => `/clientadministration/client/${user.id}`}
+        additionalFilters={
+          <div className={classes.filters}>
+            <SelectRoleFilter
+              roleFilter={roleFilter}
+              setRoleFilter={setRoleFilter}
+            />
+            <Switch
+              onChange={(e) => setShowDeleted(e.target.checked)}
+              checked={showDeleted}
+              label={t('client_administration_page.show_deleted_clients')}
+            />
+          </div>
+        }
+      />
+    </>
   );
 };

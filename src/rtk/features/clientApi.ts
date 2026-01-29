@@ -28,6 +28,11 @@ export interface AssignmentDto {
   toId: string;
 }
 
+export interface GetClientsArgs {
+  roles?: string[];
+  party?: string;
+}
+
 export interface DelegationBatchPermission {
   role: string;
   packages: string[];
@@ -59,14 +64,22 @@ export const clientApi = createApi({
   }),
   tagTypes: ['clients', 'agents', 'agentAccessPackages', 'clientAccessPackages'],
   endpoints: (builder) => ({
-    getClients: builder.query<Client[], void>({
-      query: () => `clients?party=${getCookie('AltinnPartyUuid')}`,
-      keepUnusedDataFor: 3,
+    getClients: builder.query<Client[], GetClientsArgs | void>({
+      query: (args) => {
+        const party = args?.party ?? getCookie('AltinnPartyUuid');
+        const roles = args?.roles?.filter((role) => role?.trim());
+        const roleQuery =
+          roles && roles.length > 0
+            ? `&${roles.map((role) => `roles=${encodeURIComponent(role)}`).join('&')}`
+            : '';
+        return `clients?party=${party}${roleQuery}`;
+      },
+      keepUnusedDataFor: 3 * 60,
       providesTags: ['clients'],
     }),
     getAgents: builder.query<Agent[], void>({
       query: () => `agents?party=${getCookie('AltinnPartyUuid')}`,
-      keepUnusedDataFor: 3,
+      keepUnusedDataFor: 3 * 60,
       providesTags: ['agents'],
     }),
     getAgentAccessPackages: builder.query<Client[], { to: string; party?: string }>({

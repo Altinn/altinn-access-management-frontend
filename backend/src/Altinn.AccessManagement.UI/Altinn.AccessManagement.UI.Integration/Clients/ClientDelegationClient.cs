@@ -49,9 +49,21 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default)
+        public async Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/clientdelegations/clients?party={party}";
+            if (roles?.Count > 0)
+            {
+                string roleQuery = string.Join("&", roles
+                    .Where(role => !string.IsNullOrWhiteSpace(role))
+                    .Select(role => $"roles={Uri.EscapeDataString(role)}"));
+
+                if (!string.IsNullOrEmpty(roleQuery))
+                {
+                    endpointUrl = $"{endpointUrl}&{roleQuery}";
+                }
+            }
+            
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
