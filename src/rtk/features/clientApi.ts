@@ -74,12 +74,12 @@ export const clientApi = createApi({
             : '';
         return `clients?party=${party}${roleQuery}`;
       },
-      keepUnusedDataFor: 3,
+      keepUnusedDataFor: 3 * 60,
       providesTags: ['clients'],
     }),
     getAgents: builder.query<Agent[], void>({
       query: () => `agents?party=${getCookie('AltinnPartyUuid')}`,
-      keepUnusedDataFor: 3,
+      keepUnusedDataFor: 3 * 60,
       providesTags: ['agents'],
     }),
     getAgentAccessPackages: builder.query<Client[], { to: string; party?: string }>({
