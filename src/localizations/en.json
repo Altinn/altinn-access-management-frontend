@@ -348,6 +348,10 @@
       "via_keyrole": "{{user_name}} has access to this through their role in {{via_name}}."
     }
   },
+  "user_roles": {
+    "has_client_access": "Has client access",
+    "has_client_access_description": "This user has access to one or more of the organization's clients. This does not necessarily mean they have access to the organization's own content, but that they can perform work on behalf of one or more of their clients/customers. Which clients they have access to can be managed under <a>client administration</a>."
+  },
   "users_page": {
     "page_title": "Users and groups - Altinn",
     "main_page_heading": "Users with power of attorney in {{name}}",
