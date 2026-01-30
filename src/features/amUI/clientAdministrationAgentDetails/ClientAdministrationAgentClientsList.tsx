@@ -6,6 +6,7 @@ import {
   type UserListItemProps,
   type Color,
   formatDate,
+  formatDisplayName,
 } from '@altinn/altinn-components';
 
 import type {
@@ -22,6 +23,8 @@ import { useAgentAccessPackageActions } from './useAgentAccessPackageActions';
 import { UserListItems, type UserListItemData } from './UserListItems';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { AccessPackageListItems } from './AccessPackageListItems';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 type ClientAdministrationAgentClientsListProps = {
   clients: Client[];
@@ -67,6 +70,11 @@ export const ClientAdministrationAgentClientsList = ({
 
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
+  const { toParty } = usePartyRepresentation();
+  const agentName = formatDisplayName({
+    fullName: toParty?.name || '',
+    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  });
 
   const userListItems: UserListItemData[] = sortedClients.map((client) => {
     const clientId = client.client.id;
@@ -106,7 +114,7 @@ export const ClientAdministrationAgentClientsList = ({
                   clientId,
                   access.role.code,
                   pkg.urn ?? '',
-                  client.client.name,
+                  agentName,
                   accessPackage?.name || t('client_administration_page.unknown_access_package'),
                 );
               }}
@@ -123,7 +131,7 @@ export const ClientAdministrationAgentClientsList = ({
                   clientId,
                   access.role.code,
                   pkg.urn ?? '',
-                  client.client.name,
+                  agentName,
                   accessPackage?.name || t('client_administration_page.unknown_access_package'),
                 );
               }}
