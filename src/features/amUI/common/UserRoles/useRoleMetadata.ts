@@ -1,10 +1,13 @@
-import { useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useGetAllRolesQuery, type Role } from '@/rtk/features/roleApi';
 import type { RoleInfo } from '@/rtk/features/connectionApi';
 
-type RoleMetadataMap = Record<string, Role | undefined>;
+type RoleMetadataMap = {
+  byId: Record<string, Role | undefined>;
+  byCode: Record<string, Role | undefined>;
+};
 
 export const ECC_PROVIDER_CODE = 'sys-ccr';
 export const A2_PROVIDER_CODE = 'sys-altinn2';
@@ -20,45 +23,45 @@ export const useRoleMetadata = () => {
     isLoading,
     isError,
     error,
-    refetch,
   } = useGetAllRolesQuery({
     language: i18n.language,
   });
 
-  // Refetch when language changes to ensure fresh translated data
-  useEffect(() => {
-    refetch();
-  }, [i18n.language, refetch]);
-
   const roleMetadataMap = useMemo(() => {
     if (!allRoles) {
-      return {};
+      return { byId: {}, byCode: {} };
     }
 
-    return allRoles.reduce<RoleMetadataMap>((acc, role) => {
-      acc[role.id] = role;
-      return acc;
-    }, {});
+    return allRoles.reduce<RoleMetadataMap>(
+      (acc, role) => {
+        acc.byId[role.id] = role;
+        if (role.code) {
+          acc.byCode[role.code] = role;
+        }
+        return acc;
+      },
+      { byId: {}, byCode: {} },
+    );
   }, [allRoles]);
 
   const getRoleMetadata = useCallback(
     (roleId?: string | null) => {
-      if (!roleId || !roleMetadataMap) {
+      if (!roleId) {
         return undefined;
       }
-      return roleMetadataMap[roleId];
+      return roleMetadataMap.byId[roleId];
     },
     [roleMetadataMap],
   );
 
   const getRoleByCode = useCallback(
     (roleCode?: string | null) => {
-      if (!roleCode || !allRoles) {
+      if (!roleCode) {
         return undefined;
       }
-      return allRoles.find((role) => role.code === roleCode);
+      return roleMetadataMap.byCode[roleCode];
     },
-    [allRoles],
+    [roleMetadataMap],
   );
 
   const mapRoles = useCallback(

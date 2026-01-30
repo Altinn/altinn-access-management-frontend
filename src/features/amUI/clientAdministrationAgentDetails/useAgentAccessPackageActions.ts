@@ -28,7 +28,7 @@ export const useAgentAccessPackageActions = ({
       clientId: string,
       roleCode: string,
       packageId: string,
-      clientName: string,
+      agentName: string,
       accessPackageName: string,
     ) => {
       if (!toPartyUuid || !actingPartyUuid) {
@@ -51,7 +51,7 @@ export const useAgentAccessPackageActions = ({
         }).unwrap();
         openSnackbar({
           message: t('client_administration_page.delegate_package_success_snackbar', {
-            name: clientName,
+            name: agentName,
             accessPackage: accessPackageName,
           }),
           color: 'success',
@@ -59,7 +59,7 @@ export const useAgentAccessPackageActions = ({
       } catch (error) {
         openSnackbar({
           message: t('client_administration_page.delegate_package_error', {
-            name: clientName,
+            name: agentName,
             accessPackage: accessPackageName,
           }),
           color: 'danger',
@@ -75,7 +75,7 @@ export const useAgentAccessPackageActions = ({
       clientId: string,
       roleCode: string,
       packageId: string,
-      clientName: string,
+      agentName: string,
       accessPackageName: string,
     ) => {
       if (!toPartyUuid || !actingPartyUuid) {
@@ -98,7 +98,7 @@ export const useAgentAccessPackageActions = ({
         }).unwrap();
         openSnackbar({
           message: t('client_administration_page.remove_package_success_snackbar', {
-            name: clientName,
+            name: agentName,
             accessPackage: accessPackageName,
           }),
           color: 'success',
@@ -106,7 +106,7 @@ export const useAgentAccessPackageActions = ({
       } catch (error) {
         openSnackbar({
           message: t('client_administration_page.remove_package_error', {
-            name: clientName,
+            name: agentName,
             accessPackage: accessPackageName,
           }),
           color: 'danger',
