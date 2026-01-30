@@ -144,11 +144,11 @@ const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
       {pendingRequests?.map((request) => {
         let toUrl = '';
         if (request.type === 'consent') {
-          toUrl = getConsentRequestUrl(request.id);
+          toUrl = getConsentRequestUrl(request.id, 'landingpage');
         } else if (request.type === 'systemuser') {
-          toUrl = getSystemUserRequestUrl(request.id);
+          toUrl = getSystemUserRequestUrl(request.id, 'landingpage');
         } else if (request.type === 'agentsystemuser') {
-          toUrl = getSystemUserAgentRequestUrl(request.id);
+          toUrl = getSystemUserAgentRequestUrl(request.id, 'landingpage');
         }
         return (
           <UserListItem

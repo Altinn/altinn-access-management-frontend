@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import {
@@ -16,6 +16,8 @@ import classes from './ConsentRequestPage.module.css';
 import { ConsentRequestError } from './ConsentRequestError';
 import { ConsentStatus } from '../components/ConsentStatus/ConsentStatus';
 import { ConsentPath } from '@/routes/paths';
+import { getButtonIconSize } from '@/resources/utils';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 interface ConsentRequestContentProps {
   request: ConsentRequest;
@@ -28,6 +30,7 @@ export const ConsentRequestContent = ({
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const skipLogout = searchParams.get('skiplogout');
+  const backToPage = searchParams.get('backtopage');
   const navigate = useNavigate();
   const [isReceiptVisible, setIsReceiptVisible] = useState<boolean>(false);
 
@@ -99,6 +102,24 @@ export const ConsentRequestContent = ({
 
   return (
     <>
+      {backToPage && (
+        <DsButton
+          variant='tertiary'
+          data-color='neutral'
+          data-size='sm'
+          className={classes.backButton}
+          asChild
+        >
+          <Link
+            to={
+              backToPage === 'landingpage' ? '/' : `/${ConsentPath.Consent}/${ConsentPath.Active}`
+            }
+          >
+            <ArrowLeftIcon fontSize={getButtonIconSize(true)} />
+            {t('common.back')}
+          </Link>
+        </DsButton>
+      )}
       <div className={cn(classes.consentBlock, classes.headerBlock)}>
         <DsHeading
           level={1}

@@ -53,10 +53,10 @@ export const SystemUserList = ({
             href = `/systemuser/${systemUser.id}/agentdelegation`;
           } else if (systemUser.userType === 'standard' && isPendingRequestList) {
             badgeContent = t('systemuser_overviewpage.pending_request_badge');
-            href = getSystemUserRequestUrl(systemUser.id);
+            href = getSystemUserRequestUrl(systemUser.id, 'overview');
           } else if (systemUser.userType === 'agent' && isPendingRequestList) {
             badgeContent = t('systemuser_overviewpage.pending_agent_request_badge');
-            href = getSystemUserAgentRequestUrl(systemUser.id);
+            href = getSystemUserAgentRequestUrl(systemUser.id, 'overview');
           }
 
           const badge = (
