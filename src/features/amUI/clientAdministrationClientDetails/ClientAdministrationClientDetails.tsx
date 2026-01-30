@@ -29,6 +29,8 @@ import {
 import { ClientAdministrationClientTabs } from './ClientAdministrationClientTabs';
 import { ClientAdministrationClientAgentsList } from './ClientAdministrationClientAgentsList';
 import { useClientAccessAgentLists } from './useClientAccessAgentLists';
+import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
+import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
 
 export const ClientAdministrationClientDetails = () => {
   const { t } = useTranslation();
@@ -55,27 +57,6 @@ export const ClientAdministrationClientDetails = () => {
   });
   const selectedClient = clients?.find((client) => client.client.id === id);
   const hasDelegatablePackages = (clientAccessPackages?.length ?? 0) > 0;
-
-  if (
-    isLoadingIsClientAdmin ||
-    isLoadingClientAccessPackages ||
-    isLoadingAgents ||
-    isLoadingClients
-  ) {
-    return (
-      <>
-        <DsHeading data-size='lg'>
-          <DsSkeleton variant='text'>{t('client_administration_page.page_heading')}</DsSkeleton>
-        </DsHeading>
-        <DsParagraph data-size='lg'>
-          <DsSkeleton
-            variant='text'
-            width={40}
-          />
-        </DsParagraph>
-      </>
-    );
-  }
 
   if (isClientAdmin === false) {
     return (
@@ -118,57 +99,84 @@ export const ClientAdministrationClientDetails = () => {
         }}
       />
       <PageContainer backUrl={backUrl}>
-        <DsHeading data-size='lg'>{clientName}</DsHeading>
-        {!id && (
-          <DsAlert data-color='warning'>
-            <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-          </DsAlert>
-        )}
-        {id && (
-          <ClientAdministrationClientTabs
-            activeTab={activeTab}
-            onChange={setActiveTab}
-            hasUsersContent={
-              hasDelegatablePackages ? (
-                agentsWithClientAccess.length > 0 ? (
-                  <ClientAdministrationClientAgentsList
-                    agents={agentsWithClientAccess}
-                    clientAccessPackages={clientAccessPackages ?? []}
-                    client={selectedClient}
-                    isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                    fromPartyUuid={fromPartyUuid}
-                    actingPartyUuid={actingPartyUuid}
-                    addAgentAccessPackages={addAgentAccessPackages}
-                    removeAgentAccessPackages={removeAgentAccessPackages}
-                  />
-                ) : (
-                  <DsParagraph>{t('client_administration_page.no_user_delegations')}</DsParagraph>
-                )
-              ) : (
-                <DsParagraph>{t('client_administration_page.no_access_to_delegate')}</DsParagraph>
-              )
-            }
-            allUsersContent={
-              hasDelegatablePackages ? (
-                allAgents.length > 0 ? (
-                  <ClientAdministrationClientAgentsList
-                    agents={allAgents}
-                    clientAccessPackages={clientAccessPackages ?? []}
-                    client={selectedClient}
-                    isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                    fromPartyUuid={fromPartyUuid}
-                    actingPartyUuid={actingPartyUuid}
-                    addAgentAccessPackages={addAgentAccessPackages}
-                    removeAgentAccessPackages={removeAgentAccessPackages}
-                  />
-                ) : (
-                  <DsParagraph>{t('client_administration_page.no_agents')}</DsParagraph>
-                )
-              ) : (
-                <DsParagraph>{t('client_administration_page.no_access_to_delegate')}</DsParagraph>
-              )
-            }
-          />
+        {isLoadingIsClientAdmin ||
+        isLoadingClientAccessPackages ||
+        isLoadingAgents ||
+        isLoadingClients ? (
+          <>
+            <UserPageHeaderSkeleton />
+            <DsSkeleton
+              width='100%'
+              height='200px'
+              variant='rectangle'
+              style={{ marginTop: '1.5rem' }}
+            />
+          </>
+        ) : (
+          <>
+            <UserPageHeader
+              direction='from'
+              displayDirection
+              displayRoles={false}
+            />
+            {!id && (
+              <DsAlert data-color='warning'>
+                <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+              </DsAlert>
+            )}
+            {id && (
+              <ClientAdministrationClientTabs
+                activeTab={activeTab}
+                onChange={setActiveTab}
+                hasUsersContent={
+                  hasDelegatablePackages ? (
+                    agentsWithClientAccess.length > 0 ? (
+                      <ClientAdministrationClientAgentsList
+                        agents={agentsWithClientAccess}
+                        clientAccessPackages={clientAccessPackages ?? []}
+                        client={selectedClient}
+                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                        fromPartyUuid={fromPartyUuid}
+                        actingPartyUuid={actingPartyUuid}
+                        addAgentAccessPackages={addAgentAccessPackages}
+                        removeAgentAccessPackages={removeAgentAccessPackages}
+                      />
+                    ) : (
+                      <DsParagraph>
+                        {t('client_administration_page.no_user_delegations')}
+                      </DsParagraph>
+                    )
+                  ) : (
+                    <DsParagraph>
+                      {t('client_administration_page.no_access_to_delegate')}
+                    </DsParagraph>
+                  )
+                }
+                allUsersContent={
+                  hasDelegatablePackages ? (
+                    allAgents.length > 0 ? (
+                      <ClientAdministrationClientAgentsList
+                        agents={allAgents}
+                        clientAccessPackages={clientAccessPackages ?? []}
+                        client={selectedClient}
+                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                        fromPartyUuid={fromPartyUuid}
+                        actingPartyUuid={actingPartyUuid}
+                        addAgentAccessPackages={addAgentAccessPackages}
+                        removeAgentAccessPackages={removeAgentAccessPackages}
+                      />
+                    ) : (
+                      <DsParagraph>{t('client_administration_page.no_agents')}</DsParagraph>
+                    )
+                  ) : (
+                    <DsParagraph>
+                      {t('client_administration_page.no_access_to_delegate')}
+                    </DsParagraph>
+                  )
+                }
+              />
+            )}
+          </>
         )}
       </PageContainer>
     </>
