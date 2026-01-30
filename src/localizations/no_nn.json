@@ -573,6 +573,7 @@
     "load_user_delegations_error": "Kunne ikkje laste brukarar med tilgang.",
     "no_delegations": "Fann ingen klientar med tilgang.",
     "no_user_delegations": "Fann ingen brukarar med tilgang.",
+    "no_access_to_delegate": "Du har ingen tilgangar for denne klienten.",
     "delegate_package_button": "Gi fullmakt",
     "delegate_package_success_snackbar": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "delegate_package_error": "Kunne ikkje gi {{name}} fullmakt til {{accessPackage}}.",

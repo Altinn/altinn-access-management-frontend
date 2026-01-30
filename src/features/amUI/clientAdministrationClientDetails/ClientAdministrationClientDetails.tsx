@@ -8,7 +8,6 @@ import {
   formatDisplayName,
 } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
-import { skipToken } from '@reduxjs/toolkit/query';
 
 import { amUIPath } from '@/routes/paths';
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
@@ -41,7 +40,7 @@ export const ClientAdministrationClientDetails = () => {
     data: clientAccessPackages,
     isLoading: isLoadingClientAccessPackages,
     error: clientAccessPackagesError,
-  } = useGetClientAccessPackagesQuery(id ? { from: id } : skipToken);
+  } = useGetClientAccessPackagesQuery({ from: id ?? '' }, { skip: !id });
   const { data: agents, isLoading: isLoadingAgents, error: agentsError } = useGetAgentsQuery();
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
 
@@ -55,6 +54,7 @@ export const ClientAdministrationClientDetails = () => {
     agents,
   });
   const selectedClient = clients?.find((client) => client.client.id === id);
+  const hasDelegatablePackages = (clientAccessPackages?.length ?? 0) > 0;
 
   if (
     isLoadingIsClientAdmin ||
@@ -129,35 +129,43 @@ export const ClientAdministrationClientDetails = () => {
             activeTab={activeTab}
             onChange={setActiveTab}
             hasUsersContent={
-              agentsWithClientAccess.length > 0 ? (
-                <ClientAdministrationClientAgentsList
-                  agents={agentsWithClientAccess}
-                  clientAccessPackages={clientAccessPackages ?? []}
-                  client={selectedClient}
-                  isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                  fromPartyUuid={fromPartyUuid}
-                  actingPartyUuid={actingPartyUuid}
-                  addAgentAccessPackages={addAgentAccessPackages}
-                  removeAgentAccessPackages={removeAgentAccessPackages}
-                />
+              hasDelegatablePackages ? (
+                agentsWithClientAccess.length > 0 ? (
+                  <ClientAdministrationClientAgentsList
+                    agents={agentsWithClientAccess}
+                    clientAccessPackages={clientAccessPackages ?? []}
+                    client={selectedClient}
+                    isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                    fromPartyUuid={fromPartyUuid}
+                    actingPartyUuid={actingPartyUuid}
+                    addAgentAccessPackages={addAgentAccessPackages}
+                    removeAgentAccessPackages={removeAgentAccessPackages}
+                  />
+                ) : (
+                  <DsParagraph>{t('client_administration_page.no_user_delegations')}</DsParagraph>
+                )
               ) : (
-                <DsParagraph>{t('client_administration_page.no_user_delegations')}</DsParagraph>
+                <DsParagraph>{t('client_administration_page.no_access_to_delegate')}</DsParagraph>
               )
             }
             allUsersContent={
-              allAgents.length > 0 ? (
-                <ClientAdministrationClientAgentsList
-                  agents={allAgents}
-                  clientAccessPackages={clientAccessPackages ?? []}
-                  client={selectedClient}
-                  isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                  fromPartyUuid={fromPartyUuid}
-                  actingPartyUuid={actingPartyUuid}
-                  addAgentAccessPackages={addAgentAccessPackages}
-                  removeAgentAccessPackages={removeAgentAccessPackages}
-                />
+              hasDelegatablePackages ? (
+                allAgents.length > 0 ? (
+                  <ClientAdministrationClientAgentsList
+                    agents={allAgents}
+                    clientAccessPackages={clientAccessPackages ?? []}
+                    client={selectedClient}
+                    isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                    fromPartyUuid={fromPartyUuid}
+                    actingPartyUuid={actingPartyUuid}
+                    addAgentAccessPackages={addAgentAccessPackages}
+                    removeAgentAccessPackages={removeAgentAccessPackages}
+                  />
+                ) : (
+                  <DsParagraph>{t('client_administration_page.no_agents')}</DsParagraph>
+                )
               ) : (
-                <DsParagraph>{t('client_administration_page.no_agents')}</DsParagraph>
+                <DsParagraph>{t('client_administration_page.no_access_to_delegate')}</DsParagraph>
               )
             }
           />

@@ -11,17 +11,21 @@ export const useClientAccessAgentLists = ({
   clientAccessPackages,
   agents,
 }: UseClientAccessAgentListsParams) => {
-  return useMemo(() => {
-    const agentsWithAccessIds = new Set(
-      (clientAccessPackages ?? [])
-        .filter((agent) => agent.access.some((access) => access.packages.length > 0))
-        .map((agent) => agent.agent.id),
+  const agentsWithClientAccess = useMemo(() => {
+    if (!agents?.length || !clientAccessPackages?.length) {
+      return [];
+    }
+
+    return agents.filter((agent) =>
+      clientAccessPackages.some(
+        (clientAgent) =>
+          clientAgent.agent.id === agent.agent.id &&
+          clientAgent.access.some((access) => access.packages.length > 0),
+      ),
     );
-
-    const agentsWithClientAccess =
-      agents?.filter((agent) => agentsWithAccessIds.has(agent.agent.id)) ?? [];
-    const allAgents = agents ?? [];
-
-    return { agentsWithClientAccess, allAgents };
   }, [clientAccessPackages, agents]);
+
+  const allAgents = agents ?? [];
+
+  return { agentsWithClientAccess, allAgents };
 };
