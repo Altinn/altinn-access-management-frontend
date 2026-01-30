@@ -103,7 +103,7 @@ export const ClientAdministrationClientAgentsList = ({
         const accessPackage = getAccessPackageById(pkg.id);
         return {
           id: pkg.id,
-          name: accessPackage?.name || t('client_administration_page.unknown_access_package'),
+          name: accessPackage?.name || pkg.name,
           type: packageType,
           isSubUnit: clientIsSubUnit,
           interactive: false,
@@ -123,7 +123,7 @@ export const ClientAdministrationClientAgentsList = ({
                   access.role.code,
                   pkg.urn ?? '',
                   agent.agent.name,
-                  accessPackage?.name || t('client_administration_page.unknown_access_package'),
+                  accessPackage?.name || pkg.name,
                 );
               }}
             >
@@ -140,7 +140,7 @@ export const ClientAdministrationClientAgentsList = ({
                   access.role.code,
                   pkg.urn ?? '',
                   agent.agent.name,
-                  accessPackage?.name || t('client_administration_page.unknown_access_package'),
+                  accessPackage?.name || pkg.name,
                 );
               }}
             >
