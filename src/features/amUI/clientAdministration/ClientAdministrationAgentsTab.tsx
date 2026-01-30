@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph, useSnackbar } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
@@ -12,7 +12,6 @@ import { useNavigate } from 'react-router';
 
 export const ClientAdministrationAgentsTab = () => {
   const { t } = useTranslation();
-  const { openSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const { fromParty } = usePartyRepresentation();
   const {
