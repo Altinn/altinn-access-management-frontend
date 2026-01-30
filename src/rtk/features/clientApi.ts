@@ -85,13 +85,13 @@ export const clientApi = createApi({
     getAgentAccessPackages: builder.query<Client[], { to: string; party?: string }>({
       query: ({ to, party = getCookie('AltinnPartyUuid') }) =>
         `agents/accesspackages?party=${party}&to=${to}`,
-      keepUnusedDataFor: 3,
+      keepUnusedDataFor: 3 * 60,
       providesTags: ['agentAccessPackages'],
     }),
     getClientAccessPackages: builder.query<Agent[], { from: string; party?: string }>({
       query: ({ from, party = getCookie('AltinnPartyUuid') }) =>
         `clients/accesspackages?party=${party}&from=${from}`,
-      keepUnusedDataFor: 3,
+      keepUnusedDataFor: 3 * 60,
       providesTags: ['clientAccessPackages'],
     }),
     addAgentAccessPackages: builder.mutation<
