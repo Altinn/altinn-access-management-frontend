@@ -22,6 +22,11 @@ import { formatDateToNorwegian } from '@/resources/utils';
 import { useRequests } from '@/resources/hooks/useRequests';
 import classes from './RequestPage.module.css';
 import { Request } from './types';
+import {
+  getSystemUserAgentRequestUrl,
+  getSystemUserRequestUrl,
+} from '@/routes/paths/systemUserPath';
+import { getConsentRequestUrl } from '@/routes/paths/consentPath';
 
 const selectedTabProps = {
   'data-size': 'sm',
@@ -139,11 +144,11 @@ const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
       {pendingRequests?.map((request) => {
         let toUrl = '';
         if (request.type === 'consent') {
-          toUrl = `/consent/request?id=${request.id}`;
+          toUrl = getConsentRequestUrl(request.id, 'landingpage');
         } else if (request.type === 'systemuser') {
-          toUrl = `/systemuser/request?id=${request.id}`;
+          toUrl = getSystemUserRequestUrl(request.id, 'landingpage');
         } else if (request.type === 'agentsystemuser') {
-          toUrl = `/systemuser/agentrequest?id=${request.id}`;
+          toUrl = getSystemUserAgentRequestUrl(request.id, 'landingpage');
         }
         return (
           <UserListItem

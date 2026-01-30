@@ -31,6 +31,7 @@ export const SystemUserAgentRequestPage = () => {
   const [searchParams] = useSearchParams();
   const skipLogout = searchParams.get('skiplogout');
   const requestId = searchParams.get('id') ?? '';
+  const backToPage = searchParams.get('backtopage') ?? '';
 
   const {
     data: request,
@@ -104,6 +105,7 @@ export const SystemUserAgentRequestPage = () => {
     <RequestPageBase
       system={request?.system}
       reporteeName={reporteeData?.name}
+      backToPage={backToPage}
       heading={t('systemuser_agent_request.banner_title')}
     >
       {!requestId && (

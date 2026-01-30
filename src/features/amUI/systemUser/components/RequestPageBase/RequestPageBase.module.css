@@ -45,3 +45,8 @@
   padding: var(--vendor-container-padding);
   margin-bottom: 3px;
 }
+
+.backButton {
+  justify-self: flex-start;
+  margin-bottom: var(--ds-size-2);
+}
