@@ -93,11 +93,11 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Makes requested changes to the rights on a resource that has been granted from one party to another.
         /// </summary>
         /// <param name="party">The party that is performing the edit</param>
-        /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
         /// <param name="to">The right holder that has been granted access to the resource.</param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
         /// <param name="actionKeys">The updated list of actions that the toParty should hold on the resource</param>
         /// <returns>The http response from backend</returns>
-        Task<HttpResponseMessage> UpdateResourceAccess(Guid party, Guid from, Guid to, string resourceId, List<string> actionKeys);
+        Task<HttpResponseMessage> UpdateResourceAccess(Guid party, Guid to, Guid from, string resourceId, List<string> actionKeys);
     }
 }
