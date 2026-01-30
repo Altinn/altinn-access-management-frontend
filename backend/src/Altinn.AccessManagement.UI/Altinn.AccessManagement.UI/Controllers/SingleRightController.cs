@@ -272,7 +272,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="actionKeys">The updated list of actions that the toParty should hold on the resource</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
-        [HttpPost]
+        [HttpPut]
         [Authorize]
         [Route("update")]
         public async Task<ActionResult<HttpResponseMessage>> EditResourceAccess([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resourceId, [FromBody] List<string> actionKeys)

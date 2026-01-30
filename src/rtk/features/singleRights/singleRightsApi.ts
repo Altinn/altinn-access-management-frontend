@@ -143,7 +143,7 @@ export const singleRightsApi = createApi({
       query({ party, from, to, resourceId, actionKeys }) {
         return {
           url: `singleright/update?party=${party}&from=${from}&to=${to}&resourceId=${resourceId}`,
-          method: 'POST',
+          method: 'PUT',
           body: JSON.stringify(actionKeys),
         };
       },
