@@ -146,7 +146,7 @@ export const CustomerList = ({
           />
         ))}
       </List>
-      {list.length > 0 && (
+      {totalPages > 1 && (
         <AmPagination
           totalPages={totalPages}
           showPages={showPages}
