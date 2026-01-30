@@ -14,7 +14,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 {
     /// <summary>
     /// Client for interacting with Single Rights API
-    /// 
+    /// </summary>
     public class SingleRightClient: ISingleRightClient
     {
         private readonly ILogger _logger;
@@ -87,6 +87,5 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
-
     }
 }

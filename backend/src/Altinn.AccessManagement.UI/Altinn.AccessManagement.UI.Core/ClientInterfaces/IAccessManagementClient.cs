@@ -74,7 +74,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// <returns></returns>
                 Task<HttpResponseMessage> RevokeRightDelegation(Guid from, Guid to, string resourceId, string rightKey);
 
-
                 //// Access packages (handled by IAccessPackageClient)
 
                 //// Roles 
