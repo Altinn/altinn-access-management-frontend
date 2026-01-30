@@ -137,18 +137,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<DelegationOutput> DelegateResource(Guid from, Guid to, string resource, List<string> rights)
-        {
-            string endpointUrl = $"todo/resources/{resource}/rights?from={from}&to={to}"; // TODO: Switch with actual backend endpoint when available
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(rights, _serializerOptions), Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
-
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<DelegationOutput>(response);
-        }
-
-        /// <inheritdoc />
         public async Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId)
         {
             string endpointUrl = $"todo/{party}/{userId}"; // TODO: Switch with actual backend endpoint when available
@@ -194,24 +182,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             _logger.LogError("Revoke right delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
-            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> DelegateResourceRights(string from, string to, string resourceId, List<string> rightKeys)
-        {
-            string endpointUrl = $"todo/enduser/delegations/from/{from}/to/{to}/resources/{resourceId}/rights"; // TODO: Switch with actual backend endpoint when available
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(rightKeys, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return response;
-            }
-
-            string sanitizedResourceId = resourceId.Replace(Environment.NewLine, string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty);
-            _logger.LogError($"Delegation of rights to resource {sanitizedResourceId} failed in accessmanagement with status code {response.StatusCode}");
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
 

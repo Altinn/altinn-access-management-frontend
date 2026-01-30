@@ -1,0 +1,173 @@
+[
+  {
+    "rightKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
+    "action": "instantiate",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+    "action": "read",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "urn:altinn:resource:app_ttd_terje-sin-test-appurn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+    "action": "read",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "urn:altinn:resource:app_ttd_terje-sin-test-appurn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+    "action": "write",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "urn:altinn:resource:app_ttd_terje-sin-test-appurn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+    "action": "read",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "urn:altinn:resource:app_ttd_terje-sin-test-appurn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+    "action": "write",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "urn:altinn:resource:app_ttd_terje-sin-test-appurn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+    "action": "read",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "urn:altinn:resource:app_ttd_terje-sin-test-appurn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+    "action": "write",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:delete",
+    "action": "delete",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

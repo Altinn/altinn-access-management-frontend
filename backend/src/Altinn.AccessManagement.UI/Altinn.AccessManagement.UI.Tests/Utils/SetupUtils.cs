@@ -60,6 +60,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddSingleton<ISingleRightClient, SingleRightClientMock>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
             });
