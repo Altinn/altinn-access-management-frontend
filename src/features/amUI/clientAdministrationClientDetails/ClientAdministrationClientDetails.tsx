@@ -87,6 +87,13 @@ export const ClientAdministrationClientDetails = () => {
     fullName: fromParty?.name || '',
     type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
   });
+  const actingPartyName =
+    actingParty?.name && actingParty.partyTypeName
+      ? formatDisplayName({
+          fullName: actingParty.name,
+          type: actingParty.partyTypeName === PartyType.Person ? 'person' : 'company',
+        })
+      : '';
   const fromPartyUuid = fromParty?.partyUuid ?? id;
   const actingPartyUuid = actingParty?.partyUuid;
 
@@ -148,7 +155,9 @@ export const ClientAdministrationClientDetails = () => {
                     )
                   ) : (
                     <DsParagraph>
-                      {t('client_administration_page.no_access_to_delegate')}
+                      {t('client_administration_page.no_access_to_delegate', {
+                        name: actingPartyName,
+                      })}
                     </DsParagraph>
                   )
                 }
@@ -170,7 +179,9 @@ export const ClientAdministrationClientDetails = () => {
                     )
                   ) : (
                     <DsParagraph>
-                      {t('client_administration_page.no_access_to_delegate')}
+                      {t('client_administration_page.no_access_to_delegate', {
+                        name: actingPartyName,
+                      })}
                     </DsParagraph>
                   )
                 }
