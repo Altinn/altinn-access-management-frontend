@@ -64,6 +64,7 @@ export const connectionApi = createApi({
       }): { status: string | number; data: string } => {
         return { status: response.status, data: new Date().toISOString() };
       },
+      invalidatesTags: ['Connections'],
     }),
     getRightHolders: builder.query<
       Connection[],
