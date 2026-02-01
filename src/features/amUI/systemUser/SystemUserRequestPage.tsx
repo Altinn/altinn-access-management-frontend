@@ -19,7 +19,7 @@ import { DelegationCheckError } from './components/DelegationCheckError/Delegati
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
 import { SystemUserPath } from '@/routes/paths';
-import { getApiBaseUrl, isPermissionErrorWhichCanBeEscalated } from './requestUtils';
+import { getApiBaseUrl } from './requestUtils';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
@@ -61,15 +61,10 @@ export const SystemUserRequestPage = () => {
     { isError: isRejectCreationRequestError, isLoading: isRejectingSystemUser },
   ] = useRejectSystemUserRequestMutation();
 
-  const isEscalationPossible = isPermissionErrorWhichCanBeEscalated(
-    (acceptCreationRequestError as { data: ProblemDetail })?.data,
-  );
+  const isEscalationPossible = request?.userMayEscalateButNotApprove;
 
   const isActionButtonDisabled =
-    isAcceptingSystemUser ||
-    isRejectingSystemUser ||
-    request?.status !== 'New' ||
-    isEscalationPossible;
+    isAcceptingSystemUser || isRejectingSystemUser || request?.status !== 'New';
 
   const acceptSystemUser = (): void => {
     if (!isActionButtonDisabled) {
@@ -164,7 +159,7 @@ export const SystemUserRequestPage = () => {
           />
           <DsParagraph>{t('systemuser_request.withdraw_consent_info')}</DsParagraph>
           <div>
-            {acceptCreationRequestError && !isEscalationPossible && (
+            {acceptCreationRequestError && (
               <DelegationCheckError
                 defaultError='systemuser_includedrightspage.create_systemuser_error'
                 error={acceptCreationRequestError as { data: ProblemDetail }}
@@ -179,7 +174,7 @@ export const SystemUserRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </DsAlert>
             )}
-            {hasCreateSystemUserPermission(reporteeData, isAdmin) && (
+            {!isEscalationPossible && hasCreateSystemUserPermission(reporteeData, isAdmin) && (
               <ButtonRow>
                 <DsButton
                   variant='primary'

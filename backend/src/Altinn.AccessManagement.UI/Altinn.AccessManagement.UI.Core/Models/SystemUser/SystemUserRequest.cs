@@ -108,5 +108,14 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// </summary>
         [JsonPropertyName("escalated")]
         public bool Escalated { get; set; }
+
+        /// <summary>
+        /// Indicates if the user is allowed to escalate the approval of this Request
+        /// is only true for the current logged in user trying to read the Request
+        /// if he has any Relation (Right, AccessPackage or Role) with the PartyUuid
+        /// but does not have AccessManager (Package:Tilgangsstyring) yet.
+        /// </summary>
+        [JsonPropertyName("userMayEscalateButNotApprove")]
+        public bool UserMayEscalateButNotApprove { get; set; }
     }
 }

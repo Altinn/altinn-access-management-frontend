@@ -61,6 +61,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 RedirectUrl = agentRequest.Value.RedirectUrl,
                 AccessPackages = enrichedRights.AccessPackages,
                 Created = agentRequest.Value.Created,
+                Escalated = agentRequest.Value.Escalated,
+                UserMayEscalateButNotApprove = agentRequest.Value.UserMayEscalateButNotApprove,
                 System = systemFE
             };
         }

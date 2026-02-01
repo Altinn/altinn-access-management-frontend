@@ -42,6 +42,7 @@ interface SystemUserRequestBase {
   system: RegisteredSystem;
   created: string;
   escalated: boolean;
+  userMayEscalateButNotApprove: boolean;
 }
 export interface SystemUserRequest extends SystemUserRequestBase {
   resources: ServiceResource[];
