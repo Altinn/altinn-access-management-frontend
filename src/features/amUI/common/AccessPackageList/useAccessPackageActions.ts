@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { formatDisplayName, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
 import type { DelegationErrorDetails } from '@/resources/hooks/useDelegateAccessPackage';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
@@ -9,6 +9,7 @@ import type { Party } from '@/rtk/features/lookupApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface useAccessPackageActionsProps {
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
@@ -31,12 +32,19 @@ export const useAccessPackageActions = ({
   const { toParty: toPartyFromContext, fromParty, actingParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
 
+  const formatToPartyName = (party: Party) => {
+    return formatDisplayName({
+      fullName: party.name,
+      type: party?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    });
+  };
+
   const handleDelegateSuccess = (accessPackage: AccessPackage, toParty: Party) => {
     if (onDelegateSuccess) onDelegateSuccess(accessPackage, toParty);
     else {
       openSnackbar({
         message: t('access_packages.package_delegation_success', {
-          name: toParty.name,
+          name: formatToPartyName(toParty),
           accessPackage: accessPackage.name,
         }),
         color: 'success',
@@ -56,7 +64,7 @@ export const useAccessPackageActions = ({
     else {
       openSnackbar({
         message: t('access_packages.package_delegation_error', {
-          name: toParty.name,
+          name: formatToPartyName(toParty),
           accessPackage: accessPackage.name,
         }),
         color: 'danger',
@@ -70,7 +78,7 @@ export const useAccessPackageActions = ({
     else {
       openSnackbar({
         message: t('access_packages.package_deletion_success', {
-          name: toParty.name,
+          name: formatToPartyName(toParty),
           accessPackage: accessPackage.name,
         }),
         color: 'success',
@@ -88,7 +96,7 @@ export const useAccessPackageActions = ({
     else {
       openSnackbar({
         message: t('access_packages.package_deletion_error', {
-          name: toParty.name,
+          name: formatToPartyName(toParty),
           accessPackage: accessPackage.name,
         }),
         color: 'danger',
