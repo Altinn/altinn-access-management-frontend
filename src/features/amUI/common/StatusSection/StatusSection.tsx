@@ -41,7 +41,7 @@ export const StatusSection = ({
   undelegatedPackageName,
 }: StatusSectionProps) => {
   const { t } = useTranslation();
-  const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  const { fromParty, toParty } = usePartyRepresentation();
 
   if (
     !userHasAccess &&
