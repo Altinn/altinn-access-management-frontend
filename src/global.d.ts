@@ -9,13 +9,16 @@ declare global {
       restrictPrivUse: boolean;
       crossPlatformLinks: boolean;
       displaySettingsPage: boolean;
+      displayClientAdministrationPage: boolean;
       displayPoaOverviewPage: boolean;
       useNewActorsList: boolean;
       displayRequestsPage: boolean;
+      displayDeletedAccountToggle: boolean;
       displayPrivDelegation: boolean;
       displayAccessRequest: boolean;
       displaySubConnections: boolean;
       displayRoles: boolean;
+      addAllSystemuserCustomers: boolean;
     };
   }
 }

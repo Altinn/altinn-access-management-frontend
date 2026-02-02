@@ -12,7 +12,7 @@ export const RequestRoleButton = ({ icon = true, ...props }: RequestRoleButtonPr
   // Todo: Implement request role button
   return (
     <Button
-      variant='text'
+      variant='tertiary'
       disabled
       icon={icon ? PlusCircleIcon : undefined}
       size='sm'

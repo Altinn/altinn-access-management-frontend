@@ -5,6 +5,10 @@
   max-width: 42rem;
 }
 
+.systemUserDetailsHeaderAvatar {
+  font-size: var(--ds-font-size-10);
+}
+
 .headingContainer {
   flex: 1;
 }

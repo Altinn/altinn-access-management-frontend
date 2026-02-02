@@ -58,12 +58,14 @@ export const PackagePoaDetailsPage = () => {
 
 const BreadcrumbsWrapper = () => {
   const { id } = useParams<{ id: string }>();
+  const { i18n } = useTranslation();
   const { fromParty } = usePartyRepresentation();
 
   const { data: accessPackage } = useGetPackagePermissionDetailsQuery(
     {
       from: fromParty?.partyUuid ?? '',
       packageId: id || '',
+      language: i18n.language,
     },
     { skip: !id || !fromParty?.partyUuid },
   );

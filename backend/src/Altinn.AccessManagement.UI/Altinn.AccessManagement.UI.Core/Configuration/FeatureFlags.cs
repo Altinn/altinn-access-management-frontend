@@ -42,6 +42,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplaySettingsPage { get; set; }
 
         /// <summary>
+        /// Whether to display the client administration page in the sidebar
+        /// </summary>
+        public bool DisplayClientAdministrationPage { get; set; }
+
+        /// <summary>
         /// Whether to display the POA overview page in the sidebar
         /// </summary>
         public bool DisplayPoaOverviewPage { get; set; }
@@ -57,6 +62,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayRequestsPage { get; set; }
 
         /// <summary>
+        /// Whether to display the deleted account toggle feature
+        /// </summary>
+        public bool DisplayDeletedAccountToggle { get; set; }
+
+        /// <summary>
         /// Whether to display the PRIV delegation feature
         /// </summary>
         public bool DisplayPrivDelegation { get; set; }
@@ -70,5 +80,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to display sub-connections feature
         /// </summary>
         public bool DisplaySubConnections { get; set; }
+
+        /// <summary>
+        /// Whether to show the button to add all customers for agent system user
+        /// </summary>
+        public bool AddAllSystemuserCustomers { get; set; }
     }
 }

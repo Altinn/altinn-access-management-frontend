@@ -1,117 +1,286 @@
 import React from 'react';
-import { List, ResourceListItem, DsSearch, DsParagraph, Button } from '@altinn/altinn-components';
+import {
+  DsParagraph,
+  List,
+  ResourceListItem,
+  type ResourceListItemProps,
+} from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
-import type { PackageResource } from '@/rtk/features/accessPackageApi';
+
 import { ResourceDetails } from './ResourceDetails';
 import classes from './ResourceList.module.css';
 import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
+import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
+import type { ResourceListItemResource } from './types';
 
-interface PackageResourceListProps {
-  resources: PackageResource[];
-  noResourcesText?: string;
+import cn from 'classnames';
+
+export interface ResourceListProps<
+  TResource extends ResourceListItemResource = ResourceListItemResource,
+> {
+  resources: TResource[];
   isLoading?: boolean;
+  noResourcesText?: string;
+  enableSearch?: boolean;
+  searchPlaceholder?: string;
+  onSelect?: (resource: TResource) => void;
+  showDetails?: boolean;
+  size?: ResourceListItemProps['size'];
+  titleAs?: ResourceListItemProps['titleAs'];
+  interactive?: boolean;
+  as?: ResourceListItemProps['as'];
+  showMoreButton?: boolean;
+  skeletonCount?: number;
+  resolveLogos?: boolean;
+  enableMaxHeight?: boolean;
+  renderControls?: (resource: TResource) => React.ReactNode;
+  getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
 }
 
-export const ResourceList = ({
+const extractResourceName = (resource: ResourceListItemResource): string => {
+  if ('name' in resource && typeof resource.name === 'string' && resource.name.trim().length > 0) {
+    return resource.name;
+  }
+
+  if ('title' in resource && typeof resource.title === 'string') {
+    return resource.title;
+  }
+
+  if (
+    'resourceName' in resource &&
+    typeof (resource as { resourceName?: string }).resourceName === 'string'
+  ) {
+    return (resource as { resourceName?: string }).resourceName ?? '';
+  }
+
+  return '';
+};
+
+const extractOwnerName = (resource: ResourceListItemResource): string => {
+  if ('provider' in resource && resource.provider?.name) {
+    return resource.provider.name;
+  }
+
+  if ('resourceOwnerName' in resource && resource.resourceOwnerName) {
+    return resource.resourceOwnerName;
+  }
+
+  return '';
+};
+
+const extractDescription = (resource: ResourceListItemResource): string => {
+  if ('description' in resource && typeof resource.description === 'string') {
+    return resource.description;
+  }
+
+  return '';
+};
+
+const extractOrgCode = (resource: ResourceListItemResource): string => {
+  if ('provider' in resource && resource.provider?.code) {
+    return resource.provider.code;
+  }
+
+  if ('resourceOwnerOrgcode' in resource && resource.resourceOwnerOrgcode) {
+    return resource.resourceOwnerOrgcode;
+  }
+
+  return '';
+};
+
+const extractLogoUrl = (resource: ResourceListItemResource): string | undefined => {
+  if ('provider' in resource && resource.provider?.logoUrl) {
+    return resource.provider.logoUrl;
+  }
+
+  if ('resourceOwnerLogoUrl' in resource && resource.resourceOwnerLogoUrl) {
+    return resource.resourceOwnerLogoUrl;
+  }
+
+  return undefined;
+};
+
+const extractLogoAlt = (resource: ResourceListItemResource): string | undefined =>
+  extractOwnerName(resource);
+
+const extractResourceId = (resource: ResourceListItemResource): string | undefined => {
+  if ('id' in resource && resource.id) {
+    return resource.id;
+  }
+
+  if ('identifier' in resource && resource.identifier) {
+    return resource.identifier;
+  }
+
+  return undefined;
+};
+
+export const ResourceList = <
+  TResource extends ResourceListItemResource = ResourceListItemResource,
+>({
   resources,
-  noResourcesText,
   isLoading,
-}: PackageResourceListProps) => {
+  noResourcesText,
+  enableSearch = true,
+  onSelect,
+  showDetails,
+  size,
+  titleAs,
+  interactive,
+  as,
+  resolveLogos = true,
+  enableMaxHeight = false,
+  renderControls,
+  getBadge,
+}: ResourceListProps<TResource>) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
-  const [selected, setSelected] = React.useState<PackageResource | null>(null);
+  const [filterState, setFilterState] = React.useState<{ owner?: string[] }>({});
+  const [selected, setSelected] = React.useState<TResource | null>(null);
   const { getProviderLogoUrl, isLoading: orgLoading } = useProviderLogoUrl();
+  const logoResolver = React.useMemo(
+    () => (resolveLogos ? getProviderLogoUrl : () => undefined),
+    [getProviderLogoUrl, resolveLogos],
+  );
 
-  const onSelect = (res: PackageResource) => {
-    setSelected(res);
-  };
+  const shouldShowDetails = showDetails ?? !onSelect;
+  const derivedInteractive = interactive ?? Boolean(onSelect || shouldShowDetails);
 
-  const onClose = () => setSelected(null);
+  const handleSelect = React.useCallback(
+    (resource: TResource) => {
+      if (onSelect) {
+        onSelect(resource);
+        return;
+      }
 
-  const {
-    resources: filtered,
-    hasNextPage,
-    loadNextPage,
-  } = useFilteredResources({
+      if (shouldShowDetails) {
+        setSelected(resource);
+      }
+    },
+    [onSelect, shouldShowDetails],
+  );
+
+  const closeDetails = React.useCallback(() => setSelected(null), []);
+
+  const { resources: filteredResources } = useFilteredResources<TResource>({
     resources,
-    searchString: search,
+    serviceOwnerFilter: filterState?.['owner'] ?? [],
+    searchString: enableSearch ? search : '',
+    getResourceName: extractResourceName,
+    getOwnerName: extractOwnerName,
+    getOwnerOrgCode: extractOrgCode,
+    getDescription: extractDescription,
   });
+
+  const isSkeletonVisible = isLoading || (resolveLogos && orgLoading);
+
+  const serviceOwnerOptions = React.useMemo(() => {
+    const uniqueOwners = new Map<string, { value: string; label: string; count: number }>();
+    resources.forEach((res) => {
+      const code = extractOrgCode(res);
+      const name = extractOwnerName(res);
+      if (code) {
+        const existing = uniqueOwners.get(code);
+        if (existing) {
+          existing.count = (existing.count ?? 1) + 1;
+        } else {
+          uniqueOwners.set(code, { value: code, label: name, count: 1 });
+        }
+      }
+    });
+    return Array.from(uniqueOwners.values());
+  }, [resources]);
 
   return (
     <div className={classes.container}>
-      {resources.length > 0 && (
-        <DsSearch className={classes.searchBar}>
-          <DsSearch.Input
-            aria-label={t('resource_list.resource_search_placeholder')}
-            placeholder={t('resource_list.resource_search_placeholder')}
-            value={search}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
-          />
-          {search && <DsSearch.Clear onClick={() => setSearch('')} />}
-        </DsSearch>
+      {enableSearch && resources.length > 0 && (
+        <ResourceFilterToolbar
+          search={search}
+          setSearch={setSearch}
+          filterState={filterState}
+          setFilterState={setFilterState}
+          serviceOwnerOptions={serviceOwnerOptions}
+        />
       )}
-      {orgLoading || isLoading ? (
+
+      {isSkeletonVisible ? (
         <SkeletonResourceList />
       ) : (
         <>
-          {resources.length === 0 && (
+          {resources.length === 0 && !search && (
             <DsParagraph data-size='md'>
-              {noResourcesText || t('resource_list.no_resources')}
+              {noResourcesText ?? t('resource_list.no_resources')}
             </DsParagraph>
           )}
-          {resources.length > 0 && filtered.length === 0 && (
+          {enableSearch && search.length > 0 && filteredResources.length === 0 && (
             <DsParagraph data-size='md'>
               {t('resource_list.no_resources_filtered', { searchTerm: search })}
             </DsParagraph>
           )}
-          {filtered.length > 0 && (
-            <List>
-              {filtered.map((resource) => {
-                const emblem = getProviderLogoUrl(
-                  resource.provider?.code ?? resource.resourceOwnerOrgcode ?? '',
-                );
-                return (
-                  <ResourceListItem
-                    key={resource.id}
-                    id={resource.id}
-                    as='button'
-                    size='xs'
-                    resourceName={resource.name || resource.title}
-                    ownerName={resource.provider?.name || resource.resourceOwnerName || ''}
-                    ownerLogoUrl={
-                      emblem ?? resource.provider?.logoUrl ?? resource.resourceOwnerLogoUrl
-                    }
-                    ownerLogoUrlAlt={resource.provider?.name || resource.resourceOwnerName}
-                    onClick={() => onSelect(resource)}
-                    titleAs='h3'
-                  />
-                );
-              })}
-            </List>
-          )}
-          {hasNextPage && (
-            <div className={classes.showMoreButtonContainer}>
-              <Button
-                className={classes.showMoreButton}
-                onClick={loadNextPage}
-                variant='outline'
-                size='md'
-              >
-                {t('common.show_more')}
-              </Button>
-            </div>
-          )}
+          <div
+            className={cn(classes.resourceListContainer, { [classes.maxHeight]: enableMaxHeight })}
+          >
+            {filteredResources.length > 0 && (
+              <List>
+                {filteredResources.map((resource, index) => {
+                  const derivedId = extractResourceId(resource);
+                  const resourceId = derivedId ? String(derivedId) : `resource-${index}`;
+                  const resourceName = extractResourceName(resource);
+                  const ownerName = extractOwnerName(resource);
+                  const orgCode = extractOrgCode(resource);
+                  const providerLogo = resolveLogos && orgCode ? logoResolver(orgCode) : undefined;
+                  const fallbackLogoUrl = extractLogoUrl(resource);
+                  const ownerLogoUrl = providerLogo ?? fallbackLogoUrl;
+                  const ownerLogoAlt = extractLogoAlt(resource) ?? ownerName;
+                  const itemInteractive = derivedInteractive;
+                  const itemAs = as ?? (itemInteractive ? 'button' : 'div');
+                  const itemSize = size ?? 'xs';
+                  const itemTitleAs = titleAs ?? 'h3';
+                  const handleClick = itemInteractive ? () => handleSelect(resource) : undefined;
+                  const itemShadow = itemInteractive ? undefined : 'none';
+
+                  return (
+                    <ResourceListItem
+                      key={resourceId}
+                      id={resourceId}
+                      resourceName={resourceName}
+                      ownerName={ownerName}
+                      ownerLogoUrl={ownerLogoUrl}
+                      ownerLogoUrlAlt={ownerLogoAlt}
+                      as={itemAs}
+                      size={itemSize}
+                      titleAs={itemTitleAs}
+                      interactive={itemInteractive}
+                      onClick={handleClick}
+                      badge={getBadge?.(resource, index)}
+                      controls={renderControls?.(resource)}
+                      loading={false}
+                      shadow={itemShadow}
+                    />
+                  );
+                })}
+              </List>
+            )}
+          </div>
         </>
       )}
-      <ResourceDetails
-        resource={selected}
-        onClose={onClose}
-        providerLogoUrl={getProviderLogoUrl(
-          selected?.provider?.code ?? selected?.resourceOwnerOrgcode ?? '',
-        )}
-      />
+
+      {shouldShowDetails && (
+        <ResourceDetails
+          resource={selected}
+          onClose={closeDetails}
+          providerLogoUrl={
+            selected
+              ? resolveLogos
+                ? (logoResolver(extractOrgCode(selected) ?? '') ?? selected.resourceOwnerLogoUrl)
+                : extractLogoUrl(selected)
+              : undefined
+          }
+        />
+      )}
     </div>
   );
 };

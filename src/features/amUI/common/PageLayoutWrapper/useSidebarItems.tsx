@@ -1,3 +1,4 @@
+import { useRequests } from '@/resources/hooks/useRequests';
 import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
@@ -6,6 +7,7 @@ import {
 import {
   getConsentMenuItem,
   getHeadingMenuItem,
+  getClientAdministrationMenuItem,
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
   getRequestsMenuItem,
@@ -20,7 +22,7 @@ import {
   useGetIsCompanyProfileAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
-import { MenuItemProps } from '@altinn/altinn-components';
+import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
@@ -29,6 +31,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displaySettingsPage = window.featureFlags?.displaySettingsPage;
   const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
   const displayRequestsPage = window.featureFlags?.displayRequestsPage;
+  const displayClientAdministrationPage = window.featureFlags?.displayClientAdministrationPage;
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { pathname } = useLocation();
@@ -37,6 +40,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
+  const { pendingRequests } = useRequests();
 
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
@@ -47,7 +51,18 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getHeadingMenuItem(pathname, isLoading));
   }
   if (displayRequestsPage) {
-    items.push(getRequestsMenuItem(pathname, isLoading, isSmall));
+    const requestsBadge =
+      pendingRequests && pendingRequests.length > 0
+        ? {
+            label: pendingRequests.length,
+            color: 'warning' as Color,
+            variant: 'base' as BadgeVariant,
+          }
+        : undefined;
+    items.push({
+      ...getRequestsMenuItem(pathname, isLoading, isSmall),
+      badge: requestsBadge,
+    });
   }
 
   if (displayConfettiPackage) {
@@ -61,15 +76,19 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getPoaOverviewMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (hasConsentPermission(reportee, isAdmin)) {
+  if (hasConsentPermission(isAdmin)) {
     items.push(getConsentMenuItem(pathname, isLoading, isSmall));
   }
 
   if (
-    hasCreateSystemUserPermission(reportee) ||
+    hasCreateSystemUserPermission(reportee, isAdmin) ||
     hasSystemUserClientAdminPermission(reportee, isClientAdmin)
   ) {
     items.push(getSystemUserMenuItem(pathname, isLoading, isSmall));
+  }
+
+  if (isClientAdmin && displayClientAdministrationPage) {
+    items.push(getClientAdministrationMenuItem(pathname, isLoading, isSmall));
   }
 
   if (canAccessSettings && displaySettingsPage) {

@@ -55,5 +55,6 @@
       "id": "urn:altinn:resource",
       "value": "consent-test-resource-poa"
     }
-  ]
+  ],
+  "versionId": 204
 }

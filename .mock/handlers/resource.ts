@@ -26,6 +26,7 @@ export const resourceHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
           visible: true,
           resourceOwnerName: 'NARNIA',
           resourceOwnerOrgNumber: '777777777',
+          resourceOwnerOrgcode: 'ttd',
           resourceReferences: [
             {
               ReferenceSource: 'Altinn3',

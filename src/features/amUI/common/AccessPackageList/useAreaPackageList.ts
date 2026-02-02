@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import {
@@ -11,6 +12,7 @@ import {
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { getInheritedStatus, type InheritedStatusMessageType } from '../useInheritedStatus';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export interface ExtendedAccessArea extends AccessArea {
   packages: {
@@ -43,14 +45,29 @@ export const useAreaPackageList = ({
   showAllAreas,
   showAllPackages,
 }: useAreaPackagesProps) => {
+  const { i18n } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  const typeName = fromParty
+    ? fromParty?.partyTypeName === PartyType.Organization
+      ? 'organisasjon'
+      : 'person'
+    : undefined;
 
   const {
     data: allPackageAreas,
     isLoading: loadingPackageAreas,
     isFetching: fetchingSearch,
     error: searchError,
-  } = useSearchQuery(searchString ?? '');
+  } = useSearchQuery(
+    {
+      searchString: searchString ?? '',
+      language: i18n.language,
+      typeName,
+    },
+    {
+      skip: !actingParty,
+    },
+  );
 
   const {
     data: activeDelegations,

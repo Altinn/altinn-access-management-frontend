@@ -56,6 +56,10 @@ export const settingsPageEnabled = () => {
   return window.featureFlags?.displaySettingsPage === true;
 };
 
+export const clientAdministrationPageEnabled = () => {
+  return window.featureFlags?.displayClientAdministrationPage === true;
+};
+
 export const poaOverviewPageEnabled = () => {
   return window.featureFlags?.displayPoaOverviewPage === true;
 };
@@ -74,4 +78,12 @@ export const displayAccessRequest = () => {
 
 export const displaySubConnections = () => {
   return window.featureFlags?.displaySubConnections === true;
+};
+
+export const displayDeletedAccountToggle = () => {
+  return window.featureFlags?.displayDeletedAccountToggle === true;
+};
+
+export const addAllSystemuserCustomers = () => {
+  return window.featureFlags?.addAllSystemuserCustomers === true;
 };

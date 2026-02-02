@@ -81,6 +81,8 @@
     "error_status": "HttpStatus: {{status}}",
     "ssn": "Fødselsnummer",
     "last_name": "Etternamn",
+    "org_number": "Organisasjonsnummer",
+    "org_name": "Organisasjonsnamn",
     "subunit": "Undereining",
     "subunit_lowercase": "undereining",
     "mainunit_lowercase": "hovudeining",
@@ -118,7 +120,7 @@
     "logged_in_as_name": "Logga inn som {{name}}",
     "new_altinn_info": "Om nye Altinn",
     "help_pages": "Hjelpesider",
-    "leave_beta": "Til gammel løsning",
+    "leave_beta": "Til gamle Altinn",
     "shortcuts": "Snarvegar",
     "all_forms": "Alle skjema og tenester",
     "start_business": "Starte og drive bedrift",
@@ -137,6 +139,7 @@
     "users": "Brukarar",
     "reportees": "Fullmakter hos andre",
     "systemaccess": "Systemtilgangar",
+    "client_administration": "Klientadministrasjon",
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
     "settings": "Innstillingar",
@@ -297,7 +300,7 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttenester",
     "wip_message": "Denne sida jobbar vi framleis med! For å administrere enkelttenester, må du gå til den gamle løysinga.",
-    "wip_link_text": "Gå til gammal løsning"
+    "wip_link_text": "Gå til gamle Altinn"
   },
   "access_packages": {
     "helptext_button": "Kva er tilgangspakkar?",
@@ -341,6 +344,10 @@
       "via_connection": "{{user_name}} har tilgang til dette gjennom {{via_name}}.",
       "via_keyrole": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}."
     }
+  },
+  "user_roles": {
+    "has_client_access": "Har klienttilgang",
+    "has_client_access_description": "Denne brukaren har tilgang til ein eller fleire av verksemda sine klientar. Dette betyr ikkje nødvendigvis at dei har tilgang til verksemda sitt eige innhald, men at dei kan utføre arbeid på vegner av ein eller fleire av kundane deira. Kva klientar dei har tilgang til kan administrerast under <a>klientadministrasjon</a>."
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -417,6 +424,12 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tenester",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom rolla si i {{org_name}}. Den kan derfor ikkje slettast.",
+    "actions": {
+      "access_to_all": "Tilgang til heile tenesten",
+      "partial_access": "Tilgang til {{count}} av {{total}} handlingar",
+      "action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan gi fullmakt til heile tenesta eller velje spesifikke handlingar.",
+      "cannot_give_header": "Du kan ikkje gi tilgang til:"
+    },
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ønsker å endre dette."
@@ -507,7 +520,7 @@
     "invalid_phone": "Ugyldig telefonnummer"
   },
   "info_modal": {
-    "back_button": "Gå til gammel løsning",
+    "back_button": "Gå til gamle Altinn",
     "help_pages": "Hjelpesider",
     "info_button": "Informasjon om ny løysing"
   },
@@ -516,7 +529,7 @@
     "launchAlertContent": "Denne brukaren kan også ha fullmakter frå tidlegare Altinn.",
     "launchAlertLinkText": "Sjå fullmakter frå tidlegare Altinn",
     "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som allereie finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane. Brukaren har dei same rollene i den gamle løysinga, men der inneheld dei fleire og andre tenester.",
-    "oldRolesLinkText": "Gå til gammal løysing",
+    "oldRolesLinkText": "Gå til gamle Altinn",
     "legacyRoleContent": "Denne rolla vil snart fjernast. Bruk heller tilgangspakkar."
   },
   "systemuser_overviewpage": {
@@ -524,6 +537,7 @@
     "banner_title": "Systemtilgangar",
     "sub_title_text": "Ved å opprette ein systemtilgang gir du eit fagsystem tilgang til å løyse oppgåver i Altinn på vegne av bedrifta di.",
     "systemusers_load_error": "Kunne ikkje laste systemtilgangar",
+    "pending_systemusers_load_error": "Kunne ikkje laste ventende systemtilgang-førespurnader",
     "agent_delegation_systemusers_load_error": "Kunne ikkje laste systemtilganger for kunder",
     "new_system_user_button": "Lag ny systemtilgang",
     "existing_system_users_title": "Egne systemtilgangar",
@@ -535,7 +549,52 @@
     "no_key_role2": "For å lage ein systemtilgang treng du rolla Tilgangsstyrar, Hovudadministrator eller Dagleg leiar.",
     "new_system_user": "NY",
     "systemuser_tab": "Systemtilganger",
-    "api_tab": "API-tilgangar"
+    "api_tab": "API-tilgangar",
+    "pending_request_badge": "Godkjenn eiga systemtilgang",
+    "pending_agent_request_badge": "Godkjenn systemtilgang for kundar",
+    "pending_system_users_title": "Ventende systemtilgang-førespurnader",
+    "standard_system_user_badge": "Se fullmakter",
+    "agent_system_user_badge": "Administrere kunder"
+  },
+  "client_administration_page": {
+    "no_access_title": "Du har ikkje tilgang til klientadministrasjon",
+    "page_heading": "Klientadministrasjon",
+    "clients_tab_title": "Klientar",
+    "agents_tab_title": "Brukarar",
+    "add_agent_button": "Legg til ny brukar",
+    "add_agent_button_short": "Legg til",
+    "add_agentModal_agent_tab_title": "Person",
+    "add_agent_error": "Kunne ikkje leggje til brukar.",
+    "add_agent_success_snackbar": "Brukar lagt til.",
+    "agent_search_placeholder": "Søk etter person",
+    "agent_delete_button": "Slett brukar",
+    "agent_delete_heading": "Du slettar denne brukaren",
+    "agent_delete_body": "Denne personen og alle deira fullmakter hos klientane dine vil bli sletta.",
+    "agent_delete_confirm": "Slett brukar",
+    "load_delegations_error": "Kunne ikkje laste klientar med tilgang.",
+    "no_delegations": "Fann ingen klientar med tilgang.",
+    "delegate_package_button": "Gi fullmakt",
+    "delegate_package_success_snackbar": "{{name}} har no fått fullmakt til {{accessPackage}}.",
+    "delegate_package_error": "Kunne ikkje gi {{name}} fullmakt til {{accessPackage}}.",
+    "remove_package_button": "Slett fullmakt",
+    "remove_package_success_snackbar": "{{name}} har ikkje lenger fullmakt til {{accessPackage}}.",
+    "remove_package_error": "Kunne ikkje slette fullmakt til {{accessPackage}} for {{name}}.",
+    "via_role": "Tilgang gjennom Enhetsregisteret",
+    "agent_has_clients_tab": "Har desse klientane",
+    "agent_can_get_clients_tab": "Alle klientar",
+    "direct_connections_heading": "Brukarar med klienttilgang",
+    "indirect_connections_heading": "Andre brukarar",
+    "organization_identifier": "Org.nr. {{orgnr}}",
+    "no_clients": "Organisasjonen har ingen klientar",
+    "clients_filter_label": "Klientforhold",
+    "clients_filter_register": "Frå Einingsregisteret",
+    "clients_filter_other": "Andre",
+    "clients_show_deleted": "Vis sletta",
+    "show_deleted_clients": "Vis sletta",
+    "rettighetshaver": "Andre klientforhold",
+    "error_loading_clients": "Kunne ikkje laste klientar.",
+    "no_agents": "Ingen brukarar har fått klienttilgangar enno. Du kan søkje etter brukarar som allereie har nokre tilgangar hos dykk, eller registrere ein ny brukar.",
+    "client_search_placeholder": "Søk etter klient"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
@@ -603,7 +662,16 @@
     "reject_loading": "Avviser systemtilgang...",
     "request_accepted": "Denne førespurnaden er allereie godkjend",
     "request_rejected": "Denne førespurnaden er allereie avvist",
-    "request_expired": "Denne førespurnaden har gått ut"
+    "request_expired": "Denne førespurnaden har gått ut",
+    "escalate_title": "Du manglar nødvendig fullmakt",
+    "escalate_description": "Du har ikkje tilstrekkelige fullmakter til å godkjenne førespurnaden. Vil du senda førespurnaden vidare til Tilgangsstyraren i verksemda di?",
+    "escalate_confirm_button": "Ja, send vidare",
+    "escalate_cancel_button": "Lukk og logg ut",
+    "escalate_error": "Kunne ikkje senda førespurnaden vidare",
+    "escalate_sent_title": "Førespurnaden er videresendt",
+    "escalate_sent_description": "Tilgangsstyraren i verksemda di skal no ha fått førespurnaden i Altinn.",
+    "escalate_close_button": "Avslutt",
+    "escalate_already_escalated": "Denne førespurnaden er allereie videresendt"
   },
   "systemuser_change_request": {
     "page_title": "Oppdater systemtilgang - Altinn",
@@ -651,13 +719,19 @@
     "edit_customers": "Legg til eller fjern kundar",
     "customer_search": "Søk etter kunde",
     "hide_assigned_customers": "Gøym kundar som er lagde til",
+    "add_all_customers": "Legg til alle kunder",
     "no_customers_warning": "Det finst ingen kundar enda. Kundane må gi fullmakt til tilgangspakkane som kreves av systemtilgangen til {{companyName}}.",
     "remove_from_system_user": "Fjern frå systemtilgang",
     "remove_from_system_user_aria": "Fjern {{customerName}} frå systemtilgang",
     "add_to_system_user": "Legg til i systemtilgang",
     "add_to_system_user_aria": "Legg til {{customerName}} i systemtilgang",
     "add_system_user_error": "Kunne ikkje legge til kunde",
-    "remove_system_user_error": "Kunne ikkje fjerne kunde"
+    "remove_system_user_error": "Kunne ikkje fjerne kunde",
+    "add_all_customers_success": "Alle kundar er lagde til.",
+    "add_all_customers_partial": "Berre {{successCount}} av {{totalCount}} kundar vart lagde til.",
+    "add_all_customers_failed_list": "Følgjande kundar kunne ikkje leggjast til:",
+    "add_all_customers_in_progress_warning": "Ikkje lukk denne nettsida før alle kundar er lagde til.",
+    "add_all_customers_progress": "Legg til kunde {{progress}} av {{totalCount}}"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",
@@ -678,11 +752,11 @@
   "page_not_available": {
     "title": "Tilgangsstyring for privatpersonar er framleis under arbeid",
     "text": "På denne sida vil det komme meir etter kvart. Du kan framleis tilgangsstyre på vegne av deg sjølv som privatperson i gammal løysing.",
-    "link_text": "Gå til gammal løysing"
+    "link_text": "Gå til gamle Altinn"
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
-    "loading_consent": "Laster forespørsel...",
+    "loading_consent": "Laster førespurnad...",
     "load_consent_error": "Kunne ikkje laste samtykke/fullmakt",
     "approve_consent": "Ja, eg gir samtykke",
     "reject_consent": "Nei, eg gir ikkje samtykke",
@@ -695,7 +769,12 @@
     "already_approved": "Dette samtykket er allereie gitt",
     "already_approved_poa": "Denne fullmakta er allereie gitt",
     "already_rejected": "Dette samtykket er allereie avvist",
-    "already_rejected_poa": "Denne fullmakta er allereie avvist"
+    "already_rejected_poa": "Denne fullmakta er allereie avvist",
+    "receipt_header_consent": "Samtykket er registrert!",
+    "receipt_header_poa": "Fullmakta er registrert!",
+    "receipt_body_consent": "Du kan når som helst trekke tilbake samtykket i oversikten under Samtykke- og fullmaktsavtaler.",
+    "receipt_body_poa": "Du kan når som helst trekke tilbake fullmakta i oversikten under Samtykke- og fullmaktsavtaler.",
+    "receipt_back": "Tilbake til oversikten"
   },
   "active_consents": {
     "page_title": "Samtykke- og fullmaktsavtaler - Altinn",
@@ -728,7 +807,8 @@
     "confirm_revoke_consent": "Ja, trekk samtykke",
     "confirm_revoke_poa": "Ja, trekk fullmakt",
     "altinn2_consent_alert_header": "Du er no i ein ny versjon av Samtykke- og fullmaktsoversikten",
-    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle aktive samtykke- og fullmaktsavtaler her. Finn du ikkje det du ser etter, kan du gå til dei <a>gamle Altinn-sidene</a> og velje “Samtykker og fullmakter” i oversikten."
+    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle aktive samtykke- og fullmaktsavtaler her. Finn du ikkje det du ser etter, kan du gå til dei <a>gamle Altinn-sidene</a> og velje “Samtykker og fullmakter” i oversikten.",
+    "newly_consented": "Nyleg samtykka"
   },
   "consent_log": {
     "page_title": "Avtalelogg - Altinn",
@@ -791,14 +871,19 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tenester tilgjengelege."
+    "no_resources": "Ingen tenester tilgjengelege.",
+    "filter_by_serviceowner": "Filtrer på tjenesteeier",
+    "resource_search_clear": "Tøm søk",
+    "remove_filter": "Fjern filter",
+    "service_owner_filter": "Søk etter tjenesteeier",
+    "service_owner_filter_clear": "Tøm søkefelt"
   },
   "landing_page": {
     "alert_heading": "Du er no i den nye løysinga for tilgangsstyring",
     "alert_heading_priv": "Dette er den nye løysinga for tilgangsstyring for privatperson",
     "alert_body": "Her er dagens Altinn-roller erstatta av tilgangspakker med tenester. \n\nVær oppmerksom på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Hvis du ikkje finn tenesten her, kan du gå til den gamle løysinga.",
     "alert_body_priv": "Vi har dessverre ikkje alt på plass endå, så nokre ting må du gjere i gammal løysing. \n\nØnsker du å gå til tilgangsstyring for verksemd, kan du skifte til ønska verksemd i aktørvalget i toppen.",
-    "alert_link": "Gå til gammal løysing",
+    "alert_link": "Gå til gamle Altinn",
     "shortcut_links_heading": "Kvar vil du gå?",
     "other_links_heading": "Anna",
     "users_item_description_org": "Oversikt over personar og verksemder som har fått fullmakter hos dykk",
@@ -808,7 +893,22 @@
     "poa_item_description": "Oversikt over alle tilgangspakkar og enkelttenester",
     "consent_item_description": "Oversikt over alle inngåtte avtalar",
     "systemuser_item_description": "Oversikt over systemtilgangar",
+    "client_admin_item_description": "Deleger fullmakter frå klientar til brukarar i verksemda.",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny førespurnad",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye førespurnader"
+  },
+  "request_page": {
+    "page_title": "Førespurnader - Altinn",
+    "heading": "Førespurnader for {{name}}",
+    "incoming_requests": "Mottatte førespurnader",
+    "sent_requests": "Sendte førespurnader",
+    "no_received_requests": "Ingen mottatte førespurnader",
+    "no_sent_requests": "Ingen sendte førespurnader",
+    "process_request": "Behandle førespurnad",
+    "request_consent": "Ber om samtykke",
+    "request_poa": "Ber om fullmakt",
+    "request_systemuser": "Ber om å opprette systembruker",
+    "error_loading_requests": "Kunne ikkje laste mottatte førespurnader",
+    "error_partial_loading_requests": "Kunne ikkje laste alle mottatte førespurnader"
   }
 }

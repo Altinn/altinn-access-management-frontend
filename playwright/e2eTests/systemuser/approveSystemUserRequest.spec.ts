@@ -14,39 +14,57 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
 
   test('Avvis Systembrukerforespørsel', async ({ page, login }): Promise<void> => {
     const externalRef = TestdataApi.generateExternalRef();
-    const response = await api.postSystemuserRequest(externalRef, systemId);
 
-    await page.goto(response.confirmUrl);
-    await login.loginNotChoosingActor('14824497789');
+    const response = await test.step('Create system user request', async () => {
+      return await api.postSystemuserRequest(externalRef, systemId);
+    });
 
-    await page.getByRole('button', { name: 'Avvis' }).click();
+    await test.step('Navigate to confirmation page and login', async () => {
+      await page.goto(response.confirmUrl);
+      await login.loginNotChoosingActor('14824497789');
+    });
 
-    //Expect user to be logged out
-    await expect(page).toHaveURL('https://info.altinn.no');
+    await test.step('Reject system user request', async () => {
+      await page.getByRole('button', { name: 'Avvis' }).click();
+    });
 
-    //Read from status api to verify that status is not rejected after clicking "Avvis"
-    const statusApiRequest = await api.getStatusForSystemUserRequest<{ status: string }>(
-      response.id,
-    );
-    expect(statusApiRequest.status).toBe('Rejected');
+    await test.step('Verify logout and rejection status', async () => {
+      //Expect user to be logged out
+      await expect(page).toHaveURL('https://info.altinn.no');
+
+      //Read from status api to verify that status is not rejected after clicking "Avvis"
+      const statusApiRequest = await api.getStatusForSystemUserRequest<{ status: string }>(
+        response.id,
+      );
+      expect(statusApiRequest.status).toBe('Rejected');
+    });
   });
 
   test('Godkjenn Systembrukerforespørsel', async ({ page, login }): Promise<void> => {
     const externalRef = TestdataApi.generateExternalRef();
-    const response = await api.postSystemuserRequest(externalRef, systemId);
 
-    await page.goto(response.confirmUrl);
-    await login.loginNotChoosingActor('14824497789');
+    const response = await test.step('Create system user request', async () => {
+      return await api.postSystemuserRequest(externalRef, systemId);
+    });
 
-    await page.getByRole('button', { name: 'Godkjenn' }).click();
+    await test.step('Navigate to confirmation page and login', async () => {
+      await page.goto(response.confirmUrl);
+      await login.loginNotChoosingActor('14824497789');
+    });
 
-    //Expect user to be logged out
-    await expect(page).toHaveURL('https://info.altinn.no');
+    await test.step('Approve system user request', async () => {
+      await page.getByRole('button', { name: 'Godkjenn' }).click();
+    });
 
-    //Read from status api to verify that status is not Accepted after clicking "Avvis"
-    const statusApiRequest = await api.getStatusForSystemUserRequest<{ status: string }>(
-      response.id,
-    );
-    expect(statusApiRequest.status).toBe('Accepted');
+    await test.step('Verify logout and acceptance status', async () => {
+      //Expect user to be logged out
+      await expect(page).toHaveURL('https://info.altinn.no');
+
+      //Read from status api to verify that status is not Accepted after clicking "Avvis"
+      const statusApiRequest = await api.getStatusForSystemUserRequest<{ status: string }>(
+        response.id,
+      );
+      expect(statusApiRequest.status).toBe('Accepted');
+    });
   });
 });

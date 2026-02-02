@@ -39,6 +39,9 @@ import { PackagePoaDetailsPage } from '@/features/amUI/packagePoaDetailsPage/Pac
 import { SettingsPage } from '@/features/amUI/settings/SettingsPage';
 import { LandingPage } from '@/features/amUI/landingPage/LandingPage';
 import { RequestPage } from '@/features/amUI/requestPage/RequestsPage';
+import { ClientAdministrationPage } from '@/features/amUI/clientAdministration/ClientAdministrationPage';
+import { ClientAdministrationAgentDetailsPage } from '@/features/amUI/clientAdministrationAgentDetails/ClientAdministrationAgentDetailsPage';
+import { ClientAdministrationClientDetailsPage } from '@/features/amUI/clientAdministrationClientDetails/ClientAdministrationClientDetailsPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -186,6 +189,18 @@ export const Router = createBrowserRouter(
             element={<SystemUserAgentRequestPage />}
           />
         </Route>
+        <Route
+          path={amUIPath.ClientAdministration}
+          element={<ClientAdministrationPage />}
+        />
+        <Route
+          path={amUIPath.ClientAdministrationAgent}
+          element={<ClientAdministrationAgentDetailsPage />}
+        />
+        <Route
+          path={amUIPath.ClientAdministrationClient}
+          element={<ClientAdministrationClientDetailsPage />}
+        />
         <Route path={ConsentPath.Consent}>
           <Route
             path={ConsentPath.Request}

@@ -22,6 +22,7 @@ export interface Connection {
   party: ExtendedUser;
   roles: RoleInfo[];
   connections: Connection[];
+  sortKey?: string;
 }
 
 export interface UserInfo {
@@ -63,6 +64,7 @@ export const connectionApi = createApi({
       }): { status: string | number; data: string } => {
         return { status: response.status, data: new Date().toISOString() };
       },
+      invalidatesTags: ['Connections'],
     }),
     getRightHolders: builder.query<
       Connection[],

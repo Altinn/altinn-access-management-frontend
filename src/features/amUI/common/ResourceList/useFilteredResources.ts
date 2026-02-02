@@ -1,52 +1,57 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
-import type { PackageResource } from '@/rtk/features/accessPackageApi';
-
-interface UseFilteredResourcesProps {
-  resources?: PackageResource[];
+interface UseFilteredResourcesProps<TResource> {
+  resources?: TResource[];
   searchString: string;
+  serviceOwnerFilter?: string[];
+  getResourceName: (resource: TResource) => string;
+  getOwnerName: (resource: TResource) => string;
+  getOwnerOrgCode: (resource: TResource) => string;
+  getDescription?: (resource: TResource) => string;
 }
 
-export const useFilteredResources = ({ resources, searchString }: UseFilteredResourcesProps) => {
-  const PAGE_SIZE = 10;
-  const [currentPage, setCurrentPage] = useState(1);
+export const useFilteredResources = <TResource>({
+  resources,
+  searchString,
+  serviceOwnerFilter,
+  getResourceName,
+  getOwnerName,
+  getOwnerOrgCode,
+  getDescription,
+}: UseFilteredResourcesProps<TResource>) => {
   const normalizedSearch = searchString.trim().toLowerCase();
 
   const filteredResources = useMemo(() => {
     const list = resources ?? [];
-    if (!normalizedSearch) return list;
-    return list.filter((r) => {
-      const nameOrTitle = (r.name || r.title || '').toLowerCase();
-      const ownerName = (r.provider?.name || r.resourceOwnerName || '').toLowerCase();
-      const description = (r.description || '').toLowerCase();
+    if (!normalizedSearch && !serviceOwnerFilter) return list;
+    return list.filter((resource) => {
+      const nameOrTitle = getResourceName(resource).toLowerCase();
+      const ownerName = getOwnerName(resource).toLowerCase();
+      const description = getDescription?.(resource)?.toLowerCase() ?? '';
+      const serviceOwnerMatch =
+        serviceOwnerFilter && serviceOwnerFilter.length > 0
+          ? serviceOwnerFilter
+              .map((owner) => owner.toLowerCase())
+              .includes(getOwnerOrgCode(resource).toLowerCase())
+          : true;
       return (
-        nameOrTitle.includes(normalizedSearch) ||
-        ownerName.includes(normalizedSearch) ||
-        description.includes(normalizedSearch)
+        (nameOrTitle.includes(normalizedSearch) ||
+          ownerName.includes(normalizedSearch) ||
+          description.includes(normalizedSearch)) &&
+        serviceOwnerMatch
       );
     });
-  }, [resources, normalizedSearch]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [resources, searchString]);
-
-  const paginatedResources = useMemo(() => {
-    return filteredResources.slice(0, PAGE_SIZE * currentPage);
-  }, [filteredResources, currentPage]);
-
-  const hasNextPage = filteredResources.length > PAGE_SIZE * currentPage;
-
-  const loadNextPage = () => {
-    if (hasNextPage) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
+  }, [
+    resources,
+    normalizedSearch,
+    serviceOwnerFilter,
+    getDescription,
+    getOwnerName,
+    getResourceName,
+  ]);
 
   return {
-    resources: paginatedResources,
-    hasNextPage,
-    loadNextPage,
+    resources: filteredResources,
     totalFilteredCount: filteredResources.length,
   };
 };

@@ -149,6 +149,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
                     ToParty = GetConsentParty(consent.To, toParty?.Name),
                     FromParty = GetConsentParty(consent.From, fromParty?.Name),
+                    CreatedDate = consent.ConsentRequestEvents.Find(e => string.Equals(e.EventType, "created", StringComparison.OrdinalIgnoreCase))?.Created ?? DateTimeOffset.MinValue
                 };
             });
 
@@ -329,8 +330,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 try
                 {
-                    string resourceId = right.Resource.Find(x => x.Type == "urn:altinn:resource")?.Value;
-                    ServiceResource resource = await _resourceRegistryClient.GetResource(resourceId);
+                    ConsentResourceAttribute consentResource = right.Resource.Find(x => x.Type == "urn:altinn:resource");
+                    ServiceResource resource = await _resourceRegistryClient.GetResource(consentResource.Value, consentResource.Version);
 
                     // If one of the resources is one-time consent, the whole consent is one-time consent
                     isOneTimeConsent = isOneTimeConsent || resource.IsOneTimeConsent;

@@ -290,5 +290,45 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
         }
+
+        /// <summary>
+        ///     Test case: GetPendingSystemUsers checks that pending system users (standard and agent) are returned
+        ///     Expected: GetPendingSystemUsers returns pending system users
+        /// </summary>
+        [Fact]
+        public async Task GetPendingSystemUsers_ReturnsPendingSystemUsers()
+        {
+            // Arrange
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "pendingSystemusers.json");
+            List<SystemUserFE> expectedResponse = Util.GetMockData<List<SystemUserFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyUuid}/pending");
+            List<SystemUserFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SystemUserFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetPendingSystemUsers checks error is returned when call fails
+        ///     Expected: GetPendingSystemUsers returns error
+        /// </summary>
+        [Fact]
+        public async Task GetPendingSystemUsers_ReturnsError()
+        {
+            // Arrange
+            string partyUuid = "4c285815-bf80-4f3a-a0b2-4ebf9acae3ea";
+            HttpStatusCode expectedResponse = HttpStatusCode.BadRequest;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyUuid}/pending");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
     }
 }

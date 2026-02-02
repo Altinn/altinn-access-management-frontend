@@ -11,6 +11,7 @@ const MobileViewport = { width: 375, height: 667 };
 // Digdir's org id
 const MASKINPORTEN_ORG_DIGDIR = '991825827';
 const ENV = env('environment')?.toUpperCase();
+const REDIRECT_URL = 'https://example.com/';
 
 function getDigitaliseringsdirektoratetLocator(page: any) {
   return page.getByText('DIGITALISERINGSDIREKTORATET');
@@ -45,7 +46,54 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
     });
 
     await test.step('Approve consent', async () => {
-      await consentPage.approveStandardAndWaitLogout('https://example.com/');
+      await consentPage.approveStandardAndWaitLogout(REDIRECT_URL);
+    });
+  });
+
+  /**
+   * Scenario E-bevis
+   *
+   * Funksjonelt scenario:
+   * I dette scenarioet har en virksomhet behov for tilgang til data til norsk virksomhet eller innbygger via e-bevis løsningen
+   * som administreres av Digdir. Virksomheten som ønsker tilgang til data har ikke noe oppsett
+   * for å kunne gjøre det og vil at Digdir gjennomfører alt på vegne av dem.
+   * Krever scopet "altinn:consentrequests.org" for å kunne gjøre det og det sjekkes eksplisitt på at samtykkeressursen eies av samme org som henter
+   * maskinporten-tokenet.
+   */
+  test(`E-bevis (org scope)`, async ({ consentPage, login }) => {
+    const scenario = scenarioBuilder.personToOrg('altinn:consentrequests.org');
+
+    const consentResponse = await test.step('Create consent request', async () => {
+      return await scenario.api.createConsentRequest({
+        from: { type: 'person', id: scenario.fromPerson },
+        to: { type: 'org', id: scenario.toOrg },
+        validToIsoUtc: scenario.validTo,
+        resourceValue: 'samtykke-esoknad',
+        redirectUrl: REDIRECT_URL,
+        metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
+      });
+    });
+
+    await test.step('Open consent page and login', async () => {
+      await consentPage.open(consentResponse.viewUri);
+      await login.loginNotChoosingActor(scenario.fromPerson);
+    });
+
+    await test.step('Pick language', async () => {
+      await consentPage.pickLanguage(consentPage.language);
+    });
+
+    await test.step('Verify consent UI', async () => {
+      await consentPage.expectStandardIntro();
+      await expect(consentPage.textLoanApplication).toBeVisible();
+      await expect(consentPage.getInterestRateText('4.2')).toBeVisible();
+      await expect(consentPage.getExpirationYearText('2027')).toBeVisible();
+      await expect(consentPage.getBankNameText('Testbanken E2E')).toBeVisible();
+      await expect(consentPage.textOneTimeDelivery).toBeVisible();
+    });
+
+    await test.step('Approve consent', async () => {
+      await consentPage.approveStandardAndWaitLogout(REDIRECT_URL);
     });
   });
 
@@ -74,7 +122,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
       });
 
       await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout('https://example.com/');
+        await consentPage.approveStandardAndWaitLogout(REDIRECT_URL);
       });
 
       await test.step('Fetch consent token', async () => {
@@ -138,7 +186,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
       });
 
       await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout('https://example.com/');
+        await consentPage.approveStandardAndWaitLogout(REDIRECT_URL);
       });
 
       await test.step('Fetch consent token with consumer_org', async () => {

@@ -33,6 +33,7 @@ import {
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
   getRequestsMenuItem,
+  getClientAdministrationMenuItem,
   getSettingsMenuItem,
   getSystemUserMenuItem,
   getUsersMenuItem,
@@ -40,6 +41,7 @@ import {
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/reporteeUtils';
 import { getHostUrl } from '@/resources/utils/pathUtils';
+import { useRequests } from '@/resources/hooks/useRequests';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
@@ -51,6 +53,7 @@ export const LandingPage = () => {
   const { data: canAccessSettings, isLoading: isLoadingCanAccessSettings } =
     useGetIsCompanyProfileAdminQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
+  const { pendingRequests, isLoadingRequests } = useRequests();
 
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
@@ -72,11 +75,13 @@ export const LandingPage = () => {
     isLoadingIsAdmin ||
     isLoadingIsClientAdmin ||
     isLoadingCanAccessSettings ||
-    currentUserIsLoading;
+    currentUserIsLoading ||
+    isLoadingRequests;
 
   const getMenuItems = (): MenuItemProps[] => {
     const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
     const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
+    const displayClientAdministrationPage = window.featureFlags?.displayClientAdministrationPage;
 
     if (isLoading) {
       const loadingMenuItem: MenuItemProps = {
@@ -118,15 +123,20 @@ export const LandingPage = () => {
       });
     }
 
-    if (hasConsentPermission(reportee, isAdmin)) {
+    if (hasConsentPermission(isAdmin)) {
       items.push({
         ...getConsentMenuItem(),
         description: t('landing_page.consent_item_description'),
       });
     }
-
+    if (isClientAdmin && displayClientAdministrationPage) {
+      items.push({
+        ...getClientAdministrationMenuItem(),
+        description: t('landing_page.client_admin_item_description'),
+      });
+    }
     if (
-      hasCreateSystemUserPermission(reportee) ||
+      hasCreateSystemUserPermission(reportee, isAdmin) ||
       hasSystemUserClientAdminPermission(reportee, isClientAdmin)
     ) {
       items.push({
@@ -156,7 +166,7 @@ export const LandingPage = () => {
   const getOtherItems = (): MenuItemProps[] => {
     const displaySettingsPage = window.featureFlags?.displaySettingsPage;
     const displayRequestsPage = window.featureFlags?.displayRequestsPage;
-    const requestCount = 0;
+    const requestCount = pendingRequests ? pendingRequests.length : 0;
     const items: MenuItemProps[] = [];
 
     if (displayRequestsPage) {
@@ -199,7 +209,7 @@ export const LandingPage = () => {
             }}
             title={reporteeName}
             description={getReporteeDescription()}
-            size='xl'
+            size='lg'
             loading={!reportee}
             interactive={false}
           />
@@ -274,6 +284,7 @@ const ListItemContainer = ({ heading, items }: ListItemContainerProps) => {
             icon={item.icon}
             title={item.title}
             description={item.description}
+            badge={item.badge}
             size='xs'
             border='none'
             shadow='none'

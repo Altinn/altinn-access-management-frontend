@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { DsBadge, DsTabs } from '@altinn/altinn-components';
 
 import classes from './RightsTabs.module.css';
+import { FilesIcon, FolderIcon, PackageIcon } from '@navikt/aksel-icons';
 interface RightsTabsProps {
   tabBadge?: { accessPackages: number; services: number; roles: number };
   packagesPanel: ReactNode;
@@ -39,6 +40,7 @@ export const RightsTabs = ({
               maxCount={99}
             />
           )}
+          <PackageIcon aria-hidden='true' />
           {t('user_rights_page.access_packages_title')}
         </DsTabs.Tab>
         {singleRightsPanel && (
@@ -51,6 +53,7 @@ export const RightsTabs = ({
                 maxCount={99}
               />
             )}
+            <FilesIcon aria-hidden='true' />
             {t('user_rights_page.single_rights_title')}
           </DsTabs.Tab>
         )}
@@ -64,22 +67,24 @@ export const RightsTabs = ({
                 maxCount={99}
               />
             )}
+            <FolderIcon aria-hidden='true' />
             {t('user_rights_page.roles_title')}
           </DsTabs.Tab>
         )}
+        {/* Bruk <EnvelopeClosedIcon aria-hidden='true' /> for delt fra innboks tab*/}
       </DsTabs.List>
       <DsTabs.Panel
         className={classes.tabContent}
         value='packages'
       >
-        {packagesPanel}
+        <div className={classes.innerTabContent}>{packagesPanel}</div>
       </DsTabs.Panel>
       {singleRightsPanel && (
         <DsTabs.Panel
           className={classes.tabContent}
           value='singleRights'
         >
-          {singleRightsPanel}
+          <div className={classes.innerTabContent}>{singleRightsPanel}</div>
         </DsTabs.Panel>
       )}
       {displayRoles && roleAssignmentsPanel && (
@@ -87,7 +92,7 @@ export const RightsTabs = ({
           className={classes.tabContent}
           value='roleAssignments'
         >
-          {roleAssignmentsPanel}
+          <div className={classes.innerTabContent}>{roleAssignmentsPanel}</div>
         </DsTabs.Panel>
       )}
     </DsTabs>

@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<ServiceResource> GetResource(string resourceId)
+        public async Task<ServiceResource> GetResource(string resourceId, string versionId = null)
         {
             string resourcesPath = GetResourcePath(resourceId);
             ServiceResource resource = Util.GetMockData<ServiceResource>(resourcesPath);

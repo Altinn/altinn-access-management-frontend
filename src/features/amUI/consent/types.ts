@@ -52,6 +52,7 @@ export interface ActiveConsentListItem {
   isPoa: boolean;
   fromParty: ConsentParty;
   toParty: ConsentParty;
+  createdDate: string;
 }
 
 export interface ConsentHistoryItem {

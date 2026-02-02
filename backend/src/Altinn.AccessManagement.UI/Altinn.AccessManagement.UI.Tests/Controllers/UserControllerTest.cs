@@ -876,5 +876,109 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var ok = Assert.IsType<OkObjectResult>(result.Result);
             Assert.False((bool)ok.Value);
         }
+
+        /// <summary>
+        /// Test case: UpdateShouldShowDeletedPreference successfully updates preference to true
+        /// Expected: Returns OK with updated ProfileSettingPreference
+        /// </summary>
+        [Fact]
+        public async Task UpdateShouldShowDeletedPreference_SetToTrue_ReturnsUpdatedPreference()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            bool shouldShowDeleted = true;
+
+            // Act
+            var response = await _client.PutAsJsonAsync("accessmanagement/api/v1/user/profile/settingspreferences/showdeleted", shouldShowDeleted);
+            var actualResponse = await response.Content.ReadFromJsonAsync<ProfileSettingPreference>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.True(actualResponse.ShouldShowDeletedEntities);
+        }
+
+        /// <summary>
+        /// Test case: UpdateShouldShowDeletedPreference successfully updates preference to false
+        /// Expected: Returns OK with updated ProfileSettingPreference
+        /// </summary>
+        [Fact]
+        public async Task UpdateShouldShowDeletedPreference_SetToFalse_ReturnsUpdatedPreference()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            bool shouldShowDeleted = false;
+
+            // Act
+            var response = await _client.PutAsJsonAsync("accessmanagement/api/v1/user/profile/settingspreferences/showdeleted", shouldShowDeleted);
+            var actualResponse = await response.Content.ReadFromJsonAsync<ProfileSettingPreference>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.False(actualResponse.ShouldShowDeletedEntities);
+        }
+
+        /// <summary>
+        /// Test case: UpdateShouldShowDeletedPreference returns BadRequest when model state is invalid
+        /// Expected: Returns BadRequest
+        /// </summary>
+        [Fact]
+        public async Task UpdateShouldShowDeletedPreference_InvalidModelState_ReturnsBadRequest()
+        {
+            // Arrange
+            const int userId = 20004938;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act - Send invalid JSON to trigger model state error
+            var content = new StringContent("invalid-json", System.Text.Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync("accessmanagement/api/v1/user/profile/settingspreferences/showdeleted", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: UpdateShouldShowDeletedPreference returns InternalServerError when service throws exception
+        /// Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task UpdateShouldShowDeletedPreference_ServiceThrowsException_Returns500()
+        {
+            // Arrange
+            const int userId = 500;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            bool shouldShowDeleted = true;
+
+            // Act
+            var response = await _client.PutAsJsonAsync("accessmanagement/api/v1/user/profile/settingspreferences/showdeleted", shouldShowDeleted);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: UpdateShouldShowDeletedPreference requires authentication
+        /// Expected: Returns Unauthorized when no token is provided
+        /// </summary>
+        [Fact]
+        public async Task UpdateShouldShowDeletedPreference_NoAuthentication_ReturnsUnauthorized()
+        {
+            // Arrange
+            _client.DefaultRequestHeaders.Authorization = null;
+            bool shouldShowDeleted = true;
+
+            // Act
+            var response = await _client.PutAsJsonAsync("accessmanagement/api/v1/user/profile/settingspreferences/showdeleted", shouldShowDeleted);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
     }
 }

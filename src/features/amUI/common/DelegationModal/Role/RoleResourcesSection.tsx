@@ -99,6 +99,7 @@ export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResources
               aria-label={t('resource_list.resource_search_placeholder')}
               placeholder={t('resource_list.resource_search_placeholder')}
               onChange={handleSearchChange}
+              data-size='sm'
             />
             <DsSearch.Clear
               onClick={() => {

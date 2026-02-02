@@ -524,6 +524,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
             Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
+            Assert.Equal(expected.UserType, actual.UserType);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
             AssertCollections(expected.AccessPackages, actual.AccessPackages, AssertEqual);
         }
@@ -571,6 +572,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
             Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.Created, actual.Created);
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
             Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
@@ -606,6 +608,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
             Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.Created, actual.Created);
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
             Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);

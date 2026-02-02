@@ -1,16 +1,15 @@
-import { Button, DsAlert, DsParagraph, DsTextfield } from '@altinn/altinn-components';
+import { Button, DsAlert, DsTextfield } from '@altinn/altinn-components';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { User } from '@/rtk/features/userInfoApi';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-import {
-  useAddRightHolderMutation,
-  useValidateNewUserPersonMutation,
-} from '@/rtk/features/connectionApi';
 import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
+
+export type personInput = { personIdentifier: string; lastName: string };
 
 const isValidSsnFormat = (personIdentifier: string) => /^\d{11}$/.test(personIdentifier);
 const isValidUsernameFormat = (personIdentifier: string) =>
@@ -20,11 +19,13 @@ const isValidPersonIdentifierFormat = (personIdentifier: string) =>
   isValidSsnFormat(personIdentifier) || isValidUsernameFormat(personIdentifier);
 
 export const NewPersonContent = ({
-  onComplete,
-  modalRef,
+  errorDetails,
+  addPerson,
+  isLoading,
 }: {
-  onComplete?: (user: User) => void;
-  modalRef: React.RefObject<HTMLDialogElement | null>;
+  errorDetails?: { status: string; time: string } | null;
+  addPerson: (personInput: personInput) => void;
+  isLoading?: boolean;
 }) => {
   const { t } = useTranslation();
   const [personIdentifier, setPersonIdentifier] = useState('');
@@ -34,36 +35,11 @@ export const NewPersonContent = ({
     string | null
   >(null);
   const [lastNameFormatError, setLastNameFormatError] = useState<string>('');
-
-  const [addRightHolder, { error, isError, isLoading }] = useAddRightHolderMutation();
   const shouldDisplayPrivDelegation = displayPrivDelegation();
 
-  const errorDetails =
-    isError && error && 'status' in error
-      ? {
-          status: error.status.toString(),
-          time: errorTime,
-        }
-      : null;
-
   const navigateIfValidPerson = () => {
-    const personInput = { personIdentifier, lastName };
-    addRightHolder({ personInput })
-      .unwrap()
-      .then((toUuid) => {
-        if (onComplete) {
-          onComplete({
-            id: toUuid,
-            name: lastName,
-            type: 'person',
-            children: null,
-          });
-        }
-        modalRef.current?.close();
-      })
-      .catch(() => {
-        setErrorTime(new Date().toISOString());
-      });
+    const personInput = { personIdentifier: personIdentifier, lastName: lastName };
+    addPerson(personInput);
   };
 
   if (!shouldDisplayPrivDelegation) {
@@ -74,7 +50,7 @@ export const NewPersonContent = ({
 
   return (
     <div className={classes.newPersonContent}>
-      {isError && (
+      {errorDetails && (
         <NewUserAlert
           userType='person'
           error={errorDetails}

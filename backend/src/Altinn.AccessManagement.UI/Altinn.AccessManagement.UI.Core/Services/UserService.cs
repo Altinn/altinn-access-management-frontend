@@ -48,6 +48,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return userProfile == null ? null : new UserProfileFE(userProfile);
         }
 
+        /// <inheritdoc/>
+        public async Task<ProfileSettingPreference> SetShowDeletedProfileSetting(bool shouldShowDeletedEntities)
+        {
+            ProfileSettingPreference change = new ProfileSettingPreference
+            {
+                ShouldShowDeletedEntities = shouldShowDeletedEntities
+            };
+            return await _profileClient.PatchCurrentUserProfileSetting(change); 
+        }
+
         /// <inheritdoc/>        
         public async Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId)
         {

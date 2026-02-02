@@ -48,5 +48,11 @@ namespace Altinn.AccessManagement.UI.Core.Enums
         /// </summary>
         [EnumMember(Value = "ApplicationId")]
         ApplicationId = 6,
+
+        /// <summary>
+        /// ServiceEditionVersion
+        /// </summary>
+        [EnumMember(Value = "ServiceEditionVersion")]
+        ServiceEditionVersion = 7
     }
 }
