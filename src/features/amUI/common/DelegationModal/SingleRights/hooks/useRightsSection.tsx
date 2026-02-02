@@ -127,8 +127,8 @@ export const useRightsSection = ({
     onDelegate?.();
   };
 
-  const resetActionStates = () => {
-    setIsActionLoading(false);
+  const applyActionStates = () => {
+    setIsActionLoading(true);
     setIsActionSuccess(false);
     setDelegationError(null);
     setMissingAccess(null);
@@ -170,7 +170,7 @@ export const useRightsSection = ({
       .filter((right: ChipRight) => right.checked)
       .map((r) => r.rightKey);
     if (fromParty && toParty) {
-      resetActionStates();
+      applyActionStates();
       updateResource(resource.identifier, actionKeysToDelegate, onSuccess, () => {
         setIsActionLoading(false);
         setDelegationError(
@@ -186,7 +186,7 @@ export const useRightsSection = ({
       .map((r) => r.rightKey);
 
     if (fromParty && toParty) {
-      resetActionStates();
+      applyActionStates();
       delegateRights(actionKeysToDelegate, resource.identifier, onSuccess, () => {
         setIsActionLoading(false);
         setDelegationError(

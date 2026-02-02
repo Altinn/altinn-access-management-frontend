@@ -115,7 +115,7 @@ export const singleRightsApi = createApi({
       }
     >({
       query: ({ partyUuid, fromUuid, toUuid, resourceId, actionKeys }) => ({
-        url: `singleright/delegate?party=${partyUuid}&from=${fromUuid}&to=${toUuid}&resourceId=${resourceId}`,
+        url: `singleright/delegate?party=${partyUuid}&from=${fromUuid}&to=${toUuid}&resourceId=${encodeURIComponent(resourceId)}`,
         method: 'POST',
         body: JSON.stringify(actionKeys),
       }),
@@ -130,7 +130,7 @@ export const singleRightsApi = createApi({
     >({
       query({ from, to, resourceId }) {
         return {
-          url: `singleright/${from}/${to}/${resourceId}/revoke`,
+          url: `singleright/${from}/${to}/${encodeURIComponent(resourceId)}/revoke`,
           method: 'DELETE',
         };
       },
@@ -142,7 +142,7 @@ export const singleRightsApi = createApi({
     >({
       query({ party, from, to, resourceId, actionKeys }) {
         return {
-          url: `singleright/update?party=${party}&from=${from}&to=${to}&resourceId=${resourceId}`,
+          url: `singleright/update?party=${party}&from=${from}&to=${to}&resourceId=${encodeURIComponent(resourceId)}`,
           method: 'PUT',
           body: JSON.stringify(actionKeys),
         };

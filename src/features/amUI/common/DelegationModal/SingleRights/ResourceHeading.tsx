@@ -15,7 +15,7 @@ export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => 
         {emblem || resource.resourceOwnerLogoUrl ? (
           <img
             src={emblem ?? resource.resourceOwnerLogoUrl}
-            alt={resource.resourceOwnerName ?? ''}
+            alt={resource.resourceOwnerName}
             width={40}
             height={40}
           />
@@ -23,7 +23,7 @@ export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => 
           <Avatar
             type='company'
             imageUrl={resource.resourceOwnerLogoUrl}
-            name={resource.resourceOwnerName ?? ''}
+            name={resource.resourceOwnerName}
           />
         )}
       </div>
