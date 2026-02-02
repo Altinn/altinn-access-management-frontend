@@ -102,7 +102,6 @@ export const ClientAdministrationClientAgentsList = ({
         const hasAccess = packageIdsByAgentId.get(agentId)?.has(pkg.id) ?? false;
         const accessPackage = getAccessPackageById(pkg.id);
         const delegable = accessPackage?.isDelegable ?? false;
-        console.log('accessPackage: ', accessPackage);
         return {
           id: pkg.id,
           name: accessPackage?.name || pkg.name,
