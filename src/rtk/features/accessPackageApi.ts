@@ -42,6 +42,7 @@ export interface AccessPackage {
   description: string;
   resources: PackageResource[];
   isAssignable: boolean;
+  isDelegable: boolean;
   area: AccessArea;
   urn?: string;
   permissions?: Permissions[];

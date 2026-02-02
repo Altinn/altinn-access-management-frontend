@@ -32,6 +32,7 @@ export interface AdvancedUserSearchProps {
   directConnectionsHeading?: string;
   indirectConnectionsHeading?: string;
   additionalFilters?: React.ReactNode;
+  hasActiveAdditionalFilters?: boolean;
 }
 
 const filterAvailableUserTypes = (items?: Connection[]) =>
@@ -60,6 +61,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   directConnectionsHeading,
   indirectConnectionsHeading,
   additionalFilters,
+  hasActiveAdditionalFilters = false,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
@@ -85,7 +87,8 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const directHasResults = (users?.length ?? 0) > 0;
   const indirectHasResults = (indirectUsers?.length ?? 0) > 0;
 
-  const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
+  const showDirectNoResults =
+    (isQuery || hasActiveAdditionalFilters) && !directHasResults && indirectHasResults;
   const showIndirectList = isQuery && indirectHasResults && canDelegate;
   const showEmptyState = !directHasResults && !indirectHasResults && hasDirectConnections;
 
@@ -131,7 +134,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 
       <div className={classes.results}>
         <>
-          {!hasDirectConnections && !isLoading && (
+          {!hasDirectConnections && !isLoading && !hasActiveAdditionalFilters && (
             <DsParagraph
               data-size='sm'
               className={classes.tabDescription}
@@ -192,7 +195,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
                 canDelegate
                   ? 'advanced_user_search.user_no_search_result_with_add_suggestion'
                   : 'advanced_user_search.user_no_search_result',
-                { searchTerm: trimmedQuery },
+                { searchTerm: trimmedQuery || '' },
               )}
             </DsParagraph>
             {canDelegate && AddUserButton && (

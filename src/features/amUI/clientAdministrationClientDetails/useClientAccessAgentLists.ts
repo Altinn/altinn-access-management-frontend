@@ -11,6 +11,8 @@ export const useClientAccessAgentLists = ({
   clientAccessPackages,
   agents,
 }: UseClientAccessAgentListsParams) => {
+  console.log('agents: ', agents);
+  console.log('clientAccessPackages: ', clientAccessPackages);
   const agentsWithClientAccess = useMemo(() => {
     if (!agents?.length || !clientAccessPackages?.length) {
       return [];

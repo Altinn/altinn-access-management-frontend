@@ -93,6 +93,7 @@ export const ClientAdministrationAgentClientsList = ({
           );
         });
         const accessPackage = getAccessPackageById(pkg.id);
+        const delegable = accessPackage?.isDelegable ?? false;
         return {
           id: pkg.id,
           name: accessPackage?.name || pkg.name,
@@ -105,41 +106,43 @@ export const ClientAdministrationAgentClientsList = ({
               : '',
           as: 'div',
           color: (hasAccess ? 'company' : 'neutral') as Color,
-          controls: hasAccess ? (
-            <Button
-              variant='tertiary'
-              disabled={removeDisabled}
-              onClick={() => {
-                removeAgentAccessPackage(
-                  clientId,
-                  access.role.code,
-                  pkg.urn ?? '',
-                  agentName,
-                  accessPackage?.name || pkg.name,
-                );
-              }}
-            >
-              <MinusCircleIcon />
-              {t('client_administration_page.remove_package_button')}
-            </Button>
-          ) : (
-            <Button
-              variant='tertiary'
-              disabled={delegateDisabled}
-              onClick={() => {
-                addAgentAccessPackage(
-                  clientId,
-                  access.role.code,
-                  pkg.urn ?? '',
-                  agentName,
-                  accessPackage?.name || pkg.name,
-                );
-              }}
-            >
-              <PlusCircleIcon />
-              {t('client_administration_page.delegate_package_button')}
-            </Button>
-          ),
+          controls:
+            delegable &&
+            (hasAccess ? (
+              <Button
+                variant='tertiary'
+                disabled={removeDisabled}
+                onClick={() => {
+                  removeAgentAccessPackage(
+                    clientId,
+                    access.role.code,
+                    pkg.urn ?? '',
+                    agentName,
+                    accessPackage?.name || pkg.name,
+                  );
+                }}
+              >
+                <MinusCircleIcon />
+                {t('client_administration_page.remove_package_button')}
+              </Button>
+            ) : (
+              <Button
+                variant='tertiary'
+                disabled={delegateDisabled}
+                onClick={() => {
+                  addAgentAccessPackage(
+                    clientId,
+                    access.role.code,
+                    pkg.urn ?? '',
+                    agentName,
+                    accessPackage?.name || pkg.name,
+                  );
+                }}
+              >
+                <PlusCircleIcon />
+                {t('client_administration_page.delegate_package_button')}
+              </Button>
+            )),
         };
       });
 

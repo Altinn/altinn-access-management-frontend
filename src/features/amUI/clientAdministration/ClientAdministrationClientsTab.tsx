@@ -72,6 +72,7 @@ export const ClientAdministrationClientsTab = () => {
         canDelegate={false}
         noUsersText={t('client_administration_page.no_clients')}
         getUserLink={(user) => `/clientadministration/client/${user.id}`}
+        hasActiveAdditionalFilters={roleFilter.length > 0 || !showDeleted}
         additionalFilters={
           <div className={classes.filters}>
             <SelectRoleFilter
