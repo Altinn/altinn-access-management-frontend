@@ -44,7 +44,7 @@ export const ClientAdministrationClientDetails = () => {
     );
   }
 
-  const backUrl = `/${amUIPath.ClientAdministration}`;
+  const backUrl = `/${amUIPath.ClientAdministration}?tab=clients`;
   const clientName = formatDisplayName({
     fullName: fromParty?.name || '',
     type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',

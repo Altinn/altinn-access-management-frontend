@@ -49,9 +49,21 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default)
+        public async Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/clientdelegations/clients?party={party}";
+            if (roles?.Count > 0)
+            {
+                string roleQuery = string.Join("&", roles
+                    .Where(role => !string.IsNullOrWhiteSpace(role))
+                    .Select(role => $"roles={Uri.EscapeDataString(role)}"));
+
+                if (!string.IsNullOrEmpty(roleQuery))
+                {
+                    endpointUrl = $"{endpointUrl}&{roleQuery}";
+                }
+            }
+            
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
@@ -82,6 +94,80 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             return agents.Items.ToList();
+        }
+
+        /// <inheritdoc />
+        public async Task<List<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/clientdelegations/agents/accesspackages?party={party}&to={to}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            PaginatedResult<ClientDelegation> clients =
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<ClientDelegation>>(response, _logger, "ClientDelegationClient.GetAgentAccessPackages");
+
+            if (clients?.Items == null)
+            {
+                return new List<ClientDelegation>();
+            }
+
+            return clients.Items.ToList();
+        }
+
+        /// <inheritdoc />
+        public async Task<List<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/clientdelegations/clients/accesspackages?party={party}&from={from}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            PaginatedResult<AgentDelegation> agents =
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<AgentDelegation>>(response, _logger, "ClientDelegationClient.GetClientAccessPackages");
+
+            if (agents?.Items == null)
+            {
+                return new List<AgentDelegation>();
+            }
+
+            return agents.Items.ToList();
+        }
+
+        /// <inheritdoc />
+        public async Task<List<DelegationDto>> AddAgentAccessPackages(Guid party, Guid from, Guid to, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/clientdelegations/agents/accesspackages?party={party}&from={from}&to={to}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("AccessManagement.UI // ClientDelegationClient.AddAgentAccessPackages // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, response.ReasonPhrase);
+            }
+
+            List<DelegationDto> result = JsonSerializer.Deserialize<List<DelegationDto>>(responseContent, _serializerOptions);
+            return result ?? new List<DelegationDto>();
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveAgentAccessPackages(Guid party, Guid from, Guid to, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/clientdelegations/agents/accesspackages?party={party}&from={from}&to={to}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, requestBody);
+            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            if (response.IsSuccessStatusCode)
+            {
+                return;
+            }
+
+            _logger.LogError("AccessManagement.UI // ClientDelegationClient.RemoveAgentAccessPackages // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
         }
 
         /// <inheritdoc />

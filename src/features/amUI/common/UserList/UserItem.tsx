@@ -176,6 +176,7 @@ export const UserItem = ({
       controls={!hasInheritingUsers && controls && controls(user)}
       titleAs={titleAs}
       subUnit={subUnit || hasSubUnitRole || isSubUnitByType(user.variant?.toString())}
+      deleted={user.isDeleted}
     >
       {hasInheritingUsers && isExpanded && (
         <List

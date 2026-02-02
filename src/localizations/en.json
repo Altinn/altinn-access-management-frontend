@@ -348,6 +348,10 @@
       "via_keyrole": "{{user_name}} has access to this through their role in {{via_name}}."
     }
   },
+  "user_roles": {
+    "has_client_access": "Has client access",
+    "has_client_access_description": "This user has access to one or more of the organization's clients. This does not necessarily mean they have access to the organization's own content, but that they can perform work on behalf of one or more of their clients/customers. Which clients they have access to can be managed under <a>client administration</a>."
+  },
   "users_page": {
     "page_title": "Users and groups - Altinn",
     "main_page_heading": "Users with power of attorney in {{name}}",
@@ -568,10 +572,30 @@
     "agent_delete_heading": "You are deleting this user",
     "agent_delete_body": "This person and all of their powers of attorney with your clients will be deleted.",
     "agent_delete_confirm": "Delete user",
+    "load_delegations_error": "Could not load clients with access.",
+    "no_delegations": "No clients with access found.",
+    "delegate_package_button": "Give power of attorney",
+    "delegate_package_success_snackbar": "{{name}} now has power of attorney for {{accessPackage}}.",
+    "delegate_package_error": "Could not grant {{name}} power of attorney for {{accessPackage}}.",
+    "remove_package_button": "Remove power of attorney",
+    "remove_package_success_snackbar": "{{name}} no longer has power of attorney for {{accessPackage}}.",
+    "remove_package_error": "Could not remove {{name}} power of attorney for {{accessPackage}}.",
+    "via_role": "Access through Central Coordinating Register",
+    "agent_has_clients_tab": "Has these clients",
+    "agent_can_get_clients_tab": "All clients",
     "direct_connections_heading": "Users with client access",
     "indirect_connections_heading": "Other users",
+    "organization_identifier": "Org.nr. {{orgnr}}",
     "no_clients": "The organization has no registered clients",
-    "no_agents": "Found no users with client access for this organization"
+    "clients_filter_label": "Client relationships",
+    "clients_filter_register": "From the Central Coordinating Register",
+    "clients_filter_other": "Other",
+    "clients_show_deleted": "Show deleted",
+    "show_deleted_clients": "Show deleted",
+    "rettighetshaver": "Other client relationships",
+    "error_loading_clients": "Could not load clients.",
+    "no_agents": "No users have been given client access yet. You can search for users who already have some access with you, or register a new one.",
+    "client_search_placeholder": "Search for client"
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",
