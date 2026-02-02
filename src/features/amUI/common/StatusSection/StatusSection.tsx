@@ -53,12 +53,6 @@ export const StatusSection = ({
     return null;
   }
 
-  const formattedActingPartyName = formatDisplayName({
-    fullName: actingParty?.name || '',
-    type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
-
   const formattedToPartyName = formatDisplayName({
     fullName: toParty?.name || '',
     type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
@@ -129,14 +123,23 @@ export const StatusSection = ({
             className={classes.inheritedInfoIcon}
           />
           <DsParagraph data-size='xs'>
-            <Trans
-              i18nKey={STATUS_TRANSLATION_KEYS[inheritedStatus.type]}
-              values={{
-                user_name: formattedUserName,
-                via_name: formattedViaName,
-                acting_party: formattedActingPartyName,
-              }}
-            />
+            {formattedUserName === formattedViaName &&
+            toParty?.partyTypeName === PartyType.Person ? (
+              <Trans
+                i18nKey={t('status_section.access_status.via_priv')}
+                values={{
+                  user_name: formattedUserName,
+                }}
+              />
+            ) : (
+              <Trans
+                i18nKey={STATUS_TRANSLATION_KEYS[inheritedStatus.type]}
+                values={{
+                  user_name: formattedUserName,
+                  via_name: formattedViaName,
+                }}
+              />
+            )}
           </DsParagraph>
         </div>
       )}

@@ -468,7 +468,8 @@
     "access_status": {
       "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
       "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
-      "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted."
+      "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted.",
+      "via_priv": "{{user_name}} has this power of attorney through their role as a private individual. It cannot be deleted."
     },
     "cannot_delegate_here": "Access to this package cannot be granted here.",
     "delegation_check_not_delegable": "You cannot grant this access.",
