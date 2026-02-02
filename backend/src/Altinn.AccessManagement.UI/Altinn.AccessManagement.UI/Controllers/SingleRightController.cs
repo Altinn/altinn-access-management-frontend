@@ -197,7 +197,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                return await _singleRightService.Delegate(party, from, to, resourceId, actionKeys);
+                var response = await _singleRightService.Delegate(party, from, to, resourceId, actionKeys);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(await response.Content.ReadAsStringAsync());
+                }
+
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
             }
             catch (HttpStatusException statusEx)
             {
@@ -279,7 +285,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                return await _singleRightService.UpdateResourceAccess(party, to, from, resourceId, actionKeys);
+                var response = await _singleRightService.UpdateResourceAccess(party, to, from, resourceId, actionKeys);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(await response.Content.ReadAsStringAsync());
+                }
+
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
             }
             catch (HttpStatusException statusEx)
             {

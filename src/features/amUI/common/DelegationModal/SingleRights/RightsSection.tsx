@@ -9,7 +9,6 @@ import {
   Button,
 } from '@altinn/altinn-components';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
-import { t } from 'i18next';
 import { Trans, useTranslation } from 'react-i18next';
 import { ResourceAlert } from './ResourceAlert';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
