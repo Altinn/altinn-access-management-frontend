@@ -27,8 +27,9 @@ export const ReporteesList = () => {
 
   const filterRightHolders = rightHolders?.filter(
     (rh) =>
-      rh.party.type === ConnectionUserType.Person ||
-      rh.party.type === ConnectionUserType.Organization,
+      (rh.party.type === ConnectionUserType.Person ||
+        rh.party.type === ConnectionUserType.Organization) &&
+      rh.party.id !== actingParty?.partyUuid,
   );
 
   const [searchString, setSearchString] = useState<string>('');
