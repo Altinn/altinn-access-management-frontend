@@ -370,6 +370,8 @@
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?",
+    "user_no_filter_result": "Ingen brukarar passar dei valde filtra.",
+    "user_no_filter_result_with_add_suggestion": "Ingen brukarar passar dei valde filtra. Er dette ein ny brukar du ønsker å gi fullmakt til?",
     "indirect_connections": "Brukarar utan fullmakt"
   },
   "reportees_page": {
