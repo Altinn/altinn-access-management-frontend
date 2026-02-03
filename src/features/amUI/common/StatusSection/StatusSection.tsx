@@ -123,14 +123,11 @@ export const StatusSection = ({
             className={classes.inheritedInfoIcon}
           />
           <DsParagraph data-size='xs'>
-            {formattedUserName === formattedViaName &&
+            {toParty?.partyUuid === inheritedStatus?.via?.id &&
             toParty?.partyTypeName === PartyType.Person ? (
-              <Trans
-                i18nKey={t('status_section.access_status.via_priv')}
-                values={{
-                  user_name: formattedUserName,
-                }}
-              />
+              t('status_section.access_status.via_priv', {
+                user_name: formattedUserName,
+              })
             ) : (
               <Trans
                 i18nKey={STATUS_TRANSLATION_KEYS[inheritedStatus.type]}

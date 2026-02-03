@@ -29,7 +29,7 @@ export const ReporteesList = () => {
     (rh) =>
       (rh.party.type === ConnectionUserType.Person ||
         rh.party.type === ConnectionUserType.Organization) &&
-      rh.party.id !== actingParty?.partyUuid,
+      rh.party.partyId !== actingParty?.partyId,
   );
 
   const [searchString, setSearchString] = useState<string>('');
