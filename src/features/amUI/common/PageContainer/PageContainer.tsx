@@ -20,7 +20,6 @@ import classes from './PageContainer.module.css';
  * @example
  * <PageContainer
  *   backUrl="/dashboard"
- *   pageActions={<Button>Save</Button>}
  *   contentActions={<Button>Cancel</Button>}
  * >
  *   <p>This is the main content of the page.</p>
