@@ -33,7 +33,7 @@ export const UsersPage = () => {
         <PartyRepresentationProvider
           fromPartyUuid={getCookie('AltinnPartyUuid')}
           actingPartyUuid={getCookie('AltinnPartyUuid')}
-          errorOnPriv={false}
+          errorOnPriv={true}
         >
           <Breadcrumbs items={['root', 'users']} />
           <ReporteePageHeading
