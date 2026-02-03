@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
+import { displayPrivDelegation, enableAddUserByUsername } from '@/resources/utils/featureFlagUtils';
 
 export type personInput = { personIdentifier: string; lastName: string };
 
@@ -12,18 +12,14 @@ const isValidSsnFormat = (personIdentifier: string) => /^\d{11}$/.test(personIde
 const isValidUsernameFormat = (personIdentifier: string) =>
   /^[A-Za-z0-9]{6,}$/.test(personIdentifier);
 const containsLetter = (personIdentifier: string) => /[A-Za-z]/.test(personIdentifier);
-const isValidPersonIdentifierFormat = (personIdentifier: string) =>
-  isValidSsnFormat(personIdentifier) || isValidUsernameFormat(personIdentifier);
 
-export const NewPersonContent = ({
-  errorDetails,
-  addPerson,
-  isLoading,
-}: {
+export type NewPersonContentProps = {
   errorDetails?: { status: string; time: string } | null;
   addPerson: (personInput: personInput) => void;
   isLoading?: boolean;
-}) => {
+};
+
+export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPersonContentProps) => {
   const { t } = useTranslation();
   const [personIdentifier, setPersonIdentifier] = useState('');
   const [lastName, setLastName] = useState('');
@@ -32,6 +28,36 @@ export const NewPersonContent = ({
   >(null);
   const [lastNameFormatError, setLastNameFormatError] = useState<string>('');
   const shouldDisplayPrivDelegation = displayPrivDelegation();
+  const allowUsername = enableAddUserByUsername();
+
+  const isValidPersonIdentifierFormat = (identifier: string) => {
+    if (allowUsername) {
+      return isValidSsnFormat(identifier) || isValidUsernameFormat(identifier);
+    }
+
+    return isValidSsnFormat(identifier);
+  };
+
+  const getPersonIdentifierErrorKey = (identifier: string) => {
+    const trimmedIdentifier = identifier.trim();
+    if (!trimmedIdentifier.length) {
+      return null;
+    }
+
+    if (!allowUsername) {
+      return !isValidSsnFormat(trimmedIdentifier)
+        ? 'new_user_modal.person_identifier_ssn_format_error'
+        : null;
+    }
+
+    return containsLetter(trimmedIdentifier)
+      ? !isValidUsernameFormat(trimmedIdentifier)
+        ? 'new_user_modal.person_identifier_username_format_error'
+        : null
+      : !isValidSsnFormat(trimmedIdentifier)
+        ? 'new_user_modal.person_identifier_ssn_format_error'
+        : null;
+  };
 
   const navigateIfValidPerson = () => {
     const personInput = { personIdentifier: personIdentifier, lastName: lastName };
@@ -54,7 +80,7 @@ export const NewPersonContent = ({
       )}
       <DsTextfield
         className={classes.textField}
-        label={t('new_user_modal.person_identifier')}
+        label={allowUsername ? t('new_user_modal.person_identifier') : t('common.ssn')}
         data-size='sm'
         onChange={(e) => setPersonIdentifier(e.target.value)}
         error={
@@ -66,21 +92,7 @@ export const NewPersonContent = ({
           ) : null
         }
         onBlur={() => {
-          const trimmedIdentifier = personIdentifier.trim();
-          if (!trimmedIdentifier.length) {
-            setPersonIdentifierFormatErrorKey(null);
-            return;
-          }
-
-          const errorKey = containsLetter(trimmedIdentifier)
-            ? !isValidUsernameFormat(trimmedIdentifier)
-              ? 'new_user_modal.person_identifier_username_format_error'
-              : null
-            : !isValidSsnFormat(trimmedIdentifier)
-              ? 'new_user_modal.person_identifier_ssn_format_error'
-              : null;
-
-          setPersonIdentifierFormatErrorKey(errorKey);
+          setPersonIdentifierFormatErrorKey(getPersonIdentifierErrorKey(personIdentifier));
         }}
       />
       <DsTextfield

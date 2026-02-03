@@ -87,3 +87,7 @@ export const displayDeletedAccountToggle = () => {
 export const addAllSystemuserCustomers = () => {
   return window.featureFlags?.addAllSystemuserCustomers === true;
 };
+
+export const enableAddUserByUsername = () => {
+  return window.featureFlags?.enableAddUserByUsername === true;
+};
