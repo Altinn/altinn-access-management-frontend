@@ -71,8 +71,8 @@ export const NewPersonContent = ({
             setPersonIdentifierFormatErrorKey(null);
             return;
           }
-          const hasLetter = containsLetter(trimmedIdentifier);
-          const errorKey = hasLetter
+
+          const errorKey = containsLetter(trimmedIdentifier)
             ? !isValidUsernameFormat(trimmedIdentifier)
               ? 'new_user_modal.person_identifier_username_format_error'
               : null
