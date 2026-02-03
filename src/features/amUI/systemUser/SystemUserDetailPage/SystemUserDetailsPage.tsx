@@ -30,6 +30,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   const navigate = useNavigate();
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
   const partyId = getCookie('AltinnPartyId');
+  const backUrl = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
 
   const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
   const { data: isAdmin } = useGetIsAdminQuery();
@@ -47,12 +48,8 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
     deleteSystemUser({ partyId, systemUserId: id || '' })
       .unwrap()
       .then(() => {
-        handleNavigateBack();
+        navigate(backUrl);
       });
-  };
-
-  const handleNavigateBack = (): void => {
-    navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
   };
 
   return (
@@ -63,8 +60,8 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
           lastBreadcrumb={{ label: systemUser?.integrationTitle }}
         />
         <PageContainer
-          onNavigateBack={handleNavigateBack}
-          pageActions={
+          backUrl={backUrl}
+          contentActions={
             hasCreateSystemUserPermission(reporteeData, isAdmin) &&
             systemUser && (
               <DeleteSystemUserPopover
