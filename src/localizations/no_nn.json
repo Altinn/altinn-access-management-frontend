@@ -439,7 +439,7 @@
     "technical_error_message": {
       "heading": "Oi! Noko gjekk gale",
       "message": "Grunna ein teknisk feil vart ikkje tenesta delegert. Ver venleg og prøv på nytt, eller kontakt Altinn brukarstøtte dersom feilen held fram.",
-      "all_failed": "Ingen ny fullmakt er gitt til {{name}}",
+      "all_failed": "Ingen nye tilgangar er gitt til {{name}}",
       "some_failed": "Følgande tilgangar vart ikkje gitt: {{actions}}"
     },
     "general_error": {

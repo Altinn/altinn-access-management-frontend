@@ -106,12 +106,18 @@ export const singleRightsApi = createApi({
     }),
     delegateRights: builder.mutation<
       DelegationResult,
-      { toUuid: string; resourceId: string; rightKeys: string[] }
+      {
+        partyUuid: string;
+        fromUuid: string;
+        toUuid: string;
+        resourceId: string;
+        actionKeys: string[];
+      }
     >({
-      query: ({ toUuid, resourceId, rightKeys }) => ({
-        url: `singleright/${getCookie('AltinnPartyUuid')}/${toUuid}/delegate/${resourceId}`,
+      query: ({ partyUuid, fromUuid, toUuid, resourceId, actionKeys }) => ({
+        url: `singleright/delegate?party=${partyUuid}&from=${fromUuid}&to=${toUuid}&resourceId=${encodeURIComponent(resourceId)}`,
         method: 'POST',
-        body: JSON.stringify(rightKeys),
+        body: JSON.stringify(actionKeys),
       }),
       transformErrorResponse: (response: { status: string | number }) => {
         return response.status;
@@ -124,21 +130,21 @@ export const singleRightsApi = createApi({
     >({
       query({ from, to, resourceId }) {
         return {
-          url: `singleright/${from}/${to}/${resourceId}/revoke`,
+          url: `singleright/${from}/${to}/${encodeURIComponent(resourceId)}/revoke`,
           method: 'DELETE',
         };
       },
       invalidatesTags: ['overview', 'delegationCheck'],
     }),
-    editResource: builder.mutation<
+    updateResource: builder.mutation<
       string[],
-      { from: string; to: string; resourceId: string; edits: RightChangesDto }
+      { party: string; from: string; to: string; resourceId: string; actionKeys: string[] }
     >({
-      query({ from, to, resourceId, edits }) {
+      query({ party, from, to, resourceId, actionKeys }) {
         return {
-          url: `singleright/${from}/${to}/${resourceId}/edit`,
-          method: 'POST',
-          body: JSON.stringify(edits),
+          url: `singleright/update?party=${party}&from=${from}&to=${to}&resourceId=${encodeURIComponent(resourceId)}`,
+          method: 'PUT',
+          body: JSON.stringify(actionKeys),
         };
       },
       invalidatesTags: ['overview', 'delegationCheck'],
@@ -153,7 +159,7 @@ export const {
   useDelegationCheckQuery,
   useDelegateRightsMutation,
   useRevokeResourceMutation,
-  useEditResourceMutation,
+  useUpdateResourceMutation,
 } = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;

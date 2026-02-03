@@ -97,7 +97,7 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.warningIcon}
           />
-          <DsParagraph data-size='xs'>
+          <DsParagraph data-size='sm'>
             <Trans
               i18nKey='status_section.no_permissions_fulltext'
               values={{ packageName: undelegatedPackageName }}
@@ -112,7 +112,7 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.hasPackageInfoIcon}
           />
-          <DsParagraph data-size='xs'>
+          <DsParagraph data-size='sm'>
             <Trans
               i18nKey='status_section.has_package_message'
               values={{
@@ -128,7 +128,7 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.inheritedInfoIcon}
           />
-          <DsParagraph data-size='xs'>
+          <DsParagraph data-size='sm'>
             <Trans
               i18nKey={STATUS_TRANSLATION_KEYS[inheritedStatus.type]}
               values={{
@@ -146,7 +146,7 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.dangerIcon}
           />
-          <DsParagraph data-size='xs'>
+          <DsParagraph data-size='sm'>
             <Trans
               i18nKey='status_section.cannot_delegate_here'
               values={{
@@ -162,7 +162,7 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.delegationCheckInfoIcon}
           />
-          <DsParagraph data-size='xs'>
+          <DsParagraph data-size='sm'>
             <Trans
               i18nKey={delegationCheckTranslationKey}
               components={{ b: <strong /> }}

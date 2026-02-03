@@ -442,7 +442,7 @@
     "technical_error_message": {
       "heading": "Oops! Something went wrong.",
       "message": "We encountered a technical issue. If the problem continues, please contact Altinn user service.",
-      "all_failed": "No rights were granted to {{name}}",
+      "all_failed": "No new rights were granted to {{name}}",
       "some_failed": "We couldn't grant these rights: {{actions}}"
     },
     "general_error": {

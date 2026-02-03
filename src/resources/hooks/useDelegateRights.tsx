@@ -1,26 +1,32 @@
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useDelegateRightsMutation } from '@/rtk/features/singleRights/singleRightsApi';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
-import { ChipRight } from '@/features/amUI/common/DelegationModal/SingleRights/hooks/rightsUtils';
+import { usePartyRepresentation } from '@/features/amUI/common/PartyRepresentationContext/PartyRepresentationContext';
 
 export const useDelegateRights = () => {
   const [delegate] = useDelegateRightsMutation();
+  const { toParty, fromParty, actingParty } = usePartyRepresentation();
 
   const delegateRights = (
-    rights: ChipRight[],
-    toPartyUuid: string,
-    resource: ServiceResource,
+    actionKeys: string[],
+    resourceId: string,
     onSuccess?: (response: DelegationResult) => void,
     onError?: (status: string | number) => void,
   ) => {
+    if (!toParty || !fromParty || !actingParty) {
+      console.error('Missing party information for delegation.');
+      return;
+    }
+
     delegate({
-      toUuid: toPartyUuid,
-      resourceId: resource.identifier,
-      rightKeys: rights.map((r) => r.rightKey),
+      partyUuid: actingParty.partyUuid,
+      fromUuid: fromParty.partyUuid,
+      toUuid: toParty.partyUuid,
+      resourceId: resourceId,
+      actionKeys: actionKeys,
     })
       .unwrap()
       .then((response) => {
-        onSuccess?.(response);
+        if (response) onSuccess?.(response);
       })
       .catch((status) => {
         onError?.(status);
