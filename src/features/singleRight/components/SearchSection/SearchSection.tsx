@@ -76,7 +76,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         const label = ro.organisationName || ro.organisationCode;
         return {
           label,
-          value: ro.organisationNumber,
+          value: ro.organisationCode,
         };
       })
     : [];

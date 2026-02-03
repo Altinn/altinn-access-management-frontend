@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public string SearchString { get; set; }
 
         /// <summary>
-        /// List of Resource Owners to be used for filtering (owner's org number)
+        /// List of Resource Owners to be used for filtering (owner's org code)
         /// </summary>
         public string[] ROFilters { get; set; }
 
