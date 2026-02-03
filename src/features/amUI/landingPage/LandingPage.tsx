@@ -12,6 +12,7 @@ import {
   List,
   ListItem,
   MenuItemProps,
+  UserListItem,
 } from '@altinn/altinn-components';
 import {
   ReporteeInfo,
@@ -203,14 +204,13 @@ export const LandingPage = () => {
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
-          <ListItem
-            icon={{
-              isParent: !isReporteeSubUnit,
-              type: isOrganization(reportee) ? 'company' : 'person',
-              name: reporteeName,
-            }}
-            title={reporteeName}
+          <UserListItem
+            id={reportee?.partyUuid ?? ''}
+            type={isOrganization(reportee) ? 'company' : 'person'}
+            name={reporteeName}
             description={getReporteeDescription()}
+            subUnit={isReporteeSubUnit}
+            deleted={reportee?.isDeleted}
             size='lg'
             loading={!reportee}
             interactive={false}

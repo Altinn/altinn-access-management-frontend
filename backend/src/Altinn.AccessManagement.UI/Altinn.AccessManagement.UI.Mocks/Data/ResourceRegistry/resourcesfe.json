@@ -55,6 +55,7 @@
       }
     ],
     "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgcode": "skd",
     "resourceOwnerOrgNumber": "974761076"
   },
   {
@@ -109,6 +110,7 @@
       }
     ],
     "resourceOwnerName": "PÅFUNNSETATEN",
+    "resourceOwnerOrgcode": "PAA",
     "resourceOwnerOrgNumber": "985399077"
   },
   {
@@ -168,6 +170,7 @@
       }
     ],
     "resourceOwnerName": "BLOMSTERFINN",
+    "resourceOwnerOrgcode": "finn",
     "resourceOwnerOrgNumber": "994598759"
   },
   {
@@ -227,7 +230,8 @@
       }
     ],
     "resourceOwnerName": "NARNIA",
-    "resourceOwnerOrgNumber": "777777777"
+    "resourceOwnerOrgNumber": "777777777",
+    "resourceOwnerOrgCode":  "NRNA"
   },
   {
     "title": "Snarveien",
@@ -281,6 +285,7 @@
       }
     ],
     "resourceOwnerName": "PÅFUNNSETATEN",
+    "resourceOwnerOrgcode": "PAA",
     "resourceOwnerOrgNumber": "130000000"
   },
   {
@@ -316,6 +321,7 @@
       }
     ],
     "resourceOwnerName": "NARNIA",
+    "resourceOwnerOrgcode": "NRNA",
     "resourceOwnerOrgNumber": "777777777"
   },
   {
@@ -351,6 +357,7 @@
       }
     ],
     "resourceOwnerName": "PÅFUNNSETATEN",
+    "resourceOwnerOrgcode": "PAA",
     "resourceOwnerOrgNumber": "130000000"
   },
   {
@@ -396,6 +403,7 @@
       }
     ],
     "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgcode": "ttd",
     "resourceOwnerOrgNumber": "974760746"
   },
   {
@@ -446,6 +454,7 @@
       }
     ],
     "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgcode": "ttd",
     "resourceOwnerOrgNumber": "974760746"
   },
   {
@@ -491,6 +500,7 @@
       }
     ],
     "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgcode": "ttd",
     "resourceOwnerOrgNumber": "974760746"
   },
   {
@@ -541,6 +551,7 @@
       }
     ],
     "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgcode": "ttd",
     "resourceOwnerOrgNumber": "974760746"
   },
   {
@@ -576,6 +587,7 @@
       }
     ],
     "resourceOwnerName": "Brannvesenet",
+    "resourceOwnerOrgcode": "FD",
     "resourceOwnerOrgNumber": "110110110"
   },
   {
@@ -611,6 +623,7 @@
       }
     ],
     "resourceOwnerName": "ØkernPortal",
+    "resourceOwnerOrgcode": "okp",
     "resourceOwnerOrgNumber": "904111111"
   },
   {
@@ -646,6 +659,7 @@
       }
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
+    "resourceOwnerOrgcode": "digdir",
     "resourceOwnerOrgNumber": "991825827"
   },
   {
@@ -681,6 +695,7 @@
       }
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
+    "resourceOwnerOrgcode": "digdir",
     "resourceOwnerOrgNumber": "991825827"
   },
   {
@@ -716,6 +731,7 @@
       }
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
+    "resourceOwnerOrgcode": "digdir",
     "resourceOwnerOrgNumber": "991825827"
   },
   {
@@ -751,6 +767,7 @@
       }
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
+    "resourceOwnerOrgcode": "digdir",
     "resourceOwnerOrgNumber": "991825827"
   },
   {
