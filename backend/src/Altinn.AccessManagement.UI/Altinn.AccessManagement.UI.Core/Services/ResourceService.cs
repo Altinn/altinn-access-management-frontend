@@ -355,7 +355,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <summary>
         ///     Filters the provided list of resources based on provided resourceOwnerFilters.
         ///     <param name="resources">The list of resources to be filtered.</param>
-        ///     <param name="resourceOwnerFilters">The list of resource owners to be included in the returned list.</param>
+        ///     <param name="resourceOwnerFilters">The list of resource owners (OrgCodes) to be included in the returned list.</param>
         /// </summary>
         /// <returns>List of filtered resources or all resources if the list of filters is null or empty</returns>
         private List<ServiceResourceFE> FilterResourceList(List<ServiceResourceFE> resources, string[] resourceOwnerFilters)
@@ -366,10 +366,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             List<ServiceResourceFE> filteredResources = new List<ServiceResourceFE>();
+            string[] resourceOwnerFiltersLowercase = resourceOwnerFilters.Select(filter => filter.ToLower()).ToArray();
 
             foreach (ServiceResourceFE res in resources)
             {
-                if (resourceOwnerFilters.Contains(res.ResourceOwnerOrgNumber))
+                if (resourceOwnerFiltersLowercase.Contains(res.ResourceOwnerOrgcode.ToLower()))
                 {
                     filteredResources.Add(res);
                 }

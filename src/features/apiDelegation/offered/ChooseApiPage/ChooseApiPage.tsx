@@ -138,7 +138,7 @@ export const ChooseApiPage = () => {
         provider.organisationName ??
         getProviderName(provider.organisationCode) ??
         provider.organisationCode,
-      value: provider.organisationNumber,
+      value: provider.organisationCode,
     }));
   }, [apiProviders, getProviderName]);
 

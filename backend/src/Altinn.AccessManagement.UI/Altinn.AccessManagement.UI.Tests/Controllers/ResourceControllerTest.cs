@@ -125,9 +125,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             int page = 1;
             int resultsPerPage = 4;
             // Narnia and testdepartementet
-            string[] roFilters = { "777777777", "974760746" };
+            string[] roFilters = { "nrna", "ttd" };
 
-            List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
+            List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgcode?.ToLower()));
             PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, resultsPerPage), page, allExpectedResources.Count);
 
             // Act
@@ -220,13 +220,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             int resultsPerPage = 4;
             string searchString = "gir tilgang til brannbilen";
             // Brannvesenet and Testdepartementet
-            string[] roFilters = { "110110110", "974760746" };
+            string[] roFilters = { "fd", "ttd" };
 
-            List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
+            List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgcode?.ToLower()));
             // The most relevant resource to our search will be the Brannvesenet service, which is stored last
             // Thus we rearrange the resources until they match expected output of the search
-            ServiceResourceFE mostRelevantResource = allExpectedResources.Last();
-            allExpectedResources.RemoveAt(allExpectedResources.Count - 1);
+            var mostRelevantResourceIndex = allExpectedResources.FindIndex(r => r.ResourceOwnerOrgcode?.ToLower() == "fd" );
+            var mostRelevantResource = allExpectedResources[mostRelevantResourceIndex];
+            allExpectedResources.RemoveAt(mostRelevantResourceIndex);
             allExpectedResources.Insert(0, mostRelevantResource);
             PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, resultsPerPage), page, allExpectedResources.Count);
 
@@ -389,9 +390,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             // NARNIA
-            string[] roFilters = { "777777777" };
+            string[] roFilters = { "nrna" };
 
-            List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
+            List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => roFilters.Contains(r.ResourceOwnerOrgcode?.ToLower()));
 
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenapi/search?ROFilters={roFilters[0]}");
@@ -440,9 +441,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string searchString = "det magiske klesskapet";
             // PÅFUNNSETATEN and NARNIA
-            string[] roFilters = { "130000000", "777777777" };
+            string[] roFilters = { "paa", "nrna" };
 
-            List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
+            List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => roFilters.Contains(r.ResourceOwnerOrgcode?.ToLower()));
 
             List<ServiceResourceFE> filteredExpectedResult = expectedResult.FindAll(r => r.Title.ToLower().Contains(searchString));
 
