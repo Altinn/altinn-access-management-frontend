@@ -177,6 +177,7 @@ export const AccessPackageList = ({
                   showAvailableToggle={showAvailableToggle}
                   showPermissions={showPermissions}
                   packageAs={packageAs}
+                  partyType={partyType}
                 />
               </AreaItem>
             );
