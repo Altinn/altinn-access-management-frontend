@@ -11,23 +11,21 @@ export const useClientAccessAgentLists = ({
   clientAccessPackages,
   agents,
 }: UseClientAccessAgentListsParams) => {
-  console.log('agents: ', agents);
-  console.log('clientAccessPackages: ', clientAccessPackages);
-  const agentsWithClientAccess = useMemo(() => {
-    if (!agents?.length || !clientAccessPackages?.length) {
-      return [];
-    }
-
-    return agents.filter((agent) =>
-      clientAccessPackages.some(
-        (clientAgent) =>
-          clientAgent.agent.id === agent.agent.id &&
-          clientAgent.access.some((access) => access.packages.length > 0),
-      ),
+  return useMemo(() => {
+    const allAgents = (agents ?? []).filter(
+      (agent) => agent.agent.type.toLowerCase() !== 'systembruker',
     );
-  }, [clientAccessPackages, agents]);
 
-  const allAgents = agents ?? [];
+    const agentsWithClientAccess = clientAccessPackages?.length
+      ? allAgents.filter((agent) =>
+          clientAccessPackages.some(
+            (clientAgent) =>
+              clientAgent.agent.id === agent.agent.id &&
+              clientAgent.access.some((access) => access.packages.length > 0),
+          ),
+        )
+      : [];
 
-  return { agentsWithClientAccess, allAgents };
+    return { agentsWithClientAccess, allAgents };
+  }, [agents, clientAccessPackages]);
 };
