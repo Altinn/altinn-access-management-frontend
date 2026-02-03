@@ -195,7 +195,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task RemoveAgent(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
-            string endpointUrl = $"enduser/clientdelegations/agents?party={party}&to={to}";
+            string endpointUrl = $"enduser/clientdelegations/agents?party={party}&to={to}&cascade=true";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
