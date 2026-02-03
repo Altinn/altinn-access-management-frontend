@@ -65,7 +65,7 @@ export const PageContainer = ({
               variant='tertiary'
               data-color='neutral'
             >
-              <ArrowLeftIcon />
+              <ArrowLeftIcon aria-hidden={true} />
               {t('common.back')}
             </Button>
           ) : undefined}
