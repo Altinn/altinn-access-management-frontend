@@ -57,23 +57,26 @@ export const getInheritedStatus = ({
   toParty,
   fromParty: _fromParty,
   actingParty: _actingParty,
-}: GetInheritedStatusParams): InheritedStatusMessageType | undefined => {
+}: GetInheritedStatusParams): InheritedStatusMessageType[] => {
   if (!permissions || permissions.length === 0) {
-    return undefined;
+    return [];
   }
 
-  const relevantPermission = permissions.find(
-    (permission) => !toParty?.partyUuid || permission.to?.id === toParty.partyUuid,
-  );
-  const hasRightholderRole = permissions.some(
-    (permission) => permission.role?.code === 'rettighetshaver',
-  );
+  const result: InheritedStatusMessageType[] = [];
 
-  if (!relevantPermission) {
-    return undefined;
-  }
+  permissions.forEach((permission) => {
+    const isRelevantPermission = !toParty?.partyUuid || permission.to?.id === toParty.partyUuid;
 
-  return resolveInheritanceStatus(relevantPermission, hasRightholderRole) ?? undefined;
+    if (isRelevantPermission) {
+      const hasRightholderRole = permission.role?.code === 'rettighetshaver';
+      const status = resolveInheritanceStatus(permission, hasRightholderRole);
+      if (status) {
+        result.push(status);
+      }
+    }
+  });
+
+  return result;
 };
 
 export const useInheritedStatusInfo = (params: GetInheritedStatusParams) =>
