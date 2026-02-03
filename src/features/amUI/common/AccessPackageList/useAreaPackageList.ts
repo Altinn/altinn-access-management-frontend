@@ -204,9 +204,6 @@ export const getDeletableStatus = (
   toPartyUuid?: string,
   fromPartyUuid?: string,
 ): DeletableStatus => {
-  if (toPartyUuid === fromPartyUuid) {
-    return DeletableStatus.NotDeletable;
-  }
   if (pkg.permissions.every((p) => isInherited(p, toPartyUuid || '', fromPartyUuid || ''))) {
     return DeletableStatus.NotDeletable;
   }
