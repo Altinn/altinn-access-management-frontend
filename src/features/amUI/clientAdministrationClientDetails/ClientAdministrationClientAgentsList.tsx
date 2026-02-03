@@ -166,7 +166,7 @@ export const ClientAdministrationClientAgentsList = ({
       name: agent.agent.name,
       type: userType,
       subUnit: isSubUnit,
-      deleted: agent.agent.isDeleted,
+      deleted: agent.agent.isDeleted ?? undefined,
       collapsible: true,
       as: Button,
       children: <AccessPackageListItems items={nodes} />,

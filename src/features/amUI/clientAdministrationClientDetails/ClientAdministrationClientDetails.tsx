@@ -55,8 +55,11 @@ export const ClientAdministrationClientDetails = () => {
     clientAccessPackages,
     agents,
   });
+
   const selectedClient = clients?.find((client) => client.client.id === id);
-  const hasDelegatablePackages = (clientAccessPackages?.length ?? 0) > 0;
+  const delegablePackages = selectedClient?.access?.flatMap((access) => access.packages) ?? [];
+
+  const hasDelegatablePackages = (delegablePackages?.length ?? 0) > 0;
 
   if (isClientAdmin === false) {
     return (
