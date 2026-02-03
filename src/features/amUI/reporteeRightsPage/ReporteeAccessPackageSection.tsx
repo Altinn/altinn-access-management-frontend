@@ -54,6 +54,7 @@ export const ReporteeAccessPackageSection = () => {
         isLoading={isLoadingAccesses || isLoadingParty}
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         showAllPackages
+        showPackagesCount
         minimizeAvailablePackages
         onSelect={(accessPackage) => {
           setModalItem(accessPackage);
