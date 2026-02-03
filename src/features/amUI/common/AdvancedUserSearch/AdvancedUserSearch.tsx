@@ -31,6 +31,8 @@ export interface AdvancedUserSearchProps {
   addUserButtonLabel?: string;
   directConnectionsHeading?: string;
   indirectConnectionsHeading?: string;
+  additionalFilters?: React.ReactNode;
+  hasActiveAdditionalFilters?: boolean;
 }
 
 const filterAvailableUserTypes = (items?: Connection[]) =>
@@ -58,6 +60,8 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   addUserButtonLabel,
   directConnectionsHeading,
   indirectConnectionsHeading,
+  additionalFilters,
+  hasActiveAdditionalFilters = false,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
@@ -70,7 +74,8 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   );
 
   const trimmedQuery = query.trim();
-  const isQuery = trimmedQuery !== '';
+  const isQuery = trimmedQuery !== '' || hasActiveAdditionalFilters;
+  const hasFiltersOnly = hasActiveAdditionalFilters && trimmedQuery === '';
 
   const { users, hasNextPage, goNextPage, indirectUsers, hasNextIndirectPage, goNextIndirectPage } =
     useFilteredUsers({
@@ -85,7 +90,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
   const showIndirectList = isQuery && indirectHasResults && canDelegate;
-  const showEmptyState = !directHasResults && !indirectHasResults && hasDirectConnections;
+  const showEmptyState = isQuery && !directHasResults && !indirectHasResults;
 
   const handleAddNewUser = async (user: User) => {
     if (onAddNewUser) {
@@ -106,15 +111,20 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   return (
     <div className={classes.container}>
       <div className={classes.controls}>
-        <DsSearch className={classes.searchBar}>
-          <DsSearch.Input
-            aria-label={t('common.search')}
-            placeholder={searchPlaceholder ?? t('advanced_user_search.user_search_placeholder')}
-            value={query}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)}
-          />
-          {query && <DsSearch.Clear onClick={() => setQuery('')} />}
-        </DsSearch>
+        <div className={classes.searchAndFilters}>
+          <DsSearch className={classes.searchBar}>
+            <DsSearch.Input
+              aria-label={t('common.search')}
+              placeholder={searchPlaceholder ?? t('advanced_user_search.user_search_placeholder')}
+              value={query}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                setQuery(event.target.value)
+              }
+            />
+            {query && <DsSearch.Clear onClick={() => setQuery('')} />}
+          </DsSearch>
+          {additionalFilters}
+        </div>
         {canDelegate && AddUserButton && (
           <div className={classes.buttonRow}>
             <AddUserButton onComplete={handleAddNewUser} />
@@ -124,7 +134,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 
       <div className={classes.results}>
         <>
-          {!hasDirectConnections && !isLoading && (
+          {!hasDirectConnections && !isLoading && !isQuery && (
             <DsParagraph
               data-size='sm'
               className={classes.tabDescription}
@@ -155,7 +165,12 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
           />
           {showDirectNoResults && (
             <DsParagraph data-size='md'>
-              {t('advanced_user_search.user_no_search_result', { searchTerm: trimmedQuery })}
+              {t(
+                hasFiltersOnly
+                  ? 'advanced_user_search.user_no_filter_result'
+                  : 'advanced_user_search.user_no_search_result',
+                { searchTerm: trimmedQuery },
+              )}
             </DsParagraph>
           )}
         </>
@@ -183,9 +198,13 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
             <DsParagraph data-size='md'>
               {t(
                 canDelegate
-                  ? 'advanced_user_search.user_no_search_result_with_add_suggestion'
-                  : 'advanced_user_search.user_no_search_result',
-                { searchTerm: trimmedQuery },
+                  ? hasFiltersOnly
+                    ? 'advanced_user_search.user_no_filter_result_with_add_suggestion'
+                    : 'advanced_user_search.user_no_search_result_with_add_suggestion'
+                  : hasFiltersOnly
+                    ? 'advanced_user_search.user_no_filter_result'
+                    : 'advanced_user_search.user_no_search_result',
+                { searchTerm: trimmedQuery || '' },
               )}
             </DsParagraph>
             {canDelegate && AddUserButton && (

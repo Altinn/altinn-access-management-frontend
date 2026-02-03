@@ -345,6 +345,10 @@
       "via_keyrole": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}."
     }
   },
+  "user_roles": {
+    "has_client_access": "Har klienttilgang",
+    "has_client_access_description": "Denne brukeren har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at de har tilgang til virksomhetens eget innhold, men at de kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter de har tilgang til kan administreres under <a>klientadministrasjon</a>."
+  },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
     "main_page_heading": "Brukere med fullmakter i {{name}}",
@@ -364,6 +368,8 @@
     "indirect_connections": "Brukere uten fullmakt",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
+    "user_no_filter_result": "Ingen brukere passer de valgte filtrene.",
+    "user_no_filter_result_with_add_suggestion": "Ingen brukere passer de valgte filtrene. Er dette en ny bruker du ønsker å gi fullmakt til?",
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet"
@@ -429,7 +435,7 @@
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
-      "all_failed": "Ingen ny fullmakt er gitt til {{name}}",
+      "all_failed": "Ingen nye tilganger er gitt til {{name}}",
       "some_failed": "Følgende tilganger ble ikke gitt: {{actions}}"
     },
     "specific_rights": {
@@ -566,10 +572,36 @@
     "agent_delete_heading": "Du sletter denne brukeren",
     "agent_delete_body": "Denne personen og alle dens fullmakter hos dine klienter vil bli slettet.",
     "agent_delete_confirm": "Slett bruker",
+    "load_delegations_error": "Kunne ikke laste klienter med tilgang.",
+    "load_user_delegations_error": "Kunne ikke laste brukere med tilgang.",
+    "no_delegations": "Fant ingen klienter med tilgang.",
+    "no_user_delegations": "Fant ingen brukere med tilgang.",
+    "no_access_to_delegate": "{{name}} har ingen tilganger for denne klienten.",
+    "delegate_package_button": "Gi fullmakt",
+    "delegate_package_success_snackbar": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
+    "delegate_package_error": "Kunne ikke gi {{name}} fullmakt til {{accessPackage}}.",
+    "remove_package_button": "Slett fullmakt",
+    "remove_package_success_snackbar": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
+    "remove_package_error": "Kunne ikke slette fullmakt til {{accessPackage}} for {{name}}.",
+    "via_role": "Tilgang gjennom Enhetsregisteret",
+    "agent_has_clients_tab": "Klienter med tilgang",
+    "agent_can_get_clients_tab": "Alle klienter",
+    "client_has_agents_tab": "Brukere med tilgang",
+    "client_can_get_agents_tab": "Alle brukere",
     "direct_connections_heading": "Brukere med klienttilgang",
     "indirect_connections_heading": "Andre brukere",
+    "organization_identifier": "Org.nr. {{orgnr}}",
     "no_clients": "Organisasjonen har ingen klienter",
-    "no_agents": "Fant ingen brukere med klienttilgang for denne organisasjonen"
+    "clients_filter_label": "Klientforhold",
+    "clients_filter_register": "Fra Enhetsregisteret",
+    "clients_filter_other": "Andre",
+    "clients_show_deleted": "Vis slettede",
+    "show_deleted_clients": "Vis slettede",
+    "rettighetshaver": "Andre klientforhold",
+    "error_loading_clients": "Kunne ikke laste klienter.",
+    "error_loading_agents": "Kunne ikke laste brukere.",
+    "no_agents": "Ingen brukere har fått klienttilganger ennå. Du kan søke etter brukere som allerede har noen tilganger hos dere, eller registrere en ny bruker.",
+    "client_search_placeholder": "Søk etter klient"
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",

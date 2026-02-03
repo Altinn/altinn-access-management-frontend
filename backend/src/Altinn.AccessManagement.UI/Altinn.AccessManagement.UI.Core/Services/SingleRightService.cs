@@ -16,6 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IAccessManagementClientV0 _accessManagementClientV0;
         private readonly IResourceService _resourceService;
         private readonly IResourceRegistryClient _resourceRegistryClient;
+        private readonly ISingleRightClient _singleRightClient;
 
         private readonly JsonSerializerOptions options = new JsonSerializerOptions
         {
@@ -29,12 +30,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="accessManagementClientV0">The old access management client, used to access the old am endpoints.</param>
         /// <param name="resourceService">The resource service.</param>
         /// <param name="resourceRegistryClient">The resource registry client.</param>
-        public SingleRightService(IAccessManagementClient accessManagementClient, IAccessManagementClientV0 accessManagementClientV0, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient)
+        /// <param name="singleRightClient">The single rights client.</param>
+        public SingleRightService(IAccessManagementClient accessManagementClient, IAccessManagementClientV0 accessManagementClientV0, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient)
         {
             _accessManagementClient = accessManagementClient;
             _accessManagementClientV0 = accessManagementClientV0;
             _resourceService = resourceService;
             _resourceRegistryClient = resourceRegistryClient;
+            _singleRightClient = singleRightClient;
         }
 
         /// <inheritdoc />
@@ -80,9 +83,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<DelegationOutput> Delegate(Guid from, Guid to, string resource, List<string> rights)
+        public async Task<HttpResponseMessage> Delegate(Guid party, Guid from, Guid to, string resource, List<string> actionKeys)
         {
-            return await _accessManagementClient.DelegateResource(from, to, resource, rights);
+            return await _singleRightClient.CreateSingleRightsAccess(party, to, from, resource, actionKeys);
         }
 
         /// <inheritdoc />
@@ -141,39 +144,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public Task<HttpResponseMessage> RevokeResourceAccess(Guid from, Guid to, string resourceId)
+        public async Task<HttpResponseMessage> RevokeResourceAccess(Guid from, Guid to, string resourceId)
         {
-            return _accessManagementClient.RevokeResourceDelegation(from, to, resourceId);
+            return await _accessManagementClient.RevokeResourceDelegation(from, to, resourceId);
         }
 
         /// <inheritdoc />
-        public async Task<List<string>> EditResourceAccess(Guid from, Guid to, string resourceId, RightChanges update)
+        public async Task<HttpResponseMessage> UpdateResourceAccess(Guid party, Guid to, Guid from, string resourceId, List<string> actionKeys)
         {
-            List<string> failedEdits = new List<string>();
-
-            DelegationOutput delegationOutput = await _accessManagementClient.DelegateResource(from, to, resourceId, update.RightsToDelegate);
-
-            var failingDelegations = delegationOutput.RightDelegationResults.Where(right => right.Status != "Delegated").Select(right => right.RightKey).ToList();
-
-            if (failingDelegations != null && failingDelegations.Count > 0)
-            {
-                failedEdits.AddRange(failingDelegations);
-            }
-
-            foreach (string rightKey in update.RightsToRevoke)
-            {
-                var revokeResponse = await _accessManagementClient.RevokeRightDelegation(from, to, resourceId, rightKey);
-                var revokeResult = await revokeResponse.Content.ReadAsStringAsync();
-
-                bool deleted = JsonSerializer.Deserialize<bool>(revokeResult, options);
-
-                if (!deleted)
-                {
-                    failedEdits.Add(rightKey);
-                }
-            }
-
-            return failedEdits;
+            return await _singleRightClient.UpdateSingleRightsAccess(party, to, from, resourceId, actionKeys);
         }
     }
 }

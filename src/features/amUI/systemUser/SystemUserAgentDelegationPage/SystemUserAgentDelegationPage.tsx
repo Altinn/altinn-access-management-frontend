@@ -32,6 +32,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const navigate = useNavigate();
   const partyId = getCookie('AltinnPartyId');
   const partyUuid = getCookie('AltinnPartyUuid');
+  const backUrl = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
 
   useDocumentTitle(t('systemuser_agent_delegation.page_title'));
 
@@ -65,11 +66,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const handleDeleteSystemUser = (): void => {
     deleteAgentSystemUser({ partyId, systemUserId: id || '', partyUuid })
       .unwrap()
-      .then(() => handleNavigateBack());
-  };
-
-  const handleNavigateBack = (): void => {
-    navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+      .then(() => navigate(backUrl));
   };
 
   const isLoading = isLoadingSystemUser || isLoadingCustomers || isLoadingAssignedCustomers;
@@ -82,8 +79,8 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
           lastBreadcrumb={{ label: systemUser?.integrationTitle }}
         />
         <PageContainer
-          onNavigateBack={handleNavigateBack}
-          pageActions={
+          backUrl={backUrl}
+          contentActions={
             systemUser &&
             hasCreateSystemUserPermission(reporteeData, isAdmin) && (
               <DeleteSystemUserPopover

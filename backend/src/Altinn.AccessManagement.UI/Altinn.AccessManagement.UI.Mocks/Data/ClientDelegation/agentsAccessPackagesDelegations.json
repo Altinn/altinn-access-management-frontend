@@ -1,0 +1,16 @@
+[
+  {
+    "roleId": "11111111-1111-1111-1111-111111111111",
+    "packageId": "22222222-2222-2222-2222-222222222222",
+    "viaId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "fromId": "7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a",
+    "toId": "1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4"
+  },
+  {
+    "roleId": "c1db67c2-0178-4b68-8b3f-9d048393ca5b",
+    "packageId": "2e1c4c0a-3d3d-4b9c-b6ed-1c65e1c665a8",
+    "viaId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "fromId": "7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a",
+    "toId": "1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4"
+  }
+]
