@@ -14,7 +14,7 @@ export const useAccessPackageLookup = () => {
   } = useSearchQuery({
     searchString: '',
     language: i18n.language,
-    typeName: 'organisasjon',
+    typeName: '',
   });
 
   const packageMap = React.useMemo(() => {
