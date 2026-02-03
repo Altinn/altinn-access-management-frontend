@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default)
+        public Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
@@ -46,6 +46,40 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             string dataPath = Path.Combine(dataFolder, "ClientDelegation", "agents.json");
             return Task.FromResult(Util.GetMockData<List<AgentDelegation>>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public Task<List<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "ClientDelegation", "agentsAccessPackages.json");
+            return Task.FromResult(Util.GetMockData<List<ClientDelegation>>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public Task<List<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "ClientDelegation", "clientsAccessPackages.json");
+            return Task.FromResult(Util.GetMockData<List<AgentDelegation>>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public Task<List<DelegationDto>> AddAgentAccessPackages(Guid party, Guid from, Guid to, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "ClientDelegation", "agentsAccessPackagesDelegations.json");
+            return Task.FromResult(Util.GetMockData<List<DelegationDto>>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public Task RemoveAgentAccessPackages(Guid party, Guid from, Guid to, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />

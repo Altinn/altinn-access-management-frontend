@@ -24,15 +24,39 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ClientDelegation>> GetClients(Guid party, CancellationToken cancellationToken = default)
+        public async Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
         {
-            return await _clientDelegationClient.GetClients(party, cancellationToken);
+            return await _clientDelegationClient.GetClients(party, roles, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task<List<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
         {
             return await _clientDelegationClient.GetAgents(party, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, CancellationToken cancellationToken = default)
+        {
+            return await _clientDelegationClient.GetAgentAccessPackages(party, to, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, CancellationToken cancellationToken = default)
+        {
+            return await _clientDelegationClient.GetClientAccessPackages(party, from, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<DelegationDto>> AddAgentAccessPackages(Guid party, Guid from, Guid to, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            return await _clientDelegationClient.AddAgentAccessPackages(party, from, to, payload, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveAgentAccessPackages(Guid party, Guid from, Guid to, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            await _clientDelegationClient.RemoveAgentAccessPackages(party, from, to, payload, cancellationToken);
         }
 
         /// <inheritdoc />

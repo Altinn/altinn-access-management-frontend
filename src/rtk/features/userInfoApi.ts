@@ -25,6 +25,7 @@ export interface User {
   userId?: string | null;
   username?: string | null;
   sortKey?: string;
+  isDeleted?: boolean;
 }
 
 interface UserProfileApiResponse {

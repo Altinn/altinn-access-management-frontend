@@ -20,7 +20,7 @@ languages.forEach((language) => {
     test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language})`, async ({
       consentPage,
       login,
-    }) => {
+    }, testInfo) => {
       // Create consent request from one org to another org
       // For å godkjenne her kreves det at ressursen i ressursregisteret er satt opp med utfyller/innsender-rollen for org til org-samtykke
       const scenario = scenarioBuilder.orgToOrg();
@@ -35,6 +35,14 @@ languages.forEach((language) => {
           metaData: { inntektsaar: '2028' },
         });
       });
+      console.log(
+        '\nTestscenario: ' +
+          testInfo.title +
+          '\nPerson som skal gjøre samtykke: ' +
+          scenario.fromPerson +
+          '\nSamtykke-URL ' +
+          consentResponse.viewUri,
+      );
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);

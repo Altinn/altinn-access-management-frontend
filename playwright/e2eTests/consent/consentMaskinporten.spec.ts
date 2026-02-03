@@ -24,11 +24,11 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
     page,
     login,
     consentPage,
-  }) => {
+  }, testInfo) => {
     const scenario = scenarioBuilder.personToOrgWithMaskinporten(MASKINPORTEN_ORG_DIGDIR);
 
-    await test.step('Create consent request', async () => {
-      await createAndApproveConsent({
+    const consentResp = await test.step('Create consent request', async () => {
+      return await createAndApproveConsent({
         ...scenario,
         page,
         login,
@@ -37,6 +37,14 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
         metaData: { inntektsaar: '2028' },
       });
     });
+    console.log(
+      '\nTestscenario: ' +
+        testInfo.title +
+        '\nPerson som skal gjøre samtykke: ' +
+        scenario.fromPerson +
+        '\nSamtykke-URL ' +
+        consentResp.viewUri,
+    );
 
     await test.step('Verify consent UI and expiry', async () => {
       await consentPage.expectStandardIntro();
@@ -60,7 +68,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
    * Krever scopet "altinn:consentrequests.org" for å kunne gjøre det og det sjekkes eksplisitt på at samtykkeressursen eies av samme org som henter
    * maskinporten-tokenet.
    */
-  test(`E-bevis (org scope)`, async ({ consentPage, login }) => {
+  test(`E-bevis (org scope)`, async ({ consentPage, login }, testInfo) => {
     const scenario = scenarioBuilder.personToOrg('altinn:consentrequests.org');
 
     const consentResponse = await test.step('Create consent request', async () => {
@@ -73,6 +81,15 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
         metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
       });
     });
+
+    console.log(
+      '\nTestscenario: ' +
+        testInfo.title +
+        '\nPerson som skal gjøre samtykke: ' +
+        scenario.fromPerson +
+        '\nSamtykke-URL ' +
+        consentResponse.viewUri,
+    );
 
     await test.step('Open consent page and login', async () => {
       await consentPage.open(consentResponse.viewUri);
@@ -101,7 +118,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
   test.describe('TT02-only token retrieval', () => {
     test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
 
-    test('Fetch consent token after approval', async ({ page, login, consentPage }) => {
+    test('Fetch consent token after approval', async ({ page, login, consentPage }, testInfo) => {
       const scenario = scenarioBuilder.personToOrgWithMaskinporten(MASKINPORTEN_ORG_DIGDIR);
 
       const consentResp = await test.step('Create consent request', async () => {
@@ -114,6 +131,14 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
           metaData: { inntektsaar: '2028' },
         });
       });
+      console.log(
+        '\nTestscenario: ' +
+          testInfo.title +
+          '\nPerson som skal gjøre samtykke: ' +
+          scenario.fromPerson +
+          '\nSamtykke-URL ' +
+          consentResp.viewUri,
+      );
 
       await test.step('Verify consent UI', async () => {
         await consentPage.expectStandardIntro();
@@ -141,7 +166,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
     test('Create and approve consent on behalf of organization as a consumer org and fetch token', async ({
       login,
       consentPage,
-    }) => {
+    }, testInfo) => {
       test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
 
       const SPAREBANKEN_ORG_NUMBER = '313876144'; //Dagl 28913749776
@@ -170,6 +195,14 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
           expect(viewUri).toBeTruthy();
           return { viewUri };
         });
+      console.log(
+        '\nTestscenario: ' +
+          testInfo.title +
+          '\nPerson som skal gjøre samtykke: ' +
+          scenario.fromPerson +
+          '\nSamtykke-URL ' +
+          consentResp.viewUri,
+      );
 
       await test.step('Verify consent UI and expiry', async () => {
         await consentPage.expectStandardIntro();

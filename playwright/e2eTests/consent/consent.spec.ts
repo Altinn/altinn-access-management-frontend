@@ -16,7 +16,7 @@ languages.forEach((language) => {
       language,
       viewport: mobileViewport,
     });
-    test(`Standard samtykke`, async ({ login, consentPage }) => {
+    test(`Standard samtykke`, async ({ login, consentPage }, testInfo) => {
       const scenario = scenarioBuilder.personToOrg();
 
       const consentResponse = await test.step('Create consent request', async () => {
@@ -29,6 +29,14 @@ languages.forEach((language) => {
           metaData: { inntektsaar: '2028' },
         });
       });
+      console.log(
+        '\nTestscenario: ' +
+          testInfo.title +
+          '\nPerson som skal gjøre samtykke: ' +
+          scenario.fromPerson +
+          '\nSamtykke-URL ' +
+          consentResponse.viewUri,
+      );
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
@@ -51,7 +59,7 @@ languages.forEach((language) => {
       });
     });
 
-    test(`Krav-template`, async ({ page, consentPage, login }) => {
+    test(`Krav-template`, async ({ page, consentPage, login }, testInfo) => {
       const scenario = scenarioBuilder.personToOrg();
 
       const consentResponse = await test.step('Create consent request', async () => {
@@ -64,6 +72,14 @@ languages.forEach((language) => {
           metaData: { brukerdata: 'AutomatisertTiltakE2E' },
         });
       });
+      console.log(
+        '\nTestscenario: ' +
+          testInfo.title +
+          '\nPerson som skal gjøre samtykke: ' +
+          scenario.fromPerson +
+          '\nSamtykke-URL ' +
+          consentResponse.viewUri,
+      );
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
@@ -85,7 +101,7 @@ languages.forEach((language) => {
       });
     });
 
-    test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login }) => {
+    test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login }, testInfo) => {
       const scenario = scenarioBuilder.personToOrg();
 
       const consentResponse = await test.step('Create consent request', async () => {
@@ -98,6 +114,14 @@ languages.forEach((language) => {
           metaData: { tiltak: '2024' },
         });
       });
+      console.log(
+        '\nTestscenario: ' +
+          testInfo.title +
+          '\nPerson som skal gjøre samtykke: ' +
+          scenario.fromPerson +
+          '\nSamtykke-URL ' +
+          consentResponse.viewUri,
+      );
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
@@ -123,7 +147,7 @@ languages.forEach((language) => {
       });
     });
 
-    test(`Lånesøknad`, async ({ consentPage, page, login }) => {
+    test(`Lånesøknad`, async ({ consentPage, page, login }, testInfo) => {
       const scenario = scenarioBuilder.personToOrg();
 
       const consentResponse = await test.step('Create consent request', async () => {
@@ -136,6 +160,14 @@ languages.forEach((language) => {
           metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
         });
       });
+      console.log(
+        '\nTestscenario: ' +
+          testInfo.title +
+          '\nPerson som skal gjøre samtykke: ' +
+          scenario.fromPerson +
+          '\nSamtykke-URL ' +
+          consentResponse.viewUri,
+      );
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
@@ -160,7 +192,7 @@ languages.forEach((language) => {
       });
     });
 
-    test(`Enkelt samtykke`, async ({ consentPage, page, login }) => {
+    test(`Enkelt samtykke`, async ({ consentPage, page, login }, testInfo) => {
       const scenario = scenarioBuilder.personToOrg();
 
       const consentResponse = await test.step('Create consent request', async () => {
@@ -173,6 +205,14 @@ languages.forEach((language) => {
           metaData: { simpletag: 'E2E Playwright metadata for simpletag' },
         });
       });
+      console.log(
+        '\nTestscenario: ' +
+          testInfo.title +
+          '\nPerson som skal gjøre samtykke: ' +
+          scenario.fromPerson +
+          '\nSamtykke-URL ' +
+          consentResponse.viewUri,
+      );
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
@@ -198,7 +238,7 @@ languages.forEach((language) => {
       });
     });
 
-    test(`Avvis samtykke`, async ({ consentPage, login }) => {
+    test(`Avvis samtykke`, async ({ consentPage, login }, testInfo) => {
       const scenario = scenarioBuilder.personToOrg();
 
       const consentResponse = await test.step('Create consent request', async () => {
@@ -211,6 +251,14 @@ languages.forEach((language) => {
           metaData: { simpletag: 'E2E reject test' },
         });
       });
+      console.log(
+        '\nTestscenario: ' +
+          testInfo.title +
+          '\nPerson som skal gjøre samtykke: ' +
+          scenario.fromPerson +
+          '\nSamtykke-URL ' +
+          consentResponse.viewUri,
+      );
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
