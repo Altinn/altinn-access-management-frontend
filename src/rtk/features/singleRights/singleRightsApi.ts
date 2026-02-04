@@ -44,11 +44,16 @@ interface searchParams {
   resultsPerPage: number;
 }
 
-export interface DelegationCheckedRight {
-  rightKey: string;
-  action: string;
-  status: string;
-  reasonCodes: string[];
+export interface DelegationCheckedAction {
+  actionKey: string;
+  actionName: string;
+  result: boolean;
+  reasons: DelegationCheckReason[];
+}
+
+export interface DelegationCheckReason {
+  description: string;
+  reasonKey: string;
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
@@ -83,9 +88,9 @@ export const singleRightsApi = createApi({
       query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,
       providesTags: ['overview'],
     }),
-    delegationCheck: builder.query<DelegationCheckedRight[], string>({
+    delegationCheck: builder.query<DelegationCheckedAction[], string>({
       query: (resourceId) => ({
-        url: `singleright/${getCookie('AltinnPartyUuid')}/delegationcheck/${resourceId}`,
+        url: `singleright/delegationcheck?from=${getCookie('AltinnPartyUuid')}&resource=${resourceId}`,
         method: 'GET',
       }),
       transformErrorResponse: (response: {

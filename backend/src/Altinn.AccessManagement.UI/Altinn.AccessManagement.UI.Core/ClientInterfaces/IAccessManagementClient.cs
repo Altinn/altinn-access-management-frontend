@@ -41,13 +41,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 //// Single Rights
 
                 /// <summary>
-                ///    Fetches all rights on a given resource with details on whether they can be delegated on behalf of the party
-                /// </summary>
-                /// <param name="party">The party on which the delegation would be on behalf of</param>
-                /// <param name="resource">The id of the resource to be checked for delegation</param>
-                Task<List<DelegationCheckedRight>> GetDelegationCheck(Guid party, string resource);
-
-                /// <summary>
                 ///     Retrieves the single rights for a specific right holder.
                 /// </summary>
                 /// <param name="party">The party identifier.</param>

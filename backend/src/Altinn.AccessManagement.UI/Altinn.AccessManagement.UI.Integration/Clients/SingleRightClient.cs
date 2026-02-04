@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
@@ -42,6 +43,18 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _client = httpClient;
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        /// <inheritdoc />
+        public async Task<ResourceCheckDto> GetDelegationCheck(Guid from, string resource)
+        {
+            string endpointUrl = $"enduser/connections/resources/delegationcheck?party={from}&resourceId={resource}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            var content = await response.Content.ReadAsStringAsync();
+
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<ResourceCheckDto>(response);
         }
 
         /// <inheritdoc />

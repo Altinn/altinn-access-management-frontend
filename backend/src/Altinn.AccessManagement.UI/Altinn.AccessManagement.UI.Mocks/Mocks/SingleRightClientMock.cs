@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +34,23 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             IHttpContextAccessor httpContextAccessor)
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
+        }
+
+
+        /// <inheritdoc />
+        public async Task<ResourceCheckDto> GetDelegationCheck(Guid party, string resource)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "SingleRight", "DelegationCheck", $"{resource}.json");
+                return await Task.FromResult(Util.GetMockData<ResourceCheckDto>(dataPath));
+            }
+            catch
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
         }
 
         /// <inheritdoc />

@@ -126,17 +126,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         //// Single Rights
 
         /// <inheritdoc />
-        public async Task<List<DelegationCheckedRight>> GetDelegationCheck(Guid party, string resource)
-        {
-            string endpointUrl = $"todo/resources/{resource}/rights/delegationcheck/?from={party}"; // TODO: Switch with actual backend endpoint when available
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
-
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<DelegationCheckedRight>>(response);
-        }
-
-        /// <inheritdoc />
         public async Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId)
         {
             string endpointUrl = $"todo/{party}/{userId}"; // TODO: Switch with actual backend endpoint when available

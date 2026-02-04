@@ -132,12 +132,13 @@ export const RightsSection = ({
               icon={CheckmarkCircleIcon}
               collapsible={true}
               title={
-                rights.filter((r) => r.checked).length !== rights.length
+                rights.length > 0 &&
+                (rights.filter((r) => r.checked).length !== rights.length
                   ? t('delegation_modal.actions.partial_access', {
                       count: rights.filter((r) => r.checked).length,
                       total: rights.length,
                     })
-                  : t('delegation_modal.actions.access_to_all')
+                  : t('delegation_modal.actions.access_to_all'))
               }
               onClick={() => setRightsExpanded(!rightsExpanded)}
               expanded={rightsExpanded}

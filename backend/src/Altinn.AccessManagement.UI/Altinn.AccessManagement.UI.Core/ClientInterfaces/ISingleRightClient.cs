@@ -1,10 +1,19 @@
-﻿namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
+﻿using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+
+namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>
     /// Interface for client to integrate with the single rights API
     /// </summary>
     public interface ISingleRightClient
     {
+        /// <summary>
+        ///    Fetches all actions on a given resource with details on whether they can be delegated on behalf of the fromParty
+        /// </summary>
+        /// <param name="from">The party from which the delegation would be on behalf of</param>
+        /// <param name="resource">The id of the resource to be checked for delegation</param>
+        Task<ResourceCheckDto> GetDelegationCheck(Guid from, string resource);
+
         /// <summary>
         ///    Creates a new delegation of a service with rights
         /// </summary>
