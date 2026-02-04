@@ -1,22 +1,14 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  DsAlert,
-  DsHeading,
-  DsParagraph,
-  DsSkeleton,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 
 import { amUIPath } from '@/routes/paths';
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import {
-  useAddAgentAccessPackagesMutation,
   useGetAgentsQuery,
   useGetClientAccessPackagesQuery,
   useGetClientsQuery,
-  useRemoveAgentAccessPackagesMutation,
 } from '@/rtk/features/clientApi';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
@@ -45,11 +37,6 @@ export const ClientAdministrationClientDetails = () => {
   } = useGetClientAccessPackagesQuery({ from: id ?? '' }, { skip: !id });
   const { data: agents, isLoading: isLoadingAgents, error: agentsError } = useGetAgentsQuery();
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
-
-  const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
-    useAddAgentAccessPackagesMutation();
-  const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
-    useRemoveAgentAccessPackagesMutation();
 
   const { agentsWithClientAccess, allAgents } = useClientAccessAgentLists({
     clientAccessPackages,
@@ -145,11 +132,8 @@ export const ClientAdministrationClientDetails = () => {
                         agents={agentsWithClientAccess}
                         clientAccessPackages={clientAccessPackages ?? []}
                         client={selectedClient}
-                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
                         fromPartyUuid={fromPartyUuid}
                         actingPartyUuid={actingPartyUuid}
-                        addAgentAccessPackages={addAgentAccessPackages}
-                        removeAgentAccessPackages={removeAgentAccessPackages}
                       />
                     ) : (
                       <DsParagraph>
@@ -171,11 +155,8 @@ export const ClientAdministrationClientDetails = () => {
                         agents={allAgents}
                         clientAccessPackages={clientAccessPackages ?? []}
                         client={selectedClient}
-                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
                         fromPartyUuid={fromPartyUuid}
                         actingPartyUuid={actingPartyUuid}
-                        addAgentAccessPackages={addAgentAccessPackages}
-                        removeAgentAccessPackages={removeAgentAccessPackages}
                       />
                     ) : (
                       <DsParagraph>{t('client_administration_page.no_agents')}</DsParagraph>

@@ -2,44 +2,45 @@ import { useCallback } from 'react';
 import { SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type {
-  AddAgentAccessPackagesFn,
-  RemoveAgentAccessPackagesFn,
+import {
+  useAddAgentAccessPackagesMutation,
+  useRemoveAgentAccessPackagesMutation,
 } from '@/rtk/features/clientApi';
 
-type UseClientAccessPackageActionsParams = {
+interface AccessPackageActionParams {
+  roleCode: string;
+  packageId: string;
+  agentName: string;
+  accessPackageName: string;
   fromPartyUuid?: string;
+  toPartyUuid?: string;
   actingPartyUuid?: string;
-  addAgentAccessPackages: AddAgentAccessPackagesFn;
-  removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
-};
+}
 
-export const useClientAccessPackageActions = ({
-  fromPartyUuid,
-  actingPartyUuid,
-  addAgentAccessPackages,
-  removeAgentAccessPackages,
-}: UseClientAccessPackageActionsParams) => {
+export const useClientAdministrationAccessPackageActions = () => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
 
-  const addClientAccessPackage = useCallback(
-    async (
-      agentId: string,
-      roleCode: string,
-      packageId: string,
-      agentName: string,
-      accessPackageName: string,
-    ) => {
-      if (!fromPartyUuid || !actingPartyUuid) {
-        return;
-      }
+  const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
+    useAddAgentAccessPackagesMutation();
+  const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
+    useRemoveAgentAccessPackagesMutation();
 
+  const addAccessPackage = useCallback(
+    async ({
+      roleCode,
+      packageId,
+      agentName,
+      accessPackageName,
+      fromPartyUuid,
+      toPartyUuid,
+      actingPartyUuid,
+    }: AccessPackageActionParams) => {
       try {
         await addAgentAccessPackages({
-          from: fromPartyUuid,
-          to: agentId,
-          party: actingPartyUuid,
+          from: fromPartyUuid!,
+          to: toPartyUuid!,
+          party: actingPartyUuid!,
           payload: {
             values: [
               {
@@ -67,26 +68,24 @@ export const useClientAccessPackageActions = ({
         });
       }
     },
-    [actingPartyUuid, addAgentAccessPackages, fromPartyUuid, openSnackbar, t],
+    [addAgentAccessPackages, openSnackbar],
   );
 
-  const removeClientAccessPackage = useCallback(
-    async (
-      agentId: string,
-      roleCode: string,
-      packageId: string,
-      agentName: string,
-      accessPackageName: string,
-    ) => {
-      if (!fromPartyUuid || !actingPartyUuid) {
-        return;
-      }
-
+  const removeAccessPackage = useCallback(
+    async ({
+      roleCode,
+      packageId,
+      agentName,
+      accessPackageName,
+      fromPartyUuid,
+      toPartyUuid,
+      actingPartyUuid,
+    }: AccessPackageActionParams) => {
       try {
         await removeAgentAccessPackages({
-          from: fromPartyUuid,
-          to: agentId,
-          party: actingPartyUuid,
+          from: fromPartyUuid!,
+          to: toPartyUuid!,
+          party: actingPartyUuid!,
           payload: {
             values: [
               {
@@ -114,8 +113,12 @@ export const useClientAccessPackageActions = ({
         });
       }
     },
-    [actingPartyUuid, fromPartyUuid, openSnackbar, removeAgentAccessPackages, t],
+    [openSnackbar, removeAgentAccessPackages],
   );
 
-  return { addClientAccessPackage, removeClientAccessPackage };
+  return {
+    addAccessPackage,
+    removeAccessPackage,
+    isLoading: isAddingAgentAccessPackages || isRemovingAgentAccessPackages,
+  };
 };

@@ -8,18 +8,13 @@ import {
   formatDate,
   formatDisplayName,
 } from '@altinn/altinn-components';
-
-import type {
-  AddAgentAccessPackagesFn,
-  Client,
-  RemoveAgentAccessPackagesFn,
-} from '@/rtk/features/clientApi';
+import type { Client } from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 
-import { useAgentAccessPackageActions } from './useAgentAccessPackageActions';
+import { useClientAdministrationAccessPackageActions } from '../clientAdministration/useClientAdministrationAccessPackageActions';
 import { UserListItems, type UserListItemData } from './UserListItems';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { AccessPackageListItems } from './AccessPackageListItems';
@@ -32,8 +27,6 @@ type ClientAdministrationAgentClientsListProps = {
   isLoading: boolean;
   toPartyUuid?: string;
   actingPartyUuid?: string;
-  addAgentAccessPackages: AddAgentAccessPackagesFn;
-  removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
 };
 
 const getUserListItemType = (clientType: string): UserListItemProps['type'] => {
@@ -51,22 +44,13 @@ export const ClientAdministrationAgentClientsList = ({
   isLoading,
   toPartyUuid,
   actingPartyUuid,
-  addAgentAccessPackages,
-  removeAgentAccessPackages,
 }: ClientAdministrationAgentClientsListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
 
-  const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
-  const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
-
-  const { addAgentAccessPackage, removeAgentAccessPackage } = useAgentAccessPackageActions({
-    toPartyUuid,
-    actingPartyUuid,
-    addAgentAccessPackages,
-    removeAgentAccessPackages,
-  });
+  const { addAccessPackage: addAgentAccessPackage, removeAccessPackage: removeAgentAccessPackage } =
+    useClientAdministrationAccessPackageActions();
 
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
@@ -111,15 +95,17 @@ export const ClientAdministrationAgentClientsList = ({
             (hasAccess ? (
               <Button
                 variant='tertiary'
-                disabled={removeDisabled}
+                disabled={isLoading}
                 onClick={() => {
-                  removeAgentAccessPackage(
-                    clientId,
-                    access.role.code,
-                    pkg.urn ?? '',
-                    agentName,
-                    accessPackage?.name || pkg.name,
-                  );
+                  removeAgentAccessPackage({
+                    roleCode: access.role.code,
+                    packageId: pkg.urn ?? '',
+                    agentName: agentName,
+                    accessPackageName: accessPackage?.name || pkg.name,
+                    fromPartyUuid: clientId,
+                    toPartyUuid,
+                    actingPartyUuid,
+                  });
                 }}
               >
                 <MinusCircleIcon />
@@ -128,15 +114,17 @@ export const ClientAdministrationAgentClientsList = ({
             ) : (
               <Button
                 variant='tertiary'
-                disabled={delegateDisabled}
+                disabled={isLoading}
                 onClick={() => {
-                  addAgentAccessPackage(
-                    clientId,
-                    access.role.code,
-                    pkg.urn ?? '',
-                    agentName,
-                    accessPackage?.name || pkg.name,
-                  );
+                  addAgentAccessPackage({
+                    roleCode: access.role.code,
+                    packageId: pkg.urn ?? '',
+                    agentName: agentName,
+                    accessPackageName: accessPackage?.name || pkg.name,
+                    fromPartyUuid: clientId,
+                    toPartyUuid,
+                    actingPartyUuid,
+                  });
                 }}
               >
                 <PlusCircleIcon />
