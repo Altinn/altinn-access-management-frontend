@@ -477,6 +477,7 @@
   },
   "new_user_modal": {
     "not_found_error_person": "Fann ingen brukar med dette fødselsnr./brukarnamnet og namnet. Sjekk at informasjonen er korrekt.",
+    "not_found_error_person_ssn": "Fann ingen brukar med dette fødselsnummeret og namnet. Sjekk at informasjonen er korrekt.",
     "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Sjekk at informasjonen er korrekt.",
     "too_many_requests_error": "Du er blitt sperra pga. for mange feilande forsøk. Du kan prøve igjen om ein time.",
     "person": "Person",

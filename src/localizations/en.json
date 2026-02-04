@@ -480,6 +480,7 @@
   },
   "new_user_modal": {
     "not_found_error_person": "Did not find a user with the given name and national identity number or username. Please check that you entered the correct information.",
+    "not_found_error_person_ssn": "Did not find a user with the given name and national identity number. Please check that you entered the correct information.",
     "not_found_error_org": "Did not find an organization with the given number. Please check that you entered the correct information.",
     "too_many_requests_error": "You have been blocked due to too many failing attempts. Try again in an hour.",
     "person": "Person",
