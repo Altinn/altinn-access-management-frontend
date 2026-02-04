@@ -127,26 +127,10 @@ export const StatusSection = ({
           reverseNameOrder: false,
         });
 
-        let text = <></>;
-        if (toParty?.partyUuid === status.via?.id && toParty?.partyTypeName === PartyType.Person) {
-          text = (
-            <>
-              {t('status_section.access_status.via_priv', {
-                user_name: formattedUserName,
-              })}
-            </>
-          );
-        } else {
-          text = (
-            <Trans
-              i18nKey={STATUS_TRANSLATION_KEYS[status.type]}
-              values={{
-                user_name: formattedUserName,
-                via_name: formattedViaName,
-              }}
-            />
-          );
-        }
+        const textKey =
+          toParty?.partyUuid === status.via?.id && toParty?.partyTypeName === PartyType.Person
+            ? 'status_section.access_status.via_priv'
+            : STATUS_TRANSLATION_KEYS[status.type];
 
         return (
           <div
@@ -157,7 +141,15 @@ export const StatusSection = ({
               fontSize='1.5rem'
               className={classes.inheritedInfoIcon}
             />
-            <DsParagraph data-size='sm'>{text}</DsParagraph>
+            <DsParagraph data-size='sm'>
+              <Trans
+                i18nKey={textKey}
+                values={{
+                  user_name: formattedUserName,
+                  via_name: formattedViaName,
+                }}
+              />
+            </DsParagraph>
           </div>
         );
       })}

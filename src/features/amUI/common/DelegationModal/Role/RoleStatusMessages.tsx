@@ -37,12 +37,19 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
     toParty,
   });
 
-  if (
-    !status ||
-    (status.type === InheritedStatusType.ViaKeyRole && role.provider?.code === 'sys-ccr')
-  ) {
-    return null;
-  }
+  // remove duplicates from inheritedStatus. Items are duplicate if type AND via.id are the same
+  const uniqueInheritedStatus = Array.from(
+    new Map(
+      status?.map((item) => [
+        `${item.type}|${item.via?.id}`, // composite key
+        item,
+      ]),
+    ).values(),
+  );
+
+  const filteredStatuses = uniqueInheritedStatus.filter(
+    (s) => !(s.type === InheritedStatusType.ViaKeyRole && role.provider?.code === 'sys-ccr'),
+  );
 
   const formattedUserName = formatDisplayName({
     fullName: toParty?.name || '',
@@ -50,28 +57,35 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
     reverseNameOrder: false,
   });
 
-  const safeViaType = status.via?.type ? String(status.via.type).toLowerCase() : '';
-  const formattedViaName = formatDisplayName({
-    fullName: status.via?.name || '',
-    type: safeViaType === 'person' ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  return filteredStatuses.map((s) => {
+    const safeViaType = s.via?.type ? String(s.via.type).toLowerCase() : '';
+    const formattedViaName = formatDisplayName({
+      fullName: s.via?.name || '',
+      type: safeViaType === 'person' ? 'person' : 'company',
+      reverseNameOrder: false,
+    });
 
-  return (
-    <div className={classes.infoLine}>
-      <InformationSquareFillIcon
-        fontSize='1.5rem'
-        className={classes.inheritedInfoIcon}
-      />
-      <DsParagraph data-size='xs'>
-        <Trans
-          i18nKey={STATUS_TRANSLATION_KEYS[status.type]}
-          values={{
-            user_name: formattedUserName,
-            via_name: formattedViaName,
-          }}
+    const textKey =
+      toParty?.partyUuid === s.via?.id && toParty?.partyTypeName === PartyType.Person
+        ? 'status_section.access_status.via_priv'
+        : STATUS_TRANSLATION_KEYS[s.type];
+
+    return (
+      <div className={classes.infoLine}>
+        <InformationSquareFillIcon
+          fontSize='1.5rem'
+          className={classes.inheritedInfoIcon}
         />
-      </DsParagraph>
-    </div>
-  );
+        <DsParagraph data-size='xs'>
+          <Trans
+            i18nKey={textKey}
+            values={{
+              user_name: formattedUserName,
+              via_name: formattedViaName,
+            }}
+          />
+        </DsParagraph>
+      </div>
+    );
+  });
 };

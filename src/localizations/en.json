@@ -345,7 +345,8 @@
     "access_status": {
       "via_role": "{{user_name}} has access to this through the role they hold in {{via_name}}.",
       "via_connection": "{{user_name}} has access to this through {{via_name}}.",
-      "via_keyrole": "{{user_name}} has access to this through their role in {{via_name}}."
+      "via_keyrole": "{{user_name}} has access to this through their role in {{via_name}}.",
+      "via_priv": "{{user_name}} has access to this through their role as a private individual."
     }
   },
   "user_roles": {

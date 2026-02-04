@@ -342,7 +342,8 @@
     "access_status": {
       "via_role": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}.",
       "via_connection": "{{user_name}} har tilgang til dette gjennom {{via_name}}.",
-      "via_keyrole": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}."
+      "via_keyrole": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}.",
+      "via_priv": "{{user_name}} har tilgang til dette gjennom sin rolle som privatperson."
     }
   },
   "user_roles": {
