@@ -600,7 +600,7 @@
     "rettighetshaver": "Andre klientforhold",
     "error_loading_clients": "Kunne ikke laste klienter.",
     "error_loading_agents": "Kunne ikke laste brukere.",
-    "no_agents": "Ingen brukere har fått klienttilganger ennå. Du kan søke etter brukere som allerede har noen tilganger hos dere, eller registrere en ny bruker.",
+    "no_agents": "Ingen brukere har fått klienttilganger ennå. Legg til en ny bruker for å komme i gang.",
     "client_search_placeholder": "Søk etter klient"
   },
   "systemuser_creationpage": {

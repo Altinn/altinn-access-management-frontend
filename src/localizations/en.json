@@ -603,7 +603,7 @@
     "rettighetshaver": "Other client relationships",
     "error_loading_clients": "Could not load clients.",
     "error_loading_agents": "Could not load users.",
-    "no_agents": "No users have been given client access yet. You can search for users who already have some access with you, or register a new one.",
+    "no_agents": "No users have been given client access yet. Add a new user to get started.",
     "client_search_placeholder": "Search for client"
   },
   "systemuser_creationpage": {
