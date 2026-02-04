@@ -45,7 +45,7 @@ export const StatusSection = ({
 
   if (
     !userHasAccess &&
-    !inheritedStatus &&
+    (!inheritedStatus || !inheritedStatus.length) &&
     !cannotDelegateHere &&
     !showDelegationCheckWarning &&
     !showUndelegatedWarning
