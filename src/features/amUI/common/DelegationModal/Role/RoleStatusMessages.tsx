@@ -67,7 +67,7 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
 
     const textKey =
       toParty?.partyUuid === s.via?.id && toParty?.partyTypeName === PartyType.Person
-        ? 'status_section.access_status.via_priv'
+        ? 'role.access_status.via_priv'
         : STATUS_TRANSLATION_KEYS[s.type];
 
     return (
