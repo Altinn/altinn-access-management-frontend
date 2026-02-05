@@ -60,7 +60,7 @@ export const UserRightsPage = () => {
           <DelegationModalProvider>
             <PageContainer
               backUrl={`/${amUIPath.Users}`}
-              contentActions={<DeleteUserModal direction='to' />}
+              contentActions={actingPartyUuid !== id && <DeleteUserModal direction='to' />}
             >
               <UserPageHeader
                 direction='to'
