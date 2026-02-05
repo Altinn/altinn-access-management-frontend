@@ -5,6 +5,7 @@ import type { CompactPackage, Permissions } from '@/dataObjects/dtos/accessPacka
 
 export interface AccessArea {
   id: string;
+  urn: string;
   name: string;
   description: string;
   iconUrl: string;

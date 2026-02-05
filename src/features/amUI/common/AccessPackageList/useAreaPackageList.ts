@@ -31,6 +31,7 @@ export interface ExtendedAccessPackage extends AccessPackage {
 interface useAreaPackagesProps {
   showAllAreas?: boolean;
   showAllPackages?: boolean;
+  showGuardianships?: boolean;
   searchString?: string;
 }
 
@@ -44,6 +45,7 @@ export const useAreaPackageList = ({
   searchString,
   showAllAreas,
   showAllPackages,
+  showGuardianships,
 }: useAreaPackagesProps) => {
   const { i18n } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
@@ -136,10 +138,13 @@ export const useAreaPackageList = ({
 
           acc.assignedAreas.push({ ...area, packages: pkgs });
         } else if (showAllAreas) {
-          acc.availableAreas.push({
-            ...area,
-            packages: { assigned: [], available: area.accessPackages },
-          });
+          const isGuardianshipArea = area.urn.startsWith('accesspackage:area:vergemal');
+          if (!isGuardianshipArea || showGuardianships) {
+            acc.availableAreas.push({
+              ...area,
+              packages: { assigned: [], available: area.accessPackages },
+            });
+          }
         }
 
         return acc;
@@ -156,6 +161,7 @@ export const useAreaPackageList = ({
     fromParty,
     showAllAreas,
     showAllPackages,
+    showGuardianships,
     toParty,
   ]);
 

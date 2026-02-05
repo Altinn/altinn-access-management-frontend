@@ -11,6 +11,11 @@
         public string Id { get; set; }
 
         /// <summary>
+        /// Urn of the AccessArea
+        /// </summary>
+        public string Urn { get; set; }
+
+        /// <summary>
         /// Name
         /// </summary>
         public string Name { get; set; }
@@ -36,6 +41,7 @@
         public AccessAreaFE(AccessArea area, List<AccessPackage> packages)
         {
             Id = area.Id;
+            Urn = area.Urn;
             Name = area.Name;
             Description = area.Description;
             IconUrl = area.IconUrl;
