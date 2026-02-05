@@ -47,6 +47,7 @@ export const AccessPackagePermissions = () => {
         showPermissions
         showAllPackages
         showAllAreas
+        showGuardianships
         showPackagesCount={false}
         packageAs={(props) => (
           <Link

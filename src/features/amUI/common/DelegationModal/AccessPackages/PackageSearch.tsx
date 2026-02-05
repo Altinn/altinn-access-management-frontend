@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { useCallback, useState } from 'react';
-import { DsSearch, DsHeading } from '@altinn/altinn-components';
+import { DsSearch, DsHeading, formatDisplayName } from '@altinn/altinn-components';
 
 import { debounce } from '@/resources/utils';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -11,6 +11,7 @@ import { useDelegationModalContext } from '../DelegationModalContext';
 import type { DelegationAction } from '../EditModal';
 
 import classes from './PackageSearch.module.css';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
@@ -47,7 +48,12 @@ export const PackageSearch = ({
         >
           <Trans
             i18nKey='delegation_modal.give_package_to_name'
-            values={{ name: toParty.name }}
+            values={{
+              name: formatDisplayName({
+                fullName: toParty.name,
+                type: toParty.partyTypeName === PartyType.Person ? 'person' : 'company',
+              }),
+            }}
             components={{ strong: <strong /> }}
           />
         </DsHeading>
@@ -78,6 +84,7 @@ export const PackageSearch = ({
             <AccessPackageList
               showAllAreas={true}
               showAllPackages={true}
+              showGuardianships={false}
               showPackagesCount={true}
               onSelect={onSelection}
               searchString={debouncedSearchString}
