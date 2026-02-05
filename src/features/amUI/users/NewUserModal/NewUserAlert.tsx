@@ -2,6 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
+import { enableAddUserByUsername } from '@/resources/utils/featureFlagUtils';
+
 import { TechnicalErrorParagraphs } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 export interface NewUserAlertProps {
@@ -13,11 +15,18 @@ export interface NewUserAlertProps {
 
 export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
   const { t } = useTranslation();
+  const allowUsername = enableAddUserByUsername();
   let errorText;
 
   if (error && error.status === '400' && userType === 'person') {
     errorText = (
-      <DsParagraph data-size='sm'>{t('new_user_modal.not_found_error_person')}</DsParagraph>
+      <DsParagraph data-size='sm'>
+        {t(
+          allowUsername
+            ? 'new_user_modal.not_found_error_person'
+            : 'new_user_modal.not_found_error_person_ssn',
+        )}
+      </DsParagraph>
     );
   } else if (error && error.status === '400' && userType === 'org') {
     errorText = <DsParagraph data-size='sm'>{t('new_user_modal.not_found_error_org')}</DsParagraph>;

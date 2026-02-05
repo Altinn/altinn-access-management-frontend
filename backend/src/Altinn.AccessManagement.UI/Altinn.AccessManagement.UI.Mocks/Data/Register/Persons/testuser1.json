@@ -1,0 +1,9 @@
+{
+    "FirstName": "Test",
+    "MiddleName": "",
+    "LastName": "Bruker",
+    "Address": "Gata",
+    "MailingAddress": "test@example.no",
+    "DateOfBirth": null,
+    "DateOfDeath": null
+}

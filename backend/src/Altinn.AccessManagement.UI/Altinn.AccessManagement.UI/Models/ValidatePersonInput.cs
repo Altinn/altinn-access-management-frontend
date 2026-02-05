@@ -6,9 +6,9 @@
     public class ValidatePersonInput
     {
         /// <summary>
-        /// The social security number of the person to validate
+        /// The person identifier (social security number or username) of the person to validate
         /// </summary>
-        public string Ssn { get; set; }
+        public string PersonIdentifier { get; set; }
 
         /// <summary>
         /// The last name of the person to validate 

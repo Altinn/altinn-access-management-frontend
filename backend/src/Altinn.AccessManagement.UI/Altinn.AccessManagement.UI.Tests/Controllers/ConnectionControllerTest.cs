@@ -54,6 +54,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 {
                     failedLookupField.SetValue(null, 0);
                 }
+
+                var connectionClientMockType = typeof(ConnectionClientMock);
+                var failedLookupFieldConnection = connectionClientMockType.GetField("_numberOfFaliedPersonLookups", BindingFlags.NonPublic | BindingFlags.Static);
+                if (failedLookupFieldConnection != null)
+                {
+                    failedLookupFieldConnection.SetValue(null, 0);
+                }
             }
             catch (Exception)
             {
@@ -97,7 +104,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
+            ValidatePersonInput input = new ValidatePersonInput { PersonIdentifier = ssn, LastName = lastname };
             string jsonRights = JsonSerializer.Serialize(input);
             HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
 
@@ -129,7 +136,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
+            ValidatePersonInput input = new ValidatePersonInput { PersonIdentifier = ssn, LastName = lastname };
             string jsonRights = JsonSerializer.Serialize(input);
             HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
 
@@ -155,7 +162,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
+            ValidatePersonInput input = new ValidatePersonInput { PersonIdentifier = ssn, LastName = lastname };
             string jsonRights = JsonSerializer.Serialize(input);
             HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
 
@@ -184,7 +191,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var token = PrincipalUtil.GetToken(20004938, 20004938, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
+            ValidatePersonInput input = new ValidatePersonInput { PersonIdentifier = ssn, LastName = lastname };
             string jsonRights = JsonSerializer.Serialize(input);
             HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
 
@@ -325,17 +332,47 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///    Test case: AddReporteeRightHolder with invalid SSN format
-        ///    Expected: Returns 400 Bad Request
+        ///    Test case: AddReporteeRightHolder succeeds with valid username PersonInput
+        ///    Expected: Returns 200 OK
         /// </summary>
         [Fact]
-        public async Task AddReporteeRightHolder_InvalidSsnFormat_ReturnsBadRequest()
+        public async Task AddReporteeRightHolder_ValidUsernamePersonInput_ReturnsOk()
         {
             // Arrange
             var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
             var personInput = new PersonInput
             {
-                PersonIdentifier = "2083819838a", // Invalid SSN format - contains letter
+                PersonIdentifier = "testuser1",
+                LastName = "Bruker"
+            };
+
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string jsonInput = JsonSerializer.Serialize(personInput);
+            HttpContent content = new StringContent(jsonInput, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync(
+                $"accessmanagement/api/v1/connection/reportee/{reporteePartyUuid}/rightholder",
+                content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: AddReporteeRightHolder with invalid person identifier characters
+        ///    Expected: Returns 400 Bad Request
+        /// </summary>
+        [Fact]
+        public async Task AddReporteeRightHolder_InvalidPersonIdentifierCharacters_ReturnsBadRequest()
+        {
+            // Arrange
+            var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
+            var personInput = new PersonInput
+            {
+                PersonIdentifier = "20838198 3a", // Contains space which is not allowed
                 LastName = "Medaljong"
             };
 
@@ -382,6 +419,36 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: AddReporteeRightHolder with unknown but valid username
+        ///    Expected: Returns 404 Not Found
+        /// </summary>
+        [Fact]
+        public async Task AddReporteeRightHolder_UnknownUsername_ReturnsNotFound()
+        {
+            // Arrange
+            var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
+            var personInput = new PersonInput
+            {
+                PersonIdentifier = "unknownuser",
+                LastName = "Medaljong"
+            };
+
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string jsonInput = JsonSerializer.Serialize(personInput);
+            HttpContent content = new StringContent(jsonInput, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync(
+                $"accessmanagement/api/v1/connection/reportee/{reporteePartyUuid}/rightholder",
+                content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
         /// <summary>
