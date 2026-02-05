@@ -56,6 +56,7 @@ export const useRightsSection = ({
     data: delegationCheckedActions,
     isError: isDelegationCheckError,
     error: delegationCheckError,
+    isLoading: isDelegationCheckLoading,
   } = useDelegationCheckQuery(resource.identifier);
 
   /// Computed values
@@ -208,6 +209,7 @@ export const useRightsSection = ({
     rights,
     hasUnsavedChanges,
     hasAccess,
+    isDelegationCheckLoading,
     isDelegationCheckError,
     delegationCheckError,
     delegationError,
