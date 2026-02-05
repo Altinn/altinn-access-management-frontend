@@ -176,7 +176,7 @@ export const SystemUserRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </DsAlert>
             )}
-            {!isEscalationPossible && hasCreateSystemUserPermission(reporteeData, isAdmin) && (
+            {hasCreateSystemUserPermission(reporteeData, isAdmin) && (
               <ButtonRow>
                 <DsButton
                   variant='primary'
