@@ -22,7 +22,7 @@ export const LoadingAnimation = ({
         aria-live='polite'
       >
         <DsSpinner
-          data-size='lg'
+          data-size='xl'
           aria-label={t('common.loading')}
         />
       </div>

@@ -371,6 +371,8 @@
     "indirect_connections": "Users without power of attorney",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
+    "user_no_filter_result": "No users match the selected filters.",
+    "user_no_filter_result_with_add_suggestion": "No users match the selected filters. Is this someone you want to give access to?",
     "user_list_heading": "Other users with power of attorney",
     "direct_connections": "Users with power of attorney",
     "user_search_placeholder": "Search for users"
@@ -440,7 +442,7 @@
     "technical_error_message": {
       "heading": "Oops! Something went wrong.",
       "message": "We encountered a technical issue. If the problem continues, please contact Altinn user service.",
-      "all_failed": "No rights were granted to {{name}}",
+      "all_failed": "No new rights were granted to {{name}}",
       "some_failed": "We couldn't grant these rights: {{actions}}"
     },
     "general_error": {
@@ -472,7 +474,8 @@
     "access_status": {
       "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
       "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
-      "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted."
+      "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted.",
+      "via_priv": "{{user_name}} has this power of attorney through their role as a private individual. It cannot be deleted."
     },
     "cannot_delegate_here": "Access to this package cannot be granted here.",
     "delegation_check_not_delegable": "You cannot grant this access.",
@@ -573,7 +576,10 @@
     "agent_delete_body": "This person and all of their powers of attorney with your clients will be deleted.",
     "agent_delete_confirm": "Delete user",
     "load_delegations_error": "Could not load clients with access.",
+    "load_user_delegations_error": "Could not load users with access.",
     "no_delegations": "No clients with access found.",
+    "no_user_delegations": "No users with access found.",
+    "no_access_to_delegate": "{{name}} has no access for this client.",
     "delegate_package_button": "Give power of attorney",
     "delegate_package_success_snackbar": "{{name}} now has power of attorney for {{accessPackage}}.",
     "delegate_package_error": "Could not grant {{name}} power of attorney for {{accessPackage}}.",
@@ -581,8 +587,10 @@
     "remove_package_success_snackbar": "{{name}} no longer has power of attorney for {{accessPackage}}.",
     "remove_package_error": "Could not remove {{name}} power of attorney for {{accessPackage}}.",
     "via_role": "Access through Central Coordinating Register",
-    "agent_has_clients_tab": "Has these clients",
+    "agent_has_clients_tab": "Clients with access",
     "agent_can_get_clients_tab": "All clients",
+    "client_has_agents_tab": "Users with access",
+    "client_can_get_agents_tab": "All users",
     "direct_connections_heading": "Users with client access",
     "indirect_connections_heading": "Other users",
     "organization_identifier": "Org.nr. {{orgnr}}",
@@ -594,6 +602,7 @@
     "show_deleted_clients": "Show deleted",
     "rettighetshaver": "Other client relationships",
     "error_loading_clients": "Could not load clients.",
+    "error_loading_agents": "Could not load users.",
     "no_agents": "No users have been given client access yet. You can search for users who already have some access with you, or register a new one.",
     "client_search_placeholder": "Search for client"
   },

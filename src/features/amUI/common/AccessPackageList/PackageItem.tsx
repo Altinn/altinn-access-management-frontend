@@ -1,8 +1,8 @@
-import { AccessPackageListItem, Typography } from '@altinn/altinn-components';
+import { AccessPackageListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { JSX } from 'react';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface PackageItemProps {
   pkg: AccessPackage;
@@ -11,6 +11,7 @@ interface PackageItemProps {
   hasAccess?: boolean;
   badge?: React.ReactNode;
   as?: React.ElementType;
+  partyType: PartyType;
 }
 
 export const PackageItem = ({
@@ -20,8 +21,10 @@ export const PackageItem = ({
   hasAccess,
   badge,
   as,
+  partyType,
 }: PackageItemProps) => {
   const { t } = useTranslation();
+  const partyTypeColor = partyType === PartyType.Person ? 'person' : 'company';
 
   return (
     <AccessPackageListItem
@@ -33,7 +36,7 @@ export const PackageItem = ({
       })}
       onClick={() => onSelect?.(pkg)}
       controls={controls}
-      color={hasAccess ? 'company' : 'neutral'}
+      color={hasAccess ? partyTypeColor : 'neutral'}
       size='xs'
       badge={badge}
       as={as}

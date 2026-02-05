@@ -370,6 +370,8 @@
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?",
+    "user_no_filter_result": "Ingen brukarar passar dei valde filtra.",
+    "user_no_filter_result_with_add_suggestion": "Ingen brukarar passar dei valde filtra. Er dette ein ny brukar du ønsker å gi fullmakt til?",
     "indirect_connections": "Brukarar utan fullmakt"
   },
   "reportees_page": {
@@ -437,7 +439,7 @@
     "technical_error_message": {
       "heading": "Oi! Noko gjekk gale",
       "message": "Grunna ein teknisk feil vart ikkje tenesta delegert. Ver venleg og prøv på nytt, eller kontakt Altinn brukarstøtte dersom feilen held fram.",
-      "all_failed": "Ingen ny fullmakt er gitt til {{name}}",
+      "all_failed": "Ingen nye tilgangar er gitt til {{name}}",
       "some_failed": "Følgande tilgangar vart ikkje gitt: {{actions}}"
     },
     "general_error": {
@@ -469,7 +471,8 @@
     "access_status": {
       "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
       "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
-      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast."
+      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
+      "via_priv": "{{user_name}} har denne fullmakta gjennom sin rolle som privatperson. Den kan difor ikkje slettast."
     },
     "cannot_delegate_here": "Tilgang til denne pakken kan ikkje bli gitt eller fjerna her.",
     "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta.",
@@ -570,7 +573,10 @@
     "agent_delete_body": "Denne personen og alle deira fullmakter hos klientane dine vil bli sletta.",
     "agent_delete_confirm": "Slett brukar",
     "load_delegations_error": "Kunne ikkje laste klientar med tilgang.",
+    "load_user_delegations_error": "Kunne ikkje laste brukarar med tilgang.",
     "no_delegations": "Fann ingen klientar med tilgang.",
+    "no_user_delegations": "Fann ingen brukarar med tilgang.",
+    "no_access_to_delegate": "{{name}} har ingen tilgangar for denne klienten.",
     "delegate_package_button": "Gi fullmakt",
     "delegate_package_success_snackbar": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "delegate_package_error": "Kunne ikkje gi {{name}} fullmakt til {{accessPackage}}.",
@@ -578,8 +584,10 @@
     "remove_package_success_snackbar": "{{name}} har ikkje lenger fullmakt til {{accessPackage}}.",
     "remove_package_error": "Kunne ikkje slette fullmakt til {{accessPackage}} for {{name}}.",
     "via_role": "Tilgang gjennom Enhetsregisteret",
-    "agent_has_clients_tab": "Har desse klientane",
+    "agent_has_clients_tab": "Klientar med tilgang",
     "agent_can_get_clients_tab": "Alle klientar",
+    "client_has_agents_tab": "Brukarar med tilgang",
+    "client_can_get_agents_tab": "Alle brukarar",
     "direct_connections_heading": "Brukarar med klienttilgang",
     "indirect_connections_heading": "Andre brukarar",
     "organization_identifier": "Org.nr. {{orgnr}}",
@@ -591,6 +599,7 @@
     "show_deleted_clients": "Vis sletta",
     "rettighetshaver": "Andre klientforhold",
     "error_loading_clients": "Kunne ikkje laste klientar.",
+    "error_loading_agents": "Kunne ikkje laste brukarar.",
     "no_agents": "Ingen brukarar har fått klienttilgangar enno. Du kan søkje etter brukarar som allereie har nokre tilgangar hos dykk, eller registrere ein ny brukar.",
     "client_search_placeholder": "Søk etter klient"
   },

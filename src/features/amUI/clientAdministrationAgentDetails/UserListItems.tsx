@@ -19,15 +19,18 @@ export type UserListItemData = UserListItemProps & {
 
 interface UserListItemsProps {
   items: UserListItemData[];
+  searchPlaceholder?: string;
 }
 
 const PAGE_SIZE = 10;
 
-export const UserListItems = ({ items }: UserListItemsProps) => {
+export const UserListItems = ({ items, searchPlaceholder }: UserListItemsProps) => {
   const { t } = useTranslation();
   const [searchString, setSearchString] = useState<string>('');
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const placeholder =
+    searchPlaceholder ?? t('client_administration_page.client_search_placeholder');
 
   const onSearch = useCallback(
     debounce((newSearchString: string) => {
@@ -75,8 +78,8 @@ export const UserListItems = ({ items }: UserListItemsProps) => {
       <div className={classes.search}>
         <DsSearch className={classes.searchBar}>
           <DsSearch.Input
-            aria-label={t('client_administration_page.client_search_placeholder')}
-            placeholder={t('client_administration_page.client_search_placeholder')}
+            aria-label={placeholder}
+            placeholder={placeholder}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
           />
           <DsSearch.Clear

@@ -41,7 +41,7 @@ export const StatusSection = ({
   undelegatedPackageName,
 }: StatusSectionProps) => {
   const { t } = useTranslation();
-  const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  const { fromParty, toParty } = usePartyRepresentation();
 
   if (
     !userHasAccess &&
@@ -52,12 +52,6 @@ export const StatusSection = ({
   ) {
     return null;
   }
-
-  const formattedActingPartyName = formatDisplayName({
-    fullName: actingParty?.name || '',
-    type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
 
   const formattedToPartyName = formatDisplayName({
     fullName: toParty?.name || '',
@@ -97,7 +91,7 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.warningIcon}
           />
-          <DsParagraph data-size='xs'>
+          <DsParagraph data-size='sm'>
             <Trans
               i18nKey='status_section.no_permissions_fulltext'
               values={{ packageName: undelegatedPackageName }}
@@ -112,7 +106,7 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.hasPackageInfoIcon}
           />
-          <DsParagraph data-size='xs'>
+          <DsParagraph data-size='sm'>
             <Trans
               i18nKey='status_section.has_package_message'
               values={{
@@ -128,15 +122,21 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.inheritedInfoIcon}
           />
-          <DsParagraph data-size='xs'>
-            <Trans
-              i18nKey={STATUS_TRANSLATION_KEYS[inheritedStatus.type]}
-              values={{
+          <DsParagraph data-size='sm'>
+            {toParty?.partyUuid === inheritedStatus?.via?.id &&
+            toParty?.partyTypeName === PartyType.Person ? (
+              t('status_section.access_status.via_priv', {
                 user_name: formattedUserName,
-                via_name: formattedViaName,
-                acting_party: formattedActingPartyName,
-              }}
-            />
+              })
+            ) : (
+              <Trans
+                i18nKey={STATUS_TRANSLATION_KEYS[inheritedStatus.type]}
+                values={{
+                  user_name: formattedUserName,
+                  via_name: formattedViaName,
+                }}
+              />
+            )}
           </DsParagraph>
         </div>
       )}
@@ -146,7 +146,7 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.dangerIcon}
           />
-          <DsParagraph data-size='xs'>
+          <DsParagraph data-size='sm'>
             <Trans
               i18nKey='status_section.cannot_delegate_here'
               values={{
@@ -162,7 +162,7 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.delegationCheckInfoIcon}
           />
-          <DsParagraph data-size='xs'>
+          <DsParagraph data-size='sm'>
             <Trans
               i18nKey={delegationCheckTranslationKey}
               components={{ b: <strong /> }}

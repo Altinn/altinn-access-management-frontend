@@ -6,6 +6,7 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import type { ExtendedAccessArea } from './useAreaPackageList';
 import { PermissionBadge } from './PermissionBadge';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface AreaItemProps {
   area: ExtendedAccessArea;
@@ -14,6 +15,7 @@ interface AreaItemProps {
   children?: React.ReactNode;
   showPackagesCount?: boolean;
   showPermissions?: boolean;
+  partyType: PartyType;
 }
 
 export const AreaItem = ({
@@ -23,6 +25,7 @@ export const AreaItem = ({
   children,
   showPackagesCount,
   showPermissions,
+  partyType,
 }: AreaItemProps) => {
   const { t } = useTranslation();
   const isSm = useIsMobileOrSmaller();
@@ -35,13 +38,14 @@ export const AreaItem = ({
   const showPermissionsBadge = showPermissions;
   const showUndelegatedPackageWarning =
     showPermissions && area.packages.available.some((pkg) => isCriticalAndUndelegated(pkg));
+  const colorTheme = partyType === PartyType.Person ? 'person' : 'company';
 
   return (
     <AccessAreaListItem
       key={area.id}
       id={area.id}
       name={area.name}
-      colorTheme='company'
+      colorTheme={colorTheme}
       iconUrl={area.iconUrl}
       badge={
         showPackagesCountBadge || showPermissionsBadge || showUndelegatedPackageWarning ? (
@@ -52,7 +56,7 @@ export const AreaItem = ({
                   delegated: area.packages.assigned.length,
                   total: area.packages.assigned.length + area.packages.available.length,
                 })}
-                color='company'
+                color={colorTheme}
               />
             )}
             {showPermissionsBadge && <PermissionBadge permissions={permissions} />}

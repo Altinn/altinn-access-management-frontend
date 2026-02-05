@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 
 import pageClasses from './PackagePoaDetailsPage.module.css';
-import { DsParagraph } from '@altinn/altinn-components';
+import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { type User, PartyType } from '@/rtk/features/userInfoApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
@@ -64,11 +64,17 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
 
   const connections = usePackagePermissionConnections(accessPackage);
 
+  const formatToPartyName = (party: Party) => {
+    return formatDisplayName({
+      fullName: party.name,
+      type: party?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    });
+  };
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
     setDelegateActionError(null);
     queueSnackbar(
       t('package_poa_details_page.package_delegation_success', {
-        name: toParty.name,
+        name: formatToPartyName(toParty),
         accessPackage: p?.name ?? '',
       }),
       'success',
@@ -78,7 +84,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
   const onRevokeSuccess = (p: AccessPackage, toParty: Party) => {
     queueSnackbar(
       t('package_poa_details_page.package_revocation_success', {
-        name: toParty.name,
+        name: formatToPartyName(toParty),
         accessPackage: p?.name ?? '',
       }),
       'success',
@@ -125,9 +131,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
           data-size='md'
           className={pageClasses.tabDescription}
         >
-          {t('package_poa_details_page.users_tab.description', {
-            fromparty: fromParty?.name,
-          })}
+          {t('package_poa_details_page.users_tab.description')}
         </DsParagraph>
       )}
 

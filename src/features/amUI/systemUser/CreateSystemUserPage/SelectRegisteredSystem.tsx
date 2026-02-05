@@ -58,9 +58,7 @@ export const SelectRegisteredSystem = ({
   };
 
   return (
-    <PageContainer
-      onNavigateBack={() => navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`)}
-    >
+    <PageContainer backUrl={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}>
       <div className={classes.creationPageContainer}>
         <DsHeading
           level={1}

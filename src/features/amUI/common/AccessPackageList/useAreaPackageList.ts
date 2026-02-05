@@ -169,6 +169,7 @@ export const useAreaPackageList = ({
     activeDelegations,
     searchError,
     activeDelegationsError,
+    partyType: typeName === 'person' ? PartyType.Person : PartyType.Organization,
   };
 };
 

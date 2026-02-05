@@ -17,6 +17,7 @@ import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActio
 import { PermissionBadge } from './PermissionBadge';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
 import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
@@ -30,6 +31,7 @@ interface AreaItemContentProps {
   showAvailableToggle?: boolean;
   showPermissions?: boolean;
   packageAs?: React.ElementType;
+  partyType: PartyType;
 }
 
 export const AreaItemContent = ({
@@ -44,6 +46,7 @@ export const AreaItemContent = ({
   showAvailableToggle = true,
   showPermissions = false,
   packageAs,
+  partyType,
 }: AreaItemContentProps) => {
   const { packages } = area;
   const { t } = useTranslation();
@@ -92,6 +95,7 @@ export const AreaItemContent = ({
                 key={pkg.id}
                 pkg={pkg}
                 onSelect={onSelect}
+                partyType={partyType}
                 hasAccess
                 controls={
                   !isSm &&
@@ -144,6 +148,7 @@ export const AreaItemContent = ({
                 key={pkg.id}
                 pkg={pkg}
                 onSelect={onSelect}
+                partyType={partyType}
                 badge={
                   <>
                     {showPermissions && isCriticalAndUndelegated(pkg) && (

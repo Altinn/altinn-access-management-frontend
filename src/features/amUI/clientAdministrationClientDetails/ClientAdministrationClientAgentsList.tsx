@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
@@ -6,99 +6,107 @@ import {
   type UserListItemProps,
   type Color,
   formatDate,
-  formatDisplayName,
 } from '@altinn/altinn-components';
+import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type {
   AddAgentAccessPackagesFn,
+  Agent,
   Client,
   RemoveAgentAccessPackagesFn,
 } from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
-import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 
-import { useAgentAccessPackageActions } from './useAgentAccessPackageActions';
-import { UserListItems, type UserListItemData } from './UserListItems';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { AccessPackageListItems } from './AccessPackageListItems';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { AccessPackageListItems } from '../clientAdministrationAgentDetails/AccessPackageListItems';
+import {
+  UserListItems,
+  type UserListItemData,
+} from '../clientAdministrationAgentDetails/UserListItems';
+import { useClientAccessPackageActions } from './useClientAccessPackageActions';
 
-type ClientAdministrationAgentClientsListProps = {
-  clients: Client[];
-  agentAccessPackages: Client[];
+type ClientAdministrationClientAgentsListProps = {
+  agents: Agent[];
+  clientAccessPackages: Agent[];
+  client?: Client;
   isLoading: boolean;
-  toPartyUuid?: string;
+  fromPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
 };
 
-const getUserListItemType = (clientType: string): UserListItemProps['type'] => {
-  return clientType.toLowerCase() === 'organisasjon' ? 'company' : 'person';
+const getUserListItemType = (agentType: string): UserListItemProps['type'] => {
+  return agentType.toLowerCase() === 'person' ? 'person' : 'company';
 };
 
-const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>): Client[] =>
-  [...clients].sort((a, b) =>
-    buildClientSortKey(a, parentNameById).localeCompare(buildClientSortKey(b, parentNameById)),
-  );
-
-export const ClientAdministrationAgentClientsList = ({
-  clients,
-  agentAccessPackages,
+export const ClientAdministrationClientAgentsList = ({
+  agents,
+  clientAccessPackages,
+  client,
   isLoading,
-  toPartyUuid,
+  fromPartyUuid,
   actingPartyUuid,
   addAgentAccessPackages,
   removeAgentAccessPackages,
-}: ClientAdministrationAgentClientsListProps) => {
+}: ClientAdministrationClientAgentsListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
 
-  const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
-  const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
+  const delegateDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
+  const removeDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
 
-  const { addAgentAccessPackage, removeAgentAccessPackage } = useAgentAccessPackageActions({
-    toPartyUuid,
+  const { addClientAccessPackage, removeClientAccessPackage } = useClientAccessPackageActions({
+    fromPartyUuid,
     actingPartyUuid,
     addAgentAccessPackages,
     removeAgentAccessPackages,
   });
 
-  const parentNameById = buildClientParentNameById(clients);
-  const sortedClients = sortClientsByKey(clients, parentNameById);
-  const { toParty } = usePartyRepresentation();
-  const agentName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const clientAccess = client?.access ?? [];
+  const clientType = client?.client.type ?? '';
+  const clientIsSubUnit = isSubUnitByType(client?.client.variant);
+  const packageType = clientType.toLowerCase() === 'organisasjon' ? 'company' : 'person';
 
-  const userListItems: UserListItemData[] = sortedClients.map((client) => {
-    const clientId = client.client.id;
-    const isSubUnit = isSubUnitByType(client.client.variant);
-    const userType = getUserListItemType(client.client.type);
+  const packageIdsByAgentId = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+    (clientAccessPackages ?? []).forEach((agent) => {
+      const packageIds = new Set<string>();
+      agent.access.forEach((access) => {
+        access.packages.forEach((pkg) => {
+          packageIds.add(pkg.id);
+        });
+      });
+      map.set(agent.agent.id, packageIds);
+    });
+    return map;
+  }, [clientAccessPackages]);
 
-    const nodes = client.access.reduce((acc, access) => {
+  const sortedAgents = useMemo(
+    () => [...agents].sort((a, b) => a.agent.name.localeCompare(b.agent.name)),
+    [agents],
+  );
+
+  const userListItems: UserListItemData[] = sortedAgents.map((agent) => {
+    const agentId = agent.agent.id;
+    const isSubUnit = isSubUnitByType(agent.agent.variant);
+    const userType = getUserListItemType(agent.agent.type);
+
+    const nodes = clientAccess.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
 
       const roleName = getRoleMetadata(access.role.id)?.name ?? access.role.name;
       const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
-        const hasAccess = agentAccessPackages.some((aap) => {
-          return (
-            aap.client.id === clientId &&
-            aap.access.some((p) => p.packages.some((ap) => ap.id === pkg.id))
-          );
-        });
+        const hasAccess = packageIdsByAgentId.get(agentId)?.has(pkg.id) ?? false;
         const accessPackage = getAccessPackageById(pkg.id);
         const delegable = accessPackage?.isDelegable ?? false;
         return {
           id: pkg.id,
           name: accessPackage?.name || pkg.name,
-          type: client.client.type.toLowerCase() === 'organisasjon' ? 'company' : 'person',
-          isSubUnit,
+          type: packageType,
+          isSubUnit: clientIsSubUnit,
           interactive: false,
           description:
             access.role.code !== 'rettighetshaver'
@@ -113,11 +121,11 @@ export const ClientAdministrationAgentClientsList = ({
                 variant='tertiary'
                 disabled={removeDisabled}
                 onClick={() => {
-                  removeAgentAccessPackage(
-                    clientId,
+                  removeClientAccessPackage(
+                    agentId,
                     access.role.code,
                     pkg.urn ?? '',
-                    agentName,
+                    agent.agent.name,
                     accessPackage?.name || pkg.name,
                   );
                 }}
@@ -130,11 +138,11 @@ export const ClientAdministrationAgentClientsList = ({
                 variant='tertiary'
                 disabled={delegateDisabled}
                 onClick={() => {
-                  addAgentAccessPackage(
-                    clientId,
+                  addClientAccessPackage(
+                    agentId,
                     access.role.code,
                     pkg.urn ?? '',
-                    agentName,
+                    agent.agent.name,
                     accessPackage?.name || pkg.name,
                   );
                 }}
@@ -154,24 +162,29 @@ export const ClientAdministrationAgentClientsList = ({
     }, [] as AccessPackageListItemProps[]);
 
     return {
-      id: clientId,
-      name: client.client.name,
+      id: agentId,
+      name: agent.agent.name,
       type: userType,
       subUnit: isSubUnit,
-      deleted: client.client.isDeleted,
+      deleted: agent.agent.isDeleted ?? undefined,
       collapsible: true,
       as: Button,
       children: <AccessPackageListItems items={nodes} />,
       description:
         userType === 'company'
           ? t('client_administration_page.organization_identifier', {
-              orgnr: client.client.organizationIdentifier,
+              orgnr: agent.agent.organizationIdentifier,
             })
           : userType === 'person'
-            ? `${t('common.date_of_birth')} ${formatDate(client.client.dateOfBirth ?? '')}`
+            ? `${t('common.date_of_birth')} ${formatDate(agent.agent.dateOfBirth ?? '')}`
             : undefined,
     };
   });
 
-  return <UserListItems items={userListItems} />;
+  return (
+    <UserListItems
+      items={userListItems}
+      searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+    />
+  );
 };

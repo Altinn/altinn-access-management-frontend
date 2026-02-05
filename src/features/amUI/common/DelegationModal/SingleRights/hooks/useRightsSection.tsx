@@ -1,8 +1,6 @@
-import { RightStatus, DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
+import { RightStatus } from '@/dataObjects/dtos/resourceDelegation';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
-import { useEditResource } from '@/resources/hooks/useEditResource';
-import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
-import { SnackbarDuration, DsChip, useSnackbar } from '@altinn/altinn-components';
+import { formatDisplayName } from '@altinn/altinn-components';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
@@ -14,12 +12,13 @@ import {
   useGetSingleRightsForRightholderQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { arraysEqualUnordered } from '@/resources/utils';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
 import classes from '../ResourceInfo.module.css';
 import { useRightChips } from './useRightChips';
+import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 
 export const useRightsSection = ({
   resource,
@@ -30,7 +29,7 @@ export const useRightsSection = ({
 }) => {
   const { t } = useTranslation();
   const delegateRights = useDelegateRights();
-  const editResource = useEditResource();
+  const updateResource = useUpdateResource();
 
   /// State variables
 
@@ -39,10 +38,11 @@ export const useRightsSection = ({
   const [hasAccess, setHasAccess] = useState(false);
   const [delegationError, setDelegationError] = useState<string | null>(null);
   const [missingAccess, setMissingAccess] = useState<string | null>(null);
+  const [isActionLoading, setIsActionLoading] = useState(false);
+  const [isActionSuccess, setIsActionSuccess] = useState(false);
 
   /// Hooks and data fetching
 
-  const { openSnackbar } = useSnackbar();
   const { toParty, fromParty } = usePartyRepresentation();
   const { data: delegatedResources, isFetching } = useGetSingleRightsForRightholderQuery(
     {
@@ -65,6 +65,12 @@ export const useRightsSection = ({
     currentRights,
   );
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.action);
+  const toPartyName = toParty
+    ? formatDisplayName({
+        fullName: toParty.name,
+        type: toParty.partyTypeName === PartyType.Organization ? 'company' : 'person',
+      })
+    : '';
 
   /// Useffect hooks
 
@@ -114,6 +120,20 @@ export const useRightsSection = ({
 
   /// Functions
 
+  const onSuccess = () => {
+    setIsActionLoading(false);
+    setIsActionSuccess(true);
+    setTimeout(() => setIsActionSuccess(false), 2000);
+    onDelegate?.();
+  };
+
+  const applyActionStates = () => {
+    setIsActionLoading(true);
+    setIsActionSuccess(false);
+    setDelegationError(null);
+    setMissingAccess(null);
+  };
+
   const getMissingAccessMessage = useCallback(
     (response: DelegationCheckedRight[]) => {
       const hasMissingRoleAccess = response.some((right) =>
@@ -146,69 +166,34 @@ export const useRightsSection = ({
   );
 
   const saveEditedRights = () => {
-    const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
+    const actionKeysToDelegate = rights
+      .filter((right: ChipRight) => right.checked)
+      .map((r) => r.rightKey);
     if (fromParty && toParty) {
-      setDelegationError(null);
-      editResource(
-        resource.identifier,
-        fromParty?.partyUuid,
-        toParty?.partyUuid,
-        currentRights,
-        newRights,
-        () => {
-          openSnackbar({
-            message: t('delegation_modal.edit_success', { name: toParty?.name }),
-            color: 'success',
-          });
-          onDelegate?.();
-        },
-        () =>
-          openSnackbar({
-            message: t('delegation_modal.error_message', { name: toParty?.name }),
-            color: 'danger',
-            duration: SnackbarDuration.infinite,
-          }),
-      );
+      applyActionStates();
+      updateResource(resource.identifier, actionKeysToDelegate, onSuccess, () => {
+        setIsActionLoading(false);
+        setDelegationError(
+          t('delegation_modal.technical_error_message.all_failed', { name: toPartyName }),
+        );
+      });
     }
   };
 
   const delegateChosenRights = () => {
-    const rightsToDelegate = rights.filter((right: ChipRight) => right.checked);
+    const actionKeysToDelegate = rights
+      .filter((right: ChipRight) => right.checked)
+      .map((r) => r.rightKey);
 
-    delegateRights(
-      rightsToDelegate,
-      toParty?.partyUuid ?? '',
-      resource,
-      (response: DelegationResult) => {
-        setDelegationError(null);
-
-        openSnackbar({
-          message: t('delegation_modal.success_message', { name: toParty?.name }),
-          color: 'success',
-        });
-
-        const notDelegatedActions = response.rightDelegationResults.filter(
-          (result) =>
-            rightsToDelegate.find((r) => r.rightKey === result.rightKey) &&
-            result.status === BFFDelegatedStatus.NotDelegated,
-        );
-
-        if (notDelegatedActions.length > 0) {
-          setDelegationError(
-            t('delegation_modal.technical_error_message.some_failed', {
-              actions: notDelegatedActions.map((action) => action.action).join(', '),
-            }),
-          );
-        } else {
-          onDelegate?.();
-        }
-      },
-      () => {
+    if (fromParty && toParty) {
+      applyActionStates();
+      delegateRights(actionKeysToDelegate, resource.identifier, onSuccess, () => {
+        setIsActionLoading(false);
         setDelegationError(
-          t('delegation_modal.technical_error_message.all_failed', { name: toParty?.name }),
+          t('delegation_modal.technical_error_message.all_failed', { name: toPartyName }),
         );
-      },
-    );
+      });
+    }
   };
 
   const { chips } = useRightChips(rights, setRights, classes.chip);
@@ -225,5 +210,7 @@ export const useRightsSection = ({
     delegationCheckError,
     delegationError,
     missingAccess,
+    isActionLoading,
+    isActionSuccess,
   };
 };

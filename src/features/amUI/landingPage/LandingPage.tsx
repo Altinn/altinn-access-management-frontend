@@ -12,6 +12,7 @@ import {
   List,
   ListItem,
   MenuItemProps,
+  UserListItem,
 } from '@altinn/altinn-components';
 import {
   ReporteeInfo,
@@ -187,28 +188,29 @@ export const LandingPage = () => {
   const isReporteeSubUnit = isSubUnit(reportee);
 
   const getReporteeDescription = (): string => {
-    if (isOrganization(reportee)) {
+    if (isOrganization(reportee) && reportee?.organizationNumber) {
       const orgNrString = `${t('common.org_nr')} ${formatOrgNr(reportee?.organizationNumber)}`;
       if (isReporteeSubUnit) {
         return `↳ ${orgNrString}, ${t('common.subunit').toLowerCase()}`;
       }
       return orgNrString;
+    } else if (reportee?.dateOfBirth) {
+      return `${t('common.date_of_birth')} ${formatDate(reportee?.dateOfBirth)}`;
     }
-    return `${t('common.date_of_birth')} ${formatDate(reportee?.dateOfBirth)}`;
+    return '';
   };
 
   return (
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
-          <ListItem
-            icon={{
-              isParent: !isReporteeSubUnit,
-              type: isOrganization(reportee) ? 'company' : 'person',
-              name: reporteeName,
-            }}
-            title={reporteeName}
+          <UserListItem
+            id={reportee?.partyUuid ?? ''}
+            type={isOrganization(reportee) ? 'company' : 'person'}
+            name={reporteeName}
             description={getReporteeDescription()}
+            subUnit={isReporteeSubUnit}
+            deleted={reportee?.isDeleted}
             size='lg'
             loading={!reportee}
             interactive={false}
