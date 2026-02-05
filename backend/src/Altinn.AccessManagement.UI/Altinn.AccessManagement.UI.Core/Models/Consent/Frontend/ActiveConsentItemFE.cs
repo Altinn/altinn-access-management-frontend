@@ -34,5 +34,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// Date when consent request was created
         /// </summary>
         public DateTimeOffset CreatedDate { get; set; }
+
+        /// <summary>
+        /// Date when consent was accepted
+        /// </summary>
+        public DateTimeOffset? ConsentedDate { get; set; }
     }
 }
