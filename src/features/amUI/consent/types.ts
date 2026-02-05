@@ -53,6 +53,7 @@ export interface ActiveConsentListItem {
   fromParty: ConsentParty;
   toParty: ConsentParty;
   createdDate: string;
+  consentedDate?: string;
 }
 
 export interface ConsentHistoryItem {

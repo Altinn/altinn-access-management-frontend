@@ -149,11 +149,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
                     ToParty = GetConsentParty(consent.To, toParty?.Name),
                     FromParty = GetConsentParty(consent.From, fromParty?.Name),
-                    CreatedDate = consent.ConsentRequestEvents.Find(e => string.Equals(e.EventType, "created", StringComparison.OrdinalIgnoreCase))?.Created ?? DateTimeOffset.MinValue
+                    CreatedDate = consent.ConsentRequestEvents.Find(e => string.Equals(e.EventType, "created", StringComparison.OrdinalIgnoreCase))?.Created ?? DateTimeOffset.MinValue,
+                    ConsentedDate = consent.ConsentRequestEvents.Find(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase))?.Created ?? null
                 };
             });
 
-            return activeConsentsFE.ToList();
+            return activeConsentsFE.Reverse().ToList();
         }
 
         /// <inheritdoc />

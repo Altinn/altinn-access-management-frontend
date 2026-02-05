@@ -21,6 +21,7 @@ import { ConsentListItem } from './ConsentListItem';
 import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 import { getConsentRequestUrl } from '@/routes/paths/consentPath';
+import { toDateTimeString } from '../utils';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -97,6 +98,7 @@ export const ActiveConsentsPage = () => {
                   subItems={groupedPendingActiveConsents[partyId].map((item) => ({
                     id: item.id,
                     title: item.toParty.name,
+                    description: toDateTimeString(item.createdDate),
                     badgeText: item.isPoa
                       ? t('active_consents.see_pending_poa')
                       : t('active_consents.see_pending_consent'),
@@ -156,6 +158,7 @@ export const ActiveConsentsPage = () => {
                   subItems={groupedActiveConsents[partyId].map((item) => ({
                     id: item.id,
                     title: item.toParty.name,
+                    description: item.consentedDate ? toDateTimeString(item.consentedDate) : '',
                     isNew: newlyCreatedId === item.id,
                     badgeText: item.isPoa
                       ? t('active_consents.see_poa')
@@ -186,8 +189,18 @@ const LoadingListItem = () => {
       isLoading
       title={'xxxxxxxxxxx'}
       subItems={[
-        { id: '1', title: 'xxxxxxxxxxx', badgeText: 'xxxxxxxxxxx' },
-        { id: '2', title: 'xxxxxxxxxxx', badgeText: 'xxxxxxxxxxx' },
+        {
+          id: '1',
+          title: 'xxxxxxxxxxx',
+          badgeText: 'xxxxxxxxxxx',
+          description: 'xxxxxxxxxxxxxxxxxxxxxx',
+        },
+        {
+          id: '2',
+          title: 'xxxxxxxxxxx',
+          badgeText: 'xxxxxxxxxxx',
+          description: 'xxxxxxxxxxxxxxxxxxxxxx',
+        },
       ]}
     />
   );

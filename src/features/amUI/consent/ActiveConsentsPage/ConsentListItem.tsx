@@ -8,7 +8,13 @@ import { useTranslation } from 'react-i18next';
 
 interface ConsentListItemProps {
   title: string;
-  subItems: { id: string; title: string; badgeText: string; isNew?: boolean }[];
+  subItems: {
+    id: string;
+    title: string;
+    description: string;
+    badgeText: string;
+    isNew?: boolean;
+  }[];
   partyType?: string;
   isLoading?: boolean;
   onClick?: (consentId: string) => void;
@@ -47,6 +53,7 @@ export const ConsentListItem = ({
             key={item.id}
             icon={{ svgElement: HandshakeIcon }}
             title={{ as: 'h4', children: item.title }}
+            description={item.description}
             as='button'
             loading={isLoading}
             interactive={!!onClick}
