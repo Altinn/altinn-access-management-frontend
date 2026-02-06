@@ -154,7 +154,8 @@
     "help": "Hjelp og kontakt",
     "service_messages": "Driftsmeldinger",
     "privacy_policy": "Personvern",
-    "accessibility": "Tilgjengelighet"
+    "accessibility": "Tilgjengelighet",
+    "service_announcement": "Driftsmeldinger"
   },
   "sidebar": {
     "access_management": "Tilgangsstyring",
