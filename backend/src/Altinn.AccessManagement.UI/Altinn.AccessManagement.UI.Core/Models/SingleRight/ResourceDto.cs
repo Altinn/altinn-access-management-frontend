@@ -35,7 +35,7 @@ public class ResourceDto
     public required string Description { get; set; }
 
     /// <summary>
-    /// Refrence identifier
+    /// Reference identifier
     /// </summary>
     public required string RefId { get; set; }
 

@@ -25,13 +25,13 @@
   },
   "actions": [
     {
-      "actionKey": "urn:altinn:resource:app_ttd_security-level3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionKey": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
       "actionName": "Read",
       "result": false,
       "reasons": []
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_security-level3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionKey": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
       "actionName": "Write",
       "result": false,
       "reasons": []
