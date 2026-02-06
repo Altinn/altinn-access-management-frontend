@@ -37,41 +37,61 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
     toParty,
   });
 
-  if (
-    !status ||
-    (status.type === InheritedStatusType.ViaKeyRole && role.provider?.code === 'sys-ccr')
-  ) {
-    return null;
-  }
-
   const formattedUserName = formatDisplayName({
     fullName: toParty?.name || '',
     type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
     reverseNameOrder: false,
   });
 
-  const safeViaType = status.via?.type ? String(status.via.type).toLowerCase() : '';
-  const formattedViaName = formatDisplayName({
-    fullName: status.via?.name || '',
-    type: safeViaType === 'person' ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  // remove duplicates from inheritedStatus. Items are duplicate if type AND via.id are the same
+  const uniqueInheritedStatus = Array.from(
+    new Map(
+      status?.map((item) => [
+        `${item.type}|${item.via?.id}`, // composite key
+        item,
+      ]),
+    ).values(),
+  );
+  const filteredStatuses = uniqueInheritedStatus.filter(
+    (s) => !(s.type === InheritedStatusType.ViaKeyRole && role.provider?.code === 'sys-ccr'),
+  );
 
   return (
-    <div className={classes.infoLine}>
-      <InformationSquareFillIcon
-        fontSize='1.5rem'
-        className={classes.inheritedInfoIcon}
-      />
-      <DsParagraph data-size='xs'>
-        <Trans
-          i18nKey={STATUS_TRANSLATION_KEYS[status.type]}
-          values={{
-            user_name: formattedUserName,
-            via_name: formattedViaName,
-          }}
-        />
-      </DsParagraph>
-    </div>
+    <>
+      {filteredStatuses.map((s) => {
+        const safeViaType = s.via?.type ? String(s.via.type).toLowerCase() : '';
+        const formattedViaName = formatDisplayName({
+          fullName: s.via?.name || '',
+          type: safeViaType === 'person' ? 'person' : 'company',
+          reverseNameOrder: false,
+        });
+
+        const textKey =
+          toParty?.partyUuid === s.via?.id && toParty?.partyTypeName === PartyType.Person
+            ? 'role.access_status.via_priv'
+            : STATUS_TRANSLATION_KEYS[s.type];
+
+        return (
+          <div
+            key={`${s.type}-${s.via?.id}`}
+            className={classes.infoLine}
+          >
+            <InformationSquareFillIcon
+              fontSize='1.5rem'
+              className={classes.inheritedInfoIcon}
+            />
+            <DsParagraph data-size='xs'>
+              <Trans
+                i18nKey={textKey}
+                values={{
+                  user_name: formattedUserName,
+                  via_name: formattedViaName,
+                }}
+              />
+            </DsParagraph>
+          </div>
+        );
+      })}
+    </>
   );
 };

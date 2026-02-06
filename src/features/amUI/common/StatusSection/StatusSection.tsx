@@ -21,7 +21,7 @@ const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
 
 export interface StatusSectionProps {
   userHasAccess?: boolean;
-  inheritedStatus?: InheritedStatusMessageType;
+  inheritedStatus?: InheritedStatusMessageType[];
   cannotDelegateHere?: boolean;
   showDelegationCheckWarning?: boolean;
   delegationCheckTranslationKey?: string;
@@ -45,7 +45,7 @@ export const StatusSection = ({
 
   if (
     !userHasAccess &&
-    !inheritedStatus &&
+    (!inheritedStatus || !inheritedStatus.length) &&
     !cannotDelegateHere &&
     !showDelegationCheckWarning &&
     !showUndelegatedWarning
@@ -65,12 +65,6 @@ export const StatusSection = ({
     reverseNameOrder: false,
   });
 
-  const formattedViaName = formatDisplayName({
-    fullName: inheritedStatus?.via?.name || '',
-    type: inheritedStatus?.via?.type?.toLowerCase() === 'person' ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
-
   const formattedUserName = formattedToPartyName;
   const shouldShowDelegationCheck = !cannotDelegateHere && showDelegationCheckWarning;
 
@@ -79,6 +73,16 @@ export const StatusSection = ({
     reporteeorg: formattedFromPartyName,
     ...delegationCheckValues,
   };
+
+  // remove duplicates from inheritedStatus. Items are duplicate if type AND via.id are the same
+  const uniqueInheritedStatus = Array.from(
+    new Map(
+      inheritedStatus?.map((item) => [
+        `${item.type}|${item.via?.id}`, // composite key
+        item,
+      ]),
+    ).values(),
+  );
 
   return (
     <div
@@ -116,30 +120,39 @@ export const StatusSection = ({
           </DsParagraph>
         </div>
       )}
-      {inheritedStatus && (
-        <div className={classes.infoLine}>
-          <InformationSquareFillIcon
-            fontSize='1.5rem'
-            className={classes.inheritedInfoIcon}
-          />
-          <DsParagraph data-size='sm'>
-            {toParty?.partyUuid === inheritedStatus?.via?.id &&
-            toParty?.partyTypeName === PartyType.Person ? (
-              t('status_section.access_status.via_priv', {
-                user_name: formattedUserName,
-              })
-            ) : (
+      {uniqueInheritedStatus?.map((status) => {
+        const formattedViaName = formatDisplayName({
+          fullName: status.via?.name || '',
+          type: status.via?.type?.toLowerCase() === 'person' ? 'person' : 'company',
+          reverseNameOrder: false,
+        });
+
+        const textKey =
+          toParty?.partyUuid === status.via?.id && toParty?.partyTypeName === PartyType.Person
+            ? 'status_section.access_status.via_priv'
+            : STATUS_TRANSLATION_KEYS[status.type];
+
+        return (
+          <div
+            key={`${status.type}-${status.via?.id}`}
+            className={classes.infoLine}
+          >
+            <InformationSquareFillIcon
+              fontSize='1.5rem'
+              className={classes.inheritedInfoIcon}
+            />
+            <DsParagraph data-size='sm'>
               <Trans
-                i18nKey={STATUS_TRANSLATION_KEYS[inheritedStatus.type]}
+                i18nKey={textKey}
                 values={{
                   user_name: formattedUserName,
                   via_name: formattedViaName,
                 }}
               />
-            )}
-          </DsParagraph>
-        </div>
-      )}
+            </DsParagraph>
+          </div>
+        );
+      })}
       {cannotDelegateHere && (
         <div className={classes.infoLine}>
           <XMarkOctagonFillIcon

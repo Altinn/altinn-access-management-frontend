@@ -24,7 +24,7 @@ export interface ExtendedAccessArea extends AccessArea {
 export interface ExtendedAccessPackage extends AccessPackage {
   deletableStatus?: DeletableStatus;
   inherited?: boolean;
-  inheritedStatus?: InheritedStatusMessageType;
+  inheritedStatus?: InheritedStatusMessageType[];
   permissions?: Permissions[];
 }
 
@@ -119,7 +119,8 @@ export const useAreaPackageList = ({
                   ...pkg,
                   deletableStatus,
                   inherited:
-                    !!inheritedStatus || deletableStatus !== DeletableStatus.FullyDeletable,
+                    inheritedStatus.length > 0 ||
+                    deletableStatus !== DeletableStatus.FullyDeletable,
                   inheritedStatus,
                   permissions: pkgAccess.permissions ?? [],
                 };
