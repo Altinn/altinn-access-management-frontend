@@ -64,5 +64,21 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// </summary>
         [JsonPropertyName("created")]
         public DateTimeOffset Created { get; set; }
+
+        /// <summary>
+        /// Tracks if the original user creating the Request have escalated the Approval of this Request
+        /// to somebody else in the organisation with AccessManager (Package:Tilgangsstyring)
+        /// </summary>
+        [JsonPropertyName("escalated")]
+        public bool Escalated { get; set; }
+
+        /// <summary>
+        /// Indicates if the user is allowed to escalate the approval of this Request
+        /// is only true for the current logged in user trying to read the Request
+        /// if he has any Relation (Right, AccessPackage or Role) with the PartyUuid
+        /// but does not have AccessManager (Package:Tilgangsstyring) yet.
+        /// </summary>
+        [JsonPropertyName("userMayEscalateButNotApprove")]
+        public bool UserMayEscalateButNotApprove { get; set; }
     }
 }

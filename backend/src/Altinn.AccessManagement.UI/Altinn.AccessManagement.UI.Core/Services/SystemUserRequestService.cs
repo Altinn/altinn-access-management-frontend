@@ -63,6 +63,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 AccessPackages = enrichedRights.AccessPackages,
                 Created = request.Value.Created,
                 Escalated = request.Value.Escalated,
+                UserMayEscalateButNotApprove = request.Value.UserMayEscalateButNotApprove,
                 System = systemFE
             };
         }
