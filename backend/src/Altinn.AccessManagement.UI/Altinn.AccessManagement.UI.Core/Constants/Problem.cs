@@ -160,5 +160,13 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// </summary>
         public static ProblemDescriptor Request_UserIsNotAccessManager { get; }
             = _factory.Create(66, HttpStatusCode.Forbidden, "The request requires logged in user to have accessmanager write.");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor CreateGenericProblem(HttpStatusCode statusCode, string detail)
+        {
+            return _factory.Create(999, statusCode, detail);
+        }
     }
 }
