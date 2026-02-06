@@ -31,7 +31,9 @@ export const AccessPackageSection = () => {
   } = usePartyRepresentation();
   const { data: isHovedadmin } = useGetIsHovedadminQuery();
   const isCurrentUser = selfParty?.partyUuid === id;
-  const canGiveAccess = !isCurrentUser || (isCurrentUser && isHovedadmin);
+  const canGiveAccess =
+    !isCurrentUser ||
+    (isCurrentUser && isHovedadmin && actingParty?.partyTypeName !== PartyType.Person);
   const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
