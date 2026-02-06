@@ -27,22 +27,22 @@ public class ResourceDto
     /// <summary>
     /// Name
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Description
     /// </summary>
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     /// <summary>
     /// Refrence identifier
     /// </summary>
-    public string RefId { get; set; }
+    public required string RefId { get; set; }
 
     /// <summary>
     /// Provider
     /// </summary>
-    public Entity Provider { get; set; }
+    public required Entity Provider { get; set; }
 
     /// <summary>
     /// Check if the resource is valid
@@ -57,7 +57,7 @@ public class ResourceDto
         /// <summary>
         /// Resource actions
         /// </summary>
-        public List<string> Actions { get; set; }
+        public required List<string> Actions { get; set; }
 
         /// <summary>
         /// Result of the delegation check.
