@@ -16,7 +16,7 @@ export const mapRightsToChipRights = (
   return rights.map((action: DelegationCheckedAction) => {
     return {
       action: action.actionName,
-      rightKey: action.actionName,
+      rightKey: action.actionKey,
       delegable: action.result === true,
       checked: checked(action) || false,
       delegationReason: action.reasons.length > 0 ? action.reasons[0].reasonKey : '',

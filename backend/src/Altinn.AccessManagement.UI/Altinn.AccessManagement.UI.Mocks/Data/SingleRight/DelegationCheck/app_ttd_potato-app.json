@@ -5,7 +5,7 @@
     "typeId": "0197a840-2ee9-75f4-879e-9d9197683d88",
     "name": "terje-sin-test-app",
     "description": "-",
-    "refId": "app_ttd_terje-sin-test-app",
+    "refId": "app_ttd_potato-app",
     "provider": {
       "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
       "name": "Testdepartementet",
@@ -25,7 +25,7 @@
   },
   "actions": [
     {
-      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
+      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
       "actionName": "Instantiate",
       "result": true,
       "reasons": [
@@ -80,7 +80,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
       "actionName": "Read",
       "result": true,
       "reasons": [
@@ -135,7 +135,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
       "actionName": "Task_1 Read",
       "result": true,
       "reasons": [
@@ -190,7 +190,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
       "actionName": "Task_1 Write",
       "result": true,
       "reasons": [
@@ -245,7 +245,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
       "actionName": "Task_2 Read",
       "result": true,
       "reasons": [
@@ -300,7 +300,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
       "actionName": "Task_2 Write",
       "result": true,
       "reasons": [
@@ -355,7 +355,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
       "actionName": "Task_3 Read",
       "result": true,
       "reasons": [
@@ -410,7 +410,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
       "actionName": "Task_3 Write",
       "result": true,
       "reasons": [
@@ -465,7 +465,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
       "actionName": "EndEvent_1 Read",
       "result": true,
       "reasons": [
@@ -520,7 +520,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
       "actionName": "EndEvent_1 Write",
       "result": true,
       "reasons": [
@@ -575,7 +575,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:delete",
+      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:delete",
       "actionName": "Delete",
       "result": true,
       "reasons": [
@@ -630,7 +630,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
       "actionName": "Write",
       "result": false,
       "reasons": [
@@ -653,13 +653,13 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:complete",
+      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:complete",
       "actionName": "EndEvent_1 Complete",
       "result": false,
       "reasons": []
     },
     {
-      "actionKey": "urn:altinn:appresource:events:urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionKey": "urn:altinn:appresource:events:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
       "actionName": "Events Read",
       "result": true,
       "reasons": [
@@ -714,7 +714,7 @@
       ]
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:confirm",
+      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:confirm",
       "actionName": "Task_2 Confirm",
       "result": false,
       "reasons": [

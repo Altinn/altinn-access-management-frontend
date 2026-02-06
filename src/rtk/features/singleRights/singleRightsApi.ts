@@ -90,7 +90,7 @@ export const singleRightsApi = createApi({
     }),
     delegationCheck: builder.query<DelegationCheckedAction[], string>({
       query: (resourceId) => ({
-        url: `singleright/delegationcheck?from=${getCookie('AltinnPartyUuid')}&resource=${resourceId}`,
+        url: `singleright/delegationcheck?from=${getCookie('AltinnPartyUuid')}&resource=${encodeURIComponent(resourceId)}`,
         method: 'GET',
       }),
       transformErrorResponse: (response: {

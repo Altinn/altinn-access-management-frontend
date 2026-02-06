@@ -1,5 +1,7 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.Common;
 
+#nullable enable
+
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 /// <summary>
@@ -42,6 +44,9 @@ public class ResourceDto
     /// </summary>
     public Entity Provider { get; set; }
 
+    /// <summary>
+    /// Check if the resource is valid
+    /// </summary>
     public class ResourceDtoCheck
     {
         /// <summary>
@@ -127,3 +132,5 @@ public class ResourceDto
         }
     }
 }
+
+#nullable disable

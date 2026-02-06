@@ -38,14 +38,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
 
         /// <inheritdoc />
-        public async Task<ResourceCheckDto> GetDelegationCheck(Guid party, string resource)
+        public Task<ResourceCheckDto> GetDelegationCheck(Guid from, string resource)
         {
-            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowExceptionIfTriggerParty(from.ToString());
 
             try
             {
                 string dataPath = Path.Combine(dataFolder, "SingleRight", "DelegationCheck", $"{resource}.json");
-                return await Task.FromResult(Util.GetMockData<ResourceCheckDto>(dataPath));
+                return Task.FromResult(Util.GetMockData<ResourceCheckDto>(dataPath));
             }
             catch
             {

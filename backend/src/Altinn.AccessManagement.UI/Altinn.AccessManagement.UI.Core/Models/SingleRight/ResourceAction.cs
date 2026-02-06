@@ -1,6 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Enums;
 
+#nullable enable
+
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 /// <summary>
@@ -106,3 +108,5 @@ public class ResourceAction
         public string? ViaRoleUrn { get; set; }
     }
 }
+
+#nullable disable
