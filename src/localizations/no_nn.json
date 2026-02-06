@@ -132,7 +132,8 @@
     "help": "Hjelp og kontakt",
     "service_messages": "Driftsmeldingar",
     "privacy_policy": "Personvern",
-    "accessibility": "Tilgjengeligheit"
+    "accessibility": "Tilgjengeligheit",
+    "service_announcement": "Driftsmeldingar"
   },
   "sidebar": {
     "access_management": "Tilgangsstyring",

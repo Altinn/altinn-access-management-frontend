@@ -135,7 +135,8 @@
     "help": "Help and contact",
     "service_messages": "Service messages",
     "privacy_policy": "Privacy policy",
-    "accessibility": "Accessibility"
+    "accessibility": "Accessibility",
+    "service_announcement": "Service announcements"
   },
   "sidebar": {
     "access_management": "Access management",
