@@ -90,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserClient // CreateNewSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -220,7 +220,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserClient // DeleteAgentSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -247,7 +247,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserClient // GetClients // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -273,7 +273,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserClient // GetListOfDelegationsForStandardSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {

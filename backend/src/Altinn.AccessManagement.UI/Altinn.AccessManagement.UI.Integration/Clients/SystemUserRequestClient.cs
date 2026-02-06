@@ -69,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // GetSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -94,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // ApproveSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -119,7 +119,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // RejectSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -144,7 +144,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // GetPendingSystemUserRequests // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -169,7 +169,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // EscalateSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {

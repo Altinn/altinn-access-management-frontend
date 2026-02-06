@@ -90,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // AddClient // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -116,7 +116,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {

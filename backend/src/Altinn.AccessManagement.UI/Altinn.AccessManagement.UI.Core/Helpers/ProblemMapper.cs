@@ -1,7 +1,7 @@
-using System.Net.Http.Json;
+using System.Net;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.Authorization.ProblemDetails;
-using Microsoft.AspNetCore.Http;
 
 namespace Altinn.AccessManagement.UI.Core.Helpers
 {
@@ -13,11 +13,11 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <summary>
         /// Map error codes from AUTH to AMUI error codes
         /// </summary>
-        public static async Task<ProblemDescriptor> MapToAuthUiError(HttpResponseMessage response, CancellationToken cancellationToken)
+        public static ProblemDescriptor MapToAuthUiError(string responseContent, HttpStatusCode statusCode)
         {
             try
             {
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                AltinnProblemDetails problemDetails = JsonSerializer.Deserialize<AltinnProblemDetails>(responseContent);
                 string authErrorCode = problemDetails?.ErrorCode.ToString();
 
                 return authErrorCode switch
@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             catch
             {
                 // In case of deserialization failure or any other exception, return a generic problem descriptor
-                return Problem.CreateGenericProblem(response.StatusCode, "Error without problem code");
+                return Problem.CreateGenericProblem(statusCode, "Error without problem code");
             }
         }
 
