@@ -78,7 +78,17 @@ export const ClientAdministrationPageContent = () => {
           data-size='md'
           className={classes.pageDescription}
         >
-          {t('client_administration_page.forwarding_accesses_info')}
+          <Trans
+            i18nKey='client_administration_page.forwarding_accesses_info'
+            components={{
+              a: (
+                <a
+                  target='_blank'
+                  rel='noopener noreferrer'
+                />
+              ),
+            }}
+          />
         </DsParagraph>
       </div>
       <DsTabs
