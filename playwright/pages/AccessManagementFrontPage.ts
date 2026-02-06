@@ -53,6 +53,20 @@ export class AccessManagementFrontPage {
     ).toBeVisible();
   }
 
+  async clickAccessPackageToDelegateIfVisible(packageName: string) {
+    await expect(this.page.locator('.ds-spinner')).toHaveCount(0);
+    const accessPackage = await this.page.getByRole('button', {
+      name: 'Gi fullmakt for ' + packageName,
+    });
+    if (await accessPackage.isVisible()) {
+      await accessPackage.click();
+    }
+  }
+
+  async clickAccessAreaInPopup(areaName: string) {
+    await this.page.getByRole('search').getByRole('button', { name: areaName }).click();
+  }
+
   async expectAccessPackageToNotBeDelegable(packageName: string) {
     await expect(
       this.page.getByRole('button', { name: 'Gi fullmakt for ' + packageName }),
@@ -69,5 +83,23 @@ export class AccessManagementFrontPage {
 
   async expectOthersWithRightsListToNotBeVisible() {
     await expect(this.page.getByRole('heading', { name: 'Andre med fullmakt' })).not.toBeVisible;
+  }
+
+  async clickLeggTilBruker() {
+    await this.page.getByRole('button', { name: 'Legg til Ny bruker' }).click();
+  }
+
+  async addPerson(fnr: string, lastName: string) {
+    const fnrField1 = await this.page.getByRole('textbox', { name: 'Fødselsnummer' }); // AT22 og AT23
+    const fnrField2 = await this.page.getByRole('textbox', { name: 'Fødselsnr./brukernavn' }); //TT02
+
+    if (await fnrField1.isVisible()) {
+      await fnrField1.fill(fnr);
+    } else if (await fnrField2.isVisible()) {
+      await fnrField2.fill(fnr);
+    }
+
+    await this.page.getByRole('textbox', { name: 'Etternavn' }).fill(lastName);
+    await this.page.getByRole('button', { name: 'Legg til person' }).click();
   }
 }

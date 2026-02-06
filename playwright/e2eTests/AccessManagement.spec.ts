@@ -17,29 +17,29 @@ test.describe('Tilgangsstyring', () => {
       await login.LoginToAccessManagement('70885100226');
     });
 
-    await test.step('Select actor UNDERDANIG DYPSINDIG TIGER AS and go to the users page', async () => {
+    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
       await aktorvalgHeader.goToInfoportal();
       await aktorvalgHeader.goToSelectActor('OVERFØLSOM KATT');
       await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
-    await test.step('go to the users page and select user "Iherdig Litteratur"', async () => {
+    await test.step('Gå til brukere og velg bruker "Iherdig Litteratur"', async () => {
       await aktorvalgHeader.goToAccessManagement();
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
       await accessManagementFrontPage.clickUser('Iherdig Litteratur');
     });
 
-    await test.step('Click "give new power of attourney"', async () => {
+    await test.step('Klikk "Gi fullmakt"', async () => {
       await accessManagementFrontPage.clickGiFullmakt();
     });
 
-    await test.step('User should be able to give power of attourney for "Access Manager"', async () => {
+    await test.step('Brukeren skal kunne til å gi fullmakt til "Tilgangsstyrer"', async () => {
       await accessManagementFrontPage.GoToArea('Administrere tilganger');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Tilgangsstyrer');
     });
 
-    await test.step('User should be able to give power of attourney for "Postal Services"', async () => {
+    await test.step('Brukeren skal kunne til å gi fullmakt til "Posttjenester"', async () => {
       await accessManagementFrontPage.GoToArea('Andre tjenesteytende næringer');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Posttjenester');
     });
@@ -56,24 +56,24 @@ test.describe('Tilgangsstyring', () => {
       await login.LoginToAccessManagement('64866402394');
     });
 
-    await test.step('Select actor UNDERDANIG DYPSINDIG TIGER AS and go to the users page', async () => {
+    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
       await aktorvalgHeader.goToInfoportal();
       await aktorvalgHeader.goToSelectActor('TRÅDLØS TELEFONNUMMER');
       await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
-    await test.step('go to the users page and a user', async () => {
+    await test.step('Gå til brukere og velg deg selv', async () => {
       await aktorvalgHeader.goToAccessManagement();
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
       await accessManagementFrontPage.clickUser('TRÅDLØS TELEFONNUMMER');
     });
 
-    await test.step('Click "give new power of attourney"', async () => {
+    await test.step('Klikk "Gi fullmakt"', async () => {
       await accessManagementFrontPage.clickGiFullmakt();
     });
 
-    await test.step('User should be able to give power of attourney for "Manage access" packages', async () => {
+    await test.step('Brukeren skal kunne til å gi fullmakt til "Administrere tilganger"-pakker', async () => {
       await accessManagementFrontPage.GoToArea('Administrere tilganger');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Tilgangsstyrer');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable(
@@ -82,7 +82,7 @@ test.describe('Tilgangsstyring', () => {
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Klientadministrator');
     });
 
-    await test.step('User should be able to give power of attourney for "Other service industries" packages', async () => {
+    await test.step('Brukeren skal kunne til å gi fullmakt til "Andre tjenesteytende næringer"-pakker', async () => {
       await accessManagementFrontPage.GoToArea('Andre tjenesteytende næringer');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable(
         'Finansiering og forsikring',
@@ -95,7 +95,7 @@ test.describe('Tilgangsstyring', () => {
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Elektronisk kommunikasjon');
     });
 
-    await test.step('User should be able to give power of attourney for "Bygg, anlegg og eiendom" packages', async () => {
+    await test.step('Brukeren skal kunne til å gi fullmakt til "Bygg, anlegg og eiendom"-pakker', async () => {
       await accessManagementFrontPage.GoToArea('Bygg, anlegg og eiendom');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Motta nabo- og planvarsel');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Byggesøknad');
@@ -109,7 +109,7 @@ test.describe('Tilgangsstyring', () => {
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Kjøp og salg av eiendom');
     });
 
-    await test.step('User should be able to give power of attourney for "Energi, vann, avløp og avfall" packages', async () => {
+    await test.step('Brukeren skal kunne til å gi fullmakt til "Energi, vann, avløp og avfall"-pakker', async () => {
       await accessManagementFrontPage.GoToArea('Energi, vann, avløp og avfall');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Damp- og varmtvann');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable(
@@ -135,7 +135,7 @@ test.describe('Tilgangsstyring', () => {
       );
     });
 
-    await test.step('User should not be able to delegate certain access packages', async () => {
+    await test.step('Noen pakker skal ikke kunne delegeres', async () => {
       await accessManagementFrontPage.expectAccessPackageToNotBeDelegable(
         'Konkursbo administrator',
       );
@@ -167,13 +167,13 @@ test.describe('Tilgangsstyring', () => {
       await login.LoginToAccessManagement('70885100226');
     });
 
-    await test.step('Select actor UNDERDANIG DYPSINDIG TIGER AS and go to the users page', async () => {
+    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
       await aktorvalgHeader.goToInfoportal();
       await aktorvalgHeader.goToSelectActor('OVERFØLSOM KATT');
       await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
-    await test.step('go to the users page and select yourself', async () => {
+    await test.step('Gå til brukere-siden og velg deg selv', async () => {
       await aktorvalgHeader.goToAccessManagement();
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
@@ -196,23 +196,57 @@ test.describe('Tilgangsstyring', () => {
       await login.LoginToAccessManagement('61868901372');
     });
 
-    await test.step('Select actor UNDERDANIG DYPSINDIG TIGER AS and go to the users page', async () => {
+    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
       await aktorvalgHeader.goToInfoportal();
       await aktorvalgHeader.goToSelectActor('RELEVANT ANDAKT');
       await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
-    await test.step('go to the users page', async () => {
+    await test.step('Gå til brukere-siden', async () => {
       await aktorvalgHeader.goToAccessManagement();
       await accessManagementFrontPage.goToUsers();
     });
 
-    await test.step('User should not be able to give power of attourney to themselves', async () => {
+    await test.step('Brukeren skal ikke kunne gi fullmakt til seg selv', async () => {
       await accessManagementFrontPage.expectPowerOfAttourneyButtonToNotBeVisible();
     });
+  });
+});
 
-    await test.step('select yourself', async () => {
-      await accessManagementFrontPage.clickUser('RELEVANT ANDAKT');
+test.describe.skip('Testdata for Tilgangsstyring-testene', () => {
+  test('legg til testdata 70885100226 OVERFØLSOM KATT', async ({
+    page,
+    accessManagementFrontPage,
+  }) => {
+    const login = new LoginPage(page);
+    const aktorvalgHeader = new AktorvalgHeader(page);
+    await test.step('Log in', async () => {
+      await page.goto(env('BASE_URL'));
+      await login.LoginToAccessManagement('12816699205');
+    });
+
+    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
+      await aktorvalgHeader.goToInfoportal();
+      await aktorvalgHeader.goToSelectActor('MORALSK KUNSTEVENTYR');
+      await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
+    });
+
+    await test.step('Gå til brukere-siden', async () => {
+      await aktorvalgHeader.goToAccessManagement();
+      await accessManagementFrontPage.goToUsers();
+    });
+
+    await test.step('Gi 70885100226 OVERFØLSOM KATT tilgangsstyrer-pakken', async () => {
+      await accessManagementFrontPage.clickLeggTilBruker();
+      await accessManagementFrontPage.addPerson('70885100226', 'KATT');
+      await accessManagementFrontPage.clickGiFullmakt();
+      await accessManagementFrontPage.clickAccessAreaInPopup('Administrere tilganger');
+      await accessManagementFrontPage.clickAccessPackageToDelegateIfVisible('Tilgangsstyrer');
+    });
+
+    await test.step('Gi 70885100226 OVERFØLSOM KATT Posttjenester-pakken', async () => {
+      await accessManagementFrontPage.clickAccessAreaInPopup('Andre tjenesteytende næringer');
+      await accessManagementFrontPage.clickAccessPackageToDelegateIfVisible('Posttjenester');
     });
   });
 });
