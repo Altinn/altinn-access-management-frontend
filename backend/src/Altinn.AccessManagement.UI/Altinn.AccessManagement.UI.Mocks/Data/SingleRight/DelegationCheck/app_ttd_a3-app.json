@@ -1,59 +1,40 @@
-[
-  {
-    "rightKey": "a3-app/read",
-    "action": "read",
-    "status": "NotDelegable",
-    "details": [
-      {
-        "code": "MissingRoleAccess",
-        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
-        "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
-        }
+{
+  "resource": {
+    "id": "0197a841-6624-76c5-b8c0-a29ff343e561",
+    "providerId": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
+    "typeId": "0197a840-2ee9-75f4-879e-9d9197683d88",
+    "name": "a3-app",
+    "description": "-",
+    "refId": "app_ttd_a3-app",
+    "provider": {
+      "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
+      "name": "Testdepartementet",
+      "refId": "",
+      "logoUrl": "https://altinncdn.no/orgs/ttd/ttd.png",
+      "code": "ttd",
+      "typeId": "0195efb8-7c80-713e-ad96-a9896d12f444",
+      "type": {
+        "id": "0195efb8-7c80-713e-ad96-a9896d12f444",
+        "name": "Tjenesteeier"
       }
-    ]
+    },
+    "type": {
+      "id": "0197a840-2ee9-75f4-879e-9d9197683d88",
+      "name": "AltinnApp"
+    }
   },
-  {
-    "rightKey": "a3-app/write",
-    "action": "write",
-    "status": "NotDelegable",
-    "details": [
-      {
-        "code": "MissingRoleAccess",
-        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
-        "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "rightKey": "a3-app/sign",
-    "action": "sign",
-    "status": "NotDelegable",
-    "details": [
-      {
-        "code": "MissingRoleAccess",
-        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
-        "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
-        }
-      }
-    ]
-  }
-]
+  "actions": [
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionName": "Read",
+      "result": false,
+      "reasons": []
+    },
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionName": "Write",
+      "result": false,
+      "reasons": []
+    }
+  ]
+}

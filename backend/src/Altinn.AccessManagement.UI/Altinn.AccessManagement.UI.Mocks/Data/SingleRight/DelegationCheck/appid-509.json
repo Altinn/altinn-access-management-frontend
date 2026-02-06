@@ -1,59 +1,97 @@
-[
-  {
-    "rightKey": "appid-509/read",
-    "action": "read",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "DelegationAccess",
-        "description": "The user have access through delegation(s) of the right to the recipient(s)",
-        "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
-        }
+{
+  "resource": {
+    "id": "0197a842-04f4-7936-97e1-d9d63eab9c85",
+    "providerId": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
+    "typeId": "0197a840-2750-7b03-a851-2a6a06571982",
+    "name": "appid-509",
+    "description": "Veldig fin test",
+    "refId": "appid-509",
+    "provider": {
+      "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
+      "name": "Testdepartementet",
+      "refId": "",
+      "logoUrl": "https://altinncdn.no/orgs/ttd/ttd.png",
+      "code": "ttd",
+      "typeId": "0195efb8-7c80-713e-ad96-a9896d12f444",
+      "type": {
+        "id": "0195efb8-7c80-713e-ad96-a9896d12f444",
+        "name": "Tjenesteeier"
       }
-    ]
+    },
+    "type": {
+      "id": "0197a840-2750-7b03-a851-2a6a06571982",
+      "name": "GenericAccessResource"
+    }
   },
-  {
-    "rightKey": "appid-509/write",
-    "action": "write",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "DelegationAccess",
-        "description": "The user have access through delegation(s) of the right to the recipient(s)",
-        "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
+  "actions": [
+    {
+      "actionKey": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionName": "Read",
+      "result": true,
+      "reasons": [
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      }
-    ]
-  },
-  {
-    "rightKey": "appid-509/sign",
-    "action": "sign",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "DelegationAccess",
-        "description": "The user have access through delegation(s) of the right to the recipient(s)",
-        "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionName": "Write",
+      "result": true,
+      "reasons": [
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      }
-    ]
-  }
-]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
+      "actionName": "Sign",
+      "result": true,
+      "reasons": [
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        }
+      ]
+    }
+  ]
+}

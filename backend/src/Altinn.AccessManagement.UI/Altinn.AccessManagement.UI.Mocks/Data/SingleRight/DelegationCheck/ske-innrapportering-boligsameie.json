@@ -1,21 +1,67 @@
-[
-  {
-    "rightKey": "ske-innrapportering-boligsameie/write",
-    "action": "write",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "DelegationAccess",
-        "description": "The user have access through delegation(s) of the right to the recipient(s)",
-        "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
-        }
+{
+  "resource": {
+    "id": "0197a842-15e8-797c-aaac-f46c09693ef3",
+    "providerId": "a48c427f-278f-06a2-b7f0-b5fda415dff1",
+    "typeId": "0197a840-2750-7b03-a851-2a6a06571982",
+    "name": "Innrapportering Boligsameie",
+    "description": "Sameier med 9 eller flere boligseksjoner skal levere opplysninger om sameiers andel av felles inntekter, utgifter, formue og gjeld. Det er vanligvis sameiets styre eller forretningsfører som leverer opplysningene.",
+    "refId": "ske-innrapportering-boligsameie",
+    "provider": {
+      "id": "a48c427f-278f-06a2-b7f0-b5fda415dff1",
+      "name": "Skatteetaten",
+      "refId": "974761076",
+      "logoUrl": "https://altinncdn.no/orgs/skd/skd.png",
+      "code": "skd",
+      "typeId": "0195efb8-7c80-713e-ad96-a9896d12f444",
+      "type": {
+        "id": "0195efb8-7c80-713e-ad96-a9896d12f444",
+        "name": "Tjenesteeier"
       }
-    ]
-  }
-]
+    },
+    "type": {
+      "id": "0197a840-2750-7b03-a851-2a6a06571982",
+      "name": "GenericAccessResource"
+    }
+  },
+  "actions": [
+    {
+      "actionKey": "urn:altinn:resource:ske-innrapportering-boligsameie:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionName": "Write",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        }
+      ]
+    }
+  ]
+}

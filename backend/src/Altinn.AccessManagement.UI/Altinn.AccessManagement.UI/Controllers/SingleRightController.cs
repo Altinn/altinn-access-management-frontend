@@ -159,12 +159,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("{from}/delegationcheck/{resource}")]
-        public async Task<ActionResult<List<DelegationCheckedRightFE>>> GetDelegationCheck([FromRoute] Guid from, [FromRoute] string resource)
+        [Route("delegationcheck")]
+        public async Task<ActionResult<List<ResourceAction>>> GetDelegationCheck([FromQuery] Guid from, [FromQuery] string resource)
         {
             try
             {
-                List<DelegationCheckedRightFE> result = await _singleRightService.DelegationCheck(from, resource);
+                List<ResourceAction> result = await _singleRightService.DelegationCheck(from, resource);
                 return Ok(result);
             }
             catch (HttpStatusException statusEx)

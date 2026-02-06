@@ -7,6 +7,7 @@ import {
   DsParagraph,
   ListItem,
   Button,
+  DsSpinner,
 } from '@altinn/altinn-components';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -23,6 +24,7 @@ import classes from './ResourceInfo.module.css';
 type RightsSectionProps = {
   resource: ServiceResource;
   isDelegationCheckError: boolean;
+  isDelegationCheckLoading: boolean;
   delegationCheckError: FetchBaseQueryError | SerializedError | undefined;
   delegationError: string | null;
   missingAccess: string | null;
@@ -44,6 +46,7 @@ export const RightsSection = ({
   rights,
   hasUnsavedChanges,
   hasAccess,
+  isDelegationCheckLoading,
   isDelegationCheckError,
   delegationCheckError,
   delegationError,
@@ -129,6 +132,7 @@ export const RightsSection = ({
             </DsHeading>
 
             <ListItem
+              loading={isDelegationCheckLoading}
               icon={CheckmarkCircleIcon}
               collapsible={true}
               title={
