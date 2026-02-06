@@ -69,9 +69,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserChangeRequestClient // GetSystemUserChangeRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
+                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -96,9 +94,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserChangeRequestClient // ApproveSystemUserChangeRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
+                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -123,9 +119,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserChangeRequestClient // RejectSystemUserChangeRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
+                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
             }
             catch (Exception ex)
             {

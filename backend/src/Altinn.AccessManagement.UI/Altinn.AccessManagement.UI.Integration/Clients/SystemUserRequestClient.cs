@@ -69,9 +69,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // GetSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
+                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -96,9 +94,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // ApproveSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
+                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -123,9 +119,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // RejectSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
+                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -150,9 +144,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // GetPendingSystemUserRequests // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                
-                AltinnProblemDetails pendingProblemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ProblemMapper.MapToAuthUiError(pendingProblemDetails?.ErrorCode.ToString());
+                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -177,9 +169,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // EscalateSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-
-                AltinnProblemDetails escalateProblemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ProblemMapper.MapToAuthUiError(escalateProblemDetails?.ErrorCode.ToString());
+                return await ProblemMapper.MapToAuthUiError(response, cancellationToken);
             }
             catch (Exception ex)
             {

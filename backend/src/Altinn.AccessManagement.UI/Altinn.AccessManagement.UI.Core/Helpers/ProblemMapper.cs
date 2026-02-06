@@ -1,5 +1,7 @@
+using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.Authorization.ProblemDetails;
+using Microsoft.AspNetCore.Http;
 
 namespace Altinn.AccessManagement.UI.Core.Helpers
 {
@@ -11,34 +13,45 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <summary>
         /// Map error codes from AUTH to AMUI error codes
         /// </summary>
-        public static ProblemDescriptor MapToAuthUiError(string authErrorCode)
+        public static async Task<ProblemDescriptor> MapToAuthUiError(HttpResponseMessage response, CancellationToken cancellationToken)
         {
-            return authErrorCode switch
+            try
             {
-                "AUTH-00001" => Problem.Rights_NotFound_Or_NotDelegable,
-                "AUTH-00002" => Problem.Rights_FailedToDelegate,
-                "AUTH-00003" => Problem.SystemUser_FailedToCreate,
-                "AUTH-00004" => Problem.SystemUser_AlreadyExists,
-                "AUTH-00011" => Problem.SystemIdNotFound,
-                "AUTH-00014" => Problem.UnableToDoDelegationCheck,
-                "AUTH-00016" => Problem.DelegationRightMissingRoleAccess,
-                "AUTH-00018" => Problem.DelegationRightMissingDelegationAccess,
-                "AUTH-00019" => Problem.DelegationRightMissingSrrRightAccess,
-                "AUTH-00020" => Problem.DelegationRightInsufficientAuthenticationLevel,
-                "AUTH-00028" => Problem.CustomerIdNotFound,
-                "AUTH-00043" => Problem.AgentSystemUser_FailedToGetClients_Unauthorized,
-                "AUTH-00044" => Problem.AgentSystemUser_FailedToGetClients_Forbidden,
-                "AUTH-00045" => Problem.AgentSystemUser_FailedToGetClients,
-                "AUTH-00050" => Problem.AccessPackage_DelegationCheckFailed,
-                "AUTH-00051" => Problem.AccessPackage_DelegationFailed,
-                "AUTH-00053" => Problem.AccessPackage_Delegation_MissingRequiredAccess,
-                "AUTH-00055" => Problem.AccessPackage_FailedToGetDelegatedPackages,
-                "AUTH-00057" => Problem.SystemUser_FailedToDeleteAccessPackage,
-                "AUTH-00062" => Problem.SystemUser_FailedToGetDelegatedRights,
-                "AUTH-00066" => Problem.Request_UserIsNotAccessManager,
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                string authErrorCode = problemDetails?.ErrorCode.ToString();
 
-                _ => Problem.Generic_EndOfMethod,
-            };
+                return authErrorCode switch
+                {
+                    "AUTH-00001" => Problem.Rights_NotFound_Or_NotDelegable,
+                    "AUTH-00002" => Problem.Rights_FailedToDelegate,
+                    "AUTH-00003" => Problem.SystemUser_FailedToCreate,
+                    "AUTH-00004" => Problem.SystemUser_AlreadyExists,
+                    "AUTH-00011" => Problem.SystemIdNotFound,
+                    "AUTH-00014" => Problem.UnableToDoDelegationCheck,
+                    "AUTH-00016" => Problem.DelegationRightMissingRoleAccess,
+                    "AUTH-00018" => Problem.DelegationRightMissingDelegationAccess,
+                    "AUTH-00019" => Problem.DelegationRightMissingSrrRightAccess,
+                    "AUTH-00020" => Problem.DelegationRightInsufficientAuthenticationLevel,
+                    "AUTH-00028" => Problem.CustomerIdNotFound,
+                    "AUTH-00043" => Problem.AgentSystemUser_FailedToGetClients_Unauthorized,
+                    "AUTH-00044" => Problem.AgentSystemUser_FailedToGetClients_Forbidden,
+                    "AUTH-00045" => Problem.AgentSystemUser_FailedToGetClients,
+                    "AUTH-00050" => Problem.AccessPackage_DelegationCheckFailed,
+                    "AUTH-00051" => Problem.AccessPackage_DelegationFailed,
+                    "AUTH-00053" => Problem.AccessPackage_Delegation_MissingRequiredAccess,
+                    "AUTH-00055" => Problem.AccessPackage_FailedToGetDelegatedPackages,
+                    "AUTH-00057" => Problem.SystemUser_FailedToDeleteAccessPackage,
+                    "AUTH-00062" => Problem.SystemUser_FailedToGetDelegatedRights,
+                    "AUTH-00066" => Problem.Request_UserIsNotAccessManager,
+
+                    _ => Problem.Generic_EndOfMethod,
+                };
+            }
+            catch
+            {
+                // In case of deserialization failure or any other exception, return a generic problem descriptor
+                return Problem.CreateGenericProblem(response.StatusCode, "Error without problem code");
+            }
         }
 
         /// <summary>
