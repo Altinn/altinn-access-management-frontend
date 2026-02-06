@@ -51,16 +51,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
             // Check for bad input
             string personIdentifierCleaned = personIdentifier.Trim().Replace("\"", string.Empty);
             string lastname_cleaned = lastname.Trim().Replace("\"", string.Empty);
-            bool isSsn = IsValidSsn(personIdentifierCleaned);
-            bool isUsername = IsValidUsername(personIdentifierCleaned);
-            if (!isSsn && !isUsername)
+            if (!IsDigitsOnly(personIdentifierCleaned))
             {
+                // Only validate what we can assume is an SSN (digits only)
                 return null;
             }
 
-            if (!isSsn)
+            if (!IsValidSsn(personIdentifierCleaned))
             {
-                // We cannot validate usernames against the register, return null to signal not found
                 return null;
             }
 
@@ -97,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 // Check for bad input
                 string personIdentifierCleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
                 string lastname_cleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
-                if (!IsValidSsn(personIdentifierCleaned) && !IsValidUsername(personIdentifierCleaned))
+                if (IsDigitsOnly(personIdentifierCleaned) && !IsValidSsn(personIdentifierCleaned))
                 {
                     throw new ArgumentException("Invalid person identifier format");
                 }
@@ -138,11 +136,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return personIdentifier.Length == 11 && personIdentifier.All(char.IsDigit);
         }
 
-        private static bool IsValidUsername(string personIdentifier)
+        private static bool IsDigitsOnly(string personIdentifier)
         {
-            return personIdentifier.Length >= 6
-                && personIdentifier.All(char.IsLetterOrDigit)
-                && personIdentifier.Any(char.IsLetter);
+            return !string.IsNullOrEmpty(personIdentifier) && personIdentifier.All(char.IsDigit);
         }
     }
 }

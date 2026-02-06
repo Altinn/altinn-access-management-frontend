@@ -362,17 +362,17 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///    Test case: AddReporteeRightHolder with invalid person identifier characters
-        ///    Expected: Returns 400 Bad Request
+        ///    Test case: AddReporteeRightHolder with person identifier that is not digits-only and not found.
+        ///    Expected: Returns 404 Not Found (no BFF format validation for non-SSN input)
         /// </summary>
         [Fact]
-        public async Task AddReporteeRightHolder_InvalidPersonIdentifierCharacters_ReturnsBadRequest()
+        public async Task AddReporteeRightHolder_NonSsnPersonIdentifier_ReturnsNotFound()
         {
             // Arrange
             var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
             var personInput = new PersonInput
             {
-                PersonIdentifier = "20838198 3a", // Contains space which is not allowed
+                PersonIdentifier = "20838198 3a",
                 LastName = "Medaljong"
             };
 
@@ -388,7 +388,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 content);
 
             // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
         /// <summary>
