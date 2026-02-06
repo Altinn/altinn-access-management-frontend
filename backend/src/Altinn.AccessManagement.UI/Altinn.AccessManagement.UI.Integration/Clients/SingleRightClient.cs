@@ -52,7 +52,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
-            var content = await response.Content.ReadAsStringAsync();
 
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<ResourceCheckDto>(response);
         }
