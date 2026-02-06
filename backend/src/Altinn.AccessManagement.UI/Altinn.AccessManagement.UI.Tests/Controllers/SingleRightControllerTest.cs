@@ -490,11 +490,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string resource = "appid-503";
             string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationCheck", "appid-503.json");
-            List<DelegationCheckedRightFE> expectedResponse = Util.GetMockData<List<DelegationCheckedRightFE>>(path);
+            List<ResourceAction> expectedResponse = Util.GetMockData<List<ResourceAction>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{from}/delegationcheck/{resource}");
-            List<DelegationCheckedRightFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<DelegationCheckedRightFE>>();
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegationcheck?from={from}&resource={resource}");
+            List<ResourceAction> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceAction>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -513,7 +513,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string resource = "non-existing-resource";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{from}/delegationcheck/{resource}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegationcheck?from={from}&resource={resource}");
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
@@ -527,11 +527,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DelegationCheck_InternalServerError()
         {
             // Arrange
-            string from = "00000000-0000-0000-0000-000000000000";
+            string from = "00000000-0000-0000-0000-000000000000"; // This triggers ThrowExceptionIfTriggerParty in mock
             string resource = "appid-503";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{from}/delegationcheck/{resource}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegationcheck?from={from}&resource={resource}");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
