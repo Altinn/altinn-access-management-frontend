@@ -14,7 +14,7 @@
     ],
     "rightDelegationResults": [
       {
-        "rightKey": "appid-502/read",
+        "rightKey": "urn:altinn:resource:appid-502:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "resource": [
           {
             "id": "urn:altinn:resource",
@@ -55,7 +55,7 @@
     ],
     "rightDelegationResults": [
       {
-        "rightKey": "a3-app2,ttd:instantiate",
+        "rightKey": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
         "resource": [
           {
             "id": "urn:altinn:resource",
@@ -80,7 +80,7 @@
         ]
       },
       {
-        "rightKey": "a3-app2,ttd:read",
+        "rightKey": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "resource": [
           {
             "id": "urn:altinn:org",
@@ -109,7 +109,7 @@
         ]
       },
       {
-        "rightKey": "a3-app2,ttd,Task_1:read",
+        "rightKey": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "resource": [
           {
             "id": "urn:altinn:org",
@@ -158,7 +158,7 @@
     ],
     "rightDelegationResults": [
       {
-        "rightKey": "jks-test-resource/read",
+        "rightKey": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "resource": [
           {
             "id": "urn:altinn:resource",
@@ -199,7 +199,7 @@
     ],
     "rightDelegationResults": [
       {
-        "rightKey": "ske-innrapportering-boligsameie/write",
+        "rightKey": "urn:altinn:resource:ske-innrapportering-boligsameie:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
         "resource": [
           {
             "id": "urn:altinn:resource",

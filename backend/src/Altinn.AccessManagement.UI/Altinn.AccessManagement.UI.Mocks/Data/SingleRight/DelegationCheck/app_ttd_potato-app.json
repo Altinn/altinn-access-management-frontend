@@ -1,489 +1,740 @@
-[
-  {
-    "rightKey": "app_ttd_potato-app,ttd:instantiate",
-    "action": "instantiate",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:ttd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "parameters": {
-          "RoleRequirementsMatches": [
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0237"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "SIttd"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0241"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0239"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0240"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "REGNA"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "a0238"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "UTINN"
-            },
-            {
-              "id": "urn:altinn:org",
-              "value": "ttd"
-            }
-          ]
-        }
+{
+  "resource": {
+    "id": "0197a841-973e-70e1-9e6e-776aa18c61ec",
+    "providerId": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
+    "typeId": "0197a840-2ee9-75f4-879e-9d9197683d88",
+    "name": "terje-sin-test-app",
+    "description": "-",
+    "refId": "app_ttd_terje-sin-test-app",
+    "provider": {
+      "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
+      "name": "Testdepartementet",
+      "refId": "",
+      "logoUrl": "https://altinncdn.no/orgs/ttd/ttd.png",
+      "code": "ttd",
+      "typeId": "0195efb8-7c80-713e-ad96-a9896d12f444",
+      "type": {
+        "id": "0195efb8-7c80-713e-ad96-a9896d12f444",
+        "name": "Tjenesteeier"
       }
-    ]
+    },
+    "type": {
+      "id": "0197a840-2ee9-75f4-879e-9d9197683d88",
+      "name": "AltinnApp"
+    }
   },
-  {
-    "rightKey": "app_ttd_potato-app,ttd:read",
-    "action": "read",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:ttd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "parameters": {
-          "RoleRequirementsMatches": [
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0237"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "SIttd"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0241"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0239"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0240"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "REGNA"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "a0238"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "UTINN"
-            },
-            {
-              "id": "urn:altinn:org",
-              "value": "ttd"
-            }
-          ]
+  "actions": [
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
+      "actionName": "Instantiate",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      }
-    ]
-  },
-  {
-    "rightKey": "app_ttd_potato-app,ttd,Task_1:read",
-    "action": "read",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "parameters": {
-          "RoleRequirementsMatches": [
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0237"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "SIttd"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0241"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0239"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0240"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "REGNA"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "a0238"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "UTINN"
-            }
-          ]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionName": "Read",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      }
-    ]
-  },
-  {
-    "rightKey": "app_ttd_potato-app,ttd,Task_1:write",
-    "action": "write",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "parameters": {
-          "RoleRequirementsMatches": [
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0237"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "SIttd"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0241"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0239"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0240"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "REGNA"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "a0238"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "UTINN"
-            }
-          ]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionName": "Task_1 Read",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      }
-    ]
-  },
-  {
-    "rightKey": "app_ttd_potato-app,EndEvent_1,ttd:read",
-    "action": "read",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "parameters": {
-          "RoleRequirementsMatches": [
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0237"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "SIttd"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0241"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0239"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0240"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "REGNA"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "a0238"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "UTINN"
-            }
-          ]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionName": "Task_1 Write",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      }
-    ]
-  },
-  {
-    "rightKey": "app_ttd_potato-app,EndEvent_1,ttd:write",
-    "action": "write",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "parameters": {
-          "RoleRequirementsMatches": [
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0237"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "SIttd"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0241"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0239"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0240"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "REGNA"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "a0238"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "UTINN"
-            }
-          ]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionName": "Task_2 Read",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      }
-    ]
-  },
-  {
-    "rightKey": "app_ttd_potato-app,ttd:delete",
-    "action": "delete",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "parameters": {
-          "RoleRequirementsMatches": [
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0237"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "SIttd"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0241"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0239"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0240"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "REGNA"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "a0238"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "UTINN"
-            }
-          ]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionName": "Task_2 Write",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      }
-    ]
-  },
-  {
-    "rightKey": "app_ttd_potato-app,ttd:write",
-    "action": "write",
-    "status": "NotDelegable",
-    "details": [
-      {
-        "code": "MissingRoleAccess",
-        "description": "Delegator does not have any required role(s) for the reportee party: (urn:altinn:org:ttd), which would give access to delegate the right.",
-        "parameters": {
-          "RequiredRoles": [
-            {
-              "id": "urn:altinn:org",
-              "value": "ttd"
-            }
-          ]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionName": "Task_3 Read",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      },
-      {
-        "code": "MissingDelegationAccess",
-        "description": "The user does not have access through delegation(s) of the right",
-        "parameters": {}
-      }
-    ]
-  },
-  {
-    "rightKey": "app_ttd_potato-app,EndEvent_1,ttd:complete",
-    "action": "complete",
-    "status": "NotDelegable",
-    "details": [
-      {
-        "code": "MissingRoleAccess",
-        "description": "Delegator does not have any required role(s) for the reportee party: (urn:altinn:org:ttd), which would give access to delegate the right.",
-        "parameters": {
-          "RequiredRoles": [
-            {
-              "id": "urn:altinn:org",
-              "value": "ttd"
-            }
-          ]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionName": "Task_3 Write",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      },
-      {
-        "code": "MissingDelegationAccess",
-        "description": "The user does not have access through delegation(s) of the right",
-        "parameters": {}
-      }
-    ]
-  },
-  {
-    "rightKey": "app_ttd_potato-app,events,ttd:read",
-    "action": "read",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:ttd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "parameters": {
-          "RoleRequirementsMatches": [
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0237"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "SIttd"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0241"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0239"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0240"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "REGNA"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "a0238"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "UTINN"
-            },
-            {
-              "id": "urn:altinn:org",
-              "value": "ttd"
-            }
-          ]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionName": "EndEvent_1 Read",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      }
-    ]
-  },
-  {
-    "rightKey": "app_ttd_potato-app,ttd,Task_3:read",
-    "action": "read",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:KNUF. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "parameters": {
-          "RoleRequirementsMatches": [
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0237"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "SIttd"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0241"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0239"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "A0240"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "REGNA"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "a0238"
-            },
-            {
-              "id": "urn:altinn:rolecode",
-              "value": "UTINN"
-            },
-            {
-              "id": "urn:altinn:org",
-              "value": "KNUF"
-            }
-          ]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionName": "EndEvent_1 Write",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
         }
-      }
-    ]
-  }
-]
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:delete",
+      "actionName": "Delete",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        }
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionName": "Write",
+      "result": false,
+      "reasons": [
+        {
+          "description": "Missing-Role",
+          "reasonKey": "MissingRoleAccess",
+          "roleId": "1c6eeec1-fe70-4fc5-8b45-df4a2255dea6",
+          "roleUrn": "urn:altinn:role:privatperson",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        }
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:complete",
+      "actionName": "EndEvent_1 Complete",
+      "result": false,
+      "reasons": []
+    },
+    {
+      "actionKey": "urn:altinn:appresource:events:urn:altinn:resource:app_ttd_terje-sin-test-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionName": "Events Read",
+      "result": true,
+      "reasons": [
+        {
+          "description": "Direct-AssignmentRole-RoleMap",
+          "reasonKey": "RoleAccess",
+          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "fromName": "DISKRET NÆR TIGER AS",
+          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "toName": "SITRONGUL MEDALJONG",
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        },
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        }
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:app_ttd_terje-sin-test-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:confirm",
+      "actionName": "Task_2 Confirm",
+      "result": false,
+      "reasons": [
+        {
+          "description": "Missing-Role",
+          "reasonKey": "MissingPackageAccess",
+          "roleId": "1c6eeec1-fe70-4fc5-8b45-df4a2255dea6",
+          "roleUrn": "urn:altinn:role:privatperson",
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        }
+      ]
+    }
+  ]
+}
