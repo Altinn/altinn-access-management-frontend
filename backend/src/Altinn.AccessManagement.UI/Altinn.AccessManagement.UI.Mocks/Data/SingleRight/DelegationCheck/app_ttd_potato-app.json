@@ -719,7 +719,7 @@
       "result": false,
       "reasons": [
         {
-          "description": "Missing-Role",
+          "description": "Missing-Package",
           "reasonKey": "MissingPackageAccess",
           "roleId": "1c6eeec1-fe70-4fc5-8b45-df4a2255dea6",
           "roleUrn": "urn:altinn:role:privatperson",
