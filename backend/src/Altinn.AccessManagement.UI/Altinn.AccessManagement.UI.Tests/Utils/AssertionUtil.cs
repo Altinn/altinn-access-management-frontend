@@ -1,3 +1,4 @@
+using System.Linq;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
@@ -12,7 +13,6 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Microsoft.AspNetCore.Mvc;
@@ -76,23 +76,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             AssertCollections(expected.Resource, actual.Resource, AssertEqual);
             Assert.Equal(expected.Action, actual.Action);
-        }
-
-        /// <summary>
-        ///     Assert that two <see cref="DelegationCheckedRightFE" /> have the same property in the same positions.
-        /// </summary>
-        /// <param name="expected">An instance with the expected values.</param>
-        /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(DelegationCheckedRightFE expected, DelegationCheckedRightFE actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.Action, actual.Action);
-            Assert.Equal(expected.RightKey, actual.RightKey);
-            Assert.Equal(expected.Status, actual.Status);
-            AssertCollections(expected.ReasonCodes, actual.ReasonCodes, Assert.Equal);
-
         }
 
         /// <summary>
@@ -681,7 +664,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Title, actual.Title);
             Assert.Equal(expected.ConsentTextHtml, actual.ConsentTextHtml);
         }
-        
+
         public static void AssertEqual(ActiveConsentItemFE expected, ActiveConsentItemFE actual)
         {
             Assert.NotNull(actual);
@@ -713,7 +696,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.ConsentEventID, actual.ConsentEventID);
-            Assert.Equal(expected.Created, actual.Created);        
+            Assert.Equal(expected.Created, actual.Created);
             Assert.Equal(expected.EventType, actual.EventType);
             Assert.Equal(expected.PerformedBy, actual.PerformedBy);
         }
@@ -877,6 +860,36 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 Assert.True(actual.ContainsKey(kvp.Key), $"Expected key '{kvp.Key}' not found in actual dictionary");
                 AssertEqual(kvp.Value, actual[kvp.Key]);
             }
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="ResourceAction" /> have the same property values.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(ResourceAction expected, ResourceAction actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.ActionKey, actual.ActionKey);
+            Assert.Equal(expected.ActionName, actual.ActionName);
+            Assert.Equal(expected.Result, actual.Result);
+            AssertCollections<ResourceAction.Reason>(expected.Reasons.ToList(), actual.Reasons.ToList(), AssertEqual);
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="ResourceAction.Reason" /> have the same property values.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(ResourceAction.Reason expected, ResourceAction.Reason actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Description, actual.Description);
+            Assert.Equal(expected.ReasonKey, actual.ReasonKey);
         }
     }
 }

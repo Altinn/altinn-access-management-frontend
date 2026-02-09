@@ -438,7 +438,7 @@
       "cannot_give_header": "You cannot grant access to:"
     },
     "specific_rights": {
-      "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
+      "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
     },
     "technical_error_message": {

@@ -72,7 +72,12 @@ export const UserList = ({
               <DsParagraph data-size='md'>
                 {canAdd ? t('users_page.only_you_have_access') : t('users_page.no_users')}
               </DsParagraph>
-              {canAdd && <NewUserButton isLarge />}
+              {canAdd && (
+                <NewUserButton
+                  isLarge
+                  onComplete={onAddNewUser}
+                />
+              )}
             </>
           ) : (
             <>

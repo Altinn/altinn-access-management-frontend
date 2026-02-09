@@ -441,7 +441,7 @@
       "some_failed": "Følgende tilganger ble ikke gitt: {{actions}}"
     },
     "specific_rights": {
-      "missing_role_message": "Du får ikke delegert hele tjenesten, fordi du mangler noen av rettighetene selv. Daglig leder eller hovedadministrator kan gi deg tilgang.",
+      "missing_role_message": "Du får ikke delegert hele tjenesten, fordi du mangler noen av rettighetene selv.",
       "missing_srr_right_message": "{{reportee}} er ikke gitt tillatelse fra {{resourceOwner}} til å delegere hele tjenesten. Ta kontakt med dem dersom du ønsker å endre dette."
     },
     "general_error": {

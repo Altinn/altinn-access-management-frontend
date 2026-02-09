@@ -4,7 +4,6 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -63,23 +62,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         // ----------------------------
 
         /// <inheritdoc />
-        public async Task<List<DelegationCheckedRightFE>> DelegationCheck(Guid party, string resource)
+        public async Task<List<ResourceAction>> DelegationCheck(Guid from, string resource)
         {
-            List<DelegationCheckedRight> delegationCheckResult = await _accessManagementClient.GetDelegationCheck(party, resource);
-            List<DelegationCheckedRightFE> simplifiedResult = new List<DelegationCheckedRightFE>();
-            
-            foreach (DelegationCheckedRight right in delegationCheckResult)
-            {
-                simplifiedResult.Add(new DelegationCheckedRightFE
-                {
-                    Action = right.Action,
-                    RightKey = right.RightKey,
-                    Status = right.Status,
-                    ReasonCodes = right.Details.Select(d => d.Code).ToList()
-                });
-            }
+            ResourceCheckDto delegationCheckResult = await _singleRightClient.GetDelegationCheck(from, resource);
+            List<ResourceAction> actions = delegationCheckResult.Actions.ToList();
 
-            return simplifiedResult;
+            return actions;
         }
 
         /// <inheritdoc />

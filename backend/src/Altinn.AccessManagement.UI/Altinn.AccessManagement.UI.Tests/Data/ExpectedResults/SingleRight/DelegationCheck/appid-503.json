@@ -1,20 +1,71 @@
 [
-  {
-    "rightKey": "appid-503/read",
-    "action": "read",
-    "status": "Delegable",
-    "reasonCodes": ["DelegationAccess"]
-  },
-  {
-    "rightKey": "appid-503/write",
-    "action": "write",
-    "status": "Delegable",
-    "reasonCodes": [ "DelegationAccess" ]
-  },
-  {
-    "rightKey": "appid-503/sign",
-    "action": "sign",
-    "status": "Delegable",
-    "reasonCodes": [ "DelegationAccess" ]
-  }
-]
+    {
+      "actionKey": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "actionName": "Read",
+      "result": true,
+      "reasons": [
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        }
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "actionName": "Write",
+      "result": true,
+      "reasons": [
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        }
+      ]
+    },
+    {
+      "actionKey": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
+      "actionName": "Sign",
+      "result": true,
+      "reasons": [
+        {
+          "description": "MainAdministratorRole",
+          "reasonKey": "RoleAccess",
+          "roleId": null,
+          "roleUrn": null,
+          "packageId": null,
+          "packageUrn": null,
+          "fromId": null,
+          "fromName": null,
+          "toId": null,
+          "toName": null,
+          "viaId": null,
+          "viaName": null,
+          "viaRoleId": null,
+          "viaRoleUrn": null
+        }
+      ]
+    }
+  ]

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
-  DelegationCheckedRight,
+  DelegationCheckedAction,
   ServiceResource,
   useDelegationCheckQuery,
   useGetSingleRightsForRightholderQuery,
@@ -53,9 +53,10 @@ export const useRightsSection = ({
   );
   const { data: reportee } = useGetReporteeQuery();
   const {
-    data: delegationCheckedRights,
+    data: delegationCheckedActions,
     isError: isDelegationCheckError,
     error: delegationCheckError,
+    isLoading: isDelegationCheckLoading,
   } = useDelegationCheckQuery(resource.identifier);
 
   /// Computed values
@@ -97,26 +98,26 @@ export const useRightsSection = ({
 
   // Instantiate/reset rights and missing access message states
   useEffect(() => {
-    if (delegationCheckedRights) {
-      setMissingAccess(getMissingAccessMessage(delegationCheckedRights));
+    if (delegationCheckedActions) {
+      setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
 
       if (hasAccess) {
         const chipRights: ChipRight[] = mapRightsToChipRights(
-          delegationCheckedRights,
-          (right) => currentRights.some((key) => key === right.rightKey),
+          delegationCheckedActions,
+          (right) => currentRights.some((key) => key === right.actionKey),
           resource.resourceOwnerOrgcode,
         );
         setRights(chipRights);
       } else {
         const chipRights: ChipRight[] = mapRightsToChipRights(
-          delegationCheckedRights,
-          (right) => right.status === RightStatus.Delegable,
+          delegationCheckedActions,
+          (right) => right.result === true,
           resource.resourceOwnerOrgcode,
         );
         setRights(chipRights);
       }
     }
-  }, [delegationCheckedRights, resource.identifier, hasAccess, currentRights]);
+  }, [delegationCheckedActions, resource.identifier, hasAccess, currentRights]);
 
   /// Functions
 
@@ -135,19 +136,21 @@ export const useRightsSection = ({
   };
 
   const getMissingAccessMessage = useCallback(
-    (response: DelegationCheckedRight[]) => {
+    (response: DelegationCheckedAction[]) => {
       const hasMissingRoleAccess = response.some((right) =>
-        right.reasonCodes.some(
-          (code) => code === ErrorCode.MissingRoleAccess || code === ErrorCode.MissingRightAccess,
+        right.reasons.some(
+          (reason) =>
+            reason.reasonKey === ErrorCode.MissingRoleAccess ||
+            reason.reasonKey === ErrorCode.MissingRightAccess,
         ),
       );
       const hasMissingSrrRightAccess = response.some(
         (right) =>
           !hasMissingRoleAccess &&
-          right.reasonCodes.some(
-            (code) =>
-              code === ErrorCode.MissingSrrRightAccess ||
-              code === ErrorCode.AccessListValidationFail,
+          right.reasons.some(
+            (reason) =>
+              reason.reasonKey === ErrorCode.MissingSrrRightAccess ||
+              reason.reasonKey === ErrorCode.AccessListValidationFail,
           ),
       );
 
@@ -206,6 +209,7 @@ export const useRightsSection = ({
     rights,
     hasUnsavedChanges,
     hasAccess,
+    isDelegationCheckLoading,
     isDelegationCheckError,
     delegationCheckError,
     delegationError,

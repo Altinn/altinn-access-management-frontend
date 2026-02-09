@@ -26,6 +26,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
     rights,
     hasUnsavedChanges,
     hasAccess,
+    isDelegationCheckLoading,
     isDelegationCheckError,
     delegationCheckError,
     delegationError,
@@ -68,6 +69,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
               rights={rights}
               hasUnsavedChanges={hasUnsavedChanges}
               hasAccess={hasAccess}
+              isDelegationCheckLoading={isDelegationCheckLoading}
               isDelegationCheckError={isDelegationCheckError}
               delegationCheckError={delegationCheckError}
               delegationError={delegationError}

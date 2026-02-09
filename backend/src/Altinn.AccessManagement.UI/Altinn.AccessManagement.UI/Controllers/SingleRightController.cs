@@ -3,10 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -159,12 +156,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("{from}/delegationcheck/{resource}")]
-        public async Task<ActionResult<List<DelegationCheckedRightFE>>> GetDelegationCheck([FromRoute] Guid from, [FromRoute] string resource)
+        [Route("delegationcheck")]
+        public async Task<ActionResult<List<ResourceAction>>> GetDelegationCheck([FromQuery] Guid from, [FromQuery] string resource)
         {
             try
             {
-                List<DelegationCheckedRightFE> result = await _singleRightService.DelegationCheck(from, resource);
+                List<ResourceAction> result = await _singleRightService.DelegationCheck(from, resource);
                 return Ok(result);
             }
             catch (HttpStatusException statusEx)
