@@ -169,8 +169,8 @@ test.describe('Tilgangsstyring', () => {
       await accessManagementFrontPage.clickUser('OVERFØLSOM KATT');
     });
 
-    await test.step('User should not be able to give power of attourney to themselves', async () => {
-      await accessManagementFrontPage.expectPowerOfAttourneyButtonToNotBeVisible();
+    await test.step('User should not be able to give power of attorney to themselves', async () => {
+      await accessManagementFrontPage.expectPowerOfAttorneyButtonToNotBeVisible();
     });
   });
 
@@ -194,12 +194,12 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Brukeren skal ikke kunne gi fullmakt til seg selv', async () => {
-      await accessManagementFrontPage.expectPowerOfAttourneyButtonToNotBeVisible();
+      await accessManagementFrontPage.expectPowerOfAttorneyButtonToNotBeVisible();
     });
   });
 });
 
-test.describe.skip('@slow Testdata for Tilgangsstyring-testene', () => {
+test.describe('@slow Testdata for Tilgangsstyring-testene', () => {
   test('legg til testdata 70885100226 OVERFØLSOM KATT', async ({
     page,
     accessManagementFrontPage,

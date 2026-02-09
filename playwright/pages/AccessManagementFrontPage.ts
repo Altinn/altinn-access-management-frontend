@@ -73,7 +73,7 @@ export class AccessManagementFrontPage {
     ).not.toBeVisible();
   }
 
-  async expectPowerOfAttourneyButtonToNotBeVisible() {
+  async expectPowerOfAttorneyButtonToNotBeVisible() {
     await expect(this.page.getByRole('button', { name: 'Gi fullmakt' })).not.toBeVisible();
   }
 
