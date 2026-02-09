@@ -10,8 +10,6 @@ export type personInput = { personIdentifier: string; lastName: string };
 
 const isValidSsnFormat = (personIdentifier: string) => /^\d{11}$/.test(personIdentifier);
 const isDigitsOnly = (personIdentifier: string) => /^\d+$/.test(personIdentifier);
-const isValidUsernameFormat = (personIdentifier: string) => personIdentifier.length >= 6;
-const containsWhitespace = (personIdentifier: string) => /\s/.test(personIdentifier);
 
 export type NewPersonContentProps = {
   errorDetails?: { status: string; time: string } | null;
@@ -30,31 +28,10 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
   const shouldDisplayPrivDelegation = displayPrivDelegation();
   const allowUsername = enableAddUserByUsername();
 
-  const isValidPersonIdentifierFormat = (identifier: string) => {
-    const trimmedIdentifier = identifier.trim();
-    if (!trimmedIdentifier.length) {
-      return false;
-    }
-
-    if (containsWhitespace(trimmedIdentifier)) {
-      return false;
-    }
-
-    if (allowUsername && !isDigitsOnly(trimmedIdentifier)) {
-      return isValidUsernameFormat(trimmedIdentifier);
-    }
-
-    return isValidSsnFormat(trimmedIdentifier);
-  };
-
   const getPersonIdentifierErrorKey = (identifier: string) => {
     const trimmedIdentifier = identifier.trim();
     if (!trimmedIdentifier.length) {
       return null;
-    }
-
-    if (containsWhitespace(trimmedIdentifier)) {
-      return 'new_user_modal.person_identifier_whitespace_forbidden_error';
     }
 
     if (!allowUsername) {
@@ -63,11 +40,16 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
         : null;
     }
 
+    // Check for whitespace anywhere in the identifier
+    if (/\s/.test(trimmedIdentifier)) {
+      return 'new_user_modal.person_identifier_whitespace_forbidden_error';
+    }
+
     if (isDigitsOnly(trimmedIdentifier) && !isValidSsnFormat(trimmedIdentifier)) {
       return 'new_user_modal.person_identifier_ssn_format_error';
     }
 
-    if (!isDigitsOnly(trimmedIdentifier) && !isValidUsernameFormat(trimmedIdentifier)) {
+    if (!isDigitsOnly(trimmedIdentifier) && trimmedIdentifier.length < 6) {
       return 'new_user_modal.person_identifier_username_format_error';
     }
 
@@ -103,7 +85,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
         value={personIdentifier}
         onChange={(e) => setPersonIdentifier(e.target.value)}
         error={
-          !isValidPersonIdentifierFormat(personIdentifier) && personIdentifierFormatErrorKey ? (
+          personIdentifierFormatErrorKey ? (
             <Trans
               i18nKey={personIdentifierFormatErrorKey}
               components={{ br: <br /> }}
@@ -128,7 +110,11 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
       />
       <div className={classes.validationButton}>
         <Button
-          disabled={!isValidPersonIdentifierFormat(personIdentifier) || !isValidLastnameFormat()}
+          disabled={
+            getPersonIdentifierErrorKey(personIdentifier) !== null ||
+            !isValidLastnameFormat() ||
+            isLoading
+          }
           loading={isLoading}
           onClick={navigateIfValidPerson}
         >
