@@ -43,7 +43,7 @@ export class AccessManagementFrontPage {
     await this.page.getByRole('button', { name: 'Gi fullmakt' }).click();
   }
 
-  async GoToArea(areaName: string) {
+  async goToArea(areaName: string) {
     await this.page.getByRole('button', { name: areaName }).first().click();
   }
 

@@ -33,12 +33,12 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Brukeren skal kunne til å gi fullmakt til "Tilgangsstyrer"', async () => {
-      await accessManagementFrontPage.GoToArea('Administrere tilganger');
+      await accessManagementFrontPage.goToArea('Administrere tilganger');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Tilgangsstyrer');
     });
 
     await test.step('Brukeren skal kunne til å gi fullmakt til "Posttjenester"', async () => {
-      await accessManagementFrontPage.GoToArea('Andre tjenesteytende næringer');
+      await accessManagementFrontPage.goToArea('Andre tjenesteytende næringer');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Posttjenester');
     });
   });
@@ -72,7 +72,7 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Brukeren skal kunne til å gi fullmakt til "Administrere tilganger"-pakker', async () => {
-      await accessManagementFrontPage.GoToArea('Administrere tilganger');
+      await accessManagementFrontPage.goToArea('Administrere tilganger');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Tilgangsstyrer');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable(
         'Maskinporten administrator',
@@ -81,7 +81,7 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Brukeren skal kunne til å gi fullmakt til "Andre tjenesteytende næringer"-pakker', async () => {
-      await accessManagementFrontPage.GoToArea('Andre tjenesteytende næringer');
+      await accessManagementFrontPage.goToArea('Andre tjenesteytende næringer');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable(
         'Finansiering og forsikring',
       );
@@ -94,7 +94,7 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Brukeren skal kunne til å gi fullmakt til "Bygg, anlegg og eiendom"-pakker', async () => {
-      await accessManagementFrontPage.GoToArea('Bygg, anlegg og eiendom');
+      await accessManagementFrontPage.goToArea('Bygg, anlegg og eiendom');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Motta nabo- og planvarsel');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Byggesøknad');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Plansak');
@@ -108,7 +108,7 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Brukeren skal kunne til å gi fullmakt til "Energi, vann, avløp og avfall"-pakker', async () => {
-      await accessManagementFrontPage.GoToArea('Energi, vann, avløp og avfall');
+      await accessManagementFrontPage.goToArea('Energi, vann, avløp og avfall');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Damp- og varmtvann');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable(
         'Utvinning av råolje, naturgass og kull',
@@ -140,7 +140,7 @@ test.describe('Tilgangsstyring', () => {
       await accessManagementFrontPage.expectAccessPackageToNotBeDelegable(
         'Eksplisitt tjenestedelegering',
       );
-      await accessManagementFrontPage.GoToArea('Fullmakter for regnskapsfører');
+      await accessManagementFrontPage.goToArea('Fullmakter for regnskapsfører');
       await accessManagementFrontPage.expectAccessPackageToNotBeDelegable('Regnskapsfører lønn');
       await accessManagementFrontPage.expectAccessPackageToNotBeDelegable(
         'Regnskapsfører med signeringsrettighet',
@@ -148,7 +148,7 @@ test.describe('Tilgangsstyring', () => {
       await accessManagementFrontPage.expectAccessPackageToNotBeDelegable(
         'Regnskapsfører uten signeringsrettighet',
       );
-      await accessManagementFrontPage.GoToArea('Fullmakter for revisor');
+      await accessManagementFrontPage.goToArea('Fullmakter for revisor');
       await accessManagementFrontPage.expectAccessPackageToNotBeDelegable('Ansvarlig revisor');
       await accessManagementFrontPage.expectAccessPackageToNotBeDelegable('Revisormedarbeider');
     });
