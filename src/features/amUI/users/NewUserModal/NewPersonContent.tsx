@@ -36,7 +36,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
       return false;
     }
 
-    if (containsWhitespace(identifier)) {
+    if (containsWhitespace(trimmedIdentifier)) {
       return false;
     }
 
@@ -53,7 +53,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
       return null;
     }
 
-    if (containsWhitespace(identifier)) {
+    if (containsWhitespace(trimmedIdentifier)) {
       return 'new_user_modal.person_identifier_whitespace_forbidden_error';
     }
 
@@ -76,7 +76,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
 
   const navigateIfValidPerson = () => {
     const personInput = {
-      personIdentifier,
+      personIdentifier: personIdentifier.trim(),
       lastName: lastName.trim(),
     };
     addPerson(personInput);
