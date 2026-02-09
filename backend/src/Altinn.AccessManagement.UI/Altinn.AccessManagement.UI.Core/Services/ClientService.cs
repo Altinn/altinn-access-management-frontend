@@ -1,3 +1,4 @@
+using System.Linq;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
@@ -62,13 +63,47 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<AssignmentDto> AddAgent(Guid party, Guid? to, PersonInput personInput = null, CancellationToken cancellationToken = default)
         {
-            return await _clientDelegationClient.AddAgent(party, to, personInput, cancellationToken);
+            if (personInput != null)
+            {
+                if (string.IsNullOrWhiteSpace(personInput.PersonIdentifier) || string.IsNullOrWhiteSpace(personInput.LastName))
+                {
+                    throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
+                }
+
+                string personIdentifierCleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
+                string lastnameCleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
+
+                if (IsDigitsOnly(personIdentifierCleaned) && !IsValidSsn(personIdentifierCleaned))
+                {
+                    throw new ArgumentException("Invalid person identifier format");
+                }
+
+                PersonInput cleanedInput = new PersonInput
+                {
+                    LastName = lastnameCleaned,
+                    PersonIdentifier = personIdentifierCleaned,
+                };
+
+                return await _clientDelegationClient.AddAgent(party, to, cleanedInput, cancellationToken);
+            }
+
+            return await _clientDelegationClient.AddAgent(party, to, null, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task RemoveAgent(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
             await _clientDelegationClient.RemoveAgent(party, to, cancellationToken);
+        }
+
+        private static bool IsValidSsn(string personIdentifier)
+        {
+            return personIdentifier.Length == 11 && personIdentifier.All(char.IsDigit);
+        }
+
+        private static bool IsDigitsOnly(string personIdentifier)
+        {
+            return !string.IsNullOrEmpty(personIdentifier) && personIdentifier.All(char.IsDigit);
         }
     }
 }

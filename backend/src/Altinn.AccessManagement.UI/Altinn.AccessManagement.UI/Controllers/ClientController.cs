@@ -237,6 +237,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="to">The uuid for the agent party.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Assignment details for the agent.</returns>
+        /// <response code="400">Bad Request</response>
+        /// <response code="429">TooManyRequests</response>
+        /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
         [Route("agents")]
@@ -255,6 +258,12 @@ namespace Altinn.AccessManagement.UI.Controllers
                     _logger.LogWarning(ex, "Failed to read PersonInput in AddAgent for party {Party}", party);
                     return BadRequest("Failed to read PersonInput.");
                 }
+            }
+
+            // Clear model state errors for to if personInput is provided (they are mutually exclusive)
+            if (personInput != null && ModelState.ContainsKey("to"))
+            {
+                ModelState.Remove("to");
             }
 
             if ((to == null || to == Guid.Empty) && personInput == null)
@@ -276,6 +285,19 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 AssignmentDto assignment = await _clientService.AddAgent(party, to, personInput, cancellationToken);
                 return Ok(assignment);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.TooManyRequests)
+                {
+                    return StatusCode(429);
+                }
+
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
             }
             catch (Exception ex)
             {

@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.IO;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -86,6 +87,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<AssignmentDto> AddAgent(Guid party, Guid? to, PersonInput personInput = null, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
+
+            if (party == Guid.Parse("00000000-0000-0000-0000-000000000429"))
+            {
+                throw new HttpStatusException("Status Error", "Too many requests", HttpStatusCode.TooManyRequests, null, "Too many requests");
+            }
 
             return Task.FromResult(new AssignmentDto
             {
