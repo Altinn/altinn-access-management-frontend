@@ -55,7 +55,7 @@ export class AktorvalgHeader {
 
   async selectActor(actorName: string) {
     await this.page.locator('a').filter({ hasText: actorName }).first().click();
-    await expect(this.page.getByRole('button', { name: actorName })).toBeVisible();
+    await expect(this.page.getByRole('button', { name: actorName }).first()).toBeVisible();
   }
 
   async currentlySelectedActor(actorName: string) {
