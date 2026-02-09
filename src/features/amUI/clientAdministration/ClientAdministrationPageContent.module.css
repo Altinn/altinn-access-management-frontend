@@ -14,3 +14,7 @@
 .pageDescription {
   max-width: 80ch;
 }
+
+.tab {
+  color: var(--ds-color-base-default);
+}

@@ -563,7 +563,7 @@
   "client_administration_page": {
     "no_access_title": "You do not have access to client administration",
     "page_heading": "Client administration for {{actingparty}}",
-    "page_description": "Org.no. {{actingparty.organisationidentifier}} (main unit)",
+    "page_description": "Org.no. {{actingparty.organisationidentifier}} ({{unitType}})",
     "forwarding_accesses_info": "New! You can now forward accesses that your business has received from another business. These can only be given to private individuals. Read more about this on the <a href='https://docs.altinn.studio/en/authorization/getting-started/'>help pages</a>.",
     "clients_tab_title": "Clients",
     "agents_tab_title": "Users",

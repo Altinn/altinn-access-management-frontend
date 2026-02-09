@@ -9,11 +9,16 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import { ClientAdministrationAgentsTab } from './ClientAdministrationAgentsTab';
 import { ClientAdministrationClientsTab } from './ClientAdministrationClientsTab';
 import classes from './ClientAdministrationPageContent.module.css';
+import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 export const ClientAdministrationPageContent = () => {
   const { t } = useTranslation();
   const pageIsEnabled = clientAdministrationPageEnabled();
   const { actingParty } = usePartyRepresentation();
+  const unitType = isSubUnitByType(actingParty?.variant)
+    ? t('common.subunit_lowercase')
+    : t('common.mainunit_lowercase');
 
   const [params, setParams] = useSearchParams();
   const activeTab = params.get('tab') === 'clients' ? 'clients' : 'users';
@@ -56,7 +61,6 @@ export const ClientAdministrationPageContent = () => {
       <DsAlert data-color='warning'>{t('client_administration_page.no_access_title')}</DsAlert>
     );
   }
-
   return (
     <>
       <div className={classes.headerSection}>
@@ -70,7 +74,10 @@ export const ClientAdministrationPageContent = () => {
           <DsParagraph data-size='md'>
             <Trans
               i18nKey='client_administration_page.page_description'
-              values={{ 'actingparty.organisationidentifier': actingParty?.orgNumber ?? '' }}
+              values={{
+                'actingparty.organisationidentifier': actingParty?.orgNumber ?? '',
+                unitType,
+              }}
             />
           </DsParagraph>
         </div>
@@ -98,8 +105,18 @@ export const ClientAdministrationPageContent = () => {
         onChange={handleTabChange}
       >
         <DsTabs.List>
-          <DsTabs.Tab value='users'>{t('client_administration_page.agents_tab_title')}</DsTabs.Tab>
-          <DsTabs.Tab value='clients'>
+          <DsTabs.Tab
+            value='users'
+            className={classes.tab}
+          >
+            <PersonGroupIcon aria-hidden='true' />
+            {t('client_administration_page.agents_tab_title')}
+          </DsTabs.Tab>
+          <DsTabs.Tab
+            value='clients'
+            className={classes.tab}
+          >
+            <DatabaseIcon aria-hidden='true' />
             {t('client_administration_page.clients_tab_title')}
           </DsTabs.Tab>
         </DsTabs.List>

@@ -8,6 +8,7 @@ import { UserListActions } from '../UserList/UserListActions';
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AdvancedUserSearch.module.css';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 export interface ConnectionsListProps {
   users: ExtendedUser[];
@@ -43,6 +44,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
         {users.map((user) => (
           <UserItem
             includeSelfAsChild={includeSelfAsChild}
+            subUnit={isSubUnitByType(user?.variant)}
             key={user.id}
             user={user}
             size='md'
