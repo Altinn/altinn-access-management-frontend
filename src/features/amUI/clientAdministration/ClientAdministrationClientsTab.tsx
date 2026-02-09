@@ -70,6 +70,7 @@ export const ClientAdministrationClientsTab = () => {
         connections={clientConnections}
         isLoading={isClientsLoading}
         canDelegate={false}
+        searchPlaceholder={t('client_administration_page.client_search_placeholder')}
         noUsersText={t('client_administration_page.no_clients')}
         getUserLink={(user) => `/clientadministration/client/${user.id}`}
         hasActiveAdditionalFilters={roleFilter.length > 0 || !showDeleted}
