@@ -10,6 +10,7 @@ export type personInput = { personIdentifier: string; lastName: string };
 
 const isValidSsnFormat = (personIdentifier: string) => /^\d{11}$/.test(personIdentifier);
 const isDigitsOnly = (personIdentifier: string) => /^\d+$/.test(personIdentifier);
+const containsWhitespace = (personIdentifier: string) => /\s/.test(personIdentifier);
 
 export type NewPersonContentProps = {
   errorDetails?: { status: string; time: string } | null;
@@ -40,8 +41,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
         : null;
     }
 
-    // Check for whitespace anywhere in the identifier
-    if (/\s/.test(trimmedIdentifier)) {
+    if (containsWhitespace(trimmedIdentifier)) {
       return 'new_user_modal.person_identifier_whitespace_forbidden_error';
     }
 
