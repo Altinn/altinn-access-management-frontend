@@ -78,11 +78,11 @@ export class AccessManagementFrontPage {
   }
 
   async expectOthersWithRightsListToBeVisible() {
-    await expect(this.page.getByRole('heading', { name: 'Andre med fullmakt' })).toBeVisible;
+    await expect(this.page.getByRole('heading', { name: 'Andre med fullmakt' })).toBeVisible();
   }
 
   async expectOthersWithRightsListToNotBeVisible() {
-    await expect(this.page.getByRole('heading', { name: 'Andre med fullmakt' })).not.toBeVisible;
+    await expect(this.page.getByRole('heading', { name: 'Andre med fullmakt' })).not.toBeVisible();
   }
 
   async clickLeggTilBruker() {
