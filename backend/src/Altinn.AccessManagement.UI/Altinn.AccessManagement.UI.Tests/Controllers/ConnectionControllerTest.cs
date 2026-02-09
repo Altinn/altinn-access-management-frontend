@@ -363,10 +363,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///    Test case: AddReporteeRightHolder with valid username containing spaces.
-        ///    Expected: Returns 200 OK when spaces are removed before lookup.
+        ///    Expected: Returns 400 Bad Request
         /// </summary>
         [Fact]
-        public async Task AddReporteeRightHolder_UsernameWithSpaces_ReturnsOk()
+        public async Task AddReporteeRightHolder_UsernameWithSpaces_ReturnsBadRequest()
         {
             // Arrange
             var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
@@ -388,7 +388,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 content);
 
             // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
 
         /// <summary>
@@ -432,7 +432,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
             var personInput = new PersonInput
             {
-                PersonIdentifier = "20838198 3a",
+                PersonIdentifier = "208381983a",
                 LastName = "Medaljong"
             };
 

@@ -496,6 +496,7 @@
     "person_identifier": "Fødselsnr./brukarnamn",
     "person_identifier_ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
     "person_identifier_username_format_error": "Brukarnamn må bestå av minst 6 teikn",
+    "person_identifier_whitespace_forbidden_error": "Mellomrom er ikkje tillate i fødselsnummer eller brukarnamn",
     "last_name_format_error": "Vennligst fyll inn eit gyldig etternavn"
   },
   "settings_page": {

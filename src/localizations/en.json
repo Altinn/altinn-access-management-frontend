@@ -499,6 +499,7 @@
     "person_identifier": "SSN/username",
     "person_identifier_ssn_format_error": "Social security number must consist of 11 digits",
     "person_identifier_username_format_error": "Username must be at least 6 characters",
+    "person_identifier_whitespace_forbidden_error": "Spaces are not allowed in SSN or username",
     "last_name_format_error": "Please enter a valid last name"
   },
   "settings_page": {

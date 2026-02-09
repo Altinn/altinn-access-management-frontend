@@ -472,6 +472,32 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: AddAgent accepts last name containing spaces.
+        /// </summary>
+        [Fact]
+        public async Task AddAgent_LastNameWithSpaces_ReturnsAssignment()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            PersonInput personInput = new PersonInput
+            {
+                PersonIdentifier = "20838198385",
+                LastName = "Van Der Berg",
+            };
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party={party}",
+                JsonContent.Create(personInput));
+
+            AssignmentDto assignment = await response.Content.ReadFromJsonAsync<AssignmentDto>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(assignment);
+            Assert.Equal(Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), assignment.ToId);
+            Assert.Equal(party, assignment.FromId);
+        }
+
+        /// <summary>
         /// Test case: AddAgent returns bad request when SSN (digits only) has invalid length.
         /// </summary>
         [Fact]
@@ -514,15 +540,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: AddAgent returns bad request when spaces are removed and username becomes too short.
+        /// Test case: AddAgent returns bad request when username contains spaces.
         /// </summary>
         [Fact]
-        public async Task AddAgent_UsernameWithSpacesBecomesTooShort_ReturnsBadRequest()
+        public async Task AddAgent_UsernameWithSpaces_ReturnsBadRequest()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             PersonInput personInput = new PersonInput
             {
-                PersonIdentifier = "ab cde",
+                PersonIdentifier = "test user1",
                 LastName = "Medaljong",
             };
             SetAuthHeader();

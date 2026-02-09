@@ -11,7 +11,7 @@ export type personInput = { personIdentifier: string; lastName: string };
 const isValidSsnFormat = (personIdentifier: string) => /^\d{11}$/.test(personIdentifier);
 const isDigitsOnly = (personIdentifier: string) => /^\d+$/.test(personIdentifier);
 const isValidUsernameFormat = (personIdentifier: string) => personIdentifier.length >= 6;
-const sanitizePersonIdentifier = (personIdentifier: string) => personIdentifier.replace(/\s+/g, '');
+const containsWhitespace = (personIdentifier: string) => /\s/.test(personIdentifier);
 
 export type NewPersonContentProps = {
   errorDetails?: { status: string; time: string } | null;
@@ -31,35 +31,43 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
   const allowUsername = enableAddUserByUsername();
 
   const isValidPersonIdentifierFormat = (identifier: string) => {
-    const sanitizedIdentifier = sanitizePersonIdentifier(identifier.trim());
-    if (!sanitizedIdentifier.length) {
+    const trimmedIdentifier = identifier.trim();
+    if (!trimmedIdentifier.length) {
       return false;
     }
 
-    if (allowUsername && !isDigitsOnly(sanitizedIdentifier)) {
-      return isValidUsernameFormat(sanitizedIdentifier);
+    if (containsWhitespace(identifier)) {
+      return false;
     }
 
-    return isValidSsnFormat(sanitizedIdentifier);
+    if (allowUsername && !isDigitsOnly(trimmedIdentifier)) {
+      return isValidUsernameFormat(trimmedIdentifier);
+    }
+
+    return isValidSsnFormat(trimmedIdentifier);
   };
 
   const getPersonIdentifierErrorKey = (identifier: string) => {
-    const sanitizedIdentifier = sanitizePersonIdentifier(identifier.trim());
-    if (!sanitizedIdentifier.length) {
+    const trimmedIdentifier = identifier.trim();
+    if (!trimmedIdentifier.length) {
       return null;
     }
 
+    if (containsWhitespace(identifier)) {
+      return 'new_user_modal.person_identifier_whitespace_forbidden_error';
+    }
+
     if (!allowUsername) {
-      return !isValidSsnFormat(sanitizedIdentifier)
+      return !isValidSsnFormat(trimmedIdentifier)
         ? 'new_user_modal.person_identifier_ssn_format_error'
         : null;
     }
 
-    if (isDigitsOnly(sanitizedIdentifier) && !isValidSsnFormat(sanitizedIdentifier)) {
+    if (isDigitsOnly(trimmedIdentifier) && !isValidSsnFormat(trimmedIdentifier)) {
       return 'new_user_modal.person_identifier_ssn_format_error';
     }
 
-    if (!isDigitsOnly(sanitizedIdentifier) && !isValidUsernameFormat(sanitizedIdentifier)) {
+    if (!isDigitsOnly(trimmedIdentifier) && !isValidUsernameFormat(trimmedIdentifier)) {
       return 'new_user_modal.person_identifier_username_format_error';
     }
 
@@ -68,7 +76,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
 
   const navigateIfValidPerson = () => {
     const personInput = {
-      personIdentifier: sanitizePersonIdentifier(personIdentifier.trim()),
+      personIdentifier,
       lastName: lastName.trim(),
     };
     addPerson(personInput);
@@ -78,7 +86,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
     return <DsAlert data-color='info'>{t('new_user_modal.limited_preview_message')}</DsAlert>;
   }
 
-  const isValidLastnameFormat = () => lastName.length >= 1;
+  const isValidLastnameFormat = () => lastName.trim().length >= 1;
 
   return (
     <div className={classes.newPersonContent}>
@@ -93,7 +101,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
         label={allowUsername ? t('new_user_modal.person_identifier') : t('common.ssn')}
         data-size='sm'
         value={personIdentifier}
-        onChange={(e) => setPersonIdentifier(sanitizePersonIdentifier(e.target.value))}
+        onChange={(e) => setPersonIdentifier(e.target.value)}
         error={
           !isValidPersonIdentifierFormat(personIdentifier) && personIdentifierFormatErrorKey ? (
             <Trans
