@@ -138,7 +138,7 @@ export const ResourceList = <
 }: ResourceListProps<TResource>) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
-  const [filterState, setFilterState] = React.useState<{ owner?: string[] }>({});
+  const [filterState, setFilterState] = React.useState<string[]>([]);
   const [selected, setSelected] = React.useState<TResource | null>(null);
   const { getProviderLogoUrl, isLoading: orgLoading } = useProviderLogoUrl();
   const logoResolver = React.useMemo(
@@ -167,7 +167,7 @@ export const ResourceList = <
 
   const { resources: filteredResources } = useFilteredResources<TResource>({
     resources,
-    serviceOwnerFilter: filterState?.['owner'] ?? [],
+    serviceOwnerFilter: filterState ?? [],
     searchString: enableSearch ? search : '',
     getResourceName: extractResourceName,
     getOwnerName: extractOwnerName,
