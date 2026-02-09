@@ -61,11 +61,7 @@ export const UserPageHeader = ({
           type={isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person'}
           size={'lg'}
           isParent={!isSubUnitByType(user?.variant?.toString())}
-          style={{
-            fontSize: '2.75rem',
-            width: '2.75rem',
-            height: '2.75rem',
-          }}
+          className={classes.avatarInner}
         />
         {displayDirection && (
           <Avatar

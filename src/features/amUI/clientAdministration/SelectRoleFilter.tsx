@@ -58,7 +58,7 @@ export const SelectRoleFilter = ({ roleFilter, setRoleFilter }: SelectRoleFilter
     [options, t],
   );
 
-  const filterState = useMemo<FilterState>(() => ({ roles: roleFilter }), [roleFilter]);
+  const filterState = useMemo<FilterState>(() => ({ [ROLE_FILTER_KEY]: roleFilter }), [roleFilter]);
 
   const handleFilterStateChange = (state: FilterState) => {
     setRoleFilter((state[ROLE_FILTER_KEY] ?? []) as string[]);

@@ -167,7 +167,7 @@ export const ResourceList = <
 
   const { resources: filteredResources } = useFilteredResources<TResource>({
     resources,
-    serviceOwnerFilter: filterState ?? [],
+    serviceOwnerFilter: filterState,
     searchString: enableSearch ? search : '',
     getResourceName: extractResourceName,
     getOwnerName: extractOwnerName,
