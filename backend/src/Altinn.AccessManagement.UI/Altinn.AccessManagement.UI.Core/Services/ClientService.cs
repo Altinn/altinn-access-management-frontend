@@ -70,10 +70,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
                 }
 
-                string personIdentifierCleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
+                string personIdentifierCleaned = RemoveWhitespace(personInput.PersonIdentifier).Replace("\"", string.Empty);
                 string lastnameCleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
 
+                if (string.IsNullOrWhiteSpace(personIdentifierCleaned) || string.IsNullOrWhiteSpace(lastnameCleaned))
+                {
+                    throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
+                }
+
                 if (IsDigitsOnly(personIdentifierCleaned) && !IsValidSsn(personIdentifierCleaned))
+                {
+                    throw new ArgumentException("Invalid person identifier format");
+                }
+
+                if (!IsDigitsOnly(personIdentifierCleaned) && !IsValidUsername(personIdentifierCleaned))
                 {
                     throw new ArgumentException("Invalid person identifier format");
                 }
@@ -104,6 +114,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static bool IsDigitsOnly(string personIdentifier)
         {
             return !string.IsNullOrEmpty(personIdentifier) && personIdentifier.All(char.IsDigit);
+        }
+
+        private static bool IsValidUsername(string personIdentifier)
+        {
+            return personIdentifier.Length >= 6;
+        }
+
+        private static string RemoveWhitespace(string personIdentifier)
+        {
+            return string.Concat(personIdentifier.Where(c => !char.IsWhiteSpace(c)));
         }
     }
 }

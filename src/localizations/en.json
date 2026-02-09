@@ -498,6 +498,7 @@
     "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future.",
     "person_identifier": "SSN/username",
     "person_identifier_ssn_format_error": "Social security number must consist of 11 digits",
+    "person_identifier_username_format_error": "Username must be at least 6 characters",
     "last_name_format_error": "Please enter a valid last name"
   },
   "settings_page": {

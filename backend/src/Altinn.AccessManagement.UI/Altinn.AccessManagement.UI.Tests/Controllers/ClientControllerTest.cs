@@ -493,6 +493,48 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: AddAgent returns bad request when username is shorter than 6 characters.
+        /// </summary>
+        [Fact]
+        public async Task AddAgent_ShortUsername_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            PersonInput personInput = new PersonInput
+            {
+                PersonIdentifier = "abcde",
+                LastName = "Medaljong",
+            };
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party={party}",
+                JsonContent.Create(personInput));
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddAgent returns bad request when spaces are removed and username becomes too short.
+        /// </summary>
+        [Fact]
+        public async Task AddAgent_UsernameWithSpacesBecomesTooShort_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            PersonInput personInput = new PersonInput
+            {
+                PersonIdentifier = "ab cde",
+                LastName = "Medaljong",
+            };
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party={party}",
+                JsonContent.Create(personInput));
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
         /// Test case: AddAgent returns bad request when no to or person input is provided.
         /// </summary>
         [Fact]
@@ -539,6 +581,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage response = await _client.PostAsync(
                 $"accessmanagement/api/v1/clientdelegations/agents?party={party}",
                 content);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddAgent returns bad request when cleaned person input becomes empty.
+        /// </summary>
+        [Fact]
+        public async Task AddAgent_CleanedPersonInputBecomesEmpty_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            PersonInput personInput = new PersonInput
+            {
+                PersonIdentifier = "\"\"",
+                LastName = "\"\"",
+            };
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party={party}",
+                JsonContent.Create(personInput));
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }

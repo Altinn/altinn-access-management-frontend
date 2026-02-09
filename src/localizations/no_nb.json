@@ -495,6 +495,7 @@
     "limited_preview_message": "Du kan dessverre ikke legge til personer helt enda. Dette vil komme senere.",
     "person_identifier": "Fødselsnr./brukernavn",
     "person_identifier_ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
+    "person_identifier_username_format_error": "Brukernavn må bestå av minst 6 tegn",
     "last_name_format_error": "Vennligst fyll inn et gyldig etternavn"
   },
   "settings_page": {

@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Guid?> ValidatePerson(string personIdentifier, string lastname)
         {
             // Check for bad input
-            string personIdentifierCleaned = personIdentifier.Trim().Replace("\"", string.Empty);
+            string personIdentifierCleaned = RemoveWhitespace(personIdentifier).Replace("\"", string.Empty);
             string lastname_cleaned = lastname.Trim().Replace("\"", string.Empty);
             if (!IsDigitsOnly(personIdentifierCleaned))
             {
@@ -93,9 +93,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 }
 
                 // Check for bad input
-                string personIdentifierCleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
+                string personIdentifierCleaned = RemoveWhitespace(personInput.PersonIdentifier).Replace("\"", string.Empty);
                 string lastname_cleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
+
+                if (string.IsNullOrWhiteSpace(personIdentifierCleaned) || string.IsNullOrWhiteSpace(lastname_cleaned))
+                {
+                    throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
+                }
+
                 if (IsDigitsOnly(personIdentifierCleaned) && !IsValidSsn(personIdentifierCleaned))
+                {
+                    throw new ArgumentException("Invalid person identifier format");
+                }
+
+                if (!IsDigitsOnly(personIdentifierCleaned) && !IsValidUsername(personIdentifierCleaned))
                 {
                     throw new ArgumentException("Invalid person identifier format");
                 }
@@ -139,6 +150,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static bool IsDigitsOnly(string personIdentifier)
         {
             return !string.IsNullOrEmpty(personIdentifier) && personIdentifier.All(char.IsDigit);
+        }
+
+        private static bool IsValidUsername(string personIdentifier)
+        {
+            return personIdentifier.Length >= 6;
+        }
+
+        private static string RemoveWhitespace(string personIdentifier)
+        {
+            return string.Concat(personIdentifier.Where(c => !char.IsWhiteSpace(c)));
         }
     }
 }

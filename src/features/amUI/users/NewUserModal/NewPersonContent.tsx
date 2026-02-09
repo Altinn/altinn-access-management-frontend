@@ -10,6 +10,8 @@ export type personInput = { personIdentifier: string; lastName: string };
 
 const isValidSsnFormat = (personIdentifier: string) => /^\d{11}$/.test(personIdentifier);
 const isDigitsOnly = (personIdentifier: string) => /^\d+$/.test(personIdentifier);
+const isValidUsernameFormat = (personIdentifier: string) => personIdentifier.length >= 6;
+const sanitizePersonIdentifier = (personIdentifier: string) => personIdentifier.replace(/\s+/g, '');
 
 export type NewPersonContentProps = {
   errorDetails?: { status: string; time: string } | null;
@@ -29,39 +31,46 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
   const allowUsername = enableAddUserByUsername();
 
   const isValidPersonIdentifierFormat = (identifier: string) => {
-    const trimmedIdentifier = identifier.trim();
-    if (!trimmedIdentifier.length) {
+    const sanitizedIdentifier = sanitizePersonIdentifier(identifier.trim());
+    if (!sanitizedIdentifier.length) {
       return false;
     }
 
-    if (allowUsername && !isDigitsOnly(trimmedIdentifier)) {
-      return true;
+    if (allowUsername && !isDigitsOnly(sanitizedIdentifier)) {
+      return isValidUsernameFormat(sanitizedIdentifier);
     }
 
-    return isValidSsnFormat(trimmedIdentifier);
+    return isValidSsnFormat(sanitizedIdentifier);
   };
 
   const getPersonIdentifierErrorKey = (identifier: string) => {
-    const trimmedIdentifier = identifier.trim();
-    if (!trimmedIdentifier.length) {
+    const sanitizedIdentifier = sanitizePersonIdentifier(identifier.trim());
+    if (!sanitizedIdentifier.length) {
       return null;
     }
 
     if (!allowUsername) {
-      return !isValidSsnFormat(trimmedIdentifier)
+      return !isValidSsnFormat(sanitizedIdentifier)
         ? 'new_user_modal.person_identifier_ssn_format_error'
         : null;
     }
 
-    if (isDigitsOnly(trimmedIdentifier) && !isValidSsnFormat(trimmedIdentifier)) {
+    if (isDigitsOnly(sanitizedIdentifier) && !isValidSsnFormat(sanitizedIdentifier)) {
       return 'new_user_modal.person_identifier_ssn_format_error';
+    }
+
+    if (!isDigitsOnly(sanitizedIdentifier) && !isValidUsernameFormat(sanitizedIdentifier)) {
+      return 'new_user_modal.person_identifier_username_format_error';
     }
 
     return null;
   };
 
   const navigateIfValidPerson = () => {
-    const personInput = { personIdentifier: personIdentifier.trim(), lastName: lastName };
+    const personInput = {
+      personIdentifier: sanitizePersonIdentifier(personIdentifier.trim()),
+      lastName: lastName.trim(),
+    };
     addPerson(personInput);
   };
 
@@ -83,7 +92,8 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
         className={classes.textField}
         label={allowUsername ? t('new_user_modal.person_identifier') : t('common.ssn')}
         data-size='sm'
-        onChange={(e) => setPersonIdentifier(e.target.value)}
+        value={personIdentifier}
+        onChange={(e) => setPersonIdentifier(sanitizePersonIdentifier(e.target.value))}
         error={
           !isValidPersonIdentifierFormat(personIdentifier) && personIdentifierFormatErrorKey ? (
             <Trans
@@ -100,6 +110,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
         className={classes.textField}
         label={t('common.last_name')}
         data-size='sm'
+        value={lastName}
         onChange={(e) => setLastName(e.target.value)}
         error={lastNameFormatError}
         onBlur={() => {
