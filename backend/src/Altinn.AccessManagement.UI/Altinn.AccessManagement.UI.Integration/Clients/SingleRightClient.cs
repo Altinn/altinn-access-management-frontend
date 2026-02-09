@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<ResourceCheckDto> GetDelegationCheck(Guid from, string resource)
         {
-            string endpointUrl = $"enduser/connections/resources/delegationcheck?party={from}&resourceId={resource}";
+            string endpointUrl = $"enduser/connections/resources/delegationcheck?party={from}&resource={resource}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
