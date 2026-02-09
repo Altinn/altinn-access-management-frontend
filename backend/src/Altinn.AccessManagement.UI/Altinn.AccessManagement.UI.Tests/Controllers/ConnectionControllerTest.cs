@@ -360,37 +360,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
-
-        /// <summary>
-        ///    Test case: AddReporteeRightHolder with valid username containing spaces.
-        ///    Expected: Returns 400 Bad Request
-        /// </summary>
-        [Fact]
-        public async Task AddReporteeRightHolder_UsernameWithSpaces_ReturnsBadRequest()
-        {
-            // Arrange
-            var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
-            var personInput = new PersonInput
-            {
-                PersonIdentifier = "test user1",
-                LastName = "Bruker"
-            };
-
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            string jsonInput = JsonSerializer.Serialize(personInput);
-            HttpContent content = new StringContent(jsonInput, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync(
-                $"accessmanagement/api/v1/connection/reportee/{reporteePartyUuid}/rightholder",
-                content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        }
-
+ 
         /// <summary>
         ///    Test case: AddReporteeRightHolder with username shorter than 6 characters.
         ///    Expected: Returns 400 Bad Request

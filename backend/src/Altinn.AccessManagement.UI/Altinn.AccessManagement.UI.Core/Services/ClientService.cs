@@ -78,11 +78,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
                 }
 
-                if (ContainsWhitespace(personIdentifierCleaned))
-                {
-                    throw new ArgumentException("Invalid person identifier format");
-                }
-
                 if (IsDigitsOnly(personIdentifierCleaned) && !IsValidSsn(personIdentifierCleaned))
                 {
                     throw new ArgumentException("Invalid person identifier format");
@@ -124,11 +119,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static bool IsValidUsername(string personIdentifier)
         {
             return personIdentifier.Length >= 6;
-        }
-
-        private static bool ContainsWhitespace(string personIdentifier)
-        {
-            return personIdentifier.Any(char.IsWhiteSpace);
         }
     }
 }

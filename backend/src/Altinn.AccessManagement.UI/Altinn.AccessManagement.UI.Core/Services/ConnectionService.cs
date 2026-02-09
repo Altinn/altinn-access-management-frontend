@@ -52,11 +52,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             string personIdentifierCleaned = personIdentifier.Trim().Replace("\"", string.Empty);
             string lastname_cleaned = lastname.Trim().Replace("\"", string.Empty);
 
-            if (ContainsWhitespace(personIdentifierCleaned))
-            {
-                return null;
-            }
-
             if (!IsDigitsOnly(personIdentifierCleaned))
             {
                 // Only validate what we can assume is an SSN (digits only)
@@ -107,11 +102,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
                 }
 
-                if (ContainsWhitespace(personIdentifierCleaned))
-                {
-                    throw new ArgumentException("Invalid person identifier format");
-                }
-
                 if (IsDigitsOnly(personIdentifierCleaned) && !IsValidSsn(personIdentifierCleaned))
                 {
                     throw new ArgumentException("Invalid person identifier format");
@@ -121,7 +111,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     throw new ArgumentException("Invalid person identifier format");
                 }
-
+   
                 PersonInput cleanedInput = new PersonInput
                 {
                     LastName = lastname_cleaned,
@@ -166,11 +156,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static bool IsValidUsername(string personIdentifier)
         {
             return personIdentifier.Length >= 6;
-        }
-
-        private static bool ContainsWhitespace(string personIdentifier)
-        {
-            return personIdentifier.Any(char.IsWhiteSpace);
         }
     }
 }

@@ -540,27 +540,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: AddAgent returns bad request when username contains spaces.
-        /// </summary>
-        [Fact]
-        public async Task AddAgent_UsernameWithSpaces_ReturnsBadRequest()
-        {
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            PersonInput personInput = new PersonInput
-            {
-                PersonIdentifier = "test user1",
-                LastName = "Medaljong",
-            };
-            SetAuthHeader();
-
-            HttpResponseMessage response = await _client.PostAsync(
-                $"accessmanagement/api/v1/clientdelegations/agents?party={party}",
-                JsonContent.Create(personInput));
-
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        }
-
-        /// <summary>
         /// Test case: AddAgent returns bad request when no to or person input is provided.
         /// </summary>
         [Fact]
