@@ -16,13 +16,10 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.goToInfoportal();
-      await aktorvalgHeader.goToSelectActor('OVERFØLSOM KATT');
       await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
     await test.step('Gå til brukere og velg bruker "Iherdig Litteratur"', async () => {
-      await aktorvalgHeader.goToAccessManagement();
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
       await accessManagementFrontPage.clickUser('Iherdig Litteratur');
@@ -55,13 +52,10 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.goToInfoportal();
-      await aktorvalgHeader.goToSelectActor('TRÅDLØS TELEFONNUMMER');
       await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
     await test.step('Gå til brukere og velg deg selv', async () => {
-      await aktorvalgHeader.goToAccessManagement();
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
       await accessManagementFrontPage.clickUser('TRÅDLØS TELEFONNUMMER');
@@ -166,13 +160,10 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.goToInfoportal();
-      await aktorvalgHeader.goToSelectActor('OVERFØLSOM KATT');
       await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
     await test.step('Gå til brukere-siden og velg deg selv', async () => {
-      await aktorvalgHeader.goToAccessManagement();
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
       await accessManagementFrontPage.clickUser('OVERFØLSOM KATT');
@@ -195,13 +186,10 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.goToInfoportal();
-      await aktorvalgHeader.goToSelectActor('RELEVANT ANDAKT');
       await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
     await test.step('Gå til brukere-siden', async () => {
-      await aktorvalgHeader.goToAccessManagement();
       await accessManagementFrontPage.goToUsers();
     });
 
