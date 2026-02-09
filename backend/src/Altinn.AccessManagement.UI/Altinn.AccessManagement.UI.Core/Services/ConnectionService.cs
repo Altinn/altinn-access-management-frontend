@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
@@ -48,23 +49,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>
         public async Task<Guid?> ValidatePerson(string personIdentifier, string lastname)
         {
-            // Check for bad input
             string personIdentifierCleaned = personIdentifier.Trim().Replace("\"", string.Empty);
-            string lastname_cleaned = lastname.Trim().Replace("\"", string.Empty);
+            string lastnameCleaned = lastname.Trim().Replace("\"", string.Empty);
 
-            if (!IsDigitsOnly(personIdentifierCleaned))
-            {
-                // Only validate what we can assume is an SSN (digits only)
-                return null;
-            }
-
-            if (!IsValidSsn(personIdentifierCleaned))
+            if (string.IsNullOrWhiteSpace(personIdentifierCleaned) || string.IsNullOrWhiteSpace(lastnameCleaned))
             {
                 return null;
             }
 
-            // Check that a person with the provided ssn and last name exists
-            Person person = await _registerClient.GetPerson(personIdentifierCleaned, lastname_cleaned);
+            if (!PersonIdentifierUtils.IsValidPersonIdentifier(personIdentifierCleaned))
+            {
+                return null;
+            }
+
+            Person person = await _registerClient.GetPerson(personIdentifierCleaned, lastnameCleaned);
 
             if (person == null)
             {
@@ -93,28 +91,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
                 }
 
-                // Check for bad input
                 string personIdentifierCleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
-                string lastname_cleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
+                string lastnameCleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
 
-                if (string.IsNullOrWhiteSpace(personIdentifierCleaned) || string.IsNullOrWhiteSpace(lastname_cleaned))
+                if (string.IsNullOrWhiteSpace(personIdentifierCleaned) || string.IsNullOrWhiteSpace(lastnameCleaned))
                 {
                     throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
                 }
 
-                if (IsDigitsOnly(personIdentifierCleaned) && !IsValidSsn(personIdentifierCleaned))
-                {
-                    throw new ArgumentException("Invalid person identifier format");
-                }
-
-                if (!IsDigitsOnly(personIdentifierCleaned) && !IsValidUsername(personIdentifierCleaned))
+                if (!PersonIdentifierUtils.IsValidPersonIdentifier(personIdentifierCleaned))
                 {
                     throw new ArgumentException("Invalid person identifier format");
                 }
    
                 PersonInput cleanedInput = new PersonInput
                 {
-                    LastName = lastname_cleaned,
+                    LastName = lastnameCleaned,
                     PersonIdentifier = personIdentifierCleaned
                 };
 
@@ -141,21 +133,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 _logger.LogError(ex, "Failed fetching rightholders for {PartyUuid}", partyUuid);
                 throw;
             }
-        }
-
-        private static bool IsValidSsn(string personIdentifier)
-        {
-            return personIdentifier.Length == 11 && personIdentifier.All(char.IsDigit);
-        }
-
-        private static bool IsDigitsOnly(string personIdentifier)
-        {
-            return !string.IsNullOrEmpty(personIdentifier) && personIdentifier.All(char.IsDigit);
-        }
-
-        private static bool IsValidUsername(string personIdentifier)
-        {
-            return personIdentifier.Length >= 6;
         }
     }
 }

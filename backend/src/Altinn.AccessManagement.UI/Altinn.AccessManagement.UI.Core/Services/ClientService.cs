@@ -1,5 +1,5 @@
-using System.Linq;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -78,12 +78,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
                 }
 
-                if (IsDigitsOnly(personIdentifierCleaned) && !IsValidSsn(personIdentifierCleaned))
-                {
-                    throw new ArgumentException("Invalid person identifier format");
-                }
-
-                if (!IsDigitsOnly(personIdentifierCleaned) && !IsValidUsername(personIdentifierCleaned))
+                if (!PersonIdentifierUtils.IsValidPersonIdentifier(personIdentifierCleaned))
                 {
                     throw new ArgumentException("Invalid person identifier format");
                 }
@@ -104,21 +99,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task RemoveAgent(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
             await _clientDelegationClient.RemoveAgent(party, to, cancellationToken);
-        }
-
-        private static bool IsValidSsn(string personIdentifier)
-        {
-            return personIdentifier.Length == 11 && personIdentifier.All(char.IsDigit);
-        }
-
-        private static bool IsDigitsOnly(string personIdentifier)
-        {
-            return !string.IsNullOrEmpty(personIdentifier) && personIdentifier.All(char.IsDigit);
-        }
-
-        private static bool IsValidUsername(string personIdentifier)
-        {
-            return personIdentifier.Length >= 6;
         }
     }
 }
