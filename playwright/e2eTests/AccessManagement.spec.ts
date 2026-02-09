@@ -211,7 +211,7 @@ test.describe('Tilgangsstyring', () => {
   });
 });
 
-test.describe.skip('Testdata for Tilgangsstyring-testene', () => {
+test.describe.skip('@slow Testdata for Tilgangsstyring-testene', () => {
   test('legg til testdata 70885100226 OVERFØLSOM KATT', async ({
     page,
     accessManagementFrontPage,
@@ -245,6 +245,37 @@ test.describe.skip('Testdata for Tilgangsstyring-testene', () => {
     await test.step('Gi 70885100226 OVERFØLSOM KATT Posttjenester-pakken', async () => {
       await accessManagementFrontPage.clickAccessAreaInPopup('Andre tjenesteytende næringer');
       await accessManagementFrontPage.clickAccessPackageToDelegateIfVisible('Posttjenester');
+    });
+  });
+
+  test('legg til testdata 64866402394 TRÅDLØS TELEFONNUMMER', async ({
+    page,
+    accessManagementFrontPage,
+  }) => {
+    const login = new LoginPage(page);
+    const aktorvalgHeader = new AktorvalgHeader(page);
+    await test.step('Log in', async () => {
+      await page.goto(env('BASE_URL'));
+      await login.LoginToAccessManagement('12816699205');
+    });
+
+    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
+      await aktorvalgHeader.goToInfoportal();
+      await aktorvalgHeader.goToSelectActor('MORALSK KUNSTEVENTYR');
+      await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
+    });
+
+    await test.step('Gå til brukere-siden', async () => {
+      await aktorvalgHeader.goToAccessManagement();
+      await accessManagementFrontPage.goToUsers();
+    });
+
+    await test.step('Gi 64866402394 TRÅDLØS TELEFONNUMMER KATT hovedadministrator-pakken', async () => {
+      await accessManagementFrontPage.clickLeggTilBruker();
+      await accessManagementFrontPage.addPerson('64866402394', 'TELEFONNUMMER');
+      await accessManagementFrontPage.clickGiFullmakt();
+      await accessManagementFrontPage.clickAccessAreaInPopup('Administrere tilganger');
+      await accessManagementFrontPage.clickAccessPackageToDelegateIfVisible('Hovedadministrator');
     });
   });
 });
