@@ -433,7 +433,7 @@
       "cannot_give_header": "Du kan ikkje gi tilgang til:"
     },
     "specific_rights": {
-      "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
+      "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ønsker å endre dette."
     },
     "technical_error_message": {

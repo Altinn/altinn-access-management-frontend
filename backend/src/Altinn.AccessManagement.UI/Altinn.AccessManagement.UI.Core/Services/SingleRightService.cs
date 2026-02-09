@@ -4,7 +4,6 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services

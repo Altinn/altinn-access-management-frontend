@@ -13,7 +13,6 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Microsoft.AspNetCore.Mvc;
@@ -77,23 +76,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             AssertCollections(expected.Resource, actual.Resource, AssertEqual);
             Assert.Equal(expected.Action, actual.Action);
-        }
-
-        /// <summary>
-        ///     Assert that two <see cref="DelegationCheckedRightFE" /> have the same property in the same positions.
-        /// </summary>
-        /// <param name="expected">An instance with the expected values.</param>
-        /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(DelegationCheckedRightFE expected, DelegationCheckedRightFE actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.Action, actual.Action);
-            Assert.Equal(expected.RightKey, actual.RightKey);
-            Assert.Equal(expected.Status, actual.Status);
-            AssertCollections(expected.ReasonCodes, actual.ReasonCodes, Assert.Equal);
-
         }
 
         /// <summary>

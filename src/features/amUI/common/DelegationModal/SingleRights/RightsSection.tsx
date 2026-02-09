@@ -7,7 +7,6 @@ import {
   DsParagraph,
   ListItem,
   Button,
-  DsSpinner,
 } from '@altinn/altinn-components';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { Trans, useTranslation } from 'react-i18next';
