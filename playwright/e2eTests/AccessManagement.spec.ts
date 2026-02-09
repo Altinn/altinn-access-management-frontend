@@ -2,8 +2,6 @@ import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from './../fixture/pomFixture';
 import { AktorvalgHeader } from '../pages/AktorvalgHeader';
-import { access } from 'fs';
-import { AccessManagementFrontPage } from '../pages/AccessManagementFrontPage';
 
 test.describe('Tilgangsstyring', () => {
   test('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', async ({
