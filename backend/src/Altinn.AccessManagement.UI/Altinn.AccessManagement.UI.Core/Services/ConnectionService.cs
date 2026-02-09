@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
@@ -48,24 +49,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>
         public async Task<Guid?> ValidatePerson(string personIdentifier, string lastname)
         {
-            // Check for bad input
             string personIdentifierCleaned = personIdentifier.Trim().Replace("\"", string.Empty);
-            string lastname_cleaned = lastname.Trim().Replace("\"", string.Empty);
-            bool isSsn = IsValidSsn(personIdentifierCleaned);
-            bool isUsername = IsValidUsername(personIdentifierCleaned);
-            if (!isSsn && !isUsername)
+            string lastnameCleaned = lastname.Trim().Replace("\"", string.Empty);
+
+            if (string.IsNullOrWhiteSpace(personIdentifierCleaned) || string.IsNullOrWhiteSpace(lastnameCleaned))
             {
                 return null;
             }
 
-            if (!isSsn)
+            if (!PersonIdentifierUtils.IsValidPersonIdentifier(personIdentifierCleaned))
             {
-                // We cannot validate usernames against the register, return null to signal not found
                 return null;
             }
 
-            // Check that a person with the provided ssn and last name exists
-            Person person = await _registerClient.GetPerson(personIdentifierCleaned, lastname_cleaned);
+            Person person = await _registerClient.GetPerson(personIdentifierCleaned, lastnameCleaned);
 
             if (person == null)
             {
@@ -94,17 +91,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
                 }
 
-                // Check for bad input
                 string personIdentifierCleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
-                string lastname_cleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
-                if (!IsValidSsn(personIdentifierCleaned) && !IsValidUsername(personIdentifierCleaned))
+                string lastnameCleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
+
+                if (string.IsNullOrWhiteSpace(personIdentifierCleaned) || string.IsNullOrWhiteSpace(lastnameCleaned))
+                {
+                    throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
+                }
+
+                if (!PersonIdentifierUtils.IsValidPersonIdentifier(personIdentifierCleaned))
                 {
                     throw new ArgumentException("Invalid person identifier format");
                 }
-
+   
                 PersonInput cleanedInput = new PersonInput
                 {
-                    LastName = lastname_cleaned,
+                    LastName = lastnameCleaned,
                     PersonIdentifier = personIdentifierCleaned
                 };
 
@@ -131,18 +133,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 _logger.LogError(ex, "Failed fetching rightholders for {PartyUuid}", partyUuid);
                 throw;
             }
-        }
-
-        private static bool IsValidSsn(string personIdentifier)
-        {
-            return personIdentifier.Length == 11 && personIdentifier.All(char.IsDigit);
-        }
-
-        private static bool IsValidUsername(string personIdentifier)
-        {
-            return personIdentifier.Length >= 6
-                && personIdentifier.All(char.IsLetterOrDigit)
-                && personIdentifier.Any(char.IsLetter);
         }
     }
 }

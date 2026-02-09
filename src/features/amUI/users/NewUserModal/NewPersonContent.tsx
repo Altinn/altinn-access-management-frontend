@@ -9,9 +9,8 @@ import { displayPrivDelegation, enableAddUserByUsername } from '@/resources/util
 export type personInput = { personIdentifier: string; lastName: string };
 
 const isValidSsnFormat = (personIdentifier: string) => /^\d{11}$/.test(personIdentifier);
-const isValidUsernameFormat = (personIdentifier: string) =>
-  /^[A-Za-z0-9]{6,}$/.test(personIdentifier);
-const containsLetter = (personIdentifier: string) => /[A-Za-z]/.test(personIdentifier);
+const isDigitsOnly = (personIdentifier: string) => /^\d+$/.test(personIdentifier);
+const containsWhitespace = (personIdentifier: string) => /\s/.test(personIdentifier);
 
 export type NewPersonContentProps = {
   errorDetails?: { status: string; time: string } | null;
@@ -30,14 +29,6 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
   const shouldDisplayPrivDelegation = displayPrivDelegation();
   const allowUsername = enableAddUserByUsername();
 
-  const isValidPersonIdentifierFormat = (identifier: string) => {
-    if (allowUsername) {
-      return isValidSsnFormat(identifier) || isValidUsernameFormat(identifier);
-    }
-
-    return isValidSsnFormat(identifier);
-  };
-
   const getPersonIdentifierErrorKey = (identifier: string) => {
     const trimmedIdentifier = identifier.trim();
     if (!trimmedIdentifier.length) {
@@ -50,17 +41,26 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
         : null;
     }
 
-    return containsLetter(trimmedIdentifier)
-      ? !isValidUsernameFormat(trimmedIdentifier)
-        ? 'new_user_modal.person_identifier_username_format_error'
-        : null
-      : !isValidSsnFormat(trimmedIdentifier)
-        ? 'new_user_modal.person_identifier_ssn_format_error'
-        : null;
+    if (containsWhitespace(trimmedIdentifier)) {
+      return 'new_user_modal.person_identifier_whitespace_forbidden_error';
+    }
+
+    if (isDigitsOnly(trimmedIdentifier) && !isValidSsnFormat(trimmedIdentifier)) {
+      return 'new_user_modal.person_identifier_ssn_format_error';
+    }
+
+    if (!isDigitsOnly(trimmedIdentifier) && trimmedIdentifier.length < 6) {
+      return 'new_user_modal.person_identifier_username_format_error';
+    }
+
+    return null;
   };
 
   const navigateIfValidPerson = () => {
-    const personInput = { personIdentifier: personIdentifier, lastName: lastName };
+    const personInput = {
+      personIdentifier: personIdentifier.trim(),
+      lastName: lastName.trim(),
+    };
     addPerson(personInput);
   };
 
@@ -68,7 +68,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
     return <DsAlert data-color='info'>{t('new_user_modal.limited_preview_message')}</DsAlert>;
   }
 
-  const isValidLastnameFormat = () => lastName.length >= 1;
+  const isValidLastnameFormat = () => lastName.trim().length >= 1;
 
   return (
     <div className={classes.newPersonContent}>
@@ -82,9 +82,10 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
         className={classes.textField}
         label={allowUsername ? t('new_user_modal.person_identifier') : t('common.ssn')}
         data-size='sm'
+        value={personIdentifier}
         onChange={(e) => setPersonIdentifier(e.target.value)}
         error={
-          !isValidPersonIdentifierFormat(personIdentifier) && personIdentifierFormatErrorKey ? (
+          personIdentifierFormatErrorKey ? (
             <Trans
               i18nKey={personIdentifierFormatErrorKey}
               components={{ br: <br /> }}
@@ -99,6 +100,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
         className={classes.textField}
         label={t('common.last_name')}
         data-size='sm'
+        value={lastName}
         onChange={(e) => setLastName(e.target.value)}
         error={lastNameFormatError}
         onBlur={() => {
@@ -108,7 +110,12 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
       />
       <div className={classes.validationButton}>
         <Button
-          disabled={!isValidPersonIdentifierFormat(personIdentifier) || !isValidLastnameFormat()}
+          disabled={
+            personIdentifier.trim().length === 0 ||
+            getPersonIdentifierErrorKey(personIdentifier) !== null ||
+            !isValidLastnameFormat() ||
+            isLoading
+          }
           loading={isLoading}
           onClick={navigateIfValidPerson}
         >

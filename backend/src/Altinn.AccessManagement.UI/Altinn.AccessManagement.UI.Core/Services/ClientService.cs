@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -62,7 +63,36 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<AssignmentDto> AddAgent(Guid party, Guid? to, PersonInput personInput = null, CancellationToken cancellationToken = default)
         {
-            return await _clientDelegationClient.AddAgent(party, to, personInput, cancellationToken);
+            if (personInput != null)
+            {
+                if (string.IsNullOrWhiteSpace(personInput.PersonIdentifier) || string.IsNullOrWhiteSpace(personInput.LastName))
+                {
+                    throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
+                }
+
+                string personIdentifierCleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
+                string lastnameCleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
+
+                if (string.IsNullOrWhiteSpace(personIdentifierCleaned) || string.IsNullOrWhiteSpace(lastnameCleaned))
+                {
+                    throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
+                }
+
+                if (!PersonIdentifierUtils.IsValidPersonIdentifier(personIdentifierCleaned))
+                {
+                    throw new ArgumentException("Invalid person identifier format");
+                }
+
+                PersonInput cleanedInput = new PersonInput
+                {
+                    LastName = lastnameCleaned,
+                    PersonIdentifier = personIdentifierCleaned,
+                };
+
+                return await _clientDelegationClient.AddAgent(party, to, cleanedInput, cancellationToken);
+            }
+
+            return await _clientDelegationClient.AddAgent(party, to, null, cancellationToken);
         }
 
         /// <inheritdoc />
