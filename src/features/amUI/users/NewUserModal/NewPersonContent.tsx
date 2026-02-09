@@ -111,6 +111,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
       <div className={classes.validationButton}>
         <Button
           disabled={
+            personIdentifier.trim().length === 0 ||
             getPersonIdentifierErrorKey(personIdentifier) !== null ||
             !isValidLastnameFormat() ||
             isLoading
