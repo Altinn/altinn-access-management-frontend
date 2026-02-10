@@ -594,6 +594,7 @@
     "agent_can_get_clients_tab": "Alle klienter",
     "client_has_agents_tab": "Brukere med tilgang",
     "client_can_get_agents_tab": "Alle brukere",
+    "new_agent_tag": "NY",
     "direct_connections_heading": "Brukere med klienttilgang",
     "indirect_connections_heading": "Andre brukere",
     "organization_identifier": "Org.nr. {{orgnr}}",

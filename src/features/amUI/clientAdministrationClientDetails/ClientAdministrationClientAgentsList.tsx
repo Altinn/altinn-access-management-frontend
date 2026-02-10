@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
   Button,
+  DsParagraph,
   type UserListItemProps,
   type Color,
   formatDate,
@@ -18,6 +19,7 @@ import type {
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
+import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 
 import { AccessPackageListItems } from '../clientAdministrationAgentDetails/AccessPackageListItems';
 import {
@@ -35,10 +37,25 @@ type ClientAdministrationClientAgentsListProps = {
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
+  emptyText?: string;
+  onUserAdded?: () => void;
 };
+
+const RECENT_AGENT_TIME = 5 * 60 * 1000;
 
 const getUserListItemType = (agentType: string): UserListItemProps['type'] => {
   return agentType.toLowerCase() === 'person' ? 'person' : 'company';
+};
+
+const isRecentAgent = (agentAddedAt: string | undefined): boolean => {
+  const parsed = Date.parse(agentAddedAt ?? '');
+  if (Number.isNaN(parsed)) {
+    return false;
+  }
+
+  const nowMs = Date.now();
+
+  return nowMs - parsed <= RECENT_AGENT_TIME;
 };
 
 export const ClientAdministrationClientAgentsList = ({
@@ -50,6 +67,8 @@ export const ClientAdministrationClientAgentsList = ({
   actingPartyUuid,
   addAgentAccessPackages,
   removeAgentAccessPackages,
+  emptyText,
+  onUserAdded,
 }: ClientAdministrationClientAgentsListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
@@ -84,13 +103,42 @@ export const ClientAdministrationClientAgentsList = ({
     return map;
   }, [clientAccessPackages]);
 
-  const sortedAgents = useMemo(
-    () => [...agents].sort((a, b) => a.agent.name.localeCompare(b.agent.name)),
-    [agents],
-  );
+  const { sortedAgents, recentAgentIds } = useMemo(() => {
+    const decoratedAgents = agents.map((agent) => {
+      return {
+        agent,
+        recent: isRecentAgent(agent.agentAddedAt),
+      };
+    });
+
+    decoratedAgents.sort((a, b) => {
+      if (a.recent !== b.recent) {
+        return a.recent ? -1 : 1;
+      }
+
+      if (a.recent && b.recent) {
+        const byAddedAt =
+          (Date.parse(b.agent.agentAddedAt ?? '') ?? 0) -
+          (Date.parse(a.agent.agentAddedAt ?? '') ?? 0);
+        if (byAddedAt !== 0) {
+          return byAddedAt;
+        }
+      }
+
+      return a.agent.agent.name.localeCompare(b.agent.agent.name);
+    });
+
+    return {
+      sortedAgents: decoratedAgents.map(({ agent }) => agent),
+      recentAgentIds: new Set(
+        decoratedAgents.filter(({ recent }) => recent).map(({ agent }) => agent.agent.id),
+      ),
+    };
+  }, [agents]);
 
   const userListItems: UserListItemData[] = sortedAgents.map((agent) => {
     const agentId = agent.agent.id;
+    const isRecentlyAdded = recentAgentIds.has(agentId);
     const isSubUnit = isSubUnitByType(agent.agent.variant);
     const userType = getUserListItemType(agent.agent.type);
 
@@ -178,13 +226,33 @@ export const ClientAdministrationClientAgentsList = ({
           : userType === 'person'
             ? `${t('common.date_of_birth')} ${formatDate(agent.agent.dateOfBirth ?? '')}`
             : undefined,
+      badge: isRecentlyAdded
+        ? {
+            label: t('client_administration_page.new_agent_tag'),
+          }
+        : undefined,
     };
   });
 
+  const hasAgents = userListItems.length > 0;
+
   return (
-    <UserListItems
-      items={userListItems}
-      searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
-    />
+    <div>
+      {hasAgents ? (
+        <UserListItems
+          items={userListItems}
+          searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+        />
+      ) : (
+        <DsParagraph>{emptyText ?? t('client_administration_page.no_agents')}</DsParagraph>
+      )}
+      <div style={{ marginTop: '1rem' }}>
+        <AddAgentButton
+          onComplete={() => {
+            onUserAdded?.();
+          }}
+        />
+      </div>
+    </div>
   );
 };

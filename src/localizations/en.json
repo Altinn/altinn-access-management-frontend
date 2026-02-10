@@ -597,6 +597,7 @@
     "agent_can_get_clients_tab": "All clients",
     "client_has_agents_tab": "Users with access",
     "client_can_get_agents_tab": "All users",
+    "new_agent_tag": "NEW",
     "direct_connections_heading": "Users with client access",
     "indirect_connections_heading": "Other users",
     "organization_identifier": "Org.nr. {{orgnr}}",

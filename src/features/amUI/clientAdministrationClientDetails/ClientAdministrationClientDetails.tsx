@@ -140,22 +140,18 @@ export const ClientAdministrationClientDetails = () => {
                 onChange={setActiveTab}
                 hasUsersContent={
                   hasDelegatablePackages ? (
-                    agentsWithClientAccess.length > 0 ? (
-                      <ClientAdministrationClientAgentsList
-                        agents={agentsWithClientAccess}
-                        clientAccessPackages={clientAccessPackages ?? []}
-                        client={selectedClient}
-                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                        fromPartyUuid={fromPartyUuid}
-                        actingPartyUuid={actingPartyUuid}
-                        addAgentAccessPackages={addAgentAccessPackages}
-                        removeAgentAccessPackages={removeAgentAccessPackages}
-                      />
-                    ) : (
-                      <DsParagraph>
-                        {t('client_administration_page.no_user_delegations')}
-                      </DsParagraph>
-                    )
+                    <ClientAdministrationClientAgentsList
+                      agents={agentsWithClientAccess}
+                      clientAccessPackages={clientAccessPackages ?? []}
+                      client={selectedClient}
+                      isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                      fromPartyUuid={fromPartyUuid}
+                      actingPartyUuid={actingPartyUuid}
+                      addAgentAccessPackages={addAgentAccessPackages}
+                      removeAgentAccessPackages={removeAgentAccessPackages}
+                      emptyText={t('client_administration_page.no_user_delegations')}
+                      onUserAdded={() => setActiveTab('all-users')}
+                    />
                   ) : (
                     <DsParagraph>
                       {t('client_administration_page.no_access_to_delegate', {
@@ -166,20 +162,18 @@ export const ClientAdministrationClientDetails = () => {
                 }
                 allUsersContent={
                   hasDelegatablePackages ? (
-                    allAgents.length > 0 ? (
-                      <ClientAdministrationClientAgentsList
-                        agents={allAgents}
-                        clientAccessPackages={clientAccessPackages ?? []}
-                        client={selectedClient}
-                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                        fromPartyUuid={fromPartyUuid}
-                        actingPartyUuid={actingPartyUuid}
-                        addAgentAccessPackages={addAgentAccessPackages}
-                        removeAgentAccessPackages={removeAgentAccessPackages}
-                      />
-                    ) : (
-                      <DsParagraph>{t('client_administration_page.no_agents')}</DsParagraph>
-                    )
+                    <ClientAdministrationClientAgentsList
+                      agents={allAgents}
+                      clientAccessPackages={clientAccessPackages ?? []}
+                      client={selectedClient}
+                      isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                      fromPartyUuid={fromPartyUuid}
+                      actingPartyUuid={actingPartyUuid}
+                      addAgentAccessPackages={addAgentAccessPackages}
+                      removeAgentAccessPackages={removeAgentAccessPackages}
+                      emptyText={t('client_administration_page.no_agents')}
+                      onUserAdded={() => setActiveTab('all-users')}
+                    />
                   ) : (
                     <DsParagraph>
                       {t('client_administration_page.no_access_to_delegate', {
