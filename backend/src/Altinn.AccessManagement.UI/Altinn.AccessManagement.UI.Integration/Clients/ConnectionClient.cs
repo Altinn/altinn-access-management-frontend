@@ -91,9 +91,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<Connection>> GetConnections(Guid party, Guid? from, Guid? to)
+        public async Task<List<Connection>> GetConnections(Guid party, Guid? from, Guid? to, bool includeClientDelegations = false)
         {
             var endpointBuilder = new System.Text.StringBuilder($"enduser/connections?party={party}&from={from?.ToString() ?? string.Empty}&to={to?.ToString() ?? string.Empty}");
+            endpointBuilder.Append($"&includeClientDelegations={includeClientDelegations.ToString().ToLowerInvariant()}");
 
             string endpointUrl = endpointBuilder.ToString();
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);

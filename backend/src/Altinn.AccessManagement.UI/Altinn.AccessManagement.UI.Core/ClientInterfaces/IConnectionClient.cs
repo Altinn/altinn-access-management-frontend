@@ -33,7 +33,8 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The GUID identifying the party for which to retrieve connections.</param>
         /// <param name="from">The GUID identifying the party from which to retrieve connections.</param>
         /// <param name="to">The GUID identifying the party to which to retrieve connections.</param>
+        /// <param name="includeClientDelegations">Whether to include client delegations in the response.</param>
         /// <returns> A list of <see cref="Connection"/> objects representing the connections between the given parties.</returns>
-        Task<List<Connection>> GetConnections(Guid party, Guid? from, Guid? to);
+        Task<List<Connection>> GetConnections(Guid party, Guid? from, Guid? to, bool includeClientDelegations = false);
     }
 }

@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsSearch } from '@altinn/altinn-components';
+import { DsSearch, DsSwitch } from '@altinn/altinn-components';
 
 import { debounce } from '@/resources/utils';
 import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
@@ -13,12 +13,14 @@ import classes from './ReporteePage.module.css';
 export const ReporteesList = () => {
   const { t } = useTranslation();
   const { toParty, isLoading: loadingPartyRepresentation, actingParty } = usePartyRepresentation();
+  const [includeClientDelegations, setIncludeClientDelegations] = useState(false);
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
     {
       partyUuid: actingParty?.partyUuid ?? '',
       fromUuid: '', // all
       toUuid: toParty?.partyUuid ?? '',
+      includeClientDelegations,
     },
     {
       skip: !toParty?.partyUuid || !actingParty?.partyUuid,
@@ -56,6 +58,13 @@ export const ReporteesList = () => {
             }}
           />
         </DsSearch>
+        <div className={classes.searchControls}>
+          <DsSwitch
+            checked={includeClientDelegations}
+            onChange={(event) => setIncludeClientDelegations(event.target.checked)}
+            label={t('users_page.show_users_with_client_access')}
+          />
+        </div>
       </div>
       <UserList
         connections={filterRightHolders || []}

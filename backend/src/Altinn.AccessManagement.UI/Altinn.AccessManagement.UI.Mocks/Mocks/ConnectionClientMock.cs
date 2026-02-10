@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc/>
-        public Task<List<Connection>> GetConnections(Guid party, Guid? from, Guid? to)
+        public Task<List<Connection>> GetConnections(Guid party, Guid? from, Guid? to, bool includeClientDelegations = false)
         {
             if (party == Guid.Empty)
             {

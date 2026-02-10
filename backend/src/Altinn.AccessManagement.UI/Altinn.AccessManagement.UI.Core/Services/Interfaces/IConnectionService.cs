@@ -47,7 +47,8 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">The uuid of the reportee party</param>
         /// <param name="from">The uuid of the party from which to get right holders</param>
         /// <param name="to">The uuid of the party to which to get right holders</param>
+        /// <param name="includeClientDelegations">Whether to include client delegations in the response.</param>
         /// <returns> A list of RightHolderInfo </returns>
-        Task<List<Connection>> GetConnections(Guid party, Guid? from, Guid? to);
+        Task<List<Connection>> GetConnections(Guid party, Guid? from, Guid? to, bool includeClientDelegations = false);
     }
 }

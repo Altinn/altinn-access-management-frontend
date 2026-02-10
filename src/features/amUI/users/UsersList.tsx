@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import { DsHeading, DsParagraph, DsSearch } from '@altinn/altinn-components';
+import { DsHeading, DsParagraph, DsSearch, DsSwitch } from '@altinn/altinn-components';
 
 import type { User } from '@/rtk/features/userInfoApi';
 import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
@@ -28,12 +28,14 @@ export const UsersList = () => {
   const shouldDisplayPrivDelegation = displayPrivDelegation();
   const navigate = useNavigate();
   const { data: isAdmin } = useGetIsAdminQuery();
+  const [includeClientDelegations, setIncludeClientDelegations] = useState(false);
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
       fromUuid: fromParty?.partyUuid ?? '',
       toUuid: '', // all
+      includeClientDelegations,
     },
     {
       skip: !fromParty?.partyUuid || !isAdmin,
@@ -161,7 +163,14 @@ export const UsersList = () => {
                 }}
               />
             </DsSearch>
-            {isAdmin && <NewUserButton onComplete={handleNewUser} />}
+            <div className={classes.searchControls}>
+              <DsSwitch
+                checked={includeClientDelegations}
+                onChange={(event) => setIncludeClientDelegations(event.target.checked)}
+                label={t('users_page.show_users_with_client_access')}
+              />
+              {isAdmin && <NewUserButton onComplete={handleNewUser} />}
+            </div>
           </div>
           <UserList
             connections={connectionsWithRoles}
