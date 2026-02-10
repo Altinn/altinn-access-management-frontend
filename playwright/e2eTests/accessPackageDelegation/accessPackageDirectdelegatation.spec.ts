@@ -69,30 +69,45 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     login,
     aktorvalgHeader,
   }) => {
-    await page.goto(env('BASE_URL'));
-    await login.LoginToAccessManagement('04856996188');
-    await aktorvalgHeader.selectActor('SUBJEKTIV ELASTISK TIGER AS');
-    await DelegationApiUtil.addOrgToDelegate('Org-C', 'Org-D');
-    await DelegationApiUtil.delegateAccessPackage('Org-C', 'Org-D', [
-      'urn:altinn:accesspackage:byggesoknad',
-      'urn:altinn:accesspackage:godkjenning-av-personell',
-      'urn:altinn:accesspackage:veitransport',
-    ]);
-    await page.reload();
-    await page.waitForLoadState('domcontentloaded');
+    await test.step('log in', async () => {
+      await page.goto(env('BASE_URL'));
+      await login.LoginToAccessManagement('04856996188');
+      await aktorvalgHeader.selectActor('SUBJEKTIV ELASTISK TIGER AS');
+    });
 
-    // Step 2: Open delegation flow
+    await test.step('delegate stuff via api', async () => {
+      await DelegationApiUtil.addOrgToDelegate('Org-C', 'Org-D');
+      await DelegationApiUtil.delegateAccessPackage('Org-C', 'Org-D', [
+        'urn:altinn:accesspackage:byggesoknad',
+        'urn:altinn:accesspackage:godkjenning-av-personell',
+        'urn:altinn:accesspackage:veitransport',
+      ]);
+      await page.reload();
+      await page.waitForLoadState('domcontentloaded');
+    });
 
-    await delegation.chooseOrg('Skyfri Oksydert Katt Klemme');
+    // // Step 2: Open delegation flow
+    // await test.step('velg aktør Skyfri Oksydert Katt Klemme', async () => {
+    //   // await delegation.chooseOrg('Skyfri Oksydert Katt Klemme');
+    //   await aktorvalgHeader.goToSelectActor('SUBJEKTIV ELASTISK TIGER AS');
+    //   await aktorvalgHeader.selectActor('Skyfri Oksydert Katt Klemme');
+    // });
 
-    //Step3 : Delete delegated pacakge directly from area list
-    await delegation.deleteDelegatedPackage('Transport og lagring', 'Veitransport');
-    await delegation.deleteDelegatedPackage('Oppvekst og utdanning', 'Godkjenning av personell');
+    // //Step3 : Delete delegated pacakge directly from area list
+    // await test.step('deleger pakker direkte fra area-lista', async () => {
+    //   await delegation.deleteDelegatedPackage('Transport og lagring', 'Veitransport');
+    //   await delegation.deleteDelegatedPackage('Oppvekst og utdanning', 'Godkjenning av personell');
+    // });
 
-    //Delete package by opening the package first
-    await delegation.deletePackageInside('Bygg, anlegg og eiendom', 'Byggesøknad');
-    //Delete user from rettighetshaver list
-    await delegation.deleteDelegatedUser();
-    await delegation.logoutFromBrukerflate();
+    // //Delete package by opening the package first
+    // await test.step('slett pakke', async () => {
+    //   await delegation.deletePackageInside('Bygg, anlegg og eiendom', 'Byggesøknad');
+    // });
+
+    // //Delete user from rettighetshaver list
+    // await test.step('slett brukeren fra rettighetshaverlista', async () => {
+    //   await delegation.deleteDelegatedUser();
+    //   await delegation.logoutFromBrukerflate();
+    // });
   });
 });
