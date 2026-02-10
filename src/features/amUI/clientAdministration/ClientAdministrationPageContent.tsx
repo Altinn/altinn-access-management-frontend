@@ -51,13 +51,16 @@ export const ClientAdministrationPageContent = () => {
       <>
         <DsHeading data-size='md'>
           <DsSkeleton variant='text'>
-            <span style={{ width: '30%' }}>&nbsp;</span>
+            <DsSkeleton
+              variant='text'
+              width={80}
+            />
           </DsSkeleton>
         </DsHeading>
-        <DsParagraph data-size='lg'>
+        <DsParagraph data-size='md'>
           <DsSkeleton
             variant='text'
-            width={40}
+            width={240}
           />
         </DsParagraph>
       </>

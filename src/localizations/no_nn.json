@@ -602,7 +602,7 @@
     "rettighetshaver": "Andre klientforhold",
     "error_loading_clients": "Kunne ikkje laste klientar.",
     "error_loading_agents": "Kunne ikkje laste brukarar.",
-    "no_agents": "Ingen brukarar har fått klienttilgangar enno. Legg til ein ny brukar for å komme i gang.",
+    "no_agents": "Ingen brukarar har fått klienttilgangar enno. Legg til ein ny brukar for å kome i gang.",
     "client_search_placeholder": "Søk etter klient"
   },
   "systemuser_creationpage": {
