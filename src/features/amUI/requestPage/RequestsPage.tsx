@@ -165,7 +165,7 @@ const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
               />
             )}
             controls={
-              <div className={classes.requestItemBadge}> {t('request_page.process_request')}</div>
+              <div className={classes.requestItemBadge}>{t('request_page.process_request')}</div>
             }
           />
         );
