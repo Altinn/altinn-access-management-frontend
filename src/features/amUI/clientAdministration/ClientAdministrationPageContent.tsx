@@ -1,10 +1,17 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Navigate, useSearchParams } from 'react-router';
-import { DsAlert, DsHeading, DsParagraph, DsSkeleton, DsTabs } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsSkeleton,
+  DsTabs,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
-import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ClientAdministrationAgentsTab } from './ClientAdministrationAgentsTab';
 import { ClientAdministrationClientsTab } from './ClientAdministrationClientsTab';
@@ -16,6 +23,7 @@ export const ClientAdministrationPageContent = () => {
   const { t } = useTranslation();
   const pageIsEnabled = clientAdministrationPageEnabled();
   const { actingParty } = usePartyRepresentation();
+
   const unitType = isSubUnitByType(actingParty?.variant)
     ? t('common.subunit_lowercase')
     : t('common.mainunit_lowercase');
@@ -43,7 +51,7 @@ export const ClientAdministrationPageContent = () => {
       <>
         <DsHeading data-size='md'>
           <DsSkeleton variant='text'>
-            {t('client_administration_page.page_heading', { actingparty: '' })}
+            <span style={{ width: '30%' }}>&nbsp;</span>
           </DsSkeleton>
         </DsHeading>
         <DsParagraph data-size='lg'>
@@ -61,6 +69,7 @@ export const ClientAdministrationPageContent = () => {
       <DsAlert data-color='warning'>{t('client_administration_page.no_access_title')}</DsAlert>
     );
   }
+
   return (
     <>
       <div className={classes.headerSection}>
@@ -68,14 +77,19 @@ export const ClientAdministrationPageContent = () => {
           <DsHeading data-size='sm'>
             <Trans
               i18nKey='client_administration_page.page_heading'
-              values={{ actingparty: actingParty?.name ?? '' }}
+              values={{
+                name: formatDisplayName({
+                  fullName: actingParty?.name ?? '',
+                  type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+                }),
+              }}
             />
           </DsHeading>
           <DsParagraph data-size='md'>
             <Trans
               i18nKey='client_administration_page.page_description'
               values={{
-                'actingparty.organisationidentifier': actingParty?.orgNumber ?? '',
+                organisationidentifier: actingParty?.orgNumber ?? '',
                 unitType,
               }}
             />
