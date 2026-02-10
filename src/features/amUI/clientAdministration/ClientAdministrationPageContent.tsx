@@ -123,7 +123,9 @@ export const ClientAdministrationPageContent = () => {
         <DsTabs.Panel value='users'>
           <ClientAdministrationAgentsTab />
         </DsTabs.Panel>
-        <DsTabs.Panel value='clients'>{<ClientAdministrationClientsTab />}</DsTabs.Panel>
+        <DsTabs.Panel value='clients'>
+          <ClientAdministrationClientsTab />
+        </DsTabs.Panel>
       </DsTabs>
     </>
   );
