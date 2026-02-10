@@ -62,7 +62,7 @@ export const SystemUserRequestPage = () => {
     { isError: isRejectCreationRequestError, isLoading: isRejectingSystemUser },
   ] = useRejectSystemUserRequestMutation();
 
-  const isEscalationPossible = request?.userMayEscalateButNotApprove;
+  const isEscalationPossible = request?.userMayEscalateButNotApprove && request?.status === 'New';
 
   const isActionButtonDisabled =
     isAcceptingSystemUser || isRejectingSystemUser || request?.status !== 'New';
