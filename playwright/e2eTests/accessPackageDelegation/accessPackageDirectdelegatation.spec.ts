@@ -1,3 +1,4 @@
+import { env } from 'playwright/util/helper';
 import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 import { withTimeout } from 'playwright/util/asyncUtils';
@@ -18,9 +19,18 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     }
   });
 
-  test('Org-A delegates access package to Org-B', async ({ delegation, login }) => {
-    await login.loginWithUserInA3('04856996188');
-    await login.chooseAktøriA3('SUBJEKTIV ELASTISK TIGER AS');
+  test('Org-A delegates access package to Org-B', async ({
+    page,
+    delegation,
+    login,
+    aktorvalgHeader,
+    accessManagementFrontPage,
+  }) => {
+    await page.goto(env('BASE_URL'));
+    await login.LoginToAccessManagement('04856996188');
+    await aktorvalgHeader.selectActor('SUBJEKTIV ELASTISK TIGER AS');
+    await accessManagementFrontPage.goToUsers();
+
     // Step 3: Add new user
     await delegation.addUser();
 
@@ -53,9 +63,15 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await delegation.logoutFromBrukerflate();
   });
 
-  test('Org-C revokes all delegated rights from Org-D', async ({ delegation, page, login }) => {
-    await login.loginWithUserInA3('22875997754');
-    await login.chooseAktøriA3('DRIFTIG LOGISK TIGER AS');
+  test('Org-C revokes all delegated rights from Org-D', async ({
+    delegation,
+    page,
+    login,
+    aktorvalgHeader,
+  }) => {
+    await page.goto(env('BASE_URL'));
+    await login.LoginToAccessManagement('04856996188');
+    await aktorvalgHeader.selectActor('SUBJEKTIV ELASTISK TIGER AS');
     await DelegationApiUtil.addOrgToDelegate('Org-C', 'Org-D');
     await DelegationApiUtil.delegateAccessPackage('Org-C', 'Org-D', [
       'urn:altinn:accesspackage:byggesoknad',
