@@ -42,7 +42,7 @@
   background-color: var(--ds-color-background-default);
 }
 
-.listItemContainer.menuList > li:not(:last-child):after {
+.listItemContainer.menuList > li:not(:last-child)::after {
   content: '';
   position: absolute;
   bottom: calc(var(--row-gap) * -0.5 - var(--separator-height));
