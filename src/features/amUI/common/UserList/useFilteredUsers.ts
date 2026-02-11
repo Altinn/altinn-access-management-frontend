@@ -84,40 +84,17 @@ const filterUsers = (users: ExtendedUser[], searchString: string): ExtendedUser[
     .filter((user) => user !== null) as ExtendedUser[];
 };
 
-const parseAddedAtMs = (addedAt: string | undefined): number => {
-  const parsed = Date.parse(addedAt ?? '');
-  return Number.isNaN(parsed) ? 0 : parsed;
-};
-
-const compareByNewUserRecency = (a: ExtendedUser | User, b: ExtendedUser | User): number => {
-  const aIsNewUser = isNewUser(a.addedAt);
-  const bIsNewUser = isNewUser(b.addedAt);
-
-  if (aIsNewUser !== bIsNewUser) {
-    return aIsNewUser ? -1 : 1;
-  }
-
-  if (!aIsNewUser) {
-    return 0;
-  }
-
-  return parseAddedAtMs(b.addedAt) - parseAddedAtMs(a.addedAt);
-};
-
 const sortUsers = (users: (ExtendedUser | User)[]): (ExtendedUser | User)[] => {
   const processedUsers = users.map((user) => {
     const userCopy = { ...user };
     if (Array.isArray(userCopy.children) && userCopy.children.length > 0) {
       userCopy.children = sortUsers(userCopy.children);
     }
+    const newUser = isNewUser(userCopy.addedAt);
+    userCopy.sortKey = `${newUser ? '0' : '1'}:${userCopy.name}`;
     return userCopy;
   });
   return processedUsers.sort((a, b) => {
-    const byNewUserRecency = compareByNewUserRecency(a, b);
-    if (byNewUserRecency !== 0) {
-      return byNewUserRecency;
-    }
-
     if (a.type?.toLowerCase() === 'organisasjon' && b.type?.toLowerCase() !== 'organisasjon')
       return -1;
     if (b.type?.toLowerCase() === 'organisasjon' && a.type?.toLowerCase() !== 'organisasjon')
