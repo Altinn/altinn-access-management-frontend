@@ -12,6 +12,7 @@ import {
   KeyVerticalIcon,
   ExternalLinkIcon,
   DatabaseIcon,
+  PersonCircleIcon,
 } from '@navikt/aksel-icons';
 import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
@@ -43,6 +44,25 @@ export const getHeadingMenuItem = (pathname?: string, isLoading = false): MenuIt
     title: t('sidebar.access_management'),
     selected: pathname === '/',
     as: (props) => getMenuLinkAs(props, '/'),
+  };
+};
+
+export const getYourRightsMenuItem = (
+  userUuid: string,
+  pathname?: string,
+  isLoading = false,
+  isSmall = false,
+): MenuItemProps => {
+  return {
+    groupId: 12,
+    id: '2.0',
+    size: 'md',
+    loading: isLoading,
+    title: t('sidebar.your_rights'),
+    selected: pathname?.includes(`/${amUIPath.Users}/${userUuid}`),
+    icon: { svgElement: PersonCircleIcon, theme: isSmall ? 'surface' : 'default' },
+    as: (props) =>
+      getMenuLinkAs(props, `/${amUIPath.Users}/${userUuid}?returnTo=${pathname ?? ''}`),
   };
 };
 
