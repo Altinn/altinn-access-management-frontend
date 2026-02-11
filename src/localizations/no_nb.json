@@ -561,7 +561,7 @@
     "no_access_title": "Du har ikke tilgang til klientadministrasjon",
     "page_heading": "Klientadministrasjon for {{name}}",
     "page_description": "org.nr. {{organisationidentifier}} ({{unitType}})",
-    "forwarding_accesses_info": "Nyhet! Du kan nå gi videre fullmakter som din virksomhet har mottatt fra en andre. Disse kan kun gis til privatpersoner. Les mer om dette på <a href='https://info.altinn.no/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
+    "forwarding_accesses_info": "Nyhet! Du kan nå gi videre fullmakter som din virksomhet har mottatt fra andre. Disse kan kun gis til privatpersoner. Les mer om dette på <a href='https://info.altinn.no/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
     "clients_tab_title": "Klienter",
     "agents_tab_title": "Brukere",
     "add_agent_button": "Legg til ny bruker",
