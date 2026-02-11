@@ -7,7 +7,7 @@ import classes from './PoaOverviewPage.module.css';
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
 import { Link } from 'react-router';
 
-export const AccessPackagePermissions = () => {
+export const GuardianshipPermissions = () => {
   const { t } = useTranslation();
 
   const [searchString, setSearchString] = useState('');
@@ -19,6 +19,7 @@ export const AccessPackagePermissions = () => {
     }, 300),
     [],
   );
+
   return (
     <>
       <search className={classes.searchInput}>
@@ -45,8 +46,9 @@ export const AccessPackagePermissions = () => {
         minimizeAvailablePackages={false}
         showAvailableToggle={false}
         showPermissions
-        showAllPackages
-        showAllAreas
+        showAllPackages={true}
+        showAllAreas={true}
+        showOnlyGuardianships
         showPackagesCount={false}
         packageAs={(props) => (
           <Link

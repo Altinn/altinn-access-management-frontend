@@ -5,18 +5,14 @@ import { DsHeading, Skeleton } from '@altinn/altinn-components';
 import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
-import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
-import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
-import { AccessPackageInfoAlert } from '../userRightsPage/AccessPackageSection/AccessPackageInfoAlert';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { isGuardianshipUrn } from '@/resources/utils/urnUtils';
+import { isGuardianshipUrn } from '@/resources/utils';
 
-export const ReporteeAccessPackageSection = () => {
+export const ReporteeGuardianshipSection = () => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
-  const { setActionError } = useDelegationModalContext();
 
   const { toParty, fromParty, actingParty, isLoading: isLoadingParty } = usePartyRepresentation();
 
@@ -38,49 +34,37 @@ export const ReporteeAccessPackageSection = () => {
   const numberOfAccesses = accesses
     ? Object.values(accesses)
         .flat()
-        .filter((item) => !isGuardianshipUrn(item.package.urn)).length
+        .filter((item) => isGuardianshipUrn(item.package.urn)).length
     : 0;
 
   return (
     <>
-      <AccessPackageInfoAlert />
       <Skeleton loading={isLoadingAccesses || isLoadingParty}>
         <DsHeading
           level={2}
           data-size='2xs'
-          id='access_packages_title'
         >
-          {t('access_packages.current_access_packages_title', {
+          {t('guardianships.current_guardianship_title', {
             count: numberOfAccesses ?? 0,
           })}
         </DsHeading>
       </Skeleton>
       <AccessPackageList
         isLoading={isLoadingAccesses || isLoadingParty}
-        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+        availableActions={[]}
         showAllPackages
         showPackagesCount
+        showOnlyGuardianships
         minimizeAvailablePackages
         onSelect={(accessPackage) => {
           setModalItem(accessPackage);
           modalRef.current?.showModal();
         }}
-        onDelegateError={(accessPackage, errorInfo) => {
-          setActionError(errorInfo);
-          setModalItem(accessPackage);
-          modalRef.current?.showModal();
-        }}
-        onRevokeError={(accessPackage, errorInfo) => {
-          setActionError(errorInfo);
-          setModalItem(accessPackage);
-          modalRef.current?.showModal();
-        }}
-        noPackagesText={t('access_packages.user_has_no_packages')}
       />
       <AccessPackageInfoModal
         modalRef={modalRef}
         modalItem={modalItem}
-        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+        availableActions={[]}
       />
     </>
   );

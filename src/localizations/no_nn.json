@@ -330,6 +330,14 @@
       "delegation_check_error_message_plural": "En teknisk feil sperrer deg fra å gi fullmakt til ein eller fleire tilgangspakkar. Ver venleg å kontakte Altinn brukarteneste om problemet held fram."
     }
   },
+  "guardianships": {
+    "current_guardianship_title": "{{count}} vergemål",
+    "search_label": "Søk etter vergemål",
+    "modal_info_title": "Vergemål",
+    "modal_info_description": "Oppnevnelsen av verge er henta frå Statsforvalteren. Ho kan ikkje slettast eller endrast her.",
+    "modal_info_info_1": "Ein verge kan bistå med å betale regningar, forvalte formue eller representere personar overfor offentlege myndigheiter.",
+    "modal_info_info_2": "For å sjå kva denne fullmakta gjeld, kan du gå til fanen for vergemål i oversikten."
+  },
   "role": {
     "provider_status": "Denne rolla er henta frå ",
     "current_roles_title": "{{count}} roller",
