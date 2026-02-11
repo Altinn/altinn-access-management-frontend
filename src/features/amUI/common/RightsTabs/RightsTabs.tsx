@@ -149,7 +149,7 @@ export const RightsTabs = ({
           <div className={classes.innerTabContent}>{roleAssignmentsPanel}</div>
         </DsTabs.Panel>
       )}
-      {guardianshipsPanel && (
+      {showGuardianshipsTab && (
         <DsTabs.Panel
           className={classes.tabContent}
           value='guardianships'
