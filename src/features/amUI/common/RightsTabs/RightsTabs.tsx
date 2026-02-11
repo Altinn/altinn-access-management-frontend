@@ -58,7 +58,7 @@ export const RightsTabs = ({
       const tab = hash.replace('#', '');
       if (tab === 'guardianships' && showGuardianshipsTab) {
         setChosenTab(tab);
-        navigate(''); // clear hash fragment from URL after navigating to correct tab
+        navigate('', { replace: true }); // clear hash fragment from URL after navigating to correct tab
       }
     }
   }, [hash]);
