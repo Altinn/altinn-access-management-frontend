@@ -32,8 +32,8 @@ export const GuardianshipPermissions = () => {
         <DsSearch data-size='sm'>
           <DsSearch.Input
             value={searchString}
-            aria-label={t('access_packages.search_label')}
-            placeholder={t('access_packages.search_label')}
+            aria-label={t('guardianships.search_label')}
+            placeholder={t('guardianships.search_label')}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setSearchString(event.target.value);
               debouncedSearch(event.target.value);
