@@ -117,9 +117,9 @@ export const ClientAdministrationClientAgentsList = ({
       }
 
       if (a.recent && b.recent) {
-        const byAddedAt =
-          (Date.parse(b.agent.agentAddedAt ?? '') ?? 0) -
-          (Date.parse(a.agent.agentAddedAt ?? '') ?? 0);
+        const bAddedAt = Date.parse(b.agent.agentAddedAt ?? '') || 0;
+        const aAddedAt = Date.parse(a.agent.agentAddedAt ?? '') || 0;
+        const byAddedAt = bAddedAt - aAddedAt;
         if (byAddedAt !== 0) {
           return byAddedAt;
         }
