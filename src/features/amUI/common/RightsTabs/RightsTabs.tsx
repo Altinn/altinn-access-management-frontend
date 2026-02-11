@@ -61,7 +61,7 @@ export const RightsTabs = ({
         navigate('', { replace: true }); // clear hash fragment from URL after navigating to correct tab
       }
     }
-  }, [hash]);
+  }, [hash, showGuardianshipsTab, navigate]);
 
   return (
     <DsTabs

@@ -1,6 +1,6 @@
 import { DsSearch } from '@altinn/altinn-components';
 import { debounce } from '@/resources/utils';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import classes from './PoaOverviewPage.module.css';
@@ -20,6 +20,12 @@ export const GuardianshipPermissions = () => {
     [],
   );
 
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
   return (
     <>
       <search className={classes.searchInput}>
@@ -35,6 +41,7 @@ export const GuardianshipPermissions = () => {
           />
           <DsSearch.Clear
             onClick={() => {
+              debouncedSearch.cancel();
               setSearchString('');
               debouncedSearch('');
             }}

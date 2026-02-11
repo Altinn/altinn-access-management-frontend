@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsSearch } from '@altinn/altinn-components';
 
-import { AccessPackage, useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
+import { type AccessPackage, useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './GuardianshipSection.module.css';

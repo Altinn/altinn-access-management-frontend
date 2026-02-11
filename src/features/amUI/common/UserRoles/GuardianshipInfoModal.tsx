@@ -1,15 +1,15 @@
-import { DsDialog, DsHeading, DsValidationMessage } from '@altinn/altinn-components';
+import { DsDialog, DsHeading, DsParagraph, DsValidationMessage } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
 
 import classes from './GuardianshipInfoModal.module.css';
 import { Link } from 'react-router';
 
-interface GuardianInfoModalProps {
+interface GuardianshipInfoModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-export const GuardianshipInfoModal = ({ open, onClose }: GuardianInfoModalProps) => {
+export const GuardianshipInfoModal = ({ open, onClose }: GuardianshipInfoModalProps) => {
   const { t } = useTranslation();
 
   return (
@@ -29,16 +29,8 @@ export const GuardianshipInfoModal = ({ open, onClose }: GuardianInfoModalProps)
         <DsValidationMessage data-color='info'>
           {t('guardianships.modal_info_description')}
         </DsValidationMessage>
-        <DsHeading
-          data-size='xs'
-          level={3}
-        >
-          {t('guardianships.modal_info_info_1')}
-        </DsHeading>
-        <DsHeading
-          data-size='xs'
-          level={3}
-        >
+        <DsParagraph>{t('guardianships.modal_info_info_1')}</DsParagraph>
+        <DsParagraph>
           <Trans
             i18nKey='guardianships.modal_info_info_2'
             components={{
@@ -50,7 +42,7 @@ export const GuardianshipInfoModal = ({ open, onClose }: GuardianInfoModalProps)
               ),
             }}
           />
-        </DsHeading>
+        </DsParagraph>
       </div>
     </DsDialog>
   );
