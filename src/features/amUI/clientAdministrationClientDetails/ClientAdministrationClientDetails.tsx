@@ -31,6 +31,7 @@ import { ClientAdministrationClientAgentsList } from './ClientAdministrationClie
 import { useClientAccessAgentLists } from './useClientAccessAgentLists';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
+import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 
 export const ClientAdministrationClientDetails = () => {
   const { t } = useTranslation();
@@ -173,6 +174,7 @@ export const ClientAdministrationClientDetails = () => {
                       removeAgentAccessPackages={removeAgentAccessPackages}
                       emptyText={t('client_administration_page.no_agents')}
                       onUserAdded={() => setActiveTab('all-users')}
+                      addUserButton={<AddAgentButton />}
                     />
                   ) : (
                     <DsParagraph>

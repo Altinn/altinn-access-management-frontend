@@ -20,11 +20,12 @@ export type UserListItemData = UserListItemProps & {
 interface UserListItemsProps {
   items: UserListItemData[];
   searchPlaceholder?: string;
+  addUserButton?: React.ReactNode;
 }
 
 const PAGE_SIZE = 10;
 
-export const UserListItems = ({ items, searchPlaceholder }: UserListItemsProps) => {
+export const UserListItems = ({ items, searchPlaceholder, addUserButton }: UserListItemsProps) => {
   const { t } = useTranslation();
   const [searchString, setSearchString] = useState<string>('');
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
@@ -89,6 +90,7 @@ export const UserListItems = ({ items, searchPlaceholder }: UserListItemsProps) 
             }}
           />
         </DsSearch>
+        {addUserButton && <div className={classes.addButton}>{addUserButton}</div>}
       </div>
       <List>
         {paginatedItems.map(({ children, ...item }) => {

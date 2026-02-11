@@ -19,7 +19,6 @@ import type {
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
-import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 
 import { AccessPackageListItems } from '../clientAdministrationAgentDetails/AccessPackageListItems';
 import {
@@ -38,7 +37,7 @@ type ClientAdministrationClientAgentsListProps = {
   addAgentAccessPackages: AddAgentAccessPackagesFn;
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
   emptyText?: string;
-  onUserAdded?: () => void;
+  addUserButton?: React.ReactNode;
 };
 
 const RECENT_AGENT_TIME = 5 * 60 * 1000;
@@ -68,7 +67,7 @@ export const ClientAdministrationClientAgentsList = ({
   addAgentAccessPackages,
   removeAgentAccessPackages,
   emptyText,
-  onUserAdded,
+  addUserButton,
 }: ClientAdministrationClientAgentsListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
@@ -242,17 +241,11 @@ export const ClientAdministrationClientAgentsList = ({
         <UserListItems
           items={userListItems}
           searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+          addAgentButton={addAgentButton}
         />
       ) : (
         <DsParagraph>{emptyText ?? t('client_administration_page.no_agents')}</DsParagraph>
       )}
-      <div style={{ marginTop: '1rem' }}>
-        <AddAgentButton
-          onComplete={() => {
-            onUserAdded?.();
-          }}
-        />
-      </div>
     </div>
   );
 };
