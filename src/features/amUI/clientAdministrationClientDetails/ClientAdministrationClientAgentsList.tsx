@@ -19,6 +19,7 @@ import type {
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
+import { isNewUser } from '../common/isNewUser';
 
 import { AccessPackageListItems } from '../clientAdministrationAgentDetails/AccessPackageListItems';
 import {
@@ -40,22 +41,12 @@ type ClientAdministrationClientAgentsListProps = {
   addUserButton?: React.ReactNode;
 };
 
-const RECENT_AGENT_TIME = 5 * 60 * 1000;
-
 const getUserListItemType = (agentType: string): UserListItemProps['type'] => {
   return agentType.toLowerCase() === 'person' ? 'person' : 'company';
 };
 
-const isRecentAgent = (agentAddedAt: string | undefined): boolean => {
-  const parsed = Date.parse(agentAddedAt ?? '');
-  if (Number.isNaN(parsed)) {
-    return false;
-  }
-
-  const nowMs = Date.now();
-
-  return nowMs - parsed <= RECENT_AGENT_TIME;
-};
+const getAgentSortKey = (agent: Agent): string =>
+  `${isNewUser(agent.agentAddedAt) ? '0' : '1'}:${agent.agent.name.toLowerCase()}`;
 
 export const ClientAdministrationClientAgentsList = ({
   agents,
@@ -102,42 +93,15 @@ export const ClientAdministrationClientAgentsList = ({
     return map;
   }, [clientAccessPackages]);
 
-  const { sortedAgents, recentAgentIds } = useMemo(() => {
-    const decoratedAgents = agents.map((agent) => {
-      return {
-        agent,
-        recent: isRecentAgent(agent.agentAddedAt),
-      };
+  const sortedAgents = useMemo(() => {
+    return [...agents].sort((a, b) => {
+      return getAgentSortKey(a).localeCompare(getAgentSortKey(b));
     });
-
-    decoratedAgents.sort((a, b) => {
-      if (a.recent !== b.recent) {
-        return a.recent ? -1 : 1;
-      }
-
-      if (a.recent && b.recent) {
-        const bAddedAt = Date.parse(b.agent.agentAddedAt ?? '') || 0;
-        const aAddedAt = Date.parse(a.agent.agentAddedAt ?? '') || 0;
-        const byAddedAt = bAddedAt - aAddedAt;
-        if (byAddedAt !== 0) {
-          return byAddedAt;
-        }
-      }
-
-      return a.agent.agent.name.localeCompare(b.agent.agent.name);
-    });
-
-    return {
-      sortedAgents: decoratedAgents.map(({ agent }) => agent),
-      recentAgentIds: new Set(
-        decoratedAgents.filter(({ recent }) => recent).map(({ agent }) => agent.agent.id),
-      ),
-    };
   }, [agents]);
 
   const userListItems: UserListItemData[] = sortedAgents.map((agent) => {
     const agentId = agent.agent.id;
-    const isRecentlyAdded = recentAgentIds.has(agentId);
+    const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.variant);
     const userType = getUserListItemType(agent.agent.type);
 
@@ -241,7 +205,7 @@ export const ClientAdministrationClientAgentsList = ({
         <UserListItems
           items={userListItems}
           searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
-          addAgentButton={addAgentButton}
+          addUserButton={addUserButton}
         />
       ) : (
         <DsParagraph>{emptyText ?? t('client_administration_page.no_agents')}</DsParagraph>

@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from 'react';
 
 import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
 import { Connection } from '@/rtk/features/connectionApi';
+import { isNewUser } from '../isNewUser';
 
 const PAGE_SIZE = 10;
 
@@ -17,11 +18,12 @@ const mapToExtendedUsers = (connections: Connection[]): ExtendedUser[] => {
       ? mapToExtendedUsers(connection.connections)
       : (connection.party.children ?? []);
 
+    const newUser = isNewUser(connection.party.addedAt);
     return {
       ...connection.party,
       roles: connection.roles,
       children,
-      sortKey: connection.sortKey,
+      sortKey: `${newUser ? '0' : '1'}:${connection.sortKey}`,
     };
   });
 };
@@ -82,6 +84,26 @@ const filterUsers = (users: ExtendedUser[], searchString: string): ExtendedUser[
     .filter((user) => user !== null) as ExtendedUser[];
 };
 
+const parseAddedAtMs = (addedAt: string | undefined): number => {
+  const parsed = Date.parse(addedAt ?? '');
+  return Number.isNaN(parsed) ? 0 : parsed;
+};
+
+const compareByNewUserRecency = (a: ExtendedUser | User, b: ExtendedUser | User): number => {
+  const aIsNewUser = isNewUser(a.addedAt);
+  const bIsNewUser = isNewUser(b.addedAt);
+
+  if (aIsNewUser !== bIsNewUser) {
+    return aIsNewUser ? -1 : 1;
+  }
+
+  if (!aIsNewUser) {
+    return 0;
+  }
+
+  return parseAddedAtMs(b.addedAt) - parseAddedAtMs(a.addedAt);
+};
+
 const sortUsers = (users: (ExtendedUser | User)[]): (ExtendedUser | User)[] => {
   const processedUsers = users.map((user) => {
     const userCopy = { ...user };
@@ -91,6 +113,11 @@ const sortUsers = (users: (ExtendedUser | User)[]): (ExtendedUser | User)[] => {
     return userCopy;
   });
   return processedUsers.sort((a, b) => {
+    const byNewUserRecency = compareByNewUserRecency(a, b);
+    if (byNewUserRecency !== 0) {
+      return byNewUserRecency;
+    }
+
     if (a.type?.toLowerCase() === 'organisasjon' && b.type?.toLowerCase() !== 'organisasjon')
       return -1;
     if (b.type?.toLowerCase() === 'organisasjon' && a.type?.toLowerCase() !== 'organisasjon')

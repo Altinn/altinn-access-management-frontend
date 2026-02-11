@@ -211,6 +211,64 @@ describe('useFilteredUsers', () => {
     expect(result.current.users.at(-1)?.type).toBe('Person');
   });
 
+  it('prioritizes new users and sorts newest first', () => {
+    const now = Date.now();
+    const connections: Connection[] = [
+      {
+        party: {
+          id: 'old-org',
+          name: 'Old Org',
+          type: 'Organisasjon',
+          variant: 'AS',
+          children: null,
+          partyId: '1',
+          organizationIdentifier: '100000001',
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+      },
+      {
+        party: {
+          id: 'newer-person',
+          name: 'Newer Person',
+          type: 'Person',
+          variant: 'Person',
+          children: null,
+          partyId: '2',
+          dateOfBirth: '1980-01-01',
+          addedAt: new Date(now - 2 * 60 * 1000).toISOString(),
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+      },
+      {
+        party: {
+          id: 'older-new-org',
+          name: 'Older New Org',
+          type: 'Organisasjon',
+          variant: 'AS',
+          children: null,
+          partyId: '3',
+          organizationIdentifier: '100000003',
+          addedAt: new Date(now - 4 * 60 * 1000).toISOString(),
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+      },
+    ];
+
+    const { result } = renderHook(() => useFilteredUsers({ connections, searchString: '' }));
+
+    expect(result.current.users.map((user) => user.name)).toEqual([
+      'Newer Person',
+      'Older New Org',
+      'Old Org',
+    ]);
+  });
+
   it('should keep all children when parent matches search string', () => {
     const { result } = renderHook(() =>
       useFilteredUsers({ connections: mockConnections, searchString: 'Lorem' }),
