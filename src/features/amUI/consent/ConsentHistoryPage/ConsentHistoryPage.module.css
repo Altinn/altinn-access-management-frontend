@@ -14,11 +14,6 @@
   max-width: 50rem;
 }
 
-.timelineTitle {
-  font-weight: 500;
-  font-size: 1.125rem;
-}
-
 .timelineContent {
   display: flex;
   flex-direction: column;

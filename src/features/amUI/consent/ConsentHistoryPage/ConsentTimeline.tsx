@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
+  DsHeading,
   DsParagraph,
   DsSearch,
   Timeline,
@@ -67,12 +68,12 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
             >
               <TimelineActivity byline={item.bylineText}>
                 <div className={classes.timelineContent}>
-                  <DsParagraph
-                    data-size='md'
-                    className={classes.timelineTitle}
+                  <DsHeading
+                    level={3}
+                    data-size='2xs'
                   >
                     {item.timelineText}
-                  </DsParagraph>
+                  </DsHeading>
                   {item.validToText && <DsParagraph data-size='xs'>{item.validToText}</DsParagraph>}
                   <span>
                     <Button
