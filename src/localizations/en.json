@@ -383,7 +383,8 @@
   "reportees_page": {
     "page_title": "Powers of attorney from others - Altinn",
     "main_page_heading": "Authorizations {{name}} has with others",
-    "not_admin_alert": "You do not have access to this page for {{name}}. Please switch to a different page or change to a reportee you have sufficient rights for."
+    "not_admin_alert": "You do not have access to this page for {{name}}. Please switch to a different page or change to a reportee you have sufficient rights for.",
+    "show_clients_toggle": "Show clients"
   },
   "user_rights_page": {
     "page_title": "User access - Altinn",

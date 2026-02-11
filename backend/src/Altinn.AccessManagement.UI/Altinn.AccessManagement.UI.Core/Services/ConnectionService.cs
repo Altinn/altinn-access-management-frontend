@@ -122,11 +122,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<Connection>> GetConnections(Guid partyUuid, Guid? from, Guid? to, bool includeClientDelegations = false)
+        public async Task<List<Connection>> GetConnections(
+            Guid partyUuid,
+            Guid? from,
+            Guid? to,
+            bool includeClientDelegations = true,
+            bool includeAgentConnections = true)
         {
             try
             {
-                return await _connectionClient.GetConnections(partyUuid, from, to, includeClientDelegations);
+                return await _connectionClient.GetConnections(
+                    partyUuid,
+                    from,
+                    to,
+                    includeClientDelegations,
+                    includeAgentConnections);
             }
             catch (Exception ex)
             {

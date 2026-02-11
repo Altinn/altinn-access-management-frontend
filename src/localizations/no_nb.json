@@ -380,7 +380,8 @@
   "reportees_page": {
     "page_title": "Fullmakter hos andre - Altinn",
     "main_page_heading": "Fullmakter {{name}} har hos andre",
-    "not_admin_alert": "Du har ikke tilgang til å se denne siden hos {{name}}. Vennligst bytt side eller velg en annen aktør."
+    "not_admin_alert": "Du har ikke tilgang til å se denne siden hos {{name}}. Vennligst bytt side eller velg en annen aktør.",
+    "show_clients_toggle": "Vis klienter"
   },
   "user_rights_page": {
     "page_title": "Brukertilganger - Altinn",

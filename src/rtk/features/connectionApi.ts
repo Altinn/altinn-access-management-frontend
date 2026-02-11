@@ -73,10 +73,17 @@ export const connectionApi = createApi({
         fromUuid?: string;
         toUuid?: string;
         includeClientDelegations?: boolean;
+        includeAgentConnections?: boolean;
       }
     >({
-      query: ({ partyUuid, fromUuid, toUuid, includeClientDelegations = false }) =>
-        `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}&includeClientDelegations=${includeClientDelegations}`,
+      query: ({
+        partyUuid,
+        fromUuid,
+        toUuid,
+        includeClientDelegations = true,
+        includeAgentConnections = true,
+      }) =>
+        `rightholders?party=${partyUuid}&from=${fromUuid}&to=${toUuid}&includeClientDelegations=${includeClientDelegations}&includeAgentConnections=${includeAgentConnections}`,
       keepUnusedDataFor: 3,
       providesTags: ['Connections'],
       transformErrorResponse: (response: {

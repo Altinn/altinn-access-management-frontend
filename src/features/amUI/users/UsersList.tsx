@@ -28,14 +28,14 @@ export const UsersList = () => {
   const shouldDisplayPrivDelegation = displayPrivDelegation();
   const navigate = useNavigate();
   const { data: isAdmin } = useGetIsAdminQuery();
-  const [includeClientDelegations, setIncludeClientDelegations] = useState(false);
+  const [includeAgentConnections, setIncludeAgentConnections] = useState(false);
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
       fromUuid: fromParty?.partyUuid ?? '',
       toUuid: '', // all
-      includeClientDelegations,
+      includeAgentConnections,
     },
     {
       skip: !fromParty?.partyUuid || !isAdmin,
@@ -134,42 +134,46 @@ export const UsersList = () => {
               )
             }
           />
-          {isAdmin && (
-            <DsHeading
-              level={2}
-              data-size='sm'
-              id='user_list_heading_id'
-              className={classes.usersListHeading}
-            >
-              {t('users_page.user_list_heading')}
-            </DsHeading>
-          )}
         </>
       )}
       {isAdmin ? (
         <>
           <div className={classes.searchAndAddUser}>
-            <DsSearch className={classes.searchBar}>
-              <DsSearch.Input
-                aria-label={t('users_page.user_search_placeholder')}
-                placeholder={t('users_page.user_search_placeholder')}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  onSearch(event.target.value)
-                }
-              />
-              <DsSearch.Clear
-                onClick={() => {
-                  setSearchString('');
-                }}
-              />
-            </DsSearch>
-            <div className={classes.searchControls}>
+            <div className={classes.filtersContainer}>
+              <DsSearch
+                className={classes.searchBar}
+                data-size='sm'
+              >
+                <DsSearch.Input
+                  aria-label={t('users_page.user_search_placeholder')}
+                  placeholder={t('users_page.user_search_placeholder')}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                    onSearch(event.target.value)
+                  }
+                />
+                <DsSearch.Clear
+                  onClick={() => {
+                    setSearchString('');
+                  }}
+                />
+              </DsSearch>
               <DsSwitch
-                checked={includeClientDelegations}
-                onChange={(event) => setIncludeClientDelegations(event.target.checked)}
+                data-size={'sm'}
+                checked={includeAgentConnections}
+                onChange={(event) => setIncludeAgentConnections(event.target.checked)}
                 label={t('users_page.show_users_with_client_access')}
               />
-              {isAdmin && <NewUserButton onComplete={handleNewUser} />}
+            </div>
+            <div className={classes.addUserContainer}>
+              <DsHeading
+                level={2}
+                data-size='sm'
+                id='user_list_heading_id'
+                className={classes.usersListHeading}
+              >
+                {t('users_page.user_list_heading')}
+              </DsHeading>
+              <NewUserButton onComplete={handleNewUser} />
             </div>
           </div>
           <UserList

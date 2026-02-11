@@ -237,6 +237,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="from">The string representation of the GUID identifying the party the authenticated user is acting for (optional).</param>
         /// <param name="to">The string representation of the GUID identifying the target party to which the assignment should be created (optional).</param>
         /// <param name="includeClientDelegations">Whether to include client delegations in the response.</param>
+        /// <param name="includeAgentConnections">Whether to include agent connections in the response.</param>
         /// <remarks>
         /// Party must match From or To
         /// Either from or to must be provided
@@ -245,7 +246,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("rightholders")]
-        public async Task<ActionResult> GetRightholders([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to, [FromQuery] bool includeClientDelegations = false)
+        public async Task<ActionResult> GetRightholders(
+            [FromQuery] Guid party,
+            [FromQuery] Guid? from,
+            [FromQuery] Guid? to,
+            [FromQuery] bool includeClientDelegations = true,
+            [FromQuery] bool includeAgentConnections = true)
         {
             if (!ModelState.IsValid)
             {
@@ -261,7 +267,12 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
 
-                var rightHolders = await _connectionService.GetConnections(party, from, to, includeClientDelegations);
+                var rightHolders = await _connectionService.GetConnections(
+                    party,
+                    from,
+                    to,
+                    includeClientDelegations,
+                    includeAgentConnections);
 
                 return Ok(rightHolders);
             }
