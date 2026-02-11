@@ -339,7 +339,7 @@
     "modal_info_title": "Guardianship",
     "modal_info_description": "The appointment of a guardian is retrieved from the County Governor. It cannot be deleted or changed here.",
     "modal_info_info_1": "A guardian can assist with paying bills, managing assets, or representing individuals before public authorities.",
-    "modal_info_info_2": "To see what this power of attorney covers, you can go to the guardianship tab in the overview."
+    "modal_info_info_2": "To see what this power of attorney covers, you can go to the <a>guardianship tab</a> in the overview."
   },
   "role": {
     "provider_status": "This role is fetched from ",

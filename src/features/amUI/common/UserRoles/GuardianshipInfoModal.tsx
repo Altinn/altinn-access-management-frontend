@@ -1,14 +1,15 @@
 import { DsDialog, DsHeading, DsValidationMessage } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
-import classes from './guardianInfoModal.module.css';
+import classes from './GuardianshipInfoModal.module.css';
+import { Link } from 'react-router';
 
 interface GuardianInfoModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-export const GuardianInfoModal = ({ open, onClose }: GuardianInfoModalProps) => {
+export const GuardianshipInfoModal = ({ open, onClose }: GuardianInfoModalProps) => {
   const { t } = useTranslation();
 
   return (
@@ -38,7 +39,17 @@ export const GuardianInfoModal = ({ open, onClose }: GuardianInfoModalProps) => 
           data-size='xs'
           level={3}
         >
-          {t('guardianships.modal_info_info_2')}
+          <Trans
+            i18nKey='guardianships.modal_info_info_2'
+            components={{
+              a: (
+                <Link
+                  to={'#guardianships'}
+                  onClick={onClose}
+                />
+              ),
+            }}
+          />
         </DsHeading>
       </div>
     </DsDialog>

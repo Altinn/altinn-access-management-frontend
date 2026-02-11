@@ -11,7 +11,7 @@ import { RoleInfoModal } from '../DelegationModal/RoleInfoModal';
 import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries';
 import { useRoleMetadata } from './useRoleMetadata';
 import { ClientAccessInfoModal } from './ClientAccessInfoModal';
-import { GuardianInfoModal } from './GuardianInfoModal';
+import { GuardianshipInfoModal } from './GuardianshipInfoModal';
 
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   const { t } = useTranslation();
@@ -97,7 +97,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
         />
       )}
       {isGuardian && (
-        <GuardianInfoModal
+        <GuardianshipInfoModal
           open={isGuardianModalOpen}
           onClose={() => setIsGuardianModalOpen(false)}
         />

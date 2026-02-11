@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { DsBadge, DsTabs } from '@altinn/altinn-components';
 
@@ -26,6 +27,8 @@ export const RightsTabs = ({
   guardianshipsPanel,
 }: RightsTabsProps) => {
   const { t } = useTranslation();
+  const { hash } = useLocation();
+  const navigate = useNavigate();
   const [chosenTab, setChosenTab] = useState('packages');
 
   const { displayRoles } = window.featureFlags;
@@ -49,6 +52,16 @@ export const RightsTabs = ({
     guardianshipsPanel &&
     fromParty?.partyTypeName === PartyType.Person &&
     (guardianshipRoles.length > 0 || !toParty);
+
+  useEffect(() => {
+    if (hash) {
+      const tab = hash.replace('#', '');
+      if (tab === 'guardianships' && showGuardianshipsTab) {
+        setChosenTab(tab);
+        navigate(''); // clear hash fragment from URL after navigating to correct tab
+      }
+    }
+  }, [hash]);
 
   return (
     <DsTabs

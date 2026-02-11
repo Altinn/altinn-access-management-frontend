@@ -336,7 +336,7 @@
     "modal_info_title": "Vergemål",
     "modal_info_description": "Oppnevnelsen av verge er henta frå Statsforvalteren. Ho kan ikkje slettast eller endrast her.",
     "modal_info_info_1": "Ein verge kan bistå med å betale regningar, forvalte formue eller representere personar overfor offentlege myndigheiter.",
-    "modal_info_info_2": "For å sjå kva denne fullmakta gjeld, kan du gå til fanen for vergemål i oversikten."
+    "modal_info_info_2": "For å sjå kva denne fullmakta gjeld, kan du gå til <a>fanen for vergemål</a> i oversikten."
   },
   "role": {
     "provider_status": "Denne rolla er henta frå ",
