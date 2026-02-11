@@ -31,7 +31,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     },
   );
 
-  const { userRoles, altinn3Roles } = useGroupedRoleListEntries({
+  const { userRoles, altinn3Roles, guardianshipRoles } = useGroupedRoleListEntries({
     permissions,
   });
 
@@ -54,6 +54,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
 
   const roles = mapRoles(userRoles?.map(({ role }) => role) ?? []);
   const isAgent = altinn3Roles.some((rolePermission) => rolePermission.role.code === 'agent');
+  const isGuardian = guardianshipRoles.length > 0;
 
   return (
     <>
@@ -66,6 +67,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
             {t('user_roles.has_client_access')}
           </DsChip.Button>
         )}
+        {isGuardian && <DsChip.Button>{t('user_roles.is_guardian')}</DsChip.Button>}
         {roles.map((role) => {
           return (
             <DsChip.Button

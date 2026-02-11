@@ -348,6 +348,7 @@
     }
   },
   "user_roles": {
+    "is_guardian": "Verge",
     "has_client_access": "Har klienttilgang",
     "has_client_access_description": "Denne brukeren har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at de har tilgang til virksomhetens eget innhold, men at de kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter de har tilgang til kan administreres under <a>klientadministrasjon</a>."
   },
@@ -386,6 +387,7 @@
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
     "roles_title": "Roller",
+    "guardianships_title": "Vergemål",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },

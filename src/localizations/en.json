@@ -351,6 +351,7 @@
     }
   },
   "user_roles": {
+    "is_guardian": "Guardian",
     "has_client_access": "Has client access",
     "has_client_access_description": "This user has access to one or more of the organization's clients. This does not necessarily mean they have access to the organization's own content, but that they can perform work on behalf of one or more of their clients/customers. Which clients they have access to can be managed under <a>client administration</a>."
   },
@@ -389,6 +390,7 @@
     "access_packages_title": "Access packages",
     "single_rights_title": "Services",
     "roles_title": "Roles",
+    "guardianships_title": "Guardianships",
     "resource_type_text": "Single right",
     "delete_confirm_message": "Are you sure you want to delete this?"
   },
