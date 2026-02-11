@@ -136,7 +136,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
         <>
           {!hasDirectConnections && !isLoading && !isQuery && (
             <DsParagraph
-              data-size='sm'
+              data-size='md'
               className={classes.tabDescription}
             >
               {noUsersText ??
