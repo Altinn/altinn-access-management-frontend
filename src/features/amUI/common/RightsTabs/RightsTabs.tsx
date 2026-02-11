@@ -8,6 +8,8 @@ import { FilesIcon, FolderIcon, PackageIcon, ShieldLockIcon } from '@navikt/akse
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries';
+import { PartyType } from '@/rtk/features/userInfoApi';
+
 interface RightsTabsProps {
   tabBadge?: { accessPackages: number; services: number; roles: number; guardianships: number };
   packagesPanel: ReactNode;
@@ -43,7 +45,10 @@ export const RightsTabs = ({
   const { guardianshipRoles } = useGroupedRoleListEntries({
     permissions,
   });
-  const showGuardianshipsTab = guardianshipsPanel && (guardianshipRoles.length > 0 || !toParty);
+  const showGuardianshipsTab =
+    guardianshipsPanel &&
+    fromParty?.partyTypeName === PartyType.Person &&
+    (guardianshipRoles.length > 0 || !toParty);
 
   return (
     <DsTabs
