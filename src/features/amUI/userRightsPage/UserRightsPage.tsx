@@ -27,7 +27,7 @@ import { UserRightsPageSkeleton } from './UserRightsPageSkeleton';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { GuardianshipSection } from './AccessPackageSection/GuardianshipSection';
+import { GuardianshipSection } from '../common/GuardianshipSection/GuardianshipSection';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();

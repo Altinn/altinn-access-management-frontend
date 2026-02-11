@@ -1,0 +1,12 @@
+.inputs {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0 5px;
+}
+
+.searchField {
+  min-width: 0; /* allow flex child to shrink */
+}
