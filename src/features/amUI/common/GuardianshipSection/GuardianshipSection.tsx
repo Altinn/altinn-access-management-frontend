@@ -38,7 +38,6 @@ export const GuardianshipSection = () => {
     : 0;
 
   // Local search state with debounce to avoid excessive backend calls
-  const [searchString, setSearchString] = useState<string>('');
   const [debouncedSearchString, setDebouncedSearchString] = useState<string>('');
 
   const debouncedUpdate = useCallback(
@@ -66,27 +65,7 @@ export const GuardianshipSection = () => {
       </div>
       <div className={classes.inputs}>
         {numberOfAccesses > 0 && (
-          <div className={classes.searchField}>
-            <DsSearch data-size='sm'>
-              <DsSearch.Input
-                aria-label={t('guardianships.search_label')}
-                placeholder={t('guardianships.search_label')}
-                value={searchString}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = event.target.value;
-                  setSearchString(value);
-                  debouncedUpdate(value);
-                }}
-              />
-              <DsSearch.Clear
-                onClick={() => {
-                  debouncedUpdate.cancel();
-                  setSearchString('');
-                  setDebouncedSearchString('');
-                }}
-              />
-            </DsSearch>
-          </div>
+          <DebouncedSearch setDebouncedSearchString={setDebouncedSearchString} />
         )}
       </div>
       <AccessPackageList
@@ -108,5 +87,51 @@ export const GuardianshipSection = () => {
         availableActions={[]}
       />
     </>
+  );
+};
+
+interface DebouncedSearchProps {
+  setDebouncedSearchString: (value: string) => void;
+}
+const DebouncedSearch = ({ setDebouncedSearchString }: DebouncedSearchProps) => {
+  const { t } = useTranslation();
+  // Local search state with debounce to avoid excessive backend calls
+  const [searchString, setSearchString] = useState<string>('');
+
+  const debouncedUpdate = useCallback(
+    debounce((value: string) => {
+      setDebouncedSearchString(value);
+    }, 300),
+    [],
+  );
+
+  useEffect(() => {
+    return () => {
+      debouncedUpdate.cancel();
+    };
+  }, [debouncedUpdate]);
+
+  return (
+    <div className={classes.searchField}>
+      <DsSearch data-size='sm'>
+        <DsSearch.Input
+          aria-label={t('guardianships.search_label')}
+          placeholder={t('guardianships.search_label')}
+          value={searchString}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            const value = event.target.value;
+            setSearchString(value);
+            debouncedUpdate(value);
+          }}
+        />
+        <DsSearch.Clear
+          onClick={() => {
+            debouncedUpdate.cancel();
+            setSearchString('');
+            setDebouncedSearchString('');
+          }}
+        />
+      </DsSearch>
+    </div>
   );
 };
