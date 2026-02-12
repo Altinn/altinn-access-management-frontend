@@ -1,15 +1,22 @@
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { DsBadge, DsTabs } from '@altinn/altinn-components';
 
 import classes from './RightsTabs.module.css';
-import { FilesIcon, FolderIcon, PackageIcon } from '@navikt/aksel-icons';
+import { FilesIcon, FolderIcon, PackageIcon, ShieldLockIcon } from '@navikt/aksel-icons';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries';
+import { PartyType } from '@/rtk/features/userInfoApi';
+
 interface RightsTabsProps {
-  tabBadge?: { accessPackages: number; services: number; roles: number };
+  tabBadge?: { accessPackages: number; services: number; roles: number; guardianships: number };
   packagesPanel: ReactNode;
   singleRightsPanel: ReactNode;
   roleAssignmentsPanel: ReactNode;
+  guardianshipsPanel?: ReactNode;
 }
 
 export const RightsTabs = ({
@@ -17,11 +24,44 @@ export const RightsTabs = ({
   packagesPanel,
   singleRightsPanel,
   roleAssignmentsPanel,
+  guardianshipsPanel,
 }: RightsTabsProps) => {
   const { t } = useTranslation();
+  const { hash } = useLocation();
+  const navigate = useNavigate();
   const [chosenTab, setChosenTab] = useState('packages');
 
   const { displayRoles } = window.featureFlags;
+  const { toParty, fromParty, actingParty } = usePartyRepresentation();
+
+  const { data: permissions } = useGetRolePermissionsQuery(
+    {
+      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.partyUuid,
+      to: toParty?.partyUuid,
+    },
+    {
+      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
+    },
+  );
+
+  const { guardianshipRoles } = useGroupedRoleListEntries({
+    permissions,
+  });
+  const showGuardianshipsTab =
+    guardianshipsPanel &&
+    fromParty?.partyTypeName === PartyType.Person &&
+    (guardianshipRoles.length > 0 || !toParty);
+
+  useEffect(() => {
+    if (hash) {
+      const tab = hash.replace('#', '');
+      if (tab === 'guardianships' && showGuardianshipsTab) {
+        setChosenTab(tab);
+        navigate('', { replace: true }); // clear hash fragment from URL after navigating to correct tab
+      }
+    }
+  }, [hash, showGuardianshipsTab, navigate]);
 
   return (
     <DsTabs
@@ -72,6 +112,20 @@ export const RightsTabs = ({
           </DsTabs.Tab>
         )}
         {/* Bruk <EnvelopeClosedIcon aria-hidden='true' /> for delt fra innboks tab*/}
+        {showGuardianshipsTab && (
+          <DsTabs.Tab value='guardianships'>
+            {tabBadge && (
+              <DsBadge
+                data-size='sm'
+                color={chosenTab === 'guardianships' ? 'accent' : 'neutral'}
+                count={tabBadge?.guardianships ?? 0}
+                maxCount={99}
+              />
+            )}
+            <ShieldLockIcon aria-hidden='true' />
+            {t('user_rights_page.guardianships_title')}
+          </DsTabs.Tab>
+        )}
       </DsTabs.List>
       <DsTabs.Panel
         className={classes.tabContent}
@@ -93,6 +147,14 @@ export const RightsTabs = ({
           value='roleAssignments'
         >
           <div className={classes.innerTabContent}>{roleAssignmentsPanel}</div>
+        </DsTabs.Panel>
+      )}
+      {showGuardianshipsTab && (
+        <DsTabs.Panel
+          className={classes.tabContent}
+          value='guardianships'
+        >
+          <div className={classes.innerTabContent}>{guardianshipsPanel}</div>
         </DsTabs.Panel>
       )}
     </DsTabs>

@@ -15,6 +15,7 @@ import { AccessPackagePermissions } from './AccessPackagePermissions';
 import { useRerouteIfPoaOverviewPageDisabled } from '@/resources/utils/featureFlagUtils';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { GuardianshipPermissions } from './GuardianshipPermissions';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
@@ -48,6 +49,7 @@ export const PoaOverviewPage = () => {
             packagesPanel={<AccessPackagePermissions />}
             singleRightsPanel={null}
             roleAssignmentsPanel={null}
+            guardianshipsPanel={<GuardianshipPermissions />}
           />
         </PartyRepresentationProvider>
       </PageLayoutWrapper>

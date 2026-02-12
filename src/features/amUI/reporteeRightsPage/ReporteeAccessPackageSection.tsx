@@ -10,6 +10,7 @@ import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/A
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { AccessPackageInfoAlert } from '../userRightsPage/AccessPackageSection/AccessPackageInfoAlert';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { isGuardianshipUrn } from '@/resources/utils/urnUtils';
 
 export const ReporteeAccessPackageSection = () => {
   const { t } = useTranslation();
@@ -34,7 +35,11 @@ export const ReporteeAccessPackageSection = () => {
     { skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid },
   );
 
-  const numberOfAccesses = accesses ? Object.values(accesses).flat().length : 0;
+  const numberOfAccesses = accesses
+    ? Object.values(accesses)
+        .flat()
+        .filter((item) => !isGuardianshipUrn(item.package.urn)).length
+    : 0;
 
   return (
     <>

@@ -25,6 +25,7 @@ import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { SingleRightsSection } from '../userRightsPage/SingleRightsSection/SingleRightsSection';
+import { GuardianshipSection } from '../common/GuardianshipSection/GuardianshipSection';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
@@ -59,6 +60,7 @@ export const ReporteeRightsPage = () => {
                 packagesPanel={<ReporteeAccessPackageSection />}
                 singleRightsPanel={<SingleRightsSection />}
                 roleAssignmentsPanel={<ReporteeRoleSection />}
+                guardianshipsPanel={<GuardianshipSection />}
               />
             </PageContainer>
           </DelegationModalProvider>

@@ -16,7 +16,7 @@ import { AccessPackageInfoAlert } from './AccessPackageInfoAlert';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import classes from './AccessPackageSection.module.css';
-import { debounce } from '@/resources/utils';
+import { debounce, isGuardianshipUrn } from '@/resources/utils';
 import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 
 export const AccessPackageSection = () => {
@@ -43,7 +43,11 @@ export const AccessPackageSection = () => {
     { skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid },
   );
 
-  const numberOfAccesses = accesses ? Object.values(accesses).flat().length : 0;
+  const numberOfAccesses = accesses
+    ? Object.values(accesses)
+        .flat()
+        .filter((item) => !isGuardianshipUrn(item.package.urn)).length
+    : 0;
 
   // Local search state with debounce to avoid excessive backend calls
   const [searchString, setSearchString] = useState<string>('');

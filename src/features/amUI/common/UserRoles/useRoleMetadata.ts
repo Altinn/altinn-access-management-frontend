@@ -10,6 +10,7 @@ type RoleMetadataMap = {
 };
 
 export const ECC_PROVIDER_CODE = 'sys-ccr';
+export const CRA_PROVIDER_CODE = 'sys-cra';
 export const A2_PROVIDER_CODE = 'sys-altinn2';
 export const A3_PROVIDER_CODE = 'sys-altinn3';
 
