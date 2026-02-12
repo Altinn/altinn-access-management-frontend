@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
-  DsHeading,
   DsParagraph,
   DsSkeleton,
   formatDisplayName,
+  useSnackbar,
 } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 
@@ -35,6 +35,7 @@ import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 
 export const ClientAdministrationClientDetails = () => {
   const { t } = useTranslation();
+  const { openSnackbar } = useSnackbar();
   const { id } = useParams();
   const { fromParty, actingParty } = usePartyRepresentation();
   const [activeTab, setActiveTab] = useState('has-users');
@@ -101,6 +102,14 @@ export const ClientAdministrationClientDetails = () => {
   const fromPartyUuid = fromParty?.partyUuid ?? id;
   const actingPartyUuid = actingParty?.partyUuid;
 
+  const onUserAdded = () => {
+    setActiveTab('all-users');
+    openSnackbar({
+      message: t('client_administration_page.add_agent_client_access_success_snackbar'),
+      color: 'success',
+    });
+  };
+
   return (
     <>
       <Breadcrumbs
@@ -151,7 +160,6 @@ export const ClientAdministrationClientDetails = () => {
                       addAgentAccessPackages={addAgentAccessPackages}
                       removeAgentAccessPackages={removeAgentAccessPackages}
                       emptyText={t('client_administration_page.no_user_delegations')}
-                      onUserAdded={() => setActiveTab('all-users')}
                     />
                   ) : (
                     <DsParagraph>
@@ -173,8 +181,7 @@ export const ClientAdministrationClientDetails = () => {
                       addAgentAccessPackages={addAgentAccessPackages}
                       removeAgentAccessPackages={removeAgentAccessPackages}
                       emptyText={t('client_administration_page.no_agents')}
-                      onUserAdded={() => setActiveTab('all-users')}
-                      addUserButton={<AddAgentButton />}
+                      addUserButton={<AddAgentButton onComplete={onUserAdded} />}
                     />
                   ) : (
                     <DsParagraph>
