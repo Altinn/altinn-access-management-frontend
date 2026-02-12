@@ -685,12 +685,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task RevokeResourceAccess_handles_error()
         {
             // Arrange
-            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
             string resourceId = "invalid_appid";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/revoke");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/revoke?party={party}&from={from}&to={to}&resourceId={resourceId}");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
@@ -704,12 +705,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task RevokeResourceAccess_returns_ok_on_valid_input()
         {
             // Arrange
-            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
             string resourceId = "appid-502";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/revoke");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/revoke?party={party}&from={from}&to={to}&resourceId={resourceId}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);

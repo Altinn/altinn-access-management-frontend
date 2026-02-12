@@ -25,11 +25,7 @@ export const useUpdateResource = () => {
     })
       .unwrap()
       .then((failedEdits) => {
-        if (failedEdits.length > 0) {
-          onError?.();
-        } else {
-          onSuccess?.();
-        }
+        onSuccess?.();
       })
       .catch((error) => {
         console.log(error);

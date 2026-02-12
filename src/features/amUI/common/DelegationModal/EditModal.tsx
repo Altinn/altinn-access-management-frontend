@@ -12,6 +12,7 @@ import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export enum DelegationAction {
   DELEGATE = 'DELEGATE',

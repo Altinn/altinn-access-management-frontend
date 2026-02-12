@@ -439,7 +439,8 @@
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
       "all_failed": "Ingen nye tilganger er gitt til {{name}}",
-      "some_failed": "Følgende tilganger ble ikke gitt: {{actions}}"
+      "some_failed": "Følgende tilganger ble ikke gitt: {{actions}}",
+      "revoke_failed": "En teknisk feil gjorde at tjenesten ikke ble slettet. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter."
     },
     "specific_rights": {
       "missing_role_message": "Du får ikke delegert hele tjenesten, fordi du mangler noen av rettighetene selv.",

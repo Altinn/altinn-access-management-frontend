@@ -1,6 +1,7 @@
 .modalDialog {
   max-width: 992px;
-  max-height: fit-content;
+  max-height: calc(100vh - var(--ds-spacing-16));
+  overflow-y: auto;
 }
 
 .triggerButton {

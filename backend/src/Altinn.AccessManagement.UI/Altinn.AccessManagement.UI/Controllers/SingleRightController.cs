@@ -243,6 +243,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         ///     Endpoint for revoking all rights on a resource that has been granted from one party to another.
         /// </summary>
+        /// <param name="party">The party that is performing the revoking</param>
         /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
         /// <param name="to">The right holder that has been granted access to the resource.</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
@@ -250,18 +251,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpDelete]
         [Authorize]
-        [Route("{from}/{to}/{resourceId}/revoke")]
-        public async Task<ActionResult> RevokeResourceAccess([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] string resourceId)
+        [Route("revoke")]
+        public async Task<ActionResult> RevokeResourceAccess([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resourceId)
         {
             try
             {
-                var response = await _singleRightService.RevokeResourceAccess(to, from, resourceId);
+                var response = await _singleRightService.RevokeResourceAccess(party, from, to, resourceId);
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (HttpStatusException statusEx)
             {
-                _logger.LogError(ex, "Unexpected exception occurred during revoke of a resource");
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
         }
 

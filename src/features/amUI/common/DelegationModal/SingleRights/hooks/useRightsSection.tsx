@@ -19,6 +19,7 @@ import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import classes from '../ResourceInfo.module.css';
 import { useRightChips } from './useRightChips';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
+import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 
 export const useRightsSection = ({
   resource,
@@ -36,7 +37,9 @@ export const useRightsSection = ({
   const [rights, setRights] = useState<ChipRight[]>([]);
   const [currentRights, setCurrentRights] = useState<string[]>([]);
   const [hasAccess, setHasAccess] = useState(false);
-  const [delegationError, setDelegationError] = useState<string | null>(null);
+  const [delegationError, setDelegationError] = useState<'delegate' | 'revoke' | 'edit' | null>(
+    null,
+  );
   const [missingAccess, setMissingAccess] = useState<string | null>(null);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [isActionSuccess, setIsActionSuccess] = useState(false);
@@ -44,6 +47,7 @@ export const useRightsSection = ({
   /// Hooks and data fetching
 
   const { toParty, fromParty } = usePartyRepresentation();
+  const revoke = useRevokeResource();
   const { data: delegatedResources, isFetching } = useGetSingleRightsForRightholderQuery(
     {
       party: getCookie('AltinnPartyId'),
@@ -133,7 +137,11 @@ export const useRightsSection = ({
     setIsActionSuccess(false);
     setDelegationError(null);
     setMissingAccess(null);
+    console.log(
+      'Applying action states: loading=true, success=false, delegationError=null, missingAccess=null',
+    );
   };
+  console.log('delegationError state:', delegationError);
 
   const getMissingAccessMessage = useCallback(
     (response: DelegationCheckedAction[]) => {
@@ -176,9 +184,8 @@ export const useRightsSection = ({
       applyActionStates();
       updateResource(resource.identifier, actionKeysToDelegate, onSuccess, () => {
         setIsActionLoading(false);
-        setDelegationError(
-          t('delegation_modal.technical_error_message.all_failed', { name: toPartyName }),
-        );
+        setDelegationError('edit');
+        console.log('Failed to update resource with new rights:', actionKeysToDelegate);
       });
     }
   };
@@ -192,9 +199,17 @@ export const useRightsSection = ({
       applyActionStates();
       delegateRights(actionKeysToDelegate, resource.identifier, onSuccess, () => {
         setIsActionLoading(false);
-        setDelegationError(
-          t('delegation_modal.technical_error_message.all_failed', { name: toPartyName }),
-        );
+        setDelegationError('delegate');
+      });
+    }
+  };
+
+  const revokeResource = () => {
+    if (fromParty && toParty) {
+      applyActionStates();
+      revoke(resource.identifier, onSuccess, () => {
+        setIsActionLoading(false);
+        setDelegationError('revoke');
       });
     }
   };
@@ -205,6 +220,7 @@ export const useRightsSection = ({
     chips,
     saveEditedRights,
     delegateChosenRights,
+    revokeResource,
     undelegableActions,
     rights,
     hasUnsavedChanges,

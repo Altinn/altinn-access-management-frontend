@@ -443,7 +443,8 @@
       "heading": "Oi! Noko gjekk gale",
       "message": "Grunna ein teknisk feil vart ikkje tenesta delegert. Ver venleg og prøv på nytt, eller kontakt Altinn brukarstøtte dersom feilen held fram.",
       "all_failed": "Ingen nye tilgangar er gitt til {{name}}",
-      "some_failed": "Følgande tilgangar vart ikkje gitt: {{actions}}"
+      "some_failed": "Følgande tilgangar vart ikkje gitt: {{actions}}",
+      "revoke_failed": "Ein teknisk feil gjorde at tenesta ikkje vart sletta. Ver venleg og prøv på nytt, eller kontakt Altinn brukarstøtte dersom feilen held fram."
     },
     "general_error": {
       "revoke_heading": "Kunne ikkje slette fullmakt",

@@ -446,7 +446,8 @@
       "heading": "Oops! Something went wrong.",
       "message": "We encountered a technical issue. If the problem continues, please contact Altinn user service.",
       "all_failed": "No new rights were granted to {{name}}",
-      "some_failed": "We couldn't grant these rights: {{actions}}"
+      "some_failed": "We couldn't grant these rights: {{actions}}",
+      "revoke_failed": "A technical error occurred while trying to delete the service. Please try again or contact Altinn user service if the problem persists."
     },
     "general_error": {
       "revoke_heading": "Could not delete power of attorney",
