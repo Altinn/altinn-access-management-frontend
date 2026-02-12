@@ -26,12 +26,15 @@ export const GuardianshipPermissions = () => {
         showAllAreas={true}
         showOnlyGuardianships
         showPackagesCount={false}
-        packageAs={(props) => (
-          <Link
-            to={`/poa-overview/access-package/${props.packageId}`}
-            {...props}
-          />
-        )}
+        packageAs={(props) => {
+          const { packageId, ...rest } = props;
+          return (
+            <Link
+              to={`/poa-overview/access-package/${packageId}`}
+              {...rest}
+            />
+          );
+        }}
         noPackagesText={t('access_packages.no_packages')}
       />
     </>
