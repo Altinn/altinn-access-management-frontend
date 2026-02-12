@@ -19,7 +19,7 @@ export const DebouncedSearchField = ({
     debounce((value: string) => {
       setDebouncedSearchString(value);
     }, 300),
-    [],
+    [setDebouncedSearchString],
   );
 
   useEffect(() => {
