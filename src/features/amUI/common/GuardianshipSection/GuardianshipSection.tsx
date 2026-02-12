@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsHeading, DsSearch } from '@altinn/altinn-components';
+import { DsHeading } from '@altinn/altinn-components';
 
 import { type AccessPackage, useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 
-import classes from './GuardianshipSection.module.css';
-import { debounce, isGuardianshipUrn } from '@/resources/utils';
+import { isGuardianshipUrn } from '@/resources/utils';
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
 import { AccessPackageInfoModal } from '../../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
+import { DebouncedSearchField } from '../DebouncedSearchField/DebouncedSearchField';
 
 export const GuardianshipSection = () => {
   const { t } = useTranslation();
@@ -40,19 +40,6 @@ export const GuardianshipSection = () => {
   // Local search state with debounce to avoid excessive backend calls
   const [debouncedSearchString, setDebouncedSearchString] = useState<string>('');
 
-  const debouncedUpdate = useCallback(
-    debounce((value: string) => {
-      setDebouncedSearchString(value);
-    }, 300),
-    [],
-  );
-
-  useEffect(() => {
-    return () => {
-      debouncedUpdate.cancel();
-    };
-  }, [debouncedUpdate]);
-
   return (
     <>
       <div>
@@ -63,11 +50,12 @@ export const GuardianshipSection = () => {
           {t('guardianships.current_guardianship_title', { count: numberOfAccesses })}
         </DsHeading>
       </div>
-      <div className={classes.inputs}>
-        {numberOfAccesses > 0 && (
-          <DebouncedSearch setDebouncedSearchString={setDebouncedSearchString} />
-        )}
-      </div>
+      {numberOfAccesses > 0 && (
+        <DebouncedSearchField
+          placeholder={t('guardianships.search_label')}
+          setDebouncedSearchString={setDebouncedSearchString}
+        />
+      )}
       <AccessPackageList
         isLoading={loadingAccesses || loadingPartyRepresentation}
         showPackagesCount
@@ -87,51 +75,5 @@ export const GuardianshipSection = () => {
         availableActions={[]}
       />
     </>
-  );
-};
-
-interface DebouncedSearchProps {
-  setDebouncedSearchString: (value: string) => void;
-}
-const DebouncedSearch = ({ setDebouncedSearchString }: DebouncedSearchProps) => {
-  const { t } = useTranslation();
-  // Local search state with debounce to avoid excessive backend calls
-  const [searchString, setSearchString] = useState<string>('');
-
-  const debouncedUpdate = useCallback(
-    debounce((value: string) => {
-      setDebouncedSearchString(value);
-    }, 300),
-    [],
-  );
-
-  useEffect(() => {
-    return () => {
-      debouncedUpdate.cancel();
-    };
-  }, [debouncedUpdate]);
-
-  return (
-    <div className={classes.searchField}>
-      <DsSearch data-size='sm'>
-        <DsSearch.Input
-          aria-label={t('guardianships.search_label')}
-          placeholder={t('guardianships.search_label')}
-          value={searchString}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            const value = event.target.value;
-            setSearchString(value);
-            debouncedUpdate(value);
-          }}
-        />
-        <DsSearch.Clear
-          onClick={() => {
-            debouncedUpdate.cancel();
-            setSearchString('');
-            setDebouncedSearchString('');
-          }}
-        />
-      </DsSearch>
-    </div>
   );
 };
