@@ -2,6 +2,7 @@ import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from './../fixture/pomFixture';
 import { AktorvalgHeader } from '../pages/AktorvalgHeader';
+import { Token } from '../api-requests/Token';
 
 test.describe('Tilgangsstyring', () => {
   test('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', async ({
@@ -200,6 +201,13 @@ test.describe('Tilgangsstyring', () => {
 });
 
 test.describe('@slow Testdata for Tilgangsstyring-testene', () => {
+  test('bruk API til å sette opp testdata', async ({ page }) => {
+    test.step('spørring her', async () => {
+      const tokenTool = await new Token();
+      const bearerToken = await tokenTool.getPersonalAltinnTokenWithOnlyPid('70885100226');
+    });
+  });
+
   test('legg til testdata 70885100226 OVERFØLSOM KATT', async ({
     page,
     accessManagementFrontPage,
