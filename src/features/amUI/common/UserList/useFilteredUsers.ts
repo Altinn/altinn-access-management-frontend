@@ -90,18 +90,22 @@ const sortUsers = (users: (ExtendedUser | User)[]): (ExtendedUser | User)[] => {
     if (Array.isArray(userCopy.children) && userCopy.children.length > 0) {
       userCopy.children = sortUsers(userCopy.children);
     }
-    const newUser = isNewUser(userCopy.addedAt);
-    userCopy.sortKey = `${newUser ? '0' : '1'}:${userCopy.name}`;
     return userCopy;
   });
   return processedUsers.sort((a, b) => {
+    const aSortKey = a.sortKey ?? a.name;
+    const bSortKey = b.sortKey ?? b.name;
+    const sortKeyComparison = aSortKey.localeCompare(bSortKey);
+    if (sortKeyComparison !== 0) {
+      return sortKeyComparison;
+    }
+
     if (a.type?.toLowerCase() === 'organisasjon' && b.type?.toLowerCase() !== 'organisasjon')
       return -1;
     if (b.type?.toLowerCase() === 'organisasjon' && a.type?.toLowerCase() !== 'organisasjon')
       return 1;
-    const aSortKey = a.sortKey ?? a.name;
-    const bSortKey = b.sortKey ?? b.name;
-    return aSortKey.localeCompare(bSortKey);
+
+    return a.name.localeCompare(b.name);
   });
 };
 

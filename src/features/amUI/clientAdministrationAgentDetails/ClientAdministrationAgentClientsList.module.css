@@ -20,6 +20,12 @@
   max-width: 27rem;
 }
 
+.addButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .accessRoleItem {
   display: flex;
   flex-direction: column;
