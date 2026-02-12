@@ -61,7 +61,7 @@ export const systemUserApi = createApi({
       },
     }),
     getSystemuserIsAdmin: builder.query<boolean, string>({
-      query: (partyUuid) => `isAdmin?party=${partyUuid}`,
+      query: (partyUuid) => `user/isAdmin?party=${partyUuid}`,
     }),
 
     // systemregister
