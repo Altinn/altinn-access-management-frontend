@@ -56,7 +56,6 @@ export const PageLayoutWrapper = ({
         }}
         sidebar={{
           menu: {
-            variant: 'subtle',
             groups: menuGroups,
             items: sidebarItems,
           },

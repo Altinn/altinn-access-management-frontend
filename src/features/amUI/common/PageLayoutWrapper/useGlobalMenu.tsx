@@ -55,7 +55,7 @@ export const useGlobalMenu = () => {
 
   const headerLinks: MenuItemProps[] = [
     {
-      groupId: 1,
+      groupId: '1',
       icon: { svgElement: InboxFillIcon, theme: 'surface' },
       id: 'inbox',
       size: 'lg',
@@ -69,7 +69,7 @@ export const useGlobalMenu = () => {
       badge: { label: t('common.beta'), variant: 'base', color: 'neutral' },
     },
     {
-      groupId: 10,
+      groupId: '10',
       icon: { svgElement: PadlockLockedFillIcon, theme: 'surface' },
       id: 'access_management',
       size: 'lg',
@@ -85,7 +85,7 @@ export const useGlobalMenu = () => {
     },
     ...(isSm ? sidebarItems : []),
     {
-      groupId: 100,
+      groupId: '100',
       icon: { svgElement: MenuGridIcon, theme: 'surface' },
       id: 'all_forms',
       size: 'lg',
@@ -99,7 +99,7 @@ export const useGlobalMenu = () => {
     },
     {
       id: 'info',
-      groupId: 1000,
+      groupId: '1000',
       icon: InformationSquareIcon,
       title: t('header.new_altinn_info'),
       size: 'sm',
@@ -112,7 +112,7 @@ export const useGlobalMenu = () => {
     },
     {
       id: 'starte-og-drive',
-      groupId: 1000,
+      groupId: '1000',
       icon: Buildings2Icon,
       title: t('header.start_business'),
       size: 'sm',
@@ -125,7 +125,7 @@ export const useGlobalMenu = () => {
     },
     {
       id: 'trenger-du-hjelp',
-      groupId: 1000,
+      groupId: '1000',
       icon: ChatExclamationmarkIcon,
       title: t('header.help'),
       size: 'sm',
