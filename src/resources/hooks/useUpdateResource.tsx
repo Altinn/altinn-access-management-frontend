@@ -24,7 +24,7 @@ export const useUpdateResource = () => {
       actionKeys,
     })
       .unwrap()
-      .then((failedEdits) => {
+      .then(() => {
         onSuccess?.();
       })
       .catch((error) => {

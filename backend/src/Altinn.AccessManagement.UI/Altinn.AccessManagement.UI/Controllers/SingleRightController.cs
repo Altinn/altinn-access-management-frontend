@@ -264,6 +264,11 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = statusEx.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during update of single right");
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
         }
 
         /// <summary>

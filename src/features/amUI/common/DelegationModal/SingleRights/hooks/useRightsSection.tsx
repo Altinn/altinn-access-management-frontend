@@ -137,11 +137,7 @@ export const useRightsSection = ({
     setIsActionSuccess(false);
     setDelegationError(null);
     setMissingAccess(null);
-    console.log(
-      'Applying action states: loading=true, success=false, delegationError=null, missingAccess=null',
-    );
   };
-  console.log('delegationError state:', delegationError);
 
   const getMissingAccessMessage = useCallback(
     (response: DelegationCheckedAction[]) => {
@@ -185,7 +181,6 @@ export const useRightsSection = ({
       updateResource(resource.identifier, actionKeysToDelegate, onSuccess, () => {
         setIsActionLoading(false);
         setDelegationError('edit');
-        console.log('Failed to update resource with new rights:', actionKeysToDelegate);
       });
     }
   };

@@ -142,7 +142,7 @@ export const singleRightsApi = createApi({
       invalidatesTags: ['overview', 'delegationCheck'],
     }),
     updateResource: builder.mutation<
-      string[],
+      void,
       { party: string; from: string; to: string; resourceId: string; actionKeys: string[] }
     >({
       query({ party, from, to, resourceId, actionKeys }) {
