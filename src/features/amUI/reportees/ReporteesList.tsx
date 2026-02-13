@@ -66,7 +66,7 @@ export const ReporteesList = () => {
         {actingParty?.partyTypeName === PartyType.Person && (
           // This is ony relevant for private persons looking at their reportees,
           // as they can have access from clients that they might want to filter out
-          <div className={classes.searchControls}>
+          <div>
             <DsSwitch
               data-size='sm'
               checked={includeClientDelegations}

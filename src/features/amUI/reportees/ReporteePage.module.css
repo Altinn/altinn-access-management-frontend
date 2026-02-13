@@ -22,10 +22,6 @@
   padding-bottom: 15px;
 }
 
-.searchControls {
-  margin-left: auto;
-}
-
 @media (max-width: 700px) {
   .search {
     flex-direction: column;
