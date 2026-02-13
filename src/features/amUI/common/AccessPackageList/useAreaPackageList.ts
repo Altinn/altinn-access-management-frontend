@@ -139,7 +139,7 @@ export const useAreaPackageList = ({
 
           acc.assignedAreas.push({ ...area, packages: pkgs });
         } else if (showAllAreas) {
-          const isGuardianshipArea = area.urn.startsWith('accesspackage:area:vergemal');
+          const isGuardianshipArea = area.urn?.startsWith('accesspackage:area:vergemal');
           if (!isGuardianshipArea || showGuardianships) {
             acc.availableAreas.push({
               ...area,
