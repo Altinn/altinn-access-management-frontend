@@ -7,9 +7,14 @@ import { Navigate, useParams } from 'react-router';
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
+import { amUIPath } from '@/routes/paths';
+import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const ClientAdministrationAgentDetailsPage = () => {
   const { id } = useParams();
+  const backUrl = `/${amUIPath.ClientAdministration}?tab=users`;
+  const { data: isClientAdmin } = useGetIsClientAdminQuery();
 
   const pageIsEnabled = clientAdministrationPageEnabled();
 
@@ -23,7 +28,16 @@ export const ClientAdministrationAgentDetailsPage = () => {
   }
 
   return (
-    <PageWrapper>
+    <PageWrapper
+      pageAction={
+        isClientAdmin === false ? undefined : (
+          <ClientAdministrationAgentDeleteModal
+            agentId={id}
+            backUrl={backUrl}
+          />
+        )
+      }
+    >
       <PageLayoutWrapper>
         <PartyRepresentationProvider
           fromPartyUuid={getCookie('AltinnPartyUuid')}

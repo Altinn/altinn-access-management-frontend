@@ -142,6 +142,7 @@
     "access_management": "Access management",
     "users": "Users",
     "your_rights": "Your accesses",
+    "your_clients": "Your clients",
     "reportees": "Powers of attorney from others",
     "systemaccess": "System access",
     "client_administration": "Client Administration",
@@ -386,6 +387,19 @@
     "main_page_heading": "Authorizations {{name}} has with others",
     "not_admin_alert": "You do not have access to this page for {{name}}. Please switch to a different page or change to a reportee you have sufficient rights for.",
     "show_clients_toggle": "Show clients"
+  },
+  "my_clients_page": {
+    "page_title": "Your clients - Altinn",
+    "main_page_heading": "Clients {{name}} has access to",
+    "not_acting_on_behalf_info": "This page is only available when you are acting on behalf of another party.",
+    "search_placeholder": "Search for client",
+    "no_clients": "No clients found for this acting party.",
+    "remove_package_success_snackbar": "{{name}} no longer has power of attorney for {{accessPackage}}.",
+    "remove_package_error": "Could not remove {{name}} power of attorney for {{accessPackage}}.",
+    "delete_provider_button": "Delete all access",
+    "delete_provider_heading": "You are deleting all access for this party",
+    "delete_provider_body": "All access to clients through {{name}} will be deleted. This action cannot be undone.",
+    "delete_provider_confirm": "Delete all access"
   },
   "user_rights_page": {
     "page_title": "User access - Altinn",
@@ -911,6 +925,7 @@
     "users_item_description_org": "Overview of people and organizations that have been granted access in your organization",
     "your_rights_description": "See the powers of attorney you hold on behalf of {{reportee}}",
     "your_rights_description_yourself": "See the powers of attorney you hold on behalf of yourself",
+    "your_clients_description": "See which clients you have access to on behalf of {{reportee}}",
     "users_item_description_person": "Overview of people and organizations that have been granted access to you",
     "reportees_item_description_org": "Overview of all who have granted access to your organization",
     "reportees_item_description_person": "Overview of all who have granted you access",

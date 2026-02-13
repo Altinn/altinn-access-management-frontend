@@ -139,6 +139,7 @@
     "access_management": "Tilgangsstyring",
     "users": "Brukarar",
     "your_rights": "Dine tilgangar",
+    "your_clients": "Dine klientar",
     "reportees": "Fullmakter hos andre",
     "systemaccess": "Systemtilgangar",
     "client_administration": "Klientadministrasjon",
@@ -383,6 +384,19 @@
     "main_page_heading": "Fullmakter {{name}} har hos andre",
     "not_admin_alert": "Du har ikkje tilgang til å sjå denne sida hos {{name}}. Bytt side eller vel ein anna aktør.",
     "show_clients_toggle": "Vis klientar"
+  },
+  "my_clients_page": {
+    "page_title": "Dine klientar - Altinn",
+    "main_page_heading": "Klientar {{name}} har tilgang til",
+    "not_acting_on_behalf_info": "Denne sida er berre tilgjengeleg når du handlar på vegner av ein annan aktør.",
+    "search_placeholder": "Søk etter klient",
+    "no_clients": "Ingen klientar funne for vald aktør.",
+    "remove_package_success_snackbar": "{{name}} har ikkje lenger fullmakt for {{accessPackage}}.",
+    "remove_package_error": "Klarte ikkje å fjerne {{name}} si fullmakt for {{accessPackage}}.",
+    "delete_provider_button": "Slett alle fullmakter",
+    "delete_provider_heading": "Du slettar alle fullmakter for denne aktøren",
+    "delete_provider_body": "Alle fullmakter til klientar gjennom {{name}} vil bli sletta. Denne handlinga kan ikkje angrast.",
+    "delete_provider_confirm": "Slett alle fullmakter"
   },
   "user_rights_page": {
     "page_title": "Brukertilgang - Altinn",
@@ -907,6 +921,7 @@
     "other_links_heading": "Anna",
     "your_rights_description": "Sjå fullmaktene du har på vegne av {{reportee}}",
     "your_rights_description_yourself": "Sjå fullmaktene du har på vegne av deg sjølv",
+    "your_clients_description": "Sjå kva klientar du har tilgang til på vegne av {{reportee}}",
     "users_item_description_org": "Oversikt over personar og verksemder som har fått fullmakter hos dykk",
     "users_item_description_person": "Oversikt over personar og verksemder som har fullmakter hos deg",
     "reportees_item_description_org": "Oversikt over alle som har gitt fullmakter til dykk",
