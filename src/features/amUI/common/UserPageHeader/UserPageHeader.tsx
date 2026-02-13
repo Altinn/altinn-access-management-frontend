@@ -60,6 +60,7 @@ export const UserPageHeader = ({
           name={userName}
           type={isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person'}
           size={'lg'}
+          isDeleted={user?.isDeleted}
           isParent={!isSubUnitByType(user?.variant?.toString())}
           className={classes.avatarInner}
         />
@@ -68,6 +69,7 @@ export const UserPageHeader = ({
             name={secondaryUserName}
             type={isOrganization(secondaryParty?.partyTypeName?.toString()) ? 'company' : 'person'}
             size={'lg'}
+            isDeleted={secondaryParty?.isDeleted}
             className={classes.secondaryAvatar}
             isParent={!isSubUnitByType(secondaryParty?.variant?.toString())}
           />
