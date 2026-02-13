@@ -699,7 +699,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///  Test case: Call RevokeResourceAccess with invalid resource
-        ///  Expected: RevokeResourceAccess returns internal server error when revoke request fails
+        ///  Expected: RevokeResourceAccess returns a failing status as provided by backend (in this case: BadRequest)
         /// </summary>
         [Fact]
         public async Task RevokeResourceAccess_handles_response_error()
