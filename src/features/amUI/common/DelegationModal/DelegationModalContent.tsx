@@ -19,7 +19,6 @@ import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import type { DelegationAction } from './EditModal';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export interface DelegationModalProps {
   delegationType: DelegationType;

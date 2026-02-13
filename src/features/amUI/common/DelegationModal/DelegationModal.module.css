@@ -1,6 +1,6 @@
 .modalDialog {
   max-width: 992px;
-  max-height: calc(100vh - var(--ds-spacing-16));
+  max-height: calc(100vh - var(--ds-spacing-8));
   overflow-y: auto;
 }
 
