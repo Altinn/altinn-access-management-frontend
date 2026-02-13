@@ -6,7 +6,6 @@ import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
 import { useGetAgentsQuery } from '@/rtk/features/clientApi';
 import { type Connection } from '@/rtk/features/connectionApi';
-import { isNewUser } from '../common/isNewUser';
 import classes from './ClientAdministrationAgentsTab.module.css';
 import { useNavigate } from 'react-router';
 
@@ -30,7 +29,6 @@ export const ClientAdministrationAgentsTab = () => {
           isDeleted: agent.agent.isDeleted ?? undefined,
           roles: [],
         },
-        sortKey: `${isNewUser(agent.agentAddedAt) ? '0' : '1'}:${agent.agent.name}`,
         roles: [],
         connections: [],
       })) ?? [],
