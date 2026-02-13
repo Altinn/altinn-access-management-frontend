@@ -6,14 +6,12 @@ import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
 import { useGetAgentsQuery } from '@/rtk/features/clientApi';
 import { type Connection } from '@/rtk/features/connectionApi';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import classes from './ClientAdministrationAgentsTab.module.css';
 import { useNavigate } from 'react-router';
 
 export const ClientAdministrationAgentsTab = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { fromParty } = usePartyRepresentation();
   const {
     data: agents,
     isLoading: isAgentsLoading,
@@ -27,6 +25,7 @@ export const ClientAdministrationAgentsTab = () => {
           ...agent.agent,
           children: null,
           parent: null,
+          addedAt: agent.agentAddedAt,
           isDeleted: agent.agent.isDeleted ?? undefined,
           roles: [],
         },

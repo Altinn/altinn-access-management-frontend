@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 
@@ -12,6 +13,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
         /// Gets or sets the agent entity.
         /// </summary>
         public CompactEntity Agent { get; set; } = new();
+
+        /// <summary>
+        /// Gets or sets when the agent was added.
+        /// </summary>
+        public DateTimeOffset AgentAddedAt { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of access information for the agent.

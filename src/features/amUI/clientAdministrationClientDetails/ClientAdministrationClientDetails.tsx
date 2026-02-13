@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
-  DsHeading,
   DsParagraph,
   DsSkeleton,
   formatDisplayName,
+  useSnackbar,
 } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 
@@ -31,9 +31,11 @@ import { ClientAdministrationClientAgentsList } from './ClientAdministrationClie
 import { useClientAccessAgentLists } from './useClientAccessAgentLists';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
+import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 
 export const ClientAdministrationClientDetails = () => {
   const { t } = useTranslation();
+  const { openSnackbar } = useSnackbar();
   const { id } = useParams();
   const { fromParty, actingParty } = usePartyRepresentation();
   const [activeTab, setActiveTab] = useState('has-users');
@@ -100,6 +102,14 @@ export const ClientAdministrationClientDetails = () => {
   const fromPartyUuid = fromParty?.partyUuid ?? id;
   const actingPartyUuid = actingParty?.partyUuid;
 
+  const onUserAdded = () => {
+    setActiveTab('all-users');
+    openSnackbar({
+      message: t('client_administration_page.add_agent_client_access_success_snackbar'),
+      color: 'success',
+    });
+  };
+
   return (
     <>
       <Breadcrumbs
@@ -140,22 +150,17 @@ export const ClientAdministrationClientDetails = () => {
                 onChange={setActiveTab}
                 hasUsersContent={
                   hasDelegatablePackages ? (
-                    agentsWithClientAccess.length > 0 ? (
-                      <ClientAdministrationClientAgentsList
-                        agents={agentsWithClientAccess}
-                        clientAccessPackages={clientAccessPackages ?? []}
-                        client={selectedClient}
-                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                        fromPartyUuid={fromPartyUuid}
-                        actingPartyUuid={actingPartyUuid}
-                        addAgentAccessPackages={addAgentAccessPackages}
-                        removeAgentAccessPackages={removeAgentAccessPackages}
-                      />
-                    ) : (
-                      <DsParagraph>
-                        {t('client_administration_page.no_user_delegations')}
-                      </DsParagraph>
-                    )
+                    <ClientAdministrationClientAgentsList
+                      agents={agentsWithClientAccess}
+                      clientAccessPackages={clientAccessPackages ?? []}
+                      client={selectedClient}
+                      isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                      fromPartyUuid={fromPartyUuid}
+                      actingPartyUuid={actingPartyUuid}
+                      addAgentAccessPackages={addAgentAccessPackages}
+                      removeAgentAccessPackages={removeAgentAccessPackages}
+                      emptyText={t('client_administration_page.no_user_delegations')}
+                    />
                   ) : (
                     <DsParagraph>
                       {t('client_administration_page.no_access_to_delegate', {
@@ -166,20 +171,18 @@ export const ClientAdministrationClientDetails = () => {
                 }
                 allUsersContent={
                   hasDelegatablePackages ? (
-                    allAgents.length > 0 ? (
-                      <ClientAdministrationClientAgentsList
-                        agents={allAgents}
-                        clientAccessPackages={clientAccessPackages ?? []}
-                        client={selectedClient}
-                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                        fromPartyUuid={fromPartyUuid}
-                        actingPartyUuid={actingPartyUuid}
-                        addAgentAccessPackages={addAgentAccessPackages}
-                        removeAgentAccessPackages={removeAgentAccessPackages}
-                      />
-                    ) : (
-                      <DsParagraph>{t('client_administration_page.no_agents')}</DsParagraph>
-                    )
+                    <ClientAdministrationClientAgentsList
+                      agents={allAgents}
+                      clientAccessPackages={clientAccessPackages ?? []}
+                      client={selectedClient}
+                      isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                      fromPartyUuid={fromPartyUuid}
+                      actingPartyUuid={actingPartyUuid}
+                      addAgentAccessPackages={addAgentAccessPackages}
+                      removeAgentAccessPackages={removeAgentAccessPackages}
+                      emptyText={t('client_administration_page.no_agents')}
+                      addUserButton={<AddAgentButton onComplete={onUserAdded} />}
+                    />
                   ) : (
                     <DsParagraph>
                       {t('client_administration_page.no_access_to_delegate', {

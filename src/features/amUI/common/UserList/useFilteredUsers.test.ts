@@ -25,6 +25,7 @@ const mockConnections: Connection[] = [
       },
     ],
     connections: [],
+    sortKey: 'Alice',
   },
   {
     party: {
@@ -54,6 +55,7 @@ const mockConnections: Connection[] = [
       },
     ],
     connections: [],
+    sortKey: 'Lorem AS',
   },
   {
     party: {
@@ -68,6 +70,7 @@ const mockConnections: Connection[] = [
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
     connections: [],
+    sortKey: 'DIGITALISERINGSDIREKTORATET',
   },
   {
     party: {
@@ -92,6 +95,7 @@ const mockConnections: Connection[] = [
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
     connections: [],
+    sortKey: 'ORANSJE ALLSLAGS HAMSTER KF',
   },
   {
     party: {
@@ -116,6 +120,7 @@ const mockConnections: Connection[] = [
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
     connections: [],
+    sortKey: 'TYKKHUDET IDIOTSIKKER STRUTS LTD',
   },
 ];
 
@@ -126,8 +131,8 @@ describe('useFilteredUsers', () => {
     );
 
     expect(result.current.users).toHaveLength(2);
-    expect(result.current.users[0].name).toBe('Lorem AS'); // orgs sorted before persons
-    expect(result.current.users[1].name).toBe('Alice');
+    expect(result.current.users[0].name).toBe('Alice');
+    expect(result.current.users[1].name).toBe('Lorem AS');
   });
 
   it('should return all users when search string is empty', () => {
@@ -202,13 +207,79 @@ describe('useFilteredUsers', () => {
     expect(result?.current?.users?.[0]?.children?.[0]?.name).toBe('InheritAlice');
   });
 
-  it('sorts organizations before persons when listing users', () => {
+  it('sorts by sort key before type ordering when listing users', () => {
     const { result } = renderHook(() =>
       useFilteredUsers({ connections: mockConnections, searchString: '' }),
     );
 
-    expect(result.current.users.slice(0, 4).every((u) => u.type === 'Organisasjon')).toBe(true);
-    expect(result.current.users.at(-1)?.type).toBe('Person');
+    expect(result.current.users.map((user) => user.name)).toEqual([
+      'Alice',
+      'DIGITALISERINGSDIREKTORATET',
+      'Lorem AS',
+      'ORANSJE ALLSLAGS HAMSTER KF',
+      'TYKKHUDET IDIOTSIKKER STRUTS LTD',
+    ]);
+  });
+
+  it('prioritizes new users and sorts newest first', () => {
+    const now = Date.now();
+    const connections: Connection[] = [
+      {
+        party: {
+          id: 'old-org',
+          name: 'Old Org',
+          type: 'Organisasjon',
+          variant: 'AS',
+          children: null,
+          partyId: '1',
+          organizationIdentifier: '100000001',
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+        sortKey: 'Old Org',
+      },
+      {
+        party: {
+          id: 'newer-person',
+          name: 'Newer Person',
+          type: 'Person',
+          variant: 'Person',
+          children: null,
+          partyId: '2',
+          dateOfBirth: '1980-01-01',
+          addedAt: new Date(now - 2 * 60 * 1000).toISOString(),
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+        sortKey: 'Newer Person',
+      },
+      {
+        party: {
+          id: 'older-new-org',
+          name: 'Older New Org',
+          type: 'Organisasjon',
+          variant: 'AS',
+          children: null,
+          partyId: '3',
+          organizationIdentifier: '100000003',
+          addedAt: new Date(now - 4 * 60 * 1000).toISOString(),
+          roles: [],
+        },
+        roles: [],
+        connections: [],
+        sortKey: 'Older New Org',
+      },
+    ];
+
+    const { result } = renderHook(() => useFilteredUsers({ connections, searchString: '' }));
+
+    expect(result.current.users.map((user) => user.name)).toEqual([
+      'Newer Person',
+      'Older New Org',
+      'Old Org',
+    ]);
   });
 
   it('should keep all children when parent matches search string', () => {

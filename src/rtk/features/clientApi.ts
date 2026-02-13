@@ -18,6 +18,7 @@ export interface Client {
 
 export interface Agent {
   agent: Entity;
+  agentAddedAt: string;
   access: ClientAccess[];
 }
 
