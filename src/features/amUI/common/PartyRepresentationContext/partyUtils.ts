@@ -10,6 +10,7 @@ export const mapConnectionToParty = (party: User | undefined): Party | undefined
     name: party.name,
     unitType: party.type,
     orgNumber: party.organizationIdentifier ?? undefined,
+    isDeleted: party.isDeleted,
     partyUuid: party.id,
     partyTypeName:
       party.type?.toLocaleLowerCase() === 'organisasjon'
