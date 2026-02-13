@@ -23,7 +23,7 @@ const mapToExtendedUsers = (connections: Connection[]): ExtendedUser[] => {
       ...connection.party,
       roles: connection.roles,
       children,
-      sortKey: `${newUser ? '0' : '1'}:${connection.sortKey}`,
+      sortKey: `${newUser ? '0' : '1'}:${connection.sortKey ?? connection.party.name}`,
     };
   });
 };
