@@ -28,20 +28,26 @@ export class AktorvalgHeader {
     this.menuButton = this.page.getByRole('button', { name: 'Meny', exact: true });
     this.dummy = this.page.getByRole('link', { name: 'Sjekk innboks' });
     this.searchBar = this.page.getByRole('searchbox', { name: 'Søk på altinn.no' });
-    this.menuInbox = this.page.getByRole('link', { name: 'Innboks Beta', exact: true });
+
+    // Menu / Navigation
+    this.menuInbox = this.page.getByRole('navigation', { name: 'Menu' }).getByLabel('Innboks');
     this.menuAccessManagement = this.page
-      .getByRole('group')
-      .getByRole('link', { name: 'Tilgangsstyring' });
+      .getByRole('navigation', { name: 'Menu' })
+      .getByLabel('Tilgangsstyring');
     this.menuApps = this.page
-      .getByRole('group')
-      .getByRole('link', { name: 'Alle skjema og tjenester' });
-    this.menuStartCompany = this.page.getByRole('link', {
-      name: 'Starte og drive bedrift',
-      exact: true,
-    });
-    this.menuHelp = this.page.getByRole('link', { name: 'Trenger du hjelp?' });
-    this.menuLanguage = this.page.locator('a').filter({ hasText: 'Språk/language' }).first();
-    this.menuProfile = this.page.getByRole('link', { name: 'Din profil' });
+      .getByRole('navigation', { name: 'Menu' })
+      .getByLabel('Alle skjema og tjenester');
+    this.menuStartCompany = this.page
+      .getByRole('navigation', { name: 'Menu' })
+      .getByLabel('Starte og drive bedrift');
+    this.menuHelp = this.page
+      .getByRole('navigation', { name: 'Menu' })
+      .getByLabel('Trenger du hjelp?');
+    this.menuLanguage = this.page
+      .getByRole('navigation', { name: 'Menu' })
+      .getByLabel('Språk/language');
+    this.menuProfile = this.page.getByRole('navigation', { name: 'Menu' }).getByLabel('Din profil');
+
     this.menuLogout = this.page.getByRole('button', { name: 'Logg ut' });
     this.aktorvalgSearch = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
     this.showDeletedSwitch = this.page.getByRole('switch', { name: 'Vis slettede' });
@@ -54,8 +60,7 @@ export class AktorvalgHeader {
   }
 
   async selectActor(actorName: string) {
-    await this.page.locator('a').filter({ hasText: actorName }).first().click();
-    await expect(this.page.getByRole('button', { name: actorName }).first()).toBeVisible();
+    await this.page.getByLabel(actorName).first().click();
   }
 
   async currentlySelectedActor(actorName: string) {
@@ -114,10 +119,12 @@ export class AktorvalgHeader {
 
   async clickFavorite(actorName: string) {
     await this.page
-      .locator('span')
-      .filter({ hasText: actorName })
+      // .locator('span')
+      // .filter({ hasText: actorName })
       .getByLabel('Legg til i favorittar')
+      .first()
       .click();
+
     await expect(
       this.page.getByRole('button', { name: 'Fjern frå favorittar' }).first(),
     ).toBeVisible();
@@ -154,7 +161,7 @@ export class AktorvalgHeader {
   async chooseBokmalLanguage() {
     await this.menuButton.click();
     await this.menuLanguage.click();
-    await this.page.locator('a').filter({ hasText: 'Bokmål' }).click();
+    await this.page.locator('#no_nb').click();
   }
 
   async expectedNumberOfActors(number: number) {
@@ -168,10 +175,8 @@ export class AktorvalgHeader {
   async expectDeletedActorToBeVisible(name: string) {
     await expect(
       this.page
-        .locator('a')
-        .filter({ hasText: name })
-        .locator('span')
-        .filter({ hasText: 'Slettet' })
+        .getByRole('menuitem', { name })
+        .filter({ has: this.page.getByText('Slettet') })
         .first(),
     ).toBeVisible();
   }

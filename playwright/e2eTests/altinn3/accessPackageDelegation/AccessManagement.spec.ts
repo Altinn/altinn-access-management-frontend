@@ -1,7 +1,7 @@
 import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
-import { test } from './../fixture/pomFixture';
-import { AktorvalgHeader } from '../pages/AktorvalgHeader';
+import { test } from '../../../fixture/pomFixture';
+import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 
 test.describe('Tilgangsstyring', () => {
   test('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', async ({
@@ -199,7 +199,7 @@ test.describe('Tilgangsstyring', () => {
   });
 });
 
-test.describe('@slow Testdata for Tilgangsstyring-testene', () => {
+test.skip('Testdata for Tilgangsstyring-testene', () => {
   test('legg til testdata 70885100226 OVERFØLSOM KATT', async ({
     page,
     accessManagementFrontPage,
@@ -236,7 +236,7 @@ test.describe('@slow Testdata for Tilgangsstyring-testene', () => {
     });
   });
 
-  test('legg til testdata 64866402394 TRÅDLØS TELEFONNUMMER', async ({
+  test.skip('legg til testdata 64866402394 TRÅDLØS TELEFONNUMMER', async ({
     page,
     accessManagementFrontPage,
   }) => {

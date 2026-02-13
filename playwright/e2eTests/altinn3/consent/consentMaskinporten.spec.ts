@@ -4,7 +4,6 @@ import { Language } from 'playwright/pages/consent/ConsentPage';
 import { env, formatUiDateTime } from 'playwright/util/helper';
 import { createAndApproveConsent, getConsentRequestId } from './helper/consentHelper.js';
 import { scenarioBuilder } from './helper/scenarioBuilder';
-import { ConsentApiRequests } from '../../api-requests/ConsentApiRequests';
 
 const MobileViewport = { width: 375, height: 667 };
 
