@@ -49,15 +49,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId);
 
                 /// <summary>
-                /// Revokes all rights on a resource that has been granted from one party to another.
-                /// </summary>
-                /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
-                /// <param name="to">The right holder that has been granted access to the resource.</param>
-                /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
-                /// <returns></returns>
-                Task<HttpResponseMessage> RevokeResourceDelegation(Guid from, Guid to, string resourceId);
-
-                /// <summary>
                 /// Revokes a single right on a resource that has been granted from one party to another.
                 /// </summary>
                 /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>

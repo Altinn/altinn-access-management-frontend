@@ -8,7 +8,7 @@ import {
   ListItem,
   Button,
 } from '@altinn/altinn-components';
-import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import { ResourceAlert } from './ResourceAlert';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -33,6 +33,7 @@ type RightsSectionProps = {
   chips: () => JSX.Element[];
   saveEditedRights: () => void;
   delegateChosenRights: () => void;
+  revokeResource: () => void;
   undelegableActions: string[];
 };
 
@@ -41,6 +42,7 @@ export const RightsSection = ({
   chips,
   saveEditedRights,
   delegateChosenRights,
+  revokeResource,
   undelegableActions,
   rights,
   hasUnsavedChanges,
@@ -98,7 +100,10 @@ export const RightsSection = ({
                 {t('delegation_modal.technical_error_message.heading')}
               </DsHeading>
               <DsParagraph>
-                {t('delegation_modal.technical_error_message.message')} {delegationError}
+                {delegationError !== 'revoke' &&
+                  `${t('delegation_modal.technical_error_message.message')} ${t('delegation_modal.technical_error_message.all_failed', { name: toName })}`}
+                {delegationError === 'revoke' &&
+                  t('delegation_modal.technical_error_message.revoke_failed')}
               </DsParagraph>
             </DsAlert>
           )}
@@ -180,10 +185,14 @@ export const RightsSection = ({
           {hasAccess ? t('common.update_poa') : t('common.give_poa')}
         </Button>
         {hasAccess && toParty && (
-          <DeleteResourceButton
-            resource={resource}
-            fullText
-          />
+          <Button
+            variant='tertiary'
+            className={classes.deleteButton}
+            onClick={revokeResource}
+          >
+            <MinusCircleIcon />
+            {t('common.delete_poa')}
+          </Button>
         )}
       </div>
     </>

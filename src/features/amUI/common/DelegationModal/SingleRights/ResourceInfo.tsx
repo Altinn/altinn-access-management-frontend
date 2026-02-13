@@ -22,6 +22,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
     chips,
     saveEditedRights,
     delegateChosenRights,
+    revokeResource,
     undelegableActions,
     rights,
     hasUnsavedChanges,
@@ -47,34 +48,38 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
       {!!resource && (
         <div className={classes.infoView}>
           <ResourceHeading resource={resource} />
-          <StatusSection
-            userHasAccess={hasAccess}
-            showDelegationCheckWarning={showMissingRightsStatus}
-            cannotDelegateHere={cannotDelegateHere}
-          />
-          {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
-          {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
           {isActionLoading || isActionSuccess ? (
             <LoadingAnimation
               isLoading={isActionLoading}
               displaySuccess={isActionSuccess}
             />
           ) : (
-            <RightsSection
-              resource={resource}
-              chips={chips}
-              saveEditedRights={saveEditedRights}
-              delegateChosenRights={delegateChosenRights}
-              undelegableActions={undelegableActions}
-              rights={rights}
-              hasUnsavedChanges={hasUnsavedChanges}
-              hasAccess={hasAccess}
-              isDelegationCheckLoading={isDelegationCheckLoading}
-              isDelegationCheckError={isDelegationCheckError}
-              delegationCheckError={delegationCheckError}
-              delegationError={delegationError}
-              missingAccess={missingAccess}
-            />
+            <>
+              <StatusSection
+                userHasAccess={hasAccess}
+                showDelegationCheckWarning={showMissingRightsStatus}
+                cannotDelegateHere={cannotDelegateHere}
+              />
+              {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
+              {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
+
+              <RightsSection
+                resource={resource}
+                chips={chips}
+                saveEditedRights={saveEditedRights}
+                delegateChosenRights={delegateChosenRights}
+                revokeResource={revokeResource}
+                undelegableActions={undelegableActions}
+                rights={rights}
+                hasUnsavedChanges={hasUnsavedChanges}
+                hasAccess={hasAccess}
+                isDelegationCheckLoading={isDelegationCheckLoading}
+                isDelegationCheckError={isDelegationCheckError}
+                delegationCheckError={delegationCheckError}
+                delegationError={delegationError}
+                missingAccess={missingAccess}
+              />
+            </>
           )}
         </div>
       )}
