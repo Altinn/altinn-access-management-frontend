@@ -89,7 +89,9 @@ export const SystemUserAgentRequestPage = () => {
 
   const onRejectOrApprove = (): void => {
     if (skipLogout) {
-      navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+      navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`, {
+        state: { createdId: request?.id },
+      });
     } else {
       const url = request?.redirectUrl
         ? `${getApiBaseUrl()}/agentrequest/${request?.id}/logout`
