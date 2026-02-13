@@ -22,6 +22,7 @@ import {
   useGetIsCompanyProfileAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
+import { useGetMyClientsQuery } from '@/rtk/features/clientApi';
 import { useTranslation } from 'react-i18next';
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { useSearchParams } from 'react-router';
@@ -38,9 +39,11 @@ import {
   getClientAdministrationMenuItem,
   getSettingsMenuItem,
   getSystemUserMenuItem,
+  getYourClientsMenuItem,
   getUsersMenuItem,
   getYourRightsMenuItem,
 } from '@/resources/utils/sidebarConfig';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/reporteeUtils';
 import { getHostUrl } from '@/resources/utils/pathUtils';
@@ -58,6 +61,7 @@ export const LandingPage = () => {
     useGetIsCompanyProfileAdminQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const { pendingRequests, isLoadingRequests } = useRequests();
+  const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
 
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
@@ -65,6 +69,19 @@ export const LandingPage = () => {
   });
 
   const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
+  const { data: myClientsByProvider } = useGetMyClientsQuery(
+    { provider: [actingPartyUuid] },
+    {
+      skip:
+        !actingPartyUuid ||
+        !reportee?.partyUuid ||
+        !currentUser?.partyUuid ||
+        isCurrentUserReportee,
+    },
+  );
+  const hasMyClients =
+    myClientsByProvider?.some((providerWithClients) => providerWithClients.clients.length > 0) ??
+    false;
 
   useEffect(() => {
     // Remove the openAccountMenu query parameter after reading it the first time
@@ -200,7 +217,13 @@ export const LandingPage = () => {
         : t('landing_page.your_rights_description', { reportee: reporteeName }),
     });
 
-    // TODO: Add Your Clients item here
+    if (!isCurrentUserReportee && hasMyClients) {
+      items.push({
+        ...getYourClientsMenuItem('/', isLoading),
+        description: t('landing_page.your_clients_description', { reportee: reporteeName }),
+      });
+    }
+
     return items;
   };
 

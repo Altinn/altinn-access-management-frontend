@@ -1,0 +1,85 @@
+[
+  {
+    "provider": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "ACME Accounting AS",
+      "type": "Organization",
+      "variant": "org",
+      "parent": null,
+      "children": null,
+      "partyId": 500099,
+      "organizationIdentifier": "987654321",
+      "dateOfBirth": null
+    },
+    "clients": [
+      {
+        "client": {
+          "id": "77777777-7777-7777-7777-777777777777",
+          "name": "ACME AS",
+          "type": "Organization",
+          "variant": "org",
+          "parent": null,
+          "children": null,
+          "partyId": 500000,
+          "organizationIdentifier": "123456789",
+          "dateOfBirth": null
+        },
+        "access": [
+          {
+            "role": {
+              "id": "11111111-1111-1111-1111-111111111111",
+              "code": "DAGL",
+              "children": null
+            },
+            "packages": [
+              {
+                "id": "22222222-2222-2222-2222-222222222222",
+                "urn": "urn:altinn:accesspackage:demo",
+                "areaId": "33333333-3333-3333-3333-333333333333"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "client": {
+          "id": "4e3c6b21-9c5a-4e1f-8c2b-0e7a6ec3f3c8",
+          "name": "NORDIC DATA AS",
+          "type": "Organization",
+          "variant": "org",
+          "parent": {
+            "id": "f1c4cc73-9ec1-4f11-8a3c-f2ad3d7c1e2a",
+            "name": "NORDIC GROUP AS",
+            "type": "Organization",
+            "variant": "org",
+            "parent": null,
+            "children": null,
+            "partyId": 500010,
+            "organizationIdentifier": "999888777",
+            "dateOfBirth": null
+          },
+          "children": null,
+          "partyId": 500011,
+          "organizationIdentifier": "910111213",
+          "dateOfBirth": null
+        },
+        "access": [
+          {
+            "role": {
+              "id": "c1db67c2-0178-4b68-8b3f-9d048393ca5b",
+              "code": "HADM",
+              "children": null
+            },
+            "packages": [
+              {
+                "id": "2e1c4c0a-3d3d-4b9c-b6ed-1c65e1c665a8",
+                "urn": "urn:altinn:accesspackage:agent",
+                "areaId": "a2d8b1b0-36c6-4e39-8a9a-002c1bfe7a24"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

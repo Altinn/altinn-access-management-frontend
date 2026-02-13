@@ -21,6 +21,11 @@ export interface Agent {
   access: ClientAccess[];
 }
 
+export interface MyClientsByProvider {
+  provider: Entity;
+  clients: Client[];
+}
+
 export interface AssignmentDto {
   id: string;
   roleId: string;
@@ -62,8 +67,21 @@ export const clientApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['clients', 'agents', 'agentAccessPackages', 'clientAccessPackages'],
+  tagTypes: ['clients', 'agents', 'agentAccessPackages', 'clientAccessPackages', 'myClients'],
   endpoints: (builder) => ({
+    getMyClients: builder.query<MyClientsByProvider[], { provider?: string[] } | void>({
+      query: (args) => {
+        const providers = args?.provider?.filter((providerId) => providerId?.trim()) ?? [];
+        const providerQuery =
+          providers.length > 0
+            ? providers.map((providerId) => `provider=${encodeURIComponent(providerId)}`).join('&')
+            : '';
+
+        return providerQuery ? `my/clients?${providerQuery}` : 'my/clients';
+      },
+      keepUnusedDataFor: 3 * 60,
+      providesTags: ['myClients'],
+    }),
     getClients: builder.query<Client[], GetClientsArgs | void>({
       query: (args) => {
         const party = args?.party ?? getCookie('AltinnPartyUuid');
@@ -116,6 +134,24 @@ export const clientApi = createApi({
       }),
       invalidatesTags: ['agentAccessPackages', 'clientAccessPackages'],
     }),
+    removeMyClientAccessPackages: builder.mutation<
+      void,
+      { provider: string; from: string; payload: DelegationBatchInput }
+    >({
+      query: ({ provider, from, payload }) => ({
+        url: `my/clients?provider=${provider}&from=${from}`,
+        method: 'DELETE',
+        body: payload,
+      }),
+      invalidatesTags: ['myClients'],
+    }),
+    removeMyClientProvider: builder.mutation<void, { provider: string }>({
+      query: ({ provider }) => ({
+        url: `my/clientproviders?provider=${provider}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['myClients'],
+    }),
     addAgent: builder.mutation<AssignmentDto, { to?: string; personInput?: PersonInput }>({
       query: ({ to, personInput }) => ({
         url: `agents?party=${getCookie('AltinnPartyUuid')}${to ? `&to=${to}` : ''}`,
@@ -135,12 +171,15 @@ export const clientApi = createApi({
 });
 
 export const {
+  useGetMyClientsQuery,
   useGetClientsQuery,
   useGetAgentsQuery,
   useGetAgentAccessPackagesQuery,
   useGetClientAccessPackagesQuery,
   useAddAgentAccessPackagesMutation,
   useRemoveAgentAccessPackagesMutation,
+  useRemoveMyClientAccessPackagesMutation,
+  useRemoveMyClientProviderMutation,
   useAddAgentMutation,
   useRemoveAgentMutation,
 } = clientApi;

@@ -9,7 +9,6 @@ import { amUIPath } from '@/routes/paths';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
 import { ClientAdministrationAgentClientsList } from './ClientAdministrationAgentClientsList';
 import {
   createErrorDetails,
@@ -100,15 +99,7 @@ export const ClientAdministrationAgentDetails = () => {
           label: userName,
         }}
       />
-      <PageContainer
-        backUrl={backUrl}
-        contentActions={
-          <ClientAdministrationAgentDeleteModal
-            agentId={id}
-            backUrl={backUrl}
-          />
-        }
-      >
+      <PageContainer backUrl={backUrl}>
         {isLoadingIsClientAdmin || isLoadingAgentAccessPackages || isLoadingClients ? (
           <>
             <UserPageHeaderSkeleton />

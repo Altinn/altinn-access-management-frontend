@@ -2,3 +2,16 @@
   background-color: var(--backgroundColorA3);
   min-height: 100vh;
 }
+
+.pageAction {
+  position: fixed;
+  top: calc(4rem + var(--ds-spacing-2));
+  right: var(--ds-spacing-4);
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .pageAction {
+    right: var(--ds-spacing-2);
+  }
+}
