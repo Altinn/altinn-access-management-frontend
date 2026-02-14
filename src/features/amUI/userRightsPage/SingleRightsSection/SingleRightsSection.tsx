@@ -21,26 +21,29 @@ import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 export const SingleRightsSection = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const fromPartyId = getCookie('AltinnPartyId');
   const { displayResourceDelegation } = window.featureFlags;
+  const { toParty, fromParty, actingParty } = usePartyRepresentation();
 
   const {
-    data: singleRights,
+    data: delegatedResources,
     isError,
     error,
     isLoading,
   } = useGetSingleRightsForRightholderQuery(
     {
-      party: fromPartyId,
-      userId: id || '',
+      actingParty: actingParty?.partyUuid || '',
+      from: fromParty?.partyUuid || '',
+      to: toParty?.partyUuid || '',
     },
     {
-      skip: !displayResourceDelegation,
+      skip: !displayResourceDelegation || !actingParty || !fromParty || !toParty,
     },
   );
 
-  const { toParty, fromParty, actingParty } = usePartyRepresentation();
-  const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights ?? [], 5);
+  const { paginatedData, totalPages, currentPage, goToPage } = usePagination(
+    delegatedResources ?? [],
+    5,
+  );
   const modalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
 
@@ -80,7 +83,7 @@ export const SingleRightsSection = () => {
           data-size='xs'
           id='single_rights_title'
         >
-          {t('single_rights.current_services_title', { count: singleRights?.length })}
+          {t('single_rights.current_services_title', { count: delegatedResources?.length })}
         </DsHeading>
         <DelegationModal delegationType={DelegationType.SingleRights} />
         {isError && <div>{t('user_rights_page.error')}</div>}

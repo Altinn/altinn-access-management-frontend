@@ -21,6 +21,7 @@ import { SearchResults } from './SearchResults';
 import { FilterChips } from './FilterChips';
 
 import classes from './ResourceSearch.module.css';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface ResourceSearchProps {
   onSelect: (resource: ServiceResource) => void;
@@ -29,10 +30,11 @@ export interface ResourceSearchProps {
 
 const searchResultsPerPage = 7;
 
-export const ResourceSearch = ({ onSelect, toParty }: ResourceSearchProps) => {
+export const ResourceSearch = ({ onSelect }: ResourceSearchProps) => {
   const { t } = useTranslation();
   const { id } = useParams();
 
+  const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
     useDelegationModalContext();
   const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
@@ -46,10 +48,14 @@ export const ResourceSearch = ({ onSelect, toParty }: ResourceSearchProps) => {
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
   });
-  const { data: delegatedResources } = useGetSingleRightsForRightholderQuery({
-    party: getCookie('AltinnPartyId'),
-    userId: id || '',
-  });
+  const { data: delegatedResources } = useGetSingleRightsForRightholderQuery(
+    {
+      actingParty: actingParty?.partyUuid || '',
+      from: fromParty?.partyUuid || '',
+      to: toParty?.partyUuid || '',
+    },
+    { skip: !toParty || !fromParty || !actingParty },
+  );
 
   const displayPopularResources =
     !searchString && filters.length === 0 && window.featureFlags.displayPopularSingleRightsServices;

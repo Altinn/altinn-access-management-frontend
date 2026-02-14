@@ -28,7 +28,19 @@ export interface ServiceResource {
 
 export interface ResourceDelegation {
   resource: ServiceResource;
-  delegation: DelegationResult;
+  permissions: Permissions[];
+}
+
+export interface ResourceRight {
+  resource: ServiceResource;
+  rules: ResourcePermissions[];
+}
+
+export interface ResourcePermissions {
+  key: string;
+  action: string;
+  subResource?: string;
+  perrmissions: Permissions[];
 }
 
 interface resourceReference {
@@ -68,7 +80,7 @@ export const singleRightsApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['SingleRights', 'overview', 'delegationCheck'],
+  tagTypes: ['SingleRights', 'resources', 'delegationCheck', 'rights'],
   endpoints: (builder) => ({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
@@ -83,10 +95,19 @@ export const singleRightsApi = createApi({
     }),
     getSingleRightsForRightholder: builder.query<
       ResourceDelegation[],
-      { party: string; userId: string }
+      { actingParty: string; from: string; to: string }
     >({
-      query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,
-      providesTags: ['overview'],
+      query: ({ actingParty, from, to }) =>
+        `singleright/delegation/resources?party=${actingParty}&to=${to}&from=${from}`,
+      providesTags: ['resources'],
+    }),
+    getResourceRights: builder.query<
+      ResourceRight,
+      { actingParty: string; from: string; to: string; resourceId: string }
+    >({
+      query: ({ actingParty, from, to, resourceId }) =>
+        `singleright/delegation/resources/rights?party=${actingParty}&to=${to}&from=${from}&resourceId=${encodeURIComponent(resourceId)}`,
+      providesTags: ['rights'],
     }),
     delegationCheck: builder.query<DelegationCheckedAction[], string>({
       query: (resourceId) => ({
@@ -127,7 +148,7 @@ export const singleRightsApi = createApi({
       transformErrorResponse: (response: { status: string | number }) => {
         return response.status;
       },
-      invalidatesTags: ['overview', 'delegationCheck'],
+      invalidatesTags: ['resources', 'delegationCheck', 'rights'],
     }),
     revokeResource: builder.mutation<
       { isSuccessStatusCode: boolean },
@@ -139,7 +160,7 @@ export const singleRightsApi = createApi({
           method: 'DELETE',
         };
       },
-      invalidatesTags: ['overview', 'delegationCheck'],
+      invalidatesTags: ['resources', 'delegationCheck', 'rights'],
     }),
     updateResource: builder.mutation<
       void,
@@ -152,7 +173,7 @@ export const singleRightsApi = createApi({
           body: JSON.stringify(actionKeys),
         };
       },
-      invalidatesTags: ['overview', 'delegationCheck'],
+      invalidatesTags: ['resources', 'delegationCheck', 'rights'],
     }),
   }),
 });
@@ -160,6 +181,7 @@ export const singleRightsApi = createApi({
 export const {
   useGetPaginatedSearchQuery,
   useGetSingleRightsForRightholderQuery,
+  useGetResourceRightsQuery,
   useClearAccessCacheMutation,
   useDelegationCheckQuery,
   useDelegateRightsMutation,

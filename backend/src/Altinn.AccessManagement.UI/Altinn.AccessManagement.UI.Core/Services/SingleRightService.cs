@@ -77,22 +77,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ResourceDelegation>> GetSingleRightsForRightholder(string languageCode, string party, string userId)
+        public async Task<List<ResourceDelegation>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to)
         {
-            var res = await _accessManagementClient.GetSingleRightsForRightholder(party, userId);
-            var results = await res.Content.ReadAsStringAsync();
+            List<ResourcePermission> resourcePermissions = await _singleRightClient.GetDelegatedResources(languageCode, party, from, to);
 
-            var delegationOutputs = JsonSerializer.Deserialize<List<DelegationOutput>>(results, options);
             List<ResourceDelegation> delegationsFE = new List<ResourceDelegation>();
 
             // Create a Lookup to map orgnr to org details
             OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
 
-            foreach (var delegation in delegationOutputs)
+            foreach (var resourcePermission in resourcePermissions)
             {
-                var firstRightDelegationResult = delegation.RightDelegationResults?.First();
-                var firstResource = firstRightDelegationResult?.Resource?.First();
-                var resourceId = firstResource?.Value;
+                var resourceId = resourcePermission.Resource?.RefId;
 
                 if (string.IsNullOrEmpty(resourceId))
                 {
@@ -107,28 +103,34 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     orgList.Orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out var org);
 
                     ServiceResourceFE resourceFE = new ServiceResourceFE(
-                    resource.Identifier,
-                    resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
-                    resourceType: resource.ResourceType,
-                    status: resource.Status,
-                    resourceReferences: resource.ResourceReferences,
-                    resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                    resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
-                    resourceOwnerOrgcode: resource.HasCompetentAuthority?.Orgcode,
-                    rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
-                    description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
-                    visible: resource.Visible,
-                    delegable: resource.Delegable,
-                    contactPoints: resource.ContactPoints,
-                    spatial: resource.Spatial,
-                    authorizationReference: resource.AuthorizationReference,
-                    resourceOwnerLogoUrl: org?.Logo);
+                        resource.Identifier,
+                        resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
+                        resourceType: resource.ResourceType,
+                        status: resource.Status,
+                        resourceReferences: resource.ResourceReferences,
+                        resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
+                        resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
+                        resourceOwnerOrgcode: resource.HasCompetentAuthority?.Orgcode,
+                        rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
+                        description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
+                        visible: resource.Visible,
+                        delegable: resource.Delegable,
+                        contactPoints: resource.ContactPoints,
+                        spatial: resource.Spatial,
+                        authorizationReference: resource.AuthorizationReference,
+                        resourceOwnerLogoUrl: org?.Logo);
 
-                    delegationsFE.Add(new ResourceDelegation(resourceFE, delegation));
+                    delegationsFE.Add(new ResourceDelegation(resourceFE, resourcePermission.Permissions));
                 }
             }
 
             return delegationsFE;
+        }
+
+        /// <inheritdoc />
+        public async Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
+        {
+            return await _singleRightClient.GetDelegatedResourceRights(languageCode, party, from, to, resource);
         }
 
         /// <inheritdoc />

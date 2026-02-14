@@ -54,6 +54,24 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
+        public Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "SingleRight", "GetDelegations", "delegations.json");
+            return Task.FromResult(Util.GetMockData<List<ResourcePermission>>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "SingleRight", "GetResourceRights", $"{resource}.json");
+            return Task.FromResult(Util.GetMockData<ResourceRight>(dataPath));
+        }
+
+        /// <inheritdoc />
         public async Task<HttpResponseMessage> CreateSingleRightsAccess(Guid party, Guid to, Guid from, string resourceId, List<string> actionKeys)
         {
             ThrowExceptionIfTriggerParty(from.ToString());

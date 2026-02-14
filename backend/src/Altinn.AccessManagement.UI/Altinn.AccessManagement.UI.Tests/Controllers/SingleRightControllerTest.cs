@@ -654,7 +654,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(expectedResponse.Count, actualResponse.Count);
             AssertionUtil.AssertCollections(expectedResponse.Select(r => r.Resource).ToList(), actualResponse.Select(r => r.Resource).ToList(), AssertionUtil.AssertEqual);
-            AssertionUtil.AssertCollections(expectedResponse.Select(r => r.Delegation).ToList().ToList(), actualResponse.Select(r => r.Delegation).ToList(), AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedResponse.Select(r => r.Permissions).ToList(), actualResponse.Select(r => r.Permissions).ToList(), (expected, actual) => AssertionUtil.AssertCollections(expected, actual, AssertionUtil.AssertEqual));
 
         }
 

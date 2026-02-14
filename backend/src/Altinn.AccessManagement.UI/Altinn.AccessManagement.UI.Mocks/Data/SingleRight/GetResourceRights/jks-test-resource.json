@@ -1,0 +1,54 @@
+{
+    "resource": {
+        "id": "b8c9d0e1-f2a3-4567-0123-678901234567",
+        "providerId": "c9d0e1f2-a3b4-5678-1234-789012345678",
+        "typeId": "d0e1f2a3-b4c5-6789-2345-890123456789",
+        "name": "JK's Test Ressurs",
+        "description": "Veldig fin test ressurs",
+        "refId": "jks-test-resource",
+        "provider": {
+            "id": "c9d0e1f2-a3b4-5678-1234-789012345678",
+            "name": "JK's Test departement",
+            "refId": "991825827",
+            "logoUrl": null,
+            "code": "ttd",
+            "typeId": "e1f2a3b4-c5d6-7890-3456-901234567890"
+        },
+        "type": {
+            "id": "genericaccessresource",
+            "name": "GenericAccessResource"
+        }
+    },
+    "rules": [
+        {
+            "key": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+            "subResource": "",
+            "action": "read",
+            "permissions": [
+                {
+                    "from": {
+                        "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+                        "name": "DISKRET NÆR TIGER AS",
+                        "type": "organization",
+                        "variant": "AS",
+                        "parent": null,
+                        "children": null,
+                        "partyId": 51329012
+                    },
+                    "to": {
+                        "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+                        "name": "SITRONGUL MEDALJONG",
+                        "type": "person",
+                        "variant": null,
+                        "parent": null,
+                        "children": null,
+                        "partyId": 50789533
+                    },
+                    "via": null,
+                    "role": null,
+                    "viaRole": null
+                }
+            ]
+        }
+    ]
+}

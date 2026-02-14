@@ -9,6 +9,7 @@ import {
   DelegationCheckedAction,
   ServiceResource,
   useDelegationCheckQuery,
+  useGetResourceRightsQuery,
   useGetSingleRightsForRightholderQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { arraysEqualUnordered } from '@/resources/utils';
@@ -46,14 +47,16 @@ export const useRightsSection = ({
 
   /// Hooks and data fetching
 
-  const { toParty, fromParty } = usePartyRepresentation();
+  const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const revoke = useRevokeResource();
-  const { data: delegatedResources, isFetching } = useGetSingleRightsForRightholderQuery(
+  const { data: resourceRights, isFetching: isResourceRightsFetching } = useGetResourceRightsQuery(
     {
-      party: getCookie('AltinnPartyId'),
-      userId: toParty?.partyId.toString() || '',
+      actingParty: actingParty?.partyUuid || '',
+      from: fromParty?.partyUuid || '',
+      to: toParty?.partyUuid || '',
+      resourceId: resource.identifier,
     },
-    { skip: !toParty },
+    { skip: !toParty || !fromParty || !actingParty || !resource.identifier },
   );
   const { data: reportee } = useGetReporteeQuery();
   const {
@@ -61,7 +64,7 @@ export const useRightsSection = ({
     isError: isDelegationCheckError,
     error: delegationCheckError,
     isLoading: isDelegationCheckLoading,
-  } = useDelegationCheckQuery(resource.identifier);
+  } = useDelegationCheckQuery(resource.identifier, { skip: !resource.identifier });
 
   /// Computed values
 
@@ -81,24 +84,17 @@ export const useRightsSection = ({
 
   // Instantiate/reset access and rights states
   useEffect(() => {
-    if (delegatedResources && !isFetching) {
-      const resourceDelegation =
-        !!delegatedResources &&
-        delegatedResources.find(
-          (delegation) => delegation.resource.identifier === resource.identifier,
-        );
-      if (resourceDelegation) {
+    if (resourceRights && !isResourceRightsFetching) {
+      if (resourceRights.rules.length > 0) {
         setHasAccess(true);
-        const rightKeys = resourceDelegation.delegation.rightDelegationResults.map(
-          (r) => r.rightKey,
-        );
+        const rightKeys = resourceRights.rules.map((r) => r.key);
         setCurrentRights(rightKeys);
       } else {
         setHasAccess(false);
         setCurrentRights([]);
       }
     }
-  }, [delegatedResources, isFetching, resource.identifier]);
+  }, [resourceRights, isResourceRightsFetching, resource.identifier]);
 
   // Instantiate/reset rights and missing access message states
   useEffect(() => {

@@ -1,4 +1,6 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using System;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -13,6 +15,27 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="from">The party from which the delegation would be on behalf of</param>
         /// <param name="resource">The id of the resource to be checked for delegation</param>
         Task<ResourceCheckDto> GetDelegationCheck(Guid from, string resource);
+
+        /// <summary>
+        ///     Retrieves the delegated resources for a specific right holder.
+        /// </summary>
+        /// <param name = "languageCode" > The language that the response should be given on</param>
+        /// <param name = "party" > The acting party that is asking to see the resource delegations</param>
+        /// <param name="from">The party from which the resources have been delegated</param>
+        /// <param name="to">The party that has received the delegations</param>
+        /// <returns>A list of <see cref="ResourcePermission"/> representing the delegated resources for the specified parties</returns>
+        Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to);
+
+        /// <summary>
+        ///     Retrieves the delegated resources for a specific right holder.
+        /// </summary>
+        /// <param name = "languageCode" > The language that the response should be given on</param>
+        /// <param name = "party" > The acting party that is asking to see the resource delegations</param>
+        /// <param name="from">The party from which the resources have been delegated</param>
+        /// <param name="to">The party that has received the delegations</param>
+        /// <param name="resource">The id of the resource to fetch single rights for</param>
+        /// <returns>A <see cref="ResourceRight"/> representing the delegated rights for the specified resource</returns>
+        Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource);
 
         /// <summary>
         ///    Creates a new delegation of a service with rights

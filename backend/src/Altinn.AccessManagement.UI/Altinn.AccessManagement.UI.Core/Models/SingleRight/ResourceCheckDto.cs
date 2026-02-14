@@ -1,4 +1,6 @@
-﻿namespace Altinn.AccessManagement.UI.Core.Models.SingleRight;
+﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+
+namespace Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 /// <summary>
 /// Delegation check model for a resource
@@ -8,7 +10,7 @@ public class ResourceCheckDto
     /// <summary>
     /// Resource the delegation check is regarding
     /// </summary>
-    public required ResourceDto Resource { get; set; }
+    public required ResourceAM Resource { get; set; }
 
     /// <summary>
     /// Actions for which access is being checked on the resource.

@@ -65,19 +65,29 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<HttpResponseMessage> Delegate(Guid party, Guid from, Guid to, string resource, List<string> actionKeys);
 
         /// <summary>
-        ///     Gets the single-rights for a given rightholder
+        ///     Gets the resources (without actions) that have been granted from one party to another
         /// </summary>
         /// <param name="languageCode">
         ///     The language code for the request
         /// </param>
-        /// <param name="party">
-        ///     The party from which the rights have been given (delegator)
-        /// </param>
-        /// <param name="userId">
-        ///     The user id of the rightholder
-        /// </param>
+        /// <param name="party">The acting party that is asking to see the resource delegations</param>
+        /// <param name="from">The party from which the resources have been delegated</param>
+        /// <param name="to">The party that has received the delegations</param>
         /// <returns></returns>
-        Task<List<ResourceDelegation>> GetSingleRightsForRightholder(string languageCode, string party, string userId);
+        Task<List<ResourceDelegation>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to);
+
+        /// <summary>
+        ///     Gets the resources (without actions) that have been granted from one party to another
+        /// </summary>
+        /// <param name="languageCode">
+        ///     The language code for the request
+        /// </param>
+        /// <param name="party">The acting party that is asking to see the resource delegations</param>
+        /// <param name="from">The party from which the resources have been delegated</param>
+        /// <param name="to">The party that has received the delegations</param>
+        /// <param name="resource">The identifier of the resource that has been granted access to</param>
+        /// <returns></returns>
+        Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource);
 
         /// <summary>
         /// Revokes all rights on a resource that has been granted from one party to another.

@@ -1,0 +1,54 @@
+{
+    "resource": {
+        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "providerId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+        "typeId": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+        "name": "Det magiske klesskapet",
+        "description": "The Magic Closet",
+        "refId": "appid-502",
+        "provider": {
+            "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+            "name": "NARNIA",
+            "refId": "777777777",
+            "logoUrl": null,
+            "code": "NRNA",
+            "typeId": "d4e5f6a7-b8c9-0123-def0-234567890123"
+        },
+        "type": {
+            "id": "default",
+            "name": "Default"
+        }
+    },
+    "rules": [
+        {
+            "key": "urn:altinn:resource:appid-502:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+            "subResource": "",
+            "action": "read",
+            "permissions": [
+                {
+                    "from": {
+                        "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+                        "name": "DISKRET NÆR TIGER AS",
+                        "type": "organization",
+                        "variant": "AS",
+                        "parent": null,
+                        "children": null,
+                        "partyId": 51329012
+                    },
+                    "to": {
+                        "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+                        "name": "SITRONGUL MEDALJONG",
+                        "type": "person",
+                        "variant": null,
+                        "parent": null,
+                        "children": null,
+                        "partyId": 50789533
+                    },
+                    "via": null,
+                    "role": null,
+                    "viaRole": null
+                }
+            ]
+        }
+    ]
+}
