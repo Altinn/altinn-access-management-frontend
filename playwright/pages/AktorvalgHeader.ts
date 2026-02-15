@@ -54,9 +54,9 @@ export class AktorvalgHeader {
   }
 
   async goToSelectActor(actorName: string) {
-    await this.page.waitForLoadState('domcontentloaded');
-    await this.page.getByRole('button', { name: actorName }).click();
-    await expect(this.page.locator('a').filter({ hasText: actorName }).first()).toBeVisible();
+    // await this.page.waitForLoadState('domcontentloaded'); // is this needed?
+    await expect(this.page.getByLabel(actorName).first()).toBeVisible();
+    await this.page.getByLabel(actorName).first().click();
   }
 
   async selectActor(actorName: string) {
@@ -64,8 +64,8 @@ export class AktorvalgHeader {
   }
 
   async currentlySelectedActor(actorName: string) {
-    await this.page.waitForLoadState('domcontentloaded');
-    await this.page.waitForTimeout(50);
+    // await this.page.waitForLoadState('domcontentloaded'); // is this needed?
+    // await this.page.waitForTimeout(50); // is this needed?
     await expect(this.page.getByRole('button', { name: actorName }).first()).toBeVisible();
   }
 
@@ -101,7 +101,7 @@ export class AktorvalgHeader {
   }
 
   async actorIsListed(name: string) {
-    await expect(this.page.locator('a').filter({ hasText: name }).first()).toBeVisible();
+    await expect(this.page.getByLabel(name).first()).toBeVisible();
   }
 
   async checkAllMenuButtons() {
