@@ -28,7 +28,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
   }) => {
     await page.goto(env('BASE_URL'));
     await login.LoginToAccessManagement('04856996188');
-    await aktorvalgHeader.selectActor('SUBJEKTIV ELASTISK TIGER AS');
+    await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
     await accessManagementFrontPage.goToUsers();
 
     // Step 3: Add new user
@@ -72,7 +72,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await test.step('log in', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('04856996188');
-      await aktorvalgHeader.selectActor('SUBJEKTIV ELASTISK TIGER AS');
+      await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
     });
 
     await test.step('delegate stuff via api', async () => {

@@ -31,12 +31,12 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
   });
 
   test('Check that all buttons are visible and clickable', async ({ page, aktorvalgHeader }) => {
-    let actorName = 'Kunnskapsrik Kry Ape';
+    let defaultActorName = 'Kunnskapsrik Kry Ape';
     const login = new LoginPage(page);
     await test.step('Log in', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('11886599619');
-      await aktorvalgHeader.selectActor(actorName);
+      await aktorvalgHeader.selectActorFromHeaderMenu(defaultActorName);
     });
 
     await test.step('choose bokmål', async () => {
@@ -54,20 +54,20 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
 
     // velg aktør
     await test.step('Choose an org as actor', async () => {
-      await aktorvalgHeader.goToSelectActor(actorName);
+      await aktorvalgHeader.goToSelectActor(defaultActorName);
       await aktorvalgHeader.removeAllFavorites();
-      await aktorvalgHeader.selectActor(actorName);
+      await aktorvalgHeader.selectActorFromHeaderMenu(defaultActorName);
     });
 
     //sett favoritt
     await test.step('Add actor as favorites', async () => {
-      await aktorvalgHeader.goToSelectActor(actorName);
+      await aktorvalgHeader.goToSelectActor(defaultActorName);
       await aktorvalgHeader.clickFavorite('KKunnskapsrik Kry Ape↳ Org.nr');
     });
 
     //fjern favoritt
     await test.step('Remove actor from favorites', async () => {
-      await aktorvalgHeader.selectActor('Håndfast Plasma');
+      await aktorvalgHeader.selectActorFromHeaderMenu('Håndfast Plasma');
       await aktorvalgHeader.goToSelectActor('Håndfast Plasma');
       await aktorvalgHeader.unfavoriteFirstActor();
     });

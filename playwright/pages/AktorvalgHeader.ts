@@ -1,7 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
-import { env } from 'playwright/util/helper';
-import { AccessManagementFrontPage } from './AccessManagementFrontPage';
 
 export class AktorvalgHeader {
   readonly page: Page;
@@ -10,6 +8,7 @@ export class AktorvalgHeader {
   readonly menuButton: Locator;
   readonly dummy: Locator;
   readonly searchBar: Locator;
+  readonly menuNavigation: Locator;
   readonly menuInbox: Locator;
   readonly menuAccessManagement: Locator;
   readonly menuApps: Locator;
@@ -20,6 +19,7 @@ export class AktorvalgHeader {
   readonly menuLogout: Locator;
   readonly aktorvalgSearch: Locator;
   readonly showDeletedSwitch: Locator;
+  readonly bokmalLanguageOption: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -30,36 +30,32 @@ export class AktorvalgHeader {
     this.searchBar = this.page.getByRole('searchbox', { name: 'Søk på altinn.no' });
 
     // Menu / Navigation
-    this.menuInbox = this.page.getByRole('navigation', { name: 'Menu' }).getByLabel('Innboks');
-    this.menuAccessManagement = this.page
-      .getByRole('navigation', { name: 'Menu' })
-      .getByLabel('Tilgangsstyring');
-    this.menuApps = this.page
-      .getByRole('navigation', { name: 'Menu' })
-      .getByLabel('Alle skjema og tjenester');
-    this.menuStartCompany = this.page
-      .getByRole('navigation', { name: 'Menu' })
-      .getByLabel('Starte og drive bedrift');
-    this.menuHelp = this.page
-      .getByRole('navigation', { name: 'Menu' })
-      .getByLabel('Trenger du hjelp?');
-    this.menuLanguage = this.page
-      .getByRole('navigation', { name: 'Menu' })
-      .getByLabel('Språk/language');
-    this.menuProfile = this.page.getByRole('navigation', { name: 'Menu' }).getByLabel('Din profil');
+    this.menuNavigation = this.page.getByRole('navigation', { name: 'Menu' });
+    this.menuInbox = this.menuItem('Innboks');
+    this.menuAccessManagement = this.menuItem('Tilgangsstyring');
+    this.menuApps = this.menuItem('Alle skjema og tjenester');
+    this.menuStartCompany = this.menuItem('Starte og drive bedrift');
+    this.menuHelp = this.menuItem('Trenger du hjelp?');
+    this.menuLanguage = this.menuItem('Språk/language');
+    this.menuProfile = this.menuItem('Din profil');
 
     this.menuLogout = this.page.getByRole('button', { name: 'Logg ut' });
     this.aktorvalgSearch = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
     this.showDeletedSwitch = this.page.getByRole('switch', { name: 'Vis slettede' });
+    this.bokmalLanguageOption = this.page.locator('#no_nb');
+  }
+
+  private menuItem(label: string): Locator {
+    return this.menuNavigation.getByLabel(label);
   }
 
   async goToSelectActor(actorName: string) {
-    // await this.page.waitForLoadState('domcontentloaded'); // is this needed?
     await expect(this.page.getByLabel(actorName).first()).toBeVisible();
     await this.page.getByLabel(actorName).first().click();
   }
 
-  async selectActor(actorName: string) {
+  async selectActorFromHeaderMenu(actorName: string) {
+    await expect(this.page.getByLabel(actorName).first()).toBeVisible();
     await this.page.getByLabel(actorName).first().click();
   }
 
@@ -159,7 +155,7 @@ export class AktorvalgHeader {
   async chooseBokmalLanguage() {
     await this.menuButton.click();
     await this.menuLanguage.click();
-    await this.page.locator('#no_nb').click();
+    await this.bokmalLanguageOption.click();
   }
 
   async expectedNumberOfActors(number: number) {

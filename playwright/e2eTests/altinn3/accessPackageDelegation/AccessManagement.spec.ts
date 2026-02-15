@@ -16,7 +16,7 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
+      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
     await test.step('Gå til brukere og velg bruker "Iherdig Litteratur"', async () => {
@@ -52,7 +52,7 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
+      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
     await test.step('Gå til brukere og velg deg selv', async () => {
@@ -160,7 +160,7 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
+      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
     await test.step('Gå til brukere-siden og velg deg selv', async () => {
@@ -186,7 +186,7 @@ test.describe('Tilgangsstyring', () => {
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
+      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
     await test.step('Gå til brukere-siden', async () => {
@@ -214,7 +214,7 @@ test.skip('Testdata for Tilgangsstyring-testene', () => {
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
       await aktorvalgHeader.goToInfoportal();
       await aktorvalgHeader.goToSelectActor('MORALSK KUNSTEVENTYR');
-      await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
+      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
     await test.step('Gå til brukere-siden', async () => {
@@ -250,7 +250,7 @@ test.skip('Testdata for Tilgangsstyring-testene', () => {
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
       await aktorvalgHeader.goToInfoportal();
       await aktorvalgHeader.goToSelectActor('MORALSK KUNSTEVENTYR');
-      await aktorvalgHeader.selectActor('UNDERDANIG DYPSINDIG TIGER AS');
+      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
     });
 
     await test.step('Gå til brukere-siden', async () => {
