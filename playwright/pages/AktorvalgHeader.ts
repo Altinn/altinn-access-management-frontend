@@ -59,18 +59,26 @@ export class AktorvalgHeader {
     return this.menuNavigation.getByLabel(label);
   }
 
+  private actorOption(actorName: string): Locator {
+    return this.page.getByLabel(actorName).first();
+  }
+
+  private selectedActorButton(actorName: string): Locator {
+    return this.page.getByRole('button', { name: actorName }).first();
+  }
+
   async goToSelectActor(actorName: string) {
-    await expect(this.page.getByLabel(actorName).first()).toBeVisible();
-    await this.page.getByLabel(actorName).first().click();
+    await expect(this.actorOption(actorName)).toBeVisible();
+    await this.actorOption(actorName).click();
   }
 
   async selectActorFromHeaderMenu(actorName: string) {
-    await expect(this.page.getByLabel(actorName).first()).toBeVisible();
-    await this.page.getByLabel(actorName).first().click();
+    await expect(this.actorOption(actorName)).toBeVisible();
+    await this.actorOption(actorName).click();
   }
 
   async currentlySelectedActor(actorName: string) {
-    await expect(this.page.getByRole('button', { name: actorName }).first()).toBeVisible();
+    await expect(this.selectedActorButton(actorName)).toBeVisible();
   }
 
   async goToInfoportal() {
