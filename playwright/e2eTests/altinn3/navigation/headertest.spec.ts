@@ -12,14 +12,9 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
       await login.LoginToAccessManagement('19846999968');
     });
 
-    // await test.step('Go to actor selector', async () => {
-    //   await aktorvalgHeader.goToInfoportal();
-    //   await aktorvalgHeader.goToSelectActor('Pratsom Skole');
-    // });
-
     await test.step('Expect three actors to be visible', async () => {
       await aktorvalgHeader.uncheckShowDeletedSwitch();
-      // await aktorvalgHeader.expectedNumberOfActors(3);
+      await aktorvalgHeader.expectedNumberOfActors(3);
     });
 
     await test.step('Click the "show deleted" switch', async () => {
@@ -27,7 +22,7 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
 
     await test.step('Expect four actors to be visible', async () => {
-      // await aktorvalgHeader.expectedNumberOfActors(4);
+      await aktorvalgHeader.expectedNumberOfActors(4);
     });
 
     await test.step('Expect one of them to be a deleted actor', async () => {

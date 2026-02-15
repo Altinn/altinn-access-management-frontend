@@ -64,8 +64,6 @@ export class AktorvalgHeader {
   }
 
   async currentlySelectedActor(actorName: string) {
-    // await this.page.waitForLoadState('domcontentloaded'); // is this needed?
-    // await this.page.waitForTimeout(50); // is this needed?
     await expect(this.page.getByRole('button', { name: actorName }).first()).toBeVisible();
   }
 
@@ -165,11 +163,17 @@ export class AktorvalgHeader {
   }
 
   async expectedNumberOfActors(number: number) {
-    await expect(this.page.getByRole('group').locator('a')).toHaveCount(number);
+    await expect(
+      this.page.locator('[role="menuitem"][aria-selected][aria-label]:visible'),
+    ).toHaveCount(number);
   }
 
   async expectActorToBeVisible(name: string) {
-    await expect(this.page.getByRole('group').locator('a').filter({ hasText: name })).toBeVisible();
+    await expect(
+      this.page
+        .locator('[role="menuitem"][aria-selected][aria-label]:visible')
+        .filter({ hasText: name }),
+    ).toBeVisible();
   }
 
   async expectDeletedActorToBeVisible(name: string) {
