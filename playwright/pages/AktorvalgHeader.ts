@@ -111,13 +111,8 @@ export class AktorvalgHeader {
     await this.page.getByRole('button', { name: 'Lukk Meny Meny' }).click();
   }
 
-  async clickFavorite(actorName: string) {
-    await this.page
-      // .locator('span')
-      // .filter({ hasText: actorName })
-      .getByLabel('Legg til i favorittar')
-      .first()
-      .click();
+  async clickFavorite() {
+    await this.page.getByLabel('Legg til i favorittar').first().click();
 
     await expect(
       this.page.getByRole('button', { name: 'Fjern frå favorittar' }).first(),
