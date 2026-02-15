@@ -8,8 +8,8 @@ const standardApiDetails = {
   department: 'Testdepartement',
 };
 
-test.describe('API-Delegations to organization user', () => {
-  test.skip('Delegate api to an organization', async ({ apiDelegations, login }) => {
+test.describe.skip('API-Delegations to organization user', () => {
+  test('Delegate api to an organization', async ({ apiDelegations, login }) => {
     const userThatDelegates = {
       id: '12917198150',
       reportee: 'AKSEPTABEL MOTLØS TIGER AS',
@@ -30,7 +30,7 @@ test.describe('API-Delegations to organization user', () => {
     await apiDelegations.verifyConfirmationPage(standardApiDetails, userToDelegateTo);
   });
 
-  test.skip('Delegate api to an organization and receiver verifies it', async ({
+  test('Delegate api to an organization and receiver verifies it', async ({
     login,
     logoutUser,
     apiDelegations,
@@ -70,7 +70,7 @@ test.describe('API-Delegations to organization user', () => {
     await apiDelegations.verifyAPIOverviewPage(userThatDelegates.reportee, standardApiDetails.name);
   });
 
-  test.skip('Delegate api to organization to which api was delegated before', async ({
+  test('Delegate api to organization to which api was delegated before', async ({
     apiDelegations,
     page,
     login,
@@ -100,7 +100,7 @@ test.describe('API-Delegations to organization user', () => {
     await apiDelegations.verifyConfirmationPage(standardApiDetails, userThatReceivesDelegation);
   });
 
-  test.skip('Verify filtering of API providers in API delagation and verify Forrige/ Neste buttons', async ({
+  test('Verify filtering of API providers in API delagation and verify Forrige/ Neste buttons', async ({
     apiDelegations,
     login,
   }) => {
@@ -129,7 +129,7 @@ test.describe('API-Delegations to organization user', () => {
     );
   });
 
-  test.skip('Delegate api to an organization by selecting from API providers filter', async ({
+  test('Delegate api to an organization by selecting from API providers filter', async ({
     apiDelegations,
     page,
     login,
@@ -166,7 +166,7 @@ test.describe('API-Delegations to organization user', () => {
     await expect(page.getByText(standardApiDetails.name)).toBeVisible();
   });
 
-  test.skip('Verify adding multiple organizations and APIs and deleting them', async ({
+  test('Verify adding multiple organizations and APIs and deleting them', async ({
     apiDelegations,
     page,
     login,
@@ -209,8 +209,8 @@ test.describe('API-Delegations to organization user', () => {
   });
 });
 
-test.describe('API Delegation Access Control Tests', () => {
-  test.skip('Verify that Tilgangsstyrer does NOT have access to API delegering panel', async ({
+test.describe.skip('API Delegation Access Control Tests', () => {
+  test('Verify that Tilgangsstyrer does NOT have access to API delegering panel', async ({
     page,
     login,
     apiDelegations,
@@ -230,7 +230,7 @@ test.describe('API Delegation Access Control Tests', () => {
     await expect(apiDelegations.getApiAccessButton).not.toBeVisible();
   });
 
-  test.skip('Verify reportee with Programmeringsgrensesnitt (API) role does have access to API-delegering panel', async ({
+  test('Verify reportee with Programmeringsgrensesnitt (API) role does have access to API-delegering panel', async ({
     page,
     login,
     apiDelegations,
@@ -252,7 +252,7 @@ test.describe('API Delegation Access Control Tests', () => {
     await expect(apiDelegations.getApiAccessButton).toBeVisible();
   });
 
-  test.skip('User is not able to delegate an API if they do not have the rights to the API it attempts to delegate', async ({
+  test('User is not able to delegate an API if they do not have the rights to the API it attempts to delegate', async ({
     page,
     login,
     apiDelegations,

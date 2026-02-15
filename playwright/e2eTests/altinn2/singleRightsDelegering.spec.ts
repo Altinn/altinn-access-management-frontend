@@ -2,7 +2,7 @@
 /* eslint-disable import/no-named-as-default-member */
 import { test } from '../../fixture/pomFixture';
 
-test.skip('User with DAGL/HADM role without having resource access themselves', () => {
+test.describe.skip('User with DAGL/HADM role without having resource access themselves', () => {
   test('User A who is DAGL/HADM for org delegates resources/Altinn 3 app/Altinn 2 services to User B', async ({
     login,
     delegate,
@@ -63,7 +63,7 @@ test.skip('User with DAGL/HADM role without having resource access themselves', 
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
   });
 
-  test.skip('User A who is DAGL/HADM for org delegates resources/Altinn 3 app/Altinn 2 services to Org B', async ({
+  test('User A who is DAGL/HADM for org delegates resources/Altinn 3 app/Altinn 2 services to Org B', async ({
     login,
     delegate,
     delegateRights,
@@ -126,7 +126,7 @@ test.skip('User with DAGL/HADM role without having resource access themselves', 
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
   });
 
-  test.skip('DAGL/HADM do not have rights to delegate Altinn2 to org Y , but has the rights to delegate same service after delegating sens role to himself', async ({
+  test('DAGL/HADM do not have rights to delegate Altinn2 to org Y , but has the rights to delegate same service after delegating sens role to himself', async ({
     login,
     delegate,
     delegateRights,
@@ -176,7 +176,7 @@ test.skip('User with DAGL/HADM role without having resource access themselves', 
     await coverebyRights.checkCoverebyRights();
   });
 
-  test.skip('Singleright delegation - Non-delegable service', async ({
+  test('Singleright delegation - Non-delegable service', async ({
     login,
     delegate,
     delegateRights,

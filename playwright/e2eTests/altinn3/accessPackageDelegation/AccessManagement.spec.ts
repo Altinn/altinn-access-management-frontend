@@ -199,7 +199,7 @@ test.describe('Tilgangsstyring', () => {
   });
 });
 
-test.skip('Testdata for Tilgangsstyring-testene', () => {
+test.describe.skip('Testdata for Tilgangsstyring-testene', () => {
   test('legg til testdata 70885100226 OVERFØLSOM KATT', async ({
     page,
     accessManagementFrontPage,
@@ -236,7 +236,7 @@ test.skip('Testdata for Tilgangsstyring-testene', () => {
     });
   });
 
-  test.skip('legg til testdata 64866402394 TRÅDLØS TELEFONNUMMER', async ({
+  test('legg til testdata 64866402394 TRÅDLØS TELEFONNUMMER', async ({
     page,
     accessManagementFrontPage,
   }) => {
