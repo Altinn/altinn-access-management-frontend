@@ -20,6 +20,7 @@ export class AktorvalgHeader {
   readonly aktorvalgSearch: Locator;
   readonly showDeletedSwitch: Locator;
   readonly bokmalLanguageOption: Locator;
+  readonly VisibleActors: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -43,6 +44,15 @@ export class AktorvalgHeader {
     this.aktorvalgSearch = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
     this.showDeletedSwitch = this.page.getByRole('switch', { name: 'Vis slettede' });
     this.bokmalLanguageOption = this.page.locator('#no_nb');
+
+    const actorDetails = this.page
+      .getByText('Født:', { exact: false })
+      .or(this.page.getByText('Org.nr', { exact: false }));
+
+    this.VisibleActors = this.page
+      .getByRole('menuitem')
+      .filter({ hasNot: this.page.getByRole('menuitem') })
+      .filter({ has: actorDetails });
   }
 
   private menuItem(label: string): Locator {
@@ -154,17 +164,11 @@ export class AktorvalgHeader {
   }
 
   async expectedNumberOfActors(number: number) {
-    await expect(
-      this.page.locator('[role="menuitem"][aria-selected][aria-label]:visible'),
-    ).toHaveCount(number);
+    await expect(this.VisibleActors).toHaveCount(number);
   }
 
   async expectActorToBeVisible(name: string) {
-    await expect(
-      this.page
-        .locator('[role="menuitem"][aria-selected][aria-label]:visible')
-        .filter({ hasText: name }),
-    ).toBeVisible();
+    await expect(this.VisibleActors.filter({ hasText: name })).toBeVisible();
   }
 
   async expectDeletedActorToBeVisible(name: string) {
