@@ -66,11 +66,6 @@ export const ResourceSearch = ({ onSelect, toParty }: ResourceSearchProps) => {
       })
     : [];
 
-  const unCheckFilter = (filter: string) => {
-    setFilters((prevState: string[]) => prevState.filter((f) => f !== filter));
-    setCurrentPage(1);
-  };
-
   const debouncedSearch = useCallback(
     debounce((searchString: string) => {
       setDebouncedSearchString(searchString);
