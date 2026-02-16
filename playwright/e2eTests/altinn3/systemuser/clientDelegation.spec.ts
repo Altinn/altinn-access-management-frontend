@@ -1,9 +1,9 @@
-import { test, expect } from 'playwright/fixture/pomFixture';
+import { test, expect } from '../../../fixture/pomFixture';
 
-import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../util/loadFacilitators';
-import { ClientDelegationPage } from '../../pages/systemuser/ClientDelegation';
-import { AccessManagementFrontPage } from '../../pages/AccessManagementFrontPage';
-import { ApiRequests } from '../../api-requests/ApiRequests';
+import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../../util/loadFacilitators';
+import { ClientDelegationPage } from '../../../pages/systemuser/ClientDelegation';
+import { AccessManagementFrontPage } from '../../../pages/AccessManagementFrontPage';
+import { ApiRequests } from '../../../api-requests/ApiRequests';
 
 test.describe('Delegering av klienter til Systembruker', () => {
   let api: ApiRequests;

@@ -8,6 +8,7 @@ import {
   useApproveAgentSystemUserRequestMutation,
   useRejectAgentSystemUserRequestMutation,
   useGetSystemUserReporteeQuery,
+  useGetSystemuserIsAdminQuery,
 } from '@/rtk/features/systemUserApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
@@ -22,7 +23,6 @@ import { SystemUserPath } from '@/routes/paths';
 import { RightsList } from './components/RightsList/RightsList';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
-import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
@@ -50,7 +50,9 @@ export const SystemUserAgentRequestPage = () => {
   } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
     skip: !request?.partyId,
   });
-  const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: isAdmin } = useGetSystemuserIsAdminQuery(request?.partyUuid ?? '', {
+    skip: !request?.partyUuid,
+  });
 
   const [
     postAcceptCreationRequest,
@@ -62,7 +64,7 @@ export const SystemUserAgentRequestPage = () => {
     { isError: isRejectCreationRequestError, isLoading: isRejectingSystemUser },
   ] = useRejectAgentSystemUserRequestMutation();
 
-  const isEscalationPossible = request?.userMayEscalateButNotApprove;
+  const isEscalationPossible = request?.userMayEscalateButNotApprove && request?.status === 'New';
 
   const isActionButtonDisabled =
     isAcceptingSystemUser || isRejectingSystemUser || request?.status !== 'New';
@@ -87,7 +89,9 @@ export const SystemUserAgentRequestPage = () => {
 
   const onRejectOrApprove = (): void => {
     if (skipLogout) {
-      navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+      navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`, {
+        state: { createdId: request?.id },
+      });
     } else {
       const url = request?.redirectUrl
         ? `${getApiBaseUrl()}/agentrequest/${request?.id}/logout`

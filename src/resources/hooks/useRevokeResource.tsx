@@ -1,21 +1,15 @@
+import { usePartyRepresentation } from '@/features/amUI/common/PartyRepresentationContext/PartyRepresentationContext';
 import { useRevokeResourceMutation } from '@/rtk/features/singleRights/singleRightsApi';
 
 export const useRevokeResource = () => {
   const [revoke] = useRevokeResourceMutation();
+  const { actingParty, toParty, fromParty } = usePartyRepresentation();
 
-  const revokeResource = (
-    resourceId: string,
-    fromPartyUuid: string,
-    toPartyUuid: string,
-    onSuccess?: () => void,
-    onError?: () => void,
-  ) => {
-    const from = fromPartyUuid;
-    const to = toPartyUuid;
-
+  const revokeResource = (resourceId: string, onSuccess?: () => void, onError?: () => void) => {
     revoke({
-      from,
-      to,
+      from: fromParty?.partyUuid || '',
+      to: toParty?.partyUuid || '',
+      party: actingParty?.partyUuid || '',
       resourceId,
     })
       .unwrap()

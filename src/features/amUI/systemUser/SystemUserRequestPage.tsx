@@ -9,6 +9,7 @@ import {
   useApproveSystemUserRequestMutation,
   useRejectSystemUserRequestMutation,
   useGetSystemUserReporteeQuery,
+  useGetSystemuserIsAdminQuery,
 } from '@/rtk/features/systemUserApi';
 
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
@@ -22,7 +23,6 @@ import { SystemUserPath } from '@/routes/paths';
 import { getApiBaseUrl } from './requestUtils';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
-import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
@@ -50,7 +50,9 @@ export const SystemUserRequestPage = () => {
   } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
     skip: !request?.partyId,
   });
-  const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: isAdmin } = useGetSystemuserIsAdminQuery(request?.partyUuid ?? '', {
+    skip: !request?.partyUuid,
+  });
 
   const [
     postAcceptCreationRequest,
@@ -62,7 +64,7 @@ export const SystemUserRequestPage = () => {
     { isError: isRejectCreationRequestError, isLoading: isRejectingSystemUser },
   ] = useRejectSystemUserRequestMutation();
 
-  const isEscalationPossible = request?.userMayEscalateButNotApprove;
+  const isEscalationPossible = request?.userMayEscalateButNotApprove && request?.status === 'New';
 
   const isActionButtonDisabled =
     isAcceptingSystemUser || isRejectingSystemUser || request?.status !== 'New';
@@ -87,7 +89,9 @@ export const SystemUserRequestPage = () => {
 
   const onRejectOrApprove = (): void => {
     if (skipLogout) {
-      navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+      navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`, {
+        state: { createdId: request?.id },
+      });
     } else {
       const url = request?.redirectUrl
         ? `${getApiBaseUrl()}/request/${request?.id}/logout`

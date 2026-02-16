@@ -60,6 +60,9 @@ export const systemUserApi = createApi({
         };
       },
     }),
+    getSystemuserIsAdmin: builder.query<boolean, string>({
+      query: (partyUuid) => `user/isAdmin?party=${partyUuid}`,
+    }),
 
     // systemregister
     getRegisteredSystems: builder.query<RegisteredSystem[], void>({
@@ -312,6 +315,7 @@ const apiWithTag = systemUserApi.enhanceEndpoints({
 
 export const {
   useGetSystemUserReporteeQuery,
+  useGetSystemuserIsAdminQuery,
   useCreateSystemUserMutation,
   useDeleteSystemuserMutation,
   useGetSystemUserQuery,

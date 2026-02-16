@@ -82,11 +82,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Revokes all rights on a resource that has been granted from one party to another.
         /// </summary>
+        /// <param name="party">The party that is performing the revoking</param>
         /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
         /// <param name="to">The right holder that has been granted access to the resource.</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
-        Task<HttpResponseMessage> RevokeResourceAccess(Guid from, Guid to, string resourceId);
+        Task<HttpResponseMessage> RevokeResourceAccess(Guid party, Guid from, Guid to, string resourceId);
 
         /// <summary>
         /// Makes requested changes to the rights on a resource that has been granted from one party to another.

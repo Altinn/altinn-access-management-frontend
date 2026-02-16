@@ -4,7 +4,6 @@ import { Button, DsButton, SnackbarDuration, useSnackbar } from '@altinn/altinn-
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
-import type { Party } from '@/rtk/features/lookupApi';
 
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 
@@ -14,9 +13,16 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 interface DeleteResourceButton {
   resource: ServiceResource;
   fullText?: boolean;
+  onSuccess?: () => void;
+  onError?: () => void;
 }
 
-export const DeleteResourceButton = ({ resource, fullText = false }: DeleteResourceButton) => {
+export const DeleteResourceButton = ({
+  resource,
+  fullText = false,
+  onSuccess,
+  onError,
+}: DeleteResourceButton) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
   const { fromParty, toParty } = usePartyRepresentation();
@@ -49,16 +55,15 @@ export const DeleteResourceButton = ({ resource, fullText = false }: DeleteResou
           setIsLoading(true);
           revoke(
             resource.identifier,
-            fromParty.partyUuid,
-
-            toParty.partyUuid,
             () => {
               setIsLoading(false);
               snackbar(true);
+              onSuccess?.();
             },
             () => {
               setIsLoading(false);
               snackbar(false);
+              onError?.();
             },
           );
         }}
