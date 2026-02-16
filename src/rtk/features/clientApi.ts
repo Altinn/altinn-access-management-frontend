@@ -86,7 +86,7 @@ export const clientApi = createApi({
         const roles = args?.roles?.filter((role) => role?.trim());
         const roleQuery =
           roles && roles.length
-            ? `&role=${roles.map((r) => encodeURIComponent(r)).join('&role=')}`
+            ? `&roles=${roles.map((r) => encodeURIComponent(r)).join('&roles=')}`
             : '';
         return `clients?party=${party}${roleQuery}`;
       },

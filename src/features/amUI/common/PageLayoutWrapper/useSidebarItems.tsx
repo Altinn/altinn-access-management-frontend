@@ -36,7 +36,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
   const displayRequestsPage = window.featureFlags?.displayRequestsPage;
   const displayClientAdministrationPage = window.featureFlags?.displayClientAdministrationPage;
-  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
+  const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
 
