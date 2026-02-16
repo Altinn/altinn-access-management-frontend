@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-import { test } from './../fixture/pomFixture';
+import { test } from '../../fixture/pomFixture';
 import { env } from 'playwright/util/helper';
 
 const standardApiDetails = {
@@ -8,7 +8,7 @@ const standardApiDetails = {
   department: 'Testdepartement',
 };
 
-test.describe.skip('@slow API-Delegations to organization user', () => {
+test.describe.skip('API-Delegations to organization user', () => {
   test('Delegate api to an organization', async ({ apiDelegations, login }) => {
     const userThatDelegates = {
       id: '12917198150',
@@ -209,7 +209,7 @@ test.describe.skip('@slow API-Delegations to organization user', () => {
   });
 });
 
-test.describe('@slow API Delegation Access Control Tests', () => {
+test.describe.skip('API Delegation Access Control Tests', () => {
   test('Verify that Tilgangsstyrer does NOT have access to API delegering panel', async ({
     page,
     login,

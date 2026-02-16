@@ -1,7 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
-import { env } from 'playwright/util/helper';
-import { AccessManagementFrontPage } from './AccessManagementFrontPage';
 
 export class AktorvalgHeader {
   readonly page: Page;
@@ -10,6 +8,7 @@ export class AktorvalgHeader {
   readonly menuButton: Locator;
   readonly dummy: Locator;
   readonly searchBar: Locator;
+  readonly menuNavigation: Locator;
   readonly menuInbox: Locator;
   readonly menuAccessManagement: Locator;
   readonly menuApps: Locator;
@@ -20,6 +19,12 @@ export class AktorvalgHeader {
   readonly menuLogout: Locator;
   readonly aktorvalgSearch: Locator;
   readonly showDeletedSwitch: Locator;
+  readonly bokmalLanguageOption: Locator;
+  readonly VisibleActors: Locator;
+  readonly addFavoriteButtons: Locator;
+  readonly removeFavoriteButtons: Locator;
+  readonly closeMenuButton: Locator;
+  readonly deletedActorBadge: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -28,40 +33,66 @@ export class AktorvalgHeader {
     this.menuButton = this.page.getByRole('button', { name: 'Meny', exact: true });
     this.dummy = this.page.getByRole('link', { name: 'Sjekk innboks' });
     this.searchBar = this.page.getByRole('searchbox', { name: 'Søk på altinn.no' });
-    this.menuInbox = this.page.getByRole('link', { name: 'Innboks Beta', exact: true });
-    this.menuAccessManagement = this.page
-      .getByRole('group')
-      .getByRole('link', { name: 'Tilgangsstyring' });
-    this.menuApps = this.page
-      .getByRole('group')
-      .getByRole('link', { name: 'Alle skjema og tjenester' });
-    this.menuStartCompany = this.page.getByRole('link', {
-      name: 'Starte og drive bedrift',
-      exact: true,
-    });
-    this.menuHelp = this.page.getByRole('link', { name: 'Trenger du hjelp?' });
-    this.menuLanguage = this.page.locator('a').filter({ hasText: 'Språk/language' }).first();
-    this.menuProfile = this.page.getByRole('link', { name: 'Din profil' });
+
+    // Menu / Navigation
+    this.menuNavigation = this.page.getByRole('navigation', { name: 'Menu' });
+    this.menuInbox = this.menuItem('Innboks');
+    this.menuAccessManagement = this.menuItem('Tilgangsstyring');
+    this.menuApps = this.menuItem('Alle skjema og tjenester');
+    this.menuStartCompany = this.menuItem('Starte og drive bedrift');
+    this.menuHelp = this.menuItem('Trenger du hjelp?');
+    this.menuLanguage = this.menuItem('Språk/language');
+    this.menuProfile = this.menuItem('Din profil');
+
     this.menuLogout = this.page.getByRole('button', { name: 'Logg ut' });
     this.aktorvalgSearch = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
     this.showDeletedSwitch = this.page.getByRole('switch', { name: 'Vis slettede' });
+    this.bokmalLanguageOption = this.page.locator('#no_nb');
+    this.addFavoriteButtons = this.page.getByRole('button', { name: 'Legg til i favorittar' });
+    this.removeFavoriteButtons = this.page.getByRole('button', { name: 'Fjern frå favorittar' });
+    this.closeMenuButton = this.page.getByRole('button', { name: 'Lukk Meny' });
+    this.deletedActorBadge = this.page.getByText('Slettet');
+
+    const actorDetails = this.page
+      .getByText('Født:', { exact: false })
+      .or(this.page.getByText('Org.nr', { exact: false }));
+
+    this.VisibleActors = this.page
+      .getByRole('menuitem')
+      .filter({ has: actorDetails })
+      .filter({ hasNot: this.page.getByRole('menuitem') });
+  }
+
+  private menuItem(label: string): Locator {
+    return this.menuNavigation.getByLabel(label);
+  }
+
+  private actorOption(actorName: string): Locator {
+    return this.page.getByLabel(actorName).first();
+  }
+
+  private selectedActorButton(actorName: string): Locator {
+    return this.page.getByRole('button', { name: actorName }).first();
+  }
+
+  private deletedActorOption(actorName: string): Locator {
+    return this.VisibleActors.filter({ hasText: actorName })
+      .filter({ has: this.deletedActorBadge })
+      .first();
   }
 
   async goToSelectActor(actorName: string) {
-    await this.page.waitForLoadState('domcontentloaded');
-    await this.page.getByRole('button', { name: actorName }).click();
-    await expect(this.page.locator('a').filter({ hasText: actorName }).first()).toBeVisible();
+    await expect(this.actorOption(actorName)).toBeVisible();
+    await this.actorOption(actorName).click();
   }
 
-  async selectActor(actorName: string) {
-    await this.page.locator('a').filter({ hasText: actorName }).first().click();
-    await expect(this.page.getByRole('button', { name: actorName }).first()).toBeVisible();
+  async selectActorFromHeaderMenu(actorName: string) {
+    await expect(this.actorOption(actorName)).toBeVisible();
+    await this.actorOption(actorName).click();
   }
 
   async currentlySelectedActor(actorName: string) {
-    await this.page.waitForLoadState('domcontentloaded');
-    await this.page.waitForTimeout(50);
-    await expect(this.page.getByRole('button', { name: actorName }).first()).toBeVisible();
+    await expect(this.selectedActorButton(actorName)).toBeVisible();
   }
 
   async goToInfoportal() {
@@ -96,7 +127,7 @@ export class AktorvalgHeader {
   }
 
   async actorIsListed(name: string) {
-    await expect(this.page.locator('a').filter({ hasText: name }).first()).toBeVisible();
+    await expect(this.page.getByLabel(name).first()).toBeVisible();
   }
 
   async checkAllMenuButtons() {
@@ -109,32 +140,24 @@ export class AktorvalgHeader {
     await expect(this.menuProfile).toBeVisible();
     await expect(this.menuLanguage).toBeVisible();
     await expect(this.menuLogout).toBeVisible();
-    await this.page.getByRole('button', { name: 'Lukk Meny Meny' }).click();
+    await this.closeMenuButton.click();
   }
 
-  async clickFavorite(actorName: string) {
-    await this.page
-      .locator('span')
-      .filter({ hasText: actorName })
-      .getByLabel('Legg til i favorittar')
-      .click();
-    await expect(
-      this.page.getByRole('button', { name: 'Fjern frå favorittar' }).first(),
-    ).toBeVisible();
+  async clickFavorite() {
+    await this.addFavoriteButtons.first().click();
+    await expect(this.removeFavoriteButtons.first()).toBeVisible();
   }
 
   async removeAllFavorites() {
-    var unfavoriteButtons = await this.page
-      .getByRole('button', { name: 'Fjern frå favorittar' })
-      .all();
+    var unfavoriteButtons = await this.removeFavoriteButtons.all();
     for (const button of unfavoriteButtons) {
       await button.click();
     }
   }
 
   async unfavoriteFirstActor() {
-    await this.page.getByRole('button', { name: 'Fjern frå favorittar' }).first().click();
-    await expect(this.page.getByRole('button', { name: 'Fjern frå favorittar' })).toHaveCount(0);
+    await this.removeFavoriteButtons.first().click();
+    await expect(this.removeFavoriteButtons).toHaveCount(0);
   }
 
   async checkShowDeletedSwitch() {
@@ -154,26 +177,19 @@ export class AktorvalgHeader {
   async chooseBokmalLanguage() {
     await this.menuButton.click();
     await this.menuLanguage.click();
-    await this.page.locator('a').filter({ hasText: 'Bokmål' }).click();
+    await this.bokmalLanguageOption.click();
   }
 
   async expectedNumberOfActors(number: number) {
-    await expect(this.page.getByRole('group').locator('a')).toHaveCount(number);
+    await expect(this.VisibleActors).toHaveCount(number);
   }
 
   async expectActorToBeVisible(name: string) {
-    await expect(this.page.getByRole('group').locator('a').filter({ hasText: name })).toBeVisible();
+    await expect(this.VisibleActors.filter({ hasText: name })).toBeVisible();
   }
 
   async expectDeletedActorToBeVisible(name: string) {
-    await expect(
-      this.page
-        .locator('a')
-        .filter({ hasText: name })
-        .locator('span')
-        .filter({ hasText: 'Slettet' })
-        .first(),
-    ).toBeVisible();
+    await expect(this.deletedActorOption(name)).toBeVisible();
   }
 
   async closePopups() {

@@ -1,7 +1,7 @@
-import { ConsentApiRequests } from '../../../api-requests/ConsentApiRequests';
-import { MaskinportenToken } from '../../../api-requests/MaskinportenToken';
+import { ConsentApiRequests } from '../../../../api-requests/ConsentApiRequests';
+import { MaskinportenToken } from '../../../../api-requests/MaskinportenToken';
 import { fromPersons, toOrgs, fromOrgs } from './consentTestdata';
-import { addTimeToNowUtc, pickRandom } from 'playwright/util/helper';
+import { addTimeToNowUtc, pickRandom } from '../../../../util/helper';
 
 export const scenarioBuilder = {
   /**
