@@ -334,6 +334,14 @@
       "delegation_check_error_message_plural": "A technical error prevents you from giving the user one or more access packages. Please contact Altinn user service if the problem persists."
     }
   },
+  "guardianships": {
+    "current_guardianship_title": "{{count}} guardianships",
+    "search_label": "Search for guardianships",
+    "modal_info_title": "Guardianship",
+    "modal_info_description": "The appointment of a guardian is retrieved from the County Governor. It cannot be deleted or changed here.",
+    "modal_info_info_1": "A guardian can assist with paying bills, managing assets, or representing individuals before public authorities.",
+    "modal_info_info_2": "To see what this power of attorney covers, you can go to the <a>guardianship tab</a> in the overview."
+  },
   "role": {
     "provider_status": "This role is fetched from ",
     "current_roles_title": "{{count}} roles",
@@ -352,6 +360,7 @@
     }
   },
   "user_roles": {
+    "is_guardian": "Guardian",
     "has_client_access": "Has client access",
     "has_client_access_description": "This user has access to one or more of the organization's clients. This does not necessarily mean they have access to the organization's own content, but that they can perform work on behalf of one or more of their clients/customers. Which clients they have access to can be managed under <a>client administration</a>."
   },
@@ -392,6 +401,7 @@
     "access_packages_title": "Access packages",
     "single_rights_title": "Services",
     "roles_title": "Roles",
+    "guardianships_title": "Guardianships",
     "resource_type_text": "Single right",
     "delete_confirm_message": "Are you sure you want to delete this?"
   },

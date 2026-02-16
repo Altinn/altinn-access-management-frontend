@@ -11,12 +11,14 @@ import { RoleInfoModal } from '../DelegationModal/RoleInfoModal';
 import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries';
 import { useRoleMetadata } from './useRoleMetadata';
 import { ClientAccessInfoModal } from './ClientAccessInfoModal';
+import { GuardianshipInfoModal } from './GuardianshipInfoModal';
 
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [isClientAccessModalOpen, setIsClientAccessModalOpen] = useState(false);
+  const [isGuardianModalOpen, setIsGuardianModalOpen] = useState(false);
 
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
 
@@ -31,7 +33,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     },
   );
 
-  const { userRoles, altinn3Roles } = useGroupedRoleListEntries({
+  const { userRoles, altinn3Roles, guardianshipRoles } = useGroupedRoleListEntries({
     permissions,
   });
 
@@ -54,6 +56,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
 
   const roles = mapRoles(userRoles?.map(({ role }) => role) ?? []);
   const isAgent = altinn3Roles.some((rolePermission) => rolePermission.role.code === 'agent');
+  const isGuardian = guardianshipRoles.length > 0;
 
   return (
     <>
@@ -64,6 +67,11 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
         {isAgent && (
           <DsChip.Button onClick={() => setIsClientAccessModalOpen(true)}>
             {t('user_roles.has_client_access')}
+          </DsChip.Button>
+        )}
+        {isGuardian && (
+          <DsChip.Button onClick={() => setIsGuardianModalOpen(true)}>
+            {t('user_roles.is_guardian')}
           </DsChip.Button>
         )}
         {roles.map((role) => {
@@ -86,6 +94,12 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
         <ClientAccessInfoModal
           open={isClientAccessModalOpen}
           onClose={() => setIsClientAccessModalOpen(false)}
+        />
+      )}
+      {isGuardian && (
+        <GuardianshipInfoModal
+          open={isGuardianModalOpen}
+          onClose={() => setIsGuardianModalOpen(false)}
         />
       )}
     </>
