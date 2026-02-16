@@ -221,14 +221,30 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<ConsentFE>> GetConsent(Guid consentId, CancellationToken cancellationToken)
         {
-            Result<ConsentRequestDetails> request = await _consentClient.GetConsentRequest(consentId, cancellationToken);
+            Result<Consent> request = await _consentClient.GetConsent(consentId, cancellationToken);
 
             if (request.IsProblem)
             {
                 return request.Problem;
             }
 
-            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(request.Value, cancellationToken);
+            // convert consent to consentRequest to reuse enrichment logic
+            ConsentRequestDetails consentRequest = new ConsentRequestDetails()
+            {
+                Id = request.Value.Id,
+                From = request.Value.From,
+                To = request.Value.To,
+                HandledBy = request.Value.HandledBy,
+                ValidTo = request.Value.ValidTo,
+                ConsentRights = request.Value.ConsentRights,
+                RequestMessage = request.Value.RequestMessage,
+                TemplateId = request.Value.TemplateId,
+                TemplateVersion = 1,
+                RedirectUrl = string.Empty,
+                ConsentRequestEvents = request.Value.ConsentRequestEvents
+            };
+
+            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(consentRequest, cancellationToken);
 
             if (enrichedConsentTemplate.IsProblem)
             {
