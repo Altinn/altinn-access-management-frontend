@@ -49,6 +49,7 @@ import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/report
 import { getHostUrl } from '@/resources/utils/pathUtils';
 import { useRequests } from '@/resources/hooks/useRequests';
 import cn from 'classnames';
+import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
@@ -98,11 +99,11 @@ export const LandingPage = () => {
     isLoadingCanAccessSettings ||
     currentUserIsLoading ||
     isLoadingRequests;
+  const displayClientAdministrationPage = clientAdministrationPageEnabled();
 
   const getMenuItems = (): MenuItemProps[] => {
     const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
     const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
-    const displayClientAdministrationPage = window.featureFlags?.displayClientAdministrationPage;
 
     if (isLoading) {
       const loadingMenuItem: MenuItemProps = {
@@ -215,7 +216,7 @@ export const LandingPage = () => {
         : t('landing_page.your_rights_description', { reportee: reporteeName }),
     });
 
-    if (!isCurrentUserReportee && hasMyClients) {
+    if (!isCurrentUserReportee && hasMyClients && displayClientAdministrationPage) {
       items.push({
         ...getYourClientsMenuItem('/', isLoading),
         description: t('landing_page.your_clients_description', { reportee: reporteeName }),

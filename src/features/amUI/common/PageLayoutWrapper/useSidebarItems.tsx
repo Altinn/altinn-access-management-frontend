@@ -1,5 +1,6 @@
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useRequests } from '@/resources/hooks/useRequests';
+import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
@@ -35,7 +36,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displaySettingsPage = window.featureFlags?.displaySettingsPage;
   const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
   const displayRequestsPage = window.featureFlags?.displayRequestsPage;
-  const displayClientAdministrationPage = window.featureFlags?.displayClientAdministrationPage;
+  const displayClientAdministrationPage = clientAdministrationPageEnabled();
   const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;

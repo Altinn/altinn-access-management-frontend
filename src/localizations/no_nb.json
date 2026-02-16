@@ -593,6 +593,7 @@
     "agent_system_user_badge": "Administrere kunder"
   },
   "client_administration_page": {
+    "page_title": "Klientadministrasjon - Altinn",
     "no_access_title": "Du har ikke tilgang til klientadministrasjon",
     "page_heading": "Klientadministrasjon for {{name}}",
     "page_description": "org.nr. {{organisationidentifier}} ({{unitType}})",

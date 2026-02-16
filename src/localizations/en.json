@@ -596,6 +596,7 @@
     "agent_system_user_badge": "Manage customers"
   },
   "client_administration_page": {
+    "page_title": "Client administration - Altinn",
     "no_access_title": "You do not have access to client administration",
     "page_heading": "Client administration for {{name}}",
     "page_description": "Org.no. {{organisationidentifier}} ({{unitType}})",
