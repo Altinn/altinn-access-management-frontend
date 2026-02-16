@@ -72,11 +72,9 @@ export const clientApi = createApi({
     getMyClients: builder.query<MyClientsByProvider[], { provider?: string[] } | void>({
       query: (args) => {
         const providers = args?.provider?.filter((providerId) => providerId?.trim()) ?? [];
-        const providerQuery =
-          providers.length > 0
-            ? providers.map((providerId) => `provider=${encodeURIComponent(providerId)}`).join('&')
-            : '';
-
+        const providerQuery = providers.length
+          ? `provider=${providers.map((id) => encodeURIComponent(id)).join('&provider=')}`
+          : '';
         return providerQuery ? `my/clients?${providerQuery}` : 'my/clients';
       },
       keepUnusedDataFor: 3 * 60,
@@ -87,8 +85,8 @@ export const clientApi = createApi({
         const party = args?.party ?? getCookie('AltinnPartyUuid');
         const roles = args?.roles?.filter((role) => role?.trim());
         const roleQuery =
-          roles && roles.length > 0
-            ? `&${roles.map((role) => `roles=${encodeURIComponent(role)}`).join('&')}`
+          roles && roles.length
+            ? `&role=${roles.map((r) => encodeURIComponent(r)).join('&role=')}`
             : '';
         return `clients?party=${party}${roleQuery}`;
       },
