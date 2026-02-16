@@ -5,16 +5,18 @@ import { Language } from 'playwright/pages/consent/ConsentPage';
 import { formatUiDateTime } from 'playwright/util/helper';
 import { scenarioBuilder } from './helper/scenarioBuilder';
 
-const redirectUrl = 'https://example.com/';
+const REDIRECT_URL = 'https://example.com/';
+const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
+const REJECTED_REDIRECT_URL = `${REDIRECT_URL}?Status=Failed&ErrorMessage=User+did+not+give+consent`;
 
-const languages = [Language.NB, Language.NN, Language.EN];
-const mobileViewport = { width: 375, height: 667 };
+const LANGUAGES = [Language.NB, Language.NN, Language.EN];
+const MOBILE_VIEWPORT = { width: 375, height: 667 };
 
-languages.forEach((language) => {
+LANGUAGES.forEach((language) => {
   test.describe(`Samtykke - fra person til org (${language})`, () => {
     test.use({
       language,
-      viewport: mobileViewport,
+      viewport: MOBILE_VIEWPORT,
     });
     test(`Standard samtykke`, async ({ login, consentPage }) => {
       const scenario = scenarioBuilder.personToOrg();
@@ -25,7 +27,7 @@ languages.forEach((language) => {
           to: { type: 'org', id: scenario.toOrg },
           validToIsoUtc: scenario.validTo,
           resourceValue: 'standard-samtykke-for-dele-data',
-          redirectUrl,
+          redirectUrl: REDIRECT_URL,
           metaData: { inntektsaar: '2028' },
         });
       });
@@ -47,7 +49,7 @@ languages.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout(redirectUrl);
+        await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
@@ -60,7 +62,7 @@ languages.forEach((language) => {
           to: { type: 'org', id: scenario.toOrg },
           validToIsoUtc: scenario.validTo,
           resourceValue: 'samtykke-brukerstyrt-tilgang',
-          redirectUrl,
+          redirectUrl: REDIRECT_URL,
           metaData: { brukerdata: 'AutomatisertTiltakE2E' },
         });
       });
@@ -81,7 +83,7 @@ languages.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout(redirectUrl);
+        await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
@@ -94,7 +96,7 @@ languages.forEach((language) => {
           to: { type: 'org', id: scenario.toOrg },
           validToIsoUtc: scenario.validTo,
           resourceValue: 'samtykke-fullmakt-utfoere-tjeneste',
-          redirectUrl,
+          redirectUrl: REDIRECT_URL,
           metaData: { tiltak: '2024' },
         });
       });
@@ -119,7 +121,7 @@ languages.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
-        await consentPage.approveFullmaktAndWaitLogout(redirectUrl);
+        await consentPage.approveFullmaktAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
@@ -132,7 +134,7 @@ languages.forEach((language) => {
           to: { type: 'org', id: scenario.toOrg },
           validToIsoUtc: scenario.validTo,
           resourceValue: 'samtykke-laanesoeknad',
-          redirectUrl,
+          redirectUrl: REDIRECT_URL,
           metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
         });
       });
@@ -156,7 +158,7 @@ languages.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout(redirectUrl);
+        await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
@@ -169,7 +171,7 @@ languages.forEach((language) => {
           to: { type: 'org', id: scenario.toOrg },
           validToIsoUtc: scenario.validTo,
           resourceValue: 'enkelt-samtykke',
-          redirectUrl,
+          redirectUrl: REDIRECT_URL,
           metaData: { simpletag: 'E2E Playwright metadata for simpletag' },
         });
       });
@@ -194,7 +196,7 @@ languages.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout(redirectUrl);
+        await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
@@ -207,7 +209,7 @@ languages.forEach((language) => {
           to: { type: 'org', id: scenario.toOrg },
           validToIsoUtc: scenario.validTo,
           resourceValue: 'enkelt-samtykke',
-          redirectUrl,
+          redirectUrl: REDIRECT_URL,
           metaData: { simpletag: 'E2E reject test' },
         });
       });
@@ -226,7 +228,7 @@ languages.forEach((language) => {
       });
 
       await test.step('Reject consent', async () => {
-        await consentPage.rejectStandardAndWaitLogout(redirectUrl);
+        await consentPage.rejectStandardAndWaitLogout(REJECTED_REDIRECT_URL);
       });
     });
   });
