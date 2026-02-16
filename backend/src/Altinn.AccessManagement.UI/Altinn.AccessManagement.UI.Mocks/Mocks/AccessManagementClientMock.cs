@@ -119,21 +119,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeResourceDelegation(Guid from, Guid to, string resourceId)
-        {
-            ThrowExceptionIfTriggerParty(from.ToString());
-
-            string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
-
-            var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
-            if (mockResponse.IsSuccessStatusCode)
-            {
-                return mockResponse;
-            }
-            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
-        }
-
-        /// <inheritdoc />
         public async Task<HttpResponseMessage> RevokeRightDelegation(Guid from, Guid to, string resourceId, string rightKey)
         {
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
