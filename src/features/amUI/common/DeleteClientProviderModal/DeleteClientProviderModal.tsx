@@ -49,7 +49,10 @@ export const DeleteClientProviderModal = ({
         variant='tertiary'
         data-size='sm'
         disabled={disabled}
-        onClick={() => setHasError(false)}
+        onClick={() => {
+          setHasError(false);
+          dialogRef.current?.showModal();
+        }}
       >
         <TrashIcon />
         {triggerLabel}

@@ -79,9 +79,7 @@ export const LandingPage = () => {
         isCurrentUserReportee,
     },
   );
-  const hasMyClients =
-    myClientsByProvider?.some((providerWithClients) => providerWithClients.clients.length > 0) ??
-    false;
+  const hasMyClients = myClientsByProvider && myClientsByProvider.length > 0;
 
   useEffect(() => {
     // Remove the openAccountMenu query parameter after reading it the first time

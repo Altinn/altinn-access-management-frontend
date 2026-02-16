@@ -25,6 +25,7 @@ import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { ClientAdministrationAgentTabs } from './ClientAdministrationAgentTabs';
 import { useAgentAccessClientLists } from './useAgentAccessClientLists';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
+import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
 
 export const ClientAdministrationAgentDetails = () => {
   const { t } = useTranslation();
@@ -99,7 +100,15 @@ export const ClientAdministrationAgentDetails = () => {
           label: userName,
         }}
       />
-      <PageContainer backUrl={backUrl}>
+      <PageContainer
+        backUrl={backUrl}
+        contentActions={
+          <ClientAdministrationAgentDeleteModal
+            agentId={id}
+            backUrl={backUrl}
+          />
+        }
+      >
         {isLoadingIsClientAdmin || isLoadingAgentAccessPackages || isLoadingClients ? (
           <>
             <UserPageHeaderSkeleton />

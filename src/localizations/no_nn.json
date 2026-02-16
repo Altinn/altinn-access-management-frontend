@@ -351,7 +351,8 @@
   },
   "user_roles": {
     "has_client_access": "Har klienttilgang",
-    "has_client_access_description": "Denne brukaren har tilgang til ein eller fleire av verksemda sine klientar. Dette betyr ikkje nødvendigvis at dei har tilgang til verksemda sitt eige innhald, men at dei kan utføre arbeid på vegner av ein eller fleire av kundane deira. Kva klientar dei har tilgang til kan administrerast under <a>klientadministrasjon</a>."
+    "has_client_access_description": "Denne brukaren har tilgang til ein eller fleire av verksemda sine klientar. Dette betyr ikkje nødvendigvis at dei har tilgang til verksemda sitt eige innhald, men at dei kan utføre arbeid på vegner av ein eller fleire av kundane deira. Kva klientar dei har tilgang til kan administrerast under <a>klientadministrasjon</a>.",
+    "has_client_access_description_self": "Du har tilgang til ein eller fleire av verksemda sine klientar. Dette betyr ikkje nødvendigvis at du har tilgang til verksemda sitt eige innhald, men kan utføre arbeid på vegner av ein eller fleire av kundane deira. Kva klientar dei har tilgang til kan administrerast under <a>dine klientar</a>."
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -387,16 +388,16 @@
   },
   "my_clients_page": {
     "page_title": "Dine klientar - Altinn",
-    "main_page_heading": "Klientar {{name}} har tilgang til",
+    "main_page_heading": "Klientar du har tilgang til gjennom {{name}}",
     "not_acting_on_behalf_info": "Denne sida er berre tilgjengeleg når du handlar på vegner av ein annan aktør.",
     "search_placeholder": "Søk etter klient",
-    "no_clients": "Ingen klientar funne for vald aktør.",
-    "remove_package_success_snackbar": "{{name}} har ikkje lenger fullmakt for {{accessPackage}}.",
-    "remove_package_error": "Klarte ikkje å fjerne {{name}} si fullmakt for {{accessPackage}}.",
-    "delete_provider_button": "Slett alle fullmakter",
-    "delete_provider_heading": "Du slettar alle fullmakter for denne aktøren",
-    "delete_provider_body": "Alle fullmakter til klientar gjennom {{name}} vil bli sletta. Denne handlinga kan ikkje angrast.",
-    "delete_provider_confirm": "Slett alle fullmakter"
+    "no_clients": "Du har ingen klientar for {{actingParty}}",
+    "remove_package_success_snackbar": "{{name}} har ikkje lenger klienttilgang for {{accessPackage}}.",
+    "remove_package_error": "Klarte ikkje å fjerne klienttilgangen til {{name}} for {{accessPackage}}.",
+    "delete_provider_button": "Slett klienttilgang",
+    "delete_provider_heading": "Du slettar alle klienttilgangar for denne aktøren",
+    "delete_provider_body": "Alle klienttilgangar gjennom {{name}} vil bli sletta. Denne handlinga kan ikkje angrast.",
+    "delete_provider_confirm": "Slett klienttilgang"
   },
   "user_rights_page": {
     "page_title": "Brukertilgang - Altinn",

@@ -14,7 +14,6 @@ import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 export const ClientAdministrationAgentDetailsPage = () => {
   const { id } = useParams();
   const backUrl = `/${amUIPath.ClientAdministration}?tab=users`;
-  const { data: isClientAdmin } = useGetIsClientAdminQuery();
 
   const pageIsEnabled = clientAdministrationPageEnabled();
 
@@ -28,16 +27,7 @@ export const ClientAdministrationAgentDetailsPage = () => {
   }
 
   return (
-    <PageWrapper
-      pageAction={
-        isClientAdmin === false ? undefined : (
-          <ClientAdministrationAgentDeleteModal
-            agentId={id}
-            backUrl={backUrl}
-          />
-        )
-      }
-    >
+    <PageWrapper>
       <PageLayoutWrapper>
         <PartyRepresentationProvider
           fromPartyUuid={getCookie('AltinnPartyUuid')}

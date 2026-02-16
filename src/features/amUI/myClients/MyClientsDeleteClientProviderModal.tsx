@@ -34,7 +34,7 @@ export const MyClientsDeleteClientProviderModal = ({
     <DeleteClientProviderModal
       triggerLabel={t('my_clients_page.delete_provider_button')}
       heading={t('my_clients_page.delete_provider_heading')}
-      body={t('my_clients_page.delete_provider_body', { name: providerName })}
+      body={t('my_clients_page.delete_provider_body', { provider: providerName })}
       confirmLabel={t('my_clients_page.delete_provider_confirm')}
       disabled={disabled || !provider || !selfPartyUuid}
       onConfirm={onConfirmDelete}
