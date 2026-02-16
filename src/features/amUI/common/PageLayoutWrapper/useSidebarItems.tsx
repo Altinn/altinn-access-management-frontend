@@ -1,3 +1,4 @@
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useRequests } from '@/resources/hooks/useRequests';
 import {
   hasConsentPermission,
@@ -15,7 +16,10 @@ import {
   getShortcutsMenuItem,
   getSystemUserMenuItem,
   getUsersMenuItem,
+  getYourClientsMenuItem,
 } from '@/resources/utils/sidebarConfig';
+import { useGetMyClientsQuery } from '@/rtk/features/clientApi';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
@@ -32,8 +36,25 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
   const displayRequestsPage = window.featureFlags?.displayRequestsPage;
   const displayClientAdministrationPage = window.featureFlags?.displayClientAdministrationPage;
-
+  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
+  const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
+
+  const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
+
+  const { data: myClientsByProvider } = useGetMyClientsQuery(
+    { provider: [actingPartyUuid] },
+    {
+      skip:
+        !actingPartyUuid ||
+        !reportee?.partyUuid ||
+        !currentUser?.partyUuid ||
+        isCurrentUserReportee,
+    },
+  );
+
+  const hasMyClients = myClientsByProvider && myClientsByProvider.length > 0;
+
   const { pathname } = useLocation();
 
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
@@ -89,6 +110,12 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
 
   if (isClientAdmin && displayClientAdministrationPage) {
     items.push(getClientAdministrationMenuItem(pathname, isLoading, isSmall));
+  }
+
+  if (hasMyClients && !isCurrentUserReportee && displayClientAdministrationPage) {
+    items.push({
+      ...getYourClientsMenuItem(pathname, isLoading, isSmall),
+    });
   }
 
   if (canAccessSettings && displaySettingsPage) {

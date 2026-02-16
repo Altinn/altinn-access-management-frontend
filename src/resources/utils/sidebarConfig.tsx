@@ -73,10 +73,11 @@ export const getYourClientsMenuItem = (
   isSmall = false,
 ): MenuItemProps => {
   return {
-    groupId: 12,
-    id: '2.05',
+    groupId: '14',
+    id: 'your-clients',
     size: 'md',
     loading: isLoading,
+    variant: 'tinted',
     title: t('sidebar.your_clients'),
     selected: pathname?.includes(`/${amUIPath.MyClients}`),
     icon: { svgElement: DatabaseIcon, theme: isSmall ? 'surface' : 'default' },
