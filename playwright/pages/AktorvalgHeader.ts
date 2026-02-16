@@ -21,6 +21,10 @@ export class AktorvalgHeader {
   readonly showDeletedSwitch: Locator;
   readonly bokmalLanguageOption: Locator;
   readonly VisibleActors: Locator;
+  readonly addFavoriteButtons: Locator;
+  readonly removeFavoriteButtons: Locator;
+  readonly closeMenuButton: Locator;
+  readonly deletedActorBadge: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -44,6 +48,10 @@ export class AktorvalgHeader {
     this.aktorvalgSearch = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
     this.showDeletedSwitch = this.page.getByRole('switch', { name: 'Vis slettede' });
     this.bokmalLanguageOption = this.page.locator('#no_nb');
+    this.addFavoriteButtons = this.page.getByRole('button', { name: 'Legg til i favorittar' });
+    this.removeFavoriteButtons = this.page.getByRole('button', { name: 'Fjern frå favorittar' });
+    this.closeMenuButton = this.page.getByRole('button', { name: 'Lukk Meny' });
+    this.deletedActorBadge = this.page.getByText('Slettet');
 
     const actorDetails = this.page
       .getByText('Født:', { exact: false })
@@ -51,8 +59,8 @@ export class AktorvalgHeader {
 
     this.VisibleActors = this.page
       .getByRole('menuitem')
-      .filter({ hasNot: this.page.getByRole('menuitem') })
-      .filter({ has: actorDetails });
+      .filter({ has: actorDetails })
+      .filter({ hasNot: this.page.getByRole('menuitem') });
   }
 
   private menuItem(label: string): Locator {
@@ -65,6 +73,12 @@ export class AktorvalgHeader {
 
   private selectedActorButton(actorName: string): Locator {
     return this.page.getByRole('button', { name: actorName }).first();
+  }
+
+  private deletedActorOption(actorName: string): Locator {
+    return this.VisibleActors.filter({ hasText: actorName })
+      .filter({ has: this.deletedActorBadge })
+      .first();
   }
 
   async goToSelectActor(actorName: string) {
@@ -126,29 +140,24 @@ export class AktorvalgHeader {
     await expect(this.menuProfile).toBeVisible();
     await expect(this.menuLanguage).toBeVisible();
     await expect(this.menuLogout).toBeVisible();
-    await this.page.getByRole('button', { name: 'Lukk Meny Meny' }).click();
+    await this.closeMenuButton.click();
   }
 
   async clickFavorite() {
-    await this.page.getByLabel('Legg til i favorittar').first().click();
-
-    await expect(
-      this.page.getByRole('button', { name: 'Fjern frå favorittar' }).first(),
-    ).toBeVisible();
+    await this.addFavoriteButtons.first().click();
+    await expect(this.removeFavoriteButtons.first()).toBeVisible();
   }
 
   async removeAllFavorites() {
-    var unfavoriteButtons = await this.page
-      .getByRole('button', { name: 'Fjern frå favorittar' })
-      .all();
+    var unfavoriteButtons = await this.removeFavoriteButtons.all();
     for (const button of unfavoriteButtons) {
       await button.click();
     }
   }
 
   async unfavoriteFirstActor() {
-    await this.page.getByRole('button', { name: 'Fjern frå favorittar' }).first().click();
-    await expect(this.page.getByRole('button', { name: 'Fjern frå favorittar' })).toHaveCount(0);
+    await this.removeFavoriteButtons.first().click();
+    await expect(this.removeFavoriteButtons).toHaveCount(0);
   }
 
   async checkShowDeletedSwitch() {
@@ -180,12 +189,7 @@ export class AktorvalgHeader {
   }
 
   async expectDeletedActorToBeVisible(name: string) {
-    await expect(
-      this.page
-        .getByRole('menuitem', { name })
-        .filter({ has: this.page.getByText('Slettet') })
-        .first(),
-    ).toBeVisible();
+    await expect(this.deletedActorOption(name)).toBeVisible();
   }
 
   async closePopups() {
