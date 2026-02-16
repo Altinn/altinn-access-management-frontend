@@ -131,18 +131,18 @@ export const singleRightsApi = createApi({
     }),
     revokeResource: builder.mutation<
       { isSuccessStatusCode: boolean },
-      { from: string; to: string; resourceId: string }
+      { party: string; from: string; to: string; resourceId: string }
     >({
-      query({ from, to, resourceId }) {
+      query({ party, from, to, resourceId }) {
         return {
-          url: `singleright/${from}/${to}/${encodeURIComponent(resourceId)}/revoke`,
+          url: `singleright/revoke?party=${party}&from=${from}&to=${to}&resourceId=${encodeURIComponent(resourceId)}`,
           method: 'DELETE',
         };
       },
       invalidatesTags: ['overview', 'delegationCheck'],
     }),
     updateResource: builder.mutation<
-      string[],
+      void,
       { party: string; from: string; to: string; resourceId: string; actionKeys: string[] }
     >({
       query({ party, from, to, resourceId, actionKeys }) {

@@ -207,10 +207,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
-            string requestId = PERSON_CONSENT_ID;
+            string approvedRequestId = "62334b04-a65b-4eb2-b198-ab3c15e27f16";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{requestId}/logout");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{approvedRequestId}/logout");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Found, httpResponse.StatusCode);
+            Assert.Equal(expectedRedirectUrl, httpResponse.Headers.Location.OriginalString);
+        }
+
+        /// <summary>
+        ///     Test case: RedirectAfterReject checks that redirect is done to logout url
+        ///     Expected: RedirectAfterReject redirects to logout url
+        /// </summary>
+        [Fact]
+        public async Task LogoutAfterReject_RedirectsToLogoutUrl()
+        {
+            // Arrange
+            string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
+            string rejectedRequestId = "52574a16-4114-4bdf-b471-85ac10a722b9";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{rejectedRequestId}/logout");
 
             // Assert
             Assert.Equal(HttpStatusCode.Found, httpResponse.StatusCode);

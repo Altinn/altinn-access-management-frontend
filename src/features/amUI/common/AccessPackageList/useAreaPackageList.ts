@@ -13,6 +13,7 @@ import {
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { getInheritedStatus, type InheritedStatusMessageType } from '../useInheritedStatus';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { isGuardianshipUrn } from '@/resources/utils/urnUtils';
 
 export interface ExtendedAccessArea extends AccessArea {
   packages: {
@@ -31,7 +32,7 @@ export interface ExtendedAccessPackage extends AccessPackage {
 interface useAreaPackagesProps {
   showAllAreas?: boolean;
   showAllPackages?: boolean;
-  showGuardianships?: boolean;
+  showOnlyGuardianships?: boolean;
   searchString?: string;
 }
 
@@ -45,7 +46,7 @@ export const useAreaPackageList = ({
   searchString,
   showAllAreas,
   showAllPackages,
-  showGuardianships,
+  showOnlyGuardianships,
 }: useAreaPackagesProps) => {
   const { i18n } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
@@ -93,68 +94,69 @@ export const useAreaPackageList = ({
         availableAreas: [],
       };
     }
-    return allPackageAreas.reduce(
-      (acc, area) => {
-        const activeDelegationArea: AccessPackageDelegation[] | null = activeDelegations
-          ? activeDelegations[area.id]
-          : null;
+    return allPackageAreas
+      .filter((area) =>
+        showOnlyGuardianships ? isGuardianshipUrn(area.urn) : !isGuardianshipUrn(area.urn),
+      )
+      .reduce(
+        (acc, area) => {
+          const activeDelegationArea: AccessPackageDelegation[] | null = activeDelegations
+            ? activeDelegations[area.id]
+            : null;
 
-        if (activeDelegationArea) {
-          const pkgs = area.accessPackages.reduce(
-            (pkgAcc, pkg) => {
-              const pkgAccess = activeDelegationArea.find((d) => d.package.id === pkg.id);
-              if (pkgAccess !== undefined) {
-                const deletableStatus = getDeletableStatus(
-                  pkgAccess,
-                  toParty?.partyUuid,
-                  fromParty?.partyUuid,
-                );
-                const inheritedStatus = getInheritedStatus({
-                  permissions: pkgAccess.permissions,
-                  actingParty,
-                  toParty,
-                  fromParty,
-                });
-                const acquiredPkg = {
-                  ...pkg,
-                  deletableStatus,
-                  inherited:
-                    inheritedStatus.length > 0 ||
-                    deletableStatus !== DeletableStatus.FullyDeletable,
-                  inheritedStatus,
-                  permissions: pkgAccess.permissions ?? [],
-                };
-                pkgAcc.assigned.push(acquiredPkg);
-              } else if (showAllPackages) {
-                pkgAcc.available.push(pkg);
-              }
+          if (activeDelegationArea) {
+            const pkgs = area.accessPackages.reduce(
+              (pkgAcc, pkg) => {
+                const pkgAccess = activeDelegationArea.find((d) => d.package.id === pkg.id);
+                if (pkgAccess !== undefined) {
+                  const deletableStatus = getDeletableStatus(
+                    pkgAccess,
+                    toParty?.partyUuid,
+                    fromParty?.partyUuid,
+                  );
+                  const inheritedStatus = getInheritedStatus({
+                    permissions: pkgAccess.permissions,
+                    actingParty,
+                    toParty,
+                    fromParty,
+                  });
+                  const acquiredPkg = {
+                    ...pkg,
+                    deletableStatus,
+                    inherited:
+                      inheritedStatus.length > 0 ||
+                      deletableStatus !== DeletableStatus.FullyDeletable,
+                    inheritedStatus,
+                    permissions: pkgAccess.permissions ?? [],
+                  };
+                  pkgAcc.assigned.push(acquiredPkg);
+                } else if (showAllPackages) {
+                  pkgAcc.available.push(pkg);
+                }
 
-              return pkgAcc;
-            },
-            {
-              assigned: [] as ExtendedAccessPackage[],
-              available: [] as ExtendedAccessPackage[],
-            },
-          );
+                return pkgAcc;
+              },
+              {
+                assigned: [] as ExtendedAccessPackage[],
+                available: [] as ExtendedAccessPackage[],
+              },
+            );
 
-          acc.assignedAreas.push({ ...area, packages: pkgs });
-        } else if (showAllAreas) {
-          const isGuardianshipArea = area.urn?.startsWith('accesspackage:area:vergemal');
-          if (!isGuardianshipArea || showGuardianships) {
+            acc.assignedAreas.push({ ...area, packages: pkgs });
+          } else if (showAllAreas) {
             acc.availableAreas.push({
               ...area,
               packages: { assigned: [], available: area.accessPackages },
             });
           }
-        }
 
-        return acc;
-      },
-      {
-        assignedAreas: [] as ExtendedAccessArea[],
-        availableAreas: [] as ExtendedAccessArea[],
-      },
-    );
+          return acc;
+        },
+        {
+          assignedAreas: [] as ExtendedAccessArea[],
+          availableAreas: [] as ExtendedAccessArea[],
+        },
+      );
   }, [
     actingParty,
     allPackageAreas,
@@ -162,7 +164,7 @@ export const useAreaPackageList = ({
     fromParty,
     showAllAreas,
     showAllPackages,
-    showGuardianships,
+    showOnlyGuardianships,
     toParty,
   ]);
 

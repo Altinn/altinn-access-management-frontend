@@ -5,16 +5,17 @@ import { Language } from 'playwright/pages/consent/ConsentPage';
 import { formatUiDateTime } from 'playwright/util/helper';
 import { scenarioBuilder } from './helper/scenarioBuilder';
 
-const redirectUrl = 'https://example.com/';
+const REDIRECT_URL = 'https://example.com/';
+const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
 
-const languages = [Language.NB, Language.NN, Language.EN];
-const mobileViewport = { width: 375, height: 667 };
+const LANGUAGES = [Language.NB, Language.NN, Language.EN];
+const MOBILE_VIEWPORT = { width: 375, height: 667 };
 
-languages.forEach((language) => {
+LANGUAGES.forEach((language) => {
   test.describe(`Samtykke fra organisasjon til organisasjon: (${language})`, () => {
     test.use({
       language,
-      viewport: mobileViewport,
+      viewport: MOBILE_VIEWPORT,
     });
 
     test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language})`, async ({
@@ -31,7 +32,7 @@ languages.forEach((language) => {
           to: { type: 'org', id: scenario.toOrg },
           validToIsoUtc: scenario.validTo,
           resourceValue: 'standard-samtykke-for-dele-data',
-          redirectUrl,
+          redirectUrl: REDIRECT_URL,
           metaData: { inntektsaar: '2028' },
         });
       });
@@ -53,7 +54,7 @@ languages.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout(redirectUrl);
+        await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
   });

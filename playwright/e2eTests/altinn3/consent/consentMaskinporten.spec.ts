@@ -4,21 +4,21 @@ import { Language } from 'playwright/pages/consent/ConsentPage';
 import { env, formatUiDateTime } from 'playwright/util/helper';
 import { createAndApproveConsent, getConsentRequestId } from './helper/consentHelper.js';
 import { scenarioBuilder } from './helper/scenarioBuilder';
-import { ConsentApiRequests } from '../../api-requests/ConsentApiRequests';
 
-const MobileViewport = { width: 375, height: 667 };
+const MOBILE_VIEWPORT = { width: 375, height: 667 };
 
 // Digdir's org id
 const MASKINPORTEN_ORG_DIGDIR = '991825827';
 const ENV = env('environment')?.toUpperCase();
 const REDIRECT_URL = 'https://example.com/';
+const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
 
 function getDigitaliseringsdirektoratetLocator(page: any) {
   return page.getByText('DIGITALISERINGSDIREKTORATET');
 }
 
 test.describe('Generate consent request for Digdir using maskinporten to fetch token', () => {
-  test.use({ language: Language.NB, viewport: MobileViewport });
+  test.use({ language: Language.NB, viewport: MOBILE_VIEWPORT });
 
   test('Create and approve standard consent with Maskinporten', async ({
     page,
@@ -46,7 +46,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
     });
 
     await test.step('Approve consent', async () => {
-      await consentPage.approveStandardAndWaitLogout(REDIRECT_URL);
+      await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
     });
   });
 
@@ -93,7 +93,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
     });
 
     await test.step('Approve consent', async () => {
-      await consentPage.approveStandardAndWaitLogout(REDIRECT_URL);
+      await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
     });
   });
 
@@ -122,7 +122,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
       });
 
       await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout(REDIRECT_URL);
+        await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
 
       await test.step('Fetch consent token', async () => {
@@ -186,7 +186,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
       });
 
       await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout(REDIRECT_URL);
+        await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
 
       await test.step('Fetch consent token with consumer_org', async () => {

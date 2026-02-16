@@ -1,7 +1,7 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
-import { ApiRequests } from '../../api-requests/ApiRequests';
+import { ApiRequests } from '../../../api-requests/ApiRequests';
 
 test.describe('Systembruker endringsforespørsel', () => {
   let api: ApiRequests;
