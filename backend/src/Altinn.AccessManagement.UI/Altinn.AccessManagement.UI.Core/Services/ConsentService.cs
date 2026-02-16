@@ -124,7 +124,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             uriBuilder.Query = queryParams.ToString();
             return uriBuilder.Uri.ToString();
-    }
+        }
 
         /// <inheritdoc />
         public async Task<Result<List<ActiveConsentItemFE>>> GetActiveConsents(Guid party, CancellationToken cancellationToken)
