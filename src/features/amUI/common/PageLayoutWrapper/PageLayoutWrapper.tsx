@@ -69,7 +69,7 @@ export const PageLayoutWrapper = ({
         content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
         footer={footer}
       >
-        <div className={classes.content}>{children}</div>
+        <div>{children}</div>
         <InfoModal />
       </Layout>
       <Snackbar />
