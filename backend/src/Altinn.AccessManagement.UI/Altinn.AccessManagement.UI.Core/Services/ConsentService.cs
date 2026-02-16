@@ -1,4 +1,6 @@
+using System.Collections.Specialized;
 using System.Text;
+using System.Web;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Constants;
@@ -104,7 +106,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return request.Problem;
             }
 
-            return request.Value.RedirectUrl;
+            // add Status to RedirectUrl
+            UriBuilder uriBuilder = new UriBuilder(request.Value.RedirectUrl);
+            NameValueCollection queryParams = HttpUtility.ParseQueryString(uriBuilder.Query);
+
+            if (request.Value.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase)))
+            {
+                // if consent was approved
+                queryParams.Add("Status", "OK");
+            }
+            else if (request.Value.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "rejected", StringComparison.OrdinalIgnoreCase)))
+            {
+                // if consent was rejected
+                queryParams.Add("Status", "Failed");
+                queryParams.Add("ErrorMessage", "User did not give consent");
+            }
+            
+            uriBuilder.Query = queryParams.ToString();
+            return uriBuilder.Uri.ToString();
         }
 
         /// <inheritdoc />
