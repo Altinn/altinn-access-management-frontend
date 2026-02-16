@@ -6,6 +6,7 @@ import {
   DsAlert,
   DsButton,
   DsHeading,
+  DsParagraph,
   DsSkeleton,
   formatDate,
   formatDisplayName,
@@ -38,11 +39,13 @@ import {
   getSettingsMenuItem,
   getSystemUserMenuItem,
   getUsersMenuItem,
+  getYourRightsMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/reporteeUtils';
 import { getHostUrl } from '@/resources/utils/pathUtils';
 import { useRequests } from '@/resources/hooks/useRequests';
+import cn from 'classnames';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
@@ -60,6 +63,8 @@ export const LandingPage = () => {
     fullName: reportee?.name || '',
     type: isOrganization(reportee) ? 'company' : 'person',
   });
+
+  const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
 
   useEffect(() => {
     // Remove the openAccountMenu query parameter after reading it the first time
@@ -99,6 +104,7 @@ export const LandingPage = () => {
     }
 
     const items: MenuItemProps[] = [];
+
     if (displayConfettiPackage) {
       items.push({
         ...getUsersMenuItem(),
@@ -185,6 +191,19 @@ export const LandingPage = () => {
     return items;
   };
 
+  const getYourAccessesItems = () => {
+    const items: MenuItemProps[] = [];
+    items.push({
+      ...getYourRightsMenuItem(currentUser?.partyUuid ?? '', '/', isLoading),
+      description: isCurrentUserReportee
+        ? t('landing_page.your_rights_description_yourself')
+        : t('landing_page.your_rights_description', { reportee: reporteeName }),
+    });
+
+    // TODO: Add Your Clients item here
+    return items;
+  };
+
   const isReporteeSubUnit = isSubUnit(reportee);
 
   const getReporteeDescription = (): string => {
@@ -204,17 +223,23 @@ export const LandingPage = () => {
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
-          <UserListItem
-            id={reportee?.partyUuid ?? ''}
-            type={isOrganization(reportee) ? 'company' : 'person'}
-            name={reporteeName}
-            description={getReporteeDescription()}
-            subUnit={isReporteeSubUnit}
-            deleted={reportee?.isDeleted}
-            size='lg'
-            loading={!reportee}
-            interactive={false}
-          />
+          <DsHeading
+            level={1}
+            className={classes.landingPageHeading}
+          >
+            <UserListItem
+              id={reportee?.partyUuid ?? ''}
+              type={isOrganization(reportee) ? 'company' : 'person'}
+              name={reporteeName}
+              description={getReporteeDescription()}
+              subUnit={isReporteeSubUnit}
+              deleted={reportee?.isDeleted}
+              size='lg'
+              loading={!reportee}
+              interactive={false}
+              shadow='none'
+            />
+          </DsHeading>
           <DsAlert data-color='info'>
             {isLoading ? (
               <DsSkeleton
@@ -225,7 +250,7 @@ export const LandingPage = () => {
             ) : (
               <>
                 <DsHeading
-                  level={1}
+                  level={2}
                   data-size='xs'
                   color='info'
                 >
@@ -234,9 +259,8 @@ export const LandingPage = () => {
                     : t('landing_page.alert_heading_priv')}
                 </DsHeading>
                 <div className={classes.landingPageAlert}>
-                  {isOrganization(reportee)
-                    ? t('landing_page.alert_body')
-                    : t('landing_page.alert_body_priv')}
+                  <DsParagraph>{t('landing_page.alert_body')}</DsParagraph>
+                  <DsParagraph>{t('landing_page.alert_body_p2')}</DsParagraph>
                   <DsButton
                     asChild
                     variant='secondary'
@@ -250,6 +274,11 @@ export const LandingPage = () => {
               </>
             )}
           </DsAlert>
+          <ListItemContainer
+            heading={t('landing_page.your_content_heading')}
+            items={getYourAccessesItems()}
+            renderAsCards
+          />
           <ListItemContainer
             heading={t('landing_page.shortcut_links_heading')}
             items={getMenuItems()}
@@ -269,8 +298,9 @@ export const LandingPage = () => {
 interface ListItemContainerProps {
   heading: string;
   items: MenuItemProps[];
+  renderAsCards?: boolean;
 }
-const ListItemContainer = ({ heading, items }: ListItemContainerProps) => {
+const ListItemContainer = ({ heading, items, renderAsCards = false }: ListItemContainerProps) => {
   return (
     <div>
       <DsHeading
@@ -279,17 +309,18 @@ const ListItemContainer = ({ heading, items }: ListItemContainerProps) => {
       >
         {heading}
       </DsHeading>
-      <List className={classes.listItemContainer}>
+      <List className={cn(classes.listItemContainer, !renderAsCards && classes.menuList)}>
         {items.map((item, index) => (
           <ListItem
+            className={cn(renderAsCards && classes.cardItem)}
             key={`${item.href}-${index}`}
             icon={item.icon}
             title={item.title}
             description={item.description}
             badge={item.badge}
-            size='xs'
+            size={'xs'}
             border='none'
-            shadow='none'
+            shadow={'none'}
             linkIcon
             loading={item.loading}
             as={item.as}

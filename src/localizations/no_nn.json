@@ -138,6 +138,7 @@
   "sidebar": {
     "access_management": "Tilgangsstyring",
     "users": "Brukarar",
+    "your_rights": "Dine tilgangar",
     "reportees": "Fullmakter hos andre",
     "systemaccess": "Systemtilgangar",
     "client_administration": "Klientadministrasjon",
@@ -370,6 +371,7 @@
     "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønskjer du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?",
+    "show_users_with_client_access": "Vis brukarar med klienttilgang",
     "indirect_connections": "Brukarar utan fullmakt",
     "no_access_to_users_header": "Denne sida jobbar vi framleis med!",
     "no_access_to_users_message": "Kun tilgangsstyrarar kan se full liste av brukarar med fullmakter i denne verksemda. <br /> Liste over nøkkelpersonar (styret) vil bli tilgjengeleg for brukarar utan tilgangsstyring etterhvert."
@@ -388,7 +390,8 @@
   "reportees_page": {
     "page_title": "Fullmakter hos andre - Altinn",
     "main_page_heading": "Fullmakter {{name}} har hos andre",
-    "not_admin_alert": "Du har ikkje tilgang til å sjå denne sida hos {{name}}. Bytt side eller vel ein anna aktør."
+    "not_admin_alert": "Du har ikkje tilgang til å sjå denne sida hos {{name}}. Bytt side eller vel ein anna aktør.",
+    "show_clients_toggle": "Vis klientar"
   },
   "user_rights_page": {
     "page_title": "Brukertilgang - Altinn",
@@ -452,7 +455,8 @@
       "heading": "Oi! Noko gjekk gale",
       "message": "Grunna ein teknisk feil vart ikkje tenesta delegert. Ver venleg og prøv på nytt, eller kontakt Altinn brukarstøtte dersom feilen held fram.",
       "all_failed": "Ingen nye tilgangar er gitt til {{name}}",
-      "some_failed": "Følgande tilgangar vart ikkje gitt: {{actions}}"
+      "some_failed": "Følgande tilgangar vart ikkje gitt: {{actions}}",
+      "revoke_failed": "Ein teknisk feil gjorde at tenesta ikkje vart sletta. Ver venleg og prøv på nytt, eller kontakt Altinn brukarstøtte dersom feilen held fram."
     },
     "general_error": {
       "revoke_heading": "Kunne ikkje slette fullmakt",
@@ -575,7 +579,9 @@
   },
   "client_administration_page": {
     "no_access_title": "Du har ikkje tilgang til klientadministrasjon",
-    "page_heading": "Klientadministrasjon",
+    "page_heading": "Klientadministrasjon for {{name}}",
+    "page_description": "org.nr. {{organisationidentifier}} ({{unitType}})",
+    "forwarding_accesses_info": "Nyheit! Du kan no gi vidare fullmakter som verksemda di har motteke frå andre. Desse kan berre givast til privatpersonar. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
     "clients_tab_title": "Klientar",
     "agents_tab_title": "Brukarar",
     "add_agent_button": "Legg til ny brukar",
@@ -583,15 +589,15 @@
     "add_agentModal_agent_tab_title": "Person",
     "add_agent_error": "Kunne ikkje leggje til brukar.",
     "add_agent_success_snackbar": "Brukar lagt til.",
-    "agent_search_placeholder": "Søk etter person",
+    "agent_search_placeholder": "Søk etter brukar",
     "agent_delete_button": "Slett brukar",
     "agent_delete_heading": "Du slettar denne brukaren",
     "agent_delete_body": "Denne personen og alle deira fullmakter hos klientane dine vil bli sletta.",
     "agent_delete_confirm": "Slett brukar",
     "load_delegations_error": "Kunne ikkje laste klientar med tilgang.",
     "load_user_delegations_error": "Kunne ikkje laste brukarar med tilgang.",
-    "no_delegations": "Fann ingen klientar med tilgang.",
-    "no_user_delegations": "Fann ingen brukarar med tilgang.",
+    "no_delegations": "Ingen klientar har gitt fullmakter til verksemda.",
+    "no_user_delegations": "Verksemda har ingen brukarar med klienttilgang.",
     "no_access_to_delegate": "{{name}} har ingen tilgangar for denne klienten.",
     "delegate_package_button": "Gi fullmakt",
     "delegate_package_success_snackbar": "{{name}} har no fått fullmakt til {{accessPackage}}.",
@@ -616,7 +622,7 @@
     "rettighetshaver": "Andre klientforhold",
     "error_loading_clients": "Kunne ikkje laste klientar.",
     "error_loading_agents": "Kunne ikkje laste brukarar.",
-    "no_agents": "Ingen brukarar har fått klienttilgangar enno. Du kan søkje etter brukarar som allereie har nokre tilgangar hos dykk, eller registrere ein ny brukar.",
+    "no_agents": "Ingen brukarar har fått klienttilgangar enno. Legg til ein ny brukar for å kome i gang.",
     "client_search_placeholder": "Søk etter klient"
   },
   "systemuser_creationpage": {
@@ -904,11 +910,14 @@
   "landing_page": {
     "alert_heading": "Du er no i den nye løysinga for tilgangsstyring",
     "alert_heading_priv": "Dette er den nye løysinga for tilgangsstyring for privatperson",
-    "alert_body": "Her er dagens Altinn-roller erstatta av tilgangspakker med tenester. \n\nVær oppmerksom på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Hvis du ikkje finn tenesten her, kan du gå til den gamle løysinga.",
-    "alert_body_priv": "Vi har dessverre ikkje alt på plass endå, så nokre ting må du gjere i gammal løysing. \n\nØnsker du å gå til tilgangsstyring for verksemd, kan du skifte til ønska verksemd i aktørvalget i toppen.",
+    "alert_body": "Her er dagens Altinn-roller erstatta av tilgangspakkar med tenester.",
+    "alert_body_p2": "Vær merksam på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Om du ikkje finn tenesten her, kan du gå til den gamle løysinga.",
     "alert_link": "Gå til gamle Altinn",
-    "shortcut_links_heading": "Kvar vil du gå?",
+    "your_content_heading": "Dine tilganger",
+    "shortcut_links_heading": "Andre tilganger",
     "other_links_heading": "Anna",
+    "your_rights_description": "Sjå fullmaktene du har på vegne av {{reportee}}",
+    "your_rights_description_yourself": "Sjå fullmaktene du har på vegne av deg sjølv",
     "users_item_description_org": "Oversikt over personar og verksemder som har fått fullmakter hos dykk",
     "users_item_description_person": "Oversikt over personar og verksemder som har fullmakter hos deg",
     "reportees_item_description_org": "Oversikt over alle som har gitt fullmakter til dykk",

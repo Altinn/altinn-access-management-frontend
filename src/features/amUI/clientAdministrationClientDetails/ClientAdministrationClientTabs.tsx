@@ -1,6 +1,7 @@
 import React, { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsTabs } from '@altinn/altinn-components';
+import { PersonGroupIcon } from '@navikt/aksel-icons';
 
 type ClientAdministrationClientTabsProps = {
   activeTab: string;
@@ -26,9 +27,11 @@ export const ClientAdministrationClientTabs = ({
     >
       <DsTabs.List>
         <DsTabs.Tab value='has-users'>
+          <PersonGroupIcon aria-hidden='true' />
           {t('client_administration_page.client_has_agents_tab')}
         </DsTabs.Tab>
         <DsTabs.Tab value='all-users'>
+          <PersonGroupIcon aria-hidden='true' />
           {t('client_administration_page.client_can_get_agents_tab')}
         </DsTabs.Tab>
       </DsTabs.List>

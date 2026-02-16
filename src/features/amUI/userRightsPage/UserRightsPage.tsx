@@ -28,12 +28,14 @@ import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { GuardianshipSection } from '../common/GuardianshipSection/GuardianshipSection';
+import { useBackUrl } from '@/resources/hooks/useBackUrl';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { data: isHovedadmin, isLoading: isHovedadminLoading } = useGetIsHovedadminQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
+  const backUrl = useBackUrl(`/${amUIPath.Users}`);
 
   const actingPartyUuid =
     !isHovedadminLoading && !isHovedadmin && !currentUserIsLoading && currentUser?.partyUuid === id
@@ -55,12 +57,12 @@ export const UserRightsPage = () => {
           actingPartyUuid={actingPartyUuid ?? ''}
           fromPartyUuid={getCookie('AltinnPartyUuid')}
           toPartyUuid={id ?? undefined}
-          returnToUrlOnError={`/${amUIPath.Users}`}
+          returnToUrlOnError={backUrl}
         >
           <BreadcrumbsWrapper />
           <DelegationModalProvider>
             <PageContainer
-              backUrl={`/${amUIPath.Users}`}
+              backUrl={backUrl}
               contentActions={<DeleteUserModal direction='to' />}
             >
               <UserPageHeader

@@ -98,9 +98,9 @@ export class ConsentPage {
 
     // Controls/links
     this.languagePicker = page.getByRole('button', { name: /language/i });
-    this.norwegian = page.locator('a', { hasText: 'Norsk (bokmål)' });
-    this.english = page.locator('a', { hasText: 'English' });
-    this.nynorsk = page.locator('a', { hasText: 'Nynorsk' });
+    this.norwegian = page.locator('#no_nb');
+    this.english = page.locator('#en');
+    this.nynorsk = page.locator('#no_nn');
     this.linkAltinn = page.getByRole('link', { name: /altinn\.no/i });
     // Language-specific button selectors
     const buttonTexts = {
