@@ -7,7 +7,7 @@ import type {
   Client,
   RemoveAgentAccessPackagesFn,
 } from '@/rtk/features/clientApi';
-import { ClientAccessList } from '../common/ClientAccessList';
+import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
 
 import { useAgentAccessPackageActions } from './useAgentAccessPackageActions';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';

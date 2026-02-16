@@ -2,7 +2,10 @@ import React, { useCallback } from 'react';
 import { Snackbar, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { ClientAccessList, type ClientAccessPackageAction } from '../common/ClientAccessList';
+import {
+  ClientAccessList,
+  type ClientAccessPackageAction,
+} from '../common/ClientAccessList/ClientAccessList';
 import { useRemoveMyClientAccessPackagesMutation, type Client } from '@/rtk/features/clientApi';
 
 type MyClientsAccessSectionProps = {

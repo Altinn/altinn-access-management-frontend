@@ -19,8 +19,8 @@ import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 
-import { AccessPackageListItems } from '../common/AccessPackageListItems';
-import { UserListItems, type UserListItemData } from '../common/UserListItems';
+import { AccessPackageListItems } from '../common/AccessPackageListItems/AccessPackageListItems';
+import { UserListItems, type UserListItemData } from '../common/UserListItems/UserListItems';
 import { useClientAccessPackageActions } from './useClientAccessPackageActions';
 
 type ClientAdministrationClientAgentsListProps = {

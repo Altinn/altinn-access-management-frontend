@@ -15,8 +15,8 @@ import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
-import { AccessPackageListItems } from '../AccessPackageListItems';
-import { UserListItems, type UserListItemData } from '../UserListItems';
+import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageListItems';
+import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
 
 export type ClientAccessPackageAction = {
   clientId: string;
