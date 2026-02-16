@@ -352,7 +352,7 @@
   "user_roles": {
     "has_client_access": "Har klienttilgang",
     "has_client_access_description": "Denne brukeren har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at de har tilgang til virksomhetens eget innhold, men at de kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter de har tilgang til kan administreres under <a>klientadministrasjon</a>.",
-    "has_client_access_description_self": "Du har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at du har tilgang til virksomhetens eget innhold, men kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter de har tilgang til kan administreres under <a>dine klienter</a>."
+    "has_client_access_description_self": "Du har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at du har tilgang til virksomhetens eget innhold, men kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter du har tilgang til kan administreres under <a>dine klienter</a>."
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -392,8 +392,8 @@
     "not_acting_on_behalf_info": "Denne siden er kun tilgjengelig når du handler på vegne av en annen aktør.",
     "search_placeholder": "Søk etter klient",
     "no_clients": "Du har ingen klienter for {{actingParty}}",
-    "remove_package_success_snackbar": "{{actingParty}} har ikke lenger klienttilgang for {{accessPackage}}.",
-    "remove_package_error": "Kunne ikke fjerne {{actingParty}} sin klienttilgang for {{accessPackage}}.",
+    "remove_package_success_snackbar": "{{name}} har ikke lenger klienttilgang for {{accessPackage}}.",
+    "remove_package_error": "Kunne ikke fjerne {{name}} sin klienttilgang for {{accessPackage}}.",
     "delete_provider_button": "Slett klienttilgang",
     "delete_provider_heading": "Du sletter alle klienttilganger for denne aktøren",
     "delete_provider_body": "Alle klienttilganger gjennom {{provider}} vil bli slettet. Denne handlingen kan ikke angres.",
