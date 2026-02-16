@@ -21,6 +21,7 @@ import classes from '../ResourceInfo.module.css';
 import { useRightChips } from './useRightChips';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
+import { useHasResourceCheck } from './useHasResourceCheck';
 
 export const useRightsSection = ({
   resource,
@@ -49,6 +50,7 @@ export const useRightsSection = ({
 
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const revoke = useRevokeResource();
+  const hasResourceAccess = useHasResourceCheck(resource.identifier);
   const { data: resourceRights, isFetching: isResourceRightsFetching } = useGetResourceRightsQuery(
     {
       actingParty: actingParty?.partyUuid || '',
@@ -56,7 +58,7 @@ export const useRightsSection = ({
       to: toParty?.partyUuid || '',
       resourceId: resource.identifier,
     },
-    { skip: !toParty || !fromParty || !actingParty || !resource.identifier },
+    { skip: !toParty || !fromParty || !actingParty || !resource.identifier || !hasResourceAccess }, // Only fetch resource rights if the rightholder has access to the resource
   );
   const { data: reportee } = useGetReporteeQuery();
   const {
@@ -84,8 +86,8 @@ export const useRightsSection = ({
 
   // Instantiate/reset access and rights states
   useEffect(() => {
-    if (resourceRights && !isResourceRightsFetching) {
-      if (resourceRights.rules.length > 0) {
+    if (!isResourceRightsFetching) {
+      if (resourceRights && resourceRights.rules.length > 0) {
         setHasAccess(true);
         const rightKeys = resourceRights.rules.map((r) => r.key);
         setCurrentRights(rightKeys);
