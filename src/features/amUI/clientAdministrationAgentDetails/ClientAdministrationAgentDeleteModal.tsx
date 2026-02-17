@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { DsAlert, DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 import { useRemoveAgentMutation } from '@/rtk/features/clientApi';
-import classes from './ClientAdministrationAgentDeleteModal.module.css';
-import { TrashIcon } from '@navikt/aksel-icons';
+import { DeleteClientProviderModal } from '../common/DeleteClientProviderModal/DeleteClientProviderModal';
 
 interface ClientAdministrationAgentDeleteModalProps {
   agentId?: string;
@@ -18,62 +16,25 @@ export const ClientAdministrationAgentDeleteModal = ({
 }: ClientAdministrationAgentDeleteModalProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [isDeleteOpen, setDeleteOpen] = useState(false);
-  const [removeAgent, { isLoading: isRemoving, isError: isRemoveError }] = useRemoveAgentMutation();
+  const [removeAgent] = useRemoveAgentMutation();
+
+  const onConfirmDelete = useCallback(async () => {
+    if (!agentId) {
+      return;
+    }
+
+    await removeAgent({ to: agentId }).unwrap();
+    navigate(backUrl);
+  }, [agentId, backUrl, navigate, removeAgent]);
 
   return (
-    <>
-      <DsButton
-        variant='tertiary'
-        onClick={() => setDeleteOpen(true)}
-        disabled={!agentId}
-      >
-        <TrashIcon />
-        {t('client_administration_page.agent_delete_button')}
-      </DsButton>
-      <DsDialog
-        open={isDeleteOpen}
-        onClose={() => setDeleteOpen(false)}
-        closedby='any'
-      >
-        <DsHeading data-size='sm'>{t('client_administration_page.agent_delete_heading')}</DsHeading>
-        <DsParagraph data-size='md'>
-          {t('client_administration_page.agent_delete_body')}
-        </DsParagraph>
-        {isRemoveError && (
-          <DsAlert data-color='danger'>
-            <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-          </DsAlert>
-        )}
-        <div className={classes.buttonContainer}>
-          <DsButton
-            variant='primary'
-            data-color='danger'
-            onClick={() => {
-              if (!agentId) {
-                return;
-              }
-              removeAgent({ to: agentId })
-                .unwrap()
-                .then(() => {
-                  setDeleteOpen(false);
-                  navigate(backUrl);
-                })
-                .catch(() => undefined);
-            }}
-            loading={isRemoving}
-          >
-            {t('client_administration_page.agent_delete_confirm')}
-          </DsButton>
-          <DsButton
-            variant='secondary'
-            onClick={() => setDeleteOpen(false)}
-            disabled={isRemoving}
-          >
-            {t('common.cancel')}
-          </DsButton>
-        </div>
-      </DsDialog>
-    </>
+    <DeleteClientProviderModal
+      triggerLabel={t('client_administration_page.agent_delete_button')}
+      heading={t('client_administration_page.agent_delete_heading')}
+      body={t('client_administration_page.agent_delete_body')}
+      confirmLabel={t('client_administration_page.agent_delete_confirm')}
+      disabled={!agentId}
+      onConfirm={onConfirmDelete}
+    />
   );
 };

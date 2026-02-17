@@ -141,6 +141,8 @@
   "sidebar": {
     "access_management": "Access management",
     "users": "Users",
+    "your_rights": "Your accesses",
+    "your_clients": "Your clients",
     "reportees": "Powers of attorney from others",
     "systemaccess": "System access",
     "client_administration": "Client Administration",
@@ -333,6 +335,14 @@
       "delegation_check_error_message_plural": "A technical error prevents you from giving the user one or more access packages. Please contact Altinn user service if the problem persists."
     }
   },
+  "guardianships": {
+    "current_guardianship_title": "{{count}} guardianships",
+    "search_label": "Search for guardianships",
+    "modal_info_title": "Guardianship",
+    "modal_info_description": "The appointment of a guardian is retrieved from the County Governor. It cannot be deleted or changed here.",
+    "modal_info_info_1": "A guardian can assist with paying bills, managing assets, or representing individuals before public authorities.",
+    "modal_info_info_2": "To see what this power of attorney covers, you can go to the <a>guardianship tab</a> in the overview."
+  },
   "role": {
     "provider_status": "This role is fetched from ",
     "current_roles_title": "{{count}} roles",
@@ -351,8 +361,10 @@
     }
   },
   "user_roles": {
+    "is_guardian": "Guardian",
     "has_client_access": "Has client access",
-    "has_client_access_description": "This user has access to one or more of the organization's clients. This does not necessarily mean they have access to the organization's own content, but that they can perform work on behalf of one or more of their clients/customers. Which clients they have access to can be managed under <a>client administration</a>."
+    "has_client_access_description": "This user has access to one or more of the organization's clients. This does not necessarily mean they have access to the organization's own content, but that they can perform work on behalf of one or more of their clients/customers. Which clients they have access to can be managed under <a>client administration</a>.",
+    "has_client_access_description_self": "You have access to one or more of the organization's clients. This does not necessarily mean you have access to the organization's own content, but you can perform work on behalf of one or more of their clients/customers. Which clients you have access to can be managed under <a>your clients</a>."
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -364,6 +376,7 @@
     "only_you_have_access": "Only you have access here. Do you want to change this?",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
+    "show_users_with_client_access": "Show users with client access",
     "indirect_connections": "Users without power of attorney",
     "no_access_to_users_header": "We are still working on this page!",
     "no_access_to_users_message": "Only access managers can see the full list of users with powers of attorney in this organization. <br /> A list of key personnel (the board) will eventually be made available to users without access management."
@@ -382,13 +395,28 @@
   "reportees_page": {
     "page_title": "Powers of attorney from others - Altinn",
     "main_page_heading": "Authorizations {{name}} has with others",
-    "not_admin_alert": "You do not have access to this page for {{name}}. Please switch to a different page or change to a reportee you have sufficient rights for."
+    "not_admin_alert": "You do not have access to this page for {{name}}. Please switch to a different page or change to a reportee you have sufficient rights for.",
+    "show_clients_toggle": "Show clients"
+  },
+  "my_clients_page": {
+    "page_title": "Your clients - Altinn",
+    "main_page_heading": "Clients you have access to through {{actingParty}}",
+    "not_acting_on_behalf_info": "This page is only available when you are acting on behalf of another party.",
+    "search_placeholder": "Search for client",
+    "no_clients": "You have no clients for {{actingParty}}",
+    "remove_package_success_snackbar": "{{name}} no longer has client access for {{accessPackage}}.",
+    "remove_package_error": "Could not remove {{name}}'s client access for {{accessPackage}}.",
+    "delete_provider_button": "Delete client access",
+    "delete_provider_heading": "Do you want to delete your client access?",
+    "delete_provider_body": "You will lose all authorizations for clients you have through {{provider}}. This action cannot be undone.",
+    "delete_provider_confirm": "Delete client access"
   },
   "user_rights_page": {
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
-    "single_rights_title": "Services",
+    "single_rights_title": "Services", 
     "roles_title": "Roles",
+    "guardianships_title": "Guardianships",
     "resource_type_text": "Single right",
     "delete_confirm_message": "Are you sure you want to delete this?"
   },
@@ -445,7 +473,8 @@
       "heading": "Oops! Something went wrong.",
       "message": "We encountered a technical issue. If the problem continues, please contact Altinn user service.",
       "all_failed": "No new rights were granted to {{name}}",
-      "some_failed": "We couldn't grant these rights: {{actions}}"
+      "some_failed": "We couldn't grant these rights: {{actions}}",
+      "revoke_failed": "A technical error occurred while trying to delete the service. Please try again or contact Altinn user service if the problem persists."
     },
     "general_error": {
       "revoke_heading": "Could not delete power of attorney",
@@ -567,6 +596,7 @@
     "agent_system_user_badge": "Manage customers"
   },
   "client_administration_page": {
+    "page_title": "Client administration - Altinn",
     "no_access_title": "You do not have access to client administration",
     "page_heading": "Client administration for {{name}}",
     "page_description": "Org.no. {{organisationidentifier}} ({{unitType}})",
@@ -901,12 +931,16 @@
   "landing_page": {
     "alert_heading": "You are now in the new access management solution",
     "alert_heading_priv": "This is the new access management solution for private individuals",
-    "alert_body": "Today's Altinn roles have been replaced by access packages with services. \n\nPlease note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
-    "alert_body_priv": "Unfortunately we don't have everything in place yet, so you may need to do some things in the old solution. \n\nIf you want to go to access management for your organization, you can switch to your desired organization in the account selector at the top.",
+    "alert_body": "Today's Altinn roles have been replaced by access packages with services.",
+    "alert_body_p2": "Please note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
     "alert_link": "Go to old Altinn",
-    "shortcut_links_heading": "Where do you want to go?",
+    "your_content_heading": "Your accesses",
+    "shortcut_links_heading": "Other accesses",
     "other_links_heading": "Other",
     "users_item_description_org": "Overview of people and organizations that have been granted access in your organization",
+    "your_rights_description": "See the powers of attorney you hold on behalf of {{reportee}}",
+    "your_rights_description_yourself": "See the powers of attorney you hold on behalf of yourself",
+    "your_clients_description": "See which clients you have access to on behalf of {{reportee}}",
     "users_item_description_person": "Overview of people and organizations that have been granted access to you",
     "reportees_item_description_org": "Overview of all who have granted access to your organization",
     "reportees_item_description_person": "Overview of all who have granted you access",

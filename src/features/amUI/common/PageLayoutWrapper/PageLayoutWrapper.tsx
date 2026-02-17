@@ -10,7 +10,6 @@ import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
 
-import classes from './PageLayoutWrapper.module.css';
 import { useTranslation } from 'react-i18next';
 import { GeneralPath } from '@/routes/paths';
 import { useSidebarItems } from './useSidebarItems';
@@ -56,7 +55,6 @@ export const PageLayoutWrapper = ({
         }}
         sidebar={{
           menu: {
-            variant: 'subtle',
             groups: menuGroups,
             items: sidebarItems,
           },
@@ -71,7 +69,7 @@ export const PageLayoutWrapper = ({
         content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
         footer={footer}
       >
-        <div className={classes.content}>{children}</div>
+        <div>{children}</div>
         <InfoModal />
       </Layout>
       <Snackbar />

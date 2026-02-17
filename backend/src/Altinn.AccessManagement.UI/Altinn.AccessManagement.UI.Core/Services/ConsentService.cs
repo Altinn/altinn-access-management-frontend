@@ -1,4 +1,6 @@
+using System.Collections.Specialized;
 using System.Text;
+using System.Web;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Constants;
@@ -104,7 +106,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return request.Problem;
             }
 
-            return request.Value.RedirectUrl;
+            // add Status to RedirectUrl
+            UriBuilder uriBuilder = new UriBuilder(request.Value.RedirectUrl);
+            NameValueCollection queryParams = HttpUtility.ParseQueryString(uriBuilder.Query);
+
+            if (request.Value.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase)))
+            {
+                // if consent was approved
+                queryParams.Add("Status", "OK");
+            }
+            else if (request.Value.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "rejected", StringComparison.OrdinalIgnoreCase)))
+            {
+                // if consent was rejected
+                queryParams.Add("Status", "Failed");
+                queryParams.Add("ErrorMessage", "User did not give consent");
+            }
+            
+            uriBuilder.Query = queryParams.ToString();
+            return uriBuilder.Uri.ToString();
         }
 
         /// <inheritdoc />
@@ -202,14 +221,30 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<ConsentFE>> GetConsent(Guid consentId, CancellationToken cancellationToken)
         {
-            Result<ConsentRequestDetails> request = await _consentClient.GetConsentRequest(consentId, cancellationToken);
+            Result<Consent> request = await _consentClient.GetConsent(consentId, cancellationToken);
 
             if (request.IsProblem)
             {
                 return request.Problem;
             }
 
-            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(request.Value, cancellationToken);
+            // convert consent to consentRequest to reuse enrichment logic
+            ConsentRequestDetails consentRequest = new ConsentRequestDetails()
+            {
+                Id = request.Value.Id,
+                From = request.Value.From,
+                To = request.Value.To,
+                HandledBy = request.Value.HandledBy,
+                ValidTo = request.Value.ValidTo,
+                ConsentRights = request.Value.ConsentRights,
+                RequestMessage = request.Value.RequestMessage,
+                TemplateId = request.Value.TemplateId,
+                TemplateVersion = 1,
+                RedirectUrl = string.Empty,
+                ConsentRequestEvents = request.Value.ConsentRequestEvents
+            };
+
+            Result<EnrichedConsentTemplate> enrichedConsentTemplate = await EnrichConsentTemplate(consentRequest, cancellationToken);
 
             if (enrichedConsentTemplate.IsProblem)
             {

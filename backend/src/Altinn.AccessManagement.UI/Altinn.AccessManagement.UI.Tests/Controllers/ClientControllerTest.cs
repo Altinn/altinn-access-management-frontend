@@ -42,6 +42,214 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: GetMyClients returns the expected list of delegated clients for the authenticated user.
+        /// </summary>
+        [Fact]
+        public async Task GetMyClients_ReturnsClients()
+        {
+            Guid provider = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string path = Path.Combine(_testDataFolder, "myClients.json");
+            List<MyClientDelegation> expectedResponse = Util.GetMockData<List<MyClientDelegation>>(path);
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/my/clients?provider={provider}");
+            List<MyClientDelegation> actualResponse =
+                await response.Content.ReadFromJsonAsync<List<MyClientDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Equivalent(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        /// Test case: GetMyClients with invalid provider format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task GetMyClients_InvalidProvider_ReturnsBadRequest()
+        {
+            SetAuthHeader();
+            HttpResponseMessage response = await _client.GetAsync(
+                "accessmanagement/api/v1/clientdelegations/my/clients?provider=not-a-guid");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetMyClients returns internal server error when service throws.
+        /// </summary>
+        [Fact]
+        public async Task GetMyClients_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            Guid provider = Guid.Empty;
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/my/clients?provider={provider}");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveMyClientProvider returns no content on valid input.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientProvider_ReturnsNoContent()
+        {
+            Guid provider = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/clientdelegations/my/clientproviders?provider={provider}");
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveMyClientProvider with invalid provider format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientProvider_InvalidProvider_ReturnsBadRequest()
+        {
+            SetAuthHeader();
+            HttpResponseMessage response = await _client.DeleteAsync(
+                "accessmanagement/api/v1/clientdelegations/my/clientproviders?provider=not-a-guid");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveMyClientProvider returns internal server error when service throws.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientProvider_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            Guid provider = Guid.Empty;
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/clientdelegations/my/clientproviders?provider={provider}");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveMyClientAccessPackages returns no content on valid input.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientAccessPackages_ReturnsNoContent()
+        {
+            Guid provider = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            DelegationBatchInputDto payload = new DelegationBatchInputDto
+            {
+                Values =
+                [
+                    new DelegationBatchInputDto.Permission
+                    {
+                        Role = "DAGL",
+                        Packages = ["urn:altinn:accesspackage:demo"]
+                    }
+                ]
+            };
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/my/clients?provider={provider}&from={from}")
+            {
+                Content = JsonContent.Create(payload)
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveMyClientAccessPackages with invalid provider format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientAccessPackages_InvalidProvider_ReturnsBadRequest()
+        {
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            DelegationBatchInputDto payload = new DelegationBatchInputDto
+            {
+                Values =
+                [
+                    new DelegationBatchInputDto.Permission
+                    {
+                        Role = "DAGL",
+                        Packages = ["urn:altinn:accesspackage:demo"]
+                    }
+                ]
+            };
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/my/clients?provider=not-a-guid&from={from}")
+            {
+                Content = JsonContent.Create(payload)
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveMyClientAccessPackages returns internal server error when client throws.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientAccessPackages_ClientThrowsException_ReturnsInternalServerError()
+        {
+            Guid provider = Guid.Empty;
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            DelegationBatchInputDto payload = new DelegationBatchInputDto
+            {
+                Values =
+                [
+                    new DelegationBatchInputDto.Permission
+                    {
+                        Role = "DAGL",
+                        Packages = ["urn:altinn:accesspackage:demo"]
+                    }
+                ]
+            };
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/my/clients?provider={provider}&from={from}")
+            {
+                Content = JsonContent.Create(payload)
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveMyClientAccessPackages returns bad request when payload is null.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientAccessPackages_NullPayload_ReturnsBadRequest()
+        {
+            Guid provider = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/my/clients?provider={provider}&from={from}")
+            {
+                Content = new StringContent("null", Encoding.UTF8, "application/json")
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
         /// Test case: GetClients returns the expected list of client delegations.
         /// </summary>
         [Fact]

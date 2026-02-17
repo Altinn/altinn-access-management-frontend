@@ -160,6 +160,8 @@
   "sidebar": {
     "access_management": "Tilgangsstyring",
     "users": "Brukere",
+    "your_rights": "Se dine tilganger",
+    "your_clients": "Dine klienter",
     "reportees": "Fullmakter hos andre",
     "systemaccess": "Systemtilganger",
     "client_administration": "Klientadministrasjon",
@@ -330,6 +332,14 @@
       "delegation_check_error_message_plural": "En teknisk feil sperrer deg fra å gi fullmakt til en eller flere tilgangspakker. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer."
     }
   },
+  "guardianships": {
+    "current_guardianship_title": "{{count}} vergemål",
+    "search_label": "Søk etter vergemål",
+    "modal_info_title": "Vergemål",
+    "modal_info_description": "Oppnevnelsen av verge er hentet fra Statsforvalteren. Den kan ikke slettes eller endres her.",
+    "modal_info_info_1": "En verge kan bistå med å betale regninger, forvalte formue eller representere personer overfor offentlige myndigheter.",
+    "modal_info_info_2": "For å se hva denne fullmakten gjelder, kan du gå til <a>fanen for vergemål</a> i oversikten."
+  },
   "role": {
     "provider_status": "Denne rollen er hentet fra ",
     "current_roles_title": "{{count}} roller",
@@ -348,8 +358,10 @@
     }
   },
   "user_roles": {
+    "is_guardian": "Verge",
     "has_client_access": "Har klienttilgang",
-    "has_client_access_description": "Denne brukeren har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at de har tilgang til virksomhetens eget innhold, men at de kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter de har tilgang til kan administreres under <a>klientadministrasjon</a>."
+    "has_client_access_description": "Denne brukeren har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at de har tilgang til virksomhetens eget innhold, men at de kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter de har tilgang til kan administreres under <a>klientadministrasjon</a>.",
+    "has_client_access_description_self": "Du har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at du har tilgang til virksomhetens eget innhold, men kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter du har tilgang til kan administreres under <a>dine klienter</a>."
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -361,6 +373,7 @@
     "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
+    "show_users_with_client_access": "Vis brukere med klienttilgang",
     "indirect_connections": "Brukere uten fullmakt",
     "no_access_to_users_header": "Denne siden jobber vi fremdeles med!",
     "no_access_to_users_message": "Kun tilgangsstyrerere kan se full liste av brukere med fullmakter i denne virksomheten. <br /> Liste over nøkkelpersoner (styret) vil være tilgjengelig for brukere uten tilgangsstyring etterhvert."
@@ -379,13 +392,28 @@
   "reportees_page": {
     "page_title": "Fullmakter hos andre - Altinn",
     "main_page_heading": "Fullmakter {{name}} har hos andre",
-    "not_admin_alert": "Du har ikke tilgang til å se denne siden hos {{name}}. Vennligst bytt side eller velg en annen aktør."
+    "not_admin_alert": "Du har ikke tilgang til å se denne siden hos {{name}}. Vennligst bytt side eller velg en annen aktør.",
+    "show_clients_toggle": "Vis klienter"
+  },
+  "my_clients_page": {
+    "page_title": "Dine klienter - Altinn",
+    "main_page_heading": "Klienter du har tilgang til gjennom {{actingParty}}",
+    "not_acting_on_behalf_info": "Denne siden er kun tilgjengelig når du handler på vegne av en annen aktør.",
+    "search_placeholder": "Søk etter klient",
+    "no_clients": "Du har ingen klienter for {{actingParty}}",
+    "remove_package_success_snackbar": "{{name}} har ikke lenger klienttilgang for {{accessPackage}}.",
+    "remove_package_error": "Kunne ikke fjerne {{name}} sin klienttilgang for {{accessPackage}}.",
+    "delete_provider_button": "Slett klienttilgang",
+    "delete_provider_heading": "Vil du slette din klienttilgang?",
+    "delete_provider_body": "Du vil miste alle fullmakter for klienter du har gjennom {{provider}}. Denne handlingen kan ikke angres.",
+    "delete_provider_confirm": "Slett klienttilgang"
   },
   "user_rights_page": {
     "page_title": "Brukertilganger - Altinn",
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
     "roles_title": "Roller",
+    "guardianships_title": "Vergemål",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -438,7 +466,8 @@
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
       "all_failed": "Ingen nye tilganger er gitt til {{name}}",
-      "some_failed": "Følgende tilganger ble ikke gitt: {{actions}}"
+      "some_failed": "Følgende tilganger ble ikke gitt: {{actions}}",
+      "revoke_failed": "En teknisk feil gjorde at tjenesten ikke ble slettet. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter."
     },
     "specific_rights": {
       "missing_role_message": "Du får ikke delegert hele tjenesten, fordi du mangler noen av rettighetene selv.",
@@ -564,6 +593,7 @@
     "agent_system_user_badge": "Administrere kunder"
   },
   "client_administration_page": {
+    "page_title": "Klientadministrasjon - Altinn",
     "no_access_title": "Du har ikke tilgang til klientadministrasjon",
     "page_heading": "Klientadministrasjon for {{name}}",
     "page_description": "org.nr. {{organisationidentifier}} ({{unitType}})",
@@ -898,11 +928,15 @@
   "landing_page": {
     "alert_heading": "Du er nå i den nye løsningen for tilgangsstyring",
     "alert_heading_priv": "Dette er den nye løsningen for tilgangsstyring for privatperson",
-    "alert_body": "Her er dagens Altinn-roller erstattet av tilgangspakker med tjenester. \n\nVær oppmerksom på at det er noen tjenester du ikke kan gi tilgang til i den nye løsningen. Hvis du ikke finner tjenesten her, kan du gå til den gamle løsningen.",
-    "alert_body_priv": "Vi har dessverre ikke alt på plass enda, så noen ting må du gjøre i gammel løsning. \n\nØnsker du å gå til tilgangsstyring for virksomhet, kan du skifte til ønsket virksomhet i aktørvalget i toppen.",
+    "alert_body": "Her er dagens Altinn-roller erstattet av tilgangspakker med tjenester.",
+    "alert_body_p2": "Vær oppmerksom på at det er noen tjenester du ikke kan gi tilgang til i den nye løsningen. Hvis du ikke finner tjenesten her, kan du gå til den gamle løsningen.",
     "alert_link": "Gå til gamle Altinn",
-    "shortcut_links_heading": "Hvor vil du gå?",
+    "your_content_heading": "Dine tilganger",
+    "shortcut_links_heading": "Andre tilganger",
     "other_links_heading": "Annet",
+    "your_rights_description": "Se fullmaktene du har på vegne av {{reportee}}",
+    "your_rights_description_yourself": "Se fullmaktene du har på vegne av deg selv",
+    "your_clients_description": "Se hvilke klienter du har tilgang til på vegne av {{reportee}}",
     "users_item_description_org": "Oversikt over personer og virksomheter som har fått fullmakter hos dere",
     "users_item_description_person": "Oversikt over personer og virksomheter som har fullmakter hos deg",
     "reportees_item_description_org": "Oversikt over alle som har gitt fullmakter til dere",

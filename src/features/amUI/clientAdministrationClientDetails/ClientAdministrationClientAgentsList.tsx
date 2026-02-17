@@ -21,11 +21,8 @@ import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { isNewUser } from '../common/isNewUser';
 
-import { AccessPackageListItems } from '../clientAdministrationAgentDetails/AccessPackageListItems';
-import {
-  UserListItems,
-  type UserListItemData,
-} from '../clientAdministrationAgentDetails/UserListItems';
+import { AccessPackageListItems } from '../common/AccessPackageListItems/AccessPackageListItems';
+import { UserListItems, type UserListItemData } from '../common/UserListItems/UserListItems';
 import { useClientAccessPackageActions } from './useClientAccessPackageActions';
 
 type ClientAdministrationClientAgentsListProps = {
