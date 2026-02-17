@@ -55,8 +55,12 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
   };
 
   const roles = mapRoles(userRoles?.map(({ role }) => role) ?? []);
+<<<<<<< feat/my-clients-page
   const isAgent = altinn3Roles.some((rolePermission) => rolePermission.role.code === 'agent');
   const isViewingOwnAccess = toParty?.partyUuid === selfParty?.partyUuid;
+=======
+  const isAgent = altinn3Roles.some((rolePermission) => rolePermission.role?.code === 'agent');
+>>>>>>> main
   const isGuardian = guardianshipRoles.length > 0;
 
   return (

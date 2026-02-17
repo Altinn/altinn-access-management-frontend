@@ -41,7 +41,7 @@ export const useGroupedRoleListEntries = ({
     };
 
     permissions.forEach((connection) => {
-      const providerCode = connection.role.provider?.code;
+      const providerCode = connection.role?.provider?.code;
       if (!providerCode) {
         return;
       }
@@ -56,10 +56,12 @@ export const useGroupedRoleListEntries = ({
       }
     });
 
-    groups.altinn2Roles.sort((a, b) => collator.compare(a.role.name, b.role.name));
-    groups.altinn3Roles.sort((a, b) => collator.compare(a.role.name, b.role.name));
-    groups.userRoles.sort((a, b) => collator.compare(a.role.name, b.role.name));
-    groups.guardianshipRoles.sort((a, b) => collator.compare(a.role.name, b.role.name));
+    groups.altinn2Roles.sort((a, b) => collator.compare(a.role?.name ?? '', b.role?.name ?? ''));
+    groups.altinn3Roles.sort((a, b) => collator.compare(a.role?.name ?? '', b.role?.name ?? ''));
+    groups.userRoles.sort((a, b) => collator.compare(a.role?.name ?? '', b.role?.name ?? ''));
+    groups.guardianshipRoles.sort((a, b) =>
+      collator.compare(a.role?.name ?? '', b.role?.name ?? ''),
+    );
 
     return groups;
   }, [permissions]);
