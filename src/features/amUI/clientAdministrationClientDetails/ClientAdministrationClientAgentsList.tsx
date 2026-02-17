@@ -7,6 +7,7 @@ import {
   type UserListItemProps,
   type Color,
   formatDate,
+  formatDisplayName,
 } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
@@ -106,6 +107,10 @@ export const ClientAdministrationClientAgentsList = ({
       if (access.packages.length === 0) return acc;
 
       const roleName = getRoleMetadata(access.role.id)?.name ?? access.role.name;
+      const agentName = formatDisplayName({
+        fullName: agent.agent.name,
+        type: agent.agent.type === 'Person' ? 'person' : 'company',
+      });
       const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
         const hasAccess = packageIdsByAgentId.get(agentId)?.has(pkg.id) ?? false;
         const accessPackage = getAccessPackageById(pkg.id);
@@ -133,7 +138,7 @@ export const ClientAdministrationClientAgentsList = ({
                     agentId,
                     access.role.code,
                     pkg.urn ?? '',
-                    agent.agent.name,
+                    agentName,
                     accessPackage?.name || pkg.name,
                   );
                 }}
@@ -150,7 +155,7 @@ export const ClientAdministrationClientAgentsList = ({
                     agentId,
                     access.role.code,
                     pkg.urn ?? '',
-                    agent.agent.name,
+                    agentName,
                     accessPackage?.name || pkg.name,
                   );
                 }}
