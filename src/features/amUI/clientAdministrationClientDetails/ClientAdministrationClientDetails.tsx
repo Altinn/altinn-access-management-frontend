@@ -144,12 +144,12 @@ export const ClientAdministrationClientDetails = () => {
                 <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
               </DsAlert>
             )}
-            {id && (
-              <ClientAdministrationClientTabs
-                activeTab={activeTab}
-                onChange={setActiveTab}
-                hasUsersContent={
-                  hasDelegatablePackages ? (
+            {id &&
+              (hasDelegatablePackages ? (
+                <ClientAdministrationClientTabs
+                  activeTab={activeTab}
+                  onChange={setActiveTab}
+                  hasUsersContent={
                     <ClientAdministrationClientAgentsList
                       agents={agentsWithClientAccess}
                       clientAccessPackages={clientAccessPackages ?? []}
@@ -161,16 +161,8 @@ export const ClientAdministrationClientDetails = () => {
                       removeAgentAccessPackages={removeAgentAccessPackages}
                       emptyText={t('client_administration_page.no_user_delegations')}
                     />
-                  ) : (
-                    <DsParagraph>
-                      {t('client_administration_page.no_access_to_delegate', {
-                        name: actingPartyName,
-                      })}
-                    </DsParagraph>
-                  )
-                }
-                allUsersContent={
-                  hasDelegatablePackages ? (
+                  }
+                  allUsersContent={
                     <ClientAdministrationClientAgentsList
                       agents={allAgents}
                       clientAccessPackages={clientAccessPackages ?? []}
@@ -183,16 +175,15 @@ export const ClientAdministrationClientDetails = () => {
                       emptyText={t('client_administration_page.no_agents')}
                       addUserButton={<AddAgentButton onComplete={onUserAdded} />}
                     />
-                  ) : (
-                    <DsParagraph>
-                      {t('client_administration_page.no_access_to_delegate', {
-                        name: actingPartyName,
-                      })}
-                    </DsParagraph>
-                  )
-                }
-              />
-            )}
+                  }
+                />
+              ) : (
+                <DsParagraph>
+                  {t('client_administration_page.no_access_to_delegate', {
+                    name: actingPartyName,
+                  })}
+                </DsParagraph>
+              ))}
           </>
         )}
       </PageContainer>

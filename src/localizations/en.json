@@ -617,7 +617,7 @@
     "load_delegations_error": "Could not load clients with access.",
     "load_user_delegations_error": "Could not load users with access.",
     "no_delegations": "No clients have granted power of attorney to the organization.",
-    "no_user_delegations": "The organization has no users with client access.",
+    "no_user_delegations": "No users have been granted power of attorney for this client.",
     "no_access_to_delegate": "{{name}} has no access for this client.",
     "delegate_package_button": "Give power of attorney",
     "delegate_package_success_snackbar": "{{name}} now has power of attorney for {{accessPackage}}.",

@@ -189,6 +189,8 @@ export const ClientAdministrationClientAgentsList = ({
       badge: isRecentlyAdded
         ? {
             label: t('client_administration_page.new_agent_tag'),
+            color: 'success',
+            variant: 'base',
           }
         : undefined,
     };

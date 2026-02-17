@@ -614,7 +614,7 @@
     "load_delegations_error": "Kunne ikke laste klienter med tilgang.",
     "load_user_delegations_error": "Kunne ikke laste brukere med tilgang.",
     "no_delegations": "Ingen klienter har gitt fullmakter til virksomheten.",
-    "no_user_delegations": "Virksomheten har ingen brukere med klienttilgang.",
+    "no_user_delegations": "Ingen brukere er gitt fullmakt til klienten.",
     "no_access_to_delegate": "{{name}} har ingen tilganger for denne klienten.",
     "delegate_package_button": "Gi fullmakt",
     "delegate_package_success_snackbar": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
