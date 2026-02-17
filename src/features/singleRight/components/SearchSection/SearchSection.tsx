@@ -197,6 +197,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           ) || []
         : [];
 
+    if (errorCodeTextKeyList.length === 0) {
+      errorCodeTextKeyList.push(ErrorCode.MissingDelegationAccess);
+    }
+
     let prioritizedErrorCodes: string[] = [];
 
     if (errorCodeTextKeyList?.length > 0) {

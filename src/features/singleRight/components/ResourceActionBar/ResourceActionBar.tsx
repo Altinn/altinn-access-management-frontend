@@ -13,8 +13,10 @@ import { getButtonIconSize } from '@/resources/utils';
 
 import classes from './ResourceActionBar.module.css';
 
-export interface ResourceActionBarProps
-  extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children'> {
+export interface ResourceActionBarProps extends Pick<
+  ActionBarProps,
+  'subtitle' | 'title' | 'children'
+> {
   /** Indicates the status of the ActionBar */
   status: ServiceStatus;
 
@@ -136,8 +138,9 @@ export const ResourceActionBar = ({
       />
     </DsValidationMessage>
   );
+  console.log('render', { status, previousStatus, open });
 
-  const action = () => {
+  const action = useMemo(() => {
     if (isLoading) {
       return loadingText;
     }
@@ -151,14 +154,14 @@ export const ResourceActionBar = ({
       default:
         return addButton;
     }
-  };
+  }, [status, isLoading]);
 
   return (
     <ActionBar
       subtitle={subtitle}
       title={title}
       color={color}
-      actions={action()}
+      actions={action}
       open={open}
       onClick={() => {
         setOpen(!open);
