@@ -407,8 +407,8 @@
     "remove_package_success_snackbar": "{{name}} no longer has client access for {{accessPackage}}.",
     "remove_package_error": "Could not remove {{name}}'s client access for {{accessPackage}}.",
     "delete_provider_button": "Delete client access",
-    "delete_provider_heading": "You are deleting all client access for this party",
-    "delete_provider_body": "All client access through {{provider}} will be deleted. This action cannot be undone.",
+    "delete_provider_heading": "Do you want to delete your client access?",
+    "delete_provider_body": "You will lose all authorizations for clients you have through {{provider}}. This action cannot be undone.",
     "delete_provider_confirm": "Delete client access"
   },
   "user_rights_page": {

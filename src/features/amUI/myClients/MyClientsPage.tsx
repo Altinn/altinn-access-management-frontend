@@ -87,6 +87,7 @@ export const MyClientsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
+        <Breadcrumbs items={['root', 'my_clients']} />
         <PageContainer
           backUrl={backUrl}
           contentActions={
@@ -98,7 +99,6 @@ export const MyClientsPage = () => {
           }
         >
           <>
-            <Breadcrumbs items={['root', 'my_clients']} />
             <ReporteePageHeading
               title={t('my_clients_page.main_page_heading', { actingParty: actingPartyName })}
               reportee={reportee}

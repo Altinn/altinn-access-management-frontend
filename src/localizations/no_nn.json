@@ -404,8 +404,8 @@
     "remove_package_success_snackbar": "{{name}} har ikkje lenger klienttilgang for {{accessPackage}}.",
     "remove_package_error": "Klarte ikkje å fjerne klienttilgangen til {{name}} for {{accessPackage}}.",
     "delete_provider_button": "Slett klienttilgang",
-    "delete_provider_heading": "Du slettar alle klienttilgangar for denne aktøren",
-    "delete_provider_body": "Alle klienttilgangar gjennom {{provider}} vil bli sletta. Denne handlinga kan ikkje angrast.",
+    "delete_provider_heading": "Vil du slette klienttilgangen din?",
+    "delete_provider_body": "Du vil miste alle fullmakter for klientar du har gjennom {{provider}}. Denne handlinga kan ikkje angrast.",
     "delete_provider_confirm": "Slett klienttilgang"
   },
   "user_rights_page": {
