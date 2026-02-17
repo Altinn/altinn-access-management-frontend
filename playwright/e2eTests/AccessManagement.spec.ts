@@ -3,6 +3,7 @@ import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from './../fixture/pomFixture';
 import { AktorvalgHeader } from '../pages/AktorvalgHeader';
 import { Token } from '../api-requests/Token';
+import { ApiRequests } from '../api-requests/ApiRequests';
 
 test.describe('Tilgangsstyring', () => {
   test('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', async ({
@@ -203,8 +204,20 @@ test.describe('Tilgangsstyring', () => {
 test.describe('@slow Testdata for Tilgangsstyring-testene', () => {
   test('bruk API til å sette opp testdata', async ({ page }) => {
     test.step('spørring her', async () => {
-      const tokenTool = await new Token();
-      const bearerToken = await tokenTool.getPersonalAltinnTokenWithOnlyPid('70885100226');
+      const api = await new ApiRequests();
+      await api.addConnectionPackagePerson(
+        '12816699205',
+        '314138910',
+        '70885100226',
+        'urn:altinn:accesspackage:tilgangsstyrer',
+      );
+      await api.addConnectionPackagePerson(
+        '12816699205',
+        '314138910',
+        '70885100226',
+        'urn:altinn:accesspackage:posttjenester',
+      );
+      await api.getConnectionPerson('12816699205', '314138910', '70885100226');
     });
   });
 

@@ -1,6 +1,7 @@
 import { env } from 'playwright/util/helper';
 
 export class Token {
+  public platformToken: string;
   private readonly username: string;
   private readonly password: string;
   private readonly org: string;
@@ -11,6 +12,7 @@ export class Token {
     this.password = env('PASSWORD_TEST_API');
     this.org = org || env('ORG');
     this.environment = env('ENV_NAME');
+    this.platformToken = '';
   }
 
   public get orgNo(): string {
@@ -129,8 +131,8 @@ export class Token {
    * Tar imot en PID og returnerer en personal token
    * @returns personal token
    */
-  public async getPersonalAltinnTokenWithOnlyPid(pid: string): Promise<string> {
-    const person = (await this.getUserIdPartyIdUuidForUser(pid)).data[0];
+  public async getPersonalTokenByPid(pid: string): Promise<string> {
+    const person = await this.getIds(pid);
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${this.environment}` +
       `&pid=${pid}` +
@@ -153,22 +155,68 @@ export class Token {
   }
 
   /**
-   * Henter userId, partyId og partyUuid for en gitt bruker
-   * @returns json objekt med info om en bruker
+   * Henter userId, partyId og partyUuid for en gitt bruker eller organisasjon
+   * @returns json objekt med info om en bruker eller organisasjon
    */
-  public async getUserIdPartyIdUuidForUser(pid: string) {
+  public async getIds(pidOrOrgNo: string) {
     const url = `${env('API_BASE_URL')}/register/api/v1/access-management/parties/query?fields=person,party,user`;
-    const subscriptionKey = env('AT23_REGISTER_SUBSCRIPTION_KEY');
-    const token = await this.getPlatformToken();
-    const payload = {
-      data: [`urn:altinn:person:identifier-no:${pid}`],
-    };
-    const body = JSON.stringify(payload);
+    const subscriptionKey = env(`${env('ENV_NAME')}_REGISTER_SUBSCRIPTION_KEY`);
+    const platformToken = await this.getPlatformToken();
+    var payload;
+    if (pidOrOrgNo.length == 9) {
+      payload = { data: [`urn:altinn:organization:identifier-no:${pidOrOrgNo}`] };
+    } else {
+      payload = { data: [`urn:altinn:person:identifier-no:${pidOrOrgNo}`] };
+    }
 
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        PlatformAccessToken: token,
+        PlatformAccessToken: platformToken,
+        'Ocp-Apim-Subscription-Key': subscriptionKey,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch status for request. Status: ${response.status}`);
+    }
+    const responseData = await response.json();
+    return await responseData.data[0];
+  }
+
+  /**
+   * Retrieves the party UUID for a given identifier by delegating to the appropriate lookup.
+   *
+   * @param pidOrOrg - A personal identifier or organization number; values with length 9 are treated as organization numbers.
+   * @returns A promise that resolves to the party UUID associated with the provided identifier.
+   */
+  public async getPartyUuid(pidOrOrg: string) {
+    return (await this.getIds(pidOrOrg)).partyUuid;
+  }
+
+  public async getLastName(pid: string) {
+    return (await this.getIds(pid)).lastName;
+  }
+
+  /**
+   * Henter partyId og partyUuid for en gitt org
+   * @returns json objekt med info om en org
+   */
+  public async getIdsForOrg(orgno: string) {
+    const url = `${env('API_BASE_URL')}/register/api/v1/access-management/parties/query`;
+    const subscriptionKey = env(`${env('ENV_NAME')}_REGISTER_SUBSCRIPTION_KEY`);
+    const platformToken = await this.getPlatformToken();
+
+    const payload = {
+      data: [`urn:altinn:organization:identifier-no:${orgno}`],
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        PlatformAccessToken: platformToken,
         'Ocp-Apim-Subscription-Key': subscriptionKey,
         'Content-Type': 'application/json',
       },
@@ -186,7 +234,12 @@ export class Token {
    * Lager platform token som brukes til å slå opp blant annet userId, partyId, partyUuid.
    * @returns Platform Access Token
    */
-  private async getPlatformToken() {
+  public async getPlatformToken() {
+    if (this.platformToken != '') {
+      console.log('platformtoken finnes allerede');
+      return this.platformToken;
+    }
+
     const url = `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPlatformAccessToken?env=${env('ENV_NAME')}&app=testtjeneste&ttl=60000`;
     const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
     const headers = {
@@ -198,7 +251,10 @@ export class Token {
     if (!token) {
       throw new Error('Token retrieval failed for Platform Access token');
     }
-    return token;
+
+    this.platformToken = token;
+    console.log('platformtoken fantes ikke, fikk ny.');
+    return this.platformToken;
   }
 
   private async getAltinnToken(url: string, headers: Record<string, string>): Promise<string> {
