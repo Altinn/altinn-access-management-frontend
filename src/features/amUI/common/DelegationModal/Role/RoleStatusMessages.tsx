@@ -53,7 +53,7 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
     ).values(),
   );
   const filteredStatuses = uniqueInheritedStatus.filter(
-    (s) => !(s.type === InheritedStatusType.ViaKeyRole && role.provider?.code === 'sys-ccr'),
+    (s) => !(s.type === InheritedStatusType.ViaKeyRole && role?.provider?.code === 'sys-ccr'),
   );
 
   return (
