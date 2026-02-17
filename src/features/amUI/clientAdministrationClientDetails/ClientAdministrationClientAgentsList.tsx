@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
   Button,
+  DsParagraph,
   type UserListItemProps,
   type Color,
   formatDate,
@@ -18,6 +19,7 @@ import type {
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
+import { isNewUser } from '../common/isNewUser';
 
 import { AccessPackageListItems } from '../common/AccessPackageListItems/AccessPackageListItems';
 import { UserListItems, type UserListItemData } from '../common/UserListItems/UserListItems';
@@ -32,11 +34,16 @@ type ClientAdministrationClientAgentsListProps = {
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
+  emptyText?: string;
+  addUserButton?: React.ReactNode;
 };
 
 const getUserListItemType = (agentType: string): UserListItemProps['type'] => {
   return agentType.toLowerCase() === 'person' ? 'person' : 'company';
 };
+
+const getAgentSortKey = (agent: Agent): string =>
+  `${isNewUser(agent.agentAddedAt) ? '0' : '1'}:${agent.agent.name.toLowerCase()}`;
 
 export const ClientAdministrationClientAgentsList = ({
   agents,
@@ -47,6 +54,8 @@ export const ClientAdministrationClientAgentsList = ({
   actingPartyUuid,
   addAgentAccessPackages,
   removeAgentAccessPackages,
+  emptyText,
+  addUserButton,
 }: ClientAdministrationClientAgentsListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
@@ -81,13 +90,15 @@ export const ClientAdministrationClientAgentsList = ({
     return map;
   }, [clientAccessPackages]);
 
-  const sortedAgents = useMemo(
-    () => [...agents].sort((a, b) => a.agent.name.localeCompare(b.agent.name)),
-    [agents],
-  );
+  const sortedAgents = useMemo(() => {
+    return [...agents].sort((a, b) => {
+      return getAgentSortKey(a).localeCompare(getAgentSortKey(b));
+    });
+  }, [agents]);
 
   const userListItems: UserListItemData[] = sortedAgents.map((agent) => {
     const agentId = agent.agent.id;
+    const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.variant);
     const userType = getUserListItemType(agent.agent.type);
 
@@ -175,13 +186,29 @@ export const ClientAdministrationClientAgentsList = ({
           : userType === 'person'
             ? `${t('common.date_of_birth')} ${formatDate(agent.agent.dateOfBirth ?? '')}`
             : undefined,
+      badge: isRecentlyAdded
+        ? {
+            label: t('client_administration_page.new_agent_tag'),
+            color: 'success',
+            variant: 'base',
+          }
+        : undefined,
     };
   });
 
+  const hasAgents = userListItems.length > 0;
+
   return (
-    <UserListItems
-      items={userListItems}
-      searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
-    />
+    <div>
+      {hasAgents ? (
+        <UserListItems
+          items={userListItems}
+          searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+          addUserButton={addUserButton}
+        />
+      ) : (
+        <DsParagraph>{emptyText ?? t('client_administration_page.no_agents')}</DsParagraph>
+      )}
+    </div>
   );
 };
