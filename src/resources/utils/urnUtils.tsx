@@ -11,3 +11,10 @@ export const getUrnForParty = (partyUuid: string, partyType: PartyType) => {
     throw new Error('Cannot delegate. User type not defined');
   }
 };
+
+export const isGuardianshipUrn = (urn: string) => {
+  return (
+    urn.startsWith('urn:altinn:accesspackage:vergemal') ||
+    urn.startsWith('accesspackage:area:vergemal')
+  );
+};

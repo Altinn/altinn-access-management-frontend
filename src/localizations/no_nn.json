@@ -139,6 +139,7 @@
     "access_management": "Tilgangsstyring",
     "users": "Brukarar",
     "your_rights": "Dine tilgangar",
+    "your_clients": "Dine klientar",
     "reportees": "Fullmakter hos andre",
     "systemaccess": "Systemtilgangar",
     "client_administration": "Klientadministrasjon",
@@ -331,6 +332,14 @@
       "delegation_check_error_message_plural": "En teknisk feil sperrer deg fra å gi fullmakt til ein eller fleire tilgangspakkar. Ver venleg å kontakte Altinn brukarteneste om problemet held fram."
     }
   },
+  "guardianships": {
+    "current_guardianship_title": "{{count}} vergemål",
+    "search_label": "Søk etter vergemål",
+    "modal_info_title": "Vergemål",
+    "modal_info_description": "Oppnevnelsen av verge er henta frå Statsforvalteren. Ho kan ikkje slettast eller endrast her.",
+    "modal_info_info_1": "Ein verge kan bistå med å betale regningar, forvalte formue eller representere personar overfor offentlege myndigheiter.",
+    "modal_info_info_2": "For å sjå kva denne fullmakta gjeld, kan du gå til <a>fanen for vergemål</a> i oversikten."
+  },
   "role": {
     "provider_status": "Denne rolla er henta frå ",
     "current_roles_title": "{{count}} roller",
@@ -349,8 +358,10 @@
     }
   },
   "user_roles": {
+    "is_guardian": "Verge",
     "has_client_access": "Har klienttilgang",
-    "has_client_access_description": "Denne brukaren har tilgang til ein eller fleire av verksemda sine klientar. Dette betyr ikkje nødvendigvis at dei har tilgang til verksemda sitt eige innhald, men at dei kan utføre arbeid på vegner av ein eller fleire av kundane deira. Kva klientar dei har tilgang til kan administrerast under <a>klientadministrasjon</a>."
+    "has_client_access_description": "Denne brukaren har tilgang til ein eller fleire av verksemda sine klientar. Dette betyr ikkje nødvendigvis at dei har tilgang til verksemda sitt eige innhald, men at dei kan utføre arbeid på vegner av ein eller fleire av kundane deira. Kva klientar dei har tilgang til kan administrerast under <a>klientadministrasjon</a>.",
+    "has_client_access_description_self": "Du har tilgang til ein eller fleire av verksemda sine klientar. Dette betyr ikkje nødvendigvis at du har tilgang til verksemda sitt eige innhald, men kan utføre arbeid på vegner av ein eller fleire av kundane deira. Kva klientar du har tilgang til kan administrerast under <a>dine klientar</a>."
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -384,11 +395,25 @@
     "not_admin_alert": "Du har ikkje tilgang til å sjå denne sida hos {{name}}. Bytt side eller vel ein anna aktør.",
     "show_clients_toggle": "Vis klientar"
   },
+  "my_clients_page": {
+    "page_title": "Dine klientar - Altinn",
+    "main_page_heading": "Klientar du har tilgang til gjennom {{actingParty}}",
+    "not_acting_on_behalf_info": "Denne sida er berre tilgjengeleg når du handlar på vegner av ein annan aktør.",
+    "search_placeholder": "Søk etter klient",
+    "no_clients": "Du har ingen klientar for {{actingParty}}",
+    "remove_package_success_snackbar": "{{name}} har ikkje lenger klienttilgang for {{accessPackage}}.",
+    "remove_package_error": "Klarte ikkje å fjerne klienttilgangen til {{name}} for {{accessPackage}}.",
+    "delete_provider_button": "Slett klienttilgang",
+    "delete_provider_heading": "Vil du slette klienttilgangen din?",
+    "delete_provider_body": "Du vil miste alle fullmakter for klientar du har gjennom {{provider}}. Denne handlinga kan ikkje angrast.",
+    "delete_provider_confirm": "Slett klienttilgang"
+  },
   "user_rights_page": {
     "page_title": "Brukertilgang - Altinn",
     "access_packages_title": "Tilgangspakkar",
     "single_rights_title": "Tenester",
     "roles_title": "Roller",
+    "guardianships_title": "Vergemål",
     "resource_type_text": "Enkeltteneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -568,6 +593,7 @@
     "agent_system_user_badge": "Administrere kunder"
   },
   "client_administration_page": {
+    "page_title": "Klientadministrasjon - Altinn",
     "no_access_title": "Du har ikkje tilgang til klientadministrasjon",
     "page_heading": "Klientadministrasjon for {{name}}",
     "page_description": "org.nr. {{organisationidentifier}} ({{unitType}})",
@@ -908,6 +934,7 @@
     "other_links_heading": "Anna",
     "your_rights_description": "Sjå fullmaktene du har på vegne av {{reportee}}",
     "your_rights_description_yourself": "Sjå fullmaktene du har på vegne av deg sjølv",
+    "your_clients_description": "Sjå kva klientar du har tilgang til på vegne av {{reportee}}",
     "users_item_description_org": "Oversikt over personar og verksemder som har fått fullmakter hos dykk",
     "users_item_description_person": "Oversikt over personar og verksemder som har fullmakter hos deg",
     "reportees_item_description_org": "Oversikt over alle som har gitt fullmakter til dykk",

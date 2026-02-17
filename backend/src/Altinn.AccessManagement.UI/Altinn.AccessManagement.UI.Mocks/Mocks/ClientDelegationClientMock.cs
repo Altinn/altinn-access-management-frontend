@@ -32,6 +32,32 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
+        public Task<List<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)
+        {
+            if (provider?.Count > 0)
+            {
+                Util.ThrowExceptionIfTriggerParty(provider[0].ToString());
+            }
+
+            string dataPath = Path.Combine(dataFolder, "ClientDelegation", "myClients.json");
+            return Task.FromResult(Util.GetMockData<List<MyClientDelegation>>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public Task RemoveMyClientProvider(Guid provider, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(provider.ToString());
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
+        public Task RemoveMyClientAccessPackages(Guid provider, Guid from, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(provider.ToString());
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
         public Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());

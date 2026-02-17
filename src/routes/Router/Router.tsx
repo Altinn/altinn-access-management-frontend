@@ -42,6 +42,7 @@ import { RequestPage } from '@/features/amUI/requestPage/RequestsPage';
 import { ClientAdministrationPage } from '@/features/amUI/clientAdministration/ClientAdministrationPage';
 import { ClientAdministrationAgentDetailsPage } from '@/features/amUI/clientAdministrationAgentDetails/ClientAdministrationAgentDetailsPage';
 import { ClientAdministrationClientDetailsPage } from '@/features/amUI/clientAdministrationClientDetails/ClientAdministrationClientDetailsPage';
+import { MyClientsPage } from '@/features/amUI/myClients/MyClientsPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -142,6 +143,10 @@ export const Router = createBrowserRouter(
         <Route
           path={amUIPath.UserRights}
           element={<UserRightsPage />}
+        />
+        <Route
+          path={amUIPath.MyClients}
+          element={<MyClientsPage />}
         />
         <Route
           path={amUIPath.Reportees}

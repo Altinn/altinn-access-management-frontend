@@ -1,0 +1,30 @@
+.container {
+  width: 100%;
+}
+
+.search {
+  padding-bottom: 15px;
+}
+
+.searchBar {
+  max-width: 23rem;
+}
+
+.accessRoleItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+  padding: var(--ds-spacing-2);
+  margin-left: var(--ds-spacing-10);
+  margin-top: 10px;
+}
+
+.showMoreButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.showMoreButton {
+  min-width: 120px;
+}

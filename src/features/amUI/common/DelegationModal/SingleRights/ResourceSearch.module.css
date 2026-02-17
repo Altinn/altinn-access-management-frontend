@@ -1,25 +1,11 @@
-.searchInputs {
-  width: 100%;
-  display: flex;
-  gap: 12px;
-  padding-bottom: 5px;
-}
-
-.searchField {
-  max-width: 500px;
-}
-
 .searchResults {
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-height: 500px;
 }
 
-.resultCountAndChips {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: var(--fds-spacing-2);
+.toolbarContainer ul {
+  max-height: 30rem;
 }
 
 .pagination {
@@ -30,67 +16,4 @@
 .spinner {
   padding-top: 100px;
   margin: auto;
-}
-
-.filterChips {
-  margin-left: 5px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.resourceList {
-  padding-top: 5px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.resourceItem {
-  display: flex;
-  align-items: center;
-}
-
-.resource {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.resourceHeading {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  text-align: left;
-}
-
-.resourceSubtitle,
-.infoText {
-  color: #5b6471;
-  white-space: nowrap;
-}
-
-.listItemRight {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-@media only screen and (max-width: 768px) {
-  .searchInputs {
-    flex-direction: column;
-    align-items: start;
-    gap: 4px;
-    padding-bottom: 10px;
-  }
-
-  .searchField {
-    width: 100%;
-  }
-}
-
-@media only screen and (min-width: 769px) {
-  .filter {
-    padding-bottom: 10px;
-  }
 }

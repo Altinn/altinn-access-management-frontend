@@ -1,0 +1,34 @@
+{
+  "id": "62334b04-a65b-4eb2-b198-ab3c15e27f16",
+  "from": "urn:altinn:person:identifier-no:167536b5-f8ed-4c5a-8f48-0279507e53ae",
+  "to": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+  "handledBy": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+  "validTo": "2075-05-21T11:11:24.9535551+00:00",
+  "consentRights": [
+    {
+      "action": ["read"],
+      "resource": [{ "type": "urn:altinn:resource", "value": "consent-test-resource" }],
+      "metadata": { "inntektsaar": "2016" }
+    }
+  ],
+  "consentRequestEvents": [
+    {
+      "consentEventID": "cdb40e2f-8b03-4edf-aa54-b08b51d60c3d",
+      "created": "2025-07-02T15:09:13.526811+00:00",
+      "performedBy": "urn:altinn:organization:identifier-no:991825827",
+      "eventType": "Created",
+      "consentRequestID": "62334b04-a65b-4eb2-b198-ab3c15e27f16"
+    },
+    {
+      "consentEventID": "5a191817-7179-414b-aa1d-8253c86898c3",
+      "created": "2025-07-03T15:09:13.526811+00:00",
+      "performedBy": "urn:altinn:person:identifier-no:20838198385",
+      "eventType": "Accepted",
+      "consentRequestID": "62334b04-a65b-4eb2-b198-ab3c15e27f16"
+    }
+  ],
+  "requestMessage": null,
+  "redirectUrl": "https://smartbank.no/consent",
+  "templateId": "sblanesoknad",
+  "templateVersion": 1
+}

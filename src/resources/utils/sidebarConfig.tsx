@@ -67,6 +67,24 @@ export const getYourRightsMenuItem = (
   };
 };
 
+export const getYourClientsMenuItem = (
+  pathname?: string,
+  isLoading = false,
+  isSmall = false,
+): MenuItemProps => {
+  return {
+    groupId: '14',
+    id: 'your-clients',
+    size: 'md',
+    loading: isLoading,
+    variant: 'tinted',
+    title: t('sidebar.your_clients'),
+    selected: pathname?.includes(`/${amUIPath.MyClients}`),
+    icon: { svgElement: DatabaseIcon, theme: isSmall ? 'surface' : 'default' },
+    as: (props) => getMenuLinkAs(props, `/${amUIPath.MyClients}`),
+  };
+};
+
 export const getUsersMenuItem = (
   pathname?: string,
   isLoading = false,

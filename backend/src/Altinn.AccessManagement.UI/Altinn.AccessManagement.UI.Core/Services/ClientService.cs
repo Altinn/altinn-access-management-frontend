@@ -25,6 +25,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
+        public async Task<List<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)
+        {
+            return await _clientDelegationClient.GetMyClients(provider, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveMyClientProvider(Guid provider, CancellationToken cancellationToken = default)
+        {
+            await _clientDelegationClient.RemoveMyClientProvider(provider, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveMyClientAccessPackages(Guid provider, Guid from, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            await _clientDelegationClient.RemoveMyClientAccessPackages(provider, from, payload, cancellationToken);
+        }
+
+        /// <inheritdoc />
         public async Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
         {
             return await _clientDelegationClient.GetClients(party, roles, cancellationToken);
