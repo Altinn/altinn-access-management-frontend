@@ -20,7 +20,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
   const [isClientAccessModalOpen, setIsClientAccessModalOpen] = useState(false);
   const [isGuardianModalOpen, setIsGuardianModalOpen] = useState(false);
 
-  const { toParty, fromParty, actingParty } = usePartyRepresentation();
+  const { toParty, fromParty, actingParty, selfParty } = usePartyRepresentation();
 
   const { data: permissions } = useGetRolePermissionsQuery(
     {
@@ -55,6 +55,8 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
   };
 
   const roles = mapRoles(userRoles?.map(({ role }) => role) ?? []);
+
+  const isViewingOwnAccess = toParty?.partyUuid === selfParty?.partyUuid;
   const isAgent = altinn3Roles.some((rolePermission) => rolePermission.role?.code === 'agent');
   const isGuardian = guardianshipRoles.length > 0;
 
@@ -94,6 +96,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
         <ClientAccessInfoModal
           open={isClientAccessModalOpen}
           onClose={() => setIsClientAccessModalOpen(false)}
+          isViewingOwnAccess={isViewingOwnAccess}
         />
       )}
       {isGuardian && (

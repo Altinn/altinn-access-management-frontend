@@ -142,6 +142,7 @@
     "access_management": "Access management",
     "users": "Users",
     "your_rights": "Your accesses",
+    "your_clients": "Your clients",
     "reportees": "Powers of attorney from others",
     "systemaccess": "System access",
     "client_administration": "Client Administration",
@@ -362,7 +363,8 @@
   "user_roles": {
     "is_guardian": "Guardian",
     "has_client_access": "Has client access",
-    "has_client_access_description": "This user has access to one or more of the organization's clients. This does not necessarily mean they have access to the organization's own content, but that they can perform work on behalf of one or more of their clients/customers. Which clients they have access to can be managed under <a>client administration</a>."
+    "has_client_access_description": "This user has access to one or more of the organization's clients. This does not necessarily mean they have access to the organization's own content, but that they can perform work on behalf of one or more of their clients/customers. Which clients they have access to can be managed under <a>client administration</a>.",
+    "has_client_access_description_self": "You have access to one or more of the organization's clients. This does not necessarily mean you have access to the organization's own content, but you can perform work on behalf of one or more of their clients/customers. Which clients you have access to can be managed under <a>your clients</a>."
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -396,10 +398,23 @@
     "not_admin_alert": "You do not have access to this page for {{name}}. Please switch to a different page or change to a reportee you have sufficient rights for.",
     "show_clients_toggle": "Show clients"
   },
+  "my_clients_page": {
+    "page_title": "Your clients - Altinn",
+    "main_page_heading": "Clients you have access to through {{actingParty}}",
+    "not_acting_on_behalf_info": "This page is only available when you are acting on behalf of another party.",
+    "search_placeholder": "Search for client",
+    "no_clients": "You have no clients for {{actingParty}}",
+    "remove_package_success_snackbar": "{{name}} no longer has client access for {{accessPackage}}.",
+    "remove_package_error": "Could not remove {{name}}'s client access for {{accessPackage}}.",
+    "delete_provider_button": "Delete client access",
+    "delete_provider_heading": "Do you want to delete your client access?",
+    "delete_provider_body": "You will lose all authorizations for clients you have through {{provider}}. This action cannot be undone.",
+    "delete_provider_confirm": "Delete client access"
+  },
   "user_rights_page": {
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
-    "single_rights_title": "Services",
+    "single_rights_title": "Services", 
     "roles_title": "Roles",
     "guardianships_title": "Guardianships",
     "resource_type_text": "Single right",
@@ -581,6 +596,7 @@
     "agent_system_user_badge": "Manage customers"
   },
   "client_administration_page": {
+    "page_title": "Client administration - Altinn",
     "no_access_title": "You do not have access to client administration",
     "page_heading": "Client administration for {{name}}",
     "page_description": "Org.no. {{organisationidentifier}} ({{unitType}})",
@@ -922,6 +938,7 @@
     "users_item_description_org": "Overview of people and organizations that have been granted access in your organization",
     "your_rights_description": "See the powers of attorney you hold on behalf of {{reportee}}",
     "your_rights_description_yourself": "See the powers of attorney you hold on behalf of yourself",
+    "your_clients_description": "See which clients you have access to on behalf of {{reportee}}",
     "users_item_description_person": "Overview of people and organizations that have been granted access to you",
     "reportees_item_description_org": "Overview of all who have granted access to your organization",
     "reportees_item_description_person": "Overview of all who have granted you access",

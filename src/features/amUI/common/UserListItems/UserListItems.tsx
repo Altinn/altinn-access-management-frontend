@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { debounce } from '@/resources/utils';
 
-import classes from './ClientAdministrationAgentClientsList.module.css';
+import classes from './UserListItems.module.css';
 
 export type UserListItemData = UserListItemProps & {
   children?: ReactNode;

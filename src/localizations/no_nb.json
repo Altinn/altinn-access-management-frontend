@@ -161,6 +161,7 @@
     "access_management": "Tilgangsstyring",
     "users": "Brukere",
     "your_rights": "Se dine tilganger",
+    "your_clients": "Dine klienter",
     "reportees": "Fullmakter hos andre",
     "systemaccess": "Systemtilganger",
     "client_administration": "Klientadministrasjon",
@@ -359,7 +360,8 @@
   "user_roles": {
     "is_guardian": "Verge",
     "has_client_access": "Har klienttilgang",
-    "has_client_access_description": "Denne brukeren har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at de har tilgang til virksomhetens eget innhold, men at de kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter de har tilgang til kan administreres under <a>klientadministrasjon</a>."
+    "has_client_access_description": "Denne brukeren har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at de har tilgang til virksomhetens eget innhold, men at de kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter de har tilgang til kan administreres under <a>klientadministrasjon</a>.",
+    "has_client_access_description_self": "Du har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at du har tilgang til virksomhetens eget innhold, men kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter du har tilgang til kan administreres under <a>dine klienter</a>."
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -392,6 +394,19 @@
     "main_page_heading": "Fullmakter {{name}} har hos andre",
     "not_admin_alert": "Du har ikke tilgang til å se denne siden hos {{name}}. Vennligst bytt side eller velg en annen aktør.",
     "show_clients_toggle": "Vis klienter"
+  },
+  "my_clients_page": {
+    "page_title": "Dine klienter - Altinn",
+    "main_page_heading": "Klienter du har tilgang til gjennom {{actingParty}}",
+    "not_acting_on_behalf_info": "Denne siden er kun tilgjengelig når du handler på vegne av en annen aktør.",
+    "search_placeholder": "Søk etter klient",
+    "no_clients": "Du har ingen klienter for {{actingParty}}",
+    "remove_package_success_snackbar": "{{name}} har ikke lenger klienttilgang for {{accessPackage}}.",
+    "remove_package_error": "Kunne ikke fjerne {{name}} sin klienttilgang for {{accessPackage}}.",
+    "delete_provider_button": "Slett klienttilgang",
+    "delete_provider_heading": "Vil du slette din klienttilgang?",
+    "delete_provider_body": "Du vil miste alle fullmakter for klienter du har gjennom {{provider}}. Denne handlingen kan ikke angres.",
+    "delete_provider_confirm": "Slett klienttilgang"
   },
   "user_rights_page": {
     "page_title": "Brukertilganger - Altinn",
@@ -578,6 +593,7 @@
     "agent_system_user_badge": "Administrere kunder"
   },
   "client_administration_page": {
+    "page_title": "Klientadministrasjon - Altinn",
     "no_access_title": "Du har ikke tilgang til klientadministrasjon",
     "page_heading": "Klientadministrasjon for {{name}}",
     "page_description": "org.nr. {{organisationidentifier}} ({{unitType}})",
@@ -918,6 +934,7 @@
     "other_links_heading": "Annet",
     "your_rights_description": "Se fullmaktene du har på vegne av {{reportee}}",
     "your_rights_description_yourself": "Se fullmaktene du har på vegne av deg selv",
+    "your_clients_description": "Se hvilke klienter du har tilgang til på vegne av {{reportee}}",
     "users_item_description_org": "Oversikt over personer og virksomheter som har fått fullmakter hos dere",
     "users_item_description_person": "Oversikt over personer og virksomheter som har fullmakter hos deg",
     "reportees_item_description_org": "Oversikt over alle som har gitt fullmakter til dere",
