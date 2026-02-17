@@ -62,10 +62,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         // ----------------------------
 
         /// <inheritdoc />
-        public async Task<List<ResourceAction>> DelegationCheck(Guid from, string resource)
+        public async Task<List<RuleCheck>> DelegationCheck(Guid from, string resource)
         {
             ResourceCheckDto delegationCheckResult = await _singleRightClient.GetDelegationCheck(from, resource);
-            List<ResourceAction> actions = delegationCheckResult.Actions.ToList();
+            List<RuleCheck> actions = delegationCheckResult.Rules.ToList();
 
             return actions;
         }

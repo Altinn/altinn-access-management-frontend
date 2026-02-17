@@ -157,11 +157,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegationcheck")]
-        public async Task<ActionResult<List<ResourceAction>>> GetDelegationCheck([FromQuery] Guid from, [FromQuery] string resource)
+        public async Task<ActionResult<List<RuleCheck>>> GetDelegationCheck([FromQuery] Guid from, [FromQuery] string resource)
         {
             try
             {
-                List<ResourceAction> result = await _singleRightService.DelegationCheck(from, resource);
+                List<RuleCheck> result = await _singleRightService.DelegationCheck(from, resource);
                 return Ok(result);
             }
             catch (HttpStatusException statusEx)

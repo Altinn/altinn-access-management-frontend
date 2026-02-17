@@ -15,5 +15,5 @@ public class ResourceCheckDto
     /// <summary>
     /// Actions for which access is being checked on the resource.
     /// </summary>
-    public required IEnumerable<ResourceAction> Actions { get; set; }
+    public required IEnumerable<RuleCheck> Rules { get; set; }
 }

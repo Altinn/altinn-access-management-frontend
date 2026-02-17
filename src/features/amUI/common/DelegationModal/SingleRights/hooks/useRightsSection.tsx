@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
-  DelegationCheckedAction,
+  DelegationCheckedRight,
   ServiceResource,
   useDelegationCheckQuery,
   useGetResourceRightsQuery,
@@ -106,7 +106,7 @@ export const useRightsSection = ({
       if (hasAccess) {
         const chipRights: ChipRight[] = mapRightsToChipRights(
           delegationCheckedActions,
-          (right) => currentRights.some((key) => key === right.actionKey),
+          (right) => currentRights.some((key) => key === right.rule.key),
           resource.resourceOwnerOrgcode,
         );
         setRights(chipRights);
@@ -138,21 +138,21 @@ export const useRightsSection = ({
   };
 
   const getMissingAccessMessage = useCallback(
-    (response: DelegationCheckedAction[]) => {
+    (response: DelegationCheckedRight[]) => {
       const hasMissingRoleAccess = response.some((right) =>
-        right.reasons.some(
-          (reason) =>
-            reason.reasonKey === ErrorCode.MissingRoleAccess ||
-            reason.reasonKey === ErrorCode.MissingRightAccess,
+        right.reasonCodes.some(
+          (reasonCode) =>
+            reasonCode === ErrorCode.MissingRoleAccess ||
+            reasonCode === ErrorCode.MissingRightAccess,
         ),
       );
       const hasMissingSrrRightAccess = response.some(
         (right) =>
           !hasMissingRoleAccess &&
-          right.reasons.some(
-            (reason) =>
-              reason.reasonKey === ErrorCode.MissingSrrRightAccess ||
-              reason.reasonKey === ErrorCode.AccessListValidationFail,
+          right.reasonCodes.some(
+            (reasonCode) =>
+              reasonCode === ErrorCode.MissingSrrRightAccess ||
+              reasonCode === ErrorCode.AccessListValidationFail,
           ),
       );
 

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -22,7 +23,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// </summary>
     public class SingleRightClientMock : ISingleRightClient
     {
-        private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private static readonly JsonSerializerOptions options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters = { new JsonStringEnumConverter() }
+        };
         private readonly string dataFolder;
 
         /// <summary>

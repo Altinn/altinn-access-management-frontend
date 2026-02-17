@@ -1,4 +1,4 @@
-import { DelegationCheckedAction } from '@/rtk/features/singleRights/singleRightsApi';
+import { DelegationCheckedRight } from '@/rtk/features/singleRights/singleRightsApi';
 
 export type ChipRight = {
   action: string;
@@ -9,17 +9,17 @@ export type ChipRight = {
 };
 
 export const mapRightsToChipRights = (
-  rights: DelegationCheckedAction[],
-  checked: (action: DelegationCheckedAction) => boolean,
+  rights: DelegationCheckedRight[],
+  checked: (action: DelegationCheckedRight) => boolean,
   resourceOwnerCode: string,
 ): ChipRight[] => {
-  return rights.map((action: DelegationCheckedAction) => {
+  return rights.map((action: DelegationCheckedRight) => {
     return {
-      action: action.actionName,
-      rightKey: action.actionKey,
+      action: action.rule.name,
+      rightKey: action.rule.key,
       delegable: action.result === true,
       checked: checked(action) || false,
-      delegationReason: action.reasons.length > 0 ? action.reasons[0].reasonKey : '',
+      delegationReason: action.reasonCodes.length > 0 ? action.reasonCodes[0] : '',
     };
   });
 };

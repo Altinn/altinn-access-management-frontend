@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="from">The party from which the delegation would be on behalf of</param>
         /// <param name="resource">The id of the resource to be checked for delegation</param>
-        Task<List<ResourceAction>> DelegationCheck(Guid from, string resource);
+        Task<List<RuleCheck>> DelegationCheck(Guid from, string resource);
 
         /// <summary>
         ///    Delegates the specified rights on a specified resource to someone on behalf of a specified party

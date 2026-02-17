@@ -487,11 +487,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string resource = "appid-503";
             string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationCheck", "appid-503.json");
-            List<ResourceAction> expectedResponse = Util.GetMockData<List<ResourceAction>>(path);
+            List<RuleCheck> expectedResponse = Util.GetMockData<List<RuleCheck>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegationcheck?from={from}&resource={resource}");
-            List<ResourceAction> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceAction>>();
+            List<RuleCheck> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<RuleCheck>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
