@@ -138,7 +138,6 @@ export const ResourceActionBar = ({
       />
     </DsValidationMessage>
   );
-  console.log('render', { status, previousStatus, open });
 
   const action = useMemo(() => {
     if (isLoading) {
