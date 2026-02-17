@@ -71,7 +71,10 @@ export class LoginPage {
 
   private async clickLoginToAccessManagement() {
     await this.page.getByRole('button', { name: 'Meny' }).click();
-    await this.page.getByRole('group').getByRole('link', { name: 'Tilgangsstyring' }).click();
+    await expect(
+      this.page.getByRole('navigation', { name: 'Menu' }).getByLabel('Tilgangsstyring'),
+    ).toBeVisible();
+    await this.page.getByRole('navigation', { name: 'Menu' }).getByLabel('Tilgangsstyring').click();
     await this.testIdLink.click();
   }
 
