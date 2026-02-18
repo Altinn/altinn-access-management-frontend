@@ -645,7 +645,7 @@
     "error_loading_agents": "Could not load users.",
     "no_agents": "No users have been given client access yet.",
     "addUserPrompt": "Add a new user to get started.",
-    "no_results": "No users were found for this search",
+    "no_results": "No users were found for this search.",
     "client_search_placeholder": "Search for client"
   },
   "systemuser_creationpage": {

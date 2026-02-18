@@ -642,7 +642,7 @@
     "error_loading_agents": "Kunne ikkje laste brukarar.",
     "no_agents": "Ingen brukarar har fått klienttilgangar enno.",
     "addUserPrompt": "Legg til ein ny brukar for å kome i gang.",
-    "no_results": "Ingen brukarar blei funne for dette søket",
+    "no_results": "Ingen brukarar blei funne for dette søket.",
     "client_search_placeholder": "Søk etter klient"
   },
   "systemuser_creationpage": {

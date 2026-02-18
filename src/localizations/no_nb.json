@@ -642,7 +642,7 @@
     "error_loading_agents": "Kunne ikke laste brukere.",
     "no_agents": "Ingen brukere har fått klienttilganger ennå.",
     "addUserPrompt": "Legg til en ny bruker for å komme i gang.",
-    "no_results": "Ingen brukere ble funnet for dette søket",
+    "no_results": "Ingen brukere ble funnet for dette søket.",
     "client_search_placeholder": "Søk etter klient"
   },
   "systemuser_creationpage": {
