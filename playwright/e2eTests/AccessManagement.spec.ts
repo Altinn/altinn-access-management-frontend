@@ -4,6 +4,7 @@ import { test } from './../fixture/pomFixture';
 import { AktorvalgHeader } from '../pages/AktorvalgHeader';
 import { Token } from '../api-requests/Token';
 import { ApiRequests } from '../api-requests/ApiRequests';
+import { EnduserConnection } from '../api-requests/EnduserConnection';
 
 test.describe('Tilgangsstyring', () => {
   test('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', async ({
@@ -204,7 +205,7 @@ test.describe('Tilgangsstyring', () => {
 test.describe('@slow Testdata for Tilgangsstyring-testene', () => {
   test('bruk API til å sette opp testdata', async ({ page }) => {
     test.step('spørring her', async () => {
-      const api = await new ApiRequests();
+      const api = await new EnduserConnection();
       await api.addConnectionPackagePerson(
         '12816699205',
         '314138910',

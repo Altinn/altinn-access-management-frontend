@@ -132,6 +132,7 @@ export class Token {
    * @returns personal token
    */
   public async getPersonalTokenByPid(pid: string): Promise<string> {
+    console.log('getPersonalTokenByPid');
     const person = await this.getIds(pid);
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${this.environment}` +
@@ -159,6 +160,7 @@ export class Token {
    * @returns json objekt med info om en bruker eller organisasjon
    */
   public async getIds(pidOrOrgNo: string) {
+    console.log('getIds');
     const url = `${env('API_BASE_URL')}/register/api/v1/access-management/parties/query?fields=person,party,user`;
     const subscriptionKey = env(`${env('ENV_NAME')}_REGISTER_SUBSCRIPTION_KEY`);
     const platformToken = await this.getPlatformToken();
@@ -183,6 +185,7 @@ export class Token {
       throw new Error(`Failed to fetch status for request. Status: ${response.status}`);
     }
     const responseData = await response.json();
+    console.log('after getIds');
     return await responseData.data[0];
   }
 
@@ -193,10 +196,12 @@ export class Token {
    * @returns A promise that resolves to the party UUID associated with the provided identifier.
    */
   public async getPartyUuid(pidOrOrg: string) {
+    console.log('getPartyUuid');
     return (await this.getIds(pidOrOrg)).partyUuid;
   }
 
   public async getLastName(pid: string) {
+    console.log('getLastName');
     return (await this.getIds(pid)).lastName;
   }
 
@@ -205,6 +210,7 @@ export class Token {
    * @returns json objekt med info om en org
    */
   public async getIdsForOrg(orgno: string) {
+    console.log('getIdsForOrg');
     const url = `${env('API_BASE_URL')}/register/api/v1/access-management/parties/query`;
     const subscriptionKey = env(`${env('ENV_NAME')}_REGISTER_SUBSCRIPTION_KEY`);
     const platformToken = await this.getPlatformToken();
@@ -226,7 +232,7 @@ export class Token {
     if (!response.ok) {
       throw new Error(`Failed to fetch status for request. Status: ${response.status}`);
     }
-
+    console.log('after getIdsForOrg');
     return await response.json();
   }
 
