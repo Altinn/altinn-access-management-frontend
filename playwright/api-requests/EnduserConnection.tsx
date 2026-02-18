@@ -1,3 +1,4 @@
+import { ok } from 'assert';
 import { Token } from './Token';
 import { env } from 'playwright/util/helper';
 
@@ -6,6 +7,10 @@ export class EnduserConnection {
 
   constructor() {
     this.tokenClass = new Token();
+  }
+
+  public async packageExists(packageName: any) {
+    console.log(packageName);
   }
   /**
    * Fetches connection details between a source organization and a target user.
@@ -52,7 +57,6 @@ export class EnduserConnection {
    * @throws Error if the request fails or returns a non-OK HTTP status.
    */
   public async addConnectionPerson(pid: string, from: string, toPid: string, toLastName: string) {
-    console.log('addConnectionPerson');
     const fromUuid = await this.tokenClass.getPartyUuid(from);
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}`;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
@@ -76,7 +80,6 @@ export class EnduserConnection {
       );
     }
 
-    console.log('after addConnectionPerson');
     return response.json();
   }
 
@@ -99,17 +102,15 @@ export class EnduserConnection {
     toPid: string,
     packageName: string,
   ) {
-    console.log('addConnectionPackagePerson');
     const fromUuid = await this.tokenClass.getPartyUuid(from);
     const toUuid = await this.tokenClass.getPartyUuid(toPid);
     const toLastName = await this.tokenClass.getLastName(toPid);
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&packageId&package=${packageName}`;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     const payload = {
       personidentifier: toPid,
       lastName: toLastName,
     };
-
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&packageId&package=${packageName}`;
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -124,8 +125,39 @@ export class EnduserConnection {
         `Failed to fetch status for addConnectionPersonPackage request. Status: ${response.status}`,
       );
     }
+    // const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&packageId&package=${packageName}`;
 
-    console.log('after addConnectionPackagePerson');
+    console.log(`${toPid} got package ${packageName}`);
     return response.json();
+  }
+
+  public async deleteConnectionPackagePerson(
+    pid: string,
+    from: string,
+    toPid: string,
+    packageName: string,
+  ) {
+    const fromUuid = await this.tokenClass.getPartyUuid(from);
+    const toUuid = await this.tokenClass.getPartyUuid(toPid);
+    const toLastName = await this.tokenClass.getLastName(toPid);
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&packageId&package=${packageName}`;
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for addConnectionPersonPackage request. Status: ${response.status}`,
+      );
+    }
+
+    console.log(`${toPid} lost package ${packageName}`);
+    return response;
   }
 }
