@@ -1,6 +1,7 @@
 import React, { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Button,
+  DsParagraph,
   DsSearch,
   formatDisplayName,
   List,
@@ -15,17 +16,24 @@ import classes from './UserListItems.module.css';
 
 export type UserListItemData = UserListItemProps & {
   children?: ReactNode;
+  organizationIdentifier?: string;
 };
 
 interface UserListItemsProps {
   items: UserListItemData[];
   searchPlaceholder?: string;
   addUserButton?: React.ReactNode;
+  emptyText?: string;
 }
 
 const PAGE_SIZE = 10;
 
-export const UserListItems = ({ items, searchPlaceholder, addUserButton }: UserListItemsProps) => {
+export const UserListItems = ({
+  items,
+  searchPlaceholder,
+  addUserButton,
+  emptyText,
+}: UserListItemsProps) => {
   const { t } = useTranslation();
   const [searchString, setSearchString] = useState<string>('');
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
@@ -45,7 +53,10 @@ export const UserListItems = ({ items, searchPlaceholder, addUserButton }: UserL
       return items;
     }
     return items.filter((item) => {
-      return item.name.toLowerCase().includes(searchString.trim().toLowerCase());
+      return (
+        item.name.toLowerCase().includes(searchString.trim().toLowerCase()) ||
+        item.organizationIdentifier?.toLowerCase().includes(searchString.trim().toLowerCase())
+      );
     });
   }, [items, searchString]);
 
@@ -92,6 +103,15 @@ export const UserListItems = ({ items, searchPlaceholder, addUserButton }: UserL
         </DsSearch>
         {addUserButton && <div className={classes.addButton}>{addUserButton}</div>}
       </div>
+      {items.length === 0 ? (
+        <DsParagraph className={classes.emptyText}>
+          {emptyText ?? t('client_administration_page.no_agents')}
+        </DsParagraph>
+      ) : filteredItems.length === 0 ? (
+        <DsParagraph className={classes.emptyText}>
+          {t('client_administration_page.no_results')}
+        </DsParagraph>
+      ) : null}
       <List>
         {paginatedItems.map(({ children, ...item }) => {
           const collapsible = item.collapsible ?? !!children;

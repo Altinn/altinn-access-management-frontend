@@ -623,9 +623,9 @@
     "remove_package_success_snackbar": "{{name}} har ikkje lenger fullmakt til {{accessPackage}}.",
     "remove_package_error": "Kunne ikkje slette fullmakt til {{accessPackage}} for {{name}}.",
     "via_role": "Tilgang gjennom Enhetsregisteret",
-    "agent_has_clients_tab": "Klientar med tilgang",
+    "agent_has_clients_tab": "Har desse klientane",
     "agent_can_get_clients_tab": "Alle klientar",
-    "client_has_agents_tab": "Brukarar med tilgang",
+    "client_has_agents_tab": "Brukarar med fullmakt",
     "client_can_get_agents_tab": "Alle brukarar",
     "new_agent_tag": "NY",
     "direct_connections_heading": "Brukarar med klienttilgang",
@@ -640,7 +640,9 @@
     "rettighetshaver": "Andre klientforhold",
     "error_loading_clients": "Kunne ikkje laste klientar.",
     "error_loading_agents": "Kunne ikkje laste brukarar.",
-    "no_agents": "Ingen brukarar har fått klienttilgangar enno. Legg til ein ny brukar for å kome i gang.",
+    "no_agents": "Ingen brukarar har fått klienttilgangar enno.",
+    "addUserPrompt": "Legg til ein ny brukar for å kome i gang.",
+    "no_results": "Ingen brukarar blei funne for dette søket",
     "client_search_placeholder": "Søk etter klient"
   },
   "systemuser_creationpage": {

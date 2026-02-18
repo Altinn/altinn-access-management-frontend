@@ -201,19 +201,12 @@ export const ClientAdministrationClientAgentsList = ({
     };
   });
 
-  const hasAgents = userListItems.length > 0;
-
   return (
-    <div>
-      {hasAgents ? (
-        <UserListItems
-          items={userListItems}
-          searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
-          addUserButton={addUserButton}
-        />
-      ) : (
-        <DsParagraph>{emptyText ?? t('client_administration_page.no_agents')}</DsParagraph>
-      )}
-    </div>
+    <UserListItems
+      items={userListItems}
+      searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+      addUserButton={addUserButton}
+      emptyText={emptyText}
+    />
   );
 };

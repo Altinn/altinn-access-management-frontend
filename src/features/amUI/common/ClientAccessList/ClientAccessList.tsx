@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
   Button,
+  DsParagraph,
   type Color,
   formatDate,
   type UserListItemProps,
@@ -34,6 +35,7 @@ type ClientAccessListProps = {
   onRemoveAccessPackage?: (action: ClientAccessPackageAction) => void;
   searchPlaceholder?: string;
   requireDelegableForActions?: boolean;
+  emptyAccessText?: string;
 };
 
 const getUserListItemType = (clientType: string): UserListItemProps['type'] => {
@@ -54,6 +56,7 @@ export const ClientAccessList = ({
   onRemoveAccessPackage,
   searchPlaceholder,
   requireDelegableForActions = true,
+  emptyAccessText,
 }: ClientAccessListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
@@ -147,12 +150,20 @@ export const ClientAccessList = ({
     return {
       id: clientId,
       name: client.client.name,
+      organizationIdentifier: client.client.organizationIdentifier,
       type: userType,
       subUnit: isSubUnit,
       deleted: client.client.isDeleted,
       collapsible: true,
       as: Button,
-      children: <AccessPackageListItems items={nodes} />,
+      children:
+        nodes.length > 0 ? (
+          <AccessPackageListItems items={nodes} />
+        ) : emptyAccessText ? (
+          <DsParagraph>{emptyAccessText}</DsParagraph>
+        ) : (
+          <AccessPackageListItems items={nodes} />
+        ),
       description:
         userType === 'company'
           ? t('client_administration_page.organization_identifier', {
