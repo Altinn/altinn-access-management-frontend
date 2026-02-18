@@ -157,9 +157,7 @@ export const ClientAccessList = ({
       collapsible: true,
       as: Button,
       children:
-        nodes.length > 0 ? (
-          <AccessPackageListItems items={nodes} />
-        ) : emptyAccessText ? (
+        nodes.length === 0 && emptyAccessText ? (
           <DsParagraph>{emptyAccessText}</DsParagraph>
         ) : (
           <AccessPackageListItems items={nodes} />
