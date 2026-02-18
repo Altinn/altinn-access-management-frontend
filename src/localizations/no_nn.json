@@ -613,7 +613,7 @@
     "agent_delete_confirm": "Slett brukar",
     "load_delegations_error": "Kunne ikkje laste klientar med tilgang.",
     "load_user_delegations_error": "Kunne ikkje laste brukarar med tilgang.",
-    "no_delegations": "Ingen klientar har gitt fullmakter til verksemda.",
+    "no_delegations": "Ingen klientar er tildelte.",
     "no_user_delegations": "Ingen brukarar har fått fullmakt til klienten.",
     "no_access_to_delegate": "{{name}} har ingen tilgangar for denne klienten.",
     "delegate_package_button": "Gi fullmakt",
