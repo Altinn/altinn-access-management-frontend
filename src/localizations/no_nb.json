@@ -927,9 +927,11 @@
   },
   "landing_page": {
     "alert_heading": "Du er nå i den nye løsningen for tilgangsstyring",
-    "alert_heading_priv": "Dette er den nye løsningen for tilgangsstyring for privatperson",
     "alert_body": "Her er dagens Altinn-roller erstattet av tilgangspakker med tjenester.",
     "alert_body_p2": "Vær oppmerksom på at det er noen tjenester du ikke kan gi tilgang til i den nye løsningen. Hvis du ikke finner tjenesten her, kan du gå til den gamle løsningen.",
+    "alert_heading_priv": "Dette er den nye løsningen for tilgangsstyring til privatperson",
+    "alert_body_priv": "Her er dagens Altinn-roller erstattet av tilgangsspakker som inneholder skjema og tjenester. Disse kan du gi til andre hvis du ønsker at noen skal hjelpe deg i Altinn.",
+    "alert_body_p2_priv": "Vær oppmerksom på at det er noen tjenester du ikke kan gi tilgang til i den nye løsningen ennå. Disse finner du fortsatt i den gamle løsningen.",
     "alert_link": "Gå til gamle Altinn",
     "your_content_heading": "Dine tilganger",
     "shortcut_links_heading": "Andre tilganger",

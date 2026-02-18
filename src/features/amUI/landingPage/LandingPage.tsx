@@ -281,8 +281,16 @@ export const LandingPage = () => {
                     : t('landing_page.alert_heading_priv')}
                 </DsHeading>
                 <div className={classes.landingPageAlert}>
-                  <DsParagraph>{t('landing_page.alert_body')}</DsParagraph>
-                  <DsParagraph>{t('landing_page.alert_body_p2')}</DsParagraph>
+                  <DsParagraph>
+                    {isOrganization(reportee)
+                      ? t('landing_page.alert_body')
+                      : t('landing_page.alert_body_priv')}
+                  </DsParagraph>
+                  <DsParagraph>
+                    {isOrganization(reportee)
+                      ? t('landing_page.alert_body_p2')
+                      : t('landing_page.alert_body_p2_priv')}
+                  </DsParagraph>
                   <DsButton
                     asChild
                     variant='secondary'
