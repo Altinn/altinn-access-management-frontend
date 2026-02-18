@@ -6,169 +6,83 @@ import store from '@/rtk/app/store';
 
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
-import { DeleteUserModal } from './DeleteUserModal';
+import { DeleteUserModalContent } from './DeleteUserModalContent';
+import {
+  AGENT_ROLE_REASON,
+  DeletionLevel,
+  DeletionTarget,
+  ER_ROLE_REASON,
+  OLD_ALTINN_REASON,
+  type DeletionStatus,
+  type NonDeletableReason,
+} from './deletionModalUtils';
 
-type DeleteUserModalStoryProps = React.ComponentProps<typeof DeleteUserModal>;
+type DeleteUserModalStoryArgs = {
+  target: DeletionTarget;
+  level: DeletionLevel;
+  nonDeletableReasons: NonDeletableReason[];
+  isRolePermissionsLoading: boolean;
+};
 
-// Helper to wrap each story with necessary providers
-const StoryWrapper: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => (
-  <Provider store={store}>
-    <RootProvider>{children}</RootProvider>
-  </Provider>
-);
+const allReasons: NonDeletableReason[] = [OLD_ALTINN_REASON, ER_ROLE_REASON, AGENT_ROLE_REASON];
 
 export default {
   title: 'Features/AMUI/DeleteUserModal',
-  component: DeleteUserModal,
-} as Meta<DeleteUserModalStoryProps>;
+  component: DeleteUserModalContent,
+  args: {
+    target: DeletionTarget.User,
+    level: DeletionLevel.Full,
+    nonDeletableReasons: [],
+    isRolePermissionsLoading: false,
+  },
+  argTypes: {
+    target: {
+      control: { type: 'radio' },
+      options: Object.values(DeletionTarget),
+    },
+    level: {
+      control: { type: 'radio' },
+      options: Object.values(DeletionLevel),
+    },
+    nonDeletableReasons: {
+      control: { type: 'check' },
+      options: allReasons,
+    },
+    isRolePermissionsLoading: {
+      control: 'boolean',
+    },
+  },
+  render: (args) => {
+    const status: DeletionStatus = {
+      target: args.target,
+      level: args.level,
+    };
 
-// --- Stories for "Other User" (direction='to') ---
-export const User_FullDeletionAllowed: StoryObj<DeleteUserModalStoryProps> = {
-  render: (args) => (
-    <StoryWrapper>
-      <PartyRepresentationProvider
-        fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'DELETABLE_PARTY_1'}
-        actingPartyUuid={'PARTY_1'}
-      >
-        <DeleteUserModal {...args} />
-      </PartyRepresentationProvider>
-    </StoryWrapper>
-  ),
-  args: {},
-};
+    return (
+      <Provider store={store}>
+        <RootProvider>
+          <PartyRepresentationProvider
+            fromPartyUuid='123'
+            toPartyUuid='456'
+            actingPartyUuid='123'
+          >
+            <DeleteUserModalContent
+              status={status}
+              nonDeletableReasons={args.nonDeletableReasons}
+              isRolePermissionsLoading={args.isRolePermissionsLoading}
+            />
+          </PartyRepresentationProvider>
+        </RootProvider>
+      </Provider>
+    );
+  },
+} as Meta;
 
-export const User_LimitedDeletionOnly: StoryObj<DeleteUserModalStoryProps> = {
-  render: (args) => (
-    <StoryWrapper>
-      <PartyRepresentationProvider
-        fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
-        actingPartyUuid={'PARTY_1'}
-      >
-        <DeleteUserModal {...args} />
-      </PartyRepresentationProvider>
-    </StoryWrapper>
-  ),
-  args: {},
-};
-
-export const User_DeletionNotAllowed: StoryObj<DeleteUserModalStoryProps> = {
-  render: (args) => (
-    <StoryWrapper>
-      <PartyRepresentationProvider
-        fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'NOT_DELETABLE_PARTY_1'}
-        actingPartyUuid={'PARTY_1'}
-      >
-        <DeleteUserModal {...args} />
-      </PartyRepresentationProvider>
-    </StoryWrapper>
-  ),
-  args: {},
-};
-
-// --- Stories for "Yourself" (direction='to') ---
-export const Yourself_FullDeletionAllowed: StoryObj<DeleteUserModalStoryProps> = {
-  render: (args) => (
-    <StoryWrapper>
-      <PartyRepresentationProvider
-        fromPartyUuid={'DELETABLE_PARTY_1'}
-        toPartyUuid={'167536b5-f8ed-4c5a-8f48-0279507e53ae'} // Uuid of logged in party
-        actingPartyUuid={'DELETABLE_PARTY_1'}
-      >
-        <DeleteUserModal {...args} />
-      </PartyRepresentationProvider>
-    </StoryWrapper>
-  ),
-  args: {},
-};
-
-export const Yourself_LimitedDeletionOnly: StoryObj<DeleteUserModalStoryProps> = {
-  render: (args) => (
-    <StoryWrapper>
-      <PartyRepresentationProvider
-        fromPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
-        toPartyUuid={'167536b5-f8ed-4c5a-8f48-0279507e53ae'} // Uuid of logged in party
-        actingPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
-      >
-        <DeleteUserModal {...args} />
-      </PartyRepresentationProvider>
-    </StoryWrapper>
-  ),
-  args: {},
-};
-
-export const Yourself_DeletionNotAllowed: StoryObj<DeleteUserModalStoryProps> = {
-  render: (args) => (
-    <StoryWrapper>
-      <PartyRepresentationProvider
-        fromPartyUuid={'NOT_DELETABLE_PARTY_1'}
-        toPartyUuid={'167536b5-f8ed-4c5a-8f48-0279507e53ae'} // Uuid of logged in party
-        actingPartyUuid={'NOT_DELETABLE_PARTY_1'}
-      >
-        <DeleteUserModal {...args} />
-      </PartyRepresentationProvider>
-    </StoryWrapper>
-  ),
-  args: {},
-};
-
-// --- Stories for "Reportee" (Accesses at others, direction='from') ---
-export const Reportee_FullDeletionAllowed: StoryObj<DeleteUserModalStoryProps> = {
-  render: (args) => (
-    <StoryWrapper>
-      <PartyRepresentationProvider
-        fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'DELETABLE_PARTY_1'}
-        actingPartyUuid={'DELETABLE_PARTY_1'}
-      >
-        <DeleteUserModal
-          {...args}
-          direction='from'
-        />
-      </PartyRepresentationProvider>
-    </StoryWrapper>
-  ),
-  args: {},
-};
-
-export const Reportee_LimitedDeletionOnly: StoryObj<DeleteUserModalStoryProps> = {
-  render: (args) => (
-    <StoryWrapper>
-      <PartyRepresentationProvider
-        fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
-        actingPartyUuid={'PARTIALLY_DELETABLE_PARTY_1'}
-      >
-        <DeleteUserModal
-          {...args}
-          direction='from'
-        />
-      </PartyRepresentationProvider>
-    </StoryWrapper>
-  ),
-  args: {},
-};
-
-export const Reportee_DeletionNotAllowed: StoryObj<DeleteUserModalStoryProps> = {
-  render: (args) => (
-    <StoryWrapper>
-      <PartyRepresentationProvider
-        fromPartyUuid={'PARTY_1'}
-        toPartyUuid={'NOT_DELETABLE_PARTY_1'}
-        actingPartyUuid={'NOT_DELETABLE_PARTY_1'}
-      >
-        <DeleteUserModal
-          {...args}
-          direction='from'
-        />
-      </PartyRepresentationProvider>
-    </StoryWrapper>
-  ),
-  args: {},
+export const Default: StoryObj<DeleteUserModalStoryArgs> = {
+  args: {
+    target: DeletionTarget.User,
+    level: DeletionLevel.Full,
+    nonDeletableReasons: [],
+    isRolePermissionsLoading: false,
+  },
 };

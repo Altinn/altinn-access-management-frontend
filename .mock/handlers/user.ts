@@ -1,5 +1,148 @@
 import { http, HttpResponse } from 'msw';
 
+type MockRole = {
+  id: string;
+  code: string;
+};
+
+type MockConnectionParty = {
+  id: string;
+  name: string;
+  type: 'Person' | 'Organisasjon';
+  variant: string;
+  children: null;
+  partyId: number;
+  organizationIdentifier?: string;
+  dateOfBirth?: string;
+  isDeleted: boolean;
+};
+
+type MockConnection = {
+  party: MockConnectionParty;
+  roles: MockRole[];
+  connections: [];
+  sortKey: string;
+};
+
+const roleDagligLeder: MockRole = { id: '123', code: 'daglig-leder' };
+const roleRettighetshaver: MockRole = { id: '456', code: 'rettighetshaver' };
+const roleAgent: MockRole = { id: '789', code: 'agent' };
+
+const getStablePartyId = (id: string) => {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash << 5) - hash + id.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash) + 10000000;
+};
+
+const createOrgConnection = (id: string, name: string, roles: MockRole[]): MockConnection => ({
+  party: {
+    id,
+    name,
+    type: 'Organisasjon',
+    variant: 'AS',
+    children: null,
+    partyId: getStablePartyId(id),
+    organizationIdentifier: '310202398',
+    isDeleted: false,
+  },
+  roles,
+  connections: [],
+  sortKey: name.toLowerCase(),
+});
+
+const createPersonConnection = (id: string, name: string, roles: MockRole[]): MockConnection => ({
+  party: {
+    id,
+    name,
+    type: 'Person',
+    variant: 'Person',
+    children: null,
+    partyId: getStablePartyId(id),
+    dateOfBirth: '1984-04-03',
+    isDeleted: false,
+  },
+  roles,
+  connections: [],
+  sortKey: name.toLowerCase(),
+});
+
+const getRightHoldersResponse = (requestUrl: URL): MockConnection[] => {
+  const partyId = requestUrl.searchParams.get('party') ?? '';
+  const fromId = requestUrl.searchParams.get('from') ?? '';
+  const toId = requestUrl.searchParams.get('to') ?? '';
+  const includeClientDelegations =
+    requestUrl.searchParams.get('includeClientDelegations') !== 'false';
+  const includeAgentConnections =
+    requestUrl.searchParams.get('includeAgentConnections') !== 'false';
+
+  if (fromId.includes('PARTIALLY_DELETABLE') || toId.includes('PARTIALLY_DELETABLE')) {
+    const targetId = fromId || toId || partyId || 'partially-deletable';
+    return [
+      createOrgConnection(targetId, 'DIGITALISERINGSDIREKTORATET', [
+        roleDagligLeder,
+        roleRettighetshaver,
+      ]),
+    ];
+  }
+
+  if (fromId.includes('NOT_DELETABLE') || toId.includes('NOT_DELETABLE')) {
+    const targetId = fromId || toId || partyId || 'not-deletable';
+    return [createOrgConnection(targetId, 'DIGITALISERINGSDIREKTORATET', [roleDagligLeder])];
+  }
+
+  if (fromId && toId) {
+    const connectedPartyId = fromId === partyId ? toId : fromId;
+    const isConnectedPartyPerson = connectedPartyId.toLowerCase() === 'user';
+
+    return isConnectedPartyPerson
+      ? [createPersonConnection(connectedPartyId, 'SITRONGUL MEDALJONG', [roleRettighetshaver])]
+      : [
+          createOrgConnection(connectedPartyId, 'DIGITALISERINGSDIREKTORATET', [
+            roleRettighetshaver,
+          ]),
+        ];
+  }
+
+  if (fromId && !toId) {
+    const rightHolders: MockConnection[] = [
+      createPersonConnection('person-right-holder-1', 'SITRONGUL MEDALJONG', [roleRettighetshaver]),
+      createOrgConnection('org-right-holder-1', 'EKSEMPEL REGNSKAP AS', [roleDagligLeder]),
+    ];
+
+    if (includeAgentConnections) {
+      rightHolders.push(createPersonConnection('person-agent-1', 'OLA AGENT', [roleAgent]));
+    }
+
+    return rightHolders;
+  }
+
+  if (!fromId && toId) {
+    const reportees: MockConnection[] = [
+      createOrgConnection('reportee-org-1', 'DISKRET NÆR TIGER AS', [roleRettighetshaver]),
+      createPersonConnection('reportee-person-1', 'KARI FULLMAKT', [roleRettighetshaver]),
+    ];
+
+    if (includeClientDelegations) {
+      reportees.push(
+        createOrgConnection('reportee-client-1', 'KLIENT FULLMAKT AS', [roleRettighetshaver]),
+      );
+    }
+
+    return reportees;
+  }
+
+  return [
+    createOrgConnection(
+      partyId || '3d8b34c3-df0d-4dcc-be12-e788ce414744',
+      'DIGITALISERINGSDIREKTORATET',
+      [roleRettighetshaver],
+    ),
+  ];
+};
+
 export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/reporteelist/:id`, () => {
     return HttpResponse.json({
@@ -16,49 +159,12 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       ],
     });
   }),
-  http.get(
-    `${ACCESSMANAGEMENT_BASE_URL}/user/rightholders?party=:partyId&from=:fromId&to=:toId`,
-    ({ request }) => {
-      const url = new URL(request.url);
-      const fromId = url.searchParams.get('from');
-      const toId = url.searchParams.get('to');
-      const id = url.searchParams.get('party');
-
-      const daglRole = { id: '123', code: 'daglig-leder' };
-      const rhRole = { id: '456', code: 'rettighetshaver' };
-
-      const defaultReturn = {
-        party: {
-          id: id || '3d8b34c3-df0d-4dcc-be12-e788ce414744',
-          type: 'Organisasjon',
-          name: 'DIGITALISERINGSDIREKTORATET',
-          children: null,
-          keyValues: { PartyId: '50365521', DateOfBirth: '1984-04-03' },
-        },
-        roles: [rhRole],
-      };
-
-      if (fromId?.includes('PARTIALLY_DELETABLE') || toId?.includes('PARTIALLY_DELETABLE')) {
-        return HttpResponse.json([
-          {
-            ...defaultReturn,
-            roles: [daglRole, rhRole],
-          },
-        ]);
-      }
-
-      if (fromId?.includes('NOT_DELETABLE') || toId?.includes('NOT_DELETABLE')) {
-        return HttpResponse.json([
-          {
-            ...defaultReturn,
-            roles: [daglRole],
-          },
-        ]);
-      }
-
-      return HttpResponse.json([defaultReturn]);
-    },
-  ),
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/rightholders`, ({ request }) => {
+    return HttpResponse.json(getRightHoldersResponse(new URL(request.url)));
+  }),
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/connection/rightholders`, ({ request }) => {
+    return HttpResponse.json(getRightHoldersResponse(new URL(request.url)));
+  }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/profile`, () => {
     return HttpResponse.json({
       userId: 20010996,

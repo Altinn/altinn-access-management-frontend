@@ -6,10 +6,33 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  min-height: 100%;
+}
+
+.contentBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reasonsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.reasonList {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.reasonList li {
+  margin: 0;
 }
 
 .buttons {
   padding-top: 0.5rem;
   display: flex;
+  flex-wrap: nowrap;
   gap: 0.5rem;
 }
