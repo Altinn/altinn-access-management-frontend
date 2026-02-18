@@ -430,7 +430,7 @@
     "non_deletable_reason_er_roles": "Fullmakter som følger roller i <erLink>Enhetsregisteret</erLink>.",
     "non_deletable_reason_agent_role": "Klienttilgang som administreres på <agentLink>{{linkText}}</agentLink>.",
     "yes_button": "Ja, slett",
-    "user_partial_confirmation_message": "<p>Men brukern har også tilganger som kan slettes. Vil du slette disse tilgangene? <i>Denne handlingen kan ikke angres.</i></p>",
+    "user_partial_confirmation_message": "<p>Men brukeren har også tilganger som kan slettes. Vil du slette disse tilgangene? <i>Denne handlingen kan ikke angres.</i></p>",
     "yourself_trigger_button": "Slett alle tilganger",
     "yourself_heading": "Er du sikker på at du vil slette alle dine tilganger?",
     "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke angres.</i></p>",

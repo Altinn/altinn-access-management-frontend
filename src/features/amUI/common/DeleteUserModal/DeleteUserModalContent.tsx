@@ -48,7 +48,6 @@ export interface DeleteUserModalContentProps {
 
 const srmLink =
   'https://www.altinn.no/Pages/ServiceEngine/Start/StartService.aspx?ServiceEditionCode=1&ServiceCode=3498&M=SP&DontChooseReportee=true&O=personal';
-const a2ProfileLink = getRedirectToA2UsersListSectionUrl(9);
 
 const nonDeletableReasonKeys: Record<NonDeletableReason, string> = {
   [OLD_ALTINN_REASON]: 'delete_user.non_deletable_reason_old_altinn',
@@ -82,6 +81,7 @@ export const DeleteUserModalContent = ({
     () => getDeleteUserDialogModelFromStatus({ status, nonDeletableReasons }),
     [nonDeletableReasons, status],
   );
+  const a2ProfileLink = getRedirectToA2UsersListSectionUrl(9);
 
   const formattedToPartyName = formatDisplayName({
     fullName: toParty?.name || '',
