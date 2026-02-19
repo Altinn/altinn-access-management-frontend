@@ -27,6 +27,7 @@ import { UserRightsPageSkeleton } from './UserRightsPageSkeleton';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { GuardianshipSection } from '../common/GuardianshipSection/GuardianshipSection';
 import { useBackUrl } from '@/resources/hooks/useBackUrl';
 
 export const UserRightsPage = () => {
@@ -72,6 +73,7 @@ export const UserRightsPage = () => {
                 packagesPanel={<AccessPackageSection />}
                 singleRightsPanel={<SingleRightsSection />}
                 roleAssignmentsPanel={<RoleSection />}
+                guardianshipsPanel={<GuardianshipSection />}
               />
             </PageContainer>
           </DelegationModalProvider>

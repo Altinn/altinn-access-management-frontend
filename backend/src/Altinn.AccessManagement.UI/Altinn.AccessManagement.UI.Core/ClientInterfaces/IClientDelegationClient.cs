@@ -12,6 +12,30 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
     public interface IClientDelegationClient
     {
         /// <summary>
+        /// Gets clients delegated to the authenticated user, optionally filtered by provider(s).
+        /// </summary>
+        /// <param name="provider">Optional provider party uuids.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>A list of providers and their delegated clients.</returns>
+        Task<List<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Removes a provider relationship for the authenticated user, including delegated client access.
+        /// </summary>
+        /// <param name="provider">The provider party uuid.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        Task RemoveMyClientProvider(Guid provider, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Removes delegated access packages for the authenticated user from a specific client via a provider.
+        /// </summary>
+        /// <param name="provider">The provider party uuid.</param>
+        /// <param name="from">The client party uuid.</param>
+        /// <param name="payload">Delegation payload.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        Task RemoveMyClientAccessPackages(Guid provider, Guid from, DelegationBatchInputDto payload, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Gets the clients that have delegated access from the specified party.
         /// </summary>
         /// <param name="party">The party uuid to query for.</param>

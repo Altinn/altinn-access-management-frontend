@@ -259,6 +259,12 @@ const singleRightSlice = createSlice({
             status = ServiceStatus.NotDelegable;
           }
         }
+
+        if (!serviceWithStatus.rightList || serviceWithStatus.rightList.length === 0) {
+          serviceWithStatus.status = ServiceStatus.NotDelegable;
+          status = ServiceStatus.NotDelegable;
+        }
+
         const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
           if (sws.service?.identifier === serviceID) {
             sws.rightList = action.payload;
@@ -301,6 +307,7 @@ const singleRightSlice = createSlice({
           }
           return sws;
         });
+
         state.servicesWithStatus = nextStateArray;
       })
 

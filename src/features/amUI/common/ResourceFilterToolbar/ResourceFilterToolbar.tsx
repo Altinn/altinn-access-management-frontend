@@ -1,14 +1,15 @@
 import React from 'react';
-import { Toolbar } from '@altinn/altinn-components';
+import { FilterState, Toolbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 interface ResourceFilterToolbarProps {
   search: string;
   setSearch: (search: string) => void;
-  filterState: { owner?: string[] };
-  setFilterState: (state: { owner?: string[] }) => void;
+  filterState: string[];
+  setFilterState: (newValue: string[]) => void;
   serviceOwnerOptions: { value: string; label: string; count?: number }[];
 }
+const OWNER_FILTER_KEY = 'owner';
 
 export const ResourceFilterToolbar = ({
   search,
@@ -18,6 +19,15 @@ export const ResourceFilterToolbar = ({
   serviceOwnerOptions,
 }: ResourceFilterToolbarProps) => {
   const { t } = useTranslation();
+
+  const filterStateWithOwner = React.useMemo(
+    () => ({ [OWNER_FILTER_KEY]: filterState }),
+    [filterState],
+  );
+
+  const onFilterStateChange = (newFilterState: FilterState) => {
+    setFilterState((newFilterState[OWNER_FILTER_KEY] as string[]) ?? []);
+  };
 
   return (
     <Toolbar
@@ -30,34 +40,40 @@ export const ResourceFilterToolbar = ({
         clearButtonAltText: t('resource_list.resource_search_clear'),
         onClear: () => setSearch(''),
       }}
-      filterState={filterState}
-      onFilterStateChange={setFilterState}
-      getFilterLabel={(_name, value) => {
-        const serviceOwners = serviceOwnerOptions
-          .filter((owner) => value?.includes(owner.value))
-          .map((owner) => owner.label);
-        return serviceOwners ? serviceOwners.join(', ') : '';
+      filter={{
+        filterState: filterStateWithOwner,
+        onFilterStateChange: onFilterStateChange,
+        getFilterLabel: (_name, value) => {
+          const serviceOwners = serviceOwnerOptions
+            .filter((owner) => value?.includes(owner.value))
+            .map((owner) => owner.label);
+          return serviceOwners.length
+            ? serviceOwners.join(', ')
+            : t('resource_list.filter_by_serviceowner');
+        },
+        filters: [
+          {
+            id: OWNER_FILTER_KEY,
+            name: OWNER_FILTER_KEY,
+            label: t('resource_list.filter_by_serviceowner'),
+            removable: false,
+            searchable: true,
+            search: {
+              placeholder: t('resource_list.service_owner_filter'),
+              name: 'search-service-owner',
+              clearButtonAltText: t('resource_list.service_owner_filter_clear'),
+            },
+            items: serviceOwnerOptions.map((owner) => ({
+              value: owner.value,
+              name: OWNER_FILTER_KEY,
+              role: 'checkbox',
+              count: owner.count,
+              label: `${owner.label}${owner.count ? ` (${owner.count})` : ''}`,
+              searchWords: [owner.label],
+            })),
+          },
+        ],
       }}
-      addFilterButtonLabel={t('resource_list.filter_by_serviceowner')}
-      removeButtonAltText={t('resource_list.remove_filter')}
-      filters={
-        serviceOwnerOptions.length > 0
-          ? [
-              {
-                name: 'owner',
-                label: t('resource_list.filter_by_serviceowner'),
-                optionType: 'checkbox',
-                removable: false,
-                options: serviceOwnerOptions,
-                search: {
-                  placeholder: t('resource_list.service_owner_filter'),
-                  name: 'search-service-owner',
-                  clearButtonAltText: t('resource_list.service_owner_filter_clear'),
-                },
-              },
-            ]
-          : []
-      }
     />
   );
 };

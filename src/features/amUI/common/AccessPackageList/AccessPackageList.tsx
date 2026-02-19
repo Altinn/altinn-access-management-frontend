@@ -20,7 +20,7 @@ import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorPa
 interface AccessPackageListProps {
   showAllPackages?: boolean;
   showAllAreas?: boolean;
-  showGuardianships?: boolean;
+  showOnlyGuardianships?: boolean;
   minimizeAvailablePackages?: boolean;
   isLoading?: boolean;
   availableActions?: DelegationAction[];
@@ -40,7 +40,7 @@ interface AccessPackageListProps {
 export const AccessPackageList = ({
   showAllAreas,
   showAllPackages,
-  showGuardianships,
+  showOnlyGuardianships,
   minimizeAvailablePackages,
   isLoading,
   availableActions,
@@ -71,7 +71,7 @@ export const AccessPackageList = ({
   } = useAreaPackageList({
     showAllAreas,
     showAllPackages,
-    showGuardianships,
+    showOnlyGuardianships,
     searchString,
   });
 

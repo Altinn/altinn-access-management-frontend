@@ -132,9 +132,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeResourceAccess(Guid from, Guid to, string resourceId)
+        public async Task<HttpResponseMessage> RevokeResourceAccess(Guid party, Guid from, Guid to, string resourceId)
         {
-            return await _accessManagementClient.RevokeResourceDelegation(from, to, resourceId);
+            return await _singleRightClient.RevokeResourceDelegation(party, from, to, resourceId);
         }
 
         /// <inheritdoc />

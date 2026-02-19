@@ -9,7 +9,6 @@ import { amUIPath } from '@/routes/paths';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
 import { ClientAdministrationAgentClientsList } from './ClientAdministrationAgentClientsList';
 import {
   createErrorDetails,
@@ -26,6 +25,7 @@ import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { ClientAdministrationAgentTabs } from './ClientAdministrationAgentTabs';
 import { useAgentAccessClientLists } from './useAgentAccessClientLists';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
+import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
 
 export const ClientAdministrationAgentDetails = () => {
   const { t } = useTranslation();

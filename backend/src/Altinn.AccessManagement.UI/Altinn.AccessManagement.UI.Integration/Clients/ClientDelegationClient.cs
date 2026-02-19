@@ -49,6 +49,65 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<List<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = "enduser/clientdelegations/my/clients";
+            if (provider?.Count > 0)
+            {
+                string providerQuery = string.Join("&", provider.Select(providerId => $"provider={providerId}"));
+                endpointUrl = $"{endpointUrl}?{providerQuery}";
+            }
+
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            PaginatedResult<MyClientDelegation> clients =
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<MyClientDelegation>>(response, _logger, "ClientDelegationClient.GetMyClients");
+
+            if (clients?.Items == null)
+            {
+                return new List<MyClientDelegation>();
+            }
+
+            return clients.Items.ToList();
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveMyClientProvider(Guid provider, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/clientdelegations/my/clientproviders?provider={provider}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                return;
+            }
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+            _logger.LogError("AccessManagement.UI // ClientDelegationClient.RemoveMyClientProvider // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveMyClientAccessPackages(Guid provider, Guid from, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/clientdelegations/my/clients?provider={provider}&from={from}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, requestBody);
+            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            if (response.IsSuccessStatusCode)
+            {
+                return;
+            }
+
+            _logger.LogError("AccessManagement.UI // ClientDelegationClient.RemoveMyClientAccessPackages // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
+        }
+
+        /// <inheritdoc />
         public async Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/clientdelegations/clients?party={party}";

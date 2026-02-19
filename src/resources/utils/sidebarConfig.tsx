@@ -37,8 +37,9 @@ const getMenuLinkAs = (
 export const getHeadingMenuItem = (pathname?: string, isLoading = false): MenuItemProps => {
   return {
     id: '1',
-    groupId: 11,
-    icon: { svgElement: PadlockLockedFillIcon, theme: 'base' },
+    groupId: '11',
+    icon: PadlockLockedFillIcon,
+    variant: 'tinted',
     size: 'lg',
     loading: isLoading,
     title: t('sidebar.access_management'),
@@ -66,16 +67,35 @@ export const getYourRightsMenuItem = (
   };
 };
 
+export const getYourClientsMenuItem = (
+  pathname?: string,
+  isLoading = false,
+  isSmall = false,
+): MenuItemProps => {
+  return {
+    groupId: '14',
+    id: 'your-clients',
+    size: 'md',
+    loading: isLoading,
+    variant: 'tinted',
+    title: t('sidebar.your_clients'),
+    selected: pathname?.includes(`/${amUIPath.MyClients}`),
+    icon: { svgElement: DatabaseIcon, theme: isSmall ? 'surface' : 'default' },
+    as: (props) => getMenuLinkAs(props, `/${amUIPath.MyClients}`),
+  };
+};
+
 export const getUsersMenuItem = (
   pathname?: string,
   isLoading = false,
   isSmall = false,
 ): MenuItemProps => {
   return {
-    groupId: 12,
+    groupId: '12',
     id: '2',
     size: 'md',
     loading: isLoading,
+    variant: 'tinted',
     title: t('sidebar.users'),
     selected: pathname?.includes(`/${amUIPath.Users}`),
     icon: { svgElement: PersonGroupIcon, theme: isSmall ? 'surface' : 'default' },
@@ -89,10 +109,11 @@ export const getPoaOverviewMenuItem = (
   isSmall = false,
 ): MenuItemProps => {
   return {
-    groupId: 12,
+    groupId: '12',
     id: '2.1',
     size: 'md',
     loading: isLoading,
+    variant: 'tinted',
     title: t('sidebar.poa_overview'),
     icon: { svgElement: KeyVerticalIcon, theme: isSmall ? 'surface' : 'default' },
     selected: pathname?.includes(`/${amUIPath.PoaOverview}`),
@@ -106,10 +127,11 @@ export const getReporteesMenuItem = (
   isSmall = false,
 ): MenuItemProps => {
   return {
-    groupId: 14,
+    groupId: '14',
     id: '4',
     size: 'md',
     loading: isLoading,
+    variant: 'tinted',
     title: t('sidebar.reportees'),
     selected: pathname?.includes(`/${amUIPath.Reportees}`),
     icon: { svgElement: PadlockUnlockedIcon, theme: isSmall ? 'surface' : 'default' },
@@ -123,10 +145,11 @@ export const getConsentMenuItem = (
   isSmall = false,
 ): MenuItemProps => {
   return {
-    groupId: 14,
+    groupId: '14',
     id: '4.1',
     size: 'md',
     loading: isLoading,
+    variant: 'tinted',
     title: t('sidebar.consent'),
     icon: { svgElement: HandshakeIcon, theme: isSmall ? 'surface' : 'default' },
     selected: pathname?.includes(`/${ConsentPath.Consent}`),
@@ -140,10 +163,11 @@ export const getSystemUserMenuItem = (
   isSmall = false,
 ): MenuItemProps => {
   return {
-    groupId: 16,
+    groupId: '16',
     id: '6',
     size: 'md',
     loading: isLoading,
+    variant: 'tinted',
     title: t('sidebar.systemaccess'),
     icon: { svgElement: TenancyIcon, theme: isSmall ? 'surface' : 'default' },
     selected: pathname?.includes(`/${SystemUserPath.SystemUser}`),
@@ -157,10 +181,11 @@ export const getClientAdministrationMenuItem = (
   isSmall = false,
 ): MenuItemProps => {
   return {
-    groupId: 14,
+    groupId: '14',
     id: 'client-admin',
     size: 'md',
     loading: isLoading,
+    variant: 'tinted',
     title: t('sidebar.client_administration'),
     icon: { svgElement: DatabaseIcon, theme: isSmall ? 'surface' : 'default' },
     selected: pathname?.includes(`/${amUIPath.ClientAdministration}`),
@@ -174,10 +199,11 @@ export const getSettingsMenuItem = (
   isSmall = false,
 ): MenuItemProps => {
   return {
-    groupId: 17,
+    groupId: '17',
     id: 'settings',
     size: 'md',
     loading: isLoading,
+    variant: 'tinted',
     title: t('sidebar.settings'),
     selected: pathname?.includes(`/${amUIPath.Settings}`),
     icon: { svgElement: CogIcon, theme: isSmall ? 'surface' : 'default' },
@@ -191,10 +217,11 @@ export const getRequestsMenuItem = (
   isSmall = false,
 ): MenuItemProps => {
   return {
-    groupId: 12,
+    groupId: '12',
     id: '2.2',
     size: 'md',
     loading: isLoading,
+    variant: 'tinted',
     title: t('sidebar.requests'),
     selected: pathname?.includes(`/${amUIPath.Requests}`),
     icon: { svgElement: BellDotIcon, theme: isSmall ? 'surface' : 'default' },
@@ -211,6 +238,7 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
       id: 'beta-about',
       size: 'md',
       loading: isLoading,
+      variant: 'tinted',
       title: t('header.help_pages'),
       icon: ExternalLinkIcon,
       selected: false,
@@ -221,6 +249,7 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
       id: 'beta-leave',
       size: 'md',
       loading: isLoading,
+      variant: 'tinted',
       title: t('header.leave_beta'),
       icon: LeaveIcon,
       selected: false,
