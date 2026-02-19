@@ -182,7 +182,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
       currentServiceWithStatus &&
       (!currentServiceWithStatus?.rightList || currentServiceWithStatus?.rightList.length === 0)
     ) {
-      status = ServiceStatus.HTTPError;
+      status = ServiceStatus.NotDelegable;
     }
 
     const errorCodeTextKeyList =
@@ -196,6 +196,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
                 .map((detail) => detail.code) || [],
           ) || []
         : [];
+
+    if (errorCodeTextKeyList.length === 0 && status === ServiceStatus.NotDelegable) {
+      errorCodeTextKeyList.push(ErrorCode.MissingDelegationAccess);
+    }
 
     let prioritizedErrorCodes: string[] = [];
 
