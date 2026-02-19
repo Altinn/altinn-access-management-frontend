@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Authorization
             {
                 XacmlJsonRequestRoot request = DecisionHelper.CreateDecisionRequest(context, requirement, httpContext.Request.Query);
 
-                XacmlJsonResponse response = await _pdp.GetDecisionForRequest(request);
+                XacmlJsonResponse response = await _pdp.GetDecisionForRequest(request, httpContext.RequestAborted);
 
                 bool userHasRequestedPartyAccess = DecisionHelper.ValidatePdpDecision(response, context.User);
 
