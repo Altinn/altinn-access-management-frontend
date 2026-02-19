@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Threading;
 using Altinn.Authorization.ABAC.Xacml.JsonProfile;
 using Altinn.Common.PEP.Interfaces;
 
@@ -10,6 +11,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     public class MockPDP : IPDP
     {
         public Task<XacmlJsonResponse> GetDecisionForRequest(XacmlJsonRequestRoot xacmlJsonRequest)
+        {
+            return GetDecisionForRequest(xacmlJsonRequest, CancellationToken.None);
+        }
+
+        public Task<XacmlJsonResponse> GetDecisionForRequest(XacmlJsonRequestRoot xacmlJsonRequest, CancellationToken cancellationToken)
         {
             XacmlJsonResponse response;
 
@@ -57,6 +63,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
 
         public Task<bool> GetDecisionForUnvalidateRequest(XacmlJsonRequestRoot xacmlJsonRequest, ClaimsPrincipal user)
+        {
+            return GetDecisionForUnvalidateRequest(xacmlJsonRequest, user, CancellationToken.None);
+        }
+
+        public Task<bool> GetDecisionForUnvalidateRequest(XacmlJsonRequestRoot xacmlJsonRequest, ClaimsPrincipal user, CancellationToken cancellationToken)
         {
             return Task.FromResult(true);
         }
