@@ -370,7 +370,7 @@
     "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
     "no_users": "Denne listen er tom",
-    "only_you_have_access": "Ingen andre enn deg har fullmakt",
+    "only_you_have_access": "Ingen andre enn deg har fullmakt.",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "show_users_with_client_access": "Vis brukere med klienttilgang",
     "indirect_connections": "Brukere uten fullmakt",
@@ -909,7 +909,6 @@
     "package_revocation_success": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
     "users_tab": {
       "description": "Søk etter brukere for å gi eller slette fullmakter.",
-      "user_search_placeholder": "Søk etter person eller virksomhet",
       "no_users": "Ingen har fullmakt til denne pakken på vegne av {{fromparty}}."
     },
     "services_tab": {
