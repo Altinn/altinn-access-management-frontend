@@ -3,7 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
-import type { DelegationResult, RightChangesDto } from '@/dataObjects/dtos/resourceDelegation';
+import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
+import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 
 interface PaginatedListDTO {
   page: number;

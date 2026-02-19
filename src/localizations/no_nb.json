@@ -303,7 +303,10 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttjenester",
     "wip_message": "Denne siden jobber vi fremdeles med! For å administrere enkelttjenester, må du gå til den gamle løsningen.",
-    "wip_link_text": "Gå til gamle Altinn"
+    "wip_link_text": "Gå til gamle Altinn",
+    "inheritance": {
+      "right_inherited": "Denne handlingen er arvet og kan ikke endres her."
+    }
   },
   "access_packages": {
     "helptext_button": "Hva er tilgangspakker?",
@@ -500,10 +503,10 @@
   "status_section": {
     "has_package_message": "{{user_name}} har denne fullmakten.",
     "access_status": {
-      "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_priv": "{{user_name}} har denne fullmakten gjennom sin rolle som privatperson. Den kan derfor ikke slettes."
+      "via_role": "{{user_name}} har fullmakt gjennom rollen de har i {{via_name}}. Den kan derfor ikke slettes.",
+      "via_connection": "{{user_name}} har fullmakt gjennom {{via_name}}. Denne kan derfor ikke slettes.",
+      "via_keyrole": "{{user_name}} har fullmakt gjennom rollen de har i {{via_name}}. Den kan derfor ikke slettes.",
+      "via_priv": "{{user_name}} har fullmakt gjennom sin rolle som privatperson. Den kan derfor ikke slettes."
     },
     "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
     "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten.",

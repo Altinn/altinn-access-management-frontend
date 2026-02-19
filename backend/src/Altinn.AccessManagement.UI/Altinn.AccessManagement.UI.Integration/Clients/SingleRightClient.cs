@@ -110,10 +110,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/connections/resources?party={party}&to={to}&from={from}&resource={resourceId}";
+                string endpointUrl = $"enduser/connections/resources/rules?party={party}&to={to}&from={from}&resource={resourceId}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var ruleKeys = new { directRuleKeys = actionKeys };
+                var ruleKeys = new { DirectRuleKeys = actionKeys };
                 string requestBody = JsonSerializer.Serialize(ruleKeys, _serializerOptions);
                 StringContent content = new StringContent(requestBody, System.Text.Encoding.UTF8, "application/json");
                 var httpResponse = await _client.PutAsync(token, endpointUrl, content);

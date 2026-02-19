@@ -40,16 +40,12 @@ export const SingleRightsSection = () => {
     },
   );
 
-  const { paginatedData, totalPages, currentPage, goToPage } = usePagination(
-    delegatedResources ?? [],
-    5,
-  );
   const modalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
 
   const resources = React.useMemo(
-    () => paginatedData.map((delegation) => delegation.resource).filter(Boolean),
-    [paginatedData],
+    () => delegatedResources?.map((delegation) => delegation.resource).filter(Boolean),
+    [delegatedResources],
   ) as ServiceResource[];
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8; // Section for "Users (A2)" in Profile is 9, for "Accesses for others (A2)" it is 8
@@ -91,7 +87,7 @@ export const SingleRightsSection = () => {
 
         <div className={classes.singleRightsList}>
           <ResourceList
-            resources={resources}
+            resources={resources ?? []}
             enableSearch={true}
             showDetails={false}
             onSelect={(resource) => {
@@ -107,18 +103,6 @@ export const SingleRightsSection = () => {
               />
             )}
           />
-        </div>
-        <div className={classes.tools}>
-          {totalPages > 1 && (
-            <AmPagination
-              className={classes.pagination}
-              totalPages={totalPages}
-              currentPage={currentPage}
-              setCurrentPage={goToPage}
-              size='sm'
-              hideLabels
-            />
-          )}
         </div>
         <EditModal
           ref={modalRef}

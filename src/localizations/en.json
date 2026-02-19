@@ -306,7 +306,10 @@
     "delete_singleRight_error_message": "Failed to delete access to ",
     "wip_title": "Power of attorney to services",
     "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
-    "wip_link_text": "Go to old Altinn"
+    "wip_link_text": "Go to old Altinn",
+    "inheritance": {
+      "right_inherited": "This action is inherited and cannot be changed here."
+    }
   },
   "access_packages": {
     "helptext_button": "What are access packages?",
@@ -414,7 +417,7 @@
   "user_rights_page": {
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
-    "single_rights_title": "Services", 
+    "single_rights_title": "Services",
     "roles_title": "Roles",
     "guardianships_title": "Guardianships",
     "resource_type_text": "Single right",

@@ -189,6 +189,7 @@ export const RightsSection = ({
             variant='tertiary'
             className={classes.deleteButton}
             onClick={revokeResource}
+            disabled={!rights.some((r) => r.inherited === false)}
           >
             <MinusCircleIcon />
             {t('common.delete_poa')}

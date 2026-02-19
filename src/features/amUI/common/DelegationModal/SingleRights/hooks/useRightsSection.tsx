@@ -1,16 +1,13 @@
-import { RightStatus } from '@/dataObjects/dtos/resourceDelegation';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
   DelegationCheckedRight,
   ServiceResource,
   useDelegationCheckQuery,
   useGetResourceRightsQuery,
-  useGetSingleRightsForRightholderQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { arraysEqualUnordered } from '@/resources/utils';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';

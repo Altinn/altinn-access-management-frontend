@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { DsChip, DsPopover } from '@altinn/altinn-components';
 import { ChipRight } from './rightsUtils';
+import { useTranslation } from 'react-i18next';
 
 export const useRightChips = (
   rights: ChipRight[],
   setRights: React.Dispatch<React.SetStateAction<ChipRight[]>>,
   chipClassname: string,
 ) => {
+  const { t } = useTranslation();
   const [popoverOpen, setPopoverOpen] = useState('');
 
   const toggle = (right: ChipRight) =>
@@ -39,13 +41,14 @@ export const useRightChips = (
             <DsPopover
               id={`popover_${right.rightKey}`}
               open={popoverOpen === right.rightKey}
+              placement='top'
               onClose={() => {
                 setPopoverOpen('');
               }}
               aria-live='polite'
               role='tooltip'
             >
-              This right is inherited and cannot be changed here.
+              {t('single_rights.inheritance.right_inherited')}
             </DsPopover>
           </div>
         );
