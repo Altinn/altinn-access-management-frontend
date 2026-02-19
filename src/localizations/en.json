@@ -372,7 +372,7 @@
     "user_list_heading": "Other users with power of attorney",
     "direct_connections": "Users with power of attorney",
     "user_search_placeholder": "Search for users",
-    "no_users": "This list is empty",
+    "no_users": "You have not received any authorizations from others.",
     "only_you_have_access": "Only you have access here. Do you want to change this?",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
@@ -414,7 +414,7 @@
   "user_rights_page": {
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
-    "single_rights_title": "Services", 
+    "single_rights_title": "Services",
     "roles_title": "Roles",
     "guardianships_title": "Guardianships",
     "resource_type_text": "Single right",
