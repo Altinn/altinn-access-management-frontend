@@ -83,6 +83,29 @@ export class EnduserConnection {
     return response.json();
   }
 
+  public async deleteConnectionPerson(pid: string, from: string, toPid: string) {
+    const fromUuid = await this.tokenClass.getPartyUuid(from);
+    const toUuid = await this.tokenClass.getPartyUuid(toPid);
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&cascade=true`;
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for addConnection request. Status: ${response.status}`,
+      );
+    }
+
+    return response;
+  }
+
   /**
    * Adds an access package connection from one party to another person.
    *

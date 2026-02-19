@@ -204,8 +204,15 @@ test.describe('Tilgangsstyring', () => {
 
 test.describe('@slow Testdata for Tilgangsstyring-testene', () => {
   test('bruk API til å sette opp testdata', async ({ page }) => {
-    test.step('spørring her', async () => {
+    await test.step('spørring her', async () => {
       const api = await new EnduserConnection();
+      await api.deleteConnectionPerson('12816699205', '314138910', '70885100226');
+      const connection = await api.addConnectionPerson(
+        '12816699205',
+        '314138910',
+        '70885100226',
+        'KATT',
+      );
       const tilgangsstyrer = await api.addConnectionPackagePerson(
         '12816699205',
         '314138910',
@@ -225,10 +232,11 @@ test.describe('@slow Testdata for Tilgangsstyring-testene', () => {
         'urn:altinn:accesspackage:byggesoknad',
       );
 
+      await api.packageExists(connection);
       await api.packageExists(tilgangsstyrer);
       await api.packageExists(posttjenester);
       await api.packageExists(byggesoknad);
-      // await api.getConnectionPerson('12816699205', '314138910', '70885100226');
+      await api.getConnectionPerson('12816699205', '314138910', '70885100226');
     });
   });
 
