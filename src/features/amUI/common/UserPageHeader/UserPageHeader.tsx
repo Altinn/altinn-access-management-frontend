@@ -1,10 +1,4 @@
-import {
-  DsParagraph,
-  DsHeading,
-  MenuItemIcon,
-  Avatar,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsParagraph, DsHeading, Avatar, formatDisplayName } from '@altinn/altinn-components';
 import { t } from 'i18next';
 
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -60,37 +54,26 @@ export const UserPageHeader = ({
       : t('reportee_rights_page.heading_subtitle', { name: toPartyName });
 
   const avatar = () => {
-    if (displayDirection) {
-      return (
-        <div className={classes.avatar}>
-          <MenuItemIcon
-            icon={{
-              name: userName,
-              type: isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person',
-              isParent: !isSubUnitByType(user?.variant?.toString()),
-            }}
-            size={'lg'}
-          />
+    return (
+      <div className={classes.avatar}>
+        <Avatar
+          name={userName}
+          type={isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person'}
+          size={'lg'}
+          isDeleted={user?.isDeleted}
+          isParent={!isSubUnitByType(user?.variant?.toString())}
+          className={classes.avatarInner}
+        />
+        {displayDirection && (
           <Avatar
             name={secondaryUserName}
             type={isOrganization(secondaryParty?.partyTypeName?.toString()) ? 'company' : 'person'}
             size={'lg'}
+            isDeleted={secondaryParty?.isDeleted}
             className={classes.secondaryAvatar}
             isParent={!isSubUnitByType(secondaryParty?.variant?.toString())}
           />
-        </div>
-      );
-    }
-    return (
-      <div className={classes.avatar}>
-        <MenuItemIcon
-          icon={{
-            name: userName,
-            type: isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person',
-            isParent: !isSubUnitByType(user?.variant?.toString()),
-          }}
-          size={'lg'}
-        />
+        )}
       </div>
     );
   };

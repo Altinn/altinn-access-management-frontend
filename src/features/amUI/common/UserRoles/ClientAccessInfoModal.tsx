@@ -8,10 +8,19 @@ import { amUIPath } from '@/routes/paths';
 interface ClientAccessInfoModalProps {
   open: boolean;
   onClose: () => void;
+  isViewingOwnAccess?: boolean;
 }
 
-export const ClientAccessInfoModal = ({ open, onClose }: ClientAccessInfoModalProps) => {
+export const ClientAccessInfoModal = ({
+  open,
+  onClose,
+  isViewingOwnAccess = false,
+}: ClientAccessInfoModalProps) => {
   const { t } = useTranslation();
+  const descriptionKey = isViewingOwnAccess
+    ? 'user_roles.has_client_access_description_self'
+    : 'user_roles.has_client_access_description';
+  const linkPath = isViewingOwnAccess ? amUIPath.MyClients : amUIPath.ClientAdministration;
 
   return (
     <DsDialog
@@ -29,9 +38,9 @@ export const ClientAccessInfoModal = ({ open, onClose }: ClientAccessInfoModalPr
         </DsHeading>
         <DsParagraph data-size='sm'>
           <Trans
-            i18nKey='user_roles.has_client_access_description'
+            i18nKey={descriptionKey}
             components={{
-              a: <Link to={`/${amUIPath.ClientAdministration}`} />,
+              a: <Link to={`/${linkPath}`} />,
             }}
           />
         </DsParagraph>

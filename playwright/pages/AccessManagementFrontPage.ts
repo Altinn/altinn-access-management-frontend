@@ -12,14 +12,12 @@ export class AccessManagementFrontPage {
   constructor(page: Page) {
     this.page = page;
 
-    this.systemAccessLink = this.page
-      .getByRole('group')
-      .getByRole('link', { name: 'Systemtilganger' });
+    this.systemAccessLink = this.page.getByRole('link', { name: 'Systemtilganger' });
 
-    this.usersLink = this.page.getByRole('group').getByRole('link', { name: 'Brukere' });
-    this.powersOfAttorneyLink = this.page
-      .getByRole('group')
-      .getByRole('link', { name: 'Fullmakter' });
+    this.usersLink = this.page.getByRole('link', { name: 'Brukere' });
+
+    this.powersOfAttorneyLink = this.page.getByRole('link', { name: 'Fullmakter' });
+
     this.ourAccessAtOthersLink = this.page.getByRole('link', {
       name: 'Fullmakter hos andre',
     });

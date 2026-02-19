@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
-  DsHeading,
   DsParagraph,
   DsSkeleton,
   formatDisplayName,
+  useSnackbar,
 } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 
@@ -31,9 +31,11 @@ import { ClientAdministrationClientAgentsList } from './ClientAdministrationClie
 import { useClientAccessAgentLists } from './useClientAccessAgentLists';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
+import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 
 export const ClientAdministrationClientDetails = () => {
   const { t } = useTranslation();
+  const { openSnackbar } = useSnackbar();
   const { id } = useParams();
   const { fromParty, actingParty } = usePartyRepresentation();
   const [activeTab, setActiveTab] = useState('has-users');
@@ -100,6 +102,14 @@ export const ClientAdministrationClientDetails = () => {
   const fromPartyUuid = fromParty?.partyUuid ?? id;
   const actingPartyUuid = actingParty?.partyUuid;
 
+  const onUserAdded = () => {
+    setActiveTab('all-users');
+    openSnackbar({
+      message: t('client_administration_page.add_agent_client_access_success_snackbar'),
+      color: 'success',
+    });
+  };
+
   return (
     <>
       <Breadcrumbs
@@ -134,62 +144,46 @@ export const ClientAdministrationClientDetails = () => {
                 <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
               </DsAlert>
             )}
-            {id && (
-              <ClientAdministrationClientTabs
-                activeTab={activeTab}
-                onChange={setActiveTab}
-                hasUsersContent={
-                  hasDelegatablePackages ? (
-                    agentsWithClientAccess.length > 0 ? (
-                      <ClientAdministrationClientAgentsList
-                        agents={agentsWithClientAccess}
-                        clientAccessPackages={clientAccessPackages ?? []}
-                        client={selectedClient}
-                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                        fromPartyUuid={fromPartyUuid}
-                        actingPartyUuid={actingPartyUuid}
-                        addAgentAccessPackages={addAgentAccessPackages}
-                        removeAgentAccessPackages={removeAgentAccessPackages}
-                      />
-                    ) : (
-                      <DsParagraph>
-                        {t('client_administration_page.no_user_delegations')}
-                      </DsParagraph>
-                    )
-                  ) : (
-                    <DsParagraph>
-                      {t('client_administration_page.no_access_to_delegate', {
-                        name: actingPartyName,
-                      })}
-                    </DsParagraph>
-                  )
-                }
-                allUsersContent={
-                  hasDelegatablePackages ? (
-                    allAgents.length > 0 ? (
-                      <ClientAdministrationClientAgentsList
-                        agents={allAgents}
-                        clientAccessPackages={clientAccessPackages ?? []}
-                        client={selectedClient}
-                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                        fromPartyUuid={fromPartyUuid}
-                        actingPartyUuid={actingPartyUuid}
-                        addAgentAccessPackages={addAgentAccessPackages}
-                        removeAgentAccessPackages={removeAgentAccessPackages}
-                      />
-                    ) : (
-                      <DsParagraph>{t('client_administration_page.no_agents')}</DsParagraph>
-                    )
-                  ) : (
-                    <DsParagraph>
-                      {t('client_administration_page.no_access_to_delegate', {
-                        name: actingPartyName,
-                      })}
-                    </DsParagraph>
-                  )
-                }
-              />
-            )}
+            {id &&
+              (hasDelegatablePackages ? (
+                <ClientAdministrationClientTabs
+                  activeTab={activeTab}
+                  onChange={setActiveTab}
+                  hasUsersContent={
+                    <ClientAdministrationClientAgentsList
+                      agents={agentsWithClientAccess}
+                      clientAccessPackages={clientAccessPackages ?? []}
+                      client={selectedClient}
+                      isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                      fromPartyUuid={fromPartyUuid}
+                      actingPartyUuid={actingPartyUuid}
+                      addAgentAccessPackages={addAgentAccessPackages}
+                      removeAgentAccessPackages={removeAgentAccessPackages}
+                      emptyText={t('client_administration_page.no_agents')}
+                    />
+                  }
+                  allUsersContent={
+                    <ClientAdministrationClientAgentsList
+                      agents={allAgents}
+                      clientAccessPackages={clientAccessPackages ?? []}
+                      client={selectedClient}
+                      isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                      fromPartyUuid={fromPartyUuid}
+                      actingPartyUuid={actingPartyUuid}
+                      addAgentAccessPackages={addAgentAccessPackages}
+                      removeAgentAccessPackages={removeAgentAccessPackages}
+                      emptyText={`${t('client_administration_page.no_agents')} ${t('client_administration_page.addUserPrompt')}`}
+                      addUserButton={<AddAgentButton onComplete={onUserAdded} />}
+                    />
+                  }
+                />
+              ) : (
+                <DsParagraph>
+                  {t('client_administration_page.no_access_to_delegate', {
+                    name: actingPartyName,
+                  })}
+                </DsParagraph>
+              ))}
           </>
         )}
       </PageContainer>

@@ -37,16 +37,16 @@ export const getDeletionStatus = (
     rolePermissions?.length === 0 ||
     rolePermissions?.every(
       (r) =>
-        r.role.code === RIGHTHOLDER_ROLE &&
-        r.permissions.every((p) => p.via === null || p.via === undefined),
+        r.role?.code === RIGHTHOLDER_ROLE &&
+        r.permissions?.every((p) => p.via === null || p.via === undefined),
     )
   ) {
     level = DeletionLevel.Full;
   } else if (
     rolePermissions?.some(
       (r) =>
-        r.role.code === RIGHTHOLDER_ROLE &&
-        r.permissions.some((p) => p.via === null || p.via === undefined),
+        r.role?.code === RIGHTHOLDER_ROLE &&
+        r.permissions?.some((p) => p.via === null || p.via === undefined),
     )
   ) {
     level = DeletionLevel.Limited;
