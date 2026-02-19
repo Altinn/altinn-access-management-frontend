@@ -159,7 +159,7 @@ export const ClientAdministrationClientDetails = () => {
                       actingPartyUuid={actingPartyUuid}
                       addAgentAccessPackages={addAgentAccessPackages}
                       removeAgentAccessPackages={removeAgentAccessPackages}
-                      emptyText={t('client_administration_page.no_user_delegations')}
+                      emptyText={t('client_administration_page.no_agents')}
                     />
                   }
                   allUsersContent={
@@ -172,7 +172,7 @@ export const ClientAdministrationClientDetails = () => {
                       actingPartyUuid={actingPartyUuid}
                       addAgentAccessPackages={addAgentAccessPackages}
                       removeAgentAccessPackages={removeAgentAccessPackages}
-                      emptyText={t('client_administration_page.no_agents')}
+                      emptyText={`${t('client_administration_page.no_agents')} ${t('client_administration_page.addUserPrompt')}`}
                       addUserButton={<AddAgentButton onComplete={onUserAdded} />}
                     />
                   }
