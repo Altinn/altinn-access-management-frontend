@@ -932,9 +932,11 @@
   },
   "landing_page": {
     "alert_heading": "You are now in the new access management solution",
-    "alert_heading_priv": "This is the new access management solution for private individuals",
     "alert_body": "Today's Altinn roles have been replaced by access packages with services.",
     "alert_body_p2": "Please note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
+    "alert_heading_priv": "This is the new access management solution for private individuals",
+    "alert_body_priv": "Here, the current Altinn roles are replaced with access packages that contain forms and services. You can give these to others if you want someone to help you in Altinn.",
+    "alert_body_p2_priv": "Please note that there are some services you cannot grant access to in the new Altinn yet. These are still found in the old solution.",
     "alert_link": "Go to old Altinn",
     "your_content_heading": "Your accesses",
     "shortcut_links_heading": "Other accesses",
