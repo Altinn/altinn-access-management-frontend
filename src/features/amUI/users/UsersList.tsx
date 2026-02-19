@@ -187,7 +187,6 @@ export const UsersList = () => {
             }
             listItemTitleAs='h2'
             interactive={isAdmin}
-            onAddNewUser={handleNewUser}
           />
         </>
       ) : (
