@@ -373,7 +373,7 @@
     "direct_connections": "Users with power of attorney",
     "user_search_placeholder": "Search for users",
     "no_users": "This list is empty",
-    "only_you_have_access": "Only you have access here.",
+    "only_you_have_access": "Only you have power of attorney. Add a new user to grant power of attorney to others.",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
     "show_users_with_client_access": "Show users with client access",
     "indirect_connections": "Users without power of attorney",

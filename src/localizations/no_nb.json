@@ -370,7 +370,7 @@
     "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
     "no_users": "Denne listen er tom",
-    "only_you_have_access": "Ingen andre enn deg har fullmakt.",
+    "only_you_have_access": "Det er kun du som har fullmakt. Legg til ny bruker for å gi fullmakt til andre.",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "show_users_with_client_access": "Vis brukere med klienttilgang",
     "indirect_connections": "Brukere uten fullmakt",
