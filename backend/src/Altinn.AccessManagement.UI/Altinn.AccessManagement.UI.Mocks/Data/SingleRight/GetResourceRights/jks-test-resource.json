@@ -1,52 +1,97 @@
 {
     "resource": {
-        "id": "b8c9d0e1-f2a3-4567-0123-678901234567",
-        "providerId": "c9d0e1f2-a3b4-5678-1234-789012345678",
-        "typeId": "d0e1f2a3-b4c5-6789-2345-890123456789",
+        "id": "0197a842-04f4-7936-97e1-d9d63eab9c85",
+        "providerId": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
+        "typeId": "0197a840-2750-7b03-a851-2a6a06571982",
         "name": "JK's Test Ressurs",
         "description": "Veldig fin test ressurs",
         "refId": "jks-test-resource",
         "provider": {
-            "id": "c9d0e1f2-a3b4-5678-1234-789012345678",
-            "name": "JK's Test departement",
-            "refId": "991825827",
-            "logoUrl": null,
+            "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
+            "name": "Testdepartementet",
+            "refId": "",
+            "logoUrl": "https://altinncdn.no/orgs/ttd/ttd.png",
             "code": "ttd",
-            "typeId": "e1f2a3b4-c5d6-7890-3456-901234567890"
+            "typeId": "0195efb8-7c80-713e-ad96-a9896d12f444",
+            "type": null
         },
         "type": {
-            "id": "genericaccessresource",
+            "id": "0197a840-2750-7b03-a851-2a6a06571982",
             "name": "GenericAccessResource"
         }
     },
-    "rules": [
+    "directRules": [],
+    "indirectRules": [
         {
-            "key": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-            "subResource": "",
-            "action": "read",
+            "rule": {
+                "key": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+                "name": null,
+                "resource": [
+                    "urn:altinn:resource:jks-test-resource"
+                ],
+                "action": "urn:oasis:names:tc:xacml:1.0:action:action-id:read"
+            },
+            "reason": {
+                "items": [
+                    {
+                        "name": "assignment",
+                        "description": "Access granted directly with assignment"
+                    }
+                ]
+            },
             "permissions": [
                 {
                     "from": {
-                        "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-                        "name": "DISKRET NÆR TIGER AS",
-                        "type": "organization",
+                        "id": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+                        "name": "RAKRYGGET UNG TIGER AS",
+                        "type": "Organisasjon",
                         "variant": "AS",
                         "parent": null,
                         "children": null,
-                        "partyId": 51329012
+                        "partyid": 51442738,
+                        "userId": null,
+                        "username": null,
+                        "organizationIdentifier": "313523497",
+                        "personIdentifier": null,
+                        "dateOfBirth": null,
+                        "dateOfDeath": null,
+                        "isDeleted": false,
+                        "deletedAt": null
                     },
                     "to": {
-                        "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-                        "name": "SITRONGUL MEDALJONG",
-                        "type": "person",
-                        "variant": null,
+                        "id": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+                        "name": "INTELLIGENT ALBATROSS",
+                        "type": "Person",
+                        "variant": "Person",
                         "parent": null,
                         "children": null,
-                        "partyId": 50789533
+                        "partyid": 51175615,
+                        "userId": 20010835,
+                        "username": null,
+                        "organizationIdentifier": null,
+                        "personIdentifier": "19895199357",
+                        "dateOfBirth": "1951-09-19",
+                        "dateOfDeath": null,
+                        "isDeleted": false,
+                        "deletedAt": null
                     },
                     "via": null,
-                    "role": null,
-                    "viaRole": null
+                    "role": {
+                        "id": "42cae370-2dc1-4fdc-9c67-c2f4b0f0f829",
+                        "code": "rettighetshaver",
+                        "urn": "urn:altinn:role:rettighetshaver",
+                        "legacyurn ": null,
+                        "children": null
+                    },
+                    "viaRole": null,
+                    "reason": {
+                        "items": [
+                            {
+                                "name": "assignment",
+                                "description": "Access granted directly with assignment"
+                            }
+                        ]
+                    }
                 }
             ]
         }

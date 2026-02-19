@@ -87,9 +87,15 @@ export const useRightsSection = ({
   // Instantiate/reset access and rights states
   useEffect(() => {
     if (!isResourceRightsFetching) {
-      if (resourceRights && resourceRights.rules.length > 0) {
+      if (
+        resourceRights &&
+        (resourceRights.directRules.length > 0 || resourceRights.indirectRules.length > 0)
+      ) {
         setHasAccess(true);
-        const rightKeys = resourceRights.rules.map((r) => r.key);
+        const rightKeys = [
+          ...resourceRights.directRules.map((r) => r.rule.key),
+          ...resourceRights.indirectRules.map((r) => r.rule.key),
+        ];
         setCurrentRights(rightKeys);
       } else {
         setHasAccess(false);
@@ -103,23 +109,23 @@ export const useRightsSection = ({
     if (delegationCheckedActions) {
       setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
 
-      if (hasAccess) {
+      if (hasAccess && resourceRights) {
         const chipRights: ChipRight[] = mapRightsToChipRights(
           delegationCheckedActions,
           (right) => currentRights.some((key) => key === right.rule.key),
-          resource.resourceOwnerOrgcode,
+          (rightKey) => resourceRights.indirectRules.some((r) => r.rule.key === rightKey),
         );
         setRights(chipRights);
       } else {
         const chipRights: ChipRight[] = mapRightsToChipRights(
           delegationCheckedActions,
           (right) => right.result === true,
-          resource.resourceOwnerOrgcode,
+          () => false, // If the user doesn't have access to the resource, none of the rights can be inherited
         );
         setRights(chipRights);
       }
     }
-  }, [delegationCheckedActions, resource.identifier, hasAccess, currentRights]);
+  }, [delegationCheckedActions, resource.identifier, hasAccess, currentRights, resourceRights]);
 
   /// Functions
 

@@ -19,11 +19,17 @@
             "name": "Default"
         }
     },
-    "rules": [
+    "directRules": [
         {
-            "key": "urn:altinn:resource:appid-502:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-            "subResource": "",
-            "action": "read",
+            "rule": {
+                "key": "urn:altinn:resource:appid-502:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+                "name": "Read",
+                "resource": [
+                    "appid-502"
+                ],
+                "action": "read"
+            },
+            "reason": null,
             "permissions": [
                 {
                     "from": {
@@ -46,9 +52,11 @@
                     },
                     "via": null,
                     "role": null,
-                    "viaRole": null
+                    "viaRole": null,
+                    "reason": null
                 }
             ]
         }
-    ]
+    ],
+    "indirectRules": []
 }

@@ -33,14 +33,23 @@ export interface ResourceDelegation {
 
 export interface ResourceRight {
   resource: ServiceResource;
-  rules: ResourcePermissions[];
+  directRules: RuleItem[];
+  indirectRules: RuleItem[];
 }
 
-export interface ResourcePermissions {
-  key: string;
-  action: string;
-  subResource?: string;
-  perrmissions: Permissions[];
+export interface RuleItem {
+  rule: Rule;
+  reason?: Reason;
+  permissions: Permissions[];
+}
+
+export interface Reason {
+  items: ReasonItem[];
+}
+
+export interface ReasonItem {
+  name: string;
+  description: string;
 }
 
 interface resourceReference {

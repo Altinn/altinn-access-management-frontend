@@ -33,7 +33,7 @@
         ],
         "action": "urn:oasis:names:tc:xacml:1.0:action:action-id:read"
       },
-      "result": false,
+      "result": true,
       "reasonCodes": [
         "MissingRoleAccess",
         "MissingDelegationAccess"
@@ -48,7 +48,7 @@
         ],
         "action": "urn:oasis:names:tc:xacml:1.0:action:action-id:write"
       },
-      "result": false,
+      "result": true,
       "reasonCodes": [
         "MissingRoleAccess",
         "MissingDelegationAccess"

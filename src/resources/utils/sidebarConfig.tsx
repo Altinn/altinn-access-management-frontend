@@ -12,7 +12,7 @@ import {
   KeyVerticalIcon,
   ExternalLinkIcon,
   DatabaseIcon,
-  PersonCircleIcon,
+  PersonIcon,
 } from '@navikt/aksel-icons';
 import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
@@ -61,7 +61,7 @@ export const getYourRightsMenuItem = (
     loading: isLoading,
     title: t('sidebar.your_rights'),
     selected: pathname?.includes(`/${amUIPath.Users}/${userUuid}`),
-    icon: { svgElement: PersonCircleIcon, theme: isSmall ? 'surface' : 'default' },
+    icon: { svgElement: PersonIcon, theme: isSmall ? 'surface' : 'default' },
     as: (props) =>
       getMenuLinkAs(props, `/${amUIPath.Users}/${userUuid}?returnTo=${pathname ?? ''}`),
   };

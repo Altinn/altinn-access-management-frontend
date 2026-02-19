@@ -113,7 +113,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"enduser/connections/resources?party={party}&to={to}&from={from}&resource={resourceId}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                string requestBody = JsonSerializer.Serialize(actionKeys, _serializerOptions);
+                var ruleKeys = new { directRuleKeys = actionKeys };
+                string requestBody = JsonSerializer.Serialize(ruleKeys, _serializerOptions);
                 StringContent content = new StringContent(requestBody, System.Text.Encoding.UTF8, "application/json");
                 var httpResponse = await _client.PutAsync(token, endpointUrl, content);
                 return httpResponse;

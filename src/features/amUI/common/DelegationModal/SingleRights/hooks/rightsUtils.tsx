@@ -6,20 +6,22 @@ export type ChipRight = {
   delegable: boolean;
   checked: boolean;
   delegationReason: string;
+  inherited?: boolean;
 };
 
 export const mapRightsToChipRights = (
   rights: DelegationCheckedRight[],
-  checked: (action: DelegationCheckedRight) => boolean,
-  resourceOwnerCode: string,
+  isChecked: (right: DelegationCheckedRight) => boolean,
+  isInherited: (rightKey: string) => boolean,
 ): ChipRight[] => {
-  return rights.map((action: DelegationCheckedRight) => {
+  return rights.map((right: DelegationCheckedRight) => {
     return {
-      action: action.rule.name,
-      rightKey: action.rule.key,
-      delegable: action.result === true,
-      checked: checked(action) || false,
-      delegationReason: action.reasonCodes.length > 0 ? action.reasonCodes[0] : '',
+      action: right.rule.name,
+      rightKey: right.rule.key,
+      delegable: right.result === true,
+      checked: isChecked(right) || false,
+      delegationReason: right.reasonCodes.length > 0 ? right.reasonCodes[0] : '',
+      inherited: isInherited(right.rule.key),
     };
   });
 };

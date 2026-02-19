@@ -19,11 +19,17 @@
             "name": "AltinnApp"
         }
     },
-    "rules": [
+    "directRules": [
         {
-            "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
-            "subResource": "",
-            "action": "instantiate",
+            "rule": {
+                "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
+                "name": "Instantiate",
+                "resource": [
+                    "app_ttd_a3-app2"
+                ],
+                "action": "instantiate"
+            },
+            "reason": null,
             "permissions": [
                 {
                     "from": {
@@ -48,16 +54,25 @@
                     "role": {
                         "id": "d6e7f8a9-b0c1-2345-8901-456789012345",
                         "code": "daglig-leder",
+                        "urn": "altinn:external-role:ccr:daglig-leder",
+                        "legacyUrn": null,
                         "children": null
                     },
-                    "viaRole": null
+                    "viaRole": null,
+                    "reason": null
                 }
             ]
         },
         {
-            "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-            "subResource": "",
-            "action": "read",
+            "rule": {
+                "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+                "name": "Read",
+                "resource": [
+                    "app_ttd_a3-app2"
+                ],
+                "action": "read"
+            },
+            "reason": null,
             "permissions": [
                 {
                     "from": {
@@ -82,16 +97,26 @@
                     "role": {
                         "id": "d6e7f8a9-b0c1-2345-8901-456789012345",
                         "code": "daglig-leder",
+                        "urn": "altinn:external-role:ccr:daglig-leder",
+                        "legacyUrn": null,
                         "children": null
                     },
-                    "viaRole": null
+                    "viaRole": null,
+                    "reason": null
                 }
             ]
         },
         {
-            "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-            "subResource": "Task_1",
-            "action": "read",
+            "rule": {
+                "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+                "name": "Read Task_1",
+                "resource": [
+                    "app_ttd_a3-app2",
+                    "Task_1"
+                ],
+                "action": "read"
+            },
+            "reason": null,
             "permissions": [
                 {
                     "from": {
@@ -116,11 +141,15 @@
                     "role": {
                         "id": "d6e7f8a9-b0c1-2345-8901-456789012345",
                         "code": "daglig-leder",
+                        "urn": "altinn:external-role:ccr:daglig-leder",
+                        "legacyUrn": null,
                         "children": null
                     },
-                    "viaRole": null
+                    "viaRole": null,
+                    "reason": null
                 }
             ]
         }
-    ]
+    ],
+    "indirectRules": []
 }
