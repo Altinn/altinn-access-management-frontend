@@ -4,6 +4,7 @@ import {
   AGENT_ROLE_REASON,
   AGENT_ROLE,
   ER_ROLE_REASON,
+  GUARDIANSHIP_ROLE_REASON,
   getDeleteUserDialogModel,
   getDeleteUserDialogModelFromStatus,
   getNonDeletableReasons,
@@ -18,10 +19,12 @@ import {
 } from './deletionModalUtils';
 import { RolePermission } from '@/rtk/features/roleApi';
 import { Entity } from '@/dataObjects/dtos/Common';
+import { A2_PROVIDER_CODE, CRA_PROVIDER_CODE } from '../UserRoles/useRoleMetadata';
 
 type rolePermissionSetting = {
   code: string;
   via: (string | null)[];
+  providerCode?: string;
 };
 
 const defaultEntity: Entity = {
@@ -38,6 +41,13 @@ const mockRolePermissions = (settings: rolePermissionSetting[]): RolePermission[
       code: setting.code,
       name: `Role Name ${index}`,
       description: `Description for role ${index}`,
+      provider: setting.providerCode
+        ? {
+            id: `provider-id-${index}`,
+            name: `Provider Name ${index}`,
+            code: setting.providerCode,
+          }
+        : undefined,
     },
     permissions:
       setting.via?.map((via, permIndex) => ({
@@ -232,9 +242,16 @@ describe('getNonDeletableReasons', () => {
     expect(getNonDeletableReasons(rolePermissions)).toEqual([]);
   });
 
-  it('returns old Altinn reason when rightholder access is only via inherited/delegated paths', () => {
-    const rolePermissions = mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: ['via-org'] }]);
+  it('returns old Altinn reason when at least one role has the old Altinn provider', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: RIGHTHOLDER_ROLE, via: [null], providerCode: A2_PROVIDER_CODE },
+    ]);
     expect(getNonDeletableReasons(rolePermissions)).toEqual([OLD_ALTINN_REASON]);
+  });
+
+  it('does not return old Altinn reason when access is inherited without old Altinn provider', () => {
+    const rolePermissions = mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: ['via-org'] }]);
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([]);
   });
 
   it('returns ER role reason for non-rightholder, non-agent roles', () => {
@@ -247,16 +264,25 @@ describe('getNonDeletableReasons', () => {
     expect(getNonDeletableReasons(rolePermissions)).toEqual([AGENT_ROLE_REASON]);
   });
 
+  it('returns guardianship reason for guardianship role access', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: 'role-code', via: ['via-org'], providerCode: CRA_PROVIDER_CODE },
+    ]);
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([GUARDIANSHIP_ROLE_REASON]);
+  });
+
   it('returns all matching reasons in stable order', () => {
     const rolePermissions = mockRolePermissions([
-      { code: RIGHTHOLDER_ROLE, via: ['via-org'] },
+      { code: RIGHTHOLDER_ROLE, via: ['via-org'], providerCode: A2_PROVIDER_CODE },
       { code: 'dagl', via: ['via-org'] },
       { code: AGENT_ROLE, via: ['via-org'] },
+      { code: 'role-code', via: ['via-org'], providerCode: CRA_PROVIDER_CODE },
     ]);
     expect(getNonDeletableReasons(rolePermissions)).toEqual([
       OLD_ALTINN_REASON,
       ER_ROLE_REASON,
       AGENT_ROLE_REASON,
+      GUARDIANSHIP_ROLE_REASON,
     ]);
   });
 });
@@ -381,7 +407,7 @@ describe('getDeleteUserDialogModel', () => {
 
   it('returns partially deletable state with reasons and partial confirmation key', () => {
     const rolePermissions = mockRolePermissions([
-      { code: RIGHTHOLDER_ROLE, via: [null, 'via-org'] },
+      { code: RIGHTHOLDER_ROLE, via: [null, 'via-org'], providerCode: A2_PROVIDER_CODE },
       { code: AGENT_ROLE, via: ['via-org'] },
       { code: 'dagl', via: ['via-org'] },
     ]);

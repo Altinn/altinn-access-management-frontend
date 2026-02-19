@@ -7,7 +7,7 @@ import {
   DsSkeleton,
   formatDisplayName,
 } from '@altinn/altinn-components';
-import { TrashIcon } from '@navikt/aksel-icons';
+import { TrashIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -34,6 +34,7 @@ import {
   DeletionLevel,
   type DeletionStatus,
   DeletionTarget,
+  GUARDIANSHIP_ROLE_REASON,
   getDeleteUserDialogModelFromStatus,
   ER_ROLE_REASON,
   OLD_ALTINN_REASON,
@@ -48,11 +49,13 @@ export interface DeleteUserModalContentProps {
 
 const srmLink =
   'https://www.altinn.no/Pages/ServiceEngine/Start/StartService.aspx?ServiceEditionCode=1&ServiceCode=3498&M=SP&DontChooseReportee=true&O=personal';
+const guardianshipInfoLink = 'https://www.vergemal.no/';
 
 const nonDeletableReasonKeys: Record<NonDeletableReason, string> = {
   [OLD_ALTINN_REASON]: 'delete_user.non_deletable_reason_old_altinn',
   [ER_ROLE_REASON]: 'delete_user.non_deletable_reason_er_roles',
   [AGENT_ROLE_REASON]: 'delete_user.non_deletable_reason_agent_role',
+  [GUARDIANSHIP_ROLE_REASON]: 'delete_user.non_deletable_reason_guardianship',
 };
 
 export const DeleteUserModalContent = ({
@@ -148,6 +151,13 @@ export const DeleteUserModalContent = ({
         rel='noopener noreferrer'
       ></Link>
     ),
+    guardianshipLink: (
+      <Link
+        to={guardianshipInfoLink}
+        target='_blank'
+        rel='noopener noreferrer'
+      ></Link>
+    ),
   };
 
   return (
@@ -193,11 +203,17 @@ export const DeleteUserModalContent = ({
               )}
               {shouldShowNonDeletableReasons && (
                 <div className={classes.reasonsSection}>
-                  <DsParagraph data-size='sm'>
-                    {t('delete_user.non_deletable_reasons_intro', {
-                      to_name: formattedToPartyName,
-                    })}
-                  </DsParagraph>
+                  <div className={classes.infoLine}>
+                    <XMarkOctagonFillIcon
+                      fontSize='1.5rem'
+                      className={classes.dangerIcon}
+                    />
+                    <DsParagraph data-size='sm'>
+                      {t('delete_user.non_deletable_reasons_intro', {
+                        to_name: formattedToPartyName,
+                      })}
+                    </DsParagraph>
+                  </div>
                   <ul className={classes.reasonList}>
                     {dialogModel.nonDeletableReasons.map((reason) => (
                       <li key={reason}>

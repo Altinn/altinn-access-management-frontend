@@ -1,15 +1,18 @@
 import { RolePermission } from '@/rtk/features/roleApi';
+import { A2_PROVIDER_CODE, CRA_PROVIDER_CODE } from '../UserRoles/useRoleMetadata';
 
 export const RIGHTHOLDER_ROLE = 'rettighetshaver';
 export const AGENT_ROLE = 'agent';
 export const ER_ROLE_REASON = 'er_roles';
 export const OLD_ALTINN_REASON = 'old_altinn';
 export const AGENT_ROLE_REASON = 'agent_role';
+export const GUARDIANSHIP_ROLE_REASON = 'guardianship_role';
 
 export type NonDeletableReason =
   | typeof ER_ROLE_REASON
   | typeof OLD_ALTINN_REASON
-  | typeof AGENT_ROLE_REASON;
+  | typeof AGENT_ROLE_REASON
+  | typeof GUARDIANSHIP_ROLE_REASON;
 
 export enum DeletionTarget {
   Yourself = 'yourself',
@@ -76,20 +79,23 @@ export const getNonDeletableReasons = (
     return [];
   }
 
-  const hasOldAltinnAccess = rolePermissions.some((rolePermission) => {
-    if (rolePermission?.role?.code !== RIGHTHOLDER_ROLE) {
-      return false;
-    }
-    return rolePermission.permissions.some((permission) => !!permission.via);
-  });
+  const hasOldAltinnAccess = rolePermissions.some(
+    (rolePermission) => rolePermission?.role?.provider?.code === A2_PROVIDER_CODE,
+  );
 
   const hasERRoles = rolePermissions.some(
     (rolePermission) =>
-      rolePermission?.role?.code !== RIGHTHOLDER_ROLE && rolePermission?.role?.code !== AGENT_ROLE,
+      rolePermission?.role?.code !== RIGHTHOLDER_ROLE &&
+      rolePermission?.role?.code !== AGENT_ROLE &&
+      rolePermission?.role?.provider?.code !== A2_PROVIDER_CODE &&
+      rolePermission?.role?.provider?.code !== CRA_PROVIDER_CODE,
   );
 
   const hasAgentRole = rolePermissions.some(
     (rolePermission) => rolePermission?.role?.code === AGENT_ROLE,
+  );
+  const hasGuardianshipRole = rolePermissions.some(
+    (rolePermission) => rolePermission?.role?.provider?.code === CRA_PROVIDER_CODE,
   );
 
   const reasons: NonDeletableReason[] = [];
@@ -101,6 +107,9 @@ export const getNonDeletableReasons = (
   }
   if (hasAgentRole) {
     reasons.push(AGENT_ROLE_REASON);
+  }
+  if (hasGuardianshipRole) {
+    reasons.push(GUARDIANSHIP_ROLE_REASON);
   }
 
   return reasons;
