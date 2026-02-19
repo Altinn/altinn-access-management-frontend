@@ -369,7 +369,7 @@
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
-    "no_users": "Denne listen er tom",
+    "no_users": "Du har ikke mottatt noen fullmakter fra andre.",
     "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
