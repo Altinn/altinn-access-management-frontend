@@ -9,9 +9,6 @@ export class EnduserConnection {
     this.tokenClass = new Token();
   }
 
-  public async packageExists(packageName: any) {
-    console.log(packageName);
-  }
   /**
    * Fetches connection details between a source organization and a target user.
    *
@@ -25,7 +22,6 @@ export class EnduserConnection {
    * @throws Error when the HTTP response is not OK.
    */
   public async getConnectionPerson(pid: string, from: string, to: string) {
-    console.log('getConnectionPerson');
     const fromUuid = await this.tokenClass.getPartyUuid(from);
     const toUuid = await this.tokenClass.getPartyUuid(to);
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to:${toUuid}`;
@@ -42,7 +38,7 @@ export class EnduserConnection {
         `Failed to fetch status for addConnection request. Status: ${response.status}`,
       );
     }
-    console.log('after getConnectionPerson');
+
     return response.json();
   }
 
@@ -56,8 +52,9 @@ export class EnduserConnection {
    * @returns A promise resolving to the JSON response from the API.
    * @throws Error if the request fails or returns a non-OK HTTP status.
    */
-  public async addConnectionPerson(pid: string, from: string, toPid: string, toLastName: string) {
+  public async addConnectionPerson(pid: string, from: string, toPid: string) {
     const fromUuid = await this.tokenClass.getPartyUuid(from);
+    const toLastName = await this.tokenClass.getLastName(toPid);
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}`;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     const payload = {
@@ -83,6 +80,15 @@ export class EnduserConnection {
     return response.json();
   }
 
+  /**
+   * Deletes an end-user connection between two parties by resolving their UUIDs and issuing a DELETE request.
+   *
+   * @param pid - The personal identifier used to obtain an authorization token.
+   * @param from - The party identifier representing the source party.
+   * @param toPid - The party identifier representing the target party.
+   * @returns A promise that resolves to the fetch response.
+   * @throws If the DELETE request fails or returns a non-OK status.
+   */
   public async deleteConnectionPerson(pid: string, from: string, toPid: string) {
     const fromUuid = await this.tokenClass.getPartyUuid(from);
     const toUuid = await this.tokenClass.getPartyUuid(toPid);
@@ -148,12 +154,20 @@ export class EnduserConnection {
         `Failed to fetch status for addConnectionPersonPackage request. Status: ${response.status}`,
       );
     }
-    // const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&packageId&package=${packageName}`;
 
-    console.log(`${toPid} got package ${packageName}`);
     return response.json();
   }
 
+  /**
+   * Deletes an access package connection between two parties for a person.
+   *
+   * @param pid - Personal identifier used to obtain an authorization token.
+   * @param from - Party identifier representing the source party.
+   * @param toPid - Personal identifier for the target party.
+   * @param packageName - Name of the access package to delete.
+   * @returns A promise that resolves with the HTTP response from the delete request.
+   * @throws If the DELETE request fails or returns a non-OK status.
+   */
   public async deleteConnectionPackagePerson(
     pid: string,
     from: string,
@@ -180,7 +194,6 @@ export class EnduserConnection {
       );
     }
 
-    console.log(`${toPid} lost package ${packageName}`);
     return response;
   }
 }
