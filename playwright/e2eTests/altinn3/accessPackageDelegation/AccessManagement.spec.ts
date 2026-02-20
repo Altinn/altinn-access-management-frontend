@@ -2,6 +2,7 @@ import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
+import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 test.describe('Tilgangsstyring', () => {
   test('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', async ({
@@ -10,6 +11,17 @@ test.describe('Tilgangsstyring', () => {
   }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
+
+    await test.step('sett opp testdata', async () => {
+      const api = await new EnduserConnection();
+      await api.deleteConnectionPerson('12816699205', '314138910', '70885100226');
+      await api.addConnectionAndPackagesToPerson('12816699205', '314138910', '70885100226', [
+        'urn:altinn:accesspackage:tilgangsstyrer',
+        'urn:altinn:accesspackage:posttjenester',
+        'urn:altinn:accesspackage:byggesoknad',
+      ]);
+    });
+
     await test.step('Log in', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('70885100226');
@@ -46,6 +58,15 @@ test.describe('Tilgangsstyring', () => {
   }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
+
+    await test.step('sett opp testdata', async () => {
+      const api = await new EnduserConnection();
+      await api.deleteConnectionPerson('12816699205', '314138910', '64866402394');
+      await api.addConnectionAndPackagesToPerson('12816699205', '314138910', '64866402394', [
+        'urn:altinn:accesspackage:hovedadministrator',
+      ]);
+    });
+
     await test.step('Log in', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('64866402394');
@@ -154,9 +175,19 @@ test.describe('Tilgangsstyring', () => {
   }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
+
+    await test.step('sett opp testdata', async () => {
+      const api = await new EnduserConnection();
+      await api.deleteConnectionPerson('12816699205', '314138910', '15843346194');
+      await api.addConnectionAndPackagesToPerson('12816699205', '314138910', '15843346194', [
+        'urn:altinn:accesspackage:tilgangsstyrer',
+        'urn:altinn:accesspackage:byggesoknad',
+      ]);
+    });
+
     await test.step('Log in', async () => {
       await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('70885100226');
+      await login.LoginToAccessManagement('15843346194');
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
@@ -166,7 +197,7 @@ test.describe('Tilgangsstyring', () => {
     await test.step('Gå til brukere-siden og velg deg selv', async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
-      await accessManagementFrontPage.clickUser('OVERFØLSOM KATT');
+      await accessManagementFrontPage.clickUser('DYREBAR MIDDAG');
     });
 
     await test.step('User should not be able to give power of attorney to themselves', async () => {
@@ -180,9 +211,18 @@ test.describe('Tilgangsstyring', () => {
   }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
+
+    await test.step('sett opp testdata', async () => {
+      const api = new EnduserConnection();
+      await api.deleteConnectionPerson('12816699205', '314138910', '22907997719');
+      await api.addConnectionAndPackagesToPerson('12816699205', '314138910', '22907997719', [
+        'urn:altinn:accesspackage:byggesoknad',
+      ]);
+    });
+
     await test.step('Log in', async () => {
       await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('61868901372');
+      await login.LoginToAccessManagement('22907997719');
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
@@ -195,75 +235,6 @@ test.describe('Tilgangsstyring', () => {
 
     await test.step('Brukeren skal ikke kunne gi fullmakt til seg selv', async () => {
       await accessManagementFrontPage.expectPowerOfAttorneyButtonToNotBeVisible();
-    });
-  });
-});
-
-test.describe.skip('Testdata for Tilgangsstyring-testene', () => {
-  test('legg til testdata 70885100226 OVERFØLSOM KATT', async ({
-    page,
-    accessManagementFrontPage,
-  }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('Log in', async () => {
-      await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('12816699205');
-    });
-
-    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.goToInfoportal();
-      await aktorvalgHeader.goToSelectActor('MORALSK KUNSTEVENTYR');
-      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
-    });
-
-    await test.step('Gå til brukere-siden', async () => {
-      await aktorvalgHeader.goToAccessManagement();
-      await accessManagementFrontPage.goToUsers();
-    });
-
-    await test.step('Gi 70885100226 OVERFØLSOM KATT tilgangsstyrer-pakken', async () => {
-      await accessManagementFrontPage.clickLeggTilBruker();
-      await accessManagementFrontPage.addPerson('70885100226', 'KATT');
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.clickAccessAreaInPopup('Administrere tilganger');
-      await accessManagementFrontPage.clickAccessPackageToDelegateIfVisible('Tilgangsstyrer');
-    });
-
-    await test.step('Gi 70885100226 OVERFØLSOM KATT Posttjenester-pakken', async () => {
-      await accessManagementFrontPage.clickAccessAreaInPopup('Andre tjenesteytende næringer');
-      await accessManagementFrontPage.clickAccessPackageToDelegateIfVisible('Posttjenester');
-    });
-  });
-
-  test('legg til testdata 64866402394 TRÅDLØS TELEFONNUMMER', async ({
-    page,
-    accessManagementFrontPage,
-  }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('Log in', async () => {
-      await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('12816699205');
-    });
-
-    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.goToInfoportal();
-      await aktorvalgHeader.goToSelectActor('MORALSK KUNSTEVENTYR');
-      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
-    });
-
-    await test.step('Gå til brukere-siden', async () => {
-      await aktorvalgHeader.goToAccessManagement();
-      await accessManagementFrontPage.goToUsers();
-    });
-
-    await test.step('Gi 64866402394 TRÅDLØS TELEFONNUMMER KATT hovedadministrator-pakken', async () => {
-      await accessManagementFrontPage.clickLeggTilBruker();
-      await accessManagementFrontPage.addPerson('64866402394', 'TELEFONNUMMER');
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.clickAccessAreaInPopup('Administrere tilganger');
-      await accessManagementFrontPage.clickAccessPackageToDelegateIfVisible('Hovedadministrator');
     });
   });
 });
