@@ -14,6 +14,7 @@ test.describe('Tilgangsstyring', () => {
 
     await test.step('sett opp testdata', async () => {
       const api = await new EnduserConnection();
+      await api.deleteConnectionPerson('12816699205', '314138910', '70885100226');
       await api.addConnectionPerson('12816699205', '314138910', '70885100226');
       await api.addConnectionPackagePerson(
         '12816699205',
@@ -74,6 +75,7 @@ test.describe('Tilgangsstyring', () => {
 
     await test.step('sett opp testdata', async () => {
       const api = await new EnduserConnection();
+      await api.deleteConnectionPerson('12816699205', '314138910', '64866402394');
       await api.addConnectionPerson('12816699205', '314138910', '64866402394');
       await api.addConnectionPackagePerson(
         '12816699205',
@@ -194,18 +196,25 @@ test.describe('Tilgangsstyring', () => {
 
     await test.step('sett opp testdata', async () => {
       const api = await new EnduserConnection();
-      await api.addConnectionPerson('12816699205', '314138910', '70885100226');
+      await api.deleteConnectionPerson('12816699205', '314138910', '15843346194');
+      await api.addConnectionPerson('12816699205', '314138910', '15843346194');
       await api.addConnectionPackagePerson(
         '12816699205',
         '314138910',
-        '64866402394',
-        'urn:altinn:accesspackage:hovedadministrator',
+        '15843346194',
+        'urn:altinn:accesspackage:tilgangsstyrer',
+      );
+      await api.addConnectionPackagePerson(
+        '12816699205',
+        '314138910',
+        '15843346194',
+        'urn:altinn:accesspackage:byggesoknad',
       );
     });
 
     await test.step('Log in', async () => {
       await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('70885100226');
+      await login.LoginToAccessManagement('15843346194');
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
@@ -215,7 +224,7 @@ test.describe('Tilgangsstyring', () => {
     await test.step('Gå til brukere-siden og velg deg selv', async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
-      await accessManagementFrontPage.clickUser('OVERFØLSOM KATT');
+      await accessManagementFrontPage.clickUser('DYREBAR MIDDAG');
     });
 
     await test.step('User should not be able to give power of attorney to themselves', async () => {
@@ -229,9 +238,22 @@ test.describe('Tilgangsstyring', () => {
   }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
+
+    await test.step('sett opp testdata', async () => {
+      const api = await new EnduserConnection();
+      await api.deleteConnectionPerson('12816699205', '314138910', '22907997719');
+      await api.addConnectionPerson('12816699205', '314138910', '22907997719');
+      await api.addConnectionPackagePerson(
+        '12816699205',
+        '314138910',
+        '22907997719',
+        'urn:altinn:accesspackage:byggesoknad',
+      );
+    });
+
     await test.step('Log in', async () => {
       await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('70885100226');
+      await login.LoginToAccessManagement('22907997719');
     });
 
     await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
