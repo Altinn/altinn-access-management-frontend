@@ -139,7 +139,7 @@ export class EnduserConnection {
       personidentifier: toPid,
       lastName: toLastName,
     };
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&packageId&package=${packageName}`;
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -176,7 +176,7 @@ export class EnduserConnection {
   ) {
     const fromUuid = await this.tokenClass.getPartyUuid(fromOrg);
     const toUuid = await this.tokenClass.getPartyUuid(toPid);
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&packageId&package=${packageName}`;
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
 
     const response = await fetch(url, {
