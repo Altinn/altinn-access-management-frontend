@@ -1,7 +1,7 @@
 import { env } from 'playwright/util/helper';
 
 export class Token {
-  public platformToken: string;
+  private platformToken: string;
   private readonly username: string;
   private readonly password: string;
   private readonly org: string;
