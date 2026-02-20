@@ -62,6 +62,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(from.ToString());
 
             string dataPath = Path.Combine(dataFolder, "SingleRight", "GetDelegations", "delegations.json");
             return Task.FromResult(Util.GetMockData<List<ResourcePermission>>(dataPath));
@@ -71,9 +72,17 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(from.ToString());
 
-            string dataPath = Path.Combine(dataFolder, "SingleRight", "GetResourceRights", $"{resource}.json");
-            return Task.FromResult(Util.GetMockData<ResourceRight>(dataPath));
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "SingleRight", "GetResourceRights", $"{resource}.json");
+                return Task.FromResult(Util.GetMockData<ResourceRight>(dataPath));
+            }
+            catch (FileNotFoundException)
+            {
+                throw new HttpStatusException("NotFound", $"Resource '{resource}' not found", HttpStatusCode.NotFound, "");
+            }
         }
 
         /// <inheritdoc />
@@ -133,6 +142,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (id == "********" || id == "00000000-0000-0000-0000-000000000000")
             {
                 throw new Exception();
+            }
+        }
+
+        // A helper for testing handling of HttpStatusException in client
+        private static void ThrowHttpStatusExceptionIfTriggerParty(string id)
+        {
+            if (id == "11111111-1111-1111-1111-111111111111")
+            {
+                throw new HttpStatusException("StatusError", "Simulated backend error", HttpStatusCode.BadRequest, "");
             }
         }
     }
