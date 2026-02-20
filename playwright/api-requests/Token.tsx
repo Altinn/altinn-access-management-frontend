@@ -11,7 +11,8 @@ export class Token {
     this.username = env('USERNAME_TEST_API');
     this.password = env('PASSWORD_TEST_API');
     this.org = org || env('ORG');
-    this.environment = env('environment');
+    // this.environment = env('environment');
+    this.environment = env('ENV_NAME');
     this.platformToken = '';
   }
 
