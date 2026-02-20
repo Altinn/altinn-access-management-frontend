@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { CompactPackage, Permissions } from '@/dataObjects/dtos/accessPackage';
+import type { CompactPackage, Permissions, Reason } from '@/dataObjects/dtos/accessPackage';
 
 export interface AccessArea {
   id: string;
@@ -58,10 +58,6 @@ export interface DelegationCheckResponse {
   package: AccessPackage;
   result: boolean;
   reasons: Reason[];
-}
-
-export interface Reason {
-  description: string;
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/accesspackage`;
