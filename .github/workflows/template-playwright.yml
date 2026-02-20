@@ -55,7 +55,7 @@ jobs:
           MASKINPORTEN_JWK: ${{ secrets.MASKINPORTEN_JWK }}
           MASKINPORTEN_BEHALF_OF_CLIENT_ID: ${{ secrets.MASKINPORTEN_BEHALF_OF_CLIENT_ID }}
           MASKINPORTEN_BEHALF_OF_JWK: ${{ secrets.MASKINPORTEN_BEHALF_OF_JWK }}
-          AT_23_REGISTER_SUBSCRIPTION_KEY: ${{ secrets.AT_23_REGISTER_SUBSCRIPTION_KEY }}
+          AT23_REGISTER_SUBSCRIPTION_KEY: ${{ secrets.AT23_REGISTER_SUBSCRIPTION_KEY }}
           TT02_REGISTER_SUBSCRIPTION_KEY: ${{ secrets.TT02_REGISTER_SUBSCRIPTION_KEY }}
         run: |
           yarn run env:${{ inputs.environment }} --project ${{ inputs.project }} --workers=4
