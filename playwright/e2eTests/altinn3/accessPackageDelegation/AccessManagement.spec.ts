@@ -240,7 +240,7 @@ test.describe('Tilgangsstyring', () => {
     const aktorvalgHeader = new AktorvalgHeader(page);
 
     await test.step('sett opp testdata', async () => {
-      const api = await new EnduserConnection();
+      const api = new EnduserConnection();
       await api.deleteConnectionPerson('12816699205', '314138910', '22907997719');
       await api.addConnectionPerson('12816699205', '314138910', '22907997719');
       await api.addConnectionPackagePerson(
