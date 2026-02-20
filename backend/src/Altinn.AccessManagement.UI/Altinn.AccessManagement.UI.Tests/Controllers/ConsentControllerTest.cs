@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using System.Web;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
@@ -199,7 +200,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: RedirectAfterApprove checks that redirect is done to logout url
+        ///     Test case: RedirectAfterApprove checks that redirect is done to logout url and redirect url is encrypted in cookie
         ///     Expected: RedirectAfterApprove redirects to logout url
         /// </summary>
         [Fact]
@@ -207,18 +208,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
+            string expectedDecryptedUrl = "https://smartbank.no/consent?Status=OK";
             string approvedRequestId = "62334b04-a65b-4eb2-b198-ab3c15e27f16";
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{approvedRequestId}/logout");
+            string decryptedUrl = GetRedirectCookieValue(httpResponse);
 
             // Assert
             Assert.Equal(HttpStatusCode.Found, httpResponse.StatusCode);
             Assert.Equal(expectedRedirectUrl, httpResponse.Headers.Location.OriginalString);
+            Assert.Equal(expectedDecryptedUrl, decryptedUrl);
         }
 
         /// <summary>
-        ///     Test case: RedirectAfterReject checks that redirect is done to logout url
+        ///     Test case: RedirectAfterReject checks that redirect is done to logout url and redirect url is encrypted in cookie
         ///     Expected: RedirectAfterReject redirects to logout url
         /// </summary>
         [Fact]
@@ -226,14 +230,17 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
+            string expectedDecryptedUrl = "https://smartbank.no/consent?Status=Failed&ErrorMessage=User+did+not+give+consent";
             string rejectedRequestId = "52574a16-4114-4bdf-b471-85ac10a722b9";
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{rejectedRequestId}/logout");
+            string decryptedUrl = GetRedirectCookieValue(httpResponse);
 
             // Assert
             Assert.Equal(HttpStatusCode.Found, httpResponse.StatusCode);
             Assert.Equal(expectedRedirectUrl, httpResponse.Headers.Location.OriginalString);
+            Assert.Equal(expectedDecryptedUrl, decryptedUrl);
         }
 
         /// <summary>
@@ -362,6 +369,33 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+        private static string GetRedirectCookieValue(HttpResponseMessage httpResponse)
+        {
+            string myCookieValue = string.Empty;
+            if (httpResponse.Headers.TryGetValues("Set-Cookie", out IEnumerable<string> setCookieHeaders))
+            {
+                foreach (var cookieHeader in setCookieHeaders)
+                {
+                    var parts = cookieHeader
+                        .Split(';')
+                        .Select(c => c.Trim().Split('='))
+                        .Where(parts => parts.Length == 2 && parts[0] == "AltinnLogoutInfo")
+                        .Select(parts => parts[1])
+                        .FirstOrDefault();
+
+                    if (parts != null)
+                    {
+                        myCookieValue = parts;
+                    }
+                }
+            }
+
+            string decodedValue = HttpUtility.UrlDecode(myCookieValue);
+            byte[] base64EncodedBytes = Convert.FromBase64String(decodedValue.Substring("amSafeRedirectUrl=".Length));
+            string decryptedUrl = Encoding.UTF8.GetString(base64EncodedBytes);
+            return decryptedUrl;
         }
     }
 }

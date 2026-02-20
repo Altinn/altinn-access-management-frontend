@@ -391,6 +391,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
             {
                 AllowAutoRedirect = false,
+                HandleCookies = true,
             };
             factory.Server.AllowSynchronousIO = true;
             return factory.CreateClient(opts);
