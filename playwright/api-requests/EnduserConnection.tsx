@@ -76,7 +76,8 @@ export class EnduserConnection {
    * @param pid - The PID used to acquire an Altinn token.
    * @param fromOrg - The organization number used to resolve the party UUID for the connection.
    * @param toPid - The PID of the connection being added.
-   * @param toLastName - The last name of the connection being added.
+   * @param fromUuid - The organization's partyUuid.
+   * @param toLastName - the last name for the connection being added
    * @returns A promise resolving to the JSON response from the API.
    * @throws Error if the request fails or returns a non-OK HTTP status.
    */
@@ -156,6 +157,9 @@ export class EnduserConnection {
    * @param fromOrg - The organization number used to resolve the "from" party UUID.
    * @param toPid - The recipient's PID used to resolve the "to" party UUID and last name.
    * @param packageName - The access package name to be granted.
+   * @param fromUuid - The organization's partyUuid.
+   * @param toUuid - the partyUuid of the connection being added.
+   * @param toLastName - the last name for the connection being added.
    * @returns A promise resolving to the API response JSON payload.
    * @throws If the API response status is not OK.
    */
