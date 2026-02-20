@@ -207,7 +207,6 @@ export class Token {
    */
   public async getPlatformToken() {
     if (this.platformToken != '') {
-      // console.log('platformtoken finnes allerede');
       return this.platformToken;
     }
 
@@ -224,7 +223,6 @@ export class Token {
     }
 
     this.platformToken = token;
-    // console.log('platformtoken fantes ikke, fikk ny.');
     return this.platformToken;
   }
 

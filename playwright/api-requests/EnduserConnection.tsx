@@ -1,4 +1,3 @@
-import { ok } from 'assert';
 import { Token } from './Token';
 import { env } from 'playwright/util/helper';
 
