@@ -34,7 +34,7 @@ export class EnduserConnection {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch status for addConnection request. Status: ${response.status}`,
+        `Failed to fetch status for getConnectionPerson request. Status: ${response.status}`,
       );
     }
 
@@ -72,7 +72,7 @@ export class EnduserConnection {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch status for addConnection request. Status: ${response.status}`,
+        `Failed to fetch status for addConnectionPerson request. Status: ${response.status}`,
       );
     }
 
@@ -104,7 +104,7 @@ export class EnduserConnection {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch status for deleteConnection request. Status: ${response.status}`,
+        `Failed to fetch status for deleteConnectionPerson request. Status: ${response.status}`,
       );
     }
 
@@ -151,7 +151,7 @@ export class EnduserConnection {
 
     if (!response.ok) {
       console.warn(
-        `Failed to fetch status for addConnectionPersonPackage request. Status: ${response.status}`,
+        `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
       );
     }
 
@@ -189,7 +189,7 @@ export class EnduserConnection {
 
     if (!response.ok) {
       console.warn(
-        `Failed to fetch status for deleteConnectionPersonPackage request. Status: ${response.status}`,
+        `Failed to fetch status for deleteConnectionPackagePerson request. Status: ${response.status}`,
       );
     }
 
