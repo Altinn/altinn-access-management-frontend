@@ -15,7 +15,6 @@ import classes from './SingleRightsSection.module.css';
 import { DeleteResourceButton } from './DeleteResourceButton';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
-import { is } from 'cypress/types/bluebird';
 
 export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { id } = useParams();

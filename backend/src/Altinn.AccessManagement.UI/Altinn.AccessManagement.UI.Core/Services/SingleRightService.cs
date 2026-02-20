@@ -100,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 if (resource != null)
                 {
                     // Find the logo based on the orgnr in the orgnrToOrgLookup
-                    orgList.Orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out var org);
+                    orgList.Orgs.TryGetValue(resource.HasCompetentAuthority?.Orgcode?.ToLower() ?? string.Empty, out var org);
 
                     ServiceResourceFE resourceFE = new ServiceResourceFE(
                         resource.Identifier,

@@ -1,4 +1,3 @@
-import { DeleteResourceButton } from '@/features/amUI/userRightsPage/SingleRightsSection/DeleteResourceButton';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import {
   formatDisplayName,
@@ -17,10 +16,9 @@ import { JSX, useState } from 'react';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SerializedError } from '@reduxjs/toolkit';
+import { DelegationAction } from '../EditModal';
 
 import classes from './ResourceInfo.module.css';
-import { DelegationAction } from '../EditModal';
-import { a } from 'vitest/dist/chunks/suite.d.BJWk38HB';
 
 type RightsSectionProps = {
   resource: ServiceResource;
