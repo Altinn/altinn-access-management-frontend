@@ -79,7 +79,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
           data-size='xs'
           id='single_rights_title'
         >
-          {t('single_rights.current_services_title', { count: delegatedResources?.length })}
+          {t('single_rights.current_services_title', { count: delegatedResources?.length ?? 0 })}
         </DsHeading>
         {isError && <div>{t('user_rights_page.error')}</div>}
         {isLoading && <div>{t('user_rights_page.loading')}</div>}

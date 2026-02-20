@@ -4,7 +4,7 @@ import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
-import type { Permissions } from '@/dataObjects/dtos/accessPackage';
+import type { Permissions, Reason } from '@/dataObjects/dtos/accessPackage';
 
 interface PaginatedListDTO {
   page: number;
@@ -42,15 +42,6 @@ export interface RuleItem {
   rule: Rule;
   reason?: Reason;
   permissions: Permissions[];
-}
-
-export interface Reason {
-  items: ReasonItem[];
-}
-
-export interface ReasonItem {
-  name: string;
-  description: string;
 }
 
 interface resourceReference {
