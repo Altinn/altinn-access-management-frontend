@@ -115,7 +115,7 @@ export const UserItem = ({
       descriptionString +=
         t('common.org_nr') +
         ' ' +
-        formatOrgNr(user.organizationIdentifier ?? '') +
+        formatOrgNr(user.organizationIdentifier) +
         (isSubOrMainUnit || subUnit
           ? `, ${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')}`
           : '');

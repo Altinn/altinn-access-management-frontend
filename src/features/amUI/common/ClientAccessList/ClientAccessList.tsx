@@ -165,7 +165,7 @@ export const ClientAccessList = ({
       description:
         userType === 'company'
           ? t('client_administration_page.organization_identifier', {
-              orgnr: formatOrgNr(client.client.organizationIdentifier ?? ''),
+              orgnr: formatOrgNr(client.client.organizationIdentifier),
             })
           : userType === 'person'
             ? `${t('common.date_of_birth')} ${formatDate(client.client.dateOfBirth ?? '')}`
