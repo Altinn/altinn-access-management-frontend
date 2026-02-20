@@ -160,7 +160,7 @@ export class Token {
    */
   public async getIds(pidOrOrgNo: string) {
     const url = `${env('API_BASE_URL')}/register/api/v1/access-management/parties/query?fields=person,party,user`;
-    const subscriptionKey = env(`${env('ENV_NAME')}_REGISTER_SUBSCRIPTION_KEY`);
+    const subscriptionKey = env(`${env('ENV_NAME').toUpperCase()}_REGISTER_SUBSCRIPTION_KEY`);
     const platformToken = await this.getPlatformToken();
     var payload;
     if (pidOrOrgNo.length == 9) {
