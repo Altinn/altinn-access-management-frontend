@@ -15,13 +15,13 @@ export class EnduserConnection {
    * the connections endpoint using a personal token bound to `pid`.
    *
    * @param pid - PID used to acquire an Altinn Personal token.
-   * @param from - Organization number used to resolve the source party UUID.
+   * @param fromOrg - Organization number used to resolve the source party UUID.
    * @param to - PID used to resolve the target party UUID.
    * @returns A promise resolving to the JSON response from the connections endpoint.
    * @throws Error when the HTTP response is not OK.
    */
-  public async getConnectionPerson(pid: string, from: string, to: string) {
-    const fromUuid = await this.tokenClass.getPartyUuid(from);
+  public async getConnectionPerson(pid: string, fromOrg: string, to: string) {
+    const fromUuid = await this.tokenClass.getPartyUuid(fromOrg);
     const toUuid = await this.tokenClass.getPartyUuid(to);
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}`;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
@@ -83,7 +83,7 @@ export class EnduserConnection {
    * Deletes an end-user connection between two parties by resolving their UUIDs and issuing a DELETE request.
    *
    * @param pid - The PID used to obtain an authorization token.
-   * @param Org - The party identifier representing the source party.
+   * @param fromOrg - The party identifier representing the source party.
    * @param toPid - The party identifier representing the target party.
    * @returns A promise that resolves to the fetch response.
    * @throws If the DELETE request fails or returns a non-OK status.
@@ -104,7 +104,7 @@ export class EnduserConnection {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch status for addConnection request. Status: ${response.status}`,
+        `Failed to fetch status for deleteConnection request. Status: ${response.status}`,
       );
     }
 
@@ -189,7 +189,7 @@ export class EnduserConnection {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch status for addConnectionPersonPackage request. Status: ${response.status}`,
+        `Failed to fetch status for deleteConnectionPersonPackage request. Status: ${response.status}`,
       );
     }
 

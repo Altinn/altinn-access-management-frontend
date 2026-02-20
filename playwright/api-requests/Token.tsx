@@ -150,7 +150,7 @@ export class Token {
 
     const token = await this.getAltinnToken(url, headers);
     if (!token) {
-      throw new Error('Token retrieval failed for Altinn token');
+      throw new Error(`Token retrieval failed for "getPersonalTokenByPid(${pid})"`);
     }
     return token;
   }
@@ -181,7 +181,9 @@ export class Token {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch status for request. Status: ${response.status}`);
+      throw new Error(
+        `Failed to fetch status for "getIds(${pidOrOrgNo})". Status: ${response.status}`,
+      );
     }
     const responseData = await response.json();
     // console.log('after getIds');
