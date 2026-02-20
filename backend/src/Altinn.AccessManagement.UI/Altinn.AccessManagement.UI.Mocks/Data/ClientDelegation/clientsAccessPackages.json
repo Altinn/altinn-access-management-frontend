@@ -7,9 +7,10 @@
       "variant": "Person",
       "parent": null,
       "children": null,
+      "personIdentifier": "11012800000",
+      "dateOfBirth": "1928-01-11",
       "partyId": 50758618,
-      "organizationIdentifier": null,
-      "dateOfBirth": "1928-01-11"
+      "organizationIdentifier": null
     },
     "access": [
       {
@@ -30,9 +31,10 @@
       "variant": "Person",
       "parent": null,
       "children": null,
+      "personIdentifier": "07118000000",
+      "dateOfBirth": "1980-11-07",
       "partyId": 50367406,
-      "organizationIdentifier": null,
-      "dateOfBirth": "1980-11-07"
+      "organizationIdentifier": null
     },
     "access": [
       {
@@ -53,9 +55,10 @@
       "variant": "Person",
       "parent": null,
       "children": null,
+      "personIdentifier": "25126600000",
+      "dateOfBirth": "1966-12-25",
       "partyId": 50837995,
-      "organizationIdentifier": null,
-      "dateOfBirth": "1966-12-25"
+      "organizationIdentifier": null
     },
     "access": [
       {
