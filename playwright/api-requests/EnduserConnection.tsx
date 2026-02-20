@@ -150,7 +150,7 @@ export class EnduserConnection {
     });
 
     if (!response.ok) {
-      throw new Error(
+      console.warn(
         `Failed to fetch status for addConnectionPersonPackage request. Status: ${response.status}`,
       );
     }
@@ -188,7 +188,7 @@ export class EnduserConnection {
     });
 
     if (!response.ok) {
-      throw new Error(
+      console.warn(
         `Failed to fetch status for deleteConnectionPersonPackage request. Status: ${response.status}`,
       );
     }
