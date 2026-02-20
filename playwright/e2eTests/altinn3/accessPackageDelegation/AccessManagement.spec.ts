@@ -15,25 +15,11 @@ test.describe('Tilgangsstyring', () => {
     await test.step('sett opp testdata', async () => {
       const api = await new EnduserConnection();
       await api.deleteConnectionPerson('12816699205', '314138910', '70885100226');
-      await api.addConnectionPerson('12816699205', '314138910', '70885100226');
-      await api.addConnectionPackagePerson(
-        '12816699205',
-        '314138910',
-        '70885100226',
+      await api.addConnectionAndPackagesToPerson('12816699205', '314138910', '70885100226', [
         'urn:altinn:accesspackage:tilgangsstyrer',
-      );
-      await api.addConnectionPackagePerson(
-        '12816699205',
-        '314138910',
-        '70885100226',
         'urn:altinn:accesspackage:posttjenester',
-      );
-      await api.addConnectionPackagePerson(
-        '12816699205',
-        '314138910',
-        '70885100226',
         'urn:altinn:accesspackage:byggesoknad',
-      );
+      ]);
     });
 
     await test.step('Log in', async () => {
@@ -76,13 +62,9 @@ test.describe('Tilgangsstyring', () => {
     await test.step('sett opp testdata', async () => {
       const api = await new EnduserConnection();
       await api.deleteConnectionPerson('12816699205', '314138910', '64866402394');
-      await api.addConnectionPerson('12816699205', '314138910', '64866402394');
-      await api.addConnectionPackagePerson(
-        '12816699205',
-        '314138910',
-        '64866402394',
+      await api.addConnectionAndPackagesToPerson('12816699205', '314138910', '64866402394', [
         'urn:altinn:accesspackage:hovedadministrator',
-      );
+      ]);
     });
 
     await test.step('Log in', async () => {
@@ -197,19 +179,10 @@ test.describe('Tilgangsstyring', () => {
     await test.step('sett opp testdata', async () => {
       const api = await new EnduserConnection();
       await api.deleteConnectionPerson('12816699205', '314138910', '15843346194');
-      await api.addConnectionPerson('12816699205', '314138910', '15843346194');
-      await api.addConnectionPackagePerson(
-        '12816699205',
-        '314138910',
-        '15843346194',
+      await api.addConnectionAndPackagesToPerson('12816699205', '314138910', '15843346194', [
         'urn:altinn:accesspackage:tilgangsstyrer',
-      );
-      await api.addConnectionPackagePerson(
-        '12816699205',
-        '314138910',
-        '15843346194',
         'urn:altinn:accesspackage:byggesoknad',
-      );
+      ]);
     });
 
     await test.step('Log in', async () => {
@@ -242,13 +215,9 @@ test.describe('Tilgangsstyring', () => {
     await test.step('sett opp testdata', async () => {
       const api = new EnduserConnection();
       await api.deleteConnectionPerson('12816699205', '314138910', '22907997719');
-      await api.addConnectionPerson('12816699205', '314138910', '22907997719');
-      await api.addConnectionPackagePerson(
-        '12816699205',
-        '314138910',
-        '22907997719',
+      await api.addConnectionAndPackagesToPerson('12816699205', '314138910', '22907997719', [
         'urn:altinn:accesspackage:byggesoknad',
-      );
+      ]);
     });
 
     await test.step('Log in', async () => {

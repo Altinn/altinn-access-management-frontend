@@ -9,6 +9,35 @@ export class EnduserConnection {
   }
 
   /**
+   * Adds a connection between a person and an organization, then assigns the specified packages.
+   *
+   * @param pid - PID used to acquire an Altinn Personal tokens.
+   * @param fromOrg - Organization number used to resolve the source party UUID.
+   * @param toPid - The target PID to connect to.
+   * @param packageNames - The package names to add for the connected person.
+   */
+  public async addConnectionAndPackagesToPerson(
+    pid: string,
+    fromOrg: string,
+    toPid: string,
+    packageNames: Array<string>,
+  ) {
+    const fromUuid = await this.tokenClass.getPartyUuid(fromOrg);
+    const toPerson = await this.tokenClass.getIds(toPid);
+
+    await this.addConnectionPerson(pid, fromOrg, toPid, fromUuid, toPerson.lastName);
+    await this.addConnectionPackagePerson(
+      pid,
+      fromOrg,
+      toPid,
+      packageNames,
+      fromUuid,
+      toPerson.partyUuid,
+      toPerson.lastName,
+    );
+  }
+
+  /**
    * Fetches connection details between a source organization and a target user.
    *
    * Resolves party UUIDs for the provided `from` organization and `to` user, then queries
@@ -51,9 +80,15 @@ export class EnduserConnection {
    * @returns A promise resolving to the JSON response from the API.
    * @throws Error if the request fails or returns a non-OK HTTP status.
    */
-  public async addConnectionPerson(pid: string, fromOrg: string, toPid: string) {
-    const fromUuid = await this.tokenClass.getPartyUuid(fromOrg);
-    const toLastName = await this.tokenClass.getLastName(toPid);
+  public async addConnectionPerson(
+    pid: string,
+    fromOrg: string,
+    toPid: string,
+    fromUuid?: string,
+    toLastName?: string,
+  ) {
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromOrg));
+    toLastName = toLastName || (await this.tokenClass.getLastName(toPid));
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}`;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     const payload = {
@@ -128,34 +163,44 @@ export class EnduserConnection {
     pid: string,
     fromOrg: string,
     toPid: string,
-    packageName: string,
+    packageNames: Array<string>,
+    fromUuid?: string,
+    toUuid?: string,
+    toLastName?: string,
   ) {
-    const fromUuid = await this.tokenClass.getPartyUuid(fromOrg);
-    const toPerson = await this.tokenClass.getIds(toPid);
-    const toUuid = toPerson.partyUuid;
-    const toLastName = toPerson.lastName;
+    var toPerson;
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromOrg));
+    if (!toUuid && !toLastName) {
+      toPerson = await this.tokenClass.getIds(toPid);
+    }
+    toUuid = toUuid || toPerson.partyUuid;
+    toLastName = toLastName || toPerson.lastName;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     const payload = {
       personidentifier: toPid,
       lastName: toLastName,
     };
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
+    var responses = new Array<Response>();
+    packageNames.forEach(async (packageName) => {
+      const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        console.warn(
+          `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
+        );
+        responses.push(response);
+      }
     });
 
-    if (!response.ok) {
-      console.warn(
-        `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
-      );
-    }
-
-    return response.json();
+    return responses;
   }
 
   /**
