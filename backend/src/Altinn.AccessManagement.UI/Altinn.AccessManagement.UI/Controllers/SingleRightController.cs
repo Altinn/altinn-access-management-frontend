@@ -8,7 +8,6 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -252,6 +251,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="party">The acting party that is asking to see the resource delegations</param>
         /// <param name="from">The party from which the resources have been delegated (the owner of the data)</param>
         /// <param name="to">The party that has received the delegations</param>
+        /// <param name="resourceId">The id of the resource to fetch delegated rights for</param>
         /// <response code="200">OK</response>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>

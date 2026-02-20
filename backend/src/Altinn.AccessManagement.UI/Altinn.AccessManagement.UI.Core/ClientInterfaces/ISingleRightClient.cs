@@ -1,6 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using System;
+﻿using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
