@@ -20,13 +20,15 @@ import {
   useInheritedStatusInfo,
 } from '../../useInheritedStatus';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { DelegationAction } from '../EditModal';
 
 export interface ResourceInfoProps {
   resource: ServiceResource;
   onDelegate?: () => void;
+  availableActions?: DelegationAction[];
 }
 
-export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
+export const ResourceInfo = ({ resource, onDelegate, availableActions }: ResourceInfoProps) => {
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const { data: resourceDelegations } = useGetSingleRightsForRightholderQuery(
     {
@@ -101,6 +103,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                 saveEditedRights={saveEditedRights}
                 delegateChosenRights={delegateChosenRights}
                 revokeResource={revokeResource}
+                availableActions={availableActions}
                 undelegableActions={undelegableActions}
                 rights={rights}
                 hasUnsavedChanges={hasUnsavedChanges}

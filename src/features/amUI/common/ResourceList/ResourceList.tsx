@@ -17,6 +17,15 @@ import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterTo
 import type { ResourceListItemResource } from './types';
 
 import cn from 'classnames';
+import {
+  extractResourceName,
+  extractOwnerName,
+  extractOrgCode,
+  extractDescription,
+  extractResourceId,
+  extractLogoUrl,
+  extractLogoAlt,
+} from './utils';
 
 export interface ResourceListProps<
   TResource extends ResourceListItemResource = ResourceListItemResource,
@@ -38,85 +47,8 @@ export interface ResourceListProps<
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
+  delegationModal?: React.ReactNode;
 }
-
-const extractResourceName = (resource: ResourceListItemResource): string => {
-  if ('name' in resource && typeof resource.name === 'string' && resource.name.trim().length > 0) {
-    return resource.name;
-  }
-
-  if ('title' in resource && typeof resource.title === 'string') {
-    return resource.title;
-  }
-
-  if (
-    'resourceName' in resource &&
-    typeof (resource as { resourceName?: string }).resourceName === 'string'
-  ) {
-    return (resource as { resourceName?: string }).resourceName ?? '';
-  }
-
-  return '';
-};
-
-const extractOwnerName = (resource: ResourceListItemResource): string => {
-  if ('provider' in resource && resource.provider?.name) {
-    return resource.provider.name;
-  }
-
-  if ('resourceOwnerName' in resource && resource.resourceOwnerName) {
-    return resource.resourceOwnerName;
-  }
-
-  return '';
-};
-
-const extractDescription = (resource: ResourceListItemResource): string => {
-  if ('description' in resource && typeof resource.description === 'string') {
-    return resource.description;
-  }
-
-  return '';
-};
-
-const extractOrgCode = (resource: ResourceListItemResource): string => {
-  if ('provider' in resource && resource.provider?.code) {
-    return resource.provider.code;
-  }
-
-  if ('resourceOwnerOrgcode' in resource && resource.resourceOwnerOrgcode) {
-    return resource.resourceOwnerOrgcode;
-  }
-
-  return '';
-};
-
-const extractLogoUrl = (resource: ResourceListItemResource): string | undefined => {
-  if ('provider' in resource && resource.provider?.logoUrl) {
-    return resource.provider.logoUrl;
-  }
-
-  if ('resourceOwnerLogoUrl' in resource && resource.resourceOwnerLogoUrl) {
-    return resource.resourceOwnerLogoUrl;
-  }
-
-  return undefined;
-};
-
-const extractLogoAlt = (resource: ResourceListItemResource): string | undefined =>
-  extractOwnerName(resource);
-
-const extractResourceId = (resource: ResourceListItemResource): string | undefined => {
-  if ('id' in resource && resource.id) {
-    return resource.id;
-  }
-
-  if ('identifier' in resource && resource.identifier) {
-    return resource.identifier;
-  }
-
-  return undefined;
-};
 
 export const ResourceList = <
   TResource extends ResourceListItemResource = ResourceListItemResource,
@@ -135,6 +67,7 @@ export const ResourceList = <
   enableMaxHeight = false,
   renderControls,
   getBadge,
+  delegationModal,
 }: ResourceListProps<TResource>) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
@@ -196,16 +129,18 @@ export const ResourceList = <
 
   return (
     <div className={classes.container}>
-      {enableSearch && resources.length > 0 && (
-        <ResourceFilterToolbar
-          search={search}
-          setSearch={setSearch}
-          filterState={filterState}
-          setFilterState={setFilterState}
-          serviceOwnerOptions={serviceOwnerOptions}
-        />
-      )}
-
+      <div className={classes.searchAndAdd}>
+        {enableSearch && resources.length > 0 && (
+          <ResourceFilterToolbar
+            search={search}
+            setSearch={setSearch}
+            filterState={filterState}
+            setFilterState={setFilterState}
+            serviceOwnerOptions={serviceOwnerOptions}
+          />
+        )}
+        {delegationModal}
+      </div>
       {isSkeletonVisible ? (
         <SkeletonResourceList />
       ) : (

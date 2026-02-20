@@ -50,18 +50,19 @@ export const getHeadingMenuItem = (pathname?: string, isLoading = false): MenuIt
 
 export const getYourRightsMenuItem = (
   userUuid: string,
+  userName: string,
   pathname?: string,
   isLoading = false,
   isSmall = false,
 ): MenuItemProps => {
   return {
-    groupId: 12,
+    groupId: '12',
     id: '2.0',
     size: 'md',
     loading: isLoading,
     title: t('sidebar.your_rights'),
     selected: pathname?.includes(`/${amUIPath.Users}/${userUuid}`),
-    icon: { svgElement: PersonIcon, theme: isSmall ? 'surface' : 'default' },
+    icon: { name: userName, type: 'person' },
     as: (props) =>
       getMenuLinkAs(props, `/${amUIPath.Users}/${userUuid}?returnTo=${pathname ?? ''}`),
   };

@@ -5,24 +5,25 @@ import { DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
-import usePagination from '@/resources/hooks/usePagination';
-import { AmPagination } from '@/components/Paginering';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import { EditModal } from '../../common/DelegationModal/EditModal';
+import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
 
 import classes from './SingleRightsSection.module.css';
 import { DeleteResourceButton } from './DeleteResourceButton';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
+import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
+import { is } from 'cypress/types/bluebird';
 
-export const SingleRightsSection = () => {
-  const { t } = useTranslation();
+export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { id } = useParams();
+  const { t } = useTranslation();
   const { displayResourceDelegation } = window.featureFlags;
-  const { toParty, fromParty, actingParty } = usePartyRepresentation();
+  const { toParty, fromParty, actingParty, selfParty } = usePartyRepresentation();
+
+  const canGiveAccess = useCanGiveAccess(id ?? '');
 
   const {
     data: delegatedResources,
@@ -81,7 +82,6 @@ export const SingleRightsSection = () => {
         >
           {t('single_rights.current_services_title', { count: delegatedResources?.length })}
         </DsHeading>
-        <DelegationModal delegationType={DelegationType.SingleRights} />
         {isError && <div>{t('user_rights_page.error')}</div>}
         {isLoading && <div>{t('user_rights_page.loading')}</div>}
 
@@ -96,6 +96,20 @@ export const SingleRightsSection = () => {
             }}
             size='md'
             titleAs='h3'
+            delegationModal={
+              canGiveAccess &&
+              !isReportee && (
+                <DelegationModal
+                  delegationType={DelegationType.SingleRights}
+                  availableActions={[
+                    DelegationAction.REVOKE,
+                    canGiveAccess && !isReportee
+                      ? DelegationAction.DELEGATE
+                      : DelegationAction.REQUEST,
+                  ]}
+                />
+              )
+            }
             renderControls={(resource) => (
               <DeleteResourceButton
                 resource={resource}
@@ -108,6 +122,10 @@ export const SingleRightsSection = () => {
           ref={modalRef}
           resource={selectedResource ?? undefined}
           onClose={() => setSelectedResource(null)}
+          availableActions={[
+            DelegationAction.REVOKE,
+            canGiveAccess && !isReportee ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+          ]}
         />
       </div>
     )

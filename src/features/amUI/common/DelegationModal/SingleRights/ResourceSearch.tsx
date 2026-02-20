@@ -11,7 +11,6 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Party } from '@/rtk/features/lookupApi';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -20,17 +19,18 @@ import { ResourceFilterToolbar } from '../../ResourceFilterToolbar/ResourceFilte
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './ResourceSearch.module.css';
+import { DelegationAction } from '../EditModal';
 
 export interface ResourceSearchProps {
   onSelect: (resource: ServiceResource) => void;
   toParty?: Party;
+  availableActions?: DelegationAction[];
 }
 
 const searchResultsPerPage = 7;
 
-export const ResourceSearch = ({ onSelect }: ResourceSearchProps) => {
+export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchProps) => {
   const { t } = useTranslation();
-  const { id } = useParams();
 
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
@@ -122,6 +122,7 @@ export const ResourceSearch = ({ onSelect }: ResourceSearchProps) => {
           searchResultsPerPage={searchResultsPerPage}
           onSelect={onSelect}
           setCurrentPage={setCurrentPage}
+          availableActions={availableActions}
         />
       </div>
     </>

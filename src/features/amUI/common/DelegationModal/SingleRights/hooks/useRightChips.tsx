@@ -21,9 +21,17 @@ export const useRightChips = (
       }),
     );
 
-  const chips = () =>
+  const onActionCLick = (right: ChipRight) => {
+    if (right.inherited) {
+      setPopoverOpen(right.rightKey);
+    } else {
+      toggle(right);
+    }
+  };
+
+  const chips = (editable: boolean) =>
     rights
-      .filter((right: ChipRight) => right.delegable)
+      .filter((right: ChipRight) => !editable || right.delegable)
       .map((right: ChipRight) => {
         const actionText = right.action;
         return (
@@ -32,7 +40,7 @@ export const useRightChips = (
               className={chipClassname}
               data-size='sm'
               checked={right.checked}
-              onClick={() => (right.inherited ? setPopoverOpen(right.rightKey) : toggle(right))}
+              onClick={() => editable && onActionCLick(right)}
               popoverTarget={right.inherited ? `popover_${right.rightKey}` : undefined}
               aria-describedby={right.inherited ? `popover_${right.rightKey}` : undefined}
             >

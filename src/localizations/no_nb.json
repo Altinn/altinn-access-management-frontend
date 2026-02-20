@@ -919,7 +919,7 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tjenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tjenester er tilgjengelige.",
+    "no_resources": "Ingen tjenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
