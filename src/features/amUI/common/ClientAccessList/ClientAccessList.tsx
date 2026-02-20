@@ -12,7 +12,7 @@ import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { Client } from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
@@ -165,7 +165,7 @@ export const ClientAccessList = ({
       description:
         userType === 'company'
           ? t('client_administration_page.organization_identifier', {
-              orgnr: client.client.organizationIdentifier,
+              orgnr: formatOrgNr(client.client.organizationIdentifier ?? ''),
             })
           : userType === 'person'
             ? `${t('common.date_of_birth')} ${formatDate(client.client.dateOfBirth ?? '')}`
