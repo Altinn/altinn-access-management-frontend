@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router';
 import { DsHeading, DsParagraph, DsSearch, DsSwitch } from '@altinn/altinn-components';
 
 import type { User } from '@/rtk/features/userInfoApi';
-import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   type Connection,
   ConnectionUserType,
@@ -157,12 +157,14 @@ export const UsersList = () => {
                   }}
                 />
               </DsSearch>
-              <DsSwitch
-                data-size={'sm'}
-                checked={includeAgentConnections}
-                onChange={(event) => setIncludeAgentConnections(event.target.checked)}
-                label={t('users_page.show_users_with_client_access')}
-              />
+              {fromParty?.partyTypeName === PartyType.Organization && (
+                <DsSwitch
+                  data-size={'sm'}
+                  checked={includeAgentConnections}
+                  onChange={(event) => setIncludeAgentConnections(event.target.checked)}
+                  label={t('users_page.show_users_with_client_access')}
+                />
+              )}
             </div>
             <div className={classes.addUserContainer}>
               <DsHeading
