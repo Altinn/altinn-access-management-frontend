@@ -85,6 +85,7 @@ export const useRightsSection = ({
   useEffect(() => {
     if (!isResourceRightsFetching) {
       if (
+        hasResourceAccess &&
         resourceRights &&
         (resourceRights.directRules.length > 0 || resourceRights.indirectRules.length > 0)
       ) {
@@ -99,7 +100,7 @@ export const useRightsSection = ({
         setCurrentRights([]);
       }
     }
-  }, [resourceRights, isResourceRightsFetching, resource.identifier]);
+  }, [resourceRights, isResourceRightsFetching, resource.identifier, hasResourceAccess]);
 
   // Instantiate/reset rights and missing access message states
   useEffect(() => {
