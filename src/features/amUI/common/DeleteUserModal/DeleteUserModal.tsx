@@ -26,6 +26,13 @@ export const DeleteUserModal = ({ direction = 'to' }: DeleteUserModalProps) => {
   const targetPartyUuid = direction === 'to' ? toParty?.partyUuid : fromParty?.partyUuid;
   const viewingYourself =
     !!targetPartyUuid && !!selfParty?.partyUuid && targetPartyUuid === selfParty.partyUuid;
+  const actingAsYourself =
+    !!actingParty?.partyUuid && actingParty.partyUuid === selfParty?.partyUuid;
+  const hideDeleteUserButton = viewingYourself && actingAsYourself;
+
+  if (hideDeleteUserButton) {
+    return null;
+  }
 
   const status = getDeletionStatus(rolePermissions, viewingYourself, direction === 'from');
   const nonDeletableReasons = getNonDeletableReasons(rolePermissions);
