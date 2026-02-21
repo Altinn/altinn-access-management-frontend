@@ -48,7 +48,7 @@ export interface DeleteUserModalContentProps {
 }
 
 const srmLink =
-  'https://www.altinn.no/Pages/ServiceEngine/Start/StartService.aspx?ServiceEditionCode=1&ServiceCode=3498&M=SP&DontChooseReportee=true&O=personal';
+  'https://info.altinn.no/skjemaoversikt/bronnoysundregistrene/stiftelse-av-aksjeselskap/';
 const guardianshipInfoLink = 'https://www.vergemal.no/';
 
 const nonDeletableReasonKeys: Record<NonDeletableReason, string> = {

@@ -14,21 +14,27 @@ export interface DeleteUserModalProps {
 export const DeleteUserModal = ({ direction = 'to' }: DeleteUserModalProps) => {
   const { fromParty, toParty, actingParty, selfParty } = usePartyRepresentation();
 
-  const { data: rolePermissions, isLoading: isRolePermissionsLoading } = useGetRolePermissionsQuery(
-    {
-      from: fromParty?.partyUuid ?? '',
-      to: toParty?.partyUuid ?? '',
-      party: actingParty?.partyUuid ?? '',
-    },
-    { skip: !fromParty?.partyUuid || !toParty?.partyUuid || !actingParty?.partyUuid },
-  );
-
   const targetPartyUuid = direction === 'to' ? toParty?.partyUuid : fromParty?.partyUuid;
   const viewingYourself =
     !!targetPartyUuid && !!selfParty?.partyUuid && targetPartyUuid === selfParty.partyUuid;
   const actingAsYourself =
     !!actingParty?.partyUuid && actingParty.partyUuid === selfParty?.partyUuid;
   const hideDeleteUserButton = viewingYourself && actingAsYourself;
+
+  const { data: rolePermissions, isLoading: isRolePermissionsLoading } = useGetRolePermissionsQuery(
+    {
+      from: fromParty?.partyUuid ?? '',
+      to: toParty?.partyUuid ?? '',
+      party: actingParty?.partyUuid ?? '',
+    },
+    {
+      skip:
+        hideDeleteUserButton ||
+        !fromParty?.partyUuid ||
+        !toParty?.partyUuid ||
+        !actingParty?.partyUuid,
+    },
+  );
 
   if (hideDeleteUserButton) {
     return null;

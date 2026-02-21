@@ -437,13 +437,13 @@
     "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke angres.</i></p>",
     "yourself_limited_deletion_heading": "Du har tilganger som ikke kan slettes",
     "yourself_deletion_not_allowed_heading": "Dine tilganger kan ikke slettes",
-    "yourself_partial_confirmation_message": "Brukeren har også andre fullmakter, og disse kan du slette her. Ønsker du det? Denne handlingen kan ikke endres.",
+    "yourself_partial_confirmation_message": "<p>Du har også andre fullmakter, og disse kan du slette her. Ønsker du det? <i>Denne handlingen kan ikke endres.</i></p>",
     "reportee_trigger_button": "Slett alle tilganger",
     "reportee_heading": "Er du sikker på at du vil slette alle deres tilganger?",
-    "reportee_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke angres.</i></p>",
+    "reportee_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke endres.</i></p>",
     "reportee_limited_deletion_heading": "Dere har tilganger som ikke kan slettes",
     "reportee_deletion_not_allowed_heading": "Deres tilganger kan ikke slettes",
-    "reportee_partial_confirmation_message": "<p>Men {{to_name}} har også tilganger som kan slettes. Vil du slette disse tilgangene? <i>Denne handlingen kan ikke angres.</i></p>"
+    "reportee_partial_confirmation_message": "<p>{{to_name}} har også andre fullmakter, og disse kan du slette her. Vil du slette disse tilgangene? <i>Denne handlingen kan ikke endres.</i></p>"
   },
   "reportee_rights_page": {
     "page_title": "Fullmakter hos andre - Altinn",
