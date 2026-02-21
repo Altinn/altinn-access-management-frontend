@@ -378,16 +378,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             {
                 foreach (var cookieHeader in setCookieHeaders)
                 {
-                    var parts = cookieHeader
+                    var cookiePart  = cookieHeader
                         .Split(';')
-                        .Select(c => c.Trim().Split('='))
-                        .Where(parts => parts.Length == 2 && parts[0] == "AltinnLogoutInfo")
-                        .Select(parts => parts[1])
+                        .Select(c => c.Trim().Split('=', 2))
+                        .Where(kv => kv.Length == 2 && kv[0] == "AltinnLogoutInfo")
+                        .Select(kv => kv[1])
                         .FirstOrDefault();
 
-                    if (parts != null)
+                    if (cookiePart  != null)
                     {
-                        myCookieValue = parts;
+                        myCookieValue = cookiePart ;
                     }
                 }
             }
