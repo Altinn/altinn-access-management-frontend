@@ -58,6 +58,12 @@ const nonDeletableReasonKeys: Record<NonDeletableReason, string> = {
   [GUARDIANSHIP_ROLE_REASON]: 'delete_user.non_deletable_reason_guardianship',
 };
 
+const nonDeletableReasonsIntroKeys: Record<DeletionTarget, string> = {
+  [DeletionTarget.User]: 'delete_user.user_non_deletable_reasons_intro',
+  [DeletionTarget.Yourself]: 'delete_user.yourself_non_deletable_reasons_intro',
+  [DeletionTarget.Reportee]: 'delete_user.reportee_non_deletable_reasons_intro',
+};
+
 export const DeleteUserModalContent = ({
   status,
   nonDeletableReasons,
@@ -231,8 +237,9 @@ export const DeleteUserModalContent = ({
                       className={classes.dangerIcon}
                     />
                     <DsParagraph data-size='sm'>
-                      {t('delete_user.non_deletable_reasons_intro', {
+                      {t(nonDeletableReasonsIntroKeys[dialogModel.status.target], {
                         to_name: formattedToPartyName,
+                        from_name: formattedFromPartyName,
                       })}
                     </DsParagraph>
                   </div>
