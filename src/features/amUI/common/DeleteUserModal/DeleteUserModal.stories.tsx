@@ -70,7 +70,7 @@ export default {
           <PartyRepresentationProvider
             fromPartyUuid='123'
             toPartyUuid='456'
-            actingPartyUuid='123'
+            actingPartyUuid='456'
           >
             <DeleteUserModalContent
               status={status}

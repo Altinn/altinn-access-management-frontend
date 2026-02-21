@@ -428,7 +428,6 @@
     "user_deletion_not_allowed_heading": "The user cannot be deleted",
     "agent_role_my_clients_link": "Your clients",
     "agent_role_client_admin_link": "Client Administration",
-    "non_deletable_reasons_intro": "{{to_name}} has authorizations that cannot be deleted here",
     "user_non_deletable_reasons_intro": "{{to_name}} has authorizations that cannot be deleted here",
     "yourself_non_deletable_reasons_intro": "You have authorizations that cannot be deleted here",
     "reportee_non_deletable_reasons_intro": "{{to_name}} has authorizations for {{from_name}} that cannot be deleted here",
@@ -449,7 +448,7 @@
     "reportee_message": "<p>{{to_name}} will lose all authorizations for {{from_name}} and will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
     "reportee_limited_deletion_heading": "They have access that cannot be deleted",
     "reportee_deletion_not_allowed_heading": "Their access cannot be deleted",
-    "reportee_partial_confirmation_message": "<p> {{to_name}} also have other authorizations, and you can delete them here. Do you want to proceed? <i>This action cannot be undone.</i></p>"
+    "reportee_partial_confirmation_message": "<p>{{to_name}} also has other authorizations, and you can delete them here. Do you want to proceed? <i>This action cannot be undone.</i></p>"
   },
   "reportee_rights_page": {
     "page_title": "Powers of attorney from others - Altinn",

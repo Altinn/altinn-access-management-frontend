@@ -8,7 +8,7 @@ import {
   formatDisplayName,
 } from '@altinn/altinn-components';
 import { TrashIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';

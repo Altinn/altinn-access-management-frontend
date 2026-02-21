@@ -425,7 +425,6 @@
     "user_deletion_not_allowed_heading": "Brukeren kan ikke slettes",
     "agent_role_my_clients_link": "Dine klienter",
     "agent_role_client_admin_link": "Klientadministrasjon",
-    "non_deletable_reasons_intro": "{{to_name}} har fullmakter som ikke kan slettes her",
     "user_non_deletable_reasons_intro": "{{to_name}} har fullmakter som ikke kan slettes her",
     "yourself_non_deletable_reasons_intro": "Du har fullmakter som ikke kan slettes her",
     "reportee_non_deletable_reasons_intro": "{{to_name}} har fullmakter for {{from_name}} som ikke kan slettes her",

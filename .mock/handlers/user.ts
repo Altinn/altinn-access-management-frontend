@@ -69,6 +69,71 @@ const createPersonConnection = (id: string, name: string, roles: MockRole[]): Mo
   sortKey: name.toLowerCase(),
 });
 
+type ConnectionPartyTemplate =
+  | {
+      type: 'Person';
+      name: string;
+      dateOfBirth?: string;
+    }
+  | {
+      type: 'Organisasjon';
+      name: string;
+      organizationIdentifier?: string;
+      variant?: string;
+    };
+
+const connectedPartyTemplates: Record<string, ConnectionPartyTemplate> = {
+  '123': {
+    type: 'Organisasjon',
+    name: 'DISKRET NÆR TIGER AS',
+    organizationIdentifier: '310202398',
+    variant: 'AS',
+  },
+  '456': {
+    type: 'Person',
+    name: 'SITRONGUL MEDALJONG',
+    dateOfBirth: '1984-04-03',
+  },
+  'mocked-party-uuid': {
+    type: 'Organisasjon',
+    name: 'LEVENDE KUNSTIG APE',
+    organizationIdentifier: '312787075',
+    variant: 'FLI',
+  },
+};
+
+const createConnectionForPartyId = (id: string, roles: MockRole[]): MockConnection => {
+  const template =
+    id.toLowerCase() === 'user'
+      ? connectedPartyTemplates['456']
+      : (connectedPartyTemplates[id] ?? {
+          type: 'Organisasjon',
+          name: 'DIGITALISERINGSDIREKTORATET',
+          organizationIdentifier: '310202398',
+          variant: 'AS',
+        });
+
+  if (template.type === 'Person') {
+    return createPersonConnection(id, template.name, roles);
+  }
+
+  return {
+    party: {
+      id,
+      name: template.name,
+      type: 'Organisasjon',
+      variant: template.variant ?? 'AS',
+      children: null,
+      partyId: getStablePartyId(id),
+      organizationIdentifier: template.organizationIdentifier ?? '310202398',
+      isDeleted: false,
+    },
+    roles,
+    connections: [],
+    sortKey: template.name.toLowerCase(),
+  };
+};
+
 const getRightHoldersResponse = (requestUrl: URL): MockConnection[] => {
   const partyId = requestUrl.searchParams.get('party') ?? '';
   const fromId = requestUrl.searchParams.get('from') ?? '';
@@ -95,15 +160,7 @@ const getRightHoldersResponse = (requestUrl: URL): MockConnection[] => {
 
   if (fromId && toId) {
     const connectedPartyId = fromId === partyId ? toId : fromId;
-    const isConnectedPartyPerson = connectedPartyId.toLowerCase() === 'user';
-
-    return isConnectedPartyPerson
-      ? [createPersonConnection(connectedPartyId, 'SITRONGUL MEDALJONG', [roleRettighetshaver])]
-      : [
-          createOrgConnection(connectedPartyId, 'DIGITALISERINGSDIREKTORATET', [
-            roleRettighetshaver,
-          ]),
-        ];
+    return [createConnectionForPartyId(connectedPartyId, [roleRettighetshaver])];
   }
 
   if (fromId && !toId) {
@@ -135,11 +192,9 @@ const getRightHoldersResponse = (requestUrl: URL): MockConnection[] => {
   }
 
   return [
-    createOrgConnection(
-      partyId || '3d8b34c3-df0d-4dcc-be12-e788ce414744',
-      'DIGITALISERINGSDIREKTORATET',
-      [roleRettighetshaver],
-    ),
+    createConnectionForPartyId(partyId || '3d8b34c3-df0d-4dcc-be12-e788ce414744', [
+      roleRettighetshaver,
+    ]),
   ];
 };
 
