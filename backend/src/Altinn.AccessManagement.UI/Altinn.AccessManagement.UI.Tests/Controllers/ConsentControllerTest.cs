@@ -378,7 +378,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             {
                 foreach (var cookieHeader in setCookieHeaders)
                 {
-                    var cookiePart  = cookieHeader
+                    var cookiePart = cookieHeader
                         .Split(';')
                         .Select(c => c.Trim().Split('=', 2))
                         .Where(kv => kv.Length == 2 && kv[0] == "AltinnLogoutInfo")
@@ -392,7 +392,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 }
             }
 
-            string decodedValue = HttpUtility.UrlDecode(myCookieValue);
+            string decodedValue = Uri.UnescapeDataString(myCookieValue);
             byte[] base64EncodedBytes = Convert.FromBase64String(decodedValue.Substring("amSafeRedirectUrl=".Length));
             string decryptedUrl = Encoding.UTF8.GetString(base64EncodedBytes);
             return decryptedUrl;
