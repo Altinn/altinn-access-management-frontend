@@ -1,8 +1,13 @@
 import { RolePermission } from '@/rtk/features/roleApi';
-import { A2_PROVIDER_CODE, CRA_PROVIDER_CODE } from '../UserRoles/useRoleMetadata';
+import {
+  A2_PROVIDER_CODE,
+  CRA_PROVIDER_CODE,
+  ECC_PROVIDER_CODE,
+} from '../UserRoles/useRoleMetadata';
 
 export const RIGHTHOLDER_ROLE = 'rettighetshaver';
 export const AGENT_ROLE = 'agent';
+
 export const ER_ROLE_REASON = 'er_roles';
 export const OLD_ALTINN_REASON = 'old_altinn';
 export const AGENT_ROLE_REASON = 'agent_role';
@@ -84,16 +89,13 @@ export const getNonDeletableReasons = (
   );
 
   const hasERRoles = rolePermissions.some(
-    (rolePermission) =>
-      rolePermission?.role?.code !== RIGHTHOLDER_ROLE &&
-      rolePermission?.role?.code !== AGENT_ROLE &&
-      rolePermission?.role?.provider?.code !== A2_PROVIDER_CODE &&
-      rolePermission?.role?.provider?.code !== CRA_PROVIDER_CODE,
+    (rolePermission) => rolePermission?.role?.provider?.code === ECC_PROVIDER_CODE,
   );
 
   const hasAgentRole = rolePermissions.some(
     (rolePermission) => rolePermission?.role?.code === AGENT_ROLE,
   );
+
   const hasGuardianshipRole = rolePermissions.some(
     (rolePermission) => rolePermission?.role?.provider?.code === CRA_PROVIDER_CODE,
   );
