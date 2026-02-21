@@ -33,5 +33,15 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="resourceId">The id of the resource/service to be delegated</param>
         /// <param name="actionKeys">The updated list of actions that the toParty should hold on the resource</param>
         Task<HttpResponseMessage> UpdateSingleRightsAccess(Guid party, Guid to, Guid from, string resourceId, List<string> actionKeys);
+
+        /// <summary>
+        /// Revokes all rights on a resource that has been granted from one party to another.
+        /// </summary>
+        /// <param name="party">The acting party that performs the revoking.</param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
+        /// <param name="to">The right holder that has been granted access to the resource.</param>
+        /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> RevokeResourceDelegation(Guid party, Guid from, Guid to, string resourceId);
     }
 }

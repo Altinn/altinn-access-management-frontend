@@ -11,6 +11,11 @@
   align-items: center;
   position: relative;
 }
+.avatarInner {
+  font-size: 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
+}
 
 .secondaryAvatar {
   position: absolute;

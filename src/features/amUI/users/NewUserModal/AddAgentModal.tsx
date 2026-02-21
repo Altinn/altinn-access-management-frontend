@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { DsButton, DsDialog, DsHeading, DsTabs } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon } from '@navikt/aksel-icons';
@@ -43,6 +43,7 @@ interface AddAgentModalProps {
 }
 
 const AddAgentModal: React.FC<AddAgentModalProps> = ({ modalRef, onComplete }) => {
+  const modalHeadingId = useId();
   const [errorDetail, setErrorDetail] = useState<{ status: string; time: string } | null>(null);
   const [addAgent, { isLoading, error }] = useAddAgentMutation();
   const { t } = useTranslation();
@@ -77,7 +78,7 @@ const AddAgentModal: React.FC<AddAgentModalProps> = ({ modalRef, onComplete }) =
     <DsDialog
       ref={modalRef}
       closedby='any'
-      aria-labelledby='addAgentModal'
+      aria-labelledby={modalHeadingId}
       onClose={() => {
         setErrorDetail(null);
       }}
@@ -86,7 +87,7 @@ const AddAgentModal: React.FC<AddAgentModalProps> = ({ modalRef, onComplete }) =
         data-size='xs'
         level={2}
         className={classes.modalHeading}
-        id='addAgentModal'
+        id={modalHeadingId}
       >
         {t('client_administration_page.add_agent_button')}
       </DsHeading>

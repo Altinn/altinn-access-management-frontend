@@ -14,14 +14,30 @@
 }
 
 .searchBar {
-  max-width: 27rem;
+  max-width: 23rem;
 }
 
 .searchAndAddUser {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-bottom: 15px;
+}
+
+.filtersContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.addUserContainer {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 15px;
+  width: 100%;
 }
 
 .noAccessContainer {
@@ -36,5 +52,17 @@
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
+  }
+
+  .searchControls {
+    margin-left: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .filtersContainer {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

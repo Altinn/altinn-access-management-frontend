@@ -10,8 +10,10 @@ import { ConnectionUserType } from '@/rtk/features/connectionApi';
 
 import classes from './UserList.module.css';
 import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { ECC_PROVIDER_CODE, useRoleMetadata } from '../UserRoles/useRoleMetadata';
+import { isNewUser } from '../isNewUser';
+import { color } from 'storybook/internal/theming';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
@@ -113,7 +115,7 @@ export const UserItem = ({
       descriptionString +=
         t('common.org_nr') +
         ' ' +
-        user.organizationIdentifier +
+        formatOrgNr(user.organizationIdentifier) +
         (isSubOrMainUnit || subUnit
           ? `, ${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')}`
           : '');
@@ -147,11 +149,16 @@ export const UserItem = ({
       id={user.id}
       name={type !== 'system' ? formatDisplayName({ fullName: user.name, type }) : user.name}
       description={!isExpanded ? description(user) : undefined}
-      roleNames={
-        showRoles && !isExpanded
-          ? roleNames.filter((name): name is string => name !== undefined)
+      badge={
+        isNewUser(user.addedAt)
+          ? {
+              label: t('client_administration_page.new_agent_tag'),
+              color: 'success',
+              variant: 'base',
+            }
           : undefined
       }
+      roleNames={showRoles && !isExpanded ? roleNames : []}
       type={type}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}

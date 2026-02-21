@@ -25,6 +25,7 @@ export interface User {
   userId?: string | null;
   username?: string | null;
   sortKey?: string;
+  addedAt?: string;
   isDeleted?: boolean;
 }
 

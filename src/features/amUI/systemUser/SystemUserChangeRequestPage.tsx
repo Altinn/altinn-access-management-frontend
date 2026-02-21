@@ -7,6 +7,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import {
   useApproveChangeRequestMutation,
   useGetChangeRequestQuery,
+  useGetSystemuserIsAdminQuery,
   useGetSystemUserReporteeQuery,
   useRejectChangeRequestMutation,
 } from '@/rtk/features/systemUserApi';
@@ -21,7 +22,6 @@ import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/Create
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
-import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
@@ -46,7 +46,9 @@ export const SystemUserChangeRequestPage = () => {
   } = useGetSystemUserReporteeQuery(changeRequest?.partyId ?? '', {
     skip: !changeRequest?.partyId,
   });
-  const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: isAdmin } = useGetSystemuserIsAdminQuery(changeRequest?.partyUuid ?? '', {
+    skip: !changeRequest?.partyUuid,
+  });
 
   const [
     postAcceptChangeRequest,

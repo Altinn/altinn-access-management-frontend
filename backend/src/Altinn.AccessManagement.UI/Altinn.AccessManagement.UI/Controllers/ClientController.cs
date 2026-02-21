@@ -31,6 +31,105 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        /// Endpoint for retrieving clients delegated to the authenticated user.
+        /// </summary>
+        /// <param name="provider">Optional provider party uuids.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of providers and delegated clients.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("my/clients")]
+        public async Task<ActionResult<IEnumerable<MyClientDelegation>>> GetMyClients(
+            [FromQuery] List<Guid> provider = null,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                List<MyClientDelegation> clients = await _clientService.GetMyClients(provider, cancellationToken);
+                return Ok(clients);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetMyClients failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing a client-provider relationship for the authenticated user.
+        /// </summary>
+        /// <param name="provider">The provider party uuid.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>No content on success.</returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("my/clientproviders")]
+        public async Task<IActionResult> RemoveMyClientProvider(
+            [FromQuery] Guid provider,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _clientService.RemoveMyClientProvider(provider, cancellationToken);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveMyClientProvider failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing delegated access packages for the authenticated user from a client via provider.
+        /// </summary>
+        /// <param name="provider">The provider party uuid.</param>
+        /// <param name="from">The client party uuid.</param>
+        /// <param name="payload">Delegation payload.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>No content on success.</returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("my/clients")]
+        public async Task<IActionResult> RemoveMyClientAccessPackages(
+            [FromQuery] Guid provider,
+            [FromQuery] Guid from,
+            [FromBody] DelegationBatchInputDto payload,
+            CancellationToken cancellationToken = default)
+        {
+            if (payload == null)
+            {
+                return BadRequest("Delegation payload is required.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _clientService.RemoveMyClientAccessPackages(provider, from, payload, cancellationToken);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveMyClientAccessPackages failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
         /// Endpoint for retrieving clients for a party.
         /// </summary>
         /// <param name="party">The uuid for the party.</param>
