@@ -66,7 +66,6 @@ export const DeleteUserModalContent = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const dialogRef = useRef<HTMLDialogElement>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [dialogVisible, setDialogVisible] = useState(false);
 
@@ -147,7 +146,6 @@ export const DeleteUserModalContent = ({
 
     setIsSuccess(false);
     setDialogVisible(false);
-    dialogRef.current?.close();
   };
 
   const isDeletionNotAllowed = dialogModel.status.level === DeletionLevel.None;
@@ -196,7 +194,6 @@ export const DeleteUserModalContent = ({
       <DsDialog
         open={dialogVisible}
         onClose={() => setDialogVisible(false)}
-        ref={dialogRef}
         closedby='any'
         closeButton={t('common.close')}
         className={classes.modal}
@@ -293,7 +290,10 @@ export const DeleteUserModalContent = ({
                 <Button
                   color='neutral'
                   variant='tertiary'
-                  onClick={() => dialogRef.current?.close()}
+                  onClick={() => {
+                    setIsSuccess(false);
+                    setDialogVisible(false);
+                  }}
                 >
                   {t('common.cancel')}
                 </Button>
