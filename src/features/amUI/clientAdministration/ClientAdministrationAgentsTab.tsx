@@ -4,10 +4,12 @@ import { DsAlert, DsParagraph, SnackbarDuration, useSnackbar } from '@altinn/alt
 
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
-import { useGetAgentsQuery } from '@/rtk/features/clientApi';
-import { type Connection } from '@/rtk/features/connectionApi';
+
+import { useAddAgentMutation, useGetAgentsQuery } from '@/rtk/features/clientApi';
+import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
 import classes from './ClientAdministrationAgentsTab.module.css';
 import { useNavigate } from 'react-router';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 export const ClientAdministrationAgentsTab = () => {
   const { t } = useTranslation();
@@ -18,7 +20,8 @@ export const ClientAdministrationAgentsTab = () => {
     isLoading: isAgentsLoading,
     isError: isGetAgentsError,
   } = useGetAgentsQuery();
-  const [addAgent] = useAddAgentMutation();
+  const [addAgent, { isLoading: isAddAgentLoading }] = useAddAgentMutation();
+  const { fromParty } = usePartyRepresentation();
   const {
     data: indirectConnections,
     isLoading: isIndirectLoading,
@@ -96,7 +99,7 @@ export const ClientAdministrationAgentsTab = () => {
         getUserLink={(user) => `/clientadministration/agent/${user.id}`}
         onAddNewUser={(user) => navigate(`/clientadministration/agent/${user.id}`)}
         isLoading={isAgentsLoading || isIndirectLoading}
-        isActionLoading={isIndirectFetching}
+        isActionLoading={isIndirectFetching || isAddAgentLoading}
         AddUserButton={AddAgentButton}
         addUserButtonLabel={t('client_administration_page.add_agent_button_short')}
         onDelegate={(user) => {
