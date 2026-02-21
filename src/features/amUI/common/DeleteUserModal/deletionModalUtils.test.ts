@@ -19,7 +19,11 @@ import {
 } from './deletionModalUtils';
 import { RolePermission } from '@/rtk/features/roleApi';
 import { Entity } from '@/dataObjects/dtos/Common';
-import { A2_PROVIDER_CODE, CRA_PROVIDER_CODE } from '../UserRoles/useRoleMetadata';
+import {
+  A2_PROVIDER_CODE,
+  CRA_PROVIDER_CODE,
+  ECC_PROVIDER_CODE,
+} from '../UserRoles/useRoleMetadata';
 
 type rolePermissionSetting = {
   code: string;
@@ -255,7 +259,9 @@ describe('getNonDeletableReasons', () => {
   });
 
   it('returns ER role reason for non-rightholder, non-agent roles', () => {
-    const rolePermissions = mockRolePermissions([{ code: 'dagl', via: ['via-org'] }]);
+    const rolePermissions = mockRolePermissions([
+      { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
+    ]);
     expect(getNonDeletableReasons(rolePermissions)).toEqual([ER_ROLE_REASON]);
   });
 
@@ -274,7 +280,7 @@ describe('getNonDeletableReasons', () => {
   it('returns all matching reasons in stable order', () => {
     const rolePermissions = mockRolePermissions([
       { code: RIGHTHOLDER_ROLE, via: ['via-org'], providerCode: A2_PROVIDER_CODE },
-      { code: 'dagl', via: ['via-org'] },
+      { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
       { code: AGENT_ROLE, via: ['via-org'] },
       { code: 'role-code', via: ['via-org'], providerCode: CRA_PROVIDER_CODE },
     ]);
@@ -409,7 +415,7 @@ describe('getDeleteUserDialogModel', () => {
     const rolePermissions = mockRolePermissions([
       { code: RIGHTHOLDER_ROLE, via: [null, 'via-org'], providerCode: A2_PROVIDER_CODE },
       { code: AGENT_ROLE, via: ['via-org'] },
-      { code: 'dagl', via: ['via-org'] },
+      { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
     ]);
     const model = getDeleteUserDialogModel({
       rolePermissions,

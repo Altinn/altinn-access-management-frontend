@@ -60,7 +60,7 @@ export const hasDeletableRights = (rolePermissions: RolePermission[] | undefined
     if (rolePermission.permissions?.length === 0) {
       return true;
     }
-    return rolePermission.permissions.some((permission) => !permission?.via);
+    return rolePermission.permissions?.some((permission) => !permission?.via) ?? false;
   });
 };
 
@@ -69,12 +69,7 @@ export const hasNonDeletableRights = (rolePermissions: RolePermission[] | undefi
     return false;
   }
 
-  return rolePermissions.some((rolePermission) => {
-    if (rolePermission?.role?.code !== RIGHTHOLDER_ROLE) {
-      return true;
-    }
-    return rolePermission.permissions.some((permission) => !!permission.via);
-  });
+  return getNonDeletableReasons(rolePermissions).length > 0;
 };
 
 export const getNonDeletableReasons = (
