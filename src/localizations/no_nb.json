@@ -405,7 +405,7 @@
     "remove_package_error": "Kunne ikke fjerne {{name}} sin klienttilgang for {{accessPackage}}.",
     "delete_provider_button": "Slett klienttilgang",
     "delete_provider_heading": "Vil du slette din klienttilgang?",
-    "delete_provider_body": "Du vil miste alle fullmakter for klienter du har gjennom {{provider}}. Denne handlingen kan ikke angres.",
+    "delete_provider_body": "Du vil miste alle fullmakter for klienter du har gjennom {{provider}}. Denne handlingen kan ikke endres.",
     "delete_provider_confirm": "Slett klienttilgang"
   },
   "user_rights_page": {
@@ -420,7 +420,7 @@
   "delete_user": {
     "user_trigger_button": "Slett bruker",
     "user_heading": "Er du sikker på at du vil slette denne brukeren?",
-    "user_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke angres.</i></p>",
+    "user_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke endres.</i></p>",
     "user_limited_deletion_heading": "Noen fullmakter kan ikke slettes",
     "user_deletion_not_allowed_heading": "Brukeren kan ikke slettes",
     "agent_role_my_clients_link": "Dine klienter",
@@ -434,7 +434,7 @@
     "user_partial_confirmation_message": "<p>Brukeren har også andre fullmakter, og disse kan du slette her. Ønsker du det? <i>Denne handlingen kan ikke endres.</i></p>",
     "yourself_trigger_button": "Slett alle tilganger",
     "yourself_heading": "Er du sikker på at du vil slette alle dine tilganger?",
-    "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke angres.</i></p>",
+    "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke endres.</i></p>",
     "yourself_limited_deletion_heading": "Du har tilganger som ikke kan slettes",
     "yourself_deletion_not_allowed_heading": "Dine tilganger kan ikke slettes",
     "yourself_partial_confirmation_message": "<p>Du har også andre fullmakter, og disse kan du slette her. Ønsker du det? <i>Denne handlingen kan ikke endres.</i></p>",

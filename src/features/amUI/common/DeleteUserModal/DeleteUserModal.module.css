@@ -5,20 +5,20 @@
 .modalContent {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
   min-height: 100%;
 }
 
 .contentBody {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .reasonsSection {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
 }
 
 .reasonList {
