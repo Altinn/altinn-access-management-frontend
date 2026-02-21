@@ -8,7 +8,7 @@ import {
   formatDisplayName,
 } from '@altinn/altinn-components';
 import { TrashIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
@@ -68,6 +68,14 @@ export const DeleteUserModalContent = ({
   const dispatch = useDispatch();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [dialogVisible, setDialogVisible] = useState(false);
+
+  useEffect(() => {
+    if (dialogVisible) {
+      dispatch(roleApi.util.invalidateTags(['role-permissions', 'roles']));
+      dispatch(accessPackageApi.util.invalidateTags(['AccessPackages']));
+    }
+  }, [dialogVisible, dispatch]);
 
   const [deleteUser, { isLoading: isDeleteLoading, isError, error }] =
     useRemoveRightHolderMutation();
@@ -99,6 +107,7 @@ export const DeleteUserModalContent = ({
   });
 
   const isDeletingYourself = dialogModel.status.target === DeletionTarget.Yourself;
+  const shouldNavigateOnDeleteComplete = dialogModel.status.level === DeletionLevel.Full;
   const agentAccessLinkPath = isDeletingYourself
     ? amUIPath.MyClients
     : amUIPath.ClientAdministration;
@@ -119,7 +128,7 @@ export const DeleteUserModalContent = ({
       }).unwrap();
 
       setIsSuccess(true);
-      dispatch(roleApi.util.invalidateTags(['roles']));
+      dispatch(roleApi.util.invalidateTags(['role-permissions', 'roles']));
       dispatch(accessPackageApi.util.invalidateTags(['AccessPackages']));
 
       if (toParty.partyUuid === selfParty?.partyUuid) {
@@ -128,6 +137,17 @@ export const DeleteUserModalContent = ({
     } catch {
       // Error details are shown from mutation state.
     }
+  };
+
+  const onDeleteComplete = () => {
+    if (shouldNavigateOnDeleteComplete) {
+      navigate(`/${amUIPath.Users}`);
+      return;
+    }
+
+    setIsSuccess(false);
+    setDialogVisible(false);
+    dialogRef.current?.close();
   };
 
   const isDeletionNotAllowed = dialogModel.status.level === DeletionLevel.None;
@@ -163,6 +183,9 @@ export const DeleteUserModalContent = ({
   return (
     <DsDialog.TriggerContext>
       <DsDialog.Trigger
+        onClick={() => {
+          setDialogVisible(true);
+        }}
         data-size='sm'
         variant='tertiary'
         disabled={!!isPartyRepresentationLoading}
@@ -171,6 +194,8 @@ export const DeleteUserModalContent = ({
         {t(dialogModel.textKeys.triggerButtonKey)}
       </DsDialog.Trigger>
       <DsDialog
+        open={dialogVisible}
+        onClose={() => setDialogVisible(false)}
         ref={dialogRef}
         closedby='any'
         closeButton={t('common.close')}
@@ -180,7 +205,7 @@ export const DeleteUserModalContent = ({
           <LoadingAnimation
             isLoading={isLoading}
             displaySuccess={isSuccess}
-            onAnimationEnd={() => navigate(`/${amUIPath.Users}`)}
+            onAnimationEnd={onDeleteComplete}
           />
         ) : isPartyRepresentationLoading ? (
           <DsSkeleton
