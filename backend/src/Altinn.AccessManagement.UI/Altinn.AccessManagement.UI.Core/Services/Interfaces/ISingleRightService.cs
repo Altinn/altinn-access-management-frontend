@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation);
 
         /// <summary>
-        ///     Clears cached acesses of a delegation recipient
+        ///     Clears cached accesses of a delegation recipient
         /// </summary>
         /// <param name="party">
         ///     The party from which the rights have been given (delegator)

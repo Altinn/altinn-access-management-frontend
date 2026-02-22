@@ -15,12 +15,14 @@ import classes from './SingleRightsSection.module.css';
 import { DeleteResourceButton } from './DeleteResourceButton';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
+import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { id } = useParams();
   const { t } = useTranslation();
+  const isSmallScreen = useIsTabletOrSmaller();
   const { displayResourceDelegation } = window.featureFlags;
-  const { toParty, fromParty, actingParty, selfParty } = usePartyRepresentation();
+  const { toParty, fromParty, actingParty } = usePartyRepresentation();
 
   const canGiveAccess = useCanGiveAccess(id ?? '');
 
@@ -112,7 +114,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
             renderControls={(resource) => (
               <DeleteResourceButton
                 resource={resource}
-                fullText
+                fullText={!isSmallScreen}
               />
             )}
           />

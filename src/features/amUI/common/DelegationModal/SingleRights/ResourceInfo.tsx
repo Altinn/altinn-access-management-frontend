@@ -14,11 +14,7 @@ import { ResourceHeading } from './ResourceHeading';
 import { RightsSection } from './RightsSection';
 
 import classes from './ResourceInfo.module.css';
-import {
-  InheritedStatusMessageType,
-  InheritedStatusType,
-  useInheritedStatusInfo,
-} from '../../useInheritedStatus';
+import { useInheritedStatusInfo } from '../../useInheritedStatus';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../EditModal';
 

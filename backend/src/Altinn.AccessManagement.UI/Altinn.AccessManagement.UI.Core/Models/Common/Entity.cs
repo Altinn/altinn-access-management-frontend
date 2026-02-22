@@ -115,11 +115,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common
         public string OrganizationIdentifier { get; set; }
 
         /// <summary>
-        /// Person identifier (fnr/dnr) when entity is a person.
-        /// </summary>
-        public string PersonIdentifier { get; set; }
-
-        /// <summary>
         /// Date of birth for persons.
         /// </summary>
         public string DateOfBirth { get; set; }

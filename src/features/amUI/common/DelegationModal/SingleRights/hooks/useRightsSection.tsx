@@ -79,7 +79,7 @@ export const useRightsSection = ({
       })
     : '';
 
-  /// Useffect hooks
+  /// UseEffect hooks
 
   // Instantiate/reset access and rights states
   useEffect(() => {

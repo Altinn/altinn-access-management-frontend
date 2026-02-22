@@ -21,7 +21,7 @@ export const useRightChips = (
       }),
     );
 
-  const onActionCLick = (right: ChipRight) => {
+  const onActionClick = (right: ChipRight) => {
     if (right.inherited) {
       setPopoverOpen(right.rightKey);
     } else {
@@ -40,7 +40,7 @@ export const useRightChips = (
               className={chipClassname}
               data-size='sm'
               checked={right.checked}
-              onClick={() => editable && onActionCLick(right)}
+              onClick={() => editable && onActionClick(right)}
               popoverTarget={right.inherited ? `popover_${right.rightKey}` : undefined}
               aria-describedby={right.inherited ? `popover_${right.rightKey}` : undefined}
             >

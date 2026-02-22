@@ -508,7 +508,7 @@
       "via_keyrole": "{{user_name}} har fullmakt gjennom rollen de har i {{via_name}}. Den kan derfor ikke slettes.",
       "via_priv": "{{user_name}} har fullmakt gjennom sin rolle som privatperson. Den kan derfor ikke slettes."
     },
-    "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
+    "cannot_delegate_here": "Denne fullmakten kan ikke gis/fjernes her.",
     "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten.",
     "no_permissions_fulltext": "Virksomheten kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlige."
   },

@@ -166,6 +166,7 @@ export const RightsSection = ({
                       <DsHeading
                         level={5}
                         data-size='2xs'
+                        className={classes.undelegableHeader}
                       >
                         {t('delegation_modal.actions.cannot_give_header')}
                       </DsHeading>
