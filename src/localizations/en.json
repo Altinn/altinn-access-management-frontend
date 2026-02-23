@@ -499,14 +499,14 @@
       "body": "<p>{{ to_name }} has been granted this authorization both directly and through their roles in the Central Coordinating Register for Legal Entities.</p><p>Even if you delete this directly granted authorization, the user will still have the authorization through the Central Coordinating Register for Legal Entities.</p>"
     },
     "service_error": {
-      "general_heading": "You cannot give access to this service",
+      "general_heading": "You cannot give power of attorney to this service",
       "technical_error_heading": "Something went wrong",
       "undelegable_service": "{{resourceOwner}} has determined that this service cannot be given to others.",
       "technical_error": "A technical error has occurred. Please try again or contact Altinn user service if the problem persists.",
       "time_of_error": "Error occurred at time: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
-      "missing_rights": "You cannot delegate this authorization to others because you do not have it yourself. The general manager or main administrator can help you with this."
+      "missing_rights": "You cannot give this power of attorney because you do not have access yourself."
     }
   },
   "status_section": {

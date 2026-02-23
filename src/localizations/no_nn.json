@@ -503,7 +503,7 @@
       "time_of_error": "Tidspunkt feilen oppstod: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Kven som får bruke denne tenesta blir bestemt av {{resourceOwner}}, og {{reportee}} har ikkje fått den moglegheita. Vi tilrår å ta kontakt med {{resourceOwner}}.",
-      "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar den sjølv. Dagleg leiar eller hovudadministrator kan hjelpe deg med dette."
+      "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar tilgang til den sjølv."
     }
   },
   "status_section": {
