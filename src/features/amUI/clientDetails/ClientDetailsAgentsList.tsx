@@ -182,7 +182,7 @@ export const ClientDetailsAgentsList = ({
       subUnit: isSubUnit,
       deleted: agent.agent.isDeleted ?? undefined,
       collapsible: true,
-      as: Button,
+      as: 'button',
       children: <AccessPackageListItems items={nodes} />,
       description:
         userType === 'company'
