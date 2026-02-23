@@ -22,11 +22,7 @@ export const ClientAdministrationAgentsTab = () => {
   } = useGetAgentsQuery();
   const [addAgent, { isLoading: isAddAgentLoading }] = useAddAgentMutation();
   const { fromParty } = usePartyRepresentation();
-  const {
-    data: indirectConnections,
-    isLoading: isIndirectLoading,
-    isFetching: isIndirectFetching,
-  } = useGetRightHoldersQuery(
+  const { data: indirectConnections, isLoading: isIndirectLoading } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
       fromUuid: fromParty?.partyUuid ?? '',
@@ -99,7 +95,7 @@ export const ClientAdministrationAgentsTab = () => {
         getUserLink={(user) => `/clientadministration/agent/${user.id}`}
         onAddNewUser={(user) => navigate(`/clientadministration/agent/${user.id}`)}
         isLoading={isAgentsLoading || isIndirectLoading}
-        isActionLoading={isIndirectFetching || isAddAgentLoading}
+        isActionLoading={isAddAgentLoading}
         AddUserButton={AddAgentButton}
         addUserButtonLabel={t('client_administration_page.add_agent_button_short')}
         onDelegate={(user) => {
