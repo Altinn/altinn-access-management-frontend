@@ -506,7 +506,7 @@
       "time_of_error": "Error occurred at time: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
-      "missing_rights": "You cannot delegate this authorization to others because you do not have it yourself. The general manager or main administrator can help you with this."
+      "missing_rights": "You cannot delegate this power of attorney because you do not have access yourself."
     }
   },
   "status_section": {
