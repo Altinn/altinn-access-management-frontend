@@ -2,15 +2,15 @@ import { useMemo } from 'react';
 
 import type { Client } from '@/rtk/features/clientApi';
 
-type UseAgentAccessClientListsParams = {
+type UseAgentDetailsAccessClientListsParams = {
   agentAccessPackages?: Client[];
   clients?: Client[];
 };
 
-export const useAgentAccessClientLists = ({
+export const useAgentDetailsAccessClientLists = ({
   agentAccessPackages,
   clients,
-}: UseAgentAccessClientListsParams) => {
+}: UseAgentDetailsAccessClientListsParams) => {
   return useMemo(() => {
     const agentAccessClientIds = new Set(
       (agentAccessPackages ?? [])

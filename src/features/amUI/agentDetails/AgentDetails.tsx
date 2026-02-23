@@ -9,7 +9,7 @@ import { amUIPath } from '@/routes/paths';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { ClientAdministrationAgentClientsList } from './ClientAdministrationAgentClientsList';
+import { AgentDetailsClientsList } from './AgentDetailsClientsList';
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
@@ -22,12 +22,12 @@ import {
   useGetClientsQuery,
 } from '@/rtk/features/clientApi';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
-import { ClientAdministrationAgentTabs } from './ClientAdministrationAgentTabs';
-import { useAgentAccessClientLists } from './useAgentAccessClientLists';
+import { AgentDetailsTabs } from './AgentDetailsTabs';
+import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientLists';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
-import { ClientAdministrationAgentDeleteModal } from './ClientAdministrationAgentDeleteModal';
+import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
 
-export const ClientAdministrationAgentDetails = () => {
+export const AgentDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { toParty, actingParty } = usePartyRepresentation();
@@ -45,7 +45,7 @@ export const ClientAdministrationAgentDetails = () => {
   const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
     useRemoveAgentAccessPackagesMutation();
 
-  const { clientsWithAgentAccess, allClients } = useAgentAccessClientLists({
+  const { clientsWithAgentAccess, allClients } = useAgentDetailsAccessClientLists({
     agentAccessPackages,
     clients,
   });
@@ -103,7 +103,7 @@ export const ClientAdministrationAgentDetails = () => {
       <PageContainer
         backUrl={backUrl}
         contentActions={
-          <ClientAdministrationAgentDeleteModal
+          <AgentDetailsDeleteModal
             agentId={id}
             backUrl={backUrl}
           />
@@ -126,12 +126,12 @@ export const ClientAdministrationAgentDetails = () => {
               displayDirection={false}
               displayRoles={false}
             />
-            <ClientAdministrationAgentTabs
+            <AgentDetailsTabs
               activeTab={activeTab}
               onChange={setActiveTab}
               hasClientsContent={
                 clientsWithAgentAccess.length > 0 ? (
-                  <ClientAdministrationAgentClientsList
+                  <AgentDetailsClientsList
                     clients={clientsWithAgentAccess}
                     agentAccessPackages={agentAccessPackages ?? []}
                     isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
@@ -146,7 +146,7 @@ export const ClientAdministrationAgentDetails = () => {
               }
               canGetClientsContent={
                 allClients.length > 0 ? (
-                  <ClientAdministrationAgentClientsList
+                  <AgentDetailsClientsList
                     clients={allClients}
                     agentAccessPackages={agentAccessPackages ?? []}
                     toPartyUuid={toPartyUuid}

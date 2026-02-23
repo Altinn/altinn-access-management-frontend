@@ -40,8 +40,8 @@ import { SettingsPage } from '@/features/amUI/settings/SettingsPage';
 import { LandingPage } from '@/features/amUI/landingPage/LandingPage';
 import { RequestPage } from '@/features/amUI/requestPage/RequestsPage';
 import { ClientAdministrationPage } from '@/features/amUI/clientAdministration/ClientAdministrationPage';
-import { ClientAdministrationAgentDetailsPage } from '@/features/amUI/clientAdministrationAgentDetails/ClientAdministrationAgentDetailsPage';
-import { ClientAdministrationClientDetailsPage } from '@/features/amUI/clientAdministrationClientDetails/ClientAdministrationClientDetailsPage';
+import { AgentDetailsPage } from '@/features/amUI/agentDetails/AgentDetailsPage';
+import { ClientDetailsPage } from '@/features/amUI/clientDetails/ClientDetailsPage';
 import { MyClientsPage } from '@/features/amUI/myClients/MyClientsPage';
 
 export const Router = createBrowserRouter(
@@ -200,11 +200,11 @@ export const Router = createBrowserRouter(
         />
         <Route
           path={amUIPath.ClientAdministrationAgent}
-          element={<ClientAdministrationAgentDetailsPage />}
+          element={<AgentDetailsPage />}
         />
         <Route
           path={amUIPath.ClientAdministrationClient}
-          element={<ClientAdministrationClientDetailsPage />}
+          element={<ClientDetailsPage />}
         />
         <Route path={ConsentPath.Consent}>
           <Route
