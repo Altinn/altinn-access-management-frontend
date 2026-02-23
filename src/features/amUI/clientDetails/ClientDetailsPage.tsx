@@ -8,9 +8,9 @@ import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUt
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { ClientAdministrationClientDetails } from './ClientAdministrationClientDetails';
+import { ClientDetails } from './ClientDetails';
 
-export const ClientAdministrationClientDetailsPage = () => {
+export const ClientDetailsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
 
@@ -36,7 +36,7 @@ export const ClientAdministrationClientDetailsPage = () => {
           toPartyUuid={getCookie('AltinnPartyUuid')}
           errorOnPriv={true}
         >
-          <ClientAdministrationClientDetails />
+          <ClientDetails />
         </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>

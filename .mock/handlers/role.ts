@@ -5,7 +5,6 @@ type Entity = {
   name: string;
   type: string;
   variant: string;
-  keyValues: null;
 };
 
 const createEntity = (id: string, name: string, type = 'Organization', variant = 'AS'): Entity => ({
@@ -13,7 +12,6 @@ const createEntity = (id: string, name: string, type = 'Organization', variant =
   name,
   type,
   variant,
-  keyValues: null,
 });
 
 const roleResponse = {

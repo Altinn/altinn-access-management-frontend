@@ -210,7 +210,12 @@ export const LandingPage = () => {
   const getYourAccessesItems = () => {
     const items: MenuItemProps[] = [];
     items.push({
-      ...getYourRightsMenuItem(currentUser?.partyUuid ?? '', '/', isLoading),
+      ...getYourRightsMenuItem(
+        currentUser?.partyUuid ?? '',
+        formatDisplayName({ fullName: currentUser?.name ?? '', type: 'person' }),
+        '/',
+        isLoading,
+      ),
       description: isCurrentUserReportee
         ? t('landing_page.your_rights_description_yourself')
         : t('landing_page.your_rights_description', { reportee: reporteeName }),
@@ -281,8 +286,16 @@ export const LandingPage = () => {
                     : t('landing_page.alert_heading_priv')}
                 </DsHeading>
                 <div className={classes.landingPageAlert}>
-                  <DsParagraph>{t('landing_page.alert_body')}</DsParagraph>
-                  <DsParagraph>{t('landing_page.alert_body_p2')}</DsParagraph>
+                  <DsParagraph>
+                    {isOrganization(reportee)
+                      ? t('landing_page.alert_body')
+                      : t('landing_page.alert_body_priv')}
+                  </DsParagraph>
+                  <DsParagraph>
+                    {isOrganization(reportee)
+                      ? t('landing_page.alert_body_p2')
+                      : t('landing_page.alert_body_p2_priv')}
+                  </DsParagraph>
                   <DsButton
                     asChild
                     variant='secondary'

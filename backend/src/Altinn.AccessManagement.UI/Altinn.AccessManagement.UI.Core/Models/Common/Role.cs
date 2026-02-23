@@ -79,7 +79,17 @@ public class CompactRole
     public string Code { get; set; }
 
     /// <summary>
-    /// Children
+    /// Role URN
     /// </summary>
-    public List<CompactRole> Children { get; set; }
+    public string Urn { get; set; }
+
+    /// <summary>
+    /// Legacy role URN
+    /// </summary>
+    public string LegacyUrn { get; set; }
+
+    /// <summary>
+    /// Children role codes
+    /// </summary>
+    public List<string> Children { get; set; }
 }

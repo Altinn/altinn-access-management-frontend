@@ -3,19 +3,19 @@ import { useTranslation } from 'react-i18next';
 import { DsTabs } from '@altinn/altinn-components';
 import { PersonGroupIcon } from '@navikt/aksel-icons';
 
-type ClientAdministrationClientTabsProps = {
+type ClientDetailsTabsProps = {
   activeTab: string;
   onChange: (value: string) => void;
   hasUsersContent: ReactNode;
   allUsersContent: ReactNode;
 };
 
-export const ClientAdministrationClientTabs = ({
+export const ClientDetailsTabs = ({
   activeTab,
   onChange,
   hasUsersContent,
   allUsersContent,
-}: ClientAdministrationClientTabsProps) => {
+}: ClientDetailsTabsProps) => {
   const { t } = useTranslation();
 
   return (

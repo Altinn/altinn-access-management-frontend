@@ -123,41 +123,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
 
-        //// Single Rights
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId)
-        {
-            string endpointUrl = $"todo/{party}/{userId}"; // TODO: Switch with actual backend endpoint when available
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
-
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                return response;
-            }
-
-            _logger.LogError("Getting single rights from accessmanagement failed with {StatusCode}", response.StatusCode);
-            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeRightDelegation(Guid from, Guid to, string resourceId, string rightKey)
-        {
-            string endpointUrl = $"todo/enduser/delegations/from/{from}/to/{to}/resources/{resourceId}/rights/{rightKey}"; // TODO: Switch with actual backend endpoint when available
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return response;
-            }
-
-            _logger.LogError("Revoke right delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
-            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
-        }
-
         //// Roles
 
         /// <inheritdoc />

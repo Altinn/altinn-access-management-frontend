@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Threading;
 using Altinn.Authorization.ABAC.Xacml.JsonProfile;
 using Altinn.Common.PEP.Interfaces;
 
@@ -12,6 +13,12 @@ public class PdpPermitMock: IPDP
     /// <inheritdoc/>
     public Task<XacmlJsonResponse> GetDecisionForRequest(XacmlJsonRequestRoot xacmlJsonRequest)
     {
+        return GetDecisionForRequest(xacmlJsonRequest, CancellationToken.None);
+    }
+
+    /// <inheritdoc/>
+    public Task<XacmlJsonResponse> GetDecisionForRequest(XacmlJsonRequestRoot xacmlJsonRequest, CancellationToken cancellationToken)
+    {
         var response = new XacmlJsonResponse
         {
             Response = new List<XacmlJsonResult>(new[] { new XacmlJsonResult { Decision = "Permit" } })
@@ -22,6 +29,12 @@ public class PdpPermitMock: IPDP
 
     /// <inheritdoc/>
     public Task<bool> GetDecisionForUnvalidateRequest(XacmlJsonRequestRoot xacmlJsonRequest, ClaimsPrincipal user)
+    {
+        return GetDecisionForUnvalidateRequest(xacmlJsonRequest, user, CancellationToken.None);
+    }
+
+    /// <inheritdoc/>
+    public Task<bool> GetDecisionForUnvalidateRequest(XacmlJsonRequestRoot xacmlJsonRequest, ClaimsPrincipal user, CancellationToken cancellationToken)
     {
         return Task.FromResult(true);
     }

@@ -2,15 +2,15 @@ import { useMemo } from 'react';
 
 import type { Agent } from '@/rtk/features/clientApi';
 
-type UseClientAccessAgentListsParams = {
+type UseClientDetailsAccessAgentListsParams = {
   clientAccessPackages?: Agent[];
   agents?: Agent[];
 };
 
-export const useClientAccessAgentLists = ({
+export const useClientDetailsAccessAgentLists = ({
   clientAccessPackages,
   agents,
-}: UseClientAccessAgentListsParams) => {
+}: UseClientDetailsAccessAgentListsParams) => {
   return useMemo(() => {
     const allAgents = (agents ?? []).filter(
       (agent) => agent.agent.type.toLowerCase() !== 'systembruker',

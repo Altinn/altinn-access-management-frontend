@@ -11,26 +11,28 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Party } from '@/rtk/features/lookupApi';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { SearchResults } from './SearchResults';
+import { ResourceFilterToolbar } from '../../ResourceFilterToolbar/ResourceFilterToolbar';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './ResourceSearch.module.css';
-import { ResourceFilterToolbar } from '../../ResourceFilterToolbar/ResourceFilterToolbar';
+import { DelegationAction } from '../EditModal';
 
 export interface ResourceSearchProps {
   onSelect: (resource: ServiceResource) => void;
   toParty?: Party;
+  availableActions?: DelegationAction[];
 }
 
 const searchResultsPerPage = 7;
 
-export const ResourceSearch = ({ onSelect, toParty }: ResourceSearchProps) => {
+export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchProps) => {
   const { t } = useTranslation();
-  const { id } = useParams();
 
+  const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
     useDelegationModalContext();
   const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
@@ -43,11 +45,17 @@ export const ResourceSearch = ({ onSelect, toParty }: ResourceSearchProps) => {
     ROfilters: filters,
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
+    includeA2Services: false,
+    includeMigratedApps: true,
   });
-  const { data: delegatedResources } = useGetSingleRightsForRightholderQuery({
-    party: getCookie('AltinnPartyId'),
-    userId: id || '',
-  });
+  const { data: delegatedResources } = useGetSingleRightsForRightholderQuery(
+    {
+      actingParty: actingParty?.partyUuid || '',
+      from: fromParty?.partyUuid || '',
+      to: toParty?.partyUuid || '',
+    },
+    { skip: !toParty || !fromParty || !actingParty },
+  );
 
   const displayPopularResources =
     !searchString && filters.length === 0 && window.featureFlags.displayPopularSingleRightsServices;
@@ -116,6 +124,7 @@ export const ResourceSearch = ({ onSelect, toParty }: ResourceSearchProps) => {
           searchResultsPerPage={searchResultsPerPage}
           onSelect={onSelect}
           setCurrentPage={setCurrentPage}
+          availableActions={availableActions}
         />
       </div>
     </>
