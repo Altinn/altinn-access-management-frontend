@@ -1,45 +1,21 @@
-import { DsSearch } from '@altinn/altinn-components';
-import { debounce } from '@/resources/utils';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import classes from './PoaOverviewPage.module.css';
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
 import { Link } from 'react-router';
+import { DebouncedSearchField } from '../common/DebouncedSearchField/DebouncedSearchField';
 
 export const AccessPackagePermissions = () => {
   const { t } = useTranslation();
 
-  const [searchString, setSearchString] = useState('');
-  const [debouncedSearchString, setDebouncedSearchString] = useState(searchString ?? '');
+  const [debouncedSearchString, setDebouncedSearchString] = useState('');
 
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      setDebouncedSearchString(value);
-    }, 300),
-    [],
-  );
   return (
     <>
-      <search className={classes.searchInput}>
-        <DsSearch data-size='sm'>
-          <DsSearch.Input
-            value={searchString}
-            aria-label={t('access_packages.search_label')}
-            placeholder={t('access_packages.search_label')}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setSearchString(event.target.value);
-              debouncedSearch(event.target.value);
-            }}
-          />
-          <DsSearch.Clear
-            onClick={() => {
-              setSearchString('');
-              debouncedSearch('');
-            }}
-          />
-        </DsSearch>
-      </search>
+      <DebouncedSearchField
+        placeholder={t('access_packages.search_label')}
+        setDebouncedSearchString={setDebouncedSearchString}
+      />
       <AccessPackageList
         searchString={debouncedSearchString}
         minimizeAvailablePackages={false}
