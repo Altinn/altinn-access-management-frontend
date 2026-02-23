@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { DsParagraph } from '@altinn/altinn-components';
 
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import {
+  useGetSingleRightsForRightholderQuery,
+  type ServiceResource,
+} from '@/rtk/features/singleRights/singleRightsApi';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 import { StatusSection } from '../../StatusSection/StatusSection';
@@ -11,13 +14,28 @@ import { ResourceHeading } from './ResourceHeading';
 import { RightsSection } from './RightsSection';
 
 import classes from './ResourceInfo.module.css';
+import { useInheritedStatusInfo } from '../../useInheritedStatus';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { DelegationAction } from '../EditModal';
 
 export interface ResourceInfoProps {
   resource: ServiceResource;
   onDelegate?: () => void;
+  availableActions?: DelegationAction[];
 }
 
-export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
+export const ResourceInfo = ({ resource, onDelegate, availableActions }: ResourceInfoProps) => {
+  const { actingParty, fromParty, toParty } = usePartyRepresentation();
+  const { data: resourceDelegations } = useGetSingleRightsForRightholderQuery(
+    {
+      actingParty: actingParty?.partyUuid || '',
+      from: fromParty?.partyUuid || '',
+      to: toParty?.partyUuid || '',
+    },
+    {
+      skip: !actingParty || !fromParty || !toParty,
+    },
+  );
   const {
     chips,
     saveEditedRights,
@@ -39,6 +57,17 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
   const hasDelegableRights = rights.some((r) => r.delegable);
   const showMissingRightsStatus = !hasAccess && rights.length > 0 && !hasDelegableRights;
   const cannotDelegateHere = resource?.delegable === false;
+  const resourcePermissions =
+    resourceDelegations?.find(
+      (delegation) => delegation.resource.identifier === resource.identifier,
+    )?.permissions || [];
+
+  const inheritedStatus = useInheritedStatusInfo({
+    permissions: resourcePermissions,
+    toParty,
+    fromParty,
+    actingParty,
+  });
 
   return (
     <>
@@ -58,6 +87,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
               <StatusSection
                 userHasAccess={hasAccess}
                 showDelegationCheckWarning={showMissingRightsStatus}
+                inheritedStatus={inheritedStatus}
                 cannotDelegateHere={cannotDelegateHere}
               />
               {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
@@ -69,6 +99,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                 saveEditedRights={saveEditedRights}
                 delegateChosenRights={delegateChosenRights}
                 revokeResource={revokeResource}
+                availableActions={availableActions}
                 undelegableActions={undelegableActions}
                 rights={rights}
                 hasUnsavedChanges={hasUnsavedChanges}

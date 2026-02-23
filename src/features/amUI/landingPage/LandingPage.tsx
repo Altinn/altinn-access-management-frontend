@@ -210,7 +210,12 @@ export const LandingPage = () => {
   const getYourAccessesItems = () => {
     const items: MenuItemProps[] = [];
     items.push({
-      ...getYourRightsMenuItem(currentUser?.partyUuid ?? '', '/', isLoading),
+      ...getYourRightsMenuItem(
+        currentUser?.partyUuid ?? '',
+        formatDisplayName({ fullName: currentUser?.name ?? '', type: 'person' }),
+        '/',
+        isLoading,
+      ),
       description: isCurrentUserReportee
         ? t('landing_page.your_rights_description_yourself')
         : t('landing_page.your_rights_description', { reportee: reporteeName }),

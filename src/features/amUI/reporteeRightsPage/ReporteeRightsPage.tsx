@@ -58,7 +58,7 @@ export const ReporteeRightsPage = () => {
               />
               <RightsTabs
                 packagesPanel={<ReporteeAccessPackageSection />}
-                singleRightsPanel={<SingleRightsSection />}
+                singleRightsPanel={<SingleRightsSection isReportee />}
                 roleAssignmentsPanel={<ReporteeRoleSection />}
                 guardianshipsPanel={<GuardianshipSection />}
               />

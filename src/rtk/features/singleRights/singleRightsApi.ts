@@ -3,7 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
-import type { DelegationResult, RightChangesDto } from '@/dataObjects/dtos/resourceDelegation';
+import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
+import type { Permissions, Reason } from '@/dataObjects/dtos/accessPackage';
 
 interface PaginatedListDTO {
   page: number;
@@ -28,7 +29,19 @@ export interface ServiceResource {
 
 export interface ResourceDelegation {
   resource: ServiceResource;
-  delegation: DelegationResult;
+  permissions: Permissions[];
+}
+
+export interface ResourceRight {
+  resource: ServiceResource;
+  directRules: RuleItem[];
+  indirectRules: RuleItem[];
+}
+
+export interface RuleItem {
+  rule: Rule;
+  reason?: Reason;
+  permissions: Permissions[];
 }
 
 interface resourceReference {
@@ -42,18 +55,21 @@ interface searchParams {
   ROfilters: string[];
   page: number;
   resultsPerPage: number;
+  includeA2Services?: boolean;
+  includeMigratedApps?: boolean;
 }
 
-export interface DelegationCheckedAction {
-  actionKey: string;
-  actionName: string;
+export interface DelegationCheckedRight {
+  rule: Rule;
   result: boolean;
-  reasons: DelegationCheckReason[];
+  reasonCodes: string[];
 }
 
-export interface DelegationCheckReason {
-  description: string;
-  reasonKey: string;
+export interface Rule {
+  key: string;
+  name: string;
+  action: string;
+  resource?: string[];
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
@@ -68,27 +84,51 @@ export const singleRightsApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['SingleRights', 'overview', 'delegationCheck'],
+  tagTypes: ['SingleRights', 'resources', 'delegationCheck', 'rights'],
   endpoints: (builder) => ({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
       query: (args) => {
-        const { searchString, ROfilters, page, resultsPerPage } = args;
-        let filterUrl = '';
+        const {
+          searchString,
+          ROfilters,
+          page,
+          resultsPerPage,
+          includeA2Services,
+          includeMigratedApps,
+        } = args;
+        let searchParams = '';
         for (const filter of ROfilters) {
-          filterUrl = filterUrl + `&ROFilters=${filter}`;
+          searchParams = searchParams + `&ROFilters=${filter}`;
         }
-        return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${filterUrl}`;
+        if (includeA2Services === false) {
+          // Default is to include A2 services, so only add param if false
+          searchParams = searchParams + `&includeA2Services=false`;
+        }
+        if (includeMigratedApps) {
+          // Default is to not include migrated apps, so only add param if true
+          searchParams = searchParams + `&includeMigratedApps=true`;
+        }
+        return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${searchParams}`;
       },
     }),
     getSingleRightsForRightholder: builder.query<
       ResourceDelegation[],
-      { party: string; userId: string }
+      { actingParty: string; from: string; to: string }
     >({
-      query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,
-      providesTags: ['overview'],
+      query: ({ actingParty, from, to }) =>
+        `singleright/delegation/resources?party=${actingParty}&to=${to}&from=${from}`,
+      providesTags: ['resources'],
     }),
-    delegationCheck: builder.query<DelegationCheckedAction[], string>({
+    getResourceRights: builder.query<
+      ResourceRight,
+      { actingParty: string; from: string; to: string; resourceId: string }
+    >({
+      query: ({ actingParty, from, to, resourceId }) =>
+        `singleright/delegation/resources/rights?party=${actingParty}&to=${to}&from=${from}&resourceId=${encodeURIComponent(resourceId)}`,
+      providesTags: ['rights'],
+    }),
+    delegationCheck: builder.query<DelegationCheckedRight[], string>({
       query: (resourceId) => ({
         url: `singleright/delegationcheck?from=${getCookie('AltinnPartyUuid')}&resource=${encodeURIComponent(resourceId)}`,
         method: 'GET',
@@ -127,7 +167,7 @@ export const singleRightsApi = createApi({
       transformErrorResponse: (response: { status: string | number }) => {
         return response.status;
       },
-      invalidatesTags: ['overview', 'delegationCheck'],
+      invalidatesTags: ['resources', 'delegationCheck', 'rights'],
     }),
     revokeResource: builder.mutation<
       { isSuccessStatusCode: boolean },
@@ -139,7 +179,7 @@ export const singleRightsApi = createApi({
           method: 'DELETE',
         };
       },
-      invalidatesTags: ['overview', 'delegationCheck'],
+      invalidatesTags: ['resources', 'delegationCheck', 'rights'],
     }),
     updateResource: builder.mutation<
       void,
@@ -152,7 +192,7 @@ export const singleRightsApi = createApi({
           body: JSON.stringify(actionKeys),
         };
       },
-      invalidatesTags: ['overview', 'delegationCheck'],
+      invalidatesTags: ['resources', 'delegationCheck', 'rights'],
     }),
   }),
 });
@@ -160,6 +200,7 @@ export const singleRightsApi = createApi({
 export const {
   useGetPaginatedSearchQuery,
   useGetSingleRightsForRightholderQuery,
+  useGetResourceRightsQuery,
   useClearAccessCacheMutation,
   useDelegationCheckQuery,
   useDelegateRightsMutation,

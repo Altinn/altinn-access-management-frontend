@@ -32,8 +32,9 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <summary>
         ///     Integration point for retrieving the full list of resources
         /// </summary>
+        /// <param name="includeMigratedApps">Indicates whether to include migrated applications in the list</param>
         /// <returns>The resource full list of all resources if exists</returns>
-        Task<List<ServiceResource>> GetResourceList();
+        Task<List<ServiceResource>> GetResourceList(bool includeMigratedApps = false);
 
         /// <summary>
         ///     Gets list of all resource owners.

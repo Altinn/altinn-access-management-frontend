@@ -83,7 +83,12 @@ const renderModalContent = (
   availableActions?: DelegationAction[],
 ) => {
   if (resource) {
-    return <ResourceInfo resource={resource} />;
+    return (
+      <ResourceInfo
+        resource={resource}
+        availableActions={availableActions}
+      />
+    );
   }
   if (accessPackage) {
     return (

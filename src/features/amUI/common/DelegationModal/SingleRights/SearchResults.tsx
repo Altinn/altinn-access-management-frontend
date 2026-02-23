@@ -7,6 +7,7 @@ import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 
 import classes from './ResourceSearch.module.css';
+import { DelegationAction } from '../EditModal';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -20,6 +21,7 @@ interface SearchResultsProps {
   searchResultsPerPage: number;
   onSelect: (resource: ServiceResource) => void;
   setCurrentPage: (page: number) => void;
+  availableActions?: DelegationAction[];
 }
 
 export const SearchResults = ({
@@ -34,6 +36,7 @@ export const SearchResults = ({
   searchResultsPerPage,
   onSelect,
   setCurrentPage,
+  availableActions,
 }: SearchResultsProps) => {
   const { t } = useTranslation();
 

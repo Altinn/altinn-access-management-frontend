@@ -306,7 +306,10 @@
     "delete_singleRight_error_message": "Failed to delete access to ",
     "wip_title": "Power of attorney to services",
     "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
-    "wip_link_text": "Go to old Altinn"
+    "wip_link_text": "Go to old Altinn",
+    "inheritance": {
+      "right_inherited": "This action is inherited and cannot be changed here."
+    }
   },
   "access_packages": {
     "helptext_button": "What are access packages?",
@@ -508,8 +511,8 @@
       "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted.",
       "via_priv": "{{user_name}} has this power of attorney through their role as a private individual. It cannot be deleted."
     },
-    "cannot_delegate_here": "Access to this package cannot be granted here.",
-    "delegation_check_not_delegable": "You cannot grant this access.",
+    "cannot_delegate_here": "This power of attorney cannot be granted here.",
+    "delegation_check_not_delegable": "You cannot grant this power of attorney.",
     "no_permissions_fulltext": "Your organization might have content that no one sees. You must grant access to {{packageName}} for such messages and services to be visible."
   },
   "new_user_modal": {
@@ -923,7 +926,7 @@
   "resource_list": {
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
-    "no_resources": "No resources available.",
+    "no_resources": "No services.",
     "filter_by_serviceowner": "Filter by service owner",
     "resource_search_clear": "Clear search",
     "remove_filter": "Remove filter",

@@ -303,7 +303,10 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttenester",
     "wip_message": "Denne sida jobbar vi framleis med! For å administrere enkelttenester, må du gå til den gamle løysinga.",
-    "wip_link_text": "Gå til gamle Altinn"
+    "wip_link_text": "Gå til gamle Altinn",
+    "inheritance": {
+      "right_inherited": "Denne handlinga er arvet og kan ikkje endrast her."
+    }
   },
   "access_packages": {
     "helptext_button": "Kva er tilgangspakkar?",
@@ -505,7 +508,7 @@
       "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
       "via_priv": "{{user_name}} har denne fullmakta gjennom sin rolle som privatperson. Den kan difor ikkje slettast."
     },
-    "cannot_delegate_here": "Tilgang til denne pakken kan ikkje bli gitt eller fjerna her.",
+    "cannot_delegate_here": "Denne fullmakta kan ikkje bli gitt eller fjerna her.",
     "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta.",
     "no_permissions_fulltext": "Virksemden kan ha innhald som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldingar og tenester skal bli synlege."
   },
@@ -920,7 +923,7 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tenester tilgjengelege.",
+    "no_resources": "Ingen tenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",

@@ -33,7 +33,6 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
           type: 'Organisasjon',
           name: 'DIGITALISERINGSDIREKTORATET',
           children: null,
-          keyValues: { PartyId: '50365521', DateOfBirth: '1984-04-03' },
         },
         roles: [rhRole],
       };

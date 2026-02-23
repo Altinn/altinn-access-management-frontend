@@ -104,9 +104,15 @@ export const DelegationModalContent = ({
         <ResourceSearch
           onSelect={onResourceSelection}
           toParty={toParty}
+          availableActions={availableActions}
         />
       );
-      infoViewContent = resourceToView && <ResourceInfo resource={resourceToView} />;
+      infoViewContent = resourceToView && (
+        <ResourceInfo
+          resource={resourceToView}
+          availableActions={availableActions}
+        />
+      );
       triggerButtonText = t('single_rights.give_new_single_right');
   }
 
@@ -114,7 +120,7 @@ export const DelegationModalContent = ({
     <DsDialog.TriggerContext>
       <DsDialog.Trigger
         data-size='sm'
-        variant='secondary'
+        variant='primary'
         className={classes.triggerButton}
       >
         {triggerButtonText}

@@ -1,4 +1,3 @@
-import { DeleteResourceButton } from '@/features/amUI/userRightsPage/SingleRightsSection/DeleteResourceButton';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import {
   formatDisplayName,
@@ -17,6 +16,7 @@ import { JSX, useState } from 'react';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SerializedError } from '@reduxjs/toolkit';
+import { DelegationAction } from '../EditModal';
 
 import classes from './ResourceInfo.module.css';
 
@@ -30,11 +30,12 @@ type RightsSectionProps = {
   hasAccess: boolean;
   hasUnsavedChanges: boolean;
   rights: ChipRight[];
-  chips: () => JSX.Element[];
+  chips: (editable: boolean) => JSX.Element[];
   saveEditedRights: () => void;
   delegateChosenRights: () => void;
   revokeResource: () => void;
   undelegableActions: string[];
+  availableActions?: DelegationAction[];
 };
 
 export const RightsSection = ({
@@ -52,6 +53,7 @@ export const RightsSection = ({
   delegationCheckError,
   delegationError,
   missingAccess,
+  availableActions,
 }: RightsSectionProps) => {
   const [rightsExpanded, setRightsExpanded] = useState(false);
 
@@ -155,40 +157,48 @@ export const RightsSection = ({
             >
               <div className={classes.rightExpandableContent}>
                 <DsParagraph>{t('delegation_modal.actions.action_description')}</DsParagraph>
-                <div className={classes.rightChips}>{chips()}</div>
-                {undelegableActions.length > 0 && (
-                  <div className={classes.undelegableSection}>
-                    <DsHeading
-                      level={5}
-                      data-size='2xs'
-                    >
-                      {t('delegation_modal.actions.cannot_give_header')}
-                    </DsHeading>
-                    <div className={classes.undelegableActions}>
-                      {undelegableActions.map((action) => action).join(', ')}
+                <div className={classes.rightChips}>
+                  {chips(availableActions?.includes(DelegationAction.DELEGATE) ?? false)}
+                </div>
+                {undelegableActions.length > 0 &&
+                  availableActions?.includes(DelegationAction.DELEGATE) && (
+                    <div className={classes.undelegableSection}>
+                      <DsHeading
+                        level={5}
+                        data-size='2xs'
+                        className={classes.undelegableHeader}
+                      >
+                        {t('delegation_modal.actions.cannot_give_header')}
+                      </DsHeading>
+                      <div className={classes.undelegableActions}>
+                        {undelegableActions.map((action) => action).join(', ')}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             </ListItem>
           </div>
         </>
       )}
       <div className={classes.editButtons}>
-        <Button
-          data-size='sm'
-          disabled={
-            displayResourceAlert || !rights.some((r) => r.checked === true) || !hasUnsavedChanges
-          }
-          onClick={hasAccess ? saveEditedRights : delegateChosenRights}
-        >
-          {hasAccess ? t('common.update_poa') : t('common.give_poa')}
-        </Button>
+        {availableActions?.includes(DelegationAction.DELEGATE) && (
+          <Button
+            data-size='sm'
+            disabled={
+              displayResourceAlert || !rights.some((r) => r.checked === true) || !hasUnsavedChanges
+            }
+            onClick={hasAccess ? saveEditedRights : delegateChosenRights}
+          >
+            {hasAccess ? t('common.update_poa') : t('common.give_poa')}
+          </Button>
+        )}
         {hasAccess && toParty && (
           <Button
-            variant='tertiary'
+            variant={availableActions?.includes(DelegationAction.DELEGATE) ? 'tertiary' : 'primary'}
             className={classes.deleteButton}
             onClick={revokeResource}
+            disabled={!rights.some((r) => r.inherited === false)}
+            color='danger'
           >
             <MinusCircleIcon />
             {t('common.delete_poa')}

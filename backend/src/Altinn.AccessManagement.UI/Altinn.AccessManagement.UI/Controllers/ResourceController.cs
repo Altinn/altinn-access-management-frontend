@@ -66,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
-                return await _resourceService.GetPaginatedSearchResults(languageCode, parameters.ROFilters, parameters.SearchString, parameters.Page, parameters.ResultsPerPage);
+                return await _resourceService.GetPaginatedSearchResults(languageCode, parameters);
             }
             catch (HttpStatusException ex)
             {
