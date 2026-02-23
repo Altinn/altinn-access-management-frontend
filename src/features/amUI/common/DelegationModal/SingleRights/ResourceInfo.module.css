@@ -41,6 +41,11 @@
 .undelegableSection {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
+}
+
+.undelegableHeader {
+  white-space: nowrap;
 }
 
 .undelegableActions {

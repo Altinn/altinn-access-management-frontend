@@ -56,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<ServiceResource> GetResource(string resourceId, string versionId = null)
         {
-            try 
+            try
             {
                 ServiceResource result = null;
                 string endpointUrl = $"resource/{resourceId}";
@@ -160,8 +160,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <summary>
         ///     Gets all resources no matter if it's an AltinnApp or GenericAccessResource
         /// </summary>
+        /// <param name="includeMigratedApps">Indicates whether to include migrated applications in the list</param>
         /// <returns>List of all resources</returns>
-        public async Task<List<ServiceResource>> GetResourceList()
+        public async Task<List<ServiceResource>> GetResourceList(bool includeMigratedApps = false)
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {
@@ -170,6 +171,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string endpointUrl = "resource/resourcelist";
+
+                if (includeMigratedApps)
+                {
+                    endpointUrl += "?includeMigratedApps=true";
+                }
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
                 string content = await response.Content.ReadAsStringAsync();

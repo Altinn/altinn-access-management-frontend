@@ -1,0 +1,24 @@
+{
+    "resource": {
+        "id": "d4e5f6a7-b8c9-0123-def0-234567890124",
+        "providerId": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+        "typeId": "f6a7b8c9-d0e1-2345-f012-456789012345",
+        "name": "A3 app 2",
+        "description": "An Altinn 3 app",
+        "refId": "app_ttd_a3-app",
+        "provider": {
+            "id": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+            "name": "Testdepartementet",
+            "refId": "974760746",
+            "logoUrl": null,
+            "code": "TTD",
+            "typeId": "a7b8c9d0-e1f2-3456-0123-567890123456"
+        },
+        "type": {
+            "id": "altinnapp",
+            "name": "AltinnApp"
+        }
+    },
+    "directRules": [],
+    "indirectRules": []
+}

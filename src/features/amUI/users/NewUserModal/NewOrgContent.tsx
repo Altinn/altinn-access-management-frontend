@@ -8,6 +8,7 @@ import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/Techni
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
+import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 
 export const NewOrgContent = ({
   addOrg,
@@ -49,7 +50,7 @@ export const NewOrgContent = ({
             <strong>{orgData.name}</strong>
           </DsParagraph>
           <DsParagraph data-size='sm'>
-            {t('common.org_nr')} {orgData.orgNumber}
+            {t('common.org_nr')} {formatOrgNr(orgData.orgNumber)}
             {orgData.unitType === 'AAFY' ||
               (orgData?.unitType === 'BEDR' && ' - ' + t('common.subunit'))}
           </DsParagraph>

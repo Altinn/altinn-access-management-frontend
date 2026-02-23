@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation);
 
         /// <summary>
-        ///     Clears cached acesses of a delegation recipient
+        ///     Clears cached accesses of a delegation recipient
         /// </summary>
         /// <param name="party">
         ///     The party from which the rights have been given (delegator)
@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="from">The party from which the delegation would be on behalf of</param>
         /// <param name="resource">The id of the resource to be checked for delegation</param>
-        Task<List<ResourceAction>> DelegationCheck(Guid from, string resource);
+        Task<List<RuleCheck>> DelegationCheck(Guid from, string resource);
 
         /// <summary>
         ///    Delegates the specified rights on a specified resource to someone on behalf of a specified party
@@ -65,19 +65,29 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<HttpResponseMessage> Delegate(Guid party, Guid from, Guid to, string resource, List<string> actionKeys);
 
         /// <summary>
-        ///     Gets the single-rights for a given rightholder
+        ///     Gets the resources (without actions) that have been granted from one party to another
         /// </summary>
         /// <param name="languageCode">
         ///     The language code for the request
         /// </param>
-        /// <param name="party">
-        ///     The party from which the rights have been given (delegator)
-        /// </param>
-        /// <param name="userId">
-        ///     The user id of the rightholder
-        /// </param>
+        /// <param name="party">The acting party that is asking to see the resource delegations</param>
+        /// <param name="from">The party from which the resources have been delegated</param>
+        /// <param name="to">The party that has received the delegations</param>
         /// <returns></returns>
-        Task<List<ResourceDelegation>> GetSingleRightsForRightholder(string languageCode, string party, string userId);
+        Task<List<ResourceDelegation>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to);
+
+        /// <summary>
+        ///     Gets the resources (without actions) that have been granted from one party to another
+        /// </summary>
+        /// <param name="languageCode">
+        ///     The language code for the request
+        /// </param>
+        /// <param name="party">The acting party that is asking to see the resource delegations</param>
+        /// <param name="from">The party from which the resources have been delegated</param>
+        /// <param name="to">The party that has received the delegations</param>
+        /// <param name="resource">The identifier of the resource that has been granted access to</param>
+        /// <returns></returns>
+        Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource);
 
         /// <summary>
         /// Revokes all rights on a resource that has been granted from one party to another.

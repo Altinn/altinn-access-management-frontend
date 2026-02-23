@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
@@ -58,21 +59,48 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to)
+        {
+            string endpointUrl = $"enduser/connections/resources?party={party}&to={to}&from={from}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<ResourcePermission>>(response, _logger, "SingleRightClient // GetDelegatedResources");
+        }
+
+        /// <inheritdoc />
+        public async Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
+        {
+            string endpointUrl = $"enduser/connections/resources/rules?party={party}&to={to}&from={from}&resource={resource}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<ResourceRight>(response, _logger, "SingleRightClient // GetDelegatedResourceRights");
+        }
+
+        /// <inheritdoc />
         public async Task<HttpResponseMessage> CreateSingleRightsAccess(Guid party, Guid to, Guid from, string resourceId, List<string> actionKeys)
         {
             try
             {
-                string endpointUrl = $"enduser/connections/resources?party={party}&to={to}&from={from}&resource={resourceId}";
+                string endpointUrl = $"enduser/connections/resources/rules?party={party}&to={to}&from={from}&resource={resourceId}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                string requestBody = JsonSerializer.Serialize(actionKeys, _serializerOptions);
+                var ruleKeys = new { directRuleKeys = actionKeys };
+                string requestBody = JsonSerializer.Serialize(ruleKeys, _serializerOptions);
                 StringContent content = new StringContent(requestBody, System.Text.Encoding.UTF8, "application/json");
+
                 var httpResponse = await _client.PostAsync(token, endpointUrl, content);
+                var responseContent = await httpResponse.Content.ReadAsStringAsync();
                 return httpResponse;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SingleRightClient // SingleRightDelegationCheck // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SingleRightClient // CreateSingleRightsAccess // Exception");
                 throw;
             }
         }
@@ -82,17 +110,18 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/connections/resources?party={party}&to={to}&from={from}&resource={resourceId}";
+                string endpointUrl = $"enduser/connections/resources/rules?party={party}&to={to}&from={from}&resource={resourceId}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                string requestBody = JsonSerializer.Serialize(actionKeys, _serializerOptions);
+                var ruleKeys = new { directRuleKeys = actionKeys };
+                string requestBody = JsonSerializer.Serialize(ruleKeys, _serializerOptions);
                 StringContent content = new StringContent(requestBody, System.Text.Encoding.UTF8, "application/json");
                 var httpResponse = await _client.PutAsync(token, endpointUrl, content);
                 return httpResponse;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SingleRightClient // AccessPackageDelegationCheck // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SingleRightClient // UpdateSingleRightsAccess // Exception");
                 throw;
             }
         }
@@ -102,7 +131,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             string endpointUrl = $"enduser/connections/resources?party={party}&to={to}&from={from}&resource={resourceId}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            
+
             HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
 
             if (response.IsSuccessStatusCode)

@@ -303,7 +303,10 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttenester",
     "wip_message": "Denne sida jobbar vi framleis med! For å administrere enkelttenester, må du gå til den gamle løysinga.",
-    "wip_link_text": "Gå til gamle Altinn"
+    "wip_link_text": "Gå til gamle Altinn",
+    "inheritance": {
+      "right_inherited": "Denne handlinga er arvet og kan ikkje endrast her."
+    }
   },
   "access_packages": {
     "helptext_button": "Kva er tilgangspakkar?",
@@ -369,7 +372,7 @@
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukarar med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
-    "no_users": "Denne lista er tom",
+    "no_users": "Du har ikkje motteke nokon fullmakter frå andre.",
     "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønskjer du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?",
@@ -511,7 +514,7 @@
       "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
       "via_priv": "{{user_name}} har denne fullmakta gjennom sin rolle som privatperson. Den kan difor ikkje slettast."
     },
-    "cannot_delegate_here": "Tilgang til denne pakken kan ikkje bli gitt eller fjerna her.",
+    "cannot_delegate_here": "Denne fullmakta kan ikkje bli gitt eller fjerna her.",
     "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta.",
     "no_permissions_fulltext": "Virksemden kan ha innhald som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldingar og tenester skal bli synlege."
   },
@@ -926,7 +929,7 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tenester tilgjengelege.",
+    "no_resources": "Ingen tenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
@@ -935,9 +938,11 @@
   },
   "landing_page": {
     "alert_heading": "Du er no i den nye løysinga for tilgangsstyring",
-    "alert_heading_priv": "Dette er den nye løysinga for tilgangsstyring for privatperson",
     "alert_body": "Her er dagens Altinn-roller erstatta av tilgangspakkar med tenester.",
-    "alert_body_p2": "Vær merksam på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Om du ikkje finn tenesten her, kan du gå til den gamle løysinga.",
+    "alert_body_p2": "Ver merksam på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Visst du ikkje finn tenesta her, kan du gå til den gamle løysinga.",
+    "alert_heading_priv": "Dette er den nye løysinga for tilgangsstyring til privatperson",
+    "alert_body_priv": "Her er dagens Altinn-roller erstatta av tilgangspakkar som inneheld skjema og tenester. Desse kan du gi vidare til andre dersom du ønsker at nokon skal hjelpe deg i Altinn.",
+    "alert_body_p2_priv": "Ver merksam på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Visst du ikkje finn tenesta her, kan du gå til den gamle løysinga.",
     "alert_link": "Gå til gamle Altinn",
     "your_content_heading": "Dine tilganger",
     "shortcut_links_heading": "Andre tilganger",

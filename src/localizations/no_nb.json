@@ -303,7 +303,10 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttjenester",
     "wip_message": "Denne siden jobber vi fremdeles med! For å administrere enkelttjenester, må du gå til den gamle løsningen.",
-    "wip_link_text": "Gå til gamle Altinn"
+    "wip_link_text": "Gå til gamle Altinn",
+    "inheritance": {
+      "right_inherited": "Denne handlingen er arvet og kan ikke endres her."
+    }
   },
   "access_packages": {
     "helptext_button": "Hva er tilgangspakker?",
@@ -369,7 +372,7 @@
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
-    "no_users": "Denne listen er tom",
+    "no_users": "Du har ikke mottatt noen fullmakter fra andre.",
     "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
@@ -506,12 +509,12 @@
   "status_section": {
     "has_package_message": "{{user_name}} har denne fullmakten.",
     "access_status": {
-      "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_priv": "{{user_name}} har denne fullmakten gjennom sin rolle som privatperson. Den kan derfor ikke slettes."
+      "via_role": "{{user_name}} har fullmakt gjennom rollen de har i {{via_name}}. Den kan derfor ikke slettes.",
+      "via_connection": "{{user_name}} har fullmakt gjennom {{via_name}}. Denne kan derfor ikke slettes.",
+      "via_keyrole": "{{user_name}} har fullmakt gjennom rollen de har i {{via_name}}. Den kan derfor ikke slettes.",
+      "via_priv": "{{user_name}} har fullmakt gjennom sin rolle som privatperson. Den kan derfor ikke slettes."
     },
-    "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
+    "cannot_delegate_here": "Denne fullmakten kan ikke gis/fjernes her.",
     "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten.",
     "no_permissions_fulltext": "Virksomheten kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlige."
   },
@@ -926,7 +929,7 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tjenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tjenester er tilgjengelige.",
+    "no_resources": "Ingen tjenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
@@ -935,9 +938,11 @@
   },
   "landing_page": {
     "alert_heading": "Du er nå i den nye løsningen for tilgangsstyring",
-    "alert_heading_priv": "Dette er den nye løsningen for tilgangsstyring for privatperson",
     "alert_body": "Her er dagens Altinn-roller erstattet av tilgangspakker med tjenester.",
     "alert_body_p2": "Vær oppmerksom på at det er noen tjenester du ikke kan gi tilgang til i den nye løsningen. Hvis du ikke finner tjenesten her, kan du gå til den gamle løsningen.",
+    "alert_heading_priv": "Dette er den nye løsningen for tilgangsstyring til privatperson",
+    "alert_body_priv": "Her er dagens Altinn-roller erstattet av tilgangspakker som inneholder skjema og tjenester. Disse kan du gi til andre hvis du ønsker at noen skal hjelpe deg i Altinn.",
+    "alert_body_p2_priv": "Vær oppmerksom på at det er noen tjenester du ikke kan gi tilgang til i den nye løsningen ennå. Disse finner du fortsatt i den gamle løsningen.",
     "alert_link": "Gå til gamle Altinn",
     "your_content_heading": "Dine tilganger",
     "shortcut_links_heading": "Andre tilganger",

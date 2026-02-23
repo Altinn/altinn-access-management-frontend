@@ -863,33 +863,22 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        ///     Assert that two <see cref="ResourceAction" /> have the same property values.
+        ///     Assert that two <see cref="RuleCheck" /> have the same property values.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(ResourceAction expected, ResourceAction actual)
+        public static void AssertEqual(RuleCheck expected, RuleCheck actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
+            Assert.NotNull(expected.Rule);
+            Assert.NotNull(actual.Rule);
 
-            Assert.Equal(expected.ActionKey, actual.ActionKey);
-            Assert.Equal(expected.ActionName, actual.ActionName);
+            Assert.Equal(expected.Rule.Key, actual.Rule.Key);
+            Assert.Equal(expected.Rule.Name, actual.Rule.Name);
+            Assert.Equal(expected.Rule.Action, actual.Rule.Action);
             Assert.Equal(expected.Result, actual.Result);
-            AssertCollections<ResourceAction.Reason>(expected.Reasons.ToList(), actual.Reasons.ToList(), AssertEqual);
-        }
-
-        /// <summary>
-        ///     Assert that two <see cref="ResourceAction.Reason" /> have the same property values.
-        /// </summary>
-        /// <param name="expected">An instance with the expected values.</param>
-        /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(ResourceAction.Reason expected, ResourceAction.Reason actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.Description, actual.Description);
-            Assert.Equal(expected.ReasonKey, actual.ReasonKey);
+            AssertCollections(expected.ReasonCodes, actual.ReasonCodes, Assert.Equal);
         }
     }
 }

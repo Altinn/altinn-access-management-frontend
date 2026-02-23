@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// <summary>
         /// Gets or sets the DateOfBirth
         /// </summary>
-        public DateOnly DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether if the reportee in the list is only there for showing the hierarchy (a parent unit with no access)
@@ -118,7 +118,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
             }
             else if (party is Altinn.Register.Contracts.Person person)
             {
-                DateOfBirth = (DateOnly)person.DateOfBirth;
+                DateOfBirth = person.DateOfBirth.IsNull ? null : person.DateOfBirth.Value;
             }
         }
 

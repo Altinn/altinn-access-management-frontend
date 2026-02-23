@@ -10,7 +10,7 @@ import { ConnectionUserType } from '@/rtk/features/connectionApi';
 
 import classes from './UserList.module.css';
 import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { ECC_PROVIDER_CODE, useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
 import { color } from 'storybook/internal/theming';
@@ -115,7 +115,7 @@ export const UserItem = ({
       descriptionString +=
         t('common.org_nr') +
         ' ' +
-        user.organizationIdentifier +
+        formatOrgNr(user.organizationIdentifier) +
         (isSubOrMainUnit || subUnit
           ? `, ${t(hasSubUnitRole || subUnit ? 'common.subunit_lowercase' : 'common.mainunit_lowercase')}`
           : '');
