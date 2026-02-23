@@ -130,11 +130,11 @@ export const ClientAccessList = ({
           type: userType,
           isSubUnit,
           interactive: false,
+          as: 'div',
           description:
             access.role.code !== 'rettighetshaver'
               ? t('client_administration_page.via_role', { role: roleName })
               : '',
-          as: 'div',
           color: (hasAccess ? 'company' : 'neutral') as Color,
           controls,
         };
@@ -153,9 +153,10 @@ export const ClientAccessList = ({
       organizationIdentifier: client.client.organizationIdentifier,
       type: userType,
       subUnit: isSubUnit,
-      deleted: client.client.isDeleted,
+      deleted: client.client.isDeleted ?? undefined,
       collapsible: true,
-      as: Button,
+      interactive: true,
+      as: 'button',
       children:
         nodes.length === 0 && emptyAccessText ? (
           <DsParagraph>{emptyAccessText}</DsParagraph>
