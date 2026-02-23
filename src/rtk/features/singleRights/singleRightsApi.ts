@@ -55,6 +55,8 @@ interface searchParams {
   ROfilters: string[];
   page: number;
   resultsPerPage: number;
+  includeA2Services?: boolean;
+  includeMigratedApps?: boolean;
 }
 
 export interface DelegationCheckedRight {
@@ -87,12 +89,27 @@ export const singleRightsApi = createApi({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
       query: (args) => {
-        const { searchString, ROfilters, page, resultsPerPage } = args;
-        let filterUrl = '';
+        const {
+          searchString,
+          ROfilters,
+          page,
+          resultsPerPage,
+          includeA2Services,
+          includeMigratedApps,
+        } = args;
+        let searchParams = '';
         for (const filter of ROfilters) {
-          filterUrl = filterUrl + `&ROFilters=${filter}`;
+          searchParams = searchParams + `&ROFilters=${filter}`;
         }
-        return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${filterUrl}`;
+        if (includeA2Services === false) {
+          // Default is to include A2 services, so only add param if false
+          searchParams = searchParams + `&includeA2Services=false`;
+        }
+        if (includeMigratedApps) {
+          // Default is to not include migrated apps, so only add param if true
+          searchParams = searchParams + `&includeMigratedApps=true`;
+        }
+        return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${searchParams}`;
       },
     }),
     getSingleRightsForRightholder: builder.query<
