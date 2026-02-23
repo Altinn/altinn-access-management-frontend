@@ -19,7 +19,7 @@ export const ClientAdministrationAgentsTab = () => {
     isLoading: isAgentsLoading,
     isError: isGetAgentsError,
   } = useGetAgentsQuery();
-  const [addAgent] = useAddAgentMutation();
+  const [addAgent, { isLoading: isAdding }] = useAddAgentMutation();
   const { fromParty } = usePartyRepresentation();
 
   const {
@@ -61,7 +61,7 @@ export const ClientAdministrationAgentsTab = () => {
   );
 
   const handleAddAgent = (userId: string) => {
-    addAgent({ to: userId })
+    void addAgent({ to: userId })
       .unwrap()
       .then(() => {
         openSnackbar({
@@ -99,7 +99,7 @@ export const ClientAdministrationAgentsTab = () => {
         getUserLink={(user) => `/clientadministration/agent/${user.id}`}
         onAddNewUser={(user) => navigate(`/clientadministration/agent/${user.id}`)}
         isLoading={isAgentsLoading || isIndirectLoading}
-        isActionLoading={isIndirectFetching}
+        isActionLoading={isIndirectFetching || isAdding}
         AddUserButton={AddAgentButton}
         addUserButtonLabel={t('client_administration_page.add_agent_button_short')}
         onDelegate={(user) => {
