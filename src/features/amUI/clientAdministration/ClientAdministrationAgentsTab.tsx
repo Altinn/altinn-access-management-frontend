@@ -1,22 +1,47 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
-import { useGetAgentsQuery } from '@/rtk/features/clientApi';
-import { type Connection } from '@/rtk/features/connectionApi';
+import { useAddAgentMutation, useGetAgentsQuery, type Agent } from '@/rtk/features/clientApi';
+import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
 import classes from './ClientAdministrationAgentsTab.module.css';
 import { useNavigate } from 'react-router';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 export const ClientAdministrationAgentsTab = () => {
   const { t } = useTranslation();
+  const { openSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const {
     data: agents,
     isLoading: isAgentsLoading,
     isError: isGetAgentsError,
   } = useGetAgentsQuery();
+  const [addAgent, { isLoading: isAdding }] = useAddAgentMutation();
+  const { fromParty } = usePartyRepresentation();
+
+  const {
+    data: indirectConnections,
+    isLoading: isIndirectLoading,
+    isFetching: isIndirectFetching,
+  } = useGetRightHoldersQuery(
+    {
+      partyUuid: fromParty?.partyUuid ?? '',
+      fromUuid: fromParty?.partyUuid ?? '',
+      toUuid: '',
+    },
+    { skip: !fromParty?.partyUuid },
+  );
+
+  const filteredIndirectConnections = useMemo<Connection[]>(
+    () =>
+      indirectConnections?.filter((connection) => {
+        return connection.party.type === 'Person';
+      }) ?? [],
+    [indirectConnections],
+  );
 
   const agentConnections = useMemo<Connection[]>(
     () =>
@@ -35,6 +60,24 @@ export const ClientAdministrationAgentsTab = () => {
     [agents],
   );
 
+  const handleAddAgent = (userId: string) => {
+    void addAgent({ to: userId })
+      .unwrap()
+      .then(() => {
+        openSnackbar({
+          message: t('client_administration_page.add_agent_success_snackbar'),
+          color: 'success',
+        });
+      })
+      .catch(() => {
+        openSnackbar({
+          message: t('client_administration_page.add_agent_error'),
+          color: 'danger',
+          duration: SnackbarDuration.infinite,
+        });
+      });
+  };
+
   if (isGetAgentsError) {
     return (
       <DsAlert
@@ -52,12 +95,16 @@ export const ClientAdministrationAgentsTab = () => {
         includeSelfAsChild={false}
         includeSelfAsChildOnIndirect={false}
         connections={agentConnections}
+        indirectConnections={filteredIndirectConnections}
         getUserLink={(user) => `/clientadministration/agent/${user.id}`}
-        onAddNewUser={(user) => {
-          navigate(`/clientadministration/agent/${user.id}`);
-        }}
-        isLoading={isAgentsLoading}
+        onAddNewUser={(user) => navigate(`/clientadministration/agent/${user.id}`)}
+        isLoading={isAgentsLoading || isIndirectLoading}
+        isActionLoading={isIndirectFetching || isAdding}
         AddUserButton={AddAgentButton}
+        addUserButtonLabel={t('client_administration_page.add_agent_button_short')}
+        onDelegate={(user) => {
+          handleAddAgent(user.id);
+        }}
         canDelegate={true}
         noUsersText={t('client_administration_page.no_agents')}
         searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
