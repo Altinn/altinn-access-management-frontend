@@ -23,52 +23,34 @@
       "name": "GenericAccessResource"
     }
   },
-  "actions": [
+  "rules": [
     {
-      "actionKey": "urn:altinn:resource:appid-502:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "Read",
-      "result": true,
-      "reasons": [
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess"
+      ],
+      "rule": {
+        "key": "urn:altinn:resource:appid-502:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "name": "Read",
+        "resource": [
+          "urn:altinn:resource:appid-502"
+        ],
+        "action": "read"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:appid-502:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "actionName": "Write",
-      "result": true,
-      "reasons": [
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess"
+      ],
+      "rule": {
+        "key": "urn:altinn:resource:appid-502:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+        "name": "Write",
+        "resource": [
+          "urn:altinn:resource:appid-502"
+        ],
+        "action": "write"
+      },
+      "result": true
     }
   ]
 }

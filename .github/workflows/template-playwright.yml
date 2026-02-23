@@ -55,6 +55,8 @@ jobs:
           MASKINPORTEN_JWK: ${{ secrets.MASKINPORTEN_JWK }}
           MASKINPORTEN_BEHALF_OF_CLIENT_ID: ${{ secrets.MASKINPORTEN_BEHALF_OF_CLIENT_ID }}
           MASKINPORTEN_BEHALF_OF_JWK: ${{ secrets.MASKINPORTEN_BEHALF_OF_JWK }}
+          AT23_REGISTER_SUBSCRIPTION_KEY: ${{ secrets.AT23_REGISTER_SUBSCRIPTION_KEY }}
+          TT02_REGISTER_SUBSCRIPTION_KEY: ${{ secrets.TT02_REGISTER_SUBSCRIPTION_KEY }}
         run: |
           yarn run env:${{ inputs.environment }} --project ${{ inputs.project }} --workers=4
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

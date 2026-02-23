@@ -4,6 +4,15 @@
   gap: 0.5rem;
 }
 
+.searchAndAdd {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--ds-size-2);
+  flex-wrap: wrap;
+  gap: var(--ds-size-2);
+}
+
 .showMoreButtonContainer {
   display: flex;
   justify-content: center;

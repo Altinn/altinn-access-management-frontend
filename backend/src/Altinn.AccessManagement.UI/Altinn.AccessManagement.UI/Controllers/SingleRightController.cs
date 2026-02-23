@@ -8,7 +8,6 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -157,11 +156,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegationcheck")]
-        public async Task<ActionResult<List<ResourceAction>>> GetDelegationCheck([FromQuery] Guid from, [FromQuery] string resource)
+        public async Task<ActionResult<List<RuleCheck>>> GetDelegationCheck([FromQuery] Guid from, [FromQuery] string resource)
         {
             try
             {
-                List<ResourceAction> result = await _singleRightService.DelegationCheck(from, resource);
+                List<RuleCheck> result = await _singleRightService.DelegationCheck(from, resource);
                 return Ok(result);
             }
             catch (HttpStatusException statusEx)
@@ -215,27 +214,66 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Endpoint for getting single rights for a right holder
+        ///     Endpoint for getting the resources (without actions) that have been granted from one party to another
         /// </summary>
-        /// <param name="party">The party identifier</param>
-        /// <param name="userId">The user identifier</param>
+        /// <param name="party">The acting party that is asking to see the resource delegations</param>
+        /// <param name="from">The party from which the resources have been delegated (the owner of the data)</param>
+        /// <param name="to">The party that has received the delegations</param>
         /// <response code="200">OK</response>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("{party}/rightholder/{userId}")]
-        public async Task<ActionResult<List<ResourceDelegation>>> GetSingleRightsForRightholder([FromRoute] string party, [FromRoute] string userId)
+        [Route("delegation/resources")]
+        public async Task<ActionResult<List<ResourceDelegation>>> GetDelegatedResources([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
-                List<ResourceDelegation> delegations = await _singleRightService.GetSingleRightsForRightholder(languageCode, party, userId);
+                List<ResourceDelegation> delegations = await _singleRightService.GetDelegatedResources(languageCode, party, from, to);
                 return Ok(delegations);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected exception occurred while retrieving single rights for right holder: {Message}", ex.Message);
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving resource delegations for right holder: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for getting the resources (without actions) that have been granted from one party to another
+        /// </summary>
+        /// <param name="party">The acting party that is asking to see the resource delegations</param>
+        /// <param name="from">The party from which the resources have been delegated (the owner of the data)</param>
+        /// <param name="to">The party that has received the delegations</param>
+        /// <param name="resourceId">The id of the resource to fetch delegated rights for</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("delegation/resources/rights")]
+        public async Task<ActionResult<ResourceRight>> GetDelegatedResourceRights([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resourceId)
+        {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            try
+            {
+                ResourceRight delegations = await _singleRightService.GetDelegatedResourceRights(languageCode, party, from, to, resourceId);
+                return Ok(delegations);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving resource right delegations for right holder: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
@@ -266,7 +304,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected exception occurred during revoking of single right");
+                _logger.LogError(ex, "Unexpected exception occurred during revoking of resource access:" + ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
@@ -303,7 +341,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected exception occurred during update of single right");
+                _logger.LogError(ex, "Unexpected exception occurred during update of resource access:" + ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

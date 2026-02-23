@@ -199,7 +199,7 @@ export const ConsentRequestContent = ({
                 : t('consent_request.approve_consent')}
             </DsButton>
             <DsButton
-              variant='tertiary'
+              variant='primary'
               aria-disabled={isActionButtonDisabled}
               loading={isRejectingConsent}
               onClick={rejectConsent}

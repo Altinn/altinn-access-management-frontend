@@ -9,7 +9,7 @@ export const useDelegateRights = () => {
   const delegateRights = (
     actionKeys: string[],
     resourceId: string,
-    onSuccess?: (response: DelegationResult) => void,
+    onSuccess?: () => void,
     onError?: (status: string | number) => void,
   ) => {
     if (!toParty || !fromParty || !actingParty) {
@@ -25,8 +25,8 @@ export const useDelegateRights = () => {
       actionKeys: actionKeys,
     })
       .unwrap()
-      .then((response) => {
-        if (response) onSuccess?.(response);
+      .then(() => {
+        onSuccess?.();
       })
       .catch((status) => {
         onError?.(status);

@@ -53,29 +53,29 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[] resourceOwnerFilters, string searchString, int page, int resultsPerPage)
+        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, PaginatedSearchParams searchParams)
         {
             try
             {
-                List<ServiceResource> resources = await GetFullResourceList();
-                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema && r.ResourceType != ResourceType.Systemresource && r.Visible);
+                List<ServiceResource> resources = await GetFullResourceList(searchParams.IncludeMigratedApps);
+                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema && r.ResourceType != ResourceType.Systemresource && r.Visible && (searchParams.IncludeA2Services || r.ResourceType != ResourceType.Altinn2Service));
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
                 bool displayPopularServicesOnly = _featureFlags.DisplayPopularSingleRightsServices;
-                if (string.IsNullOrEmpty(searchString) && (resourceOwnerFilters == null || resourceOwnerFilters.Length == 0) && displayPopularServicesOnly)
+                if (string.IsNullOrEmpty(searchParams.SearchString) && (searchParams.ROFilters == null || searchParams.ROFilters.Length == 0) && displayPopularServicesOnly)
                 {
                     // Return a selection of popular services
                     List<ServiceResourceFE> popularResources = FilterOutPopularResources(resourcesFE);
-                    return PaginationUtils.GetListPage(popularResources, page, resultsPerPage);
+                    return PaginationUtils.GetListPage(popularResources, searchParams.Page, searchParams.ResultsPerPage);
                 }
                 else
                 {
                     // Perform search/filtering and return matches
-                    List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
-                    List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchString);
+                    List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, searchParams.ROFilters);
+                    List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchParams.SearchString);
                     OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
 
-                    var paginatedResult = PaginationUtils.GetListPage(searchResults, page, resultsPerPage);
+                    var paginatedResult = PaginationUtils.GetListPage(searchResults, searchParams.Page, searchParams.ResultsPerPage);
 
                     // Add logo to each resource if it exists
                     foreach (ServiceResourceFE resource in paginatedResult.PageList)
@@ -334,13 +334,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return resources;
         }
 
-        private async Task<List<ServiceResource>> GetFullResourceList()
+        private async Task<List<ServiceResource>> GetFullResourceList(bool includeMigratedApps = false)
         {
-            string cacheKey = "resourcesList:all";
+            string cacheKey = $"resourcesList:all:{includeMigratedApps}";
 
             if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
             {
-                resources = await _resourceRegistryClient.GetResourceList();
+                resources = await _resourceRegistryClient.GetResourceList(includeMigratedApps);
 
                 MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetPriority(CacheItemPriority.High)

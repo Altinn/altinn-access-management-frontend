@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, DsButton, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { Button, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
@@ -69,7 +69,7 @@ export const DeleteResourceButton = ({
         }}
       >
         <MinusCircleIcon />
-        {fullText ? t('common.delete_poa') : t('common.delete')}
+        {fullText && t('common.delete_poa')}
       </Button>
     )
   );

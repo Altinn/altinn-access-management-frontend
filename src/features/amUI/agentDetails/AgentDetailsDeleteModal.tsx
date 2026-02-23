@@ -5,15 +5,12 @@ import { useNavigate } from 'react-router';
 import { useRemoveAgentMutation } from '@/rtk/features/clientApi';
 import { DeleteClientProviderModal } from '../common/DeleteClientProviderModal/DeleteClientProviderModal';
 
-interface ClientAdministrationAgentDeleteModalProps {
+interface AgentDetailsDeleteModalProps {
   agentId?: string;
   backUrl: string;
 }
 
-export const ClientAdministrationAgentDeleteModal = ({
-  agentId,
-  backUrl,
-}: ClientAdministrationAgentDeleteModalProps) => {
+export const AgentDetailsDeleteModal = ({ agentId, backUrl }: AgentDetailsDeleteModalProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [removeAgent] = useRemoveAgentMutation();

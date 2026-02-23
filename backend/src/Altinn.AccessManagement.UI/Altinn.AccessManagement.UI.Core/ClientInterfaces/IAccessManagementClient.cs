@@ -38,26 +38,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// <returns>All right holder's accesses</returns>
                 Task<UserAccesses> GetUserAccesses(Guid from, Guid to);
 
-                //// Single Rights
-
-                /// <summary>
-                ///     Retrieves the single rights for a specific right holder.
-                /// </summary>
-                /// <param name="party">The party identifier.</param>
-                /// <param name="userId">The user identifier.</param>
-                /// <returns></returns>
-                Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId);
-
-                /// <summary>
-                /// Revokes a single right on a resource that has been granted from one party to another.
-                /// </summary>
-                /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
-                /// <param name="to">The right holder that has been granted access to the resource.</param>
-                /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
-                /// <param name="rightKey">The identifier of the right that is to be revoked</param>
-                /// <returns></returns>
-                Task<HttpResponseMessage> RevokeRightDelegation(Guid from, Guid to, string resourceId, string rightKey);
-
                 //// Access packages (handled by IAccessPackageClient)
 
                 //// Roles 

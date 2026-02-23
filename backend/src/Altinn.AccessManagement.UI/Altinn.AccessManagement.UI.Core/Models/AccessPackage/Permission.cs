@@ -31,6 +31,38 @@ public class Permission
     /// Via role
     /// </summary>
     public CompactRole ViaRole { get; set; }
+
+    /// <summary>
+    /// Reason for the permission
+    /// </summary>
+    public Reason Reason { get; set; }
+}
+
+/// <summary>
+/// Reason model containing a list of reason items
+/// </summary>
+public class Reason
+{
+    /// <summary>
+    /// List of reason items
+    /// </summary>
+    public List<ReasonItem> Items { get; set; }
+}
+
+/// <summary>
+/// A single reason item with name and description
+/// </summary>
+public class ReasonItem
+{
+    /// <summary>
+    /// Name of the reason
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
+    /// Description of the reason
+    /// </summary>
+    public string Description { get; set; }
 }
 
 /// <summary>

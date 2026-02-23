@@ -4,6 +4,10 @@
   min-height: 500px;
 }
 
+.toolbarContainer {
+  margin: var(--ds-spacing-3) 0;
+}
+
 .toolbarContainer ul {
   max-height: 30rem;
 }

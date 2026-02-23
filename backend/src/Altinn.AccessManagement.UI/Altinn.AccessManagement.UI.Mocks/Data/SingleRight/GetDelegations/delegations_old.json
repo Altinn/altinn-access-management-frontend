@@ -1,0 +1,228 @@
+[
+    {
+        "from": [
+            {
+                "id": "urn:altinn:organizationnumber",
+                "value": "777777777"
+            }
+        ],
+        "to": [
+            {
+                "id": "urn:altinn:ssn",
+                "value": "50019992"
+            }
+        ],
+        "rightDelegationResults": [
+            {
+                "rightKey": "urn:altinn:resource:appid-502:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+                "resource": [
+                    {
+                        "id": "urn:altinn:resource",
+                        "value": "appid-502"
+                    }
+                ],
+                "action": "read",
+                "status": "Delegated",
+                "details": [
+                    {
+                        "code": "",
+                        "description": "",
+                        "parameters": {
+                            "roleRequirementsMatches": [
+                                {
+                                    "id": "",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "from": [
+            {
+                "id": "urn:altinn:organizationnumber",
+                "value": "123456789"
+            }
+        ],
+        "to": [
+            {
+                "id": "urn:altinn:ssn",
+                "value": "50019992"
+            }
+        ],
+        "rightDelegationResults": [
+            {
+                "rightKey": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
+                "resource": [
+                    {
+                        "id": "urn:altinn:resource",
+                        "value": "app_ttd_a3-app2"
+                    }
+                ],
+                "action": "instantiate",
+                "status": "Delegated",
+                "details": [
+                    {
+                        "code": "",
+                        "description": "",
+                        "parameters": {
+                            "roleRequirementsMatches": [
+                                {
+                                    "id": "",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "rightKey": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+                "resource": [
+                    {
+                        "id": "urn:altinn:org",
+                        "value": "ttd"
+                    },
+                    {
+                        "id": "urn:altinn:app",
+                        "value": "a3-app2"
+                    }
+                ],
+                "action": "read",
+                "status": "Delegated",
+                "details": [
+                    {
+                        "code": "",
+                        "description": "",
+                        "parameters": {
+                            "roleRequirementsMatches": [
+                                {
+                                    "id": "",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "rightKey": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+                "resource": [
+                    {
+                        "id": "urn:altinn:org",
+                        "value": "ttd"
+                    },
+                    {
+                        "id": "urn:altinn:app",
+                        "value": "a3-app2"
+                    },
+                    {
+                        "id": "urn:altinn:task",
+                        "value": "Task_1"
+                    }
+                ],
+                "action": "read",
+                "status": "Delegated",
+                "details": [
+                    {
+                        "code": "",
+                        "description": "",
+                        "parameters": {
+                            "roleRequirementsMatches": [
+                                {
+                                    "id": "",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "from": [
+            {
+                "id": "urn:altinn:organizationnumber",
+                "value": "777777777"
+            }
+        ],
+        "to": [
+            {
+                "id": "urn:altinn:ssn",
+                "value": "50019992"
+            }
+        ],
+        "rightDelegationResults": [
+            {
+                "rightKey": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+                "resource": [
+                    {
+                        "id": "urn:altinn:resource",
+                        "value": "jks-test-resource"
+                    }
+                ],
+                "action": "read",
+                "status": "Delegated",
+                "details": [
+                    {
+                        "code": "",
+                        "description": "",
+                        "parameters": {
+                            "roleRequirementsMatches": [
+                                {
+                                    "id": "",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "from": [
+            {
+                "id": "urn:altinn:organizationnumber",
+                "value": "777777777"
+            }
+        ],
+        "to": [
+            {
+                "id": "urn:altinn:ssn",
+                "value": "50019992"
+            }
+        ],
+        "rightDelegationResults": [
+            {
+                "rightKey": "urn:altinn:resource:ske-innrapportering-boligsameie:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+                "resource": [
+                    {
+                        "id": "urn:altinn:resource",
+                        "value": "ske-innrapportering-boligsameie"
+                    }
+                ],
+                "action": "write",
+                "status": "Delegated",
+                "details": [
+                    {
+                        "code": "",
+                        "description": "",
+                        "parameters": {
+                            "roleRequirementsMatches": [
+                                {
+                                    "id": "",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]
