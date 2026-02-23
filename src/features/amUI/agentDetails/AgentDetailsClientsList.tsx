@@ -43,14 +43,10 @@ export const AgentDetailsClientsList = ({
     addAgentAccessPackages,
     removeAgentAccessPackages,
   });
-  const { toParty, actingParty } = usePartyRepresentation();
+  const { toParty } = usePartyRepresentation();
   const agentName = formatDisplayName({
     fullName: toParty?.name || '',
     type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
-  const actingPartyName = formatDisplayName({
-    fullName: actingParty?.name || '',
-    type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
   });
 
   return (
@@ -66,9 +62,6 @@ export const AgentDetailsClientsList = ({
         removeAgentAccessPackage(clientId, roleCode, packageId, agentName, accessPackageName)
       }
       searchPlaceholder={t('client_administration_page.client_search_placeholder')}
-      emptyAccessText={t('client_administration_page.no_access_to_delegate', {
-        name: actingPartyName,
-      })}
     />
   );
 };
