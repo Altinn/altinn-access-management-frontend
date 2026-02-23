@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<ServiceResource>> GetResourceList()
+        public Task<List<ServiceResource>> GetResourceList(bool includeMigratedApps = false)
         {
             return GetResources();
         }

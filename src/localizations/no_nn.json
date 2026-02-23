@@ -303,7 +303,10 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttenester",
     "wip_message": "Denne sida jobbar vi framleis med! For å administrere enkelttenester, må du gå til den gamle løysinga.",
-    "wip_link_text": "Gå til gamle Altinn"
+    "wip_link_text": "Gå til gamle Altinn",
+    "inheritance": {
+      "right_inherited": "Denne handlinga er arvet og kan ikkje endrast her."
+    }
   },
   "access_packages": {
     "helptext_button": "Kva er tilgangspakkar?",
@@ -369,7 +372,7 @@
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukarar med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
-    "no_users": "Denne lista er tom",
+    "no_users": "Du har ikkje motteke nokon fullmakter frå andre.",
     "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønskjer du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?",
@@ -421,25 +424,31 @@
     "user_trigger_button": "Slett brukar",
     "user_heading": "Er du sikker på at du vil slette denne brukaren?",
     "user_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikkje lenger ha tilgang til deres innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angrast.</i></p>",
-    "user_limited_deletion_heading": "Brukaren har tilgangar som ikkje kan slettast",
-    "user_limited_deletion_message": "<p>{{to_name}} har fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast fullstendig frå {{from_name}}.</p><p>Ønsker du å slette alle tilgangar som ikkje er knytt til slike roller? <i>Denne handlinga kan ikkje angrast.</i></p>",
+    "user_limited_deletion_heading": "Nokre fullmakter kan ikkje slettast",
     "user_deletion_not_allowed_heading": "Brukaren kan ikkje slettast",
-    "user_deletion_not_allowed_message": "<p>{{to_name}} har kun fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast her.</p>",
+    "agent_role_my_clients_link": "Dine klientar",
+    "agent_role_client_admin_link": "Klientadministrasjon",
+    "user_non_deletable_reasons_intro": "{{to_name}} har fullmakter som ikkje kan slettast her",
+    "yourself_non_deletable_reasons_intro": "Du har fullmakter som ikkje kan slettast her",
+    "reportee_non_deletable_reasons_intro": "{{to_name}} har fullmakter for {{from_name}} som ikkje kan slettast her",
+    "non_deletable_reason_old_altinn": "Fullmakter gitt i <a2Link>den gamle Altinn-løysinga</a2Link> må slettast der.",
+    "non_deletable_reason_er_roles": "Fullmakter som følgjer roller i Einingsregisteret må endrast via <erLink>Samordna registermelding</erLink>.",
+    "non_deletable_reason_agent_role": "Klienttilgangar kan administrerast i <agentLink>{{linkText}}</agentLink>.",
+    "non_deletable_reason_guardianship": "Fullmakter gitt gjennom vergemål frå <guardianshipLink>Sivilrettsforvaltninga</guardianshipLink>.",
     "yes_button": "Ja, slett",
+    "user_partial_confirmation_message": "<p>Brukaren har òg andre fullmakter, og desse kan du slette her. Ønskjer du det? <i>Denne handlinga kan ikkje gjerast om.</i></p>",
     "yourself_trigger_button": "Slett alle tilgangar",
     "yourself_heading": "Er du sikker på at du vil slette alle dine tilgangar?",
     "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikkje lenger ha tilgang til deres innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angrast.</i></p>",
     "yourself_limited_deletion_heading": "Du har tilgangar som ikkje kan slettast",
-    "yourself_limited_deletion_message": "<p>Du har fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast fullstendig frå {{from_name}}. </p><p>Ønsker du å slette alle tilgangar som ikkje er knytt til slike roller? <i>Denne handlinga kan ikkje angrast.</i></p>",
     "yourself_deletion_not_allowed_heading": "Dine tilgangar kan ikkje slettast",
-    "yourself_deletion_not_allowed_message": "<p>Du har kun fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast her.</p>",
+    "yourself_partial_confirmation_message": "<p>Du har òg andre fullmakter, og desse kan du slette her. Ønskjer du det? <i>Denne handlinga kan ikkje gjerast om.</i></p>",
     "reportee_trigger_button": "Slett alle tilgangar",
     "reportee_heading": "Er du sikker på at du vil slette alle deiras tilgangar?",
     "reportee_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikkje lenger ha tilgang til deres innhald eller til å representere dei i Altinn. <i>Denne handlinga kan ikkje angrast.</i></p>",
     "reportee_limited_deletion_heading": "De har tilgangar som ikkje kan slettast",
-    "reportee_limited_deletion_message": "<p>{{to_name}} har fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast fullstendig frå {{from_name}}.</p><p>Ønsker du å slette alle tilgangar som ikkje er knytt til slike roller? <i>Denne handlinga kan ikkje angrast.</i></p>",
     "reportee_deletion_not_allowed_heading": "Deiras tilgangar kan ikkje slettast",
-    "reportee_deletion_not_allowed_message": "<p>{{to_name}} har kun fullmakter gjennom rolle(r) i <erLink>Einingsregisteret</erLink> eller i <a2Link>den gamle Altinnløysninga</a2Link>, og kan derfor ikkje slettast her.</p>"
+    "reportee_partial_confirmation_message": "<p>{{to_name}} har òg andre fullmakter, og desse kan du slette her. Vil du slette desse tilgangane? <i>Denne handlinga kan ikkje gjerast om.</i></p>"
   },
   "reportee_rights_page": {
     "page_title": "Fullmakter hos andre - Altinn",
@@ -494,7 +503,7 @@
       "time_of_error": "Tidspunkt feilen oppstod: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Kven som får bruke denne tenesta blir bestemt av {{resourceOwner}}, og {{reportee}} har ikkje fått den moglegheita. Vi tilrår å ta kontakt med {{resourceOwner}}.",
-      "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar den sjølv. Dagleg leiar eller hovudadministrator kan hjelpe deg med dette."
+      "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar tilgang til den sjølv."
     }
   },
   "status_section": {
@@ -505,7 +514,7 @@
       "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
       "via_priv": "{{user_name}} har denne fullmakta gjennom sin rolle som privatperson. Den kan difor ikkje slettast."
     },
-    "cannot_delegate_here": "Tilgang til denne pakken kan ikkje bli gitt eller fjerna her.",
+    "cannot_delegate_here": "Denne fullmakta kan ikkje bli gitt eller fjerna her.",
     "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta.",
     "no_permissions_fulltext": "Virksemden kan ha innhald som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldingar og tenester skal bli synlege."
   },
@@ -920,7 +929,7 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tenester tilgjengelege.",
+    "no_resources": "Ingen tenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
@@ -929,9 +938,11 @@
   },
   "landing_page": {
     "alert_heading": "Du er no i den nye løysinga for tilgangsstyring",
-    "alert_heading_priv": "Dette er den nye løysinga for tilgangsstyring for privatperson",
     "alert_body": "Her er dagens Altinn-roller erstatta av tilgangspakkar med tenester.",
-    "alert_body_p2": "Vær merksam på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Om du ikkje finn tenesten her, kan du gå til den gamle løysinga.",
+    "alert_body_p2": "Ver merksam på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Visst du ikkje finn tenesta her, kan du gå til den gamle løysinga.",
+    "alert_heading_priv": "Dette er den nye løysinga for tilgangsstyring til privatperson",
+    "alert_body_priv": "Her er dagens Altinn-roller erstatta av tilgangspakkar som inneheld skjema og tenester. Desse kan du gi vidare til andre dersom du ønsker at nokon skal hjelpe deg i Altinn.",
+    "alert_body_p2_priv": "Ver merksam på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Visst du ikkje finn tenesta her, kan du gå til den gamle løysinga.",
     "alert_link": "Gå til gamle Altinn",
     "your_content_heading": "Dine tilganger",
     "shortcut_links_heading": "Andre tilganger",
@@ -939,8 +950,8 @@
     "your_rights_description": "Sjå fullmaktene du har på vegne av {{reportee}}",
     "your_rights_description_yourself": "Sjå fullmaktene du har på vegne av deg sjølv",
     "your_clients_description": "Sjå kva klientar du har tilgang til på vegne av {{reportee}}",
-    "users_item_description_org": "Oversikt over personar og verksemder som har fått fullmakter hos dykk",
-    "users_item_description_person": "Oversikt over personar og verksemder som har fullmakter hos deg",
+    "users_item_description": "Oversikt over personar og verksemder som har fått fullmakter hos {{reportee}}",
+    "users_item_description_yourself": "Oversikt over personar og verksemder som har fullmakter hos deg",
     "reportees_item_description_org": "Oversikt over alle som har gitt fullmakter til dykk",
     "reportees_item_description_person": "Oversikt over alle som har gitt deg fullmakter",
     "poa_item_description": "Oversikt over alle tilgangspakkar og enkelttenester",

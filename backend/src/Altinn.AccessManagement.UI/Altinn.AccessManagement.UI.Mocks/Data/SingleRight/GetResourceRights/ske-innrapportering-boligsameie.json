@@ -1,0 +1,90 @@
+{
+    "resource": {
+        "id": "f2a3b4c5-d6e7-8901-4567-012345678901",
+        "providerId": "a3b4c5d6-e7f8-9012-5678-123456789012",
+        "typeId": "b4c5d6e7-f8a9-0123-6789-234567890123",
+        "name": "Innrapportering Boligsameie",
+        "description": "Sameier med 9 eller flere boligseksjoner skal levere opplysninger om sameiers andel av felles inntekter, utgifter, formue og gjeld. Det er vanligvis sameiets styre eller forretningsfører som leverer opplysningene.",
+        "refId": "ske-innrapportering-boligsameie",
+        "provider": {
+            "id": "a3b4c5d6-e7f8-9012-5678-123456789012",
+            "name": "Skatteetaten",
+            "refId": "974761076",
+            "logoUrl": null,
+            "code": "skd",
+            "typeId": "c5d6e7f8-a9b0-1234-7890-345678901234"
+        },
+        "type": {
+            "id": "genericaccessresource",
+            "name": "GenericAccessResource"
+        }
+    },
+    "directRules": [
+        {
+            "rule": {
+                "key": "urn:altinn:resource:ske-innrapportering-boligsameie:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+                "name": "Write",
+                "resource": [
+                    "ske-innrapportering-boligsameie"
+                ],
+                "action": "write"
+            },
+            "reason": {
+                "items": [
+                    {
+                        "name": "assignment",
+                        "description": "Access granted directly with assignment"
+                    }
+                ]
+            },
+            "permissions": [
+                {
+                    "from": {
+                        "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+                        "name": "DISKRET NÆR TIGER AS",
+                        "type": "organization",
+                        "variant": "AS",
+                        "parent": null,
+                        "children": null,
+                        "partyId": 51329012
+                    },
+                    "to": {
+                        "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+                        "name": "SITRONGUL MEDALJONG",
+                        "type": "person",
+                        "variant": null,
+                        "parent": null,
+                        "children": null,
+                        "partyId": 50789533
+                    },
+                    "via": {
+                        "id": "6b0574ae-f569-4c0d-a8d4-8ad56f427890",
+                        "name": "Digitaliseringsdirektoratet",
+                        "type": "organization",
+                        "variant": "ORGL",
+                        "parent": null,
+                        "children": null,
+                        "partyId": 50067799
+                    },
+                    "role": null,
+                    "viaRole": {
+                        "id": "d6e7f8a9-b0c1-2345-8901-456789012345",
+                        "code": "daglig-leder",
+                        "urn": "altinn:external-role:ccr:daglig-leder",
+                        "legacyUrn": null,
+                        "children": null
+                    },
+                    "reason": {
+                        "items": [
+                            {
+                                "name": "assignment",
+                                "description": "Access granted directly with assignment"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "indirectRules": []
+}

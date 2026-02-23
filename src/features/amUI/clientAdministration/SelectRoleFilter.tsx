@@ -51,6 +51,7 @@ export const SelectRoleFilter = ({ roleFilter, setRoleFilter }: SelectRoleFilter
         id: ROLE_FILTER_KEY,
         name: ROLE_FILTER_KEY,
         label: t('client_administration_page.clients_filter_label'),
+        title: t('client_administration_page.clients_filter_label'),
         removable: false,
         items: options,
       },

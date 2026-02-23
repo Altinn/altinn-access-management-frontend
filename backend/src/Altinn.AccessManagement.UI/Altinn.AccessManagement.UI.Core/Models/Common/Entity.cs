@@ -100,6 +100,16 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common
         public int? PartyId { get; set; }
 
         /// <summary>
+        /// User id.
+        /// </summary>
+        public int? UserId { get; set; }
+
+        /// <summary>
+        /// Username.
+        /// </summary>
+        public string Username { get; set; }
+
+        /// <summary>
         /// Organization identifier (orgnr) when entity is an organization.
         /// </summary>
         public string OrganizationIdentifier { get; set; }
@@ -110,8 +120,18 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common
         public string DateOfBirth { get; set; }
 
         /// <summary>
+        /// Date of death for persons.
+        /// </summary>
+        public string DateOfDeath { get; set; }
+
+        /// <summary>
         /// Indicates if the entity is deleted.
         /// </summary>
         public bool IsDeleted { get; set; }
+
+        /// <summary>
+        /// Timestamp when the entity was deleted.
+        /// </summary>
+        public DateTime? DeletedAt { get; set; }
     }
 }

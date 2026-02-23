@@ -7,38 +7,38 @@ import type {
   RemoveAgentAccessPackagesFn,
 } from '@/rtk/features/clientApi';
 
-type UseClientAccessPackageActionsParams = {
-  fromPartyUuid?: string;
+type UseAgentDetailsAccessPackageActionsParams = {
+  toPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
 };
 
-export const useClientAccessPackageActions = ({
-  fromPartyUuid,
+export const useAgentDetailsAccessPackageActions = ({
+  toPartyUuid,
   actingPartyUuid,
   addAgentAccessPackages,
   removeAgentAccessPackages,
-}: UseClientAccessPackageActionsParams) => {
+}: UseAgentDetailsAccessPackageActionsParams) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
 
-  const addClientAccessPackage = useCallback(
+  const addAgentAccessPackage = useCallback(
     async (
-      agentId: string,
+      clientId: string,
       roleCode: string,
       packageId: string,
       agentName: string,
       accessPackageName: string,
     ) => {
-      if (!fromPartyUuid || !actingPartyUuid) {
+      if (!toPartyUuid || !actingPartyUuid) {
         return;
       }
 
       try {
         await addAgentAccessPackages({
-          from: fromPartyUuid,
-          to: agentId,
+          from: clientId,
+          to: toPartyUuid,
           party: actingPartyUuid,
           payload: {
             values: [
@@ -67,25 +67,25 @@ export const useClientAccessPackageActions = ({
         });
       }
     },
-    [actingPartyUuid, addAgentAccessPackages, fromPartyUuid, openSnackbar, t],
+    [actingPartyUuid, addAgentAccessPackages, openSnackbar, t, toPartyUuid],
   );
 
-  const removeClientAccessPackage = useCallback(
+  const removeAgentAccessPackage = useCallback(
     async (
-      agentId: string,
+      clientId: string,
       roleCode: string,
       packageId: string,
       agentName: string,
       accessPackageName: string,
     ) => {
-      if (!fromPartyUuid || !actingPartyUuid) {
+      if (!toPartyUuid || !actingPartyUuid) {
         return;
       }
 
       try {
         await removeAgentAccessPackages({
-          from: fromPartyUuid,
-          to: agentId,
+          from: clientId,
+          to: toPartyUuid,
           party: actingPartyUuid,
           payload: {
             values: [
@@ -114,8 +114,8 @@ export const useClientAccessPackageActions = ({
         });
       }
     },
-    [actingPartyUuid, fromPartyUuid, openSnackbar, removeAgentAccessPackages, t],
+    [actingPartyUuid, openSnackbar, removeAgentAccessPackages, t, toPartyUuid],
   );
 
-  return { addClientAccessPackage, removeClientAccessPackage };
+  return { addAgentAccessPackage, removeAgentAccessPackage };
 };

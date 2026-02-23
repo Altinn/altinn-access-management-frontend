@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -22,7 +23,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// </summary>
     public class SingleRightClientMock : ISingleRightClient
     {
-        private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private static readonly JsonSerializerOptions options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters = { new JsonStringEnumConverter() }
+        };
         private readonly string dataFolder;
 
         /// <summary>
@@ -50,6 +55,33 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             catch
             {
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
+        }
+
+        /// <inheritdoc />
+        public Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(from.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "SingleRight", "GetDelegations", "delegations.json");
+            return Task.FromResult(Util.GetMockData<List<ResourcePermission>>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(from.ToString());
+
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "SingleRight", "GetResourceRights", $"{resource}.json");
+                return Task.FromResult(Util.GetMockData<ResourceRight>(dataPath));
+            }
+            catch (FileNotFoundException)
+            {
+                throw new HttpStatusException("NotFound", $"Resource '{resource}' not found", HttpStatusCode.NotFound, "");
             }
         }
 
@@ -110,6 +142,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (id == "********" || id == "00000000-0000-0000-0000-000000000000")
             {
                 throw new Exception();
+            }
+        }
+
+        // A helper for testing handling of HttpStatusException in client
+        private static void ThrowHttpStatusExceptionIfTriggerParty(string id)
+        {
+            if (id == "11111111-1111-1111-1111-111111111111")
+            {
+                throw new HttpStatusException("StatusError", "Simulated backend error", HttpStatusCode.BadRequest, "");
             }
         }
     }

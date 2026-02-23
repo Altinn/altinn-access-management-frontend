@@ -1,5 +1,203 @@
 import { http, HttpResponse } from 'msw';
 
+type MockRole = {
+  id: string;
+  code: string;
+};
+
+type MockConnectionParty = {
+  id: string;
+  name: string;
+  type: 'Person' | 'Organisasjon';
+  variant: string;
+  children: null;
+  partyId: number;
+  organizationIdentifier?: string;
+  dateOfBirth?: string;
+  isDeleted: boolean;
+};
+
+type MockConnection = {
+  party: MockConnectionParty;
+  roles: MockRole[];
+  connections: [];
+  sortKey: string;
+};
+
+const roleDagligLeder: MockRole = { id: '123', code: 'daglig-leder' };
+const roleRettighetshaver: MockRole = { id: '456', code: 'rettighetshaver' };
+const roleAgent: MockRole = { id: '789', code: 'agent' };
+
+const getStablePartyId = (id: string) => {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash << 5) - hash + id.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash) + 10000000;
+};
+
+const createOrgConnection = (id: string, name: string, roles: MockRole[]): MockConnection => ({
+  party: {
+    id,
+    name,
+    type: 'Organisasjon',
+    variant: 'AS',
+    children: null,
+    partyId: getStablePartyId(id),
+    organizationIdentifier: '310202398',
+    isDeleted: false,
+  },
+  roles,
+  connections: [],
+  sortKey: name.toLowerCase(),
+});
+
+const createPersonConnection = (id: string, name: string, roles: MockRole[]): MockConnection => ({
+  party: {
+    id,
+    name,
+    type: 'Person',
+    variant: 'Person',
+    children: null,
+    partyId: getStablePartyId(id),
+    dateOfBirth: '1984-04-03',
+    isDeleted: false,
+  },
+  roles,
+  connections: [],
+  sortKey: name.toLowerCase(),
+});
+
+type ConnectionPartyTemplate =
+  | {
+      type: 'Person';
+      name: string;
+      dateOfBirth?: string;
+    }
+  | {
+      type: 'Organisasjon';
+      name: string;
+      organizationIdentifier?: string;
+      variant?: string;
+    };
+
+const connectedPartyTemplates: Record<string, ConnectionPartyTemplate> = {
+  '123': {
+    type: 'Organisasjon',
+    name: 'DISKRET NÆR TIGER AS',
+    organizationIdentifier: '310202398',
+    variant: 'AS',
+  },
+  '456': {
+    type: 'Person',
+    name: 'SITRONGUL MEDALJONG',
+    dateOfBirth: '1984-04-03',
+  },
+  'mocked-party-uuid': {
+    type: 'Organisasjon',
+    name: 'LEVENDE KUNSTIG APE',
+    organizationIdentifier: '312787075',
+    variant: 'FLI',
+  },
+};
+
+const createConnectionForPartyId = (id: string, roles: MockRole[]): MockConnection => {
+  const template =
+    id.toLowerCase() === 'user'
+      ? connectedPartyTemplates['456']
+      : (connectedPartyTemplates[id] ?? {
+          type: 'Organisasjon',
+          name: 'DIGITALISERINGSDIREKTORATET',
+          organizationIdentifier: '310202398',
+          variant: 'AS',
+        });
+
+  if (template.type === 'Person') {
+    return createPersonConnection(id, template.name, roles);
+  }
+
+  return {
+    party: {
+      id,
+      name: template.name,
+      type: 'Organisasjon',
+      variant: template.variant ?? 'AS',
+      children: null,
+      partyId: getStablePartyId(id),
+      organizationIdentifier: template.organizationIdentifier ?? '310202398',
+      isDeleted: false,
+    },
+    roles,
+    connections: [],
+    sortKey: template.name.toLowerCase(),
+  };
+};
+
+const getRightHoldersResponse = (requestUrl: URL): MockConnection[] => {
+  const partyId = requestUrl.searchParams.get('party') ?? '';
+  const fromId = requestUrl.searchParams.get('from') ?? '';
+  const toId = requestUrl.searchParams.get('to') ?? '';
+  const includeClientDelegations =
+    requestUrl.searchParams.get('includeClientDelegations') !== 'false';
+  const includeAgentConnections =
+    requestUrl.searchParams.get('includeAgentConnections') !== 'false';
+
+  if (fromId.includes('PARTIALLY_DELETABLE') || toId.includes('PARTIALLY_DELETABLE')) {
+    const targetId = fromId || toId || partyId || 'partially-deletable';
+    return [
+      createOrgConnection(targetId, 'DIGITALISERINGSDIREKTORATET', [
+        roleDagligLeder,
+        roleRettighetshaver,
+      ]),
+    ];
+  }
+
+  if (fromId.includes('NOT_DELETABLE') || toId.includes('NOT_DELETABLE')) {
+    const targetId = fromId || toId || partyId || 'not-deletable';
+    return [createOrgConnection(targetId, 'DIGITALISERINGSDIREKTORATET', [roleDagligLeder])];
+  }
+
+  if (fromId && toId) {
+    const connectedPartyId = fromId === partyId ? toId : fromId;
+    return [createConnectionForPartyId(connectedPartyId, [roleRettighetshaver])];
+  }
+
+  if (fromId && !toId) {
+    const rightHolders: MockConnection[] = [
+      createPersonConnection('person-right-holder-1', 'SITRONGUL MEDALJONG', [roleRettighetshaver]),
+      createOrgConnection('org-right-holder-1', 'EKSEMPEL REGNSKAP AS', [roleDagligLeder]),
+    ];
+
+    if (includeAgentConnections) {
+      rightHolders.push(createPersonConnection('person-agent-1', 'OLA AGENT', [roleAgent]));
+    }
+
+    return rightHolders;
+  }
+
+  if (!fromId && toId) {
+    const reportees: MockConnection[] = [
+      createOrgConnection('reportee-org-1', 'DISKRET NÆR TIGER AS', [roleRettighetshaver]),
+      createPersonConnection('reportee-person-1', 'KARI FULLMAKT', [roleRettighetshaver]),
+    ];
+
+    if (includeClientDelegations) {
+      reportees.push(
+        createOrgConnection('reportee-client-1', 'KLIENT FULLMAKT AS', [roleRettighetshaver]),
+      );
+    }
+
+    return reportees;
+  }
+
+  return [
+    createConnectionForPartyId(partyId || '3d8b34c3-df0d-4dcc-be12-e788ce414744', [
+      roleRettighetshaver,
+    ]),
+  ];
+};
+
 export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/reporteelist/:id`, () => {
     return HttpResponse.json({
@@ -33,7 +231,6 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
           type: 'Organisasjon',
           name: 'DIGITALISERINGSDIREKTORATET',
           children: null,
-          keyValues: { PartyId: '50365521', DateOfBirth: '1984-04-03' },
         },
         roles: [rhRole],
       };

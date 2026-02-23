@@ -1,21 +1,34 @@
 import { describe, it, expect } from 'vitest';
 
 import {
+  AGENT_ROLE_REASON,
+  AGENT_ROLE,
+  ER_ROLE_REASON,
+  GUARDIANSHIP_ROLE_REASON,
+  getDeleteUserDialogModel,
+  getDeleteUserDialogModelFromStatus,
+  getNonDeletableReasons,
   getDeletionStatus,
   getTextKeysForDeletionStatus,
+  OLD_ALTINN_REASON,
   DeletionTarget,
   DeletionLevel,
   RIGHTHOLDER_ROLE,
   type DeletionStatus,
   type DeletionI18nKeys,
 } from './deletionModalUtils';
-import { Connection } from '@/rtk/features/connectionApi';
 import { RolePermission } from '@/rtk/features/roleApi';
 import { Entity } from '@/dataObjects/dtos/Common';
+import {
+  A2_PROVIDER_CODE,
+  CRA_PROVIDER_CODE,
+  ECC_PROVIDER_CODE,
+} from '../UserRoles/useRoleMetadata';
 
 type rolePermissionSetting = {
   code: string;
   via: (string | null)[];
+  providerCode?: string;
 };
 
 const defaultEntity: Entity = {
@@ -32,6 +45,13 @@ const mockRolePermissions = (settings: rolePermissionSetting[]): RolePermission[
       code: setting.code,
       name: `Role Name ${index}`,
       description: `Description for role ${index}`,
+      provider: setting.providerCode
+        ? {
+            id: `provider-id-${index}`,
+            name: `Provider Name ${index}`,
+            code: setting.providerCode,
+          }
+        : undefined,
     },
     permissions:
       setting.via?.map((via, permIndex) => ({
@@ -98,7 +118,7 @@ describe('getDeletionStatus', () => {
         'viewing yourself, mixed roles (Rightholder and other), should target Yourself and allow Limited deletion',
       rolePermissions: mockRolePermissions([
         { code: RIGHTHOLDER_ROLE, via: [null] },
-        { code: 'dagl', via: [] },
+        { code: AGENT_ROLE, via: [] },
       ]),
       viewingYourself: true,
       reporteeView: false,
@@ -134,7 +154,7 @@ describe('getDeletionStatus', () => {
       description: 'reportee view, mixed roles, should target Reportee and allow Limited deletion',
       rolePermissions: mockRolePermissions([
         { code: RIGHTHOLDER_ROLE, via: [null] },
-        { code: 'dagl', via: [] },
+        { code: AGENT_ROLE, via: [] },
       ]),
       viewingYourself: false,
       reporteeView: true,
@@ -167,11 +187,18 @@ describe('getDeletionStatus', () => {
       description: 'user view, mixed roles, should target User and allow Limited deletion',
       rolePermissions: mockRolePermissions([
         { code: RIGHTHOLDER_ROLE, via: [null] },
-        { code: 'dagl', via: [] },
+        { code: AGENT_ROLE, via: [] },
       ]),
       viewingYourself: false,
       reporteeView: false,
       expected: { target: DeletionTarget.User, level: DeletionLevel.Limited },
+    },
+    {
+      description: 'user view, only agent role, should target User and allow No deletion',
+      rolePermissions: mockRolePermissions([{ code: AGENT_ROLE, via: [null] }]),
+      viewingYourself: false,
+      reporteeView: false,
+      expected: { target: DeletionTarget.User, level: DeletionLevel.None },
     },
     {
       description: 'user view, only other roles, should target User and allow No deletion',
@@ -193,10 +220,10 @@ describe('getDeletionStatus', () => {
     },
     {
       description:
-        'some roles are Rightholder, some are not, across multiple rolePermissions, should allow Limited deletion (user view)',
+        'some roles are Rightholder, some are agent, across multiple rolePermissions, should allow Limited deletion (user view)',
       rolePermissions: [
         ...mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: [null] }]),
-        ...mockRolePermissions([{ code: 'dagl', via: [] }]),
+        ...mockRolePermissions([{ code: AGENT_ROLE, via: [] }]),
       ],
       viewingYourself: false,
       reporteeView: false,
@@ -213,6 +240,59 @@ describe('getDeletionStatus', () => {
   );
 });
 
+describe('getNonDeletableReasons', () => {
+  it('returns no reasons when all access is deletable', () => {
+    const rolePermissions = mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: [null] }]);
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([]);
+  });
+
+  it('returns old Altinn reason when at least one role has the old Altinn provider', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: RIGHTHOLDER_ROLE, via: [null], providerCode: A2_PROVIDER_CODE },
+    ]);
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([OLD_ALTINN_REASON]);
+  });
+
+  it('does not return old Altinn reason when access is inherited without old Altinn provider', () => {
+    const rolePermissions = mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: ['via-org'] }]);
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([]);
+  });
+
+  it('returns ER role reason for non-rightholder, non-agent roles', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
+    ]);
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([ER_ROLE_REASON]);
+  });
+
+  it('returns agent role reason for agent role access', () => {
+    const rolePermissions = mockRolePermissions([{ code: AGENT_ROLE, via: ['via-org'] }]);
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([AGENT_ROLE_REASON]);
+  });
+
+  it('returns guardianship reason for guardianship role access', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: 'role-code', via: ['via-org'], providerCode: CRA_PROVIDER_CODE },
+    ]);
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([GUARDIANSHIP_ROLE_REASON]);
+  });
+
+  it('returns all matching reasons in stable order', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: RIGHTHOLDER_ROLE, via: ['via-org'], providerCode: A2_PROVIDER_CODE },
+      { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
+      { code: AGENT_ROLE, via: ['via-org'] },
+      { code: 'role-code', via: ['via-org'], providerCode: CRA_PROVIDER_CODE },
+    ]);
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([
+      OLD_ALTINN_REASON,
+      ER_ROLE_REASON,
+      AGENT_ROLE_REASON,
+      GUARDIANSHIP_ROLE_REASON,
+    ]);
+  });
+});
+
 describe('getTextKeysForDeletionStatus', () => {
   const testCases: Array<{
     description: string;
@@ -225,7 +305,7 @@ describe('getTextKeysForDeletionStatus', () => {
       status: { target: DeletionTarget.Yourself, level: DeletionLevel.Full },
       expected: {
         headingKey: 'delete_user.yourself_heading',
-        messageKey: 'delete_user.yourself_message',
+        fullDeletionMessageKey: 'delete_user.yourself_message',
         triggerButtonKey: 'delete_user.yourself_trigger_button',
       },
     },
@@ -234,7 +314,7 @@ describe('getTextKeysForDeletionStatus', () => {
       status: { target: DeletionTarget.Yourself, level: DeletionLevel.Limited },
       expected: {
         headingKey: 'delete_user.yourself_limited_deletion_heading',
-        messageKey: 'delete_user.yourself_limited_deletion_message',
+        fullDeletionMessageKey: null,
         triggerButtonKey: 'delete_user.yourself_trigger_button',
       },
     },
@@ -243,7 +323,7 @@ describe('getTextKeysForDeletionStatus', () => {
       status: { target: DeletionTarget.Yourself, level: DeletionLevel.None },
       expected: {
         headingKey: 'delete_user.yourself_deletion_not_allowed_heading',
-        messageKey: 'delete_user.yourself_deletion_not_allowed_message',
+        fullDeletionMessageKey: null,
         triggerButtonKey: 'delete_user.yourself_trigger_button',
       },
     },
@@ -254,7 +334,7 @@ describe('getTextKeysForDeletionStatus', () => {
       status: { target: DeletionTarget.Reportee, level: DeletionLevel.Full },
       expected: {
         headingKey: 'delete_user.reportee_heading',
-        messageKey: 'delete_user.reportee_message',
+        fullDeletionMessageKey: 'delete_user.reportee_message',
         triggerButtonKey: 'delete_user.reportee_trigger_button',
       },
     },
@@ -263,7 +343,7 @@ describe('getTextKeysForDeletionStatus', () => {
       status: { target: DeletionTarget.Reportee, level: DeletionLevel.Limited },
       expected: {
         headingKey: 'delete_user.reportee_limited_deletion_heading',
-        messageKey: 'delete_user.reportee_limited_deletion_message',
+        fullDeletionMessageKey: null,
         triggerButtonKey: 'delete_user.reportee_trigger_button',
       },
     },
@@ -272,7 +352,7 @@ describe('getTextKeysForDeletionStatus', () => {
       status: { target: DeletionTarget.Reportee, level: DeletionLevel.None },
       expected: {
         headingKey: 'delete_user.reportee_deletion_not_allowed_heading',
-        messageKey: 'delete_user.reportee_deletion_not_allowed_message',
+        fullDeletionMessageKey: null,
         triggerButtonKey: 'delete_user.reportee_trigger_button',
       },
     },
@@ -283,7 +363,7 @@ describe('getTextKeysForDeletionStatus', () => {
       status: { target: DeletionTarget.User, level: DeletionLevel.Full },
       expected: {
         headingKey: 'delete_user.user_heading',
-        messageKey: 'delete_user.user_message',
+        fullDeletionMessageKey: 'delete_user.user_message',
         triggerButtonKey: 'delete_user.user_trigger_button',
       },
     },
@@ -292,7 +372,7 @@ describe('getTextKeysForDeletionStatus', () => {
       status: { target: DeletionTarget.User, level: DeletionLevel.Limited },
       expected: {
         headingKey: 'delete_user.user_limited_deletion_heading',
-        messageKey: 'delete_user.user_limited_deletion_message',
+        fullDeletionMessageKey: null,
         triggerButtonKey: 'delete_user.user_trigger_button',
       },
     },
@@ -301,7 +381,7 @@ describe('getTextKeysForDeletionStatus', () => {
       status: { target: DeletionTarget.User, level: DeletionLevel.None },
       expected: {
         headingKey: 'delete_user.user_deletion_not_allowed_heading',
-        messageKey: 'delete_user.user_deletion_not_allowed_message',
+        fullDeletionMessageKey: null,
         triggerButtonKey: 'delete_user.user_trigger_button',
       },
     },
@@ -314,4 +394,100 @@ describe('getTextKeysForDeletionStatus', () => {
       expect(result).toEqual(expected);
     },
   );
+});
+
+describe('getDeleteUserDialogModel', () => {
+  it('returns deletable state for fully deletable access', () => {
+    const rolePermissions = mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: [null] }]);
+    const model = getDeleteUserDialogModel({
+      rolePermissions,
+      viewingYourself: false,
+      reporteeView: false,
+    });
+
+    expect(model.status.level).toBe(DeletionLevel.Full);
+    expect(model.partialConfirmationMessageKey).toBeNull();
+    expect(model.nonDeletableReasons).toEqual([]);
+    expect(model.textKeys.headingKey).toBe('delete_user.user_heading');
+  });
+
+  it('returns partially deletable state with reasons and partial confirmation key', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: RIGHTHOLDER_ROLE, via: [null, 'via-org'], providerCode: A2_PROVIDER_CODE },
+      { code: AGENT_ROLE, via: ['via-org'] },
+      { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
+    ]);
+    const model = getDeleteUserDialogModel({
+      rolePermissions,
+      viewingYourself: true,
+      reporteeView: false,
+    });
+
+    expect(model.status.level).toBe(DeletionLevel.Limited);
+    expect(model.partialConfirmationMessageKey).toBe(
+      'delete_user.yourself_partial_confirmation_message',
+    );
+    expect(model.nonDeletableReasons).toEqual([
+      OLD_ALTINN_REASON,
+      ER_ROLE_REASON,
+      AGENT_ROLE_REASON,
+    ]);
+    expect(model.textKeys.headingKey).toBe('delete_user.yourself_limited_deletion_heading');
+  });
+
+  it('returns not deletable state with no partial confirmation key', () => {
+    const rolePermissions = mockRolePermissions([{ code: AGENT_ROLE, via: ['via-org'] }]);
+    const model = getDeleteUserDialogModel({
+      rolePermissions,
+      viewingYourself: false,
+      reporteeView: true,
+    });
+
+    expect(model.status.level).toBe(DeletionLevel.None);
+    expect(model.partialConfirmationMessageKey).toBeNull();
+    expect(model.nonDeletableReasons).toEqual([AGENT_ROLE_REASON]);
+    expect(model.textKeys.headingKey).toBe('delete_user.reportee_deletion_not_allowed_heading');
+  });
+});
+
+describe('getDeleteUserDialogModelFromStatus', () => {
+  it('returns full deletion model without partial confirmation key', () => {
+    const model = getDeleteUserDialogModelFromStatus({
+      status: { target: DeletionTarget.User, level: DeletionLevel.Full },
+      nonDeletableReasons: [],
+    });
+
+    expect(model.status).toEqual({
+      target: DeletionTarget.User,
+      level: DeletionLevel.Full,
+    });
+    expect(model.textKeys).toEqual({
+      headingKey: 'delete_user.user_heading',
+      fullDeletionMessageKey: 'delete_user.user_message',
+      triggerButtonKey: 'delete_user.user_trigger_button',
+    });
+    expect(model.nonDeletableReasons).toEqual([]);
+    expect(model.partialConfirmationMessageKey).toBeNull();
+  });
+
+  it('returns limited deletion model with partial confirmation key', () => {
+    const model = getDeleteUserDialogModelFromStatus({
+      status: { target: DeletionTarget.Reportee, level: DeletionLevel.Limited },
+      nonDeletableReasons: [ER_ROLE_REASON, AGENT_ROLE_REASON],
+    });
+
+    expect(model.status).toEqual({
+      target: DeletionTarget.Reportee,
+      level: DeletionLevel.Limited,
+    });
+    expect(model.textKeys).toEqual({
+      headingKey: 'delete_user.reportee_limited_deletion_heading',
+      fullDeletionMessageKey: null,
+      triggerButtonKey: 'delete_user.reportee_trigger_button',
+    });
+    expect(model.nonDeletableReasons).toEqual([ER_ROLE_REASON, AGENT_ROLE_REASON]);
+    expect(model.partialConfirmationMessageKey).toBe(
+      'delete_user.reportee_partial_confirmation_message',
+    );
+  });
 });

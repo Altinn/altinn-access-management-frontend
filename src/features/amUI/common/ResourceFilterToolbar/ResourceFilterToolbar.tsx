@@ -55,6 +55,7 @@ export const ResourceFilterToolbar = ({
           {
             id: OWNER_FILTER_KEY,
             name: OWNER_FILTER_KEY,
+            title: t('resource_list.filter_by_serviceowner'),
             label: t('resource_list.filter_by_serviceowner'),
             removable: false,
             searchable: true,

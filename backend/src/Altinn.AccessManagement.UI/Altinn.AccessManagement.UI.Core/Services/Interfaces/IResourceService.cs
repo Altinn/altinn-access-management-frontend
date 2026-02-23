@@ -13,20 +13,17 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         ///     Fetches the singleRights resources, processes them with filters and search string if given and then paginates the
         ///     result.
         /// </summary>
-        /// <param name="languageCode">languageCode.</param>
-        /// <param name="resourceOwnerFilters">resourceOwnerFilters.</param>
-        /// <param name="searchString">searchString.</param>
-        /// <param name="page">page.</param>
-        /// <param name="resultsPerPage">resultsPerPage.</param>
-        /// <returns>the resources that match the filters and search string corresponding to the provided page.</returns>
-        Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[] resourceOwnerFilters, string searchString, int page, int resultsPerPage);
+        /// <param name="languageCode">The language code.</param>
+        /// <param name="searchParams">The parameters that define the search criteria.</param>
+        /// <returns>The resources that match the filters and search string corresponding to the provided page.</returns>
+        Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, PaginatedSearchParams searchParams);
 
         /// <summary>
         ///     Searches through all maskinporten schema services and returns matches.
         /// </summary>
-        /// <param name="languageCode">languageCode.</param>
-        /// <param name="resourceOwnerFilters">resourceOwnerFilters.</param>
-        /// <param name="searchString">searchString.</param>
+        /// <param name="languageCode">The language code.</param>
+        /// <param name="resourceOwnerFilters">The filters for resource owners.</param>
+        /// <param name="searchString">The search string.</param>
         /// <returns>List of resource owners.</returns>
         public Task<List<ServiceResourceFE>> MaskinportenschemaSearch(string languageCode, string[] resourceOwnerFilters, string searchString);
 

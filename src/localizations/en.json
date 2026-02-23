@@ -306,7 +306,10 @@
     "delete_singleRight_error_message": "Failed to delete access to ",
     "wip_title": "Power of attorney to services",
     "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
-    "wip_link_text": "Go to old Altinn"
+    "wip_link_text": "Go to old Altinn",
+    "inheritance": {
+      "right_inherited": "This action is inherited and cannot be changed here."
+    }
   },
   "access_packages": {
     "helptext_button": "What are access packages?",
@@ -372,7 +375,7 @@
     "user_list_heading": "Other users with power of attorney",
     "direct_connections": "Users with power of attorney",
     "user_search_placeholder": "Search for users",
-    "no_users": "This list is empty",
+    "no_users": "You have not received any power of attorney from others.",
     "only_you_have_access": "Only you have access here. Do you want to change this?",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
     "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
@@ -414,7 +417,7 @@
   "user_rights_page": {
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
-    "single_rights_title": "Services", 
+    "single_rights_title": "Services",
     "roles_title": "Roles",
     "guardianships_title": "Guardianships",
     "resource_type_text": "Single right",
@@ -424,25 +427,31 @@
     "user_trigger_button": "Delete user",
     "user_heading": "Are you sure you want to delete this user?",
     "user_message": "<p>{{to_name}} will lose all authorizations for {{from_name}} and will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
-    "user_limited_deletion_heading": "The user has access that cannot be deleted",
-    "user_limited_deletion_message": "<p>{{to_name}} has authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be completely deleted from {{from_name}}.</p><p>Do you want to delete all access that is not linked to such roles? <i>This action cannot be undone.</i></p>",
+    "user_limited_deletion_heading": "Some authorizations cannot be deleted",
     "user_deletion_not_allowed_heading": "The user cannot be deleted",
-    "user_deletion_not_allowed_message": "<p>{{to_name}} only has authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be deleted here.</p>",
+    "agent_role_my_clients_link": "Your clients",
+    "agent_role_client_admin_link": "Client Administration",
+    "user_non_deletable_reasons_intro": "{{to_name}} has authorizations that cannot be deleted here",
+    "yourself_non_deletable_reasons_intro": "You have authorizations that cannot be deleted here",
+    "reportee_non_deletable_reasons_intro": "{{to_name}} has authorizations for {{from_name}} that cannot be deleted here",
+    "non_deletable_reason_old_altinn": "Authorizations granted in the <a2Link>old Altinn solution</a2Link> must be deleted there.",
+    "non_deletable_reason_er_roles": "Authorizations that follow roles in the Central Coordinating Register for Legal Entities must be changed via <erLink>the Coordinated Register Notification</erLink>.",
+    "non_deletable_reason_agent_role": "Client accesses can be managed in <agentLink>{{linkText}}</agentLink>.",
+    "non_deletable_reason_guardianship": "Authorizations granted through guardianship from <guardianshipLink>the Norwegian Civil Affairs Authority</guardianshipLink>.",
     "yes_button": "Yes, delete",
+    "user_partial_confirmation_message": "<p>The user also has other authorizations, and you can delete them here. Do you want to proceed? <i>This action cannot be undone.</i></p>",
     "yourself_trigger_button": "Delete all access",
     "yourself_heading": "Are you sure you want to delete all your access?",
     "yourself_message": "<p>You will lose all authorizations you have for {{from_name}} and will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
     "yourself_limited_deletion_heading": "You have access that cannot be deleted",
-    "yourself_limited_deletion_message": "<p>You have authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be completely deleted from {{from_name}}. </p><p>Do you want to delete all access that is not linked to such roles? <i>This action cannot be undone.</i></p>",
     "yourself_deletion_not_allowed_heading": "Your access cannot be deleted",
-    "yourself_deletion_not_allowed_message": "<p>You only have authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be deleted here.</p>",
+    "yourself_partial_confirmation_message": "<p>You also have other authorizations, and you can delete them here. Do you want to proceed? <i>This action cannot be undone.</i></p>",
     "reportee_trigger_button": "Delete all access",
     "reportee_heading": "Are you sure you want to delete all their access?",
     "reportee_message": "<p>{{to_name}} will lose all authorizations for {{from_name}} and will no longer have access to their content or be able to represent them in Altinn. <i>This action cannot be undone.</i></p>",
     "reportee_limited_deletion_heading": "They have access that cannot be deleted",
-    "reportee_limited_deletion_message": "<p>{{to_name}} has authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be completely deleted from {{from_name}}.</p><p>Do you want to delete all access that is not linked to such roles? <i>This action cannot be undone.</i></p>",
     "reportee_deletion_not_allowed_heading": "Their access cannot be deleted",
-    "reportee_deletion_not_allowed_message": "<p>{{to_name}} only has authorizations through role(s) in the <erLink>Central Coordinating Register for Legal Entities</erLink> or in the <a2Link>old Altinn solution</a2Link>, and therefore cannot be deleted here.</p>"
+    "reportee_partial_confirmation_message": "<p>{{to_name}} also has other authorizations, and you can delete them here. Do you want to proceed? <i>This action cannot be undone.</i></p>"
   },
   "reportee_rights_page": {
     "page_title": "Powers of attorney from others - Altinn",
@@ -490,14 +499,14 @@
       "body": "<p>{{ to_name }} has been granted this authorization both directly and through their roles in the Central Coordinating Register for Legal Entities.</p><p>Even if you delete this directly granted authorization, the user will still have the authorization through the Central Coordinating Register for Legal Entities.</p>"
     },
     "service_error": {
-      "general_heading": "You cannot give access to this service",
+      "general_heading": "You cannot give power of attorney to this service",
       "technical_error_heading": "Something went wrong",
       "undelegable_service": "{{resourceOwner}} has determined that this service cannot be given to others.",
       "technical_error": "A technical error has occurred. Please try again or contact Altinn user service if the problem persists.",
       "time_of_error": "Error occurred at time: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
-      "missing_rights": "You cannot delegate this authorization to others because you do not have it yourself. The general manager or main administrator can help you with this."
+      "missing_rights": "You cannot give this power of attorney because you do not have access yourself."
     }
   },
   "status_section": {
@@ -508,8 +517,8 @@
       "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted.",
       "via_priv": "{{user_name}} has this power of attorney through their role as a private individual. It cannot be deleted."
     },
-    "cannot_delegate_here": "Access to this package cannot be granted here.",
-    "delegation_check_not_delegable": "You cannot grant this access.",
+    "cannot_delegate_here": "This power of attorney cannot be granted here.",
+    "delegation_check_not_delegable": "You cannot grant this power of attorney.",
     "no_permissions_fulltext": "Your organization might have content that no one sees. You must grant access to {{packageName}} for such messages and services to be visible."
   },
   "new_user_modal": {
@@ -923,7 +932,7 @@
   "resource_list": {
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
-    "no_resources": "No resources available.",
+    "no_resources": "No services.",
     "filter_by_serviceowner": "Filter by service owner",
     "resource_search_clear": "Clear search",
     "remove_filter": "Remove filter",
@@ -932,18 +941,20 @@
   },
   "landing_page": {
     "alert_heading": "You are now in the new access management solution",
-    "alert_heading_priv": "This is the new access management solution for private individuals",
     "alert_body": "Today's Altinn roles have been replaced by access packages with services.",
     "alert_body_p2": "Please note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
+    "alert_heading_priv": "This is the new access management solution for private individuals",
+    "alert_body_priv": "Here, the current Altinn roles are replaced with access packages that contain forms and services. You can give these to others if you want someone to help you in Altinn.",
+    "alert_body_p2_priv": "Please note that there are some services you cannot grant access to in the new Altinn yet. These are still found in the old solution.",
     "alert_link": "Go to old Altinn",
     "your_content_heading": "Your accesses",
     "shortcut_links_heading": "Other accesses",
     "other_links_heading": "Other",
-    "users_item_description_org": "Overview of people and organizations that have been granted access in your organization",
+    "users_item_description": "Overview of people and organizations that have been granted access in {{reportee}}",
     "your_rights_description": "See the powers of attorney you hold on behalf of {{reportee}}",
     "your_rights_description_yourself": "See the powers of attorney you hold on behalf of yourself",
     "your_clients_description": "See which clients you have access to on behalf of {{reportee}}",
-    "users_item_description_person": "Overview of people and organizations that have been granted access to you",
+    "users_item_description_yourself": "Overview of people and organizations that have been granted access to you",
     "reportees_item_description_org": "Overview of all who have granted access to your organization",
     "reportees_item_description_person": "Overview of all who have granted you access",
     "poa_item_description": "Overview of all access packages and individual services",
