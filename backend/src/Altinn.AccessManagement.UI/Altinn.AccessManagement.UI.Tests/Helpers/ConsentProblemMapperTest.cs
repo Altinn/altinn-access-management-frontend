@@ -8,7 +8,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
     public class ConsentProblemMapperTests
     {
         [Fact]
-        public void MapToAuthUiError_ShouldMapToNotAuthorizedForConsentRequest()
+        public void MapToConsentUiError_ShouldMapToNotAuthorizedForConsentRequest()
         {
             // Arrange
             string errorCode = "AM-00000";
@@ -23,7 +23,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         }
 
         [Fact]
-        public void MapToAuthUiError_ShouldGenericError()
+        public void MapToConsentUiError_ShouldGenericError()
         {
             // Arrange
             string errorCode = "AM-HEHEHE";
@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         }
 
         [Fact]
-        public void MapToAuthUiError_ShouldShowGenericProblemForErrorWithoutCode()
+        public void MapToConsentUiError_ShouldShowGenericProblemForErrorWithoutCode()
         {
             // Arrange
             string expectedErrorCode = "CTUI-00999";
