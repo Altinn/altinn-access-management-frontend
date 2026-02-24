@@ -104,19 +104,6 @@ export const useRightsSection = ({
     }
   }, [resourceRights, isResourceRightsFetching, resource.identifier, hasResourceAccess]);
 
-  const findInheritedRight = (right: ResourceRight, ruleKey: string) => {
-    const rule = right.indirectRules.find((r) => r.rule.key === ruleKey);
-
-    // if rule is found, this is inherited.
-    if (rule) {
-      return getInheritedStatus({
-        permissions: rule?.permissions,
-        toParty: toParty,
-      });
-    }
-    return [];
-  };
-
   // Instantiate/reset rights and missing access message states
   useEffect(() => {
     if (delegationCheckedActions) {
@@ -124,12 +111,21 @@ export const useRightsSection = ({
 
       if (hasAccess && resourceRights) {
         const chipRights: ChipRight[] = mapRightsToChipRights(
-          delegationCheckedActions.map((right) => ({
-            ...right,
-            toParty: toParty,
-            isChecked: currentRights.some((key) => key === right.rule.key),
-            inheritedStatus: findInheritedRight(resourceRights, right.rule.key),
-          })),
+          delegationCheckedActions.map((right) => {
+            const rule = resourceRights.indirectRules.find((r) => r.rule.key === right.rule.key);
+            const inheritedStatus = rule
+              ? getInheritedStatus({
+                  permissions: rule.permissions,
+                  toParty: toParty,
+                })
+              : [];
+            return {
+              ...right,
+              toParty: toParty,
+              isChecked: currentRights.includes(right.rule.key),
+              inheritedStatus: inheritedStatus,
+            };
+          }),
         );
         setRights(chipRights);
       } else {
