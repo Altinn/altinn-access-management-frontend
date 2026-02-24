@@ -41,11 +41,20 @@ const getErrorInfo = (action: 'delegate' | 'revoke', error: unknown): ActionErro
 export const useResourceListDelegation = ({
   onActionError,
 }: UseResourceListDelegationProps = {}) => {
-  const [runDelegationCheck, { isLoading: delegationCheckIsLoading }] =
-    useLazyDelegationCheckQuery();
-  const [delegateRights, { isLoading: delegateRightsIsLoading }] = useDelegateRightsMutation();
-  const [revokeResource, { isLoading: revokeResourceIsLoading }] = useRevokeResourceMutation();
+  const [runDelegationCheck] = useLazyDelegationCheckQuery();
+  const [delegateRights] = useDelegateRightsMutation();
+  const [revokeResource] = useRevokeResourceMutation();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
+
+  const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
+  const isResourceLoading = useCallback(
+    (resourceId: string) => loadingByResourceId[resourceId] ?? false,
+    [loadingByResourceId],
+  );
+
+  const setResourceLoading = useCallback((resourceId: string, isLoading: boolean) => {
+    setLoadingByResourceId((prev) => ({ ...prev, [resourceId]: isLoading }));
+  }, []);
 
   const delegateFromList = useCallback(
     async (resource: ServiceResource) => {
@@ -58,11 +67,12 @@ export const useResourceListDelegation = ({
         onActionError?.(resource, getErrorInfo('delegate', 403));
         return;
       }
-
+      setResourceLoading(resource.identifier, true);
       const result = await runDelegationCheck(resource.identifier);
 
       if (result.error) {
         onActionError?.(resource, getErrorInfo('delegate', result.error));
+        setResourceLoading(resource.identifier, false);
         return;
       }
 
@@ -83,11 +93,15 @@ export const useResourceListDelegation = ({
             .then(() => {})
             .catch((error) => {
               onActionError?.(resource, getErrorInfo('delegate', error));
+            })
+            .finally(() => {
+              setResourceLoading(resource.identifier, false);
             });
           return;
         }
       }
       onActionError?.(resource, getErrorInfo('delegate', 403));
+      setResourceLoading(resource.identifier, false);
     },
     [actingParty, delegateRights, fromParty, onActionError, runDelegationCheck, toParty],
   );
@@ -98,7 +112,7 @@ export const useResourceListDelegation = ({
         onActionError?.(resource, getErrorInfo('revoke', 500));
         return;
       }
-
+      setResourceLoading(resource.identifier, true);
       revokeResource({
         from: fromParty.partyUuid,
         to: toParty.partyUuid,
@@ -109,6 +123,9 @@ export const useResourceListDelegation = ({
         .then(() => {})
         .catch((error) => {
           onActionError?.(resource, getErrorInfo('revoke', error));
+        })
+        .finally(() => {
+          setResourceLoading(resource.identifier, false);
         });
     },
     [actingParty, fromParty, onActionError, revokeResource, toParty],
@@ -117,6 +134,6 @@ export const useResourceListDelegation = ({
   return {
     delegateFromList,
     revokeFromList,
-    isLoading: delegationCheckIsLoading || delegateRightsIsLoading || revokeResourceIsLoading,
+    isResourceLoading: (resourceId: string) => isResourceLoading(resourceId),
   };
 };

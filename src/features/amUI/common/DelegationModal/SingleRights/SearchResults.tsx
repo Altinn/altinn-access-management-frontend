@@ -7,7 +7,6 @@ import {
   type ResourceDelegation,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 
@@ -50,11 +49,7 @@ export const SearchResults = ({
   const { setActionError } = useDelegationModalContext();
   const isMobile = useIsMobileOrSmaller();
 
-  const {
-    delegateFromList,
-    revokeFromList,
-    isLoading: resourceListDelegationIsLoading,
-  } = useResourceListDelegation({
+  const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
     onActionError: (resource, errorInfo) => {
       if (errorInfo) {
         onSelect(resource, true);
@@ -127,13 +122,13 @@ export const SearchResults = ({
               const isAlreadyDelegated = isDelegated(resource.identifier);
               const canRevoke = availableActions?.includes(DelegationAction.REVOKE);
               const canDelegate = availableActions?.includes(DelegationAction.DELEGATE);
-
+              const isLoading = isResourceLoading(resource.identifier);
               if (isAlreadyDelegated && canRevoke) {
                 return (
                   <DsButton
                     variant='tertiary'
                     data-size='sm'
-                    loading={resourceListDelegationIsLoading}
+                    loading={isLoading}
                     onClick={() => {
                       setActionError(null);
                       revokeFromList(resource);
@@ -153,7 +148,7 @@ export const SearchResults = ({
                   <DsButton
                     variant='tertiary'
                     data-size='sm'
-                    loading={resourceListDelegationIsLoading}
+                    loading={isLoading}
                     onClick={(event) => {
                       setActionError(null);
                       void delegateFromList(resource);
