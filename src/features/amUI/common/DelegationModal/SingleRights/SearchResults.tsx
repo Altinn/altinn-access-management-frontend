@@ -129,6 +129,7 @@ export const SearchResults = ({
                     variant='tertiary'
                     data-size='sm'
                     loading={isLoading}
+                    disabled={isLoading}
                     onClick={() => {
                       setActionError(null);
                       revokeFromList(resource);
@@ -149,9 +150,10 @@ export const SearchResults = ({
                     variant='tertiary'
                     data-size='sm'
                     loading={isLoading}
-                    onClick={(event) => {
+                    disabled={isLoading}
+                    onClick={() => {
                       setActionError(null);
-                      void delegateFromList(resource);
+                      delegateFromList(resource);
                     }}
                     aria-label={t('common.give_poa_for', {
                       poa_object: resource.title,

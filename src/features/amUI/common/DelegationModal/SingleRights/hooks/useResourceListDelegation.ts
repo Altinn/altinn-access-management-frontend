@@ -13,27 +13,14 @@ interface UseResourceListDelegationProps {
   onActionError?: (resource: ServiceResource, errorInfo?: ActionError) => void;
 }
 
-const getErrorInfo = (action: 'delegate' | 'revoke', error: unknown): ActionError => {
-  const status =
-    typeof error === 'string' || typeof error === 'number'
-      ? String(error)
-      : typeof error === 'object' && error !== null && 'status' in error
-        ? String(error.status as string | number)
-        : '500';
-
-  const detailsFromResponse =
-    typeof error === 'object' &&
-    error !== null &&
-    'data' in error &&
-    error.data &&
-    typeof error.data === 'object' &&
-    !Array.isArray(error.data)
-      ? (error.data as ActionError['details'])
-      : undefined;
-
+const getErrorInfo = (
+  action: 'delegate' | 'revoke',
+  status: string,
+  details?: ActionError['details'],
+): ActionError => {
   return {
     httpStatus: status,
-    details: { ...detailsFromResponse, detail: action },
+    details: details,
     timestamp: new Date().toISOString(),
   };
 };
@@ -58,20 +45,15 @@ export const useResourceListDelegation = ({
 
   const delegateFromList = useCallback(
     async (resource: ServiceResource) => {
-      if (!actingParty || !fromParty || !toParty) {
-        onActionError?.(resource, getErrorInfo('delegate', 500));
+      if (!actingParty || !fromParty || !toParty || resource.delegable === false) {
+        onActionError?.(resource, getErrorInfo('delegate', ''));
         return;
       }
 
-      if (resource.delegable === false) {
-        onActionError?.(resource, getErrorInfo('delegate', 403));
-        return;
-      }
       setResourceLoading(resource.identifier, true);
       const result = await runDelegationCheck(resource.identifier);
-
       if (result.error) {
-        onActionError?.(resource, getErrorInfo('delegate', result.error));
+        onActionError?.(resource, getErrorInfo('delegate', String(result.error)));
         setResourceLoading(resource.identifier, false);
         return;
       }
@@ -92,7 +74,7 @@ export const useResourceListDelegation = ({
             .unwrap()
             .then(() => {})
             .catch((error) => {
-              onActionError?.(resource, getErrorInfo('delegate', error));
+              onActionError?.(resource, getErrorInfo('delegate', String(error)));
             })
             .finally(() => {
               setResourceLoading(resource.identifier, false);
@@ -100,7 +82,7 @@ export const useResourceListDelegation = ({
           return;
         }
       }
-      onActionError?.(resource, getErrorInfo('delegate', 403));
+      onActionError?.(resource, getErrorInfo('delegate', '403'));
       setResourceLoading(resource.identifier, false);
     },
     [actingParty, delegateRights, fromParty, onActionError, runDelegationCheck, toParty],
@@ -109,7 +91,7 @@ export const useResourceListDelegation = ({
   const revokeFromList = useCallback(
     (resource: ServiceResource) => {
       if (!actingParty || !fromParty || !toParty) {
-        onActionError?.(resource, getErrorInfo('revoke', 500));
+        onActionError?.(resource, getErrorInfo('revoke', '500'));
         return;
       }
       setResourceLoading(resource.identifier, true);
@@ -122,7 +104,7 @@ export const useResourceListDelegation = ({
         .unwrap()
         .then(() => {})
         .catch((error) => {
-          onActionError?.(resource, getErrorInfo('revoke', error));
+          onActionError?.(resource, getErrorInfo('revoke', String(error)));
         })
         .finally(() => {
           setResourceLoading(resource.identifier, false);
