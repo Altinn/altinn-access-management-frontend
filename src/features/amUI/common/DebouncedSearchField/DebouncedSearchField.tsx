@@ -25,6 +25,10 @@ export const DebouncedSearchField = ({
   );
 
   useEffect(() => {
+    setSearchString(initialValue);
+  }, [initialValue]);
+
+  useEffect(() => {
     return () => {
       debouncedUpdate.cancel();
     };
