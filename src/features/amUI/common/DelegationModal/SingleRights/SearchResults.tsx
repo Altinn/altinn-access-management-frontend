@@ -51,11 +51,13 @@ export const SearchResults = ({
 
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
     onActionError: (resource, errorInfo) => {
-      if (errorInfo) {
-        onSelect(resource, true);
-        setActionError(errorInfo);
-        return;
-      }
+      onSelect(resource, true);
+      setActionError(errorInfo);
+    },
+    onSuccess: (resource) => {
+      setActionError(null);
+    },
+    onPartialDelegation: (resource) => {
       setActionError(null);
       onSelect(resource);
     },

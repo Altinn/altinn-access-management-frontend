@@ -10,8 +10,17 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface UseResourceListDelegationProps {
-  onActionError?: (resource: ServiceResource, errorInfo?: ActionError) => void;
+  onActionError?: (resource: ServiceResource, errorInfo: ActionError) => void;
+  onSuccess?: (resource: ServiceResource) => void;
+  onPartialDelegation?: (resource: ServiceResource) => void;
 }
+
+const extractStatus = (error: unknown): string => {
+  if (error && typeof error === 'object' && 'status' in error) {
+    return String((error as { status: unknown }).status);
+  }
+  return String(error);
+};
 
 const getErrorInfo = (
   action: 'delegate' | 'revoke',
@@ -27,6 +36,8 @@ const getErrorInfo = (
 
 export const useResourceListDelegation = ({
   onActionError,
+  onSuccess,
+  onPartialDelegation,
 }: UseResourceListDelegationProps = {}) => {
   const [runDelegationCheck] = useLazyDelegationCheckQuery();
   const [delegateRights] = useDelegateRightsMutation();
@@ -45,15 +56,15 @@ export const useResourceListDelegation = ({
 
   const delegateFromList = useCallback(
     async (resource: ServiceResource) => {
-      if (!actingParty || !fromParty || !toParty || resource.delegable === false) {
-        onActionError?.(resource, getErrorInfo('delegate', ''));
+      if (resource.delegable === false) {
+        onActionError?.(resource, getErrorInfo('delegate', '403'));
         return;
       }
 
       setResourceLoading(resource.identifier, true);
       const result = await runDelegationCheck(resource.identifier);
       if (result.error) {
-        onActionError?.(resource, getErrorInfo('delegate', String(result.error)));
+        onActionError?.(resource, getErrorInfo('delegate', extractStatus(result.error)));
         setResourceLoading(resource.identifier, false);
         return;
       }
@@ -65,16 +76,18 @@ export const useResourceListDelegation = ({
         if (canDelegateAllActions) {
           const allActionKeys = result.data.map((action) => action.rule.key);
           delegateRights({
-            partyUuid: actingParty.partyUuid,
-            fromUuid: fromParty.partyUuid,
-            toUuid: toParty.partyUuid,
+            partyUuid: actingParty!.partyUuid,
+            fromUuid: fromParty!.partyUuid,
+            toUuid: toParty!.partyUuid,
             resourceId: resource.identifier,
             actionKeys: allActionKeys,
           })
             .unwrap()
-            .then(() => {})
+            .then(() => {
+              onSuccess?.(resource);
+            })
             .catch((error) => {
-              onActionError?.(resource, getErrorInfo('delegate', String(error)));
+              onActionError?.(resource, getErrorInfo('delegate', extractStatus(error)));
             })
             .finally(() => {
               setResourceLoading(resource.identifier, false);
@@ -82,40 +95,53 @@ export const useResourceListDelegation = ({
           return;
         }
       }
-      onActionError?.(resource, getErrorInfo('delegate', '403'));
+      const canDelegateSomeActions = result.data && result.data.some((action) => action.result);
+
+      if (canDelegateSomeActions) {
+        onPartialDelegation?.(resource);
+      } else {
+        onActionError?.(resource, getErrorInfo('delegate', '403'));
+      }
       setResourceLoading(resource.identifier, false);
     },
-    [actingParty, delegateRights, fromParty, onActionError, runDelegationCheck, toParty],
+    [
+      actingParty,
+      delegateRights,
+      fromParty,
+      onActionError,
+      onPartialDelegation,
+      onSuccess,
+      runDelegationCheck,
+      toParty,
+    ],
   );
 
   const revokeFromList = useCallback(
     (resource: ServiceResource) => {
-      if (!actingParty || !fromParty || !toParty) {
-        onActionError?.(resource, getErrorInfo('revoke', '500'));
-        return;
-      }
       setResourceLoading(resource.identifier, true);
       revokeResource({
-        from: fromParty.partyUuid,
-        to: toParty.partyUuid,
-        party: actingParty.partyUuid,
+        from: fromParty!.partyUuid,
+        to: toParty!.partyUuid,
+        party: actingParty!.partyUuid,
         resourceId: resource.identifier,
       })
         .unwrap()
-        .then(() => {})
+        .then(() => {
+          onSuccess?.(resource);
+        })
         .catch((error) => {
-          onActionError?.(resource, getErrorInfo('revoke', String(error)));
+          onActionError?.(resource, getErrorInfo('revoke', extractStatus(error)));
         })
         .finally(() => {
           setResourceLoading(resource.identifier, false);
         });
     },
-    [actingParty, fromParty, onActionError, revokeResource, toParty],
+    [actingParty, fromParty, onActionError, onSuccess, revokeResource, toParty],
   );
 
   return {
     delegateFromList,
     revokeFromList,
-    isResourceLoading: (resourceId: string) => isResourceLoading(resourceId),
+    isResourceLoading,
   };
 };
