@@ -77,7 +77,10 @@ export const ClientAdministrationPageContent = () => {
     <>
       <div className={classes.headerSection}>
         <div className={classes.pageHeader}>
-          <DsHeading data-size='sm'>
+          <DsHeading
+            data-size='sm'
+            level={1}
+          >
             <Trans
               i18nKey='client_administration_page.page_heading'
               values={{

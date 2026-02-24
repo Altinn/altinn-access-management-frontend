@@ -131,6 +131,7 @@ export const ClientAccessList = ({
           isSubUnit,
           interactive: false,
           as: 'div',
+          titleAs: 'h3',
           description:
             access.role.code !== 'rettighetshaver'
               ? t('client_administration_page.via_role', { role: roleName })
@@ -157,6 +158,7 @@ export const ClientAccessList = ({
       collapsible: true,
       interactive: true,
       as: 'button',
+      titleAs: 'h2',
       children:
         nodes.length === 0 && emptyAccessText ? (
           <DsParagraph>{emptyAccessText}</DsParagraph>
