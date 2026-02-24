@@ -81,6 +81,38 @@ export const useRightsSection = ({
       })
     : '';
 
+  const getMissingAccessMessage = useCallback(
+    (response: DelegationCheckedRight[]) => {
+      const hasMissingRoleAccess = response.some((right) =>
+        right.reasonCodes.some(
+          (reasonCode) =>
+            reasonCode === ErrorCode.MissingRoleAccess ||
+            reasonCode === ErrorCode.MissingRightAccess,
+        ),
+      );
+      const hasMissingSrrRightAccess = response.some(
+        (right) =>
+          !hasMissingRoleAccess &&
+          right.reasonCodes.some(
+            (reasonCode) =>
+              reasonCode === ErrorCode.MissingSrrRightAccess ||
+              reasonCode === ErrorCode.AccessListValidationFail,
+          ),
+      );
+
+      if (hasMissingRoleAccess) {
+        return t('delegation_modal.specific_rights.missing_role_message');
+      }
+      if (hasMissingSrrRightAccess) {
+        return t('delegation_modal.specific_rights.missing_srr_right_message', {
+          resourceOwner: resource?.resourceOwnerName,
+          reportee: reportee?.name,
+        });
+      }
+      return null;
+    },
+    [t, resource?.resourceOwnerName, reportee?.name],
+  );
   /// UseEffect hooks
 
   // Instantiate/reset access and rights states
@@ -147,6 +179,7 @@ export const useRightsSection = ({
     currentRights,
     resourceRights,
     toParty,
+    getMissingAccessMessage,
   ]);
 
   /// Functions
@@ -164,39 +197,6 @@ export const useRightsSection = ({
     setDelegationError(null);
     setMissingAccess(null);
   };
-
-  const getMissingAccessMessage = useCallback(
-    (response: DelegationCheckedRight[]) => {
-      const hasMissingRoleAccess = response.some((right) =>
-        right.reasonCodes.some(
-          (reasonCode) =>
-            reasonCode === ErrorCode.MissingRoleAccess ||
-            reasonCode === ErrorCode.MissingRightAccess,
-        ),
-      );
-      const hasMissingSrrRightAccess = response.some(
-        (right) =>
-          !hasMissingRoleAccess &&
-          right.reasonCodes.some(
-            (reasonCode) =>
-              reasonCode === ErrorCode.MissingSrrRightAccess ||
-              reasonCode === ErrorCode.AccessListValidationFail,
-          ),
-      );
-
-      if (hasMissingRoleAccess) {
-        return t('delegation_modal.specific_rights.missing_role_message');
-      }
-      if (hasMissingSrrRightAccess) {
-        return t('delegation_modal.specific_rights.missing_srr_right_message', {
-          resourceOwner: resource?.resourceOwnerName,
-          reportee: reportee?.name,
-        });
-      }
-      return null;
-    },
-    [t, resource?.resourceOwnerName, reportee?.name],
-  );
 
   const saveEditedRights = () => {
     const actionKeysToDelegate = rights
