@@ -2,6 +2,7 @@ export enum ErrorCode {
   MissingRoleAccess = 'MissingRoleAccess',
   MissingRightAccess = 'MissingRightAccess',
   MissingDelegationAccess = 'MissingDelegationAccess',
+  MissingPackageAccess = 'MissingPackageAccess',
   MissingSrrRightAccess = 'MissingSrrRightAccess',
   HTTPError = 'HTTPError',
   Unauthorized = 'Unauthorized',
@@ -15,6 +16,7 @@ export const getErrorCodeTextKey = (errorCode: string | undefined): string | und
     case ErrorCode.MissingRoleAccess:
       return 'single_rights.missing_role_access';
     case ErrorCode.MissingDelegationAccess:
+    case ErrorCode.MissingPackageAccess:
       return 'single_rights.missing_delegation_access';
     case ErrorCode.MissingSrrRightAccess:
     case ErrorCode.AccessListValidationFail:
@@ -40,6 +42,7 @@ export const prioritizeErrors = (errors: string[]): string[] => {
     ErrorCode.HTTPError,
     ErrorCode.MissingRoleAccess,
     ErrorCode.MissingDelegationAccess,
+    ErrorCode.MissingPackageAccess,
     ErrorCode.MissingSrrRightAccess,
     ErrorCode.AccessListValidationFail,
     ErrorCode.Unknown,

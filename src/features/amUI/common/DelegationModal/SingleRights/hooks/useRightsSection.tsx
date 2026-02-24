@@ -147,7 +147,9 @@ export const useRightsSection = ({
         right.reasonCodes.some(
           (reasonCode) =>
             reasonCode === ErrorCode.MissingRoleAccess ||
-            reasonCode === ErrorCode.MissingRightAccess,
+            reasonCode === ErrorCode.MissingRightAccess ||
+            reasonCode === ErrorCode.MissingDelegationAccess ||
+            reasonCode === ErrorCode.MissingPackageAccess,
         ),
       );
       const hasMissingSrrRightAccess = response.some(
