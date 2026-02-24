@@ -305,7 +305,9 @@
     "wip_message": "Denne siden jobber vi fremdeles med! For å administrere enkelttjenester, må du gå til den gamle løsningen.",
     "wip_link_text": "Gå til gamle Altinn",
     "inheritance": {
-      "right_inherited": "Denne handlingen er arvet og kan ikke endres her."
+      "right_inherited_via_role": "{{user_name}} har denne handlingen gjennom rollen de har i {{via_name}}.",
+      "right_inherited_via_connection": "{{user_name}} har denne handlingen gjennom {{via_name}}.",
+      "right_inherited_via_keyrole": "{{user_name}} har denne handlingen gjennom rollen de har i {{via_name}}."
     }
   },
   "access_packages": {

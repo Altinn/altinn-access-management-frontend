@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
 import {
   DelegationCheckedRight,
+  ResourceRight,
   ServiceResource,
   useDelegationCheckQuery,
   useGetResourceRightsQuery,
@@ -19,6 +20,7 @@ import { useRightChips } from './useRightChips';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useHasResourceCheck } from './useHasResourceCheck';
+import { getInheritedStatus } from '../../../useInheritedStatus';
 
 export const useRightsSection = ({
   resource,
@@ -102,6 +104,19 @@ export const useRightsSection = ({
     }
   }, [resourceRights, isResourceRightsFetching, resource.identifier, hasResourceAccess]);
 
+  const findInheritedRight = (right: ResourceRight, ruleKey: string) => {
+    const rule = right.indirectRules.find((r) => r.rule.key === ruleKey);
+
+    // if rule is found, this is inherited.
+    if (rule) {
+      return getInheritedStatus({
+        permissions: rule?.permissions,
+        toParty: toParty,
+      });
+    }
+    return [];
+  };
+
   // Instantiate/reset rights and missing access message states
   useEffect(() => {
     if (delegationCheckedActions) {
@@ -109,16 +124,22 @@ export const useRightsSection = ({
 
       if (hasAccess && resourceRights) {
         const chipRights: ChipRight[] = mapRightsToChipRights(
-          delegationCheckedActions,
-          (right) => currentRights.some((key) => key === right.rule.key),
-          (rightKey) => resourceRights.indirectRules.some((r) => r.rule.key === rightKey),
+          delegationCheckedActions.map((right) => ({
+            ...right,
+            toParty: toParty,
+            isChecked: currentRights.some((key) => key === right.rule.key),
+            inheritedStatus: findInheritedRight(resourceRights, right.rule.key),
+          })),
         );
         setRights(chipRights);
       } else {
         const chipRights: ChipRight[] = mapRightsToChipRights(
-          delegationCheckedActions,
-          (right) => right.result === true,
-          () => false, // If the user doesn't have access to the resource, none of the rights can be inherited
+          delegationCheckedActions.map((right) => ({
+            ...right,
+            toParty: toParty,
+            isChecked: right.result === true,
+            inheritedStatus: [], // If the user doesn't have access to the resource, none of the rights can be inherited
+          })),
         );
         setRights(chipRights);
       }
