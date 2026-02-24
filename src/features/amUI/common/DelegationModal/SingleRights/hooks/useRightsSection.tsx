@@ -144,7 +144,14 @@ export const useRightsSection = ({
         setRights(chipRights);
       }
     }
-  }, [delegationCheckedActions, resource.identifier, hasAccess, currentRights, resourceRights]);
+  }, [
+    delegationCheckedActions,
+    resource.identifier,
+    hasAccess,
+    currentRights,
+    resourceRights,
+    toParty,
+  ]);
 
   /// Functions
 
