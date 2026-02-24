@@ -65,9 +65,10 @@ export const RightsSection = ({
     type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
   });
   const displayResourceAlert =
-    isDelegationCheckError ||
-    resource?.delegable === false ||
-    (rights.length > 0 && !rights.some((r) => r.delegable === true));
+    availableActions?.includes(DelegationAction.DELEGATE) &&
+    (isDelegationCheckError ||
+      resource?.delegable === false ||
+      (rights.length > 0 && !rights.some((r) => r.delegable === true)));
 
   const delegationCheckErrorDetails =
     isDelegationCheckError &&
