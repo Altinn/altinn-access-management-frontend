@@ -25,6 +25,7 @@ import { isNewUser } from '../common/isNewUser';
 import { AccessPackageListItems } from '../common/AccessPackageListItems/AccessPackageListItems';
 import { UserListItems, type UserListItemData } from '../common/UserListItems/UserListItems';
 import { useClientDetailsAccessPackageActions } from './useClientDetailsAccessPackageActions';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 type ClientDetailsAgentsListProps = {
   agents: Agent[];
@@ -103,7 +104,7 @@ export const ClientDetailsAgentsList = ({
     const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.variant);
     const userType = getUserListItemType(agent.agent.type);
-
+    const isMobileOrSmaller = useIsMobileOrSmaller();
     const nodes = clientAccess.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
 
@@ -112,6 +113,7 @@ export const ClientDetailsAgentsList = ({
         fullName: agent.agent.name,
         type: agent.agent.type === 'Person' ? 'person' : 'company',
       });
+
       const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
         const hasAccess = packageIdsByAgentId.get(agentId)?.has(pkg.id) ?? false;
         const accessPackage = getAccessPackageById(pkg.id);
@@ -134,6 +136,11 @@ export const ClientDetailsAgentsList = ({
               <Button
                 variant='tertiary'
                 disabled={removeDisabled}
+                aria-label={
+                  isMobileOrSmaller
+                    ? t('client_administration_page.remove_package_button')
+                    : undefined
+                }
                 onClick={() => {
                   removeClientAccessPackage(
                     agentId,
@@ -145,12 +152,17 @@ export const ClientDetailsAgentsList = ({
                 }}
               >
                 <MinusCircleIcon />
-                {t('client_administration_page.remove_package_button')}
+                {!isMobileOrSmaller && t('client_administration_page.remove_package_button')}
               </Button>
             ) : (
               <Button
                 variant='tertiary'
                 disabled={delegateDisabled}
+                aria-label={
+                  isMobileOrSmaller
+                    ? t('client_administration_page.delegate_package_button')
+                    : undefined
+                }
                 onClick={() => {
                   addClientAccessPackage(
                     agentId,
@@ -162,7 +174,7 @@ export const ClientDetailsAgentsList = ({
                 }}
               >
                 <PlusCircleIcon />
-                {t('client_administration_page.delegate_package_button')}
+                {!isMobileOrSmaller && t('client_administration_page.delegate_package_button')}
               </Button>
             )),
         };
