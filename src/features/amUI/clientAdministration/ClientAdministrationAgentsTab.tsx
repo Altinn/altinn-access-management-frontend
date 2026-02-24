@@ -110,6 +110,7 @@ export const ClientAdministrationAgentsTab = () => {
         searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
         directConnectionsHeading={t('client_administration_page.direct_connections_heading')}
         indirectConnectionsHeading={t('client_administration_page.indirect_connections_heading')}
+        titleAs='h2'
       />
     </div>
   );

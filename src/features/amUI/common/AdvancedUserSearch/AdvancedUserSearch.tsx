@@ -10,7 +10,7 @@ import classes from './AdvancedUserSearch.module.css';
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
-import { ConnectionsList } from './ConnectionsList';
+import { ConnectionsList, titleAsType } from './ConnectionsList';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface AdvancedUserSearchProps {
@@ -33,6 +33,7 @@ export interface AdvancedUserSearchProps {
   indirectConnectionsHeading?: string;
   additionalFilters?: React.ReactNode;
   hasActiveAdditionalFilters?: boolean;
+  titleAs?: titleAsType;
 }
 
 const filterAvailableUserTypes = (items?: Connection[]) =>
@@ -62,6 +63,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   indirectConnectionsHeading,
   additionalFilters,
   hasActiveAdditionalFilters = false,
+  titleAs = 'h4',
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
@@ -162,6 +164,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
             onRevoke={onRevoke}
             includeSelfAsChild={includeSelfAsChild}
             getUserLink={getUserLink}
+            titleAs={titleAs}
           />
           {showDirectNoResults && (
             <DsParagraph data-size='md'>

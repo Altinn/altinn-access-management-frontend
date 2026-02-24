@@ -94,6 +94,7 @@ export const StatusSection = ({
           <ExclamationmarkTriangleFillIcon
             fontSize='1.5rem'
             className={classes.warningIcon}
+            aria-hidden='true'
           />
           <DsParagraph data-size='sm'>
             <Trans

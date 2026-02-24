@@ -124,6 +124,7 @@ export const ClientDetailsAgentsList = ({
           type: packageType,
           isSubUnit: clientIsSubUnit,
           interactive: false,
+          titleAs: 'h3',
           description:
             access.role.code !== 'rettighetshaver'
               ? t('client_administration_page.via_role', { role: roleName })
@@ -195,6 +196,7 @@ export const ClientDetailsAgentsList = ({
       deleted: agent.agent.isDeleted ?? undefined,
       collapsible: true,
       interactive: true,
+      titleAs: 'h2',
       as: 'button',
       children: <AccessPackageListItems items={nodes} />,
       description:
