@@ -107,7 +107,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                 isDelegationCheckLoading={isDelegationCheckLoading}
                 isDelegationCheckError={isDelegationCheckError}
                 delegationCheckError={delegationCheckError}
-                delegationError={delegationError}
+                delegationError={delegationError ?? null}
                 missingAccess={missingAccess}
               />
             </>

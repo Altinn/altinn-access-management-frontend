@@ -203,6 +203,7 @@ export const {
   useGetResourceRightsQuery,
   useClearAccessCacheMutation,
   useDelegationCheckQuery,
+  useLazyDelegationCheckQuery,
   useDelegateRightsMutation,
   useRevokeResourceMutation,
   useUpdateResourceMutation,

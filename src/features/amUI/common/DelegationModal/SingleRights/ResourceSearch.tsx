@@ -22,7 +22,7 @@ import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
 
 export interface ResourceSearchProps {
-  onSelect: (resource: ServiceResource) => void;
+  onSelect: (resource: ServiceResource, error?: boolean) => void;
   toParty?: Party;
   availableActions?: DelegationAction[];
 }
