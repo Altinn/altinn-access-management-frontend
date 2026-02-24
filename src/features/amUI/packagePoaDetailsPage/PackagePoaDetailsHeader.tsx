@@ -1,4 +1,4 @@
-import React, { useId } from 'react';
+import React from 'react';
 import classes from './PackagePoaDetailsHeader.module.css';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { PackageIcon } from '@navikt/aksel-icons';
@@ -17,20 +17,18 @@ export const PackagePoaDetailsHeader: React.FC<PackagePoaDetailsHeaderProps> = (
   isLoading = false,
   statusSection,
 }) => {
-  const id = useId();
   return isLoading ? (
     <PackagePoaDetailsHeaderSkeleton />
   ) : (
     <>
       <PackageIcon
         className={classes.packageIcon}
-        aria-labelledby={id}
+        aria-hidden={true}
       />
       <DsHeading
         level={1}
         data-size='lg'
         className={classes.pageHeading}
-        id={id}
       >
         {packageName}
       </DsHeading>
