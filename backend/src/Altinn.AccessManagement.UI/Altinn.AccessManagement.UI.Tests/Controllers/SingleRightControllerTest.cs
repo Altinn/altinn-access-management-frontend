@@ -61,7 +61,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 }
             };
 
-            Right dto = new Right
+            Core.Models.Right dto = new Core.Models.Right
             {
                 Resource = resource,
             };
@@ -106,7 +106,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            Right dto = new Right
+            Core.Models.Right dto = new Core.Models.Right
             {
                 Resource = resource,
             };
@@ -151,7 +151,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            Right dto = new Right
+            Core.Models.Right dto = new Core.Models.Right
             {
                 Resource = resource,
             };
@@ -200,19 +200,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<Right> rights = new List<Right>
+            List<Core.Models.Right> rights = new List<Core.Models.Right>
             {
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "write",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "sign",
@@ -276,14 +276,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<Right> rights = new List<Right>
+            List<Core.Models.Right> rights = new List<Core.Models.Right>
             {
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "write",
@@ -347,14 +347,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<Right> rights = new List<Right>
+            List<Core.Models.Right> rights = new List<Core.Models.Right>
             {
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "write",
@@ -409,19 +409,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<Right> rights = new List<Right>
+            List<Core.Models.Right> rights = new List<Core.Models.Right>
             {
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "write",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "sign",
@@ -487,11 +487,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string resource = "appid-503";
             string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationCheck", "appid-503.json");
-            List<ResourceAction> expectedResponse = Util.GetMockData<List<ResourceAction>>(path);
+            List<RightCheck> expectedResponse = Util.GetMockData<List<RightCheck>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegationcheck?from={from}&resource={resource}");
-            List<ResourceAction> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceAction>>();
+            List<RightCheck> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<RightCheck>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -630,51 +630,152 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.True(httpResponse.StatusCode == HttpStatusCode.BadRequest || httpResponse.StatusCode == HttpStatusCode.InternalServerError);
         }
 
-
         /// <summary>
-        /// Test case: GetSingleRightsForUser returns the single-rights for a user
-        /// Expected: GetSingleRightsForUser returns the single-rights for a user
+        ///     Test case: Successfully retrieve delegated resources for a right holder
+        ///     Expected: Returns OK and the list of delegated resources
         /// </summary>
         [Fact]
-        public async Task GetSingleRightsForUser_returnsExpectedRights()
+        public async Task GetDelegatedResources_ReturnsValid()
         {
             // Arrange
-            string partyId = "999 999 999";
-            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-
-            // Expected response data
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
             string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetDelegations", "delegations.json");
-            string content = File.ReadAllText(Path.Combine(path));
-            List<ResourceDelegation> expectedResponse = JsonSerializer.Deserialize<List<ResourceDelegation>>(content, options);
+            List<ResourceDelegation> expectedResponse = Util.GetMockData<List<ResourceDelegation>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}&to={to}");
             List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
 
             // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
             Assert.Equal(expectedResponse.Count, actualResponse.Count);
-            AssertionUtil.AssertCollections(expectedResponse.Select(r => r.Resource).ToList(), actualResponse.Select(r => r.Resource).ToList(), AssertionUtil.AssertEqual);
-            AssertionUtil.AssertCollections(expectedResponse.Select(r => r.Delegation).ToList().ToList(), actualResponse.Select(r => r.Delegation).ToList(), AssertionUtil.AssertEqual);
-
         }
 
-
         /// <summary>
-        ///    Test case: GetSingleRightsForUser handles error
-        ///    Expected: GetSingleRightsForUser returns internal server error
+        ///     Test case: Handles unexpected errors when retrieving delegated resources
+        ///     Expected: Returns an internal server error
         /// </summary>
         [Fact]
-        public async Task GetSingleRightsForUser_handles_error()
+        public async Task GetDelegatedResources_InternalServerError()
         {
-            // Arrange
-            string partyId = "********";
-            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            // Arrange - Using Guid that triggers exception in mock
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}&to={to}");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles HttpStatusException when retrieving delegated resources
+        ///     Expected: Returns the appropriate status code from HttpStatusException
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_HttpStatusException()
+        {
+            // Arrange - Using Guid that triggers HttpStatusException in mock
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}&to={to}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Successfully retrieve delegated resource rights for a specific resource
+        ///     Expected: Returns OK and the resource rights
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResourceRights_ReturnsValid()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resourceId = "appid-502";
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetResourceRights", $"{resourceId}.json");
+            ResourceRight expectedResponse = Util.GetMockData<ResourceRight>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources/rights?party={party}&from={from}&to={to}&resourceId={resourceId}");
+            ResourceRight actualResponse = await httpResponse.Content.ReadFromJsonAsync<ResourceRight>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.NotNull(actualResponse.Resource);
+            Assert.Equal(expectedResponse.Resource.RefId, actualResponse.Resource.RefId);
+        }
+
+        /// <summary>
+        ///     Test case: Handles unexpected errors when retrieving delegated resource rights
+        ///     Expected: Returns an internal server error
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResourceRights_InternalServerError()
+        {
+            // Arrange - Using Guid that triggers exception in mock
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resourceId = "appid-502";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources/rights?party={party}&from={from}&to={to}&resourceId={resourceId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles HttpStatusException when retrieving delegated resource rights
+        ///     Expected: Returns the appropriate status code from HttpStatusException
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResourceRights_HttpStatusException()
+        {
+            // Arrange - Using Guid that triggers HttpStatusException in mock
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resourceId = "appid-502";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources/rights?party={party}&from={from}&to={to}&resourceId={resourceId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles HttpStatusException when resource is not found for delegated resource rights
+        ///     Expected: Returns NotFound status code
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResourceRights_ResourceNotFound()
+        {
+            // Arrange - Using invalid resource ID that doesn't exist in mock data
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resourceId = "non-existing-resource";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources/rights?party={party}&from={from}&to={to}&resourceId={resourceId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
         /// <summary>

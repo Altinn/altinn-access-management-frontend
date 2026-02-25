@@ -23,51 +23,35 @@
       "name": "GenericAccessResource"
     }
   },
-  "actions": [
+  "rights": [
     {
-      "actionKey": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "Read",
+      "right": {
+        "key": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "name": "Read",
+        "resource": [
+          "urn:altinn:resource:jks-test-resource"
+        ],
+        "action": "urn:oasis:names:tc:xacml:1.0:action:action-id:read"
+      },
       "result": true,
-      "reasons": [
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
+      "reasonCodes": [
+        "MissingRoleAccess",
+        "MissingDelegationAccess"
       ]
     },
     {
-      "actionKey": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "actionName": "Write",
+      "right": {
+        "key": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+        "name": "Write",
+        "resource": [
+          "urn:altinn:resource:jks-test-resource"
+        ],
+        "action": "urn:oasis:names:tc:xacml:1.0:action:action-id:write"
+      },
       "result": true,
-      "reasons": [
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
+      "reasonCodes": [
+        "MissingRoleAccess",
+        "MissingDelegationAccess"
       ]
     }
   ]

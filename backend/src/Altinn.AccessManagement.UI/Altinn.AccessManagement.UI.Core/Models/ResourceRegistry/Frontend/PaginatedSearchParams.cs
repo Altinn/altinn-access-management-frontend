@@ -22,6 +22,16 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public string[] ROFilters { get; set; }
 
         /// <summary>
+        /// Flag indicating whether to include A2 services in the search results. Default is true.
+        /// </summary>
+        public bool IncludeA2Services { get; set; } = true;
+
+        /// <summary>
+        /// Flag indicating whether to include migrated apps in the search results. Default is false.
+        /// </summary>
+        public bool IncludeMigratedApps { get; set; } = false;
+
+        /// <summary>
         /// Number of returned resources (per page)
         /// </summary>
         public int ResultsPerPage { get; set; }

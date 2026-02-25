@@ -86,7 +86,7 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
         {t('role.current_roles_title', { count: mappedRoles.length })}
       </DsHeading>
       {mappedRoles.length === 0 ? (
-        <DsParagraph data-size='sm'>{t('role.no_roles_message')}</DsParagraph>
+        <DsParagraph>{t('role.no_roles_message')}</DsParagraph>
       ) : (
         <List>
           {mappedRoles.map((role) => {

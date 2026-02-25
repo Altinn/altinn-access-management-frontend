@@ -92,8 +92,8 @@ export const StatusSection = ({
       {showUndelegatedWarning && (
         <div className={classes.infoLine}>
           <ExclamationmarkTriangleFillIcon
-            fontSize='1.5rem'
             className={classes.warningIcon}
+            aria-hidden='true'
           />
           <DsParagraph data-size='sm'>
             <Trans
@@ -107,8 +107,8 @@ export const StatusSection = ({
       {userHasAccess && (
         <div className={classes.infoLine}>
           <CheckmarkCircleFillIcon
-            fontSize='1.5rem'
             className={classes.hasPackageInfoIcon}
+            aria-hidden='true'
           />
           <DsParagraph data-size='sm'>
             <Trans
@@ -138,8 +138,8 @@ export const StatusSection = ({
             className={classes.infoLine}
           >
             <InformationSquareFillIcon
-              fontSize='1.5rem'
               className={classes.inheritedInfoIcon}
+              aria-hidden='true'
             />
             <DsParagraph data-size='sm'>
               <Trans
@@ -156,8 +156,8 @@ export const StatusSection = ({
       {cannotDelegateHere && (
         <div className={classes.infoLine}>
           <XMarkOctagonFillIcon
-            fontSize='1.5rem'
             className={classes.dangerIcon}
+            aria-hidden='true'
           />
           <DsParagraph data-size='sm'>
             <Trans
@@ -172,8 +172,8 @@ export const StatusSection = ({
       {shouldShowDelegationCheck && (
         <div className={classes.infoLine}>
           <ExclamationmarkTriangleFillIcon
-            fontSize='1.5rem'
             className={classes.delegationCheckInfoIcon}
+            aria-hidden='true'
           />
           <DsParagraph data-size='sm'>
             <Trans

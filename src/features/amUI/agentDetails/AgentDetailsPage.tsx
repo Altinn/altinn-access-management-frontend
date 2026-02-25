@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ClientAdministrationAgentDetails } from './ClientAdministrationAgentDetails';
+import { AgentDetails } from './AgentDetails';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -10,7 +10,7 @@ import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUt
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
-export const ClientAdministrationAgentDetailsPage = () => {
+export const AgentDetailsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
 
@@ -36,7 +36,7 @@ export const ClientAdministrationAgentDetailsPage = () => {
           toPartyUuid={id}
           errorOnPriv={true}
         >
-          <ClientAdministrationAgentDetails />
+          <AgentDetails />
         </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>

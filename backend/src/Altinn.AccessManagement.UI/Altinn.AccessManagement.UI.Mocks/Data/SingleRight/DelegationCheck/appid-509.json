@@ -23,75 +23,48 @@
       "name": "GenericAccessResource"
     }
   },
-  "actions": [
+  "rights": [
     {
-      "actionKey": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "Read",
-      "result": true,
-      "reasons": [
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "name": "Read",
+        "resource": [
+          "urn:altinn:resource:appid-509"
+        ],
+        "action": "read"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "actionName": "Write",
-      "result": true,
-      "reasons": [
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+        "name": "Write",
+        "resource": [
+          "urn:altinn:resource:appid-509"
+        ],
+        "action": "write"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
-      "actionName": "Sign",
-      "result": true,
-      "reasons": [
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
+        "name": "Sign",
+        "resource": [
+          "urn:altinn:resource:appid-509"
+        ],
+        "action": "sign"
+      },
+      "result": true
     }
   ]
 }

@@ -23,6 +23,7 @@ import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { StatusSection } from '../../StatusSection/StatusSection';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -34,6 +35,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
   const displayAccessRequestFeature = displayAccessRequest();
+  const isSmall = useIsMobileOrSmaller();
 
   const {
     onDelegate,
@@ -92,14 +94,16 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <Icon
-          size='lg'
-          svgElement={PackageIcon}
-          className={classes.headerIcon}
-        />
+        {!isSmall && (
+          <Icon
+            size='md'
+            svgElement={PackageIcon}
+            className={classes.headerIcon}
+          />
+        )}
         <DsHeading
           level={1}
-          data-size='md'
+          data-size={isSmall ? 'xs' : 'md'}
         >
           {accessPackage?.name}
         </DsHeading>
@@ -159,11 +163,16 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             inheritedStatus={inheritedStatus ?? undefined}
           />
 
-          <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
+          <DsParagraph
+            data-size={isSmall ? 'sm' : 'md'}
+            variant='long'
+          >
+            {accessPackage?.description}
+          </DsParagraph>
           <div className={classes.services}>
             <DsHeading
               level={2}
-              data-size='xs'
+              data-size={isSmall ? 'xs' : 'sm'}
             >
               {t('delegation_modal.package_services', {
                 count: accessPackage.resources.length,

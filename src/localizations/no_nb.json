@@ -297,13 +297,16 @@
     "no_resources chosen": "Ingen valgte tjenester",
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikke se at noen tjenester er blitt valgt.",
     "popular_services": "Populære tjenester:",
-    "give_new_single_right": "Gi fullmakt",
+    "give_new_single_right": "Gi fullmakt til ny tjeneste",
     "current_services_title": "Fullmakt til {{count}} tjenester",
     "delete_singleRight_success_message": "Slettet tilgang til ",
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttjenester",
     "wip_message": "Denne siden jobber vi fremdeles med! For å administrere enkelttjenester, må du gå til den gamle løsningen.",
-    "wip_link_text": "Gå til gamle Altinn"
+    "wip_link_text": "Gå til gamle Altinn",
+    "inheritance": {
+      "right_inherited": "Denne handlingen er arvet og kan ikke endres her."
+    }
   },
   "access_packages": {
     "helptext_button": "Hva er tilgangspakker?",
@@ -311,7 +314,7 @@
     "given_packages_title": "Mottatte tilgangspakker",
     "available_packages_title": "Tilgjengelige tilgangspakker",
     "other_available": "Andre tilgjengelige",
-    "current_access_packages_title": "{{count}} tilgangspakker",
+    "current_access_packages_title": "Fullmakt til {{count}} tilgangspakker",
     "give_new_button": "Gi fullmakt",
     "search_label": "Søk etter tilgangspakker",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
@@ -333,7 +336,7 @@
     }
   },
   "guardianships": {
-    "current_guardianship_title": "{{count}} vergemål",
+    "current_guardianship_title": "Fullmakt til {{count}} vergemål",
     "search_label": "Søk etter vergemål",
     "modal_info_title": "Vergemål",
     "modal_info_description": "Oppnevnelsen av verge er hentet fra Statsforvalteren. Den kan ikke slettes eller endres her.",
@@ -342,7 +345,7 @@
   },
   "role": {
     "provider_status": "Denne rollen er hentet fra ",
-    "current_roles_title": "{{count}} roller",
+    "current_roles_title": "Fullmakt til {{count}} roller",
     "fetch_error_heading": "Kan ikke vise roller for denne brukeren",
     "fetch_error_description": "Vi klarer ikke å hente rollene akkurat nå.",
     "no_roles_message": "Denne brukeren har ingen roller.",
@@ -405,7 +408,7 @@
     "remove_package_error": "Kunne ikke fjerne {{name}} sin klienttilgang for {{accessPackage}}.",
     "delete_provider_button": "Slett klienttilgang",
     "delete_provider_heading": "Vil du slette din klienttilgang?",
-    "delete_provider_body": "Du vil miste alle fullmakter for klienter du har gjennom {{provider}}. Denne handlingen kan ikke angres.",
+    "delete_provider_body": "Du vil miste alle fullmakter for klienter du har gjennom {{provider}}. Denne handlingen kan ikke endres.",
     "delete_provider_confirm": "Slett klienttilgang"
   },
   "user_rights_page": {
@@ -420,26 +423,32 @@
   "delete_user": {
     "user_trigger_button": "Slett bruker",
     "user_heading": "Er du sikker på at du vil slette denne brukeren?",
-    "user_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke angres.</i></p>",
-    "user_limited_deletion_heading": "Brukeren har tilganger som ikke kan slettes",
-    "user_limited_deletion_message": "<p>{{to_name}} har fullmakter gjennom rolle(r) i <erLink>Enhetsregisteret</erLink> eller i <a2Link>den gamle Altinnløsningen</a2Link>, og kan derfor ikke slettes fullstendig fra {{from_name}}.</p><p>Ønsker du å slette alle tilganger som ikke er knyttet til slike roller? <i>Denne handlingen kan ikke angres.</i></p>",
+    "user_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke endres.</i></p>",
+    "user_limited_deletion_heading": "Noen fullmakter kan ikke slettes",
     "user_deletion_not_allowed_heading": "Brukeren kan ikke slettes",
-    "user_deletion_not_allowed_message": "<p>{{to_name}} har kun fullmakter gjennom rolle(r) i <erLink>Enhetsregisteret</erLink> eller i <a2Link>den gamle Altinnløsningen</a2Link>, og kan derfor ikke slettes her.</p>",
+    "agent_role_my_clients_link": "Dine klienter",
+    "agent_role_client_admin_link": "Klientadministrasjon",
+    "user_non_deletable_reasons_intro": "{{to_name}} har fullmakter som ikke kan slettes her",
+    "yourself_non_deletable_reasons_intro": "Du har fullmakter som ikke kan slettes her",
+    "reportee_non_deletable_reasons_intro": "{{to_name}} har fullmakter for {{from_name}} som ikke kan slettes her",
+    "non_deletable_reason_old_altinn": "Fullmakter gitt i <a2Link>den gamle Altinn-løsningen</a2Link> må slettes der.",
+    "non_deletable_reason_er_roles": "Fullmakter som følger roller i Enhetsregisteret må endres via <erLink>Samordnet registermelding</erLink>.",
+    "non_deletable_reason_agent_role": "Klienttilganger kan administreres på <agentLink>{{linkText}}</agentLink>.",
+    "non_deletable_reason_guardianship": "Fullmakter gitt gjennom vergemål fra <guardianshipLink>Sivilrettsforvaltningen</guardianshipLink>.",
     "yes_button": "Ja, slett",
+    "user_partial_confirmation_message": "<p>Brukeren har også andre fullmakter, og disse kan du slette her. Ønsker du det? <i>Denne handlingen kan ikke endres.</i></p>",
     "yourself_trigger_button": "Slett alle tilganger",
     "yourself_heading": "Er du sikker på at du vil slette alle dine tilganger?",
-    "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke angres.</i></p>",
+    "yourself_message": "<p>Du vil miste alle fullmakter du har for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke endres.</i></p>",
     "yourself_limited_deletion_heading": "Du har tilganger som ikke kan slettes",
-    "yourself_limited_deletion_message": "<p>Du har fullmakter gjennom rolle(r) i <erLink>Enhetsregisteret</erLink> eller i <a2Link>den gamle Altinnløsningen</a2Link>, og kan derfor ikke slettes fullstendig fra {{from_name}}. </p><p>Ønsker du å slette alle tilganger som ikke er knyttet til slike roller? <i>Denne handlingen kan ikke angres.</i></p>",
     "yourself_deletion_not_allowed_heading": "Dine tilganger kan ikke slettes",
-    "yourself_deletion_not_allowed_message": "<p>Du har kun fullmakter gjennom rolle(r) i <erLink>Enhetsregisteret</erLink> eller i <a2Link>den gamle Altinnløsningen</a2Link>, og kan derfor ikke slettes her.</p>",
+    "yourself_partial_confirmation_message": "<p>Du har også andre fullmakter, og disse kan du slette her. Ønsker du det? <i>Denne handlingen kan ikke endres.</i></p>",
     "reportee_trigger_button": "Slett alle tilganger",
     "reportee_heading": "Er du sikker på at du vil slette alle deres tilganger?",
-    "reportee_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke angres.</i></p>",
+    "reportee_message": "<p>{{to_name}} vil miste alle fullmakter for {{from_name}} og vil ikke lenger ha tilgang til deres innhold eller til å representere dem i Altinn. <i>Denne handlingen kan ikke endres.</i></p>",
     "reportee_limited_deletion_heading": "Dere har tilganger som ikke kan slettes",
-    "reportee_limited_deletion_message": "<p>{{to_name}} har fullmakter gjennom rolle(r) i <erLink>Enhetsregisteret</erLink> eller i <a2Link>den gamle Altinnløsningen</a2Link>, og kan derfor ikke slettes fullstendig fra {{from_name}}.</p><p>Ønsker du å slette alle tilganger som ikke er knyttet til slike roller? <i>Denne handlingen kan ikke angres.</i></p>",
     "reportee_deletion_not_allowed_heading": "Deres tilganger kan ikke slettes",
-    "reportee_deletion_not_allowed_message": "<p>{{to_name}} har kun fullmakter gjennom rolle(r) i <erLink>Enhetsregisteret</erLink> eller i <a2Link>den gamle Altinnløsningen</a2Link>, og kan derfor ikke slettes her.</p>"
+    "reportee_partial_confirmation_message": "<p>{{to_name}} har også andre fullmakter, og disse kan du slette her. Vil du slette disse tilgangene? <i>Denne handlingen kan ikke endres.</i></p>"
   },
   "reportee_rights_page": {
     "page_title": "Fullmakter hos andre - Altinn",
@@ -494,18 +503,18 @@
       "time_of_error": "Tidspunkt feilen inntraff: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Hvem som får benytte denne tjenesten bestemmes av {{resourceOwner}}, og {{reportee}} er ikke gitt den muligheten. Vi anbefaler dere å ta kontakt med {{resourceOwner}}.",
-      "missing_rights": "Du får ikke gitt denne fullmakten til andre fordi du mangler den selv. Daglig leder eller hovedadministrator kan hjelpe deg med dette."
+      "missing_rights": "Du får ikke gitt denne fullmakten til andre fordi du mangler tilgang til den selv."
     }
   },
   "status_section": {
     "has_package_message": "{{user_name}} har denne fullmakten.",
     "access_status": {
-      "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rollen de har i {{via_name}}. Denne tilgangspakken kan derfor ikke slettes.",
-      "via_priv": "{{user_name}} har denne fullmakten gjennom sin rolle som privatperson. Den kan derfor ikke slettes."
+      "via_role": "{{user_name}} har fullmakt gjennom rollen de har i {{via_name}}. Den kan derfor ikke slettes.",
+      "via_connection": "{{user_name}} har fullmakt gjennom {{via_name}}. Denne kan derfor ikke slettes.",
+      "via_keyrole": "{{user_name}} har fullmakt gjennom rollen de har i {{via_name}}. Den kan derfor ikke slettes.",
+      "via_priv": "{{user_name}} har fullmakt gjennom sin rolle som privatperson. Den kan derfor ikke slettes."
     },
-    "cannot_delegate_here": "Tilgang til denne pakken kan ikke gis/fjernes her.",
+    "cannot_delegate_here": "Denne fullmakten kan ikke gis/fjernes her.",
     "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten.",
     "no_permissions_fulltext": "Virksomheten kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlige."
   },
@@ -920,7 +929,7 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tjenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tjenester er tilgjengelige.",
+    "no_resources": "Denne brukeren har ingen tjenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
@@ -941,8 +950,8 @@
     "your_rights_description": "Se fullmaktene du har på vegne av {{reportee}}",
     "your_rights_description_yourself": "Se fullmaktene du har på vegne av deg selv",
     "your_clients_description": "Se hvilke klienter du har tilgang til på vegne av {{reportee}}",
-    "users_item_description_org": "Oversikt over personer og virksomheter som har fått fullmakter hos dere",
-    "users_item_description_person": "Oversikt over personer og virksomheter som har fullmakter hos deg",
+    "users_item_description": "Oversikt over personer og virksomheter som har fått fullmakter hos {{reportee}}",
+    "users_item_description_yourself": "Oversikt over personer og virksomheter som har fullmakter hos deg",
     "reportees_item_description_org": "Oversikt over alle som har gitt fullmakter til dere",
     "reportees_item_description_person": "Oversikt over alle som har gitt deg fullmakter",
     "poa_item_description": "Oversikt over alle tilgangspakker og enkelttjenester",

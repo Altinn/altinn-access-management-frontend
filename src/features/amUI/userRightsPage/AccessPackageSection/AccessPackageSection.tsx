@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsAlert, DsHeading, DsPopover, DsSearch } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsPopover } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
-import { PartyType, useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
@@ -16,22 +16,21 @@ import { AccessPackageInfoAlert } from './AccessPackageInfoAlert';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import classes from './AccessPackageSection.module.css';
-import { debounce, isGuardianshipUrn } from '@/resources/utils';
+import { isGuardianshipUrn } from '@/resources/utils';
 import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
+import { DebouncedSearchField } from '../../common/DebouncedSearchField/DebouncedSearchField';
+import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 
 export const AccessPackageSection = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const {
-    selfParty,
     toParty,
     fromParty,
     actingParty,
     isLoading: loadingPartyRepresentation,
   } = usePartyRepresentation();
-  const { data: isHovedadmin } = useGetIsHovedadminQuery();
-  const isCurrentUser = selfParty?.partyUuid === id;
-  const canGiveAccess = !isCurrentUser || (isCurrentUser && isHovedadmin);
+  const canGiveAccess = useCanGiveAccess(id ?? '');
   const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
@@ -50,21 +49,7 @@ export const AccessPackageSection = () => {
     : 0;
 
   // Local search state with debounce to avoid excessive backend calls
-  const [searchString, setSearchString] = useState<string>('');
   const [debouncedSearchString, setDebouncedSearchString] = useState<string>('');
-
-  const debouncedUpdate = useCallback(
-    debounce((value: string) => {
-      setDebouncedSearchString(value);
-    }, 300),
-    [],
-  );
-
-  useEffect(() => {
-    return () => {
-      debouncedUpdate.cancel();
-    };
-  }, [debouncedUpdate]);
 
   return (
     <>
@@ -79,7 +64,7 @@ export const AccessPackageSection = () => {
           <div className={classes.headerSection}>
             <DsHeading
               level={2}
-              data-size='2xs'
+              data-size='xs'
               id='access_packages_title'
             >
               {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
@@ -98,25 +83,10 @@ export const AccessPackageSection = () => {
           <div className={classes.inputs}>
             {numberOfAccesses > 0 && (
               <div className={classes.searchField}>
-                <DsSearch data-size='sm'>
-                  <DsSearch.Input
-                    aria-label={t('access_packages.search_label')}
-                    placeholder={t('access_packages.search_label')}
-                    value={searchString}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      const value = event.target.value;
-                      setSearchString(value);
-                      debouncedUpdate(value);
-                    }}
-                  />
-                  <DsSearch.Clear
-                    onClick={() => {
-                      debouncedUpdate.cancel();
-                      setSearchString('');
-                      setDebouncedSearchString('');
-                    }}
-                  />
-                </DsSearch>
+                <DebouncedSearchField
+                  placeholder={t('access_packages.search_label')}
+                  setDebouncedSearchString={setDebouncedSearchString}
+                />
               </div>
             )}
             <div className={classes.delegateButton}>

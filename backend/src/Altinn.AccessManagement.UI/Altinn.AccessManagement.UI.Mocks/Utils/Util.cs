@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 
 namespace Altinn.AccessManagement.UI.Mocks.Utils
@@ -19,6 +20,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Utils
             JsonSerializerOptions options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
+                Converters = { new JsonStringEnumConverter() }
             };
 
             T res = JsonSerializer.Deserialize<T>(content, options);

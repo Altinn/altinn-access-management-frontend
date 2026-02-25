@@ -10,6 +10,8 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import classes from './AdvancedUserSearch.module.css';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
+export type titleAsType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
+
 export interface ConnectionsListProps {
   users: ExtendedUser[];
   hasNextPage: boolean;
@@ -21,6 +23,7 @@ export interface ConnectionsListProps {
   includeSelfAsChild?: boolean;
   delegateLabel?: string;
   getUserLink?: (user: ExtendedUser) => string;
+  titleAs?: titleAsType;
 }
 
 export const ConnectionsList: React.FC<ConnectionsListProps> = ({
@@ -34,6 +37,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
   includeSelfAsChild = true,
   delegateLabel,
   getUserLink,
+  titleAs = 'h4',
 }) => {
   const { t } = useTranslation();
   const isInteractive = !!getUserLink;
@@ -48,7 +52,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
             key={user.id}
             user={user}
             size='md'
-            titleAs='h4'
+            titleAs={titleAs}
             interactive={isInteractive}
             linkTo={getUserLink ? getUserLink(user) : undefined}
             roleDirection='toUser'

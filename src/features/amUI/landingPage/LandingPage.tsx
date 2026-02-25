@@ -124,9 +124,11 @@ export const LandingPage = () => {
     if (displayConfettiPackage) {
       items.push({
         ...getUsersMenuItem(),
-        description: isOrganization(reportee)
-          ? t('landing_page.users_item_description_org')
-          : t('landing_page.users_item_description_person'),
+        description: isCurrentUserReportee
+          ? t('landing_page.users_item_description_yourself')
+          : t('landing_page.users_item_description', {
+              reportee: reporteeName,
+            }),
       });
     }
 
@@ -170,12 +172,8 @@ export const LandingPage = () => {
     return items;
   };
 
-  const getRequestCountText = (
-    reportee: ReporteeInfo | undefined,
-    requestCount: number,
-  ): string => {
-    const name =
-      reportee?.partyUuid === currentUser?.partyUuid ? t('common.you_uppercase') : reporteeName;
+  const getRequestCountText = (requestCount: number): string => {
+    const name = isCurrentUserReportee ? t('common.you_uppercase') : reporteeName;
     const countText = requestCount === 0 ? t('common.none') : requestCount;
     const requestTextKey =
       requestCount === 1 ? 'landing_page.new_requests_single' : 'landing_page.new_requests_plural';
@@ -195,7 +193,7 @@ export const LandingPage = () => {
     if (displayRequestsPage) {
       items.push({
         ...getRequestsMenuItem(),
-        title: getRequestCountText(reportee, requestCount),
+        title: getRequestCountText(requestCount),
         loading: isLoading,
       });
     }
@@ -210,7 +208,12 @@ export const LandingPage = () => {
   const getYourAccessesItems = () => {
     const items: MenuItemProps[] = [];
     items.push({
-      ...getYourRightsMenuItem(currentUser?.partyUuid ?? '', '/', isLoading),
+      ...getYourRightsMenuItem(
+        currentUser?.partyUuid ?? '',
+        formatDisplayName({ fullName: currentUser?.name ?? '', type: 'person' }),
+        '/',
+        isLoading,
+      ),
       description: isCurrentUserReportee
         ? t('landing_page.your_rights_description_yourself')
         : t('landing_page.your_rights_description', { reportee: reporteeName }),

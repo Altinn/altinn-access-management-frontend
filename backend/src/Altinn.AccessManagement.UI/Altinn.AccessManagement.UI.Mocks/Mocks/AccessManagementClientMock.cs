@@ -105,32 +105,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
-        //// Single Rights
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId)
-        {
-
-            ThrowExceptionIfTriggerParty(party);
-
-            string dataPath = Path.Combine(dataFolder, "SingleRight", "GetDelegations");
-
-            return await Util.GetMockedHttpResponse(dataPath, "delegations");
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeRightDelegation(Guid from, Guid to, string resourceId, string rightKey)
-        {
-            string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
-
-            var mockResponse = await Util.GetMockedHttpResponse(dataPath, rightKey);
-            if (mockResponse.IsSuccessStatusCode)
-            {
-                return mockResponse;
-            }
-            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
-        }
-
         //// Roles
 
         public Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString)

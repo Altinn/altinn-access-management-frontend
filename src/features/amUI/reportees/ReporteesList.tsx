@@ -22,7 +22,7 @@ export const ReporteesList = () => {
       fromUuid: '', // all
       toUuid: toParty?.partyUuid ?? '',
       includeClientDelegations,
-      includeAgentConnections: false, // Agent connections are not relevant for reportees
+      includeAgentConnections: true,
     },
     {
       skip: !toParty?.partyUuid || !actingParty?.partyUuid,

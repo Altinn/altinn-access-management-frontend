@@ -1,8 +1,6 @@
 import { Trans, useTranslation } from 'react-i18next';
-import { useCallback, useState } from 'react';
-import { DsSearch, DsHeading, formatDisplayName } from '@altinn/altinn-components';
+import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
 
-import { debounce } from '@/resources/utils';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
@@ -12,6 +10,7 @@ import type { DelegationAction } from '../EditModal';
 
 import classes from './PackageSearch.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { DebouncedSearchField } from '../../DebouncedSearchField/DebouncedSearchField';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
@@ -27,17 +26,7 @@ export const PackageSearch = ({
   availableActions,
 }: PackageSearchProps) => {
   const { t } = useTranslation();
-  const { searchString, setSearchString, setCurrentPage, setActionError } =
-    useDelegationModalContext();
-  const [debouncedSearchString, setDebouncedSearchString] = useState(searchString ?? '');
-
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      setDebouncedSearchString(value);
-      setCurrentPage(1);
-    }, 300),
-    [],
-  );
+  const { searchString, setSearchString, setActionError } = useDelegationModalContext();
 
   return (
     toParty && (
@@ -57,28 +46,13 @@ export const PackageSearch = ({
             components={{ strong: <strong /> }}
           />
         </DsHeading>
-        <search className={classes.searchSection}>
+        <search>
           <div className={classes.searchInputs}>
-            <div className={classes.searchField}>
-              <DsSearch data-size='sm'>
-                <DsSearch.Input
-                  aria-label={t('access_packages.search_label')}
-                  placeholder={t('access_packages.search_label')}
-                  value={searchString}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    debouncedSearch(event.target.value);
-                    setSearchString(event.target.value);
-                  }}
-                />
-                <DsSearch.Clear
-                  onClick={() => {
-                    setDebouncedSearchString('');
-                    setSearchString('');
-                    setCurrentPage(1);
-                  }}
-                />
-              </DsSearch>
-            </div>
+            <DebouncedSearchField
+              placeholder={t('access_packages.search_label')}
+              setDebouncedSearchString={setSearchString}
+              initialValue={searchString}
+            />
           </div>
           <div className={classes.searchResults}>
             <AccessPackageList
@@ -86,7 +60,7 @@ export const PackageSearch = ({
               showAllPackages={true}
               showPackagesCount={true}
               onSelect={onSelection}
-              searchString={debouncedSearchString}
+              searchString={searchString}
               availableActions={availableActions}
               onDelegateError={(accessPackage, errorInfo) => {
                 onActionError(accessPackage);

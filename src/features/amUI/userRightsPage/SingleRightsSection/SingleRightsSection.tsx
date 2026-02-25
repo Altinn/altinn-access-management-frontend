@@ -5,48 +5,49 @@ import { DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
-import usePagination from '@/resources/hooks/usePagination';
-import { AmPagination } from '@/components/Paginering';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import { EditModal } from '../../common/DelegationModal/EditModal';
+import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
 
 import classes from './SingleRightsSection.module.css';
 import { DeleteResourceButton } from './DeleteResourceButton';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
+import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
+import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
-export const SingleRightsSection = () => {
-  const { t } = useTranslation();
+export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { id } = useParams();
-  const fromPartyId = getCookie('AltinnPartyId');
+  const { t } = useTranslation();
+  const isSmallScreen = useIsTabletOrSmaller();
   const { displayResourceDelegation } = window.featureFlags;
+  const { toParty, fromParty, actingParty } = usePartyRepresentation();
+
+  const canGiveAccess = useCanGiveAccess(id ?? '');
 
   const {
-    data: singleRights,
+    data: delegatedResources,
     isError,
     error,
     isLoading,
   } = useGetSingleRightsForRightholderQuery(
     {
-      party: fromPartyId,
-      userId: id || '',
+      actingParty: actingParty?.partyUuid || '',
+      from: fromParty?.partyUuid || '',
+      to: toParty?.partyUuid || '',
     },
     {
-      skip: !displayResourceDelegation,
+      skip: !displayResourceDelegation || !actingParty || !fromParty || !toParty,
     },
   );
 
-  const { toParty, fromParty, actingParty } = usePartyRepresentation();
-  const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights ?? [], 5);
   const modalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
 
   const resources = React.useMemo(
-    () => paginatedData.map((delegation) => delegation.resource).filter(Boolean),
-    [paginatedData],
+    () => delegatedResources?.map((delegation) => delegation.resource).filter(Boolean),
+    [delegatedResources],
   ) as ServiceResource[];
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8; // Section for "Users (A2)" in Profile is 9, for "Accesses for others (A2)" it is 8
@@ -80,47 +81,52 @@ export const SingleRightsSection = () => {
           data-size='xs'
           id='single_rights_title'
         >
-          {t('single_rights.current_services_title', { count: singleRights?.length })}
+          {t('single_rights.current_services_title', { count: delegatedResources?.length ?? 0 })}
         </DsHeading>
-        <DelegationModal delegationType={DelegationType.SingleRights} />
         {isError && <div>{t('user_rights_page.error')}</div>}
         {isLoading && <div>{t('user_rights_page.loading')}</div>}
 
         <div className={classes.singleRightsList}>
           <ResourceList
-            resources={resources}
+            resources={resources ?? []}
             enableSearch={true}
             showDetails={false}
             onSelect={(resource) => {
               setSelectedResource(resource);
               modalRef.current?.showModal();
             }}
-            size='md'
+            size={isSmallScreen ? 'sm' : 'md'}
             titleAs='h3'
+            delegationModal={
+              canGiveAccess &&
+              !isReportee && (
+                <DelegationModal
+                  delegationType={DelegationType.SingleRights}
+                  availableActions={[
+                    DelegationAction.REVOKE,
+                    canGiveAccess && !isReportee
+                      ? DelegationAction.DELEGATE
+                      : DelegationAction.REQUEST,
+                  ]}
+                />
+              )
+            }
             renderControls={(resource) => (
               <DeleteResourceButton
                 resource={resource}
-                fullText
+                fullText={!isSmallScreen}
               />
             )}
           />
-        </div>
-        <div className={classes.tools}>
-          {totalPages > 1 && (
-            <AmPagination
-              className={classes.pagination}
-              totalPages={totalPages}
-              currentPage={currentPage}
-              setCurrentPage={goToPage}
-              size='sm'
-              hideLabels
-            />
-          )}
         </div>
         <EditModal
           ref={modalRef}
           resource={selectedResource ?? undefined}
           onClose={() => setSelectedResource(null)}
+          availableActions={[
+            DelegationAction.REVOKE,
+            canGiveAccess && !isReportee ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+          ]}
         />
       </div>
     )

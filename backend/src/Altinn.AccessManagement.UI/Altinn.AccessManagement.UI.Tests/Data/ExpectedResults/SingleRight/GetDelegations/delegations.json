@@ -33,47 +33,31 @@
       ],
       "keywords": []
     },
-    "delegation": {
-      "from": [
-        {
-          "id": "urn:altinn:organizationnumber",
-          "value": "777777777"
-        }
-      ],
-      "to": [
-        {
-          "id": "urn:altinn:ssn",
-          "value": "50019992"
-        }
-      ],
-      "rightDelegationResults": [
-        {
-          "rightKey": "appid-502/read",
-          "resource": [
-            {
-              "id": "urn:altinn:resource",
-              "value": "appid-502"
-            }
-          ],
-          "action": "read",
-          "status": "Delegated",
-          "details": [
-            {
-              "code": "",
-              "description": "",
-              "parameters": {
-                "roleRequirementsMatches": [
-                  {
-                    "id": "",
-                    "value": ""
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    }
+    "permissions": [
+      {
+        "from": {
+          "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "name": "DISKRET NÆR TIGER AS",
+          "type": "organization",
+          "variant": "AS",
+          "parent": null,
+          "children": null,
+          "partyId": 51329012
+        },
+        "to": {
+          "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "name": "SITRONGUL MEDALJONG",
+          "type": "person",
+          "variant": null,
+          "parent": null,
+          "children": null,
+          "partyId": 50789533
+        },
+        "via": null,
+        "role": null,
+        "viaRole": null
+      }
+    ]
   },
   {
     "resource": {
@@ -119,109 +103,35 @@
       ],
       "keywords": []
     },
-    "delegation": {
-      "from": [
-        {
-          "id": "urn:altinn:organizationnumber",
-          "value": "123456789"
-        }
-      ],
-      "to": [
-        {
-          "id": "urn:altinn:ssn",
-          "value": "50019992"
-        }
-      ],
-      "rightDelegationResults": [
-        {
-          "rightKey": "a3-app2,ttd:instantiate",
-          "resource": [
-            {
-              "id": "urn:altinn:resource",
-              "value": "app_ttd_a3-app2"
-            }
-          ],
-          "action": "instantiate",
-          "status": "Delegated",
-          "details": [
-            {
-              "code": "",
-              "description": "",
-              "parameters": {
-                "roleRequirementsMatches": [
-                  {
-                    "id": "",
-                    "value": ""
-                  }
-                ]
-              }
-            }
-          ]
+    "permissions": [
+      {
+        "from": {
+          "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "name": "DISKRET NÆR TIGER AS",
+          "type": "organization",
+          "variant": "AS",
+          "parent": null,
+          "children": null,
+          "partyId": 51329012
         },
-        {
-          "rightKey": "a3-app2,ttd:read",
-          "resource": [
-            {
-              "id": "urn:altinn:org",
-              "value": "ttd"
-            },
-            {
-              "id": "urn:altinn:app",
-              "value": "a3-app2"
-            }
-          ],
-          "action": "read",
-          "status": "Delegated",
-          "details": [
-            {
-              "code": "",
-              "description": "",
-              "parameters": {
-                "roleRequirementsMatches": [
-                  {
-                    "id": "",
-                    "value": ""
-                  }
-                ]
-              }
-            }
-          ]
+        "to": {
+          "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "name": "SITRONGUL MEDALJONG",
+          "type": "person",
+          "variant": null,
+          "parent": null,
+          "children": null,
+          "partyId": 50789533
         },
-        {
-          "rightKey": "a3-app2,ttd,Task_1:read",
-          "resource": [
-            {
-              "id": "urn:altinn:org",
-              "value": "ttd"
-            },
-            {
-              "id": "urn:altinn:app",
-              "value": "a3-app2"
-            },
-            {
-              "id": "urn:altinn:task",
-              "value": "Task_1"
-            }
-          ],
-          "action": "read",
-          "status": "Delegated",
-          "details": [
-            {
-              "code": "",
-              "description": "",
-              "parameters": {
-                "roleRequirementsMatches": [
-                  {
-                    "id": "",
-                    "value": ""
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    }
+        "via": null,
+        "role": {
+          "id": "d6e7f8a9-b0c1-2345-8901-456789012345",
+          "code": "daglig-leder",
+          "children": null
+        },
+        "viaRole": null
+      }
+    ]
   },
   {
     "resource": {
@@ -250,47 +160,31 @@
       ],
       "keywords": []
     },
-    "delegation": {
-      "from": [
-        {
-          "id": "urn:altinn:organizationnumber",
-          "value": "777777777"
-        }
-      ],
-      "to": [
-        {
-          "id": "urn:altinn:ssn",
-          "value": "50019992"
-        }
-      ],
-      "rightDelegationResults": [
-        {
-          "rightKey": "jks-test-resource/read",
-          "resource": [
-            {
-              "id": "urn:altinn:resource",
-              "value": "jks-test-resource"
-            }
-          ],
-          "action": "read",
-          "status": "Delegated",
-          "details": [
-            {
-              "code": "",
-              "description": "",
-              "parameters": {
-                "roleRequirementsMatches": [
-                  {
-                    "id": "",
-                    "value": ""
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    }
+    "permissions": [
+      {
+        "from": {
+          "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "name": "DISKRET NÆR TIGER AS",
+          "type": "organization",
+          "variant": "AS",
+          "parent": null,
+          "children": null,
+          "partyId": 51329012
+        },
+        "to": {
+          "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "name": "SITRONGUL MEDALJONG",
+          "type": "person",
+          "variant": null,
+          "parent": null,
+          "children": null,
+          "partyId": 50789533
+        },
+        "via": null,
+        "role": null,
+        "viaRole": null
+      }
+    ]
   },
   {
     "resource": {
@@ -326,46 +220,42 @@
       ],
       "keywords": []
     },
-    "delegation": {
-      "from": [
-        {
-          "id": "urn:altinn:organizationnumber",
-          "value": "777777777"
+    "permissions": [
+      {
+        "from": {
+          "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "name": "DISKRET NÆR TIGER AS",
+          "type": "organization",
+          "variant": "AS",
+          "parent": null,
+          "children": null,
+          "partyId": 51329012
+        },
+        "to": {
+          "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "name": "SITRONGUL MEDALJONG",
+          "type": "person",
+          "variant": null,
+          "parent": null,
+          "children": null,
+          "partyId": 50789533
+        },
+        "via": {
+          "id": "6b0574ae-f569-4c0d-a8d4-8ad56f427890",
+          "name": "Digitaliseringsdirektoratet",
+          "type": "organization",
+          "variant": "ORGL",
+          "parent": null,
+          "children": null,
+          "partyId": 50067799
+        },
+        "role": null,
+        "viaRole": {
+          "id": "d6e7f8a9-b0c1-2345-8901-456789012345",
+          "code": "daglig-leder",
+          "children": null
         }
-      ],
-      "to": [
-        {
-          "id": "urn:altinn:ssn",
-          "value": "50019992"
-        }
-      ],
-      "rightDelegationResults": [
-        {
-          "rightKey": "ske-innrapportering-boligsameie/write",
-          "resource": [
-            {
-              "id": "urn:altinn:resource",
-              "value": "ske-innrapportering-boligsameie"
-            }
-          ],
-          "action": "write",
-          "status": "Delegated",
-          "details": [
-            {
-              "code": "",
-              "description": "",
-              "parameters": {
-                "roleRequirementsMatches": [
-                  {
-                    "id": "",
-                    "value": ""
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    }
+      }
+    ]
   }
 ]

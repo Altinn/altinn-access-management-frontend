@@ -23,75 +23,48 @@
       "name": "GenericAccessResource"
     }
   },
-  "actions": [
+  "rights": [
     {
-      "actionKey": "urn:altinn:resource:appid-510:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "Read",
-      "result": false,
-      "reasons": [
-        {
-          "description": "",
-          "reasonKey": "AccessListValidationFail",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "AccessListValidationFail"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:appid-510:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "name": "Read",
+        "resource": [
+          "urn:altinn:resource:appid-510"
+        ],
+        "action": "read"
+      },
+      "result": false
     },
     {
-      "actionKey": "urn:altinn:resource:appid-510:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "actionName": "Write",
-      "result": false,
-      "reasons": [
-        {
-          "description": "",
-          "reasonKey": "AccessListValidationFail",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "AccessListValidationFail"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:appid-510:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+        "name": "Write",
+        "resource": [
+          "urn:altinn:resource:appid-510"
+        ],
+        "action": "write"
+      },
+      "result": false
     },
     {
-      "actionKey": "urn:altinn:resource:appid-510:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
-      "actionName": "Sign",
-      "result": false,
-      "reasons": [
-        {
-          "description": "",
-          "reasonKey": "AccessListValidationFail",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "AccessListValidationFail"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:appid-510:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
+        "name": "Sign",
+        "resource": [
+          "urn:altinn:resource:appid-510"
+        ],
+        "action": "sign"
+      },
+      "result": false
     }
   ]
 }

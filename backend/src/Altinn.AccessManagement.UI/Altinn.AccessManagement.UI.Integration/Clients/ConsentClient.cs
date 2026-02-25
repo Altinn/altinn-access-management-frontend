@@ -69,8 +69,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // ConsentClient // GetConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
 
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+                return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -97,8 +96,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // ConsentClient // RejectConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
 
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+                return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -126,8 +124,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // ConsentClient // ApproveConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
 
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+                return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -174,8 +171,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // ConsentClient // GetConsentList // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
 
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+                return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -202,8 +198,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // ConsentClient // GetConsent // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
 
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+                return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
@@ -230,8 +225,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // ConsentClient // RevokeConsent // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
 
-                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return ConsentProblemMapper.MapToConsentUiError(problemDetails, response.StatusCode);
+                return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {

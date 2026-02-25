@@ -44,3 +44,13 @@
   color: var(--ds-text-color-secondary);
   font-size: 1rem;
 }
+
+@media screen and (max-width: 768px) {
+  .accessRoleItem {
+    margin-left: 0;
+  }
+  .search {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

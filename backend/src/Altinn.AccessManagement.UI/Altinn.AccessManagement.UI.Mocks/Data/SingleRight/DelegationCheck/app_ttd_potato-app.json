@@ -23,718 +23,238 @@
       "name": "AltinnApp"
     }
   },
-  "actions": [
+  "rights": [
     {
-      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
-      "actionName": "Instantiate",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
+        "name": "Instantiate",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "instantiate"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "Read",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "name": "Read",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "read"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "Task_1 Read",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "name": "Task_1 Read",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "task_1 read"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "actionName": "Task_1 Write",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+        "name": "Task_1 Write",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "task_1 write"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "Task_2 Read",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "name": "Task_2 Read",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "task_2 read"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "actionName": "Task_2 Write",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+        "name": "Task_2 Write",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "task_2 write"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "Task_3 Read",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "name": "Task_3 Read",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "task_3 read"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "actionName": "Task_3 Write",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+        "name": "Task_3 Write",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "task_3 write"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "EndEvent_1 Read",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "name": "EndEvent_1 Read",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "endevent_1 read"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "actionName": "EndEvent_1 Write",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+        "name": "EndEvent_1 Write",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "endevent_1 write"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:delete",
-      "actionName": "Delete",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:delete",
+        "name": "Delete",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "delete"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "actionName": "Write",
-      "result": false,
-      "reasons": [
-        {
-          "description": "Missing-Role",
-          "reasonKey": "MissingRoleAccess",
-          "roleId": "1c6eeec1-fe70-4fc5-8b45-df4a2255dea6",
-          "roleUrn": "urn:altinn:role:privatperson",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "MissingRoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+        "name": "Write",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "write"
+      },
+      "result": false
     },
     {
-      "actionKey": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:complete",
-      "actionName": "EndEvent_1 Complete",
-      "result": false,
-      "reasons": []
+      "reasonCodes": [],
+      "right": {
+        "key": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:complete",
+        "name": "EndEvent_1 Complete",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "endevent_1 complete"
+      },
+      "result": false
     },
     {
-      "actionKey": "urn:altinn:appresource:events:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "Events Read",
-      "result": true,
-      "reasons": [
-        {
-          "description": "Direct-AssignmentRole-RoleMap",
-          "reasonKey": "RoleAccess",
-          "roleId": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
-          "roleUrn": "urn:altinn:external-role:ccr:styreleder",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "fromName": "DISKRET NÆR TIGER AS",
-          "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "toName": "SITRONGUL MEDALJONG",
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        },
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "RoleAccess",
+        "RoleAccess",
+        "RoleAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:appresource:events:urn:altinn:resource:app_ttd_potato-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "name": "Events Read",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "events read"
+      },
+      "result": true
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:confirm",
-      "actionName": "Task_2 Confirm",
-      "result": false,
-      "reasons": [
-        {
-          "description": "Missing-Package",
-          "reasonKey": "MissingPackageAccess",
-          "roleId": "1c6eeec1-fe70-4fc5-8b45-df4a2255dea6",
-          "roleUrn": "urn:altinn:role:privatperson",
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+      "reasonCodes": [
+        "MissingPackageAccess"
+      ],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_potato-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:confirm",
+        "name": "Task_2 Confirm",
+        "resource": [
+          "urn:altinn:resource:app_ttd_potato-app"
+        ],
+        "action": "task_2 confirm"
+      },
+      "result": false
     }
   ]
 }

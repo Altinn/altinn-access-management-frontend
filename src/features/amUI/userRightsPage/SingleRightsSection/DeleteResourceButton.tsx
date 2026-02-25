@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, DsButton, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { Button, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
@@ -48,6 +48,7 @@ export const DeleteResourceButton = ({
     fromParty &&
     toParty && (
       <Button
+        aria-label={t('common.delete') + ' ' + resource.title}
         variant='tertiary'
         className={classes.deleteButton}
         disabled={isLoading}
@@ -69,7 +70,7 @@ export const DeleteResourceButton = ({
         }}
       >
         <MinusCircleIcon />
-        {fullText ? t('common.delete_poa') : t('common.delete')}
+        {fullText && t('common.delete_poa')}
       </Button>
     )
   );

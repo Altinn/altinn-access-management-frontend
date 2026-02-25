@@ -247,7 +247,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("{partyId}/delegationcheck")]
-        public async Task<ActionResult<List<DelegationResponseData>>> DelegationCheck([FromRoute] string partyId, [FromBody] Right request)
+        public async Task<ActionResult<List<DelegationResponseData>>> DelegationCheck([FromRoute] string partyId, [FromBody] Core.Models.Right request)
         {
             try
             {

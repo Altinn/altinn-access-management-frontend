@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useMemo } from 'react';
 
-import { Reason, useDelegationCheckQuery } from '@/rtk/features/accessPackageApi';
+import type { Reason } from '@/dataObjects/dtos/accessPackage';
+import { useDelegationCheckQuery } from '@/rtk/features/accessPackageApi';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SerializedError } from '@reduxjs/toolkit';

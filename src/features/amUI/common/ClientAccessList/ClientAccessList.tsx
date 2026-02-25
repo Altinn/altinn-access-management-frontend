@@ -12,7 +12,7 @@ import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { Client } from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
@@ -130,11 +130,12 @@ export const ClientAccessList = ({
           type: userType,
           isSubUnit,
           interactive: false,
+          as: 'div',
+          titleAs: 'h3',
           description:
             access.role.code !== 'rettighetshaver'
               ? t('client_administration_page.via_role', { role: roleName })
               : '',
-          as: 'div',
           color: (hasAccess ? 'company' : 'neutral') as Color,
           controls,
         };
@@ -153,9 +154,11 @@ export const ClientAccessList = ({
       organizationIdentifier: client.client.organizationIdentifier,
       type: userType,
       subUnit: isSubUnit,
-      deleted: client.client.isDeleted,
+      deleted: client.client.isDeleted ?? undefined,
       collapsible: true,
-      as: Button,
+      interactive: true,
+      as: 'button',
+      titleAs: 'h2',
       children:
         nodes.length === 0 && emptyAccessText ? (
           <DsParagraph>{emptyAccessText}</DsParagraph>
@@ -165,7 +168,7 @@ export const ClientAccessList = ({
       description:
         userType === 'company'
           ? t('client_administration_page.organization_identifier', {
-              orgnr: client.client.organizationIdentifier,
+              orgnr: formatOrgNr(client.client.organizationIdentifier),
             })
           : userType === 'person'
             ? `${t('common.date_of_birth')} ${formatDate(client.client.dateOfBirth ?? '')}`

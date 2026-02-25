@@ -1,15 +1,13 @@
-import { RightStatus } from '@/dataObjects/dtos/resourceDelegation';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
-  DelegationCheckedAction,
+  DelegationCheckedRight,
   ServiceResource,
   useDelegationCheckQuery,
-  useGetSingleRightsForRightholderQuery,
+  useGetResourceRightsQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { arraysEqualUnordered } from '@/resources/utils';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
@@ -20,6 +18,7 @@ import classes from '../ResourceInfo.module.css';
 import { useRightChips } from './useRightChips';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
+import { useHasResourceCheck } from './useHasResourceCheck';
 
 export const useRightsSection = ({
   resource,
@@ -46,14 +45,17 @@ export const useRightsSection = ({
 
   /// Hooks and data fetching
 
-  const { toParty, fromParty } = usePartyRepresentation();
+  const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const revoke = useRevokeResource();
-  const { data: delegatedResources, isFetching } = useGetSingleRightsForRightholderQuery(
+  const hasResourceAccess = useHasResourceCheck(resource.identifier);
+  const { data: resourceRights, isFetching: isResourceRightsFetching } = useGetResourceRightsQuery(
     {
-      party: getCookie('AltinnPartyId'),
-      userId: toParty?.partyId.toString() || '',
+      actingParty: actingParty?.partyUuid || '',
+      from: fromParty?.partyUuid || '',
+      to: toParty?.partyUuid || '',
+      resourceId: resource.identifier,
     },
-    { skip: !toParty },
+    { skip: !toParty || !fromParty || !actingParty || !resource.identifier || !hasResourceAccess }, // Only fetch resource rights if the rightholder has access to the resource
   );
   const { data: reportee } = useGetReporteeQuery();
   const {
@@ -61,7 +63,7 @@ export const useRightsSection = ({
     isError: isDelegationCheckError,
     error: delegationCheckError,
     isLoading: isDelegationCheckLoading,
-  } = useDelegationCheckQuery(resource.identifier);
+  } = useDelegationCheckQuery(resource.identifier, { skip: !resource.identifier });
 
   /// Computed values
 
@@ -77,51 +79,51 @@ export const useRightsSection = ({
       })
     : '';
 
-  /// Useffect hooks
+  /// UseEffect hooks
 
   // Instantiate/reset access and rights states
   useEffect(() => {
-    if (delegatedResources && !isFetching) {
-      const resourceDelegation =
-        !!delegatedResources &&
-        delegatedResources.find(
-          (delegation) => delegation.resource.identifier === resource.identifier,
-        );
-      if (resourceDelegation) {
+    if (!isResourceRightsFetching) {
+      if (
+        hasResourceAccess &&
+        resourceRights &&
+        (resourceRights.directRights.length > 0 || resourceRights.indirectRights.length > 0)
+      ) {
         setHasAccess(true);
-        const rightKeys = resourceDelegation.delegation.rightDelegationResults.map(
-          (r) => r.rightKey,
-        );
+        const rightKeys = [
+          ...resourceRights.directRights.map((r) => r.right.key),
+          ...resourceRights.indirectRights.map((r) => r.right.key),
+        ];
         setCurrentRights(rightKeys);
       } else {
         setHasAccess(false);
         setCurrentRights([]);
       }
     }
-  }, [delegatedResources, isFetching, resource.identifier]);
+  }, [resourceRights, isResourceRightsFetching, resource.identifier, hasResourceAccess]);
 
   // Instantiate/reset rights and missing access message states
   useEffect(() => {
     if (delegationCheckedActions) {
       setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
 
-      if (hasAccess) {
+      if (hasAccess && resourceRights) {
         const chipRights: ChipRight[] = mapRightsToChipRights(
           delegationCheckedActions,
-          (right) => currentRights.some((key) => key === right.actionKey),
-          resource.resourceOwnerOrgcode,
+          (right) => currentRights.some((key) => key === right.right.key),
+          (rightKey) => resourceRights.indirectRights.some((r) => r.right.key === rightKey),
         );
         setRights(chipRights);
       } else {
         const chipRights: ChipRight[] = mapRightsToChipRights(
           delegationCheckedActions,
           (right) => right.result === true,
-          resource.resourceOwnerOrgcode,
+          () => false, // If the user doesn't have access to the resource, none of the rights can be inherited
         );
         setRights(chipRights);
       }
     }
-  }, [delegationCheckedActions, resource.identifier, hasAccess, currentRights]);
+  }, [delegationCheckedActions, resource.identifier, hasAccess, currentRights, resourceRights]);
 
   /// Functions
 
@@ -140,21 +142,21 @@ export const useRightsSection = ({
   };
 
   const getMissingAccessMessage = useCallback(
-    (response: DelegationCheckedAction[]) => {
+    (response: DelegationCheckedRight[]) => {
       const hasMissingRoleAccess = response.some((right) =>
-        right.reasons.some(
-          (reason) =>
-            reason.reasonKey === ErrorCode.MissingRoleAccess ||
-            reason.reasonKey === ErrorCode.MissingRightAccess,
+        right.reasonCodes.some(
+          (reasonCode) =>
+            reasonCode === ErrorCode.MissingRoleAccess ||
+            reasonCode === ErrorCode.MissingRightAccess,
         ),
       );
       const hasMissingSrrRightAccess = response.some(
         (right) =>
           !hasMissingRoleAccess &&
-          right.reasons.some(
-            (reason) =>
-              reason.reasonKey === ErrorCode.MissingSrrRightAccess ||
-              reason.reasonKey === ErrorCode.AccessListValidationFail,
+          right.reasonCodes.some(
+            (reasonCode) =>
+              reasonCode === ErrorCode.MissingSrrRightAccess ||
+              reasonCode === ErrorCode.AccessListValidationFail,
           ),
       );
 

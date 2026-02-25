@@ -20,7 +20,9 @@ export const CurrentUserPageHeader = ({
 }: CurrentUserPageHeaderProps) => {
   const { t } = useTranslation();
 
-  const formattedBirthDate = formatDate(currentUser?.party?.dateOfBirth || undefined);
+  const formattedBirthDate = currentUser?.party?.dateOfBirth
+    ? formatDate(currentUser.party.dateOfBirth)
+    : undefined;
 
   return (
     <div className={classes.currentUser}>

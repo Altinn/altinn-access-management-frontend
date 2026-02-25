@@ -23,18 +23,30 @@
       "name": "AltinnApp"
     }
   },
-  "actions": [
+  "rights": [
     {
-      "actionKey": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "Read",
-      "result": false,
-      "reasons": []
+      "reasonCodes": [],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "name": "Read",
+        "resource": [
+          "urn:altinn:resource:app_ttd_a3-appp"
+        ],
+        "action": "read"
+      },
+      "result": false
     },
     {
-      "actionKey": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "actionName": "Write",
-      "result": false,
-      "reasons": []
+      "reasonCodes": [],
+      "right": {
+        "key": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+        "name": "Write",
+        "resource": [
+          "urn:altinn:resource:app_ttd_a3-appp"
+        ],
+        "action": "write"
+      },
+      "result": false
     }
   ]
 }

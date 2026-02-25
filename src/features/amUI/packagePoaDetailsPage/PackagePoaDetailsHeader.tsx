@@ -21,7 +21,10 @@ export const PackagePoaDetailsHeader: React.FC<PackagePoaDetailsHeaderProps> = (
     <PackagePoaDetailsHeaderSkeleton />
   ) : (
     <>
-      <PackageIcon className={classes.packageIcon} />
+      <PackageIcon
+        className={classes.packageIcon}
+        aria-hidden={true}
+      />
       <DsHeading
         level={1}
         data-size='lg'

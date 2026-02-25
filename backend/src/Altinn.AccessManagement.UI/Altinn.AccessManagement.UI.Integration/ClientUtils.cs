@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Microsoft.Extensions.Logging;
 
@@ -22,6 +23,7 @@ namespace Altinn.AccessManagement.UI.Integration.Util
             JsonSerializerOptions serializerOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
+                Converters = { new JsonStringEnumConverter() }
             };
 
             if (response.IsSuccessStatusCode)

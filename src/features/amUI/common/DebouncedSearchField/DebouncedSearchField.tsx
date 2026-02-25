@@ -7,13 +7,15 @@ import { debounce } from '@/resources/utils';
 interface DebouncedSearchFieldProps {
   setDebouncedSearchString: (value: string) => void;
   placeholder: string;
+  initialValue?: string;
 }
 export const DebouncedSearchField = ({
   placeholder,
   setDebouncedSearchString,
+  initialValue = '',
 }: DebouncedSearchFieldProps) => {
   // Local search state with debounce to avoid excessive backend calls
-  const [searchString, setSearchString] = useState<string>('');
+  const [searchString, setSearchString] = useState<string>(initialValue);
 
   const debouncedUpdate = useCallback(
     debounce((value: string) => {
@@ -21,6 +23,10 @@ export const DebouncedSearchField = ({
     }, 300),
     [setDebouncedSearchString],
   );
+
+  useEffect(() => {
+    setSearchString(initialValue);
+  }, [initialValue]);
 
   useEffect(() => {
     return () => {

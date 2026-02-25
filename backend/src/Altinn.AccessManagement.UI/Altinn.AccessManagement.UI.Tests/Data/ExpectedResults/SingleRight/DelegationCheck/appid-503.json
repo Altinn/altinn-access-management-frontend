@@ -1,71 +1,35 @@
 [
-    {
-      "actionKey": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "actionName": "Read",
-      "result": true,
-      "reasons": [
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+  {
+    "right": {
+      "key": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "name": "Read",
+      "action": "read"
     },
-    {
-      "actionKey": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "actionName": "Write",
-      "result": true,
-      "reasons": [
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
+    "result": true,
+    "reasonCodes": [
+      "RoleAccess"
+    ]
+  },
+  {
+    "right": {
+      "key": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "name": "Write",
+      "action": "write"
     },
-    {
-      "actionKey": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
-      "actionName": "Sign",
-      "result": true,
-      "reasons": [
-        {
-          "description": "MainAdministratorRole",
-          "reasonKey": "RoleAccess",
-          "roleId": null,
-          "roleUrn": null,
-          "packageId": null,
-          "packageUrn": null,
-          "fromId": null,
-          "fromName": null,
-          "toId": null,
-          "toName": null,
-          "viaId": null,
-          "viaName": null,
-          "viaRoleId": null,
-          "viaRoleUrn": null
-        }
-      ]
-    }
-  ]
+    "result": true,
+    "reasonCodes": [
+      "RoleAccess"
+    ]
+  },
+  {
+    "right": {
+      "key": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
+      "name": "Sign",
+      "action": "sign"
+    },
+    "result": true,
+    "reasonCodes": [
+      "RoleAccess"
+    ]
+  }
+]

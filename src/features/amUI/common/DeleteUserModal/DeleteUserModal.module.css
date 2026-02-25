@@ -5,11 +5,44 @@
 .modalContent {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--dsc-spacing-lg);
+  min-height: 100%;
+}
+
+.contentBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dsc-spacing-lg);
+}
+
+.reasonsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dsc-spacing-md);
+}
+
+.reasonList {
+  margin: 0;
+  padding-left: var(--dsc-spacing-xl);
+}
+
+.reasonList li {
+  margin: 0;
+}
+
+.dangerIcon {
+  color: var(--ds-color-danger-base-default);
+}
+
+.infoLine {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--dsc-spacing-md);
 }
 
 .buttons {
-  padding-top: 0.5rem;
+  padding-top: var(--dsc-spacing-md);
   display: flex;
-  gap: 0.5rem;
+  flex-wrap: nowrap;
+  gap: var(--dsc-spacing-md);
 }
