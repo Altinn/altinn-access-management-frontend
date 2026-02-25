@@ -19,7 +19,7 @@
             "name": "GenericAccessResource"
         }
     },
-    "rules": [
+    "rights": [
         {
             "key": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
             "subResource": "",

@@ -4,7 +4,7 @@
   gap: 10px;
 }
 
-.resourceIcon {
+.lgAvatar {
   width: 40px;
   height: 40px;
   display: flex;
@@ -13,21 +13,29 @@
   font-size: 40px;
 }
 
+.resourceOwner {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+
 .resource {
   display: flex;
   flex-direction: column;
 }
 
-.infoView {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 12px;
+.resourceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+  padding-top: var(--ds-spacing-2);
+  padding-bottom: var(--ds-spacing-1);
 }
 
 .rightsSection {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: var(--ds-spacing-2);
   padding: 10px 15px 20px 0px;
 }
 
@@ -66,4 +74,13 @@
 .editButtons {
   display: flex;
   gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .rightsSection {
+    padding: 10px 0px;
+  }
+  .resourceOwner {
+    padding-top: 4px;
+  }
 }

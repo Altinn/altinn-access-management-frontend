@@ -61,7 +61,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 }
             };
 
-            Right dto = new Right
+            Core.Models.Right dto = new Core.Models.Right
             {
                 Resource = resource,
             };
@@ -106,7 +106,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            Right dto = new Right
+            Core.Models.Right dto = new Core.Models.Right
             {
                 Resource = resource,
             };
@@ -151,7 +151,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            Right dto = new Right
+            Core.Models.Right dto = new Core.Models.Right
             {
                 Resource = resource,
             };
@@ -200,19 +200,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<Right> rights = new List<Right>
+            List<Core.Models.Right> rights = new List<Core.Models.Right>
             {
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "write",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "sign",
@@ -276,14 +276,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<Right> rights = new List<Right>
+            List<Core.Models.Right> rights = new List<Core.Models.Right>
             {
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "write",
@@ -347,14 +347,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<Right> rights = new List<Right>
+            List<Core.Models.Right> rights = new List<Core.Models.Right>
             {
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "write",
@@ -409,19 +409,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<Right> rights = new List<Right>
+            List<Core.Models.Right> rights = new List<Core.Models.Right>
             {
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "write",
                 },
-                new Right
+                new Core.Models.Right
                 {
                     Resource = resource,
                     Action = "sign",
@@ -487,11 +487,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string resource = "appid-503";
             string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationCheck", "appid-503.json");
-            List<RuleCheck> expectedResponse = Util.GetMockData<List<RuleCheck>>(path);
+            List<RightCheck> expectedResponse = Util.GetMockData<List<RightCheck>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegationcheck?from={from}&resource={resource}");
-            List<RuleCheck> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<RuleCheck>>();
+            List<RightCheck> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<RightCheck>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);

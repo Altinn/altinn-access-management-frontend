@@ -71,6 +71,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="partyId">The reportee's party id</param>
         /// <param name="request">Necessary info about the right that's going to be checked</param>
-        public Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request);
+        public Task<List<DelegationResponseData>> DelegationCheck(string partyId, Models.Right request);
     }
 }

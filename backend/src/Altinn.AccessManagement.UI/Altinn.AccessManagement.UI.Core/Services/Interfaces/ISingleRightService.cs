@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </param>
         /// <param name="request">The delegation access check request object that's going to be consumed by the backend</param>
         /// <returns> List<DelegationAccessCheckResponse /></returns>
-        Task<HttpResponseMessage> CheckDelegationAccess(string partyId, Right request);
+        Task<HttpResponseMessage> CheckDelegationAccess(string partyId, Models.Right request);
 
         /// <summary>
         ///     Creates a single right delegation from a given party
@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="from">The party from which the delegation would be on behalf of</param>
         /// <param name="resource">The id of the resource to be checked for delegation</param>
-        Task<List<RuleCheck>> DelegationCheck(Guid from, string resource);
+        Task<List<RightCheck>> DelegationCheck(Guid from, string resource);
 
         /// <summary>
         ///    Delegates the specified rights on a specified resource to someone on behalf of a specified party

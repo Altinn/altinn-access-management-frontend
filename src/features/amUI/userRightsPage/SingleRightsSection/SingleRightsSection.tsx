@@ -95,7 +95,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
               setSelectedResource(resource);
               modalRef.current?.showModal();
             }}
-            size='md'
+            size={isSmallScreen ? 'sm' : 'md'}
             titleAs='h3'
             delegationModal={
               canGiveAccess &&

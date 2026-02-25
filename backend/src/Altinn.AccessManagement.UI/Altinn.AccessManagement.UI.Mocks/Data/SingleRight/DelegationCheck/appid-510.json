@@ -23,12 +23,12 @@
       "name": "GenericAccessResource"
     }
   },
-  "rules": [
+  "rights": [
     {
       "reasonCodes": [
         "AccessListValidationFail"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:appid-510:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "name": "Read",
         "resource": [
@@ -42,7 +42,7 @@
       "reasonCodes": [
         "AccessListValidationFail"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:appid-510:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
         "name": "Write",
         "resource": [
@@ -56,7 +56,7 @@
       "reasonCodes": [
         "AccessListValidationFail"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:appid-510:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
         "name": "Sign",
         "resource": [

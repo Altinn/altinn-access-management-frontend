@@ -87,12 +87,12 @@ export const useRightsSection = ({
       if (
         hasResourceAccess &&
         resourceRights &&
-        (resourceRights.directRules.length > 0 || resourceRights.indirectRules.length > 0)
+        (resourceRights.directRights.length > 0 || resourceRights.indirectRights.length > 0)
       ) {
         setHasAccess(true);
         const rightKeys = [
-          ...resourceRights.directRules.map((r) => r.rule.key),
-          ...resourceRights.indirectRules.map((r) => r.rule.key),
+          ...resourceRights.directRights.map((r) => r.right.key),
+          ...resourceRights.indirectRights.map((r) => r.right.key),
         ];
         setCurrentRights(rightKeys);
       } else {
@@ -110,8 +110,8 @@ export const useRightsSection = ({
       if (hasAccess && resourceRights) {
         const chipRights: ChipRight[] = mapRightsToChipRights(
           delegationCheckedActions,
-          (right) => currentRights.some((key) => key === right.rule.key),
-          (rightKey) => resourceRights.indirectRules.some((r) => r.rule.key === rightKey),
+          (right) => currentRights.some((key) => key === right.right.key),
+          (rightKey) => resourceRights.indirectRights.some((r) => r.right.key === rightKey),
         );
         setRights(chipRights);
       } else {
@@ -143,6 +143,10 @@ export const useRightsSection = ({
 
   const getMissingAccessMessage = useCallback(
     (response: DelegationCheckedRight[]) => {
+      console.log(
+        'ResonCodes from delegation check response:',
+        response.flatMap((r) => r.reasonCodes),
+      );
       const hasMissingRoleAccess = response.some((right) =>
         right.reasonCodes.some(
           (reasonCode) =>

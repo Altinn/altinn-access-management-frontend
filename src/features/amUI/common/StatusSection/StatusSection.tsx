@@ -92,7 +92,6 @@ export const StatusSection = ({
       {showUndelegatedWarning && (
         <div className={classes.infoLine}>
           <ExclamationmarkTriangleFillIcon
-            fontSize='1.5rem'
             className={classes.warningIcon}
             aria-hidden='true'
           />
@@ -107,10 +106,7 @@ export const StatusSection = ({
       )}
       {userHasAccess && (
         <div className={classes.infoLine}>
-          <CheckmarkCircleFillIcon
-            fontSize='1.5rem'
-            className={classes.hasPackageInfoIcon}
-          />
+          <CheckmarkCircleFillIcon className={classes.hasPackageInfoIcon} />
           <DsParagraph data-size='sm'>
             <Trans
               i18nKey='status_section.has_package_message'
@@ -138,10 +134,7 @@ export const StatusSection = ({
             key={`${status.type}-${status.via?.id}`}
             className={classes.infoLine}
           >
-            <InformationSquareFillIcon
-              fontSize='1.5rem'
-              className={classes.inheritedInfoIcon}
-            />
+            <InformationSquareFillIcon className={classes.inheritedInfoIcon} />
             <DsParagraph data-size='sm'>
               <Trans
                 i18nKey={textKey}
@@ -156,10 +149,7 @@ export const StatusSection = ({
       })}
       {cannotDelegateHere && (
         <div className={classes.infoLine}>
-          <XMarkOctagonFillIcon
-            fontSize='1.5rem'
-            className={classes.dangerIcon}
-          />
+          <XMarkOctagonFillIcon className={classes.dangerIcon} />
           <DsParagraph data-size='sm'>
             <Trans
               i18nKey='status_section.cannot_delegate_here'
@@ -172,10 +162,7 @@ export const StatusSection = ({
       )}
       {shouldShowDelegationCheck && (
         <div className={classes.infoLine}>
-          <ExclamationmarkTriangleFillIcon
-            fontSize='1.5rem'
-            className={classes.delegationCheckInfoIcon}
-          />
+          <ExclamationmarkTriangleFillIcon className={classes.delegationCheckInfoIcon} />
           <DsParagraph data-size='sm'>
             <Trans
               i18nKey={delegationCheckTranslationKey}

@@ -863,20 +863,20 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        ///     Assert that two <see cref="RuleCheck" /> have the same property values.
+        ///     Assert that two <see cref="RightCheck" /> have the same property values.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(RuleCheck expected, RuleCheck actual)
+        public static void AssertEqual(RightCheck expected, RightCheck actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
-            Assert.NotNull(expected.Rule);
-            Assert.NotNull(actual.Rule);
+            Assert.NotNull(expected.Right);
+            Assert.NotNull(actual.Right);
 
-            Assert.Equal(expected.Rule.Key, actual.Rule.Key);
-            Assert.Equal(expected.Rule.Name, actual.Rule.Name);
-            Assert.Equal(expected.Rule.Action, actual.Rule.Action);
+            Assert.Equal(expected.Right.Key, actual.Right.Key);
+            Assert.Equal(expected.Right.Name, actual.Right.Name);
+            Assert.Equal(expected.Right.Action, actual.Right.Action);
             Assert.Equal(expected.Result, actual.Result);
             AssertCollections(expected.ReasonCodes, actual.ReasonCodes, Assert.Equal);
         }
