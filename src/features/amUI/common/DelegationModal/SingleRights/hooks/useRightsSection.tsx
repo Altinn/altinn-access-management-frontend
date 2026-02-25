@@ -143,10 +143,6 @@ export const useRightsSection = ({
 
   const getMissingAccessMessage = useCallback(
     (response: DelegationCheckedRight[]) => {
-      console.log(
-        'ResonCodes from delegation check response:',
-        response.flatMap((r) => r.reasonCodes),
-      );
       const hasMissingRoleAccess = response.some((right) =>
         right.reasonCodes.some(
           (reasonCode) =>
