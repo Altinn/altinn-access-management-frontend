@@ -62,6 +62,7 @@ export const ClientDetailsAgentsList = ({
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
+  const isMobileOrSmaller = useIsMobileOrSmaller();
 
   const delegateDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
@@ -104,7 +105,6 @@ export const ClientDetailsAgentsList = ({
     const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.variant);
     const userType = getUserListItemType(agent.agent.type);
-    const isMobileOrSmaller = useIsMobileOrSmaller();
     const nodes = clientAccess.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
 
