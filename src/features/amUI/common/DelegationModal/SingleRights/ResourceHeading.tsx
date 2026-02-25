@@ -31,7 +31,7 @@ export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => 
 
   return (
     <div className={classes.infoHeading}>
-      {!isSmall && <div className={classes.resourceIcon}>{icon(false)}</div>}
+      {!isSmall && <div>{icon(false)}</div>}
 
       <div className={classes.resource}>
         <div className={classes.infoHeading}>

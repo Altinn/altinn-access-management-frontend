@@ -106,7 +106,10 @@ export const StatusSection = ({
       )}
       {userHasAccess && (
         <div className={classes.infoLine}>
-          <CheckmarkCircleFillIcon className={classes.hasPackageInfoIcon} />
+          <CheckmarkCircleFillIcon
+            className={classes.hasPackageInfoIcon}
+            aria-hidden='true'
+          />
           <DsParagraph data-size='sm'>
             <Trans
               i18nKey='status_section.has_package_message'
@@ -134,7 +137,10 @@ export const StatusSection = ({
             key={`${status.type}-${status.via?.id}`}
             className={classes.infoLine}
           >
-            <InformationSquareFillIcon className={classes.inheritedInfoIcon} />
+            <InformationSquareFillIcon
+              className={classes.inheritedInfoIcon}
+              aria-hidden='true'
+            />
             <DsParagraph data-size='sm'>
               <Trans
                 i18nKey={textKey}
@@ -149,7 +155,10 @@ export const StatusSection = ({
       })}
       {cannotDelegateHere && (
         <div className={classes.infoLine}>
-          <XMarkOctagonFillIcon className={classes.dangerIcon} />
+          <XMarkOctagonFillIcon
+            className={classes.dangerIcon}
+            aria-hidden='true'
+          />
           <DsParagraph data-size='sm'>
             <Trans
               i18nKey='status_section.cannot_delegate_here'
@@ -162,7 +171,10 @@ export const StatusSection = ({
       )}
       {shouldShowDelegationCheck && (
         <div className={classes.infoLine}>
-          <ExclamationmarkTriangleFillIcon className={classes.delegationCheckInfoIcon} />
+          <ExclamationmarkTriangleFillIcon
+            className={classes.delegationCheckInfoIcon}
+            aria-hidden='true'
+          />
           <DsParagraph data-size='sm'>
             <Trans
               i18nKey={delegationCheckTranslationKey}
