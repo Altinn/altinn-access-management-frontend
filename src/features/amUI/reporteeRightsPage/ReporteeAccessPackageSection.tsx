@@ -11,12 +11,14 @@ import { useDelegationModalContext } from '../common/DelegationModal/DelegationM
 import { AccessPackageInfoAlert } from '../userRightsPage/AccessPackageSection/AccessPackageInfoAlert';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { isGuardianshipUrn } from '@/resources/utils/urnUtils';
+import { DebouncedSearchField } from '../common/DebouncedSearchField/DebouncedSearchField';
 
 export const ReporteeAccessPackageSection = () => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
+  const [debouncedSearchString, setDebouncedSearchString] = useState<string>('');
 
   const { toParty, fromParty, actingParty, isLoading: isLoadingParty } = usePartyRepresentation();
 
@@ -55,12 +57,19 @@ export const ReporteeAccessPackageSection = () => {
           })}
         </DsHeading>
       </Skeleton>
+      {numberOfAccesses > 0 && (
+        <DebouncedSearchField
+          placeholder={t('access_packages.search_label')}
+          setDebouncedSearchString={setDebouncedSearchString}
+        />
+      )}
       <AccessPackageList
         isLoading={isLoadingAccesses || isLoadingParty}
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         showAllPackages
         showPackagesCount
-        minimizeAvailablePackages
+        minimizeAvailablePackages={!debouncedSearchString}
+        searchString={debouncedSearchString}
         onSelect={(accessPackage) => {
           setModalItem(accessPackage);
           modalRef.current?.showModal();
