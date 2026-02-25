@@ -16,12 +16,12 @@ export const mapRightsToChipRights = (
 ): ChipRight[] => {
   return rights.map((right: DelegationCheckedRight) => {
     return {
-      action: right.rule.name,
-      rightKey: right.rule.key,
+      action: right.right.name,
+      rightKey: right.right.key,
       delegable: right.result === true,
       checked: isChecked(right) || false,
       delegationReason: right.reasonCodes.length > 0 ? right.reasonCodes[0] : '',
-      inherited: isInherited(right.rule.key),
+      inherited: isInherited(right.right.key),
     };
   });
 };

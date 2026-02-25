@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpPost("checkdelegationaccesses/{partyId}")]
         [Authorize]
-        public async Task<ActionResult<List<DelegationResponseData>>> CheckDelegationAccess([FromRoute] string partyId, [FromBody] Right request)
+        public async Task<ActionResult<List<DelegationResponseData>>> CheckDelegationAccess([FromRoute] string partyId, [FromBody] Core.Models.Right request)
         {
             try
             {
@@ -156,11 +156,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegationcheck")]
-        public async Task<ActionResult<List<RuleCheck>>> GetDelegationCheck([FromQuery] Guid from, [FromQuery] string resource)
+        public async Task<ActionResult<List<RightCheck>>> GetDelegationCheck([FromQuery] Guid from, [FromQuery] string resource)
         {
             try
             {
-                List<RuleCheck> result = await _singleRightService.DelegationCheck(from, resource);
+                List<RightCheck> result = await _singleRightService.DelegationCheck(from, resource);
                 return Ok(result);
             }
             catch (HttpStatusException statusEx)

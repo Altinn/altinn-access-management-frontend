@@ -73,9 +73,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     var delegationObject = new DelegationInput
                     {
                         To = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:organizationnumber", Value = org } },
-                        Rights = new List<Right>
+                        Rights = new List<Models.Right>
                         {
-                            new Right
+                            new Models.Right
                             {
                                 Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = api } }
                             }
@@ -108,7 +108,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
+        public async Task<List<DelegationResponseData>> DelegationCheck(string partyId, Models.Right request)
         {
             return await _maskinportenSchemaClient.MaskinportenSchemaDelegationCheck(partyId, request);
         }

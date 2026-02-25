@@ -4,12 +4,6 @@
   gap: 0.2rem;
 }
 
-.inheritedInfoIcon {
-  color: var(--ds-color-info-base-default);
-  margin-right: 0.3rem;
-  min-width: 1.5rem;
-}
-
 .infoLine {
   display: flex;
   gap: 5px;
@@ -20,22 +14,68 @@
   min-width: 24px;
 }
 
+.inheritedInfoIcon {
+  color: var(--ds-color-info-base-default);
+  margin-right: 0.3rem;
+  font-size: 1.5rem;
+}
+
 .delegationCheckInfoIcon {
   color: var(--ds-color-warning-base-default);
   margin-right: 0.3rem;
+  font-size: 1.5rem;
 }
 
 .dangerIcon {
   color: var(--ds-color-danger-base-default);
   margin-right: 0.3rem;
+  font-size: 1.5rem;
 }
 
 .warningIcon {
   color: var(--ds-color-warning-base-default);
   margin-right: 0.3rem;
+  font-size: 1.5rem;
 }
 
 .hasPackageInfoIcon {
   color: var(--ds-color-success-base-default);
   margin-right: 0.3rem;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .statusSection {
+    gap: 0.1rem;
+  }
+
+  .infoLine {
+    gap: var(--ds-spacing-1);
+    align-items: flex-start;
+  }
+
+  .infoLine svg {
+    margin-top: 4px;
+    min-width: 16px;
+  }
+
+  .delegationCheckInfoIcon {
+    font-size: 1rem;
+  }
+
+  .dangerIcon {
+    font-size: 1rem;
+  }
+
+  .warningIcon {
+    font-size: 1rem;
+  }
+
+  .hasPackageInfoIcon {
+    font-size: 1rem;
+  }
+
+  .inheritedInfoIcon {
+    font-size: 1rem;
+  }
 }

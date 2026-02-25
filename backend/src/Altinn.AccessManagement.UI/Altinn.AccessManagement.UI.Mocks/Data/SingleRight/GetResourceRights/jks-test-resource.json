@@ -20,10 +20,10 @@
             "name": "GenericAccessResource"
         }
     },
-    "directRules": [],
-    "indirectRules": [
+    "directRights": [],
+    "indirectRights": [
         {
-            "rule": {
+            "right": {
                 "key": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
                 "name": null,
                 "resource": [

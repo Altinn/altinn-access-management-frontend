@@ -85,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// </summary>
                 /// <param name="partyId">The reportee's party id</param>
                 /// <param name="request">Necessary info about the right that's going to be checked</param>
-                Task<List<DelegationResponseData>> MaskinportenSchemaDelegationCheck(string partyId, Right request);
+                Task<List<DelegationResponseData>> MaskinportenSchemaDelegationCheck(string partyId, Models.Right request);
 
                 //// Single Rights
 
@@ -99,7 +99,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 ///     The delegation access check request object that's going to be consumed by the backend
                 /// </param>
                 /// <returns>HttpResponseMessage: The response from backend /></returns>
-                Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Right request);
+                Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Models.Right request);
 
                 /// <summary>
                 ///     Creates a single rights delegation

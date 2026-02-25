@@ -179,7 +179,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<DelegationResponseData>> MaskinportenSchemaDelegationCheck(string partyId, Right request)
+        public Task<List<DelegationResponseData>> MaskinportenSchemaDelegationCheck(string partyId, Core.Models.Right request)
         {
             string resourceId = request.Resource[0].Value;
             string filename;
@@ -203,7 +203,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         //// SingleRight
 
-        public async Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Right request)
+        public async Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Core.Models.Right request)
         {
             ThrowExceptionIfTriggerParty(partyId);
 

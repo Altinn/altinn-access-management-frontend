@@ -209,7 +209,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<DelegationResponseData>> MaskinportenSchemaDelegationCheck(string partyId, Right request)
+        public async Task<List<DelegationResponseData>> MaskinportenSchemaDelegationCheck(string partyId, Core.Models.Right request)
         {
             try
             {
@@ -241,7 +241,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         //// SingleRights
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Right request)
+        public async Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Core.Models.Right request)
         {
             try
             {
