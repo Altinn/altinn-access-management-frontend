@@ -314,7 +314,7 @@
     "given_packages_title": "Mottatte tilgangspakkar",
     "available_packages_title": "Tilgjengelege tilgangspakkar",
     "other_available": "Andre tilgjengelege",
-    "current_access_packages_title": "{{count}} tilgangspakkar",
+    "current_access_packages_title": "Fullmakt til {{count}} tilgangspakkar",
     "give_new_button": "Gi fullmakt",
     "search_label": "Søk etter tilgangspakkar",
     "other_packages_in_area_title": "Andre tilgjengelige pakkar i området:",
@@ -336,7 +336,7 @@
     }
   },
   "guardianships": {
-    "current_guardianship_title": "{{count}} vergemål",
+    "current_guardianship_title": "Fullmakt til {{count}} vergemål",
     "search_label": "Søk etter vergemål",
     "modal_info_title": "Vergemål",
     "modal_info_description": "Oppnevnelsen av verge er henta frå Statsforvalteren. Ho kan ikkje slettast eller endrast her.",
@@ -345,7 +345,7 @@
   },
   "role": {
     "provider_status": "Denne rolla er henta frå ",
-    "current_roles_title": "{{count}} roller",
+    "current_roles_title": "Fullmakt til {{count}} roller",
     "fetch_error_heading": "Kan ikkje vise roller for denne brukaren",
     "fetch_error_description": "Vi klarer ikkje å hente rollene akkurat no.",
     "no_roles_message": "Denne brukaren har ingen roller.",
@@ -929,7 +929,7 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tenester.",
+    "no_resources": "Denne brukaren har ingen tenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",

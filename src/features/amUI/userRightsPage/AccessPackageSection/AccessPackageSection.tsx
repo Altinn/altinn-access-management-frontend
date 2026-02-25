@@ -64,7 +64,7 @@ export const AccessPackageSection = () => {
           <div className={classes.headerSection}>
             <DsHeading
               level={2}
-              data-size='2xs'
+              data-size='xs'
               id='access_packages_title'
             >
               {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}

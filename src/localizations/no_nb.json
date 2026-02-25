@@ -297,7 +297,7 @@
     "no_resources chosen": "Ingen valgte tjenester",
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikke se at noen tjenester er blitt valgt.",
     "popular_services": "Populære tjenester:",
-    "give_new_single_right": "Gi fullmakt",
+    "give_new_single_right": "Gi fullmakt til ny tjeneste",
     "current_services_title": "Fullmakt til {{count}} tjenester",
     "delete_singleRight_success_message": "Slettet tilgang til ",
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
@@ -314,7 +314,7 @@
     "given_packages_title": "Mottatte tilgangspakker",
     "available_packages_title": "Tilgjengelige tilgangspakker",
     "other_available": "Andre tilgjengelige",
-    "current_access_packages_title": "{{count}} tilgangspakker",
+    "current_access_packages_title": "Fullmakt til {{count}} tilgangspakker",
     "give_new_button": "Gi fullmakt",
     "search_label": "Søk etter tilgangspakker",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
@@ -336,7 +336,7 @@
     }
   },
   "guardianships": {
-    "current_guardianship_title": "{{count}} vergemål",
+    "current_guardianship_title": "Fullmakt til {{count}} vergemål",
     "search_label": "Søk etter vergemål",
     "modal_info_title": "Vergemål",
     "modal_info_description": "Oppnevnelsen av verge er hentet fra Statsforvalteren. Den kan ikke slettes eller endres her.",
@@ -345,7 +345,7 @@
   },
   "role": {
     "provider_status": "Denne rollen er hentet fra ",
-    "current_roles_title": "{{count}} roller",
+    "current_roles_title": "Fullmakt til {{count}} roller",
     "fetch_error_heading": "Kan ikke vise roller for denne brukeren",
     "fetch_error_description": "Vi klarer ikke å hente rollene akkurat nå.",
     "no_roles_message": "Denne brukeren har ingen roller.",
@@ -929,7 +929,7 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tjenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Ingen tjenester.",
+    "no_resources": "Denne brukeren har ingen tjenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",

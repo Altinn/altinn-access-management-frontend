@@ -45,7 +45,7 @@ export const GuardianshipSection = () => {
       <div>
         <DsHeading
           level={2}
-          data-size='2xs'
+          data-size='xs'
         >
           {t('guardianships.current_guardianship_title', { count: numberOfAccesses })}
         </DsHeading>
