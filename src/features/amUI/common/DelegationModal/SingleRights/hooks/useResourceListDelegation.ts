@@ -74,7 +74,7 @@ export const useResourceListDelegation = ({
           result.data.length > 0 && result.data.every((action) => action.result);
 
         if (canDelegateAllActions) {
-          const allActionKeys = result.data.map((action) => action.rule.key);
+          const allActionKeys = result.data.map((action) => action.right.key);
           delegateRights({
             partyUuid: actingParty!.partyUuid,
             fromUuid: fromParty!.partyUuid,
