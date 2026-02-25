@@ -13,6 +13,7 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 interface DeleteResourceButton {
   resource: ServiceResource;
   fullText?: boolean;
+  disabled?: boolean;
   onSuccess?: () => void;
   onError?: () => void;
 }
@@ -20,6 +21,7 @@ interface DeleteResourceButton {
 export const DeleteResourceButton = ({
   resource,
   fullText = false,
+  disabled = false,
   onSuccess,
   onError,
 }: DeleteResourceButton) => {
@@ -50,7 +52,7 @@ export const DeleteResourceButton = ({
       <Button
         variant='tertiary'
         className={classes.deleteButton}
-        disabled={isLoading}
+        disabled={disabled || isLoading}
         onClick={() => {
           setIsLoading(true);
           revoke(
