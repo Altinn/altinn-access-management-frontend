@@ -23,14 +23,14 @@
       "name": "AltinnApp"
     }
   },
-  "rules": [
+  "rights": [
     {
       "reasonCodes": [
         "RoleAccess",
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
         "name": "Instantiate",
         "resource": [
@@ -46,7 +46,7 @@
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "name": "Read",
         "resource": [
@@ -62,7 +62,7 @@
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "name": "Task_1 Read",
         "resource": [
@@ -78,7 +78,7 @@
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
         "name": "Task_1 Write",
         "resource": [
@@ -94,7 +94,7 @@
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "name": "Task_2 Read",
         "resource": [
@@ -110,7 +110,7 @@
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
         "name": "Task_2 Write",
         "resource": [
@@ -126,7 +126,7 @@
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "name": "Task_3 Read",
         "resource": [
@@ -142,7 +142,7 @@
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_3:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
         "name": "Task_3 Write",
         "resource": [
@@ -158,7 +158,7 @@
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "name": "EndEvent_1 Read",
         "resource": [
@@ -174,7 +174,7 @@
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
         "name": "EndEvent_1 Write",
         "resource": [
@@ -190,7 +190,7 @@
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:delete",
         "name": "Delete",
         "resource": [
@@ -202,7 +202,7 @@
     },
     {
       "reasonCodes": [],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
         "name": "Write",
         "resource": [
@@ -214,7 +214,7 @@
     },
     {
       "reasonCodes": [],
-      "rule": {
+      "right": {
         "key": "urn:altinn:end-event:EndEvent_1:urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:complete",
         "name": "EndEvent_1 Complete",
         "resource": [
@@ -230,7 +230,7 @@
         "RoleAccess",
         "RoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:appresource:events:urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "name": "Events Read",
         "resource": [
@@ -244,7 +244,7 @@
       "reasonCodes": [
         "MissingRoleAccess"
       ],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_2:urn:oasis:names:tc:xacml:1.0:action:action-id:confirm",
         "name": "Task_2 Confirm",
         "resource": [

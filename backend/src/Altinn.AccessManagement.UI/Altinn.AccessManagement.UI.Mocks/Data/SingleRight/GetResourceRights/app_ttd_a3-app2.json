@@ -19,9 +19,9 @@
             "name": "AltinnApp"
         }
     },
-    "directRules": [
+    "directRights": [
         {
-            "rule": {
+            "right": {
                 "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
                 "name": "Instantiate",
                 "resource": [
@@ -64,7 +64,7 @@
             ]
         },
         {
-            "rule": {
+            "right": {
                 "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
                 "name": "Read",
                 "resource": [
@@ -107,7 +107,7 @@
             ]
         },
         {
-            "rule": {
+            "right": {
                 "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
                 "name": "Read Task_1",
                 "resource": [
@@ -151,5 +151,5 @@
             ]
         }
     ],
-    "indirectRules": []
+    "indirectRights": []
 }

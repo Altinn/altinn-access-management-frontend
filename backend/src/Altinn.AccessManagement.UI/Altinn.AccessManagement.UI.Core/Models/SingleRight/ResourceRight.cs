@@ -3,7 +3,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 /// <summary>
-/// Model representing a resource with its associated rules and permissions
+/// Model representing a resource with its associated rights and permissions
 /// </summary>
 public class ResourceRight
 {
@@ -13,33 +13,33 @@ public class ResourceRight
     public required ResourceAM Resource { get; set; }
 
     /// <summary>
-    /// List of direct rules and associated permissions for the resource
+    /// List of direct rights and associated permissions for the resource
     /// </summary>
-    public required List<RuleItem> DirectRules { get; set; }
+    public required List<RightAccess> DirectRights { get; set; }
 
     /// <summary>
-    /// List of indirect rules and associated permissions for the resource
+    /// List of indirect rights and associated permissions for the resource
     /// </summary>
-    public required List<RuleItem> IndirectRules { get; set; }
+    public required List<RightAccess> IndirectRights { get; set; }
 }
 
 /// <summary>
-/// Model representing a rule item with its rule definition, reason and permissions
+/// Model representing a right item with its right definition, reason and permissions
 /// </summary>
-public class RuleItem
+public class RightAccess
 {
     /// <summary>
-    /// The rule definition
+    /// The right definition
     /// </summary>
-    public required Rule Rule { get; set; }
+    public required Right Right { get; set; }
 
     /// <summary>
-    /// Reason for the rule
+    /// Reason for the right
     /// </summary>
     public Reason Reason { get; set; }
 
     /// <summary>
-    /// List of permissions associated with the rule
+    /// List of permissions associated with the right
     /// </summary>
     public List<Permission> Permissions { get; set; }
 }

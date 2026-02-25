@@ -19,7 +19,7 @@
             "name": "AltinnApp"
         }
     },
-    "rules": [
+    "rights": [
         {
             "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
             "subResource": "",

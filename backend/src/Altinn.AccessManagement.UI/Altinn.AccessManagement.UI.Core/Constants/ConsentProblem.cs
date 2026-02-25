@@ -62,5 +62,13 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// <summary>Gets a <see cref="ProblemDescriptor"/>.</summary>
         public static ProblemDescriptor UnknownError { get; }  
             = _factory.Create(99, HttpStatusCode.InternalServerError, "Unhandled error from backend");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor CreateGenericProblem(HttpStatusCode statusCode, string detail)
+        {
+            return _factory.Create(999, statusCode, detail);
+        }
     }
 }

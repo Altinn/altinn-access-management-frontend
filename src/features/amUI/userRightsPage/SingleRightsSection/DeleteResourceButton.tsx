@@ -48,6 +48,7 @@ export const DeleteResourceButton = ({
     fromParty &&
     toParty && (
       <Button
+        aria-label={t('common.delete') + ' ' + resource.title}
         variant='tertiary'
         className={classes.deleteButton}
         disabled={isLoading}

@@ -71,6 +71,7 @@ export const DelegationModalProvider = ({ children }: DelegationModalProps) => {
     setExpandedAreas([]);
     setInfoView(false);
     setFilters([]);
+    setSearchString('');
   };
 
   return (

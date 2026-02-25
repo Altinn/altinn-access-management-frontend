@@ -73,7 +73,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
         {
-            string endpointUrl = $"enduser/connections/resources/rules?party={party}&to={to}&from={from}&resource={resource}";
+            string endpointUrl = $"enduser/connections/resources/rights?party={party}&to={to}&from={from}&resource={resource}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
@@ -87,11 +87,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/connections/resources/rules?party={party}&to={to}&from={from}&resource={resourceId}";
+                string endpointUrl = $"enduser/connections/resources/rights?party={party}&to={to}&from={from}&resource={resourceId}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var ruleKeys = new { directRuleKeys = actionKeys };
-                string requestBody = JsonSerializer.Serialize(ruleKeys, _serializerOptions);
+                var rightKeys = new { directRightKeys = actionKeys };
+                string requestBody = JsonSerializer.Serialize(rightKeys, _serializerOptions);
                 StringContent content = new StringContent(requestBody, System.Text.Encoding.UTF8, "application/json");
 
                 var httpResponse = await _client.PostAsync(token, endpointUrl, content);
@@ -110,11 +110,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/connections/resources/rules?party={party}&to={to}&from={from}&resource={resourceId}";
+                string endpointUrl = $"enduser/connections/resources/rights?party={party}&to={to}&from={from}&resource={resourceId}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var ruleKeys = new { directRuleKeys = actionKeys };
-                string requestBody = JsonSerializer.Serialize(ruleKeys, _serializerOptions);
+                var rightKeys = new { directRightKeys = actionKeys };
+                string requestBody = JsonSerializer.Serialize(rightKeys, _serializerOptions);
                 StringContent content = new StringContent(requestBody, System.Text.Encoding.UTF8, "application/json");
                 var httpResponse = await _client.PutAsync(token, endpointUrl, content);
                 return httpResponse;

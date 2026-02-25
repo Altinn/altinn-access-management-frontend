@@ -17,6 +17,7 @@ import classes from './ResourceInfo.module.css';
 import { useInheritedStatusInfo } from '../../useInheritedStatus';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../EditModal';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export interface ResourceInfoProps {
   resource: ServiceResource;
@@ -25,6 +26,7 @@ export interface ResourceInfoProps {
 }
 
 export const ResourceInfo = ({ resource, onDelegate, availableActions }: ResourceInfoProps) => {
+  const isSmall = useIsMobileOrSmaller();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const { data: resourceDelegations } = useGetSingleRightsForRightholderQuery(
     {
@@ -75,7 +77,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
         {delegationError ?? missingAccess ?? ''}
       </StatusMessageForScreenReader>
       {!!resource && (
-        <div className={classes.infoView}>
+        <div>
           <ResourceHeading resource={resource} />
           {isActionLoading || isActionSuccess ? (
             <LoadingAnimation
@@ -84,14 +86,21 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
             />
           ) : (
             <>
-              <StatusSection
-                userHasAccess={hasAccess}
-                showDelegationCheckWarning={showMissingRightsStatus}
-                inheritedStatus={inheritedStatus}
-                cannotDelegateHere={cannotDelegateHere}
-              />
-              {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
-              {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
+              <div
+                className={classes.resourceInfo}
+                data-size={isSmall ? 'xs' : 'md'}
+              >
+                <StatusSection
+                  userHasAccess={hasAccess}
+                  showDelegationCheckWarning={showMissingRightsStatus}
+                  inheritedStatus={inheritedStatus}
+                  cannotDelegateHere={cannotDelegateHere}
+                />
+                {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
+                {resource.rightDescription && (
+                  <DsParagraph>{resource.rightDescription}</DsParagraph>
+                )}
+              </div>
 
               <RightsSection
                 resource={resource}

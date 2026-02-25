@@ -23,10 +23,10 @@
       "name": "AltinnApp"
     }
   },
-  "rules": [
+  "rights": [
     {
       "reasonCodes": [],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "name": "Read",
         "resource": [
@@ -38,7 +38,7 @@
     },
     {
       "reasonCodes": [],
-      "rule": {
+      "right": {
         "key": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
         "name": "Write",
         "resource": [
