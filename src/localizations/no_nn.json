@@ -929,7 +929,7 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Denne brukeren har ingen tenester.",
+    "no_resources": "Denne brukaren har ingen tenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
