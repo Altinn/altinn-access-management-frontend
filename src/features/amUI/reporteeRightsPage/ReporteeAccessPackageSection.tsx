@@ -46,12 +46,6 @@ export const ReporteeAccessPackageSection = () => {
   return (
     <>
       <AccessPackageInfoAlert />
-      {numberOfAccesses > 0 && (
-        <DebouncedSearchField
-          placeholder={t('access_packages.search_label')}
-          setDebouncedSearchString={setDebouncedSearchString}
-        />
-      )}
       <Skeleton loading={isLoadingAccesses || isLoadingParty}>
         <DsHeading
           level={2}
@@ -63,6 +57,12 @@ export const ReporteeAccessPackageSection = () => {
           })}
         </DsHeading>
       </Skeleton>
+      {numberOfAccesses > 0 && (
+        <DebouncedSearchField
+          placeholder={t('access_packages.search_label')}
+          setDebouncedSearchString={setDebouncedSearchString}
+        />
+      )}
       <AccessPackageList
         isLoading={isLoadingAccesses || isLoadingParty}
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
