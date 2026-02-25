@@ -1,4 +1,6 @@
 import { DelegationCheckedRight } from '@/rtk/features/singleRights/singleRightsApi';
+import { InheritedStatusMessageType } from '../../../useInheritedStatus';
+import { Party } from '@/rtk/features/lookupApi';
 
 export type ChipRight = {
   action: string;
@@ -6,22 +8,24 @@ export type ChipRight = {
   delegable: boolean;
   checked: boolean;
   delegationReason: string;
-  inherited?: boolean;
+  inheritedStatus?: InheritedStatusMessageType[];
+  toParty?: Party;
 };
-
-export const mapRightsToChipRights = (
-  rights: DelegationCheckedRight[],
-  isChecked: (right: DelegationCheckedRight) => boolean,
-  isInherited: (rightKey: string) => boolean,
-): ChipRight[] => {
-  return rights.map((right: DelegationCheckedRight) => {
+type ChipDelegationCheckedRight = DelegationCheckedRight & {
+  isChecked: boolean;
+  toParty?: Party;
+  inheritedStatus?: InheritedStatusMessageType[];
+};
+export const mapRightsToChipRights = (rights: ChipDelegationCheckedRight[]): ChipRight[] => {
+  return rights.map((right: ChipDelegationCheckedRight) => {
     return {
       action: right.rule.name,
       rightKey: right.rule.key,
       delegable: right.result === true,
-      checked: isChecked(right) || false,
+      checked: right.isChecked,
       delegationReason: right.reasonCodes.length > 0 ? right.reasonCodes[0] : '',
-      inherited: isInherited(right.rule.key),
+      inheritedStatus: right.inheritedStatus,
+      toParty: right.toParty,
     };
   });
 };

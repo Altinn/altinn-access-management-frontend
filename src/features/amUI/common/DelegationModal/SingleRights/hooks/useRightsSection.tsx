@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
 import {
   DelegationCheckedRight,
+  ResourceRight,
   ServiceResource,
   useDelegationCheckQuery,
   useGetResourceRightsQuery,
@@ -19,6 +20,7 @@ import { useRightChips } from './useRightChips';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useHasResourceCheck } from './useHasResourceCheck';
+import { getInheritedStatus } from '../../../useInheritedStatus';
 
 export const useRightsSection = ({
   resource,
@@ -79,68 +81,6 @@ export const useRightsSection = ({
       })
     : '';
 
-  /// UseEffect hooks
-
-  // Instantiate/reset access and rights states
-  useEffect(() => {
-    if (!isResourceRightsFetching) {
-      if (
-        hasResourceAccess &&
-        resourceRights &&
-        (resourceRights.directRules.length > 0 || resourceRights.indirectRules.length > 0)
-      ) {
-        setHasAccess(true);
-        const rightKeys = [
-          ...resourceRights.directRules.map((r) => r.rule.key),
-          ...resourceRights.indirectRules.map((r) => r.rule.key),
-        ];
-        setCurrentRights(rightKeys);
-      } else {
-        setHasAccess(false);
-        setCurrentRights([]);
-      }
-    }
-  }, [resourceRights, isResourceRightsFetching, resource.identifier, hasResourceAccess]);
-
-  // Instantiate/reset rights and missing access message states
-  useEffect(() => {
-    if (delegationCheckedActions) {
-      setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
-
-      if (hasAccess && resourceRights) {
-        const chipRights: ChipRight[] = mapRightsToChipRights(
-          delegationCheckedActions,
-          (right) => currentRights.some((key) => key === right.rule.key),
-          (rightKey) => resourceRights.indirectRules.some((r) => r.rule.key === rightKey),
-        );
-        setRights(chipRights);
-      } else {
-        const chipRights: ChipRight[] = mapRightsToChipRights(
-          delegationCheckedActions,
-          (right) => right.result === true,
-          () => false, // If the user doesn't have access to the resource, none of the rights can be inherited
-        );
-        setRights(chipRights);
-      }
-    }
-  }, [delegationCheckedActions, resource.identifier, hasAccess, currentRights, resourceRights]);
-
-  /// Functions
-
-  const onSuccess = () => {
-    setIsActionLoading(false);
-    setIsActionSuccess(true);
-    setTimeout(() => setIsActionSuccess(false), 2000);
-    onDelegate?.();
-  };
-
-  const applyActionStates = () => {
-    setIsActionLoading(true);
-    setIsActionSuccess(false);
-    setDelegationError(null);
-    setMissingAccess(null);
-  };
-
   const getMissingAccessMessage = useCallback(
     (response: DelegationCheckedRight[]) => {
       const hasMissingRoleAccess = response.some((right) =>
@@ -173,6 +113,90 @@ export const useRightsSection = ({
     },
     [t, resource?.resourceOwnerName, reportee?.name],
   );
+  /// UseEffect hooks
+
+  // Instantiate/reset access and rights states
+  useEffect(() => {
+    if (!isResourceRightsFetching) {
+      if (
+        hasResourceAccess &&
+        resourceRights &&
+        (resourceRights.directRules.length > 0 || resourceRights.indirectRules.length > 0)
+      ) {
+        setHasAccess(true);
+        const rightKeys = [
+          ...resourceRights.directRules.map((r) => r.rule.key),
+          ...resourceRights.indirectRules.map((r) => r.rule.key),
+        ];
+        setCurrentRights(rightKeys);
+      } else {
+        setHasAccess(false);
+        setCurrentRights([]);
+      }
+    }
+  }, [resourceRights, isResourceRightsFetching, resource.identifier, hasResourceAccess]);
+
+  // Instantiate/reset rights and missing access message states
+  useEffect(() => {
+    if (delegationCheckedActions) {
+      setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
+
+      if (hasAccess && resourceRights) {
+        const chipRights: ChipRight[] = mapRightsToChipRights(
+          delegationCheckedActions.map((right) => {
+            const rule = resourceRights.indirectRules.find((r) => r.rule.key === right.rule.key);
+            const inheritedStatus = rule
+              ? getInheritedStatus({
+                  permissions: rule.permissions,
+                  toParty: toParty,
+                })
+              : [];
+            return {
+              ...right,
+              toParty: toParty,
+              isChecked: currentRights.includes(right.rule.key),
+              inheritedStatus: inheritedStatus,
+            };
+          }),
+        );
+        setRights(chipRights);
+      } else {
+        const chipRights: ChipRight[] = mapRightsToChipRights(
+          delegationCheckedActions.map((right) => ({
+            ...right,
+            toParty: toParty,
+            isChecked: right.result === true,
+            inheritedStatus: [], // If the user doesn't have access to the resource, none of the rights can be inherited
+          })),
+        );
+        setRights(chipRights);
+      }
+    }
+  }, [
+    delegationCheckedActions,
+    resource.identifier,
+    hasAccess,
+    currentRights,
+    resourceRights,
+    toParty,
+    getMissingAccessMessage,
+  ]);
+
+  /// Functions
+
+  const onSuccess = () => {
+    setIsActionLoading(false);
+    setIsActionSuccess(true);
+    setTimeout(() => setIsActionSuccess(false), 2000);
+    onDelegate?.();
+  };
+
+  const applyActionStates = () => {
+    setIsActionLoading(true);
+    setIsActionSuccess(false);
+    setDelegationError(null);
+    setMissingAccess(null);
+  };
 
   const saveEditedRights = () => {
     const actionKeysToDelegate = rights

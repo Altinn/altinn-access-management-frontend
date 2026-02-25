@@ -308,7 +308,9 @@
     "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
     "wip_link_text": "Go to old Altinn",
     "inheritance": {
-      "right_inherited": "This action is inherited and cannot be changed here."
+      "right_inherited_via_role": "{{user_name}} has this action through the role they hold in {{via_name}}. It cannot be changed here.",
+      "right_inherited_via_connection": "{{user_name}} has this action through {{via_name}}. It cannot be changed here.",
+      "right_inherited_via_keyrole": "{{user_name}} has this action through the role they hold in {{via_name}}. It cannot be changed here."
     }
   },
   "access_packages": {
