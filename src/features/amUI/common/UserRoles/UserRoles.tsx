@@ -12,6 +12,7 @@ import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries
 import { useRoleMetadata } from './useRoleMetadata';
 import { ClientAccessInfoModal } from './ClientAccessInfoModal';
 import { GuardianshipInfoModal } from './GuardianshipInfoModal';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   const { t } = useTranslation();
@@ -19,6 +20,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [isClientAccessModalOpen, setIsClientAccessModalOpen] = useState(false);
   const [isGuardianModalOpen, setIsGuardianModalOpen] = useState(false);
+  const isSmall = useIsMobileOrSmaller();
 
   const { toParty, fromParty, actingParty, selfParty } = usePartyRepresentation();
 
@@ -59,6 +61,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
   const isViewingOwnAccess = toParty?.partyUuid === selfParty?.partyUuid;
   const isAgent = altinn3Roles.some((rolePermission) => rolePermission.role?.code === 'agent');
   const isGuardian = guardianshipRoles.length > 0;
+  const chipSize = isSmall ? 'sm' : 'md';
 
   return (
     <>
@@ -67,12 +70,18 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
         {...props}
       >
         {isAgent && (
-          <DsChip.Button onClick={() => setIsClientAccessModalOpen(true)}>
+          <DsChip.Button
+            data-size={chipSize}
+            onClick={() => setIsClientAccessModalOpen(true)}
+          >
             {t('user_roles.has_client_access')}
           </DsChip.Button>
         )}
         {isGuardian && (
-          <DsChip.Button onClick={() => setIsGuardianModalOpen(true)}>
+          <DsChip.Button
+            data-size={chipSize}
+            onClick={() => setIsGuardianModalOpen(true)}
+          >
             {t('user_roles.is_guardian')}
           </DsChip.Button>
         )}
@@ -80,6 +89,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
           return (
             <DsChip.Button
               key={role.id}
+              data-size={chipSize}
               onClick={() => onChipClick(role)}
             >
               {role.name}

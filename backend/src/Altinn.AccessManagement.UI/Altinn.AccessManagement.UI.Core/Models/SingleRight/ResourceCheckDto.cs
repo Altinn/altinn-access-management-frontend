@@ -13,7 +13,7 @@ public class ResourceCheckDto
     public required ResourceAM Resource { get; set; }
 
     /// <summary>
-    /// Actions for which access is being checked on the resource.
+    /// Rights describing which accesses are available on the service and if they are delegable to the user.
     /// </summary>
-    public required IEnumerable<RuleCheck> Rules { get; set; }
+    public required IEnumerable<RightCheck> Rights { get; set; }
 }

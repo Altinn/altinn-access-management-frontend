@@ -19,6 +19,7 @@ import { SerializedError } from '@reduxjs/toolkit';
 import { DelegationAction } from '../EditModal';
 
 import classes from './ResourceInfo.module.css';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 type RightsSectionProps = {
   resource: ServiceResource;
@@ -56,6 +57,7 @@ export const RightsSection = ({
   availableActions,
 }: RightsSectionProps) => {
   const [rightsExpanded, setRightsExpanded] = useState(false);
+  const isSmall = useIsMobileOrSmaller();
 
   const { t } = useTranslation();
   const { toParty } = usePartyRepresentation();
@@ -121,7 +123,7 @@ export const RightsSection = ({
           <div className={classes.rightsSection}>
             <DsHeading
               level={4}
-              data-size='xs'
+              data-size={isSmall ? '2xs' : 'xs'}
             >
               {hasAccess && !hasUnsavedChanges ? (
                 <Trans
@@ -142,6 +144,7 @@ export const RightsSection = ({
               loading={isDelegationCheckLoading}
               icon={CheckmarkCircleIcon}
               collapsible={true}
+              size={isSmall ? 'sm' : 'md'}
               title={
                 rights.filter((r) => r.checked).length !== rights.length
                   ? t('delegation_modal.actions.partial_access', {

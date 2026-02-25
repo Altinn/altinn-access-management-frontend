@@ -8,12 +8,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight;
 /// <summary>
 /// Action
 /// </summary>
-public class RuleCheck
+public class RightCheck
 {
     /// <summary>
-    /// The rule, defined by its action and key
+    /// The right, defined by its action and key
     /// </summary>
-    public required Rule Rule
+    public required Right Right
     {
         get; set;
     }
@@ -32,27 +32,27 @@ public class RuleCheck
 }
 
 /// <summary>
-/// A delegable rule that contains an action and key
+/// A delegable right that contains an action and key
 /// </summary>
-public class Rule
+public class Right
 {
     /// <summary>
-    /// The identifying key of the rule.
+    /// The identifying key of the right.
     /// </summary>
     public required string Key { get; set; }
 
     /// <summary>
-    /// The display name of the rule, used for showing to users in the UI.
+    /// The display name of the right, used for showing to users in the UI.
     /// </summary>
     public required string Name { get; set; }
 
     /// <summary>
-    /// The resource identifiers that the rule applies to.
+    /// The resource identifiers that the right applies to.
     /// </summary>
     public List<string>? Resource { get; set; }
 
     /// <summary>
-    /// The action that the rule applies to, e.g. "read", "write", "sign", etc.
+    /// The action that the right applies to, e.g. "read", "write", "sign", etc.
     /// </summary>
     public required string Action { get; set; }
 }

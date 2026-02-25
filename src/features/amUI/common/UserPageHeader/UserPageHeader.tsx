@@ -8,7 +8,8 @@ import { UserRoles } from '../UserRoles/UserRoles';
 
 import classes from './UserPageHeader.module.css';
 import { UserPageHeaderSkeleton } from './UserPageHeaderSkeleton';
-import { isSubUnit, isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface UserPageHeaderProps {
   direction: 'to' | 'from';
@@ -38,6 +39,7 @@ export const UserPageHeader = ({
     fullName: fromParty?.name ?? '',
     type: fromParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
   });
+  const isSmall = useIsMobileOrSmaller();
 
   if (!toParty && !fromParty && !loadingPartyRepresentation) {
     return null;
@@ -59,7 +61,7 @@ export const UserPageHeader = ({
         <Avatar
           name={userName}
           type={isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person'}
-          size={'lg'}
+          size={isSmall ? 'md' : 'lg'}
           isDeleted={user?.isDeleted}
           isParent={!isSubUnitByType(user?.variant?.toString())}
           className={classes.avatarInner}
@@ -68,7 +70,7 @@ export const UserPageHeader = ({
           <Avatar
             name={secondaryUserName}
             type={isOrganization(secondaryParty?.partyTypeName?.toString()) ? 'company' : 'person'}
-            size={'lg'}
+            size={isSmall ? 'md' : 'lg'}
             isDeleted={secondaryParty?.isDeleted}
             className={classes.secondaryAvatar}
             isParent={!isSubUnitByType(secondaryParty?.variant?.toString())}
@@ -85,7 +87,7 @@ export const UserPageHeader = ({
       {avatar()}
       <DsHeading
         level={1}
-        data-size='sm'
+        data-size={isSmall ? '2xs' : 'sm'}
         className={classes.heading}
       >
         {userName}

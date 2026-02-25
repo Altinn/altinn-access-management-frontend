@@ -40,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> CheckDelegationAccess(string partyId, Right request)
+        public async Task<HttpResponseMessage> CheckDelegationAccess(string partyId, Models.Right request)
         {
             return await _accessManagementClientV0.CheckSingleRightsDelegationAccess(partyId, request);
         }
@@ -62,10 +62,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         // ----------------------------
 
         /// <inheritdoc />
-        public async Task<List<RuleCheck>> DelegationCheck(Guid from, string resource)
+        public async Task<List<RightCheck>> DelegationCheck(Guid from, string resource)
         {
             ResourceCheckDto delegationCheckResult = await _singleRightClient.GetDelegationCheck(from, resource);
-            List<RuleCheck> actions = delegationCheckResult.Rules.ToList();
+            List<RightCheck> actions = delegationCheckResult.Rights.ToList();
 
             return actions;
         }

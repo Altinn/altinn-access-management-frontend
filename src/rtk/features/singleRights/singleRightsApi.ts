@@ -34,12 +34,12 @@ export interface ResourceDelegation {
 
 export interface ResourceRight {
   resource: ServiceResource;
-  directRules: RuleItem[];
-  indirectRules: RuleItem[];
+  directRights: RightAccess[];
+  indirectRights: RightAccess[];
 }
 
-export interface RuleItem {
-  rule: Rule;
+export interface RightAccess {
+  right: Right;
   reason?: Reason;
   permissions: Permissions[];
 }
@@ -60,12 +60,12 @@ interface searchParams {
 }
 
 export interface DelegationCheckedRight {
-  rule: Rule;
+  right: Right;
   result: boolean;
   reasonCodes: string[];
 }
 
-export interface Rule {
+export interface Right {
   key: string;
   name: string;
   action: string;
