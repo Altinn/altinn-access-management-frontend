@@ -47,6 +47,7 @@ export interface ResourceListProps<
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
+  getHasAccess?: (resource: TResource) => boolean;
   delegationModal?: React.ReactNode;
 }
 
@@ -67,6 +68,7 @@ export const ResourceList = <
   enableMaxHeight = false,
   renderControls,
   getBadge,
+  getHasAccess,
   delegationModal,
 }: ResourceListProps<TResource>) => {
   const { t } = useTranslation();
@@ -191,6 +193,7 @@ export const ResourceList = <
                       interactive={itemInteractive}
                       onClick={handleClick}
                       badge={getBadge?.(resource, index)}
+                      variant={getHasAccess?.(resource) ? 'tinted' : 'default'}
                       controls={renderControls?.(resource)}
                       loading={false}
                       shadow={itemShadow}

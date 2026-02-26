@@ -42,7 +42,10 @@ export const DelegationModalContent = ({
   } = useDelegationModalContext();
   const { toParty } = usePartyRepresentation();
   const { closeAllAreas } = useAreaExpandedContextOrLocal();
-  const onResourceSelection = (resource?: ServiceResource) => {
+  const onResourceSelection = (resource?: ServiceResource, error = false) => {
+    if (!error) {
+      setActionError(null);
+    }
     setInfoView(true);
     setResourceToView(resource);
   };
