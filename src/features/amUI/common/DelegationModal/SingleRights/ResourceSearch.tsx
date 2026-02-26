@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsHeading } from '@altinn/altinn-components';
+import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
 import { useCallback } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -20,6 +20,7 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 
 import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export interface ResourceSearchProps {
   onSelect: (resource: ServiceResource) => void;
@@ -90,7 +91,12 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
       >
         <Trans
           i18nKey='delegation_modal.give_service_to_name'
-          values={{ name: toParty?.name }}
+          values={{
+            name: formatDisplayName({
+              fullName: toParty?.name || '',
+              type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+            }),
+          }}
           components={{ strong: <strong /> }}
         />
       </DsHeading>

@@ -8,6 +8,7 @@ import {
   DsButton,
   DsHeading,
   DsPopover,
+  formatDisplayName,
   List,
   SettingsItem,
 } from '@altinn/altinn-components';
@@ -16,7 +17,7 @@ import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi'
 import classes from './SettingsPageContent.module.css';
 import { ChatIcon, PaperplaneIcon, QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { SettingsModal } from './SettingsModal';
-import { useGetIsCompanyProfileAdminQuery } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetIsCompanyProfileAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SettingsPageContent = () => {
   const { t } = useTranslation();
@@ -57,7 +58,12 @@ export const SettingsPageContent = () => {
     return (
       <div className={classes.pageContent}>
         <DsAlert data-color='warning'>
-          {t('settings_page.not_admin_alert', { name: actingParty?.name || '' })}
+          {t('settings_page.not_admin_alert', {
+            name: formatDisplayName({
+              fullName: actingParty?.name || '',
+              type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+            }),
+          })}
         </DsAlert>
       </div>
     );
@@ -69,7 +75,12 @@ export const SettingsPageContent = () => {
         level={1}
         data-size='sm'
       >
-        {t('settings_page.page_heading', { name: actingParty?.name })}
+        {t('settings_page.page_heading', {
+          name: formatDisplayName({
+            fullName: actingParty?.name || '',
+            type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+          }),
+        })}
       </DsHeading>
       <div className={classes.settingsHeaderAndInfo}>
         <DsHeading

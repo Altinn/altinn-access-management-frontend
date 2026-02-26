@@ -119,7 +119,7 @@ export const useHeader = ({
     favoriteAccountUuids: favoriteAccountUuids ?? [],
     currentAccountUuid: reportee?.partyUuid,
     selfAccountUuid: userProfile?.uuid,
-    isVirtualized: reporteeList && reporteeList.length > 20,
+    virtualized: reporteeList && reporteeList.length > 20,
     isLoading:
       !reporteeList ||
       isLoadingReporteeList ||
