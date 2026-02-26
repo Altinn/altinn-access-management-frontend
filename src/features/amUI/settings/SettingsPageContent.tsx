@@ -8,6 +8,7 @@ import {
   DsButton,
   DsHeading,
   DsPopover,
+  formatDisplayName,
   List,
   SettingsItem,
 } from '@altinn/altinn-components';
@@ -16,7 +17,7 @@ import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi'
 import classes from './SettingsPageContent.module.css';
 import { ChatIcon, PaperplaneIcon, QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { SettingsModal } from './SettingsModal';
-import { useGetIsCompanyProfileAdminQuery } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetIsCompanyProfileAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SettingsPageContent = () => {
   const { t } = useTranslation();
@@ -52,12 +53,19 @@ export const SettingsPageContent = () => {
     setModalMode(null);
   };
 
+  const formattedActingPartyName = formatDisplayName({
+    fullName: actingParty?.name || '',
+    type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  });
+
   // Show not-admin alert when loaded and user lacks permission
   if (!isCompanyProfileAdmin && !isCompanyProfileAdminLoading) {
     return (
       <div className={classes.pageContent}>
         <DsAlert data-color='warning'>
-          {t('settings_page.not_admin_alert', { name: actingParty?.name || '' })}
+          {t('settings_page.not_admin_alert', {
+            name: formattedActingPartyName,
+          })}
         </DsAlert>
       </div>
     );
@@ -69,7 +77,9 @@ export const SettingsPageContent = () => {
         level={1}
         data-size='sm'
       >
-        {t('settings_page.page_heading', { name: actingParty?.name })}
+        {t('settings_page.page_heading', {
+          name: formattedActingPartyName,
+        })}
       </DsHeading>
       <div className={classes.settingsHeaderAndInfo}>
         <DsHeading
