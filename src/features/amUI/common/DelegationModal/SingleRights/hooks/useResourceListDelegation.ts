@@ -72,7 +72,6 @@ export const useResourceListDelegation = ({
     if (!isFetching && waitingForRefetchRef.current.size > 0) {
       // Clear loading state for all resources that were waiting for refetch
       waitingForRefetchRef.current.forEach((resourceId) => {
-        console.log('Clearing loading state after refetch for resource', resourceId);
         setResourceLoading(resourceId, false);
       });
       waitingForRefetchRef.current.clear();
