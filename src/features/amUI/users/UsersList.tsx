@@ -35,10 +35,11 @@ export const UsersList = () => {
       partyUuid: fromParty?.partyUuid ?? '',
       fromUuid: fromParty?.partyUuid ?? '',
       toUuid: '', // all
-      includeAgentConnections,
+      includeAgentConnections:
+        fromParty?.partyTypeName === PartyType.Person || includeAgentConnections,
     },
     {
-      skip: !fromParty?.partyUuid || !isAdmin,
+      skip: !fromParty || !isAdmin,
     },
   );
   const { partyConnection: currentUser, isLoading: currentUserLoading } = useSelfConnection();
