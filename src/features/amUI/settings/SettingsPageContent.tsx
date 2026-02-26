@@ -53,16 +53,18 @@ export const SettingsPageContent = () => {
     setModalMode(null);
   };
 
+  const formattedActingPartyName = formatDisplayName({
+    fullName: actingParty?.name || '',
+    type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  });
+
   // Show not-admin alert when loaded and user lacks permission
   if (!isCompanyProfileAdmin && !isCompanyProfileAdminLoading) {
     return (
       <div className={classes.pageContent}>
         <DsAlert data-color='warning'>
           {t('settings_page.not_admin_alert', {
-            name: formatDisplayName({
-              fullName: actingParty?.name || '',
-              type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-            }),
+            name: formattedActingPartyName,
           })}
         </DsAlert>
       </div>
@@ -76,10 +78,7 @@ export const SettingsPageContent = () => {
         data-size='sm'
       >
         {t('settings_page.page_heading', {
-          name: formatDisplayName({
-            fullName: actingParty?.name || '',
-            type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-          }),
+          name: formattedActingPartyName,
         })}
       </DsHeading>
       <div className={classes.settingsHeaderAndInfo}>
