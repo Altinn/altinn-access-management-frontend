@@ -1,9 +1,10 @@
 import { expect } from '@playwright/test';
 import { test } from 'playwright/fixture/pomFixture';
 
+import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { Language } from 'playwright/pages/consent/ConsentPage';
-import { formatUiDateTime } from 'playwright/util/helper';
-import { scenarioBuilder } from './helper/scenarioBuilder';
+import { addTimeToNowUtc, formatUiDateTime, pickRandom } from 'playwright/util/helper';
+import { fromOrgs, toOrgs } from './helper/consentTestdata';
 
 const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
@@ -24,13 +25,16 @@ LANGUAGES.forEach((language) => {
     }) => {
       // Create consent request from one org to another org
       // For å godkjenne her kreves det at ressursen i ressursregisteret er satt opp med utfyller/innsender-rollen for org til org-samtykke
-      const scenario = scenarioBuilder.orgToOrg();
+      const [fromOrg, fromPerson] = pickRandom(fromOrgs);
+      const toOrg = pickRandom(toOrgs);
+      const validTo = addTimeToNowUtc({ days: 2 });
+      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await scenario.api.createConsentRequest({
-          from: { type: 'org', id: scenario.fromOrg },
-          to: { type: 'org', id: scenario.toOrg },
-          validToIsoUtc: scenario.validTo,
+        return await api.createConsentRequest({
+          from: { type: 'org', id: fromOrg },
+          to: { type: 'org', id: toOrg },
+          validToIsoUtc: validTo,
           resourceValue: 'standard-samtykke-for-dele-data',
           redirectUrl: REDIRECT_URL,
           metaData: { inntektsaar: '2028' },
@@ -39,7 +43,7 @@ LANGUAGES.forEach((language) => {
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(scenario.fromPerson);
+        await login.loginNotChoosingActor(fromPerson);
       });
 
       await test.step('Pick language', async () => {
@@ -48,7 +52,7 @@ LANGUAGES.forEach((language) => {
 
       await test.step('Verify consent UI and expiry', async () => {
         await expect(consentPage.textIncomeData).toBeVisible();
-        const expected = formatUiDateTime(scenario.validTo);
+        const expected = formatUiDateTime(validTo);
         await consentPage.expectExpiry(expected);
         await expect(consentPage.getIncomeYearText('2028')).toBeVisible();
       });
