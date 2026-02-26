@@ -8,12 +8,14 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
+import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
 
 import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
 import { useResourceListDelegation } from './hooks/useResourceListDelegation';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { useRenderSearchResultControl } from './createSearchResultControlsRenderer';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -46,6 +48,7 @@ export const SearchResults = ({
 }: SearchResultsProps) => {
   const { t } = useTranslation();
   const { setActionError } = useDelegationModalContext();
+  const { toParty } = usePartyRepresentation();
 
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
     onActionError: (resource, errorInfo) => {
@@ -67,9 +70,27 @@ export const SearchResults = ({
       false,
     [delegatedResources],
   );
+  const isInherited = React.useCallback(
+    (resourceId: string) => {
+      const delegation = delegatedResources?.find(
+        (item) => item.resource?.identifier === resourceId,
+      );
+      if (!delegation) {
+        return false;
+      }
+      return (
+        getInheritedStatus({
+          permissions: delegation.permissions,
+          toParty,
+        }).length > 0
+      );
+    },
+    [delegatedResources, toParty],
+  );
 
   const renderControls = useRenderSearchResultControl({
     isDelegated,
+    isInherited,
     availableActions,
     isResourceLoading,
     setActionError,

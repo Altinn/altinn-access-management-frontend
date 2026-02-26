@@ -10,6 +10,7 @@ import { DelegationAction } from '../EditModal';
 
 type UseRenderSearchResultControlProps = {
   isDelegated: (resourceId: string) => boolean;
+  isInherited: (resourceId: string) => boolean;
   availableActions?: DelegationAction[];
   isResourceLoading: (resourceId: string) => boolean;
   setActionError: (error: ActionError | null) => void;
@@ -19,6 +20,7 @@ type UseRenderSearchResultControlProps = {
 
 export const useRenderSearchResultControl = ({
   isDelegated,
+  isInherited,
   availableActions,
   isResourceLoading,
   setActionError,
@@ -30,6 +32,7 @@ export const useRenderSearchResultControl = ({
 
   return (resource: ServiceResource) => {
     const isAlreadyDelegated = isDelegated(resource.identifier);
+    const isResourceInherited = isInherited(resource.identifier);
     const canRevoke = availableActions?.includes(DelegationAction.REVOKE);
     const canDelegate = availableActions?.includes(DelegationAction.DELEGATE);
     const isLoading = isResourceLoading(resource.identifier);
@@ -40,7 +43,7 @@ export const useRenderSearchResultControl = ({
           variant='tertiary'
           data-size='sm'
           loading={isLoading}
-          disabled={isLoading}
+          disabled={isLoading || isResourceInherited}
           onClick={() => {
             setActionError(null);
             revokeFromList(resource);
