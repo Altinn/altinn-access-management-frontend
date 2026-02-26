@@ -62,9 +62,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
                 bool displayPopularServicesOnly = _featureFlags.DisplayPopularSingleRightsServices;
-                if (string.IsNullOrEmpty(searchParams.SearchString) && (searchParams.ROFilters == null || searchParams.ROFilters.Length == 0) && displayPopularServicesOnly)
+                if (string.IsNullOrEmpty(searchParams.SearchString) && (searchParams.ROFilters == null || searchParams.ROFilters.Length == 0) && displayPopularServicesOnly && searchParams.IncludeA2Services)
                 {
-                    // Return a selection of popular services
+                    // Return a selection of popular services (A2 services)
                     List<ServiceResourceFE> popularResources = FilterOutPopularResources(resourcesFE);
                     return PaginationUtils.GetListPage(popularResources, searchParams.Page, searchParams.ResultsPerPage);
                 }

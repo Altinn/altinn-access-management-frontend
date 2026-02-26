@@ -58,7 +58,10 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
   );
 
   const displayPopularResources =
-    !searchString && filters.length === 0 && window.featureFlags.displayPopularSingleRightsServices;
+    !searchString &&
+    filters.length === 0 &&
+    window.featureFlags.displayPopularSingleRightsServices &&
+    false; // Popular resources are currently disabled as the list is not curated for the new UI. Will be re-enabled when a curated list is in place.
 
   const resources = searchData?.pageList;
   const totalNumberOfResults = searchData?.numEntriesTotal;
