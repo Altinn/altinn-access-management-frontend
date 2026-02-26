@@ -16,7 +16,7 @@ export const SystemUserRequestLoadError = ({ error }: SystemUserRequestLoadError
     errorText = 'systemuser_request.load_request_error_notfound';
   } else if (!errorText && error?.status === 403) {
     errorText = 'systemuser_request.load_request_missing_permissions';
-  } else {
+  } else if (!errorText) {
     errorText = 'systemuser_request.load_request_error';
   }
 
