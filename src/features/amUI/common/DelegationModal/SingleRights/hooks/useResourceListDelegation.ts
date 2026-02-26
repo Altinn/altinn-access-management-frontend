@@ -65,7 +65,6 @@ export const useResourceListDelegation = ({
   );
 
   const setResourceLoading = useCallback((resourceId: string, isLoading: boolean) => {
-    console.log('Setting loading for resource', resourceId, 'to', isLoading);
     setLoadingByResourceId((prev) => ({ ...prev, [resourceId]: isLoading }));
   }, []);
 
