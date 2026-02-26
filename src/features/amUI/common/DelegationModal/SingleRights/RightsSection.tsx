@@ -90,6 +90,7 @@ export const RightsSection = ({
           error={delegationCheckErrorDetails}
           rightReasons={rights.map((r) => r.delegationReason)}
           resource={resource}
+          className={classes.resourceAlert}
         />
       ) : (
         <>

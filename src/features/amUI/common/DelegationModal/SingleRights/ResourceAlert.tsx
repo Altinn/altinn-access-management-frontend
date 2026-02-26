@@ -14,9 +14,11 @@ export interface ResourceAlertProps {
   error?: { status: string; time: string } | null;
   /*** The reasons why each right is not delegable */
   rightReasons?: string[];
+  /** Optional className for custom styling */
+  className?: string;
 }
 
-export const ResourceAlert = ({ resource, error, rightReasons }: ResourceAlertProps) => {
+export const ResourceAlert = ({ resource, error, rightReasons, className }: ResourceAlertProps) => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
   let headingText = '';
@@ -67,7 +69,10 @@ export const ResourceAlert = ({ resource, error, rightReasons }: ResourceAlertPr
     }
   }
   return (
-    <DsAlert data-color={color}>
+    <DsAlert
+      data-color={color}
+      className={className}
+    >
       <DsHeading
         level={2}
         data-size='2xs'
