@@ -182,7 +182,7 @@ export class ConsentApiRequests {
   /**
    * Get consent token using Maskinporten
    * @param consentRequestId The ID of the approved consent request
-   * @param fromPersonId The person ID (not in URN format, just the ID)
+   * @param from The consenting party (person or org)
    * @param clientIdEnv Environment variable name for the Maskinporten client ID
    * @param jwkEnv Environment variable name for the JWK private key
    * @param consumerOrg Optional organization number for "behalf of" scenarios
@@ -190,17 +190,19 @@ export class ConsentApiRequests {
    */
   async getConsentTokenWithMaskinporten(
     consentRequestId: string,
-    fromPersonId: string,
+    from: FromParty,
     clientIdEnv: string,
     jwkEnv: string,
     consumerOrg?: string,
   ): Promise<string> {
-    // Convert person ID to URN format
-    const fromPersonUrn = `urn:altinn:person:identifier-no:${fromPersonId}`;
+    const fromUrn =
+      from.type === 'org'
+        ? `urn:altinn:organization:identifier-no:${from.id}`
+        : `urn:altinn:person:identifier-no:${from.id}`;
 
     // Create MaskinportenToken instance to fetch the consent token
     const maskinportenToken = new MaskinportenToken(clientIdEnv, jwkEnv);
-    return await maskinportenToken.getConsentToken(consentRequestId, fromPersonUrn, consumerOrg);
+    return await maskinportenToken.getConsentToken(consentRequestId, fromUrn, consumerOrg);
   }
 }
 

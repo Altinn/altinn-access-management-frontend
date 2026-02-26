@@ -4,7 +4,7 @@ import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, env, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 import { getConsentRequestId } from './helper/consentHelper.js';
-import { fromPersons, toOrgs } from './helper/consentTestdata';
+import { fromOrgs, fromPersons, toOrgs } from './helper/consentTestdata';
 
 const MOBILE_VIEWPORT = { width: 375, height: 667 };
 
@@ -146,7 +146,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
         const consentId = getConsentRequestId(consentResp.viewUri);
         const token = await api.getConsentTokenWithMaskinporten(
           consentId,
-          fromPerson,
+          { type: 'person', id: fromPerson },
           'MASKINPORTEN_CLIENT_ID',
           'MASKINPORTEN_JWK',
         );
@@ -211,7 +211,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
 
         const token = await api.getConsentTokenWithMaskinporten(
           consentId,
-          fromPerson,
+          { type: 'person', id: fromPerson },
           'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
           'MASKINPORTEN_BEHALF_OF_JWK',
           SPAREBANKEN_ORG_NUMBER,
@@ -219,6 +219,63 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
         expect(token).toBeTruthy();
         expect(token.length).toBeGreaterThan(10);
       });
+    });
+  });
+
+  test('Create and approve consent on behalf of organization as a consumer org and fetch token with org number', async ({
+    login,
+    consentPage,
+  }) => {
+    test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+
+    const SPAREBANKEN_ORG_NUMBER = '313876144'; //Dagl 28913749776
+    const SPAREBANKEN_DRIFT_ORG_NUMBER = '310149942'; //Dagl: 09906397525
+
+    // const fromOrg = "313872254";
+    // const personapprove = "26904397341";
+
+    const fromOrg = '312690365';
+    const personapprove = '09923649732';
+
+    const validTo = addTimeToNowUtc({ days: 5 });
+    const api = new ConsentApiRequests(SPAREBANKEN_DRIFT_ORG_NUMBER);
+
+    const consentResp =
+      await test.step('Fetch Maskinporten token for consumer_org and create consent request with toOrg as SPAREBANKEN_ORG_NUMBER', async () => {
+        // Use Maskinporten token (from behalf_of client) with consumer_orgno to create consent request
+        const { viewUri } = await api.createConsentRequestWithMaskinporten(
+          { type: 'org', id: fromOrg },
+          { type: 'org', id: SPAREBANKEN_ORG_NUMBER },
+          'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
+          'MASKINPORTEN_BEHALF_OF_JWK',
+          SPAREBANKEN_ORG_NUMBER,
+        );
+
+        await consentPage.open(viewUri);
+        await login.loginNotChoosingActor(personapprove);
+        await consentPage.pickLanguage(consentPage.language);
+
+        expect(viewUri).toBeTruthy();
+        return { viewUri };
+      });
+
+    await test.step('Approve consent', async () => {
+      await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
+    });
+
+    await test.step('Fetch consent token with consumer_org', async () => {
+      const consentId = getConsentRequestId(consentResp.viewUri);
+
+      const token = await api.getConsentTokenWithMaskinporten(
+        consentId,
+        { type: 'org', id: fromOrg },
+        'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
+        'MASKINPORTEN_BEHALF_OF_JWK',
+        SPAREBANKEN_ORG_NUMBER,
+      );
+      console.log('token', token);
+      expect(token).toBeTruthy();
+      expect(token.length).toBeGreaterThan(10);
     });
   });
 });

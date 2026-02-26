@@ -89,6 +89,8 @@ export function createMaskinportenGrantAssertion(
     jti,
   };
 
+  console.log('payload', payload);
+
   if (consumerOrg) {
     payload.consumer_org = consumerOrg;
   }
@@ -132,8 +134,11 @@ export function createConsentAuthorizationJWT(
   };
 
   if (consumerOrg) {
+    console.log('consumerOrg', consumerOrg);
     payload.consumer_org = consumerOrg;
   }
+
+  console.log('payload', payload);
 
   return signJWT(payload, privateKey);
 }
