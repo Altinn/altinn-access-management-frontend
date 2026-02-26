@@ -64,29 +64,22 @@ export const SearchResults = ({
     },
   });
 
-  const isDelegated = React.useCallback(
-    (resourceId: string) =>
-      delegatedResources?.some((delegation) => delegation.resource?.identifier === resourceId) ??
-      false,
-    [delegatedResources],
-  );
-  const isInherited = React.useCallback(
-    (resourceId: string) => {
-      const delegation = delegatedResources?.find(
-        (item) => item.resource?.identifier === resourceId,
-      );
-      if (!delegation) {
-        return false;
-      }
-      return (
-        getInheritedStatus({
-          permissions: delegation.permissions,
-          toParty,
-        }).length > 0
-      );
-    },
-    [delegatedResources, toParty],
-  );
+  const isDelegated = (resourceId: string) =>
+    delegatedResources?.some((delegation) => delegation.resource?.identifier === resourceId) ??
+    false;
+
+  const isInherited = (resourceId: string) => {
+    const delegation = delegatedResources?.find((item) => item.resource?.identifier === resourceId);
+    if (!delegation) {
+      return false;
+    }
+    return (
+      getInheritedStatus({
+        permissions: delegation.permissions,
+        toParty,
+      }).length > 0
+    );
+  };
 
   const renderControls = useRenderSearchResultControl({
     isDelegated,
