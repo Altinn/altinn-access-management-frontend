@@ -22,11 +22,14 @@ const extractStatus = (error: unknown): string => {
   return String(error);
 };
 
-const getErrorInfo = (
-  action: 'delegate' | 'revoke',
-  status: string,
-  details?: ActionError['details'],
-): ActionError => {
+const extractDetails = (error: unknown): ActionError['details'] | undefined => {
+  if (error && typeof error === 'object' && 'data' in error) {
+    return error.data as ActionError['details'];
+  }
+  return undefined;
+};
+
+const getErrorInfo = (status: string, details?: ActionError['details']): ActionError => {
   return {
     httpStatus: status,
     details: details,
@@ -57,14 +60,17 @@ export const useResourceListDelegation = ({
   const delegateFromList = useCallback(
     async (resource: ServiceResource) => {
       if (resource.delegable === false) {
-        onActionError?.(resource, getErrorInfo('delegate', '403'));
+        onActionError?.(resource, getErrorInfo('403'));
         return;
       }
 
       setResourceLoading(resource.identifier, true);
       const result = await runDelegationCheck(resource.identifier);
       if (result.error) {
-        onActionError?.(resource, getErrorInfo('delegate', extractStatus(result.error)));
+        onActionError?.(
+          resource,
+          getErrorInfo(extractStatus(result.error), extractDetails(result.error)),
+        );
         setResourceLoading(resource.identifier, false);
         return;
       }
@@ -87,7 +93,7 @@ export const useResourceListDelegation = ({
               onSuccess?.(resource);
             })
             .catch((error) => {
-              onActionError?.(resource, getErrorInfo('delegate', extractStatus(error)));
+              onActionError?.(resource, getErrorInfo(extractStatus(error), extractDetails(error)));
             })
             .finally(() => {
               setResourceLoading(resource.identifier, false);
@@ -100,7 +106,7 @@ export const useResourceListDelegation = ({
       if (canDelegateSomeActions) {
         onPartialDelegation?.(resource);
       } else {
-        onActionError?.(resource, getErrorInfo('delegate', '403'));
+        onActionError?.(resource, getErrorInfo('403'));
       }
       setResourceLoading(resource.identifier, false);
     },
@@ -130,7 +136,7 @@ export const useResourceListDelegation = ({
           onSuccess?.(resource);
         })
         .catch((error) => {
-          onActionError?.(resource, getErrorInfo('revoke', extractStatus(error)));
+          onActionError?.(resource, getErrorInfo(extractStatus(error), extractDetails(error)));
         })
         .finally(() => {
           setResourceLoading(resource.identifier, false);
