@@ -297,7 +297,7 @@
     "no_resources chosen": "Ingen valgte tjenester",
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikke se at noen tjenester er blitt valgt.",
     "popular_services": "Populære tjenester:",
-    "give_new_single_right": "Gi fullmakt til ny tjeneste",
+    "give_new_single_right": "Gi fullmakt",
     "current_services_title": "Fullmakt til {{count}} tjenester",
     "delete_singleRight_success_message": "Slettet tilgang til ",
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",

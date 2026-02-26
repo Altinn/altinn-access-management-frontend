@@ -297,7 +297,7 @@
     "no_resources chosen": "Ingen valde tenester",
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikkje sjå at nokon tenester er valde.",
     "popular_services": "Populære tenester:",
-    "give_new_single_right": "Gi fullmakt til ny teneste",
+    "give_new_single_right": "Gi fullmakt",
     "current_services_title": "Fullmakt til {{count}} tenester",
     "delete_singleRight_success_message": "Slettet tilgang til ",
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
