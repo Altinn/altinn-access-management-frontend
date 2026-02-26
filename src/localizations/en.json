@@ -301,7 +301,7 @@
     "restart_prompter_no_resources_chosen_ingress": "We cannot see that any services have been selected.",
     "popular_services": "Popular services",
     "give_new_single_right": "Give power of attorney to new service",
-    "current_services_title": "Power of attorney to {{count}} services",
+    "current_services_title": "Power of attorney for {{count}} services",
     "delete_singleRight_success_message": "Deleted access to ",
     "delete_singleRight_error_message": "Failed to delete access to ",
     "wip_title": "Power of attorney to services",
@@ -317,7 +317,7 @@
     "given_packages_title": "Currently held access packages",
     "available_packages_title": "Available access packages",
     "other_available": "Other available",
-    "current_access_packages_title": "{{count}} access packages",
+    "current_access_packages_title": "Power of attorney for {{count}} access packages",
     "give_new_button": "Give new power of attorney",
     "search_label": "Search for access packages",
     "other_packages_in_area_title": "Other available packages in this area:",
@@ -339,7 +339,7 @@
     }
   },
   "guardianships": {
-    "current_guardianship_title": "{{count}} guardianships",
+    "current_guardianship_title": "Power of attorney for {{count}} guardianships",
     "search_label": "Search for guardianships",
     "modal_info_title": "Guardianship",
     "modal_info_description": "The appointment of a guardian is retrieved from the County Governor. It cannot be deleted or changed here.",
@@ -348,7 +348,7 @@
   },
   "role": {
     "provider_status": "This role is fetched from ",
-    "current_roles_title": "{{count}} roles",
+    "current_roles_title": "Power of attorney for {{count}} roles",
     "fetch_error_heading": "Unable to show roles for this user",
     "fetch_error_description": "We can't fetch the roles right now.",
     "no_roles_message": "This user has no roles.",
@@ -932,7 +932,7 @@
   "resource_list": {
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
-    "no_resources": "No services.",
+    "no_resources": "This user has no services.",
     "filter_by_serviceowner": "Filter by service owner",
     "resource_search_clear": "Clear search",
     "remove_filter": "Remove filter",

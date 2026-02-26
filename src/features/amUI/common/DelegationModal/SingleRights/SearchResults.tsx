@@ -2,24 +2,30 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import {
+  type ResourceDelegation,
+  type ServiceResource,
+} from '@/rtk/features/singleRights/singleRightsApi';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 
 import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
+import { useResourceListDelegation } from './hooks/useResourceListDelegation';
+import { useDelegationModalContext } from '../DelegationModalContext';
+import { useRenderSearchResultControl } from './createSearchResultControlsRenderer';
 
 interface SearchResultsProps {
   isFetching: boolean;
-  error: any;
+  error: unknown;
   resources?: ServiceResource[];
   searchString?: string;
-  delegatedResources?: any[];
+  delegatedResources?: ResourceDelegation[];
   totalNumberOfResults?: number;
   displayPopularResources: boolean;
   currentPage: number;
   searchResultsPerPage: number;
-  onSelect: (resource: ServiceResource) => void;
+  onSelect: (resource: ServiceResource, error?: boolean) => void;
   setCurrentPage: (page: number) => void;
   availableActions?: DelegationAction[];
 }
@@ -39,6 +45,37 @@ export const SearchResults = ({
   availableActions,
 }: SearchResultsProps) => {
   const { t } = useTranslation();
+  const { setActionError } = useDelegationModalContext();
+
+  const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
+    onActionError: (resource, errorInfo) => {
+      onSelect(resource, true);
+      setActionError(errorInfo);
+    },
+    onSuccess: (resource) => {
+      setActionError(null);
+    },
+    onPartialDelegation: (resource) => {
+      setActionError(null);
+      onSelect(resource);
+    },
+  });
+
+  const isDelegated = React.useCallback(
+    (resourceId: string) =>
+      delegatedResources?.some((delegation) => delegation.resource?.identifier === resourceId) ??
+      false,
+    [delegatedResources],
+  );
+
+  const renderControls = useRenderSearchResultControl({
+    isDelegated,
+    availableActions,
+    isResourceLoading,
+    setActionError,
+    revokeFromList,
+    delegateFromList,
+  });
 
   if (isFetching) {
     return (
@@ -89,17 +126,8 @@ export const SearchResults = ({
             onSelect={onSelect}
             size='sm'
             titleAs='h3'
-            getBadge={(resource) => {
-              const hasPoa =
-                delegatedResources &&
-                delegatedResources.some(
-                  (delegation) => delegation.resource?.identifier === resource.identifier,
-                );
-
-              return hasPoa
-                ? { label: t('common.has_poa'), theme: 'base', color: 'success' }
-                : undefined;
-            }}
+            getHasAccess={(resource) => isDelegated(resource.identifier)}
+            renderControls={renderControls}
           />
         </div>
       )}

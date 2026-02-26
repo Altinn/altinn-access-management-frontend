@@ -17,6 +17,7 @@ export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => 
         <Icon
           iconUrl={emblem ?? resource.resourceOwnerLogoUrl}
           size={small ? 'sm' : 'xl'}
+          className={!small ? classes.lgAvatar : undefined}
         />
       ) : (
         <Avatar

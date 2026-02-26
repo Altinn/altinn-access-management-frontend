@@ -1,8 +1,11 @@
-﻿namespace Altinn.AccessManagement.UI.Core.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace Altinn.AccessManagement.UI.Core.Enums
 {
     /// <summary>
     /// Reason codes for delegation check results
     /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum DelegationCheckReasonCode
     {
         /// <summary>
