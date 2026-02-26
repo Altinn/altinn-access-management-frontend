@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsButton, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 
 import {
   type ResourceDelegation,
@@ -14,7 +13,7 @@ import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
 import { useResourceListDelegation } from './hooks/useResourceListDelegation';
 import { useDelegationModalContext } from '../DelegationModalContext';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useRenderSearchResultControl } from './createSearchResultControlsRenderer';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -47,7 +46,6 @@ export const SearchResults = ({
 }: SearchResultsProps) => {
   const { t } = useTranslation();
   const { setActionError } = useDelegationModalContext();
-  const isMobile = useIsMobileOrSmaller();
 
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
     onActionError: (resource, errorInfo) => {
@@ -69,6 +67,15 @@ export const SearchResults = ({
       false,
     [delegatedResources],
   );
+
+  const renderControls = useRenderSearchResultControl({
+    isDelegated,
+    availableActions,
+    isResourceLoading,
+    setActionError,
+    revokeFromList,
+    delegateFromList,
+  });
 
   if (isFetching) {
     return (
@@ -120,55 +127,7 @@ export const SearchResults = ({
             size='sm'
             titleAs='h3'
             getHasAccess={(resource) => isDelegated(resource.identifier)}
-            renderControls={(resource) => {
-              const isAlreadyDelegated = isDelegated(resource.identifier);
-              const canRevoke = availableActions?.includes(DelegationAction.REVOKE);
-              const canDelegate = availableActions?.includes(DelegationAction.DELEGATE);
-              const isLoading = isResourceLoading(resource.identifier);
-              if (isAlreadyDelegated && canRevoke) {
-                return (
-                  <DsButton
-                    variant='tertiary'
-                    data-size='sm'
-                    loading={isLoading}
-                    disabled={isLoading}
-                    onClick={() => {
-                      setActionError(null);
-                      revokeFromList(resource);
-                    }}
-                    aria-label={t('common.delete_poa_for', {
-                      poa_object: resource.title,
-                    })}
-                  >
-                    <MinusCircleIcon aria-hidden='true' />
-                    {!isMobile && t('common.delete_poa')}
-                  </DsButton>
-                );
-              }
-
-              if (!isAlreadyDelegated && canDelegate) {
-                return (
-                  <DsButton
-                    variant='tertiary'
-                    data-size='sm'
-                    loading={isLoading}
-                    disabled={isLoading}
-                    onClick={() => {
-                      setActionError(null);
-                      delegateFromList(resource);
-                    }}
-                    aria-label={t('common.give_poa_for', {
-                      poa_object: resource.title,
-                    })}
-                  >
-                    <PlusCircleIcon aria-hidden='true' />
-                    {!isMobile && t('common.give_poa')}
-                  </DsButton>
-                );
-              }
-
-              return null;
-            }}
+            renderControls={renderControls}
           />
         </div>
       )}
