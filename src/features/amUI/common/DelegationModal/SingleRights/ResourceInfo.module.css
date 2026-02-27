@@ -32,6 +32,10 @@
   padding-bottom: var(--ds-spacing-1);
 }
 
+.resourceAlert {
+  margin-bottom: var(--ds-spacing-2);
+}
+
 .rightsSection {
   display: flex;
   flex-direction: column;

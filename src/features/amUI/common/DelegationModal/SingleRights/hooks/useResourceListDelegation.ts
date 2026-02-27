@@ -1,9 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
 import { usePartyRepresentation } from '@/features/amUI/common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   useDelegateRightsMutation,
+  useGetSingleRightsForRightholderQuery,
   useLazyDelegationCheckQuery,
   useRevokeResourceMutation,
   type ServiceResource,
@@ -45,9 +46,19 @@ export const useResourceListDelegation = ({
   const [runDelegationCheck] = useLazyDelegationCheckQuery();
   const [delegateRights] = useDelegateRightsMutation();
   const [revokeResource] = useRevokeResourceMutation();
+
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
+  const { isFetching } = useGetSingleRightsForRightholderQuery(
+    {
+      actingParty: actingParty?.partyUuid || '',
+      from: fromParty?.partyUuid || '',
+      to: toParty?.partyUuid || '',
+    },
+    { skip: !toParty || !fromParty || !actingParty },
+  );
 
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
+  const waitingForRefetchRef = useRef<Set<string>>(new Set());
   const isResourceLoading = useCallback(
     (resourceId: string) => loadingByResourceId[resourceId] ?? false,
     [loadingByResourceId],
@@ -56,6 +67,16 @@ export const useResourceListDelegation = ({
   const setResourceLoading = useCallback((resourceId: string, isLoading: boolean) => {
     setLoadingByResourceId((prev) => ({ ...prev, [resourceId]: isLoading }));
   }, []);
+
+  useEffect(() => {
+    if (!isFetching && waitingForRefetchRef.current.size > 0) {
+      // Clear loading state for all resources that were waiting for refetch
+      waitingForRefetchRef.current.forEach((resourceId) => {
+        setResourceLoading(resourceId, false);
+      });
+      waitingForRefetchRef.current.clear();
+    }
+  }, [isFetching, setResourceLoading]);
 
   const delegateFromList = useCallback(
     async (resource: ServiceResource) => {
@@ -66,7 +87,7 @@ export const useResourceListDelegation = ({
 
       setResourceLoading(resource.identifier, true);
       const result = await runDelegationCheck(resource.identifier);
-      if (result.error) {
+      if (result.isError) {
         onActionError?.(
           resource,
           getErrorInfo(extractStatus(result.error), extractDetails(result.error)),
@@ -91,11 +112,11 @@ export const useResourceListDelegation = ({
             .unwrap()
             .then(() => {
               onSuccess?.(resource);
+              // Add to waiting set - loading will be cleared when automatic refetch completes
+              waitingForRefetchRef.current.add(resource.identifier);
             })
             .catch((error) => {
               onActionError?.(resource, getErrorInfo(extractStatus(error), extractDetails(error)));
-            })
-            .finally(() => {
               setResourceLoading(resource.identifier, false);
             });
           return;
@@ -118,6 +139,7 @@ export const useResourceListDelegation = ({
       onPartialDelegation,
       onSuccess,
       runDelegationCheck,
+      setResourceLoading,
       toParty,
     ],
   );
@@ -134,15 +156,15 @@ export const useResourceListDelegation = ({
         .unwrap()
         .then(() => {
           onSuccess?.(resource);
+          // Add to waiting set - loading will be cleared when automatic refetch completes
+          waitingForRefetchRef.current.add(resource.identifier);
         })
         .catch((error) => {
           onActionError?.(resource, getErrorInfo(extractStatus(error), extractDetails(error)));
-        })
-        .finally(() => {
           setResourceLoading(resource.identifier, false);
         });
     },
-    [actingParty, fromParty, onActionError, onSuccess, revokeResource, toParty],
+    [actingParty, fromParty, onActionError, onSuccess, revokeResource, setResourceLoading, toParty],
   );
 
   return {
