@@ -10,9 +10,6 @@
   /* Position at the bottom of the viewport */
   position: fixed;
   inset: auto 0 0 0;
-
-  /* Ensure it's above other top-layer elements like dialogs */
-  /* Elements in top layer stack in order of appearance, so we use z-index within top layer */
 }
 
 /* Hide the default popover backdrop */
