@@ -1,7 +1,9 @@
 import React from 'react';
 import type { LanguageCode } from '@altinn/altinn-components';
-import { Badge, Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
+import { Badge, Layout, RootProvider } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
+
+import { TopLayerSnackbar } from '@/components/TopLayerSnackbar';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
@@ -72,7 +74,7 @@ export const PageLayoutWrapper = ({
         <div>{children}</div>
         <InfoModal />
       </Layout>
-      <Snackbar />
+      <TopLayerSnackbar />
     </RootProvider>
   );
 };

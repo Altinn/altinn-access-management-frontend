@@ -2,7 +2,7 @@ import { InfoModal } from '@/features/amUI/common/PageLayoutWrapper/InfoModal';
 import { useFooter } from '@/features/amUI/common/PageLayoutWrapper/useFooter';
 import { useHeader } from '@/features/amUI/common/PageLayoutWrapper/useHeader';
 import { GeneralPath } from '@/routes/paths';
-import { LanguageCode, Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
+import { LanguageCode, Layout, RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
@@ -36,7 +36,6 @@ export const ErrorLayoutWrapper = ({ children }: { children: React.ReactNode }) 
         {children}
         <InfoModal />
       </Layout>
-      <Snackbar />
     </RootProvider>
   );
 };
