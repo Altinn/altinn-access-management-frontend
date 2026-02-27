@@ -1,0 +1,19 @@
+/* Remove default popover styles and positioning */
+.topLayerSnackbar {
+  /* Reset the default popover styles */
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  overflow: visible;
+
+  /* Position at the bottom of the viewport */
+  position: fixed;
+  inset: auto 0 0 0;
+}
+
+/* Hide the default popover backdrop */
+.topLayerSnackbar::backdrop {
+  background: transparent;
+  pointer-events: none;
+}
