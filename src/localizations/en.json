@@ -302,6 +302,7 @@
     "popular_services": "Popular services",
     "give_new_single_right": "Give power of attorney to new service",
     "current_services_title": "Power of attorney for {{count}} services",
+    "user_has_no_services": "This user has no services.",
     "delete_singleRight_success_message": "Deleted access to ",
     "delete_singleRight_error_message": "Failed to delete access to ",
     "wip_title": "Power of attorney to services",

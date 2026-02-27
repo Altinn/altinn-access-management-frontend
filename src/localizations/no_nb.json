@@ -299,6 +299,7 @@
     "popular_services": "Populære tjenester:",
     "give_new_single_right": "Gi fullmakt til ny tjeneste",
     "current_services_title": "Fullmakt til {{count}} tjenester",
+    "user_has_no_services": "Denne brukeren har ingen tjenester.",
     "delete_singleRight_success_message": "Slettet tilgang til ",
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttjenester",

@@ -299,6 +299,7 @@
     "popular_services": "Populære tenester:",
     "give_new_single_right": "Gi fullmakt til ny teneste",
     "current_services_title": "Fullmakt til {{count}} tenester",
+    "user_has_no_services": "Denne brukaren har ingen tenester.",
     "delete_singleRight_success_message": "Slettet tilgang til ",
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttenester",
