@@ -47,7 +47,7 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
     includeA2Services: false,
-    includeMigratedApps: true,
+    includeMigratedApps: false,
   });
   const { data: delegatedResources } = useGetSingleRightsForRightholderQuery(
     {
