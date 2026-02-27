@@ -9,7 +9,6 @@ import {
   useDelegationCheckQuery,
   useGetResourceRightsQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import { arraysEqualUnordered } from '@/resources/utils';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
@@ -34,7 +33,6 @@ export const useRightsSection = ({
   /// State variables
 
   const [rights, setRights] = useState<ChipRight[]>([]);
-  const [currentRights, setCurrentRights] = useState<string[]>([]);
   const [hasAccess, setHasAccess] = useState(false);
   const [delegationError, setDelegationError] = useState<'delegate' | 'revoke' | 'edit' | null>(
     null,
@@ -67,10 +65,7 @@ export const useRightsSection = ({
 
   /// Computed values
 
-  const hasUnsavedChanges = !arraysEqualUnordered(
-    rights.filter((r) => r.checked).map((r) => r.rightKey),
-    currentRights,
-  );
+  const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.action);
   const toPartyName = toParty
     ? formatDisplayName({
@@ -90,14 +85,8 @@ export const useRightsSection = ({
         (resourceRights.directRights.length > 0 || resourceRights.indirectRights.length > 0)
       ) {
         setHasAccess(true);
-        const rightKeys = [
-          ...resourceRights.directRights.map((r) => r.right.key),
-          ...resourceRights.indirectRights.map((r) => r.right.key),
-        ];
-        setCurrentRights(rightKeys);
       } else {
         setHasAccess(false);
-        setCurrentRights([]);
       }
     }
   }, [resourceRights, isResourceRightsFetching, resource.identifier, hasResourceAccess]);
@@ -110,7 +99,10 @@ export const useRightsSection = ({
       if (hasAccess && resourceRights) {
         const chipRights: ChipRight[] = mapRightsToChipRights(
           delegationCheckedActions,
-          (right) => currentRights.some((key) => key === right.right.key),
+          (right) =>
+            resourceRights.directRights.some((r) => r.right.key === right.right.key) ||
+            resourceRights.indirectRights.some((r) => r.right.key === right.right.key),
+          (rightKey) => resourceRights.directRights.some((r) => r.right.key === rightKey),
           (rightKey) => resourceRights.indirectRights.some((r) => r.right.key === rightKey),
         );
         setRights(chipRights);
@@ -118,12 +110,13 @@ export const useRightsSection = ({
         const chipRights: ChipRight[] = mapRightsToChipRights(
           delegationCheckedActions,
           (right) => right.result === true,
+          () => false, // Without access, there are no directly delegated rights
           () => false, // If the user doesn't have access to the resource, none of the rights can be inherited
         );
         setRights(chipRights);
       }
     }
-  }, [delegationCheckedActions, resource.identifier, hasAccess, currentRights, resourceRights]);
+  }, [delegationCheckedActions, resource.identifier, hasAccess, resourceRights]);
 
   /// Functions
 
