@@ -375,10 +375,9 @@
     "user_list_heading": "Other users with power of attorney",
     "direct_connections": "Users with power of attorney",
     "user_search_placeholder": "Search for users",
+    "only_you_have_access": "Only you have power of attorney. Add a new user to grant power of attorney to others.",
     "no_users": "You have not received any power of attorney from others.",
-    "only_you_have_access": "Only you have access here. Do you want to change this?",
     "user_no_search_result": "No matches for the search \"{{searchTerm}}\".",
-    "user_no_search_result_with_add_suggestion": "No matches for the search \"{{searchTerm}}\". Is this someone you want to give access to?",
     "show_users_with_client_access": "Show users with client access",
     "indirect_connections": "Users without power of attorney",
     "no_access_to_users_header": "We are still working on this page!",
@@ -922,7 +921,6 @@
     "package_revocation_success": "{{name}} no longer has power of attorney for {{accessPackage}}.",
     "users_tab": {
       "description": "Search for users to grant or revoke permissions.",
-      "user_search_placeholder": "Search for person or organization",
       "no_users": "No users have power of attorney for this package on behalf of {{fromparty}}."
     },
     "services_tab": {
