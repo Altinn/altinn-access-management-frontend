@@ -19,7 +19,6 @@ import {
   getUsersMenuItem,
   getYourClientsMenuItem,
 } from '@/resources/utils/sidebarConfig';
-import { useGetMyClientsQuery } from '@/rtk/features/clientApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import {
   useGetIsAdminQuery,
@@ -29,6 +28,7 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
+import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
@@ -42,21 +42,17 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
 
-  const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
-
-  const { data: myClientsByProvider } = useGetMyClientsQuery(
-    { provider: [actingPartyUuid] },
+  const { data: roles } = useGetRolePermissionsQuery(
     {
-      skip:
-        !displayClientAdministrationPage ||
-        !actingPartyUuid ||
-        !reportee?.partyUuid ||
-        !currentUser?.partyUuid ||
-        isCurrentUserReportee,
+      party: currentUser?.partyUuid ?? '',
+      from: getCookie('AltinnPartyUuid') ?? '',
+      to: currentUser?.partyUuid ?? '',
+    },
+    {
+      skip: !displayClientAdministrationPage || !currentUser?.partyUuid || isCurrentUserReportee,
     },
   );
-
-  const hasMyClients = myClientsByProvider && myClientsByProvider.length > 0;
+  const isAgent = roles?.some((rolePermission) => rolePermission.role.code === 'agent');
 
   const { pathname } = useLocation();
 
@@ -115,7 +111,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getClientAdministrationMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (hasMyClients && !isCurrentUserReportee && displayClientAdministrationPage) {
+  if (isAgent && !isCurrentUserReportee && displayClientAdministrationPage) {
     items.push({
       ...getYourClientsMenuItem(pathname, isLoading, isSmall),
     });
