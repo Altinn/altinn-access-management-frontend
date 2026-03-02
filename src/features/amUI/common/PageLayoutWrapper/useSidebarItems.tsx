@@ -36,6 +36,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displaySettingsPage = window.featureFlags?.displaySettingsPage;
   const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
   const displayRequestsPage = window.featureFlags?.displayRequestsPage;
+
   const displayClientAdministrationPage = clientAdministrationPageEnabled();
   const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
@@ -47,6 +48,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     { provider: [actingPartyUuid] },
     {
       skip:
+        !displayClientAdministrationPage ||
         !actingPartyUuid ||
         !reportee?.partyUuid ||
         !currentUser?.partyUuid ||
