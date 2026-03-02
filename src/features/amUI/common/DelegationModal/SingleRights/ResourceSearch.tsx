@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
@@ -37,6 +37,13 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
   const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
     useDelegationModalContext();
   const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
+
+  useEffect(() => {
+    if (!searchString) {
+      setDebouncedSearchString('');
+    }
+  }, [searchString]);
+
   const {
     data: searchData,
     error,
