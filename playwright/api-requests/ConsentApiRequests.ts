@@ -138,7 +138,7 @@ export class ConsentApiRequests {
    * @param to The organization receiving the consent request
    * @param clientIdEnv Environment variable name for the Maskinporten client ID
    * @param jwkEnv Environment variable name for the JWK private key
-   * @param consumerOrg Optional organization number for "behalf of" scenarios
+   * @param options Optional request overrides and "behalf of" parameters
    * @returns The view URI for the consent request
    */
   public async createConsentRequestWithMaskinporten(
@@ -146,13 +146,20 @@ export class ConsentApiRequests {
     to: ToParty,
     clientIdEnv: string,
     jwkEnv: string,
-    consumerOrg?: string,
+    options?: {
+      consumerOrg?: string;
+      consentRequestScope?: string;
+      validToIsoUtc?: string;
+      resourceValue?: string;
+      redirectUrl?: string;
+      metaData?: Record<string, string>;
+    },
   ): Promise<{ viewUri: string }> {
     // Set default values for fields not needed in test
-    const validToIsoUtc = addTimeToNowUtc({ days: 5 });
-    const resourceValue = 'standard-samtykke-for-dele-data';
-    const redirectUrl = 'https://example.com/';
-    const metaData = { inntektsaar: '2028' };
+    const validToIsoUtc = options?.validToIsoUtc ?? addTimeToNowUtc({ days: 5 });
+    const resourceValue = options?.resourceValue ?? 'standard-samtykke-for-dele-data';
+    const redirectUrl = options?.redirectUrl ?? 'https://example.com/';
+    const metaData = options?.metaData ?? { inntektsaar: '2028' };
 
     const params: CreateConsentRequestParams = {
       from,
@@ -166,7 +173,7 @@ export class ConsentApiRequests {
     const payload = this.buildConsentRequestPayload(params);
 
     const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
-    const scopes = 'altinn:consentrequests.write';
+    const scopes = options?.consentRequestScope ?? 'altinn:consentrequests.write';
 
     // Create MaskinportenToken instance to fetch the access token
     const maskinportenToken = new MaskinportenToken(clientIdEnv, jwkEnv);
@@ -175,7 +182,7 @@ export class ConsentApiRequests {
       endpoint,
       scopes,
       maskinportenToken,
-      consumerOrg,
+      options?.consumerOrg,
     );
   }
 

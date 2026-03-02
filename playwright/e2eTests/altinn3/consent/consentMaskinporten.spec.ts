@@ -156,6 +156,67 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
     });
 
     /**
+     * Scenario 3 - E-bevis
+     *
+     * Funksjonelt scenario:
+     * En virksomhet trenger tilgang til data via e-bevis, og Digdir gjør oppslag/forespørsel på vegne av dem
+     * med scope `altinn:consentrequests.org`.
+     */
+    test('Scenario 3 E-bevis: create consent with org scope and fetch token', async ({
+      login,
+      consentPage,
+    }) => {
+      const fromPerson = pickRandom(fromPersons);
+      const toOrg = pickRandom(toOrgs);
+      const validTo = addTimeToNowUtc({ days: 2 });
+      const api = new ConsentApiRequests(toOrg);
+
+      const consentResp =
+        await test.step('Create consent request with Maskinporten using org scope', async () => {
+          const response = await api.createConsentRequestWithMaskinporten(
+            { type: 'person', id: fromPerson },
+            { type: 'org', id: toOrg },
+            'MASKINPORTEN_CLIENT_ID',
+            'MASKINPORTEN_JWK',
+            {
+              consentRequestScope: 'altinn:consentrequests.org', // Digdir's super scope for e-bevis
+              validToIsoUtc: validTo,
+              resourceValue: 'samtykke-esoknad',
+              redirectUrl: REDIRECT_URL,
+              metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
+            },
+          );
+
+          await consentPage.open(response.viewUri);
+          await login.loginNotChoosingActor(fromPerson);
+          await consentPage.pickLanguage(consentPage.language);
+          return response;
+        });
+
+      await test.step('Verify Digdir on-behalf-of text is displayed', async () => {
+        await expect(
+          consentPage.page.getByText('Digitaliseringsdirektoratet foretar dette oppslaget på'),
+        ).toBeVisible();
+      });
+
+      await test.step('Approve consent', async () => {
+        await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
+      });
+
+      await test.step('Fetch consent token with Digdir client', async () => {
+        const consentId = getConsentRequestId(consentResp.viewUri);
+        const token = await api.getConsentTokenWithMaskinporten(
+          consentId,
+          { type: 'person', id: fromPerson },
+          'MASKINPORTEN_CLIENT_ID',
+          'MASKINPORTEN_JWK',
+        );
+        expect(token).toBeTruthy();
+        expect(token.length).toBeGreaterThan(10);
+      });
+    });
+
+    /**
      * Scenario 2 - "På vegne av - samtykke for datakonsument må få delegert scope-tilgang"
      *
      * Funksjonelt scenario:
@@ -187,7 +248,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
             { type: 'org', id: FROM_ORG },
             'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
             'MASKINPORTEN_BEHALF_OF_JWK',
-            FROM_ORG,
+            { consumerOrg: FROM_ORG },
           );
 
           await consentPage.open(viewUri);
@@ -266,7 +327,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
           { type: 'org', id: SPAREBANKEN_ORG_NUMBER },
           'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
           'MASKINPORTEN_BEHALF_OF_JWK',
-          SPAREBANKEN_ORG_NUMBER,
+          { consumerOrg: SPAREBANKEN_ORG_NUMBER },
         );
 
         await consentPage.open(viewUri);
