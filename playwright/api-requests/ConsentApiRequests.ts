@@ -86,7 +86,7 @@ export class ConsentApiRequests {
     const toUrn = `${urnPrefix[params.to.type]}${params.to.id}`;
 
     const resourceValue = params.resourceValue || 'enkelt-samtykke';
-    const redirectUrl = params.redirectUrl || 'https://vg.no';
+    const redirectUrl = params.redirectUrl || 'https://altinn.no';
     const metaData = params.metaData || { simpletag: 'playwright-e2e-metadata' };
 
     return {
