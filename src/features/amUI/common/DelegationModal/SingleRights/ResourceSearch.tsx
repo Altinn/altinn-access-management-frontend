@@ -40,6 +40,7 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
 
   useEffect(() => {
     if (!searchString) {
+      debouncedSearch.cancel?.();
       setDebouncedSearchString('');
     }
   }, [searchString]);
