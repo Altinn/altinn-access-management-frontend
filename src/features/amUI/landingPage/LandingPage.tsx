@@ -63,6 +63,7 @@ export const LandingPage = () => {
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const { pendingRequests, isLoadingRequests } = useRequests();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
+  const displayClientAdministrationPage = clientAdministrationPageEnabled();
 
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
@@ -74,6 +75,7 @@ export const LandingPage = () => {
     { provider: [actingPartyUuid] },
     {
       skip:
+        !displayClientAdministrationPage ||
         !actingPartyUuid ||
         !reportee?.partyUuid ||
         !currentUser?.partyUuid ||
@@ -99,7 +101,6 @@ export const LandingPage = () => {
     isLoadingCanAccessSettings ||
     currentUserIsLoading ||
     isLoadingRequests;
-  const displayClientAdministrationPage = clientAdministrationPageEnabled();
 
   const getMenuItems = (): MenuItemProps[] => {
     const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
