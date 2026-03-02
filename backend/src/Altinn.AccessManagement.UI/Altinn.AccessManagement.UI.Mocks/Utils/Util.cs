@@ -63,6 +63,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Utils
         // A helper for testing handling of exceptions in clients
         public static void ThrowExceptionIfTriggerParty(string id)
         {
+            if (id == "00000000-0000-0000-0000-000000000404")
+            {
+                throw new HttpStatusException(
+                    "Status Error",
+                    "Downstream sensitive message",
+                    HttpStatusCode.NotFound,
+                    null,
+                    "Downstream sensitive message");
+            }
+
             if (id == "********" || id == "00000000-0000-0000-0000-000000000000")
             {
                 throw new Exception();

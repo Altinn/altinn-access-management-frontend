@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -292,6 +293,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/clients?party={party}");
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetClients returns the backend status code and problem details when client throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task GetClients_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/clients?party={party}");
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream sensitive message", problemDetails.Detail);
         }
 
         /// <summary>
@@ -825,6 +845,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 null);
 
             Assert.Equal(HttpStatusCode.TooManyRequests, response.StatusCode);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            Assert.True(string.IsNullOrWhiteSpace(responseContent));
         }
 
         /// <summary>
