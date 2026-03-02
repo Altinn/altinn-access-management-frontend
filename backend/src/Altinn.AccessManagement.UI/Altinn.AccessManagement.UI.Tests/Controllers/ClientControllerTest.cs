@@ -491,6 +491,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: GetAgentAccessPackages returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task GetAgentAccessPackages_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party={party}&to={to}");
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
+        }
+
+        /// <summary>
         /// Test case: GetClientAccessPackages returns the expected list of agent delegations.
         /// </summary>
         [Fact]
