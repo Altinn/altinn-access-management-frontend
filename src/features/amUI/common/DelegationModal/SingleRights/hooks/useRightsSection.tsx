@@ -101,8 +101,6 @@ export const useRightsSection = ({
           isDelegated: (right) =>
             resourceRights.directRights.some((r) => r.right.key === right.right.key) ||
             resourceRights.indirectRights.some((r) => r.right.key === right.right.key),
-          isDirectlyDelegated: (rightKey) =>
-            resourceRights.directRights.some((r) => r.right.key === rightKey),
           isInherited: (rightKey) =>
             resourceRights.indirectRights.some((r) => r.right.key === rightKey),
         });
