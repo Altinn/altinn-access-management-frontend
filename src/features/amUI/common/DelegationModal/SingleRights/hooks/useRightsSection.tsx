@@ -97,22 +97,20 @@ export const useRightsSection = ({
       setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
 
       if (hasAccess && resourceRights) {
-        const chipRights: ChipRight[] = mapRightsToChipRights(
-          delegationCheckedActions,
-          (right) =>
+        const chipRights: ChipRight[] = mapRightsToChipRights(delegationCheckedActions, {
+          isDelegated: (right) =>
             resourceRights.directRights.some((r) => r.right.key === right.right.key) ||
             resourceRights.indirectRights.some((r) => r.right.key === right.right.key),
-          (rightKey) => resourceRights.directRights.some((r) => r.right.key === rightKey),
-          (rightKey) => resourceRights.indirectRights.some((r) => r.right.key === rightKey),
-        );
+          isDirectlyDelegated: (rightKey) =>
+            resourceRights.directRights.some((r) => r.right.key === rightKey),
+          isInherited: (rightKey) =>
+            resourceRights.indirectRights.some((r) => r.right.key === rightKey),
+        });
         setRights(chipRights);
       } else {
-        const chipRights: ChipRight[] = mapRightsToChipRights(
-          delegationCheckedActions,
-          (right) => right.result === true,
-          () => false, // Without access, there are no directly delegated rights
-          () => false, // If the user doesn't have access to the resource, none of the rights can be inherited
-        );
+        const chipRights: ChipRight[] = mapRightsToChipRights(delegationCheckedActions, {
+          isChecked: (right) => right.result === true,
+        });
         setRights(chipRights);
       }
     }

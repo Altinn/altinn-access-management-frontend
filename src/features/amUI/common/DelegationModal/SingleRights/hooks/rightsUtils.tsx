@@ -11,19 +11,31 @@ export type ChipRight = {
   inherited?: boolean;
 };
 
+type MapRightsToChipRightsOptions = {
+  isDelegated?: (right: DelegationCheckedRight) => boolean;
+  isDirectlyDelegated?: (rightKey: string) => boolean;
+  isInherited?: (rightKey: string) => boolean;
+  isChecked?: (right: DelegationCheckedRight) => boolean;
+};
+
 export const mapRightsToChipRights = (
   rights: DelegationCheckedRight[],
-  isDelegated: (right: DelegationCheckedRight) => boolean,
-  isDirectlyDelegated: (rightKey: string) => boolean,
-  isInherited: (rightKey: string) => boolean,
+  {
+    isDelegated = () => false,
+    isDirectlyDelegated = () => false,
+    isInherited = () => false,
+    isChecked,
+  }: MapRightsToChipRightsOptions = {},
 ): ChipRight[] => {
+  const checkedPredicate = isChecked ?? isDelegated;
+
   return rights.map((right: DelegationCheckedRight) => {
     const delegated = isDelegated(right);
     return {
       action: right.right.name,
       rightKey: right.right.key,
       delegable: right.result === true,
-      checked: delegated,
+      checked: checkedPredicate(right),
       delegated,
       directlyDelegated: isDirectlyDelegated(right.right.key),
       delegationReason: right.reasonCodes.length > 0 ? right.reasonCodes[0] : '',
