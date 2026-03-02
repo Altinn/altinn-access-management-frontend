@@ -67,10 +67,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Utils
             {
                 throw new HttpStatusException(
                     "Status Error",
-                    "Downstream sensitive message",
+                    "Downstream message",
                     HttpStatusCode.NotFound,
                     null,
-                    "Downstream sensitive message");
+                    "Downstream message");
             }
 
             if (id == "********" || id == "00000000-0000-0000-0000-000000000000")

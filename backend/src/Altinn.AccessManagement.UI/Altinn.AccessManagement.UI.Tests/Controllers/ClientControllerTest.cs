@@ -311,7 +311,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.NotNull(problemDetails);
             Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
             Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
-            Assert.Equal("Downstream sensitive message", problemDetails.Detail);
+            Assert.Equal("Downstream message", problemDetails.Detail);
         }
 
         /// <summary>
