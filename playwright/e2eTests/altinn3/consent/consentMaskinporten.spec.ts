@@ -155,29 +155,39 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
       });
     });
 
+    /**
+     * Scenario 2 - "På vegne av - samtykke for datakonsument må få delegert scope-tilgang"
+     *
+     * Funksjonelt scenario:
+     * Sparebanken må hente inn samtykke fra person, men en annen org er datakonsument
+     * (Sparebanken Drift).
+     *
+     * Forhåndssteg:
+     * - Sparebanken Øst har delegert scopetilgang "samtykke:write" til Sparebanken Drift (datakonsument).
+     * - Sparebanken Drift henter ut Maskinporten-token for Sparebank 1 Øst ved å oppgi
+     *   consumer_org for Sparebank 1 Øst (for selve forespørselen).
+     */
     test('Create and approve consent on behalf of organization as a consumer org and fetch token', async ({
       login,
       consentPage,
     }) => {
       test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
 
-      const SPAREBANKEN_ORG_NUMBER = '313876144'; //Dagl 28913749776
-
-      const SPAREBANKEN_DRIFT_ORG_NUMBER = '310149942'; //Dagl: 09906397525
+      const FROM_ORG = '313876144'; //Dagl 28913749776
 
       const fromPerson = pickRandom(fromPersons);
       const validTo = addTimeToNowUtc({ days: 5 });
-      const api = new ConsentApiRequests(SPAREBANKEN_DRIFT_ORG_NUMBER);
+      const api = new ConsentApiRequests();
 
       const consentResp =
-        await test.step('Fetch Maskinporten token for consumer_org and create consent request with toOrg as SPAREBANKEN_ORG_NUMBER', async () => {
+        await test.step('Fetch Maskinporten token for consumer_org and create consent request with toOrg as FROM_ORG', async () => {
           // Use Maskinporten token (from behalf_of client) with consumer_orgno to create consent request
           const { viewUri } = await api.createConsentRequestWithMaskinporten(
             { type: 'person', id: fromPerson },
-            { type: 'org', id: SPAREBANKEN_ORG_NUMBER },
+            { type: 'org', id: FROM_ORG },
             'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
             'MASKINPORTEN_BEHALF_OF_JWK',
-            SPAREBANKEN_ORG_NUMBER,
+            FROM_ORG,
           );
 
           await consentPage.open(viewUri);
@@ -214,7 +224,7 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
           { type: 'person', id: fromPerson },
           'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
           'MASKINPORTEN_BEHALF_OF_JWK',
-          SPAREBANKEN_ORG_NUMBER,
+          FROM_ORG,
         );
         expect(token).toBeTruthy();
         expect(token.length).toBeGreaterThan(10);
@@ -222,6 +232,18 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
     });
   });
 
+  /**
+   * Scenario 2 - "På vegne av - samtykke for datakonsument må få delegert scope-tilgang"
+   *
+   * Funksjonelt scenario:
+   * Sparebanken må hente inn samtykke fra virksomhet (from = org), mens en annen org er datakonsument
+   * (Sparebanken Drift).
+   *
+   * Forhåndssteg:
+   * - Sparebanken Øst har delegert scopetilgang "samtykke:write" til Sparebanken Drift (datakonsument).
+   * - Sparebanken Drift henter ut Maskinporten-token for Sparebank 1 Øst ved å oppgi
+   *   consumer_org for Sparebank 1 Øst (for selve forespørselen).
+   */
   test('Create and approve consent on behalf of organization as a consumer org and fetch token with org number', async ({
     login,
     consentPage,
@@ -229,16 +251,12 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
     test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
 
     const SPAREBANKEN_ORG_NUMBER = '313876144'; //Dagl 28913749776
-    const SPAREBANKEN_DRIFT_ORG_NUMBER = '310149942'; //Dagl: 09906397525
 
-    // const fromOrg = "313872254";
-    // const personapprove = "26904397341";
-
+    // Org that consents
     const fromOrg = '312690365';
     const personapprove = '09923649732';
 
-    const validTo = addTimeToNowUtc({ days: 5 });
-    const api = new ConsentApiRequests(SPAREBANKEN_DRIFT_ORG_NUMBER);
+    const api = new ConsentApiRequests();
 
     const consentResp =
       await test.step('Fetch Maskinporten token for consumer_org and create consent request with toOrg as SPAREBANKEN_ORG_NUMBER', async () => {
