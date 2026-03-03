@@ -4,6 +4,7 @@ import { DsHeading, DsSkeleton } from '@altinn/altinn-components';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 
 import classes from './SingleRightsSection.module.css';
+import { SkeletonResourceList } from '../../common/ResourceList/SkeletonResourceList';
 
 type SingleRightsSectionSkeletonProps = {
   isReportee?: boolean;
@@ -16,30 +17,13 @@ export const SingleRightsSectionSkeleton = ({
 
   return (
     <div className={classes.singleRightsSectionContainer}>
-      <DsSkeleton>
-        <DsHeading
-          level={2}
-          data-size='xs'
-          id='single_rights_title'
-        >
-          {t('single_rights.current_services_title', { count: 0 })}
-        </DsHeading>
-      </DsSkeleton>
+      <DsSkeleton
+        width='40%'
+        height='32px'
+        className={classes.headingSkeleton}
+      />
       <div className={classes.singleRightsList}>
-        <ResourceList
-          resources={[]}
-          isLoading
-          enableSearch
-          showDetails={false}
-          delegationModal={
-            !isReportee && (
-              <DsSkeleton
-                width={120}
-                height={40}
-              />
-            )
-          }
-        />
+        <SkeletonResourceList />
       </div>
     </div>
   );
