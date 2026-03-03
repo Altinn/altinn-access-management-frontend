@@ -202,10 +202,7 @@ export const RightsSection = ({
             variant={availableActions?.includes(DelegationAction.DELEGATE) ? 'tertiary' : 'primary'}
             className={classes.deleteButton}
             onClick={revokeResource}
-            disabled={
-              rights.length === 0 ||
-              !rights.some((r) => r.directlyDelegated && r.inherited !== true)
-            }
+            disabled={rights.length === 0 || rights.some((r) => r.inherited === true)}
             color='danger'
           >
             <MinusCircleIcon aria-hidden='true' />
