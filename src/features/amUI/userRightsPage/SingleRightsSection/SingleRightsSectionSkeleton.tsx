@@ -1,20 +1,9 @@
-import { useTranslation } from 'react-i18next';
-import { DsHeading, DsSkeleton } from '@altinn/altinn-components';
-
-import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
+import { DsSkeleton } from '@altinn/altinn-components';
 
 import classes from './SingleRightsSection.module.css';
 import { SkeletonResourceList } from '../../common/ResourceList/SkeletonResourceList';
 
-type SingleRightsSectionSkeletonProps = {
-  isReportee?: boolean;
-};
-
-export const SingleRightsSectionSkeleton = ({
-  isReportee = false,
-}: SingleRightsSectionSkeletonProps) => {
-  const { t } = useTranslation();
-
+export const SingleRightsSectionSkeleton = () => {
   return (
     <div className={classes.singleRightsSectionContainer}>
       <DsSkeleton
