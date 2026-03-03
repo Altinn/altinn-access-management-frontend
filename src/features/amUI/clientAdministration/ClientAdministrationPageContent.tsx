@@ -1,6 +1,6 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Navigate, useSearchParams } from 'react-router';
+import { Navigate } from 'react-router';
 import {
   DsAlert,
   DsHeading,
@@ -11,6 +11,7 @@ import {
 } from '@altinn/altinn-components';
 
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
+import { useUrlState } from '@/resources/hooks/useUrlState';
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ClientAdministrationAgentsTab } from './ClientAdministrationAgentsTab';
@@ -28,12 +29,7 @@ export const ClientAdministrationPageContent = () => {
     ? t('common.subunit_lowercase')
     : t('common.mainunit_lowercase');
 
-  const [params, setParams] = useSearchParams();
-  const activeTab = params.get('tab') === 'clients' ? 'clients' : 'users';
-
-  const handleTabChange = (value: string) => {
-    setParams({ tab: value }, { replace: true });
-  };
+  const [activeTab, setActiveTab] = useUrlState('tab', 'users');
 
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
 
@@ -122,7 +118,7 @@ export const ClientAdministrationPageContent = () => {
         defaultValue='users'
         data-size='sm'
         value={activeTab}
-        onChange={handleTabChange}
+        onChange={setActiveTab}
       >
         <DsTabs.List>
           <DsTabs.Tab

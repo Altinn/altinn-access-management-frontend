@@ -12,6 +12,7 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
 import { ConnectionsList, titleAsType } from './ConnectionsList';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { useUrlState } from '@/resources/hooks/useUrlState';
 
 export interface AdvancedUserSearchProps {
   includeSelfAsChild: boolean;
@@ -66,7 +67,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   titleAs = 'h4',
 }) => {
   const { t } = useTranslation();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useUrlState('query', '');
   const { fromParty } = usePartyRepresentation();
   const filteredConnections = useMemo(() => filterAvailableUserTypes(connections), [connections]);
 

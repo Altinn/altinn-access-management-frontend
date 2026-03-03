@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { Button, DsLink } from '@altinn/altinn-components';
 
 import classes from './PageContainer.module.css';
@@ -14,8 +14,13 @@ import classes from './PageContainer.module.css';
  *
  * @param {React.ReactNode} children - The main content of the page.
  * @param {React.ReactNode | React.ReactNode[]} [contentActions] - Actions or elements to display in the content actions area.
- * @param {string} [backUrl] - URL to navigate back to when the back button is clicked. (the preferred way to handle back navigation)
- * @param {() => void} [onNavigateBack] - Callback function to handle custom back navigation logic. (this will only be called if `backUrl` is not provided)
+ * Back navigation strategy:
+ * - If the user has internal navigation history, clicking back uses browser history
+ *   (navigate(-1)) to preserve URL state like filters and tabs.
+ * - If the user deep-linked directly to this page (no internal history), it falls back to `backUrl`.
+ *
+ * @param {string} [backUrl] - Fallback URL when there is no internal navigation history (e.g. deep links).
+ * @param {() => void} [onNavigateBack] - Callback function to handle custom back navigation logic. (only used if `backUrl` is not provided)
  *
  * @example
  * <PageContainer
@@ -40,18 +45,23 @@ export const PageContainer = ({
   onNavigateBack,
 }: PageContainerProps) => {
   const { t } = useTranslation();
+  const location = useLocation();
+
+  // Prefer the referrer URL passed via React Router state (preserves filters/tabs),
+  // otherwise fall back to the static backUrl prop.
+  const resolvedBackUrl = (location.state?.from as string) ?? backUrl;
 
   return (
     <div className={classes.container}>
       <div className={classes.topActions}>
         <div className={classes.pageActions}>
-          {backUrl ? (
+          {resolvedBackUrl ? (
             <DsLink
               asChild={true}
               data-size='md'
               data-color='neutral'
             >
-              <Link to={backUrl}>
+              <Link to={resolvedBackUrl}>
                 <ArrowLeftIcon
                   aria-hidden={true}
                   fontSize='1.3rem'

@@ -2,7 +2,7 @@ import type { UserListItemProps } from '@altinn/altinn-components';
 import { formatDate, formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
 import type { ElementType, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import { type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
@@ -71,6 +71,7 @@ export const UserItem = ({
   const hasInheritingUsers = childrenToDisplay.length > 0 && shouldDisplaySubConnections;
   const [isExpanded, setExpanded] = useState(false);
   const { t } = useTranslation();
+  const location = useLocation();
   const { mapRoles } = useRoleMetadata();
   useEffect(
     () =>
@@ -177,6 +178,7 @@ export const UserItem = ({
                 <Link
                   {...props}
                   to={linkTo ?? user.id}
+                  state={{ from: location.pathname + location.search }}
                 />
               )
       }

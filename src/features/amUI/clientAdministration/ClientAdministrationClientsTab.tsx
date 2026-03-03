@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, Switch } from '@altinn/altinn-components';
 
@@ -7,6 +7,7 @@ import { type Client, useGetClientsQuery } from '@/rtk/features/clientApi';
 import { type Connection } from '@/rtk/features/connectionApi';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
 import { SelectRoleFilter } from './SelectRoleFilter';
+import { useUrlState } from '@/resources/hooks/useUrlState';
 import classes from './ClientAdministrationAgentsTab.module.css';
 
 const buildClientConnections = (clients?: Client[]): Connection[] => {
@@ -32,8 +33,8 @@ const buildClientConnections = (clients?: Client[]): Connection[] => {
 
 export const ClientAdministrationClientsTab = () => {
   const { t } = useTranslation();
-  const [roleFilter, setRoleFilter] = useState<string[]>([]);
-  const [showDeleted, setShowDeleted] = useState(false);
+  const [roleFilter, setRoleFilter] = useUrlState('roles', []);
+  const [showDeleted, setShowDeleted] = useUrlState('showDeleted', 'false');
 
   const {
     data: clients,
@@ -42,11 +43,12 @@ export const ClientAdministrationClientsTab = () => {
   } = useGetClientsQuery({ roles: roleFilter });
 
   const filteredClients = useMemo(() => {
-    if (!clients || showDeleted) {
+    if (!clients || showDeleted === 'true') {
       return clients;
     }
     return clients.filter((client) => !client.client?.isDeleted);
   }, [clients, showDeleted]);
+
   const clientConnections = useMemo<Connection[]>(
     () => buildClientConnections(filteredClients),
     [filteredClients],
@@ -81,8 +83,8 @@ export const ClientAdministrationClientsTab = () => {
               setRoleFilter={setRoleFilter}
             />
             <Switch
-              onChange={(e) => setShowDeleted(e.target.checked)}
-              checked={showDeleted}
+              onChange={(e) => setShowDeleted(e.target.checked ? 'true' : 'false')}
+              checked={showDeleted === 'true'}
               label={t('client_administration_page.show_deleted_clients')}
             />
           </div>
