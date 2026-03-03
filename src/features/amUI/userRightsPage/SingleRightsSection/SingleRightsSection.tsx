@@ -17,6 +17,7 @@ import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
+import { getInheritedStatus } from '../../common/useInheritedStatus';
 
 export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { id } = useParams();
@@ -49,6 +50,20 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
     () => delegatedResources?.map((delegation) => delegation.resource).filter(Boolean),
     [delegatedResources],
   ) as ServiceResource[];
+
+  const isResourceInherited = (resourceId: string) => {
+    const resource = delegatedResources?.find(
+      (delegation) => delegation.resource.identifier === resourceId,
+    );
+    if (!resource) return false;
+    const inheritanceStatus = getInheritedStatus({
+      permissions: resource.permissions,
+      toParty,
+      fromParty,
+      actingParty,
+    });
+    return inheritanceStatus.length > 0;
+  };
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8; // Section for "Users (A2)" in Profile is 9, for "Accesses for others (A2)" it is 8
   const A2url = getRedirectToA2UsersListSectionUrl(sectionId);
@@ -114,12 +129,16 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
                 />
               )
             }
-            renderControls={(resource) => (
-              <DeleteResourceButton
-                resource={resource}
-                fullText={!isSmallScreen}
-              />
-            )}
+            renderControls={(resource) => {
+              const isInherited = isResourceInherited(resource.identifier);
+              return (
+                <DeleteResourceButton
+                  resource={resource}
+                  fullText={!isSmallScreen}
+                  disabled={isInherited}
+                />
+              );
+            }}
           />
         </div>
         <EditModal
