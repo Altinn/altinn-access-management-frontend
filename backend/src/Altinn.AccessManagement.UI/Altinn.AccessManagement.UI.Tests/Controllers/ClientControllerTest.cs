@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -91,6 +92,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: GetMyClients returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task GetMyClients_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid provider = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/my/clients?provider={provider}");
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
+        }
+
+        /// <summary>
         /// Test case: RemoveMyClientProvider returns no content on valid input.
         /// </summary>
         [Fact]
@@ -131,6 +152,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 $"accessmanagement/api/v1/clientdelegations/my/clientproviders?provider={provider}");
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveMyClientProvider returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientProvider_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid provider = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/clientdelegations/my/clientproviders?provider={provider}");
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
         }
 
         /// <summary>
@@ -229,6 +270,43 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: RemoveMyClientAccessPackages returns the backend status code and problem details when client throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientAccessPackages_ClientThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid provider = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            DelegationBatchInputDto payload = new DelegationBatchInputDto
+            {
+                Values =
+                [
+                    new DelegationBatchInputDto.Permission
+                    {
+                        Role = "DAGL",
+                        Packages = ["urn:altinn:accesspackage:demo"]
+                    }
+                ]
+            };
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/my/clients?provider={provider}&from={from}")
+            {
+                Content = JsonContent.Create(payload)
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
+        }
+
+        /// <summary>
         /// Test case: RemoveMyClientAccessPackages returns bad request when payload is null.
         /// </summary>
         [Fact]
@@ -295,6 +373,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: GetClients returns the backend status code and problem details when client throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task GetClients_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/clients?party={party}");
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
+        }
+
+        /// <summary>
         /// Test case: GetAgents returns the expected list of agent delegations.
         /// </summary>
         [Fact]
@@ -340,6 +437,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: GetAgents returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task GetAgents_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/agents?party={party}");
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
+        }
+
+        /// <summary>
         /// Test case: GetAgentAccessPackages returns the expected list of client delegations.
         /// </summary>
         [Fact]
@@ -372,6 +488,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 $"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party=not-a-guid&to={to}");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetAgentAccessPackages returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task GetAgentAccessPackages_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party={party}&to={to}");
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
         }
 
         /// <summary>
@@ -811,6 +948,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: AddAgent returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task AddAgent_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party={party}&to={to}",
+                null);
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
+        }
+
+        /// <summary>
         /// Test case: AddAgent returns too many requests when underlying service is rate limited.
         /// </summary>
         [Fact]
@@ -825,6 +984,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 null);
 
             Assert.Equal(HttpStatusCode.TooManyRequests, response.StatusCode);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            Assert.True(string.IsNullOrWhiteSpace(responseContent));
         }
 
         /// <summary>
@@ -872,6 +1033,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 $"accessmanagement/api/v1/clientdelegations/agents?party={party}&to={to}");
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveAgent returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task RemoveAgent_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents?party={party}&to={to}");
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
         }
     }
 }
