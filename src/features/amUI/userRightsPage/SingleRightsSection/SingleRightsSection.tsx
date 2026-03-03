@@ -16,21 +16,25 @@ import { DeleteResourceButton } from './DeleteResourceButton';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
-import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
+import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
 
 export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { id } = useParams();
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
   const { displayResourceDelegation } = window.featureFlags;
-  const { toParty, fromParty, actingParty } = usePartyRepresentation();
+  const {
+    toParty,
+    fromParty,
+    actingParty,
+    isLoading: loadingPartyRepresentation,
+  } = usePartyRepresentation();
 
   const canGiveAccess = useCanGiveAccess(id ?? '');
 
   const {
     data: delegatedResources,
     isError,
-    error,
     isLoading,
   } = useGetSingleRightsForRightholderQuery(
     {
@@ -67,6 +71,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8; // Section for "Users (A2)" in Profile is 9, for "Accesses for others (A2)" it is 8
   const A2url = getRedirectToA2UsersListSectionUrl(sectionId);
+  const isSectionLoading = loadingPartyRepresentation || isLoading;
 
   if (!displayResourceDelegation) {
     return (
@@ -88,66 +93,67 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
     );
   }
 
-  return (
-    toParty && (
-      <div className={classes.singleRightsSectionContainer}>
-        <DsHeading
-          level={2}
-          data-size='xs'
-          id='single_rights_title'
-        >
-          {t('single_rights.current_services_title', { count: delegatedResources?.length ?? 0 })}
-        </DsHeading>
-        {isError && <div>{t('user_rights_page.error')}</div>}
-        {isLoading && <div>{t('user_rights_page.loading')}</div>}
+  if (!toParty && !isSectionLoading) {
+    return null;
+  }
 
-        <div className={classes.singleRightsList}>
-          <ResourceList
-            resources={resources ?? []}
-            enableSearch={true}
-            showDetails={false}
-            onSelect={(resource) => {
-              setSelectedResource(resource);
-              modalRef.current?.showModal();
-            }}
-            size={isSmallScreen ? 'sm' : 'md'}
-            titleAs='h3'
-            delegationModal={
-              canGiveAccess &&
-              !isReportee && (
-                <DelegationModal
-                  delegationType={DelegationType.SingleRights}
-                  availableActions={[
-                    DelegationAction.REVOKE,
-                    canGiveAccess && !isReportee
-                      ? DelegationAction.DELEGATE
-                      : DelegationAction.REQUEST,
-                  ]}
-                />
-              )
-            }
-            renderControls={(resource) => {
-              const isInherited = isResourceInherited(resource.identifier);
-              return (
-                <DeleteResourceButton
-                  resource={resource}
-                  fullText={!isSmallScreen}
-                  disabled={isInherited}
-                />
-              );
-            }}
-          />
-        </div>
-        <EditModal
-          ref={modalRef}
-          resource={selectedResource ?? undefined}
-          onClose={() => setSelectedResource(null)}
-          availableActions={[
-            DelegationAction.REVOKE,
-            canGiveAccess && !isReportee ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-          ]}
+  if (isSectionLoading) {
+    return <SingleRightsSectionSkeleton isReportee={isReportee} />;
+  }
+
+  return (
+    <div className={classes.singleRightsSectionContainer}>
+      <DsHeading
+        level={2}
+        data-size='xs'
+        id='single_rights_title'
+      >
+        {t('single_rights.current_services_title', { count: delegatedResources?.length ?? 0 })}
+      </DsHeading>
+      {isError && <div>{t('user_rights_page.error')}</div>}
+
+      <div className={classes.singleRightsList}>
+        <ResourceList
+          resources={resources ?? []}
+          enableSearch={true}
+          showDetails={false}
+          onSelect={(resource) => {
+            setSelectedResource(resource);
+            modalRef.current?.showModal();
+          }}
+          size={isSmallScreen ? 'sm' : 'md'}
+          titleAs='h3'
+          delegationModal={
+            canGiveAccess &&
+            !isReportee && (
+              <DelegationModal
+                delegationType={DelegationType.SingleRights}
+                availableActions={[
+                  DelegationAction.REVOKE,
+                  canGiveAccess && !isReportee
+                    ? DelegationAction.DELEGATE
+                    : DelegationAction.REQUEST,
+                ]}
+              />
+            )
+          }
+          renderControls={(resource) => (
+            <DeleteResourceButton
+              resource={resource}
+              fullText={!isSmallScreen}
+            />
+          )}
         />
       </div>
-    )
+      <EditModal
+        ref={modalRef}
+        resource={selectedResource ?? undefined}
+        onClose={() => setSelectedResource(null)}
+        availableActions={[
+          DelegationAction.REVOKE,
+          canGiveAccess && !isReportee ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+        ]}
+      />
+    </div>
   );
 };
