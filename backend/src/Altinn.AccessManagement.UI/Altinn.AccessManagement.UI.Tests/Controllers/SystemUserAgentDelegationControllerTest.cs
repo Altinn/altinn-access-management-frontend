@@ -92,7 +92,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyId = "51329012";
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = "75722078-b089-459a-bb5a-6bbcb2e18dcf";
-           
+
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
@@ -206,11 +206,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _regnskapsforerSystemUserId;
             string customerId = "3d8b34c3-df0d-4dcc-be12-e788ce414744";
-            
+
             AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
                 CustomerId = Guid.Parse(customerId),
-                Access = 
+                Access =
                 [
                     new ClientRoleAccessPackages()
                     {
@@ -249,11 +249,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _revisorSystemUserId;
             string customerId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
-            
+
             AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
                 CustomerId = Guid.Parse(customerId),
-                Access = 
+                Access =
                 [
                     new ClientRoleAccessPackages()
                     {
@@ -292,11 +292,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _regnskapsforerSystemUserId;
             string customerId = "82cc64c5-60ff-4184-8c07-964c3a1e6fc7";
-            
+
             AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
                 CustomerId = Guid.Parse(customerId),
-                Access = 
+                Access =
                 [
                     new ClientRoleAccessPackages()
                     {
@@ -329,7 +329,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _regnskapsforerSystemUserId;
             string delegationId = "7da509f3-cff5-4253-946e-0336ae0bc48f";
-            
+
             bool expectedResponse = true;
 
             // Act
@@ -353,11 +353,53 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _regnskapsforerSystemUserId;
             string delegationId = "60f1ade9-ed48-4083-a369-178d45d6ffd1";
-            
+
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{delegationId}?partyuuid={partyUuid}");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: AddOwnOrganizationToAgentSystemUser checks that own organization is added to agent system user
+        ///     Expected: AddOwnOrganizationToAgentSystemUser returns true
+        /// </summary>
+        [Fact]
+        public async Task AddOwnOrganizationToAgentSystemUser_ReturnTrue()
+        {
+            // Arrange
+            string partyId = "51329012";
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string systemUserId = _regnskapsforerSystemUserId;
+
+            HttpStatusCode expectedResponse = HttpStatusCode.OK;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/self?partyuuid={partyUuid}", null);
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
+        
+        /// <summary>
+        ///     Test case: RemoveOwnOrganizationToAgentSystemUser checks that own organization is removed from agent system user
+        ///     Expected: RemoveOwnOrganizationToAgentSystemUser returns true
+        /// </summary>
+        [Fact]
+        public async Task RemoveOwnOrganizationToAgentSystemUser_ReturnTrue()
+        {
+            // Arrange
+            string partyId = "51329012";
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string systemUserId = _regnskapsforerSystemUserId;
+            
+            HttpStatusCode expectedResponse = HttpStatusCode.OK;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/self?partyuuid={partyUuid}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
