@@ -120,31 +120,37 @@ export class EnduserConnection {
    *
    * @param pid - The PID used to obtain an authorization token.
    * @param fromOrg - The party identifier representing the source party.
-   * @param toPid - The party identifier representing the target party.
+   * @param toPids - An array of PIDs whose connections are to be deleted.
    * @returns A promise that resolves to the fetch response.
-   * @throws If the DELETE request fails or returns a non-OK status.
    */
-  public async deleteConnectionPerson(pid: string, fromOrg: string, toPid: string) {
+  public async deleteConnectionPerson(pid: string, fromOrg: string, toPids: Array<string>) {
     const fromUuid = await this.tokenClass.getPartyUuid(fromOrg);
-    const toUuid = await this.tokenClass.getPartyUuid(toPid);
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&cascade=true`;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    // const toUuid = await this.tokenClass.getPartyUuid(toPid);
+    let responses = new Array<Response>();
 
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+    toPids.forEach(async (toPid) => {
+      const toUuid = await this.tokenClass.getPartyUuid(toPid);
+
+      const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&cascade=true`;
+
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        console.warn(
+          `Failed to fetch status for deleteConnectionPerson request. Status: ${response.status}`,
+        );
+        responses.push(response);
+      }
     });
 
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch status for deleteConnectionPerson request. Status: ${response.status}`,
-      );
-    }
-
-    return response;
+    return responses;
   }
 
   /**
@@ -161,7 +167,6 @@ export class EnduserConnection {
    * @param toUuid - the partyUuid of the connection being added.
    * @param toLastName - the last name for the connection being added.
    * @returns A promise resolving to the API response JSON payload.
-   * @throws If the API response status is not OK.
    */
   public async addConnectionPackagePerson(
     pid: string,
