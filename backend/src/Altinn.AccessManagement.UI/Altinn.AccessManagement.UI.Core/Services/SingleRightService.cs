@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Register.Contracts;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -68,6 +69,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<RightCheck> actions = delegationCheckResult.Rights.ToList();
 
             return actions;
+        }
+
+        /// <inheritdoc />
+        public async Task<List<Models.SingleRight.Right>> GetResourceRightsMeta(string resource, string languageCode)
+        {
+            return await _resourceRegistryClient.GetResourceRights(resource, languageCode);
         }
 
         /// <inheritdoc />

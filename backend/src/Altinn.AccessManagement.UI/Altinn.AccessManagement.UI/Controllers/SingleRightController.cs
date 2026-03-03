@@ -176,6 +176,38 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        ///     Endpoint for retrieving metadata about the rights on a resource
+        /// </summary>
+        /// <param name="resource">The id of the resource for which to retrieve rights metadata</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        /// <returns> A list of rights on the resource</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("rightsmeta")]
+        public async Task<ActionResult<List<Core.Models.SingleRight.Right>>> GetResourceRightsMeta([FromQuery] string resource)
+        {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+
+            try
+            {
+                List<Core.Models.SingleRight.Right> result = await _singleRightService.GetResourceRightsMeta(resource, languageCode);
+                return Ok(result);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving single rights for right holder: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
         ///     Endpoint for delegating a given set of rights on a resource
         /// </summary>
         /// <param name="from">The party from which the resource will be delegated (The owner of the delegated content)</param>
