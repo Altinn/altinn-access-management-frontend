@@ -217,6 +217,32 @@ export const systemUserApi = createApi({
         method: 'DELETE',
       }),
     }),
+    assignSelfCustomer: builder.mutation<
+      void,
+      {
+        partyId: string;
+        systemUserId: string;
+        partyUuid: string;
+      }
+    >({
+      query: ({ partyId, systemUserId, partyUuid }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/self?partyUuid=${partyUuid}`,
+        method: 'POST',
+      }),
+    }),
+    removeSelfCustomer: builder.mutation<
+      void,
+      {
+        partyId: string;
+        systemUserId: string;
+        partyUuid: string;
+      }
+    >({
+      query: ({ partyId, systemUserId, partyUuid }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/self?partyUuid=${partyUuid}`,
+        method: 'DELETE',
+      }),
+    }),
 
     // system user request
     getSystemUserRequest: builder.query<SystemUserRequest, { requestId: string }>({
@@ -342,6 +368,8 @@ export const {
   useGetPendingSystemUserRequestsQuery,
   useEscalateRequestMutation,
   useEscalateAgentRequestMutation,
+  useAssignSelfCustomerMutation,
+  useRemoveSelfCustomerMutation,
 } = apiWithTag;
 
 export const { endpoints, reducerPath, reducer, middleware } = apiWithTag;

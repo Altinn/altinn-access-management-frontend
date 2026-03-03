@@ -7,6 +7,7 @@ import {
   DsValidationMessage,
   ListItem,
   DsCheckbox,
+  Badge,
 } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
@@ -46,6 +47,7 @@ interface CustomerListProps {
   onAddCustomer?: (customer: AgentDelegationCustomer) => void;
   onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
   onAddAllCustomers?: () => void;
+  onRemoveSelf?: () => void;
   children?: React.ReactNode;
 }
 
@@ -57,6 +59,7 @@ export const CustomerList = ({
   onAddCustomer,
   onRemoveCustomer,
   onAddAllCustomers,
+  onRemoveSelf,
   children,
 }: CustomerListProps) => {
   const { t } = useTranslation();
@@ -119,7 +122,6 @@ export const CustomerList = ({
             </DsButton>
           </div>
         )}
-
         {children}
       </div>
       <List>
@@ -141,6 +143,7 @@ export const CustomerList = ({
                 isError={errorIds?.some((x) => x === customer.id)}
                 onRemoveCustomer={onRemoveCustomer}
                 onAddCustomer={onAddCustomer}
+                onRemoveSelf={onRemoveSelf}
               />
             }
           />
@@ -165,6 +168,7 @@ interface ListControlsProps {
   isError?: boolean;
   onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
   onAddCustomer?: (customer: AgentDelegationCustomer) => void;
+  onRemoveSelf?: () => void;
 }
 const ListControls = ({
   customer,
@@ -173,6 +177,7 @@ const ListControls = ({
   isError,
   onRemoveCustomer,
   onAddCustomer,
+  onRemoveSelf,
 }: ListControlsProps): React.ReactNode => {
   const { t } = useTranslation();
 
@@ -220,6 +225,19 @@ const ListControls = ({
         >
           <PlusCircleIcon /> {t('systemuser_agent_delegation.add_to_system_user')}
         </DsButton>
+      )}
+      {customer.isSelfOrg && (
+        <>
+          <Badge>{t('systemuser_agent_delegation.own_organization')}</Badge>
+          <DsButton
+            data-color='danger'
+            variant='tertiary'
+            aria-label={t('systemuser_agent_delegation.remove_own_organization')}
+            onClick={onRemoveSelf}
+          >
+            {t('systemuser_agent_delegation.remove')}
+          </DsButton>
+        </>
       )}
     </div>
   );

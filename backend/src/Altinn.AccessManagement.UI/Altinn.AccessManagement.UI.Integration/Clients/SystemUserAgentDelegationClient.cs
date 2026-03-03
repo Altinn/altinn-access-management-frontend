@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings)
         {
-            _logger = logger;        
+            _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _platformSettings = platformSettings.Value;
             httpClient.BaseAddress = new Uri(_platformSettings.ApiAuthenticationEndpoint);
@@ -121,6 +121,58 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<bool>> AddSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/self?partyUuid={partyUuid}";
+
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, null);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // AddSelf // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // AddSelf // Exception");
+                throw;
+            }
+        }
+        
+        /// <inheritdoc/>
+        public async Task<Result<bool>> RemoveSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/self?partyUuid={partyUuid}";
+
+                HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // RemoveSelf // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // RemoveSelf // Exception");
                 throw;
             }
         }

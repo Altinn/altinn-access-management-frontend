@@ -789,7 +789,13 @@
     "add_all_customers_partial": "Berre {{successCount}} av {{totalCount}} kundar vart lagde til.",
     "add_all_customers_failed_list": "Følgjande kundar kunne ikkje leggjast til:",
     "add_all_customers_in_progress_warning": "Ikkje lukk denne nettsida før alle kundar er lagde til.",
-    "add_all_customers_progress": "Legg til kunde {{progress}} av {{totalCount}}"
+    "add_all_customers_progress": "Legg til kunde {{progress}} av {{totalCount}}",
+    "own_organization": "Mi organisasjon",
+    "remove": "Fjern",
+    "remove_own_organization": "Fjern eigen organisasjon frå systemtilgang",
+    "add_own_organization": "Legg til eigen organisasjon",
+    "add_own_organization_error": "Kunne ikkje leggja til mi organisasjon",
+    "remove_own_organization_error": "Kunne ikkje fjerna mi organisasjon"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",
