@@ -1,4 +1,4 @@
-import { DelegationCheckedRight } from '@/rtk/features/singleRights/singleRightsApi';
+import { DelegationCheckedRight, Right } from '@/rtk/features/singleRights/singleRightsApi';
 
 export type ChipRight = {
   action: string;
@@ -17,16 +17,36 @@ type MapRightsToChipRightsOptions = {
 };
 
 export const mapRightsToChipRights = (
-  rights: DelegationCheckedRight[],
+  rightsMeta: Right[],
+  delegationCheckedRights?: DelegationCheckedRight[],
   {
     isDelegated = () => false,
     isInherited = () => false,
     isChecked,
   }: MapRightsToChipRightsOptions = {},
 ): ChipRight[] => {
+  let mappableRights: DelegationCheckedRight[] = [];
+
+  if (delegationCheckedRights) {
+    mappableRights = rightsMeta.map((rightMeta) => {
+      const matchingCheckedRight = delegationCheckedRights.find(
+        (checkedRight) => checkedRight.right.key === rightMeta.key,
+      );
+      return matchingCheckedRight
+        ? { ...matchingCheckedRight, right: rightMeta }
+        : { right: rightMeta, result: false, reasonCodes: [] };
+    });
+  } else {
+    mappableRights = rightsMeta.map((rightMeta) => ({
+      right: rightMeta,
+      result: false,
+      reasonCodes: [],
+    }));
+  }
+
   const checkedPredicate = isChecked ?? isDelegated;
 
-  return rights.map((right: DelegationCheckedRight) => {
+  return mappableRights.map((right: DelegationCheckedRight) => {
     const delegated = isDelegated(right);
     const inherited = isInherited(right.right.key);
     return {
