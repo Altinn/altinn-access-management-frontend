@@ -112,7 +112,7 @@ export const singleRightsApi = createApi({
         return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${searchParams}`;
       },
     }),
-    getDelegatedResources: builder.query<
+    getSingleRights: builder.query<
       ResourceDelegation[],
       { actingParty: string; from?: string; to?: string }
     >({
@@ -207,7 +207,7 @@ export const singleRightsApi = createApi({
 
 export const {
   useGetPaginatedSearchQuery,
-  useGetDelegatedResourcesQuery,
+  useGetSingleRightsQuery,
   useGetResourceRightsQuery,
   useClearAccessCacheMutation,
   useDelegationCheckQuery,

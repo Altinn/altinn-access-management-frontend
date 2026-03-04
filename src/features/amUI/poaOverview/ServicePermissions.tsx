@@ -7,7 +7,7 @@ import { ResourceList } from '../common/ResourceList/ResourceList';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   ServiceResource,
-  useGetDelegatedResourcesQuery,
+  useGetSingleRightsQuery,
   useGetPaginatedSearchQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { amUIPath } from '@/routes/paths';
@@ -24,7 +24,7 @@ export const ServicePermissions = () => {
     data: delegatedResources,
     isLoading,
     isError,
-  } = useGetDelegatedResourcesQuery(
+  } = useGetSingleRightsQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',
