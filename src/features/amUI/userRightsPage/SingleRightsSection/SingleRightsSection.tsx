@@ -16,21 +16,21 @@ import { DeleteResourceButton } from './DeleteResourceButton';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
-import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
+import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
+import { getInheritedStatus } from '../../common/useInheritedStatus';
 
 export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { id } = useParams();
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
   const { displayResourceDelegation } = window.featureFlags;
-  const { toParty, fromParty, actingParty } = usePartyRepresentation();
+  const { toParty, fromParty, actingParty, isLoading: isPartyLoading } = usePartyRepresentation();
 
   const canGiveAccess = useCanGiveAccess(id ?? '');
 
   const {
     data: delegatedResources,
     isError,
-    error,
     isLoading,
   } = useGetSingleRightsForRightholderQuery(
     {
@@ -88,6 +88,10 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
     );
   }
 
+  if (isLoading || isPartyLoading) {
+    return <SingleRightsSectionSkeleton />;
+  }
+
   return (
     toParty && (
       <div className={classes.singleRightsSectionContainer}>
@@ -99,7 +103,6 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
           {t('single_rights.current_services_title', { count: delegatedResources?.length ?? 0 })}
         </DsHeading>
         {isError && <div>{t('user_rights_page.error')}</div>}
-        {isLoading && <div>{t('user_rights_page.loading')}</div>}
 
         <div className={classes.singleRightsList}>
           <ResourceList
