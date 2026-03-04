@@ -79,6 +79,7 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
                     <Button
                       size='xs'
                       variant='ghost'
+                      data-testid={item.consentId}
                       onClick={() => showConsentDetails(item.consentId)}
                     >
                       {item.isPoa ? t('consent_log.view_poa') : t('consent_log.view_consent')}
