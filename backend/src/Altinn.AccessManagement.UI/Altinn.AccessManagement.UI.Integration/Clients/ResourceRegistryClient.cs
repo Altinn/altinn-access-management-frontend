@@ -12,6 +12,7 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
+using Altinn.Authorization.ProblemDetails;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
