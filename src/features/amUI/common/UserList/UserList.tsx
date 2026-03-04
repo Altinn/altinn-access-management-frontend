@@ -1,9 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
-import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
-
-import { NewUserButton } from '../../users/NewUserModal/NewUserModal';
+import type { ExtendedUser } from '@/rtk/features/userInfoApi';
 
 import { UserItem } from './UserItem';
 import { useFilteredUsers } from './useFilteredUsers';
@@ -26,7 +24,6 @@ export interface UserListProps {
   availableAction?: DelegationAction;
   onDelegate?: (userId: string) => void;
   onRevoke?: (userId: string) => void;
-  onAddNewUser?: (user: User) => void;
 }
 
 export const UserList = ({
@@ -42,7 +39,6 @@ export const UserList = ({
   availableAction,
   onDelegate,
   onRevoke,
-  onAddNewUser,
 }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
@@ -67,39 +63,12 @@ export const UserList = ({
           role='alert'
           className={classes.noResultsContent}
         >
-          {searchString.length === 0 ? (
-            <>
-              <DsParagraph data-size='md'>
-                {canAdd ? t('users_page.only_you_have_access') : t('users_page.no_users')}
-              </DsParagraph>
-              {canAdd && (
-                <NewUserButton
-                  isLarge
-                  onComplete={onAddNewUser}
-                />
-              )}
-            </>
-          ) : (
-            <>
-              {canAdd ? (
-                <>
-                  <DsParagraph data-size='md'>
-                    {t('users_page.user_no_search_result_with_add_suggestion', {
-                      searchTerm: searchString,
-                    })}
-                  </DsParagraph>
-                  <NewUserButton
-                    isLarge
-                    onComplete={onAddNewUser}
-                  />
-                </>
-              ) : (
-                <DsParagraph data-size='md'>
-                  {t('users_page.user_no_search_result', { searchTerm: searchString })}
-                </DsParagraph>
-              )}
-            </>
-          )}
+          <DsParagraph data-size='md'>
+            {canAdd && searchString.length === 0 && t('users_page.only_you_have_access')}
+            {!canAdd && searchString.length === 0 && t('users_page.no_users')}
+            {searchString.length > 0 &&
+              t('users_page.user_no_search_result', { searchTerm: searchString })}
+          </DsParagraph>
         </div>
       )}
       <List spacing={2}>

@@ -372,10 +372,9 @@
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
+    "only_you_have_access": "Det er kun du som har fullmakt. Legg til ny bruker for å gi fullmakt til andre.",
     "no_users": "Du har ikke mottatt noen fullmakter fra andre.",
-    "only_you_have_access": "Ingen andre enn deg har fullmakt. Ønsker du å endre dette?",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
-    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette en ny bruker du ønsker å gi fullmakt til?",
     "show_users_with_client_access": "Vis brukere med klienttilgang",
     "indirect_connections": "Brukere uten fullmakt",
     "no_access_to_users_header": "Denne siden jobber vi fremdeles med!",
@@ -919,7 +918,6 @@
     "package_revocation_success": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
     "users_tab": {
       "description": "Søk etter brukere for å gi eller slette fullmakter.",
-      "user_search_placeholder": "Søk etter person eller virksomhet",
       "no_users": "Ingen har fullmakt til denne pakken på vegne av {{fromparty}}."
     },
     "services_tab": {
