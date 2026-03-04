@@ -907,7 +907,10 @@
   },
   "poa_overview_page": {
     "page_title": "Powers of attorney overview - Altinn",
-    "heading": "Powers of attorney overview for {{name}}"
+    "heading": "Powers of attorney overview for {{name}}",
+    "services_tab": {
+      "no_resources": "No services have been delegated."
+    }
   },
   "poa_status": {
     "no_permissions": "You have to give power of attorney"
@@ -927,6 +930,16 @@
     },
     "services_tab": {
       "no_resources": "This package includes no services"
+    }
+  },
+  "service_poa_details_page": {
+    "page_title": "Service power of attorney details - Altinn",
+    "load_error": "Oops! Something went wrong.",
+    "not_found": "The service could not be found.",
+    "back_to_overview_link": "Go back to the overview",
+    "users_tab": {
+      "description": "Search for users to grant or revoke permissions.",
+      "no_users": "No users have power of attorney for this service on behalf of {{fromparty}}."
     }
   },
   "resource_list": {

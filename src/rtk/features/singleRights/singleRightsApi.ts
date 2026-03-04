@@ -112,12 +112,20 @@ export const singleRightsApi = createApi({
         return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${searchParams}`;
       },
     }),
-    getSingleRightsForRightholder: builder.query<
+    getDelegatedResourcesByFromOrTo: builder.query<
       ResourceDelegation[],
-      { actingParty: string; from: string; to: string }
+      { actingParty: string; from?: string; to?: string }
     >({
-      query: ({ actingParty, from, to }) =>
-        `singleright/delegation/resources?party=${actingParty}&to=${to}&from=${from}`,
+      query: ({ actingParty, from, to }) => {
+        const params = new URLSearchParams({ party: actingParty });
+        if (from) {
+          params.set('from', from);
+        }
+        if (to) {
+          params.set('to', to);
+        }
+        return `singleright/delegation/resources?${params.toString()}`;
+      },
       providesTags: ['resources'],
     }),
     getResourceRights: builder.query<
@@ -199,7 +207,7 @@ export const singleRightsApi = createApi({
 
 export const {
   useGetPaginatedSearchQuery,
-  useGetSingleRightsForRightholderQuery,
+  useGetDelegatedResourcesByFromOrToQuery,
   useGetResourceRightsQuery,
   useClearAccessCacheMutation,
   useDelegationCheckQuery,

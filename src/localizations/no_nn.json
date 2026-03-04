@@ -904,7 +904,10 @@
   },
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt - Altinn",
-    "heading": "Fullmaktsoversikt for {{name}}"
+    "heading": "Fullmaktsoversikt for {{name}}",
+    "services_tab": {
+      "no_resources": "Ingen tenester er delegert."
+    }
   },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt"
@@ -924,6 +927,16 @@
     },
     "services_tab": {
       "no_resources": "Denne pakken inkluderer ingen tenester"
+    }
+  },
+  "service_poa_details_page": {
+    "page_title": "Fullmaktsdetaljar for teneste - Altinn",
+    "load_error": "Oi! Noko gjekk gale.",
+    "not_found": "Fann ikkje tenesta.",
+    "back_to_overview_link": "Gå tilbake til oversikta",
+    "users_tab": {
+      "description": "Søk etter brukarar for å gi eller slette fullmakter.",
+      "no_users": "Ingen har fullmakt til denne tenesta på vegne av {{fromparty}}."
     }
   },
   "resource_list": {

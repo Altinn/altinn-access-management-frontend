@@ -904,7 +904,10 @@
   },
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt - Altinn",
-    "heading": "Fullmaktsoversikt for {{name}}"
+    "heading": "Fullmaktsoversikt for {{name}}",
+    "services_tab": {
+      "no_resources": "Ingen tjenester er delegert."
+    }
   },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt."
@@ -924,6 +927,16 @@
     },
     "services_tab": {
       "no_resources": "Denne pakken inkluderer ingen tjenester"
+    }
+  },
+  "service_poa_details_page": {
+    "page_title": "Fullmaktsdetaljer for tjeneste - Altinn",
+    "load_error": "Oi! Noe gikk galt.",
+    "not_found": "Fant ikke tjenesten.",
+    "back_to_overview_link": "Gå tilbake til oversikten",
+    "users_tab": {
+      "description": "Søk etter brukere for å gi eller slette fullmakter.",
+      "no_users": "Ingen har fullmakt til denne tjenesten på vegne av {{fromparty}}."
     }
   },
   "resource_list": {

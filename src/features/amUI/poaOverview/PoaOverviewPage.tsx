@@ -16,6 +16,7 @@ import { useRerouteIfPoaOverviewPageDisabled } from '@/resources/utils/featureFl
 import { formatDisplayName } from '@altinn/altinn-components';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { GuardianshipPermissions } from './GuardianshipPermissions';
+import { ServicePermissions } from './ServicePermissions';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
@@ -47,7 +48,9 @@ export const PoaOverviewPage = () => {
           />
           <RightsTabs
             packagesPanel={<AccessPackagePermissions />}
-            singleRightsPanel={null}
+            singleRightsPanel={
+              window.featureFlags.displayResourceDelegation ? <ServicePermissions /> : null
+            }
             roleAssignmentsPanel={null}
             guardianshipsPanel={<GuardianshipPermissions />}
           />

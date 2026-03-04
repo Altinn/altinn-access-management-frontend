@@ -52,16 +52,21 @@ export const RightsTabs = ({
 
   const showGuardianshipsTab =
     guardianshipsPanel && fromParty?.partyTypeName === PartyType.Person && hasGuardianPermission;
+  const showSingleRightsTab = Boolean(singleRightsPanel);
 
   useEffect(() => {
     if (hash) {
       const tab = hash.replace('#', '');
-      if (tab === 'guardianships' && showGuardianshipsTab) {
+      const canNavigateToHashTab =
+        (tab === 'guardianships' && showGuardianshipsTab) ||
+        (tab === 'singleRights' && showSingleRightsTab);
+
+      if (canNavigateToHashTab) {
         setChosenTab(tab);
         navigate('', { replace: true }); // clear hash fragment from URL after navigating to correct tab
       }
     }
-  }, [hash, showGuardianshipsTab, navigate]);
+  }, [hash, showGuardianshipsTab, showSingleRightsTab, navigate]);
 
   return (
     <DsTabs

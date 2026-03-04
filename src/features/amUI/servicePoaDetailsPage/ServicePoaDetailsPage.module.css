@@ -1,0 +1,29 @@
+.headingContainer {
+  display: grid;
+  grid-template-areas:
+    'icon heading'
+    'description description';
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.serviceIcon {
+  grid-area: icon;
+  height: 2.4rem;
+  width: 2.4rem;
+  margin: auto;
+}
+
+.pageHeading {
+  grid-area: heading;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.pageDescription {
+  grid-area: description;
+  max-width: 100%;
+  word-break: break-word;
+}

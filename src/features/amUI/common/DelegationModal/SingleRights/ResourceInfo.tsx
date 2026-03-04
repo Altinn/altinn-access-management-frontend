@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DsParagraph } from '@altinn/altinn-components';
 
 import {
-  useGetSingleRightsForRightholderQuery,
+  useGetDelegatedResourcesByFromOrToQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
@@ -28,7 +28,7 @@ export interface ResourceInfoProps {
 export const ResourceInfo = ({ resource, onDelegate, availableActions }: ResourceInfoProps) => {
   const isSmall = useIsMobileOrSmaller();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
-  const { data: resourceDelegations } = useGetSingleRightsForRightholderQuery(
+  const { data: resourceDelegations } = useGetDelegatedResourcesByFromOrToQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',
