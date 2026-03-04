@@ -150,25 +150,12 @@ export const DelegationModalContent = ({
               </Button>
             )}
             <div className={classes.content}>
-              <DelegationModalContentWrapper>
-                {infoView ? infoViewContent : searchViewContent}
-              </DelegationModalContentWrapper>
+              {infoView ? infoViewContent : searchViewContent}
+              <Snackbar />
             </div>
           </SnackbarProvider>
         </>
       </DsDialog>
     </DsDialog.TriggerContext>
-  );
-};
-
-interface DelegationModalContentWrapperProps {
-  children: React.ReactNode;
-}
-const DelegationModalContentWrapper = ({ children }: DelegationModalContentWrapperProps) => {
-  return (
-    <>
-      {children}
-      <Snackbar />
-    </>
   );
 };
