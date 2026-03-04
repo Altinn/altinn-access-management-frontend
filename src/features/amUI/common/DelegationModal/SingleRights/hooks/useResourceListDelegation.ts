@@ -9,6 +9,9 @@ import {
   useRevokeResourceMutation,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
+import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface UseResourceListDelegationProps {
   onActionError?: (resource: ServiceResource, errorInfo: ActionError) => void;
@@ -46,6 +49,8 @@ export const useResourceListDelegation = ({
   const [runDelegationCheck] = useLazyDelegationCheckQuery();
   const [delegateRights] = useDelegateRightsMutation();
   const [revokeResource] = useRevokeResourceMutation();
+  const { t } = useTranslation();
+  const { openSnackbar } = useSnackbar();
 
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const { isFetching } = useGetSingleRightsForRightholderQuery(
@@ -56,6 +61,10 @@ export const useResourceListDelegation = ({
     },
     { skip: !toParty || !fromParty || !actingParty },
   );
+  const toPartyName = formatDisplayName({
+    fullName: toParty?.name || '',
+    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  });
 
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
   const waitingForRefetchRef = useRef<Set<string>>(new Set());
@@ -114,6 +123,13 @@ export const useResourceListDelegation = ({
               onSuccess?.(resource);
               // Add to waiting set - loading will be cleared when automatic refetch completes
               waitingForRefetchRef.current.add(resource.identifier);
+              openSnackbar({
+                message: t('single_rights.add_singleRight_success_message', {
+                  name: toPartyName,
+                  resourceTitle: resource.title,
+                }),
+                color: 'success',
+              });
             })
             .catch((error) => {
               onActionError?.(resource, getErrorInfo(extractStatus(error), extractDetails(error)));
@@ -158,6 +174,13 @@ export const useResourceListDelegation = ({
           onSuccess?.(resource);
           // Add to waiting set - loading will be cleared when automatic refetch completes
           waitingForRefetchRef.current.add(resource.identifier);
+          openSnackbar({
+            message: t('single_rights.delete_singleRight_success_message', {
+              name: toPartyName,
+              resourceTitle: resource.title,
+            }),
+            color: 'success',
+          });
         })
         .catch((error) => {
           onActionError?.(resource, getErrorInfo(extractStatus(error), extractDetails(error)));
