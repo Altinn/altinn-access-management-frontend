@@ -11,6 +11,7 @@ declare global {
       displayPopularSingleRightsServices: boolean;
       displayConfettiPackage: boolean;
       displayResourceDelegation: boolean;
+      displayResourcesInPoaOverviewDelegation: boolean;
       restrictPrivUse: boolean;
       displaySettingsPage: boolean;
       displayPoaOverviewPage: boolean;
@@ -47,6 +48,7 @@ window.featureFlags = {
   displayPopularSingleRightsServices: false,
   displayConfettiPackage: true,
   displayResourceDelegation: true,
+  displayResourcesInPoaOverviewDelegation: true,
   restrictPrivUse: false,
   displaySettingsPage: true,
   displayPoaOverviewPage: true,

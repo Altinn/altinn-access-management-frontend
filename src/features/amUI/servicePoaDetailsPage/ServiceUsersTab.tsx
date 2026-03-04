@@ -45,7 +45,7 @@ export const ServiceUsersTab = ({
   const modalRef = useRef<HTMLDialogElement>(null);
   const { isLoading: roleMetadataIsLoading } = useRoleMetadata();
   const connections = usePermissionConnections(permissions);
-  const canDelegate = resource?.delegable !== false;
+  const canDelegate = !!resource && resource.delegable !== false;
 
   const {
     data: indirectConnections,

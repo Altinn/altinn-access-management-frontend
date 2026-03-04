@@ -5,6 +5,7 @@ declare global {
     featureFlags: {
       displayPopularSingleRightsServices: boolean;
       displayResourceDelegation: boolean;
+      displayResourcesInPoaOverviewDelegation: boolean;
       displayConfettiPackage: boolean;
       restrictPrivUse: boolean;
       crossPlatformLinks: boolean;

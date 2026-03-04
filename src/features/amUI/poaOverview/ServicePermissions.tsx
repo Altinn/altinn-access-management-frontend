@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import { ResourceList } from '../common/ResourceList/ResourceList';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -15,7 +16,11 @@ export const ServicePermissions = () => {
   const navigate = useNavigate();
   const { actingParty, fromParty } = usePartyRepresentation();
 
-  const { data: delegatedResources, isLoading } = useGetDelegatedResourcesByFromOrToQuery(
+  const {
+    data: delegatedResources,
+    isLoading,
+    isError,
+  } = useGetDelegatedResourcesByFromOrToQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',
@@ -41,6 +46,17 @@ export const ServicePermissions = () => {
 
     return Array.from(uniqueResources.values());
   }, [delegatedResources]);
+
+  if (isError) {
+    return (
+      <DsAlert
+        role='alert'
+        data-color='danger'
+      >
+        <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+      </DsAlert>
+    );
+  }
 
   return (
     <ResourceList

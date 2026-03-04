@@ -12,7 +12,10 @@ import { ReporteePageHeading } from '../common/ReporteePageHeading';
 
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { AccessPackagePermissions } from './AccessPackagePermissions';
-import { useRerouteIfPoaOverviewPageDisabled } from '@/resources/utils/featureFlagUtils';
+import {
+  useRerouteIfPoaOverviewPageDisabled,
+  displayResourcesInPoaOverviewDelegation,
+} from '@/resources/utils/featureFlagUtils';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { GuardianshipPermissions } from './GuardianshipPermissions';
@@ -49,7 +52,7 @@ export const PoaOverviewPage = () => {
           <RightsTabs
             packagesPanel={<AccessPackagePermissions />}
             singleRightsPanel={
-              window.featureFlags.displayResourceDelegation ? <ServicePermissions /> : null
+              displayResourcesInPoaOverviewDelegation() ? <ServicePermissions /> : null
             }
             roleAssignmentsPanel={null}
             guardianshipsPanel={<GuardianshipPermissions />}

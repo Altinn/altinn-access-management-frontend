@@ -91,3 +91,7 @@ export const addAllSystemuserCustomers = () => {
 export const enableAddUserByUsername = () => {
   return window.featureFlags?.enableAddUserByUsername === true;
 };
+
+export const displayResourcesInPoaOverviewDelegation = () => {
+  return window.featureFlags?.displayResourcesInPoaOverviewDelegation === true;
+};
