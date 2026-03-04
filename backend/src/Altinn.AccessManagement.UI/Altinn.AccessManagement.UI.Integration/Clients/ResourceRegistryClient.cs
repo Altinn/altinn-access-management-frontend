@@ -230,7 +230,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"v2/resource/{resourceId}/policy/rights";
 
             HttpResponseMessage response = await _httpClient.GetAsync(null, endpointUrl, languageCode: languageCode);
-            var content = await response.Content.ReadAsStringAsync();
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<Right>>(response);
         }
     }
