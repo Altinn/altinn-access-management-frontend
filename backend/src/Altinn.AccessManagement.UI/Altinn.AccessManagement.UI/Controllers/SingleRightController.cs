@@ -225,8 +225,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegation/resources")]
-        public async Task<ActionResult<List<ResourceDelegation>>> GetDelegatedResources([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to)
+        public async Task<ActionResult<List<ResourceDelegation>>> GetDelegatedResources([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!from.HasValue && !to.HasValue)
+            {
+                return BadRequest("Either 'from' or 'to' query parameter must be provided.");
+            }
+
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {

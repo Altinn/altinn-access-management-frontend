@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="from">The party from which the resources have been delegated</param>
         /// <param name="to">The party that has received the delegations</param>
         /// <returns>A list of <see cref="ResourcePermission"/> representing the delegated resources for the specified parties</returns>
-        Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to);
+        Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid? from, Guid? to);
 
         /// <summary>
         ///     Retrieves the delegated resources for a specific right holder.

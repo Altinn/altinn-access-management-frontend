@@ -59,10 +59,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to)
+        public Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid? from, Guid? to)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
-            ThrowHttpStatusExceptionIfTriggerParty(from.ToString());
+            if (from.HasValue)
+            {
+                ThrowHttpStatusExceptionIfTriggerParty(from.ToString());
+            }
 
             string dataPath = Path.Combine(dataFolder, "SingleRight", "GetDelegations", "delegations.json");
             return Task.FromResult(Util.GetMockData<List<ResourcePermission>>(dataPath));

@@ -77,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ResourceDelegation>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to)
+        public async Task<List<ResourceDelegation>> GetDelegatedResources(string languageCode, Guid party, Guid? from, Guid? to)
         {
             List<ResourcePermission> resourcePermissions = await _singleRightClient.GetDelegatedResources(languageCode, party, from, to);
 

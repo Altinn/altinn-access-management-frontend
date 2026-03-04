@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="from">The party from which the resources have been delegated</param>
         /// <param name="to">The party that has received the delegations</param>
         /// <returns></returns>
-        Task<List<ResourceDelegation>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to);
+        Task<List<ResourceDelegation>> GetDelegatedResources(string languageCode, Guid party, Guid? from, Guid? to);
 
         /// <summary>
         ///     Gets the resources (without actions) that have been granted from one party to another

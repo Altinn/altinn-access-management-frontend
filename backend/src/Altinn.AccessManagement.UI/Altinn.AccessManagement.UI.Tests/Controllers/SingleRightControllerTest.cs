@@ -655,6 +655,65 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: Successfully retrieve delegated resources when only from-party is specified
+        ///     Expected: Returns OK and the list of delegated resources
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_FromOnly_ReturnsValid()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}");
+            List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.NotEmpty(actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: Successfully retrieve delegated resources when only to-party is specified
+        ///     Expected: Returns OK and the list of delegated resources
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_ToOnly_ReturnsValid()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources?party={party}&to={to}");
+            List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.NotEmpty(actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: Missing from and to parameters when retrieving delegated resources
+        ///     Expected: Returns bad request
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_MissingFromAndTo_ReturnsBadRequest()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
         ///     Test case: Handles unexpected errors when retrieving delegated resources
         ///     Expected: Returns an internal server error
         /// </summary>
