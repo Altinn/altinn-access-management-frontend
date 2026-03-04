@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
@@ -8,13 +8,17 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import {
   ServiceResource,
   useGetDelegatedResourcesByFromOrToQuery,
+  useGetPaginatedSearchQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { amUIPath } from '@/routes/paths';
+import { DebouncedSearchField } from '../common/DebouncedSearchField/DebouncedSearchField';
 
 export const ServicePermissions = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { actingParty, fromParty } = usePartyRepresentation();
+  const [debouncedSearchString, setDebouncedSearchString] = useState('');
+  const hasSearch = debouncedSearchString.trim().length > 0;
 
   const {
     data: delegatedResources,
@@ -30,7 +34,25 @@ export const ServicePermissions = () => {
     },
   );
 
-  const services = useMemo(() => {
+  const {
+    data: searchData,
+    isFetching: isFetchingSearch,
+    isError: isSearchError,
+  } = useGetPaginatedSearchQuery(
+    {
+      searchString: debouncedSearchString,
+      ROfilters: [],
+      page: 1,
+      resultsPerPage: 100,
+      includeA2Services: false,
+      includeMigratedApps: false,
+    },
+    {
+      skip: !hasSearch,
+    },
+  );
+
+  const delegatedServices = useMemo(() => {
     const uniqueResources = new Map<string, ServiceResource>();
 
     delegatedResources?.forEach((delegation) => {
@@ -47,7 +69,9 @@ export const ServicePermissions = () => {
     return Array.from(uniqueResources.values());
   }, [delegatedResources]);
 
-  if (isError) {
+  const services = hasSearch ? (searchData?.pageList ?? []) : delegatedServices;
+
+  if (isError || (hasSearch && isSearchError)) {
     return (
       <DsAlert
         role='alert'
@@ -59,18 +83,32 @@ export const ServicePermissions = () => {
   }
 
   return (
-    <ResourceList
-      isLoading={isLoading}
-      resources={services}
-      noResourcesText={t('poa_overview_page.services_tab.no_resources')}
-      onSelect={(resource) =>
-        navigate(
-          `/${amUIPath.PoaServiceDetails.replace(':id', encodeURIComponent(resource.identifier))}`,
-        )
-      }
-      showDetails={false}
-      size='md'
-      titleAs='h3'
-    />
+    <>
+      <DebouncedSearchField
+        placeholder={t('resource_list.resource_search_placeholder')}
+        setDebouncedSearchString={setDebouncedSearchString}
+      />
+      <ResourceList
+        isLoading={isLoading || (hasSearch && isFetchingSearch)}
+        resources={services}
+        noResourcesText={
+          hasSearch
+            ? t('resource_list.no_resources_filtered', { searchTerm: debouncedSearchString })
+            : t('poa_overview_page.services_tab.no_resources')
+        }
+        onSelect={(resource) =>
+          navigate(
+            `/${amUIPath.PoaServiceDetails.replace(':id', encodeURIComponent(resource.identifier))}`,
+            {
+              state: { resource },
+            },
+          )
+        }
+        showDetails={false}
+        size='md'
+        titleAs='h3'
+        enableSearch={false}
+      />
+    </>
   );
 };

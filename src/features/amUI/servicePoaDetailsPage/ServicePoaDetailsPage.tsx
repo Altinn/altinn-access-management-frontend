@@ -1,11 +1,14 @@
 import { useMemo } from 'react';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useLocation, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetDelegatedResourcesByFromOrToQuery } from '@/rtk/features/singleRights/singleRightsApi';
+import {
+  ServiceResource,
+  useGetDelegatedResourcesByFromOrToQuery,
+} from '@/rtk/features/singleRights/singleRightsApi';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { poaOverviewPageEnabled } from '@/resources/utils/featureFlagUtils';
 
@@ -56,13 +59,15 @@ export const ServicePoaDetailsPage = () => {
 const BreadcrumbsWrapper = () => {
   const { id } = useParams<{ id: string }>();
   const { fromParty, actingParty } = usePartyRepresentation();
+  const location = useLocation();
+  const selectedResourceFromState = (location.state as { resource?: ServiceResource } | null)
+    ?.resource;
   const serviceIdentifier = decodeURIComponent(id ?? '');
 
   const { data: delegatedResources } = useGetDelegatedResourcesByFromOrToQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',
-      to: '',
     },
     {
       skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !serviceIdentifier,
@@ -73,8 +78,11 @@ const BreadcrumbsWrapper = () => {
     () =>
       delegatedResources?.find(
         (delegation) => delegation.resource?.identifier === serviceIdentifier,
-      )?.resource?.title ?? serviceIdentifier,
-    [delegatedResources, serviceIdentifier],
+      )?.resource?.title ??
+      (selectedResourceFromState?.identifier === serviceIdentifier
+        ? selectedResourceFromState.title
+        : serviceIdentifier),
+    [delegatedResources, selectedResourceFromState, serviceIdentifier],
   );
 
   return (

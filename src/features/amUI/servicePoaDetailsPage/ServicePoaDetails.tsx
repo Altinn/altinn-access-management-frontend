@@ -1,11 +1,14 @@
 import { useMemo } from 'react';
-import { Link, useParams } from 'react-router';
+import { Link, useLocation, useParams } from 'react-router';
 import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { FilesIcon } from '@navikt/aksel-icons';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useGetDelegatedResourcesByFromOrToQuery } from '@/rtk/features/singleRights/singleRightsApi';
+import {
+  ServiceResource,
+  useGetDelegatedResourcesByFromOrToQuery,
+} from '@/rtk/features/singleRights/singleRightsApi';
 import { amUIPath } from '@/routes/paths';
 
 import classes from './ServicePoaDetailsPage.module.css';
@@ -15,6 +18,9 @@ export const ServicePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const { fromParty, actingParty } = usePartyRepresentation();
+  const location = useLocation();
+  const selectedResourceFromState = (location.state as { resource?: ServiceResource } | null)
+    ?.resource;
 
   const serviceIdentifier = decodeURIComponent(id ?? '');
 
@@ -41,7 +47,11 @@ export const ServicePoaDetails = () => {
     [delegatedResources, serviceIdentifier],
   );
 
-  const service = serviceDelegations[0]?.resource;
+  const service =
+    serviceDelegations[0]?.resource ??
+    (selectedResourceFromState?.identifier === serviceIdentifier
+      ? selectedResourceFromState
+      : null);
   const permissions = useMemo(
     () => serviceDelegations.flatMap((delegation) => delegation.permissions ?? []),
     [serviceDelegations],
