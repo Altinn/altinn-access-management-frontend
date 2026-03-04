@@ -1,14 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 
-import { usePackagePermissionConnections } from './usePackagePermissionConnections';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { PartyRepresentationContextOutput } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { usePermissionConnections } from './usePermissionConnections';
+import type { PartyRepresentationContextOutput } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { Party } from '@/rtk/features/lookupApi';
 
 const usePartyRepresentationMock = vi.fn<() => PartyRepresentationContextOutput>();
 
-vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({
+vi.mock('../PartyRepresentationContext/PartyRepresentationContext', () => ({
   usePartyRepresentation: () => usePartyRepresentationMock(),
 }));
 
@@ -23,16 +22,6 @@ const setPartyContext = ({
     fromParty: fromPartyUuid ? ({ partyUuid: fromPartyUuid } as Party) : undefined,
     toParty: toPartyUuid ? ({ partyUuid: toPartyUuid } as Party) : undefined,
   });
-
-// Minimal AccessPackage shape for the tests (augment if underlying type changes)
-const basePkg: Partial<AccessPackage> = {
-  id: 'pkg-1',
-  urn: 'urn:altinn:accesspackage:test',
-  name: 'Test Package',
-  isAssignable: true,
-  description: 'Test',
-  resources: [],
-};
 
 const org = (id: string, name: string) => ({
   id,
@@ -66,8 +55,7 @@ const run = (
   partyContext?: { fromPartyUuid?: string; toPartyUuid?: string },
 ) => {
   if (partyContext) setPartyContext(partyContext);
-  const pkg = { ...basePkg, permissions } as AccessPackage;
-  const { result } = renderHook(() => usePackagePermissionConnections(pkg));
+  const { result } = renderHook(() => usePermissionConnections(permissions));
   return result.current;
 };
 
@@ -76,7 +64,7 @@ beforeEach(() => {
   setPartyContext();
 });
 
-describe('usePackagePermissionConnections', () => {
+describe('usePermissionConnections', () => {
   it('returns empty array when no permissions', () => {
     const res = run([]);
     expect(res).toEqual([]);

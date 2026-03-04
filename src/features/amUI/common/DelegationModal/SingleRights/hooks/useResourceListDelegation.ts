@@ -4,7 +4,7 @@ import type { ActionError } from '@/resources/hooks/useActionError';
 import { usePartyRepresentation } from '@/features/amUI/common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   useDelegateRightsMutation,
-  useGetDelegatedResourcesByFromOrToQuery,
+  useGetDelegatedResourcesQuery,
   useLazyDelegationCheckQuery,
   useRevokeResourceMutation,
   type ServiceResource,
@@ -48,7 +48,7 @@ export const useResourceListDelegation = ({
   const [revokeResource] = useRevokeResourceMutation();
 
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
-  const { isFetching } = useGetDelegatedResourcesByFromOrToQuery(
+  const { isFetching } = useGetDelegatedResourcesQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',

@@ -7,7 +7,7 @@ import { FilesIcon } from '@navikt/aksel-icons';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   ServiceResource,
-  useGetDelegatedResourcesByFromOrToQuery,
+  useGetDelegatedResourcesQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { amUIPath } from '@/routes/paths';
 
@@ -29,7 +29,7 @@ export const ServicePoaDetails = () => {
     isLoading,
     isFetching,
     error,
-  } = useGetDelegatedResourcesByFromOrToQuery(
+  } = useGetDelegatedResourcesQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',

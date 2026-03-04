@@ -7,7 +7,7 @@ import { useCallback, useEffect } from 'react';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useGetPaginatedSearchQuery,
-  useGetDelegatedResourcesByFromOrToQuery,
+  useGetDelegatedResourcesQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
@@ -57,7 +57,7 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
     includeA2Services: false,
     includeMigratedApps: false,
   });
-  const { data: delegatedResources } = useGetDelegatedResourcesByFromOrToQuery(
+  const { data: delegatedResources } = useGetDelegatedResourcesQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',

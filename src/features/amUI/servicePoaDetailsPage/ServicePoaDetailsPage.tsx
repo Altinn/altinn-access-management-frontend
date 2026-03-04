@@ -7,7 +7,7 @@ import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
   ServiceResource,
-  useGetDelegatedResourcesByFromOrToQuery,
+  useGetDelegatedResourcesQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { poaOverviewPageEnabled } from '@/resources/utils/featureFlagUtils';
@@ -64,7 +64,7 @@ const BreadcrumbsWrapper = () => {
     ?.resource;
   const serviceIdentifier = decodeURIComponent(id ?? '');
 
-  const { data: delegatedResources } = useGetDelegatedResourcesByFromOrToQuery(
+  const { data: delegatedResources } = useGetDelegatedResourcesQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',

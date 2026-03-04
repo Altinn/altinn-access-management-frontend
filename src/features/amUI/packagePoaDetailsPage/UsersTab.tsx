@@ -9,7 +9,7 @@ import { Party } from '@/rtk/features/lookupApi';
 import AdvancedUserSearch from '../common/AdvancedUserSearch/AdvancedUserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { usePackagePermissionConnections } from './usePackagePermissionConnections';
+import { usePermissionConnections } from '../common/PermissionConnections/usePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { ActionError } from '@/resources/hooks/useActionError';
@@ -62,7 +62,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     },
   );
 
-  const connections = usePackagePermissionConnections(accessPackage);
+  const connections = usePermissionConnections(accessPackage?.permissions);
 
   const formatToPartyName = (party: Party) => {
     return formatDisplayName({

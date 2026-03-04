@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router';
 import { DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { useGetDelegatedResourcesByFromOrToQuery } from '@/rtk/features/singleRights/singleRightsApi';
+import { useGetDelegatedResourcesQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
@@ -32,7 +32,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
     isError,
     error,
     isLoading,
-  } = useGetDelegatedResourcesByFromOrToQuery(
+  } = useGetDelegatedResourcesQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',

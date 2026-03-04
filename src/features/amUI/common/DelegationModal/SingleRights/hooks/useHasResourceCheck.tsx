@@ -1,9 +1,9 @@
-import { useGetDelegatedResourcesByFromOrToQuery } from '@/rtk/features/singleRights/singleRightsApi';
+import { useGetDelegatedResourcesQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
 
 export const useHasResourceCheck = (resourceId: string) => {
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
-  const { data: resourcesWithAccess } = useGetDelegatedResourcesByFromOrToQuery(
+  const { data: resourcesWithAccess } = useGetDelegatedResourcesQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',
