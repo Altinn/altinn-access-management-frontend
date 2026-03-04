@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import type { JSX } from 'react';
 import { useEffect, useRef } from 'react';
-import { Button, DsDialog } from '@altinn/altinn-components';
+import { Button, DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -137,20 +137,38 @@ export const DelegationModalContent = ({
         ref={modalRef}
       >
         <>
-          {infoView && (
-            <Button
-              className={classes.backButton}
-              variant='tertiary'
-              data-color='neutral'
-              onClick={() => setInfoView(false)}
-            >
-              <ArrowLeftIcon />
-              {t('common.back')}
-            </Button>
-          )}
-          <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
+          <SnackbarProvider>
+            {infoView && (
+              <Button
+                className={classes.backButton}
+                variant='tertiary'
+                data-color='neutral'
+                onClick={() => setInfoView(false)}
+              >
+                <ArrowLeftIcon />
+                {t('common.back')}
+              </Button>
+            )}
+            <div className={classes.content}>
+              <DelegationModalContentWrapper>
+                {infoView ? infoViewContent : searchViewContent}
+              </DelegationModalContentWrapper>
+            </div>
+          </SnackbarProvider>
         </>
       </DsDialog>
     </DsDialog.TriggerContext>
+  );
+};
+
+interface DelegationModalContentWrapperProps {
+  children: React.ReactNode;
+}
+const DelegationModalContentWrapper = ({ children }: DelegationModalContentWrapperProps) => {
+  return (
+    <>
+      {children}
+      <Snackbar />
+    </>
   );
 };
