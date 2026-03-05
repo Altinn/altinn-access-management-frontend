@@ -11,6 +11,7 @@ on:
 jobs:
   containerize:
     name: "Containerize"
+    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
     uses: "./.github/workflows/template-build-and-push-container.yml"
     with:
       tag: ${{ github.sha }}
