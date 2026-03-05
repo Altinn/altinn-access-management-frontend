@@ -79,6 +79,7 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
                     <Button
                       size='xs'
                       variant='ghost'
+                      data-testid={`${item.consentId}-${item.eventType}`}
                       onClick={() => showConsentDetails(item.consentId)}
                     >
                       {item.isPoa ? t('consent_log.view_poa') : t('consent_log.view_consent')}
@@ -123,6 +124,7 @@ interface TimelineItem {
   toPartyName?: string;
   isPoa: boolean;
   consentId: string;
+  eventType: string;
 }
 const getTimeLineItems = (
   consentLog: ConsentHistoryItem[],
@@ -169,6 +171,7 @@ const getTimeLineItems = (
             toPartyName: consent.toParty.name,
             isPoa: consent.isPoa,
             consentId: consent.id,
+            eventType: event.eventType,
           };
         });
 
