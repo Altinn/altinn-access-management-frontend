@@ -67,7 +67,9 @@ test.describe('Fetch consent token after approval', () => {
 
     await test.step('Fetch consent token', async () => {
       // only works in TT02 environment
-      test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+      if (ENV !== 'TT02') {
+        return;
+      }
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
@@ -103,7 +105,9 @@ test.describe('Fetch consent token after approval', () => {
 
     await test.step('Fetch consent token', async () => {
       // only works in TT02 environment
-      test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+      if (ENV !== 'TT02') {
+        return;
+      }
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
@@ -164,7 +168,9 @@ test.describe('Fetch consent token after approval', () => {
 
     await test.step('Fetch consent token with Digdir client', async () => {
       // only works in TT02 environment
-      test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+      if (ENV !== 'TT02') {
+        return;
+      }
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
@@ -236,7 +242,9 @@ test.describe('Fetch consent token after approval', () => {
 
     await test.step('Fetch consent token with consumer_org', async () => {
       // only works in TT02 environment
-      test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+      if (ENV !== 'TT02') {
+        return;
+      }
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
@@ -299,7 +307,9 @@ test.describe('Fetch consent token after approval', () => {
 
     await test.step('Fetch consent token with consumer_org', async () => {
       // only works in TT02 environment
-      test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+      if (ENV !== 'TT02') {
+        return;
+      }
       await assertConsentTokenIsReturned(
         api,
         viewUri,
