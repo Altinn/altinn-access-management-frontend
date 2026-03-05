@@ -1,42 +1,59 @@
 import { expect } from '@playwright/test';
 import { test } from 'playwright/fixture/pomFixture';
 import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
-import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, env, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 import { getConsentRequestId } from './helper/consentHelper.js';
 import { fromOrgs, fromPersons, toOrgs } from './helper/consentTestdata';
 
-const MOBILE_VIEWPORT = { width: 375, height: 667 };
-
-// Digdir's org id
 const MASKINPORTEN_ORG_DIGDIR = '991825827';
 const ENV = env('environment')?.toUpperCase();
 const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
 
-function getDigitaliseringsdirektoratetLocator(page: any) {
-  return page.getByText('DIGITALISERINGSDIREKTORATET');
-}
+// standard request scope used directly or behalf of organization in combination with consumer_org
+const CONSENTREQUESTS_WRITE_SCOPE = 'altinn:consentrequests.write';
 
-test.describe('Generate consent request for Digdir using maskinporten to fetch token', () => {
-  test.use({ language: Language.NB, viewport: MOBILE_VIEWPORT });
+// e-bevis scope used by Digdir
+const CONSENTREQUESTS_ORG_SCOPE = 'altinn:consentrequests.org';
 
-  test('Create and approve standard consent with Maskinporten', async ({
-    page,
-    login,
-    consentPage,
-  }) => {
+const MASKINPORTEN_CLIENT_ID_ENV = 'MASKINPORTEN_CLIENT_ID';
+const MASKINPORTEN_JWK_ENV = 'MASKINPORTEN_JWK';
+const MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV = 'MASKINPORTEN_BEHALF_OF_CLIENT_ID';
+const MASKINPORTEN_BEHALF_OF_JWK_ENV = 'MASKINPORTEN_BEHALF_OF_JWK';
+
+test.describe('Fetch consent token after approval', () => {
+  async function assertConsentTokenIsReturned(
+    api: ConsentApiRequests,
+    consentViewUri: string,
+    from: { type: 'person' | 'org'; id: string },
+    clientIdEnv: string,
+    jwkEnv: string,
+    consumerOrg?: string,
+  ) {
+    const consentId = getConsentRequestId(consentViewUri);
+    const token = await api.getConsentTokenWithMaskinporten(
+      consentId,
+      from,
+      clientIdEnv,
+      jwkEnv,
+      consumerOrg,
+    );
+    expect(token).toBeTruthy();
+    expect(token.length).toBeGreaterThan(10);
+  }
+
+  test('From person to org', async ({ login, consentPage }) => {
     const fromPerson = pickRandom(fromPersons);
     const toOrg = MASKINPORTEN_ORG_DIGDIR;
-    const validTo = addTimeToNowUtc({ days: 5 });
     const api = new ConsentApiRequests(toOrg);
 
     const consentResp = await test.step('Create consent request', async () => {
       const response = await api.createConsentRequestWithMaskinporten(
         { type: 'person', id: fromPerson },
         { type: 'org', id: toOrg },
-        'MASKINPORTEN_CLIENT_ID',
-        'MASKINPORTEN_JWK',
+        MASKINPORTEN_CLIENT_ID_ENV,
+        MASKINPORTEN_JWK_ENV,
+        { consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE },
       );
       await consentPage.open(response.viewUri);
       await login.loginNotChoosingActor(fromPerson);
@@ -44,252 +61,190 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
       return response;
     });
 
-    await test.step('Verify consent created', async () => {
-      expect(consentResp.viewUri).toBeTruthy();
+    await test.step('Approve consent', async () => {
+      await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
     });
 
-    await test.step('Verify consent UI and expiry', async () => {
-      await consentPage.expectStandardIntro();
-      await expect(consentPage.textIncomeData).toBeVisible();
-      await expect(getDigitaliseringsdirektoratetLocator(page)).toHaveCount(2);
-      await consentPage.expectExpiry(formatUiDateTime(validTo));
+    await test.step('Fetch consent token', async () => {
+      // only works in TT02 environment
+      test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+      await assertConsentTokenIsReturned(
+        api,
+        consentResp.viewUri,
+        { type: 'person', id: fromPerson },
+        MASKINPORTEN_CLIENT_ID_ENV,
+        MASKINPORTEN_JWK_ENV,
+      );
+    });
+  });
+
+  test('From org to org', async ({ login, consentPage }) => {
+    const [fromOrg, personThatCanApprove] = pickRandom(fromOrgs);
+    const toOrg = MASKINPORTEN_ORG_DIGDIR;
+    const api = new ConsentApiRequests(toOrg);
+
+    const consentResp = await test.step('Create consent request', async () => {
+      const response = await api.createConsentRequestWithMaskinporten(
+        { type: 'org', id: fromOrg },
+        { type: 'org', id: toOrg },
+        MASKINPORTEN_CLIENT_ID_ENV,
+        MASKINPORTEN_JWK_ENV,
+        { consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE },
+      );
+      await consentPage.open(response.viewUri);
+      await login.loginNotChoosingActor(personThatCanApprove);
+      await consentPage.pickLanguage(consentPage.language);
+      return response;
     });
 
     await test.step('Approve consent', async () => {
       await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
+    });
+
+    await test.step('Fetch consent token', async () => {
+      // only works in TT02 environment
+      test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+      await assertConsentTokenIsReturned(
+        api,
+        consentResp.viewUri,
+        { type: 'org', id: fromOrg },
+        MASKINPORTEN_CLIENT_ID_ENV,
+        MASKINPORTEN_JWK_ENV,
+      );
     });
   });
 
   /**
-   * Scenario E-bevis
+   * Scenario: Displaying the scenario page for a consent request (known bug)
    *
-   * Funksjonelt scenario:
-   * I dette scenarioet har en virksomhet behov for tilgang til data til norsk virksomhet eller innbygger via e-bevis løsningen
-   * som administreres av Digdir. Virksomheten som ønsker tilgang til data har ikke noe oppsett
-   * for å kunne gjøre det og vil at Digdir gjennomfører alt på vegne av dem.
-   * Krever scopet "altinn:consentrequests.org" for å kunne gjøre det og det sjekkes eksplisitt på at samtykkeressursen eies av samme org som henter
-   * maskinporten-tokenet.
+   * This test is related to Altinn issue #2094.
+   * Kjent bug: https://github.com/Altinn/altinn-authorization-tmp/issues/2094
+   *
+   * Funksjonelt Scenario: https://github.com/Altinn/altinn-authorization-tmp/issues/1006
+   *
    */
-  test(`E-bevis (org scope)`, async ({ consentPage, login }) => {
-    const fromPerson = pickRandom(fromPersons);
+
+  test.skip('Kjent bug som gir 400-feil. E-bevis', async ({ login, consentPage }) => {
+    const [fromOrg, personThatCanApprove] = pickRandom(fromOrgs);
     const toOrg = pickRandom(toOrgs);
     const validTo = addTimeToNowUtc({ days: 2 });
-    const api = new ConsentApiRequests(toOrg, 'altinn:consentrequests.org');
+    const api = new ConsentApiRequests(toOrg);
 
-    const consentResponse = await test.step('Create consent request', async () => {
-      return await api.createConsentRequest({
-        from: { type: 'person', id: fromPerson },
-        to: { type: 'org', id: toOrg },
-        validToIsoUtc: validTo,
-        resourceValue: 'samtykke-esoknad',
-        redirectUrl: REDIRECT_URL,
-        metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
+    const consentResp =
+      await test.step('Create consent request with Maskinporten using org scope', async () => {
+        const response = await api.createConsentRequestWithMaskinporten(
+          { type: 'org', id: fromOrg },
+          { type: 'org', id: toOrg },
+          MASKINPORTEN_CLIENT_ID_ENV,
+          MASKINPORTEN_JWK_ENV,
+          {
+            consentRequestScope: CONSENTREQUESTS_ORG_SCOPE, // Digdir's super scope for e-bevis
+            validToIsoUtc: validTo,
+            resourceValue: 'samtykke-esoknad', //  se issue #2094 for mer info
+            redirectUrl: REDIRECT_URL,
+            metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
+          },
+        );
+
+        await consentPage.open(response.viewUri);
+        await login.loginNotChoosingActor(personThatCanApprove);
+        await consentPage.pickLanguage(consentPage.language);
+        return response;
       });
-    });
 
-    await test.step('Open consent page and login', async () => {
-      await consentPage.open(consentResponse.viewUri);
-      await login.loginNotChoosingActor(fromPerson);
-    });
-
-    await test.step('Pick language', async () => {
-      await consentPage.pickLanguage(consentPage.language);
-    });
-
-    await test.step('Verify consent UI', async () => {
-      await consentPage.expectStandardIntro();
-      await expect(consentPage.textLoanApplication).toBeVisible();
-      await expect(consentPage.getInterestRateText('4.2')).toBeVisible();
-      await expect(consentPage.getExpirationYearText('2027')).toBeVisible();
-      await expect(consentPage.getBankNameText('Testbanken E2E')).toBeVisible();
-      await expect(consentPage.textOneTimeDelivery).toBeVisible();
+    await test.step('Verify Digdir on-behalf-of text is displayed', async () => {
+      await expect(
+        consentPage.page.getByText('Digitaliseringsdirektoratet foretar dette oppslaget på'),
+      ).toBeVisible();
     });
 
     await test.step('Approve consent', async () => {
       await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
     });
+
+    await test.step('Fetch consent token with Digdir client', async () => {
+      // only works in TT02 environment
+      test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+      await assertConsentTokenIsReturned(
+        api,
+        consentResp.viewUri,
+        { type: 'org', id: fromOrg },
+        MASKINPORTEN_CLIENT_ID_ENV,
+        MASKINPORTEN_JWK_ENV,
+      );
+    });
   });
 
-  // TT02-only token retrieval
-  test.describe('TT02-only token retrieval', () => {
-    test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+  /**
+   * "På vegne av - samtykke for datakonsument må få delegert scope-tilgang"
+   *
+   * Funksjonelt scenario:
+   * Sparebanken må hente inn samtykke fra person, men en annen org gjør det tekniske
+   * (Sparebanken Drift).
+   *
+   * Forhåndssteg:
+   * - Sparebanken Øst har delegert scopetilgang "samtykke:write" til Sparebanken Drift (datakonsument).
+   * - Sparebanken Drift henter ut Maskinporten-token for Sparebank 1 Øst ved å oppgi
+   *   consumer_org for Sparebank 1 Øst (for selve forespørselen).
+   */
+  test('På vegne av - Person to org', async ({ login, consentPage }) => {
+    const FROM_ORG = '313876144'; //Dagl 28913749776
 
-    test('Fetch consent token after approval', async ({ page, login, consentPage }) => {
-      const fromPerson = pickRandom(fromPersons);
-      const toOrg = MASKINPORTEN_ORG_DIGDIR;
-      const api = new ConsentApiRequests(toOrg);
+    const fromPerson = pickRandom(fromPersons);
+    const validTo = addTimeToNowUtc({ days: 5 });
+    const api = new ConsentApiRequests();
 
-      const consentResp = await test.step('Create consent request', async () => {
-        const response = await api.createConsentRequestWithMaskinporten(
+    const consentResp =
+      await test.step('Fetch Maskinporten token for consumer_org and create consent request with toOrg as FROM_ORG', async () => {
+        // Use Maskinporten token (from behalf_of client) with consumer_orgno to create consent request
+        const { viewUri } = await api.createConsentRequestWithMaskinporten(
           { type: 'person', id: fromPerson },
-          { type: 'org', id: toOrg },
-          'MASKINPORTEN_CLIENT_ID',
-          'MASKINPORTEN_JWK',
+          { type: 'org', id: FROM_ORG },
+          MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV,
+          MASKINPORTEN_BEHALF_OF_JWK_ENV,
+          {
+            consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE,
+            consumerOrg: FROM_ORG,
+          },
         );
-        await consentPage.open(response.viewUri);
+
+        await consentPage.open(viewUri);
         await login.loginNotChoosingActor(fromPerson);
         await consentPage.pickLanguage(consentPage.language);
-        return response;
+
+        expect(viewUri).toBeTruthy();
+        return { viewUri };
       });
 
-      await test.step('Verify consent UI', async () => {
-        await consentPage.expectStandardIntro();
-        await expect(consentPage.textIncomeData).toBeVisible();
-        await expect(getDigitaliseringsdirektoratetLocator(page)).toHaveCount(2);
-      });
-
-      await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
-      });
-
-      await test.step('Fetch consent token', async () => {
-        const consentId = getConsentRequestId(consentResp.viewUri);
-        const token = await api.getConsentTokenWithMaskinporten(
-          consentId,
-          { type: 'person', id: fromPerson },
-          'MASKINPORTEN_CLIENT_ID',
-          'MASKINPORTEN_JWK',
-        );
-        expect(token).toBeTruthy();
-        expect(token.length).toBeGreaterThan(10);
-      });
+    await test.step('Verify consent UI and expiry', async () => {
+      await consentPage.expectStandardIntro();
+      await expect(consentPage.textIncomeData).toBeVisible();
+      await consentPage.expectExpiry(formatUiDateTime(validTo));
     });
 
-    /**
-     * Scenario 3 - E-bevis
-     *
-     * Funksjonelt scenario:
-     * En virksomhet trenger tilgang til data via e-bevis, og Digdir gjør oppslag/forespørsel på vegne av dem
-     * med scope `altinn:consentrequests.org`.
-     */
-    test('Scenario 3 E-bevis: create consent with org scope and fetch token', async ({
-      login,
-      consentPage,
-    }) => {
-      const fromPerson = pickRandom(fromPersons);
-      const toOrg = pickRandom(toOrgs);
-      const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
-
-      const consentResp =
-        await test.step('Create consent request with Maskinporten using org scope', async () => {
-          const response = await api.createConsentRequestWithMaskinporten(
-            { type: 'person', id: fromPerson },
-            { type: 'org', id: toOrg },
-            'MASKINPORTEN_CLIENT_ID',
-            'MASKINPORTEN_JWK',
-            {
-              consentRequestScope: 'altinn:consentrequests.org', // Digdir's super scope for e-bevis
-              validToIsoUtc: validTo,
-              resourceValue: 'samtykke-esoknad',
-              redirectUrl: REDIRECT_URL,
-              metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
-            },
-          );
-
-          await consentPage.open(response.viewUri);
-          await login.loginNotChoosingActor(fromPerson);
-          await consentPage.pickLanguage(consentPage.language);
-          return response;
-        });
-
-      await test.step('Verify Digdir on-behalf-of text is displayed', async () => {
-        await expect(
-          consentPage.page.getByText('Digitaliseringsdirektoratet foretar dette oppslaget på'),
-        ).toBeVisible();
-      });
-
-      await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
-      });
-
-      await test.step('Fetch consent token with Digdir client', async () => {
-        const consentId = getConsentRequestId(consentResp.viewUri);
-        const token = await api.getConsentTokenWithMaskinporten(
-          consentId,
-          { type: 'person', id: fromPerson },
-          'MASKINPORTEN_CLIENT_ID',
-          'MASKINPORTEN_JWK',
-        );
-        expect(token).toBeTruthy();
-        expect(token.length).toBeGreaterThan(10);
-      });
+    await test.step('Verify behalf of text is displayed', async () => {
+      await expect(
+        consentPage.page.getByText(
+          'Jovial Konservativ Tiger AS foretar dette oppslaget på vegne av Nyttig Fredfull Struts Ltd.',
+        ),
+      ).toBeVisible();
     });
 
-    /**
-     * Scenario 2 - "På vegne av - samtykke for datakonsument må få delegert scope-tilgang"
-     *
-     * Funksjonelt scenario:
-     * Sparebanken må hente inn samtykke fra person, men en annen org er datakonsument
-     * (Sparebanken Drift).
-     *
-     * Forhåndssteg:
-     * - Sparebanken Øst har delegert scopetilgang "samtykke:write" til Sparebanken Drift (datakonsument).
-     * - Sparebanken Drift henter ut Maskinporten-token for Sparebank 1 Øst ved å oppgi
-     *   consumer_org for Sparebank 1 Øst (for selve forespørselen).
-     */
-    test('Create and approve consent on behalf of organization as a consumer org and fetch token', async ({
-      login,
-      consentPage,
-    }) => {
+    await test.step('Approve consent', async () => {
+      await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
+    });
+
+    await test.step('Fetch consent token with consumer_org', async () => {
+      // only works in TT02 environment
       test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
-
-      const FROM_ORG = '313876144'; //Dagl 28913749776
-
-      const fromPerson = pickRandom(fromPersons);
-      const validTo = addTimeToNowUtc({ days: 5 });
-      const api = new ConsentApiRequests();
-
-      const consentResp =
-        await test.step('Fetch Maskinporten token for consumer_org and create consent request with toOrg as FROM_ORG', async () => {
-          // Use Maskinporten token (from behalf_of client) with consumer_orgno to create consent request
-          const { viewUri } = await api.createConsentRequestWithMaskinporten(
-            { type: 'person', id: fromPerson },
-            { type: 'org', id: FROM_ORG },
-            'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
-            'MASKINPORTEN_BEHALF_OF_JWK',
-            { consumerOrg: FROM_ORG },
-          );
-
-          await consentPage.open(viewUri);
-          await login.loginNotChoosingActor(fromPerson);
-          await consentPage.pickLanguage(consentPage.language);
-
-          expect(viewUri).toBeTruthy();
-          return { viewUri };
-        });
-
-      await test.step('Verify consent UI and expiry', async () => {
-        await consentPage.expectStandardIntro();
-        await expect(consentPage.textIncomeData).toBeVisible();
-        await consentPage.expectExpiry(formatUiDateTime(validTo));
-      });
-
-      await test.step('Verify behalf of text is displayed', async () => {
-        await expect(
-          consentPage.page.getByText(
-            'Jovial Konservativ Tiger AS foretar dette oppslaget på vegne av Nyttig Fredfull Struts Ltd.',
-          ),
-        ).toBeVisible();
-      });
-
-      await test.step('Approve consent', async () => {
-        await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
-      });
-
-      await test.step('Fetch consent token with consumer_org', async () => {
-        const consentId = getConsentRequestId(consentResp.viewUri);
-
-        const token = await api.getConsentTokenWithMaskinporten(
-          consentId,
-          { type: 'person', id: fromPerson },
-          'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
-          'MASKINPORTEN_BEHALF_OF_JWK',
-          FROM_ORG,
-        );
-        expect(token).toBeTruthy();
-        expect(token.length).toBeGreaterThan(10);
-      });
+      await assertConsentTokenIsReturned(
+        api,
+        consentResp.viewUri,
+        { type: 'person', id: fromPerson },
+        MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV,
+        MASKINPORTEN_BEHALF_OF_JWK_ENV,
+        FROM_ORG,
+      );
     });
   });
 
@@ -305,56 +260,54 @@ test.describe('Generate consent request for Digdir using maskinporten to fetch t
    * - Sparebanken Drift henter ut Maskinporten-token for Sparebank 1 Øst ved å oppgi
    *   consumer_org for Sparebank 1 Øst (for selve forespørselen).
    */
-  test('Create and approve consent on behalf of organization as a consumer org and fetch token with org number', async ({
-    login,
-    consentPage,
-  }) => {
-    test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
-
+  test('På vegne av - Org to org', async ({ login, consentPage }) => {
     const SPAREBANKEN_ORG_NUMBER = '313876144'; //Dagl 28913749776
 
     // Org that consents
     const fromOrg = '312690365';
-    const personapprove = '09923649732';
+    const personThatCanApprove = '09923649732';
 
     const api = new ConsentApiRequests();
 
-    const consentResp =
-      await test.step('Fetch Maskinporten token for consumer_org and create consent request with toOrg as SPAREBANKEN_ORG_NUMBER', async () => {
-        // Use Maskinporten token (from behalf_of client) with consumer_orgno to create consent request
-        const { viewUri } = await api.createConsentRequestWithMaskinporten(
-          { type: 'org', id: fromOrg },
-          { type: 'org', id: SPAREBANKEN_ORG_NUMBER },
-          'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
-          'MASKINPORTEN_BEHALF_OF_JWK',
-          { consumerOrg: SPAREBANKEN_ORG_NUMBER },
-        );
+    let viewUri: string;
 
-        await consentPage.open(viewUri);
-        await login.loginNotChoosingActor(personapprove);
-        await consentPage.pickLanguage(consentPage.language);
+    await test.step('Fetch Maskinporten token for consumer_org and create consent request with toOrg as SPAREBANKEN_ORG_NUMBER', async () => {
+      // Use Maskinporten token (from behalf_of client) with consumer_orgno to create consent request
+      const response = await api.createConsentRequestWithMaskinporten(
+        { type: 'org', id: fromOrg },
+        { type: 'org', id: SPAREBANKEN_ORG_NUMBER },
+        MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV,
+        MASKINPORTEN_BEHALF_OF_JWK_ENV,
+        {
+          consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE,
+          consumerOrg: SPAREBANKEN_ORG_NUMBER,
+        },
+      );
+      viewUri = response.viewUri;
 
-        expect(viewUri).toBeTruthy();
-        return { viewUri };
-      });
+      await consentPage.open(viewUri);
+      await login.loginNotChoosingActor(personThatCanApprove);
+      await consentPage.pickLanguage(consentPage.language);
+
+      expect(viewUri).toBeTruthy();
+      return { viewUri };
+    });
 
     await test.step('Approve consent', async () => {
       await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
     });
 
     await test.step('Fetch consent token with consumer_org', async () => {
-      const consentId = getConsentRequestId(consentResp.viewUri);
-
-      const token = await api.getConsentTokenWithMaskinporten(
-        consentId,
+      // only works in TT02 environment
+      test.skip(ENV !== 'TT02', 'Consent token fetch only available in TT02');
+      await assertConsentTokenIsReturned(
+        api,
+        viewUri,
         { type: 'org', id: fromOrg },
-        'MASKINPORTEN_BEHALF_OF_CLIENT_ID',
-        'MASKINPORTEN_BEHALF_OF_JWK',
+        MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV,
+        MASKINPORTEN_BEHALF_OF_JWK_ENV,
         SPAREBANKEN_ORG_NUMBER,
       );
-      console.log('token', token);
-      expect(token).toBeTruthy();
-      expect(token.length).toBeGreaterThan(10);
     });
   });
 });

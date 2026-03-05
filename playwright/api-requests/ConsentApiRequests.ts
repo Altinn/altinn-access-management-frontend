@@ -129,7 +129,12 @@ export class ConsentApiRequests {
     const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
     const scopes = this.consentRequestScopes;
 
-    return this.sendPostRequest<typeof payload, { viewUri: string }>(payload, endpoint, scopes);
+    var resp = await this.sendPostRequest<typeof payload, { viewUri: string }>(
+      payload,
+      endpoint,
+      scopes,
+    );
+    return resp;
   }
 
   /**
@@ -146,9 +151,9 @@ export class ConsentApiRequests {
     to: ToParty,
     clientIdEnv: string,
     jwkEnv: string,
-    options?: {
+    options: {
+      consentRequestScope: string;
       consumerOrg?: string;
-      consentRequestScope?: string;
       validToIsoUtc?: string;
       resourceValue?: string;
       redirectUrl?: string;
@@ -156,10 +161,10 @@ export class ConsentApiRequests {
     },
   ): Promise<{ viewUri: string }> {
     // Set default values for fields not needed in test
-    const validToIsoUtc = options?.validToIsoUtc ?? addTimeToNowUtc({ days: 5 });
-    const resourceValue = options?.resourceValue ?? 'standard-samtykke-for-dele-data';
-    const redirectUrl = options?.redirectUrl ?? 'https://example.com/';
-    const metaData = options?.metaData ?? { inntektsaar: '2028' };
+    const validToIsoUtc = options.validToIsoUtc ?? addTimeToNowUtc({ days: 5 });
+    const resourceValue = options.resourceValue ?? 'standard-samtykke-for-dele-data';
+    const redirectUrl = options.redirectUrl ?? 'https://example.com/';
+    const metaData = options.metaData ?? { inntektsaar: '2028' };
 
     const params: CreateConsentRequestParams = {
       from,
@@ -173,17 +178,20 @@ export class ConsentApiRequests {
     const payload = this.buildConsentRequestPayload(params);
 
     const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
-    const scopes = options?.consentRequestScope ?? 'altinn:consentrequests.write';
+    const scopes = options.consentRequestScope;
 
     // Create MaskinportenToken instance to fetch the access token
     const maskinportenToken = new MaskinportenToken(clientIdEnv, jwkEnv);
-    return this.sendPostRequestWithMaskinporten<typeof payload, { viewUri: string }>(
+
+    var resp = await this.sendPostRequestWithMaskinporten<typeof payload, { viewUri: string }>(
       payload,
       endpoint,
       scopes,
       maskinportenToken,
-      options?.consumerOrg,
+      options.consumerOrg,
     );
+
+    return resp;
   }
 
   /**

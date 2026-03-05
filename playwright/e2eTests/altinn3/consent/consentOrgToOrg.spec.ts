@@ -25,6 +25,7 @@ LANGUAGES.forEach((language) => {
     }) => {
       // Create consent request from one org to another org
       // For å godkjenne her kreves det at ressursen i ressursregisteret er satt opp med utfyller/innsender-rollen for org til org-samtykke
+      // fordi privatperson" ikke har rettighet til å godkjenne på vegne av en organisasjon
       const [fromOrg, fromPerson] = pickRandom(fromOrgs);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
