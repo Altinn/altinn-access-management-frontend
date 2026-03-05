@@ -9,32 +9,42 @@ export class EnduserConnection {
   }
 
   /**
-   * Adds a connection between a person and an organization, then assigns the specified packages.
+   * The "from"-person/organization adds the "to"-person/organization as a user, then delegates the accesspackages to this new user.
    *
    * @param pid - PID used to acquire an Altinn Personal tokens.
-   * @param fromOrg - Organization number used to resolve the source party UUID.
-   * @param toPid - The target PID to connect to.
-   * @param packageNames - The package names to add for the connected person.
+   * @param from - PID or Organization number that is adding a new user/connection.
+   * @param to - The target PID or organization number that is being added as a new user/connection.
+   * @param packageNames - The package names to add for the connected user. e.g. ['urn:altinn:accesspackage:tilgangsstyrer', 'urn:altinn:accesspackage:posttjenester', 'urn:altinn:accesspackage:byggesoknad',]
    */
-  public async addConnectionAndPackagesToPerson(
+  public async addConnectionAndPackagesToUser(
     pid: string,
-    fromOrg: string,
-    toPid: string,
+    from: string,
+    to: string,
     packageNames: Array<string>,
   ) {
-    const fromUuid = await this.tokenClass.getPartyUuid(fromOrg);
-    const toPerson = await this.tokenClass.getIds(toPid);
+    const thing = [
+      'urn:altinn:accesspackage:tilgangsstyrer',
+      'urn:altinn:accesspackage:posttjenester',
+      'urn:altinn:accesspackage:byggesoknad',
+    ];
+    const fromUuid = await this.tokenClass.getPartyUuid(from);
+    const toIds = await this.tokenClass.getIds(to);
 
-    await this.addConnectionPerson(pid, fromOrg, toPid, fromUuid, toPerson.lastName);
-    await this.addConnectionPackagePerson(
-      pid,
-      fromOrg,
-      toPid,
-      packageNames,
-      fromUuid,
-      toPerson.partyUuid,
-      toPerson.lastName,
-    );
+    await this.addConnection(pid, from, to, fromUuid, toIds.lastName);
+
+    if (to.length == 11) {
+      await this.addPackagePerson(
+        pid,
+        from,
+        to,
+        packageNames,
+        fromUuid,
+        toIds.partyUuid,
+        toIds.lastName,
+      );
+    } else {
+      await this.addPackageOrg(pid, from, to, packageNames, fromUuid, toIds.partyUuid);
+    }
   }
 
   /**
@@ -74,37 +84,53 @@ export class EnduserConnection {
    * Adds a connection person to the specified party by issuing a POST request to the access management API.
    *
    * @param pid - The PID used to acquire an Altinn token.
-   * @param fromOrg - The organization number used to resolve the party UUID for the connection.
-   * @param toPid - The PID of the connection being added.
-   * @param fromUuid - The organization's partyUuid.
-   * @param toLastName - the last name for the connection being added
+   * @param from - The PID or organization number used to resolve the party UUID for the connection.
+   * @param to - The PID or organization number of the connection being added.
+   * @param fromUuid - The from's partyUuid.
+   * @param toLastName - the last name for the connection being added.
+   * @param toUuid - the to's partyUuid.
    * @returns A promise resolving to the JSON response from the API.
    * @throws Error if the request fails or returns a non-OK HTTP status.
    */
-  public async addConnectionPerson(
+  public async addConnection(
     pid: string,
-    fromOrg: string,
-    toPid: string,
+    from: string,
+    to: string,
     fromUuid?: string,
     toLastName?: string,
+    toUuid?: string,
   ) {
-    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromOrg));
-    toLastName = toLastName || (await this.tokenClass.getLastName(toPid));
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}`;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const payload = {
-      personidentifier: toPid,
-      lastName: toLastName,
-    };
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+    let url;
+    let payload;
+    let response;
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(from));
+    if (to.length == 11) {
+      toLastName = toLastName || (await this.tokenClass.getLastName(to));
+      url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}`;
+      payload = {
+        personidentifier: to,
+        lastName: toLastName,
+      };
+      response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+    } else {
+      toUuid = toUuid || (await this.tokenClass.getPartyUuid(to));
+      url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}`;
+      response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+    }
 
     if (!response.ok) {
       throw new Error(
@@ -119,18 +145,17 @@ export class EnduserConnection {
    * Deletes an end-user connection between two parties by resolving their UUIDs and issuing a DELETE request.
    *
    * @param pid - The PID used to obtain an authorization token.
-   * @param fromOrg - The party identifier representing the source party.
-   * @param toPids - An array of PIDs whose connections are to be deleted.
+   * @param from - The party identifier representing the source party.
+   * @param toList - An array of PIDs whose connections are to be deleted.
    * @returns A promise that resolves to the fetch response.
    */
-  public async deleteConnectionPerson(pid: string, fromOrg: string, toPids: Array<string>) {
-    const fromUuid = await this.tokenClass.getPartyUuid(fromOrg);
+  public async deleteConnection(pid: string, from: string, toList: Array<string>) {
+    const fromUuid = await this.tokenClass.getPartyUuid(from);
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    // const toUuid = await this.tokenClass.getPartyUuid(toPid);
     let responses = new Array<Response>();
 
-    toPids.forEach(async (toPid) => {
-      const toUuid = await this.tokenClass.getPartyUuid(toPid);
+    toList.forEach(async (to) => {
+      const toUuid = await this.tokenClass.getPartyUuid(to);
 
       const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&cascade=true`;
 
@@ -168,7 +193,7 @@ export class EnduserConnection {
    * @param toLastName - the last name for the connection being added.
    * @returns A promise resolving to the API response JSON payload.
    */
-  public async addConnectionPackagePerson(
+  public async addPackagePerson(
     pid: string,
     fromOrg: string,
     toPid: string,
@@ -199,6 +224,53 @@ export class EnduserConnection {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        console.warn(
+          `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
+        );
+        responses.push(response);
+      }
+    });
+
+    return responses;
+  }
+
+  /**
+   * Adds an access package connection from one party to another organization.
+   *
+   * Resolves party UUIDs, builds the access package
+   * request URL, and submits a POST request with the recipient details.
+   *
+   * @param pid - The PID used to acquire the access token.
+   * @param from - The PID or organization number used to resolve the "from" party UUID.
+   * @param toOrg - The recipient's organization number used to resolve the "to" party UUID.
+   * @param packageName - The access package name to be granted.
+   * @param fromUuid - The organization's partyUuid.
+   * @param toUuid - the partyUuid of the connection being added.
+   * @returns A promise resolving to the API response JSON payload.
+   */
+  public async addPackageOrg(
+    pid: string,
+    from: string,
+    toOrgNo: string,
+    packageNames: Array<string>,
+    fromUuid?: string,
+    toUuid?: string,
+  ) {
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(from));
+    toUuid = toUuid || (await this.tokenClass.getPartyUuid(toOrgNo));
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    var responses = new Array<Response>();
+    packageNames.forEach(async (packageName) => {
+      const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!response.ok) {

@@ -61,10 +61,17 @@ export class AccessManagementFrontPage {
     ).toBeVisible();
   }
 
+  async clickSlettFullmaktForTilgangspakke(packageName: string) {
+    await this.page.getByRole('button', { name: 'Slett fullmakt for ' + packageName }).click();
+  }
+
   async clickGiFullmaktForTilgangspakke(packageName: string) {
-    await this.page.getByRole('button', { name: 'Gi fullmakt for ' + packageName }).click();
+    const giFullmaktKnapp = this.page.getByRole('button', {
+      name: 'Gi fullmakt for ' + packageName,
+    });
+    await expect(giFullmaktKnapp).toBeVisible();
+    await giFullmaktKnapp.click();
     this.expectUserToHavePackage(packageName);
-    // await expect(this.page.getByRole('button', {name: 'Slett fullmakt for ' + packageName})).toBeVisible();
   }
 
   async clickAccessPackageToDelegateIfVisible(packageName: string) {
