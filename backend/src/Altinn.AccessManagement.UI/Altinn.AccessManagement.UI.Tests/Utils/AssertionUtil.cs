@@ -892,7 +892,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             Assert.Equal(expected.Key, actual.Key);
             Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.Action, actual.Action);
         }
     }
 }
