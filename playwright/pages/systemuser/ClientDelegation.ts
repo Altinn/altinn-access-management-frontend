@@ -31,7 +31,7 @@ export class ClientDelegationPage {
 
     this.clientSearchBox = page
       .getByRole('dialog')
-      .getByRole('searchbox', { name: 'Søk etter kunde' });
+      .getByRole('searchbox', { name: 'Søk i klienter' });
   }
 
   systemUserLink(name: string): Locator {
