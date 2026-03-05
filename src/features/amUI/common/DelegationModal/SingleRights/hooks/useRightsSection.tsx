@@ -74,7 +74,7 @@ export const useRightsSection = ({
   /// Computed values
 
   const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
-  const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.action);
+  const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
   const toPartyName = toParty
     ? formatDisplayName({
         fullName: toParty.name,

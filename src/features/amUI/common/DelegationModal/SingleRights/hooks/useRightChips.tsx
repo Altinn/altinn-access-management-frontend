@@ -33,7 +33,7 @@ export const useRightChips = (
     rights
       .filter((right: ChipRight) => !editable || right.delegable)
       .map((right: ChipRight) => {
-        const actionText = right.action;
+        const actionText = right.rightName;
         return (
           <div key={right.rightKey}>
             <DsChip.Checkbox
