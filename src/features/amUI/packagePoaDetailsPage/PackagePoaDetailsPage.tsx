@@ -44,7 +44,6 @@ export const PackagePoaDetailsPage = () => {
         <PartyRepresentationProvider
           fromPartyUuid={partyUuid}
           actingPartyUuid={partyUuid}
-          returnToUrlOnError={`/${amUIPath.PoaOverview}`}
         >
           <BreadcrumbsWrapper />
           <PageContainer backUrl={`/${amUIPath.PoaOverview}`}>

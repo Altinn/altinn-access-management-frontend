@@ -30,8 +30,6 @@ interface PartyRepresentationProviderProps {
   fromPartyUuid?: string;
   /** The uuid of the party that has/is reveiving accesses */
   toPartyUuid?: string;
-  /** On connection error, the user will be provided with a link to this url in order to get them to a page with a valid state */
-  returnToUrlOnError?: string;
   /** Optional loading component to show while data is being fetched */
   loadingComponent?: JSX.Element;
   /** Optional override for loading state */
@@ -53,6 +51,8 @@ export const PartyRepresentationContext = createContext<PartyRepresentationConte
   null,
 );
 
+const returnToUrlOnError = '/';
+
 /// <PartyRepresentationProvider /> is used to provide the context for the party representation
 /// in the application. It fetches the party information for the current user and the parties
 /// involved in the delegation process. The context is then used by other components to access
@@ -67,7 +67,6 @@ export const PartyRepresentationProvider = ({
   fromPartyUuid,
   toPartyUuid,
   actingPartyUuid,
-  returnToUrlOnError,
   loadingComponent,
   isLoading: externalIsLoading,
   errorOnPriv = false,
@@ -159,10 +158,13 @@ export const PartyRepresentationProvider = ({
 
   const shouldShowUnsyncedConnectionAlert =
     !isLoading &&
-    (invalidConnection || isError) &&
     authorizedPartyReportee &&
-    (authorizedPartyReportee?.partyUuid === actingPartyUuid ||
-      (fromPartyUuid && toPartyUuid && authorizedPartyReportee?.partyUuid === fromPartyUuid)); // The reportee is valid but the connection is unsynced (the user is either on their own page or acting on behalf of the reportee)
+    (invalidConnection || isError) &&
+    fromPartyUuid &&
+    toPartyUuid &&
+    authorizedPartyReportee?.partyUuid === fromPartyUuid &&
+    toPartyUuid === currentUser?.partyUuid;
+  // The reportee is valid but the connection is unsynced (the user is on their own page for the reportee)
 
   const shouldShowConnectionErrorAlert =
     !isLoading && invalidConnection && !shouldShowUnsyncedConnectionAlert;
@@ -247,7 +249,7 @@ const connectionErrorAlert = (
   return (
     <DsAlert data-color='warning'>
       <DsParagraph>
-        {t('error_page.user_connection_error')}
+        {t('error_page.user_connection_error')}{' '}
         {returnToUrl && <Link to={returnToUrl}>{t('common.go_back')}</Link>}
       </DsParagraph>
     </DsAlert>
