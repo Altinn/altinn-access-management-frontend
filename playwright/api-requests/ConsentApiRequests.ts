@@ -86,7 +86,7 @@ export class ConsentApiRequests {
     const toUrn = `${urnPrefix[params.to.type]}${params.to.id}`;
 
     const resourceValue = params.resourceValue || 'enkelt-samtykke';
-    const redirectUrl = params.redirectUrl || 'https://vg.no';
+    const redirectUrl = params.redirectUrl || 'https://altinn.no';
     const metaData = params.metaData || { simpletag: 'playwright-e2e-metadata' };
 
     return {
@@ -129,7 +129,12 @@ export class ConsentApiRequests {
     const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
     const scopes = this.consentRequestScopes;
 
-    return this.sendPostRequest<typeof payload, { viewUri: string }>(payload, endpoint, scopes);
+    var resp = await this.sendPostRequest<typeof payload, { viewUri: string }>(
+      payload,
+      endpoint,
+      scopes,
+    );
+    return resp;
   }
 
   /**
@@ -138,7 +143,7 @@ export class ConsentApiRequests {
    * @param to The organization receiving the consent request
    * @param clientIdEnv Environment variable name for the Maskinporten client ID
    * @param jwkEnv Environment variable name for the JWK private key
-   * @param consumerOrg Optional organization number for "behalf of" scenarios
+   * @param options Request options. `consentRequestScope` is required; other fields are optional overrides/"behalf of" parameters.
    * @returns The view URI for the consent request
    */
   public async createConsentRequestWithMaskinporten(
@@ -146,13 +151,20 @@ export class ConsentApiRequests {
     to: ToParty,
     clientIdEnv: string,
     jwkEnv: string,
-    consumerOrg?: string,
+    options: {
+      consentRequestScope: string;
+      consumerOrg?: string;
+      validToIsoUtc?: string;
+      resourceValue?: string;
+      redirectUrl?: string;
+      metaData?: Record<string, string>;
+    },
   ): Promise<{ viewUri: string }> {
     // Set default values for fields not needed in test
-    const validToIsoUtc = addTimeToNowUtc({ days: 5 });
-    const resourceValue = 'standard-samtykke-for-dele-data';
-    const redirectUrl = 'https://example.com/';
-    const metaData = { inntektsaar: '2028' };
+    const validToIsoUtc = options.validToIsoUtc ?? addTimeToNowUtc({ days: 5 });
+    const resourceValue = options.resourceValue ?? 'standard-samtykke-for-dele-data';
+    const redirectUrl = options.redirectUrl ?? 'https://example.com/';
+    const metaData = options.metaData ?? { inntektsaar: '2028' };
 
     const params: CreateConsentRequestParams = {
       from,
@@ -166,23 +178,26 @@ export class ConsentApiRequests {
     const payload = this.buildConsentRequestPayload(params);
 
     const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
-    const scopes = 'altinn:consentrequests.write';
+    const scopes = options.consentRequestScope;
 
     // Create MaskinportenToken instance to fetch the access token
     const maskinportenToken = new MaskinportenToken(clientIdEnv, jwkEnv);
-    return this.sendPostRequestWithMaskinporten<typeof payload, { viewUri: string }>(
+
+    var resp = await this.sendPostRequestWithMaskinporten<typeof payload, { viewUri: string }>(
       payload,
       endpoint,
       scopes,
       maskinportenToken,
-      consumerOrg,
+      options.consumerOrg,
     );
+
+    return resp;
   }
 
   /**
    * Get consent token using Maskinporten
    * @param consentRequestId The ID of the approved consent request
-   * @param fromPersonId The person ID (not in URN format, just the ID)
+   * @param fromPartyUrn The consenting party URN (person or org)
    * @param clientIdEnv Environment variable name for the Maskinporten client ID
    * @param jwkEnv Environment variable name for the JWK private key
    * @param consumerOrg Optional organization number for "behalf of" scenarios
@@ -190,17 +205,14 @@ export class ConsentApiRequests {
    */
   async getConsentTokenWithMaskinporten(
     consentRequestId: string,
-    fromPersonId: string,
+    fromPartyUrn: string,
     clientIdEnv: string,
     jwkEnv: string,
     consumerOrg?: string,
   ): Promise<string> {
-    // Convert person ID to URN format
-    const fromPersonUrn = `urn:altinn:person:identifier-no:${fromPersonId}`;
-
     // Create MaskinportenToken instance to fetch the consent token
     const maskinportenToken = new MaskinportenToken(clientIdEnv, jwkEnv);
-    return await maskinportenToken.getConsentToken(consentRequestId, fromPersonUrn, consumerOrg);
+    return await maskinportenToken.getConsentToken(consentRequestId, fromPartyUrn, consumerOrg);
   }
 }
 

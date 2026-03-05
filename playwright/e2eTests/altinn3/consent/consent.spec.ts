@@ -1,9 +1,10 @@
 import { expect } from '@playwright/test';
 import { test } from 'playwright/fixture/pomFixture';
 
+import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { Language } from 'playwright/pages/consent/ConsentPage';
-import { formatUiDateTime } from 'playwright/util/helper';
-import { scenarioBuilder } from './helper/scenarioBuilder';
+import { addTimeToNowUtc, formatUiDateTime, pickRandom } from 'playwright/util/helper';
+import { fromPersons, toOrgs } from './helper/consentTestdata';
 
 const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
@@ -19,13 +20,16 @@ LANGUAGES.forEach((language) => {
       viewport: MOBILE_VIEWPORT,
     });
     test(`Standard samtykke`, async ({ login, consentPage }) => {
-      const scenario = scenarioBuilder.personToOrg();
+      const fromPerson = pickRandom(fromPersons);
+      const toOrg = pickRandom(toOrgs);
+      const validTo = addTimeToNowUtc({ days: 2 });
+      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await scenario.api.createConsentRequest({
-          from: { type: 'person', id: scenario.fromPerson },
-          to: { type: 'org', id: scenario.toOrg },
-          validToIsoUtc: scenario.validTo,
+        return await api.createConsentRequest({
+          from: { type: 'person', id: fromPerson },
+          to: { type: 'org', id: toOrg },
+          validToIsoUtc: validTo,
           resourceValue: 'standard-samtykke-for-dele-data',
           redirectUrl: REDIRECT_URL,
           metaData: { inntektsaar: '2028' },
@@ -34,7 +38,7 @@ LANGUAGES.forEach((language) => {
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(scenario.fromPerson);
+        await login.loginNotChoosingActor(fromPerson);
       });
 
       await test.step('Pick language', async () => {
@@ -44,7 +48,7 @@ LANGUAGES.forEach((language) => {
       await test.step('Verify consent UI and expiry', async () => {
         await consentPage.expectStandardIntro();
         await expect(consentPage.textIncomeData).toBeVisible();
-        const expected = formatUiDateTime(scenario.validTo);
+        const expected = formatUiDateTime(validTo);
         await consentPage.expectExpiry(expected);
       });
 
@@ -54,13 +58,16 @@ LANGUAGES.forEach((language) => {
     });
 
     test(`Krav-template`, async ({ page, consentPage, login }) => {
-      const scenario = scenarioBuilder.personToOrg();
+      const fromPerson = pickRandom(fromPersons);
+      const toOrg = pickRandom(toOrgs);
+      const validTo = addTimeToNowUtc({ days: 2 });
+      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await scenario.api.createConsentRequest({
-          from: { type: 'person', id: scenario.fromPerson },
-          to: { type: 'org', id: scenario.toOrg },
-          validToIsoUtc: scenario.validTo,
+        return await api.createConsentRequest({
+          from: { type: 'person', id: fromPerson },
+          to: { type: 'org', id: toOrg },
+          validToIsoUtc: validTo,
           resourceValue: 'samtykke-brukerstyrt-tilgang',
           redirectUrl: REDIRECT_URL,
           metaData: { brukerdata: 'AutomatisertTiltakE2E' },
@@ -69,7 +76,7 @@ LANGUAGES.forEach((language) => {
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(scenario.fromPerson);
+        await login.loginNotChoosingActor(fromPerson);
       });
 
       await test.step('Pick language', async () => {
@@ -78,7 +85,7 @@ LANGUAGES.forEach((language) => {
 
       await test.step('Verify consent UI and expiry', async () => {
         await consentPage.expectKravIntro();
-        const expected = formatUiDateTime(scenario.validTo);
+        const expected = formatUiDateTime(validTo);
         await consentPage.expectExpiry(expected);
       });
 
@@ -88,13 +95,16 @@ LANGUAGES.forEach((language) => {
     });
 
     test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login }) => {
-      const scenario = scenarioBuilder.personToOrg();
+      const fromPerson = pickRandom(fromPersons);
+      const toOrg = pickRandom(toOrgs);
+      const validTo = addTimeToNowUtc({ days: 2 });
+      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await scenario.api.createConsentRequest({
-          from: { type: 'person', id: scenario.fromPerson },
-          to: { type: 'org', id: scenario.toOrg },
-          validToIsoUtc: scenario.validTo,
+        return await api.createConsentRequest({
+          from: { type: 'person', id: fromPerson },
+          to: { type: 'org', id: toOrg },
+          validToIsoUtc: validTo,
           resourceValue: 'samtykke-fullmakt-utfoere-tjeneste',
           redirectUrl: REDIRECT_URL,
           metaData: { tiltak: '2024' },
@@ -103,7 +113,7 @@ LANGUAGES.forEach((language) => {
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(scenario.fromPerson);
+        await login.loginNotChoosingActor(fromPerson);
       });
 
       await test.step('Pick language', async () => {
@@ -115,7 +125,7 @@ LANGUAGES.forEach((language) => {
         await expect(consentPage.textFullmaktHeading).toBeVisible();
         await expect(consentPage.textFullmaktService).toBeVisible();
         await expect(page.getByText('Tiltak: 2024')).toBeVisible();
-        const expected = formatUiDateTime(scenario.validTo);
+        const expected = formatUiDateTime(validTo);
         await consentPage.expectFullmaktExpiry();
         await consentPage.expectExpiryDate(expected);
       });
@@ -126,13 +136,16 @@ LANGUAGES.forEach((language) => {
     });
 
     test(`Lånesøknad`, async ({ consentPage, page, login }) => {
-      const scenario = scenarioBuilder.personToOrg();
+      const fromPerson = pickRandom(fromPersons);
+      const toOrg = pickRandom(toOrgs);
+      const validTo = addTimeToNowUtc({ days: 2 });
+      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await scenario.api.createConsentRequest({
-          from: { type: 'person', id: scenario.fromPerson },
-          to: { type: 'org', id: scenario.toOrg },
-          validToIsoUtc: scenario.validTo,
+        return await api.createConsentRequest({
+          from: { type: 'person', id: fromPerson },
+          to: { type: 'org', id: toOrg },
+          validToIsoUtc: validTo,
           resourceValue: 'samtykke-laanesoeknad',
           redirectUrl: REDIRECT_URL,
           metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
@@ -141,7 +154,7 @@ LANGUAGES.forEach((language) => {
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(scenario.fromPerson);
+        await login.loginNotChoosingActor(fromPerson);
       });
 
       await test.step('Pick language', async () => {
@@ -163,13 +176,16 @@ LANGUAGES.forEach((language) => {
     });
 
     test(`Enkelt samtykke`, async ({ consentPage, page, login }) => {
-      const scenario = scenarioBuilder.personToOrg();
+      const fromPerson = pickRandom(fromPersons);
+      const toOrg = pickRandom(toOrgs);
+      const validTo = addTimeToNowUtc({ days: 2 });
+      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await scenario.api.createConsentRequest({
-          from: { type: 'person', id: scenario.fromPerson },
-          to: { type: 'org', id: scenario.toOrg },
-          validToIsoUtc: scenario.validTo,
+        return await api.createConsentRequest({
+          from: { type: 'person', id: fromPerson },
+          to: { type: 'org', id: toOrg },
+          validToIsoUtc: validTo,
           resourceValue: 'enkelt-samtykke',
           redirectUrl: REDIRECT_URL,
           metaData: { simpletag: 'E2E Playwright metadata for simpletag' },
@@ -178,7 +194,7 @@ LANGUAGES.forEach((language) => {
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(scenario.fromPerson);
+        await login.loginNotChoosingActor(fromPerson);
       });
 
       await test.step('Pick language', async () => {
@@ -201,13 +217,16 @@ LANGUAGES.forEach((language) => {
     });
 
     test(`Avvis samtykke`, async ({ consentPage, login }) => {
-      const scenario = scenarioBuilder.personToOrg();
+      const fromPerson = pickRandom(fromPersons);
+      const toOrg = pickRandom(toOrgs);
+      const validTo = addTimeToNowUtc({ days: 2 });
+      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await scenario.api.createConsentRequest({
-          from: { type: 'person', id: scenario.fromPerson },
-          to: { type: 'org', id: scenario.toOrg },
-          validToIsoUtc: scenario.validTo,
+        return await api.createConsentRequest({
+          from: { type: 'person', id: fromPerson },
+          to: { type: 'org', id: toOrg },
+          validToIsoUtc: validTo,
           resourceValue: 'enkelt-samtykke',
           redirectUrl: REDIRECT_URL,
           metaData: { simpletag: 'E2E reject test' },
@@ -216,7 +235,7 @@ LANGUAGES.forEach((language) => {
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(scenario.fromPerson);
+        await login.loginNotChoosingActor(fromPerson);
       });
 
       await test.step('Pick language', async () => {
