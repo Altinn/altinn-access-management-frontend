@@ -876,7 +876,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             Assert.Equal(expected.Right.Key, actual.Right.Key);
             Assert.Equal(expected.Right.Name, actual.Right.Name);
-            Assert.Equal(expected.Right.Action, actual.Right.Action);
             Assert.Equal(expected.Result, actual.Result);
             AssertCollections(expected.ReasonCodes, actual.ReasonCodes, Assert.Equal);
         }
@@ -893,7 +892,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             Assert.Equal(expected.Key, actual.Key);
             Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.Action, actual.Action);
         }
     }
 }

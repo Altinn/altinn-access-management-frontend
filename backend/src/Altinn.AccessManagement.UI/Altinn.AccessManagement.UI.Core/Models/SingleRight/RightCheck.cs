@@ -6,12 +6,12 @@ using Altinn.AccessManagement.UI.Core.Enums;
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 /// <summary>
-/// Action
+/// Delegation check result for a right.
 /// </summary>
 public class RightCheck
 {
     /// <summary>
-    /// The right, defined by its action and key
+    /// The right, defined by its key and name.
     /// </summary>
     public required Right Right
     {
@@ -32,7 +32,7 @@ public class RightCheck
 }
 
 /// <summary>
-/// A delegable right that contains an action and key
+/// A delegable right that contains a key and a display name.
 /// </summary>
 public class Right
 {
@@ -45,16 +45,6 @@ public class Right
     /// The display name of the right, used for showing to users in the UI.
     /// </summary>
     public required string Name { get; set; }
-
-    /// <summary>
-    /// The resource identifiers that the right applies to.
-    /// </summary>
-    public List<string>? Resource { get; set; }
-
-    /// <summary>
-    /// The action that the right applies to, e.g. "read", "write", "sign", etc.
-    /// </summary>
-    public required string Action { get; set; }
 }
 
 #nullable disable

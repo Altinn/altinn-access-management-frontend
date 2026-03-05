@@ -35,7 +35,7 @@ export const useRightChips = (
     rights
       .filter((right: ChipRight) => !editable || right.delegable || right.checked)
       .map((right: ChipRight) => {
-        const actionText = right.action;
+        const actionText = right.rightName;
         const isPopoverTarget = right.inherited || (!right.delegable && right.checked);
         const popoverText = isPopoverTarget
           ? right.inherited

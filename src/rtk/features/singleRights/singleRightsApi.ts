@@ -68,8 +68,6 @@ export interface DelegationCheckedRight {
 export interface Right {
   key: string;
   name: string;
-  action: string;
-  resource?: string[];
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';

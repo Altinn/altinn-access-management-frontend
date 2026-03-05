@@ -1,7 +1,7 @@
 import { DelegationCheckedRight, Right } from '@/rtk/features/singleRights/singleRightsApi';
 
 export type ChipRight = {
-  action: string;
+  rightName: string;
   rightKey: string;
   delegable: boolean;
   checked: boolean;
@@ -50,7 +50,7 @@ export const mapRightsToChipRights = (
     const delegated = isDelegated(right);
     const inherited = isInherited(right.right.key);
     return {
-      action: right.right.name,
+      rightName: right.right.name,
       rightKey: right.right.key,
       delegable: right.result === true,
       checked: checkedPredicate(right),

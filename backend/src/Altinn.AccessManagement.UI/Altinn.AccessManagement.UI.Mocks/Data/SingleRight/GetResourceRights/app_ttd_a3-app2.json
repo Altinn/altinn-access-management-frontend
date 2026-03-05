@@ -23,11 +23,7 @@
         {
             "right": {
                 "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:instantiate",
-                "name": "Instantiate",
-                "resource": [
-                    "app_ttd_a3-app2"
-                ],
-                "action": "instantiate"
+                "name": "Instantiate"
             },
             "reason": null,
             "permissions": [
@@ -66,11 +62,7 @@
         {
             "right": {
                 "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-                "name": "Read",
-                "resource": [
-                    "app_ttd_a3-app2"
-                ],
-                "action": "read"
+                "name": "Read"
             },
             "reason": null,
             "permissions": [
@@ -109,12 +101,7 @@
         {
             "right": {
                 "key": "urn:altinn:resource:app_ttd_app_ttd_a3-app:urn:altinn:task:Task_1:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-                "name": "Read Task_1",
-                "resource": [
-                    "app_ttd_a3-app2",
-                    "Task_1"
-                ],
-                "action": "read"
+                "name": "Read Task_1"
             },
             "reason": null,
             "permissions": [
