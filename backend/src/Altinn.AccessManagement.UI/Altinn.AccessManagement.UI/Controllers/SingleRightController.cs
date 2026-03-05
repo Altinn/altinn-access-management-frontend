@@ -166,7 +166,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (HttpStatusException statusEx)
             {
                 string responseContent = statusEx.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
             }
             catch (Exception ex)
             {
@@ -198,7 +198,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (HttpStatusException statusEx)
             {
                 string responseContent = statusEx.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
             }
             catch (Exception ex)
             {
