@@ -10,7 +10,11 @@ import classes from './ClientAdministrationAgentsTab.module.css';
 import { useNavigate } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
-export const ClientAdministrationAgentsTab = () => {
+type ClientAdministrationAgentsTabProps = {
+  isActive: boolean;
+};
+
+export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministrationAgentsTabProps) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -18,7 +22,7 @@ export const ClientAdministrationAgentsTab = () => {
     data: agents,
     isLoading: isAgentsLoading,
     isError: isGetAgentsError,
-  } = useGetAgentsQuery();
+  } = useGetAgentsQuery(undefined, { skip: !isActive });
   const [addAgent, { isLoading: isAdding }] = useAddAgentMutation();
   const { fromParty } = usePartyRepresentation();
 
@@ -32,7 +36,7 @@ export const ClientAdministrationAgentsTab = () => {
       fromUuid: fromParty?.partyUuid ?? '',
       toUuid: '',
     },
-    { skip: !fromParty?.partyUuid },
+    { skip: !isActive || !fromParty?.partyUuid },
   );
 
   const filteredIndirectConnections = useMemo<Connection[]>(
