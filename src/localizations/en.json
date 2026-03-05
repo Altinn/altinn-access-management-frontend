@@ -760,7 +760,7 @@
   "systemuser_agent_request": {
     "page_title": "Approve system access for your clients - Altinn",
     "banner_title": "Approve system access for your clients",
-    "system_description": "Through a system access <strong>{{vendorName}}</strong> will be granted power of attorney to complete tasks on behalf of <strong>{{companyName}}</strong> clients. To complete the setup, clients must be added in Altinn."
+    "system_description": "Through a system access, <strong>{{vendorName}}</strong> will be granted power of attorney to complete tasks on behalf of <strong>{{companyName}}</strong>'s clients. To complete the setup, clients must be added in Altinn."
   },
   "systemuser_agent_delegation": {
     "page_title": "System access for client relations - Altinn",
@@ -780,7 +780,7 @@
     "customer_search": "Search in clients",
     "hide_assigned_customers": "Hide clients already added",
     "add_all_customers": "Add all clients",
-    "no_customers_warning": "There are no clients yet. The clients must give power of attorney to the access packages required for this system access to {{companyName}}.",
+    "no_customers_warning": "There are no clients yet. Clients must give power of attorney to the access packages required for this system access to {{companyName}}.",
     "remove_from_system_user": "Remove from system access",
     "remove_from_system_user_aria": "Remove {{customerName}} from system access",
     "add_to_system_user": "Add to system access",
