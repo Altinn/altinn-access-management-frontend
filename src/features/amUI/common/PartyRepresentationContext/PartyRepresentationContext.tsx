@@ -51,8 +51,6 @@ export const PartyRepresentationContext = createContext<PartyRepresentationConte
   null,
 );
 
-const returnToUrlOnError = '/';
-
 /// <PartyRepresentationProvider /> is used to provide the context for the party representation
 /// in the application. It fetches the party information for the current user and the parties
 /// involved in the delegation process. The context is then used by other components to access
@@ -61,7 +59,7 @@ const returnToUrlOnError = '/';
 /// If both `fromPartyUuid` and `toPartyUuid` are not provided, an error is thrown.
 /// If `actingPartyUuid` is not provided, an error is thrown.
 /// If the connection between the parties is invalid, an error alert is displayed
-/// and the children are not rendered. The error alert provides details about the error and a link to return to a valid state if `returnToUrlOnError` is provided.
+/// and the children are not rendered. The error alert provides details about the error and a link to the landing page.
 export const PartyRepresentationProvider = ({
   children,
   fromPartyUuid,
@@ -208,7 +206,7 @@ export const PartyRepresentationProvider = ({
       }}
     >
       {shouldShowUnsyncedConnectionAlert && <UnsyncedConnectionAlert />}
-      {shouldShowConnectionErrorAlert && connectionErrorAlert(error, returnToUrlOnError)}
+      {shouldShowConnectionErrorAlert && connectionErrorAlert(error, '/')}
       {shouldShowUserTypeRestrictionAlert && <NotAvailableForUserTypeAlert />}
       {shouldShowTechnicalErrorAlert && (
         <DsAlert data-color='warning'>
