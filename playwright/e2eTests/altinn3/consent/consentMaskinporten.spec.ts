@@ -25,7 +25,7 @@ test.describe('Fetch consent token after approval', () => {
   async function assertConsentTokenIsReturned(
     api: ConsentApiRequests,
     consentViewUri: string,
-    from: { type: 'person' | 'org'; id: string },
+    fromPartyUrn: string,
     clientIdEnv: string,
     jwkEnv: string,
     consumerOrg?: string,
@@ -33,7 +33,7 @@ test.describe('Fetch consent token after approval', () => {
     const consentId = getConsentRequestId(consentViewUri);
     const token = await api.getConsentTokenWithMaskinporten(
       consentId,
-      from,
+      fromPartyUrn,
       clientIdEnv,
       jwkEnv,
       consumerOrg,
@@ -71,7 +71,7 @@ test.describe('Fetch consent token after approval', () => {
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
-        { type: 'person', id: fromPerson },
+        `urn:altinn:person:identifier-no:${fromPerson}`,
         MASKINPORTEN_CLIENT_ID_ENV,
         MASKINPORTEN_JWK_ENV,
       );
@@ -107,7 +107,7 @@ test.describe('Fetch consent token after approval', () => {
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
-        { type: 'org', id: fromOrg },
+        `urn:altinn:organization:identifier-no:${fromOrg}`,
         MASKINPORTEN_CLIENT_ID_ENV,
         MASKINPORTEN_JWK_ENV,
       );
@@ -168,7 +168,7 @@ test.describe('Fetch consent token after approval', () => {
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
-        { type: 'org', id: fromOrg },
+        `urn:altinn:organization:identifier-no:${fromOrg}`,
         MASKINPORTEN_CLIENT_ID_ENV,
         MASKINPORTEN_JWK_ENV,
       );
@@ -240,7 +240,7 @@ test.describe('Fetch consent token after approval', () => {
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
-        { type: 'person', id: fromPerson },
+        `urn:altinn:person:identifier-no:${fromPerson}`,
         MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV,
         MASKINPORTEN_BEHALF_OF_JWK_ENV,
         FROM_ORG,
@@ -303,7 +303,7 @@ test.describe('Fetch consent token after approval', () => {
       await assertConsentTokenIsReturned(
         api,
         viewUri,
-        { type: 'org', id: fromOrg },
+        `urn:altinn:organization:identifier-no:${fromOrg}`,
         MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV,
         MASKINPORTEN_BEHALF_OF_JWK_ENV,
         SPAREBANKEN_ORG_NUMBER,
