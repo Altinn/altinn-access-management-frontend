@@ -28,11 +28,7 @@
       "reasonCodes": [],
       "right": {
         "key": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-        "name": "Read",
-        "resource": [
-          "urn:altinn:resource:app_ttd_a3-appp"
-        ],
-        "action": "read"
+        "name": "Read"
       },
       "result": false
     },
@@ -40,11 +36,7 @@
       "reasonCodes": [],
       "right": {
         "key": "urn:altinn:resource:app_ttd_a3-appp:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-        "name": "Write",
-        "resource": [
-          "urn:altinn:resource:app_ttd_a3-appp"
-        ],
-        "action": "write"
+        "name": "Write"
       },
       "result": false
     }

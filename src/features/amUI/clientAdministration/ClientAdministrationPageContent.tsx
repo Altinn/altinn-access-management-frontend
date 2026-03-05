@@ -141,10 +141,10 @@ export const ClientAdministrationPageContent = () => {
           </DsTabs.Tab>
         </DsTabs.List>
         <DsTabs.Panel value='users'>
-          <ClientAdministrationAgentsTab />
+          <ClientAdministrationAgentsTab isActive={activeTab === 'users'} />
         </DsTabs.Panel>
         <DsTabs.Panel value='clients'>
-          <ClientAdministrationClientsTab />
+          <ClientAdministrationClientsTab isActive={activeTab === 'clients'} />
         </DsTabs.Panel>
       </DsTabs>
     </>

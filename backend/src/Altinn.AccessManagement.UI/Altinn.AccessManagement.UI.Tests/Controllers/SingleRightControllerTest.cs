@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
+using SingleRight = Altinn.AccessManagement.UI.Core.Models.SingleRight.Right;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 
@@ -529,6 +530,62 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegationcheck?from={from}&resource={resource}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Successfully retrieve rights metadata for a resource
+        ///     Expected: Returns OK and the list of rights for the given resource
+        /// </summary>
+        [Fact]
+        public async Task GetResourceRightsMeta_ReturnsValid()
+        {
+            // Arrange
+            string resource = "appid-503";
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "RightsMeta", "appid-503.json");
+            List<SingleRight> expectedResponse = Util.GetMockData<List<SingleRight>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/rightsmeta?resource={resource}");
+            List<SingleRight> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SingleRight>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Action<SingleRight, SingleRight> assertRight = AssertionUtil.AssertEqual;
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, assertRight);
+        }
+
+        /// <summary>
+        ///     Test case: Try to retrieve rights metadata for a resource that does not exist
+        ///     Expected: Returns a non-successful status (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task GetResourceRightsMeta_InvalidResource()
+        {
+            // Arrange
+            string resource = "non-existing-resource";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/rightsmeta?resource={resource}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles unexpected errors by returning a 500 status
+        ///     Expected: Returns an internal server error
+        /// </summary>
+        [Fact]
+        public async Task GetResourceRightsMeta_InternalServerError()
+        {
+            // Arrange
+            string resource = "internal-error-trigger"; // This triggers a generic Exception in the mock
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/rightsmeta?resource={resource}");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);

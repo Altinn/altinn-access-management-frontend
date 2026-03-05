@@ -68,8 +68,6 @@ export interface DelegationCheckedRight {
 export interface Right {
   key: string;
   name: string;
-  action: string;
-  resource?: string[];
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
@@ -84,7 +82,7 @@ export const singleRightsApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['SingleRights', 'resources', 'delegationCheck', 'rights'],
+  tagTypes: ['SingleRights', 'resources', 'delegationCheck', 'rightsMeta', 'rights'],
   endpoints: (builder) => ({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
@@ -127,6 +125,11 @@ export const singleRightsApi = createApi({
       query: ({ actingParty, from, to, resourceId }) =>
         `singleright/delegation/resources/rights?party=${actingParty}&to=${to}&from=${from}&resourceId=${encodeURIComponent(resourceId)}`,
       providesTags: ['rights'],
+    }),
+    getResourceRightsMeta: builder.query<Right[], { resourceId: string }>({
+      query: ({ resourceId }) =>
+        `singleright/rightsmeta?resource=${encodeURIComponent(resourceId)}`,
+      providesTags: ['rightsMeta'],
     }),
     delegationCheck: builder.query<DelegationCheckedRight[], string>({
       query: (resourceId) => ({
@@ -201,6 +204,7 @@ export const {
   useGetPaginatedSearchQuery,
   useGetSingleRightsForRightholderQuery,
   useGetResourceRightsQuery,
+  useGetResourceRightsMetaQuery,
   useClearAccessCacheMutation,
   useDelegationCheckQuery,
   useLazyDelegationCheckQuery,

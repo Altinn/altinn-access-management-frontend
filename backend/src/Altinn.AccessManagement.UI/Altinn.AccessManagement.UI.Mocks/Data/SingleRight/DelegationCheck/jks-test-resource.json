@@ -27,11 +27,7 @@
     {
       "right": {
         "key": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-        "name": "Read",
-        "resource": [
-          "urn:altinn:resource:jks-test-resource"
-        ],
-        "action": "urn:oasis:names:tc:xacml:1.0:action:action-id:read"
+        "name": "Read"
       },
       "result": true,
       "reasonCodes": [
@@ -42,11 +38,7 @@
     {
       "right": {
         "key": "urn:altinn:resource:jks-test-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-        "name": "Write",
-        "resource": [
-          "urn:altinn:resource:jks-test-resource"
-        ],
-        "action": "urn:oasis:names:tc:xacml:1.0:action:action-id:write"
+        "name": "Write"
       },
       "result": true,
       "reasonCodes": [

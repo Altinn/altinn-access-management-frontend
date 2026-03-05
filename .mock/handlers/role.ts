@@ -16,7 +16,7 @@ const createEntity = (id: string, name: string, type = 'Organization', variant =
 
 const roleResponse = {
   role: {
-    id: 'role-ccr-styreleder',
+    id: '9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4',
     name: 'Styreleder',
     code: 'styreleder',
     description: 'Visning av hvordan rollen kan arves eller delegeres.',
@@ -27,6 +27,81 @@ const roleResponse = {
     },
   },
 };
+
+const roleMetadataResponse = [
+  {
+    id: '123',
+    name: 'Daglig leder',
+    code: 'daglig-leder',
+    description: 'Fysisk- eller juridisk person med ansvar for daglig drift.',
+    isKeyRole: true,
+    urn: 'urn:altinn:external-role:ccr:daglig-leder',
+    legacyRoleCode: 'DAGL',
+    legacyUrn: 'urn:altinn:rolecode:DAGL',
+    provider: {
+      id: 'provider-ccr',
+      name: 'Enhetsregisteret',
+      refId: null,
+      logoUrl: null,
+      code: 'sys-ccr',
+      typeId: 'provider-type-ccr',
+    },
+  },
+  {
+    id: '456',
+    name: 'Rettighetshaver',
+    code: 'rettighetshaver',
+    description: 'Representerer en delegert rettighetshaver.',
+    isKeyRole: false,
+    urn: 'urn:altinn:rolecode:rettighetshaver',
+    legacyRoleCode: null,
+    legacyUrn: null,
+    provider: {
+      id: 'provider-ccr',
+      name: 'Enhetsregisteret',
+      refId: null,
+      logoUrl: null,
+      code: 'sys-ccr',
+      typeId: 'provider-type-ccr',
+    },
+  },
+  {
+    id: '789',
+    name: 'Agent',
+    code: 'agent',
+    description: 'Representerer en agentforbindelse.',
+    isKeyRole: false,
+    urn: 'urn:altinn:rolecode:agent',
+    legacyRoleCode: null,
+    legacyUrn: null,
+    provider: {
+      id: 'provider-ccr',
+      name: 'Enhetsregisteret',
+      refId: null,
+      logoUrl: null,
+      code: 'sys-ccr',
+      typeId: 'provider-type-ccr',
+    },
+  },
+  {
+    id: '9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4',
+    name: 'Styrets leder',
+    code: 'styreleder',
+    description: 'Fysisk- eller juridisk person som er styremedlem og leder et styre.',
+    isKeyRole: true,
+    urn: 'urn:altinn:external-role:ccr:styreleder',
+    legacyRoleCode: 'LEDE',
+    legacyUrn: 'urn:altinn:rolecode:LEDE',
+    provider: {
+      id: 'provider-ccr',
+      name: 'Enhetsregisteret',
+      refId: null,
+      logoUrl: null,
+      code: 'sys-ccr',
+      typeId: 'provider-type-ccr',
+    },
+  },
+];
 
 const viaRole = (id: string, code: string) => ({
   id,
@@ -75,6 +150,9 @@ const scenarioMap: Record<string, any[]> = {
 };
 
 export const roleHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/role/meta`, () => {
+    return HttpResponse.json(roleMetadataResponse);
+  }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/role/permissions`, ({ request }) => {
     const url = new URL(request.url);
     const toParam = url.searchParams.get('to') ?? '';

@@ -100,7 +100,7 @@ export function createMaskinportenGrantAssertion(
  * Create a consent authorization JWT
  * @param clientId The Maskinporten client ID
  * @param consentRequestId The ID of the consent request
- * @param fromPersonId The person ID in URN format (e.g., urn:altinn:person:identifier-no:21818297804)
+ * @param fromPartyUrn The consenting party URN (person or org)
  * @param privateKey The private key in JWK format
  * @param consumerOrg Optional organization number for "behalf of" scenarios
  * @returns The signed JWT as a string
@@ -108,7 +108,7 @@ export function createMaskinportenGrantAssertion(
 export function createConsentAuthorizationJWT(
   clientId: string,
   consentRequestId: string,
-  fromPersonId: string,
+  fromPartyUrn: string,
   privateKey: JsonWebKey,
   consumerOrg?: string,
 ): string {
@@ -124,9 +124,9 @@ export function createConsentAuthorizationJWT(
     jti,
     authorization_details: [
       {
-        type: 'urn:altinn:consent',
+        from: fromPartyUrn,
         id: consentRequestId,
-        from: fromPersonId,
+        type: 'urn:altinn:consent',
       },
     ],
   };
