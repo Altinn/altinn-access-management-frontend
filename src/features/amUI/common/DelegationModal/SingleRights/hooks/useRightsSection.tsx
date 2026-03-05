@@ -87,12 +87,6 @@ export const useRightsSection = ({
 
   const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.action);
-  const toPartyName = toParty
-    ? formatDisplayName({
-        fullName: toParty.name,
-        type: toParty.partyTypeName === PartyType.Organization ? 'company' : 'person',
-      })
-    : '';
 
   const getMissingAccessMessage = useCallback(
     (response: DelegationCheckedRight[]) => {
@@ -152,38 +146,33 @@ export const useRightsSection = ({
       return;
     }
 
+    if (!delegationCheckedActions && !isDelegationCheckError) {
+      return;
+    }
+
     if (delegationCheckedActions) {
       setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
     }
 
-    if (rightsMeta && rightsMeta.length !== 0) {
-      if (hasAccess && resourceRights) {
-        const chipRights: ChipRight[] = mapRightsToChipRights(
-          rightsMeta,
-          delegationCheckedActions,
-          {
-            isDelegated: (right) =>
-              resourceRights.directRights.some((r) => r.right.key === right.right.key) ||
-              resourceRights.indirectRights.some((r) => r.right.key === right.right.key),
-            isInherited: (rightKey) =>
-              resourceRights.indirectRights.some((r) => r.right.key === rightKey),
-          },
-        );
-        setRights(chipRights);
-      } else {
-        const chipRights: ChipRight[] = mapRightsToChipRights(
-          rightsMeta,
-          delegationCheckedActions,
-          {
-            isChecked: (right) => right.result === true,
-          },
-        );
-        setRights(chipRights);
-      }
+    if (hasAccess && resourceRights) {
+      const chipRights: ChipRight[] = mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
+        isDelegated: (right) =>
+          resourceRights.directRights.some((r) => r.right.key === right.right.key) ||
+          resourceRights.indirectRights.some((r) => r.right.key === right.right.key),
+        isInherited: (rightKey) =>
+          resourceRights.indirectRights.some((r) => r.right.key === rightKey),
+      });
+      setRights(chipRights);
+    } else {
+      const chipRights: ChipRight[] = mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
+        isChecked: (right) => right.result === true,
+      });
+      setRights(chipRights);
     }
   }, [
     rightsMeta,
     delegationCheckedActions,
+    isDelegationCheckError,
     resource.identifier,
     hasAccess,
     resourceRights,
