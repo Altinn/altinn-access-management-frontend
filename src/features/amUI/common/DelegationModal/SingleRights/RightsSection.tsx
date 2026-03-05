@@ -68,6 +68,7 @@ export const RightsSection = ({
   });
   const displayResourceAlert =
     availableActions?.includes(DelegationAction.DELEGATE) &&
+    !hasAccess &&
     (isDelegationCheckError ||
       resource?.delegable === false ||
       (rights.length > 0 && !rights.some((r) => r.delegable === true)));

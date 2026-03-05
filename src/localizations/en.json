@@ -307,8 +307,9 @@
     "wip_title": "Power of attorney to services",
     "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
     "wip_link_text": "Go to old Altinn",
-    "inheritance": {
-      "right_inherited": "This action is inherited and cannot be changed here."
+    "action_popover": {
+      "right_inherited": "This action is inherited and cannot be changed here.",
+      "right_not_delegable": "You lack this action yourself and therefore cannot remove it from others."
     }
   },
   "access_packages": {

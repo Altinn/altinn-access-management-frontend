@@ -304,8 +304,9 @@
     "wip_title": "Fullmakter til enkelttjenester",
     "wip_message": "Denne siden jobber vi fremdeles med! For å administrere enkelttjenester, må du gå til den gamle løsningen.",
     "wip_link_text": "Gå til gamle Altinn",
-    "inheritance": {
-      "right_inherited": "Denne handlingen er arvet og kan ikke endres her."
+    "action_popover": {
+      "right_inherited": "Denne handlingen er arvet og kan ikke endres her.",
+      "right_not_delegable": "Du mangler denne handlingen selv og kan derfor ikke slette den fra andre."
     }
   },
   "access_packages": {
