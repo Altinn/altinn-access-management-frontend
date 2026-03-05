@@ -134,6 +134,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 return new List<ClientDelegation>();
             }
 
+            if (clients.Items is List<ClientDelegation> clientList)
+            {
+                return clientList;
+            }
+
             return clients.Items.ToList();
         }
 
