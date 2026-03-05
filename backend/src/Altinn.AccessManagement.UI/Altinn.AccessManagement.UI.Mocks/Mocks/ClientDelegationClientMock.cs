@@ -32,7 +32,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)
         {
             if (provider?.Count > 0)
             {
@@ -40,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             string dataPath = Path.Combine(dataFolder, "ClientDelegation", "myClients.json");
-            return Task.FromResult(Util.GetMockData<List<MyClientDelegation>>(dataPath));
+            return Task.FromResult<IEnumerable<MyClientDelegation>>(Util.GetMockData<List<MyClientDelegation>>(dataPath));
         }
 
         /// <inheritdoc />
@@ -58,39 +58,39 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "ClientDelegation", "clients.json");
-            return Task.FromResult(Util.GetMockData<List<ClientDelegation>>(dataPath));
+            return Task.FromResult<IEnumerable<ClientDelegation>>(Util.GetMockData<List<ClientDelegation>>(dataPath));
         }
 
         /// <inheritdoc />
-        public Task<List<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "ClientDelegation", "agents.json");
-            return Task.FromResult(Util.GetMockData<List<AgentDelegation>>(dataPath));
+            return Task.FromResult<IEnumerable<AgentDelegation>>(Util.GetMockData<List<AgentDelegation>>(dataPath));
         }
 
         /// <inheritdoc />
-        public Task<List<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "ClientDelegation", "agentsAccessPackages.json");
-            return Task.FromResult(Util.GetMockData<List<ClientDelegation>>(dataPath));
+            return Task.FromResult<IEnumerable<ClientDelegation>>(Util.GetMockData<List<ClientDelegation>>(dataPath));
         }
 
         /// <inheritdoc />
-        public Task<List<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "ClientDelegation", "clientsAccessPackages.json");
-            return Task.FromResult(Util.GetMockData<List<AgentDelegation>>(dataPath));
+            return Task.FromResult<IEnumerable<AgentDelegation>>(Util.GetMockData<List<AgentDelegation>>(dataPath));
         }
 
         /// <inheritdoc />
