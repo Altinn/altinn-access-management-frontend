@@ -5,6 +5,8 @@ run-name: "AT environments: ${{ github.sha }}"
 on:
   push:
     branches: ["main"]
+  workflow_dispatch:
+    
 
 jobs:
   containerize:
