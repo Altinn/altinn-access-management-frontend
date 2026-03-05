@@ -146,6 +146,9 @@ export const SystemUserAgentRequestPage = () => {
               values={{
                 vendorName: request.system.name,
                 companyName: reporteeData?.name,
+                addSelfInfo: request.accessPackages.every((p) => p.isDelegable)
+                  ? t('systemuser_agent_request.add_self_possible')
+                  : '',
               }}
             ></Trans>
           </DsParagraph>

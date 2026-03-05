@@ -755,9 +755,10 @@
     "request_expired": "Denne oppdaterings-førespurnaden har gått ut"
   },
   "systemuser_agent_request": {
-    "page_title": "Lag ein systemtilgang for kundar - Altinn",
-    "banner_title": "Lag ein systemtilgang for kundar",
-    "system_description": "Gjennom systemtilgangen får <strong>{{vendorName}}</strong> fullmakt til å løyse oppgåver på vegne av <strong>{{companyName}}</strong> sine kundar. For å fullføre oppsettet må du legge til kundene i Altinn."
+    "page_title": "Godkjenn systemtilgang for klientane dine - Altinn",
+    "banner_title": "Godkjenn systemtilgang for klientane dine",
+    "system_description": "Gjennom systemtilgangen får <strong>{{vendorName}}</strong> fullmakt til å løyse oppgåver på vegne av <strong>{{companyName}}</strong> sine klientar. For å fullføre oppsettet må du legge til klientane i Altinn. {{addSelfInfo}}",
+    "add_self_possible": "Du kan også knytte eiga verksemd til systemtilgangen."
   },
   "systemuser_agent_delegation": {
     "page_title": "Systemtilgang for kundar - Altinn",
