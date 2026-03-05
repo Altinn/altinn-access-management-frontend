@@ -12,6 +12,7 @@ import { useRightsSection } from './hooks/useRightsSection';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { ResourceHeading } from './ResourceHeading';
 import { RightsSection } from './RightsSection';
+import { ResourceInfoSkeleton } from './ResourceInfoSkeleton';
 
 import classes from './ResourceInfo.module.css';
 import { useInheritedStatusInfo } from '../../useInheritedStatus';
@@ -28,16 +29,17 @@ export interface ResourceInfoProps {
 export const ResourceInfo = ({ resource, onDelegate, availableActions }: ResourceInfoProps) => {
   const isSmall = useIsMobileOrSmaller();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
-  const { data: resourceDelegations } = useGetSingleRightsForRightholderQuery(
-    {
-      actingParty: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
-      to: toParty?.partyUuid || '',
-    },
-    {
-      skip: !actingParty || !fromParty || !toParty,
-    },
-  );
+  const { data: resourceDelegations, isLoading: isResourceDelegationsLoading } =
+    useGetSingleRightsForRightholderQuery(
+      {
+        actingParty: actingParty?.partyUuid || '',
+        from: fromParty?.partyUuid || '',
+        to: toParty?.partyUuid || '',
+      },
+      {
+        skip: !actingParty || !fromParty || !toParty,
+      },
+    );
   const {
     chips,
     saveEditedRights,
@@ -52,6 +54,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
     delegationCheckError,
     delegationError,
     missingAccess,
+    isLoading: isRightsSectionLoading,
     isActionLoading,
     isActionSuccess,
   } = useRightsSection({ resource, onDelegate });
@@ -84,6 +87,8 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
               isLoading={isActionLoading}
               displaySuccess={isActionSuccess}
             />
+          ) : isRightsSectionLoading || isResourceDelegationsLoading ? (
+            <ResourceInfoSkeleton />
           ) : (
             <>
               <div

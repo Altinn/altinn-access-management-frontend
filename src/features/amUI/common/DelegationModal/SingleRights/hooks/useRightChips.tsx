@@ -24,6 +24,8 @@ export const useRightChips = (
   const onActionClick = (right: ChipRight) => {
     if (right.inherited) {
       setPopoverOpen(right.rightKey);
+    } else if (!right.delegable && right.checked) {
+      setPopoverOpen(right.rightKey);
     } else {
       toggle(right);
     }
@@ -31,9 +33,15 @@ export const useRightChips = (
 
   const chips = (editable: boolean) =>
     rights
-      .filter((right: ChipRight) => !editable || right.delegable)
+      .filter((right: ChipRight) => !editable || right.delegable || right.checked)
       .map((right: ChipRight) => {
         const actionText = right.action;
+        const isPopoverTarget = right.inherited || (!right.delegable && right.checked);
+        const popoverText = isPopoverTarget
+          ? right.inherited
+            ? t('single_rights.action_popover.right_inherited')
+            : t('single_rights.action_popover.right_not_delegable')
+          : undefined;
         return (
           <div key={right.rightKey}>
             <DsChip.Checkbox
@@ -41,8 +49,8 @@ export const useRightChips = (
               data-size='sm'
               checked={right.checked}
               onClick={() => editable && onActionClick(right)}
-              popoverTarget={right.inherited ? `popover_${right.rightKey}` : undefined}
-              aria-describedby={right.inherited ? `popover_${right.rightKey}` : undefined}
+              popoverTarget={isPopoverTarget ? `popover_${right.rightKey}` : undefined}
+              aria-describedby={isPopoverTarget ? `popover_${right.rightKey}` : undefined}
             >
               {actionText}
             </DsChip.Checkbox>
@@ -56,7 +64,7 @@ export const useRightChips = (
               aria-live='polite'
               role='tooltip'
             >
-              {t('single_rights.inheritance.right_inherited')}
+              <div style={{ padding: '2px 2px' }}>{popoverText}</div>
             </DsPopover>
           </div>
         );

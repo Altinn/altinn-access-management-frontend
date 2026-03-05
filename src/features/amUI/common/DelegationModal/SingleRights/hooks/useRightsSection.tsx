@@ -7,6 +7,7 @@ import {
   DelegationCheckedRight,
   ServiceResource,
   useDelegationCheckQuery,
+  useGetResourceRightsMetaQuery,
   useGetResourceRightsQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
@@ -45,8 +46,14 @@ export const useRightsSection = ({
 
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const revoke = useRevokeResource();
-  const hasResourceAccess = useHasResourceCheck(resource.identifier);
-  const { data: resourceRights, isFetching: isResourceRightsFetching } = useGetResourceRightsQuery(
+  const { hasResourceAccess, isLoading: isResourceAccessLoading } = useHasResourceCheck(
+    resource.identifier,
+  );
+  const {
+    data: resourceRights,
+    isFetching: isResourceRightsFetching,
+    isLoading: isResourceRightsLoading,
+  } = useGetResourceRightsQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',
@@ -56,6 +63,13 @@ export const useRightsSection = ({
     { skip: !toParty || !fromParty || !actingParty || !resource.identifier || !hasResourceAccess }, // Only fetch resource rights if the rightholder has access to the resource
   );
   const { data: reportee } = useGetReporteeQuery();
+  const { data: rightsMeta, isLoading: isRightsMetaLoading } = useGetResourceRightsMetaQuery(
+    {
+      resourceId: resource.identifier,
+    },
+    { skip: !resource.identifier },
+  );
+
   const {
     data: delegationCheckedActions,
     isError: isDelegationCheckError,
@@ -63,16 +77,16 @@ export const useRightsSection = ({
     isLoading: isDelegationCheckLoading,
   } = useDelegationCheckQuery(resource.identifier, { skip: !resource.identifier });
 
+  const isLoading =
+    isResourceAccessLoading ||
+    isRightsMetaLoading ||
+    isDelegationCheckLoading ||
+    (hasResourceAccess && isResourceRightsLoading);
+
   /// Computed values
 
   const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.action);
-  const toPartyName = toParty
-    ? formatDisplayName({
-        fullName: toParty.name,
-        type: toParty.partyTypeName === PartyType.Organization ? 'company' : 'person',
-      })
-    : '';
 
   const getMissingAccessMessage = useCallback(
     (response: DelegationCheckedRight[]) => {
@@ -128,27 +142,37 @@ export const useRightsSection = ({
 
   // Instantiate/reset rights and missing access message states
   useEffect(() => {
+    if (!rightsMeta || rightsMeta.length === 0) {
+      return;
+    }
+
+    if (!delegationCheckedActions && !isDelegationCheckError) {
+      return;
+    }
+
     if (delegationCheckedActions) {
       setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
+    }
 
-      if (hasAccess && resourceRights) {
-        const chipRights: ChipRight[] = mapRightsToChipRights(delegationCheckedActions, {
-          isDelegated: (right) =>
-            resourceRights.directRights.some((r) => r.right.key === right.right.key) ||
-            resourceRights.indirectRights.some((r) => r.right.key === right.right.key),
-          isInherited: (rightKey) =>
-            resourceRights.indirectRights.some((r) => r.right.key === rightKey),
-        });
-        setRights(chipRights);
-      } else {
-        const chipRights: ChipRight[] = mapRightsToChipRights(delegationCheckedActions, {
-          isChecked: (right) => right.result === true,
-        });
-        setRights(chipRights);
-      }
+    if (hasAccess && resourceRights) {
+      const chipRights: ChipRight[] = mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
+        isDelegated: (right) =>
+          resourceRights.directRights.some((r) => r.right.key === right.right.key) ||
+          resourceRights.indirectRights.some((r) => r.right.key === right.right.key),
+        isInherited: (rightKey) =>
+          resourceRights.indirectRights.some((r) => r.right.key === rightKey),
+      });
+      setRights(chipRights);
+    } else {
+      const chipRights: ChipRight[] = mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
+        isChecked: (right) => right.result === true,
+      });
+      setRights(chipRights);
     }
   }, [
+    rightsMeta,
     delegationCheckedActions,
+    isDelegationCheckError,
     resource.identifier,
     hasAccess,
     resourceRights,
@@ -226,5 +250,6 @@ export const useRightsSection = ({
     missingAccess,
     isActionLoading,
     isActionSuccess,
+    isLoading,
   };
 };

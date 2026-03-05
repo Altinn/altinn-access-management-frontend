@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                List<MyClientDelegation> clients = await _clientService.GetMyClients(provider, cancellationToken);
+                IEnumerable<MyClientDelegation> clients = await _clientService.GetMyClients(provider, cancellationToken);
                 return Ok(clients);
             }
             catch (HttpStatusException ex)
@@ -166,7 +166,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                List<ClientDelegation> clients = await _clientService.GetClients(party, roles, cancellationToken);
+                IEnumerable<ClientDelegation> clients = await _clientService.GetClients(party, roles, cancellationToken);
                 return Ok(clients);
             }
             catch (HttpStatusException ex)
@@ -199,7 +199,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             
             try
             {
-                List<AgentDelegation> agents = await _clientService.GetAgents(party, cancellationToken);
+                IEnumerable<AgentDelegation> agents = await _clientService.GetAgents(party, cancellationToken);
                 return Ok(agents);
             }
             catch (HttpStatusException ex)
@@ -233,7 +233,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                List<ClientDelegation> clients = await _clientService.GetAgentAccessPackages(party, to, cancellationToken);
+                IEnumerable<ClientDelegation> clients = await _clientService.GetAgentAccessPackages(party, to, cancellationToken);
                 return Ok(clients);
             }
             catch (HttpStatusException ex)
@@ -267,7 +267,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                List<AgentDelegation> agents = await _clientService.GetClientAccessPackages(party, from, cancellationToken);
+                IEnumerable<AgentDelegation> agents = await _clientService.GetClientAccessPackages(party, from, cancellationToken);
                 return Ok(agents);
             }
             catch (HttpStatusException ex)

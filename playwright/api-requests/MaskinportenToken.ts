@@ -88,19 +88,19 @@ export class MaskinportenToken {
   /**
    * Fetch a consent token from Maskinporten
    * @param consentRequestId The ID of the approved consent request
-   * @param fromPersonId The person ID in URN format (e.g., urn:altinn:person:identifier-no:21818297804)
+   * @param fromPartyUrn The consenting party URN (person or org)
    * @param consumerOrg Optional organization number for "behalf of" scenarios
    * @returns The consent access token as a string
    */
   async getConsentToken(
     consentRequestId: string,
-    fromPersonId: string,
+    fromPartyUrn: string,
     consumerOrg?: string,
   ): Promise<string> {
     const assertion = createConsentAuthorizationJWT(
       this.clientId,
       consentRequestId,
-      fromPersonId,
+      fromPartyUrn,
       this.jwk,
       consumerOrg,
     );

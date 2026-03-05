@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)
         {
             string endpointUrl = "enduser/clientdelegations/my/clients";
             if (provider?.Count > 0)
@@ -66,10 +66,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             if (clients?.Items == null)
             {
-                return new List<MyClientDelegation>();
+                return Enumerable.Empty<MyClientDelegation>();
             }
 
-            return clients.Items.ToList();
+            return clients.Items;
         }
 
         /// <inheritdoc />
@@ -108,7 +108,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/clientdelegations/clients?party={party}";
             if (roles?.Count > 0)
@@ -131,14 +131,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             if (clients?.Items == null)
             {
-                return new List<ClientDelegation>();
+                return Enumerable.Empty<ClientDelegation>();
             }
 
-            return clients.Items.ToList();
+            return clients.Items;
         }
 
         /// <inheritdoc />
-        public async Task<List<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/clientdelegations/agents?party={party}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -149,14 +149,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             if (agents?.Items == null)
             {
-                return new List<AgentDelegation>();
+                return Enumerable.Empty<AgentDelegation>();
             }
 
-            return agents.Items.ToList();
+            return agents.Items;
         }
 
         /// <inheritdoc />
-        public async Task<List<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/clientdelegations/agents/accesspackages?party={party}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -167,14 +167,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             if (clients?.Items == null)
             {
-                return new List<ClientDelegation>();
+                return Enumerable.Empty<ClientDelegation>();
             }
 
-            return clients.Items.ToList();
+            return clients.Items;
         }
 
         /// <inheritdoc />
-        public async Task<List<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/clientdelegations/clients/accesspackages?party={party}&from={from}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -185,10 +185,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             if (agents?.Items == null)
             {
-                return new List<AgentDelegation>();
+                return Enumerable.Empty<AgentDelegation>();
             }
 
-            return agents.Items.ToList();
+            return agents.Items;
         }
 
         /// <inheritdoc />

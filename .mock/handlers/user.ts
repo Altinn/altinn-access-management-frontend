@@ -10,6 +10,7 @@ type MockConnectionParty = {
   name: string;
   type: 'Person' | 'Organisasjon';
   variant: string;
+  parent: null;
   children: null;
   partyId: number;
   organizationIdentifier?: string;
@@ -21,7 +22,6 @@ type MockConnection = {
   party: MockConnectionParty;
   roles: MockRole[];
   connections: [];
-  sortKey: string;
 };
 
 const roleDagligLeder: MockRole = { id: '123', code: 'daglig-leder' };
@@ -43,6 +43,7 @@ const createOrgConnection = (id: string, name: string, roles: MockRole[]): MockC
     name,
     type: 'Organisasjon',
     variant: 'AS',
+    parent: null,
     children: null,
     partyId: getStablePartyId(id),
     organizationIdentifier: '310202398',
@@ -50,7 +51,6 @@ const createOrgConnection = (id: string, name: string, roles: MockRole[]): MockC
   },
   roles,
   connections: [],
-  sortKey: name.toLowerCase(),
 });
 
 const createPersonConnection = (id: string, name: string, roles: MockRole[]): MockConnection => ({
@@ -59,6 +59,7 @@ const createPersonConnection = (id: string, name: string, roles: MockRole[]): Mo
     name,
     type: 'Person',
     variant: 'Person',
+    parent: null,
     children: null,
     partyId: getStablePartyId(id),
     dateOfBirth: '1984-04-03',
@@ -66,7 +67,6 @@ const createPersonConnection = (id: string, name: string, roles: MockRole[]): Mo
   },
   roles,
   connections: [],
-  sortKey: name.toLowerCase(),
 });
 
 type ConnectionPartyTemplate =
@@ -123,6 +123,7 @@ const createConnectionForPartyId = (id: string, roles: MockRole[]): MockConnecti
       name: template.name,
       type: 'Organisasjon',
       variant: template.variant ?? 'AS',
+      parent: null,
       children: null,
       partyId: getStablePartyId(id),
       organizationIdentifier: template.organizationIdentifier ?? '310202398',
@@ -130,7 +131,6 @@ const createConnectionForPartyId = (id: string, roles: MockRole[]): MockConnecti
     },
     roles,
     connections: [],
-    sortKey: template.name.toLowerCase(),
   };
 };
 
@@ -214,48 +214,30 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       ],
     });
   }),
-  http.get(
-    `${ACCESSMANAGEMENT_BASE_URL}/user/rightholders?party=:partyId&from=:fromId&to=:toId`,
-    ({ request }) => {
-      const url = new URL(request.url);
-      const fromId = url.searchParams.get('from');
-      const toId = url.searchParams.get('to');
-      const id = url.searchParams.get('party');
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/rightholders`, ({ request }) => {
+    const url = new URL(request.url);
+    return HttpResponse.json(getRightHoldersResponse(url));
+  }),
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/connection/rightholders`, ({ request }) => {
+    const url = new URL(request.url);
+    const party = url.searchParams.get('party');
+    const from = url.searchParams.get('from');
+    const to = url.searchParams.get('to');
 
-      const daglRole = { id: '123', code: 'daglig-leder' };
-      const rhRole = { id: '456', code: 'rettighetshaver' };
+    // Match BFF contract: either "from" or "to" must be provided.
+    if (!from && !to) {
+      return new HttpResponse("Either 'from' or 'to' query parameter must be provided.", {
+        status: 400,
+      });
+    }
 
-      const defaultReturn = {
-        party: {
-          id: id || '3d8b34c3-df0d-4dcc-be12-e788ce414744',
-          type: 'Organisasjon',
-          name: 'DIGITALISERINGSDIREKTORATET',
-          children: null,
-        },
-        roles: [rhRole],
-      };
+    // Keep party required in the mock to mirror BFF model binding constraints.
+    if (!party) {
+      return new HttpResponse('The party field is required.', { status: 400 });
+    }
 
-      if (fromId?.includes('PARTIALLY_DELETABLE') || toId?.includes('PARTIALLY_DELETABLE')) {
-        return HttpResponse.json([
-          {
-            ...defaultReturn,
-            roles: [daglRole, rhRole],
-          },
-        ]);
-      }
-
-      if (fromId?.includes('NOT_DELETABLE') || toId?.includes('NOT_DELETABLE')) {
-        return HttpResponse.json([
-          {
-            ...defaultReturn,
-            roles: [daglRole],
-          },
-        ]);
-      }
-
-      return HttpResponse.json([defaultReturn]);
-    },
-  ),
+    return HttpResponse.json(getRightHoldersResponse(url));
+  }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/profile`, () => {
     return HttpResponse.json({
       userId: 20010996,
@@ -425,6 +407,12 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
     return HttpResponse.json(true);
   }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/isAdmin`, () => {
+    return HttpResponse.json(true);
+  }),
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/isCompanyProfileAdmin`, () => {
+    return HttpResponse.json(true);
+  }),
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/isHovedadmin`, () => {
     return HttpResponse.json(true);
   }),
 ];

@@ -54,6 +54,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<List<RightCheck>> DelegationCheck(Guid from, string resource);
 
         /// <summary>
+        ///    Fetches all rights associated with a given resource, with meta data given on the language specified
+        /// </summary>
+        /// <param name="resource">The id of the resource to be checked for delegation</param>
+        /// <param name="languageCode">Which language on which to receive the meta data</param>
+        Task<List<Models.SingleRight.Right>> GetResourceRightsMeta(string resource, string languageCode);
+
+        /// <summary>
         ///    Delegates the specified rights on a specified resource to someone on behalf of a specified party
         /// </summary>
         /// <param name="party">The party that is performing the delegation</param>

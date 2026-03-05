@@ -30,7 +30,13 @@ const buildClientConnections = (clients?: Client[]): Connection[] => {
   });
 };
 
-export const ClientAdministrationClientsTab = () => {
+type ClientAdministrationClientsTabProps = {
+  isActive: boolean;
+};
+
+export const ClientAdministrationClientsTab = ({
+  isActive,
+}: ClientAdministrationClientsTabProps) => {
   const { t } = useTranslation();
   const [roleFilter, setRoleFilter] = useState<string[]>([]);
   const [showDeleted, setShowDeleted] = useState(false);
@@ -39,7 +45,12 @@ export const ClientAdministrationClientsTab = () => {
     data: clients,
     isLoading: isClientsLoading,
     isError: isClientsError,
-  } = useGetClientsQuery({ roles: roleFilter });
+  } = useGetClientsQuery(
+    { roles: roleFilter },
+    {
+      skip: !isActive,
+    },
+  );
 
   const filteredClients = useMemo(() => {
     if (!clients || showDeleted) {
