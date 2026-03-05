@@ -18,12 +18,12 @@ export class ClientDelegationPage {
     this.page = page;
     this.confirmButton = page.getByRole('button', { name: 'Godkjenn' });
     this.customersButton = page.getByRole('button', {
-      name: /^(Legg til kunder|Legg til eller fjern kunder)$/,
+      name: /^(Legg til klienter|Legg til eller fjern klienter)$/,
     });
 
-    this.addAllCustomersButton = page.getByRole('button', { name: 'Legg til alle kunder' });
+    this.addAllCustomersButton = page.getByRole('button', { name: 'Legg til alle klienter' });
 
-    this.addAllCustomersSuccessText = page.getByText(/Alle kunder er lagt til\.?/);
+    this.addAllCustomersSuccessText = page.getByText(/Alle klienter er lagt til\.?/);
 
     this.confirmAndCloseButton = page.getByRole('button', { name: 'Bekreft og lukk' });
 
