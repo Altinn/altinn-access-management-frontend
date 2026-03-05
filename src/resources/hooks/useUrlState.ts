@@ -28,20 +28,18 @@ export function useUrlState(key: string, defaultValue: any): any {
   const setValue = useCallback(
     (newValue: string | string[]) => {
       setSearchParams(
-        (prev) => {
-          const next = new URLSearchParams(prev);
-          const isDefault = Array.isArray(newValue)
-            ? newValue.length === (defaultValue as string[]).length
-            : newValue === defaultValue;
+        (params) => {
+          const serialized = Array.isArray(newValue) ? newValue.join(',') : newValue;
+          const serializedDefault = Array.isArray(defaultValue)
+            ? defaultValue.join(',')
+            : defaultValue;
 
-          if (isDefault) {
-            next.delete(key);
-          } else if (Array.isArray(newValue)) {
-            next.set(key, newValue.join(','));
+          if (serialized === serializedDefault) {
+            params.delete(key);
           } else {
-            next.set(key, String(newValue));
+            params.set(key, serialized);
           }
-          return next;
+          return params;
         },
         { replace: true },
       );
