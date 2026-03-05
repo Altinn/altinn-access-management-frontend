@@ -1,35 +1,32 @@
 [
-  {
-    "right": {
-      "key": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-      "name": "Read",
-      "action": "read"
+    {
+        "right": {
+            "key": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+            "name": "Read"
+        },
+        "result": true,
+        "reasonCodes": [
+            "RoleAccess"
+        ]
     },
-    "result": true,
-    "reasonCodes": [
-      "RoleAccess"
-    ]
-  },
-  {
-    "right": {
-      "key": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-      "name": "Write",
-      "action": "write"
+    {
+        "right": {
+            "key": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+            "name": "Write"
+        },
+        "result": true,
+        "reasonCodes": [
+            "RoleAccess"
+        ]
     },
-    "result": true,
-    "reasonCodes": [
-      "RoleAccess"
-    ]
-  },
-  {
-    "right": {
-      "key": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
-      "name": "Sign",
-      "action": "sign"
-    },
-    "result": true,
-    "reasonCodes": [
-      "RoleAccess"
-    ]
-  }
+    {
+        "right": {
+            "key": "urn:altinn:resource:appid-503:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
+            "name": "Sign"
+        },
+        "result": true,
+        "reasonCodes": [
+            "RoleAccess"
+        ]
+    }
 ]

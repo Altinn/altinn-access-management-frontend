@@ -23,11 +23,7 @@
         {
             "right": {
                 "key": "urn:altinn:resource:ske-innrapportering-boligsameie:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-                "name": "Write",
-                "resource": [
-                    "ske-innrapportering-boligsameie"
-                ],
-                "action": "write"
+                "name": "Write"
             },
             "reason": {
                 "items": [

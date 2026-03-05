@@ -78,7 +78,7 @@ export const clientApi = createApi({
           : '';
         return providerQuery ? `my/clients?${providerQuery}` : 'my/clients';
       },
-      keepUnusedDataFor: 3 * 60,
+      keepUnusedDataFor: 5 * 60,
       providesTags: ['myClients'],
     }),
     getClients: builder.query<Client[], GetClientsArgs | void>({
@@ -91,24 +91,24 @@ export const clientApi = createApi({
             : '';
         return `clients?party=${party}${roleQuery}`;
       },
-      keepUnusedDataFor: 3 * 60,
+      keepUnusedDataFor: 5 * 60,
       providesTags: ['clients'],
     }),
     getAgents: builder.query<Agent[], void>({
       query: () => `agents?party=${getCookie('AltinnPartyUuid')}`,
-      keepUnusedDataFor: 3 * 60,
+      keepUnusedDataFor: 5 * 60,
       providesTags: ['agents'],
     }),
     getAgentAccessPackages: builder.query<Client[], { to: string; party?: string }>({
       query: ({ to, party = getCookie('AltinnPartyUuid') }) =>
         `agents/accesspackages?party=${party}&to=${to}`,
-      keepUnusedDataFor: 3 * 60,
+      keepUnusedDataFor: 5 * 60,
       providesTags: ['agentAccessPackages'],
     }),
     getClientAccessPackages: builder.query<Agent[], { from: string; party?: string }>({
       query: ({ from, party = getCookie('AltinnPartyUuid') }) =>
         `clients/accesspackages?party=${party}&from=${from}`,
-      keepUnusedDataFor: 3 * 60,
+      keepUnusedDataFor: 5 * 60,
       providesTags: ['clientAccessPackages'],
     }),
     addAgentAccessPackages: builder.mutation<

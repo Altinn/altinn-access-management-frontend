@@ -7,9 +7,9 @@ import {
   DelegationCheckedRight,
   ServiceResource,
   useDelegationCheckQuery,
+  useGetResourceRightsMetaQuery,
   useGetResourceRightsQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import { arraysEqualUnordered } from '@/resources/utils';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
@@ -34,7 +34,6 @@ export const useRightsSection = ({
   /// State variables
 
   const [rights, setRights] = useState<ChipRight[]>([]);
-  const [currentRights, setCurrentRights] = useState<string[]>([]);
   const [hasAccess, setHasAccess] = useState(false);
   const [delegationError, setDelegationError] = useState<'delegate' | 'revoke' | 'edit' | null>(
     null,
@@ -47,8 +46,14 @@ export const useRightsSection = ({
 
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const revoke = useRevokeResource();
-  const hasResourceAccess = useHasResourceCheck(resource.identifier);
-  const { data: resourceRights, isFetching: isResourceRightsFetching } = useGetResourceRightsQuery(
+  const { hasResourceAccess, isLoading: isResourceAccessLoading } = useHasResourceCheck(
+    resource.identifier,
+  );
+  const {
+    data: resourceRights,
+    isFetching: isResourceRightsFetching,
+    isLoading: isResourceRightsLoading,
+  } = useGetResourceRightsQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',
@@ -58,6 +63,13 @@ export const useRightsSection = ({
     { skip: !toParty || !fromParty || !actingParty || !resource.identifier || !hasResourceAccess }, // Only fetch resource rights if the rightholder has access to the resource
   );
   const { data: reportee } = useGetReporteeQuery();
+  const { data: rightsMeta, isLoading: isRightsMetaLoading } = useGetResourceRightsMetaQuery(
+    {
+      resourceId: resource.identifier,
+    },
+    { skip: !resource.identifier },
+  );
+
   const {
     data: delegationCheckedActions,
     isError: isDelegationCheckError,
@@ -65,81 +77,16 @@ export const useRightsSection = ({
     isLoading: isDelegationCheckLoading,
   } = useDelegationCheckQuery(resource.identifier, { skip: !resource.identifier });
 
+  const isLoading =
+    isResourceAccessLoading ||
+    isRightsMetaLoading ||
+    isDelegationCheckLoading ||
+    (hasResourceAccess && isResourceRightsLoading);
+
   /// Computed values
 
-  const hasUnsavedChanges = !arraysEqualUnordered(
-    rights.filter((r) => r.checked).map((r) => r.rightKey),
-    currentRights,
-  );
-  const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.action);
-  const toPartyName = toParty
-    ? formatDisplayName({
-        fullName: toParty.name,
-        type: toParty.partyTypeName === PartyType.Organization ? 'company' : 'person',
-      })
-    : '';
-
-  /// UseEffect hooks
-
-  // Instantiate/reset access and rights states
-  useEffect(() => {
-    if (!isResourceRightsFetching) {
-      if (
-        hasResourceAccess &&
-        resourceRights &&
-        (resourceRights.directRights.length > 0 || resourceRights.indirectRights.length > 0)
-      ) {
-        setHasAccess(true);
-        const rightKeys = [
-          ...resourceRights.directRights.map((r) => r.right.key),
-          ...resourceRights.indirectRights.map((r) => r.right.key),
-        ];
-        setCurrentRights(rightKeys);
-      } else {
-        setHasAccess(false);
-        setCurrentRights([]);
-      }
-    }
-  }, [resourceRights, isResourceRightsFetching, resource.identifier, hasResourceAccess]);
-
-  // Instantiate/reset rights and missing access message states
-  useEffect(() => {
-    if (delegationCheckedActions) {
-      setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
-
-      if (hasAccess && resourceRights) {
-        const chipRights: ChipRight[] = mapRightsToChipRights(
-          delegationCheckedActions,
-          (right) => currentRights.some((key) => key === right.right.key),
-          (rightKey) => resourceRights.indirectRights.some((r) => r.right.key === rightKey),
-        );
-        setRights(chipRights);
-      } else {
-        const chipRights: ChipRight[] = mapRightsToChipRights(
-          delegationCheckedActions,
-          (right) => right.result === true,
-          () => false, // If the user doesn't have access to the resource, none of the rights can be inherited
-        );
-        setRights(chipRights);
-      }
-    }
-  }, [delegationCheckedActions, resource.identifier, hasAccess, currentRights, resourceRights]);
-
-  /// Functions
-
-  const onSuccess = () => {
-    setIsActionLoading(false);
-    setIsActionSuccess(true);
-    setTimeout(() => setIsActionSuccess(false), 2000);
-    onDelegate?.();
-  };
-
-  const applyActionStates = () => {
-    setIsActionLoading(true);
-    setIsActionSuccess(false);
-    setDelegationError(null);
-    setMissingAccess(null);
-  };
+  const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
+  const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
 
   const getMissingAccessMessage = useCallback(
     (response: DelegationCheckedRight[]) => {
@@ -175,6 +122,78 @@ export const useRightsSection = ({
     },
     [t, resource?.resourceOwnerName, reportee?.name],
   );
+
+  /// UseEffect hooks
+
+  // Instantiate/reset access and rights states
+  useEffect(() => {
+    if (!isResourceRightsFetching) {
+      if (
+        hasResourceAccess &&
+        resourceRights &&
+        (resourceRights.directRights.length > 0 || resourceRights.indirectRights.length > 0)
+      ) {
+        setHasAccess(true);
+      } else {
+        setHasAccess(false);
+      }
+    }
+  }, [resourceRights, isResourceRightsFetching, resource.identifier, hasResourceAccess]);
+
+  // Instantiate/reset rights and missing access message states
+  useEffect(() => {
+    if (!rightsMeta || rightsMeta.length === 0) {
+      return;
+    }
+
+    if (!delegationCheckedActions && !isDelegationCheckError) {
+      return;
+    }
+
+    if (delegationCheckedActions) {
+      setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
+    }
+
+    if (hasAccess && resourceRights) {
+      const chipRights: ChipRight[] = mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
+        isDelegated: (right) =>
+          resourceRights.directRights.some((r) => r.right.key === right.right.key) ||
+          resourceRights.indirectRights.some((r) => r.right.key === right.right.key),
+        isInherited: (rightKey) =>
+          resourceRights.indirectRights.some((r) => r.right.key === rightKey),
+      });
+      setRights(chipRights);
+    } else {
+      const chipRights: ChipRight[] = mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
+        isChecked: (right) => right.result === true,
+      });
+      setRights(chipRights);
+    }
+  }, [
+    rightsMeta,
+    delegationCheckedActions,
+    isDelegationCheckError,
+    resource.identifier,
+    hasAccess,
+    resourceRights,
+    getMissingAccessMessage,
+  ]);
+
+  /// Functions
+
+  const onSuccess = () => {
+    setIsActionLoading(false);
+    setIsActionSuccess(true);
+    setTimeout(() => setIsActionSuccess(false), 2000);
+    onDelegate?.();
+  };
+
+  const applyActionStates = () => {
+    setIsActionLoading(true);
+    setIsActionSuccess(false);
+    setDelegationError(null);
+    setMissingAccess(null);
+  };
 
   const saveEditedRights = () => {
     const actionKeysToDelegate = rights
@@ -231,5 +250,6 @@ export const useRightsSection = ({
     missingAccess,
     isActionLoading,
     isActionSuccess,
+    isLoading,
   };
 };

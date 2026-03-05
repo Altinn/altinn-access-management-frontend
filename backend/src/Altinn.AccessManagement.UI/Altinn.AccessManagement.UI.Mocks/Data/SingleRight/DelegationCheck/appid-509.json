@@ -30,11 +30,7 @@
       ],
       "right": {
         "key": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-        "name": "Read",
-        "resource": [
-          "urn:altinn:resource:appid-509"
-        ],
-        "action": "read"
+        "name": "Read"
       },
       "result": true
     },
@@ -44,11 +40,7 @@
       ],
       "right": {
         "key": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
-        "name": "Write",
-        "resource": [
-          "urn:altinn:resource:appid-509"
-        ],
-        "action": "write"
+        "name": "Write"
       },
       "result": true
     },
@@ -58,11 +50,7 @@
       ],
       "right": {
         "key": "urn:altinn:resource:appid-509:urn:oasis:names:tc:xacml:1.0:action:action-id:sign",
-        "name": "Sign",
-        "resource": [
-          "urn:altinn:resource:appid-509"
-        ],
-        "action": "sign"
+        "name": "Sign"
       },
       "result": true
     }

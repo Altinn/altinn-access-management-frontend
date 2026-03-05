@@ -16,7 +16,6 @@ import {
   UserListItem,
 } from '@altinn/altinn-components';
 import {
-  ReporteeInfo,
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
   useGetIsCompanyProfileAdminQuery,
@@ -50,6 +49,8 @@ import { getHostUrl } from '@/resources/utils/pathUtils';
 import { useRequests } from '@/resources/hooks/useRequests';
 import cn from 'classnames';
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
+import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
+import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
@@ -63,6 +64,7 @@ export const LandingPage = () => {
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const { pendingRequests, isLoadingRequests } = useRequests();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
+  const displayClientAdministrationPage = clientAdministrationPageEnabled();
 
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
@@ -70,17 +72,23 @@ export const LandingPage = () => {
   });
 
   const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
-  const { data: myClientsByProvider } = useGetMyClientsQuery(
-    { provider: [actingPartyUuid] },
+
+  const { data: roles } = useGetRolePermissionsQuery(
+    {
+      party: currentUser?.partyUuid ?? '',
+      from: actingPartyUuid,
+      to: currentUser?.partyUuid ?? '',
+    },
     {
       skip:
+        !displayClientAdministrationPage ||
         !actingPartyUuid ||
-        !reportee?.partyUuid ||
         !currentUser?.partyUuid ||
         isCurrentUserReportee,
     },
   );
-  const hasMyClients = myClientsByProvider && myClientsByProvider.length > 0;
+
+  const isAgent = roles?.some((rolePermission) => rolePermission.role.code === 'agent');
 
   useEffect(() => {
     // Remove the openAccountMenu query parameter after reading it the first time
@@ -99,7 +107,6 @@ export const LandingPage = () => {
     isLoadingCanAccessSettings ||
     currentUserIsLoading ||
     isLoadingRequests;
-  const displayClientAdministrationPage = clientAdministrationPageEnabled();
 
   const getMenuItems = (): MenuItemProps[] => {
     const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
@@ -219,7 +226,7 @@ export const LandingPage = () => {
         : t('landing_page.your_rights_description', { reportee: reporteeName }),
     });
 
-    if (!isCurrentUserReportee && hasMyClients && displayClientAdministrationPage) {
+    if (!isCurrentUserReportee && isAgent && displayClientAdministrationPage) {
       items.push({
         ...getYourClientsMenuItem('/', isLoading),
         description: t('landing_page.your_clients_description', { reportee: reporteeName }),

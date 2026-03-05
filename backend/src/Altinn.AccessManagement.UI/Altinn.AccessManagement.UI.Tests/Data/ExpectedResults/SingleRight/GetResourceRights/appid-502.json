@@ -23,11 +23,7 @@
         {
             "right": {
                 "key": "urn:altinn:resource:appid-502:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
-                "name": "Read",
-                "resource": [
-                    "appid-502"
-                ],
-                "action": "read"
+                "name": "Read"
             },
             "reason": null,
             "permissions": [

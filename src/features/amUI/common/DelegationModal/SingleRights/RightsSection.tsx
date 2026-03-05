@@ -68,6 +68,7 @@ export const RightsSection = ({
   });
   const displayResourceAlert =
     availableActions?.includes(DelegationAction.DELEGATE) &&
+    !hasAccess &&
     (isDelegationCheckError ||
       resource?.delegable === false ||
       (rights.length > 0 && !rights.some((r) => r.delegable === true)));
@@ -113,7 +114,7 @@ export const RightsSection = ({
               </DsParagraph>
             </DsAlert>
           )}
-          {missingAccess && (
+          {missingAccess && availableActions?.includes(DelegationAction.DELEGATE) && (
             <DsAlert
               data-color='info'
               data-size='sm'
@@ -202,10 +203,10 @@ export const RightsSection = ({
             variant={availableActions?.includes(DelegationAction.DELEGATE) ? 'tertiary' : 'primary'}
             className={classes.deleteButton}
             onClick={revokeResource}
-            disabled={!rights.some((r) => r.inherited === false)}
+            disabled={rights.length === 0 || rights.some((r) => r.inherited === true)}
             color='danger'
           >
-            <MinusCircleIcon />
+            <MinusCircleIcon aria-hidden='true' />
             {t('common.delete_poa')}
           </Button>
         )}

@@ -185,7 +185,6 @@ export class Token {
       );
     }
     const responseData = await response.json();
-    // console.log('after getIds');
     return await responseData.data[0];
   }
 
