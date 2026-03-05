@@ -2,6 +2,28 @@ import { http, HttpResponse } from 'msw';
 import packages from './data/packages.json';
 import delegations from './data/delegations.json';
 
+type AccessAreaLike = {
+  id?: string;
+  urn?: string;
+  accessPackages?: Array<{
+    area?: {
+      urn?: string;
+    };
+  }>;
+};
+
+const normalizeArea = (area: AccessAreaLike): AccessAreaLike => {
+  if (area.urn) {
+    return area;
+  }
+
+  const nestedUrn = area.accessPackages?.find((pkg) => pkg.area?.urn)?.area?.urn;
+  return {
+    ...area,
+    urn: nestedUrn ?? '',
+  };
+};
+
 export const accessPackageHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/accesspackage/delegations`, ({ params }) => {
     return HttpResponse.json(delegations);
@@ -35,9 +57,11 @@ export const accessPackageHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
           description: 'Test package description',
           area: {
             id: 'area-1',
+            urn: 'accesspackage:area:test_area_1',
             name: 'Test Area',
             description: 'Test area description',
-            packages: [],
+            accessPackages: [],
+            iconUrl: '',
           },
         },
         result: true,
@@ -50,9 +74,11 @@ export const accessPackageHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
           description: 'Test package description 2',
           area: {
             id: 'area-2',
+            urn: 'accesspackage:area:test_area_2',
             name: 'Test Area 2',
             description: 'Test area description 2',
-            packages: [],
+            accessPackages: [],
+            iconUrl: '',
           },
         },
         result: false,
@@ -69,6 +95,6 @@ export const accessPackageHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
     if (search === 'error') {
       return HttpResponse.error();
     }
-    return HttpResponse.json(packages);
+    return HttpResponse.json((packages as AccessAreaLike[]).map(normalizeArea));
   }),
 ];
