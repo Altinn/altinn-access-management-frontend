@@ -880,5 +880,20 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Result, actual.Result);
             AssertCollections(expected.ReasonCodes, actual.ReasonCodes, Assert.Equal);
         }
+
+        /// <summary>
+        ///     Assert that two <see cref="Right" /> have the same property values.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(Altinn.AccessManagement.UI.Core.Models.SingleRight.Right expected, Altinn.AccessManagement.UI.Core.Models.SingleRight.Right actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Key, actual.Key);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Action, actual.Action);
+        }
     }
 }

@@ -113,7 +113,7 @@ export const RightsSection = ({
               </DsParagraph>
             </DsAlert>
           )}
-          {missingAccess && (
+          {missingAccess && availableActions?.includes(DelegationAction.DELEGATE) && (
             <DsAlert
               data-color='info'
               data-size='sm'

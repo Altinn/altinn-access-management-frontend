@@ -5,10 +5,14 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Integration.Util;
+using Altinn.Authorization.ProblemDetails;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -59,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 ServiceResource result = null;
-                string endpointUrl = $"resource/{resourceId}";
+                string endpointUrl = $"v1/resource/{resourceId}";
 
                 if (!string.IsNullOrEmpty(versionId))
                 {
@@ -94,7 +98,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 // It's not possible to filter on AltinnApp or Altinn2Service for this endpoint
-                string endpointUrl = "resource/search";
+                string endpointUrl = "v1/resource/search";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -119,7 +123,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<OrgList> GetAllResourceOwners()
         {
-            string endpointUrl = "resource/orgs";
+            string endpointUrl = "v1/resource/orgs";
             string cacheKey = "all_resource_owners";
             if (!_memoryCache.TryGetValue(cacheKey, out OrgList resourceOwners))
             {
@@ -170,7 +174,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             };
             try
             {
-                string endpointUrl = "resource/resourcelist";
+                string endpointUrl = "v1/resource/resourcelist";
 
                 if (includeMigratedApps)
                 {
@@ -204,7 +208,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             List<ServiceResource> resources = new List<ServiceResource>();
 
             // Weird enough it's not possible to filter on AltinnApp or Altinn2Service for this endpoint
-            string endpointUrl = $"resource/search?ResourceType={(int)ResourceType.MaskinportenSchema}";
+            string endpointUrl = $"v1/resource/search?ResourceType={(int)ResourceType.MaskinportenSchema}";
 
             HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -218,6 +222,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             return resources;
+        }
+
+        /// <inheritdoc />
+        public async Task<List<Right>> GetResourceRights(string resourceId, string languageCode = "nb")
+        {
+            string endpointUrl = $"v2/resource/{resourceId}/policy/rights";
+
+            HttpResponseMessage response = await _httpClient.GetAsync(null, endpointUrl, languageCode: languageCode);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<Right>>(response);
         }
     }
 }

@@ -38,10 +38,17 @@ namespace Altinn.AccessManagement.UI.Integration.Util
                 if (response.Content.Headers.ContentLength > 0)
                 {
                     responseContent = await response.Content.ReadAsStringAsync();
-                    error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, serializerOptions);
-                    if (error.StatusCode != response.StatusCode)
+                    try
                     {
-                        error.StatusCode = response.StatusCode;
+                        error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, serializerOptions);
+                        if (error.StatusCode != response.StatusCode)
+                        {
+                            error.StatusCode = response.StatusCode;
+                        }
+                    }
+                    catch (JsonException)
+                    {
+                        error = new HttpStatusException("General", response.ReasonPhrase, response.StatusCode, string.Empty, responseContent);
                     }
                 }
                 else

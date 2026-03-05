@@ -1,8 +1,13 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Net.Http;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
@@ -68,6 +73,25 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             return Task.FromResult<OrgList>(null);
+        }
+
+        public Task<List<Right>> GetResourceRights(string resourceId, string languageCode = "nb")
+        {
+            if (resourceId == "internal-error-trigger")
+            {
+                throw new Exception("Mock internal error");
+            }
+
+            try
+            {
+                string folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+                string dataPath = Path.Combine(folder, "Data", "SingleRight", "DelegationCheck", $"{resourceId}.json");
+                return Task.FromResult(Util.GetMockData<ResourceCheckDto>(dataPath)?.Rights.Select(r => r.Right).ToList());
+            }
+            catch
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
         }
 
         private static string GetResourcePath(string resourceRegistryId)
