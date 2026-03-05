@@ -143,7 +143,7 @@ export class ConsentApiRequests {
    * @param to The organization receiving the consent request
    * @param clientIdEnv Environment variable name for the Maskinporten client ID
    * @param jwkEnv Environment variable name for the JWK private key
-   * @param options Optional request overrides and "behalf of" parameters
+   * @param options Request options. `consentRequestScope` is required; other fields are optional overrides/"behalf of" parameters.
    * @returns The view URI for the consent request
    */
   public async createConsentRequestWithMaskinporten(

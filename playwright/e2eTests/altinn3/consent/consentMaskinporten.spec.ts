@@ -45,6 +45,7 @@ test.describe('Fetch consent token after approval', () => {
   test('From person to org', async ({ login, consentPage }) => {
     const fromPerson = pickRandom(fromPersons);
     const toOrg = MASKINPORTEN_ORG_DIGDIR;
+    const validTo = addTimeToNowUtc({ days: 5 });
     const api = new ConsentApiRequests(toOrg);
 
     const consentResp = await test.step('Create consent request', async () => {
@@ -53,7 +54,10 @@ test.describe('Fetch consent token after approval', () => {
         { type: 'org', id: toOrg },
         MASKINPORTEN_CLIENT_ID_ENV,
         MASKINPORTEN_JWK_ENV,
-        { consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE },
+        {
+          consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE,
+          validToIsoUtc: validTo,
+        },
       );
       await consentPage.open(response.viewUri);
       await login.loginNotChoosingActor(fromPerson);
@@ -83,6 +87,7 @@ test.describe('Fetch consent token after approval', () => {
   test('From org to org', async ({ login, consentPage }) => {
     const [fromOrg, personThatCanApprove] = pickRandom(fromOrgs);
     const toOrg = MASKINPORTEN_ORG_DIGDIR;
+    const validTo = addTimeToNowUtc({ days: 5 });
     const api = new ConsentApiRequests(toOrg);
 
     const consentResp = await test.step('Create consent request', async () => {
@@ -91,7 +96,10 @@ test.describe('Fetch consent token after approval', () => {
         { type: 'org', id: toOrg },
         MASKINPORTEN_CLIENT_ID_ENV,
         MASKINPORTEN_JWK_ENV,
-        { consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE },
+        {
+          consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE,
+          validToIsoUtc: validTo,
+        },
       );
       await consentPage.open(response.viewUri);
       await login.loginNotChoosingActor(personThatCanApprove);
@@ -211,6 +219,7 @@ test.describe('Fetch consent token after approval', () => {
           {
             consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE,
             consumerOrg: FROM_ORG,
+            validToIsoUtc: validTo,
           },
         );
 
@@ -274,6 +283,7 @@ test.describe('Fetch consent token after approval', () => {
     // Org that consents
     const fromOrg = '312690365';
     const personThatCanApprove = '09923649732';
+    const validTo = addTimeToNowUtc({ days: 5 });
 
     const api = new ConsentApiRequests();
 
@@ -289,6 +299,7 @@ test.describe('Fetch consent token after approval', () => {
         {
           consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE,
           consumerOrg: SPAREBANKEN_ORG_NUMBER,
+          validToIsoUtc: validTo,
         },
       );
       viewUri = response.viewUri;
