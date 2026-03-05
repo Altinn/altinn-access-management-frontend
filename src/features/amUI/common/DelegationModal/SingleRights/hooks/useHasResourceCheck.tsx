@@ -17,6 +17,6 @@ export const useHasResourceCheck = (resourceId: string) => {
 
   return {
     hasResourceAccess,
-    isLoading: isLoading,
+    isLoading,
   };
 };
