@@ -16,8 +16,8 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <param name="provider">Optional provider party uuids.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>A list of providers and their delegated clients.</returns>
-        Task<List<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default);
+        /// <returns>A collection of providers and their delegated clients.</returns>
+        Task<IEnumerable<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes a provider relationship for the authenticated user, including delegated client access.
@@ -41,16 +41,16 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The party uuid to query for.</param>
         /// <param name="roles">Optional list of role identifiers to filter by.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>A list of clients.</returns>
-        Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default);
+        /// <returns>A collection of clients.</returns>
+        Task<IEnumerable<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the agents that can act on behalf of the specified party.
         /// </summary>
         /// <param name="party">The party uuid to query for.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>A list of agents.</returns>
-        Task<List<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default);
+        /// <returns>A collection of agents.</returns>
+        Task<IEnumerable<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the access packages delegated to an agent via the specified party.
@@ -58,8 +58,8 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The party uuid to query for.</param>
         /// <param name="to">The agent party uuid.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>A list of clients with delegated access packages.</returns>
-        Task<List<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, CancellationToken cancellationToken = default);
+        /// <returns>A collection of clients with delegated access packages.</returns>
+        Task<IEnumerable<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the access packages delegated from a client via the specified party.
@@ -67,8 +67,8 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The party uuid to query for.</param>
         /// <param name="from">The client party uuid.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>A list of agents with delegated access packages.</returns>
-        Task<List<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, CancellationToken cancellationToken = default);
+        /// <returns>A collection of agents with delegated access packages.</returns>
+        Task<IEnumerable<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds access packages for an agent via the specified party.

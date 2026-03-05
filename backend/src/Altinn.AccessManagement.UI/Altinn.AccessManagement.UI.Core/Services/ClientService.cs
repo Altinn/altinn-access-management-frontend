@@ -25,7 +25,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)
         {
             return await _clientDelegationClient.GetMyClients(provider, cancellationToken);
         }
@@ -43,25 +43,25 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ClientDelegation>> GetClients(Guid party, List<string> roles = null, CancellationToken cancellationToken = default)
         {
             return await _clientDelegationClient.GetClients(party, roles, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<List<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<AgentDelegation>> GetAgents(Guid party, CancellationToken cancellationToken = default)
         {
             return await _clientDelegationClient.GetAgents(party, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<List<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
             return await _clientDelegationClient.GetAgentAccessPackages(party, to, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<List<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, CancellationToken cancellationToken = default)
         {
             return await _clientDelegationClient.GetClientAccessPackages(party, from, cancellationToken);
         }
