@@ -3,7 +3,7 @@ import { usePartyRepresentation } from '../../../PartyRepresentationContext/Part
 
 export const useHasResourceCheck = (resourceId: string) => {
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
-  const { data: resourcesWithAccess } = useGetSingleRightsForRightholderQuery(
+  const { data: resourcesWithAccess, isLoading } = useGetSingleRightsForRightholderQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',
@@ -11,7 +11,12 @@ export const useHasResourceCheck = (resourceId: string) => {
     },
     { skip: !toParty || !fromParty || !actingParty },
   );
-  return resourcesWithAccess
+  const hasResourceAccess = resourcesWithAccess
     ? resourcesWithAccess.some((r) => r.resource.identifier === resourceId)
     : false;
+
+  return {
+    hasResourceAccess,
+    isLoading: isLoading,
+  };
 };

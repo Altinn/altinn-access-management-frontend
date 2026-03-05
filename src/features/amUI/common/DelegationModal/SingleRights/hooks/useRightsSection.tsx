@@ -46,8 +46,14 @@ export const useRightsSection = ({
 
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const revoke = useRevokeResource();
-  const hasResourceAccess = useHasResourceCheck(resource.identifier);
-  const { data: resourceRights, isFetching: isResourceRightsFetching } = useGetResourceRightsQuery(
+  const { hasResourceAccess, isLoading: isResourceAccessLoading } = useHasResourceCheck(
+    resource.identifier,
+  );
+  const {
+    data: resourceRights,
+    isFetching: isResourceRightsFetching,
+    isLoading: isResourceRightsLoading,
+  } = useGetResourceRightsQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid || '',
@@ -57,7 +63,7 @@ export const useRightsSection = ({
     { skip: !toParty || !fromParty || !actingParty || !resource.identifier || !hasResourceAccess }, // Only fetch resource rights if the rightholder has access to the resource
   );
   const { data: reportee } = useGetReporteeQuery();
-  const { data: rightsMeta } = useGetResourceRightsMetaQuery(
+  const { data: rightsMeta, isLoading: isRightsMetaLoading } = useGetResourceRightsMetaQuery(
     {
       resourceId: resource.identifier,
     },
@@ -70,6 +76,12 @@ export const useRightsSection = ({
     error: delegationCheckError,
     isLoading: isDelegationCheckLoading,
   } = useDelegationCheckQuery(resource.identifier, { skip: !resource.identifier });
+
+  const isLoading =
+    isResourceAccessLoading ||
+    isRightsMetaLoading ||
+    isDelegationCheckLoading ||
+    (hasResourceAccess && isResourceRightsLoading);
 
   /// Computed values
 
@@ -249,5 +261,6 @@ export const useRightsSection = ({
     missingAccess,
     isActionLoading,
     isActionSuccess,
+    isLoading,
   };
 };
