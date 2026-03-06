@@ -71,7 +71,7 @@ export class AccessManagementFrontPage {
     });
     await expect(giFullmaktKnapp).toBeVisible();
     await giFullmaktKnapp.click();
-    this.expectUserToHavePackage(packageName);
+    await this.expectUserToHavePackage(packageName);
   }
 
   async clickAccessPackageToDelegateIfVisible(packageName: string) {
