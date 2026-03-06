@@ -298,12 +298,14 @@
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikke se at noen tjenester er blitt valgt.",
     "popular_services": "Populære tjenester:",
     "give_new_single_right": "Gi fullmakt",
-    "current_services_title": "Fullmakt til {{count}} tjenester",
+    "current_services_title": "Fullmakt til {{count}} enkelttjenester",
     "delete_singleRight_success_message": "Slettet tilgang til ",
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttjenester",
     "wip_message": "Denne siden jobber vi fremdeles med! For å administrere enkelttjenester, må du gå til den gamle løsningen.",
     "wip_link_text": "Gå til gamle Altinn",
+    "helptext_button": "Hva er enkelttjenester?",
+    "helptext_content": "En enkelttjeneste er en fullmakt gitt til én spesifikk tjeneste. Tjenester man har tilgang til gjennom tilgangspakker eller roller vil ikke vises her.",
     "action_popover": {
       "right_inherited": "Denne handlingen er arvet og kan ikke endres her.",
       "right_not_delegable": "Du mangler denne handlingen selv og kan derfor ikke slette den fra andre."
@@ -414,7 +416,7 @@
   "user_rights_page": {
     "page_title": "Brukertilganger - Altinn",
     "access_packages_title": "Tilgangspakker",
-    "single_rights_title": "Tjenester",
+    "single_rights_title": "Enkelttjenester",
     "roles_title": "Roller",
     "guardianships_title": "Vergemål",
     "resource_type_text": "Enkelttjeneste",

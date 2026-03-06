@@ -298,14 +298,16 @@
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikkje sjå at nokon tenester er valde.",
     "popular_services": "Populære tenester:",
     "give_new_single_right": "Gi fullmakt",
-    "current_services_title": "Fullmakt til {{count}} tenester",
+    "current_services_title": "Fullmakt til {{count}} enkelttenester",
     "delete_singleRight_success_message": "Slettet tilgang til ",
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til ",
     "wip_title": "Fullmakter til enkelttenester",
     "wip_message": "Denne sida jobbar vi framleis med! For å administrere enkelttenester, må du gå til den gamle løysinga.",
     "wip_link_text": "Gå til gamle Altinn",
+    "helptext_button": "Kva er enkelttenester?",
+    "helptext_content": "Ein enkeltteneste er ein fullmakt gitt til éin spesifikk teneste. Tenester ein har tilgang til gjennom tilgangspakker eller roller vil ikkje visast her.",
     "action_popover": {
-      "right_inherited": "Denne handlinga er arvet og kan ikkje endrast her.",
+      "right_inherited": "Denne handlinga er arva og kan ikkje endrast her.",
       "right_not_delegable": "Du manglar denne handlinga sjølv og kan derfor ikkje slette den frå andre."
     }
   },
@@ -414,7 +416,7 @@
   "user_rights_page": {
     "page_title": "Brukertilgang - Altinn",
     "access_packages_title": "Tilgangspakkar",
-    "single_rights_title": "Tenester",
+    "single_rights_title": "Enkelttenester",
     "roles_title": "Roller",
     "guardianships_title": "Vergemål",
     "resource_type_text": "Enkeltteneste",
