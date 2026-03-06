@@ -3,8 +3,6 @@ import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
-import { access } from 'fs';
-import { AccessManagementFrontPage } from '../../../pages/AccessManagementFrontPage';
 
 test.describe('Tilgangsstyring', () => {
   const api = new EnduserConnection();
