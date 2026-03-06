@@ -760,7 +760,8 @@
   "systemuser_agent_request": {
     "page_title": "Godkjenn systemtilgang for klientene dine - Altinn",
     "banner_title": "Godkjenn systemtilgang for klientene dine",
-    "system_description": "Gjennom systemtilgangen får <strong>{{vendorName}}</strong> fullmakt til å løse oppgaver på vegne av <strong>{{companyName}}</strong> sine klienter. For å fullføre oppsettet må du legge til klientene i Altinn."
+    "system_description": "Gjennom systemtilgangen får <strong>{{vendorName}}</strong> fullmakt til å løse oppgaver på vegne av <strong>{{companyName}}</strong> sine klienter. For å fullføre oppsettet må du legge til klientene i Altinn. {{addSelfInfo}}",
+    "add_self_possible": "Du kan også knytte egen virksomhet til systemtilgangen."
   },
   "systemuser_agent_delegation": {
     "page_title": "Systemtilgang for klientrelasjoner - Altinn",
