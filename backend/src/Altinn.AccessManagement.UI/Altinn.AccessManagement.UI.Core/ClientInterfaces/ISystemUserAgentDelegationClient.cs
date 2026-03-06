@@ -57,5 +57,15 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean result of add</returns>
         Task<Result<bool>> RemoveSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Check if own organization is added to this systemuser
+        /// </summary>
+        /// <param name="partyId">Party id user represents</param>
+        /// <param name="systemUserGuid">System user id to get</param>
+        /// <param name="partyUuid">Party uuid of party user represents</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Boolean result of add</returns>
+        Task<Result<bool>> IsSelfAdded(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken);
     }
 }

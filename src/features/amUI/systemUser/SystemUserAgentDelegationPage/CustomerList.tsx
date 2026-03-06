@@ -47,7 +47,7 @@ interface CustomerListProps {
   onAddCustomer?: (customer: AgentDelegationCustomer) => void;
   onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
   onAddAllCustomers?: () => void;
-  onRemoveSelf?: () => void;
+  selfButton?: React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -59,7 +59,7 @@ export const CustomerList = ({
   onAddCustomer,
   onRemoveCustomer,
   onAddAllCustomers,
-  onRemoveSelf,
+  selfButton,
   children,
 }: CustomerListProps) => {
   const { t } = useTranslation();
@@ -143,7 +143,7 @@ export const CustomerList = ({
                 isError={errorIds?.some((x) => x === customer.id)}
                 onRemoveCustomer={onRemoveCustomer}
                 onAddCustomer={onAddCustomer}
-                onRemoveSelf={onRemoveSelf}
+                selfButton={selfButton}
               />
             }
           />
@@ -168,7 +168,7 @@ interface ListControlsProps {
   isError?: boolean;
   onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
   onAddCustomer?: (customer: AgentDelegationCustomer) => void;
-  onRemoveSelf?: () => void;
+  selfButton?: React.ReactNode;
 }
 const ListControls = ({
   customer,
@@ -177,7 +177,7 @@ const ListControls = ({
   isError,
   onRemoveCustomer,
   onAddCustomer,
-  onRemoveSelf,
+  selfButton,
 }: ListControlsProps): React.ReactNode => {
   const { t } = useTranslation();
 
@@ -229,14 +229,7 @@ const ListControls = ({
       {customer.isSelfOrg && (
         <>
           <Badge>{t('systemuser_agent_delegation.own_organization')}</Badge>
-          <DsButton
-            data-color='danger'
-            variant='tertiary'
-            aria-label={t('systemuser_agent_delegation.remove_own_organization')}
-            onClick={onRemoveSelf}
-          >
-            {t('systemuser_agent_delegation.remove')}
-          </DsButton>
+          {selfButton}
         </>
       )}
     </div>

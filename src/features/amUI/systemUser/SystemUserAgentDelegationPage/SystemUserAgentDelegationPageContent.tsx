@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
+import { MinusCircleIcon, PencilIcon, PlusCircleIcon, PlusIcon } from '@navikt/aksel-icons';
 import {
   DsAlert,
   DsButton,
@@ -16,6 +16,7 @@ import {
   useAssignCustomerMutation,
   useAssignSelfCustomerMutation,
   useGetSystemUserReporteeQuery,
+  useIsSelfAddedQuery,
   useRemoveCustomerMutation,
   useRemoveSelfCustomerMutation,
 } from '@/rtk/features/systemUserApi';
@@ -75,7 +76,17 @@ export const SystemUserAgentDelegationPageContent = ({
   const [removeCustomer] = useRemoveCustomerMutation();
   const [assignSelf, { isLoading: isAssigningSelf, error: assignSelfError }] =
     useAssignSelfCustomerMutation();
-  const [removeSelf, { error: removeSelfError }] = useRemoveSelfCustomerMutation();
+  const [removeSelf, { isLoading: isRemovingSelf, error: removeSelfError }] =
+    useRemoveSelfCustomerMutation();
+  const {
+    data: isSelfAdded,
+    isLoading: isLoadingIsSelfAdded,
+    refetch: refetchIsLoadingIsSelfAdded,
+  } = useIsSelfAddedQuery({
+    partyId: partyId,
+    systemUserId: id ?? '',
+    partyUuid: partyUuid,
+  });
 
   const isAddingAllCustomers = addAllState.maxCount > -1;
 
@@ -221,31 +232,33 @@ export const SystemUserAgentDelegationPageContent = ({
   }, [customers, delegations]);
 
   const assignSelfToSystemUser = () => {
-    assignSelf({ partyId: partyId, systemUserId: id ?? '', partyUuid: partyUuid });
+    assignSelf({ partyId: partyId, systemUserId: id ?? '', partyUuid: partyUuid })
+      .unwrap()
+      .then(refetchIsLoadingIsSelfAdded);
   };
 
   const removeSelfFromSystemuser = () => {
-    removeSelf({ partyId: partyId, systemUserId: id ?? '', partyUuid: partyUuid });
+    removeSelf({ partyId: partyId, systemUserId: id ?? '', partyUuid: partyUuid })
+      .unwrap()
+      .then(refetchIsLoadingIsSelfAdded);
   };
 
   const isAllAccessPackagesDelegable = systemUser.accessPackages.every((x) => x.isDelegable);
-  const isSelfAdded = true; // TODO - hardkodet
-  const addSelfButton = (isSmall?: boolean) => (
-    <>
-      {isAdmin && isAllAccessPackagesDelegable && !isSelfAdded && (
-        <DsButton
-          variant='secondary'
-          data-size={isSmall ? 'sm' : undefined}
-          loading={isAssigningSelf}
-          disabled={isAssigningSelf}
-          onClick={assignSelfToSystemUser}
-        >
-          <PlusIcon />
-          {t('systemuser_agent_delegation.add_own_organization')}
-        </DsButton>
-      )}
-    </>
-  );
+  const assignedCustomersList =
+    isSelfAdded || assignedCustomers.length > 0
+      ? [
+          {
+            id: reporteeData?.partyUuid || '',
+            name: reporteeData?.name || '',
+            orgNo: reporteeData?.organizationNumber || '',
+            access: [],
+            isSelfOrg: true,
+          },
+          ...assignedCustomers,
+        ]
+      : assignedCustomers;
+  const hasAddSelfPermission = isAdmin && isAllAccessPackagesDelegable;
+  const isLoadingSelf = isAssigningSelf || isRemovingSelf || isLoadingIsSelfAdded;
 
   return (
     <>
@@ -328,11 +341,21 @@ export const SystemUserAgentDelegationPageContent = ({
         >
           {t('systemuser_agent_delegation.assigned_customers_header')}
         </DsHeading>
-        {assignedCustomers.length === 0 ? (
+        {assignedCustomersList.length === 0 ? (
           <>
             <DsParagraph>{t('systemuser_agent_delegation.no_assigned_customers')}</DsParagraph>
             <div className={classes.addButtons}>
-              {addSelfButton()}
+              {hasAddSelfPermission && !isSelfAdded && (
+                <DsButton
+                  variant='secondary'
+                  loading={isLoadingSelf}
+                  disabled={isLoadingSelf}
+                  onClick={assignSelfToSystemUser}
+                >
+                  <PlusIcon />
+                  {t('systemuser_agent_delegation.add_own_organization')}
+                </DsButton>
+              )}
               {isClientAdmin && (
                 <DsButton
                   variant='secondary'
@@ -346,24 +369,36 @@ export const SystemUserAgentDelegationPageContent = ({
           </>
         ) : (
           <CustomerList
-            list={
-              isSelfAdded
-                ? [
-                    {
-                      id: reporteeData?.partyUuid || '',
-                      name: reporteeData?.name || '',
-                      orgNo: reporteeData?.organizationNumber || '',
-                      access: [],
-                      isSelfOrg: true,
-                    },
-                    ...assignedCustomers,
-                  ]
-                : assignedCustomers
+            list={assignedCustomersList}
+            selfButton={
+              <>
+                {hasAddSelfPermission && !isSelfAdded && (
+                  <DsButton
+                    variant='tertiary'
+                    aria-label={t('systemuser_agent_delegation.add_own_organization_list_aria')}
+                    loading={isLoadingSelf}
+                    disabled={isLoadingSelf}
+                    onClick={assignSelfToSystemUser}
+                  >
+                    <PlusCircleIcon /> {t('systemuser_agent_delegation.add_own_organization_list')}
+                  </DsButton>
+                )}
+                {hasAddSelfPermission && isSelfAdded && (
+                  <DsButton
+                    data-color='danger'
+                    variant='tertiary'
+                    aria-label={t('systemuser_agent_delegation.remove_own_organization')}
+                    loading={isLoadingSelf}
+                    disabled={isLoadingSelf}
+                    onClick={removeSelfFromSystemuser}
+                  >
+                    <MinusCircleIcon /> {t('systemuser_agent_delegation.remove')}
+                  </DsButton>
+                )}
+              </>
             }
-            onRemoveSelf={removeSelfFromSystemuser}
           >
             <div className={classes.addButtons}>
-              {addSelfButton(true)}
               {isClientAdmin && (
                 <DsButton
                   variant='secondary'
@@ -386,7 +421,7 @@ export const SystemUserAgentDelegationPageContent = ({
         {removeSelfError && (
           <DelegationCheckError
             error={removeSelfError as { data: ProblemDetail }}
-            defaultError={t('systemuser_agent_delegation.remvove_own_organization_error')}
+            defaultError={t('systemuser_agent_delegation.remove_own_organization_error')}
           />
         )}
         <DsParagraph

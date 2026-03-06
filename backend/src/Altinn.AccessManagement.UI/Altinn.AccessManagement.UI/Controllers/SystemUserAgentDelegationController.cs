@@ -135,7 +135,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return Ok(result.Value);
         }
-        
+
         /// <summary>
         /// Remove own organization from this systemuser
         /// </summary>
@@ -149,6 +149,29 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult> RemoveSelf([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromQuery] Guid partyUuid, CancellationToken cancellationToken)
         {
             Result<bool> result = await _systemUserAgentDelegationService.RemoveSelf(partyId, systemUserGuid, partyUuid, cancellationToken);
+
+            if (result.IsProblem)
+            {
+                return result.Problem.ToActionResult();
+            }
+
+            return Ok(result.Value);
+        }
+        
+        /// <summary>
+        /// Check if own organization is added to this systemuser
+        /// </summary>
+        /// <param name="partyId">Party id user represents</param>
+        /// <param name="systemUserGuid">System user id to get</param>
+        /// <param name="partyUuid">Party uuid of party user represents</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Boolean result of add</returns>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("{partyId}/{systemUserGuid}/self")]
+        public async Task<ActionResult> IsSelfAdded([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromQuery] Guid partyUuid, CancellationToken cancellationToken)
+        {
+            Result<bool> result = await _systemUserAgentDelegationService.IsSelfAdded(partyId, systemUserGuid, partyUuid, cancellationToken);
 
             if (result.IsProblem)
             {

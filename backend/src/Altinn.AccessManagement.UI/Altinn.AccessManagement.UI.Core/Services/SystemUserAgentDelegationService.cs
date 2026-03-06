@@ -105,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return response.Value;
         }
         
-         /// <inheritdoc />
+        /// <inheritdoc />
         public async Task<Result<bool>> AddSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
             Result<bool> response = await _systemUserAgentDelegationClient.AddSelf(partyId, partyUuid, systemUserGuid, cancellationToken);
@@ -121,6 +121,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Result<bool>> RemoveSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
             Result<bool> response = await _systemUserAgentDelegationClient.RemoveSelf(partyId, partyUuid, systemUserGuid, cancellationToken);
+            if (response.IsProblem)
+            {
+                return new Result<bool>(response.Problem);
+            }
+
+            return response.Value;
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<bool>> IsSelfAdded(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            Result<bool> response = await _systemUserAgentDelegationClient.IsSelfAdded(partyId, partyUuid, systemUserGuid, cancellationToken);
             if (response.IsProblem)
             {
                 return new Result<bool>(response.Problem);

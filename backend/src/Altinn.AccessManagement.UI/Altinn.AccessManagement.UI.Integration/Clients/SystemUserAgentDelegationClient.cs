@@ -150,7 +150,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
-        
+
         /// <inheritdoc/>
         public async Task<Result<bool>> RemoveSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
@@ -160,6 +160,32 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/self?partyUuid={partyUuid}";
 
                 HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // RemoveSelf // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // RemoveSelf // Exception");
+                throw;
+            }
+        }
+        
+        /// <inheritdoc/>
+        public async Task<Result<bool>> IsSelfAdded(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/self?partyUuid={partyUuid}";
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
