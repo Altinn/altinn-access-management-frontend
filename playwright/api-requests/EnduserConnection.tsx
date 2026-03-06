@@ -166,11 +166,11 @@ export class EnduserConnection {
         });
 
         if (!response.ok) {
-          console.warn(
+          throw new Error(
             `Failed to fetch status for deleteConnectionPerson request. Status: ${response.status}`,
           );
-          responses.push(response);
         }
+        responses.push(response);
       }),
     );
 
@@ -228,11 +228,11 @@ export class EnduserConnection {
         });
 
         if (!response.ok) {
-          console.warn(
+          throw new Error(
             `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
           );
-          responses.push(response);
         }
+        responses.push(response);
       }),
     );
 
@@ -278,11 +278,11 @@ export class EnduserConnection {
         });
 
         if (!response.ok) {
-          console.warn(
+          throw new Error(
             `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
           );
-          responses.push(response);
         }
+        responses.push(response);
       }),
     );
     return responses;
