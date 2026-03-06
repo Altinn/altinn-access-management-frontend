@@ -129,6 +129,11 @@ export const singleRightsApi = createApi({
     getResourceRightsMeta: builder.query<Right[], { resourceId: string }>({
       query: ({ resourceId }) =>
         `singleright/rightsmeta?resource=${encodeURIComponent(resourceId)}`,
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
+      },
       providesTags: ['rightsMeta'],
     }),
     delegationCheck: builder.query<DelegationCheckedRight[], string>({
