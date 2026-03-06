@@ -254,6 +254,8 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       '52858201748',
       '22911648052',
       '313904490',
+      '43818900555',
+      '313435482',
     ]);
     console.log('slettet testdata');
   });
