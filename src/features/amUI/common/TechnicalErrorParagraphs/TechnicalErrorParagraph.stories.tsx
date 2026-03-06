@@ -15,5 +15,10 @@ export default {
 } as Meta;
 
 export const Default: StoryObj<typeof TechnicalErrorParagraphs> = {
-  args: { size: 'sm', status: '404', time: '2025-10-01T10:00:00Z' },
+  args: {
+    size: 'sm',
+    status: '404',
+    time: '2025-10-01T10:00:00Z',
+    additionalContext: 'ID: resurs-123',
+  },
 };

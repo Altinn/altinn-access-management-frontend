@@ -17,6 +17,7 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SerializedError } from '@reduxjs/toolkit';
 import { DelegationAction } from '../EditModal';
+import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import classes from './ResourceInfo.module.css';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
@@ -37,6 +38,7 @@ type RightsSectionProps = {
   revokeResource: () => void;
   undelegableActions: string[];
   availableActions?: DelegationAction[];
+  rightsMetaTechnicalErrorDetails: { status: string; time: string } | null;
 };
 
 export const RightsSection = ({
@@ -55,6 +57,7 @@ export const RightsSection = ({
   delegationError,
   missingAccess,
   availableActions,
+  rightsMetaTechnicalErrorDetails,
 }: RightsSectionProps) => {
   const [rightsExpanded, setRightsExpanded] = useState(false);
   const isSmall = useIsMobileOrSmaller();
@@ -67,28 +70,24 @@ export const RightsSection = ({
     type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
   });
   const displayResourceAlert =
-    availableActions?.includes(DelegationAction.DELEGATE) &&
-    !hasAccess &&
-    (isDelegationCheckError ||
-      resource?.delegable === false ||
-      (rights.length > 0 && !rights.some((r) => r.delegable === true)));
+    !!rightsMetaTechnicalErrorDetails ||
+    (availableActions?.includes(DelegationAction.DELEGATE) &&
+      !hasAccess &&
+      (isDelegationCheckError ||
+        resource?.delegable === false ||
+        (rights.length > 0 && !rights.some((r) => r.delegable === true))));
 
-  const delegationCheckErrorDetails =
-    isDelegationCheckError &&
-    delegationCheckError &&
-    'status' in delegationCheckError &&
-    typeof (delegationCheckError as FetchBaseQueryError).status !== 'undefined'
-      ? {
-          status: String((delegationCheckError as FetchBaseQueryError).status),
-          time: (delegationCheckError as FetchBaseQueryError).data as string,
-        }
-      : null;
+  const delegationCheckErrorDetails = isDelegationCheckError
+    ? createErrorDetails(delegationCheckError)
+    : null;
+
+  const technicalErrorDetails = rightsMetaTechnicalErrorDetails ?? delegationCheckErrorDetails;
 
   return (
     <>
       {displayResourceAlert ? (
         <ResourceAlert
-          error={delegationCheckErrorDetails}
+          error={technicalErrorDetails}
           rightReasons={rights.map((r) => r.delegationReason)}
           resource={resource}
           className={classes.resourceAlert}
