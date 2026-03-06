@@ -33,6 +33,10 @@ export class AccessManagementFrontPage {
     await this.usersLink.click();
   }
 
+  async expandOrg(org: string) {
+    await this.page.getByRole('button', { name: org }).click();
+  }
+
   async clickUser(userName: string) {
     await this.page.getByRole('link', { name: userName }).click();
   }
@@ -49,6 +53,25 @@ export class AccessManagementFrontPage {
     await expect(
       this.page.getByRole('button', { name: 'Gi fullmakt for ' + packageName }),
     ).toBeVisible();
+  }
+
+  async expectUserToHavePackage(packageName: string) {
+    await expect(
+      this.page.getByRole('button', { name: 'Slett fullmakt for ' + packageName }),
+    ).toBeVisible();
+  }
+
+  async clickSlettFullmaktForTilgangspakke(packageName: string) {
+    await this.page.getByRole('button', { name: 'Slett fullmakt for ' + packageName }).click();
+  }
+
+  async clickGiFullmaktForTilgangspakke(packageName: string) {
+    const giFullmaktKnapp = this.page.getByRole('button', {
+      name: 'Gi fullmakt for ' + packageName,
+    });
+    await expect(giFullmaktKnapp).toBeVisible();
+    await giFullmaktKnapp.click();
+    await this.expectUserToHavePackage(packageName);
   }
 
   async clickAccessPackageToDelegateIfVisible(packageName: string) {
@@ -84,12 +107,17 @@ export class AccessManagementFrontPage {
   }
 
   async clickLeggTilBruker() {
+    await this.page.waitForLoadState('domcontentloaded');
     await this.page.getByRole('button', { name: 'Legg til Ny bruker' }).click();
   }
 
+  async LukkGiFullmaktVindu() {
+    await this.page.getByRole('button', { name: 'Lukk' }).click();
+  }
+
   async addPerson(fnr: string, lastName: string) {
-    const fnrField1 = await this.page.getByRole('textbox', { name: 'Fødselsnummer' }); // AT22 og AT23
-    const fnrField2 = await this.page.getByRole('textbox', { name: 'Fødselsnr./brukernavn' }); //TT02
+    const fnrField1 = this.page.getByRole('textbox', { name: 'Fødselsnummer' }); // AT22 og AT23
+    const fnrField2 = this.page.getByRole('textbox', { name: 'Fødselsnr./brukernavn' }); //TT02
 
     if (await fnrField1.isVisible()) {
       await fnrField1.fill(fnr);
@@ -99,5 +127,14 @@ export class AccessManagementFrontPage {
 
     await this.page.getByRole('textbox', { name: 'Etternavn' }).fill(lastName);
     await this.page.getByRole('button', { name: 'Legg til person' }).click();
+  }
+  async addOrg(orgNo: string) {
+    const virksomhetTab = await this.page.getByRole('tab', { name: 'Virksomhet' });
+    await expect(virksomhetTab).toBeVisible();
+    await virksomhetTab.click();
+    // await this.page.getByRole('tab', { name: 'Virksomhet' }).click();
+    const orgNoField = await this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
+    await orgNoField.fill(orgNo);
+    await this.page.getByRole('button', { name: 'Legg til virksomhet' }).click();
   }
 }
