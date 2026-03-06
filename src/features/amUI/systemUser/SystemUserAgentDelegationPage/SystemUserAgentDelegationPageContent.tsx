@@ -82,11 +82,16 @@ export const SystemUserAgentDelegationPageContent = ({
     data: isSelfAdded,
     isLoading: isLoadingIsSelfAdded,
     refetch: refetchIsLoadingIsSelfAdded,
-  } = useIsSelfAddedQuery({
-    partyId: partyId,
-    systemUserId: id ?? '',
-    partyUuid: partyUuid,
-  });
+  } = useIsSelfAddedQuery(
+    {
+      partyId: partyId,
+      systemUserId: id ?? '',
+      partyUuid: partyUuid,
+    },
+    {
+      skip: !isAdmin,
+    },
+  );
 
   const isAddingAllCustomers = addAllState.maxCount > -1;
 
