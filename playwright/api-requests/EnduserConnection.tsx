@@ -22,11 +22,6 @@ export class EnduserConnection {
     to: string,
     packageNames: Array<string>,
   ) {
-    const thing = [
-      'urn:altinn:accesspackage:tilgangsstyrer',
-      'urn:altinn:accesspackage:posttjenester',
-      'urn:altinn:accesspackage:byggesoknad',
-    ];
     const fromUuid = await this.tokenClass.getPartyUuid(from);
     const toIds = await this.tokenClass.getIds(to);
 
