@@ -201,9 +201,9 @@ export class EnduserConnection {
     toUuid?: string,
     toLastName?: string,
   ) {
-    var toPerson;
+    let toPerson;
     fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromOrg));
-    if (!toUuid && !toLastName) {
+    if (!toUuid || !toLastName) {
       toPerson = await this.tokenClass.getIds(toPid);
     }
     toUuid = toUuid || toPerson.partyUuid;
