@@ -5,6 +5,12 @@
   padding: 1rem 0 0.5rem 0;
 }
 
+.headerContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .singleRightsList {
   list-style-type: none;
   padding: 0.5rem 0;
