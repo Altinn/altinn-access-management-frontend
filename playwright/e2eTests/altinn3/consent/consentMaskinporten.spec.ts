@@ -136,7 +136,7 @@ test.describe('Fetch consent token after approval', () => {
    *
    */
 
-  test.skip('Kjent bug som gir 400-feil. E-bevis', async ({ login, consentPage }) => {
+  test('Kjent bug som gir 400-feil. E-bevis', async ({ login, consentPage }) => {
     const [fromOrg, personThatCanApprove] = pickRandom(fromOrgs);
     const toOrg = pickRandom(toOrgs);
     const validTo = addTimeToNowUtc({ days: 2 });
