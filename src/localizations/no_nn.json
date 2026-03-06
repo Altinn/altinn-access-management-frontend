@@ -304,6 +304,7 @@
     "wip_title": "Fullmakter til enkelttenester",
     "wip_message": "Denne sida jobbar vi framleis med! For å administrere enkelttenester, må du gå til den gamle løysinga.",
     "wip_link_text": "Gå til gamle Altinn",
+    "helptext_button": "Kva er enkelttenester?",
     "helptext_content": "Ein enkeltteneste er ein fullmakt gitt til éin spesifikk teneste. Tenester ein har tilgang til gjennom tilgangspakker eller roller vil ikkje visast her.",
     "action_popover": {
       "right_inherited": "Denne handlinga er arva og kan ikkje endrast her.",

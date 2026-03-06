@@ -307,6 +307,7 @@
     "wip_title": "Power of attorney to services",
     "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
     "wip_link_text": "Go to old Altinn",
+    "helptext_button": "What are single services?",
     "helptext_content": "Single services are powers of attorney granted to a single service. Services a user has access to through access packages or roles will not appear here.",
     "action_popover": {
       "right_inherited": "This action is inherited and cannot be changed here.",

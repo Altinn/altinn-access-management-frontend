@@ -304,6 +304,7 @@
     "wip_title": "Fullmakter til enkelttjenester",
     "wip_message": "Denne siden jobber vi fremdeles med! For å administrere enkelttjenester, må du gå til den gamle løsningen.",
     "wip_link_text": "Gå til gamle Altinn",
+    "helptext_button": "Hva er enkelttjenester?",
     "helptext_content": "En enkelttjeneste er en fullmakt gitt til én spesifikk tjeneste. Tjenester man har tilgang til gjennom tilgangspakker eller roller vil ikke vises her.",
     "action_popover": {
       "right_inherited": "Denne handlingen er arvet og kan ikke endres her.",
