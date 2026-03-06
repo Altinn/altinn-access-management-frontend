@@ -245,7 +245,7 @@ test.describe('Tilgangsstyring', () => {
   });
 });
 
-test.describe('tilgangspakkedelegering fra person til person og person til org', async () => {
+test.describe('tilgangspakkedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {
