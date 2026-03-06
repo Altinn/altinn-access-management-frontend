@@ -13,6 +13,7 @@ import {
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
+import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import classes from '../ResourceInfo.module.css';
 import { useRightChips } from './useRightChips';
@@ -63,7 +64,12 @@ export const useRightsSection = ({
     { skip: !toParty || !fromParty || !actingParty || !resource.identifier || !hasResourceAccess }, // Only fetch resource rights if the rightholder has access to the resource
   );
   const { data: reportee } = useGetReporteeQuery();
-  const { data: rightsMeta, isLoading: isRightsMetaLoading } = useGetResourceRightsMetaQuery(
+  const {
+    data: rightsMeta,
+    isLoading: isRightsMetaLoading,
+    isError: isRightsMetaError,
+    error: rightsMetaError,
+  } = useGetResourceRightsMetaQuery(
     {
       resourceId: resource.identifier,
     },
@@ -82,6 +88,22 @@ export const useRightsSection = ({
     isRightsMetaLoading ||
     isDelegationCheckLoading ||
     (hasResourceAccess && isResourceRightsLoading);
+
+  const isRightsMetaEmpty =
+    !isRightsMetaLoading &&
+    !isRightsMetaError &&
+    Array.isArray(rightsMeta) &&
+    rightsMeta.length === 0;
+
+  const rightsMetaErrorDetails = createErrorDetails(rightsMetaError);
+  const rightsMetaTechnicalErrorDetails =
+    isRightsMetaError || isRightsMetaEmpty
+      ? {
+          status:
+            rightsMetaErrorDetails?.status ?? (isRightsMetaEmpty ? 'empty response' : 'no status'),
+          time: rightsMetaErrorDetails?.time ?? new Date().toISOString(),
+        }
+      : null;
 
   /// Computed values
 
@@ -251,5 +273,6 @@ export const useRightsSection = ({
     isActionLoading,
     isActionSuccess,
     isLoading,
+    rightsMetaTechnicalErrorDetails,
   };
 };
