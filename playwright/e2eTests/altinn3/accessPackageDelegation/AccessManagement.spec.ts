@@ -247,6 +247,7 @@ test.describe('Tilgangsstyring', () => {
 
 test.describe('tilgangspakkedelegering fra person til person og person til org', async () => {
   const api = new EnduserConnection();
+
   test.afterAll('slett testdata', async () => {
     await api.deleteConnection('25928698737', '25928698737', [
       '210638962',
@@ -256,6 +257,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
     ]);
     console.log('slettet testdata');
   });
+
   test('Legg til ny person hos deg selv', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);

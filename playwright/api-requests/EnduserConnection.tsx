@@ -1,3 +1,4 @@
+import { promises } from 'dns';
 import { Token } from './Token';
 import { env } from 'playwright/util/helper';
 
@@ -154,26 +155,30 @@ export class EnduserConnection {
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     let responses = new Array<Response>();
 
-    toList.forEach(async (to) => {
-      const toUuid = await this.tokenClass.getPartyUuid(to);
+    // bruk Promise.all() og .map her
 
-      const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&cascade=true`;
+    await Promise.all(
+      toList.map(async (to) => {
+        const toUuid = await this.tokenClass.getPartyUuid(to);
 
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+        const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&cascade=true`;
 
-      if (!response.ok) {
-        console.warn(
-          `Failed to fetch status for deleteConnectionPerson request. Status: ${response.status}`,
-        );
-        responses.push(response);
-      }
-    });
+        const response = await fetch(url, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          console.warn(
+            `Failed to fetch status for deleteConnectionPerson request. Status: ${response.status}`,
+          );
+          responses.push(response);
+        }
+      }),
+    );
 
     return responses;
   }
@@ -215,24 +220,27 @@ export class EnduserConnection {
       lastName: toLastName,
     };
     var responses = new Array<Response>();
-    packageNames.forEach(async (packageName) => {
-      const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
 
-      if (!response.ok) {
-        console.warn(
-          `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
-        );
-        responses.push(response);
-      }
-    });
+    await Promise.all(
+      packageNames.map(async (packageName) => {
+        const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          console.warn(
+            `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
+          );
+          responses.push(response);
+        }
+      }),
+    );
 
     return responses;
   }
@@ -263,24 +271,26 @@ export class EnduserConnection {
     toUuid = toUuid || (await this.tokenClass.getPartyUuid(toOrgNo));
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     var responses = new Array<Response>();
-    packageNames.forEach(async (packageName) => {
-      const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
 
-      if (!response.ok) {
-        console.warn(
-          `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
-        );
-        responses.push(response);
-      }
-    });
+    await Promise.all(
+      packageNames.map(async (packageName) => {
+        const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
 
+        if (!response.ok) {
+          console.warn(
+            `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
+          );
+          responses.push(response);
+        }
+      }),
+    );
     return responses;
   }
 
