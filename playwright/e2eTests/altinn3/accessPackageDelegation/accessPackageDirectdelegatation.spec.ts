@@ -26,7 +26,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     aktorvalgHeader,
     accessManagementFrontPage,
   }) => {
-    test.step('Log in', async () => {
+    await test.step('Log in', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('04856996188');
       await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
@@ -34,17 +34,17 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     });
 
     // Step 3: Add new user
-    test.step('Add new user', async () => {
+    await test.step('Add new user', async () => {
       await delegation.addUser();
     });
 
     // Step 4: Add organization
-    test.step('Add organization', async () => {
+    await test.step('Add organization', async () => {
       await delegation.addOrganization('213091492');
     });
 
     // Step 5: Grant access to multiple packages
-    test.step('Grant access to multiple packages', async () => {
+    await test.step('Grant access to multiple packages', async () => {
       await delegation.grantAccessPkgNameDirect('Veitransport');
       await delegation.grantAccessPkgName('Byggesøknad');
       await delegation.grantAccessPkgNameDirect('Godkjenning av personell');
@@ -52,7 +52,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     });
 
     // 4) Verify delegated packages for the current org / view
-    test.step('Verify delegated packages for the current org / view', async () => {
+    await test.step('Verify delegated packages for the current org / view', async () => {
       await delegation.verifyDelegatedPackages([
         { areaName: 'Bygg, anlegg og eiendom', packageName: 'Byggesøknad' },
         { areaName: 'Oppvekst og utdanning', packageName: 'Godkjenning av personell' },
@@ -70,7 +70,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
       );
     });
 
-    test.step('log out', async () => {
+    await test.step('log out', async () => {
       await delegation.logoutFromBrukerflate();
     });
   });
