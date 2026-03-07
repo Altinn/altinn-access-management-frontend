@@ -301,12 +301,15 @@
     "restart_prompter_no_resources_chosen_ingress": "We cannot see that any services have been selected.",
     "popular_services": "Popular services",
     "give_new_single_right": "Give power of attorney",
-    "current_services_title": "Power of attorney for {{count}} services",
-    "delete_singleRight_success_message": "Deleted access to ",
-    "delete_singleRight_error_message": "Failed to delete access to ",
+    "current_services_title": "Power of attorney for {{count}} single services",
+    "delete_singleRight_success_message": "Power of attorney over {{resourceTitle}} has been successfully revoked for {{name}}.",
+    "delete_singleRight_error_message": "Failed to revoke power of attorney over {{resourceTitle}}.",
+    "add_singleRight_success_message": "{{name}} has been successfully granted power of attorney over {{resourceTitle}}.",
     "wip_title": "Power of attorney to services",
     "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
     "wip_link_text": "Go to old Altinn",
+    "helptext_button": "What are single services?",
+    "helptext_content": "Single services are powers of attorney granted to a single service. Services a user has access to through access packages or roles will not appear here.",
     "action_popover": {
       "right_inherited": "This action is inherited and cannot be changed here.",
       "right_not_delegable": "You lack this action yourself and therefore cannot remove it from others."
@@ -417,7 +420,7 @@
   "user_rights_page": {
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
-    "single_rights_title": "Services",
+    "single_rights_title": "Single services",
     "roles_title": "Roles",
     "guardianships_title": "Guardianships",
     "resource_type_text": "Single right",

@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import {
+  Button,
+  formatDisplayName,
+  SnackbarDuration,
+  useSnackbar,
+} from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
@@ -9,6 +14,7 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 
 import classes from './DeleteResourceButton.module.css';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface DeleteResourceButton {
   resource: ServiceResource;
@@ -34,12 +40,18 @@ export const DeleteResourceButton = ({
   const snackbar = (isSuccessful: boolean) => {
     const color: 'success' | 'danger' = isSuccessful ? 'success' : 'danger';
     const snackbarData = {
-      message:
-        t(
-          isSuccessful
-            ? 'single_rights.delete_singleRight_success_message'
-            : 'single_rights.delete_singleRight_error_message',
-        ) + resource.title,
+      message: t(
+        isSuccessful
+          ? 'single_rights.delete_singleRight_success_message'
+          : 'single_rights.delete_singleRight_error_message',
+        {
+          resourceTitle: resource.title,
+          name: formatDisplayName({
+            fullName: toParty?.name || '',
+            type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+          }),
+        },
+      ),
       color,
       duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
     };

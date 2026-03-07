@@ -30,8 +30,6 @@ interface PartyRepresentationProviderProps {
   fromPartyUuid?: string;
   /** The uuid of the party that has/is reveiving accesses */
   toPartyUuid?: string;
-  /** On connection error, the user will be provided with a link to this url in order to get them to a page with a valid state */
-  returnToUrlOnError?: string;
   /** Optional loading component to show while data is being fetched */
   loadingComponent?: JSX.Element;
   /** Optional override for loading state */
@@ -61,13 +59,12 @@ export const PartyRepresentationContext = createContext<PartyRepresentationConte
 /// If both `fromPartyUuid` and `toPartyUuid` are not provided, an error is thrown.
 /// If `actingPartyUuid` is not provided, an error is thrown.
 /// If the connection between the parties is invalid, an error alert is displayed
-/// and the children are not rendered. The error alert provides details about the error and a link to return to a valid state if `returnToUrlOnError` is provided.
+/// and the children are not rendered. The error alert provides details about the error and a link to the landing page.
 export const PartyRepresentationProvider = ({
   children,
   fromPartyUuid,
   toPartyUuid,
   actingPartyUuid,
-  returnToUrlOnError,
   loadingComponent,
   isLoading: externalIsLoading,
   errorOnPriv = false,
@@ -159,10 +156,13 @@ export const PartyRepresentationProvider = ({
 
   const shouldShowUnsyncedConnectionAlert =
     !isLoading &&
-    (invalidConnection || isError) &&
     authorizedPartyReportee &&
-    (authorizedPartyReportee?.partyUuid === actingPartyUuid ||
-      (fromPartyUuid && toPartyUuid && authorizedPartyReportee?.partyUuid === fromPartyUuid)); // The reportee is valid but the connection is unsynced (the user is either on their own page or acting on behalf of the reportee)
+    (invalidConnection || isError) &&
+    fromPartyUuid &&
+    toPartyUuid &&
+    authorizedPartyReportee?.partyUuid === fromPartyUuid &&
+    toPartyUuid === currentUser?.partyUuid;
+  // The reportee is valid but the connection is unsynced (the user is on their own page for the reportee)
 
   const shouldShowConnectionErrorAlert =
     !isLoading && invalidConnection && !shouldShowUnsyncedConnectionAlert;
@@ -206,7 +206,7 @@ export const PartyRepresentationProvider = ({
       }}
     >
       {shouldShowUnsyncedConnectionAlert && <UnsyncedConnectionAlert />}
-      {shouldShowConnectionErrorAlert && connectionErrorAlert(error, returnToUrlOnError)}
+      {shouldShowConnectionErrorAlert && connectionErrorAlert(error, '/')}
       {shouldShowUserTypeRestrictionAlert && <NotAvailableForUserTypeAlert />}
       {shouldShowTechnicalErrorAlert && (
         <DsAlert data-color='warning'>
@@ -247,7 +247,7 @@ const connectionErrorAlert = (
   return (
     <DsAlert data-color='warning'>
       <DsParagraph>
-        {t('error_page.user_connection_error')}
+        {t('error_page.user_connection_error')}{' '}
         {returnToUrl && <Link to={returnToUrl}>{t('common.go_back')}</Link>}
       </DsParagraph>
     </DsAlert>

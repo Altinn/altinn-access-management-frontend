@@ -3,6 +3,7 @@ import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { screen, render, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
+import { MemoryRouter } from 'react-router';
 
 import { PartyRepresentationProvider, usePartyRepresentation } from './PartyRepresentationContext';
 import * as lookupApi from '@/rtk/features/lookupApi';
@@ -156,16 +157,18 @@ const renderWithProvider = (
 ) => {
   const store = createMockStore();
   return render(
-    <Provider store={store}>
-      <PartyRepresentationProvider
-        fromPartyUuid={fromPartyUuid}
-        toPartyUuid={toPartyUuid}
-        actingPartyUuid={actingPartyUuid}
-        loadingComponent={loadingComponent}
-      >
-        {ui}
-      </PartyRepresentationProvider>
-    </Provider>,
+    <MemoryRouter>
+      <Provider store={store}>
+        <PartyRepresentationProvider
+          fromPartyUuid={fromPartyUuid}
+          toPartyUuid={toPartyUuid}
+          actingPartyUuid={actingPartyUuid}
+          loadingComponent={loadingComponent}
+        >
+          {ui}
+        </PartyRepresentationProvider>
+      </Provider>
+    </MemoryRouter>,
   );
 };
 
