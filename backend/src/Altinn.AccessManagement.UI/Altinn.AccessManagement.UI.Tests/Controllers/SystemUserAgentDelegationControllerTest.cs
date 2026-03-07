@@ -383,13 +383,34 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
         }
-        
+
         /// <summary>
-        ///     Test case: RemoveOwnOrganizationToAgentSystemUser checks that own organization is removed from agent system user
-        ///     Expected: RemoveOwnOrganizationToAgentSystemUser returns true
+        ///     Test case: RemoveOwnOrganizationFromAgentSystemUser checks that own organization is removed from agent system user
+        ///     Expected: RemoveOwnOrganizationFromAgentSystemUser returns true
         /// </summary>
         [Fact]
-        public async Task RemoveOwnOrganizationToAgentSystemUser_ReturnTrue()
+        public async Task RemoveOwnOrganizationFromAgentSystemUser_ReturnTrue()
+        {
+            // Arrange
+            string partyId = "51329012";
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string systemUserId = _regnskapsforerSystemUserId;
+
+            HttpStatusCode expectedResponse = HttpStatusCode.OK;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/self?partyuuid={partyUuid}");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
+        
+        /// <summary>
+        ///     Test case: IsOwnOrganizationAddedToAgentSystemUser checks if own organization is added to agent system user
+        ///     Expected: IsOwnOrganizationAddedToAgentSystemUser returns true
+        /// </summary>
+        [Fact]
+        public async Task IsOwnOrganizationAddedToAgentSystemUser_ReturnTrue()
         {
             // Arrange
             string partyId = "51329012";
@@ -399,7 +420,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpStatusCode expectedResponse = HttpStatusCode.OK;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/self?partyuuid={partyUuid}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/self?partyuuid={partyUuid}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
