@@ -70,6 +70,7 @@ export interface AgentDelegationCustomer {
     role: string;
     packages: string[];
   }[];
+  isSelfOrg?: boolean;
 }
 
 export interface AgentDelegation {

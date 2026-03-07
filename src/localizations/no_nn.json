@@ -792,7 +792,15 @@
     "add_all_customers_partial": "Berre {{successCount}} av {{totalCount}} klientar vart lagde til.",
     "add_all_customers_failed_list": "Følgjande klientar kunne ikkje leggjast til:",
     "add_all_customers_in_progress_warning": "Ikkje lukk denne nettsida før alle klientar er lagde til.",
-    "add_all_customers_progress": "Legg til klient {{progress}} av {{totalCount}}"
+    "add_all_customers_progress": "Legg til klient {{progress}} av {{totalCount}}",
+    "own_organization": "Di verksemd",
+    "remove": "Fjern frå systemtilgang",
+    "remove_own_organization": "Fjern di verksemd frå systemtilgang",
+    "add_own_organization_list": "Legg til i systemtilgang",
+    "add_own_organization_list_aria": "Legg til di verksemd i systemtilgang",
+    "add_own_organization": "Legg til di verksemd",
+    "add_own_organization_error": "Kunne ikkje leggja til di verksemd",
+    "remove_own_organization_error": "Kunne ikkje fjerna di verksemd"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",

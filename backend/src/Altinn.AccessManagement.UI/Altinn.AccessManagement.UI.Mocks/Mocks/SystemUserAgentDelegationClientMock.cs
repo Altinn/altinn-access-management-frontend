@@ -73,6 +73,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new Result<bool>(true));
         }
 
+        public Task<Result<bool>> AddSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(new Result<bool>(true));
+        }
+
+        public Task<Result<bool>> RemoveSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(new Result<bool>(true));
+        }
+
+        public Task<Result<bool>> IsSelfAdded(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(new Result<bool>(true));
+        }
+
         internal static class TestErrors
         {
             private static readonly ProblemDescriptorFactory _factory

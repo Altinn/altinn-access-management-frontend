@@ -217,6 +217,46 @@ export const systemUserApi = createApi({
         method: 'DELETE',
       }),
     }),
+    assignSelfCustomer: builder.mutation<
+      void,
+      {
+        partyId: string;
+        systemUserId: string;
+        partyUuid: string;
+      }
+    >({
+      query: ({ partyId, systemUserId, partyUuid }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/self?partyUuid=${partyUuid}`,
+        method: 'POST',
+      }),
+    }),
+    removeSelfCustomer: builder.mutation<
+      void,
+      {
+        partyId: string;
+        systemUserId: string;
+        partyUuid: string;
+      }
+    >({
+      query: ({ partyId, systemUserId, partyUuid }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/self?partyUuid=${partyUuid}`,
+        method: 'DELETE',
+      }),
+    }),
+    isSelfAdded: builder.query<
+      boolean,
+      {
+        partyId: string;
+        systemUserId: string;
+        partyUuid: string;
+      }
+    >({
+      query: ({ partyId, systemUserId, partyUuid }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/self?partyUuid=${partyUuid}`,
+        method: 'GET',
+      }),
+      keepUnusedDataFor: 0,
+    }),
 
     // system user request
     getSystemUserRequest: builder.query<SystemUserRequest, { requestId: string }>({
@@ -342,6 +382,9 @@ export const {
   useGetPendingSystemUserRequestsQuery,
   useEscalateRequestMutation,
   useEscalateAgentRequestMutation,
+  useAssignSelfCustomerMutation,
+  useRemoveSelfCustomerMutation,
+  useIsSelfAddedQuery,
 } = apiWithTag;
 
 export const { endpoints, reducerPath, reducer, middleware } = apiWithTag;

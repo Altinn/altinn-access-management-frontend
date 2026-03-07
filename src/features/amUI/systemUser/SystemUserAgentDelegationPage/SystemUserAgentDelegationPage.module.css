@@ -44,3 +44,9 @@
   accent-color: var(--ds-color-primary);
   height: var(--ds-size-8);
 }
+
+.addButtons {
+  display: flex;
+  gap: var(--ds-size-4);
+  justify-self: flex-end;
+}
