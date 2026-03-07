@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
-import { DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
+import { DsHeading, DsLink, DsParagraph, DsPopover } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
@@ -18,6 +18,7 @@ import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
 import { getInheritedStatus } from '../../common/useInheritedStatus';
+import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { id } = useParams();
@@ -95,15 +96,26 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
   return (
     toParty && (
       <div className={classes.singleRightsSectionContainer}>
-        <DsHeading
-          level={2}
-          data-size='xs'
-          id='single_rights_title'
-        >
-          {t('single_rights.current_services_title', { count: delegatedResources?.length ?? 0 })}
-        </DsHeading>
+        <div className={classes.headerContainer}>
+          <DsHeading
+            level={2}
+            data-size='xs'
+            id='single_rights_title'
+          >
+            {t('single_rights.current_services_title', { count: delegatedResources?.length ?? 0 })}
+          </DsHeading>
+          <DsPopover.TriggerContext>
+            <DsPopover.Trigger
+              icon
+              variant='tertiary'
+              aria-label={t('single_rights.helptext_button')}
+            >
+              <QuestionmarkCircleIcon />
+            </DsPopover.Trigger>
+            <DsPopover>{t('single_rights.helptext_content')}</DsPopover>
+          </DsPopover.TriggerContext>
+        </div>
         {isError && <div>{t('user_rights_page.error')}</div>}
-
         <div className={classes.singleRightsList}>
           <ResourceList
             resources={resources ?? []}
