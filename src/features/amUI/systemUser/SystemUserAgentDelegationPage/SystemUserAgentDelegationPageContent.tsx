@@ -249,8 +249,10 @@ export const SystemUserAgentDelegationPageContent = ({
   };
 
   const isAllAccessPackagesDelegable = systemUser.accessPackages.every((x) => x.isDelegable);
+  const hasAddSelfPermission = isAdmin && isAllAccessPackagesDelegable;
+  const isLoadingSelf = isAssigningSelf || isRemovingSelf || isLoadingIsSelfAdded;
   const assignedCustomersList =
-    isSelfAdded || assignedCustomers.length > 0
+    hasAddSelfPermission && (isSelfAdded || assignedCustomers.length > 0)
       ? [
           {
             id: reporteeData?.partyUuid || '',
@@ -262,8 +264,6 @@ export const SystemUserAgentDelegationPageContent = ({
           ...assignedCustomers,
         ]
       : assignedCustomers;
-  const hasAddSelfPermission = isAdmin && isAllAccessPackagesDelegable;
-  const isLoadingSelf = isAssigningSelf || isRemovingSelf || isLoadingIsSelfAdded;
 
   return (
     <>

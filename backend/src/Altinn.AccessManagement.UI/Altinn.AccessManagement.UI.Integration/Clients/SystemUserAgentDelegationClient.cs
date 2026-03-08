@@ -190,15 +190,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return true;
+                    return JsonSerializer.Deserialize<bool>(responseContent, _serializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // RemoveSelf // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // IsSelfAdded // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // RemoveSelf // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // IsSelfAdded // Exception");
                 throw;
             }
         }

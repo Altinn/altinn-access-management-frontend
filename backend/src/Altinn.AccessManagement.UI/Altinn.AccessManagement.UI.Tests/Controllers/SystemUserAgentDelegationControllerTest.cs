@@ -368,7 +368,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: AddOwnOrganizationToAgentSystemUser returns true
         /// </summary>
         [Fact]
-        public async Task AddOwnOrganizationToAgentSystemUser_ReturnTrue()
+        public async Task AddOwnOrganizationToAgentSystemUser_ReturnsTrue()
         {
             // Arrange
             string partyId = "51329012";
@@ -389,7 +389,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: RemoveOwnOrganizationFromAgentSystemUser returns true
         /// </summary>
         [Fact]
-        public async Task RemoveOwnOrganizationFromAgentSystemUser_ReturnTrue()
+        public async Task RemoveOwnOrganizationFromAgentSystemUser_ReturnsTrue()
         {
             // Arrange
             string partyId = "51329012";
@@ -404,26 +404,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
         }
-        
+
         /// <summary>
         ///     Test case: IsOwnOrganizationAddedToAgentSystemUser checks if own organization is added to agent system user
         ///     Expected: IsOwnOrganizationAddedToAgentSystemUser returns true
         /// </summary>
         [Fact]
-        public async Task IsOwnOrganizationAddedToAgentSystemUser_ReturnTrue()
+        public async Task IsOwnOrganizationAddedToAgentSystemUser_ReturnsTrue()
         {
             // Arrange
             string partyId = "51329012";
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _regnskapsforerSystemUserId;
-            
+
             HttpStatusCode expectedResponse = HttpStatusCode.OK;
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/self?partyuuid={partyUuid}");
+            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
+            Assert.True(actualResponse);
         }
     }
 }

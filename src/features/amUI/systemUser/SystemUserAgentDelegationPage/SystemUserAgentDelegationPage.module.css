@@ -48,5 +48,4 @@
 .addButtons {
   display: flex;
   gap: var(--ds-size-4);
-  justify-self: flex-end;
 }

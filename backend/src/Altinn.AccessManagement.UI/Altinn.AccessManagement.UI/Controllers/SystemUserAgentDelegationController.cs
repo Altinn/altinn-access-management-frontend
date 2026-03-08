@@ -165,7 +165,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="systemUserGuid">System user id to get</param>
         /// <param name="partyUuid">Party uuid of party user represents</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Boolean result of add</returns>
         /// <returns></returns>
         [Authorize]
         [HttpGet("{partyId}/{systemUserGuid}/self")]
