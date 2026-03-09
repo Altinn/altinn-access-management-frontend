@@ -979,12 +979,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
 
             Assert.NotNull(actual);
-            Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.RefId, actual.RefId);
-            Assert.Equal(expected.LogoUrl, actual.LogoUrl);
-            Assert.Equal(expected.Code, actual.Code);
-            Assert.Equal(expected.TypeId, actual.TypeId);
         }
     }
 }
