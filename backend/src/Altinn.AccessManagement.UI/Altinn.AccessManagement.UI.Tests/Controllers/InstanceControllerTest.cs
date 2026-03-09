@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
             List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(path);
 
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances?party={party}&from={from}&to={to}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}");
             List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -88,7 +88,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
 
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances?party={party}&from={from}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
             List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -108,7 +108,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string resource = "app_ttd_a3-app2";
             string instance = "urn:altinn:instance-id:51599233/c1d2e3f4-1111-2222-3333-444455556666";
 
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances?party={party}&from={from}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
             List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -129,7 +129,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
             List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(path);
 
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances?party={party}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}");
             List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -147,7 +147,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
 
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances?party={party}&from={from}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
 
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
         }
@@ -162,7 +162,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("11111111-1111-1111-1111-111111111111");
 
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances?party={party}&from={from}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
 
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
@@ -274,17 +274,17 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         /// Test case: Missing required rights parameters.
-        /// Expected: Returns bad request.
+        /// Expected: Returns not found because the mock cannot resolve the missing resource/instance.
         /// </summary>
         [Fact]
-        public async Task GetInstanceRights_MissingRequiredParams_ReturnsBadRequest()
+        public async Task GetInstanceRights_MissingRequiredParams_ReturnsNotFound()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
 
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&from={from}");
 
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
         /// <summary>

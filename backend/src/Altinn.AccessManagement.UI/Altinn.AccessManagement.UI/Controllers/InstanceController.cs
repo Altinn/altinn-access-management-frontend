@@ -7,8 +7,6 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-
 namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
@@ -49,20 +47,16 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="instance">Optional instance urn filter.</param>
         /// <returns>The delegated instances.</returns>
         [HttpGet]
-        [HttpGet("delegation/instances")]
         [Authorize]
+        [Route("delegation/instances")]
         public async Task<ActionResult<List<InstanceDelegation>>> GetInstances([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to, [FromQuery] string resource, [FromQuery] string instance)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
 
             try
             {
-                return Ok(await _instanceService.GetInstances(languageCode, party, from, to, resource, instance));
+                List<InstanceDelegation> delegations = await _instanceService.GetInstances(languageCode, party, from, to, resource, instance);
+                return Ok(delegations);
             }
             catch (HttpStatusException statusEx)
             {
@@ -71,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected exception occurred while retrieving instance delegations: {Message}", ex.Message);
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving instance delegations for right holder: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
@@ -83,8 +77,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
         /// <returns>The rights that can be delegated on the instance.</returns>
-        [HttpGet("delegationcheck")]
+        [HttpGet]
         [Authorize]
+        [Route("delegationcheck")]
         public async Task<ActionResult<List<RightCheck>>> GetDelegationCheck([FromQuery] Guid from, [FromQuery] string resource, [FromQuery] string instance)
         {
             try
@@ -113,30 +108,22 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
         /// <returns>The delegated rights for the instance.</returns>
-        [HttpGet("delegation/instances/rights")]
+        [HttpGet]
         [Authorize]
+        [Route("delegation/instances/rights")]
         public async Task<ActionResult<InstanceRight>> GetInstanceRights(
-            [FromQuery, BindRequired] Guid party,
-            [FromQuery, BindRequired] Guid from,
-            [FromQuery, BindRequired] Guid to,
-            [FromQuery, BindRequired] string resource,
-            [FromQuery, BindRequired] string instance)
+            [FromQuery] Guid party,
+            [FromQuery] Guid from,
+            [FromQuery] Guid to,
+            [FromQuery] string resource,
+            [FromQuery] string instance)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (string.IsNullOrWhiteSpace(resource) || string.IsNullOrWhiteSpace(instance))
-            {
-                return BadRequest("Query parameters 'resource' and 'instance' must be provided.");
-            }
-
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
 
             try
             {
-                return Ok(await _instanceService.GetInstanceRights(languageCode, party, from, to, resource, instance));
+                InstanceRight delegations = await _instanceService.GetInstanceRights(languageCode, party, from, to, resource, instance);
+                return Ok(delegations);
             }
             catch (HttpStatusException ex)
             {
@@ -145,7 +132,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected exception occurred while retrieving instance rights: {Message}", ex.Message);
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving instance right delegations for right holder: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
