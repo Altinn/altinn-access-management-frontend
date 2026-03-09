@@ -7,9 +7,18 @@ using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Moq;
+using AltinnCore.Authentication.JwtCookie;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -20,6 +29,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     public class InstanceControllerTest : IClassFixture<CustomWebApplicationFactory<InstanceController>>
     {
         private readonly HttpClient _client;
+        private readonly CustomWebApplicationFactory<InstanceController> _factory;
         private readonly string _mockFolder;
 
         /// <summary>
@@ -28,6 +38,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// <param name="factory">The custom web application factory.</param>
         public InstanceControllerTest(CustomWebApplicationFactory<InstanceController> factory)
         {
+            _factory = factory;
             _client = SetupUtils.GetInstanceTestClient(factory);
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
@@ -466,6 +477,68 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: Directly invoke the controller when the backend returns a non-success response for delegation.
+        /// Expected: Returns problem details with the backend status code.
+        /// </summary>
+        [Fact]
+        public async Task DelegateInstanceRights_UnsuccessfulBackendResponse_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "app_ttd_a3-app";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+            List<string> actionKeys = ["read"];
+
+            var instanceServiceMock = new Mock<IInstanceService>();
+            instanceServiceMock
+                .Setup(service => service.Delegate(party, to, resource, instance, actionKeys))
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            HttpClient client = GetTestClient(instanceServiceMock.Object);
+            HttpContent content = new StringContent(JsonSerializer.Serialize(actionKeys), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage httpResponse = await client.PostAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
+                content);
+            ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.Forbidden, httpResponse.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.Forbidden, problemDetails.Status);
+            Assert.Equal("Error returned from backend", problemDetails.Title);
+        }
+
+        /// <summary>
+        /// Test case: Directly invoke the controller when the backend returns a non-success response for updates.
+        /// Expected: Returns problem details with the backend status code.
+        /// </summary>
+        [Fact]
+        public async Task EditInstanceAccess_UnsuccessfulBackendResponse_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "app_ttd_a3-app";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+            List<string> actionKeys = ["write"];
+
+            var instanceServiceMock = new Mock<IInstanceService>();
+            instanceServiceMock
+                .Setup(service => service.UpdateInstanceAccess(party, to, resource, instance, actionKeys))
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.Conflict));
+            HttpClient client = GetTestClient(instanceServiceMock.Object);
+            HttpContent content = new StringContent(JsonSerializer.Serialize(actionKeys), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage httpResponse = await client.PutAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
+                content);
+            ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.Conflict, httpResponse.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.Conflict, problemDetails.Status);
+            Assert.Equal("Error returned from backend", problemDetails.Title);
+        }
+
+        /// <summary>
         /// Test case: Handles unknown instance/resource combinations.
         /// Expected: Returns not found.
         /// </summary>
@@ -482,6 +555,33 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
 
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+        private HttpClient GetTestClient(IInstanceService instanceService)
+        {
+            WebApplicationFactory<InstanceController> factory = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddSingleton(instanceService);
+                    services.AddSingleton<ILogger<InstanceController>>(new Mock<ILogger<InstanceController>>().Object);
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                HandleCookies = true,
+            };
+
+            factory.Server.AllowSynchronousIO = true;
+            HttpClient client = factory.CreateClient(opts);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetAccessToken("sbl.authorization"));
+            client.DefaultRequestHeaders.Add("Cookie", "altinnPersistentContext=UL=1044");
+            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
+
+            return client;
         }
     }
 }

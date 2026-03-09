@@ -80,6 +80,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<RightCheck>> DelegationCheck(Guid party, string resource, string instance)
         {
             ResourceCheckDto delegationCheckResult = await _instanceClient.GetDelegationCheck(party, resource, instance);
+            if (delegationCheckResult == null || delegationCheckResult.Rights == null)
+            {
+                return new List<RightCheck>();
+            }
+
             return delegationCheckResult.Rights.ToList();
         }
 
