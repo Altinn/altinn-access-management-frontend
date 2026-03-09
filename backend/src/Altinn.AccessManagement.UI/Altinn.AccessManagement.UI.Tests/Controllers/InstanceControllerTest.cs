@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -433,6 +434,98 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.NotNull(problemDetails);
             Assert.Equal((int)HttpStatusCode.Conflict, problemDetails.Status);
             Assert.Equal("Error returned from backend", problemDetails.Title);
+        }
+
+        /// <summary>
+        /// Test case: Handles HttpStatusException when retrieving delegated instances.
+        /// Expected: Returns problem details with the backend status code.
+        /// </summary>
+        [Fact]
+        public async Task GetInstances_HttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+
+            var instanceServiceMock = new Mock<IInstanceService>();
+            instanceServiceMock
+                .Setup(service => service.GetInstances(It.IsAny<string>(), party, null, null, null, null))
+                .ThrowsAsync(new HttpStatusException("StatusError", "Test error", HttpStatusCode.BadGateway, ""));
+            HttpClient client = GetTestClient(instanceServiceMock.Object);
+
+            HttpResponseMessage httpResponse = await client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}");
+            ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.BadGateway, httpResponse.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.BadGateway, problemDetails.Status);
+        }
+
+        /// <summary>
+        /// Test case: Handles HttpStatusException when delegating rights with an invalid instance.
+        /// Expected: Returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task DelegateInstanceRights_InvalidInstance_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "app_ttd_a3-app";
+            string instance = "urn:altinn:instance-id:51599233/non-existing-instance";
+            List<string> actionKeys = new List<string> { "read" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage httpResponse = await _client.PostAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
+                content);
+
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Handles HttpStatusException when updating rights with an invalid instance.
+        /// Expected: Returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task EditInstanceAccess_InvalidInstance_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "app_ttd_a3-app";
+            string instance = "urn:altinn:instance-id:51599233/non-existing-instance";
+            List<string> actionKeys = new List<string> { "read" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage httpResponse = await _client.PutAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
+                content);
+
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Handles unexpected errors when updating instance access.
+        /// Expected: Returns an internal server error.
+        /// </summary>
+        [Fact]
+        public async Task EditInstanceAccess_InternalServerError()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "app_ttd_a3-app";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+            List<string> actionKeys = new List<string> { "read" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage httpResponse = await _client.PutAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
+                content);
+
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
         }
 
         /// <summary>
