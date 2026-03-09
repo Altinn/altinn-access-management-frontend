@@ -152,6 +152,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: The mock instance dataset contains entries with a missing resource reference and a resource that resolves to null.
+        /// Expected: Returns only the valid delegated instances.
+        /// </summary>
+        [Fact]
+        public async Task GetInstances_SkipsEntriesWithMissingOrUnknownResource()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
+            List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(path);
+
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
+            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Equal(expectedResponse.Count, actualResponse.Count);
+            Assert.DoesNotContain(actualResponse, delegation => delegation.Resource.Identifier == "app_ttd_missing-resource");
+            Assert.All(actualResponse, delegation => Assert.False(string.IsNullOrWhiteSpace(delegation.Resource.Identifier)));
+        }
+
+        /// <summary>
         /// Test case: Handles unexpected errors when retrieving delegated instances.
         /// Expected: Returns an internal server error.
         /// </summary>
@@ -175,6 +197,48 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             string party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string resource = "app_ttd_a3-app";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "DelegationCheck", $"{resource}.json");
+            List<RightCheck> expectedResponse = Util.GetMockData<List<RightCheck>>(path);
+
+            HttpResponseMessage httpResponse =
+                await _client.GetAsync($"accessmanagement/api/v1/instances/delegationcheck?party={party}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+            List<RightCheck> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<RightCheck>>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        /// Test case: The mock delegation check returns null.
+        /// Expected: Returns OK with an empty list.
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_NullResponse_ReturnsEmptyList()
+        {
+            string party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string resource = "app_ttd_a3-app-null";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "DelegationCheck", $"{resource}.json");
+            List<RightCheck> expectedResponse = Util.GetMockData<List<RightCheck>>(path);
+
+            HttpResponseMessage httpResponse =
+                await _client.GetAsync($"accessmanagement/api/v1/instances/delegationcheck?party={party}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+            List<RightCheck> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<RightCheck>>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        /// Test case: The mock delegation check returns an object with null rights.
+        /// Expected: Returns OK with an empty list.
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_NullRights_ReturnsEmptyList()
+        {
+            string party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string resource = "app_ttd_a3-app-null-rights";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "DelegationCheck", $"{resource}.json");
             List<RightCheck> expectedResponse = Util.GetMockData<List<RightCheck>>(path);
@@ -241,11 +305,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             InstanceRight actualResponse = await httpResponse.Content.ReadFromJsonAsync<InstanceRight>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.NotNull(actualResponse);
-            Assert.Equal(expectedResponse.Resource.RefId, actualResponse.Resource.RefId);
-            Assert.Equal(expectedResponse.Instance.Urn, actualResponse.Instance.Urn);
-            Assert.Equal(expectedResponse.DirectRights.Count, actualResponse.DirectRights.Count);
-            Assert.Equal(expectedResponse.IndirectRights.Count, actualResponse.IndirectRights.Count);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
         /// <summary>
