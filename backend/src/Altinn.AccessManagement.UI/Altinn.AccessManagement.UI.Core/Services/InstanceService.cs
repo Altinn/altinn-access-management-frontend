@@ -77,9 +77,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<RightCheck>> DelegationCheck(Guid from, string resource, string instance)
+        public async Task<List<RightCheck>> DelegationCheck(Guid party, string resource, string instance)
         {
-            ResourceCheckDto delegationCheckResult = await _instanceClient.GetDelegationCheck(from, resource, instance);
+            ResourceCheckDto delegationCheckResult = await _instanceClient.GetDelegationCheck(party, resource, instance);
             return delegationCheckResult.Rights.ToList();
         }
 
@@ -87,6 +87,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<InstanceRight> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
         {
             return await _instanceClient.GetInstanceRights(languageCode, party, from, to, resource, instance);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> Delegate(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
+        {
+            return await _instanceClient.CreateInstanceRightsAccess(party, to, resource, instance, actionKeys);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> UpdateInstanceAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
+        {
+            return await _instanceClient.UpdateInstanceRightsAccess(party, to, resource, instance, actionKeys);
         }
     }
 }

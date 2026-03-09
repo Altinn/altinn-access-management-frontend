@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -75,10 +76,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<ResourceCheckDto> GetDelegationCheck(Guid from, string resource, string instance)
+        public async Task<ResourceCheckDto> GetDelegationCheck(Guid party, string resource, string instance)
         {
             string endpointUrl =
-                $"enduser/connections/resources/instances/delegationcheck?party={from}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+                $"enduser/connections/resources/instances/delegationcheck?party={party}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
@@ -96,6 +97,50 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
 
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<InstanceRight>(response, _logger, "InstanceClient // GetInstanceRights");
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
+        {
+            try
+            {
+                string endpointUrl =
+                    $"enduser/connections/resources/instances/rights?party={party}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var rightKeys = new { directRightKeys = actionKeys };
+                string requestBody = JsonSerializer.Serialize(rightKeys);
+                StringContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+
+                return await _client.PostAsync(token, endpointUrl, content);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // InstanceClient // CreateInstanceRightsAccess // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> UpdateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
+        {
+            try
+            {
+                string endpointUrl =
+                    $"enduser/connections/resources/instances/rights?party={party}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var rightKeys = new { directRightKeys = actionKeys };
+                string requestBody = JsonSerializer.Serialize(rightKeys);
+                StringContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+
+                return await _client.PutAsync(token, endpointUrl, content);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // InstanceClient // UpdateInstanceRightsAccess // Exception");
+                throw;
+            }
         }
     }
 }

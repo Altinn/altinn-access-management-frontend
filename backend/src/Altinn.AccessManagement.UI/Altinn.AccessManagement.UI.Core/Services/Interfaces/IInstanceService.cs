@@ -24,11 +24,11 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Gets the rights a user can delegate on a specific instance.
         /// </summary>
-        /// <param name="from">The party from which the instance would be delegated.</param>
+        /// <param name="party">The party for which the delegation check is performed.</param>
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
         /// <returns>The delegation check result.</returns>
-        Task<List<RightCheck>> DelegationCheck(Guid from, string resource, string instance);
+        Task<List<RightCheck>> DelegationCheck(Guid party, string resource, string instance);
 
         /// <summary>
         /// Gets rights for a delegated instance.
@@ -41,5 +41,27 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="instance">The instance urn.</param>
         /// <returns>The delegated instance rights.</returns>
         Task<InstanceRight> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance);
+
+        /// <summary>
+        /// Delegates rights on a specific instance.
+        /// </summary>
+        /// <param name="party">The acting party performing the delegation.</param>
+        /// <param name="to">The receiving party.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="instance">The instance urn.</param>
+        /// <param name="actionKeys">The right keys to delegate.</param>
+        /// <returns>The backend response.</returns>
+        Task<HttpResponseMessage> Delegate(Guid party, Guid to, string resource, string instance, List<string> actionKeys);
+
+        /// <summary>
+        /// Updates delegated rights on a specific instance.
+        /// </summary>
+        /// <param name="party">The acting party performing the update.</param>
+        /// <param name="to">The receiving party.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="instance">The instance urn.</param>
+        /// <param name="actionKeys">The updated right keys.</param>
+        /// <returns>The backend response.</returns>
+        Task<HttpResponseMessage> UpdateInstanceAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys);
     }
 }

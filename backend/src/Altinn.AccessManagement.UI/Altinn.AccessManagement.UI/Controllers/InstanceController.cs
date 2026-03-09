@@ -73,18 +73,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Gets the rights a user can delegate on a particular instance.
         /// </summary>
-        /// <param name="from">The party from which the instance would be delegated.</param>
+        /// <param name="party">The party for which the delegation check is performed.</param>
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
         /// <returns>The rights that can be delegated on the instance.</returns>
         [HttpGet]
         [Authorize]
         [Route("delegationcheck")]
-        public async Task<ActionResult<List<RightCheck>>> GetDelegationCheck([FromQuery] Guid from, [FromQuery] string resource, [FromQuery] string instance)
+        public async Task<ActionResult<List<RightCheck>>> GetDelegationCheck([FromQuery] Guid party, [FromQuery] string resource, [FromQuery] string instance)
         {
             try
             {
-                List<RightCheck> result = await _instanceService.DelegationCheck(from, resource, instance);
+                List<RightCheck> result = await _instanceService.DelegationCheck(party, resource, instance);
                 return Ok(result);
             }
             catch (HttpStatusException statusEx)
@@ -95,6 +95,44 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred while retrieving instance delegation check: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        /// Delegates a given set of rights on an instance.
+        /// </summary>
+        /// <param name="party">The acting party performing the delegation.</param>
+        /// <param name="to">The receiving party.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="instance">The instance urn.</param>
+        /// <param name="actionKeys">The identifiers of the rights/actions to be delegated.</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("delegation/instances/rights")]
+        public async Task<ActionResult<HttpResponseMessage>> DelegateInstanceRights([FromQuery] Guid party, [FromQuery] Guid to, [FromQuery] string resource, [FromQuery] string instance, [FromBody] List<string> actionKeys)
+        {
+            try
+            {
+                var response = await _instanceService.Delegate(party, to, resource, instance, actionKeys);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(await response.Content.ReadAsStringAsync());
+                }
+
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while adding instance rights for right holder: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
@@ -133,6 +171,44 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred while retrieving instance right delegations for right holder: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        /// Updates delegated rights on a specific instance.
+        /// </summary>
+        /// <param name="party">The acting party performing the update.</param>
+        /// <param name="to">The receiving party.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="instance">The instance urn.</param>
+        /// <param name="actionKeys">The updated rights/actions for the delegation.</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPut]
+        [Authorize]
+        [Route("delegation/instances/rights")]
+        public async Task<ActionResult<HttpResponseMessage>> EditInstanceAccess([FromQuery] Guid party, [FromQuery] Guid to, [FromQuery] string resource, [FromQuery] string instance, [FromBody] List<string> actionKeys)
+        {
+            try
+            {
+                var response = await _instanceService.UpdateInstanceAccess(party, to, resource, instance, actionKeys);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(await response.Content.ReadAsStringAsync());
+                }
+
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during update of instance access: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

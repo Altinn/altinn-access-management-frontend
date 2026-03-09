@@ -64,9 +64,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<ResourceCheckDto> GetDelegationCheck(Guid from, string resource, string instance)
+        public Task<ResourceCheckDto> GetDelegationCheck(Guid party, string resource, string instance)
         {
-            ThrowExceptionIfTriggerParty(from.ToString());
+            ThrowExceptionIfTriggerParty(party.ToString());
 
             if (!string.Equals(instance, "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668", StringComparison.OrdinalIgnoreCase))
             {
@@ -77,6 +77,29 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 string dataPath = Path.Combine(dataFolder, "Instance", "DelegationCheck", $"{resource}.json");
                 return Task.FromResult(Util.GetMockData<ResourceCheckDto>(dataPath));
+            }
+            catch
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(to.ToString());
+
+            if (!string.Equals(instance, "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
+
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "Instance", "CreateDelegation", $"{resource}.json");
+                _ = await File.ReadAllTextAsync(dataPath);
+                return new HttpResponseMessage(HttpStatusCode.OK);
             }
             catch
             {
@@ -99,6 +122,29 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             string dataPath = Path.Combine(dataFolder, "Instance", "GetInstanceRights", $"{resource}.json");
             return Task.FromResult(Util.GetMockData<InstanceRight>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> UpdateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(to.ToString());
+
+            if (!string.Equals(instance, "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
+
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "Instance", "CreateDelegation", $"{resource}.json");
+                _ = await File.ReadAllTextAsync(dataPath);
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            catch
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
         }
 
         private static void ThrowExceptionIfTriggerParty(string id)
