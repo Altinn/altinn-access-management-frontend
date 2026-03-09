@@ -76,7 +76,7 @@ export const RightsList = ({
               id='1'
               size='md'
               loading={true}
-              name='xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+              name='xxxxxxxxxxxxxxxxxxxxxxxxxx'
               description={'xxxxxxxxx'}
               interactive={false}
             />
@@ -84,7 +84,7 @@ export const RightsList = ({
               id='2'
               size='md'
               loading={true}
-              name='xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+              name='xxxxxxxxxxxxxxxxxxxxxxxxxx'
               description={'xxxxxxxxx'}
               interactive={false}
             />
