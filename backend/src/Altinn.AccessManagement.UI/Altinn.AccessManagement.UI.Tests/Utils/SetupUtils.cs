@@ -79,6 +79,33 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetInstanceTestClient(CustomWebApplicationFactory<InstanceController> customFactory)
+        {
+            WebApplicationFactory<InstanceController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddSingleton<IInstanceClient, InstanceClientMock>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                HandleCookies = true,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            var client = factory.CreateClient(opts);
+            client.DefaultRequestHeaders.Add("Cookie", "altinnPersistentContext=UL=1044");
+            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
+
+            return client;
+        }
+
+        /// <summary>
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for UserController tests</param>
         /// <param name="flags">Override featureFlags in the client. Defaults to true if not set</param>
         /// <returns>HttpClient</returns>
