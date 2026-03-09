@@ -59,6 +59,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: Successfully retrieve delegated instances from the delegation/resources route.
+        /// Expected: Returns OK and the list of delegated instances.
+        /// </summary>
+        [Fact]
+        public async Task GetInstances_DelegationResourcesRoute_ReturnsValid()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            HttpResponseMessage httpResponse =
+                await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/resources?party={party}&from={from}&to={to}");
+            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Equal(2, actualResponse.Count);
+        }
+
+        /// <summary>
         /// Test case: Supports omitting the to parameter.
         /// Expected: Returns OK when only from is specified.
         /// </summary>
@@ -222,6 +242,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(expectedResponse.Instance.Urn, actualResponse.Instance.Urn);
             Assert.Equal(expectedResponse.DirectRights.Count, actualResponse.DirectRights.Count);
             Assert.Equal(expectedResponse.IndirectRights.Count, actualResponse.IndirectRights.Count);
+        }
+
+        /// <summary>
+        /// Test case: Successfully retrieve delegated instance rights from the delegation/resources/rights route.
+        /// Expected: Returns OK and the instance rights.
+        /// </summary>
+        [Fact]
+        public async Task GetInstanceRights_DelegationResourcesRoute_ReturnsValid()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "app_ttd_a3-app";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/resources/rights?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+            InstanceRight actualResponse = await httpResponse.Content.ReadFromJsonAsync<InstanceRight>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Equal(resource, actualResponse.Resource.RefId);
+            Assert.Equal(instance, actualResponse.Instance.Urn);
         }
 
         /// <summary>

@@ -49,6 +49,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="instance">Optional instance urn filter.</param>
         /// <returns>The delegated instances.</returns>
         [HttpGet]
+        [HttpGet("delegation/instances")]
         [Authorize]
         public async Task<ActionResult<List<InstanceDelegation>>> GetInstances([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to, [FromQuery] string resource, [FromQuery] string instance)
         {
@@ -57,26 +58,16 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!from.HasValue && !to.HasValue)
-            {
-                return BadRequest("Either 'from' or 'to' query parameter must be provided.");
-            }
-
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
 
             try
             {
                 return Ok(await _instanceService.GetInstances(languageCode, party, from, to, resource, instance));
             }
-            catch (HttpStatusException ex)
+            catch (HttpStatusException statusEx)
             {
-                if (ex.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
-
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
@@ -122,7 +113,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
         /// <returns>The delegated rights for the instance.</returns>
-        [HttpGet("rights")]
+        [HttpGet("delegation/instances/rights")]
         [Authorize]
         public async Task<ActionResult<InstanceRight>> GetInstanceRights(
             [FromQuery, BindRequired] Guid party,
