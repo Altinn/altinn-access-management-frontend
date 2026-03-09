@@ -13,6 +13,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     {
         private readonly string dataFolder;
 
+        private readonly Guid regnskapsforerSystemUserId = Guid.Parse("61844188-3789-4b84-9314-2be1fdbc6633");
+        private readonly Guid revisorSystemUserId = Guid.Parse("244c56a5-3737-44ac-8f3b-8697c5e281da");
+        private readonly Guid forretningsforerSystemUserId = Guid.Parse("095b06de-1a93-4320-b572-42d72949cf2c");
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemUserAgentDelegationClientMock"/> class
         /// </summary>
@@ -23,10 +27,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid facilitatorId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            Guid regnskapsforerSystemUserId = Guid.Parse("61844188-3789-4b84-9314-2be1fdbc6633");
-            Guid revisorSystemUserId = Guid.Parse("244c56a5-3737-44ac-8f3b-8697c5e281da");
-            Guid forretningsforerSystemUserId = Guid.Parse("095b06de-1a93-4320-b572-42d72949cf2c");
-
             string jsonFile = null;
             if (systemUserGuid == regnskapsforerSystemUserId)
             {
@@ -75,17 +75,29 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<Result<bool>> AddSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new Result<bool>(true));
+            if (new List<Guid> { regnskapsforerSystemUserId, revisorSystemUserId, forretningsforerSystemUserId }.Contains(systemUserGuid))
+            {
+                return Task.FromResult(new Result<bool>(true));
+            }
+            return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
         }
 
         public Task<Result<bool>> RemoveSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new Result<bool>(true));
+            if (new List<Guid> { regnskapsforerSystemUserId, revisorSystemUserId, forretningsforerSystemUserId }.Contains(systemUserGuid))
+            {
+                return Task.FromResult(new Result<bool>(true));
+            }
+            return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
         }
 
         public Task<Result<bool>> IsSelfAdded(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new Result<bool>(true));
+            if (new List<Guid> { regnskapsforerSystemUserId, revisorSystemUserId, forretningsforerSystemUserId }.Contains(systemUserGuid))
+            {
+                return Task.FromResult(new Result<bool>(true));
+            }
+            return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
         }
 
         internal static class TestErrors
