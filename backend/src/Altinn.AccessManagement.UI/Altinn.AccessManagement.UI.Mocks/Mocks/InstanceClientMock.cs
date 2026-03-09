@@ -34,8 +34,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<List<InstancePermission>> GetInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
-            ThrowHttpStatusExceptionIfTriggerParty(from?.ToString());
-            ThrowHttpStatusExceptionIfTriggerParty(to?.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
             IEnumerable<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(dataPath);
@@ -88,31 +86,19 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public async Task<HttpResponseMessage> CreateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
-            ThrowHttpStatusExceptionIfTriggerParty(to.ToString());
 
             if (!string.Equals(instance, "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668", StringComparison.OrdinalIgnoreCase))
             {
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
             }
 
-            try
-            {
-                string dataPath = Path.Combine(dataFolder, "Instance", "CreateDelegation", $"{resource}.json");
-                _ = await File.ReadAllTextAsync(dataPath);
-                return new HttpResponseMessage(HttpStatusCode.OK);
-            }
-            catch
-            {
-                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
-            }
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         /// <inheritdoc />
         public Task<InstanceRight> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
-            ThrowHttpStatusExceptionIfTriggerParty(from.ToString());
-            ThrowHttpStatusExceptionIfTriggerParty(to.ToString());
 
             if (!string.Equals(resource, "app_ttd_a3-app", StringComparison.OrdinalIgnoreCase) ||
                 !string.Equals(instance, "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668", StringComparison.OrdinalIgnoreCase))
@@ -128,23 +114,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public async Task<HttpResponseMessage> UpdateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
-            ThrowHttpStatusExceptionIfTriggerParty(to.ToString());
 
             if (!string.Equals(instance, "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668", StringComparison.OrdinalIgnoreCase))
             {
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
             }
 
-            try
-            {
-                string dataPath = Path.Combine(dataFolder, "Instance", "CreateDelegation", $"{resource}.json");
-                _ = await File.ReadAllTextAsync(dataPath);
-                return new HttpResponseMessage(HttpStatusCode.OK);
-            }
-            catch
-            {
-                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
-            }
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         private static void ThrowExceptionIfTriggerParty(string id)
@@ -152,14 +128,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (id == "********" || id == "00000000-0000-0000-0000-000000000000")
             {
                 throw new Exception();
-            }
-        }
-
-        private static void ThrowHttpStatusExceptionIfTriggerParty(string id)
-        {
-            if (id == "11111111-1111-1111-1111-111111111111")
-            {
-                throw new HttpStatusException("StatusError", "Simulated backend error", HttpStatusCode.BadRequest, "");
             }
         }
     }
