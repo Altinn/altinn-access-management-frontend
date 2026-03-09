@@ -40,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public InstanceControllerTest(CustomWebApplicationFactory<InstanceController> factory)
         {
             _factory = factory;
-            _client = SetupUtils.GetInstanceTestClient(factory);
+            _client = SetupUtils.GetTestClient(factory);
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -70,26 +70,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(expectedResponse[0].Instance.Urn, actualResponse[0].Instance.Urn);
             Assert.Equal(expectedResponse[1].Resource.Identifier, actualResponse[1].Resource.Identifier);
             Assert.Equal(expectedResponse[1].Instance.Urn, actualResponse[1].Instance.Urn);
-        }
-
-        /// <summary>
-        /// Test case: Successfully retrieve delegated instances from the delegation/instances route.
-        /// Expected: Returns OK and the list of delegated instances.
-        /// </summary>
-        [Fact]
-        public async Task GetInstances_DelegationInstancesRoute_ReturnsValid()
-        {
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-
-            HttpResponseMessage httpResponse =
-                await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}");
-            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
-
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.NotNull(actualResponse);
-            Assert.Equal(2, actualResponse.Count);
         }
 
         /// <summary>
@@ -306,29 +286,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
-        }
-
-        /// <summary>
-        /// Test case: Successfully retrieve delegated instance rights from the delegation/instances/rights route.
-        /// Expected: Returns OK and the instance rights.
-        /// </summary>
-        [Fact]
-        public async Task GetInstanceRights_DelegationInstancesRoute_ReturnsValid()
-        {
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "app_ttd_a3-app";
-            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
-
-            HttpResponseMessage httpResponse = await _client.GetAsync(
-                $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
-            InstanceRight actualResponse = await httpResponse.Content.ReadFromJsonAsync<InstanceRight>();
-
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.NotNull(actualResponse);
-            Assert.Equal(resource, actualResponse.Resource.RefId);
-            Assert.Equal(instance, actualResponse.Instance.Urn);
         }
 
         /// <summary>

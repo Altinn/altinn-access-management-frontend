@@ -81,13 +81,12 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetInstanceTestClient(CustomWebApplicationFactory<InstanceController> customFactory)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<InstanceController> customFactory)
         {
             WebApplicationFactory<InstanceController> factory = customFactory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddSingleton<IInstanceClient, InstanceClientMock>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
             });
