@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 
-import { usePackagePermissionConnections } from './usePackagePermissionConnections';
+import { usePackageSearchUsers } from './usePackageSearchUsers';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { PartyRepresentationContextOutput } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Party } from '@/rtk/features/lookupApi';
@@ -67,7 +67,7 @@ const run = (
 ) => {
   if (partyContext) setPartyContext(partyContext);
   const pkg = { ...basePkg, permissions } as AccessPackage;
-  const { result } = renderHook(() => usePackagePermissionConnections(pkg));
+  const { result } = renderHook(() => usePackageSearchUsers(pkg));
   return result.current;
 };
 
@@ -76,7 +76,7 @@ beforeEach(() => {
   setPartyContext();
 });
 
-describe('usePackagePermissionConnections', () => {
+describe('usePackageSearchUsers', () => {
   it('returns empty array when no permissions', () => {
     const res = run([]);
     expect(res).toEqual([]);
@@ -95,8 +95,8 @@ describe('usePackagePermissionConnections', () => {
     ];
     const res = run(permissions);
     expect(res).toHaveLength(1);
-    expect(res[0].party.id).toBe('org1');
-    expect(res[0].party.isInherited).toBe(false); // excluded role should not set inherited
+    expect(res[0].id).toBe('org1');
+    expect(res[0].isInherited).toBe(false); // excluded role should not set inherited
     expect(res[0].roles.map((r) => r.code)).toEqual(['rettighetshaver']);
   });
 
@@ -112,7 +112,7 @@ describe('usePackagePermissionConnections', () => {
       },
     ];
     const res = run(permissions);
-    expect(res[0].party.isInherited).toBe(true);
+    expect(res[0].isInherited).toBe(true);
   });
 
   it('marks permission as inherited when it is not between the selected parties', () => {
@@ -127,7 +127,7 @@ describe('usePackagePermissionConnections', () => {
       },
     ];
     const res = run(permissions, { fromPartyUuid: 'other', toPartyUuid: 'else' });
-    expect(res[0].party.isInherited).toBe(true);
+    expect(res[0].isInherited).toBe(true);
   });
 
   it('marks child party as inherited when it has a non-excluded viaRole', () => {
@@ -144,13 +144,13 @@ describe('usePackagePermissionConnections', () => {
     ];
     const res = run(permissions);
     // parent root connection
-    const parentConn = res.find((c) => c.party.id === 'parent1');
+    const parentConn = res.find((c) => c.id === 'parent1');
     expect(parentConn).toBeTruthy();
     // child connection under parent
-    const childConn = parentConn!.connections.find((c) => c.party.id === 'person1');
+    const childConn = parentConn!.children?.find((c) => c.id === 'person1');
     expect(childConn).toBeTruthy();
-    expect(childConn!.party.isInherited).toBe(true); // because of viaRole daglig-leder
-    expect(parentConn!.party.isInherited).toBe(false); // parent received no non-excluded role itself
+    expect(childConn!.isInherited).toBe(true); // because of viaRole daglig-leder
+    expect(parentConn!.isInherited).toBe(false); // parent received no non-excluded role itself
   });
 
   it('does not duplicate roles and still respects exclusion', () => {
@@ -173,7 +173,7 @@ describe('usePackagePermissionConnections', () => {
     ];
     const res = run(permissions);
     expect(res[0].roles).toHaveLength(1);
-    expect(res[0].party.isInherited).toBe(false);
+    expect(res[0].isInherited).toBe(false);
   });
 
   it('mixed roles: excluded + non-excluded => inherited = true', () => {
@@ -195,7 +195,7 @@ describe('usePackagePermissionConnections', () => {
       },
     ];
     const res = run(permissions);
-    expect(res[0].party.isInherited).toBe(true);
+    expect(res[0].isInherited).toBe(true);
     expect(res[0].roles.map((r) => r.code).sort()).toEqual(
       ['daglig-leder', 'rettighetshaver'].sort(),
     );
@@ -214,9 +214,9 @@ describe('usePackagePermissionConnections', () => {
       },
     ];
     const res = run(permissions);
-    const parentConn = res.find((c) => c.party.id === 'org5');
-    const childConn = parentConn!.connections.find((c) => c.party.id === 'person5');
-    expect(childConn!.party.isInherited).toBe(true);
-    expect(parentConn!.party.isInherited).toBe(false);
+    const parentConn = res.find((c) => c.id === 'org5');
+    const childConn = parentConn!.children?.find((c) => c.id === 'person5');
+    expect(childConn!.isInherited).toBe(true);
+    expect(parentConn!.isInherited).toBe(false);
   });
 });

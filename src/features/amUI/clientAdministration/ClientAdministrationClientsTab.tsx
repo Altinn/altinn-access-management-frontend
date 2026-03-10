@@ -2,12 +2,13 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, Switch } from '@altinn/altinn-components';
 
-import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
+import { UserSearch } from '../common/UserSearch/UserSearch';
 import { type Client, useGetClientsQuery } from '@/rtk/features/clientApi';
 import { type Connection } from '@/rtk/features/connectionApi';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
 import { SelectRoleFilter } from './SelectRoleFilter';
 import classes from './ClientAdministrationAgentsTab.module.css';
+import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/mappers';
 
 const buildClientConnections = (clients?: Client[]): Connection[] => {
   if (!clients?.length) return [];
@@ -22,6 +23,7 @@ const buildClientConnections = (clients?: Client[]): Connection[] => {
         children: null,
         parent: null,
         roles: [],
+        isDeleted: client.client.isDeleted ?? undefined,
       },
       sortKey,
       roles: [],
@@ -62,6 +64,10 @@ export const ClientAdministrationClientsTab = ({
     () => buildClientConnections(filteredClients),
     [filteredClients],
   );
+  const users = useMemo(
+    () => mapConnectionsToUserSearchNodes(clientConnections),
+    [clientConnections],
+  );
 
   if (isClientsError) {
     return (
@@ -76,9 +82,9 @@ export const ClientAdministrationClientsTab = ({
 
   return (
     <>
-      <AdvancedUserSearch
+      <UserSearch
         includeSelfAsChild={true}
-        connections={clientConnections}
+        users={users}
         isLoading={isClientsLoading}
         canDelegate={false}
         searchPlaceholder={t('client_administration_page.client_search_placeholder')}

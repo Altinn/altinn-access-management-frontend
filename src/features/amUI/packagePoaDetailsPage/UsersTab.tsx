@@ -3,20 +3,22 @@ import { useMemo, useState } from 'react';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { type User, PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { Party } from '@/rtk/features/lookupApi';
-import AdvancedUserSearch from '../common/AdvancedUserSearch/AdvancedUserSearch';
+import UserSearch from '../common/UserSearch/UserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { usePackagePermissionConnections } from './usePackagePermissionConnections';
+import { usePackageSearchUsers } from './usePackageSearchUsers';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { ActionError } from '@/resources/hooks/useActionError';
 import { DelegateErrorAlert } from './DelegateErrorAlert';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
+import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/mappers';
+import type { UserSearchActionUser } from '../common/UserSearch/types';
 
-const mapUserToParty = (user: User): Party => ({
+const mapUserToParty = (user: UserSearchActionUser): Party => ({
   partyId: 0,
   partyUuid: user.id,
   name: user.name,
@@ -62,7 +64,11 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     },
   );
 
-  const connections = usePackagePermissionConnections(accessPackage);
+  const users = usePackageSearchUsers(accessPackage);
+  const indirectUsers = useMemo(
+    () => mapConnectionsToUserSearchNodes(indirectConnections),
+    [indirectConnections],
+  );
 
   const formatToPartyName = (party: Party) => {
     return formatDisplayName({
@@ -109,7 +115,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     onDelegateError: handleDelegateError,
   });
 
-  const handleOnDelegate = (user: User) => {
+  const handleOnDelegate = (user: UserSearchActionUser) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
       setDelegateActionError(null);
@@ -117,7 +123,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     }
   };
 
-  const handleOnRevoke = (user: User) => {
+  const handleOnRevoke = (user: UserSearchActionUser) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
       onRevoke(accessPackage, toParty);
@@ -143,10 +149,10 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
         />
       )}
 
-      <AdvancedUserSearch
+      <UserSearch
         includeSelfAsChild={false}
-        connections={connections}
-        indirectConnections={indirectConnections}
+        users={users}
+        indirectUsers={indirectUsers}
         isLoading={
           isLoading ||
           loadingIndirectConnections ||

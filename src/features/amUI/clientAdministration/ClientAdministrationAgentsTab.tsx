@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
-import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
+import { UserSearch } from '../common/UserSearch/UserSearch';
 import { useAddAgentMutation, useGetAgentsQuery, type Agent } from '@/rtk/features/clientApi';
 import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
 import classes from './ClientAdministrationAgentsTab.module.css';
 import { useNavigate } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/mappers';
 
 type ClientAdministrationAgentsTabProps = {
   isActive: boolean;
@@ -63,6 +64,14 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
       })) ?? [],
     [agents],
   );
+  const users = useMemo(
+    () => mapConnectionsToUserSearchNodes(agentConnections),
+    [agentConnections],
+  );
+  const indirectUsers = useMemo(
+    () => mapConnectionsToUserSearchNodes(filteredIndirectConnections),
+    [filteredIndirectConnections],
+  );
 
   const handleAddAgent = (userId: string) => {
     void addAgent({ to: userId })
@@ -95,11 +104,11 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
 
   return (
     <div className={classes.agentTabContainer}>
-      <AdvancedUserSearch
+      <UserSearch
         includeSelfAsChild={false}
         includeSelfAsChildOnIndirect={false}
-        connections={agentConnections}
-        indirectConnections={filteredIndirectConnections}
+        users={users}
+        indirectUsers={indirectUsers}
         getUserLink={(user) => `/clientadministration/agent/${user.id}`}
         onAddNewUser={(user) => navigate(`/clientadministration/agent/${user.id}`)}
         isLoading={isAgentsLoading || isIndirectLoading}

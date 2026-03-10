@@ -2,11 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { RootProvider } from '@altinn/altinn-components';
 
-import { AdvancedUserSearch } from './AdvancedUserSearch';
+import { UserSearch } from './UserSearch';
 import { Provider } from 'react-redux';
 import store from '@/rtk/app/store';
 import { Connection } from '@/rtk/features/connectionApi';
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { mapConnectionsToUserSearchNodes } from './mappers';
 
 const mockAllConnections: Connection[] = [
   {
@@ -106,8 +107,8 @@ const mockConnections: Connection[] = [
 ];
 
 const meta = {
-  title: 'Features/AMUI/AdvancedUserSearch',
-  component: AdvancedUserSearch,
+  title: 'Features/AMUI/UserSearch',
+  component: UserSearch,
   decorators: [
     (Story) => (
       <Provider store={store}>
@@ -124,14 +125,14 @@ const meta = {
       </Provider>
     ),
   ],
-} as Meta<typeof AdvancedUserSearch>;
+} as Meta<typeof UserSearch>;
 
 export default meta;
 
 export const Default: StoryObj<typeof meta> = {
   args: {
-    connections: mockConnections,
-    indirectConnections: mockAllConnections,
+    users: mapConnectionsToUserSearchNodes(mockConnections),
+    indirectUsers: mapConnectionsToUserSearchNodes(mockAllConnections),
     onDelegate: () => undefined,
     onRevoke: () => undefined,
     isLoading: false,
@@ -142,7 +143,7 @@ export const Default: StoryObj<typeof meta> = {
 export const EmptySearchShowsAdd: StoryObj<typeof meta> = {
   name: 'No match shows Add New',
   args: {
-    connections: mockConnections,
-    indirectConnections: mockAllConnections,
+    users: mapConnectionsToUserSearchNodes(mockConnections),
+    indirectUsers: mapConnectionsToUserSearchNodes(mockAllConnections),
   },
 };
