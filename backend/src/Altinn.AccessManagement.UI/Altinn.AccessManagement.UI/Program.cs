@@ -225,6 +225,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();
+    services.AddSingleton<IInstanceService, InstanceService>();
     services.AddSingleton<IAccessPackageService, AccessPackageService>();
     services.AddSingleton<ISystemRegisterService, SystemRegisterService>();
     services.AddSingleton<ISystemUserService, SystemUserService>();
@@ -360,6 +361,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddHttpClient<ISingleRightClient, SingleRightClient>();
+    }
+
+    if (mockSettings.Instance)
+    {
+        services.AddHttpClient<IInstanceClient, InstanceClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IInstanceClient, InstanceClient>();
     }
 
     if (mockSettings.Role)
