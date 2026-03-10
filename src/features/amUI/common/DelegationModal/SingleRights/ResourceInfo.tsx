@@ -57,6 +57,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
     isLoading: isRightsSectionLoading,
     isActionLoading,
     isActionSuccess,
+    rightsMetaTechnicalErrorDetails,
   } = useRightsSection({ resource, onDelegate });
 
   const hasDelegableRights = rights.some((r) => r.delegable);
@@ -123,6 +124,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                 delegationCheckError={delegationCheckError}
                 delegationError={delegationError ?? null}
                 missingAccess={missingAccess}
+                rightsMetaTechnicalErrorDetails={rightsMetaTechnicalErrorDetails}
               />
             </>
           )}

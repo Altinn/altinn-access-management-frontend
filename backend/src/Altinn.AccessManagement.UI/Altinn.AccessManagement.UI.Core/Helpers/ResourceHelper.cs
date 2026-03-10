@@ -92,6 +92,8 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                         Urn = accessPackage.Urn,
                         Description = accessPackage.Description,
                         Name = accessPackage.Name,
+                        IsAssignable = accessPackage.IsAssignable,
+                        IsDelegable = accessPackage.IsDelegable,
                         Resources = ResourceUtils.MapToAccessPackageResourceFE(accessPackage.Resources)
                     });
                 }

@@ -41,6 +41,7 @@ export const ResourceAlert = ({ resource, error, rightReasons, className }: Reso
       <TechnicalErrorParagraphs
         status={error.status}
         time={error.time}
+        additionalContext={resource.identifier ? `resource: ${resource.identifier}` : undefined}
       />
     );
   } else if (rightReasons) {
