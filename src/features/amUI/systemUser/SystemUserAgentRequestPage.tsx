@@ -23,6 +23,7 @@ import { SystemUserPath } from '@/routes/paths';
 import { RightsList } from './components/RightsList/RightsList';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
+import { enableAddSelfToSystemuser } from '@/resources/utils/featureFlagUtils';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
@@ -146,6 +147,10 @@ export const SystemUserAgentRequestPage = () => {
               values={{
                 vendorName: request.system.name,
                 companyName: reporteeData?.name,
+                addSelfInfo:
+                  request.accessPackages.every((p) => p.isDelegable) && enableAddSelfToSystemuser()
+                    ? t('systemuser_agent_request.add_self_possible')
+                    : '',
               }}
             ></Trans>
           </DsParagraph>

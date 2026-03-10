@@ -764,7 +764,8 @@
   "systemuser_agent_request": {
     "page_title": "Approve system access for your clients - Altinn",
     "banner_title": "Approve system access for your clients",
-    "system_description": "Through a system access, <strong>{{vendorName}}</strong> will be granted power of attorney to complete tasks on behalf of <strong>{{companyName}}</strong>'s clients. To complete the setup, clients must be added in Altinn."
+    "system_description": "Through a system access, <strong>{{vendorName}}</strong> will be granted power of attorney to complete tasks on behalf of <strong>{{companyName}}</strong>'s clients. To complete the setup, clients must be added in Altinn. {{addSelfInfo}}",
+    "add_self_possible": "You can also connect your own organization to the system access."
   },
   "systemuser_agent_delegation": {
     "page_title": "System access for client relations - Altinn",
