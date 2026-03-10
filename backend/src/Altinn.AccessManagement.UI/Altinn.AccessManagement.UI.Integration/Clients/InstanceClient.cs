@@ -47,27 +47,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<List<InstancePermission>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
-            StringBuilder endpointBuilder = new StringBuilder($"enduser/connections/resources/instances?party={party}");
-
-            if (from.HasValue)
-            {
-                endpointBuilder.Append($"&from={from}");
-            }
-
-            if (to.HasValue)
-            {
-                endpointBuilder.Append($"&to={to}");
-            }
-
-            if (!string.IsNullOrWhiteSpace(resource))
-            {
-                endpointBuilder.Append($"&resource={Uri.EscapeDataString(resource)}");
-            }
-
-            if (!string.IsNullOrWhiteSpace(instance))
-            {
-                endpointBuilder.Append($"&instance={Uri.EscapeDataString(instance)}");
-            }
+            StringBuilder endpointBuilder = new StringBuilder($"enduser/connections/resources/instances?party={party}&from={from}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}&instance={Uri.EscapeDataString(instance)}");
 
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             HttpResponseMessage response = await _client.GetAsync(token, endpointBuilder.ToString(), languageCode: languageCode);
