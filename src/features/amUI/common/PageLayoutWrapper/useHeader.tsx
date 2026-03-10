@@ -2,7 +2,6 @@ import { getHostUrl, getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { GeneralPath } from '@/routes/paths';
 import { HeaderProps, useAccountSelector } from '@altinn/altinn-components';
 import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/AccountSelector';
-import { GlobalSearchProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/GlobalSearch';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useTranslation } from 'react-i18next';
 import {
@@ -139,13 +138,6 @@ export const useHeader = ({
     },
   });
 
-  const search: GlobalSearchProps = {
-    onSearch: (value: string) => {
-      const encodedValue = encodeURIComponent(value);
-      window.location.href = `${getHostUrl()}sok?q=${encodedValue}`;
-    },
-  };
-
   const accountSelector: AccountSelectorProps = {
     ...accountSelectorData,
     forceOpenFullScreen: shouldOpenAccountMenu,
@@ -165,7 +157,6 @@ export const useHeader = ({
     globalMenu: globalMenu,
     desktopMenu: desktopMenu,
     mobileMenu: mobileMenu,
-    globalSearch: search,
     accountSelector: accountSelector,
   };
   return { header, languageCode };
