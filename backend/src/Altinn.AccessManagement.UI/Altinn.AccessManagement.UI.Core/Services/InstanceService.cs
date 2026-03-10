@@ -29,9 +29,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<InstanceDelegation>> GetInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
+        public async Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
-            List<InstancePermission> instancePermissions = await _instanceClient.GetInstances(languageCode, party, from, to, resource, instance);
+            List<InstancePermission> instancePermissions = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
             List<InstanceDelegation> delegations = new List<InstanceDelegation>();
             OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
 

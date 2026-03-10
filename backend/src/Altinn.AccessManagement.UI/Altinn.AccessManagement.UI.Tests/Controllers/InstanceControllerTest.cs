@@ -464,7 +464,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             var instanceServiceMock = new Mock<IInstanceService>();
             instanceServiceMock
-                .Setup(service => service.GetInstances(It.IsAny<string>(), party, null, null, null, null))
+                .Setup(service => service.GetDelegatedInstances(It.IsAny<string>(), party, null, null, null, null))
                 .ThrowsAsync(new HttpStatusException("StatusError", "Test error", HttpStatusCode.BadGateway, ""));
             HttpClient client = GetTestClient(instanceServiceMock.Object);
 

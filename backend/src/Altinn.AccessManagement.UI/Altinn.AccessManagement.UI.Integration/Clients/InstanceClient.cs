@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<InstancePermission>> GetInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
+        public async Task<List<InstancePermission>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
             StringBuilder endpointBuilder = new StringBuilder($"enduser/connections/resources/instances?party={party}");
 
@@ -72,7 +72,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             HttpResponseMessage response = await _client.GetAsync(token, endpointBuilder.ToString(), languageCode: languageCode);
 
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<InstancePermission>>(response, _logger, "InstanceClient // GetInstances");
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<InstancePermission>>(response, _logger, "InstanceClient // GetDelegatedInstances");
         }
 
         /// <inheritdoc />

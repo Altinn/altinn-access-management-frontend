@@ -50,13 +50,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegation/instances")]
-        public async Task<ActionResult<List<InstanceDelegation>>> GetInstances([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to, [FromQuery] string resource, [FromQuery] string instance)
+        public async Task<ActionResult<List<InstanceDelegation>>> GetDelegatedInstances([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to, [FromQuery] string resource, [FromQuery] string instance)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
 
             try
             {
-                List<InstanceDelegation> delegations = await _instanceService.GetInstances(languageCode, party, from, to, resource, instance);
+                List<InstanceDelegation> delegations = await _instanceService.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
                 return Ok(delegations);
             }
             catch (HttpStatusException statusEx)

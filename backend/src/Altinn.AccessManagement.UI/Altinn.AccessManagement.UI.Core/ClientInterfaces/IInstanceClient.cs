@@ -18,7 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="resource">Optional resource identifier filter.</param>
         /// <param name="instance">Optional instance urn filter.</param>
         /// <returns>A list of delegated instances.</returns>
-        Task<List<InstancePermission>> GetInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance);
+        Task<List<InstancePermission>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance);
 
         /// <summary>
         /// Gets the rights a user can delegate on a specific instance.
