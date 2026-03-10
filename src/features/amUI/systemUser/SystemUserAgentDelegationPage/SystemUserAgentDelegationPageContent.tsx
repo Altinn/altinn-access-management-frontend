@@ -29,6 +29,7 @@ import { CustomerList } from './CustomerList';
 import { useGetIsAdminQuery, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { AddAllCustomers } from './AddAllCustomers';
 import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
+import { enableAddSelfToSystemuser } from '@/resources/utils/featureFlagUtils';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -249,7 +250,8 @@ export const SystemUserAgentDelegationPageContent = ({
   };
 
   const isAllAccessPackagesDelegable = systemUser.accessPackages.every((x) => x.isDelegable);
-  const hasAddSelfPermission = isAdmin && isAllAccessPackagesDelegable;
+  const hasAddSelfPermission =
+    isAdmin && isAllAccessPackagesDelegable && enableAddSelfToSystemuser();
   const isLoadingSelf = isAssigningSelf || isRemovingSelf || isLoadingIsSelfAdded;
   const assignedCustomersList =
     hasAddSelfPermission && (isSelfAdded || assignedCustomers.length > 0)
