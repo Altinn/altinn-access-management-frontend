@@ -29,10 +29,10 @@ export class AktorvalgHeader {
   constructor(page: Page) {
     this.page = page;
     this.infoportalLogo = this.page.getByRole('link', { name: 'Gå til forsiden' });
-    this.searchButton = this.page.getByText('Søk', { exact: true });
+    this.searchButton = this.page.getByText('Søk i Altinn', { exact: true });
     this.menuButton = this.page.getByRole('button', { name: 'Meny', exact: true });
     this.dummy = this.page.getByRole('link', { name: 'Sjekk innboks' });
-    this.searchBar = this.page.getByRole('searchbox', { name: 'Søk på altinn.no' });
+    this.searchBar = this.page.getByRole('searchbox', { name: 'Søk' });
 
     // Menu / Navigation
     this.menuNavigation = this.page.getByRole('navigation', { name: 'Menu' });
@@ -50,7 +50,7 @@ export class AktorvalgHeader {
     this.bokmalLanguageOption = this.page.locator('#no_nb');
     this.addFavoriteButtons = this.page.getByRole('button', { name: 'Legg til i favorittar' });
     this.removeFavoriteButtons = this.page.getByRole('button', { name: 'Fjern frå favorittar' });
-    this.closeMenuButton = this.page.getByRole('button', { name: 'Lukk Meny' });
+    this.closeMenuButton = this.page.getByRole('button', { name: 'Lukk Meny' }); // Todo - denne er ikke lenger klikkbar for Playwright, og ikke veldig tilgjengelig generelt?
     this.deletedActorBadge = this.page.getByText('Slettet');
 
     const actorDetails = this.page
@@ -140,7 +140,6 @@ export class AktorvalgHeader {
     await expect(this.menuProfile).toBeVisible();
     await expect(this.menuLanguage).toBeVisible();
     await expect(this.menuLogout).toBeVisible();
-    await this.closeMenuButton.click();
   }
 
   async clickFavorite() {

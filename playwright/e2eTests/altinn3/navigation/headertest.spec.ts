@@ -53,6 +53,7 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
 
     await test.step('Click Search button', async () => {
+      await aktorvalgHeader.menuButton.click();
       await aktorvalgHeader.clickSearchButton();
     });
 
