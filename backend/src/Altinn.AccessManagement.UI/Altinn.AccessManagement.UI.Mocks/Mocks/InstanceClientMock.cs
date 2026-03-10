@@ -35,8 +35,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
-            string dataPath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
-            IEnumerable<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(dataPath);
+            IEnumerable<InstancePermission> instances = LoadInstancePermissions();
 
             if (from.HasValue)
             {
@@ -66,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
-            if (!string.Equals(instance, "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668", StringComparison.OrdinalIgnoreCase))
+            if (!KnownInstanceExists(instance) || !MockDataExists("DelegationCheck", resource))
             {
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
             }
@@ -87,7 +86,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
-            if (!string.Equals(instance, "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668", StringComparison.OrdinalIgnoreCase))
+            if (!InstanceExists(resource, instance))
             {
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
             }
@@ -100,14 +99,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
-            if (!string.Equals(resource, "app_ttd_a3-app", StringComparison.OrdinalIgnoreCase) ||
-                !string.Equals(instance, "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668", StringComparison.OrdinalIgnoreCase))
+            if (!KnownInstanceExists(instance) || !MockDataExists("GetInstanceRights", resource))
             {
                 throw new HttpStatusException("NotFound", "Instance rights not found", HttpStatusCode.NotFound, "");
             }
 
             string dataPath = Path.Combine(dataFolder, "Instance", "GetInstanceRights", $"{resource}.json");
-            return Task.FromResult(Util.GetMockData<InstanceRight>(dataPath));
+            InstanceRight instanceRights = Util.GetMockData<InstanceRight>(dataPath);
+            return Task.FromResult(instanceRights);
         }
 
         /// <inheritdoc />
@@ -115,7 +114,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
-            if (!string.Equals(instance, "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668", StringComparison.OrdinalIgnoreCase))
+            if (!InstanceExists(resource, instance))
             {
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
             }
@@ -129,6 +128,39 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 throw new Exception();
             }
+        }
+
+        // Keep the shared instance dataset in one place because several mock endpoints
+        // validate against the same mocked list, not just the list endpoint itself.
+        private List<InstancePermission> LoadInstancePermissions()
+        {
+            string dataPath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
+            return Util.GetMockData<List<InstancePermission>>(dataPath);
+        }
+
+        // Used by create/update flows where the mock should only accept an exact
+        // resource + instance combination that exists in the mocked instances list.
+        private bool InstanceExists(string resource, string instance)
+        {
+            return LoadInstancePermissions().Any(permission =>
+                string.Equals(permission.Resource?.RefId, resource, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(permission.Instance?.Urn, instance, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Used by rights/check endpoints because they also support mock-only resource
+        // variants such as null/null-rights files that are not present in the instances list.
+        private bool KnownInstanceExists(string instance)
+        {
+            return LoadInstancePermissions().Any(permission =>
+                string.Equals(permission.Instance?.Urn, instance, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Used to guard file-backed mock endpoints before reading a resource-specific
+        // payload, so missing mock files still return the expected not found/bad request.
+        private bool MockDataExists(string operation, string resource)
+        {
+            string dataPath = Path.Combine(dataFolder, "Instance", operation, $"{resource}.json");
+            return File.Exists(dataPath);
         }
     }
 }

@@ -87,7 +87,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.NotNull(actualResponse);
-            Assert.Equal(2, actualResponse.Count);
+            Assert.Equal(3, actualResponse.Count);
         }
 
         /// <summary>
