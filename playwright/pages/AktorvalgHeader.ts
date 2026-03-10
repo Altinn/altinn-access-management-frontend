@@ -50,7 +50,7 @@ export class AktorvalgHeader {
     this.bokmalLanguageOption = this.page.locator('#no_nb');
     this.addFavoriteButtons = this.page.getByRole('button', { name: 'Legg til i favorittar' });
     this.removeFavoriteButtons = this.page.getByRole('button', { name: 'Fjern frå favorittar' });
-    this.closeMenuButton = this.page.getByRole('button', { name: 'Lukk Meny' }); // Todo - denne er ikke lenger klikkbar for Playwright, og ikke veldig tilgjengelig generelt?
+    this.closeMenuButton = this.page.locator('span', { hasText: 'Meny' });
     this.deletedActorBadge = this.page.getByText('Slettet');
 
     const actorDetails = this.page
@@ -140,6 +140,7 @@ export class AktorvalgHeader {
     await expect(this.menuProfile).toBeVisible();
     await expect(this.menuLanguage).toBeVisible();
     await expect(this.menuLogout).toBeVisible();
+    await expect(this.closeMenuButton).toBeVisible();
   }
 
   async clickFavorite() {
