@@ -52,6 +52,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("delegation/instances")]
         public async Task<ActionResult<List<InstanceDelegation>>> GetDelegatedInstances([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to, [FromQuery] string resource, [FromQuery] string instance)
         {
+            if (!from.HasValue && !to.HasValue)
+            {
+                return BadRequest("Either 'from' or 'to' query parameter must be provided.");
+            }
+
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
 
             try
@@ -150,7 +155,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegation/instances/rights")]
-        public async Task<ActionResult<InstanceRight>> GetInstanceRights(
+        public async Task<ActionResult<InstanceRights>> GetInstanceRights(
             [FromQuery] Guid party,
             [FromQuery] Guid from,
             [FromQuery] Guid to,
@@ -161,7 +166,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                InstanceRight delegations = await _instanceService.GetInstanceRights(languageCode, party, from, to, resource, instance);
+                InstanceRights delegations = await _instanceService.GetInstanceRights(languageCode, party, from, to, resource, instance);
                 return Ok(delegations);
             }
             catch (HttpStatusException ex)

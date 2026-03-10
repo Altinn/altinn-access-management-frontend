@@ -113,22 +113,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: Supports omitting both from and to parameters.
-        /// Expected: Returns all delegated instances.
+        /// Test case: Rejects requests that omit both from and to parameters.
+        /// Expected: Returns bad request.
         /// </summary>
         [Fact]
-        public async Task GetInstances_MissingFromAndTo_ReturnsValid()
+        public async Task GetInstances_MissingFromAndTo_ReturnsBadRequest()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
-            List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(path);
 
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}");
-            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
+            string actualResponse = await httpResponse.Content.ReadFromJsonAsync<string>();
 
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.NotNull(actualResponse);
-            Assert.Equal(expectedResponse.Count, actualResponse.Count);
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+            Assert.Equal("Either 'from' or 'to' query parameter must be provided.", actualResponse);
         }
 
         /// <summary>
@@ -160,7 +157,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetInstances_InternalServerError()
         {
-            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");// Triggers exception in client mock
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
 
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
@@ -255,7 +252,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task DelegationCheck_InternalServerError()
         {
-            string party = "00000000-0000-0000-0000-000000000000";
+            string party = "00000000-0000-0000-0000-000000000000";// Triggers exception in client mock
             string resource = "app_ttd_a3-app";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
 
@@ -278,11 +275,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string resource = "app_ttd_a3-app";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstanceRights", $"{resource}.json");
-            InstanceRight expectedResponse = Util.GetMockData<InstanceRight>(path);
+            InstanceRights expectedResponse = Util.GetMockData<InstanceRights>(path);
 
             HttpResponseMessage httpResponse = await _client.GetAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
-            InstanceRight actualResponse = await httpResponse.Content.ReadFromJsonAsync<InstanceRight>();
+            InstanceRights actualResponse = await httpResponse.Content.ReadFromJsonAsync<InstanceRights>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
@@ -290,7 +287,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         /// Test case: Missing required rights parameters.
-        /// Expected: Returns not found because the mock cannot resolve the missing resource/instance.
+        /// Expected: Returns not found.
         /// </summary>
         [Fact]
         public async Task GetInstanceRights_MissingRequiredParams_ReturnsNotFound()
@@ -310,7 +307,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetInstanceRights_InternalServerError()
         {
-            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000"); // Triggers exception in client mock
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
             string resource = "app_ttd_a3-app";
@@ -352,7 +349,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task DelegateInstanceRights_InternalServerError()
         {
-            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");// Triggers exception in client mock
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
             string resource = "app_ttd_a3-app";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
@@ -461,14 +458,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetInstances_HttpStatusException_ReturnsProblemDetails()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
 
             var instanceServiceMock = new Mock<IInstanceService>();
             instanceServiceMock
-                .Setup(service => service.GetDelegatedInstances(It.IsAny<string>(), party, null, null, null, null))
+                .Setup(service => service.GetDelegatedInstances(It.IsAny<string>(), party, from, null, null, null))
                 .ThrowsAsync(new HttpStatusException("StatusError", "Test error", HttpStatusCode.BadGateway, ""));
             HttpClient client = GetTestClient(instanceServiceMock.Object);
 
-            HttpResponseMessage httpResponse = await client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}");
+            HttpResponseMessage httpResponse = await client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
             ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
 
             Assert.Equal(HttpStatusCode.BadGateway, httpResponse.StatusCode);
@@ -529,7 +527,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task EditInstanceAccess_InternalServerError()
         {
-            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");// Triggers exception in client mock
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
             string resource = "app_ttd_a3-app";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";

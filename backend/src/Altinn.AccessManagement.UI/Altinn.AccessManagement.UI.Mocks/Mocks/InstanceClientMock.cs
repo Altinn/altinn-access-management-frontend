@@ -107,7 +107,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<InstanceRight> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
+        public Task<InstanceRights> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
@@ -124,7 +124,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             try
             {
                 string dataPath = Path.Combine(dataFolder, "Instance", "GetInstanceRights", $"{resource}.json");
-                InstanceRight instanceRights = Util.GetMockData<InstanceRight>(dataPath);
+                InstanceRights instanceRights = Util.GetMockData<InstanceRights>(dataPath);
                 return Task.FromResult(instanceRights);
             }
             catch (FileNotFoundException)

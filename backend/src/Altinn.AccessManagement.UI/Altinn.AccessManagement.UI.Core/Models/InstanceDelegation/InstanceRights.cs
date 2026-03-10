@@ -6,7 +6,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.InstanceDelegation
     /// <summary>
     /// Model representing an instance with its associated rights and permissions.
     /// </summary>
-    public class InstanceRight
+    public class InstanceRights
     {
         /// <summary>
         /// Gets or sets the resource.

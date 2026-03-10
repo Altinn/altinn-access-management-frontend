@@ -237,11 +237,11 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        ///     Assert that two <see cref="InstanceRight" /> have the same property values.
+        ///     Assert that two <see cref="InstanceRights" /> have the same property values.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(InstanceRight expected, InstanceRight actual)
+        public static void AssertEqual(InstanceRights expected, InstanceRights actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -489,21 +489,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Urn, actual.Urn);
-            AssertEqual(expected.Type, actual.Type);
+            Assert.Equal(expected.Type?.Id, actual.Type?.Id);
+            Assert.Equal(expected.Type?.Name, actual.Type?.Name);
         }
 
-        public static void AssertEqual(DelegationInstanceType expected, DelegationInstanceType actual)
-        {
-            if (expected == null)
-            {
-                Assert.Null(actual);
-                return;
-            }
-
-            Assert.NotNull(actual);
-            Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(expected.Name, actual.Name);
-        }
 
         public static void AssertEqual(CompactEntity expected, CompactEntity actual)
         {
