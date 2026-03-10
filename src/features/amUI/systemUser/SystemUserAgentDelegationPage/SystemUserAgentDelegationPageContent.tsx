@@ -254,12 +254,12 @@ export const SystemUserAgentDelegationPageContent = ({
     isAdmin && isAllAccessPackagesDelegable && enableAddSelfToSystemuser();
   const isLoadingSelf = isAssigningSelf || isRemovingSelf || isLoadingIsSelfAdded;
   const assignedCustomersList =
-    hasAddSelfPermission && (isSelfAdded || assignedCustomers.length > 0)
+    hasAddSelfPermission && reporteeData && (isSelfAdded || assignedCustomers.length > 0)
       ? [
           {
-            id: reporteeData?.partyUuid || '',
-            name: reporteeData?.name || '',
-            orgNo: reporteeData?.organizationNumber || '',
+            id: reporteeData.partyUuid,
+            name: reporteeData.name,
+            orgNo: reporteeData.organizationNumber || '',
             access: [],
             isSelfOrg: true,
           },
