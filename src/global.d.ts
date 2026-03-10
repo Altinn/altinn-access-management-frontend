@@ -20,6 +20,7 @@ declare global {
       displayRoles: boolean;
       addAllSystemuserCustomers: boolean;
       enableAddUserByUsername: boolean;
+      enableAddSelfToSystemuser: boolean;
     };
   }
 }
