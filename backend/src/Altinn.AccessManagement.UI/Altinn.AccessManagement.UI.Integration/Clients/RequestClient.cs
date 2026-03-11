@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models.Request;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -33,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="platformSettings"> platform settings configuration</param>
         public RequestClient(
             HttpClient httpClient,
-            ILogger<AccessPackageClient> logger,
+            ILogger<RequestClient> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings)
         {
@@ -46,11 +47,17 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<RequestResourceDto>> GetSingleRightRequests(Guid party, Guid to, Guid from, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<RequestResourceDto>> GetSingleRightRequests(Guid party, Guid from, Guid to, List<RequestStatus> status, CancellationToken cancellationToken)
         {
             try
             {
-                string endpointUrl = $"/enduser/request?party={party}&to={to}&from={from}&status={status}";
+                var queryParams = status?.Select(s => new KeyValuePair<string, string>("status", s.ToString())) ?? [];
+                string endpointUrl = QueryHelpers.AddQueryString("/enduser/request", new Dictionary<string, string>
+                {
+                    { "party", party.ToString() },
+                    { "to", to.ToString() },
+                    { "from", from.ToString() }
+                }.Concat(queryParams));
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.GetAsync(token, endpointUrl);
@@ -93,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"/enduser/sent/withdraw";
+                string endpointUrl = $"/enduser/sent/withdraw?id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.PutAsync(token, endpointUrl, null);

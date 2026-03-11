@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    ///     Mock class for <see cref="IAccessPackageClient"></see> interface
+    ///     Mock class for <see cref="IRequestClient"></see> interface
     /// </summary>
     public class RequestClientMock : IRequestClient
     {
@@ -24,7 +24,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         private readonly string dataFolder;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="AccessManagementClientMock" /> class
+        ///     Initializes a new instance of the <see cref="RequestClientMock" /> class
         /// </summary>
         public RequestClientMock(HttpClient httpClient,
             ILogger<AccessManagementClientMock> logger,
@@ -34,17 +34,19 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<RequestResourceDto>> GetSingleRightRequests(Guid party, Guid to, Guid from, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<RequestResourceDto>> GetSingleRightRequests(Guid party, Guid from, Guid to, List<RequestStatus> status, CancellationToken cancellationToken)
         {
             string dataPath = Path.Combine(dataFolder, "Request", "requests.json");
             return await Task.FromResult(Util.GetMockData<PaginatedResult<RequestResourceDto>>(dataPath));
         }
 
+        /// <inheritdoc />
         public async Task<bool> CreateSingleRightRequest(Guid party, CreateRequestInput payload, CancellationToken cancellationToken)
         {
             return await Task.FromResult(true);
         }
 
+        /// <inheritdoc />
         public async Task<bool> WithdrawSingleRightRequest(Guid id, CancellationToken cancellationToken)
         {
             return await Task.FromResult(true);

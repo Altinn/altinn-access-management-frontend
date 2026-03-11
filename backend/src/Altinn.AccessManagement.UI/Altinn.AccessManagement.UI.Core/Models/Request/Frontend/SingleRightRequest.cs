@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.Request;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
 {

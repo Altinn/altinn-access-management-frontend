@@ -28,9 +28,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<SingleRightRequest>> GetSingleRightRequests(Guid party, Guid to, Guid from, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<IEnumerable<SingleRightRequest>> GetSingleRightRequests(Guid party, Guid from, Guid to, List<RequestStatus> status, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSingleRightRequests(party, to, from, status, cancellationToken);
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSingleRightRequests(party, from, to, status, cancellationToken);
             return response.Items.Select(x =>
             {
                 return new SingleRightRequest()

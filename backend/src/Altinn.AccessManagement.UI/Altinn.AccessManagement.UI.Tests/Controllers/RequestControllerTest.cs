@@ -43,7 +43,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IEnumerable<SingleRightRequest> expectedResponse = Util.GetMockData<IEnumerable<SingleRightRequest>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request?party={toParty}&to={toParty}&from={fromParty}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request?party={toParty}&from={fromParty}&to={toParty}");
             IEnumerable<SingleRightRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<SingleRightRequest>>();
 
             // Assert
@@ -73,8 +73,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: CreateSingleRightRequest checks single right request is created
-        ///     Expected: CreateSingleRightRequest returns true
+        ///     Test case: WithdrawSingleRightRequest_ReturnsTrue checks single right request is withdrawn
+        ///     Expected: WithdrawSingleRightRequest_ReturnsTrue returns true
         /// </summary>
         [Fact]
         public async Task WithdrawSingleRightRequest_ReturnsTrue()
