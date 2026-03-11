@@ -223,4 +223,36 @@ describe('mapPermissionsToUserSearchNodes', () => {
     expect(childConn?.isInherited).toBe(true);
     expect(parentConn?.isInherited).toBe(false);
   });
+
+  it('keeps a direct self child when a node already has inherited children and the direct role is null', () => {
+    const parent = org('456', 'Parent 6');
+    const child = person('person6', 'Person 6');
+    const permissions = [
+      {
+        from: org('123', '123'),
+        to: child,
+        via: parent,
+        role: null,
+        viaRole: role('v2', 'styreleder'),
+      },
+      {
+        from: org('123', '123'),
+        to: parent,
+        via: null,
+        role: null,
+        viaRole: null,
+      },
+    ];
+
+    const res = run(permissions);
+    const parentConn = res.find((node) => node.id === '456');
+    const selfChild = parentConn?.children?.find((node) => node.id === '456');
+    const inheritedChild = parentConn?.children?.find((node) => node.id === 'person6');
+
+    expect(parentConn).toBeTruthy();
+    expect(selfChild).toBeTruthy();
+    expect(selfChild?.isInherited).toBe(false);
+    expect(selfChild?.roles).toEqual([]);
+    expect(inheritedChild?.isInherited).toBe(true);
+  });
 });
