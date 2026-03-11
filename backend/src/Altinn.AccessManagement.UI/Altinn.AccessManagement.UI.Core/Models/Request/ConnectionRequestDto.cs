@@ -40,14 +40,4 @@ public class PartyEntityDto
     /// SubType of entity (e.g. for organization: AS, ENK, DA)
     /// </summary>
     public string SubType { get; set; }
-
-    /// <summary>
-    /// OrganizationIdentifier
-    /// </summary>
-    public string? OrganizationIdentifier { get; set; }
-
-    /// <summary>
-    /// PersonIdentifier
-    /// </summary>
-    public string? PersonIdentifier { get; set; }
 }
