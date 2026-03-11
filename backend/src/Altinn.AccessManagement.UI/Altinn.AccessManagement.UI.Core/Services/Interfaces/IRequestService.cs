@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Get all requests for a party (as sender or receiver)
         /// </summary>
-        /// <param name="party">The party that is performing the edit</param>
+        /// <param name="party">The acting party asking for requests</param>
         /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
         /// <param name="to">The right holder that has been granted access to the resource.</param>
         /// <param name="status">The statuses to get</param>
@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Creates a new single right request
         /// </summary>
-        /// <param name="party">The party that is performing the edit</param>
+        /// <param name="party">The acting party creating the request</param>
         /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
         /// <param name="to">The right holder that has been granted access to the resource.</param>
         /// <param name="resource">The resource to request</param>
@@ -33,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Withdraw a single right request by id
         /// </summary>
-        /// <param name="id">The party that is performing the edit</param>
+        /// <param name="id">The acting party withdrawing the request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The http response from backend</returns>
         Task<bool> WithdrawSingleRightRequest(Guid id, CancellationToken cancellationToken);

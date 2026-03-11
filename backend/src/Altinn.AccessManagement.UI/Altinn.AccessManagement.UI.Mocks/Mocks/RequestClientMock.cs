@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         ///     Initializes a new instance of the <see cref="RequestClientMock" /> class
         /// </summary>
         public RequestClientMock(HttpClient httpClient,
-            ILogger<AccessManagementClientMock> logger,
+            ILogger<RequestClientMock> logger,
             IHttpContextAccessor httpContextAccessor)
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
