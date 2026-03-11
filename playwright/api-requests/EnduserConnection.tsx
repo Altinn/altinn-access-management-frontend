@@ -318,7 +318,7 @@ export class EnduserConnection {
     });
 
     if (!response.ok) {
-      console.warn(
+      throw new Error(
         `Failed to fetch status for deleteConnectionPackagePerson request. Status: ${response.status}`,
       );
     }
