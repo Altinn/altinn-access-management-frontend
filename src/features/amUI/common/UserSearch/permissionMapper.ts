@@ -27,8 +27,7 @@ export const mapPermissionsToUserSearchNodes = (
     return [];
   }
 
-  const hasViaEntity = (permission: Permissions): permission is Permissions & { via: Entity } =>
-    permission.via != null;
+  const hasViaEntity = (permission: Permissions) => permission.via != null;
 
   const nodes: UserSearchNode[] = [];
   const sortedPermissions = [...permissions].sort((a, b) => {
