@@ -41,7 +41,7 @@ describe('mapPermissionsToUserSearchNodes', () => {
   });
 
   it("does NOT mark party with only 'rettighetshaver' role as inherited", () => {
-    const target = org('org1', 'Org 1');
+    const target = org('456', 'Org 1');
     const permissions = [
       {
         from: org('123', '123'),
@@ -55,9 +55,43 @@ describe('mapPermissionsToUserSearchNodes', () => {
     const res = run(permissions);
 
     expect(res).toHaveLength(1);
-    expect(res[0].id).toBe('org1');
+    expect(res[0].id).toBe('456');
     expect(res[0].isInherited).toBe(false);
     expect(res[0].roles.map((r) => r.code)).toEqual(['rettighetshaver']);
+  });
+
+  it('does NOT mark party as inherited when only the selected from-party differs', () => {
+    const target = org('456', 'Org 1');
+    const permissions = [
+      {
+        from: org('123', '123'),
+        to: target,
+        via: null,
+        role: role('r1b', 'rettighetshaver'),
+        viaRole: null,
+      },
+    ];
+
+    const res = run(permissions, { fromPartyUuid: 'diff' });
+
+    expect(res[0].isInherited).toBe(false);
+  });
+
+  it('does NOT mark party as inherited when only the selected to-party differs', () => {
+    const target = org('456', 'Org 1');
+    const permissions = [
+      {
+        from: org('123', '123'),
+        to: target,
+        via: null,
+        role: role('r1c', 'rettighetshaver'),
+        viaRole: null,
+      },
+    ];
+
+    const res = run(permissions, { toPartyUuid: 'diff' });
+
+    expect(res[0].isInherited).toBe(false);
   });
 
   it('marks party as inherited when it has a non-excluded direct role', () => {
@@ -77,8 +111,8 @@ describe('mapPermissionsToUserSearchNodes', () => {
     expect(res[0].isInherited).toBe(true);
   });
 
-  it('marks permission as inherited when it is not between the selected parties', () => {
-    const target = org('org2b', 'Org 2B');
+  it('marks permission as inherited when both selected parties differ', () => {
+    const target = org('456', 'Org 2B');
     const permissions = [
       {
         from: org('123', '123'),
