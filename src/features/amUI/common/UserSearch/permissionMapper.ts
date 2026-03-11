@@ -11,6 +11,7 @@ const mapEntityToUserSearchNode = (entity: Entity, isInherited: boolean): UserSe
   variant: entity.variant,
   partyId: entity.partyId,
   organizationIdentifier: entity.organizationIdentifier,
+  isDeleted: entity.isDeleted ?? undefined,
   dateOfBirth: entity.dateOfBirth,
   sortKey: buildSortKey(entity.name),
   roles: [],
@@ -26,10 +27,13 @@ export const mapPermissionsToUserSearchNodes = (
     return [];
   }
 
+  const hasViaEntity = (permission: Permissions): permission is Permissions & { via: Entity } =>
+    permission.via != null;
+
   const nodes: UserSearchNode[] = [];
   const sortedPermissions = [...permissions].sort((a, b) => {
-    if ((a.via || a.viaRole) && !(b.via || b.viaRole)) return -1;
-    if ((b.via || b.viaRole) && !(a.via || a.viaRole)) return 1;
+    if (hasViaEntity(a) && !hasViaEntity(b)) return -1;
+    if (hasViaEntity(b) && !hasViaEntity(a)) return 1;
     return 0;
   });
 
@@ -37,15 +41,12 @@ export const mapPermissionsToUserSearchNodes = (
     if (toPartyUuid !== to.id && fromPartyUuid !== from.id) {
       return true;
     }
-
     if (role && role.code !== 'rettighetshaver') {
       return true;
     }
-
-    if (via || viaRole) {
+    if (via != null || viaRole != null) {
       return true;
     }
-
     return false;
   };
 
@@ -83,7 +84,7 @@ export const mapPermissionsToUserSearchNodes = (
   for (const permission of sortedPermissions) {
     const inherited = isInherited(permission);
 
-    if (permission.via) {
+    if (hasViaEntity(permission)) {
       const viaNode = getOrCreateTopLevelPermissionNode(permission.via, false);
       const child = getOrCreateChildPermissionNode(viaNode, permission.to, inherited);
 

@@ -11,7 +11,7 @@ export interface ReasonItem {
 export interface Permissions {
   to: Entity;
   from: Entity;
-  via: Entity;
+  via: Entity | null;
   role: CompactRole | null;
   viaRole: CompactRole | null;
   reason: Reason;
