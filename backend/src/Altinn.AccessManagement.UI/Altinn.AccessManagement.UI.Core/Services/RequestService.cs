@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<bool> CreateSingleRightRequest(Guid party, Guid to, Guid from, string resource, CancellationToken cancellationToken)
+        public async Task<bool> CreateSingleRightRequest(Guid party, Guid from, Guid to, string resource, CancellationToken cancellationToken)
         {
             CreateRequestInput payload = new()
             {
