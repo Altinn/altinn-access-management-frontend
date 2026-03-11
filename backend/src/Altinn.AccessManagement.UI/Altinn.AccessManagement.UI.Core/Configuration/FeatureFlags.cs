@@ -95,5 +95,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to enable adding own organization to agent system user is enabled
         /// </summary>
         public bool EnableAddSelfToSystemuser { get; set; }
+        
+        /// <summary>
+        /// Whether to enable request access
+        /// </summary>
+        public bool EnableRequestAccess { get; set; }
     }
 }
