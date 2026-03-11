@@ -100,7 +100,7 @@ export const mapPermissionsToUserSearchNodes = (
       addRole(topLevelNode, permission.role.id, permission.role.code);
     }
 
-    // If inherited entries already exist under this node, keep direct entries in that same group.
+    // If inherited entries already exist under this node, add the direct entry as a child as well (for concistent UI)
     if ((topLevelNode.children?.length ?? 0) > 0) {
       const child = getOrCreateChildPermissionNode(topLevelNode, permission.to, inherited);
 
