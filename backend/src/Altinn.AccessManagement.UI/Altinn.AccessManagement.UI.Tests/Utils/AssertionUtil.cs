@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
+using Altinn.AccessManagement.UI.Core.Models.Request.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
@@ -957,6 +958,18 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
+        }
+
+        public static void AssertEqual(SingleRightRequest expected, SingleRightRequest actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.From.Id, actual.From.Id);
+            Assert.Equal(expected.To.Id, actual.To.Id);
+            Assert.Equal(expected.ResourceId, actual.ResourceId);
+            Assert.Equal(expected.RequestType, actual.RequestType);
         }
 
         private static void AssertEqual(Provider expected, Provider actual)
