@@ -15,7 +15,7 @@ import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { ActionError } from '@/resources/hooks/useActionError';
 import { DelegateErrorAlert } from './DelegateErrorAlert';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
-import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/mappers';
+import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
 import type { UserSearchActionUser } from '../common/UserSearch/types';
 
 const mapUserToParty = (user: UserSearchActionUser): Party => ({

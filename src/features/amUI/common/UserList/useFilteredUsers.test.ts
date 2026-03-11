@@ -5,7 +5,7 @@ import type { ExtendedUser } from '@/rtk/features/userInfoApi';
 
 import { useFilteredUsers } from './useFilteredUsers';
 import { Connection } from '@/rtk/features/connectionApi';
-import { mapConnectionsToUserSearchNodes } from '../UserSearch/mappers';
+import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
 
 const mockConnections: Connection[] = [
   {

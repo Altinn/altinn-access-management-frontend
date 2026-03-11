@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { Permissions } from '@/dataObjects/dtos/accessPackage';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/mappers';
+import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import type { UserSearchNode } from '../common/UserSearch/types';
 
 export const isInherited = (p: Permissions, toPartyUuid: string, fromPartyUuid: string) => {

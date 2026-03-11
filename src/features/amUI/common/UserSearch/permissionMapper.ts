@@ -1,0 +1,111 @@
+import type { Permissions } from '@/dataObjects/dtos/accessPackage';
+import type { Entity } from '@/dataObjects/dtos/Common';
+
+import { addRole, buildSortKey, normalizeType } from './mapperUtils';
+import type { UserSearchNode } from './types';
+
+const mapEntityToUserSearchNode = (entity: Entity, isInherited: boolean): UserSearchNode => ({
+  id: entity.id,
+  name: entity.name,
+  type: normalizeType(entity.type),
+  variant: entity.variant,
+  partyId: entity.partyId,
+  organizationIdentifier: entity.organizationIdentifier,
+  dateOfBirth: entity.dateOfBirth,
+  sortKey: buildSortKey(entity.name),
+  roles: [],
+  children: null,
+  isInherited,
+});
+
+export const mapPermissionsToUserSearchNodes = (
+  permissions?: Permissions[],
+  { toPartyUuid = '', fromPartyUuid = '' }: { toPartyUuid?: string; fromPartyUuid?: string } = {},
+): UserSearchNode[] => {
+  if (!permissions?.length) {
+    return [];
+  }
+
+  const nodes: UserSearchNode[] = [];
+  const sortedPermissions = [...permissions].sort((a, b) => {
+    if ((a.via || a.viaRole) && !(b.via || b.viaRole)) return -1;
+    if ((b.via || b.viaRole) && !(a.via || a.viaRole)) return 1;
+    return 0;
+  });
+
+  const isInherited = ({ to, from, role, via, viaRole }: Permissions) => {
+    if (toPartyUuid !== to.id && fromPartyUuid !== from.id) {
+      return true;
+    }
+
+    if (role && role.code !== 'rettighetshaver') {
+      return true;
+    }
+
+    if (via || viaRole) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const getOrCreateTopLevelPermissionNode = (entity: Entity, inherited: boolean) => {
+    const existingNode = nodes.find((node) => node.id === entity.id);
+
+    if (existingNode) {
+      existingNode.isInherited = existingNode.isInherited || inherited;
+      return existingNode;
+    }
+
+    const newNode = mapEntityToUserSearchNode(entity, inherited);
+    nodes.push(newNode);
+    return newNode;
+  };
+
+  const getOrCreateChildPermissionNode = (
+    parent: UserSearchNode,
+    entity: Entity,
+    inherited: boolean,
+  ) => {
+    const children = parent.children ?? [];
+    const existingChild = children.find((child) => child.id === entity.id);
+
+    if (existingChild) {
+      existingChild.isInherited = existingChild.isInherited || inherited;
+      return existingChild;
+    }
+
+    const newChild = mapEntityToUserSearchNode(entity, inherited);
+    parent.children = [newChild, ...children];
+    return newChild;
+  };
+
+  for (const permission of sortedPermissions) {
+    const inherited = isInherited(permission);
+
+    if (permission.via) {
+      const viaNode = getOrCreateTopLevelPermissionNode(permission.via, false);
+      const child = getOrCreateChildPermissionNode(viaNode, permission.to, inherited);
+
+      if (permission.viaRole) {
+        addRole(child, permission.viaRole.id, permission.viaRole.code, permission.via);
+      }
+
+      continue;
+    }
+
+    const topLevelNode = getOrCreateTopLevelPermissionNode(permission.to, inherited);
+
+    if (permission.role) {
+      addRole(topLevelNode, permission.role.id, permission.role.code);
+    }
+
+    // If inherited entries already exist under this node, keep direct roles in that same group.
+    if ((topLevelNode.children?.length ?? 0) > 0 && permission.role) {
+      const child = getOrCreateChildPermissionNode(topLevelNode, permission.to, inherited);
+      addRole(child, permission.role.id, permission.role.code);
+    }
+  }
+
+  return nodes;
+};

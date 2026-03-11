@@ -8,7 +8,7 @@ import { type Connection } from '@/rtk/features/connectionApi';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
 import { SelectRoleFilter } from './SelectRoleFilter';
 import classes from './ClientAdministrationAgentsTab.module.css';
-import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/mappers';
+import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
 
 const buildClientConnections = (clients?: Client[]): Connection[] => {
   if (!clients?.length) return [];

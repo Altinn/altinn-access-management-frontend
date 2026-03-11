@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import store from '@/rtk/app/store';
 import { Connection } from '@/rtk/features/connectionApi';
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { mapConnectionsToUserSearchNodes } from './mappers';
+import { mapConnectionsToUserSearchNodes } from './connectionMapper';
 
 const mockAllConnections: Connection[] = [
   {

@@ -9,7 +9,7 @@ import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connect
 import classes from './ClientAdministrationAgentsTab.module.css';
 import { useNavigate } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/mappers';
+import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
 
 type ClientAdministrationAgentsTabProps = {
   isActive: boolean;

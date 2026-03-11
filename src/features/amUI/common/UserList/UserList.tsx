@@ -11,7 +11,7 @@ import { SkeletonUserList } from './SkeletonUserList';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserListActions } from './UserListActions';
 import { Connection } from '@/rtk/features/connectionApi';
-import { mapConnectionsToUserSearchNodes } from '../UserSearch/mappers';
+import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
 
 export interface UserListProps {
   connections?: Connection[];
