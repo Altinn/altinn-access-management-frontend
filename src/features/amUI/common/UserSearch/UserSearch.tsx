@@ -12,17 +12,17 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
 import { UserSearchResults, titleAsType } from './UserSearchResults';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import type { UserSearchActionUser, UserSearchNode } from './types';
+import type { UserActionTarget, UserSearchNode } from './types';
 
 export interface UserSearchProps {
   includeSelfAsChild: boolean;
   includeSelfAsChildOnIndirect?: boolean;
   users?: UserSearchNode[];
   indirectUsers?: UserSearchNode[];
-  getUserLink?: (user: UserSearchActionUser) => string;
-  onDelegate?: (user: UserSearchActionUser) => void;
+  getUserLink?: (user: UserActionTarget) => string;
+  onDelegate?: (user: UserActionTarget) => void;
   onAddNewUser?: (user: User) => void;
-  onRevoke?: (user: UserSearchActionUser) => void;
+  onRevoke?: (user: UserActionTarget) => void;
   isLoading?: boolean;
   isActionLoading?: boolean;
   canDelegate?: boolean;

@@ -16,10 +16,10 @@ import { DelegateErrorAlert } from './DelegateErrorAlert';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
-import type { UserSearchActionUser } from '../common/UserSearch/types';
+import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
-const mapUserToParty = (user: UserSearchActionUser): Party => ({
+const mapUserToParty = (user: UserActionTarget): Party => ({
   partyId: 0,
   partyUuid: user.id,
   name: user.name,
@@ -123,7 +123,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     onDelegateError: handleDelegateError,
   });
 
-  const handleOnDelegate = (user: UserSearchActionUser) => {
+  const handleOnDelegate = (user: UserActionTarget) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
       setDelegateActionError(null);
@@ -131,7 +131,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     }
   };
 
-  const handleOnRevoke = (user: UserSearchActionUser) => {
+  const handleOnRevoke = (user: UserActionTarget) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
       onRevoke(accessPackage, toParty);

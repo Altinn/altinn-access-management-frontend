@@ -9,7 +9,7 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './UserSearch.module.css';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
-import type { UserSearchActionUser, UserSearchNode } from './types';
+import type { UserActionTarget, UserSearchNode } from './types';
 
 export type titleAsType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
 
@@ -18,12 +18,12 @@ export interface UserSearchResultsProps {
   hasNextPage: boolean;
   goNextPage: () => void;
   availableAction: DelegationAction;
-  onRevoke?: (user: UserSearchActionUser) => void;
-  onDelegate?: (user: UserSearchActionUser) => void;
+  onRevoke?: (user: UserActionTarget) => void;
+  onDelegate?: (user: UserActionTarget) => void;
   isActionLoading?: boolean;
   includeSelfAsChild?: boolean;
   delegateLabel?: string;
-  getUserLink?: (user: UserSearchActionUser) => string;
+  getUserLink?: (user: UserActionTarget) => string;
   titleAs?: titleAsType;
 }
 
