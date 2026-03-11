@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
-import { AdvancedUserSearch } from '../common/AdvancedUserSearch/AdvancedUserSearch';
-import { useAddAgentMutation, useGetAgentsQuery, type Agent } from '@/rtk/features/clientApi';
-import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
+import { UserSearch } from '../common/UserSearch/UserSearch';
+import { useAddAgentMutation, useGetAgentsQuery } from '@/rtk/features/clientApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import classes from './ClientAdministrationAgentsTab.module.css';
 import { useNavigate } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
 
 type ClientAdministrationAgentsTabProps = {
   isActive: boolean;
@@ -39,29 +40,32 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
     { skip: !isActive || !fromParty?.partyUuid },
   );
 
-  const filteredIndirectConnections = useMemo<Connection[]>(
+  const users = useMemo(
     () =>
-      indirectConnections?.filter((connection) => {
-        return connection.party.type === 'Person';
-      }) ?? [],
-    [indirectConnections],
-  );
-
-  const agentConnections = useMemo<Connection[]>(
-    () =>
-      agents?.map((agent) => ({
-        party: {
-          ...agent.agent,
-          children: null,
-          parent: null,
-          addedAt: agent.agentAddedAt,
-          isDeleted: agent.agent.isDeleted ?? undefined,
+      mapConnectionsToUserSearchNodes(
+        agents?.map((agent) => ({
+          party: {
+            ...agent.agent,
+            children: null,
+            parent: null,
+            addedAt: agent.agentAddedAt,
+            isDeleted: agent.agent.isDeleted ?? undefined,
+            roles: [],
+          },
           roles: [],
-        },
-        roles: [],
-        connections: [],
-      })) ?? [],
+          connections: [],
+        })) ?? [],
+      ),
     [agents],
+  );
+  const indirectUsers = useMemo(
+    () =>
+      mapConnectionsToUserSearchNodes(
+        indirectConnections?.filter((connection) => {
+          return connection.party.type === 'Person';
+        }) ?? [],
+      ),
+    [indirectConnections],
   );
 
   const handleAddAgent = (userId: string) => {
@@ -95,11 +99,11 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
 
   return (
     <div className={classes.agentTabContainer}>
-      <AdvancedUserSearch
+      <UserSearch
         includeSelfAsChild={false}
         includeSelfAsChildOnIndirect={false}
-        connections={agentConnections}
-        indirectConnections={filteredIndirectConnections}
+        users={users}
+        indirectUsers={indirectUsers}
         getUserLink={(user) => `/clientadministration/agent/${user.id}`}
         onAddNewUser={(user) => navigate(`/clientadministration/agent/${user.id}`)}
         isLoading={isAgentsLoading || isIndirectLoading}

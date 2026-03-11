@@ -3,20 +3,23 @@ import { useMemo, useState } from 'react';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { type User, PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { Party } from '@/rtk/features/lookupApi';
-import AdvancedUserSearch from '../common/AdvancedUserSearch/AdvancedUserSearch';
+import UserSearch from '../common/UserSearch/UserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { usePackagePermissionConnections } from './usePackagePermissionConnections';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { ActionError } from '@/resources/hooks/useActionError';
 import { DelegateErrorAlert } from './DelegateErrorAlert';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
+import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
+import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
+import type { UserActionTarget } from '../common/UserSearch/types';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
-const mapUserToParty = (user: User): Party => ({
+const mapUserToParty = (user: UserActionTarget): Party => ({
   partyId: 0,
   partyUuid: user.id,
   name: user.name,
@@ -26,14 +29,14 @@ const mapUserToParty = (user: User): Party => ({
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;
-  fromParty?: { partyUuid?: string; name?: string } | null;
   isLoading: boolean;
   isFetching: boolean;
   onDelegateError?: (errorInfo: ActionError) => void;
 }
 
-export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: UsersTabProps) => {
+export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
+  const { fromParty, toParty } = usePartyRepresentation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
@@ -62,7 +65,18 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     },
   );
 
-  const connections = usePackagePermissionConnections(accessPackage);
+  const users = useMemo(
+    () =>
+      mapPermissionsToUserSearchNodes(accessPackage?.permissions, {
+        toPartyUuid: toParty?.partyUuid,
+        fromPartyUuid: fromParty?.partyUuid,
+      }),
+    [accessPackage?.permissions, toParty?.partyUuid, fromParty?.partyUuid],
+  );
+  const indirectUsers = useMemo(
+    () => mapConnectionsToUserSearchNodes(indirectConnections),
+    [indirectConnections],
+  );
 
   const formatToPartyName = (party: Party) => {
     return formatDisplayName({
@@ -109,7 +123,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     onDelegateError: handleDelegateError,
   });
 
-  const handleOnDelegate = (user: User) => {
+  const handleOnDelegate = (user: UserActionTarget) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
       setDelegateActionError(null);
@@ -117,7 +131,7 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     }
   };
 
-  const handleOnRevoke = (user: User) => {
+  const handleOnRevoke = (user: UserActionTarget) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
       onRevoke(accessPackage, toParty);
@@ -143,10 +157,10 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
         />
       )}
 
-      <AdvancedUserSearch
+      <UserSearch
         includeSelfAsChild={false}
-        connections={connections}
-        indirectConnections={indirectConnections}
+        users={users}
+        indirectUsers={indirectUsers}
         isLoading={
           isLoading ||
           loadingIndirectConnections ||

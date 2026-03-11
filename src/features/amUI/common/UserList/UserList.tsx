@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
@@ -10,6 +11,7 @@ import { SkeletonUserList } from './SkeletonUserList';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserListActions } from './UserListActions';
 import { Connection } from '@/rtk/features/connectionApi';
+import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
 
 export interface UserListProps {
   connections?: Connection[];
@@ -41,8 +43,9 @@ export const UserList = ({
   onRevoke,
 }: UserListProps) => {
   const { t } = useTranslation();
+  const mappedUsers = useMemo(() => mapConnectionsToUserSearchNodes(connections), [connections]);
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
-    connections: connections,
+    users: mappedUsers,
     searchString,
   });
 
