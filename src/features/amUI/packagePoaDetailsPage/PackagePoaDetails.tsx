@@ -94,7 +94,6 @@ export const PackagePoaDetails = () => {
           <div className={pageClasses.innerTabContent}>
             <UsersTab
               accessPackage={accessPackage}
-              fromParty={fromParty}
               isLoading={isLoading}
               isFetching={isFetching}
             />

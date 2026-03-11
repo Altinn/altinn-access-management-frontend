@@ -9,14 +9,15 @@ import { Party } from '@/rtk/features/lookupApi';
 import UserSearch from '../common/UserSearch/UserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { usePackageSearchUsers } from './usePackageSearchUsers';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { ActionError } from '@/resources/hooks/useActionError';
 import { DelegateErrorAlert } from './DelegateErrorAlert';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
+import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import type { UserSearchActionUser } from '../common/UserSearch/types';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 const mapUserToParty = (user: UserSearchActionUser): Party => ({
   partyId: 0,
@@ -28,14 +29,14 @@ const mapUserToParty = (user: UserSearchActionUser): Party => ({
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;
-  fromParty?: { partyUuid?: string; name?: string } | null;
   isLoading: boolean;
   isFetching: boolean;
   onDelegateError?: (errorInfo: ActionError) => void;
 }
 
-export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: UsersTabProps) => {
+export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
+  const { fromParty, toParty } = usePartyRepresentation();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
@@ -64,7 +65,14 @@ export const UsersTab = ({ accessPackage, fromParty, isLoading, isFetching }: Us
     },
   );
 
-  const users = usePackageSearchUsers(accessPackage);
+  const users = useMemo(
+    () =>
+      mapPermissionsToUserSearchNodes(accessPackage?.permissions, {
+        toPartyUuid: toParty?.partyUuid,
+        fromPartyUuid: fromParty?.partyUuid,
+      }),
+    [accessPackage?.permissions, toParty?.partyUuid, fromParty?.partyUuid],
+  );
   const indirectUsers = useMemo(
     () => mapConnectionsToUserSearchNodes(indirectConnections),
     [indirectConnections],

@@ -1,38 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { renderHook } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 
-import { usePackageSearchUsers } from './usePackageSearchUsers';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { PartyRepresentationContextOutput } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { Party } from '@/rtk/features/lookupApi';
-
-const usePartyRepresentationMock = vi.fn<() => PartyRepresentationContextOutput>();
-
-vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({
-  usePartyRepresentation: () => usePartyRepresentationMock(),
-}));
-
-const setPartyContext = ({
-  fromPartyUuid = '123',
-  toPartyUuid = '456',
-}: {
-  fromPartyUuid?: string;
-  toPartyUuid?: string;
-} = {}) =>
-  usePartyRepresentationMock.mockReturnValue({
-    fromParty: fromPartyUuid ? ({ partyUuid: fromPartyUuid } as Party) : undefined,
-    toParty: toPartyUuid ? ({ partyUuid: toPartyUuid } as Party) : undefined,
-  });
-
-// Minimal AccessPackage shape for the tests (augment if underlying type changes)
-const basePkg: Partial<AccessPackage> = {
-  id: 'pkg-1',
-  urn: 'urn:altinn:accesspackage:test',
-  name: 'Test Package',
-  isAssignable: true,
-  description: 'Test',
-  resources: [],
-};
+import { mapPermissionsToUserSearchNodes } from './permissionMapper';
 
 const org = (id: string, name: string) => ({
   id,
@@ -40,43 +8,33 @@ const org = (id: string, name: string) => ({
   type: 'Organisasjon',
   variant: 'AS',
   organizationIdentifier: '123456789',
-  partyId: 'pid-' + id,
+  partyId: `pid-${id}`,
   dateOfBirth: '1990-01-01',
   parent: null,
   children: null,
 });
+
 const person = (id: string, name: string) => ({
   id,
   name,
   type: 'Person',
   variant: 'Person',
   organizationIdentifier: '123456789',
-  partyId: 'pid-' + id,
+  partyId: `pid-${id}`,
   dateOfBirth: '1990-01-01',
   parent: null,
   children: null,
 });
+
 const role = (id: string, code: string) => ({ id, code, children: null });
 
-/**
- * Helper to run the hook with given permissions and party context.
- */
-const run = (
-  permissions: any[],
-  partyContext?: { fromPartyUuid?: string; toPartyUuid?: string },
-) => {
-  if (partyContext) setPartyContext(partyContext);
-  const pkg = { ...basePkg, permissions } as AccessPackage;
-  const { result } = renderHook(() => usePackageSearchUsers(pkg));
-  return result.current;
-};
+const run = (permissions: any[], partyContext?: { fromPartyUuid?: string; toPartyUuid?: string }) =>
+  mapPermissionsToUserSearchNodes(permissions, {
+    fromPartyUuid: partyContext?.fromPartyUuid ?? '123',
+    toPartyUuid: partyContext?.toPartyUuid ?? '456',
+  });
 
-beforeEach(() => {
-  usePartyRepresentationMock.mockReset();
-  setPartyContext();
-});
-
-describe('usePackageSearchUsers', () => {
+describe('mapPermissionsToUserSearchNodes', () => {
   it('returns empty array when no permissions', () => {
     const res = run([]);
     expect(res).toEqual([]);
@@ -93,10 +51,12 @@ describe('usePackageSearchUsers', () => {
         viaRole: null,
       },
     ];
+
     const res = run(permissions);
+
     expect(res).toHaveLength(1);
     expect(res[0].id).toBe('org1');
-    expect(res[0].isInherited).toBe(false); // excluded role should not set inherited
+    expect(res[0].isInherited).toBe(false);
     expect(res[0].roles.map((r) => r.code)).toEqual(['rettighetshaver']);
   });
 
@@ -111,7 +71,9 @@ describe('usePackageSearchUsers', () => {
         viaRole: null,
       },
     ];
+
     const res = run(permissions);
+
     expect(res[0].isInherited).toBe(true);
   });
 
@@ -126,7 +88,9 @@ describe('usePackageSearchUsers', () => {
         viaRole: null,
       },
     ];
+
     const res = run(permissions, { fromPartyUuid: 'other', toPartyUuid: 'else' });
+
     expect(res[0].isInherited).toBe(true);
   });
 
@@ -142,15 +106,15 @@ describe('usePackageSearchUsers', () => {
         viaRole: role('vr1', 'daglig-leder'),
       },
     ];
+
     const res = run(permissions);
-    // parent root connection
     const parentConn = res.find((c) => c.id === 'parent1');
+    const childConn = parentConn?.children?.find((c) => c.id === 'person1');
+
     expect(parentConn).toBeTruthy();
-    // child connection under parent
-    const childConn = parentConn!.children?.find((c) => c.id === 'person1');
     expect(childConn).toBeTruthy();
-    expect(childConn!.isInherited).toBe(true); // because of viaRole daglig-leder
-    expect(parentConn!.isInherited).toBe(false); // parent received no non-excluded role itself
+    expect(childConn?.isInherited).toBe(true);
+    expect(parentConn?.isInherited).toBe(false);
   });
 
   it('does not duplicate roles and still respects exclusion', () => {
@@ -169,9 +133,11 @@ describe('usePackageSearchUsers', () => {
         via: null,
         role: role('r1', 'rettighetshaver'),
         viaRole: null,
-      }, // duplicate
+      },
     ];
+
     const res = run(permissions);
+
     expect(res[0].roles).toHaveLength(1);
     expect(res[0].isInherited).toBe(false);
   });
@@ -194,7 +160,9 @@ describe('usePackageSearchUsers', () => {
         viaRole: null,
       },
     ];
+
     const res = run(permissions);
+
     expect(res[0].isInherited).toBe(true);
     expect(res[0].roles.map((r) => r.code).sort()).toEqual(
       ['daglig-leder', 'rettighetshaver'].sort(),
@@ -213,10 +181,12 @@ describe('usePackageSearchUsers', () => {
         viaRole: role('v1', 'styreleder'),
       },
     ];
+
     const res = run(permissions);
     const parentConn = res.find((c) => c.id === 'org5');
-    const childConn = parentConn!.children?.find((c) => c.id === 'person5');
-    expect(childConn!.isInherited).toBe(true);
-    expect(parentConn!.isInherited).toBe(false);
+    const childConn = parentConn?.children?.find((c) => c.id === 'person5');
+
+    expect(childConn?.isInherited).toBe(true);
+    expect(parentConn?.isInherited).toBe(false);
   });
 });
