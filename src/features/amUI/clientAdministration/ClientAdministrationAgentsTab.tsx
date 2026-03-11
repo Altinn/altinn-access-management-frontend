@@ -4,8 +4,8 @@ import { DsAlert, DsParagraph, SnackbarDuration, useSnackbar } from '@altinn/alt
 
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { UserSearch } from '../common/UserSearch/UserSearch';
-import { useAddAgentMutation, useGetAgentsQuery, type Agent } from '@/rtk/features/clientApi';
-import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
+import { useAddAgentMutation, useGetAgentsQuery } from '@/rtk/features/clientApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import classes from './ClientAdministrationAgentsTab.module.css';
 import { useNavigate } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -40,37 +40,32 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
     { skip: !isActive || !fromParty?.partyUuid },
   );
 
-  const filteredIndirectConnections = useMemo<Connection[]>(
+  const users = useMemo(
     () =>
-      indirectConnections?.filter((connection) => {
-        return connection.party.type === 'Person';
-      }) ?? [],
-    [indirectConnections],
-  );
-
-  const agentConnections = useMemo<Connection[]>(
-    () =>
-      agents?.map((agent) => ({
-        party: {
-          ...agent.agent,
-          children: null,
-          parent: null,
-          addedAt: agent.agentAddedAt,
-          isDeleted: agent.agent.isDeleted ?? undefined,
+      mapConnectionsToUserSearchNodes(
+        agents?.map((agent) => ({
+          party: {
+            ...agent.agent,
+            children: null,
+            parent: null,
+            addedAt: agent.agentAddedAt,
+            isDeleted: agent.agent.isDeleted ?? undefined,
+            roles: [],
+          },
           roles: [],
-        },
-        roles: [],
-        connections: [],
-      })) ?? [],
+          connections: [],
+        })) ?? [],
+      ),
     [agents],
   );
-  const users = useMemo(
-    () => mapConnectionsToUserSearchNodes(agentConnections),
-    [agentConnections],
-  );
   const indirectUsers = useMemo(
-    () => mapConnectionsToUserSearchNodes(filteredIndirectConnections),
-    [filteredIndirectConnections],
+    () =>
+      mapConnectionsToUserSearchNodes(
+        indirectConnections?.filter((connection) => {
+          return connection.party.type === 'Person';
+        }) ?? [],
+      ),
+    [indirectConnections],
   );
 
   const handleAddAgent = (userId: string) => {
