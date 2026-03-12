@@ -19,7 +19,7 @@ import {
 import { formatDisplayName } from '@altinn/altinn-components';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { GuardianshipPermissions } from './GuardianshipPermissions';
-import { InstancePermissions } from './InstancePermissions';
+import { InstanceList } from '../common/InstanceList';
 import classes from './PoaOverviewPage.module.css';
 
 export const PoaOverviewPage = () => {
@@ -54,7 +54,7 @@ export const PoaOverviewPage = () => {
           <RightsTabs
             packagesPanel={<AccessPackagePermissions />}
             singleRightsPanel={null}
-            instancesPanel={showInstancesTab ? <InstancePermissions /> : null}
+            instancesPanel={showInstancesTab ? <InstanceList /> : null}
             roleAssignmentsPanel={null}
             guardianshipsPanel={<GuardianshipPermissions />}
             tabProps={{ className: classes.tab }}

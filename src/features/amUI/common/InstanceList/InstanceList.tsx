@@ -7,12 +7,12 @@ import {
   List,
   type DialogListItemProps,
 } from '@altinn/altinn-components';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { DebouncedSearchField } from '../common/DebouncedSearchField/DebouncedSearchField';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { DebouncedSearchField } from '../DebouncedSearchField/DebouncedSearchField';
 import { InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 import { displayInstanceDelegation } from '@/resources/utils/featureFlagUtils';
-import { InstancePermissionsSkeleton } from './InstancePermissionsSkeleton';
+import { InstanceListSkeleton } from './InstanceListSkeleton';
 
 const toInstanceListItem = (
   instanceDelegation: InstanceDelegation,
@@ -41,9 +41,9 @@ const toInstanceListItem = (
   };
 };
 
-export const InstancePermissions = () => {
+export const InstanceList = () => {
   const { t } = useTranslation();
-  const { actingParty, fromParty } = usePartyRepresentation();
+  const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
   const hasSearch = debouncedSearchString.trim().length > 0;
   const showInstanceDelegation = displayInstanceDelegation();
@@ -55,7 +55,8 @@ export const InstancePermissions = () => {
   } = useGetInstancesQuery(
     {
       party: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
+      from: fromParty?.partyUuid,
+      to: toParty?.partyUuid,
     },
     {
       skip: !showInstanceDelegation || !actingParty?.partyUuid || !fromParty?.partyUuid,
@@ -102,7 +103,7 @@ export const InstancePermissions = () => {
         setDebouncedSearchString={setDebouncedSearchString}
       />
       {isLoading ? (
-        <InstancePermissionsSkeleton />
+        <InstanceListSkeleton />
       ) : filteredInstances.length > 0 ? (
         <List>
           {filteredInstances.map((instanceDelegation) => {

@@ -12,7 +12,7 @@ const createLoadingListItem = (index: number): DialogListItemProps => ({
   updatedAtLabel: 'xxxxxxxxxx',
 });
 
-export const InstancePermissionsSkeleton = () => {
+export const InstanceListSkeleton = () => {
   return (
     <List>
       {Array.from({ length: 3 }, (_, index) => {
