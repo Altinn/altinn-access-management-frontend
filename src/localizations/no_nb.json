@@ -912,7 +912,9 @@
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}",
     "instances_tab": {
-      "search_label": "Søk etter element"
+      "search_label": "Søk etter element",
+      "no_results": "Ingen elementer fra innboks funnet.",
+      "no_search_results": "Ingen treff på elementer fra innboks."
     }
   },
   "poa_status": {

@@ -12,6 +12,7 @@ import { DebouncedSearchField } from '../common/DebouncedSearchField/DebouncedSe
 import { InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 import { displayInstanceDelegation } from '@/resources/utils/featureFlagUtils';
+import { InstancePermissionsSkeleton } from './InstancePermissionsSkeleton';
 
 const toInstanceListItem = (
   instanceDelegation: InstanceDelegation,
@@ -60,6 +61,7 @@ export const InstancePermissions = () => {
       skip: !showInstanceDelegation || !actingParty?.partyUuid || !fromParty?.partyUuid,
     },
   );
+
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const filteredInstances = useMemo(() => {
     const instanceList = instances ?? [];
@@ -99,20 +101,29 @@ export const InstancePermissions = () => {
         placeholder={t('poa_overview_page.instances_tab.search_label')}
         setDebouncedSearchString={setDebouncedSearchString}
       />
-      <List>
-        {filteredInstances.map((instanceDelegation) => {
-          const item = toInstanceListItem(instanceDelegation, getProviderLogoUrl);
+      {isLoading ? (
+        <InstancePermissionsSkeleton />
+      ) : filteredInstances.length > 0 ? (
+        <List>
+          {filteredInstances.map((instanceDelegation) => {
+            const item = toInstanceListItem(instanceDelegation, getProviderLogoUrl);
 
-          return (
-            <DialogListItem
-              key={item.id}
-              size='lg'
-              loading={isLoading}
-              {...item}
-            />
-          );
-        })}
-      </List>
+            return (
+              <DialogListItem
+                key={item.id}
+                size='lg'
+                {...item}
+              />
+            );
+          })}
+        </List>
+      ) : (
+        <DsParagraph>
+          {hasSearch
+            ? t('poa_overview_page.instances_tab.no_search_results')
+            : t('poa_overview_page.instances_tab.no_results')}
+        </DsParagraph>
+      )}
     </>
   );
 };

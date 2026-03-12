@@ -915,7 +915,9 @@
     "page_title": "Powers of attorney overview - Altinn",
     "heading": "Powers of attorney overview for {{name}}",
     "instances_tab": {
-      "search_label": "Search for item"
+      "search_label": "Search for inbox items",
+      "no_results": "No inbox items found.",
+      "no_search_results": "No matches for inbox items."
     }
   },
   "poa_status": {
