@@ -11,6 +11,7 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import { DebouncedSearchField } from '../common/DebouncedSearchField/DebouncedSearchField';
 import { InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
+import { displayInstanceDelegation } from '@/resources/utils/featureFlagUtils';
 
 const toInstanceListItem = (
   instanceDelegation: InstanceDelegation,
@@ -44,6 +45,7 @@ export const InstancePermissions = () => {
   const { actingParty, fromParty } = usePartyRepresentation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
   const hasSearch = debouncedSearchString.trim().length > 0;
+  const showInstanceDelegation = displayInstanceDelegation();
 
   const {
     data: instances,
@@ -55,7 +57,7 @@ export const InstancePermissions = () => {
       from: fromParty?.partyUuid || '',
     },
     {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
+      skip: !showInstanceDelegation || !actingParty?.partyUuid || !fromParty?.partyUuid,
     },
   );
   const { getProviderLogoUrl } = useProviderLogoUrl();
@@ -75,6 +77,10 @@ export const InstancePermissions = () => {
         .includes(normalizedSearch),
     );
   }, [debouncedSearchString, hasSearch, instances]);
+
+  if (!showInstanceDelegation) {
+    return null;
+  }
 
   if (isError) {
     return (
