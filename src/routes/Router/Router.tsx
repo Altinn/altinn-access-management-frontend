@@ -26,6 +26,7 @@ import { ConsentRequestPage } from '@/features/amUI/consent/ConsentRequestPage/C
 import { ActiveConsentsPage } from '@/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPage';
 import { ConsentHistoryPage } from '@/features/amUI/consent/ConsentHistoryPage/ConsentHistoryPage';
 import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
+import { InstanceDetailPage } from '@/features/amUI/InstanceDetailPage/InstanceDetailPage';
 
 import {
   GeneralPath,
@@ -159,6 +160,10 @@ export const Router = createBrowserRouter(
         <Route
           path={amUIPath.PoaOverview}
           element={<PoaOverviewPage />}
+        />
+        <Route
+          path={amUIPath.PoaOverviewInstance}
+          element={<InstanceDetailPage />}
         />
         <Route
           path={amUIPath.PackagePoaDetails}

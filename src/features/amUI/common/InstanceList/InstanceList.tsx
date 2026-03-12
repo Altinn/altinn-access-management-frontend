@@ -1,18 +1,23 @@
-import { useMemo, useState } from 'react';
+import { ElementType, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DialogListItem,
-  DsAlert,
   DsParagraph,
   List,
   type DialogListItemProps,
 } from '@altinn/altinn-components';
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+
 import { DebouncedSearchField } from '../DebouncedSearchField/DebouncedSearchField';
-import { InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
+import { InstanceDelegation } from '@/rtk/features/instanceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
-import { displayInstanceDelegation } from '@/resources/utils/featureFlagUtils';
+
 import { InstanceListSkeleton } from './InstanceListSkeleton';
+
+interface InstanceListProps {
+  instances: InstanceDelegation[];
+  isLoading?: boolean;
+  getItemAs?: (item: InstanceDelegation) => ElementType | undefined;
+}
 
 const toInstanceListItem = (
   instanceDelegation: InstanceDelegation,
@@ -41,27 +46,10 @@ const toInstanceListItem = (
   };
 };
 
-export const InstanceList = () => {
+export const InstanceList = ({ instances, isLoading = false, getItemAs }: InstanceListProps) => {
   const { t } = useTranslation();
-  const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
   const hasSearch = debouncedSearchString.trim().length > 0;
-  const showInstanceDelegation = displayInstanceDelegation();
-
-  const {
-    data: instances,
-    isLoading,
-    isError,
-  } = useGetInstancesQuery(
-    {
-      party: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid,
-      to: toParty?.partyUuid,
-    },
-    {
-      skip: !showInstanceDelegation || !actingParty?.partyUuid || !fromParty?.partyUuid,
-    },
-  );
 
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const filteredInstances = useMemo(() => {
@@ -81,21 +69,6 @@ export const InstanceList = () => {
     );
   }, [debouncedSearchString, hasSearch, instances]);
 
-  if (!showInstanceDelegation) {
-    return null;
-  }
-
-  if (isError) {
-    return (
-      <DsAlert
-        role='alert'
-        data-color='danger'
-      >
-        <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-      </DsAlert>
-    );
-  }
-
   return (
     <>
       <DebouncedSearchField
@@ -108,11 +81,14 @@ export const InstanceList = () => {
         <List>
           {filteredInstances.map((instanceDelegation) => {
             const item = toInstanceListItem(instanceDelegation, getProviderLogoUrl);
+            const Component = getItemAs?.(instanceDelegation);
 
             return (
               <DialogListItem
                 key={item.id}
                 size='lg'
+                as={Component}
+                interactive={Boolean(Component)}
                 {...item}
               />
             );

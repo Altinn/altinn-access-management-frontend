@@ -917,6 +917,9 @@
       "no_search_results": "Ingen treff på elementer fra innboks."
     }
   },
+  "instance_detail_page": {
+    "document_title": "Delt fra innboks"
+  },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt."
   },

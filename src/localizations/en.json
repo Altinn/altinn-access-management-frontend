@@ -920,6 +920,9 @@
       "no_search_results": "No matches for inbox items."
     }
   },
+  "instance_detail_page": {
+    "document_title": "Shared from inbox"
+  },
   "poa_status": {
     "no_permissions": "You have to give power of attorney"
   },
