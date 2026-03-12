@@ -5,26 +5,42 @@ import { useTranslation } from 'react-i18next';
 import { DsBadge, DsTabs } from '@altinn/altinn-components';
 
 import classes from './RightsTabs.module.css';
-import { FilesIcon, FolderIcon, PackageIcon, ShieldLockIcon } from '@navikt/aksel-icons';
+import {
+  EnvelopeClosedIcon,
+  FilesIcon,
+  FolderIcon,
+  PackageIcon,
+  ShieldLockIcon,
+} from '@navikt/aksel-icons';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { isGuardianshipUrn } from '@/resources/utils';
 
 interface RightsTabsProps {
-  tabBadge?: { accessPackages: number; services: number; roles: number; guardianships: number };
+  tabBadge?: {
+    accessPackages: number;
+    services: number;
+    instances?: number;
+    roles: number;
+    guardianships: number;
+  };
   packagesPanel: ReactNode;
   singleRightsPanel: ReactNode;
+  instancesPanel?: ReactNode;
   roleAssignmentsPanel: ReactNode;
   guardianshipsPanel?: ReactNode;
+  tabProps?: Partial<React.ComponentProps<typeof DsTabs.Tab>>;
 }
 
 export const RightsTabs = ({
   tabBadge,
   packagesPanel,
   singleRightsPanel,
+  instancesPanel,
   roleAssignmentsPanel,
   guardianshipsPanel,
+  tabProps,
 }: RightsTabsProps) => {
   const { t } = useTranslation();
   const { hash } = useLocation();
@@ -71,7 +87,10 @@ export const RightsTabs = ({
       onChange={setChosenTab}
     >
       <DsTabs.List>
-        <DsTabs.Tab value='packages'>
+        <DsTabs.Tab
+          {...tabProps}
+          value='packages'
+        >
           {tabBadge && (
             <DsBadge
               data-size='sm'
@@ -84,7 +103,10 @@ export const RightsTabs = ({
           {t('user_rights_page.access_packages_title')}
         </DsTabs.Tab>
         {singleRightsPanel && (
-          <DsTabs.Tab value='singleRights'>
+          <DsTabs.Tab
+            {...tabProps}
+            value='singleRights'
+          >
             {tabBadge && (
               <DsBadge
                 data-size='sm'
@@ -97,8 +119,28 @@ export const RightsTabs = ({
             {t('user_rights_page.single_rights_title')}
           </DsTabs.Tab>
         )}
+        {instancesPanel && (
+          <DsTabs.Tab
+            {...tabProps}
+            value='instances'
+          >
+            {tabBadge && (
+              <DsBadge
+                data-size='sm'
+                color={chosenTab === 'instances' ? 'accent' : 'neutral'}
+                count={tabBadge?.instances ?? 0}
+                maxCount={99}
+              />
+            )}
+            <EnvelopeClosedIcon aria-hidden='true' />
+            {t('user_rights_page.instances_title')}
+          </DsTabs.Tab>
+        )}
         {displayRoles && roleAssignmentsPanel && (
-          <DsTabs.Tab value='roleAssignments'>
+          <DsTabs.Tab
+            {...tabProps}
+            value='roleAssignments'
+          >
             {tabBadge && (
               <DsBadge
                 data-size='sm'
@@ -111,9 +153,11 @@ export const RightsTabs = ({
             {t('user_rights_page.roles_title')}
           </DsTabs.Tab>
         )}
-        {/* Bruk <EnvelopeClosedIcon aria-hidden='true' /> for delt fra innboks tab*/}
         {showGuardianshipsTab && (
-          <DsTabs.Tab value='guardianships'>
+          <DsTabs.Tab
+            {...tabProps}
+            value='guardianships'
+          >
             {tabBadge && (
               <DsBadge
                 data-size='sm'
@@ -139,6 +183,14 @@ export const RightsTabs = ({
           value='singleRights'
         >
           <div className={classes.innerTabContent}>{singleRightsPanel}</div>
+        </DsTabs.Panel>
+      )}
+      {instancesPanel && (
+        <DsTabs.Panel
+          className={classes.tabContent}
+          value='instances'
+        >
+          <div className={classes.innerTabContent}>{instancesPanel}</div>
         </DsTabs.Panel>
       )}
       {displayRoles && roleAssignmentsPanel && (

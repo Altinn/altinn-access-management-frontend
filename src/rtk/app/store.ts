@@ -18,6 +18,7 @@ import { consentApi } from '../features/consentApi';
 import { altinnCdnApi } from '../features/altinnCdnApi';
 import { connectionApi } from '../features/connectionApi';
 import { clientApi } from '../features/clientApi';
+import { instanceApi } from '../features/instanceApi';
 
 const store = configureStore({
   reducer: {
@@ -38,6 +39,7 @@ const store = configureStore({
     [clientApi.reducerPath]: clientApi.reducer,
     [consentApi.reducerPath]: consentApi.reducer,
     [altinnCdnApi.reducerPath]: altinnCdnApi.reducer,
+    [instanceApi.reducerPath]: instanceApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -54,6 +56,7 @@ const store = configureStore({
       clientApi.middleware,
       consentApi.middleware,
       altinnCdnApi.middleware,
+      instanceApi.middleware,
       settingsApi.middleware,
     ),
 });

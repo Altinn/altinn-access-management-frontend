@@ -15,6 +15,7 @@ declare global {
       displayRequestsPage: boolean;
       displayDeletedAccountToggle: boolean;
       displayPrivDelegation: boolean;
+      displayInstanceDelegation: boolean;
       displayAccessRequest: boolean;
       displaySubConnections: boolean;
       displayRoles: boolean;

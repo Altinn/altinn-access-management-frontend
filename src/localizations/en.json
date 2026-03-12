@@ -422,6 +422,7 @@
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
     "single_rights_title": "Single services",
+    "instances_title": "Shared from inbox",
     "roles_title": "Roles",
     "guardianships_title": "Guardianships",
     "resource_type_text": "Single right",
@@ -912,7 +913,12 @@
   },
   "poa_overview_page": {
     "page_title": "Powers of attorney overview - Altinn",
-    "heading": "Powers of attorney overview for {{name}}"
+    "heading": "Powers of attorney overview for {{name}}",
+    "instances_tab": {
+      "search_label": "Search for inbox items",
+      "no_results": "No inbox items found.",
+      "no_search_results": "No matches for inbox items."
+    }
   },
   "poa_status": {
     "no_permissions": "You have to give power of attorney"
