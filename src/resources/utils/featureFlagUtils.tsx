@@ -72,6 +72,10 @@ export const displayPrivDelegation = () => {
   return window.featureFlags?.displayPrivDelegation === true;
 };
 
+export const displayInstanceDelegation = () => {
+  return window.featureFlags?.displayInstanceDelegation === true;
+};
+
 export const displayAccessRequest = () => {
   return window.featureFlags?.displayAccessRequest === true;
 };

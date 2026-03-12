@@ -72,6 +72,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayPrivDelegation { get; set; }
 
         /// <summary>
+        /// Whether to display the instance delegation feature
+        /// </summary>
+        public bool DisplayInstanceDelegation { get; set; }
+
+        /// <summary>
         /// Whether to display the access request feature
         /// </summary>
         public bool DisplayAccessRequest { get; set; }
