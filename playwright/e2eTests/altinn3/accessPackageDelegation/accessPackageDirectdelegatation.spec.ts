@@ -26,41 +26,53 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     aktorvalgHeader,
     accessManagementFrontPage,
   }) => {
-    await page.goto(env('BASE_URL'));
-    await login.LoginToAccessManagement('04856996188');
-    await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
-    await accessManagementFrontPage.goToUsers();
+    await test.step('Log in', async () => {
+      await page.goto(env('BASE_URL'));
+      await login.LoginToAccessManagement('04856996188');
+      await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
+      await accessManagementFrontPage.goToUsers();
+    });
 
     // Step 3: Add new user
-    await delegation.addUser();
+    await test.step('Add new user', async () => {
+      await delegation.addUser();
+    });
 
     // Step 4: Add organization
-    await delegation.addOrganization('213091492');
+    await test.step('Add organization', async () => {
+      await delegation.addOrganization('213091492');
+    });
 
     // Step 5: Grant access to multiple packages
-    await delegation.grantAccessPkgNameDirect('Veitransport');
-    await delegation.grantAccessPkgName('Byggesøknad');
-    await delegation.grantAccessPkgNameDirect('Godkjenning av personell');
-    await delegation.closeAccessModal();
+    await test.step('Grant access to multiple packages', async () => {
+      await delegation.grantAccessPkgNameDirect('Veitransport');
+      await delegation.grantAccessPkgName('Byggesøknad');
+      await delegation.grantAccessPkgNameDirect('Godkjenning av personell');
+      await delegation.closeAccessModal();
+    });
 
     // 4) Verify delegated packages for the current org / view
-    await delegation.verifyDelegatedPackages([
-      { areaName: 'Bygg, anlegg og eiendom', packageName: 'Byggesøknad' },
-      { areaName: 'Oppvekst og utdanning', packageName: 'Godkjenning av personell' },
-      { areaName: 'Transport og lagring', packageName: 'Veitransport' },
-    ]);
-
-    await delegation.verifyKeyRoleUserHasDelegatedPackages(
-      'Sivilisert Trygg Tiger AS',
-      'Moderne Analyse',
-      [
+    await test.step('Verify delegated packages for the current org / view', async () => {
+      await delegation.verifyDelegatedPackages([
         { areaName: 'Bygg, anlegg og eiendom', packageName: 'Byggesøknad' },
         { areaName: 'Oppvekst og utdanning', packageName: 'Godkjenning av personell' },
         { areaName: 'Transport og lagring', packageName: 'Veitransport' },
-      ],
-    );
+      ]);
 
-    await delegation.logoutFromBrukerflate();
+      await delegation.verifyKeyRoleUserHasDelegatedPackages(
+        'Sivilisert Trygg Tiger AS',
+        'Moderne Analyse',
+        [
+          { areaName: 'Bygg, anlegg og eiendom', packageName: 'Byggesøknad' },
+          { areaName: 'Oppvekst og utdanning', packageName: 'Godkjenning av personell' },
+          { areaName: 'Transport og lagring', packageName: 'Veitransport' },
+        ],
+      );
+    });
+
+    await test.step('log out', async () => {
+      await delegation.logoutFromBrukerflate();
+    });
   });
 
   test('Org-C revokes all delegated rights from Org-D', async ({
