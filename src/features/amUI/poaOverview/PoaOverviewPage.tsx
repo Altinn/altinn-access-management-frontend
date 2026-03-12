@@ -12,10 +12,15 @@ import { ReporteePageHeading } from '../common/ReporteePageHeading';
 
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { AccessPackagePermissions } from './AccessPackagePermissions';
-import { useRerouteIfPoaOverviewPageDisabled } from '@/resources/utils/featureFlagUtils';
+import {
+  displayInstanceDelegation,
+  useRerouteIfPoaOverviewPageDisabled,
+} from '@/resources/utils/featureFlagUtils';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { GuardianshipPermissions } from './GuardianshipPermissions';
+import { InstancePermissions } from './InstancePermissions';
+import classes from './PoaOverviewPage.module.css';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
@@ -28,6 +33,7 @@ export const PoaOverviewPage = () => {
   useDocumentTitle(t('poa_overview_page.page_title'));
 
   const partyUuid = getCookie('AltinnPartyUuid') || undefined;
+  const showInstancesTab = displayInstanceDelegation();
 
   useRerouteIfPoaOverviewPageDisabled();
 
@@ -48,8 +54,10 @@ export const PoaOverviewPage = () => {
           <RightsTabs
             packagesPanel={<AccessPackagePermissions />}
             singleRightsPanel={null}
+            instancesPanel={showInstancesTab ? <InstancePermissions /> : null}
             roleAssignmentsPanel={null}
             guardianshipsPanel={<GuardianshipPermissions />}
+            tabProps={{ className: classes.tab }}
           />
         </PartyRepresentationProvider>
       </PageLayoutWrapper>

@@ -419,6 +419,7 @@
     "page_title": "Brukertilganger - Altinn",
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Enkelttjenester",
+    "instances_title": "Delt fra innboks",
     "roles_title": "Roller",
     "guardianships_title": "Vergemål",
     "resource_type_text": "Enkelttjeneste",
@@ -909,7 +910,10 @@
   },
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt - Altinn",
-    "heading": "Fullmaktsoversikt for {{name}}"
+    "heading": "Fullmaktsoversikt for {{name}}",
+    "instances_tab": {
+      "search_label": "Søk etter element"
+    }
   },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt."
