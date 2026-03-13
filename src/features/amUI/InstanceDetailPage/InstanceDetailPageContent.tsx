@@ -16,6 +16,7 @@ import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/Res
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
+import { useGetPaginatedSearchQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
@@ -33,6 +34,18 @@ export const InstanceDetailPageContent = () => {
   const resourceId = searchParams.get('resourceId') ?? searchParams.get('resourceID') ?? '';
   const dialogId = searchParams.get('dialogId');
   const inboxUrl = dialogId ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}` : undefined;
+  const { data: resourceSearchResult, isLoading: isResourceSearchLoading } =
+    useGetPaginatedSearchQuery(
+      {
+        searchString: resourceId,
+        ROfilters: [],
+        page: 1,
+        resultsPerPage: 25,
+      },
+      {
+        skip: !resourceId,
+      },
+    );
 
   const {
     data: instances = [],
@@ -50,7 +63,9 @@ export const InstanceDetailPageContent = () => {
     },
   );
 
-  const resource = instances.find((instance) => instance.resource)?.resource ?? null;
+  const resourceFromQuery =
+    resourceSearchResult?.pageList.find((resource) => resource.identifier === resourceId) ?? null;
+  const resource = instances.find((instance) => instance.resource)?.resource ?? resourceFromQuery;
 
   const users = useMemo(
     () =>
@@ -83,7 +98,7 @@ export const InstanceDetailPageContent = () => {
     );
   }
 
-  if (isInstancesLoading) {
+  if (isInstancesLoading || (isResourceSearchLoading && !resource)) {
     return <ResourceInfoSkeleton />;
   }
 
