@@ -1,5 +1,12 @@
 import { useMemo } from 'react';
-import { Avatar, DsAlert, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
+import {
+  Avatar,
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  formatDisplayName,
+  Icon,
+} from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +18,7 @@ import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 
 import classes from './InstanceDetailPageContent.module.css';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export const InstanceDetailPageContent = () => {
   const { t } = useTranslation();
@@ -92,9 +100,16 @@ export const InstanceDetailPageContent = () => {
             iconUrl={providerLogoUrl ?? instanceDelegation.resource.resourceOwnerLogoUrl}
             size='sm'
           />
-          <DsParagraph>
+          <DsParagraph data-size='sm'>
             {instanceDelegation.resource.resourceOwnerName}{' '}
-            <span className={classes.providerName}>til {fromParty?.name}</span>
+            <span className={classes.providerName}>
+              {t('instance_detail_page.provider_name', {
+                name: formatDisplayName({
+                  fullName: fromParty?.name ?? '',
+                  type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+                }),
+              })}
+            </span>
           </DsParagraph>
         </div>
         {instanceDelegation.resource.description && (

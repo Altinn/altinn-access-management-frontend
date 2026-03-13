@@ -921,7 +921,8 @@
     }
   },
   "instance_detail_page": {
-    "document_title": "Shared from inbox"
+    "document_title": "Shared from inbox",
+    "provider_name": "to {{name}}"
   },
   "poa_status": {
     "no_permissions": "You have to give power of attorney"

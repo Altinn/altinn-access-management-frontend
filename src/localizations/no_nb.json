@@ -918,7 +918,8 @@
     }
   },
   "instance_detail_page": {
-    "document_title": "Delt fra innboks"
+    "document_title": "Delt fra innboks",
+    "provider_name": "til {{name}}"
   },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt."
