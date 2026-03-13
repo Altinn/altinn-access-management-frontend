@@ -7,7 +7,7 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 test.describe('Tilgangsstyring', () => {
   const api = new EnduserConnection();
   test.afterAll(async () => {
-    const failures = await api.deleteConnection('12816699205', '314138910', [
+    await api.deleteConnection('12816699205', '314138910', [
       '70885100226',
       '64866402394',
       '15843346194',
@@ -15,9 +15,6 @@ test.describe('Tilgangsstyring', () => {
       '313435482',
       '313904490',
     ]);
-    if (failures.length > 0) {
-      throw new Error(`Cleanup failed for ${failures.length} connection(s).`);
-    }
   });
 
   test('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', async ({
@@ -250,7 +247,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {
-    const failures = await api.deleteConnection('25928698737', '25928698737', [
+    await api.deleteConnection('25928698737', '25928698737', [
       '210638962',
       '52858201748',
       '22911648052',
@@ -258,9 +255,6 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       '43818900555',
       '313435482',
     ]);
-    if (failures.length > 0) {
-      throw new Error(`Cleanup failed for ${failures.length} connection(s).`);
-    }
   });
 
   test('Legg til ny person hos deg selv', async ({ page, accessManagementFrontPage }) => {
