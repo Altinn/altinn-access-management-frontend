@@ -1,8 +1,8 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
@@ -12,20 +12,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class InstanceService : IInstanceService
     {
         private readonly IInstanceClient _instanceClient;
-        private readonly IResourceRegistryClient _resourceRegistryClient;
-        private readonly IResourceService _resourceService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceService"/> class.
         /// </summary>
         /// <param name="instanceClient">Client for instance delegation data.</param>
-        /// <param name="resourceService">Service for resource registry lookups.</param>
-        /// <param name="resourceRegistryClient">Client for resource owner metadata.</param>
-        public InstanceService(IInstanceClient instanceClient, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient)
+        public InstanceService(IInstanceClient instanceClient)
         {
             _instanceClient = instanceClient;
-            _resourceService = resourceService;
-            _resourceRegistryClient = resourceRegistryClient;
         }
 
         /// <inheritdoc />
@@ -33,42 +27,36 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             List<InstancePermission> instancePermissions = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
             List<InstanceDelegation> delegations = new List<InstanceDelegation>();
-            OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
 
             foreach (var instancePermission in instancePermissions)
             {
-                var resourceId = instancePermission.Resource?.RefId;
+                var instanceResource = instancePermission.Resource;
+                var resourceId = instanceResource?.RefId;
 
                 if (string.IsNullOrWhiteSpace(resourceId))
                 {
                     continue;
                 }
 
-                var resourceDetails = await _resourceService.GetResource(resourceId);
-                if (resourceDetails == null)
-                {
-                    continue;
-                }
+                ResourceType resourceType = Enum.TryParse(instanceResource?.Type?.Name, true, out ResourceType parsedResourceType)
+                    ? parsedResourceType
+                    : ResourceType.Default;
 
-                orgList.Orgs.TryGetValue(resourceDetails.HasCompetentAuthority?.Orgcode?.ToLower() ?? string.Empty, out var org);
-
-                ServiceResourceFE resourceFe = new ServiceResourceFE(
-                    resourceDetails.Identifier,
-                    resourceDetails.Title?.GetValueOrDefault(languageCode) ?? resourceDetails.Title?.GetValueOrDefault("nb"),
-                    resourceType: resourceDetails.ResourceType,
-                    status: resourceDetails.Status,
-                    resourceReferences: resourceDetails.ResourceReferences,
-                    resourceOwnerName: resourceDetails.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resourceDetails.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                    resourceOwnerOrgNumber: resourceDetails.HasCompetentAuthority?.Organization,
-                    resourceOwnerOrgcode: resourceDetails.HasCompetentAuthority?.Orgcode,
-                    rightDescription: resourceDetails.RightDescription?.GetValueOrDefault(languageCode) ?? resourceDetails.RightDescription?.GetValueOrDefault("nb"),
-                    description: resourceDetails.Description?.GetValueOrDefault(languageCode) ?? resourceDetails.Description?.GetValueOrDefault("nb"),
-                    visible: resourceDetails.Visible,
-                    delegable: resourceDetails.Delegable,
-                    contactPoints: resourceDetails.ContactPoints,
-                    spatial: resourceDetails.Spatial,
-                    authorizationReference: resourceDetails.AuthorizationReference,
-                    resourceOwnerLogoUrl: org?.Logo);
+                ServiceResourceFE resourceFe = new(
+                    resourceId,
+                    instanceResource.Name,
+                    instanceResource.Description,
+                    rightDescription: null,
+                    status: null,
+                    resourceOwnerName: instanceResource.Provider?.Name,
+                    resourceOwnerOrgNumber: instanceResource.Provider?.RefId,
+                    resourceReferences: null,
+                    resourceType: resourceType,
+                    contactPoints: null,
+                    spatial: null,
+                    authorizationReference: null,
+                    resourceOwnerLogoUrl: instanceResource.Provider?.LogoUrl,
+                    resourceOwnerOrgcode: instanceResource.Provider?.Code);
 
                 delegations.Add(new InstanceDelegation(resourceFe, instancePermission.Instance, instancePermission.Permissions));
             }

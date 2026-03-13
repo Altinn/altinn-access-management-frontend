@@ -4,9 +4,13 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
@@ -57,19 +61,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
-            List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(path);
 
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}");
             List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.NotNull(actualResponse);
-            Assert.Equal(expectedResponse.Count, actualResponse.Count);
-            Assert.Equal(expectedResponse[0].Resource.Identifier, actualResponse[0].Resource.Identifier);
-            Assert.Equal(expectedResponse[0].Instance.Urn, actualResponse[0].Instance.Urn);
-            Assert.Equal(expectedResponse[1].Resource.Identifier, actualResponse[1].Resource.Identifier);
-            Assert.Equal(expectedResponse[1].Instance.Urn, actualResponse[1].Instance.Urn);
+            Assert.Equal(4, actualResponse.Count);
+            Assert.Equal("app_ttd_a3-app", actualResponse[0].Resource.Identifier);
+            Assert.Equal("urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668", actualResponse[0].Instance.Urn);
+            Assert.Equal("app_ttd_a3-app2", actualResponse[1].Resource.Identifier);
+            Assert.Equal("urn:altinn:instance-id:51599233/c1d2e3f4-1111-2222-3333-444455556666", actualResponse[1].Instance.Urn);
+            Assert.Equal("app_ttd_missing-resource", actualResponse[3].Resource.Identifier);
+            Assert.Equal("missing-resource", actualResponse[3].Resource.Title);
         }
 
         /// <summary>
@@ -87,7 +91,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.NotNull(actualResponse);
-            Assert.Equal(3, actualResponse.Count);
+            Assert.Equal(4, actualResponse.Count);
         }
 
         /// <summary>
@@ -101,6 +105,55 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string resource = "app_ttd_a3-app2";
             string instance = "urn:altinn:instance-id:51599233/c1d2e3f4-1111-2222-3333-444455556666";
+            InstanceDelegation expectedResponse = new(
+                new ServiceResourceFE(
+                    identifier: resource,
+                    title: "a3-app2",
+                    description: "An Altinn 3 app",
+                    rightDescription: null,
+                    status: null,
+                    resourceOwnerName: "Testdepartementet",
+                    resourceOwnerOrgNumber: string.Empty,
+                    resourceReferences: null,
+                    resourceType: ResourceType.AltinnApp,
+                    contactPoints: null,
+                    spatial: null,
+                    authorizationReference: null,
+                    resourceOwnerLogoUrl: "https://altinncdn.no/orgs/ttd/ttd.png",
+                    resourceOwnerOrgcode: "ttd"),
+                new DelegationInstance
+                {
+                    Id = Guid.Parse("c1d2e3f4-1111-2222-3333-444455556666"),
+                    Urn = instance,
+                    Type = new IdNamePair<Guid>
+                    {
+                        Id = Guid.Parse("eb7cd8eb-eee4-43cf-814b-f54e143cd954"),
+                        Name = "BrukerstyrtAppInstansDelegering",
+                    },
+                },
+                new List<Permission>
+                {
+                    new()
+                    {
+                        From = new CompactEntity
+                        {
+                            Id = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"),
+                            Name = "DISKRET NÆR TIGER AS",
+                            PartyId = 51329012,
+                        },
+                        To = new CompactEntity
+                        {
+                            Id = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae"),
+                            Name = "SITRONGUL MEDALJONG",
+                            PartyId = 50789533,
+                        },
+                        Role = new CompactRole
+                        {
+                            Id = Guid.Parse("d6e7f8a9-b0c1-2345-8901-456789012345"),
+                            Code = "daglig-leder",
+                        },
+                    },
+                });
 
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
             List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
@@ -108,8 +161,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.NotNull(actualResponse);
             Assert.Single(actualResponse);
-            Assert.Equal(resource, actualResponse[0].Resource.Identifier);
-            Assert.Equal(instance, actualResponse[0].Instance.Urn);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse[0]);
         }
 
         /// <summary>
@@ -129,25 +181,30 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: The mock instance dataset contains entries with a missing resource reference and a resource that resolves to null.
-        /// Expected: Returns only the valid delegated instances.
+        /// Test case: The mock instance dataset contains entries with a missing resource reference and a resource that resolves to null in the resource registry.
+        /// Expected: Returns valid delegated instances by mapping the instance resource payload directly.
         /// </summary>
         [Fact]
-        public async Task GetInstances_SkipsEntriesWithMissingOrUnknownResource()
+        public async Task GetInstances_UsesInstanceResourcePayload()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
-            List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(path);
 
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
             List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.NotNull(actualResponse);
-            Assert.Equal(expectedResponse.Count, actualResponse.Count);
-            Assert.DoesNotContain(actualResponse, delegation => delegation.Resource.Identifier == "app_ttd_missing-resource");
+            Assert.Equal(4, actualResponse.Count);
             Assert.All(actualResponse, delegation => Assert.False(string.IsNullOrWhiteSpace(delegation.Resource.Identifier)));
+
+            InstanceDelegation fallbackDelegation = actualResponse.Single(delegation => delegation.Resource.Identifier == "app_ttd_missing-resource");
+            Assert.Equal("missing-resource", fallbackDelegation.Resource.Title);
+            Assert.Equal("Resource registry entry resolves to null", fallbackDelegation.Resource.Description);
+            Assert.Equal("Testdepartementet", fallbackDelegation.Resource.ResourceOwnerName);
+            Assert.Equal(string.Empty, fallbackDelegation.Resource.ResourceOwnerOrgNumber);
+            Assert.Equal("ttd", fallbackDelegation.Resource.ResourceOwnerOrgcode);
+            Assert.Equal("https://altinncdn.no/orgs/ttd/ttd.png", fallbackDelegation.Resource.ResourceOwnerLogoUrl);
         }
 
         /// <summary>

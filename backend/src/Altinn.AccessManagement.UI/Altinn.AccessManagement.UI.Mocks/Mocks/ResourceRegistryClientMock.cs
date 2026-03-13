@@ -28,7 +28,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public async Task<ServiceResource> GetResource(string resourceId, string versionId = null)
         {
             string resourcesPath = GetResourcePath(resourceId);
-            ServiceResource resource = Util.GetMockData<ServiceResource>(resourcesPath);
+            ServiceResource resource = File.Exists(resourcesPath)
+                ? Util.GetMockData<ServiceResource>(resourcesPath)
+                : null;
 
             return await Task.FromResult(resource);
         }
