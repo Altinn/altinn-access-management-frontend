@@ -21,6 +21,18 @@
   flex-direction: column;
 }
 
+.inboxButton {
+  margin-bottom: var(--ds-spacing-4);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+
+.inboxLinkContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
 @media (max-width: 600px) {
   .resourceOwner {
     padding-top: 4px;

@@ -15,7 +15,7 @@ export const InstancePermissions = () => {
       (props) => (
         <Link
           {...props}
-          to={`/poa-overview/instance?instanceUrn=${encodeURIComponent(item.instance.urn)}&resourceID=${encodeURIComponent(item.resource.identifier)}`}
+          to={`/poa-overview/instance?instanceUrn=${encodeURIComponent(item.instance.urn)}&resourceId=${encodeURIComponent(item.resource.identifier)}`}
         />
       ),
     [],

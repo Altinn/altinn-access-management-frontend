@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import {
   Avatar,
   DsAlert,
+  DsButton,
   DsHeading,
   DsParagraph,
   formatDisplayName,
@@ -16,9 +17,11 @@ import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permission
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
+import { PartyType } from '@/rtk/features/userInfoApi';
+import { getAfUrl } from '@/resources/utils/pathUtils';
+import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 
 import classes from './InstanceDetailPageContent.module.css';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 export const InstanceDetailPageContent = () => {
   const { t } = useTranslation();
@@ -27,12 +30,14 @@ export const InstanceDetailPageContent = () => {
 
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const instanceUrn = searchParams.get('instanceUrn') ?? '';
-  const resourceId = searchParams.get('resourceID') ?? '';
+  const resourceId = searchParams.get('resourceId') ?? searchParams.get('resourceID') ?? '';
+  const dialogId = searchParams.get('dialogId');
+  const inboxUrl = dialogId ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}` : undefined;
 
   const {
     data: instances = [],
-    isLoading,
-    isError,
+    isLoading: isInstancesLoading,
+    isError: isInstancesError,
   } = useGetInstancesQuery(
     {
       party: actingParty?.partyUuid || '',
@@ -45,7 +50,7 @@ export const InstanceDetailPageContent = () => {
     },
   );
 
-  const instanceDelegation = instances[0] ?? null;
+  const resource = instances.find((instance) => instance.resource)?.resource ?? null;
 
   const users = useMemo(
     () =>
@@ -58,7 +63,16 @@ export const InstanceDetailPageContent = () => {
     [fromParty?.partyUuid, instances],
   );
 
-  if (isError) {
+  if (!resourceId || !instanceUrn) {
+    return (
+      <Navigate
+        to='/not-found'
+        replace
+      />
+    );
+  }
+
+  if (isInstancesError) {
     return (
       <DsAlert
         role='alert'
@@ -69,21 +83,12 @@ export const InstanceDetailPageContent = () => {
     );
   }
 
-  if (!isLoading && instances.length === 0) {
-    return (
-      <Navigate
-        to='/not-found'
-        replace
-      />
-    );
-  }
-
-  if (isLoading || !instanceDelegation) {
+  if (isInstancesLoading) {
     return <ResourceInfoSkeleton />;
   }
 
-  const providerLogoUrl = instanceDelegation.resource.resourceOwnerOrgcode
-    ? getProviderLogoUrl(instanceDelegation.resource.resourceOwnerOrgcode)
+  const providerLogoUrl = resource?.resourceOwnerOrgcode
+    ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
 
   return (
@@ -93,36 +98,58 @@ export const InstanceDetailPageContent = () => {
           level={1}
           data-size='sm'
         >
-          {instanceDelegation.resource.title}
+          {resource?.title ?? resourceId}
         </DsHeading>
-        <div className={classes.resourceOwner}>
-          <Icon
-            iconUrl={providerLogoUrl ?? instanceDelegation.resource.resourceOwnerLogoUrl}
-            size='sm'
-          />
-          <DsParagraph data-size='sm'>
-            {instanceDelegation.resource.resourceOwnerName}{' '}
-            <span className={classes.providerName}>
-              {t('instance_detail_page.provider_name', {
-                name: formatDisplayName({
-                  fullName: fromParty?.name ?? '',
-                  type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-                }),
-              })}
-            </span>
-          </DsParagraph>
-        </div>
-        {instanceDelegation.resource.description && (
+        {resource && (
           <>
-            <DsParagraph data-size='sm'>{instanceDelegation.resource?.description}</DsParagraph>
+            <div className={classes.resourceOwner}>
+              <Icon
+                iconUrl={providerLogoUrl ?? resource.resourceOwnerLogoUrl}
+                size='sm'
+              />
+              <DsParagraph data-size='sm'>
+                {resource.resourceOwnerName}{' '}
+                <span className={classes.providerName}>
+                  {t('instance_detail_page.provider_name', {
+                    name: formatDisplayName({
+                      fullName: fromParty?.name ?? '',
+                      type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+                    }),
+                  })}
+                </span>
+              </DsParagraph>
+            </div>
+            {resource.description && (
+              <DsParagraph data-size='sm'>{resource.description}</DsParagraph>
+            )}
           </>
         )}
       </div>
+      {inboxUrl ? (
+        <div className={classes.inboxLinkContainer}>
+          <DsButton
+            asChild
+            variant='secondary'
+            className={classes.inboxButton}
+          >
+            <a href={inboxUrl}>
+              <EnvelopeClosedIcon />
+              {t('instance_detail_page.back_to_inbox')}
+            </a>
+          </DsButton>
+        </div>
+      ) : null}
       <UserSearch
         includeSelfAsChild={false}
         users={users}
-        isLoading={isLoading}
+        isLoading={isInstancesLoading}
         canDelegate={false}
+        noUsersText={t('instance_detail_page.no_users', {
+          fromparty: formatDisplayName({
+            fullName: fromParty?.name ?? '',
+            type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+          }),
+        })}
       />
     </>
   );
