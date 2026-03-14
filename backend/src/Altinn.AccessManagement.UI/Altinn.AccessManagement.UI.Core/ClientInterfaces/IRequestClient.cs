@@ -24,10 +24,12 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Create a new single right request
         /// </summary>
         /// <param name="party">The acting party creating the request</param>
-        /// <param name="payload">The request payload, containing to party, from party and resource</param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
+        /// <param name="to">The right holder that wants to be granted access to the resource.</param>
+        /// <param name="resource">The resource to request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The http response from backend</returns>
-        Task<bool> CreateSingleRightRequest(Guid party, CreateRequestInput payload, CancellationToken cancellationToken);
+        Task<bool> CreateSingleRightRequest(Guid party, Guid from, Guid to, string resource, CancellationToken cancellationToken);
 
         /// <summary>
         /// Withdraw a single right request by id

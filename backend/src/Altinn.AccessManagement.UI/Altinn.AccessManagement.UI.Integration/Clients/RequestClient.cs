@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Extensions;
@@ -23,7 +22,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly HttpClient _client;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
-        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RequestClient"/> class
@@ -71,16 +69,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<bool> CreateSingleRightRequest(Guid party, CreateRequestInput payload, CancellationToken cancellationToken)
+        public async Task<bool> CreateSingleRightRequest(Guid party, Guid from, Guid to, string resource, CancellationToken cancellationToken)
         {
             try
             {
-                string endpointUrl = $"/enduser/request?party={party}";
+                string endpointUrl = $"/enduser/request/resource?party={party}&from={from}&to={to}&resource={resource}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                string requestBody = JsonSerializer.Serialize(payload, _serializerOptions);
-                StringContent content = new StringContent(requestBody, System.Text.Encoding.UTF8, "application/json");
-                var httpResponse = await _client.PostAsync(token, endpointUrl, content);
+                var httpResponse = await _client.PostAsync(token, endpointUrl, null);
                 if (httpResponse.IsSuccessStatusCode)
                 {
                     return true;

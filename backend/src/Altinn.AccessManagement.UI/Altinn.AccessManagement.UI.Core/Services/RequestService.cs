@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.Common;
@@ -12,11 +11,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class RequestService : IRequestService
     {
         private readonly IRequestClient _requestClient;
-
-        private readonly JsonSerializerOptions options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RequestService"/> class.
@@ -48,20 +42,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<bool> CreateSingleRightRequest(Guid party, Guid from, Guid to, string resource, CancellationToken cancellationToken)
         {
-            CreateRequestInput payload = new()
-            {
-                Connection = new()
-                {
-                    To = to.ToString(),
-                    From = from.ToString()
-                },
-                Resource = new()
-                {
-                    ResourceId = resource
-                }
-            };
-
-            return await _requestClient.CreateSingleRightRequest(party, payload, cancellationToken);
+            return await _requestClient.CreateSingleRightRequest(party, from, to, resource, cancellationToken);
         }
 
         /// <inheritdoc />
