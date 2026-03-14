@@ -1,7 +1,9 @@
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Request;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -34,22 +36,67 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<RequestResourceDto>> GetSingleRightRequests(Guid party, Guid from, Guid to, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<RequestResourceDto>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
         {
-            string dataPath = Path.Combine(dataFolder, "Request", "requests.json");
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "Request", "sentRequests.json");
             return await Task.FromResult(Util.GetMockData<PaginatedResult<RequestResourceDto>>(dataPath));
         }
 
         /// <inheritdoc />
-        public async Task<bool> CreateSingleRightRequest(Guid party, Guid from, Guid to, string resource, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<RequestResourceDto>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
         {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "Request", "receivedRequests.json");
+            return await Task.FromResult(Util.GetMockData<PaginatedResult<RequestResourceDto>>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestResourceDto> GetRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
+            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
             return await Task.FromResult(true);
         }
 
         /// <inheritdoc />
-        public async Task<bool> WithdrawSingleRightRequest(Guid id, CancellationToken cancellationToken)
+        public async Task<bool> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
             return await Task.FromResult(true);
+        }
+
+        private static void ThrowExceptionIfTriggerParty(string id)
+        {
+            if (id == "00000000-0000-0000-0000-000000000000")
+            {
+                throw new Exception("Simulated internal error");
+            }
+        }
+
+        private static void ThrowHttpStatusExceptionIfTriggerParty(string id)
+        {
+            if (id == "11111111-1111-1111-1111-111111111111")
+            {
+                throw new HttpStatusException("StatusError", "Simulated backend error", HttpStatusCode.BadRequest, "");
+            }
         }
     }
 }

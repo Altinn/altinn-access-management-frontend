@@ -14,7 +14,7 @@ using Microsoft.Extensions.Options;
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
     /// <summary>
-    /// Client for interacting with Single Rights API
+    /// Client for interacting with the Request API
     /// </summary>
     public class RequestClient : IRequestClient
     {
@@ -45,17 +45,22 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<RequestResourceDto>> GetSingleRightRequests(Guid party, Guid from, Guid to, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<RequestResourceDto>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
         {
             try
             {
-                var queryParams = status?.Select(s => new KeyValuePair<string, string>("status", s.ToString())) ?? [];
-                string endpointUrl = QueryHelpers.AddQueryString("/enduser/request", new Dictionary<string, string>
+                var queryParams = new Dictionary<string, string>
                 {
-                    { "party", party.ToString() },
-                    { "to", to.ToString() },
-                    { "from", from.ToString() }
-                }.Concat(queryParams));
+                    { "party", party.ToString() }
+                };
+
+                if (to.HasValue)
+                {
+                    queryParams.Add("to", to.Value.ToString());
+                }
+
+                var statusParams = status?.Select(s => new KeyValuePair<string, string>("status", s.ToString())) ?? [];
+                string endpointUrl = QueryHelpers.AddQueryString("/enduser/request/sent", queryParams.Concat(statusParams));
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.GetAsync(token, endpointUrl);
@@ -63,17 +68,64 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // RequestClient // GetSingleRightRequests // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // GetSentRequests // Exception");
                 throw;
             }
         }
 
         /// <inheritdoc />
-        public async Task<bool> CreateSingleRightRequest(Guid party, Guid from, Guid to, string resource, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<RequestResourceDto>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
         {
             try
             {
-                string endpointUrl = $"/enduser/request/resource?party={party}&from={from}&to={to}&resource={resource}";
+                var queryParams = new Dictionary<string, string>
+                {
+                    { "party", party.ToString() }
+                };
+
+                if (from.HasValue)
+                {
+                    queryParams.Add("from", from.Value.ToString());
+                }
+
+                var statusParams = status?.Select(s => new KeyValuePair<string, string>("status", s.ToString())) ?? [];
+                string endpointUrl = QueryHelpers.AddQueryString("/enduser/request/received", queryParams.Concat(statusParams));
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<RequestResourceDto>>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // GetReceivedRequests // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestResourceDto> GetRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string endpointUrl = QueryHelpers.AddQueryString($"/enduser/request/{id}", "party", party.ToString());
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<RequestResourceDto>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // GetRequest // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string endpointUrl = $"/enduser/request/resource?party={party}&to={to}&resource={resource}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.PostAsync(token, endpointUrl, null);
@@ -86,17 +138,17 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // RequestClient // CreateSingleRightRequest // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // CreateResourceRequest // Exception");
                 throw;
             }
         }
 
         /// <inheritdoc />
-        public async Task<bool> WithdrawSingleRightRequest(Guid id, CancellationToken cancellationToken)
+        public async Task<bool> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             try
             {
-                string endpointUrl = $"/enduser/sent/withdraw?id={id}";
+                string endpointUrl = $"/enduser/request/sent/withdraw?party={party}&id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.PutAsync(token, endpointUrl, null);
@@ -109,7 +161,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // RequestClient // WithdrawSingleRightRequest // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // WithdrawRequest // Exception");
                 throw;
             }
         }

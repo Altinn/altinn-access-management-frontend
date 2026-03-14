@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Request;
 
@@ -23,7 +24,17 @@ public class RequestDto
     public RequestStatus Status { get; set; }
 
     /// <summary>
-    /// Connection from one party to another that is requested
+    /// Party that is requested to grant access
     /// </summary>
-    public ConnectionRequestDto Connection { get; set; }
+    public Entity From { get; set; }
+
+    /// <summary>
+    /// Party that access is requested for
+    /// </summary>
+    public Entity To { get; set; }
+
+    /// <summary>
+    /// Last updated
+    /// </summary>
+    public DateTimeOffset LastUpdated { get; set; }
 }

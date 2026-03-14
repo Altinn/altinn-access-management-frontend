@@ -970,6 +970,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.To.Id, actual.To.Id);
             Assert.Equal(expected.ResourceId, actual.ResourceId);
             Assert.Equal(expected.RequestType, actual.RequestType);
+            Assert.Equal(expected.LastUpdated, actual.LastUpdated);
         }
 
         private static void AssertEqual(Provider expected, Provider actual)
