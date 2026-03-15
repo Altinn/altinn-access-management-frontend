@@ -55,6 +55,32 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        ///     Gets a single resource by id.
+        /// </summary>
+        /// <param name="resourceId">The resource id.</param>
+        /// <returns>The resource if found.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("{resourceId}")]
+        public async Task<ActionResult<ServiceResourceFE>> GetResource(string resourceId)
+        {
+            if (string.IsNullOrWhiteSpace(resourceId))
+            {
+                return BadRequest();
+            }
+
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            ServiceResourceFE resource = await _resourceService.GetResource(resourceId, languageCode);
+
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return resource;
+        }
+
+        /// <summary>
         ///     Search through all delegable service resources and returns matches
         /// </summary>
         /// <returns>Paginated search results</returns>

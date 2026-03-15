@@ -2,45 +2,23 @@
   {
     "resource": {
       "identifier": "app_ttd_a3-app",
-      "title": "A3 app",
-      "description": "En Altinn 3 app",
-      "rightDescription": "Gir tilgang til en A3 app.",
+      "title": "a3-app",
+      "description": "An Altinn 3 app",
+      "rightDescription": null,
       "homepage": null,
       "status": null,
       "spatial": null,
-      "contactPoints": [
-        {
-          "category": "Some category",
-          "email": "email@someemaildigdir.no",
-          "telephone": "12345678",
-          "contactPage": "Some page (webpage maybe?)"
-        }
-      ],
+      "contactPoints": null,
       "delegable": true,
       "visible": true,
       "resourceOwnerName": "Testdepartementet",
-      "resourceOwnerOrgNumber": "974760746",
-      "resourceOwnerLogoUrl": "https://altinncdn.no/img/illustration-help-circle.svg",
-      "resourceOwnerOrgcode": "TTD",
-      "resourceReferences": [
-        {
-          "referenceSource": "Altinn3",
-          "reference": "ttd/a3-app",
-          "referenceType": "ApplicationId"
-        }
-      ],
+      "resourceOwnerOrgNumber": "",
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.png",
+      "resourceOwnerOrgcode": "ttd",
+      "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "AltinnApp",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:app",
-          "value": "a3-app"
-        },
-        {
-          "id": "urn:altinn:org",
-          "value": "ttd"
-        }
-      ],
+      "authorizationReference": null,
       "keywords": []
     },
     "instance": {
@@ -81,45 +59,23 @@
   {
     "resource": {
       "identifier": "app_ttd_a3-app2",
-      "title": "A3 app 2",
-      "description": "En Altinn 3 app",
-      "rightDescription": "Gir tilgang til en A3 app.",
+      "title": "a3-app2",
+      "description": "An Altinn 3 app",
+      "rightDescription": null,
       "homepage": null,
       "status": null,
       "spatial": null,
-      "contactPoints": [
-        {
-          "category": "Some category",
-          "email": "email@someemaildigdir.no",
-          "telephone": "12345678",
-          "contactPage": "Some page (webpage maybe?)"
-        }
-      ],
+      "contactPoints": null,
       "delegable": true,
       "visible": true,
       "resourceOwnerName": "Testdepartementet",
-      "resourceOwnerOrgNumber": "974760746",
-      "resourceOwnerLogoUrl": "https://altinncdn.no/img/illustration-help-circle.svg",
-      "resourceOwnerOrgcode": "TTD",
-      "resourceReferences": [
-        {
-          "referenceSource": "Altinn3",
-          "reference": "ttd/a3-app2",
-          "referenceType": "ApplicationId"
-        }
-      ],
+      "resourceOwnerOrgNumber": "",
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.png",
+      "resourceOwnerOrgcode": "ttd",
+      "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "AltinnApp",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:app",
-          "value": "a3-app2"
-        },
-        {
-          "id": "urn:altinn:org",
-          "value": "ttd"
-        }
-      ],
+      "authorizationReference": null,
       "keywords": []
     },
     "instance": {
@@ -164,50 +120,85 @@
   {
     "resource": {
       "identifier": "app_ttd_a3-app",
-      "title": "A3 app",
-      "description": "En Altinn 3 app",
-      "rightDescription": "Gir tilgang til en A3 app.",
+      "title": "a3-app",
+      "description": "An Altinn 3 app",
+      "rightDescription": null,
       "homepage": null,
       "status": null,
       "spatial": null,
-      "contactPoints": [
-        {
-          "category": "Some category",
-          "email": "email@someemaildigdir.no",
-          "telephone": "12345678",
-          "contactPage": "Some page (webpage maybe?)"
-        }
-      ],
+      "contactPoints": null,
       "delegable": true,
       "visible": true,
       "resourceOwnerName": "Testdepartementet",
-      "resourceOwnerOrgNumber": "974760746",
-      "resourceOwnerLogoUrl": "https://altinncdn.no/img/illustration-help-circle.svg",
-      "resourceOwnerOrgcode": "TTD",
-      "resourceReferences": [
-        {
-          "referenceSource": "Altinn3",
-          "reference": "ttd/a3-app",
-          "referenceType": "ApplicationId"
-        }
-      ],
+      "resourceOwnerOrgNumber": "",
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.png",
+      "resourceOwnerOrgcode": "ttd",
+      "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "AltinnApp",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:app",
-          "value": "a3-app"
-        },
-        {
-          "id": "urn:altinn:org",
-          "value": "ttd"
-        }
-      ],
+      "authorizationReference": null,
       "keywords": []
     },
     "instance": {
       "id": "6f4a3c12-8fd1-4a8b-8dc6-777777777777",
       "urn": "urn:altinn:instance-id:51599233/6f4a3c12-8fd1-4a8b-8dc6-777777777777",
+      "type": {
+        "id": "eb7cd8eb-eee4-43cf-814b-f54e143cd954",
+        "name": "BrukerstyrtAppInstansDelegering"
+      }
+    },
+    "permissions": [
+      {
+        "from": {
+          "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "name": "DISKRET NÆR TIGER AS",
+          "type": "organization",
+          "variant": "AS",
+          "parent": null,
+          "children": null,
+          "partyId": 51329012
+        },
+        "to": {
+          "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "name": "SITRONGUL MEDALJONG",
+          "type": "person",
+          "variant": null,
+          "parent": null,
+          "children": null,
+          "partyId": 50789533
+        },
+        "via": null,
+        "role": null,
+        "viaRole": null,
+        "reason": null
+      }
+    ]
+  },
+  {
+    "resource": {
+      "identifier": "app_ttd_missing-resource",
+      "title": "missing-resource",
+      "description": "Resource registry entry resolves to null",
+      "rightDescription": null,
+      "homepage": null,
+      "status": null,
+      "spatial": null,
+      "contactPoints": null,
+      "delegable": true,
+      "visible": true,
+      "resourceOwnerName": "Testdepartementet",
+      "resourceOwnerOrgNumber": "",
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.png",
+      "resourceOwnerOrgcode": "ttd",
+      "resourceReferences": null,
+      "priorityCounter": null,
+      "resourceType": "AltinnApp",
+      "authorizationReference": null,
+      "keywords": []
+    },
+    "instance": {
+      "id": "b42df1f3-56f2-436a-bad7-222222222222",
+      "urn": "urn:altinn:instance-id:51599233/b42df1f3-56f2-436a-bad7-222222222222",
       "type": {
         "id": "eb7cd8eb-eee4-43cf-814b-f54e143cd954",
         "name": "BrukerstyrtAppInstansDelegering"
