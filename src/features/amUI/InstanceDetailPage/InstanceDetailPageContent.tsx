@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import {
   DsAlert,
   DsButton,
@@ -14,6 +16,10 @@ import UserSearch from '../common/UserSearch/UserSearch';
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import {
+  createErrorDetails,
+  TechnicalErrorParagraphs,
+} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
@@ -33,17 +39,21 @@ export const InstanceDetailPageContent = () => {
   const resourceId = searchParams.get('resourceId') ?? searchParams.get('resourceID') ?? '';
   const dialogId = searchParams.get('dialogId');
   const inboxUrl = dialogId ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}` : undefined;
-  const { data: resourceFromQuery, isLoading: isResourceLoading } = useGetResourceQuery(
-    resourceId,
-    {
-      skip: !resourceId,
-    },
-  );
+
+  const {
+    data: resource,
+    isLoading: isResourceLoading,
+    isError: isResourceError,
+    error: resourceError,
+  } = useGetResourceQuery(resourceId, {
+    skip: !resourceId,
+  });
 
   const {
     data: instances = [],
     isLoading: isInstancesLoading,
     isError: isInstancesError,
+    error: instancesError,
   } = useGetInstancesQuery(
     {
       party: actingParty?.partyUuid || '',
@@ -55,8 +65,6 @@ export const InstanceDetailPageContent = () => {
       skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
     },
   );
-
-  const resource = resourceFromQuery ?? instances.find((instance) => instance.resource)?.resource;
 
   const users = useMemo(
     () =>
@@ -78,13 +86,22 @@ export const InstanceDetailPageContent = () => {
     );
   }
 
-  if (isInstancesError) {
+  if (isInstancesError || isResourceError) {
+    const technicalError = createErrorDetails(resourceError || instancesError);
     return (
       <DsAlert
         role='alert'
         data-color='danger'
       >
         <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+        {technicalError && (
+          <TechnicalErrorParagraphs
+            size='sm'
+            status={technicalError.status}
+            time={technicalError.time}
+            traceId={technicalError.traceId}
+          />
+        )}
       </DsAlert>
     );
   }

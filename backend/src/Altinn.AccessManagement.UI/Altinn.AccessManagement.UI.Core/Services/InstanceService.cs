@@ -25,48 +25,36 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
-            List<InstancePermission> instancePermissions = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
-            List<InstanceDelegation> delegations = new List<InstanceDelegation>();
-
-            foreach (var instancePermission in instancePermissions)
-            {
-                if (instancePermission == null)
+            return (await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance))
+                .Where(instancePermission => !string.IsNullOrWhiteSpace(instancePermission?.Resource?.RefId))
+                .Select(instancePermission =>
                 {
-                    continue;
-                }
+                    var instanceResource = instancePermission!.Resource;
+                    var resourceId = instanceResource.RefId;
 
-                var instanceResource = instancePermission.Resource;
-                var resourceId = instanceResource?.RefId;
+                    ResourceType resourceType = Enum.TryParse(instanceResource.Type?.Name, true, out ResourceType parsedResourceType)
+                        ? parsedResourceType
+                        : ResourceType.Default;
 
-                if (string.IsNullOrWhiteSpace(resourceId))
-                {
-                    continue;
-                }
+                    ServiceResourceFE resourceFe = new(
+                        resourceId,
+                        instanceResource.Name,
+                        instanceResource.Description,
+                        rightDescription: null,
+                        status: null,
+                        resourceOwnerName: instanceResource.Provider?.Name,
+                        resourceOwnerOrgNumber: instanceResource.Provider?.RefId,
+                        resourceReferences: null,
+                        resourceType: resourceType,
+                        contactPoints: null,
+                        spatial: null,
+                        authorizationReference: null,
+                        resourceOwnerLogoUrl: instanceResource.Provider?.LogoUrl,
+                        resourceOwnerOrgcode: instanceResource.Provider?.Code);
 
-                ResourceType resourceType = Enum.TryParse(instanceResource?.Type?.Name, true, out ResourceType parsedResourceType)
-                    ? parsedResourceType
-                    : ResourceType.Default;
-
-                ServiceResourceFE resourceFe = new(
-                    resourceId,
-                    instanceResource.Name,
-                    instanceResource.Description,
-                    rightDescription: null,
-                    status: null,
-                    resourceOwnerName: instanceResource.Provider?.Name,
-                    resourceOwnerOrgNumber: instanceResource.Provider?.RefId,
-                    resourceReferences: null,
-                    resourceType: resourceType,
-                    contactPoints: null,
-                    spatial: null,
-                    authorizationReference: null,
-                    resourceOwnerLogoUrl: instanceResource.Provider?.LogoUrl,
-                    resourceOwnerOrgcode: instanceResource.Provider?.Code);
-
-                delegations.Add(new InstanceDelegation(resourceFe, instancePermission.Instance, instancePermission.Permissions));
-            }
-
-            return delegations;
+                    return new InstanceDelegation(resourceFe, instancePermission.Instance, instancePermission.Permissions);
+                })
+                .ToList();
         }
 
         /// <inheritdoc />

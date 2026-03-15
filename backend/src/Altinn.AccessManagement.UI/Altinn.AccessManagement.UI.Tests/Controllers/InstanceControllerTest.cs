@@ -4,11 +4,13 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -155,6 +157,32 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             InstanceDelegation fallbackDelegation = actualResponse.Single(delegation => delegation.Resource.Identifier == "app_ttd_missing-resource");
             AssertionUtil.AssertEqual(expectedFallbackDelegation, fallbackDelegation);
+        }
+
+        /// <summary>
+        /// Test case: The instance client returns a null item in the delegated instance list.
+        /// Expected: InstanceService skips the null entry and maps the remaining valid items.
+        /// </summary>
+        [Fact]
+        public async Task InstanceService_GetInstances_SkipsNullInstancePermission()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string mockPath = Path.Combine(_mockFolder, "Data", "Instance", "GetInstances", "instances.json");
+            List<InstancePermission> mockPermissions = Util.GetMockData<List<InstancePermission>>(mockPath);
+            string expectedPath = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
+            List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(expectedPath);
+            var instanceClientMock = new Mock<IInstanceClient>();
+            instanceClientMock
+                .Setup(client => client.GetDelegatedInstances(It.IsAny<string>(), party, from, null, null, null))
+                .ReturnsAsync([null, mockPermissions[0]]);
+
+            var instanceService = new InstanceService(instanceClientMock.Object);
+
+            List<InstanceDelegation> actualResponse = await instanceService.GetDelegatedInstances("nb", party, from, null, null, null);
+
+            Assert.Single(actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse[0], actualResponse[0]);
         }
 
         /// <summary>
