@@ -184,21 +184,6 @@ export const InstanceDetailPageContent = () => {
 
   const technicalError = isInstancesError ? createErrorDetails(instancesError) : null;
 
-  <DsAlert
-    role='alert'
-    data-color='danger'
-  >
-    <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-    {technicalError && (
-      <TechnicalErrorParagraphs
-        size='sm'
-        status={technicalError.status}
-        time={technicalError.time}
-        traceId={technicalError.traceId}
-      />
-    )}
-  </DsAlert>;
-
   return (
     <>
       <InstanceDetailHeader
@@ -235,7 +220,9 @@ export const InstanceDetailPageContent = () => {
           noUsersText={t('instance_detail_page.no_users')}
         />
       ) : (
-        t('instance_detail_page.cannot_share_with_others')
+        <DsParagraph data-size='sm'>
+          {t('instance_detail_page.cannot_share_with_others')}
+        </DsParagraph>
       )}
     </>
   );
