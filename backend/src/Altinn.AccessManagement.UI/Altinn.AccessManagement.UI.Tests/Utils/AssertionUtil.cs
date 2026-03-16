@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
+using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -253,6 +254,21 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
+        ///     Assert that two <see cref="InstanceDelegation" /> have the same property values.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(InstanceDelegation expected, InstanceDelegation actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            AssertEqual(expected.Resource, actual.Resource);
+            AssertEqual(expected.Instance, actual.Instance);
+            AssertCollections(expected.Permissions, actual.Permissions, AssertEqual);
+        }
+
+        /// <summary>
         ///     Assert that two Lists of <see cref="ResourceReference" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
@@ -280,6 +296,12 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <param name="actual">The instance to verify.</param>
         public static void AssertEqual(List<ContactPoint> expected, List<ContactPoint> actual)
         {
+            if (actual == null)
+            {
+                Assert.Null(expected);
+                return;
+            }
+
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 

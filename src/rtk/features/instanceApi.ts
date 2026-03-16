@@ -46,7 +46,7 @@ export const instanceApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['instances', 'instanceRights', 'instanceDelegationCheck', 'dialogLookup'],
+  tagTypes: ['instances', 'instanceRights', 'instanceDelegationCheck'],
   endpoints: (builder) => ({
     getInstances: builder.query<
       InstanceDelegation[],

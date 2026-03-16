@@ -4,10 +4,13 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -65,11 +68,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.NotNull(actualResponse);
-            Assert.Equal(expectedResponse.Count, actualResponse.Count);
-            Assert.Equal(expectedResponse[0].Resource.Identifier, actualResponse[0].Resource.Identifier);
-            Assert.Equal(expectedResponse[0].Instance.Urn, actualResponse[0].Instance.Urn);
-            Assert.Equal(expectedResponse[1].Resource.Identifier, actualResponse[1].Resource.Identifier);
-            Assert.Equal(expectedResponse[1].Instance.Urn, actualResponse[1].Instance.Urn);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
@@ -81,13 +80,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
+            List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(path);
 
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
             List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.NotNull(actualResponse);
-            Assert.Equal(3, actualResponse.Count);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
@@ -101,6 +102,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string resource = "app_ttd_a3-app2";
             string instance = "urn:altinn:instance-id:51599233/c1d2e3f4-1111-2222-3333-444455556666";
+            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
+            List<InstanceDelegation> expectedResponses = Util.GetMockData<List<InstanceDelegation>>(path);
+            InstanceDelegation expectedResponse = expectedResponses.Single(delegation =>
+                delegation.Resource.Identifier == resource &&
+                delegation.Instance.Urn == instance);
 
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
             List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
@@ -108,8 +114,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.NotNull(actualResponse);
             Assert.Single(actualResponse);
-            Assert.Equal(resource, actualResponse[0].Resource.Identifier);
-            Assert.Equal(instance, actualResponse[0].Instance.Urn);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse[0]);
         }
 
         /// <summary>
@@ -129,25 +134,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: The mock instance dataset contains entries with a missing resource reference and a resource that resolves to null.
-        /// Expected: Returns only the valid delegated instances.
+        /// Test case: The instance client returns a null item in the delegated instance list.
+        /// Expected: InstanceService skips the null entry and maps the remaining valid items.
         /// </summary>
         [Fact]
-        public async Task GetInstances_SkipsEntriesWithMissingOrUnknownResource()
+        public async Task InstanceService_GetInstances_SkipsNullInstancePermission()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
-            List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(path);
+            string mockPath = Path.Combine(_mockFolder, "Data", "Instance", "GetInstances", "instances.json");
+            List<InstancePermission> mockPermissions = Util.GetMockData<List<InstancePermission>>(mockPath);
+            string expectedPath = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
+            List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(expectedPath);
+            var instanceClientMock = new Mock<IInstanceClient>();
+            instanceClientMock
+                .Setup(client => client.GetDelegatedInstances(It.IsAny<string>(), party, from, null, null, null))
+                .ReturnsAsync([null, mockPermissions[0]]);
 
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
-            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
+            var instanceService = new InstanceService(instanceClientMock.Object);
 
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.NotNull(actualResponse);
-            Assert.Equal(expectedResponse.Count, actualResponse.Count);
-            Assert.DoesNotContain(actualResponse, delegation => delegation.Resource.Identifier == "app_ttd_missing-resource");
-            Assert.All(actualResponse, delegation => Assert.False(string.IsNullOrWhiteSpace(delegation.Resource.Identifier)));
+            List<InstanceDelegation> actualResponse = await instanceService.GetDelegatedInstances("nb", party, from, null, null, null);
+
+            Assert.Single(actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse[0], actualResponse[0]);
         }
 
         /// <summary>

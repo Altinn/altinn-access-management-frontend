@@ -197,6 +197,42 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
+        public async Task<ServiceResourceFE> GetResource(string resourceRegistryId, string languageCode)
+        {
+            try
+            {
+                ServiceResource resource = await GetResource(resourceRegistryId);
+                if (resource == null)
+                {
+                    return null;
+                }
+
+                ServiceResourceFE resourceFe = MapResourceToFrontendModel([resource], languageCode).FirstOrDefault();
+                if (resourceFe == null)
+                {
+                    return null;
+                }
+
+                string resourceOwnerOrgCode = resourceFe.ResourceOwnerOrgcode?.ToLower();
+                if (!string.IsNullOrEmpty(resourceOwnerOrgCode))
+                {
+                    OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+                    if (orgList?.Orgs?.TryGetValue(resourceOwnerOrgCode, out var org) == true)
+                    {
+                        resourceFe.ResourceOwnerLogoUrl = org?.Logo;
+                    }
+                }
+
+                return resourceFe;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("//ResourceService //GetResource failed to fetch resource {ex}", ex);
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
         public async Task<List<ResourceOwnerFE>> GetResourceOwners(List<ResourceType> relevantResourceTypeList, string languageCode)
         {
             try
