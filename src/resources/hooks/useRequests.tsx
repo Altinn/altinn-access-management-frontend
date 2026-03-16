@@ -7,6 +7,12 @@ import { Request } from '@/features/amUI/requestPage/types';
 import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
 import { SystemUser } from '@/features/amUI/systemUser/types';
 import { ActiveConsentListItem } from '@/features/amUI/consent/types';
+import {
+  RequestDto,
+  useGetReceivedRequestsQuery,
+  useGetSentRequestsQuery,
+} from '@/rtk/features/requestApi';
+import { formatDisplayName } from '@altinn/altinn-components';
 
 export const useRequests = () => {
   const partyUuid = getCookie('AltinnPartyUuid');
@@ -41,16 +47,38 @@ export const useRequests = () => {
     skip: !partyUuid || !hasSystemUserPermission,
   });
 
+  const { data: pendingSentAccessRequests } = useGetSentRequestsQuery(
+    { party: partyUuid || '', status: ['Pending'], to: '' },
+    { skip: !partyUuid },
+  );
+  const { data: pendingReceivedAccessRequests } = useGetReceivedRequestsQuery(
+    { party: partyUuid || '', status: ['Pending'], from: '' },
+    { skip: !partyUuid },
+  );
+
   const pendingRequests: Request[] = useMemo(() => {
     const consents = (activeConsents || [])
       .filter((x) => x.isPendingConsent)
       .map(mapConsentToRequest);
 
     const systemUserRequests = (pendingSystemUsers || []).map(mapSystemUserRequestToRequest);
-    return [...consents, ...systemUserRequests].sort(
-      (a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime(),
+    const sentAccessRequests = (pendingSentAccessRequests || []).map(mapAccessRequestToRequest);
+    const receivedAccessRequests = (pendingReceivedAccessRequests || []).map(
+      mapAccessRequestToRequest,
     );
-  }, [activeConsents, pendingSystemUsers]);
+
+    return [
+      ...consents,
+      ...systemUserRequests,
+      ...sentAccessRequests,
+      ...receivedAccessRequests,
+    ].sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime());
+  }, [
+    activeConsents,
+    pendingSystemUsers,
+    pendingSentAccessRequests,
+    pendingReceivedAccessRequests,
+  ]);
 
   return {
     pendingRequests,
@@ -83,5 +111,19 @@ const mapSystemUserRequestToRequest = (request: SystemUser): Request => {
     fromPartyName: request.system.systemVendorOrgName,
     fromPartyType: 'system',
     description: 'request_page.request_systemuser',
+  };
+};
+
+const mapAccessRequestToRequest = (request: RequestDto): Request => {
+  console.log('Mapping access request to request', request);
+  const type = !request.from.organizationIdentifier ? 'person' : 'company';
+  const fromPartyName = formatDisplayName({ fullName: request.from.name, type: type });
+  return {
+    id: request.id,
+    type: 'accessrequest',
+    createdDate: request.lastUpdated,
+    fromPartyName: fromPartyName,
+    fromPartyType: type,
+    description: `request_page.request_accessrequests`,
   };
 };
