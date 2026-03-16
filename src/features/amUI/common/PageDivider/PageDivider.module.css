@@ -1,0 +1,11 @@
+.divider {
+  border: 0;
+  border-top: 1px solid var(--ds-color-neutral-border-subtle);
+  margin: 0 -2rem var(--ds-spacing-6);
+}
+
+@media (max-width: 768px) {
+  .divider {
+    margin: 0 -1rem var(--ds-spacing-6);
+  }
+}

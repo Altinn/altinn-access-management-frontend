@@ -16,6 +16,7 @@ import { useSidebarItems } from './useSidebarItems';
 
 interface PageLayoutWrapperProps {
   openAccountMenu?: boolean;
+  hideSidebar?: boolean;
   children?: React.ReactNode;
 }
 
@@ -25,6 +26,7 @@ const getAccountType = (type: string): 'company' | 'person' => {
 
 export const PageLayoutWrapper = ({
   openAccountMenu = false,
+  hideSidebar = false,
   children,
 }: PageLayoutWrapperProps): React.ReactNode => {
   const { t } = useTranslation();
@@ -33,7 +35,7 @@ export const PageLayoutWrapper = ({
 
   const { menuGroups } = useGlobalMenu();
 
-  const { header, languageCode } = useHeader({ openAccountMenu });
+  const { header, languageCode } = useHeader({ openAccountMenu, hideSidebarItems: hideSidebar });
   const footer = useFooter();
   const { sidebarItems } = useSidebarItems({ isSmall: false });
 
@@ -53,19 +55,23 @@ export const PageLayoutWrapper = ({
           size: 'xs',
           children: t('common.skiplink'),
         }}
-        sidebar={{
-          menu: {
-            groups: menuGroups,
-            items: sidebarItems,
-          },
-          footer: (
-            <Badge
-              label={t('common.beta')}
-              variant='base'
-              color='neutral'
-            />
-          ),
-        }}
+        sidebar={
+          hideSidebar
+            ? undefined
+            : {
+                menu: {
+                  groups: menuGroups,
+                  items: sidebarItems,
+                },
+                footer: (
+                  <Badge
+                    label={t('common.beta')}
+                    variant='base'
+                    color='neutral'
+                  />
+                ),
+              }
+        }
         content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
         footer={footer}
       >

@@ -1,11 +1,14 @@
-import { Navigate } from 'react-router';
+import { Navigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { amUIPath } from '@/routes/paths/amUIPath';
-import { poaOverviewPageEnabled } from '@/resources/utils/featureFlagUtils';
+import {
+  displayInstanceDelegation,
+  poaOverviewPageEnabled,
+} from '@/resources/utils/featureFlagUtils';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -16,10 +19,13 @@ import { InstanceDetailPageContent } from './InstanceDetailPageContent';
 export const InstanceDetailPage = () => {
   const { t } = useTranslation();
   const partyUuid = getCookie('AltinnPartyUuid') || '';
+  const [searchParams] = useSearchParams();
+  const isInboxDeeplink = !!searchParams.get('dialogId');
+  const instanceDelegationEnabled = displayInstanceDelegation();
 
   useDocumentTitle(t('instance_detail_page.document_title'));
 
-  if (!poaOverviewPageEnabled()) {
+  if (!instanceDelegationEnabled) {
     return (
       <Navigate
         to='/not-found'
@@ -30,12 +36,12 @@ export const InstanceDetailPage = () => {
 
   return (
     <PageWrapper>
-      <PageLayoutWrapper>
+      <PageLayoutWrapper hideSidebar={isInboxDeeplink}>
         <PartyRepresentationProvider
           fromPartyUuid={partyUuid}
           actingPartyUuid={partyUuid}
         >
-          <PageContainer backUrl={`/${amUIPath.PoaOverview}`}>
+          <PageContainer backUrl={isInboxDeeplink ? undefined : `/${amUIPath.PoaOverview}`}>
             <InstanceDetailPageContent />
           </PageContainer>
         </PartyRepresentationProvider>
