@@ -1,0 +1,59 @@
+using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.Request.Frontend;
+
+namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
+{
+    /// <summary>
+    /// Interface for service to handle requests
+    /// </summary>
+    public interface IRequestService
+    {
+        /// <summary>
+        /// Get requests sent by a party
+        /// </summary>
+        /// <param name="party">The acting party asking for sent requests</param>
+        /// <param name="to">The party the requests were sent to</param>
+        /// <param name="status">The statuses to get</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of sent requests</returns>
+        Task<IEnumerable<SingleRightRequest>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get requests received by a party
+        /// </summary>
+        /// <param name="party">The acting party asking for received requests</param>
+        /// <param name="from">The party who sent the requests</param>
+        /// <param name="status">The statuses to get</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of received requests</returns>
+        Task<IEnumerable<SingleRightRequest>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get a single request by id
+        /// </summary>
+        /// <param name="party">The acting party asking for the request</param>
+        /// <param name="id">The request id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The request</returns>
+        Task<SingleRightRequest> GetRequest(Guid party, Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Creates a new resource request
+        /// </summary>
+        /// <param name="party">The acting party creating the request</param>
+        /// <param name="to">The party the request is directed to</param>
+        /// <param name="resource">The resource to request</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>True if the request was created successfully</returns>
+        Task<bool> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Withdraw a request by id
+        /// </summary>
+        /// <param name="party">The acting party withdrawing the request</param>
+        /// <param name="id">The request id to withdraw</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>True if the request was withdrawn successfully</returns>
+        Task<bool> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken);
+    }
+}

@@ -96,6 +96,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool AltinnCdn { get; set; }
 
         /// <summary>
+        /// Set to run RequestClient locally during runtime
+        /// </summary>
+        public bool Request { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MockSettings()
