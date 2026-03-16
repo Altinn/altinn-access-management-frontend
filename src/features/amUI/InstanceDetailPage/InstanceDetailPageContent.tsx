@@ -58,8 +58,18 @@ export const InstanceDetailPageContent = () => {
   const dialogId = searchParams.get('dialogId');
   const inboxUrl = dialogId ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}` : undefined;
 
-  const { data: isAdmin, isLoading: isAdminLoading } = useGetIsAdminQuery();
-  const { data: isInstanceAdmin, isLoading: isInstanceAdminLoading } = useGetIsInstanceAdminQuery();
+  const {
+    data: isAdmin,
+    isLoading: isAdminLoading,
+    isError: isAdminError,
+    error: isAdminErrorObj,
+  } = useGetIsAdminQuery();
+  const {
+    data: isInstanceAdmin,
+    isLoading: isInstanceAdminLoading,
+    isError: isInstanceAdminError,
+    error: isInstanceAdminErrorObj,
+  } = useGetIsInstanceAdminQuery();
 
   const {
     data: instances = [],
@@ -149,47 +159,31 @@ export const InstanceDetailPageContent = () => {
     return <ResourceInfoSkeleton />;
   }
 
-  if (!resource) {
-    const technicalError = createErrorDetails(resourceError || instancesError);
-    return (
-      <>
-        {inboxLink}
-        <DsAlert
-          role='alert'
-          data-color='danger'
-        >
-          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-          {technicalError && (
-            <TechnicalErrorParagraphs
-              size='sm'
-              status={technicalError.status}
-              time={technicalError.time}
-              traceId={technicalError.traceId}
-            />
-          )}
-        </DsAlert>
-      </>
-    );
-  }
+  const contentTechnicalError =
+    isAdminError || isInstanceAdminError || isInstancesError || resourceError
+      ? createErrorDetails(
+          instancesError || isAdminErrorObj || isInstanceAdminErrorObj || resourceError,
+        )
+      : null;
 
-  const providerLogoUrl = resource.resourceOwnerOrgcode
+  const providerLogoUrl = resource?.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
 
-  const technicalError = isInstancesError ? createErrorDetails(instancesError) : null;
-
   return (
     <>
-      <InstanceDetailHeader
-        resource={resource}
-        resourceId={resourceId}
-        providerLogoUrl={providerLogoUrl}
-        fromPartyName={fromParty?.name}
-        fromPartyTypeName={fromParty?.partyTypeName}
-      />
+      {resource && (
+        <InstanceDetailHeader
+          resource={resource}
+          resourceId={resourceId}
+          providerLogoUrl={providerLogoUrl}
+          fromPartyName={fromParty?.name}
+          fromPartyTypeName={fromParty?.partyTypeName}
+        />
+      )}
       {inboxLink}
       <PageDivider />
-      {technicalError ? (
+      {contentTechnicalError ? (
         <DsAlert
           role='alert'
           data-color='danger'
@@ -197,9 +191,9 @@ export const InstanceDetailPageContent = () => {
           <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
           <TechnicalErrorParagraphs
             size='sm'
-            status={technicalError.status}
-            time={technicalError.time}
-            traceId={technicalError.traceId}
+            status={contentTechnicalError.status}
+            time={contentTechnicalError.time}
+            traceId={contentTechnicalError.traceId}
           />
         </DsAlert>
       ) : isInstanceAdmin ? (
