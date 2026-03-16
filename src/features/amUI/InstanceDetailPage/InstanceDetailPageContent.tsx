@@ -145,13 +145,7 @@ export const InstanceDetailPageContent = () => {
     </div>
   ) : null;
 
-  if (
-    (isResourceLoading ||
-      isAdminLoading ||
-      isInstanceAdminLoading ||
-      (isAdmin && isInstancesLoading)) &&
-    !resource
-  ) {
+  if (isResourceLoading || isAdminLoading || isInstanceAdminLoading) {
     return <ResourceInfoSkeleton />;
   }
 
@@ -214,7 +208,7 @@ export const InstanceDetailPageContent = () => {
           AddUserButton={DisabledAddUserButton}
           users={users}
           indirectUsers={indirectUsers}
-          isLoading={isInstancesLoading || isLoadingIndirectConnections}
+          isLoading={isInstancesLoading || isLoadingIndirectConnections || isInstanceAdminLoading}
           isActionLoading={isFetchingIndirectConnections}
           canDelegate
           noUsersText={t('instance_detail_page.no_users')}
