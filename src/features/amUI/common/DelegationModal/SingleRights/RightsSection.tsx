@@ -39,6 +39,9 @@ type RightsSectionProps = {
   undelegableActions: string[];
   availableActions?: DelegationAction[];
   rightsMetaTechnicalErrorDetails: { status: string; time: string } | null;
+  hasRequestedSingleRight?: boolean;
+  sendRequest: () => void;
+  deleteRequest: () => void;
 };
 
 export const RightsSection = ({
@@ -58,6 +61,9 @@ export const RightsSection = ({
   missingAccess,
   availableActions,
   rightsMetaTechnicalErrorDetails,
+  hasRequestedSingleRight,
+  sendRequest,
+  deleteRequest,
 }: RightsSectionProps) => {
   const [rightsExpanded, setRightsExpanded] = useState(false);
   const isSmall = useIsMobileOrSmaller();
@@ -207,6 +213,27 @@ export const RightsSection = ({
           >
             <MinusCircleIcon aria-hidden='true' />
             {t('common.delete_poa')}
+          </Button>
+        )}
+        {!hasAccess &&
+          !hasRequestedSingleRight &&
+          availableActions?.includes(DelegationAction.REQUEST) && (
+            <Button
+              data-size='sm'
+              disabled={!resource.delegable}
+              onClick={sendRequest}
+            >
+              {t('common.request_poa')}
+            </Button>
+          )}
+        {hasRequestedSingleRight && availableActions?.includes(DelegationAction.REQUEST) && (
+          <Button
+            data-size='sm'
+            disabled={!resource.delegable}
+            color='danger'
+            onClick={deleteRequest}
+          >
+            {t('delegation_modal.request.delete_request')}
           </Button>
         )}
       </div>

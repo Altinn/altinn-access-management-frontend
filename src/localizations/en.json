@@ -512,6 +512,16 @@
       "error_status": "Status: {{status}}",
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
       "missing_rights": "You cannot give this power of attorney because you do not have access yourself."
+    },
+    "request": {
+      "request_service": "Request single service",
+      "delete_request": "Delete request",
+      "pending_request_info": "Waiting for someone in <strong>{{partyName}}</strong> to process your request for authorization",
+      "cannot_request_right": "You cannot request authorization for this single service.",
+      "sent_request_success": "Request for authorization for {{resource}} has been sent",
+      "sent_request_error": "Could not send request for authorization for {{resource}}",
+      "withdraw_request_success": "Request for authorization for {{resource}} has been deleted",
+      "withdraw_request_error": "Could not delete request for authorization for {{resource}}"
     }
   },
   "status_section": {

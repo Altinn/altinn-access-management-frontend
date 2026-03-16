@@ -18,7 +18,7 @@ import { useDelegationModalContext } from './DelegationModalContext';
 import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
-import type { DelegationAction } from './EditModal';
+import { DelegationAction } from './EditModal';
 
 export interface DelegationModalProps {
   delegationType: DelegationType;
@@ -81,6 +81,7 @@ export const DelegationModalContent = ({
   let searchViewContent: JSX.Element | undefined;
   let infoViewContent: JSX.Element | undefined;
   let triggerButtonText: string | undefined;
+  let triggerButtonVariant: 'primary' | 'secondary' = 'primary';
 
   switch (delegationType) {
     case DelegationType.AccessPackage:
@@ -103,6 +104,7 @@ export const DelegationModalContent = ({
       triggerButtonText = t('access_packages.give_new_button');
       break;
     default:
+      const hasDelegateAccess = (availableActions ?? []).indexOf(DelegationAction.DELEGATE) > -1;
       searchViewContent = (
         <ResourceSearch
           onSelect={onResourceSelection}
@@ -116,14 +118,17 @@ export const DelegationModalContent = ({
           availableActions={availableActions}
         />
       );
-      triggerButtonText = t('single_rights.give_new_single_right');
+      triggerButtonVariant = hasDelegateAccess ? 'primary' : 'secondary';
+      triggerButtonText = hasDelegateAccess
+        ? t('single_rights.give_new_single_right')
+        : t('delegation_modal.request.request_service');
   }
 
   return (
     <DsDialog.TriggerContext>
       <DsDialog.Trigger
         data-size='sm'
-        variant='primary'
+        variant={triggerButtonVariant}
         className={classes.triggerButton}
       >
         {triggerButtonText}

@@ -27,7 +27,8 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
   const { displayResourceDelegation } = window.featureFlags;
   const { toParty, fromParty, actingParty, isLoading: isPartyLoading } = usePartyRepresentation();
 
-  const canGiveAccess = useCanGiveAccess(id ?? '');
+  const canGiveAccess = useCanGiveAccess(id ?? '', isReportee);
+  const canRequestAccess = !canGiveAccess && actingParty?.partyUuid === toParty?.partyUuid;
 
   const {
     data: delegatedResources,
@@ -93,6 +94,12 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
     return <SingleRightsSectionSkeleton />;
   }
 
+  const availableActions = [
+    DelegationAction.REVOKE,
+    ...(canGiveAccess ? [DelegationAction.DELEGATE] : []),
+    ...(canRequestAccess ? [DelegationAction.REQUEST] : []),
+  ];
+
   return (
     toParty && (
       <div className={classes.singleRightsSectionContainer}>
@@ -128,18 +135,10 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
             size={isSmallScreen ? 'sm' : 'md'}
             titleAs='h3'
             delegationModal={
-              canGiveAccess &&
-              !isReportee && (
-                <DelegationModal
-                  delegationType={DelegationType.SingleRights}
-                  availableActions={[
-                    DelegationAction.REVOKE,
-                    canGiveAccess && !isReportee
-                      ? DelegationAction.DELEGATE
-                      : DelegationAction.REQUEST,
-                  ]}
-                />
-              )
+              <DelegationModal
+                delegationType={DelegationType.SingleRights}
+                availableActions={availableActions}
+              />
             }
             renderControls={(resource) => {
               const isInherited = isResourceInherited(resource.identifier);
@@ -157,10 +156,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
           ref={modalRef}
           resource={selectedResource ?? undefined}
           onClose={() => setSelectedResource(null)}
-          availableActions={[
-            DelegationAction.REVOKE,
-            canGiveAccess && !isReportee ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-          ]}
+          availableActions={availableActions}
         />
       </div>
     )

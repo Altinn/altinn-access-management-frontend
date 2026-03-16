@@ -509,6 +509,16 @@
       "error_status": "Status: {{status}}",
       "access_list_service": "Hvem som får benytte denne tjenesten bestemmes av {{resourceOwner}}, og {{reportee}} er ikke gitt den muligheten. Vi anbefaler dere å ta kontakt med {{resourceOwner}}.",
       "missing_rights": "Du får ikke gitt denne fullmakten til andre fordi du mangler tilgang til den selv."
+    },
+    "request": {
+      "request_service": "Be om enkelttjeneste",
+      "delete_request": "Slett forespørsel",
+      "pending_request_info": "Venter på at noen i <strong>{{partyName}}</strong> skal behandle din forespørsel om fullmakt",
+      "cannot_request_right": "Du kan ikke be om fullmakt til denne enkelttjenesten.",
+      "sent_request_success": "Forespørsel om fullmakt til {{resource}} er sendt",
+      "sent_request_error": "Kunne ikke sende forespørsel om fullmakt til {{resource}}",
+      "withdraw_request_success": "Forespørsel om fullmakt til {{resource}} er slettet",
+      "withdraw_request_error": "Kunne ikke slette forespørsel om fullmakt til {{resource}}"
     }
   },
   "status_section": {

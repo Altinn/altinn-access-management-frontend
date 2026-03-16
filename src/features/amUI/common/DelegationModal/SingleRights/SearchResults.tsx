@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, DsSpinner, useSnackbar } from '@altinn/altinn-components';
 
 import {
   type ResourceDelegation,
@@ -16,6 +16,11 @@ import { useResourceListDelegation } from './hooks/useResourceListDelegation';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { useRenderSearchResultControl } from './createSearchResultControlsRenderer';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import {
+  useCreateSingleRightRequestMutation,
+  useDeleteSingleRightRequestMutation,
+  useGetSingleRightRequestsQuery,
+} from '@/rtk/features/requestApi';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -48,7 +53,8 @@ export const SearchResults = ({
 }: SearchResultsProps) => {
   const { t } = useTranslation();
   const { setActionError } = useDelegationModalContext();
-  const { toParty } = usePartyRepresentation();
+  const { actingParty, toParty, fromParty } = usePartyRepresentation();
+  const { openSnackbar } = useSnackbar();
 
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
     onActionError: (resource, errorInfo) => {
@@ -63,6 +69,70 @@ export const SearchResults = ({
       onSelect(resource);
     },
   });
+  const { data: singleRightRequests } = useGetSingleRightRequestsQuery(
+    {
+      actingParty: actingParty?.partyUuid || '',
+      to: fromParty?.partyUuid || '',
+    },
+    {
+      skip: !availableActions?.includes(DelegationAction.REQUEST),
+    },
+  );
+
+  const [createRequest, { isLoading: isCreatingRequest }] = useCreateSingleRightRequestMutation();
+  const [deleteSentRequest, { isLoading: isDeletingRequest }] =
+    useDeleteSingleRightRequestMutation();
+  const requestFromList = (resource: ServiceResource) => {
+    createRequest({
+      actingParty: actingParty?.partyUuid || '',
+      to: toParty?.partyUuid || '',
+      resource: resource.identifier,
+    })
+      .unwrap()
+      .then(() => {
+        openSnackbar({
+          message: t('delegation_modal.request.sent_request_success', { resource: resource.title }),
+          color: 'success',
+        });
+      })
+      .catch(() => {
+        openSnackbar({
+          message: t('delegation_modal.request.sent_request_error', { resource: resource.title }),
+          color: 'danger',
+        });
+        //onSelect(resource, true);
+      });
+  };
+
+  const deleteRequestFromList = (resource: ServiceResource) => {
+    const requestId = (singleRightRequests ?? []).find(
+      (x) => x.resourceId === resource.identifier,
+    )?.id;
+    if (requestId) {
+      deleteSentRequest({
+        actingParty: actingParty?.partyUuid || '',
+        requestId: requestId,
+      })
+        .unwrap()
+        .then(() => {
+          openSnackbar({
+            message: t('delegation_modal.request.withdraw_request_success', {
+              resource: resource.title,
+            }),
+            color: 'success',
+          });
+        })
+        .catch(() => {
+          openSnackbar({
+            message: t('delegation_modal.request.withdraw_request_error', {
+              resource: resource.title,
+            }),
+            color: 'danger',
+          });
+          //onSelect(resource, true);
+        });
+    }
+  };
 
   const isDelegated = (resourceId: string) =>
     delegatedResources?.some((delegation) => delegation.resource?.identifier === resourceId) ??
@@ -81,14 +151,25 @@ export const SearchResults = ({
     );
   };
 
+  const isRequested = (resourceId: string) => {
+    return (singleRightRequests ?? []).some((x) => x.resourceId === resourceId);
+  };
+
+  const isLoading = (resourceId: string) => {
+    return isResourceLoading(resourceId) || isCreatingRequest || isDeletingRequest;
+  };
+
   const renderControls = useRenderSearchResultControl({
     isDelegated,
     isInherited,
+    isRequested,
     availableActions,
-    isResourceLoading,
+    isResourceLoading: isLoading,
     setActionError,
     revokeFromList,
     delegateFromList,
+    requestFromList,
+    deleteRequestFromList,
   });
 
   if (isFetching) {

@@ -1,5 +1,5 @@
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
-import { formatDisplayName } from '@altinn/altinn-components';
+import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
@@ -20,12 +20,19 @@ import { useRightChips } from './useRightChips';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useHasResourceCheck } from './useHasResourceCheck';
+import {
+  useGetSingleRightRequestsQuery,
+  useDeleteSingleRightRequestMutation,
+  useCreateSingleRightRequestMutation,
+} from '@/rtk/features/requestApi';
 
 export const useRightsSection = ({
   resource,
+  isRequest,
   onDelegate,
 }: {
   resource: ServiceResource;
+  isRequest?: boolean;
   onDelegate?: () => void;
 }) => {
   const { t } = useTranslation();
@@ -75,13 +82,25 @@ export const useRightsSection = ({
     },
     { skip: !resource.identifier },
   );
+  const { data: singleRightRequests } = useGetSingleRightRequestsQuery(
+    {
+      actingParty: actingParty?.partyUuid || '',
+      to: fromParty?.partyUuid || '',
+    },
+    { skip: !isRequest },
+  );
+  const [createRequest] = useCreateSingleRightRequestMutation();
+  const [deleteSentRequest] = useDeleteSingleRightRequestMutation();
+  const { openSnackbar } = useSnackbar();
+
+  const requestId = singleRightRequests?.find((x) => x.resourceId === resource.identifier)?.id;
 
   const {
     data: delegationCheckedActions,
     isError: isDelegationCheckError,
     error: delegationCheckError,
     isLoading: isDelegationCheckLoading,
-  } = useDelegationCheckQuery(resource.identifier, { skip: !resource.identifier });
+  } = useDelegationCheckQuery(resource.identifier, { skip: !resource.identifier || isRequest });
 
   const isLoading =
     isResourceAccessLoading ||
@@ -168,7 +187,7 @@ export const useRightsSection = ({
       return;
     }
 
-    if (!delegationCheckedActions && !isDelegationCheckError) {
+    if (!delegationCheckedActions && !isDelegationCheckError && !isRequest) {
       return;
     }
 
@@ -187,7 +206,7 @@ export const useRightsSection = ({
       setRights(chipRights);
     } else {
       const chipRights: ChipRight[] = mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
-        isChecked: (right) => right.result === true,
+        isChecked: (right) => right.result === true || isRequest === true,
       });
       setRights(chipRights);
     }
@@ -198,6 +217,7 @@ export const useRightsSection = ({
     resource.identifier,
     hasAccess,
     resourceRights,
+    isRequest,
     getMissingAccessMessage,
   ]);
 
@@ -254,6 +274,48 @@ export const useRightsSection = ({
     }
   };
 
+  const sendRequest = () => {
+    createRequest({
+      actingParty: actingParty?.partyUuid || '',
+      to: toParty?.partyUuid || '',
+      resource: resource.identifier,
+    })
+      .unwrap()
+      .then(() =>
+        openSnackbar({
+          message: t('delegation_modal.request.sent_request_success', { resource: resource.title }),
+          color: 'success',
+        }),
+      )
+      .catch(() => {
+        openSnackbar({
+          message: t('delegation_modal.request.sent_request_error', { resource: resource.title }),
+          color: 'danger',
+        });
+      });
+  };
+
+  const deleteRequest = (requestId: string) => {
+    deleteSentRequest({ requestId, actingParty: actingParty?.partyUuid || '' })
+      .unwrap()
+      .then(() =>
+        openSnackbar({
+          message: t('delegation_modal.request.withdraw_request_success', {
+            resource: resource.title,
+          }),
+          color: 'success',
+        }),
+      )
+      .catch(() => {
+        openSnackbar({
+          message: t('delegation_modal.request.withdraw_request_error', {
+            resource: resource.title,
+          }),
+          color: 'danger',
+        });
+      });
+  };
+
   const { chips } = useRightChips(rights, setRights, classes.chip);
 
   return {
@@ -274,5 +336,8 @@ export const useRightsSection = ({
     isActionSuccess,
     isLoading,
     rightsMetaTechnicalErrorDetails,
+    requestId,
+    sendRequest,
+    deleteRequest,
   };
 };
