@@ -106,14 +106,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
             string resourceId = "1337";
+            string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
+            SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/resource?party={party}&to={toParty}&resource={resourceId}", null);
-            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
+            SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.True(actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
         /// <summary>
@@ -126,14 +128,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
+            string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
+            SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/request/sent/withdraw?party={party}&id={requestId}", null);
-            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
+            SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.True(actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
         /// <summary>
