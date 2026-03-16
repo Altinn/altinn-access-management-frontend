@@ -97,10 +97,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///     Test case: CreateResourceRequest creates a resource request
-        ///     Expected: CreateResourceRequest returns true
+        ///     Expected: CreateResourceRequest returns request
         /// </summary>
         [Fact]
-        public async Task CreateResourceRequest_ReturnsTrue()
+        public async Task CreateResourceRequest_ReturnsRequest()
         {
             // Arrange
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
@@ -120,10 +120,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///     Test case: WithdrawRequest withdraws a request
-        ///     Expected: WithdrawRequest returns true
+        ///     Expected: WithdrawRequest returns request
         /// </summary>
         [Fact]
-        public async Task WithdrawRequest_ReturnsTrue()
+        public async Task WithdrawRequest_ReturnsRequest()
         {
             // Arrange
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
