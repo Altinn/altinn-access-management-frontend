@@ -61,8 +61,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>The resource if found.</returns>
         [HttpGet]
         [Authorize]
-        [Route("{resourceId}")]
-        public async Task<ActionResult<ServiceResourceFE>> GetResource(string resourceId)
+        public async Task<ActionResult<ServiceResourceFE>> GetResource([FromQuery] string resourceId)
         {
             if (string.IsNullOrWhiteSpace(resourceId))
             {

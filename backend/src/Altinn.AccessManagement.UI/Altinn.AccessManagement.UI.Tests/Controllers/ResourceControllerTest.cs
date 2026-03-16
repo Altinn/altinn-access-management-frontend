@@ -97,7 +97,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.NotNull(expectedResource);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/{expectedResource.Identifier}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources?resourceId={Uri.EscapeDataString(expectedResource.Identifier)}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -120,7 +120,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/does-not-exist");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources?resourceId=does-not-exist");
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
