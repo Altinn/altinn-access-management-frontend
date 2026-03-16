@@ -47,7 +47,8 @@
           "variant": null,
           "parent": null,
           "children": null,
-          "partyId": 50789533
+          "partyId": 50789533,
+          "dateOfBirth": "1981-03-20"
         },
         "via": null,
         "role": null,
@@ -104,7 +105,8 @@
           "variant": null,
           "parent": null,
           "children": null,
-          "partyId": 50789533
+          "partyId": 50789533,
+          "dateOfBirth": "1981-03-20"
         },
         "via": null,
         "role": {
@@ -165,7 +167,8 @@
           "variant": null,
           "parent": null,
           "children": null,
-          "partyId": 50789533
+          "partyId": 50789533,
+          "dateOfBirth": "1981-03-20"
         },
         "via": null,
         "role": null,
@@ -222,7 +225,8 @@
           "variant": null,
           "parent": null,
           "children": null,
-          "partyId": 50789533
+          "partyId": 50789533,
+          "dateOfBirth": "1981-03-20"
         },
         "via": null,
         "role": null,
