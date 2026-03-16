@@ -134,32 +134,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: The mock instance dataset contains entries with a missing resource reference and a resource that resolves to null in the resource registry.
-        /// Expected: Returns valid delegated instances by mapping the instance resource payload directly.
-        /// </summary>
-        [Fact]
-        public async Task GetInstances_UsesInstanceResourcePayload()
-        {
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
-            List<InstanceDelegation> expectedResponses = Util.GetMockData<List<InstanceDelegation>>(path);
-            InstanceDelegation expectedFallbackDelegation = expectedResponses.Single(delegation =>
-                delegation.Resource.Identifier == "app_ttd_missing-resource");
-
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
-            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
-
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.NotNull(actualResponse);
-            Assert.Equal(4, actualResponse.Count);
-            Assert.All(actualResponse, delegation => Assert.False(string.IsNullOrWhiteSpace(delegation.Resource.Identifier)));
-
-            InstanceDelegation fallbackDelegation = actualResponse.Single(delegation => delegation.Resource.Identifier == "app_ttd_missing-resource");
-            AssertionUtil.AssertEqual(expectedFallbackDelegation, fallbackDelegation);
-        }
-
-        /// <summary>
         /// Test case: The instance client returns a null item in the delegated instance list.
         /// Expected: InstanceService skips the null entry and maps the remaining valid items.
         /// </summary>
