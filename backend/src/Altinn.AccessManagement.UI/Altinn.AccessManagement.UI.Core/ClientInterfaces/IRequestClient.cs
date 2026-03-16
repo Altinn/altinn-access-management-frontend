@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="to">The party the request is directed to</param>
         /// <param name="resource">The resource to request</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>True if the request was created successfully</returns>
+        /// <returns>The request</returns>
         Task<RequestResourceDto> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken);
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The acting party withdrawing the request</param>
         /// <param name="id">The request id to withdraw</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>True if the request was withdrawn successfully</returns>
+        /// <returns>The request</returns>
         Task<RequestResourceDto> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken);
     }
 }
