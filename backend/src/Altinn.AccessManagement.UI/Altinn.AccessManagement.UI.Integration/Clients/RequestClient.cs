@@ -129,12 +129,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.PostAsync(token, endpointUrl, null);
-                if (httpResponse.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-
-                return false;
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<bool>(httpResponse);
             }
             catch (Exception ex)
             {
@@ -152,12 +147,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.PutAsync(token, endpointUrl, null);
-                if (httpResponse.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-
-                return false;
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<bool>(httpResponse);
             }
             catch (Exception ex)
             {
