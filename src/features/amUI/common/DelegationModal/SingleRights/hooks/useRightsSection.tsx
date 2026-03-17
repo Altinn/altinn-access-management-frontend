@@ -25,7 +25,10 @@ import {
   useDeleteSingleRightRequestMutation,
   useCreateSingleRightRequestMutation,
 } from '@/rtk/features/requestApi';
-import { getSingleRightRequestId } from '@/resources/utils/singleRightRequestUtils';
+import {
+  getRequestPartyQueryParams,
+  getSingleRightRequestId,
+} from '@/resources/utils/singleRightRequestUtils';
 
 export const useRightsSection = ({
   resource,
@@ -72,6 +75,10 @@ export const useRightsSection = ({
     },
     { skip: !toParty || !fromParty || !actingParty || !resource.identifier || !hasResourceAccess }, // Only fetch resource rights if the rightholder has access to the resource
   );
+  const requstQueryParams = getRequestPartyQueryParams(
+    actingParty?.partyUuid,
+    fromParty?.partyUuid,
+  );
   const { data: reportee } = useGetReporteeQuery();
   const {
     data: rightsMeta,
@@ -86,10 +93,9 @@ export const useRightsSection = ({
   );
   const { data: singleRightRequests } = useGetPendingSingleRightRequestsQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      to: fromParty?.partyUuid || '',
+      ...requstQueryParams,
     },
-    { skip: !isRequest || !actingParty?.partyUuid || !fromParty?.partyUuid },
+    { skip: !isRequest || !requstQueryParams?.actingParty || !requstQueryParams?.to },
   );
   const [createRequest] = useCreateSingleRightRequestMutation();
   const [deleteSentRequest] = useDeleteSingleRightRequestMutation();
@@ -286,8 +292,7 @@ export const useRightsSection = ({
   const sendRequest = () => {
     setIsLoadingRequest(true);
     createRequest({
-      actingParty: actingParty?.partyUuid || '',
-      to: fromParty?.partyUuid || '',
+      ...requstQueryParams,
       resource: resource.identifier,
     })
       .unwrap()

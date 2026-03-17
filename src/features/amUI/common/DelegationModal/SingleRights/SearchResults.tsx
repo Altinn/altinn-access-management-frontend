@@ -21,7 +21,10 @@ import {
   useDeleteSingleRightRequestMutation,
   useGetPendingSingleRightRequestsQuery,
 } from '@/rtk/features/requestApi';
-import { getSingleRightRequestId } from '@/resources/utils/singleRightRequestUtils';
+import {
+  getRequestPartyQueryParams,
+  getSingleRightRequestId,
+} from '@/resources/utils/singleRightRequestUtils';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -71,16 +74,19 @@ export const SearchResults = ({
       onSelect(resource);
     },
   });
+  const requstQueryParams = getRequestPartyQueryParams(
+    actingParty?.partyUuid,
+    fromParty?.partyUuid,
+  );
   const { data: singleRightRequests } = useGetPendingSingleRightRequestsQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      to: fromParty?.partyUuid || '',
+      ...requstQueryParams,
     },
     {
       skip:
         !availableActions?.includes(DelegationAction.REQUEST) ||
-        !actingParty?.partyUuid ||
-        !fromParty?.partyUuid,
+        !requstQueryParams?.actingParty ||
+        !requstQueryParams?.to,
     },
   );
 
@@ -96,8 +102,7 @@ export const SearchResults = ({
       [resource.identifier]: true,
     }));
     createRequest({
-      actingParty: actingParty?.partyUuid || '',
-      to: fromParty?.partyUuid || '',
+      ...requstQueryParams,
       resource: resource.identifier,
     })
       .unwrap()

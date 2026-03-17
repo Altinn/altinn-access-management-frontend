@@ -9,3 +9,10 @@ export const getSingleRightRequestId = (
     (x) => x.resourceId === resourceId && x.to.id === toPartyUuid && x.status === 'Pending',
   )?.id;
 };
+
+export const getRequestPartyQueryParams = (
+  actingPartyUuid?: string,
+  fromPartyUuid?: string,
+): { actingParty: string; to: string } => {
+  return { actingParty: actingPartyUuid || '', to: fromPartyUuid || '' };
+};
