@@ -4,5 +4,8 @@ export interface Request {
   createdDate: string;
   fromPartyName: string;
   fromPartyType: 'person' | 'company' | 'system';
-  description: string;
+  description?: string;
+  toPartyName?: string;
+  toPartyType?: 'person' | 'company' | 'system';
+  numberOfRequests?: number;
 }

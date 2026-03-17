@@ -72,9 +72,9 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   }
   if (displayRequestsPage) {
     const requestsBadge =
-      pendingRequests && pendingRequests.length > 0
+      pendingRequests && pendingRequests.received.length > 0
         ? {
-            label: pendingRequests.length,
+            label: pendingRequests.received.length,
             color: 'warning' as Color,
             variant: 'base' as BadgeVariant,
           }

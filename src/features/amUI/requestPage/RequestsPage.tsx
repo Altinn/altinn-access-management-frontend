@@ -51,12 +51,16 @@ export const RequestPage = () => {
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { pendingRequests, isLoadingRequests, isError } = useRequests();
 
+  const getBadgeProps = (tabValue: string) =>
+    selectedTab === tabValue ? selectedTabProps : unselectedTabProps;
+
   const name = formatDisplayName({
     fullName: reportee?.name || '',
     type: reportee?.type === 'Person' ? 'person' : 'company',
   });
 
-  const totalRequests = pendingRequests ? pendingRequests.length : 0;
+  const receivedRequestsCount = pendingRequests ? pendingRequests.received.length : 0;
+  const sentRequestCount = pendingRequests ? pendingRequests.sent.length : 0;
 
   return (
     <PageWrapper>
@@ -77,12 +81,10 @@ export const RequestPage = () => {
               value={INCOMING_REQUESTS_TAB}
               className={classes.requestTab}
             >
-              {!!totalRequests && (
+              {!!receivedRequestsCount && (
                 <Badge
-                  {...(selectedTab === INCOMING_REQUESTS_TAB
-                    ? selectedTabProps
-                    : unselectedTabProps)}
-                  label={totalRequests}
+                  {...getBadgeProps(INCOMING_REQUESTS_TAB)}
+                  label={receivedRequestsCount}
                 />
               )}
               {t('request_page.incoming_requests')}
@@ -92,44 +94,77 @@ export const RequestPage = () => {
               className={classes.requestTab}
             >
               <Badge
-                {...(selectedTab === SENT_REQUESTS_TAB ? selectedTabProps : unselectedTabProps)}
-                label={'0'} // endre tall her når "Be om tilgang" implementeres
+                {...getBadgeProps(SENT_REQUESTS_TAB)}
+                label={sentRequestCount}
               />
               {t('request_page.sent_requests')}
             </DsTabs.Tab>
           </DsTabs.List>
           <DsTabs.Panel value={INCOMING_REQUESTS_TAB}>
-            {isError && (
-              <div className={classes.errorWrapper}>
-                <DsAlert data-color='danger'>
-                  {totalRequests > 0
-                    ? t('request_page.error_partial_loading_requests')
-                    : t('request_page.error_loading_requests')}
-                </DsAlert>
-              </div>
-            )}
-            <List>
-              {isLoadingRequests ? (
-                <>
-                  <LoadingRequestListItem />
-                  <LoadingRequestListItem />
-                  <LoadingRequestListItem />
-                  <LoadingRequestListItem />
-                </>
-              ) : (
-                <PendingRequests pendingRequests={pendingRequests} />
-              )}
-              {!isError && !isLoadingRequests && totalRequests === 0 && (
-                <div>{t('request_page.no_received_requests')}</div>
-              )}
-            </List>
+            <RequestsTabPanel
+              requests={pendingRequests.received}
+              count={receivedRequestsCount}
+              isLoading={isLoadingRequests}
+              isError={isError}
+              emptyMessageKey='request_page.no_received_requests'
+            />
           </DsTabs.Panel>
           <DsTabs.Panel value={SENT_REQUESTS_TAB}>
-            <div>{t('request_page.no_sent_requests')}</div>
+            <RequestsTabPanel
+              requests={pendingRequests.sent}
+              count={sentRequestCount}
+              isLoading={isLoadingRequests}
+              isError={isError}
+              emptyMessageKey='request_page.no_sent_requests'
+            />
           </DsTabs.Panel>
         </DsTabs>
       </PageLayoutWrapper>
     </PageWrapper>
+  );
+};
+
+interface RequestsTabPanelProps {
+  requests: Request[] | undefined;
+  count: number;
+  isLoading: boolean;
+  isError: boolean;
+  emptyMessageKey: string;
+}
+
+const RequestsTabPanel = ({
+  requests,
+  count,
+  isLoading,
+  isError,
+  emptyMessageKey,
+}: RequestsTabPanelProps) => {
+  const { t } = useTranslation();
+  return (
+    <>
+      {isError && (
+        <div className={classes.errorWrapper}>
+          <DsAlert data-color='danger'>
+            {count > 0
+              ? t('request_page.error_partial_loading_requests')
+              : t('request_page.error_loading_requests')}
+          </DsAlert>
+        </div>
+      )}
+      <List>
+        {isLoading ? (
+          <>
+            <LoadingRequestListItem />
+            <LoadingRequestListItem />
+            <LoadingRequestListItem />
+            <LoadingRequestListItem />
+          </>
+        ) : (
+          <PendingRequests pendingRequests={requests} />
+        )}
+        {!isError && !isLoading && count === 0 && <div>{t(emptyMessageKey)}</div>}
+      </List>
+    </>
   );
 };
 
@@ -157,7 +192,7 @@ const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
             name={request.fromPartyName}
             type={request.fromPartyType}
             linkIcon
-            description={`${t(request.description)} (${formatDateToNorwegian(request.createdDate)})`}
+            description={`${request.description ? t(request.description) : t('request_page.asks_for_number', { number: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
             as={(props) => (
               <Link
                 {...props}

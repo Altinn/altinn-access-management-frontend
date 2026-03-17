@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { getCookie } from '../Cookie/CookieMethods';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
@@ -56,23 +56,29 @@ export const useRequests = () => {
     { skip: !partyUuid },
   );
 
-  const pendingRequests: Request[] = useMemo(() => {
+  const pendingRequests: { sent: Request[]; received: Request[] } = useMemo(() => {
     const consents = (activeConsents || [])
       .filter((x) => x.isPendingConsent)
       .map(mapConsentToRequest);
 
     const systemUserRequests = (pendingSystemUsers || []).map(mapSystemUserRequestToRequest);
-    const sentAccessRequests = (pendingSentAccessRequests || []).map(mapAccessRequestToRequest);
-    const receivedAccessRequests = (pendingReceivedAccessRequests || []).map(
-      mapAccessRequestToRequest,
+    const sentAccessRequests = groupAccessRequests(
+      pendingSentAccessRequests || [],
+      (r) => r.from.id,
+    );
+    const receivedAccessRequests = groupAccessRequests(
+      pendingReceivedAccessRequests || [],
+      (r) => r.to.id,
     );
 
-    return [
-      ...consents,
-      ...systemUserRequests,
-      ...sentAccessRequests,
-      ...receivedAccessRequests,
-    ].sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime());
+    return {
+      sent: [...sentAccessRequests].sort(
+        (a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime(),
+      ),
+      received: [...consents, ...systemUserRequests, ...receivedAccessRequests].sort(
+        (a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime(),
+      ),
+    };
   }, [
     activeConsents,
     pendingSystemUsers,
@@ -114,16 +120,49 @@ const mapSystemUserRequestToRequest = (request: SystemUser): Request => {
   };
 };
 
-const mapAccessRequestToRequest = (request: RequestDto): Request => {
+const groupAccessRequests = (
+  requests: RequestDto[],
+  getKey: (r: RequestDto) => string,
+): Request[] => [
+  ...requests
+    .reduce((map, request) => {
+      const key = getKey(request);
+      const existing = map.get(key);
+      if (existing) {
+        const newerDate =
+          new Date(request.lastUpdated) > new Date(existing.createdDate)
+            ? request.lastUpdated
+            : existing.createdDate;
+        map.set(key, {
+          ...existing,
+          createdDate: newerDate,
+          numberOfRequests: (existing.numberOfRequests ?? 1) + 1,
+        });
+      } else {
+        map.set(key, mapAccessRequestToRequest(request, 1));
+      }
+      return map;
+    }, new Map<string, Request>())
+    .values(),
+];
+
+const mapAccessRequestToRequest = (request: RequestDto, numberOfRequests?: number): Request => {
   console.log('Mapping access request to request', request);
-  const type = !request.from.organizationIdentifier ? 'person' : 'company';
-  const fromPartyName = formatDisplayName({ fullName: request.from.name, type: type });
+  const fromType = !request.from.organizationIdentifier ? 'person' : 'company';
+  const fromPartyName = formatDisplayName({ fullName: request.from.name, type: fromType });
+  const toType = !request.to?.organizationIdentifier ? 'person' : 'company';
+  const toPartyName = request.to
+    ? formatDisplayName({ fullName: request.to.name, type: toType })
+    : undefined;
   return {
     id: request.id,
     type: 'accessrequest',
     createdDate: request.lastUpdated,
     fromPartyName: fromPartyName,
-    fromPartyType: type,
-    description: `request_page.request_accessrequests`,
+    fromPartyType: fromType,
+    description: undefined, // Use default
+    toPartyName: toPartyName,
+    toPartyType: toType,
+    numberOfRequests: numberOfRequests ?? 1,
   };
 };
