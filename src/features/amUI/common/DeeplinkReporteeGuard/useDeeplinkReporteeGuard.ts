@@ -32,7 +32,7 @@ export const normalizePartyUuid = (partyUuid?: string | null) =>
   partyUuid?.trim().toLowerCase() ?? '';
 
 export const getRequestedPartyUuid = (searchParams: URLSearchParams) =>
-  searchParams.get('partyUuid') ?? searchParams.get('partyuuid') ?? '';
+  searchParams.get('partyUuid') ?? '';
 
 export const getUrlWithoutRequestedPartyUuid = (url: string) => {
   try {
@@ -49,32 +49,18 @@ export const getUrlWithoutRequestedPartyUuid = (url: string) => {
 export const hasAccessToRequestedParty = (
   reporteeList: ReporteeInfo[] | undefined,
   requestedPartyUuid: string,
-) => {
-  const normalizedRequestedPartyUuid = normalizePartyUuid(requestedPartyUuid);
+): boolean => {
+  const normalized = normalizePartyUuid(requestedPartyUuid);
 
-  if (!normalizedRequestedPartyUuid || !reporteeList?.length) {
+  if (!normalized || !reporteeList?.length) {
     return false;
   }
 
-  const stack = [...reporteeList];
-
-  while (stack.length > 0) {
-    const currentReportee = stack.pop();
-
-    if (!currentReportee) {
-      continue;
-    }
-
-    if (normalizePartyUuid(currentReportee.partyUuid) === normalizedRequestedPartyUuid) {
-      return true;
-    }
-
-    if (currentReportee.subunits?.length) {
-      stack.push(...currentReportee.subunits);
-    }
-  }
-
-  return false;
+  return reporteeList.some(
+    (reportee) =>
+      normalizePartyUuid(reportee.partyUuid) === normalized ||
+      hasAccessToRequestedParty(reportee.subunits, requestedPartyUuid),
+  );
 };
 
 export const getDeeplinkGuardStatus = ({
