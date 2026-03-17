@@ -96,7 +96,13 @@ export const useSingleRightRequests = ({
   const deleteRequest = (resource: ServiceResource) => {
     const requestId = getRequestId(resource.identifier);
     if (!requestId) {
-      return Promise.reject(new Error('Request ID not found'));
+      openSnackbar({
+        message: t('delegation_modal.request.withdraw_request_error', {
+          resource: resource.title,
+        }),
+        color: 'danger',
+      });
+      return;
     }
 
     setLoadingByResourceId((prev) => ({
