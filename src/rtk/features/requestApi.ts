@@ -46,7 +46,7 @@ export const requestApi = createApi({
     }),
 
     createSingleRightRequest: builder.mutation<
-      { id: string },
+      SingleRightRequest,
       { actingParty: string; to: string; resource: string }
     >({
       query: ({ actingParty, to, resource }) => {
@@ -58,7 +58,10 @@ export const requestApi = createApi({
       invalidatesTags: [Tags.PendingSentRequests],
     }),
 
-    deleteSingleRightRequest: builder.mutation<void, { requestId: string; actingParty: string }>({
+    deleteSingleRightRequest: builder.mutation<
+      SingleRightRequest,
+      { requestId: string; actingParty: string }
+    >({
       query: ({ requestId, actingParty }) => {
         return {
           url: `request/sent/withdraw?party=${actingParty}&id=${requestId}`,

@@ -110,7 +110,6 @@ export const SearchResults = ({
           message: t('delegation_modal.request.sent_request_error', { resource: resource.title }),
           color: 'danger',
         });
-        //onSelect(resource, true);
       });
   };
 
@@ -142,7 +141,6 @@ export const SearchResults = ({
             }),
             color: 'danger',
           });
-          //onSelect(resource, true);
         });
     }
   };

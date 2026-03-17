@@ -28,7 +28,10 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
   const { toParty, fromParty, actingParty, isLoading: isPartyLoading } = usePartyRepresentation();
 
   const canGiveAccess = useCanGiveAccess(id ?? '', isReportee);
-  const canRequestAccess = !canGiveAccess && actingParty?.partyUuid === toParty?.partyUuid;
+  const canRequestAccess =
+    !canGiveAccess &&
+    actingParty?.partyUuid === toParty?.partyUuid &&
+    window.featureFlags?.enableRequestAccess;
 
   const {
     data: delegatedResources,
@@ -136,8 +139,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
             titleAs='h3'
             delegationModal={
               (availableActions.includes(DelegationAction.DELEGATE) ||
-                availableActions.includes(DelegationAction.REQUEST)) &&
-              window.featureFlags?.enableRequestAccess && (
+                availableActions.includes(DelegationAction.REQUEST)) && (
                 <DelegationModal
                   delegationType={DelegationType.SingleRights}
                   availableActions={availableActions}

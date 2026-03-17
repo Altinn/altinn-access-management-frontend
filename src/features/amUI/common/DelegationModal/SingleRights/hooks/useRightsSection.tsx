@@ -89,7 +89,7 @@ export const useRightsSection = ({
       actingParty: actingParty?.partyUuid || '',
       to: fromParty?.partyUuid || '',
     },
-    { skip: !isRequest },
+    { skip: !isRequest || !actingParty?.partyUuid || !fromParty?.partyUuid },
   );
   const [createRequest] = useCreateSingleRightRequestMutation();
   const [deleteSentRequest] = useDeleteSingleRightRequestMutation();

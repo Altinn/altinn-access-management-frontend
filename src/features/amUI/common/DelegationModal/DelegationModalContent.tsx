@@ -82,6 +82,7 @@ export const DelegationModalContent = ({
   let infoViewContent: JSX.Element | undefined;
   let triggerButtonText: string | undefined;
   let triggerButtonVariant: 'primary' | 'secondary' = 'primary';
+  const hasDelegateAccess = (availableActions ?? []).includes(DelegationAction.DELEGATE);
 
   switch (delegationType) {
     case DelegationType.AccessPackage:
@@ -104,7 +105,6 @@ export const DelegationModalContent = ({
       triggerButtonText = t('access_packages.give_new_button');
       break;
     default:
-      const hasDelegateAccess = (availableActions ?? []).indexOf(DelegationAction.DELEGATE) > -1;
       searchViewContent = (
         <ResourceSearch
           onSelect={onResourceSelection}
