@@ -1,19 +1,19 @@
 {
-    "id": "da45b77b-a068-4d53-b6be-0837cc9c5a3f",
-    "requestType": "resource",
-    "status": "Pending",
-    "from": {
-        "id": "feb51634-0042-4ab0-a9db-8705300141a6",
-        "name": "EKSTRA SUNN KATT DAGSMARSJ",
-        "type": "organization"
-    },
-    "to": {
-        "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "name": "SITRONGUL MEDALJONG",
-        "type": "person"
-    },
-    "resource": {
-        "resourceId": "1337"
-    },
-    "lastUpdated": "2025-06-01T12:00:00+00:00"
+  "id": "da45b77b-a068-4d53-b6be-0837cc9c5a3f",
+  "type": "resource",
+  "status": "Pending",
+  "from": {
+    "id": "feb51634-0042-4ab0-a9db-8705300141a6",
+    "name": "EKSTRA SUNN KATT DAGSMARSJ",
+    "type": "organization"
+  },
+  "to": {
+    "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "name": "SITRONGUL MEDALJONG",
+    "type": "person"
+  },
+  "resource": {
+    "resourceId": "1337"
+  },
+  "lastUpdated": "2025-06-01T12:00:00+00:00"
 }

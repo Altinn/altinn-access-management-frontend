@@ -66,21 +66,23 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<bool> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
+        public async Task<RequestResourceDto> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
-            return await Task.FromResult(true);
+            string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
+            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
         }
 
         /// <inheritdoc />
-        public async Task<bool> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<RequestResourceDto> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
-            return await Task.FromResult(true);
+            string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
+            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
         }
 
         private static void ThrowExceptionIfTriggerParty(string id)
