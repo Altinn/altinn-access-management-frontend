@@ -101,6 +101,9 @@ export const UserSearch: React.FC<UserSearchProps> = ({
 
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
   const showIndirectList = shouldShowIndirectSection && indirectHasResults && canDelegate;
+  const showNoUsersText = !hasDirectUsers && !isLoading && !isQuery;
+  const showDirectHeading = showIndirectList;
+  const showDirectResults = hasDirectUsers || isQuery;
   const showEmptyState = isQuery && !directHasResults && !indirectHasResults;
 
   const handleAddNewUser = async (user: User) => {
@@ -145,7 +148,12 @@ export const UserSearch: React.FC<UserSearchProps> = ({
 
       <div className={classes.results}>
         <>
-          {!hasDirectUsers && !isLoading && !isQuery && !showIndirectList && (
+          {showDirectHeading && (
+            <h3 className={classes.subHeader}>
+              {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
+            </h3>
+          )}
+          {showNoUsersText && (
             <DsParagraph
               data-size='md'
               className={classes.tabDescription}
@@ -159,22 +167,19 @@ export const UserSearch: React.FC<UserSearchProps> = ({
                 })}
             </DsParagraph>
           )}
-          {showIndirectList && (
-            <h3 className={classes.subHeader}>
-              {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
-            </h3>
+          {showDirectResults && (
+            <UserSearchResults
+              users={filteredDirectUsers}
+              hasNextPage={hasNextPage}
+              goNextPage={goNextPage}
+              availableAction={DelegationAction.REVOKE}
+              isActionLoading={isActionLoading}
+              onRevoke={onRevoke}
+              includeSelfAsChild={includeSelfAsChild}
+              getUserLink={getUserLink}
+              titleAs={titleAs}
+            />
           )}
-          <UserSearchResults
-            users={filteredDirectUsers}
-            hasNextPage={hasNextPage}
-            goNextPage={goNextPage}
-            availableAction={DelegationAction.REVOKE}
-            isActionLoading={isActionLoading}
-            onRevoke={onRevoke}
-            includeSelfAsChild={includeSelfAsChild}
-            getUserLink={getUserLink}
-            titleAs={titleAs}
-          />
           {showDirectNoResults && (
             <DsParagraph data-size='md'>
               {t(
