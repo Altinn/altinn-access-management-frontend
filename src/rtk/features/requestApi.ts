@@ -11,7 +11,7 @@ export interface ResourceReference {
 
 export interface RequestDto {
   id: string;
-  requestType: string;
+  Type: string;
   status: RequestStatus;
   from: Entity;
   to: Entity;

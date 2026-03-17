@@ -62,13 +62,10 @@ export const useRequests = () => {
       .map(mapConsentToRequest);
 
     const systemUserRequests = (pendingSystemUsers || []).map(mapSystemUserRequestToRequest);
-    const sentAccessRequests = groupAccessRequests(
-      pendingSentAccessRequests || [],
-      (r) => r.from.id,
-    );
+    const sentAccessRequests = groupAccessRequests(pendingSentAccessRequests || [], 'sent');
     const receivedAccessRequests = groupAccessRequests(
       pendingReceivedAccessRequests || [],
-      (r) => r.to.id,
+      'received',
     );
 
     return {
@@ -103,8 +100,8 @@ const mapConsentToRequest = (request: ActiveConsentListItem): Request => {
     id: request.id,
     type: 'consent',
     createdDate: request.createdDate,
-    fromPartyName: request.toParty.name,
-    fromPartyType: request.toParty.type === 'Person' ? 'person' : 'company',
+    displayPartyName: request.toParty.name,
+    displayPartyType: request.toParty.type === 'Person' ? 'person' : 'company',
     description: request.isPoa ? 'request_page.request_poa' : 'request_page.request_consent',
   };
 };
@@ -114,19 +111,16 @@ const mapSystemUserRequestToRequest = (request: SystemUser): Request => {
     id: request.id,
     type: request.userType === 'agent' ? 'agentsystemuser' : 'systemuser',
     createdDate: request.created,
-    fromPartyName: request.system.systemVendorOrgName,
-    fromPartyType: 'system',
+    displayPartyName: request.system.systemVendorOrgName,
+    displayPartyType: 'system',
     description: 'request_page.request_systemuser',
   };
 };
 
-const groupAccessRequests = (
-  requests: RequestDto[],
-  getKey: (r: RequestDto) => string,
-): Request[] => [
+const groupAccessRequests = (requests: RequestDto[], direction: 'sent' | 'received'): Request[] => [
   ...requests
     .reduce((map, request) => {
-      const key = getKey(request);
+      const key = direction === 'sent' ? request.to.id : request.from.id;
       const existing = map.get(key);
       if (existing) {
         const newerDate =
@@ -139,30 +133,28 @@ const groupAccessRequests = (
           numberOfRequests: (existing.numberOfRequests ?? 1) + 1,
         });
       } else {
-        map.set(key, mapAccessRequestToRequest(request, 1));
+        map.set(key, mapAccessRequestToRequest(request, direction, 1));
       }
       return map;
     }, new Map<string, Request>())
     .values(),
 ];
 
-const mapAccessRequestToRequest = (request: RequestDto, numberOfRequests?: number): Request => {
-  console.log('Mapping access request to request', request);
-  const fromType = !request.from.organizationIdentifier ? 'person' : 'company';
-  const fromPartyName = formatDisplayName({ fullName: request.from.name, type: fromType });
-  const toType = !request.to?.organizationIdentifier ? 'person' : 'company';
-  const toPartyName = request.to
-    ? formatDisplayName({ fullName: request.to.name, type: toType })
-    : undefined;
+const mapAccessRequestToRequest = (
+  request: RequestDto,
+  direction: 'sent' | 'received',
+  numberOfRequests: number = 1,
+): Request => {
+  const party = direction === 'sent' ? request.to : request.from;
+  const partyType = party.organizationIdentifier ? 'company' : 'person';
+  const partyName = formatDisplayName({ fullName: party.name, type: partyType });
   return {
     id: request.id,
     type: 'accessrequest',
     createdDate: request.lastUpdated,
-    fromPartyName: fromPartyName,
-    fromPartyType: fromType,
-    description: undefined, // Use default
-    toPartyName: toPartyName,
-    toPartyType: toType,
+    displayPartyName: partyName,
+    displayPartyType: partyType,
+    description: undefined, // Use default description for access requests
     numberOfRequests: numberOfRequests ?? 1,
   };
 };
