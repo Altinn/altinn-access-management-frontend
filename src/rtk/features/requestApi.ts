@@ -51,7 +51,7 @@ export const requestApi = createApi({
     >({
       query: ({ actingParty, to, resource }) => {
         return {
-          url: `request/resource?party=${actingParty}&to=${to}&resource=${resource}`,
+          url: `request/resource?party=${actingParty}&to=${to}&resource=${encodeURIComponent(resource)}`,
           method: 'POST',
         };
       },
