@@ -25,7 +25,7 @@ export const useRequests = () => {
   const {
     data: reportee,
     isLoading: isLoadingReportee,
-    isLoading: isReporteeError,
+    isError: isReporteeError,
   } = useGetReporteeQuery();
 
   const hasApproveConsentPermission = hasConsentPermission(isAdmin);
