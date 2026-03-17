@@ -61,10 +61,10 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
     isActionLoading,
     isActionSuccess,
     rightsMetaTechnicalErrorDetails,
-    requestId,
+    isPendingRequest,
     isLoadingRequest,
     sendRequest,
-    deleteRequest,
+    deleteSentRequest,
   } = useRightsSection({ resource, isRequest: isSingleRightRequest, onDelegate });
 
   const hasDelegableRights = rights.some((r) => r.delegable);
@@ -111,7 +111,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                   inheritedStatus={inheritedStatus}
                   cannotDelegateHere={cannotDelegateHere}
                   cannotRequestRight={cannotRequestRight}
-                  isPendingRequest={!!requestId}
+                  isPendingRequest={isPendingRequest}
                 />
                 {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
                 {resource.rightDescription && (
@@ -136,10 +136,10 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                 delegationError={delegationError ?? null}
                 missingAccess={missingAccess}
                 rightsMetaTechnicalErrorDetails={rightsMetaTechnicalErrorDetails}
-                hasRequestedSingleRight={!!requestId}
+                hasRequestedSingleRight={isPendingRequest}
                 isLoadingRequest={isLoadingRequest}
                 sendRequest={sendRequest}
-                deleteRequest={deleteRequest}
+                deleteRequest={deleteSentRequest}
               />
             </>
           )}

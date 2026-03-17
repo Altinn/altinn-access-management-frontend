@@ -78,17 +78,13 @@ export const useRightsSection = ({
     },
     { skip: !resource.identifier },
   );
-  const {
-    requestFromList: requestFromListHook,
-    deleteRequestFromList: deleteRequestFromListHook,
-    getRequestId,
-    isLoadingRequest,
-  } = useSingleRightRequests({
-    actingParty: actingParty?.partyUuid,
-    toParty: toParty?.partyUuid,
-    fromParty: fromParty?.partyUuid,
-    availableActions: isRequest ? [DelegationAction.REQUEST] : [],
-  });
+  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
+    useSingleRightRequests({
+      actingParty: actingParty?.partyUuid,
+      toParty: toParty?.partyUuid,
+      fromParty: fromParty?.partyUuid,
+      availableActions: isRequest ? [DelegationAction.REQUEST] : [],
+    });
 
   const {
     data: delegationCheckedActions,
@@ -270,11 +266,11 @@ export const useRightsSection = ({
   };
 
   const sendRequest = () => {
-    requestFromListHook(resource);
+    createRequest(resource);
   };
 
-  const deleteRequest = () => {
-    deleteRequestFromListHook(resource);
+  const deleteSentRequest = () => {
+    deleteRequest(resource);
   };
 
   const { chips } = useRightChips(rights, setRights, classes.chip);
@@ -297,9 +293,9 @@ export const useRightsSection = ({
     isActionSuccess,
     isLoading,
     rightsMetaTechnicalErrorDetails,
-    requestId: getRequestId(resource.identifier),
+    isPendingRequest: hasPendingRequest(resource.identifier),
     isLoadingRequest: isLoadingRequest(resource.identifier),
     sendRequest,
-    deleteRequest,
+    deleteSentRequest,
   };
 };

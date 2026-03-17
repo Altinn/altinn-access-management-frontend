@@ -51,17 +51,13 @@ export const SearchResults = ({
   const { setActionError } = useDelegationModalContext();
   const { actingParty, toParty, fromParty } = usePartyRepresentation();
 
-  const {
-    requestFromList: requestFromListHook,
-    deleteRequestFromList: deleteRequestFromListHook,
-    getRequestId,
-    isLoadingRequest,
-  } = useSingleRightRequests({
-    actingParty: actingParty?.partyUuid,
-    toParty: toParty?.partyUuid,
-    fromParty: fromParty?.partyUuid,
-    availableActions,
-  });
+  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
+    useSingleRightRequests({
+      actingParty: actingParty?.partyUuid,
+      toParty: toParty?.partyUuid,
+      fromParty: fromParty?.partyUuid,
+      availableActions,
+    });
 
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
     onActionError: (resource, errorInfo) => {
@@ -78,11 +74,11 @@ export const SearchResults = ({
   });
 
   const requestFromList = (resource: ServiceResource) => {
-    requestFromListHook(resource);
+    createRequest(resource);
   };
 
   const deleteRequestFromList = (resource: ServiceResource) => {
-    deleteRequestFromListHook(resource);
+    deleteRequest(resource);
   };
 
   const isDelegated = (resourceId: string) =>
@@ -109,7 +105,7 @@ export const SearchResults = ({
   const renderControls = useRenderSearchResultControl({
     isDelegated,
     isInherited,
-    isRequested: (resourceId: string) => !!getRequestId(resourceId),
+    isRequested: hasPendingRequest,
     availableActions,
     isResourceLoading: isLoading,
     setActionError,

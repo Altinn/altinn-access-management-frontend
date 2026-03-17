@@ -53,20 +53,20 @@ export const useSingleRightRequests = ({
     }
   }, [isRefetching]);
 
-  const [createRequest] = useCreateSingleRightRequestMutation();
+  const [createNewRequest] = useCreateSingleRightRequestMutation();
   const [deleteSentRequest] = useDeleteSingleRightRequestMutation();
 
   const getRequestId = (resourceId: string): string | undefined => {
     return getSingleRightRequestId(singleRightRequests, resourceId, toParty);
   };
 
-  const requestFromList = (resource: ServiceResource) => {
+  const createRequest = (resource: ServiceResource) => {
     setLoadingByResourceId((prev) => ({
       ...prev,
       [resource.identifier]: true,
     }));
 
-    return createRequest({
+    return createNewRequest({
       ...requestQueryParams,
       resource: resource.identifier,
     })
@@ -93,7 +93,7 @@ export const useSingleRightRequests = ({
       });
   };
 
-  const deleteRequestFromList = (resource: ServiceResource) => {
+  const deleteRequest = (resource: ServiceResource) => {
     const requestId = getRequestId(resource.identifier);
     if (!requestId) {
       return Promise.reject(new Error('Request ID not found'));
@@ -136,12 +136,9 @@ export const useSingleRightRequests = ({
   };
 
   return {
-    singleRightRequests,
-    isRefetching,
-    loadingByResourceId,
-    requestFromList,
-    deleteRequestFromList,
-    getRequestId,
+    createRequest,
+    deleteRequest,
+    hasPendingRequest: (resourceId: string) => !!getRequestId(resourceId),
     isLoadingRequest,
   };
 };
