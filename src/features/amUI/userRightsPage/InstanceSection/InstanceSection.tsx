@@ -42,10 +42,12 @@ export const InstanceSection = () => {
           <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
         </DsAlert>
       )}
-      <InstanceList
-        instances={instances}
-        isLoading={isLoading}
-      />
+      {!isError && (
+        <InstanceList
+          instances={instances}
+          isLoading={isLoading}
+        />
+      )}
     </div>
   );
 };
