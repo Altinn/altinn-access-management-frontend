@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -17,7 +16,7 @@ import {
   displayInstanceDelegation,
   useRerouteIfPoaOverviewPageDisabled,
 } from '@/resources/utils/featureFlagUtils';
-import { formatDisplayName } from '@altinn/altinn-components';
+import { formatDisplayName, DsAlert } from '@altinn/altinn-components';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { GuardianshipPermissions } from './GuardianshipPermissions';
 import { InstancePermissions } from './InstancePermissions';

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { DsAlert, DsButton, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
