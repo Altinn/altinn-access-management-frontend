@@ -59,7 +59,7 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
       [resource.identifier]: true,
     }));
 
-    return createNewRequest({
+    createNewRequest({
       ...requestQueryParams,
       resource: resource.identifier,
     })
@@ -103,7 +103,7 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
       [resource.identifier]: true,
     }));
 
-    return deleteSentRequest({
+    deleteSentRequest({
       actingParty: requestQueryParams.actingParty,
       requestId: requestId,
     })
