@@ -103,7 +103,7 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
         <Trans
           i18nKey={
             availableActions?.includes(DelegationAction.REQUEST)
-              ? 'delegation_modal.request_service_from_name'
+              ? 'delegation_modal.request_service'
               : 'delegation_modal.give_service_to_name'
           }
           values={{
