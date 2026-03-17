@@ -105,9 +105,7 @@ export const SearchResults = ({
   };
 
   const deleteRequestFromList = (resource: ServiceResource) => {
-    const requestId = (singleRightRequests ?? []).find(
-      (x) => x.resourceId === resource.identifier,
-    )?.id;
+    const requestId = getRequestId(resource.identifier);
     if (requestId) {
       deleteSentRequest({
         actingParty: actingParty?.partyUuid || '',
@@ -151,8 +149,10 @@ export const SearchResults = ({
     );
   };
 
-  const isRequested = (resourceId: string) => {
-    return (singleRightRequests ?? []).some((x) => x.resourceId === resourceId);
+  const getRequestId = (resourceId: string) => {
+    return (singleRightRequests ?? []).find(
+      (x) => x.resourceId === resourceId && x.to.id === toParty?.partyUuid,
+    )?.id;
   };
 
   const isLoading = (resourceId: string) => {
@@ -162,7 +162,7 @@ export const SearchResults = ({
   const renderControls = useRenderSearchResultControl({
     isDelegated,
     isInherited,
-    isRequested,
+    isRequested: (resourceId: string) => !!getRequestId(resourceId),
     availableActions,
     isResourceLoading: isLoading,
     setActionError,

@@ -93,7 +93,9 @@ export const useRightsSection = ({
   const [deleteSentRequest] = useDeleteSingleRightRequestMutation();
   const { openSnackbar } = useSnackbar();
 
-  const requestId = singleRightRequests?.find((x) => x.resourceId === resource.identifier)?.id;
+  const requestId = singleRightRequests?.find(
+    (x) => x.resourceId === resource.identifier && x.to.id === toParty?.partyUuid,
+  )?.id;
 
   const {
     data: delegationCheckedActions,
