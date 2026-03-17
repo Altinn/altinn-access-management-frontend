@@ -233,7 +233,7 @@ export const RightsSection = ({
         {hasRequestedSingleRight && availableActions?.includes(DelegationAction.REQUEST) && (
           <DsButton
             data-size='sm'
-            disabled={!resource.delegable || isLoadingRequest}
+            disabled={isLoadingRequest}
             data-color='danger'
             loading={isLoadingRequest}
             onClick={deleteRequest}

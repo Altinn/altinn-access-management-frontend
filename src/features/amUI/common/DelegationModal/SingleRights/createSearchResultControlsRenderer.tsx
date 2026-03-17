@@ -107,7 +107,7 @@ export const useRenderSearchResultControl = ({
           variant='tertiary'
           data-size='sm'
           loading={isLoading}
-          disabled={isLoading || !resource.delegable}
+          disabled={isLoading}
           onClick={() => {
             requestFromList(resource);
           }}

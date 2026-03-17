@@ -77,7 +77,10 @@ export const SearchResults = ({
       to: fromParty?.partyUuid || '',
     },
     {
-      skip: !availableActions?.includes(DelegationAction.REQUEST),
+      skip:
+        !availableActions?.includes(DelegationAction.REQUEST) ||
+        !actingParty?.partyUuid ||
+        !fromParty?.partyUuid,
     },
   );
 
@@ -105,7 +108,10 @@ export const SearchResults = ({
         });
       })
       .catch(() => {
-        setLoadingByResourceId({});
+        setLoadingByResourceId((prev) => ({
+          ...prev,
+          [resource.identifier]: false,
+        }));
         openSnackbar({
           message: t('delegation_modal.request.sent_request_error', { resource: resource.title }),
           color: 'danger',
@@ -134,7 +140,10 @@ export const SearchResults = ({
           });
         })
         .catch(() => {
-          setLoadingByResourceId({});
+          setLoadingByResourceId((prev) => ({
+            ...prev,
+            [resource.identifier]: false,
+          }));
           openSnackbar({
             message: t('delegation_modal.request.withdraw_request_error', {
               resource: resource.title,

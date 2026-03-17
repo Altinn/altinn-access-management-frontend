@@ -200,7 +200,7 @@ export const StatusSection = ({
           <DsParagraph data-size='sm'>
             <Trans
               i18nKey={'delegation_modal.request.pending_request_info'}
-              components={{ b: <strong /> }}
+              components={{ strong: <strong /> }}
               values={{
                 partyName: formattedFromPartyName,
               }}
