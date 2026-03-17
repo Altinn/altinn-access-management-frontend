@@ -1,5 +1,4 @@
 import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
-import { GeneralPath } from '@/routes/paths';
 import { HeaderProps, useAccountSelector } from '@altinn/altinn-components';
 import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/AccountSelector';
 import { useGlobalMenu } from './useGlobalMenu';
