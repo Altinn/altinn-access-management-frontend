@@ -19,7 +19,7 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import {
   useCreateSingleRightRequestMutation,
   useDeleteSingleRightRequestMutation,
-  useGetSingleRightRequestsQuery,
+  useGetPendingSingleRightRequestsQuery,
 } from '@/rtk/features/requestApi';
 import { getSingleRightRequestId } from '@/resources/utils/singleRightRequestUtils';
 
@@ -71,7 +71,7 @@ export const SearchResults = ({
       onSelect(resource);
     },
   });
-  const { data: singleRightRequests } = useGetSingleRightRequestsQuery(
+  const { data: singleRightRequests } = useGetPendingSingleRightRequestsQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       to: fromParty?.partyUuid || '',

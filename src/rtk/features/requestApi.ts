@@ -37,11 +37,11 @@ export const requestApi = createApi({
   tagTypes: [Tags.PendingSentRequests],
   endpoints: (builder) => ({
     // request single right access
-    getSingleRightRequests: builder.query<
+    getPendingSingleRightRequests: builder.query<
       SingleRightRequest[],
       { actingParty: string; to: string }
     >({
-      query: ({ actingParty, to }) => `request/sent?party=${actingParty}&to=${to}`,
+      query: ({ actingParty, to }) => `request/sent?party=${actingParty}&to=${to}&status=pending`,
       providesTags: [Tags.PendingSentRequests],
     }),
 
@@ -71,7 +71,7 @@ export const requestApi = createApi({
 });
 
 export const {
-  useGetSingleRightRequestsQuery,
+  useGetPendingSingleRightRequestsQuery,
   useDeleteSingleRightRequestMutation,
   useCreateSingleRightRequestMutation,
 } = requestApi;

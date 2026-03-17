@@ -21,7 +21,7 @@ import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useHasResourceCheck } from './useHasResourceCheck';
 import {
-  useGetSingleRightRequestsQuery,
+  useGetPendingSingleRightRequestsQuery,
   useDeleteSingleRightRequestMutation,
   useCreateSingleRightRequestMutation,
 } from '@/rtk/features/requestApi';
@@ -84,7 +84,7 @@ export const useRightsSection = ({
     },
     { skip: !resource.identifier },
   );
-  const { data: singleRightRequests } = useGetSingleRightRequestsQuery(
+  const { data: singleRightRequests } = useGetPendingSingleRightRequestsQuery(
     {
       actingParty: actingParty?.partyUuid || '',
       to: fromParty?.partyUuid || '',
