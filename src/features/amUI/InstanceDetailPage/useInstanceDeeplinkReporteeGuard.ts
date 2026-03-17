@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
@@ -8,8 +8,6 @@ import {
   type ReporteeInfo,
   useGetReporteeListForAuthorizedUserQuery,
 } from '@/rtk/features/userInfoApi';
-
-const REDIRECT_GUARD_RESET_TIMEOUT_MS = 5000;
 
 export type InstanceDeeplinkGuardStatus =
   | 'ready'
@@ -119,8 +117,6 @@ export const useInstanceDeeplinkReporteeGuard = ({
   actingPartyUuid,
   requestedPartyUuid,
 }: UseInstanceDeeplinkReporteeGuardArgs): UseInstanceDeeplinkReporteeGuardResult => {
-  const hasTriggeredRedirect = useRef(false);
-
   const shouldValidateRequestedParty =
     !!normalizePartyUuid(requestedPartyUuid) &&
     normalizePartyUuid(requestedPartyUuid) !== normalizePartyUuid(actingPartyUuid);
@@ -143,31 +139,14 @@ export const useInstanceDeeplinkReporteeGuard = ({
   });
 
   useEffect(() => {
-    if (status !== 'redirecting' || hasTriggeredRedirect.current || !requestedPartyUuid) {
+    if (status !== 'redirecting' || !requestedPartyUuid) {
       return;
     }
 
-    const resetRedirectTrigger = () => {
-      hasTriggeredRedirect.current = false;
-    };
-
-    hasTriggeredRedirect.current = true;
-    const timeoutId = window.setTimeout(resetRedirectTrigger, REDIRECT_GUARD_RESET_TIMEOUT_MS);
-
-    try {
-      redirectToChangeReporteeAndRedirect(
-        requestedPartyUuid,
-        getUrlWithoutRequestedPartyUuid(window.location.href),
-      );
-    } catch {
-      window.clearTimeout(timeoutId);
-      resetRedirectTrigger();
-    }
-
-    return () => {
-      window.clearTimeout(timeoutId);
-      resetRedirectTrigger();
-    };
+    redirectToChangeReporteeAndRedirect(
+      requestedPartyUuid,
+      getUrlWithoutRequestedPartyUuid(window.location.href),
+    );
   }, [requestedPartyUuid, status]);
 
   return {
