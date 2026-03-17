@@ -1,19 +1,14 @@
 import { useMemo, useRef, useState } from 'react';
-import {
-  DsAlert,
-  DsButton,
-  DsHeading,
-  DsParagraph,
-  formatDisplayName,
-  Icon,
-} from '@altinn/altinn-components';
+import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-import UserSearch from '../common/UserSearch/UserSearch';
+import { InstanceDetailHeader } from './InstanceDetailHeader';
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
-import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
+import { PageDivider } from '../common/PageDivider/PageDivider';
+import UserSearch from '../common/UserSearch/UserSearch';
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
+import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import {
@@ -24,9 +19,9 @@ import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useGetInstancesQuery, useInstanceDelegationCheckQuery } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
-import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetIsInstanceAdminQuery } from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
-import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
+import { CheckmarkIcon } from '@navikt/aksel-icons';
 
 import classes from './InstanceDetailPageContent.module.css';
 import { InstanceDelegationModal } from './InstanceDelegationModal';
@@ -45,12 +40,24 @@ export const InstanceDetailPageContent = () => {
   const resourceId = searchParams.get('resourceId') ?? searchParams.get('resourceID') ?? '';
   const dialogId = searchParams.get('dialogId');
   const inboxUrl = dialogId ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}` : undefined;
-  const { data: isAdmin = false, isLoading: isAdminLoading } = useGetIsAdminQuery();
+
+  const {
+    data: isAdmin = false,
+    isLoading: isAdminLoading,
+    isError: isAdminError,
+    error: isAdminErrorObj,
+  } = useGetIsAdminQuery();
+
+  const {
+    data: isInstanceAdmin,
+    isLoading: isInstanceAdminLoading,
+    isError: isInstanceAdminError,
+    error: isInstanceAdminErrorObj,
+  } = useGetIsInstanceAdminQuery();
 
   const {
     data: resource,
     isLoading: isResourceLoading,
-    isError: isResourceError,
     error: resourceError,
   } = useGetResourceQuery(
     {
@@ -75,7 +82,12 @@ export const InstanceDetailPageContent = () => {
       instance: instanceUrn,
     },
     {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
+      skip:
+        !isInstanceAdmin ||
+        !actingParty?.partyUuid ||
+        !fromParty?.partyUuid ||
+        !resourceId ||
+        !instanceUrn,
     },
   );
 
@@ -90,14 +102,18 @@ export const InstanceDetailPageContent = () => {
     },
   );
 
-  const { data: indirectConnections, isLoading: isIndirectLoading } = useGetRightHoldersQuery(
+  const {
+    data: indirectConnections,
+    isLoading: isIndirectLoading,
+    isFetching: isFetchingIndirectConnections,
+  } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
       fromUuid: fromParty?.partyUuid ?? '',
       toUuid: '',
     },
     {
-      skip: !fromParty?.partyUuid || !isAdmin,
+      skip: !isAdmin || !fromParty?.partyUuid,
     },
   );
 
@@ -121,8 +137,8 @@ export const InstanceDetailPageContent = () => {
     () => mapConnectionsToUserSearchNodes(indirectConnections),
     [indirectConnections],
   );
-  const isInstanceAdmin = delegateActionKeys.length > 0;
-  const canDelegate = isAdmin || isInstanceAdmin;
+
+  const canDelegate = isAdmin || (isInstanceAdmin && delegateActionKeys.length > 0);
 
   if (!resourceId || !instanceUrn) {
     return (
@@ -133,29 +149,31 @@ export const InstanceDetailPageContent = () => {
     );
   }
 
-  if (isInstancesError || isResourceError) {
-    const technicalError = createErrorDetails(resourceError || instancesError);
-    return (
-      <DsAlert
-        role='alert'
-        data-color='danger'
+  const inboxLink = inboxUrl ? (
+    <div className={classes.inboxLinkContainer}>
+      <DsButton
+        asChild
+        variant='primary'
+        className={classes.inboxButton}
       >
-        <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-        {technicalError && (
-          <TechnicalErrorParagraphs
-            size='sm'
-            status={technicalError.status}
-            time={technicalError.time}
-            traceId={technicalError.traceId}
-          />
-        )}
-      </DsAlert>
-    );
-  }
+        <a href={inboxUrl}>
+          <CheckmarkIcon aria-hidden />
+          {t('common.finished')}
+        </a>
+      </DsButton>
+    </div>
+  ) : null;
 
-  if (isInstancesLoading || (isResourceLoading && !resource)) {
+  if (isResourceLoading || isAdminLoading || isInstanceAdminLoading) {
     return <ResourceInfoSkeleton />;
   }
+
+  const contentTechnicalError =
+    isAdminError || isInstanceAdminError || isInstancesError || resourceError
+      ? createErrorDetails(
+          instancesError || isAdminErrorObj || isInstanceAdminErrorObj || resourceError,
+        )
+      : null;
 
   const providerLogoUrl = resource?.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
@@ -168,68 +186,48 @@ export const InstanceDetailPageContent = () => {
 
   return (
     <>
-      <div className={classes.infoHeading}>
-        <DsHeading
-          level={1}
-          data-size='sm'
+      {resource && (
+        <InstanceDetailHeader
+          resource={resource}
+          resourceId={resourceId}
+          providerLogoUrl={providerLogoUrl}
+          fromPartyName={fromParty?.name}
+          fromPartyTypeName={fromParty?.partyTypeName}
+        />
+      )}
+      {inboxLink}
+      <PageDivider />
+      {contentTechnicalError ? (
+        <DsAlert
+          role='alert'
+          data-color='danger'
         >
-          {resource?.title ?? resourceId}
-        </DsHeading>
-        {resource && (
-          <>
-            <div className={classes.resourceOwner}>
-              <Icon
-                iconUrl={providerLogoUrl ?? resource.resourceOwnerLogoUrl}
-                size='sm'
-              />
-              <DsParagraph data-size='sm'>
-                {resource.resourceOwnerName}{' '}
-                <span className={classes.providerName}>
-                  {t('instance_detail_page.provider_name', {
-                    name: formatDisplayName({
-                      fullName: fromParty?.name ?? '',
-                      type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-                    }),
-                  })}
-                </span>
-              </DsParagraph>
-            </div>
-            {resource.description && (
-              <DsParagraph data-size='sm'>{resource.description}</DsParagraph>
-            )}
-          </>
-        )}
-      </div>
-      {inboxUrl ? (
-        <div className={classes.inboxLinkContainer}>
-          <DsButton
-            asChild
-            variant='secondary'
-            className={classes.inboxButton}
-          >
-            <a href={inboxUrl}>
-              <EnvelopeClosedIcon />
-              {t('instance_detail_page.back_to_inbox')}
-            </a>
-          </DsButton>
-        </div>
-      ) : null}
-      <UserSearch
-        includeSelfAsChild={false}
-        AddUserButton={HideAddUserButton}
-        showIndirectConnectionsByDefault
-        users={users}
-        indirectUsers={indirectUsers}
-        isLoading={isInstancesLoading || isIndirectLoading || isAdminLoading}
-        onDelegate={canDelegate ? handleOnDelegate : undefined}
-        canDelegate={canDelegate}
-        noUsersText={t('instance_detail_page.no_users', {
-          fromparty: formatDisplayName({
-            fullName: fromParty?.name ?? '',
-            type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-          }),
-        })}
-      />
+          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+          <TechnicalErrorParagraphs
+            size='sm'
+            status={contentTechnicalError.status}
+            time={contentTechnicalError.time}
+            traceId={contentTechnicalError.traceId}
+          />
+        </DsAlert>
+      ) : isInstanceAdmin ? (
+        <UserSearch
+          includeSelfAsChild={false}
+          AddUserButton={HideAddUserButton}
+          showIndirectConnectionsByDefault
+          users={users}
+          indirectUsers={indirectUsers}
+          isLoading={isInstancesLoading || isIndirectLoading || isAdminLoading}
+          isActionLoading={isFetchingIndirectConnections}
+          onDelegate={canDelegate ? handleOnDelegate : undefined}
+          canDelegate={canDelegate}
+          noUsersText={t('instance_detail_page.no_users')}
+        />
+      ) : (
+        <DsParagraph data-size='sm'>
+          {t('instance_detail_page.cannot_share_with_others')}
+        </DsParagraph>
+      )}
       <InstanceDelegationModal
         ref={modalRef}
         resource={resource}

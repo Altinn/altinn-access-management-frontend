@@ -34,5 +34,10 @@
         /// Policy tag for authorizing if user has read access to the altinn_access_management_hovedadmin resource.
         /// </summary>
         public const string POLICY_ACCESS_MANAGEMENT_HOVEDADMIN_READ_WITH_PASS_THROUGH = "AccessManagementHovedadminReadOrAuthorizedParty";
+
+        /// <summary>
+        /// Policy tag for authorizing if user has read access to the altinn_instance_delegation resource.
+        /// </summary>
+        public const string POLICY_ACCESS_MANAGEMENT_INSTANCE_DELEGATION_READ_WITH_PASS_THROUGH = "AccessManagementInstanceDelegationReadOrAuthorizedParty";
     }
 }

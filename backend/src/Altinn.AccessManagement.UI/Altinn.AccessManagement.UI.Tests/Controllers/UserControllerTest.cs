@@ -878,6 +878,99 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: CheckIsInstanceAdmin returns true when user has required permissions
+        /// Expected: Returns true
+        /// </summary>
+        [Fact]
+        public async Task CheckIsInstanceAdmin_WithPermission_ReturnsTrue()
+        {
+            // Arrange
+            const int adminUserId = 20004938;
+            var token = PrincipalUtil.GetToken(adminUserId, 1234, 2);
+            var partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isInstanceAdmin?party={partyId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            bool hasAccess = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.True(hasAccess);
+        }
+
+        /// <summary>
+        /// Test case: CheckIsInstanceAdmin returns false when user does not have permissions
+        /// Expected: Returns false
+        /// </summary>
+        [Fact]
+        public async Task CheckIsInstanceAdmin_WithoutPermission_ReturnsFalse()
+        {
+            // Arrange
+            const int regularUserId = 1234;
+            var token = PrincipalUtil.GetToken(regularUserId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var partyId = Guid.Parse("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isInstanceAdmin?party={partyId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            bool hasAccess = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.False(hasAccess);
+        }
+
+        /// <summary>
+        /// Test case: CheckIsInstanceAdmin returns Forbidden when partyId is null or invalid
+        /// Expected: Returns Forbidden
+        /// </summary>
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("not-a-guid")]
+        public async Task CheckIsInstanceAdmin_InvalidInputs_ReturnsForbidden(string invalid_party)
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/isInstanceAdmin?party={invalid_party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Directly invoke controller IsInstanceAdmin without HttpContext permission item.
+        /// Expected: Returns Ok(false) via fallback path covering missing HasRequestedPermission scenario.
+        /// </summary>
+        [Fact]
+        public void IsInstanceAdmin_NoHasRequestedPermissionItem_ReturnsFalse()
+        {
+            // Arrange: create controller instance bypassing auth pipeline so HttpContext.Items lacks HasRequestedPermission
+            var httpContext = new DefaultHttpContext();
+            var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<UserController>>();
+            var featureFlags = Options.Create(new FeatureFlags());
+
+            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object, featureFlags)
+            {
+                ControllerContext = new ControllerContext { HttpContext = httpContext }
+            };
+
+            // Act
+            var result = controller.IsInstanceAdmin();
+
+            // Assert
+            var ok = Assert.IsType<OkObjectResult>(result.Result);
+            Assert.False((bool)ok.Value);
+        }
+
+        /// <summary>
         /// Test case: UpdateShouldShowDeletedPreference successfully updates preference to true
         /// Expected: Returns OK with updated ProfileSettingPreference
         /// </summary>
