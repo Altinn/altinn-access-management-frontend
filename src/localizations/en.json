@@ -463,6 +463,7 @@
     "heading_subtitle": "Power of attorney given to {{name}}"
   },
   "delegation_modal": {
+    "request_service_from_name": "Which service do you want to request power of attorney for? ",
     "give_service_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
     "give_package_to_name": "Give <strong>{{name}}</strong> power of attorney for new access package",
     "name_will_receive": "<strong>{{name}}</strong> will receive:",
