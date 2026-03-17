@@ -287,7 +287,7 @@ export const useRightsSection = ({
     setIsLoadingRequest(true);
     createRequest({
       actingParty: actingParty?.partyUuid || '',
-      to: toParty?.partyUuid || '',
+      to: fromParty?.partyUuid || '',
       resource: resource.identifier,
     })
       .unwrap()

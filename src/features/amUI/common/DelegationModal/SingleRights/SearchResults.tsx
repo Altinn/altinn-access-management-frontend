@@ -97,7 +97,7 @@ export const SearchResults = ({
     }));
     createRequest({
       actingParty: actingParty?.partyUuid || '',
-      to: toParty?.partyUuid || '',
+      to: fromParty?.partyUuid || '',
       resource: resource.identifier,
     })
       .unwrap()
