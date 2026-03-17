@@ -2,7 +2,10 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import { useRerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
+import {
+  displayInstanceDelegation,
+  useRerouteIfNotConfetti,
+} from '@/resources/utils/featureFlagUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { amUIPath } from '@/routes/paths';
 import { PageWrapper } from '@/components';
@@ -21,6 +24,7 @@ import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
+import { InstanceSection } from './InstanceSection/InstanceSection';
 import { PartyType, useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { UserRightsPageSkeleton } from './UserRightsPageSkeleton';
@@ -33,6 +37,7 @@ import { useBackUrl } from '@/resources/hooks/useBackUrl';
 export const UserRightsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
+  const instanceDelegationEnabled = displayInstanceDelegation();
   const { data: isHovedadmin, isLoading: isHovedadminLoading } = useGetIsHovedadminQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const backUrl = useBackUrl(`/${amUIPath.Users}`);
@@ -73,6 +78,7 @@ export const UserRightsPage = () => {
                 singleRightsPanel={<SingleRightsSection />}
                 roleAssignmentsPanel={<RoleSection />}
                 guardianshipsPanel={<GuardianshipSection />}
+                instancesPanel={instanceDelegationEnabled ? <InstanceSection /> : null}
               />
             </PageContainer>
           </DelegationModalProvider>
