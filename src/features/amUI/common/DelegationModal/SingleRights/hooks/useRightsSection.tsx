@@ -20,7 +20,6 @@ import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useHasResourceCheck } from './useHasResourceCheck';
 import { useSingleRightRequests } from './useSingleRightRequests';
-import { DelegationAction } from '../../EditModal';
 
 export const useRightsSection = ({
   resource,
@@ -80,10 +79,7 @@ export const useRightsSection = ({
   );
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
-      actingParty: actingParty?.partyUuid,
-      toParty: toParty?.partyUuid,
-      fromParty: fromParty?.partyUuid,
-      availableActions: isRequest ? [DelegationAction.REQUEST] : [],
+      canRequestRights: isRequest,
     });
 
   const {

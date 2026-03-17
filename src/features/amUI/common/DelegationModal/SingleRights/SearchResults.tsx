@@ -53,10 +53,7 @@ export const SearchResults = ({
 
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
-      actingParty: actingParty?.partyUuid,
-      toParty: toParty?.partyUuid,
-      fromParty: fromParty?.partyUuid,
-      availableActions,
+      canRequestRights: availableActions?.includes(DelegationAction.REQUEST) ?? false,
     });
 
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({

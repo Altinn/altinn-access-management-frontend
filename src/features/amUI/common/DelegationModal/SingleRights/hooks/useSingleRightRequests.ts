@@ -8,27 +8,23 @@ import {
   getRequestPartyQueryParams,
   getSingleRightRequestId,
 } from '@/resources/utils/singleRightRequestUtils';
-import { DelegationAction } from '../../../DelegationModal/EditModal';
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
 
 interface UseSingleRightRequestsProps {
-  actingParty?: string;
-  toParty?: string;
-  fromParty?: string;
-  availableActions?: DelegationAction[];
+  canRequestRights?: boolean;
 }
 
-export const useSingleRightRequests = ({
-  actingParty,
-  toParty,
-  fromParty,
-  availableActions,
-}: UseSingleRightRequestsProps) => {
+export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightRequestsProps) => {
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
+  const { fromParty, actingParty } = usePartyRepresentation();
 
-  const requestQueryParams = getRequestPartyQueryParams(actingParty, fromParty);
+  const requestQueryParams = getRequestPartyQueryParams(
+    actingParty?.partyUuid,
+    fromParty?.partyUuid,
+  );
 
   const { openSnackbar } = useSnackbar();
   const { t } = useTranslation();
@@ -39,10 +35,7 @@ export const useSingleRightRequests = ({
         ...requestQueryParams,
       },
       {
-        skip:
-          !availableActions?.includes(DelegationAction.REQUEST) ||
-          !requestQueryParams?.actingParty ||
-          !requestQueryParams?.to,
+        skip: !canRequestRights || !requestQueryParams?.actingParty || !requestQueryParams?.to,
       },
     );
 
@@ -57,7 +50,7 @@ export const useSingleRightRequests = ({
   const [deleteSentRequest] = useDeleteSingleRightRequestMutation();
 
   const getRequestId = (resourceId: string): string | undefined => {
-    return getSingleRightRequestId(singleRightRequests, resourceId, toParty);
+    return getSingleRightRequestId(singleRightRequests, resourceId, requestQueryParams?.to);
   };
 
   const createRequest = (resource: ServiceResource) => {
@@ -111,7 +104,7 @@ export const useSingleRightRequests = ({
     }));
 
     return deleteSentRequest({
-      actingParty: actingParty || '',
+      actingParty: requestQueryParams.actingParty,
       requestId: requestId,
     })
       .unwrap()
