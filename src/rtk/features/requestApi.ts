@@ -9,7 +9,7 @@ enum Tags {
 
 export interface SingleRightRequest {
   id: string;
-  requestType: 'resource';
+  type: 'resource';
   status: string;
   from: {
     id: string;

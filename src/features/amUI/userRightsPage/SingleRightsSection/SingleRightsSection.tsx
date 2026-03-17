@@ -135,10 +135,14 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
             size={isSmallScreen ? 'sm' : 'md'}
             titleAs='h3'
             delegationModal={
-              <DelegationModal
-                delegationType={DelegationType.SingleRights}
-                availableActions={availableActions}
-              />
+              (availableActions.includes(DelegationAction.DELEGATE) ||
+                availableActions.includes(DelegationAction.REQUEST)) &&
+              window.featureFlags?.enableRequestAccess && (
+                <DelegationModal
+                  delegationType={DelegationType.SingleRights}
+                  availableActions={availableActions}
+                />
+              )
             }
             renderControls={(resource) => {
               const isInherited = isResourceInherited(resource.identifier);
