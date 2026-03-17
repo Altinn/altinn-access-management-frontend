@@ -21,6 +21,7 @@ import {
   useDeleteSingleRightRequestMutation,
   useGetSingleRightRequestsQuery,
 } from '@/rtk/features/requestApi';
+import { getSingleRightRequestId } from '@/resources/utils/singleRightRequestUtils';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -150,9 +151,7 @@ export const SearchResults = ({
   };
 
   const getRequestId = (resourceId: string) => {
-    return (singleRightRequests ?? []).find(
-      (x) => x.resourceId === resourceId && x.to.id === toParty?.partyUuid,
-    )?.id;
+    return getSingleRightRequestId(singleRightRequests, resourceId, toParty?.partyUuid);
   };
 
   const isLoading = (resourceId: string) => {

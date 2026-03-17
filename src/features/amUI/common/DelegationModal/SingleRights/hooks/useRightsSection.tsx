@@ -25,6 +25,7 @@ import {
   useDeleteSingleRightRequestMutation,
   useCreateSingleRightRequestMutation,
 } from '@/rtk/features/requestApi';
+import { getSingleRightRequestId } from '@/resources/utils/singleRightRequestUtils';
 
 export const useRightsSection = ({
   resource,
@@ -93,9 +94,11 @@ export const useRightsSection = ({
   const [deleteSentRequest] = useDeleteSingleRightRequestMutation();
   const { openSnackbar } = useSnackbar();
 
-  const requestId = singleRightRequests?.find(
-    (x) => x.resourceId === resource.identifier && x.to.id === toParty?.partyUuid,
-  )?.id;
+  const requestId = getSingleRightRequestId(
+    singleRightRequests,
+    resource.identifier,
+    toParty?.partyUuid,
+  );
 
   const {
     data: delegationCheckedActions,
