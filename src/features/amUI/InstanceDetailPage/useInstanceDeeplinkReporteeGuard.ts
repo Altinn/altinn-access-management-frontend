@@ -9,6 +9,8 @@ import {
   useGetReporteeListForAuthorizedUserQuery,
 } from '@/rtk/features/userInfoApi';
 
+const REDIRECT_GUARD_RESET_TIMEOUT_MS = 5000;
+
 export type InstanceDeeplinkGuardStatus =
   | 'ready'
   | 'loading'
@@ -44,11 +46,15 @@ export const getInboxUrlForDialogId = (dialogId?: string | null) =>
   dialogId ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}` : `${getAfUrl()}inbox`;
 
 export const getUrlWithoutRequestedPartyUuid = (url: string) => {
-  const cleanUrl = new URL(url);
-  cleanUrl.searchParams.delete('partyUuid');
-  cleanUrl.searchParams.delete('partyuuid');
+  try {
+    const cleanUrl = new URL(url);
+    cleanUrl.searchParams.delete('partyUuid');
+    cleanUrl.searchParams.delete('partyuuid');
 
-  return cleanUrl.toString();
+    return cleanUrl.toString();
+  } catch {
+    return url;
+  }
 };
 
 export const hasAccessToRequestedParty = (
@@ -141,11 +147,27 @@ export const useInstanceDeeplinkReporteeGuard = ({
       return;
     }
 
+    const resetRedirectTrigger = () => {
+      hasTriggeredRedirect.current = false;
+    };
+
     hasTriggeredRedirect.current = true;
-    redirectToChangeReporteeAndRedirect(
-      requestedPartyUuid,
-      getUrlWithoutRequestedPartyUuid(window.location.href),
-    );
+    const timeoutId = window.setTimeout(resetRedirectTrigger, REDIRECT_GUARD_RESET_TIMEOUT_MS);
+
+    try {
+      redirectToChangeReporteeAndRedirect(
+        requestedPartyUuid,
+        getUrlWithoutRequestedPartyUuid(window.location.href),
+      );
+    } catch {
+      window.clearTimeout(timeoutId);
+      resetRedirectTrigger();
+    }
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      resetRedirectTrigger();
+    };
   }, [requestedPartyUuid, status]);
 
   return {
