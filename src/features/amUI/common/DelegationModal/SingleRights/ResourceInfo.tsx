@@ -139,11 +139,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                 hasRequestedSingleRight={!!requestId}
                 isLoadingRequest={isLoadingRequest}
                 sendRequest={sendRequest}
-                deleteRequest={() => {
-                  if (requestId) {
-                    deleteRequest(requestId);
-                  }
-                }}
+                deleteRequest={deleteRequest}
               />
             </>
           )}

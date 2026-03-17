@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsHeading, DsParagraph, DsSpinner, useSnackbar } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 
 import {
   type ResourceDelegation,
@@ -16,15 +16,7 @@ import { useResourceListDelegation } from './hooks/useResourceListDelegation';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { useRenderSearchResultControl } from './createSearchResultControlsRenderer';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import {
-  useCreateSingleRightRequestMutation,
-  useDeleteSingleRightRequestMutation,
-  useGetPendingSingleRightRequestsQuery,
-} from '@/rtk/features/requestApi';
-import {
-  getRequestPartyQueryParams,
-  getSingleRightRequestId,
-} from '@/resources/utils/singleRightRequestUtils';
+import { useSingleRightRequests } from './hooks/useSingleRightRequests';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -58,8 +50,18 @@ export const SearchResults = ({
   const { t } = useTranslation();
   const { setActionError } = useDelegationModalContext();
   const { actingParty, toParty, fromParty } = usePartyRepresentation();
-  const { openSnackbar } = useSnackbar();
-  const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
+
+  const {
+    requestFromList: requestFromListHook,
+    deleteRequestFromList: deleteRequestFromListHook,
+    getRequestId,
+    isLoadingRequest,
+  } = useSingleRightRequests({
+    actingParty: actingParty?.partyUuid,
+    toParty: toParty?.partyUuid,
+    fromParty: fromParty?.partyUuid,
+    availableActions,
+  });
 
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
     onActionError: (resource, errorInfo) => {
@@ -74,89 +76,13 @@ export const SearchResults = ({
       onSelect(resource);
     },
   });
-  const requstQueryParams = getRequestPartyQueryParams(
-    actingParty?.partyUuid,
-    fromParty?.partyUuid,
-  );
-  const { data: singleRightRequests } = useGetPendingSingleRightRequestsQuery(
-    {
-      ...requstQueryParams,
-    },
-    {
-      skip:
-        !availableActions?.includes(DelegationAction.REQUEST) ||
-        !requstQueryParams?.actingParty ||
-        !requstQueryParams?.to,
-    },
-  );
 
-  useEffect(() => {
-    setLoadingByResourceId({});
-  }, [singleRightRequests]);
-
-  const [createRequest] = useCreateSingleRightRequestMutation();
-  const [deleteSentRequest] = useDeleteSingleRightRequestMutation();
   const requestFromList = (resource: ServiceResource) => {
-    setLoadingByResourceId((prev) => ({
-      ...prev,
-      [resource.identifier]: true,
-    }));
-    createRequest({
-      ...requstQueryParams,
-      resource: resource.identifier,
-    })
-      .unwrap()
-      .then(() => {
-        openSnackbar({
-          message: t('delegation_modal.request.sent_request_success', { resource: resource.title }),
-          color: 'success',
-        });
-      })
-      .catch(() => {
-        setLoadingByResourceId((prev) => ({
-          ...prev,
-          [resource.identifier]: false,
-        }));
-        openSnackbar({
-          message: t('delegation_modal.request.sent_request_error', { resource: resource.title }),
-          color: 'danger',
-        });
-      });
+    requestFromListHook(resource);
   };
 
   const deleteRequestFromList = (resource: ServiceResource) => {
-    const requestId = getRequestId(resource.identifier);
-    if (requestId) {
-      setLoadingByResourceId((prev) => ({
-        ...prev,
-        [resource.identifier]: true,
-      }));
-      deleteSentRequest({
-        actingParty: actingParty?.partyUuid || '',
-        requestId: requestId,
-      })
-        .unwrap()
-        .then(() => {
-          openSnackbar({
-            message: t('delegation_modal.request.withdraw_request_success', {
-              resource: resource.title,
-            }),
-            color: 'success',
-          });
-        })
-        .catch(() => {
-          setLoadingByResourceId((prev) => ({
-            ...prev,
-            [resource.identifier]: false,
-          }));
-          openSnackbar({
-            message: t('delegation_modal.request.withdraw_request_error', {
-              resource: resource.title,
-            }),
-            color: 'danger',
-          });
-        });
-    }
+    deleteRequestFromListHook(resource);
   };
 
   const isDelegated = (resourceId: string) =>
@@ -176,12 +102,8 @@ export const SearchResults = ({
     );
   };
 
-  const getRequestId = (resourceId: string) => {
-    return getSingleRightRequestId(singleRightRequests, resourceId, toParty?.partyUuid);
-  };
-
   const isLoading = (resourceId: string) => {
-    return isResourceLoading(resourceId) || loadingByResourceId[resourceId];
+    return isResourceLoading(resourceId) || isLoadingRequest(resourceId);
   };
 
   const renderControls = useRenderSearchResultControl({

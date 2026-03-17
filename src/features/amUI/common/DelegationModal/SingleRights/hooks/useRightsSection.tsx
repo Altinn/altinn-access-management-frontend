@@ -1,5 +1,4 @@
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
-import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
@@ -20,15 +19,8 @@ import { useRightChips } from './useRightChips';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useHasResourceCheck } from './useHasResourceCheck';
-import {
-  useGetPendingSingleRightRequestsQuery,
-  useDeleteSingleRightRequestMutation,
-  useCreateSingleRightRequestMutation,
-} from '@/rtk/features/requestApi';
-import {
-  getRequestPartyQueryParams,
-  getSingleRightRequestId,
-} from '@/resources/utils/singleRightRequestUtils';
+import { useSingleRightRequests } from './useSingleRightRequests';
+import { DelegationAction } from '../../EditModal';
 
 export const useRightsSection = ({
   resource,
@@ -53,7 +45,6 @@ export const useRightsSection = ({
   const [missingAccess, setMissingAccess] = useState<string | null>(null);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [isActionSuccess, setIsActionSuccess] = useState(false);
-  const [isLoadingRequest, setIsLoadingRequest] = useState(false);
 
   /// Hooks and data fetching
 
@@ -75,10 +66,6 @@ export const useRightsSection = ({
     },
     { skip: !toParty || !fromParty || !actingParty || !resource.identifier || !hasResourceAccess }, // Only fetch resource rights if the rightholder has access to the resource
   );
-  const requstQueryParams = getRequestPartyQueryParams(
-    actingParty?.partyUuid,
-    fromParty?.partyUuid,
-  );
   const { data: reportee } = useGetReporteeQuery();
   const {
     data: rightsMeta,
@@ -91,24 +78,17 @@ export const useRightsSection = ({
     },
     { skip: !resource.identifier },
   );
-  const { data: singleRightRequests } = useGetPendingSingleRightRequestsQuery(
-    {
-      ...requstQueryParams,
-    },
-    { skip: !isRequest || !requstQueryParams?.actingParty || !requstQueryParams?.to },
-  );
-  const [createRequest] = useCreateSingleRightRequestMutation();
-  const [deleteSentRequest] = useDeleteSingleRightRequestMutation();
-  const { openSnackbar } = useSnackbar();
-
-  const requestId = getSingleRightRequestId(
-    singleRightRequests,
-    resource.identifier,
-    toParty?.partyUuid,
-  );
-  useEffect(() => {
-    setIsLoadingRequest(false);
-  }, [singleRightRequests]);
+  const {
+    requestFromList: requestFromListHook,
+    deleteRequestFromList: deleteRequestFromListHook,
+    getRequestId,
+    isLoadingRequest,
+  } = useSingleRightRequests({
+    actingParty: actingParty?.partyUuid,
+    toParty: toParty?.partyUuid,
+    fromParty: fromParty?.partyUuid,
+    availableActions: isRequest ? [DelegationAction.REQUEST] : [],
+  });
 
   const {
     data: delegationCheckedActions,
@@ -290,48 +270,11 @@ export const useRightsSection = ({
   };
 
   const sendRequest = () => {
-    setIsLoadingRequest(true);
-    createRequest({
-      ...requstQueryParams,
-      resource: resource.identifier,
-    })
-      .unwrap()
-      .then(() =>
-        openSnackbar({
-          message: t('delegation_modal.request.sent_request_success', { resource: resource.title }),
-          color: 'success',
-        }),
-      )
-      .catch(() => {
-        setIsLoadingRequest(false);
-        openSnackbar({
-          message: t('delegation_modal.request.sent_request_error', { resource: resource.title }),
-          color: 'danger',
-        });
-      });
+    requestFromListHook(resource);
   };
 
-  const deleteRequest = (requestId: string) => {
-    setIsLoadingRequest(true);
-    deleteSentRequest({ requestId, actingParty: actingParty?.partyUuid || '' })
-      .unwrap()
-      .then(() =>
-        openSnackbar({
-          message: t('delegation_modal.request.withdraw_request_success', {
-            resource: resource.title,
-          }),
-          color: 'success',
-        }),
-      )
-      .catch(() => {
-        setIsLoadingRequest(false);
-        openSnackbar({
-          message: t('delegation_modal.request.withdraw_request_error', {
-            resource: resource.title,
-          }),
-          color: 'danger',
-        });
-      });
+  const deleteRequest = () => {
+    deleteRequestFromListHook(resource);
   };
 
   const { chips } = useRightChips(rights, setRights, classes.chip);
@@ -354,8 +297,8 @@ export const useRightsSection = ({
     isActionSuccess,
     isLoading,
     rightsMetaTechnicalErrorDetails,
-    requestId,
-    isLoadingRequest,
+    requestId: getRequestId(resource.identifier),
+    isLoadingRequest: isLoadingRequest(resource.identifier),
     sendRequest,
     deleteRequest,
   };
