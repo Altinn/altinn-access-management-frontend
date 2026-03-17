@@ -911,6 +911,7 @@
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}",
+    "no_access_title": "Du har ikkje tilgang til denne sida",
     "instances_tab": {
       "search_label": "Søk etter delingar frå innboks",
       "no_results": "Ingen element frå innboks funne.",
@@ -921,7 +922,8 @@
     "document_title": "Delt frå innboks",
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
-    "no_users": "Ingen har tilgang til denne instansen på vegner av {{fromparty}}.",
+    "no_users": "Ingen brukarar har tilgang.",
+    "cannot_share_with_others": "Du kan ikkje gi denne vidare til andre. Beklagar!",
     "reportee_access_missing_title": "Du har ikkje tilgang til dette innhaldet"
   },
   "poa_status": {

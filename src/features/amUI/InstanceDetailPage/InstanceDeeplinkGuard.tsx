@@ -21,7 +21,7 @@ import classes from './InstanceDetailPageContent.module.css';
 
 interface InstanceDeeplinkGuardProps {
   children: ReactNode;
-  backUrl: string;
+  backUrl?: string;
 }
 
 export const InstanceDeeplinkGuard = ({ children, backUrl }: InstanceDeeplinkGuardProps) => {
