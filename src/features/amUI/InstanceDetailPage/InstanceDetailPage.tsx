@@ -18,14 +18,14 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 import { InstanceDetailPageContent } from './InstanceDetailPageContent';
 import classes from './InstanceDetailPageContent.module.css';
 
-const getInboxUrl = (dialogId?: string | null) =>
-  dialogId ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}` : `${getAfUrl()}inbox`;
+const getInboxUrl = (dialogId: string) => `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}`;
 
 export const InstanceDetailPage = () => {
   const { t } = useTranslation();
   const partyUuid = getCookie('AltinnPartyUuid') || '';
   const [searchParams] = useSearchParams();
-  const isInboxDeeplink = !!searchParams.get('dialogId');
+  const dialogId = searchParams.get('dialogId');
+  const isInboxDeeplink = !!dialogId;
   const instanceDelegationEnabled = displayInstanceDelegation();
 
   useDocumentTitle(t('instance_detail_page.document_title'));
@@ -39,20 +39,20 @@ export const InstanceDetailPage = () => {
     );
   }
 
-  const inboxLink = (
+  const inboxLink = dialogId ? (
     <div className={classes.inboxLinkContainer}>
       <DsButton
         asChild
         variant='secondary'
         className={classes.inboxButton}
       >
-        <a href={getInboxUrl(searchParams.get('dialogId'))}>
+        <a href={getInboxUrl(dialogId)}>
           <EnvelopeClosedIcon />
           {t('instance_detail_page.back_to_inbox')}
         </a>
       </DsButton>
     </div>
-  );
+  ) : null;
 
   return (
     <PageWrapper>
