@@ -61,7 +61,7 @@ export const requestApi = createApi({
     deleteSingleRightRequest: builder.mutation<void, { requestId: string; actingParty: string }>({
       query: ({ requestId, actingParty }) => {
         return {
-          url: `request/send/withdraw?party=${actingParty}&id=${requestId}`,
+          url: `request/sent/withdraw?party=${actingParty}&id=${requestId}`,
           method: 'DELETE',
         };
       },

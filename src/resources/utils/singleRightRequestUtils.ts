@@ -5,6 +5,7 @@ export const getSingleRightRequestId = (
   resourceId: string,
   toPartyUuid?: string,
 ): string | undefined => {
-  return singleRightRequests?.find((x) => x.resourceId === resourceId && x.to.id === toPartyUuid)
-    ?.id;
+  return singleRightRequests?.find(
+    (x) => x.resourceId === resourceId && x.to.id === toPartyUuid && x.status === 'Pending',
+  )?.id;
 };

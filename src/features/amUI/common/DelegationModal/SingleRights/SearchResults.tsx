@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph, DsSpinner, useSnackbar } from '@altinn/altinn-components';
 
@@ -56,6 +56,7 @@ export const SearchResults = ({
   const { setActionError } = useDelegationModalContext();
   const { actingParty, toParty, fromParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
+  const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
 
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
     onActionError: (resource, errorInfo) => {
@@ -80,10 +81,17 @@ export const SearchResults = ({
     },
   );
 
-  const [createRequest, { isLoading: isCreatingRequest }] = useCreateSingleRightRequestMutation();
-  const [deleteSentRequest, { isLoading: isDeletingRequest }] =
-    useDeleteSingleRightRequestMutation();
+  useEffect(() => {
+    setLoadingByResourceId({});
+  }, [singleRightRequests]);
+
+  const [createRequest] = useCreateSingleRightRequestMutation();
+  const [deleteSentRequest] = useDeleteSingleRightRequestMutation();
   const requestFromList = (resource: ServiceResource) => {
+    setLoadingByResourceId((prev) => ({
+      ...prev,
+      [resource.identifier]: true,
+    }));
     createRequest({
       actingParty: actingParty?.partyUuid || '',
       to: toParty?.partyUuid || '',
@@ -97,6 +105,7 @@ export const SearchResults = ({
         });
       })
       .catch(() => {
+        setLoadingByResourceId({});
         openSnackbar({
           message: t('delegation_modal.request.sent_request_error', { resource: resource.title }),
           color: 'danger',
@@ -108,6 +117,10 @@ export const SearchResults = ({
   const deleteRequestFromList = (resource: ServiceResource) => {
     const requestId = getRequestId(resource.identifier);
     if (requestId) {
+      setLoadingByResourceId((prev) => ({
+        ...prev,
+        [resource.identifier]: true,
+      }));
       deleteSentRequest({
         actingParty: actingParty?.partyUuid || '',
         requestId: requestId,
@@ -122,6 +135,7 @@ export const SearchResults = ({
           });
         })
         .catch(() => {
+          setLoadingByResourceId({});
           openSnackbar({
             message: t('delegation_modal.request.withdraw_request_error', {
               resource: resource.title,
@@ -155,7 +169,7 @@ export const SearchResults = ({
   };
 
   const isLoading = (resourceId: string) => {
-    return isResourceLoading(resourceId) || isCreatingRequest || isDeletingRequest;
+    return isResourceLoading(resourceId) || loadingByResourceId[resourceId];
   };
 
   const renderControls = useRenderSearchResultControl({
