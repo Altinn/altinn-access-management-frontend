@@ -16,7 +16,7 @@ public class RequestDto
     /// <summary>
     /// Discriminator indicating the request type: "resource", "package", or "assignment"
     /// </summary>
-    public string RequestType { get; set; }
+    public string Type { get; set; }
 
     /// <summary>
     /// Request status (e.g. draft, pending, approved, rejected, withdrawn)

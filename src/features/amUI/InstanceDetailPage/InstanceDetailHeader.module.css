@@ -1,0 +1,23 @@
+.infoHeading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-spacing-2);
+  margin-bottom: var(--ds-spacing-3);
+}
+
+.resourceOwner {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+
+.providerName {
+  color: var(--ds-color-text-subtle);
+}
+
+@media (max-width: 600px) {
+  .resourceOwner {
+    padding-top: 4px;
+  }
+}

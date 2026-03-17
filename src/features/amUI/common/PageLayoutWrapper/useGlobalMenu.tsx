@@ -49,7 +49,11 @@ const linkUrls = {
   },
 };
 
-export const useGlobalMenu = () => {
+export const useGlobalMenu = ({
+  hideSidebarItems = false,
+}: {
+  hideSidebarItems?: boolean;
+} = {}) => {
   const { t, i18n } = useTranslation();
 
   const lang = i18n.language as 'no_nb' | 'no_nn' | 'en';
@@ -89,7 +93,7 @@ export const useGlobalMenu = () => {
       ),
       badge: { label: t('common.beta'), variant: 'base', color: 'neutral' },
     },
-    ...(isSm ? sidebarItems : []),
+    ...(isSm && !hideSidebarItems ? sidebarItems : []),
     {
       groupId: '100',
       icon: { svgElement: MenuGridIcon, theme: 'surface' },

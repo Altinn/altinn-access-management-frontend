@@ -914,6 +914,7 @@
   "poa_overview_page": {
     "page_title": "Powers of attorney overview - Altinn",
     "heading": "Powers of attorney overview for {{name}}",
+    "no_access_title": "You do not have access to this page",
     "instances_tab": {
       "search_label": "Search for inbox items",
       "no_results": "No inbox items found.",
@@ -924,7 +925,8 @@
     "document_title": "Shared from inbox",
     "provider_name": "to {{name}}",
     "back_to_inbox": "Go to inbox",
-    "no_users": "No users have access to this instance on behalf of {{fromparty}}."
+    "no_users": "No users have access.",
+    "cannot_share_with_others": "You cannot share this with others. Sorry!"
   },
   "poa_status": {
     "no_permissions": "You have to give power of attorney"

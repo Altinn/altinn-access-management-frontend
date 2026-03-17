@@ -43,15 +43,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<bool> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
+        public async Task<SingleRightRequest> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
         {
-            return await _requestClient.CreateResourceRequest(party, to, resource, cancellationToken);
+            RequestResourceDto response = await _requestClient.CreateResourceRequest(party, to, resource, cancellationToken);
+            return MapToSingleRightRequest(response);
         }
 
         /// <inheritdoc />
-        public async Task<bool> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<SingleRightRequest> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
-            return await _requestClient.WithdrawRequest(party, id, cancellationToken);
+            RequestResourceDto response = await _requestClient.WithdrawRequest(party, id, cancellationToken);
+            return MapToSingleRightRequest(response);
         }
 
         private static SingleRightRequest MapToSingleRightRequest(RequestResourceDto x)
@@ -61,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Id = x.Id,
                 From = x.From,
                 To = x.To,
-                RequestType = x.RequestType,
+                Type = x.Type,
                 Status = x.Status,
                 ResourceId = x.Resource?.ResourceId,
                 LastUpdated = x.LastUpdated
