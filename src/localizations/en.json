@@ -69,6 +69,7 @@
     "give_poa_for": "Give power of attorney for {{poa_object}}",
     "request_poa": "Request power of attorney",
     "request_poa_for": "Request power of attorney for {{poa_object}}",
+    "delete_request_for": "Delete request for {{poa_object}}",
     "delete_poa": "Delete power of attorney",
     "delete_poa_for": "Delete power of attorney for {{poa_object}}",
     "delete_pos_confirm": "Are you sure you want to delete the power of attorney?",

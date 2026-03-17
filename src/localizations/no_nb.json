@@ -68,6 +68,7 @@
     "give_poa_for": "Gi fullmakt for {{poa_object}}",
     "request_poa": "Be om fullmakt",
     "request_poa_for": "Be om fullmakt for {{poa_object}}",
+    "delete_request_for": "Slett forespørsel for {{poa_object}}",
     "delete_poa": "Slett fullmakt",
     "delete_poa_for": "Slett fullmakt for {{poa_object}}",
     "delete_pos_confirm": "Er du sikker på at du vil slette denne?",

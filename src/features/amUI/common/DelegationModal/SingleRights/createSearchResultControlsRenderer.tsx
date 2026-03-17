@@ -93,7 +93,7 @@ export const useRenderSearchResultControl = ({
           onClick={() => {
             deleteRequestFromList(resource);
           }}
-          aria-label={t('common.delete_poa_for', { poa_object: resource.title })}
+          aria-label={t('common.delete_request_for', { poa_object: resource.title })}
         >
           <MinusCircleIcon aria-hidden='true' />
           {!isMobile && t('delegation_modal.request.delete_request')}
