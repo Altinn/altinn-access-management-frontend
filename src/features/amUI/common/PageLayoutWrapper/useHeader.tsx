@@ -17,11 +17,14 @@ import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/comp
 import { useEffect, useState } from 'react';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 import { displayDeletedAccountToggle } from '@/resources/utils/featureFlagUtils';
-import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
+import {
+  redirectToChangeReporteeAndRedirect,
+  getDefaultChangeReporteeRedirectTarget,
+} from '@/resources/utils/changeReporteeUtils';
 
 export const handleSelectAccount = (
   accountUuid: string,
-  goTo = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString(),
+  goTo = getDefaultChangeReporteeRedirectTarget(),
 ) => {
   redirectToChangeReporteeAndRedirect(accountUuid, goTo);
 };

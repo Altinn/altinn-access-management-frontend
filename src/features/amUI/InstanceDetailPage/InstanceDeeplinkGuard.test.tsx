@@ -19,10 +19,6 @@ vi.mock('./useInstanceDeeplinkReporteeGuard', async () => {
   };
 });
 
-vi.mock('../common/LoadingAnimation/LoadingAnimation', () => ({
-  LoadingAnimation: () => <div>loading</div>,
-}));
-
 describe('InstanceDeeplinkGuard', () => {
   beforeEach(() => {
     vi.clearAllMocks();
