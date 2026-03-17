@@ -3,20 +3,14 @@ import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
-import { getAfUrl } from '@/resources/utils/pathUtils';
 import {
   type ReporteeInfo,
   useGetReporteeListForAuthorizedUserQuery,
 } from '@/rtk/features/userInfoApi';
 
-export type InstanceDeeplinkGuardStatus =
-  | 'ready'
-  | 'loading'
-  | 'redirecting'
-  | 'unauthorized'
-  | 'error';
+export type DeeplinkGuardStatus = 'ready' | 'loading' | 'redirecting' | 'unauthorized' | 'error';
 
-interface GetInstanceDeeplinkGuardStatusArgs {
+interface GetDeeplinkGuardStatusArgs {
   actingPartyUuid?: string;
   requestedPartyUuid?: string;
   reporteeList?: ReporteeInfo[];
@@ -24,13 +18,13 @@ interface GetInstanceDeeplinkGuardStatusArgs {
   isAuthorizedPartyListError: boolean;
 }
 
-interface UseInstanceDeeplinkReporteeGuardArgs {
+interface UseDeeplinkReporteeGuardArgs {
   actingPartyUuid?: string;
   requestedPartyUuid?: string;
 }
 
-interface UseInstanceDeeplinkReporteeGuardResult {
-  status: InstanceDeeplinkGuardStatus;
+interface UseDeeplinkReporteeGuardResult {
+  status: DeeplinkGuardStatus;
   error?: FetchBaseQueryError | SerializedError;
 }
 
@@ -39,9 +33,6 @@ export const normalizePartyUuid = (partyUuid?: string | null) =>
 
 export const getRequestedPartyUuid = (searchParams: URLSearchParams) =>
   searchParams.get('partyUuid') ?? searchParams.get('partyuuid') ?? '';
-
-export const getInboxUrlForDialogId = (dialogId?: string | null) =>
-  dialogId ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}` : `${getAfUrl()}inbox`;
 
 export const getUrlWithoutRequestedPartyUuid = (url: string) => {
   try {
@@ -86,13 +77,13 @@ export const hasAccessToRequestedParty = (
   return false;
 };
 
-export const getInstanceDeeplinkGuardStatus = ({
+export const getDeeplinkGuardStatus = ({
   actingPartyUuid,
   requestedPartyUuid,
   reporteeList,
   isAuthorizedPartyListLoading,
   isAuthorizedPartyListError,
-}: GetInstanceDeeplinkGuardStatusArgs): InstanceDeeplinkGuardStatus => {
+}: GetDeeplinkGuardStatusArgs): DeeplinkGuardStatus => {
   const normalizedActingPartyUuid = normalizePartyUuid(actingPartyUuid);
   const normalizedRequestedPartyUuid = normalizePartyUuid(requestedPartyUuid);
 
@@ -113,10 +104,10 @@ export const getInstanceDeeplinkGuardStatus = ({
     : 'unauthorized';
 };
 
-export const useInstanceDeeplinkReporteeGuard = ({
+export const useDeeplinkReporteeGuard = ({
   actingPartyUuid,
   requestedPartyUuid,
-}: UseInstanceDeeplinkReporteeGuardArgs): UseInstanceDeeplinkReporteeGuardResult => {
+}: UseDeeplinkReporteeGuardArgs): UseDeeplinkReporteeGuardResult => {
   const shouldValidateRequestedParty =
     !!normalizePartyUuid(requestedPartyUuid) &&
     normalizePartyUuid(requestedPartyUuid) !== normalizePartyUuid(actingPartyUuid);
@@ -130,7 +121,7 @@ export const useInstanceDeeplinkReporteeGuard = ({
     skip: !shouldValidateRequestedParty,
   });
 
-  const status = getInstanceDeeplinkGuardStatus({
+  const status = getDeeplinkGuardStatus({
     actingPartyUuid,
     requestedPartyUuid,
     reporteeList,

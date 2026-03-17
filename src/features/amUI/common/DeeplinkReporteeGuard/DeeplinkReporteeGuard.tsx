@@ -1,51 +1,35 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsButton, DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
-import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
+import { DsAlert, DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 import { useSearchParams } from 'react-router';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { PageContainer } from '../common/PageContainer/PageContainer';
+import { PageContainer } from '../PageContainer/PageContainer';
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
-} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+} from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
-import {
-  getInboxUrlForDialogId,
-  getRequestedPartyUuid,
-  useInstanceDeeplinkReporteeGuard,
-} from './useInstanceDeeplinkReporteeGuard';
-import classes from './InstanceDetailPageContent.module.css';
+import { getRequestedPartyUuid, useDeeplinkReporteeGuard } from './useDeeplinkReporteeGuard';
 
-interface InstanceDeeplinkGuardProps {
+interface DeeplinkReporteeGuardProps {
   children: ReactNode;
   backUrl?: string;
+  /** Optional content rendered below error/unauthorized alerts (e.g. a fallback navigation link) */
+  fallbackAction?: ReactNode;
 }
 
-export const InstanceDeeplinkGuard = ({ children, backUrl }: InstanceDeeplinkGuardProps) => {
+export const DeeplinkReporteeGuard = ({
+  children,
+  backUrl,
+  fallbackAction,
+}: DeeplinkReporteeGuardProps) => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const actingPartyUuid = getCookie('AltinnPartyUuid');
   const requestedPartyUuid = getRequestedPartyUuid(searchParams);
-  const inboxUrl = getInboxUrlForDialogId(searchParams.get('dialogId'));
-  const deeplinkGuard = useInstanceDeeplinkReporteeGuard({ actingPartyUuid, requestedPartyUuid });
-
-  const inboxLink = (
-    <div className={classes.inboxLinkContainer}>
-      <DsButton
-        asChild
-        variant='secondary'
-        className={classes.inboxButton}
-      >
-        <a href={inboxUrl}>
-          <EnvelopeClosedIcon />
-          {t('instance_detail_page.back_to_inbox')}
-        </a>
-      </DsButton>
-    </div>
-  );
+  const deeplinkGuard = useDeeplinkReporteeGuard({ actingPartyUuid, requestedPartyUuid });
 
   if (deeplinkGuard.status === 'loading' || deeplinkGuard.status === 'redirecting') {
     return (
@@ -67,10 +51,10 @@ export const InstanceDeeplinkGuard = ({ children, backUrl }: InstanceDeeplinkGua
             level={2}
             data-size='xs'
           >
-            {t('instance_detail_page.reportee_access_missing_title')}
+            {t('common.reportee_access_missing_title')}
           </DsHeading>
         </DsAlert>
-        {inboxLink}
+        {fallbackAction}
       </PageContainer>
     );
   }
@@ -91,7 +75,7 @@ export const InstanceDeeplinkGuard = ({ children, backUrl }: InstanceDeeplinkGua
             />
           )}
         </DsAlert>
-        {inboxLink}
+        {fallbackAction}
       </PageContainer>
     );
   }
