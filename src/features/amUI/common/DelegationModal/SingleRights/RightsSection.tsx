@@ -6,6 +6,7 @@ import {
   DsParagraph,
   ListItem,
   Button,
+  DsButton,
 } from '@altinn/altinn-components';
 import { CheckmarkCircleIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -40,6 +41,7 @@ type RightsSectionProps = {
   availableActions?: DelegationAction[];
   rightsMetaTechnicalErrorDetails: { status: string; time: string } | null;
   hasRequestedSingleRight?: boolean;
+  isLoadingRequest?: boolean;
   sendRequest: () => void;
   deleteRequest: () => void;
 };
@@ -62,6 +64,7 @@ export const RightsSection = ({
   availableActions,
   rightsMetaTechnicalErrorDetails,
   hasRequestedSingleRight,
+  isLoadingRequest,
   sendRequest,
   deleteRequest,
 }: RightsSectionProps) => {
@@ -218,23 +221,25 @@ export const RightsSection = ({
         {!hasAccess &&
           !hasRequestedSingleRight &&
           availableActions?.includes(DelegationAction.REQUEST) && (
-            <Button
+            <DsButton
               data-size='sm'
-              disabled={!resource.delegable}
+              disabled={!resource.delegable || isLoadingRequest}
+              loading={isLoadingRequest}
               onClick={sendRequest}
             >
               {t('common.request_poa')}
-            </Button>
+            </DsButton>
           )}
         {hasRequestedSingleRight && availableActions?.includes(DelegationAction.REQUEST) && (
-          <Button
+          <DsButton
             data-size='sm'
-            disabled={!resource.delegable}
-            color='danger'
+            disabled={!resource.delegable || isLoadingRequest}
+            data-color='danger'
+            loading={isLoadingRequest}
             onClick={deleteRequest}
           >
             {t('delegation_modal.request.delete_request')}
-          </Button>
+          </DsButton>
         )}
       </div>
     </>

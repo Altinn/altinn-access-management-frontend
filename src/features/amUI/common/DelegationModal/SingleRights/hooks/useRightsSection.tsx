@@ -50,6 +50,7 @@ export const useRightsSection = ({
   const [missingAccess, setMissingAccess] = useState<string | null>(null);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [isActionSuccess, setIsActionSuccess] = useState(false);
+  const [isLoadingRequest, setIsLoadingRequest] = useState(false);
 
   /// Hooks and data fetching
 
@@ -99,6 +100,9 @@ export const useRightsSection = ({
     resource.identifier,
     toParty?.partyUuid,
   );
+  useEffect(() => {
+    setIsLoadingRequest(false);
+  }, [singleRightRequests]);
 
   const {
     data: delegationCheckedActions,
@@ -280,6 +284,7 @@ export const useRightsSection = ({
   };
 
   const sendRequest = () => {
+    setIsLoadingRequest(true);
     createRequest({
       actingParty: actingParty?.partyUuid || '',
       to: toParty?.partyUuid || '',
@@ -293,6 +298,7 @@ export const useRightsSection = ({
         }),
       )
       .catch(() => {
+        setIsLoadingRequest(false);
         openSnackbar({
           message: t('delegation_modal.request.sent_request_error', { resource: resource.title }),
           color: 'danger',
@@ -301,6 +307,7 @@ export const useRightsSection = ({
   };
 
   const deleteRequest = (requestId: string) => {
+    setIsLoadingRequest(true);
     deleteSentRequest({ requestId, actingParty: actingParty?.partyUuid || '' })
       .unwrap()
       .then(() =>
@@ -312,6 +319,7 @@ export const useRightsSection = ({
         }),
       )
       .catch(() => {
+        setIsLoadingRequest(false);
         openSnackbar({
           message: t('delegation_modal.request.withdraw_request_error', {
             resource: resource.title,
@@ -342,6 +350,7 @@ export const useRightsSection = ({
     isLoading,
     rightsMetaTechnicalErrorDetails,
     requestId,
+    isLoadingRequest,
     sendRequest,
     deleteRequest,
   };

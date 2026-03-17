@@ -62,6 +62,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
     isActionSuccess,
     rightsMetaTechnicalErrorDetails,
     requestId,
+    isLoadingRequest,
     sendRequest,
     deleteRequest,
   } = useRightsSection({ resource, isRequest: isSingleRightRequest, onDelegate });
@@ -136,6 +137,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                 missingAccess={missingAccess}
                 rightsMetaTechnicalErrorDetails={rightsMetaTechnicalErrorDetails}
                 hasRequestedSingleRight={!!requestId}
+                isLoadingRequest={isLoadingRequest}
                 sendRequest={sendRequest}
                 deleteRequest={() => {
                   if (requestId) {
