@@ -86,7 +86,7 @@ export const InstanceList = ({ instances, isLoading = false, getItemAs }: Instan
             return (
               <DialogListItem
                 key={item.id}
-                size='lg'
+                size='md'
                 as={Component}
                 interactive={Boolean(Component)}
                 {...item}

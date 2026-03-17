@@ -2,7 +2,10 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import { useRerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
+import {
+  displayInstanceDelegation,
+  useRerouteIfNotConfetti,
+} from '@/resources/utils/featureFlagUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { amUIPath } from '@/routes/paths';
 import { PageWrapper } from '@/components';
@@ -25,6 +28,7 @@ import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { SingleRightsSection } from '../userRightsPage/SingleRightsSection/SingleRightsSection';
+import { InstanceSection } from '../userRightsPage/InstanceSection/InstanceSection';
 import { GuardianshipSection } from '../common/GuardianshipSection/GuardianshipSection';
 
 export const ReporteeRightsPage = () => {
@@ -36,6 +40,7 @@ export const ReporteeRightsPage = () => {
   useRerouteIfNotConfetti();
 
   const { displayRoles } = window.featureFlags;
+  const instanceDelegationEnabled = displayInstanceDelegation();
   return (
     <PageWrapper>
       <PageLayoutWrapper>
@@ -60,6 +65,7 @@ export const ReporteeRightsPage = () => {
                 singleRightsPanel={<SingleRightsSection isReportee />}
                 roleAssignmentsPanel={<ReporteeRoleSection />}
                 guardianshipsPanel={<GuardianshipSection />}
+                instancesPanel={instanceDelegationEnabled ? <InstanceSection /> : null}
               />
             </PageContainer>
           </DelegationModalProvider>
