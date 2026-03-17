@@ -28,7 +28,9 @@ import { CheckmarkIcon, PlusIcon } from '@navikt/aksel-icons';
 
 import classes from './InstanceDetailPageContent.module.css';
 
-const DisabledAddUserButton = ({
+// Placeholder component for the "Add user" button in the UserSearch component.
+// This is used to disable the button while still enabling the layout since the functionality is not implemented yet.
+const AddUserPlaceholder = ({
   isLarge,
 }: {
   isLarge?: boolean;
@@ -199,7 +201,7 @@ export const InstanceDetailPageContent = () => {
       ) : isInstanceAdmin ? (
         <UserSearch
           includeSelfAsChild={false}
-          AddUserButton={DisabledAddUserButton}
+          AddUserButton={AddUserPlaceholder}
           users={users}
           indirectUsers={indirectUsers}
           isLoading={isInstancesLoading || isLoadingIndirectConnections || isInstanceAdminLoading}
