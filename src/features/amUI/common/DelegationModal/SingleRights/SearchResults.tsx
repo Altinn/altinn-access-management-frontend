@@ -49,7 +49,7 @@ export const SearchResults = ({
 }: SearchResultsProps) => {
   const { t } = useTranslation();
   const { setActionError } = useDelegationModalContext();
-  const { actingParty, toParty, fromParty } = usePartyRepresentation();
+  const { toParty } = usePartyRepresentation();
 
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
