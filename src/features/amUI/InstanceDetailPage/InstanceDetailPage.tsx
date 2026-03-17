@@ -5,10 +5,7 @@ import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { amUIPath } from '@/routes/paths/amUIPath';
-import {
-  displayInstanceDelegation,
-  poaOverviewPageEnabled,
-} from '@/resources/utils/featureFlagUtils';
+import { displayInstanceDelegation } from '@/resources/utils/featureFlagUtils';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';

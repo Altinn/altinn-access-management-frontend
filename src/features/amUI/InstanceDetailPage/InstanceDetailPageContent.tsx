@@ -150,7 +150,7 @@ export const InstanceDetailPageContent = () => {
         className={classes.inboxButton}
       >
         <a href={inboxUrl}>
-          <CheckmarkIcon />
+          <CheckmarkIcon aria-hidden />
           {t('common.finished')}
         </a>
       </DsButton>
