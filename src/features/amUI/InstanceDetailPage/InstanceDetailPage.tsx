@@ -11,6 +11,7 @@ import { displayInstanceDelegation } from '@/resources/utils/featureFlagUtils';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 
 import { DeeplinkReporteeGuard } from '../common/DeeplinkReporteeGuard/DeeplinkReporteeGuard';
+import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
@@ -56,17 +57,16 @@ export const InstanceDetailPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper hideSidebar={isInboxDeeplink}>
-        <DeeplinkReporteeGuard
-          backUrl={isInboxDeeplink ? undefined : `/${amUIPath.PoaOverview}`}
-          fallbackAction={inboxLink}
-        >
-          <PartyRepresentationProvider
-            fromPartyUuid={partyUuid}
-            actingPartyUuid={partyUuid}
-          >
-            <InstanceDetailPageContent />
-          </PartyRepresentationProvider>
-        </DeeplinkReporteeGuard>
+        <PageContainer backUrl={isInboxDeeplink ? undefined : `/${amUIPath.PoaOverview}`}>
+          <DeeplinkReporteeGuard fallbackContent={inboxLink}>
+            <PartyRepresentationProvider
+              fromPartyUuid={partyUuid}
+              actingPartyUuid={partyUuid}
+            >
+              <InstanceDetailPageContent />
+            </PartyRepresentationProvider>
+          </DeeplinkReporteeGuard>
+        </PageContainer>
       </PageLayoutWrapper>
     </PageWrapper>
   );

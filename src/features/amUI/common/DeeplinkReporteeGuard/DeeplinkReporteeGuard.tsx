@@ -5,7 +5,6 @@ import { useSearchParams } from 'react-router';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { PageContainer } from '../PageContainer/PageContainer';
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
@@ -15,15 +14,13 @@ import { getRequestedPartyUuid, useDeeplinkReporteeGuard } from './useDeeplinkRe
 
 interface DeeplinkReporteeGuardProps {
   children: ReactNode;
-  backUrl?: string;
   /** Optional content rendered below error/unauthorized alerts (e.g. a fallback navigation link) */
-  fallbackAction?: ReactNode;
+  fallbackContent?: ReactNode;
 }
 
 export const DeeplinkReporteeGuard = ({
   children,
-  backUrl,
-  fallbackAction,
+  fallbackContent,
 }: DeeplinkReporteeGuardProps) => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
@@ -33,19 +30,17 @@ export const DeeplinkReporteeGuard = ({
 
   if (deeplinkGuard.status === 'loading' || deeplinkGuard.status === 'redirecting') {
     return (
-      <PageContainer backUrl={backUrl}>
-        <DsSkeleton
-          width='100%'
-          height='200px'
-          aria-label={t('common.loading')}
-        />
-      </PageContainer>
+      <DsSkeleton
+        width='100%'
+        height='200px'
+        aria-label={t('common.loading')}
+      />
     );
   }
 
   if (deeplinkGuard.status === 'unauthorized') {
     return (
-      <PageContainer backUrl={backUrl}>
+      <>
         <DsAlert data-color='warning'>
           <DsHeading
             level={2}
@@ -54,8 +49,8 @@ export const DeeplinkReporteeGuard = ({
             {t('common.reportee_access_missing_title')}
           </DsHeading>
         </DsAlert>
-        {fallbackAction}
-      </PageContainer>
+        {fallbackContent}
+      </>
     );
   }
 
@@ -63,7 +58,7 @@ export const DeeplinkReporteeGuard = ({
     const technicalError = createErrorDetails(deeplinkGuard.error);
 
     return (
-      <PageContainer backUrl={backUrl}>
+      <>
         <DsAlert data-color='danger'>
           <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
           {technicalError && (
@@ -75,10 +70,10 @@ export const DeeplinkReporteeGuard = ({
             />
           )}
         </DsAlert>
-        {fallbackAction}
-      </PageContainer>
+        {fallbackContent}
+      </>
     );
   }
 
-  return <PageContainer backUrl={backUrl}>{children}</PageContainer>;
+  return <>{children}</>;
 };
