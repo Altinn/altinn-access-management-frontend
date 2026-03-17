@@ -47,14 +47,16 @@ export const useRequests = () => {
     skip: !partyUuid || !hasSystemUserPermission,
   });
 
-  const { data: pendingSentAccessRequests } = useGetSentRequestsQuery(
-    { party: partyUuid || '', status: ['Pending'], to: '' },
-    { skip: !partyUuid },
-  );
-  const { data: pendingReceivedAccessRequests } = useGetReceivedRequestsQuery(
-    { party: partyUuid || '', status: ['Pending'], from: '' },
-    { skip: !partyUuid },
-  );
+  const { data: pendingSentAccessRequests, isLoading: isLoadingPendingSentAccessRequests } =
+    useGetSentRequestsQuery(
+      { party: partyUuid || '', status: ['Pending'], to: '' },
+      { skip: !partyUuid },
+    );
+  const { data: pendingReceivedAccessRequests, isLoading: isLoadingPendingReceivedAccessRequests } =
+    useGetReceivedRequestsQuery(
+      { party: partyUuid || '', status: ['Pending'], from: '' },
+      { skip: !partyUuid },
+    );
 
   const pendingRequests: { sent: Request[]; received: Request[] } = useMemo(() => {
     const consents = (activeConsents || [])
@@ -91,7 +93,9 @@ export const useRequests = () => {
       isLoadingIsAdmin ||
       isLoadingReportee ||
       isLoadingActiveConsents ||
-      isLoadingPendingSystemUsers,
+      isLoadingPendingSystemUsers ||
+      isLoadingPendingSentAccessRequests ||
+      isLoadingPendingReceivedAccessRequests,
   };
 };
 
