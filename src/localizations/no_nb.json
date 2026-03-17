@@ -921,7 +921,8 @@
     "document_title": "Delt fra innboks",
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
-    "no_users": "Ingen har tilgang til denne instansen på vegne av {{fromparty}}."
+    "no_users": "Ingen har tilgang til denne instansen på vegne av {{fromparty}}.",
+    "reportee_access_missing_title": "Du har ikke tilgang til dette innholdet"
   },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt."

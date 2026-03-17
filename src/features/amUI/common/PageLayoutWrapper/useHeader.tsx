@@ -1,4 +1,4 @@
-import { getHostUrl, getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
+import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { GeneralPath } from '@/routes/paths';
 import { HeaderProps, useAccountSelector } from '@altinn/altinn-components';
 import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/AccountSelector';
@@ -17,15 +17,13 @@ import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/comp
 import { useEffect, useState } from 'react';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 import { displayDeletedAccountToggle } from '@/resources/utils/featureFlagUtils';
+import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
 
-export const handleSelectAccount = (accountUuid: string) => {
-  // always redirect to start-page when changing account
-  const redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
-  const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-  const queryKey = 'P';
-  changeUrl.searchParams.set(queryKey, accountUuid);
-  changeUrl.searchParams.set('goTo', redirectUrl);
-  (window as Window).open(changeUrl.toString(), '_self');
+export const handleSelectAccount = (
+  accountUuid: string,
+  goTo = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString(),
+) => {
+  redirectToChangeReporteeAndRedirect(accountUuid, goTo);
 };
 
 export const useHeader = ({

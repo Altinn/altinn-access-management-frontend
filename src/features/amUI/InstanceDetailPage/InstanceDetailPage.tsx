@@ -7,11 +7,11 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { poaOverviewPageEnabled } from '@/resources/utils/featureFlagUtils';
 
-import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import { InstanceDetailPageContent } from './InstanceDetailPageContent';
+import { InstanceDeeplinkGuard } from './InstanceDeeplinkGuard';
 
 export const InstanceDetailPage = () => {
   const { t } = useTranslation();
@@ -31,14 +31,14 @@ export const InstanceDetailPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <PartyRepresentationProvider
-          fromPartyUuid={partyUuid}
-          actingPartyUuid={partyUuid}
-        >
-          <PageContainer backUrl={`/${amUIPath.PoaOverview}`}>
+        <InstanceDeeplinkGuard backUrl={`/${amUIPath.PoaOverview}`}>
+          <PartyRepresentationProvider
+            fromPartyUuid={partyUuid}
+            actingPartyUuid={partyUuid}
+          >
             <InstanceDetailPageContent />
-          </PageContainer>
-        </PartyRepresentationProvider>
+          </PartyRepresentationProvider>
+        </InstanceDeeplinkGuard>
       </PageLayoutWrapper>
     </PageWrapper>
   );
