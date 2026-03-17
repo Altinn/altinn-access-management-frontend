@@ -17,6 +17,7 @@ import type { UserActionTarget, UserSearchNode } from './types';
 export interface UserSearchProps {
   includeSelfAsChild: boolean;
   includeSelfAsChildOnIndirect?: boolean;
+  showIndirectConnectionsByDefault?: boolean;
   users?: UserSearchNode[];
   indirectUsers?: UserSearchNode[];
   getUserLink?: (user: UserActionTarget) => string;
@@ -46,6 +47,7 @@ const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
 export const UserSearch: React.FC<UserSearchProps> = ({
   includeSelfAsChild,
   includeSelfAsChildOnIndirect = true,
+  showIndirectConnectionsByDefault = false,
   users: initialUsers,
   indirectUsers: initialIndirectUsers,
   getUserLink,
@@ -95,9 +97,10 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const hasDirectUsers = (directUsers?.length ?? 0) > 0;
   const directHasResults = (filteredDirectUsers?.length ?? 0) > 0;
   const indirectHasResults = (filteredIndirectUsers?.length ?? 0) > 0;
+  const shouldShowIndirectSection = isQuery || showIndirectConnectionsByDefault;
 
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
-  const showIndirectList = isQuery && indirectHasResults && canDelegate;
+  const showIndirectList = shouldShowIndirectSection && indirectHasResults && canDelegate;
   const showEmptyState = isQuery && !directHasResults && !indirectHasResults;
 
   const handleAddNewUser = async (user: User) => {
@@ -142,7 +145,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
 
       <div className={classes.results}>
         <>
-          {!hasDirectUsers && !isLoading && !isQuery && (
+          {!hasDirectUsers && !isLoading && !isQuery && !showIndirectList && (
             <DsParagraph
               data-size='md'
               className={classes.tabDescription}
@@ -156,7 +159,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
                 })}
             </DsParagraph>
           )}
-          {isQuery && showIndirectList && (
+          {showIndirectList && (
             <h3 className={classes.subHeader}>
               {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
             </h3>

@@ -1,8 +1,10 @@
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -22,6 +24,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
         private readonly PlatformSettings _platformSettings;
+
+        private static string EscapeQueryValue(string value) => Uri.EscapeDataString(value ?? string.Empty);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceClient"/> class.
@@ -47,19 +51,20 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<List<InstancePermission>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
-            StringBuilder endpointBuilder = new StringBuilder($"enduser/connections/resources/instances?party={party}&from={from}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}&instance={Uri.EscapeDataString(instance)}");
+            StringBuilder endpointBuilder = new StringBuilder($"enduser/connections/resources/instances?party={party}&from={from}&to={to}&resource={EscapeQueryValue(resource)}&instance={EscapeQueryValue(instance)}&instance={EscapeQueryValue(instance)}");
 
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             HttpResponseMessage response = await _client.GetAsync(token, endpointBuilder.ToString(), languageCode: languageCode);
-
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<InstancePermission>>(response, _logger, "InstanceClient // GetDelegatedInstances");
+            var resContent = await response.Content.ReadAsStringAsync();
+            var result = await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<InstancePermission>>(response, _logger, "InstanceClient // GetDelegatedInstances");
+            return result?.Items?.ToList();
         }
 
         /// <inheritdoc />
         public async Task<ResourceCheckDto> GetDelegationCheck(Guid party, string resource, string instance)
         {
             string endpointUrl =
-                $"enduser/connections/resources/instances/delegationcheck?party={party}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+                $"enduser/connections/resources/instances/delegationcheck?party={party}&resource={EscapeQueryValue(resource)}&instance={EscapeQueryValue(instance)}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
@@ -71,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         public async Task<InstanceRights> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
         {
             string endpointUrl =
-                $"enduser/connections/resources/instances/rights?party={party}&from={from}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+                $"enduser/connections/resources/instances/rights?party={party}&from={from}&to={to}&resource={EscapeQueryValue(resource)}&instance={EscapeQueryValue(instance)}";
 
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
@@ -85,14 +90,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string endpointUrl =
-                    $"enduser/connections/resources/instances/rights?party={party}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+                    $"enduser/connections/resources/instances/rights?party={party}&to={to}&resource={EscapeQueryValue(resource)}&instance={EscapeQueryValue(instance)}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var rightKeys = new { directRightKeys = actionKeys };
                 string requestBody = JsonSerializer.Serialize(rightKeys);
                 StringContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-
-                return await _client.PostAsync(token, endpointUrl, content);
+                var response = await _client.PostAsync(token, endpointUrl, content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return response;
             }
             catch (Exception ex)
             {
@@ -107,7 +113,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string endpointUrl =
-                    $"enduser/connections/resources/instances/rights?party={party}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+                    $"enduser/connections/resources/instances/rights?party={party}&to={to}&resource={EscapeQueryValue(resource)}&instance={EscapeQueryValue(instance)}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var rightKeys = new { directRightKeys = actionKeys };

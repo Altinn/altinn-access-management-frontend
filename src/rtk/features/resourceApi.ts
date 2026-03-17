@@ -32,8 +32,8 @@ export const resourceApi = createApi({
   }),
   tagTypes: ['APIs'],
   endpoints: (builder) => ({
-    getResource: builder.query<ServiceResource, string>({
-      query: (resourceId) => ({
+    getResource: builder.query<ServiceResource, { resourceId: string; language: string }>({
+      query: ({ resourceId }) => ({
         url: '',
         params: { resourceId },
       }),

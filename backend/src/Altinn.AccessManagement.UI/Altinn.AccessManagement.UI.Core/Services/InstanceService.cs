@@ -25,8 +25,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
-            return (await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance))
-                .Where(instancePermission => !string.IsNullOrWhiteSpace(instancePermission?.Resource?.RefId))
+            var delegatedInstances = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
+            
+            return delegatedInstances
                 .Select(instancePermission =>
                 {
                     var instanceResource = instancePermission!.Resource;
