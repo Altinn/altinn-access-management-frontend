@@ -992,7 +992,7 @@
     "asks_for_number_other": "Ber om {{count}} fullmakter",
     "request_poa": "Ber om fullmakt",
     "request_systemuser": "Ber om å opprette systembruker",
-    "error_loading_requests": "Kunne ikke laste mottatte forespørsler",
-    "error_partial_loading_requests": "Kunne ikke laste alle mottatte forespørsler"
+    "error_loading_requests": "Kunne ikke laste forespørsler",
+    "error_partial_loading_requests": "Kunne ikke laste alle forespørsler"
   }
 }
