@@ -3,10 +3,10 @@ import { SingleRightRequest } from '@/rtk/features/requestApi';
 export const getSingleRightRequestId = (
   singleRightRequests: SingleRightRequest[] | undefined,
   resourceId: string,
-  toPartyUuid?: string,
+  fromPartyUuid?: string,
 ): string | undefined => {
   return singleRightRequests?.find(
-    (x) => x.resourceId === resourceId && x.to.id === toPartyUuid && x.status === 'Pending',
+    (x) => x.resourceId === resourceId && x.from.id === fromPartyUuid && x.status === 'Pending',
   )?.id;
 };
 
