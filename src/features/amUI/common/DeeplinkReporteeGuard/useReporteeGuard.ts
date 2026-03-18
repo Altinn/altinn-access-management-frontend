@@ -8,9 +8,9 @@ import {
   useGetReporteeListForAuthorizedUserQuery,
 } from '@/rtk/features/userInfoApi';
 
-export type DeeplinkGuardStatus = 'ready' | 'loading' | 'redirecting' | 'unauthorized' | 'error';
+export type ReporteeGuardStatus = 'ready' | 'loading' | 'redirecting' | 'unauthorized' | 'error';
 
-interface GetDeeplinkGuardStatusArgs {
+interface GetReporteeGuardStatusArgs {
   actingPartyUuid?: string;
   requestedPartyUuid?: string;
   reporteeList?: ReporteeInfo[];
@@ -18,21 +18,18 @@ interface GetDeeplinkGuardStatusArgs {
   isAuthorizedPartyListError: boolean;
 }
 
-interface UseDeeplinkReporteeGuardArgs {
+interface UseReporteeGuardArgs {
   actingPartyUuid?: string;
   requestedPartyUuid?: string;
 }
 
-interface UseDeeplinkReporteeGuardResult {
-  status: DeeplinkGuardStatus;
+interface UseReporteeGuardResult {
+  status: ReporteeGuardStatus;
   error?: FetchBaseQueryError | SerializedError;
 }
 
 export const normalizePartyUuid = (partyUuid?: string | null) =>
   partyUuid?.trim().toLowerCase() ?? '';
-
-export const getRequestedPartyUuid = (searchParams: URLSearchParams) =>
-  searchParams.get('partyUuid') ?? '';
 
 export const getUrlWithoutRequestedPartyUuid = (url: string) => {
   try {
@@ -63,13 +60,13 @@ export const hasAccessToRequestedParty = (
   );
 };
 
-export const getDeeplinkGuardStatus = ({
+export const getReporteeGuardStatus = ({
   actingPartyUuid,
   requestedPartyUuid,
   reporteeList,
   isAuthorizedPartyListLoading,
   isAuthorizedPartyListError,
-}: GetDeeplinkGuardStatusArgs): DeeplinkGuardStatus => {
+}: GetReporteeGuardStatusArgs): ReporteeGuardStatus => {
   const normalizedActingPartyUuid = normalizePartyUuid(actingPartyUuid);
   const normalizedRequestedPartyUuid = normalizePartyUuid(requestedPartyUuid);
 
@@ -90,10 +87,10 @@ export const getDeeplinkGuardStatus = ({
     : 'unauthorized';
 };
 
-export const useDeeplinkReporteeGuard = ({
+export const useReporteeGuard = ({
   actingPartyUuid,
   requestedPartyUuid,
-}: UseDeeplinkReporteeGuardArgs): UseDeeplinkReporteeGuardResult => {
+}: UseReporteeGuardArgs): UseReporteeGuardResult => {
   const shouldValidateRequestedParty =
     !!normalizePartyUuid(requestedPartyUuid) &&
     normalizePartyUuid(requestedPartyUuid) !== normalizePartyUuid(actingPartyUuid);
@@ -107,7 +104,7 @@ export const useDeeplinkReporteeGuard = ({
     skip: !shouldValidateRequestedParty,
   });
 
-  const status = getDeeplinkGuardStatus({
+  const status = getReporteeGuardStatus({
     actingPartyUuid,
     requestedPartyUuid,
     reporteeList,

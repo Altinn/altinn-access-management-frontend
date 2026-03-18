@@ -10,13 +10,17 @@ import {
   TechnicalErrorParagraphs,
 } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
-import { getRequestedPartyUuid, useDeeplinkReporteeGuard } from './useDeeplinkReporteeGuard';
+import styles from './DeeplinkReporteeGuard.module.css';
+import { useReporteeGuard } from './useReporteeGuard';
 
 interface DeeplinkReporteeGuardProps {
   children: ReactNode;
   /** Optional content rendered below error/unauthorized alerts (e.g. a fallback navigation link) */
   fallbackContent?: ReactNode;
 }
+
+export const getRequestedPartyUuid = (searchParams: URLSearchParams) =>
+  searchParams.get('partyUuid') ?? '';
 
 export const DeeplinkReporteeGuard = ({
   children,
@@ -26,9 +30,9 @@ export const DeeplinkReporteeGuard = ({
   const [searchParams] = useSearchParams();
   const actingPartyUuid = getCookie('AltinnPartyUuid');
   const requestedPartyUuid = getRequestedPartyUuid(searchParams);
-  const deeplinkGuard = useDeeplinkReporteeGuard({ actingPartyUuid, requestedPartyUuid });
+  const reporteeGuard = useReporteeGuard({ actingPartyUuid, requestedPartyUuid });
 
-  if (deeplinkGuard.status === 'loading' || deeplinkGuard.status === 'redirecting') {
+  if (reporteeGuard.status === 'loading' || reporteeGuard.status === 'redirecting') {
     return (
       <DsSkeleton
         width='100%'
@@ -38,9 +42,9 @@ export const DeeplinkReporteeGuard = ({
     );
   }
 
-  if (deeplinkGuard.status === 'unauthorized') {
+  if (reporteeGuard.status === 'unauthorized') {
     return (
-      <>
+      <div className={styles.alertWithFallback}>
         <DsAlert data-color='warning'>
           <DsHeading
             level={2}
@@ -50,15 +54,15 @@ export const DeeplinkReporteeGuard = ({
           </DsHeading>
         </DsAlert>
         {fallbackContent}
-      </>
+      </div>
     );
   }
 
-  if (deeplinkGuard.status === 'error') {
-    const technicalError = createErrorDetails(deeplinkGuard.error);
+  if (reporteeGuard.status === 'error') {
+    const technicalError = createErrorDetails(reporteeGuard.error);
 
     return (
-      <>
+      <div className={styles.alertWithFallback}>
         <DsAlert data-color='danger'>
           <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
           {technicalError && (
@@ -71,7 +75,7 @@ export const DeeplinkReporteeGuard = ({
           )}
         </DsAlert>
         {fallbackContent}
-      </>
+      </div>
     );
   }
 
