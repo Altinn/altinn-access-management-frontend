@@ -922,8 +922,9 @@
     "document_title": "Delt frå innboks",
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
+    "description": "Her kan du dele ei melding/eit skjema frå innboksen eller få oversikt over kven som allereie har tilgang. Bruk søkjefeltet til å søkje etter personar/verksemder eller legg dei til som ny brukar.",
     "no_users": "Ingen brukarar har tilgang.",
-    "cannot_share_with_others": "Du kan ikkje gi denne vidare til andre. Beklagar!"
+    "no_access_description": "<b>Du har ikkje fullmakt til å gi vidare denne tenesta/meldinga.</b> For å kunne dele og gi tilgang frå innboksen må du ha tilgangspakka: Tilgangsstyrar for enkeltmeldingar, skjema og dialogar."
   },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt"

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { InstanceDetailHeader } from './InstanceDetailHeader';
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
@@ -198,21 +198,33 @@ export const InstanceDetailPageContent = () => {
             traceId={contentTechnicalError.traceId}
           />
         </DsAlert>
-      ) : isInstanceAdmin ? (
-        <UserSearch
-          includeSelfAsChild={false}
-          AddUserButton={AddUserPlaceholder}
-          users={users}
-          indirectUsers={indirectUsers}
-          isLoading={isInstancesLoading || isLoadingIndirectConnections || isInstanceAdminLoading}
-          isActionLoading={isFetchingIndirectConnections}
-          canDelegate
-          noUsersText={t('instance_detail_page.no_users')}
-        />
       ) : (
-        <DsParagraph data-size='sm'>
-          {t('instance_detail_page.cannot_share_with_others')}
-        </DsParagraph>
+        <div className={classes.contentSection}>
+          <DsParagraph data-size='sm'>
+            {isInstanceAdmin ? (
+              t('instance_detail_page.description')
+            ) : (
+              <Trans
+                i18nKey='instance_detail_page.no_access_description'
+                components={{ b: <strong /> }}
+              />
+            )}
+          </DsParagraph>
+          {isInstanceAdmin && (
+            <UserSearch
+              includeSelfAsChild={false}
+              AddUserButton={AddUserPlaceholder}
+              users={users}
+              indirectUsers={indirectUsers}
+              isLoading={
+                isInstancesLoading || isLoadingIndirectConnections || isInstanceAdminLoading
+              }
+              isActionLoading={isFetchingIndirectConnections}
+              canDelegate
+              noUsersText={t('instance_detail_page.no_users')}
+            />
+          )}
+        </div>
       )}
     </>
   );

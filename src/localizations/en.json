@@ -925,8 +925,9 @@
     "document_title": "Shared from inbox",
     "provider_name": "to {{name}}",
     "back_to_inbox": "Go to inbox",
+    "description": "Here you can share a message/form from the inbox or get an overview of who already has access. Use the search field to search for people/organizations or add them as a new user.",
     "no_users": "No users have access.",
-    "cannot_share_with_others": "You cannot share this with others. Sorry!"
+    "no_access_description": "<b>You do not have the authority to share this service/message with others.</b> To share and grant access from the inbox, you must have the access package: Access manager for single messages, forms and dialogs."
   },
   "poa_status": {
     "no_permissions": "You have to give power of attorney"
