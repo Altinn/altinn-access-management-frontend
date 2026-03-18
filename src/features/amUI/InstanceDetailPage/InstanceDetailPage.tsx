@@ -57,7 +57,9 @@ export const InstanceDetailPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper hideSidebar={isInboxDeeplink}>
-        <PageContainer backUrl={isInboxDeeplink ? undefined : `/${amUIPath.PoaOverview}`}>
+        <PageContainer
+          backUrl={isInboxDeeplink ? getInboxUrl(dialogId) : `/${amUIPath.PoaOverview}`}
+        >
           <DeeplinkReporteeGuard fallbackContent={inboxLink}>
             <PartyRepresentationProvider
               fromPartyUuid={partyUuid}
