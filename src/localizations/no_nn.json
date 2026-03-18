@@ -33,6 +33,7 @@
     "next": "Neste",
     "general_error_title": "Beklagar, men det har skjedd ein feil",
     "general_error_paragraph": "Vi klarar ikkje å hente informasjonen du ser etter akkurat no. Prøv igjen seinare. Om problemet held fram, kan du kontakte Altinn brukarservice på telefon 75 00 60 00.",
+    "reportee_access_missing_title": "Du har ikkje tilgang til dette innhaldet",
     "cancel": "Avbryt",
     "confirm": "Stadfest",
     "complete": "Fullfør",

@@ -33,6 +33,7 @@
     "next": "Neste",
     "general_error_title": "Beklager, men det har skjedd en feil",
     "general_error_paragraph": "Vi klarer ikke å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen senere. Om problemet vedvarer, ta kontakt med Altinn brukerservice.",
+    "reportee_access_missing_title": "Du har ikke tilgang til dette innholdet",
     "cancel": "Avbryt",
     "confirm": "Bekreft",
     "complete": "Fullfør",
