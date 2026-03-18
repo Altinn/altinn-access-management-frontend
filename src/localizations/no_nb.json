@@ -923,6 +923,7 @@
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}",
+    "no_access_title": "Du har ikke tilgang til denne siden",
     "instances_tab": {
       "search_label": "Søk etter element",
       "no_results": "Ingen elementer fra innboks funnet.",
@@ -933,7 +934,8 @@
     "document_title": "Delt fra innboks",
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
-    "no_users": "Ingen har tilgang til denne instansen på vegne av {{fromparty}}."
+    "no_users": "Ingen brukere har tilgang.",
+    "cannot_share_with_others": "Du kan ikke gi denne videre til andre. Beklager!"
   },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt."
@@ -998,9 +1000,11 @@
     "no_sent_requests": "Ingen sendte forespørsler",
     "process_request": "Behandle forespørsel",
     "request_consent": "Ber om samtykke",
+    "asks_for_number_one": "Ber om {{count}} fullmakt",
+    "asks_for_number_other": "Ber om {{count}} fullmakter",
     "request_poa": "Ber om fullmakt",
     "request_systemuser": "Ber om å opprette systembruker",
-    "error_loading_requests": "Kunne ikke laste mottatte forespørsler",
-    "error_partial_loading_requests": "Kunne ikke laste alle mottatte forespørsler"
+    "error_loading_requests": "Kunne ikke laste forespørsler",
+    "error_partial_loading_requests": "Kunne ikke laste alle forespørsler"
   }
 }

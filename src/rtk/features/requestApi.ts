@@ -1,26 +1,25 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { Entity } from '@/dataObjects/dtos/Common';
 
-const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
+const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/request`;
 
 enum Tags {
   PendingSentRequests = 'PendingSentRequests',
 }
 
-export interface SingleRightRequest {
+export type RequestStatus = 'None' | 'Draft' | 'Pending' | 'Approved' | 'Rejected' | 'Withdrawn';
+
+export interface RequestDto {
   id: string;
-  type: 'resource';
-  status: string;
-  from: {
-    id: string;
-    name: string;
-    type: 'organization' | 'person';
-  };
-  to: {
-    id: string;
-    name: string;
-    type: 'organization' | 'person';
-  };
+  type: string;
+  status: RequestStatus;
+  from: Entity;
+  to: Entity;
+  lastUpdated: string;
+}
+
+export interface RequestResourceDto extends RequestDto {
   resourceId: string;
 }
 
@@ -34,49 +33,73 @@ export const requestApi = createApi({
       return headers;
     },
   }),
-  tagTypes: [Tags.PendingSentRequests],
+  tagTypes: [Tags.PendingSentRequests, 'sentRequests', 'receivedRequests', 'request'],
   endpoints: (builder) => ({
-    // request single right access
+    // delegation modal queries and mutations
     getPendingSingleRightRequests: builder.query<
-      SingleRightRequest[],
-      { actingParty: string; to: string }
+      RequestResourceDto[],
+      { party: string; to: string }
     >({
-      query: ({ actingParty, to }) => `request/sent?party=${actingParty}&to=${to}&status=pending`,
+      query: ({ party, to }) => `sent?party=${party}&to=${to}&status=pending`,
       providesTags: [Tags.PendingSentRequests],
     }),
-
-    createSingleRightRequest: builder.mutation<
-      SingleRightRequest,
-      { actingParty: string; to: string; resource: string }
+    createResourceRequest: builder.mutation<
+      RequestResourceDto,
+      { party: string; to: string; resource: string }
     >({
-      query: ({ actingParty, to, resource }) => {
-        return {
-          url: `request/resource?party=${actingParty}&to=${to}&resource=${encodeURIComponent(resource)}`,
-          method: 'POST',
-        };
-      },
-      invalidatesTags: [Tags.PendingSentRequests],
+      query: ({ party, to, resource }) => ({
+        url: `resource?party=${party}&to=${to}&resource=${encodeURIComponent(resource)}`,
+        method: 'POST',
+      }),
+      invalidatesTags: [Tags.PendingSentRequests, 'sentRequests'],
+    }),
+    withdrawRequest: builder.mutation<RequestResourceDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `sent/withdraw?party=${party}&id=${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [Tags.PendingSentRequests, 'sentRequests'],
     }),
 
-    deleteSingleRightRequest: builder.mutation<
-      SingleRightRequest,
-      { requestId: string; actingParty: string }
+    // requests page queries
+    getSentRequests: builder.query<
+      RequestDto[],
+      { party: string; to?: string; status?: RequestStatus[] }
     >({
-      query: ({ requestId, actingParty }) => {
-        return {
-          url: `request/sent/withdraw?party=${actingParty}&id=${requestId}`,
-          method: 'DELETE',
-        };
+      query: ({ party, to, status = [] }) => {
+        let params = `?party=${party}`;
+        if (to) params += `&to=${to}`;
+        for (const s of status) params += `&status=${s}`;
+        return `sent${params}`;
       },
-      invalidatesTags: [Tags.PendingSentRequests],
+      providesTags: ['sentRequests'],
+    }),
+    getReceivedRequests: builder.query<
+      RequestDto[],
+      { party: string; from?: string; status?: RequestStatus[] }
+    >({
+      query: ({ party, from, status = [] }) => {
+        let params = `?party=${party}`;
+        if (from) params += `&from=${from}`;
+        for (const s of status) params += `&status=${s}`;
+        return `received${params}`;
+      },
+      providesTags: ['receivedRequests'],
+    }),
+    getRequest: builder.query<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => `${id}?party=${party}`,
+      providesTags: ['request'],
     }),
   }),
 });
 
 export const {
   useGetPendingSingleRightRequestsQuery,
-  useDeleteSingleRightRequestMutation,
-  useCreateSingleRightRequestMutation,
+  useWithdrawRequestMutation,
+  useCreateResourceRequestMutation,
+  useGetSentRequestsQuery,
+  useGetReceivedRequestsQuery,
+  useGetRequestQuery,
 } = requestApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = requestApi;

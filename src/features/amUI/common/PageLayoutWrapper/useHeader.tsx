@@ -31,9 +31,11 @@ export const handleSelectAccount = (accountUuid: string) => {
 export const useHeader = ({
   openAccountMenu = false,
   hideAccountSelector = false,
+  hideSidebarItems = false,
 }: {
   openAccountMenu?: boolean;
   hideAccountSelector?: boolean;
+  hideSidebarItems?: boolean;
 }) => {
   const { t, i18n } = useTranslation();
   const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(openAccountMenu);
@@ -51,7 +53,7 @@ export const useHeader = ({
   const [removeFavoriteActorUuid] = useRemoveFavoriteActorUuidMutation();
   const [updateShowDeleted] = useUpdateShowDeletedMutation();
 
-  const { globalMenu, desktopMenu, mobileMenu } = useGlobalMenu();
+  const { globalMenu, desktopMenu, mobileMenu } = useGlobalMenu({ hideSidebarItems });
   const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
   useEffect(() => {

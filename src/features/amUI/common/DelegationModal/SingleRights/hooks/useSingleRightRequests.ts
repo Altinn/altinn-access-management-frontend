@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
-  useCreateSingleRightRequestMutation,
-  useDeleteSingleRightRequestMutation,
+  useCreateResourceRequestMutation,
   useGetPendingSingleRightRequestsQuery,
+  useWithdrawRequestMutation,
 } from '@/rtk/features/requestApi';
 import {
   getRequestPartyQueryParams,
@@ -38,7 +38,7 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
       ...requestQueryParams,
     },
     {
-      skip: !canRequestRights || !requestQueryParams?.actingParty || !requestQueryParams?.to,
+      skip: !canRequestRights || !requestQueryParams?.party || !requestQueryParams?.to,
     },
   );
 
@@ -49,8 +49,8 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
     }
   }, [isRefetching, isLoadError]);
 
-  const [createNewRequest] = useCreateSingleRightRequestMutation();
-  const [deleteSentRequest] = useDeleteSingleRightRequestMutation();
+  const [createNewRequest] = useCreateResourceRequestMutation();
+  const [deleteSentRequest] = useWithdrawRequestMutation();
 
   const getRequestId = (resourceId: string): string | undefined => {
     return getSingleRightRequestId(singleRightRequests, resourceId, requestQueryParams?.to);
@@ -107,8 +107,8 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
     }));
 
     deleteSentRequest({
-      actingParty: requestQueryParams.actingParty,
-      requestId: requestId,
+      party: requestQueryParams.party,
+      id: requestId,
     })
       .unwrap()
       .then(() => {

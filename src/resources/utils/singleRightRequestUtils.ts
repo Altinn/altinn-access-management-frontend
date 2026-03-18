@@ -1,7 +1,7 @@
-import { SingleRightRequest } from '@/rtk/features/requestApi';
+import { RequestResourceDto } from '@/rtk/features/requestApi';
 
 export const getSingleRightRequestId = (
-  singleRightRequests: SingleRightRequest[] | undefined,
+  singleRightRequests: RequestResourceDto[] | undefined,
   resourceId: string,
   fromPartyUuid?: string,
 ): string | undefined => {
@@ -13,6 +13,6 @@ export const getSingleRightRequestId = (
 export const getRequestPartyQueryParams = (
   actingPartyUuid?: string,
   fromPartyUuid?: string,
-): { actingParty: string; to: string } => {
-  return { actingParty: actingPartyUuid || '', to: fromPartyUuid || '' };
+): { party: string; to: string } => {
+  return { party: actingPartyUuid || '', to: fromPartyUuid || '' };
 };

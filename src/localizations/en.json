@@ -926,6 +926,7 @@
   "poa_overview_page": {
     "page_title": "Powers of attorney overview - Altinn",
     "heading": "Powers of attorney overview for {{name}}",
+    "no_access_title": "You do not have access to this page",
     "instances_tab": {
       "search_label": "Search for inbox items",
       "no_results": "No inbox items found.",
@@ -936,7 +937,8 @@
     "document_title": "Shared from inbox",
     "provider_name": "to {{name}}",
     "back_to_inbox": "Go to inbox",
-    "no_users": "No users have access to this instance on behalf of {{fromparty}}."
+    "no_users": "No users have access.",
+    "cannot_share_with_others": "You cannot share this with others. Sorry!"
   },
   "poa_status": {
     "no_permissions": "You have to give power of attorney"
@@ -1001,9 +1003,11 @@
     "no_sent_requests": "No sent requests",
     "process_request": "Process request",
     "request_consent": "Requests consent",
+    "asks_for_number_one": "Requests {{count}} power of attorney",
+    "asks_for_number_other": "Requests {{count}} powers of attorney",
     "request_poa": "Requests power of attorney",
     "request_systemuser": "Requests to create system user",
-    "error_loading_requests": "Could not load received requests",
-    "error_partial_loading_requests": "Could not load all received requests"
+    "error_loading_requests": "Could not load requests",
+    "error_partial_loading_requests": "Could not load all requests"
   }
 }

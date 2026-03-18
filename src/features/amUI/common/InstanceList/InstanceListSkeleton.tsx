@@ -21,7 +21,7 @@ export const InstanceListSkeleton = () => {
         return (
           <DialogListItem
             key={item.id}
-            size='lg'
+            size='md'
             loading={true}
             {...item}
           />

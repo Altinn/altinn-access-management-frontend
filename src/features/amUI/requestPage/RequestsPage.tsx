@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import {
-  Badge,
-  BadgeVariant,
-  Color,
-  DsAlert,
-  DsTabs,
-  formatDisplayName,
-  List,
-  UserListItem,
-} from '@altinn/altinn-components';
+import { Badge, BadgeVariant, Color, DsTabs, formatDisplayName } from '@altinn/altinn-components';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { useRerouteIfRequestPageDisabled } from '@/resources/utils/featureFlagUtils';
@@ -18,15 +8,9 @@ import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import ReporteePageHeading from '../common/ReporteePageHeading';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { formatDateToNorwegian } from '@/resources/utils';
 import { useRequests } from '@/resources/hooks/useRequests';
+import { RequestsTabPanel } from './RequestsTabPanel';
 import classes from './RequestPage.module.css';
-import { Request } from './types';
-import {
-  getSystemUserAgentRequestUrl,
-  getSystemUserRequestUrl,
-} from '@/routes/paths/systemUserPath';
-import { getConsentRequestUrl } from '@/routes/paths/consentPath';
 
 const selectedTabProps = {
   'data-size': 'sm',
@@ -51,12 +35,16 @@ export const RequestPage = () => {
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { pendingRequests, isLoadingRequests, isError } = useRequests();
 
+  const getBadgeProps = (tabValue: string) =>
+    selectedTab === tabValue ? selectedTabProps : unselectedTabProps;
+
   const name = formatDisplayName({
     fullName: reportee?.name || '',
     type: reportee?.type === 'Person' ? 'person' : 'company',
   });
 
-  const totalRequests = pendingRequests ? pendingRequests.length : 0;
+  const receivedRequestsCount = pendingRequests ? pendingRequests.received.length : 0;
+  const sentRequestCount = pendingRequests ? pendingRequests.sent.length : 0;
 
   return (
     <PageWrapper>
@@ -77,12 +65,10 @@ export const RequestPage = () => {
               value={INCOMING_REQUESTS_TAB}
               className={classes.requestTab}
             >
-              {!!totalRequests && (
+              {!!receivedRequestsCount && (
                 <Badge
-                  {...(selectedTab === INCOMING_REQUESTS_TAB
-                    ? selectedTabProps
-                    : unselectedTabProps)}
-                  label={totalRequests}
+                  {...getBadgeProps(INCOMING_REQUESTS_TAB)}
+                  label={receivedRequestsCount}
                 />
               )}
               {t('request_page.incoming_requests')}
@@ -92,97 +78,32 @@ export const RequestPage = () => {
               className={classes.requestTab}
             >
               <Badge
-                {...(selectedTab === SENT_REQUESTS_TAB ? selectedTabProps : unselectedTabProps)}
-                label={'0'} // endre tall her når "Be om tilgang" implementeres
+                {...getBadgeProps(SENT_REQUESTS_TAB)}
+                label={sentRequestCount}
               />
               {t('request_page.sent_requests')}
             </DsTabs.Tab>
           </DsTabs.List>
           <DsTabs.Panel value={INCOMING_REQUESTS_TAB}>
-            {isError && (
-              <div className={classes.errorWrapper}>
-                <DsAlert data-color='danger'>
-                  {totalRequests > 0
-                    ? t('request_page.error_partial_loading_requests')
-                    : t('request_page.error_loading_requests')}
-                </DsAlert>
-              </div>
-            )}
-            <List>
-              {isLoadingRequests ? (
-                <>
-                  <LoadingRequestListItem />
-                  <LoadingRequestListItem />
-                  <LoadingRequestListItem />
-                  <LoadingRequestListItem />
-                </>
-              ) : (
-                <PendingRequests pendingRequests={pendingRequests} />
-              )}
-              {!isError && !isLoadingRequests && totalRequests === 0 && (
-                <div>{t('request_page.no_received_requests')}</div>
-              )}
-            </List>
+            <RequestsTabPanel
+              requests={pendingRequests.received}
+              count={receivedRequestsCount}
+              isLoading={isLoadingRequests}
+              isError={isError}
+              emptyMessageKey='request_page.no_received_requests'
+            />
           </DsTabs.Panel>
           <DsTabs.Panel value={SENT_REQUESTS_TAB}>
-            <div>{t('request_page.no_sent_requests')}</div>
+            <RequestsTabPanel
+              requests={pendingRequests.sent}
+              count={sentRequestCount}
+              isLoading={isLoadingRequests}
+              isError={isError}
+              emptyMessageKey='request_page.no_sent_requests'
+            />
           </DsTabs.Panel>
         </DsTabs>
       </PageLayoutWrapper>
     </PageWrapper>
-  );
-};
-
-interface PendingRequestsProps {
-  pendingRequests: Request[] | undefined;
-}
-
-const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
-  const { t } = useTranslation();
-  return (
-    <>
-      {pendingRequests?.map((request) => {
-        let toUrl = '';
-        if (request.type === 'consent') {
-          toUrl = getConsentRequestUrl(request.id, 'landingpage');
-        } else if (request.type === 'systemuser') {
-          toUrl = getSystemUserRequestUrl(request.id, 'landingpage');
-        } else if (request.type === 'agentsystemuser') {
-          toUrl = getSystemUserAgentRequestUrl(request.id, 'landingpage');
-        }
-        return (
-          <UserListItem
-            key={request.id}
-            id={request.id}
-            name={request.fromPartyName}
-            type={request.fromPartyType}
-            linkIcon
-            description={`${t(request.description)} (${formatDateToNorwegian(request.createdDate)})`}
-            as={(props) => (
-              <Link
-                {...props}
-                to={toUrl}
-              />
-            )}
-            controls={
-              <div className={classes.requestItemBadge}>{t('request_page.process_request')}</div>
-            }
-          />
-        );
-      })}
-    </>
-  );
-};
-
-const LoadingRequestListItem = () => {
-  return (
-    <UserListItem
-      id={''}
-      name={'xxxxxxxxxxxx'}
-      description='xxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-      type={'person'}
-      interactive={false}
-      loading
-    />
   );
 };
