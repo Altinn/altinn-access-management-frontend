@@ -1,7 +1,7 @@
 [
   {
     "resource": {
-      "identifier": "app_ttd_a3-app",
+      "identifier": "abctest",
       "title": "a3-app",
       "description": "An Altinn 3 app",
       "rightDescription": null,
@@ -59,7 +59,7 @@
   },
   {
     "resource": {
-      "identifier": "app_ttd_a3-app2",
+      "identifier": "1bruno-test",
       "title": "a3-app2",
       "description": "An Altinn 3 app",
       "rightDescription": null,
@@ -121,7 +121,7 @@
   },
   {
     "resource": {
-      "identifier": "app_ttd_a3-app",
+      "identifier": "abctest",
       "title": "a3-app",
       "description": "An Altinn 3 app",
       "rightDescription": null,
@@ -179,7 +179,7 @@
   },
   {
     "resource": {
-      "identifier": "app_ttd_missing-resource",
+      "identifier": "1bruno-test",
       "title": "missing-resource",
       "description": "Resource registry entry resolves to null",
       "rightDescription": null,

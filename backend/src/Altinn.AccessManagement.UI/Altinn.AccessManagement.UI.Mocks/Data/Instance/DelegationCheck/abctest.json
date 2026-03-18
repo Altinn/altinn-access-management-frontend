@@ -5,7 +5,7 @@
     "typeId": "0197a840-2ee9-75f4-879e-9d9197683d88",
     "name": "a3-app",
     "description": "-",
-    "refId": "app_ttd_a3-app",
+    "refId": "abctest",
     "provider": {
       "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
       "name": "Testdepartementet",
@@ -27,7 +27,7 @@
     {
       "reasonCodes": [],
       "right": {
-        "key": "urn:altinn:resource:app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+        "key": "urn:altinn:resource:abctest:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
         "name": "Read"
       },
       "result": false
@@ -35,7 +35,7 @@
     {
       "reasonCodes": [],
       "right": {
-        "key": "urn:altinn:resource:app_ttd_a3-app:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+        "key": "urn:altinn:resource:abctest:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
         "name": "Write"
       },
       "result": false

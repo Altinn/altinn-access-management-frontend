@@ -6,7 +6,7 @@
       "typeId": "0197f8a2-db76-7d5a-8120-0f2937d528a9",
       "name": "a3-app",
       "description": "An Altinn 3 app",
-      "refId": "app_ttd_a3-app",
+      "refId": "abctest",
       "provider": {
         "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
         "name": "Testdepartementet",
@@ -67,7 +67,7 @@
       "typeId": "0197f8a2-db76-7d5a-8120-0f2937d528a9",
       "name": "a3-app2",
       "description": "An Altinn 3 app",
-      "refId": "app_ttd_a3-app2",
+      "refId": "1bruno-test",
       "provider": {
         "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
         "name": "Testdepartementet",
@@ -132,7 +132,7 @@
       "typeId": "0197f8a2-db76-7d5a-8120-0f2937d528a9",
       "name": "a3-app",
       "description": "An Altinn 3 app",
-      "refId": "app_ttd_a3-app",
+      "refId": "abctest",
       "provider": {
         "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
         "name": "Testdepartementet",
@@ -193,7 +193,7 @@
       "typeId": "0197f8a2-db76-7d5a-8120-0f2937d528a9",
       "name": "missing-resource",
       "description": "Resource registry entry resolves to null",
-      "refId": "app_ttd_missing-resource",
+      "refId": "1bruno-test",
       "provider": {
         "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
         "name": "Testdepartementet",

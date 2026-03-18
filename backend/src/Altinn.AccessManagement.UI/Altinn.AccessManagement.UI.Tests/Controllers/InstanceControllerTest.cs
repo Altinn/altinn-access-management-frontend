@@ -100,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            string resource = "app_ttd_a3-app2";
+            string resource = "1bruno-test";
             string instance = "urn:altinn:instance-id:51599233/c1d2e3f4-1111-2222-3333-444455556666";
             string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
             List<InstanceDelegation> expectedResponses = Util.GetMockData<List<InstanceDelegation>>(path);
@@ -160,6 +160,39 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: The instance client returns an item without a resource.
+        /// Expected: InstanceService skips the invalid entry and maps the remaining valid items.
+        /// </summary>
+        [Fact]
+        public async Task InstanceService_GetInstances_SkipsInstancePermissionWithoutResource()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string mockPath = Path.Combine(_mockFolder, "Data", "Instance", "GetInstances", "instances.json");
+            List<InstancePermission> mockPermissions = Util.GetMockData<List<InstancePermission>>(mockPath);
+            string expectedPath = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
+            List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(expectedPath);
+            var instanceClientMock = new Mock<IInstanceClient>();
+            var validPermission = mockPermissions[0];
+            var invalidPermission = new InstancePermission
+            {
+                Resource = null,
+                Instance = validPermission.Instance,
+                Permissions = validPermission.Permissions
+            };
+            instanceClientMock
+                .Setup(client => client.GetDelegatedInstances(It.IsAny<string>(), party, from, null, null, null))
+                .ReturnsAsync([invalidPermission, mockPermissions[0]]);
+
+            var instanceService = new InstanceService(instanceClientMock.Object);
+
+            List<InstanceDelegation> actualResponse = await instanceService.GetDelegatedInstances("nb", party, from, null, null, null);
+
+            Assert.Single(actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse[0], actualResponse[0]);
+        }
+
+        /// <summary>
         /// Test case: Handles unexpected errors when retrieving delegated instances.
         /// Expected: Returns an internal server error.
         /// </summary>
@@ -182,7 +215,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DelegationCheck_ReturnsValid()
         {
             string party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "DelegationCheck", $"{resource}.json");
             List<RightCheck> expectedResponse = Util.GetMockData<List<RightCheck>>(path);
@@ -245,7 +278,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DelegationCheck_InvalidInstance()
         {
             string party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/non-existing-instance";
 
             HttpResponseMessage httpResponse =
@@ -262,7 +295,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DelegationCheck_InternalServerError()
         {
             string party = "00000000-0000-0000-0000-000000000000";// Triggers exception in client mock
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
 
             HttpResponseMessage httpResponse =
@@ -281,7 +314,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstanceRights", $"{resource}.json");
             InstanceRights expectedResponse = Util.GetMockData<InstanceRights>(path);
@@ -319,7 +352,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000"); // Triggers exception in client mock
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
 
             HttpResponseMessage httpResponse = await _client.GetAsync(
@@ -337,7 +370,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             List<string> actionKeys = new List<string> { "read", "write" };
 
@@ -360,7 +393,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");// Triggers exception in client mock
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             List<string> actionKeys = new List<string> { "read", "write" };
 
@@ -406,7 +439,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             List<string> actionKeys = ["read"];
 
@@ -437,7 +470,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             List<string> actionKeys = ["write"];
 
@@ -492,7 +525,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/non-existing-instance";
             List<string> actionKeys = new List<string> { "read" };
 
@@ -515,7 +548,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/non-existing-instance";
             List<string> actionKeys = new List<string> { "read" };
 
@@ -538,7 +571,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");// Triggers exception in client mock
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             List<string> actionKeys = new List<string> { "read" };
 
@@ -562,7 +595,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "app_ttd_a3-app";
+            string resource = "abctest";
             string instance = "urn:altinn:instance-id:51599233/non-existing-instance";
 
             HttpResponseMessage httpResponse = await _client.GetAsync(

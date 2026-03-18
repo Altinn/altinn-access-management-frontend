@@ -5,7 +5,7 @@
     "typeId": "0197f8a2-db76-7d5a-8120-0f2937d528a9",
     "name": "a3-app",
     "description": "An Altinn 3 app",
-    "refId": "app_ttd_a3-app",
+    "refId": "abctest",
     "provider": {
       "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
       "name": "Testdepartementet",
@@ -30,7 +30,7 @@
   "directRights": [
     {
       "right": {
-        "key": "urn:altinn:resource:app_ttd_a3-app:instance:df333e75-5896-4254-a69f-146736eaf668:read",
+        "key": "urn:altinn:resource:abctest:instance:df333e75-5896-4254-a69f-146736eaf668:read",
         "name": "Read"
       },
       "reason": {
@@ -83,7 +83,7 @@
     },
     {
       "right": {
-        "key": "urn:altinn:resource:app_ttd_a3-app:instance:df333e75-5896-4254-a69f-146736eaf668:write",
+        "key": "urn:altinn:resource:abctest:instance:df333e75-5896-4254-a69f-146736eaf668:write",
         "name": "Write"
       },
       "reason": {
@@ -138,7 +138,7 @@
   "indirectRights": [
     {
       "right": {
-        "key": "urn:altinn:resource:app_ttd_a3-app:instance:df333e75-5896-4254-a69f-146736eaf668:sign",
+        "key": "urn:altinn:resource:abctest:instance:df333e75-5896-4254-a69f-146736eaf668:sign",
         "name": "Sign"
       },
       "reason": {
