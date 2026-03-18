@@ -31,6 +31,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
   const canRequestAccess =
     !canGiveAccess &&
     actingParty?.partyUuid === toParty?.partyUuid &&
+    toParty?.partyUuid !== fromParty?.partyUuid &&
     window.featureFlags?.enableRequestAccess;
 
   const {
