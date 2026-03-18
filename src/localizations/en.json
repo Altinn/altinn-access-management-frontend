@@ -926,6 +926,7 @@
     "document_title": "Shared from inbox",
     "provider_name": "to {{name}}",
     "back_to_inbox": "Go to inbox",
+    "see_in_inbox": "View in inbox",
     "no_users": "No users have access.",
     "cannot_share_with_others": "You cannot share this with others. Sorry!"
   },
