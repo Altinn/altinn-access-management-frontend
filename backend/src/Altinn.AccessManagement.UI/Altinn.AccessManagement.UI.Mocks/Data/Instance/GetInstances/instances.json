@@ -187,44 +187,6 @@
     ]
   },
   {
-    "resource": null,
-    "instance": {
-      "id": "a31ce0e2-45e1-425f-bad6-111111111111",
-      "urn": "urn:altinn:instance-id:51599233/a31ce0e2-45e1-425f-bad6-111111111111",
-      "type": {
-        "id": "eb7cd8eb-eee4-43cf-814b-f54e143cd954",
-        "name": "BrukerstyrtAppInstansDelegering"
-      }
-    },
-    "permissions": [
-      {
-        "from": {
-          "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "name": "DISKRET NÆR TIGER AS",
-          "type": "organization",
-          "variant": "AS",
-          "parent": null,
-          "children": null,
-          "partyId": 51329012
-        },
-        "to": {
-          "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "name": "SITRONGUL MEDALJONG",
-          "type": "person",
-          "variant": null,
-          "parent": null,
-          "children": null,
-          "partyId": 50789533,
-          "dateOfBirth": "1981-03-20"
-        },
-        "via": null,
-        "role": null,
-        "viaRole": null,
-        "reason": null
-      }
-    ]
-  },
-  {
     "resource": {
       "id": "f0ab12cd-3456-4789-abcd-222222222222",
       "providerId": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",

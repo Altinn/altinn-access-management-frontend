@@ -36,7 +36,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
-            IEnumerable<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(dataPath);
+            IEnumerable<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(dataPath)
+                .Where(permission => permission?.Resource != null);
 
             if (from.HasValue)
             {
