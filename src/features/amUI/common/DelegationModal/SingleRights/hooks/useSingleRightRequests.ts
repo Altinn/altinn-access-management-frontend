@@ -29,22 +29,25 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
   const { openSnackbar } = useSnackbar();
   const { t } = useTranslation();
 
-  const { data: singleRightRequests, isFetching: isRefetching } =
-    useGetPendingSingleRightRequestsQuery(
-      {
-        ...requestQueryParams,
-      },
-      {
-        skip: !canRequestRights || !requestQueryParams?.actingParty || !requestQueryParams?.to,
-      },
-    );
+  const {
+    data: singleRightRequests,
+    isFetching: isRefetching,
+    isError: isLoadError,
+  } = useGetPendingSingleRightRequestsQuery(
+    {
+      ...requestQueryParams,
+    },
+    {
+      skip: !canRequestRights || !requestQueryParams?.actingParty || !requestQueryParams?.to,
+    },
+  );
 
   useEffect(() => {
-    // Clear loading states when query refetch completes
-    if (!isRefetching) {
+    // Clear loading states when query refetch completes, or if pending requests fail to load (might happen after a create or delete)
+    if (!isRefetching || isLoadError) {
       setLoadingByResourceId({});
     }
-  }, [isRefetching]);
+  }, [isRefetching, isLoadError]);
 
   const [createNewRequest] = useCreateSingleRightRequestMutation();
   const [deleteSentRequest] = useDeleteSingleRightRequestMutation();
