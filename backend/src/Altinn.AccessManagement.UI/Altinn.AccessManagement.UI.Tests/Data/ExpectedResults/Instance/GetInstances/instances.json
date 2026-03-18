@@ -1,8 +1,8 @@
 [
   {
     "resource": {
-      "identifier": "app_ttd_a3-app",
-      "title": "a3-app",
+      "identifier": "generic-access-resource",
+      "title": "generic-access-resource",
       "description": "An Altinn 3 app",
       "rightDescription": null,
       "homepage": null,
@@ -59,8 +59,8 @@
   },
   {
     "resource": {
-      "identifier": "app_ttd_a3-app2",
-      "title": "a3-app2",
+      "identifier": "abctest",
+      "title": "abctest",
       "description": "An Altinn 3 app",
       "rightDescription": null,
       "homepage": null,
@@ -121,8 +121,8 @@
   },
   {
     "resource": {
-      "identifier": "app_ttd_a3-app",
-      "title": "a3-app",
+      "identifier": "generic-access-resource",
+      "title": "generic-access-resource",
       "description": "An Altinn 3 app",
       "rightDescription": null,
       "homepage": null,
@@ -179,9 +179,9 @@
   },
   {
     "resource": {
-      "identifier": "app_ttd_missing-resource",
-      "title": "missing-resource",
-      "description": "Resource registry entry resolves to null",
+      "identifier": "123123",
+      "title": "123123",
+      "description": "A generic access resource",
       "rightDescription": null,
       "homepage": null,
       "status": null,

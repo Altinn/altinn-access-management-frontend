@@ -26,10 +26,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
             return (await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance))
-                .Where(instancePermission => !string.IsNullOrWhiteSpace(instancePermission?.Resource?.RefId))
                 .Select(instancePermission =>
                 {
-                    var instanceResource = instancePermission!.Resource;
+                    var instanceResource = instancePermission.Resource;
                     var resourceId = instanceResource.RefId;
 
                     ResourceType resourceType = Enum.TryParse(instanceResource.Type?.Name, true, out ResourceType parsedResourceType)
