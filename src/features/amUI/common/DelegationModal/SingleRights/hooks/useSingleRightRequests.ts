@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   useCreateResourceRequestMutation,
   useGetPendingSingleRightRequestsQuery,
@@ -17,8 +17,17 @@ interface UseSingleRightRequestsProps {
   canRequestRights?: boolean;
 }
 
+// Tracks the state snapshot when a mutation was initiated
+interface MutationSnapshot {
+  hadRequest: boolean; // Whether request existed at mutation time
+  resourceId: string;
+}
+
 export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightRequestsProps) => {
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
+  // Track mutation snapshots so we know what state changed
+  const mutationSnapshotsRef = useRef<MutationSnapshot[]>([]);
+
   const { fromParty, actingParty } = usePartyRepresentation();
 
   const requestQueryParams = getRequestPartyQueryParams(
@@ -32,7 +41,7 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
   const {
     data: singleRightRequests,
     isFetching: isRefetching,
-    isError: isLoadError,
+    isError: isQueryError,
   } = useGetPendingSingleRightRequestsQuery(
     {
       ...requestQueryParams,
@@ -42,12 +51,33 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
     },
   );
 
+  // Monitor refetch completion and clear loading states when mutations complete
   useEffect(() => {
-    // Clear loading states when query refetch completes, or if pending requests fail to load (might happen after a create or delete)
-    if (!isRefetching || isLoadError) {
-      setLoadingByResourceId({});
+    if (!isRefetching && mutationSnapshotsRef.current.length > 0) {
+      setLoadingByResourceId((prev) => {
+        const updated = { ...prev };
+        const currentRequestIds = new Set(singleRightRequests?.map((req) => req.resourceId) || []);
+
+        // Check each mutation snapshot to see if its state changed
+        mutationSnapshotsRef.current.forEach((snapshot) => {
+          const hasRequestNow = currentRequestIds.has(snapshot.resourceId);
+
+          // For CREATE: mutation is complete when request now exists (hadRequest was false, now true)
+          // For DELETE: mutation is complete when request no longer exists (hadRequest was true, now false)
+          // If query failed, we assume mutation succeeded (we already got success response from mutation itself)
+          // so we clear loading anyway to avoid stuck state
+          if (isQueryError || snapshot.hadRequest !== hasRequestNow) {
+            delete updated[snapshot.resourceId];
+          }
+        });
+
+        // Clear the mutation snapshots once processed
+        mutationSnapshotsRef.current = [];
+
+        return updated;
+      });
     }
-  }, [isRefetching, isLoadError]);
+  }, [isRefetching, singleRightRequests, isQueryError]);
 
   const [createNewRequest] = useCreateResourceRequestMutation();
   const [deleteSentRequest] = useWithdrawRequestMutation();
@@ -57,10 +87,19 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
   };
 
   const createRequest = (resource: ServiceResource) => {
+    // Capture the state before mutation
+    const hadRequestBefore = !!getRequestId(resource.identifier);
+
     setLoadingByResourceId((prev) => ({
       ...prev,
       [resource.identifier]: true,
     }));
+
+    // Store the snapshot for when refetch completes
+    mutationSnapshotsRef.current.push({
+      resourceId: resource.identifier,
+      hadRequest: hadRequestBefore,
+    });
 
     createNewRequest({
       ...requestQueryParams,
@@ -76,10 +115,15 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
         }),
       )
       .catch(() => {
+        // Clear immediately on error since refetch won't fix it
         setLoadingByResourceId((prev) => ({
           ...prev,
           [resource.identifier]: false,
         }));
+        // Remove from pending snapshots since we're handling the error
+        mutationSnapshotsRef.current = mutationSnapshotsRef.current.filter(
+          (s) => s.resourceId !== resource.identifier,
+        );
         openSnackbar({
           message: t('delegation_modal.request.sent_request_error', {
             resource: resource.title,
@@ -101,10 +145,19 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
       return;
     }
 
+    // Capture the state before mutation
+    const hadRequestBefore = !!requestId;
+
     setLoadingByResourceId((prev) => ({
       ...prev,
       [resource.identifier]: true,
     }));
+
+    // Store the snapshot for when refetch completes
+    mutationSnapshotsRef.current.push({
+      resourceId: resource.identifier,
+      hadRequest: hadRequestBefore,
+    });
 
     deleteSentRequest({
       party: requestQueryParams.party,
@@ -120,10 +173,15 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
         });
       })
       .catch(() => {
+        // Clear immediately on error since refetch won't fix it
         setLoadingByResourceId((prev) => ({
           ...prev,
           [resource.identifier]: false,
         }));
+        // Remove from pending snapshots since we're handling the error
+        mutationSnapshotsRef.current = mutationSnapshotsRef.current.filter(
+          (s) => s.resourceId !== resource.identifier,
+        );
         openSnackbar({
           message: t('delegation_modal.request.withdraw_request_error', {
             resource: resource.title,
