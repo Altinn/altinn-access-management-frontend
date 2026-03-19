@@ -477,6 +477,7 @@
       "access_to_all": "Tilgang til hele tjenesten",
       "partial_access": "Tilgang til {{count}} av {{total}} handlinger",
       "action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan gi fullmakt til hele tjenesten eller velge spesifikke handlinger.",
+      "request_action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan kun be om fullmakt til hele tjenesten.",
       "cannot_give_header": "Du kan ikke gi tilgang til:"
     },
     "technical_error_message": {
