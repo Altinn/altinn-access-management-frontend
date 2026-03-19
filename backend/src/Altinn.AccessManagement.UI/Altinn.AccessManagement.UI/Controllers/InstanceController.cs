@@ -109,21 +109,21 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Delegates a given set of rights on an instance.
         /// </summary>
         /// <param name="party">The acting party performing the delegation.</param>
-        /// <param name="to">The receiving party.</param>
+        /// <param name="to">The receiving party when delegating to an existing connection.</param>
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
-        /// <param name="actionKeys">The identifiers of the rights/actions to be delegated.</param>
+        /// <param name="input">The delegation input, including right keys and optional person details for new recipients.</param>
         /// <response code="200">OK</response>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
         [Route("delegation/instances/rights")]
-        public async Task<ActionResult<HttpResponseMessage>> DelegateInstanceRights([FromQuery] Guid party, [FromQuery] Guid to, [FromQuery] string resource, [FromQuery] string instance, [FromBody] List<string> actionKeys)
+        public async Task<ActionResult<HttpResponseMessage>> DelegateInstanceRights([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] string resource, [FromQuery] string instance, [FromBody] InstanceRightsDelegationDto input)
         {
             try
             {
-                var response = await _instanceService.Delegate(party, to, resource, instance, actionKeys);
+                var response = await _instanceService.Delegate(party, to, resource, instance, input);
                 if (response.IsSuccessStatusCode)
                 {
                     return Ok(await response.Content.ReadAsStringAsync());

@@ -2,36 +2,49 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
-import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
+import type { PersonInput } from './connectionApi';
 
-import type {
-  DelegationCheckedRight,
-  RightAccess,
-  ServiceResource,
-} from './singleRights/singleRightsApi';
+import type { DelegationCheckedRight, RightAccess } from './singleRights/singleRightsApi';
 
 interface InstanceType {
   id: string;
   name: string;
 }
 
+export interface InstanceResource {
+  identifier: string;
+  title: string | null;
+  description?: string | null;
+  rightDescription?: string | null;
+  resourceOwnerName: string | null;
+  resourceOwnerLogoUrl: string | null;
+  resourceOwnerOrgNumber: string | null;
+  resourceOwnerOrgcode: string | null;
+  resourceType: string;
+  delegable: boolean;
+}
+
 export interface DelegationInstance {
-  id: string;
-  urn: string;
-  type: InstanceType;
+  refId: string;
+  type: InstanceType | null;
 }
 
 export interface InstanceDelegation {
-  resource: ServiceResource;
+  resource: InstanceResource;
   instance: DelegationInstance;
   permissions: Permissions[];
 }
 
 export interface InstanceRights {
-  resource: ServiceResource;
+  resource: InstanceResource;
   instance: DelegationInstance;
   directRights: RightAccess[];
   indirectRights: RightAccess[];
+}
+
+export interface InstanceRightsDelegationDto {
+  to?: PersonInput;
+  directRightKeys: string[];
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
@@ -74,15 +87,22 @@ export const instanceApi = createApi({
       providesTags: ['instanceDelegationCheck'],
     }),
     delegateInstanceRights: builder.mutation<
-      DelegationResult,
-      { party: string; to: string; resource: string; instance: string; actionKeys: string[] }
+      void,
+      {
+        party: string;
+        to?: string;
+        resource: string;
+        instance: string;
+        input: InstanceRightsDelegationDto;
+      }
     >({
-      query: ({ party, to, resource, instance, actionKeys }) => ({
-        url: `instances/delegation/instances/rights?party=${party}&to=${to}&resource=${encodeURIComponent(resource)}&instance=${encodeURIComponent(instance)}`,
+      query: ({ party, to, resource, instance, input }) => ({
+        url: `instances/delegation/instances/rights?party=${party}${to ? `&to=${to}` : ''}&resource=${encodeURIComponent(resource)}&instance=${encodeURIComponent(instance)}`,
         method: 'POST',
-        body: JSON.stringify(actionKeys),
+        body: JSON.stringify(input),
+        responseHandler: 'text',
       }),
-      transformErrorResponse: (response: { status: string | number }) => response.status,
+      transformResponse: () => undefined,
       invalidatesTags: ['instances', 'instanceRights', 'instanceDelegationCheck'],
     }),
     updateInstanceRights: builder.mutation<

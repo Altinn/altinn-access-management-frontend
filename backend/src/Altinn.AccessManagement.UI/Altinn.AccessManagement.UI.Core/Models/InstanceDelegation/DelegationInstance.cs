@@ -8,14 +8,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.InstanceDelegation
     public class DelegationInstance
     {
         /// <summary>
-        /// Gets or sets the instance identifier.
+        /// Gets or sets the instance reference ID.
         /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the instance urn.
-        /// </summary>
-        public string Urn { get; set; }
+        public string RefId { get; set; }
 
         /// <summary>
         /// Gets or sets the instance type.

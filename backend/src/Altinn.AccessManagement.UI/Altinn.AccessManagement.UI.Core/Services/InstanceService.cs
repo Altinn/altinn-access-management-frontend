@@ -75,9 +75,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> Delegate(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
+        public async Task<HttpResponseMessage> Delegate(Guid party, Guid? to, string resource, string instance, InstanceRightsDelegationDto input)
         {
-            return await _instanceClient.CreateInstanceRightsAccess(party, to, resource, instance, actionKeys);
+            return await _instanceClient.CreateInstanceRightsAccess(party, to, resource, instance, input);
         }
 
         /// <inheritdoc />

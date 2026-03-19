@@ -45,12 +45,12 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Delegates rights on a specific instance.
         /// </summary>
         /// <param name="party">The acting party performing the delegation.</param>
-        /// <param name="to">The receiving party.</param>
+        /// <param name="to">The receiving party when delegating to an existing connection.</param>
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
-        /// <param name="actionKeys">The right keys to delegate.</param>
+        /// <param name="input">The delegation input.</param>
         /// <returns>The backend response.</returns>
-        Task<HttpResponseMessage> CreateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys);
+        Task<HttpResponseMessage> CreateInstanceRightsAccess(Guid party, Guid? to, string resource, string instance, InstanceRightsDelegationDto input);
 
         /// <summary>
         /// Updates rights on a specific instance delegation.

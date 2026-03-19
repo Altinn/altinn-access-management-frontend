@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
@@ -106,7 +107,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<InstanceDelegation> expectedResponses = Util.GetMockData<List<InstanceDelegation>>(path);
             InstanceDelegation expectedResponse = expectedResponses.Single(delegation =>
                 delegation.Resource.Identifier == resource &&
-                delegation.Instance.Urn == instance);
+                delegation.Instance.RefId == instance);
 
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
             List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
@@ -314,12 +315,62 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string resource = "generic-access-resource";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             List<string> actionKeys = new List<string> { "read", "write" };
+            InstanceRightsDelegationDto input = new()
+            {
+                DirectRightKeys = actionKeys
+            };
 
-            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
-            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+            string jsonInput = JsonSerializer.Serialize(input);
+            HttpContent content = new StringContent(jsonInput, Encoding.UTF8, "application/json");
 
             HttpResponseMessage httpResponse = await _client.PostAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
+                content);
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Successfully delegate rights on an instance while creating a new recipient from person input.
+        /// Expected: Returns OK.
+        /// </summary>
+        [Fact]
+        public async Task DelegateInstanceRights_Success_WithPersonInput()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+            List<string> actionKeys = ["read"];
+
+            var instanceServiceMock = new Mock<IInstanceService>();
+            instanceServiceMock
+                .Setup(service => service.Delegate(
+                    party,
+                    null,
+                    resource,
+                    instance,
+                    It.Is<InstanceRightsDelegationDto>(request =>
+                        request.To != null &&
+                        request.To.PersonIdentifier == "20838198385" &&
+                        request.To.LastName == "Medaljong" &&
+                        request.DirectRightKeys.SequenceEqual(actionKeys))))
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
+
+            HttpClient client = GetTestClient(instanceServiceMock.Object);
+            InstanceRightsDelegationDto input = new()
+            {
+                To = new PersonInputDto
+                {
+                    PersonIdentifier = "20838198385",
+                    LastName = "Medaljong"
+                },
+                DirectRightKeys = actionKeys
+            };
+
+            HttpContent content = new StringContent(JsonSerializer.Serialize(input), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage httpResponse = await client.PostAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
                 content);
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -337,9 +388,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string resource = "generic-access-resource";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             List<string> actionKeys = new List<string> { "read", "write" };
+            InstanceRightsDelegationDto input = new()
+            {
+                DirectRightKeys = actionKeys
+            };
 
-            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
-            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+            string jsonInput = JsonSerializer.Serialize(input);
+            HttpContent content = new StringContent(jsonInput, Encoding.UTF8, "application/json");
 
             HttpResponseMessage httpResponse = await _client.PostAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
@@ -383,13 +438,24 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string resource = "generic-access-resource";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             List<string> actionKeys = ["read"];
+            InstanceRightsDelegationDto input = new()
+            {
+                DirectRightKeys = actionKeys
+            };
 
             var instanceServiceMock = new Mock<IInstanceService>();
             instanceServiceMock
-                .Setup(service => service.Delegate(party, to, resource, instance, actionKeys))
+                .Setup(service => service.Delegate(
+                    party,
+                    to,
+                    resource,
+                    instance,
+                    It.Is<InstanceRightsDelegationDto>(request =>
+                        request.To == null &&
+                        request.DirectRightKeys.SequenceEqual(actionKeys))))
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.Forbidden));
             HttpClient client = GetTestClient(instanceServiceMock.Object);
-            HttpContent content = new StringContent(JsonSerializer.Serialize(actionKeys), Encoding.UTF8, "application/json");
+            HttpContent content = new StringContent(JsonSerializer.Serialize(input), Encoding.UTF8, "application/json");
 
             HttpResponseMessage httpResponse = await client.PostAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
@@ -469,9 +535,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string resource = "generic-access-resource";
             string instance = "urn:altinn:instance-id:51599233/non-existing-instance";
             List<string> actionKeys = new List<string> { "read" };
+            InstanceRightsDelegationDto input = new()
+            {
+                DirectRightKeys = actionKeys
+            };
 
-            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
-            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+            string jsonInput = JsonSerializer.Serialize(input);
+            HttpContent content = new StringContent(jsonInput, Encoding.UTF8, "application/json");
 
             HttpResponseMessage httpResponse = await _client.PostAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
