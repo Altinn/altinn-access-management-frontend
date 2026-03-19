@@ -12,7 +12,6 @@ import { CheckmarkCircleIcon, PlusIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
-import { enableAddUserByUsername } from '@/resources/utils/featureFlagUtils';
 import { useDelegateInstanceRightsMutation } from '@/rtk/features/instanceApi';
 import { connectionApi } from '@/rtk/features/connectionApi';
 
@@ -87,7 +86,6 @@ const AddUserModal = ({
 }: AddUserModalProps) => {
   const { t } = useTranslation();
   const headingId = useId();
-  const allowUsername = enableAddUserByUsername();
   const { actingParty } = usePartyRepresentation();
   const dispatch = useDispatch();
   const [delegateInstanceRights, { isLoading: isSubmitting, error: submitError }] =
@@ -142,7 +140,7 @@ const AddUserModal = ({
     [rights],
   );
 
-  const personIdentifierErrorKey = getPersonIdentifierErrorKey(personIdentifier, allowUsername);
+  const personIdentifierErrorKey = getPersonIdentifierErrorKey(personIdentifier);
   const selectedRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
   const isLastNameValid = lastName.trim().length >= 1;
   const isFormValid =
@@ -225,7 +223,7 @@ const AddUserModal = ({
         <div className={classes.fields}>
           <DsTextfield
             className={classes.textField}
-            label={allowUsername ? t('new_user_modal.person_identifier') : t('common.ssn')}
+            label={t('new_user_modal.person_identifier')}
             data-size='sm'
             value={personIdentifier}
             onChange={(e) => setPersonIdentifier(e.target.value)}

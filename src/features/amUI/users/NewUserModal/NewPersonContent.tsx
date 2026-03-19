@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-import { displayPrivDelegation, enableAddUserByUsername } from '@/resources/utils/featureFlagUtils';
+import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 import { getPersonIdentifierErrorKey } from '../../common/personIdentifierUtils';
 
 export type personInput = { personIdentifier: string; lastName: string };
@@ -24,7 +24,6 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
   >(null);
   const [lastNameFormatError, setLastNameFormatError] = useState<string>('');
   const shouldDisplayPrivDelegation = displayPrivDelegation();
-  const allowUsername = enableAddUserByUsername();
 
   const navigateIfValidPerson = () => {
     const personInput = {
@@ -50,7 +49,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
       )}
       <DsTextfield
         className={classes.textField}
-        label={allowUsername ? t('new_user_modal.person_identifier') : t('common.ssn')}
+        label={t('new_user_modal.person_identifier')}
         data-size='sm'
         value={personIdentifier}
         onChange={(e) => setPersonIdentifier(e.target.value)}
@@ -63,9 +62,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
           ) : null
         }
         onBlur={() => {
-          setPersonIdentifierFormatErrorKey(
-            getPersonIdentifierErrorKey(personIdentifier, allowUsername),
-          );
+          setPersonIdentifierFormatErrorKey(getPersonIdentifierErrorKey(personIdentifier));
         }}
       />
       <DsTextfield
@@ -84,7 +81,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
         <Button
           disabled={
             personIdentifier.trim().length === 0 ||
-            getPersonIdentifierErrorKey(personIdentifier, allowUsername) !== null ||
+            getPersonIdentifierErrorKey(personIdentifier) !== null ||
             !isValidLastnameFormat() ||
             isLoading
           }

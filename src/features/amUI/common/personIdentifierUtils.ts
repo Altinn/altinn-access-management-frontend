@@ -2,20 +2,11 @@ const isValidSsnFormat = (personIdentifier: string) => /^\d{11}$/.test(personIde
 const isDigitsOnly = (personIdentifier: string) => /^\d+$/.test(personIdentifier);
 const containsWhitespace = (personIdentifier: string) => /\s/.test(personIdentifier);
 
-export const getPersonIdentifierErrorKey = (
-  identifier: string,
-  allowUsername: boolean,
-): string | null => {
+export const getPersonIdentifierErrorKey = (identifier: string): string | null => {
   const trimmedIdentifier = identifier.trim();
 
   if (!trimmedIdentifier.length) {
     return null;
-  }
-
-  if (!allowUsername) {
-    return !isValidSsnFormat(trimmedIdentifier)
-      ? 'new_user_modal.person_identifier_ssn_format_error'
-      : null;
   }
 
   if (containsWhitespace(trimmedIdentifier)) {
