@@ -1,0 +1,12 @@
+.pendingRequestsModal {
+  max-width: 992px;
+  max-height: calc(100vh - var(--ds-spacing-8));
+  overflow-y: auto;
+}
+
+.pendingRequestsModalContent {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1rem;
+}

@@ -1,20 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Entity } from '@/dataObjects/dtos/Common';
+import { ServiceResource } from './singleRights/singleRightsApi';
 
 export type RequestStatus = 'None' | 'Draft' | 'Pending' | 'Approved' | 'Rejected' | 'Withdrawn';
 
-export interface RequestDto {
+export interface RequestResourceDto {
   id: string;
   type: string;
   status: RequestStatus;
   from: Entity;
   to: Entity;
   lastUpdated: string;
-}
-
-export interface RequestResourceDto extends RequestDto {
   resourceId: string;
+  resource?: ServiceResource;
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/request`;
@@ -37,30 +36,32 @@ export const requestApi = createApi({
   endpoints: (builder) => ({
     // requests page queries
     getSentRequests: builder.query<
-      RequestDto[],
-      { party: string; to?: string; status?: RequestStatus[] }
+      RequestResourceDto[],
+      { party: string; to?: string; includeResources?: boolean; status?: RequestStatus[] }
     >({
-      query: ({ party, to, status = [] }) => {
+      query: ({ party, to, includeResources = false, status = [] }) => {
         let params = `?party=${party}`;
         if (to) params += `&to=${to}`;
+        if (includeResources) params += `&includeResources=true`;
         for (const s of status) params += `&status=${s}`;
         return `sent${params}`;
       },
       providesTags: ['sentRequests'],
     }),
     getReceivedRequests: builder.query<
-      RequestDto[],
-      { party: string; from?: string; status?: RequestStatus[] }
+      RequestResourceDto[],
+      { party: string; from?: string; includeResources?: boolean; status?: RequestStatus[] }
     >({
-      query: ({ party, from, status = [] }) => {
+      query: ({ party, from, includeResources = false, status = [] }) => {
         let params = `?party=${party}`;
         if (from) params += `&from=${from}`;
+        if (includeResources) params += `&includeResources=true`;
         for (const s of status) params += `&status=${s}`;
         return `received${params}`;
       },
       providesTags: ['receivedRequests'],
     }),
-    getRequest: builder.query<RequestDto, { party: string; id: string }>({
+    getRequest: builder.query<RequestResourceDto, { party: string; id: string }>({
       query: ({ party, id }) => `${id}?party=${party}`,
       providesTags: ['request'],
     }),
@@ -68,9 +69,10 @@ export const requestApi = createApi({
     // delegation modal queries and mutations
     getPendingSingleRightRequests: builder.query<
       RequestResourceDto[],
-      { party: string; to: string }
+      { party: string; to: string; includeResources?: boolean }
     >({
-      query: ({ party, to }) => `sent?party=${party}&to=${to}&status=pending`,
+      query: ({ party, to, includeResources = false }) =>
+        `sent?party=${party}&to=${to}&status=pending${includeResources ? '&includeResources=true' : ''}`,
       providesTags: [Tags.PendingSentRequests],
     }),
     createResourceRequest: builder.mutation<

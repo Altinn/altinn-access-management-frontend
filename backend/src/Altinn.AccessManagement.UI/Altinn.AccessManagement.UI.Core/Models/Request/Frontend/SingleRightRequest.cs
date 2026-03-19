@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
@@ -37,6 +38,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
         /// The resource id access is requested for
         /// </summary>
         public string ResourceId { get; set; }
+
+        /// <summary>
+        /// The full resource object
+        /// </summary>
+        public ServiceResourceFE? Resource { get; set; }
 
         /// <summary>
         /// Last updated

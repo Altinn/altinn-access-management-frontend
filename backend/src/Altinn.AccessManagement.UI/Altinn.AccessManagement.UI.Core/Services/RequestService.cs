@@ -1,8 +1,10 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Request;
 using Altinn.AccessManagement.UI.Core.Models.Request.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -11,28 +13,57 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class RequestService : IRequestService
     {
         private readonly IRequestClient _requestClient;
+        private readonly ResourceHelper _resourceHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RequestService"/> class.
         /// </summary>
         /// <param name="requestClient">The request client.</param>
-        public RequestService(IRequestClient requestClient)
+        /// <param name="resourceHelper">The resource helper.</param>
+        public RequestService(IRequestClient requestClient, ResourceHelper resourceHelper)
         {
             _requestClient = requestClient;
+            _resourceHelper = resourceHelper;
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<SingleRightRequest>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<IEnumerable<SingleRightRequest>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, bool includeResources, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, cancellationToken);
-            return response.Items.Select(MapToSingleRightRequest);
+
+            List<ServiceResourceFE> resources = [];
+            if (includeResources)
+            {
+                resources = await _resourceHelper.EnrichResources(response.Items.Select(x => x.Resource.ReferenceId), languageCode);
+            }
+            
+            return response.Items.Select(x => 
+            {
+                SingleRightRequest request = MapToSingleRightRequest(x);
+                ServiceResourceFE resource = resources.FirstOrDefault(r => r.Identifier == x.Resource.ReferenceId);
+                request.Resource = resource;
+                return request;
+            });
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<SingleRightRequest>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<IEnumerable<SingleRightRequest>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, bool includeResources, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, cancellationToken);
-            return response.Items.Select(MapToSingleRightRequest);
+
+            List<ServiceResourceFE> resources = [];
+            if (includeResources)
+            {
+                resources = await _resourceHelper.EnrichResources(response.Items.Select(x => x.Resource.ReferenceId), languageCode);
+            }
+
+            return response.Items.Select(x =>
+            {
+                SingleRightRequest request = MapToSingleRightRequest(x);
+                ServiceResourceFE resource = resources.FirstOrDefault(r => r.Identifier == x.Resource.ReferenceId);
+                request.Resource = resource;
+                return request;
+            });
         }
 
         /// <inheritdoc />

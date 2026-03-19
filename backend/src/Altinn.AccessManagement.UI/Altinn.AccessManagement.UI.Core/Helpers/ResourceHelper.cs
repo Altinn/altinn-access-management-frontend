@@ -42,23 +42,24 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             if (resourceIds.Any())
             {
                 // GET resources
-                IEnumerable<Task<ServiceResource>> resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId));
-
                 List<ServiceResource> resources = [];
-                try
+                var resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId)).ToList();
+
+                // Wait for all tasks and collect successful results, even if some fail
+                foreach (var task in resourceTasks)
                 {
-                    await Task.WhenAll(resourceTasks.Select(async task =>
+                    try
                     {
-                        await task;
-                        if (task.Result != null)
+                        var resource = await task;
+                        if (resource != null)
                         {
-                            resources.Add(task.Result);
+                            resources.Add(resource);
                         }
-                    }));
-                }
-                catch
-                {
-                    // if loading a resource fails, the exception is caught and logged in _resourceRegistryClient.GetResource(resourceId)
+                    }
+                    catch
+                    {
+                        // if loading a resource fails, the exception is caught and logged in _resourceRegistryClient.GetResource(resourceId)
+                    }
                 }
 
                 OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();

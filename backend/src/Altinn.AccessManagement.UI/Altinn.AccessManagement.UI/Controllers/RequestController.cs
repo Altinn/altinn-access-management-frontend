@@ -20,17 +20,20 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly ILogger<RequestController> _logger;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly IRequestService _requestService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="RequestController" /> class
         /// </summary>
         public RequestController(
             IRequestService requestService,
-            ILogger<RequestController> logger)
+            ILogger<RequestController> logger,
+            IHttpContextAccessor httpContextAccessor)
         {
             _requestService = requestService;
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -39,17 +42,19 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="party">The acting party</param>
         /// <param name="to">The party the requests were sent to</param>
         /// <param name="status">Status filter</param>
+        /// <param name="includeResources">Whether to include resource data in the response</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
         [Route("sent")]
-        public async Task<ActionResult> GetSentRequests([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetSentRequests([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] List<RequestStatus> status, [FromQuery] bool includeResources, CancellationToken cancellationToken)
         {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
-                var returnVal = await _requestService.GetSentRequests(party, to, status, cancellationToken);
+                var returnVal = await _requestService.GetSentRequests(party, to, status, includeResources, languageCode, cancellationToken);
                 return Ok(returnVal);
             }
             catch (HttpStatusException statusEx)
@@ -70,17 +75,19 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="party">The acting party</param>
         /// <param name="from">The party who sent the requests</param>
         /// <param name="status">Status filter</param>
+        /// <param name="includeResources">Whether to include resource data in the response</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
         [Route("received")]
-        public async Task<ActionResult> GetReceivedRequests([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetReceivedRequests([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, [FromQuery] bool includeResources, CancellationToken cancellationToken)
         {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
-                var returnVal = await _requestService.GetReceivedRequests(party, from, status, cancellationToken);
+                var returnVal = await _requestService.GetReceivedRequests(party, from, status, includeResources, languageCode, cancellationToken);
                 return Ok(returnVal);
             }
             catch (HttpStatusException statusEx)
