@@ -141,11 +141,15 @@ export const InstanceDetailPageContent = () => {
     );
   }
 
+  const isCorrespondenceInstance = instanceUrn.startsWith('urn:altinn:correspondence-id:');
+
   const inboxUrl = dialogId
     ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}`
     : `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
 
-  const inboxLink = (
+  const showInboxLink = dialogId || !isCorrespondenceInstance;
+
+  const inboxLink = showInboxLink ? (
     <div className={classes.inboxLinkContainer}>
       <DsButton
         asChild
@@ -158,7 +162,7 @@ export const InstanceDetailPageContent = () => {
         </a>
       </DsButton>
     </div>
-  );
+  ) : null;
 
   if (isResourceLoading || isAdminLoading || isInstanceAdminLoading) {
     return <ResourceInfoSkeleton />;
