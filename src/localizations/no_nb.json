@@ -516,7 +516,7 @@
       "request_service": "Be om enkelttjeneste",
       "delete_request": "Slett forespørsel",
       "pending_request_info": "Venter på at noen i <strong>{{partyName}}</strong> skal behandle din forespørsel om fullmakt",
-      "cannot_request_right": "Du kan ikke be om fullmakt til denne enkelttjenesten.",
+      "cannot_request_right": "Du kan ikke be om fullmakt til denne tjenesten.",
       "sent_request_success": "Forespørsel om fullmakt til {{resource}} er sendt",
       "sent_request_error": "Kunne ikke sende forespørsel om fullmakt til {{resource}}",
       "withdraw_request_success": "Forespørsel om fullmakt til {{resource}} er slettet",
