@@ -117,16 +117,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 StringContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
                 var response = await _client.PostAsync(token, endpointUrl, content);
-                if (response.IsSuccessStatusCode)
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    return response;
-                } 
-                else
-                {
-                    string errorContent = await response.Content.ReadAsStringAsync();
-                    _logger.LogError("AccessManagement.UI // InstanceClient // CreateInstanceRightsAccess // Failed with status code {StatusCode}. Response content: {ResponseContent}", response.StatusCode, errorContent);
-                    return response;
+                    _logger.LogError($"Unexpected http response. Status code: {response.StatusCode}, Reason: {response.ReasonPhrase}");
+                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, response.ReasonPhrase);
                 }
+
+                return response;
             }
             catch (Exception ex)
             {
