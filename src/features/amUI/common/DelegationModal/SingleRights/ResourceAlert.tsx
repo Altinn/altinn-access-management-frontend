@@ -16,9 +16,17 @@ export interface ResourceAlertProps {
   rightReasons?: string[];
   /** Optional className for custom styling */
   className?: string;
+  /** Optional flag to indicate if this is a resource request */
+  isRequest?: boolean;
 }
 
-export const ResourceAlert = ({ resource, error, rightReasons, className }: ResourceAlertProps) => {
+export const ResourceAlert = ({
+  resource,
+  error,
+  rightReasons,
+  className,
+  isRequest,
+}: ResourceAlertProps) => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
   let headingText = '';
@@ -26,7 +34,9 @@ export const ResourceAlert = ({ resource, error, rightReasons, className }: Reso
   let color = 'warning';
 
   if (resource.delegable === false) {
-    headingText = t('delegation_modal.service_error.general_heading');
+    headingText = isRequest
+      ? t('delegation_modal.request.cannot_request_right')
+      : t('delegation_modal.service_error.general_heading');
     content = (
       <DsParagraph>
         {t('delegation_modal.service_error.undelegable_service', {

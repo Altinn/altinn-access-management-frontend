@@ -40,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     contactPoints: resource.ContactPoints,
                     spatial: resource.Spatial,
                     authorizationReference: resource.AuthorizationReference,
-                    resourceOwnerLogoUrl: org?.Emblem ?? org?.Logo);
+                    resourceOwnerLogoUrl: string.IsNullOrWhiteSpace(org?.Emblem) ? org?.Logo : org.Emblem);
             }).ToList();
         }
 
