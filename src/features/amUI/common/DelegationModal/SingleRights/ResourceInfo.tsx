@@ -293,7 +293,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                 availableActions?.includes(DelegationAction.REQUEST) && (
                   <DsButton
                     data-size='sm'
-                    disabled={!resource.delegable || isLoadingSingleRightRequest}
+                    disabled={displayResourceAlert || isLoadingSingleRightRequest}
                     loading={isLoadingSingleRightRequest}
                     onClick={() => createRequest(resource)}
                   >
