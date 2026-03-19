@@ -17,9 +17,6 @@ import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { mapRightsToChipRights, type ChipRight } from '../SingleRights/hooks/rightsUtils';
-import { useRightChips } from '../SingleRights/hooks/useRightChips';
-
-import classes from '../SingleRights/ResourceInfo.module.css';
 
 export const useInstanceRightsSection = ({
   resource,
@@ -263,15 +260,13 @@ export const useInstanceRightsSection = ({
     }
   };
 
-  const { chips } = useRightChips(rights, setRights, classes.chip);
-
   return {
-    chips,
+    rights,
+    setRights,
     saveEditedRights,
     delegateChosenRights,
     revokeResource,
     undelegableActions,
-    rights,
     hasUnsavedChanges,
     hasAccess,
     isDelegationCheckLoading,
