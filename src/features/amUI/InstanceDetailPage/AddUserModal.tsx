@@ -254,5 +254,3 @@ const AddUserModal = ({
     </DsDialog>
   );
 };
-
-export default AddUserModal;
