@@ -17,6 +17,7 @@ import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagra
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useHasResourceCheck } from './useHasResourceCheck';
+import { useSingleRightRequests } from './useSingleRightRequests';
 
 export const useRightsSection = ({
   resource,
@@ -74,6 +75,10 @@ export const useRightsSection = ({
     },
     { skip: !resource.identifier },
   );
+  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
+    useSingleRightRequests({
+      canRequestRights: isRequest,
+    });
 
   const {
     data: delegationCheckedActions,
@@ -254,6 +259,14 @@ export const useRightsSection = ({
     }
   };
 
+  const sendRequest = () => {
+    createRequest(resource);
+  };
+
+  const deleteSentRequest = () => {
+    deleteRequest(resource);
+  };
+
   return {
     rights,
     setRights,
@@ -272,5 +285,9 @@ export const useRightsSection = ({
     isActionSuccess,
     isLoading,
     rightsMetaTechnicalErrorDetails,
+    isPendingRequest: hasPendingRequest(resource.identifier),
+    isLoadingRequest: isLoadingRequest(resource.identifier),
+    sendRequest,
+    deleteSentRequest,
   };
 };

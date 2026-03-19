@@ -34,6 +34,7 @@
     "next": "Next",
     "general_error_title": "Sorry, looks like something went wrong",
     "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn support.",
+    "reportee_access_missing_title": "You do not have access to this content",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "complete": "Complete",
@@ -519,12 +520,12 @@
     "request": {
       "request_service": "Request single service",
       "delete_request": "Delete request",
-      "pending_request_info": "Waiting for someone in <strong>{{partyName}}</strong> to process your request for authorization",
-      "cannot_request_right": "You cannot request authorization for this single service.",
-      "sent_request_success": "Request for authorization for {{resource}} has been sent",
-      "sent_request_error": "Could not send request for authorization for {{resource}}",
-      "withdraw_request_success": "Request for authorization for {{resource}} has been deleted",
-      "withdraw_request_error": "Could not delete request for authorization for {{resource}}"
+      "pending_request_info": "Waiting for someone in <strong>{{partyName}}</strong> to process your request",
+      "cannot_request_right": "You cannot request power of attorney for this service.",
+      "sent_request_success": "Request for power of attorney for {{resource}} has been sent",
+      "sent_request_error": "Could not send request for power of attorney for {{resource}}",
+      "withdraw_request_success": "Request for power of attorney for {{resource}} has been deleted",
+      "withdraw_request_error": "Could not delete request for power of attorney for {{resource}}"
     }
   },
   "status_section": {
