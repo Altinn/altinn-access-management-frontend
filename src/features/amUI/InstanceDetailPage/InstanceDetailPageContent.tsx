@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ComponentType } from 'react';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
@@ -18,11 +18,7 @@ import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
-import {
-  type User,
-  useGetIsAdminQuery,
-  useGetIsInstanceAdminQuery,
-} from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetIsInstanceAdminQuery } from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 import { AddUserButton as InstanceAddUserButton } from './AddUserModal';
 import { CheckmarkIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons';
@@ -106,6 +102,18 @@ export const InstanceDetailPageContent = () => {
     [indirectConnections],
   );
 
+  const AddInstanceUserButton = useMemo<ComponentType<{ isLarge?: boolean }>>(
+    () =>
+      ({ isLarge }) => (
+        <InstanceAddUserButton
+          isLarge={isLarge}
+          resourceId={resourceId}
+          instanceUrn={instanceUrn}
+        />
+      ),
+    [resourceId, instanceUrn],
+  );
+
   const {
     data: resource,
     isLoading: isResourceLoading,
@@ -160,21 +168,6 @@ export const InstanceDetailPageContent = () => {
   const providerLogoUrl = resource?.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
-
-  const AddInstanceUserButton: React.FC<{
-    isLarge?: boolean;
-    onComplete?: (user: User) => void;
-  }> = ({ isLarge }) => (
-    <InstanceAddUserButton
-      isLarge={isLarge}
-      resourceId={resourceId}
-      instanceUrn={instanceUrn}
-      onComplete={() => {
-        void refetchInstances();
-        void refetchIndirectConnections();
-      }}
-    />
-  );
 
   return (
     <>

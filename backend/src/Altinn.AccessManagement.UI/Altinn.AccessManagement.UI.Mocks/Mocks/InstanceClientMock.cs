@@ -55,7 +55,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             if (!string.IsNullOrWhiteSpace(instance))
             {
-                instances = instances.Where(permission => string.Equals(permission.Instance.RefId, instance, StringComparison.OrdinalIgnoreCase));
+                instances = instances.Where(permission => string.Equals(permission.Instance?.RefId, instance, StringComparison.OrdinalIgnoreCase));
             }
 
             return Task.FromResult(instances.ToList());

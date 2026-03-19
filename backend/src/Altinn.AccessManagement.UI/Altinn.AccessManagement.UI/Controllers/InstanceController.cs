@@ -121,6 +121,16 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("delegation/instances/rights")]
         public async Task<ActionResult<HttpResponseMessage>> DelegateInstanceRights([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] string resource, [FromQuery] string instance, [FromBody] InstanceRightsDelegationDto input)
         {
+            if (!to.HasValue && input?.To == null)
+            {
+                return BadRequest("At least one recipient must be specified.");
+            }
+
+            if (to.HasValue && input?.To != null)
+            {
+                return BadRequest("Recipient must be specified either via the 'to' query parameter or the request body, not both.");
+            }
+
             try
             {
                 var response = await _instanceService.Delegate(party, to, resource, instance, input);

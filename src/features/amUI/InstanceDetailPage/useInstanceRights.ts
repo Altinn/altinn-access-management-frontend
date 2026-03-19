@@ -14,9 +14,6 @@ export const getRightsSummaryTitle = (
   rights: ChipRight[],
   t: ReturnType<typeof useTranslation>['t'],
 ): string => {
-  if (rights.length === 0) {
-    return t('instance_detail_page.add_user_modal.no_rights_available');
-  }
   const checkedCount = rights.filter((r) => r.checked).length;
   if (checkedCount === rights.length) {
     return t('delegation_modal.actions.access_to_all');

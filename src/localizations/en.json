@@ -944,8 +944,7 @@
     "no_users": "No users have access.",
     "no_access_description": "<b>You do not have the authority to share this service/message with others.</b> To share and grant access from the inbox, you must have the access package: Access manager for single messages, forms and dialogs.",
     "add_user_modal": {
-      "user_will_receive": "The user will receive:",
-      "no_rights_available": "No actions available"
+      "user_will_receive": "The user will receive:"
     }
   },
   "poa_status": {

@@ -20,6 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.InstanceDelegation
         /// Gets or sets the right keys to delegate on the instance.
         /// </summary>
         [Required]
+        [MinLength(1, ErrorMessage = "At least one right must be delegated.")]
         [JsonPropertyName("directRightKeys")]
         public List<string> DirectRightKeys { get; set; } = [];
     }

@@ -10,9 +10,11 @@ import {
 } from '@altinn/altinn-components';
 import { CheckmarkCircleIcon, PlusIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 
 import { enableAddUserByUsername } from '@/resources/utils/featureFlagUtils';
 import { useDelegateInstanceRightsMutation } from '@/rtk/features/instanceApi';
+import { connectionApi } from '@/rtk/features/connectionApi';
 
 import {
   createErrorDetails,
@@ -37,7 +39,6 @@ interface AddUserButtonProps {
   resourceId: string;
   instanceUrn: string;
   isLarge?: boolean;
-  onComplete?: (draft: AddUserModalDraft) => void;
 }
 
 interface AddUserModalProps {
@@ -46,15 +47,9 @@ interface AddUserModalProps {
   resourceId: string;
   instanceUrn: string;
   onClose: () => void;
-  onComplete?: (draft: AddUserModalDraft) => void;
 }
 
-export const AddUserButton = ({
-  resourceId,
-  instanceUrn,
-  isLarge,
-  onComplete,
-}: AddUserButtonProps) => {
+export const AddUserButton = ({ resourceId, instanceUrn, isLarge }: AddUserButtonProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
@@ -78,7 +73,6 @@ export const AddUserButton = ({
         resourceId={resourceId}
         instanceUrn={instanceUrn}
         onClose={() => setIsOpen(false)}
-        onComplete={onComplete}
       />
     </>
   );
@@ -90,12 +84,12 @@ const AddUserModal = ({
   resourceId,
   instanceUrn,
   onClose,
-  onComplete,
 }: AddUserModalProps) => {
   const { t } = useTranslation();
   const headingId = useId();
   const allowUsername = enableAddUserByUsername();
   const { actingParty } = usePartyRepresentation();
+  const dispatch = useDispatch();
   const [delegateInstanceRights, { isLoading: isSubmitting, error: submitError }] =
     useDelegateInstanceRightsMutation();
 
@@ -104,6 +98,7 @@ const AddUserModal = ({
   const [personIdentifierFormatErrorKey, setPersonIdentifierFormatErrorKey] = useState<
     string | null
   >(null);
+
   const [lastNameFormatError, setLastNameFormatError] = useState('');
   const [rightsExpanded, setRightsExpanded] = useState(false);
   const [submitErrorDetails, setSubmitErrorDetails] = useState<{
@@ -188,7 +183,7 @@ const AddUserModal = ({
         },
       }).unwrap();
 
-      onComplete?.(draft);
+      dispatch(connectionApi.util.invalidateTags(['Connections']));
       modalRef.current?.close();
     } catch {
       // Error state is handled through RTK Query mutation state.
