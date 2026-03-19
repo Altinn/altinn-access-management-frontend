@@ -3,25 +3,16 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import type { PersonInput } from './connectionApi';
-
-import type { DelegationCheckedRight, RightAccess } from './singleRights/singleRightsApi';
+import type {
+  DelegationCheckedRight,
+  RightAccess,
+  ServiceResource,
+} from './singleRights/singleRightsApi';
+import { resourceApi } from './resourceApi';
 
 interface InstanceType {
   id: string;
   name: string;
-}
-
-export interface InstanceResource {
-  identifier: string;
-  title: string | null;
-  description?: string | null;
-  rightDescription?: string | null;
-  resourceOwnerName: string | null;
-  resourceOwnerLogoUrl: string | null;
-  resourceOwnerOrgNumber: string | null;
-  resourceOwnerOrgcode: string | null;
-  resourceType: string;
-  delegable: boolean;
 }
 
 export interface DelegationInstance {
@@ -30,13 +21,13 @@ export interface DelegationInstance {
 }
 
 export interface InstanceDelegation {
-  resource: InstanceResource;
+  resource: ServiceResource;
   instance: DelegationInstance;
   permissions: Permissions[];
 }
 
 export interface InstanceRights {
-  resource: InstanceResource;
+  resource: ServiceResource;
   instance: DelegationInstance;
   directRights: RightAccess[];
   indirectRights: RightAccess[];
