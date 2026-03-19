@@ -529,7 +529,7 @@
       "active_access_request_single": "active",
       "active_access_request_plural": "active",
       "view_requests": "View requests",
-      "sent_requests_modal_header": "Your request for access to Fysioterapeutene AS has been sent. You will be notified when it is approved."
+      "sent_requests_modal_header": "Your request for access to {{partyName}} has been sent. You will be notified when it is approved."
     }
   },
   "status_section": {

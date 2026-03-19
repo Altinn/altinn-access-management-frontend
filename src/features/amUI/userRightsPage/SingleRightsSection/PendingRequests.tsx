@@ -4,6 +4,7 @@ import {
   DsButton,
   DsDialog,
   DsHeading,
+  formatDisplayName,
   ListItem,
   Snackbar,
   SnackbarProvider,
@@ -15,6 +16,8 @@ import classes from './PendingRequests.module.css';
 import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { useTranslation } from 'react-i18next';
+import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export const PendingRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -82,6 +85,8 @@ const PendingRequestsList = ({
 }: ResourceAlertProps) => {
   const { t } = useTranslation();
 
+  const { fromParty } = usePartyRepresentation();
+
   const { singleRightRequests, deleteRequest } = useSingleRightRequests({
     canRequestRights: true,
     includeResources: true,
@@ -111,7 +116,12 @@ const PendingRequestsList = ({
             data-size='xs'
             level={1}
           >
-            {t('delegation_modal.request.sent_requests_modal_header')}
+            {t('delegation_modal.request.sent_requests_modal_header', {
+              partyName: formatDisplayName({
+                fullName: fromParty?.name || '',
+                type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+              }),
+            })}
           </DsHeading>
           <ResourceList
             size='md'

@@ -526,7 +526,7 @@
       "active_access_request_single": "aktiv",
       "active_access_request_plural": "aktive",
       "view_requests": "Se forespørsler",
-      "sent_requests_modal_header": "Din forespørsel om tilganger til Fysioterapeutene AS er sendt. Du vil få beskjed når de er godkjent."
+      "sent_requests_modal_header": "Din forespørsel om tilganger til {{partyName}} er sendt. Du vil få beskjed når de er godkjent."
     }
   },
   "status_section": {
