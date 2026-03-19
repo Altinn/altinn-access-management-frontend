@@ -110,25 +110,23 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                List<string> queryParameters =
-                [
-                    $"party={party}",
-                    $"resource={Uri.EscapeDataString(resource)}",
-                    $"instance={Uri.EscapeDataString(instance)}",
-                ];
-
-                if (to.HasValue)
-                {
-                    queryParameters.Add($"to={to.Value}");
-                }
-
-                string endpointUrl = $"enduser/connections/resources/instances/rights?{string.Join("&", queryParameters)}";
+                string endpointUrl = $"enduser/connections/resources/instances/rights?party={party}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 string requestBody = JsonSerializer.Serialize(input);
                 StringContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
-                return await _client.PostAsync(token, endpointUrl, content);
+                var response = await _client.PostAsync(token, endpointUrl, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return response;
+                } 
+                else
+                {
+                    string errorContent = await response.Content.ReadAsStringAsync();
+                    _logger.LogError("AccessManagement.UI // InstanceClient // CreateInstanceRightsAccess // Failed with status code {StatusCode}. Response content: {ResponseContent}", response.StatusCode, errorContent);
+                    return response;
+                }
             }
             catch (Exception ex)
             {
