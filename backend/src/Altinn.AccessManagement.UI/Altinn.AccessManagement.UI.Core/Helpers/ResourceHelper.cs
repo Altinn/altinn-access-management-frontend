@@ -19,15 +19,19 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
 
         private readonly IAccessPackageClient _accessPackageClient;
 
+        private readonly IAltinnCdnClient _altinnCdnClient;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceHelper"/> class.
         /// </summary>
         /// <param name="resourceRegistryClient">Resource registry client</param>
         /// <param name="accessPackageClient">Access package API client</param>
-        public ResourceHelper(IResourceRegistryClient resourceRegistryClient, IAccessPackageClient accessPackageClient)
+        /// <param name="altinnCdnClient">Altinn CDN client</param>
+        public ResourceHelper(IResourceRegistryClient resourceRegistryClient, IAccessPackageClient accessPackageClient, IAltinnCdnClient altinnCdnClient)
         {
             _resourceRegistryClient = resourceRegistryClient;
             _accessPackageClient = accessPackageClient;
+            _altinnCdnClient = altinnCdnClient;
         }
 
         /// <summary>
@@ -62,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     }
                 }
 
-                OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+                Dictionary<string, Models.Common.OrgData> orgList = await _altinnCdnClient.GetOrgData();
                 resourcesFE = ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgList);
             }
 
