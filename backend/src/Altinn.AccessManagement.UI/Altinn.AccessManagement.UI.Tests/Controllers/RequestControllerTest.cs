@@ -132,7 +132,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/request/sent/withdraw?party={party}&id={requestId}", null);
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/request/sent/withdraw?party={party}&id={requestId}");
             SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
 
             // Assert
@@ -294,7 +294,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/request/sent/withdraw?party={party}&id={requestId}", null);
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/request/sent/withdraw?party={party}&id={requestId}");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
@@ -312,7 +312,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/request/sent/withdraw?party={party}&id={requestId}", null);
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/request/sent/withdraw?party={party}&id={requestId}");
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);

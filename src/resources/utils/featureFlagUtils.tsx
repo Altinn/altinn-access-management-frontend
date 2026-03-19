@@ -99,3 +99,7 @@ export const enableAddUserByUsername = () => {
 export const enableAddSelfToSystemuser = () => {
   return window.featureFlags?.enableAddSelfToSystemuser === true;
 };
+
+export const enableRequestSingleRight = () => {
+  return window.featureFlags?.enableRequestAccess === true;
+};

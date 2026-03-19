@@ -22,6 +22,7 @@ declare global {
       addAllSystemuserCustomers: boolean;
       enableAddUserByUsername: boolean;
       enableAddSelfToSystemuser: boolean;
+      enableRequestAccess: boolean;
     };
   }
 }

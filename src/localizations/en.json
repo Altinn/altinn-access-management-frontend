@@ -70,6 +70,7 @@
     "give_poa_for": "Give power of attorney for {{poa_object}}",
     "request_poa": "Request power of attorney",
     "request_poa_for": "Request power of attorney for {{poa_object}}",
+    "delete_request_for": "Delete request for {{poa_object}}",
     "delete_poa": "Delete power of attorney",
     "delete_poa_for": "Delete power of attorney for {{poa_object}}",
     "delete_pos_confirm": "Are you sure you want to delete the power of attorney?",
@@ -464,6 +465,7 @@
     "heading_subtitle": "Power of attorney given to {{name}}"
   },
   "delegation_modal": {
+    "request_service": "Which service do you want to request power of attorney for?",
     "give_service_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
     "give_package_to_name": "Give <strong>{{name}}</strong> power of attorney for new access package",
     "name_will_receive": "<strong>{{name}}</strong> will receive:",
@@ -513,6 +515,16 @@
       "error_status": "Status: {{status}}",
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
       "missing_rights": "You cannot give this power of attorney because you do not have access yourself."
+    },
+    "request": {
+      "request_service": "Request single service",
+      "delete_request": "Delete request",
+      "pending_request_info": "Waiting for someone in <strong>{{partyName}}</strong> to process your request",
+      "cannot_request_right": "You cannot request power of attorney for this service.",
+      "sent_request_success": "Request for power of attorney for {{resource}} has been sent",
+      "sent_request_error": "Could not send request for power of attorney for {{resource}}",
+      "withdraw_request_success": "Request for power of attorney for {{resource}} has been deleted",
+      "withdraw_request_error": "Could not delete request for power of attorney for {{resource}}"
     }
   },
   "status_section": {
@@ -927,8 +939,9 @@
     "provider_name": "to {{name}}",
     "back_to_inbox": "Go to inbox",
     "see_in_inbox": "View in inbox",
+    "description": "Here you can share a message/form from the inbox or get an overview of who already has access. Use the search field to search for people/organizations or add them as a new user.",
     "no_users": "No users have access.",
-    "cannot_share_with_others": "You cannot share this with others. Sorry!"
+    "no_access_description": "<b>You do not have the authority to share this service/message with others.</b> To share and grant access from the inbox, you must have the access package: Access manager for single messages, forms and dialogs."
   },
   "poa_status": {
     "no_permissions": "You have to give power of attorney"

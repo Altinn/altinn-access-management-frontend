@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 To = x.To,
                 Type = x.Type,
                 Status = x.Status,
-                ResourceId = x.Resource?.ResourceId,
+                ResourceId = x.Resource?.ReferenceId,
                 LastUpdated = x.LastUpdated
             };
         }

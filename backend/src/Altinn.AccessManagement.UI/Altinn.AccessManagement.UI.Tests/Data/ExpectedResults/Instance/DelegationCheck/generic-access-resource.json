@@ -1,0 +1,18 @@
+[
+  {
+    "reasonCodes": [],
+    "right": {
+      "key": "urn:altinn:resource:generic-access-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:read",
+      "name": "Read"
+    },
+    "result": false
+  },
+  {
+    "reasonCodes": [],
+    "right": {
+      "key": "urn:altinn:resource:generic-access-resource:urn:oasis:names:tc:xacml:1.0:action:action-id:write",
+      "name": "Write"
+    },
+    "result": false
+  }
+]

@@ -1,11 +1,11 @@
 {
   "resource": {
-    "id": "7e2058a4-4c01-4db4-a74e-e70f4b6d6e5b",
+    "id": "f0ab12cd-3456-4789-abcd-222222222222",
     "providerId": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
     "typeId": "0197f8a2-db76-7d5a-8120-0f2937d528a9",
-    "name": "a3-app",
-    "description": "An Altinn 3 app",
-    "refId": "app_ttd_a3-app",
+    "name": "123123",
+    "description": "A generic access resource",
+    "refId": "123123",
     "provider": {
       "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
       "name": "Testdepartementet",
@@ -20,8 +20,8 @@
     }
   },
   "instance": {
-    "id": "df333e75-5896-4254-a69f-146736eaf668",
-    "urn": "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668",
+    "id": "b42df1f3-56f2-436a-bad7-222222222222",
+    "urn": "urn:altinn:instance-id:51599233/b42df1f3-56f2-436a-bad7-222222222222",
     "type": {
       "id": "eb7cd8eb-eee4-43cf-814b-f54e143cd954",
       "name": "BrukerstyrtAppInstansDelegering"
@@ -30,7 +30,7 @@
   "directRights": [
     {
       "right": {
-        "key": "urn:altinn:resource:app_ttd_a3-app:instance:df333e75-5896-4254-a69f-146736eaf668:read",
+        "key": "urn:altinn:resource:123123:instance:b42df1f3-56f2-436a-bad7-222222222222:read",
         "name": "Read"
       },
       "reason": {
@@ -83,7 +83,7 @@
     },
     {
       "right": {
-        "key": "urn:altinn:resource:app_ttd_a3-app:instance:df333e75-5896-4254-a69f-146736eaf668:write",
+        "key": "urn:altinn:resource:123123:instance:b42df1f3-56f2-436a-bad7-222222222222:write",
         "name": "Write"
       },
       "reason": {
@@ -138,7 +138,7 @@
   "indirectRights": [
     {
       "right": {
-        "key": "urn:altinn:resource:app_ttd_a3-app:instance:df333e75-5896-4254-a69f-146736eaf668:sign",
+        "key": "urn:altinn:resource:123123:instance:b42df1f3-56f2-436a-bad7-222222222222:sign",
         "name": "Sign"
       },
       "reason": {
