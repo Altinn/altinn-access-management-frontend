@@ -26,7 +26,6 @@ import { useInheritedStatusInfo } from '../../useInheritedStatus';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../EditModal';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { useSingleRightRequests } from './hooks/useSingleRightRequests';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -79,12 +78,11 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
     isActionLoading,
     isActionSuccess,
     rightsMetaTechnicalErrorDetails,
+    createRequest,
+    deleteRequest,
+    hasPendingRequest,
+    isLoadingRequest,
   } = useRightsSection({ resource, isRequest: isSingleRightRequest, onDelegate });
-
-  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
-    useSingleRightRequests({
-      canRequestRights: isSingleRightRequest,
-    });
 
   const hasDelegableRights = rights.some((r) => r.delegable);
   const showMissingRightsStatus =
@@ -273,7 +271,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                               {t('delegation_modal.actions.cannot_give_header')}
                             </DsHeading>
                             <div className={classes.undelegableActions}>
-                              {undelegableActions.map((action) => action).join(', ')}
+                              {undelegableActions.join(', ')}
                             </div>
                           </div>
                         )}

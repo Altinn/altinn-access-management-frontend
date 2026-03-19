@@ -259,14 +259,6 @@ export const useRightsSection = ({
     }
   };
 
-  const sendRequest = () => {
-    createRequest(resource);
-  };
-
-  const deleteSentRequest = () => {
-    deleteRequest(resource);
-  };
-
   return {
     rights,
     setRights,
@@ -285,9 +277,9 @@ export const useRightsSection = ({
     isActionSuccess,
     isLoading,
     rightsMetaTechnicalErrorDetails,
-    isPendingRequest: hasPendingRequest(resource.identifier),
-    isLoadingRequest: isLoadingRequest(resource.identifier),
-    sendRequest,
-    deleteSentRequest,
+    hasPendingRequest,
+    isLoadingRequest,
+    createRequest,
+    deleteRequest,
   };
 };

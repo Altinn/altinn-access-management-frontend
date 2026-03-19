@@ -477,7 +477,7 @@
       "access_to_all": "Tilgang til heile tenesten",
       "partial_access": "Tilgang til {{count}} av {{total}} handlingar",
       "action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan gi fullmakt til heile tenesta eller velje spesifikke handlingar.",
-      "request_action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan kun be om fullmakt til heile tenesta.",
+      "request_action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan berre be om fullmakt til heile tenesta.",
       "cannot_give_header": "Du kan ikkje gi tilgang til:"
     },
     "specific_rights": {
