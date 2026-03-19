@@ -51,7 +51,7 @@ export class AccessManagementFrontPage {
 
   async expectAccessPackageToBeDelegable(packageName: string) {
     await expect(
-      this.page.getByRole('button', { name: 'Gi fullmakt for ' + packageName }),
+      this.page.getByRole('button', { name: 'Gi fullmakt for ' + packageName }).first(),
     ).toBeVisible();
   }
 
