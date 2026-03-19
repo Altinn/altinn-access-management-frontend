@@ -24,7 +24,7 @@ import {
   useGetIsInstanceAdminQuery,
 } from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
-import { CheckmarkIcon, PlusIcon } from '@navikt/aksel-icons';
+import { CheckmarkIcon, EnvelopeClosedIcon, PlusIcon } from '@navikt/aksel-icons';
 
 import classes from './InstanceDetailPageContent.module.css';
 
@@ -58,7 +58,6 @@ export const InstanceDetailPageContent = () => {
   const instanceUrn = searchParams.get('instanceUrn') ?? '';
   const resourceId = searchParams.get('resourceId') ?? searchParams.get('resourceID') ?? '';
   const dialogId = searchParams.get('dialogId');
-  const inboxUrl = dialogId ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}` : undefined;
 
   const {
     data: isAdmin,
@@ -142,16 +141,24 @@ export const InstanceDetailPageContent = () => {
     );
   }
 
-  const inboxLink = inboxUrl ? (
+  const isCorrespondenceInstance = instanceUrn.startsWith('urn:altinn:correspondence-id:');
+
+  const inboxUrl = dialogId
+    ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}`
+    : `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
+
+  const showInboxLink = dialogId || !isCorrespondenceInstance;
+
+  const inboxLink = showInboxLink ? (
     <div className={classes.inboxLinkContainer}>
       <DsButton
         asChild
-        variant='primary'
+        variant={dialogId ? 'primary' : 'secondary'}
         className={classes.inboxButton}
       >
         <a href={inboxUrl}>
-          <CheckmarkIcon aria-hidden />
-          {t('common.finished')}
+          {dialogId ? <CheckmarkIcon aria-hidden /> : <EnvelopeClosedIcon aria-hidden />}
+          {dialogId ? t('common.finished') : t('instance_detail_page.see_in_inbox')}
         </a>
       </DsButton>
     </div>
