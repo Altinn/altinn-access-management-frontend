@@ -1,7 +1,7 @@
-import { RequestResourceDto } from '@/rtk/features/requestApi';
+import { RequestDto } from '@/rtk/features/requestApi';
 
 export const getSingleRightRequestId = (
-  singleRightRequests: RequestResourceDto[] | undefined,
+  singleRightRequests: RequestDto[] | undefined,
   resourceId: string,
   toPartyUuid?: string,
 ): string | undefined => {
