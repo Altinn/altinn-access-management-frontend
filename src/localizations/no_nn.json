@@ -477,6 +477,7 @@
       "access_to_all": "Tilgang til heile tenesten",
       "partial_access": "Tilgang til {{count}} av {{total}} handlingar",
       "action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan gi fullmakt til heile tenesta eller velje spesifikke handlingar.",
+      "request_action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan berre be om fullmakt til heile tenesta.",
       "cannot_give_header": "Du kan ikkje gi tilgang til:"
     },
     "specific_rights": {
@@ -935,6 +936,7 @@
     "document_title": "Delt frå innboks",
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
+    "see_in_inbox": "Sjå i innboks",
     "description": "Her kan du dele ei melding/eit skjema frå innboksen eller få oversikt over kven som allereie har tilgang. Bruk søkjefeltet til å søkje etter personar/verksemder eller legg dei til som ny brukar.",
     "no_users": "Ingen brukarar har tilgang.",
     "no_access_description": "<b>Du har ikkje fullmakt til å gi vidare denne tenesta/meldinga.</b> For å kunne dele og gi tilgang frå innboksen må du ha tilgangspakka: Tilgangsstyrar for enkeltmeldingar, skjema og dialogar."

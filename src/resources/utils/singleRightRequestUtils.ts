@@ -3,16 +3,16 @@ import { RequestResourceDto } from '@/rtk/features/requestApi';
 export const getSingleRightRequestId = (
   singleRightRequests: RequestResourceDto[] | undefined,
   resourceId: string,
-  fromPartyUuid?: string,
+  toPartyUuid?: string,
 ): string | undefined => {
   return singleRightRequests?.find(
-    (x) => x.resourceId === resourceId && x.from.id === fromPartyUuid && x.status === 'Pending',
+    (x) => x.resourceId === resourceId && x.to.id === toPartyUuid && x.status === 'Pending',
   )?.id;
 };
 
 export const getRequestPartyQueryParams = (
   actingPartyUuid?: string,
-  fromPartyUuid?: string,
+  toPartyUuid?: string,
 ): { party: string; to: string } => {
-  return { party: actingPartyUuid || '', to: fromPartyUuid || '' };
+  return { party: actingPartyUuid || '', to: toPartyUuid || '' };
 };
