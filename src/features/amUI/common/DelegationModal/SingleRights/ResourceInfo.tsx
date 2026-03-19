@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-  Button,
-  DsAlert,
-  DsButton,
-  DsHeading,
-  DsParagraph,
-  formatDisplayName,
-  ListItem,
-} from '@altinn/altinn-components';
+import { Button, DsButton, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import {
   useGetSingleRightsForRightholderQuery,
@@ -26,13 +18,12 @@ import { useInheritedStatusInfo } from '../../useInheritedStatus';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../EditModal';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { ResourceAlert } from './ResourceAlert';
-import { CheckmarkCircleIcon, MinusCircleIcon } from '@navikt/aksel-icons';
-import { RightChips } from './RightChips';
+import { MinusCircleIcon } from '@navikt/aksel-icons';
+import { RightsSection } from './RightsSection';
 
 export interface ResourceInfoProps {
   resource: ServiceResource;
@@ -42,7 +33,6 @@ export interface ResourceInfoProps {
 
 export const ResourceInfo = ({ resource, onDelegate, availableActions }: ResourceInfoProps) => {
   const isSmall = useIsMobileOrSmaller();
-  const [rightsExpanded, setRightsExpanded] = useState(false);
 
   const { t } = useTranslation();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
@@ -59,6 +49,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
     );
 
   const isSingleRightRequest = availableActions?.includes(DelegationAction.REQUEST);
+  const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
 
   const {
     rights,
@@ -101,7 +92,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
   const displayResourceAlert =
     (isSingleRightRequest && resource?.delegable === false) ||
     !!rightsMetaTechnicalErrorDetails ||
-    (availableActions?.includes(DelegationAction.DELEGATE) &&
+    (hasDelegateAction &&
       !hasAccess &&
       (isDelegationCheckError ||
         resource?.delegable === false ||
@@ -161,107 +152,21 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                 className={classes.resourceAlert}
               />
             ) : (
-              <>
-                {delegationError && (
-                  <DsAlert
-                    data-color='danger'
-                    data-size='sm'
-                  >
-                    <DsHeading
-                      level={3}
-                      data-size='xs'
-                    >
-                      {t('delegation_modal.technical_error_message.heading')}
-                    </DsHeading>
-                    <DsParagraph>
-                      {delegationError !== 'revoke' &&
-                        `${t('delegation_modal.technical_error_message.message')} ${t('delegation_modal.technical_error_message.all_failed', { name: toName })}`}
-                      {delegationError === 'revoke' &&
-                        t('delegation_modal.technical_error_message.revoke_failed')}
-                    </DsParagraph>
-                  </DsAlert>
-                )}
-                {missingAccess && availableActions?.includes(DelegationAction.DELEGATE) && (
-                  <DsAlert
-                    data-color='info'
-                    data-size='sm'
-                  >
-                    {missingAccess}
-                  </DsAlert>
-                )}
-                <div className={classes.rightsSection}>
-                  <DsHeading
-                    level={4}
-                    data-size={isSmall ? '2xs' : 'xs'}
-                  >
-                    {hasAccess && !hasUnsavedChanges ? (
-                      <Trans
-                        i18nKey='delegation_modal.name_has_the_following'
-                        values={{ name: toName }}
-                        components={{ strong: <strong /> }}
-                      />
-                    ) : (
-                      <Trans
-                        i18nKey='delegation_modal.name_will_receive'
-                        values={{ name: toName }}
-                        components={{ strong: <strong /> }}
-                      />
-                    )}
-                  </DsHeading>
-                  <ListItem
-                    loading={isDelegationCheckLoading}
-                    icon={CheckmarkCircleIcon}
-                    collapsible={true}
-                    size={isSmall ? 'sm' : 'md'}
-                    title={
-                      rights.filter((r) => r.checked).length !== rights.length
-                        ? t('delegation_modal.actions.partial_access', {
-                            count: rights.filter((r) => r.checked).length,
-                            total: rights.length,
-                          })
-                        : t('delegation_modal.actions.access_to_all')
-                    }
-                    onClick={() => setRightsExpanded(!rightsExpanded)}
-                    expanded={rightsExpanded}
-                    as='button'
-                    border='solid'
-                    shadow='none'
-                  >
-                    <div className={classes.rightExpandableContent}>
-                      <DsParagraph>
-                        {isSingleRightRequest
-                          ? t('delegation_modal.actions.request_action_description')
-                          : t('delegation_modal.actions.action_description')}
-                      </DsParagraph>
-                      <div className={classes.rightChips}>
-                        <RightChips
-                          rights={rights}
-                          setRights={setRights}
-                          editable={availableActions?.includes(DelegationAction.DELEGATE)}
-                        />
-                      </div>
-                      {undelegableActions.length > 0 &&
-                        availableActions?.includes(DelegationAction.DELEGATE) && (
-                          <div className={classes.undelegableSection}>
-                            <DsHeading
-                              level={5}
-                              data-size='2xs'
-                              className={classes.undelegableHeader}
-                            >
-                              {t('delegation_modal.actions.cannot_give_header')}
-                            </DsHeading>
-                            <div className={classes.undelegableActions}>
-                              {undelegableActions.join(', ')}
-                            </div>
-                          </div>
-                        )}
-                    </div>
-                  </ListItem>
-                </div>
-              </>
+              <RightsSection
+                rights={rights}
+                setRights={setRights}
+                undelegableActions={undelegableActions}
+                isDelegationCheckLoading={isDelegationCheckLoading}
+                toName={toName}
+                isSingleRightRequest={isSingleRightRequest}
+                availableActions={availableActions}
+                delegationError={delegationError}
+                missingAccess={missingAccess && hasDelegateAction ? missingAccess : null}
+                hasAccessAndNoChanges={hasAccess && !hasUnsavedChanges}
+              />
             )}
             <div className={classes.editButtons}>
-              {availableActions?.includes(DelegationAction.DELEGATE) && (
+              {hasDelegateAction && (
                 <Button
                   data-size='sm'
                   disabled={
@@ -276,10 +181,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
               )}
               {hasAccess && toParty && (
                 <Button
-                  variant={
-                    availableActions?.includes(DelegationAction.DELEGATE) ? 'tertiary' : 'primary'
-                  }
-                  className={classes.deleteButton}
+                  variant={hasDelegateAction ? 'tertiary' : 'primary'}
                   onClick={revokeResource}
                   disabled={rights.length === 0 || rights.some((r) => r.inherited === true)}
                   color='danger'
@@ -288,30 +190,27 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                   {t('common.delete_poa')}
                 </Button>
               )}
-              {!hasAccess &&
-                !hasPendingRequest(resource.identifier) &&
-                availableActions?.includes(DelegationAction.REQUEST) && (
-                  <DsButton
-                    data-size='sm'
-                    disabled={displayResourceAlert || isLoadingSingleRightRequest}
-                    loading={isLoadingSingleRightRequest}
-                    onClick={() => createRequest(resource)}
-                  >
-                    {t('common.request_poa')}
-                  </DsButton>
-                )}
-              {hasPendingRequest(resource.identifier) &&
-                availableActions?.includes(DelegationAction.REQUEST) && (
-                  <DsButton
-                    data-size='sm'
-                    disabled={isLoadingSingleRightRequest}
-                    data-color='danger'
-                    loading={isLoadingSingleRightRequest}
-                    onClick={() => deleteRequest(resource)}
-                  >
-                    {t('delegation_modal.request.delete_request')}
-                  </DsButton>
-                )}
+              {!hasAccess && !hasPendingRequest(resource.identifier) && isSingleRightRequest && (
+                <DsButton
+                  data-size='sm'
+                  disabled={displayResourceAlert || isLoadingSingleRightRequest}
+                  loading={isLoadingSingleRightRequest}
+                  onClick={() => createRequest(resource)}
+                >
+                  {t('common.request_poa')}
+                </DsButton>
+              )}
+              {hasPendingRequest(resource.identifier) && isSingleRightRequest && (
+                <DsButton
+                  data-size='sm'
+                  disabled={isLoadingSingleRightRequest}
+                  data-color='danger'
+                  loading={isLoadingSingleRightRequest}
+                  onClick={() => deleteRequest(resource)}
+                >
+                  {t('delegation_modal.request.delete_request')}
+                </DsButton>
+              )}
             </div>
           </>
         )}
