@@ -15,9 +15,13 @@ import { usePartyRepresentation } from '../../../PartyRepresentationContext/Part
 
 interface UseSingleRightRequestsProps {
   canRequestRights?: boolean;
+  includeResources?: boolean;
 }
 
-export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightRequestsProps) => {
+export const useSingleRightRequests = ({
+  canRequestRights,
+  includeResources,
+}: UseSingleRightRequestsProps) => {
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
   const { fromParty, actingParty } = usePartyRepresentation();
 
@@ -36,6 +40,7 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
   } = useGetPendingSingleRightRequestsQuery(
     {
       ...requestQueryParams,
+      includeResources: includeResources || false,
     },
     {
       skip: !canRequestRights || !requestQueryParams?.party || !requestQueryParams?.to,
