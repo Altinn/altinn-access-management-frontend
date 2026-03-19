@@ -1,4 +1,4 @@
-import React, { useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   DsAlert,
   DsButton,
@@ -12,10 +12,15 @@ import { CheckmarkCircleIcon, PlusIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import { enableAddUserByUsername } from '@/resources/utils/featureFlagUtils';
+import { useDelegateInstanceRightsMutation } from '@/rtk/features/instanceApi';
 
-import { TechnicalErrorParagraphs } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import {
+  createErrorDetails,
+  TechnicalErrorParagraphs,
+} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { RightChips } from '../common/DelegationModal/SingleRights/RightChips';
 import { getPersonIdentifierErrorKey } from '../common/personIdentifierUtils';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getRightsSummaryTitle, useInstanceRights } from './useInstanceRights';
 
 import classes from './AddUserModal.module.css';
@@ -90,6 +95,9 @@ const AddUserModal = ({
   const { t } = useTranslation();
   const headingId = useId();
   const allowUsername = enableAddUserByUsername();
+  const { actingParty } = usePartyRepresentation();
+  const [delegateInstanceRights, { isLoading: isSubmitting, error: submitError }] =
+    useDelegateInstanceRightsMutation();
 
   const [personIdentifier, setPersonIdentifier] = useState('');
   const [lastName, setLastName] = useState('');
@@ -98,6 +106,11 @@ const AddUserModal = ({
   >(null);
   const [lastNameFormatError, setLastNameFormatError] = useState('');
   const [rightsExpanded, setRightsExpanded] = useState(false);
+  const [submitErrorDetails, setSubmitErrorDetails] = useState<{
+    status: string;
+    time: string;
+    traceId?: string;
+  } | null>(null);
 
   const {
     rights,
@@ -114,12 +127,31 @@ const AddUserModal = ({
     setLastNameFormatError('');
     resetRights();
     setRightsExpanded(false);
+    setSubmitErrorDetails(null);
   };
+
+  useEffect(() => {
+    if (submitError) {
+      const details = createErrorDetails(submitError);
+      setSubmitErrorDetails(
+        details ?? {
+          status: '500',
+          time: new Date().toISOString(),
+        },
+      );
+    }
+  }, [submitError]);
+
+  const undelegableActions = useMemo(
+    () => rights.filter((r) => !r.delegable).map((r) => r.rightName),
+    [rights],
+  );
 
   const personIdentifierErrorKey = getPersonIdentifierErrorKey(personIdentifier, allowUsername);
   const selectedRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
   const isLastNameValid = lastName.trim().length >= 1;
   const isFormValid =
+    !!actingParty?.partyUuid &&
     personIdentifier.trim().length > 0 &&
     personIdentifierErrorKey === null &&
     isLastNameValid &&
@@ -127,28 +159,40 @@ const AddUserModal = ({
     !isRightsLoading &&
     !rightsErrorDetails;
 
-  const handleComplete = () => {
-    onComplete?.({
+  const handleComplete = async () => {
+    if (!actingParty?.partyUuid) {
+      return;
+    }
+
+    const draft = {
       personIdentifier: personIdentifier.trim(),
       lastName: lastName.trim(),
       resourceId,
       instanceUrn,
       selectedRights,
-    });
+    };
 
-    /*
-    await createUserWithInstanceRights({
-      personInput: {
-        personIdentifier: draft.personIdentifier,
-        lastName: draft.lastName,
-      },
-      resourceId: draft.resourceId,
-      instanceUrn: draft.instanceUrn,
-      rights: draft.selectedRights,
-    }).unwrap();
-    */
+    setSubmitErrorDetails(null);
 
-    modalRef.current?.close();
+    try {
+      await delegateInstanceRights({
+        party: actingParty.partyUuid,
+        resource: draft.resourceId,
+        instance: draft.instanceUrn,
+        input: {
+          to: {
+            personIdentifier: draft.personIdentifier,
+            lastName: draft.lastName,
+          },
+          directRightKeys: draft.selectedRights,
+        },
+      }).unwrap();
+
+      onComplete?.(draft);
+      modalRef.current?.close();
+    } catch {
+      // Error state is handled through RTK Query mutation state.
+    }
   };
 
   return (
@@ -172,6 +216,17 @@ const AddUserModal = ({
           {t('new_user_modal.trigger_button_large')}
         </DsHeading>
 
+        {submitErrorDetails && (
+          <DsAlert data-color='danger'>
+            <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+            <TechnicalErrorParagraphs
+              status={submitErrorDetails.status}
+              time={submitErrorDetails.time}
+              traceId={submitErrorDetails.traceId}
+            />
+          </DsAlert>
+        )}
+
         <div className={classes.fields}>
           <DsTextfield
             className={classes.textField}
@@ -181,6 +236,7 @@ const AddUserModal = ({
             onChange={(e) => setPersonIdentifier(e.target.value)}
             onBlur={() => setPersonIdentifierFormatErrorKey(personIdentifierErrorKey)}
             error={personIdentifierFormatErrorKey ? t(personIdentifierFormatErrorKey) : null}
+            disabled={isSubmitting}
           />
           <DsTextfield
             className={classes.textField}
@@ -194,6 +250,7 @@ const AddUserModal = ({
               )
             }
             error={lastNameFormatError}
+            disabled={isSubmitting}
           />
         </div>
 
@@ -237,6 +294,20 @@ const AddUserModal = ({
                     editable
                   />
                 </div>
+                {undelegableActions.length > 0 && (
+                  <div className={classes.undelegableSection}>
+                    <DsHeading
+                      level={5}
+                      data-size='2xs'
+                      className={classes.undelegableHeader}
+                    >
+                      {t('delegation_modal.actions.cannot_give_header')}
+                    </DsHeading>
+                    <div className={classes.undelegableActions}>
+                      {undelegableActions.join(', ')}
+                    </div>
+                  </div>
+                )}
               </div>
             </ListItem>
           )}
@@ -244,8 +315,11 @@ const AddUserModal = ({
 
         <div className={classes.buttonRow}>
           <DsButton
-            onClick={handleComplete}
+            onClick={() => {
+              void handleComplete();
+            }}
             disabled={!isFormValid}
+            loading={isSubmitting}
           >
             {t('common.give_poa')}
           </DsButton>

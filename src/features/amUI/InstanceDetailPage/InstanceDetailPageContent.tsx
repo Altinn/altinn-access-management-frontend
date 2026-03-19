@@ -24,12 +24,8 @@ import {
   useGetIsInstanceAdminQuery,
 } from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
-<<<<<<< feat/add-new-user-modal
-import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { AddUserButton as InstanceAddUserButton } from './AddUserModal';
-=======
-import { CheckmarkIcon, EnvelopeClosedIcon, PlusIcon } from '@navikt/aksel-icons';
->>>>>>> main
+import { CheckmarkIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons';
 
 import classes from './InstanceDetailPageContent.module.css';
 
@@ -40,7 +36,7 @@ export const InstanceDetailPageContent = () => {
 
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const instanceUrn = searchParams.get('instanceUrn') ?? '';
-  const resourceId = searchParams.get('resourceId') ?? searchParams.get('resourceID') ?? '';
+  const resourceId = searchParams.get('resourceId') ?? '';
   const dialogId = searchParams.get('dialogId');
 
   const {
@@ -61,6 +57,7 @@ export const InstanceDetailPageContent = () => {
     isLoading: isInstancesLoading,
     isError: isInstancesError,
     error: instancesError,
+    refetch: refetchInstances,
   } = useGetInstancesQuery(
     {
       party: actingParty?.partyUuid || '',
@@ -92,6 +89,7 @@ export const InstanceDetailPageContent = () => {
     data: indirectConnections,
     isLoading: isLoadingIndirectConnections,
     isFetching: isFetchingIndirectConnections,
+    refetch: refetchIndirectConnections,
   } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
@@ -171,8 +169,9 @@ export const InstanceDetailPageContent = () => {
       isLarge={isLarge}
       resourceId={resourceId}
       instanceUrn={instanceUrn}
-      onComplete={(draft) => {
-        console.log('Add instance user draft:', draft);
+      onComplete={() => {
+        void refetchInstances();
+        void refetchIndirectConnections();
       }}
     />
   );
