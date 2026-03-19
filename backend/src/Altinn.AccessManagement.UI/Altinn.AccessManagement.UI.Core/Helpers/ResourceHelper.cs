@@ -59,9 +59,16 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                             resources.Add(resource);
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        // if loading a resource fails, the exception is caught and logged in _resourceRegistryClient.GetResource(resourceId)
+                        // Let cancellation-related exceptions propagate so callers can observe cancellation
+                        if (ex is TaskCanceledException || ex is OperationCanceledException)
+                        {
+                            throw;
+                        }
+
+                        // Log failures here to avoid silently swallowing exceptions and to include the resource id
+                        Console.Error.WriteLine($"Failed to load resource '{resourceId}': {ex}");
                     }
                 }
 
