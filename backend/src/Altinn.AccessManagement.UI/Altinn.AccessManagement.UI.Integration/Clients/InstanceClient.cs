@@ -3,6 +3,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -47,12 +48,37 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<List<InstancePermission>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
-            StringBuilder endpointBuilder = new StringBuilder($"enduser/connections/resources/instances?party={party}&from={from}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}&instance={Uri.EscapeDataString(instance)}");
+            List<string> queryParameters = [$"party={party}"];
+
+            if (from.HasValue)
+            {
+                queryParameters.Add($"from={from.Value}");
+            }
+
+            if (to.HasValue)
+            {
+                queryParameters.Add($"to={to.Value}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(resource))
+            {
+                queryParameters.Add($"resource={Uri.EscapeDataString(resource)}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(instance))
+            {
+                queryParameters.Add($"instance={Uri.EscapeDataString(instance)}");
+            }
+
+            string endpointUrl = $"enduser/connections/resources/instances?{string.Join("&", queryParameters)}";
 
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            HttpResponseMessage response = await _client.GetAsync(token, endpointBuilder.ToString(), languageCode: languageCode);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
 
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<InstancePermission>>(response, _logger, "InstanceClient // GetDelegatedInstances");
+            PaginatedResult<InstancePermission> paginatedResult =
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<InstancePermission>>(response, _logger, "InstanceClient // GetDelegatedInstances");
+
+            return paginatedResult?.Items?.ToList() ?? [];
         }
 
         /// <inheritdoc />

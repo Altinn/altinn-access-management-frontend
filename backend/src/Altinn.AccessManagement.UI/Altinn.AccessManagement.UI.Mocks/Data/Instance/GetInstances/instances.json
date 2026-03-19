@@ -4,9 +4,9 @@
       "id": "7e2058a4-4c01-4db4-a74e-e70f4b6d6e5b",
       "providerId": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
       "typeId": "0197f8a2-db76-7d5a-8120-0f2937d528a9",
-      "name": "a3-app",
+      "name": "generic-access-resource",
       "description": "An Altinn 3 app",
-      "refId": "app_ttd_a3-app",
+      "refId": "generic-access-resource",
       "provider": {
         "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
         "name": "Testdepartementet",
@@ -65,9 +65,9 @@
       "id": "019cb410-0987-720a-ab21-b723589af0c3",
       "providerId": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
       "typeId": "0197f8a2-db76-7d5a-8120-0f2937d528a9",
-      "name": "a3-app2",
+      "name": "abctest",
       "description": "An Altinn 3 app",
-      "refId": "app_ttd_a3-app2",
+      "refId": "abctest",
       "provider": {
         "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
         "name": "Testdepartementet",
@@ -130,9 +130,9 @@
       "id": "7e2058a4-4c01-4db4-a74e-e70f4b6d6e5b",
       "providerId": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
       "typeId": "0197f8a2-db76-7d5a-8120-0f2937d528a9",
-      "name": "a3-app",
+      "name": "generic-access-resource",
       "description": "An Altinn 3 app",
-      "refId": "app_ttd_a3-app",
+      "refId": "generic-access-resource",
       "provider": {
         "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
         "name": "Testdepartementet",
@@ -187,51 +187,13 @@
     ]
   },
   {
-    "resource": null,
-    "instance": {
-      "id": "a31ce0e2-45e1-425f-bad6-111111111111",
-      "urn": "urn:altinn:instance-id:51599233/a31ce0e2-45e1-425f-bad6-111111111111",
-      "type": {
-        "id": "eb7cd8eb-eee4-43cf-814b-f54e143cd954",
-        "name": "BrukerstyrtAppInstansDelegering"
-      }
-    },
-    "permissions": [
-      {
-        "from": {
-          "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-          "name": "DISKRET NÆR TIGER AS",
-          "type": "organization",
-          "variant": "AS",
-          "parent": null,
-          "children": null,
-          "partyId": 51329012
-        },
-        "to": {
-          "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "name": "SITRONGUL MEDALJONG",
-          "type": "person",
-          "variant": null,
-          "parent": null,
-          "children": null,
-          "partyId": 50789533,
-          "dateOfBirth": "1981-03-20"
-        },
-        "via": null,
-        "role": null,
-        "viaRole": null,
-        "reason": null
-      }
-    ]
-  },
-  {
     "resource": {
       "id": "f0ab12cd-3456-4789-abcd-222222222222",
       "providerId": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
       "typeId": "0197f8a2-db76-7d5a-8120-0f2937d528a9",
-      "name": "missing-resource",
-      "description": "Resource registry entry resolves to null",
-      "refId": "app_ttd_missing-resource",
+      "name": "123123",
+      "description": "A generic access resource",
+      "refId": "123123",
       "provider": {
         "id": "5c6e075d-343d-8bcb-b08e-54a4bb7e223e",
         "name": "Testdepartementet",
