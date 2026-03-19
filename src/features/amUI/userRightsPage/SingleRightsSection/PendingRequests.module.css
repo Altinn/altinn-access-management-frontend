@@ -4,9 +4,10 @@
   overflow-y: auto;
 }
 
-.pendingRequestsModalContent {
-  display: flex;
-  flex-direction: column;
+.closeButton {
+  margin-top: var(--ds-spacing-4);
+}
 
-  gap: 1rem;
+.backButton {
+  margin-bottom: var(--ds-spacing-4);
 }
