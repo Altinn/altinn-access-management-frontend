@@ -99,6 +99,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
     type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
   });
   const displayResourceAlert =
+    (isSingleRightRequest && resource?.delegable === false) ||
     !!rightsMetaTechnicalErrorDetails ||
     (availableActions?.includes(DelegationAction.DELEGATE) &&
       !hasAccess &&
@@ -119,33 +120,6 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
     actingParty,
   });
   const isLoadingSingleRightRequest = isLoadingRequest(resource.identifier);
-
-  const resourceAlert = displayResourceAlert ? (
-    <ResourceAlert
-      error={technicalErrorDetails}
-      rightReasons={rights.map((r) => r.delegationReason)}
-      resource={resource}
-      className={classes.resourceAlert}
-    />
-  ) : null;
-
-  const nonDelegableRequest =
-    isSingleRightRequest && resource?.delegable === false ? (
-      <DsAlert
-        data-color='warning'
-        className={classes.resourceAlert}
-      >
-        <DsHeading
-          level={2}
-          data-size='2xs'
-        >
-          {t('delegation_modal.request.cannot_request_right')}
-        </DsHeading>
-        {t('delegation_modal.service_error.undelegable_service', {
-          resourceOwner: resource.resourceOwnerName,
-        })}
-      </DsAlert>
-    ) : null;
 
   return (
     <>
@@ -178,9 +152,15 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
               {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
               {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
             </div>
-            {!nonDelegableRequest && resourceAlert}
-            {nonDelegableRequest}
-            {!resourceAlert && !nonDelegableRequest && (
+            {displayResourceAlert ? (
+              <ResourceAlert
+                error={technicalErrorDetails}
+                isRequest={isSingleRightRequest}
+                rightReasons={rights.map((r) => r.delegationReason)}
+                resource={resource}
+                className={classes.resourceAlert}
+              />
+            ) : (
               <>
                 {delegationError && (
                   <DsAlert
