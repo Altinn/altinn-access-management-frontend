@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Helpers
 {
@@ -18,19 +19,19 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
 
         private readonly IAccessPackageClient _accessPackageClient;
 
-        private readonly IAltinnCdnClient _altinnCdnClient;
+        private readonly IAltinnCdnService _altinnCdnService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceHelper"/> class.
         /// </summary>
         /// <param name="resourceRegistryClient">Resource registry client</param>
         /// <param name="accessPackageClient">Access package API client</param>
-        /// <param name="altinnCdnClient">Altinn CDN client</param>
-        public ResourceHelper(IResourceRegistryClient resourceRegistryClient, IAccessPackageClient accessPackageClient, IAltinnCdnClient altinnCdnClient)
+        /// <param name="altinnCdnService">Altinn CDN service</param>
+        public ResourceHelper(IResourceRegistryClient resourceRegistryClient, IAccessPackageClient accessPackageClient, IAltinnCdnService altinnCdnService)
         {
             _resourceRegistryClient = resourceRegistryClient;
             _accessPackageClient = accessPackageClient;
-            _altinnCdnClient = altinnCdnClient;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <summary>
@@ -46,14 +47,13 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             {
                 // GET resources
                 List<ServiceResource> resources = [];
-                var resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId)).ToList();
 
-                // Wait for all tasks and collect successful results, even if some fail
-                foreach (var task in resourceTasks)
+                // Load resources one at a time to avoid starting all requests in parallel
+                foreach (var resourceId in resourceIds)
                 {
                     try
                     {
-                        var resource = await task;
+                        var resource = await _resourceRegistryClient.GetResource(resourceId);
                         if (resource != null)
                         {
                             resources.Add(resource);
@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     }
                 }
 
-                Dictionary<string, Models.Common.OrgData> orgList = await _altinnCdnClient.GetOrgData();
+                Dictionary<string, Models.Common.OrgData> orgList = await _altinnCdnService.GetOrgData();
                 resourcesFE = ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgList);
             }
 
