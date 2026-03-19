@@ -521,7 +521,12 @@
       "sent_request_success": "Forespørsel om fullmakt til {{resource}} er sendt",
       "sent_request_error": "Kunne ikke sende forespørsel om fullmakt til {{resource}}",
       "withdraw_request_success": "Forespørsel om fullmakt til {{resource}} er slettet",
-      "withdraw_request_error": "Kunne ikke slette forespørsel om fullmakt til {{resource}}"
+      "withdraw_request_error": "Kunne ikke slette forespørsel om fullmakt til {{resource}}",
+      "sent_requests_item": "Forespørsel om tilgang",
+      "active_access_request_single": "aktiv",
+      "active_access_request_plural": "aktive",
+      "view_requests": "Se forespørsler",
+      "sent_requests_modal_header": "Din forespørsel om tilganger til Fysioterapeutene AS er sendt. Du vil få beskjed når de er godkjent."
     }
   },
   "status_section": {

@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
+import React, { useRef, useState } from 'react';
+import { ArrowLeftIcon, HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import {
   DsButton,
   DsDialog,
@@ -12,9 +12,16 @@ import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { useSingleRightRequests } from '../../common/DelegationModal/SingleRights/hooks/useSingleRightRequests';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import classes from './PendingRequests.module.css';
+import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
+import { DelegationAction } from '../../common/DelegationModal/EditModal';
+import { useTranslation } from 'react-i18next';
 
 export const PendingRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
+
+  const { t } = useTranslation();
+
+  const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
 
   const { singleRightRequests } = useSingleRightRequests({
     canRequestRights: true,
@@ -26,32 +33,28 @@ export const PendingRequests = () => {
       <DsDialog
         ref={modalRef}
         closedby='any'
+        onClose={() => setSelectedResource(null)}
         className={classes.pendingRequestsModal}
       >
         <div className={classes.pendingRequestsModalContent}>
-          <DsHeading
-            data-size='xs'
-            level={1}
-          >
-            Din forespørsel om tilganger til Fysioterapeutene AS er sendt. Du vil få beskjed når de
-            er godkjent.
-          </DsHeading>
           <SnackbarProvider>
-            <PendingRequestsList />
+            <PendingRequestsList
+              onClose={() => modalRef.current?.close()}
+              selectedResource={selectedResource}
+              setSelectedResource={setSelectedResource}
+            />
             <Snackbar />
           </SnackbarProvider>
         </div>
-        <DsButton
-          variant='primary'
-          onClick={() => modalRef.current?.close()}
-        >
-          Lukk
-        </DsButton>
       </DsDialog>
       {singleRightRequests?.length && (
         <ListItem
-          title='Forespørsel om tilgang'
-          description={`${singleRightRequests.length} ${singleRightRequests.length === 1 ? 'aktiv' : 'aktive'}`}
+          title={t('delegation_modal.request.sent_requests_item')}
+          description={`${singleRightRequests.length} ${
+            singleRightRequests.length === 1
+              ? t('delegation_modal.request.active_access_request_single')
+              : t('delegation_modal.request.active_access_request_plural')
+          }`}
           icon={HandshakeIcon}
           linkIcon
           color='neutral'
@@ -59,38 +62,85 @@ export const PendingRequests = () => {
           border='solid'
           interactive
           as='button'
-          badge={<div>Se forespørsler</div>}
-          onClick={() => {
-            modalRef.current?.showModal();
-          }}
+          badge={<div>{t('delegation_modal.request.view_requests')}</div>}
+          onClick={() => modalRef.current?.showModal()}
         />
       )}
     </>
   );
 };
 
-const PendingRequestsList = () => {
+interface ResourceAlertProps {
+  selectedResource: ServiceResource | null;
+  setSelectedResource: (resource: ServiceResource | null) => void;
+  onClose: () => void;
+}
+const PendingRequestsList = ({
+  onClose,
+  selectedResource,
+  setSelectedResource,
+}: ResourceAlertProps) => {
+  const { t } = useTranslation();
+
   const { singleRightRequests, deleteRequest } = useSingleRightRequests({
     canRequestRights: true,
     includeResources: true,
   });
 
   return (
-    <ResourceList
-      resources={
-        (singleRightRequests || []).map((x) => x.resource).filter((r) => !!r) as ServiceResource[]
-      }
-      renderControls={(resource) => {
-        return (
-          <DsButton
-            variant='tertiary'
-            onClick={() => deleteRequest(resource)}
+    <>
+      {selectedResource ? (
+        <>
+          <div>
+            <DsButton
+              variant='tertiary'
+              onClick={() => setSelectedResource(null)}
+            >
+              <ArrowLeftIcon />
+              {t('common.back')}
+            </DsButton>
+          </div>
+          <ResourceInfo
+            resource={selectedResource}
+            availableActions={[DelegationAction.REQUEST]}
+          />
+        </>
+      ) : (
+        <>
+          <DsHeading
+            data-size='xs'
+            level={1}
           >
-            <MinusCircleIcon />
-            Slett
-          </DsButton>
-        );
-      }}
-    />
+            {t('delegation_modal.request.sent_requests_modal_header')}
+          </DsHeading>
+          <ResourceList
+            size='md'
+            enableSearch={false}
+            resources={(singleRightRequests || []).map((x) => x.resource).filter((r) => !!r)}
+            showDetails={false}
+            onSelect={(resource) => setSelectedResource(resource)}
+            renderControls={(resource) => {
+              return (
+                <DsButton
+                  variant='tertiary'
+                  onClick={() => deleteRequest(resource)}
+                >
+                  <MinusCircleIcon />
+                  {t('common.delete')}
+                </DsButton>
+              );
+            }}
+          />
+          <div>
+            <DsButton
+              variant='primary'
+              onClick={onClose}
+            >
+              {t('common.close')}
+            </DsButton>
+          </div>
+        </>
+      )}
+    </>
   );
 };

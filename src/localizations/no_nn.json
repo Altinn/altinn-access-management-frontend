@@ -521,7 +521,12 @@
       "sent_request_success": "Førespurnad om fullmakt til {{resource}} er sendt",
       "sent_request_error": "Kunne ikkje sende førespurnad om fullmakt til {{resource}}",
       "withdraw_request_success": "Førespurnad om fullmakt til {{resource}} er sletta",
-      "withdraw_request_error": "Kunne ikkje slette førespurnad om fullmakt til {{resource}}"
+      "withdraw_request_error": "Kunne ikkje slette førespurnad om fullmakt til {{resource}}",
+      "sent_requests_item": "Førespurnad om tilgang",
+      "active_access_request_single": "aktiv",
+      "active_access_request_plural": "aktive",
+      "view_requests": "Sjå førespurnader",
+      "sent_requests_modal_header": "Di førespurnad om tilgangar til Fysioterapeutene AS er sendt. Du vil få beskjed når dei er godkjende."
     }
   },
   "status_section": {
