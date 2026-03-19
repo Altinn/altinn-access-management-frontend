@@ -11,21 +11,27 @@ import { DelegationAction } from '../EditModal';
 type UseRenderSearchResultControlProps = {
   isDelegated: (resourceId: string) => boolean;
   isInherited: (resourceId: string) => boolean;
+  isRequested: (resourceId: string) => boolean;
   availableActions?: DelegationAction[];
   isResourceLoading: (resourceId: string) => boolean;
   setActionError: (error: ActionError | null) => void;
   revokeFromList: (resource: ServiceResource) => void;
   delegateFromList: (resource: ServiceResource) => void;
+  requestFromList: (resource: ServiceResource) => void;
+  deleteRequestFromList: (resource: ServiceResource) => void;
 };
 
 export const useRenderSearchResultControl = ({
   isDelegated,
   isInherited,
+  isRequested,
   availableActions,
   isResourceLoading,
   setActionError,
   revokeFromList,
   delegateFromList,
+  requestFromList,
+  deleteRequestFromList,
 }: UseRenderSearchResultControlProps) => {
   const { t } = useTranslation();
   const isMobile = useIsMobileOrSmaller();
@@ -35,6 +41,8 @@ export const useRenderSearchResultControl = ({
     const isResourceInherited = isInherited(resource.identifier);
     const canRevoke = availableActions?.includes(DelegationAction.REVOKE);
     const canDelegate = availableActions?.includes(DelegationAction.DELEGATE);
+    const canRequest = availableActions?.includes(DelegationAction.REQUEST);
+    const isAlreadyRequested = isRequested(resource.identifier);
     const isLoading = isResourceLoading(resource.identifier);
 
     if (isAlreadyDelegated && canRevoke) {
@@ -71,6 +79,42 @@ export const useRenderSearchResultControl = ({
         >
           <PlusCircleIcon aria-hidden='true' />
           {!isMobile && t('common.give_poa')}
+        </DsButton>
+      );
+    }
+
+    if (isAlreadyRequested) {
+      return (
+        <DsButton
+          variant='tertiary'
+          data-size='sm'
+          loading={isLoading}
+          disabled={isLoading}
+          onClick={() => {
+            deleteRequestFromList(resource);
+          }}
+          aria-label={t('common.delete_request_for', { poa_object: resource.title })}
+        >
+          <MinusCircleIcon aria-hidden='true' />
+          {!isMobile && t('delegation_modal.request.delete_request')}
+        </DsButton>
+      );
+    }
+
+    if (resource.delegable && !isAlreadyDelegated && canRequest) {
+      return (
+        <DsButton
+          variant='tertiary'
+          data-size='sm'
+          loading={isLoading}
+          disabled={isLoading}
+          onClick={() => {
+            requestFromList(resource);
+          }}
+          aria-label={t('common.request_poa_for', { poa_object: resource.title })}
+        >
+          <PlusCircleIcon aria-hidden='true' />
+          {!isMobile && t('common.request_poa')}
         </DsButton>
       );
     }

@@ -69,6 +69,7 @@
     "give_poa_for": "Gi fullmakt for {{poa_object}}",
     "request_poa": "Be om fullmakt",
     "request_poa_for": "Be om fullmakt for {{poa_object}}",
+    "delete_request_for": "Slett forespørsel for {{poa_object}}",
     "delete_poa": "Slett fullmakt",
     "delete_poa_for": "Slett fullmakt for {{poa_object}}",
     "delete_pos_confirm": "Er du sikker på at du vil slette denne?",
@@ -461,6 +462,7 @@
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
+    "request_service": "Kva for enkelttenester ønsker du fullmakt til?",
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
     "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
@@ -510,6 +512,16 @@
       "error_status": "Status: {{status}}",
       "access_list_service": "Kven som får bruke denne tenesta blir bestemt av {{resourceOwner}}, og {{reportee}} har ikkje fått den moglegheita. Vi tilrår å ta kontakt med {{resourceOwner}}.",
       "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar tilgang til den sjølv."
+    },
+    "request": {
+      "request_service": "Be om enkeltteneste",
+      "delete_request": "Slett førespurnad",
+      "pending_request_info": "Ventar på at nokon i <strong>{{partyName}}</strong> skal handtere di førespurnad om fullmakt",
+      "cannot_request_right": "Du kan ikkje be om fullmakt til denne tenesten.",
+      "sent_request_success": "Førespurnad om fullmakt til {{resource}} er sendt",
+      "sent_request_error": "Kunne ikkje sende førespurnad om fullmakt til {{resource}}",
+      "withdraw_request_success": "Førespurnad om fullmakt til {{resource}} er sletta",
+      "withdraw_request_error": "Kunne ikkje slette førespurnad om fullmakt til {{resource}}"
     }
   },
   "status_section": {

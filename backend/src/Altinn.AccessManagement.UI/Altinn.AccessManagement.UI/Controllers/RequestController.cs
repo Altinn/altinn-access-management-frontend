@@ -164,7 +164,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="cancellationToken">Cancellation token</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
-        [HttpPut]
+        [HttpDelete]
         [Authorize]
         [Route("sent/withdraw")]
         public async Task<ActionResult> WithdrawRequest([FromQuery] Guid party, [FromQuery] Guid id, CancellationToken cancellationToken)

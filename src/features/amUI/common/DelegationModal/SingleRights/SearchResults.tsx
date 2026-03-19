@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 
@@ -16,6 +16,7 @@ import { useResourceListDelegation } from './hooks/useResourceListDelegation';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { useRenderSearchResultControl } from './createSearchResultControlsRenderer';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { useSingleRightRequests } from './hooks/useSingleRightRequests';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -50,6 +51,11 @@ export const SearchResults = ({
   const { setActionError } = useDelegationModalContext();
   const { toParty } = usePartyRepresentation();
 
+  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
+    useSingleRightRequests({
+      canRequestRights: availableActions?.includes(DelegationAction.REQUEST) ?? false,
+    });
+
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
     onActionError: (resource, errorInfo) => {
       onSelect(resource, true);
@@ -63,6 +69,14 @@ export const SearchResults = ({
       onSelect(resource);
     },
   });
+
+  const requestFromList = (resource: ServiceResource) => {
+    createRequest(resource);
+  };
+
+  const deleteRequestFromList = (resource: ServiceResource) => {
+    deleteRequest(resource);
+  };
 
   const isDelegated = (resourceId: string) =>
     delegatedResources?.some((delegation) => delegation.resource?.identifier === resourceId) ??
@@ -81,14 +95,21 @@ export const SearchResults = ({
     );
   };
 
+  const isLoading = (resourceId: string) => {
+    return isResourceLoading(resourceId) || isLoadingRequest(resourceId);
+  };
+
   const renderControls = useRenderSearchResultControl({
     isDelegated,
     isInherited,
+    isRequested: hasPendingRequest,
     availableActions,
-    isResourceLoading,
+    isResourceLoading: isLoading,
     setActionError,
     revokeFromList,
     delegateFromList,
+    requestFromList,
+    deleteRequestFromList,
   });
 
   if (isFetching) {

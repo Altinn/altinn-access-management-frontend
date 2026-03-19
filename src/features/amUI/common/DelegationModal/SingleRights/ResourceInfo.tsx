@@ -40,6 +40,9 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
         skip: !actingParty || !fromParty || !toParty,
       },
     );
+
+  const isSingleRightRequest = availableActions?.includes(DelegationAction.REQUEST);
+
   const {
     chips,
     saveEditedRights,
@@ -58,11 +61,17 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
     isActionLoading,
     isActionSuccess,
     rightsMetaTechnicalErrorDetails,
-  } = useRightsSection({ resource, onDelegate });
+    isPendingRequest,
+    isLoadingRequest,
+    sendRequest,
+    deleteSentRequest,
+  } = useRightsSection({ resource, isRequest: isSingleRightRequest, onDelegate });
 
   const hasDelegableRights = rights.some((r) => r.delegable);
-  const showMissingRightsStatus = !hasAccess && rights.length > 0 && !hasDelegableRights;
-  const cannotDelegateHere = resource?.delegable === false;
+  const showMissingRightsStatus =
+    !hasAccess && rights.length > 0 && !hasDelegableRights && !isSingleRightRequest;
+  const cannotDelegateHere = resource?.delegable === false && !isSingleRightRequest;
+  const cannotRequestRight = resource?.delegable === false && isSingleRightRequest;
   const resourcePermissions =
     resourceDelegations?.find(
       (delegation) => delegation.resource.identifier === resource.identifier,
@@ -101,6 +110,8 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                   showDelegationCheckWarning={showMissingRightsStatus}
                   inheritedStatus={inheritedStatus}
                   cannotDelegateHere={cannotDelegateHere}
+                  cannotRequestRight={cannotRequestRight}
+                  isPendingRequest={isPendingRequest}
                 />
                 {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
                 {resource.rightDescription && (
@@ -125,6 +136,10 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                 delegationError={delegationError ?? null}
                 missingAccess={missingAccess}
                 rightsMetaTechnicalErrorDetails={rightsMetaTechnicalErrorDetails}
+                hasRequestedSingleRight={isPendingRequest}
+                isLoadingRequest={isLoadingRequest}
+                sendRequest={sendRequest}
+                deleteRequest={deleteSentRequest}
               />
             </>
           )}

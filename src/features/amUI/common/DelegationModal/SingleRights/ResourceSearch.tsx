@@ -101,7 +101,11 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
         data-size='sm'
       >
         <Trans
-          i18nKey='delegation_modal.give_service_to_name'
+          i18nKey={
+            availableActions?.includes(DelegationAction.REQUEST)
+              ? 'delegation_modal.request_service'
+              : 'delegation_modal.give_service_to_name'
+          }
           values={{
             name: formatDisplayName({
               fullName: toParty?.name || '',

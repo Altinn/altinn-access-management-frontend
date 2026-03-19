@@ -19,5 +19,5 @@ public class ResourceReferenceDto
     /// <summary>
     /// Identifying the resource
     /// </summary>
-    public string ResourceId { get; set; }
+    public string ReferenceId { get; set; }
 }
