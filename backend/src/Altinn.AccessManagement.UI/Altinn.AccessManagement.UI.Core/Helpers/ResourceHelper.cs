@@ -4,7 +4,6 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 
@@ -19,15 +18,19 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
 
         private readonly IAccessPackageClient _accessPackageClient;
 
+        private readonly IAltinnCdnClient _altinnCdnClient;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceHelper"/> class.
         /// </summary>
         /// <param name="resourceRegistryClient">Resource registry client</param>
         /// <param name="accessPackageClient">Access package API client</param>
-        public ResourceHelper(IResourceRegistryClient resourceRegistryClient, IAccessPackageClient accessPackageClient)
+        /// <param name="altinnCdnClient">Altinn CDN client</param>
+        public ResourceHelper(IResourceRegistryClient resourceRegistryClient, IAccessPackageClient accessPackageClient, IAltinnCdnClient altinnCdnClient)
         {
             _resourceRegistryClient = resourceRegistryClient;
             _accessPackageClient = accessPackageClient;
+            _altinnCdnClient = altinnCdnClient;
         }
 
         /// <summary>
@@ -42,26 +45,27 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             if (resourceIds.Any())
             {
                 // GET resources
-                IEnumerable<Task<ServiceResource>> resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId));
-
                 List<ServiceResource> resources = [];
-                try
+                var resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId)).ToList();
+
+                // Wait for all tasks and collect successful results, even if some fail
+                foreach (var task in resourceTasks)
                 {
-                    await Task.WhenAll(resourceTasks.Select(async task =>
+                    try
                     {
-                        await task;
-                        if (task.Result != null)
+                        var resource = await task;
+                        if (resource != null)
                         {
-                            resources.Add(task.Result);
+                            resources.Add(resource);
                         }
-                    }));
-                }
-                catch
-                {
-                    // if loading a resource fails, the exception is caught and logged in _resourceRegistryClient.GetResource(resourceId)
+                    }
+                    catch
+                    {
+                        // if loading a resource fails, the exception is caught and logged in _resourceRegistryClient.GetResource(resourceId)
+                    }
                 }
 
-                OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+                Dictionary<string, Models.Common.OrgData> orgList = await _altinnCdnClient.GetOrgData();
                 resourcesFE = ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgList);
             }
 
