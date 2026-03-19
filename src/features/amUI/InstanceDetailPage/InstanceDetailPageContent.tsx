@@ -24,30 +24,10 @@ import {
   useGetIsInstanceAdminQuery,
 } from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
-import { CheckmarkIcon, PlusIcon } from '@navikt/aksel-icons';
+import { CheckmarkIcon } from '@navikt/aksel-icons';
+import { AddUserButton as InstanceAddUserButton } from './AddUserModal';
 
 import classes from './InstanceDetailPageContent.module.css';
-
-// Placeholder component for the "Add user" button in the UserSearch component.
-// This is used to disable the button while still enabling the layout since the functionality is not implemented yet.
-const AddUserPlaceholder = ({
-  isLarge,
-}: {
-  isLarge?: boolean;
-  onComplete?: (user: User) => void;
-}) => {
-  const { t } = useTranslation();
-
-  return (
-    <DsButton
-      disabled
-      variant={isLarge ? 'primary' : 'secondary'}
-    >
-      <PlusIcon aria-hidden={true} />
-      {isLarge ? t('new_user_modal.trigger_button_large') : t('new_user_modal.trigger_button')}
-    </DsButton>
-  );
-};
 
 export const InstanceDetailPageContent = () => {
   const { t } = useTranslation();
@@ -172,6 +152,20 @@ export const InstanceDetailPageContent = () => {
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
 
+  const AddInstanceUserButton: React.FC<{
+    isLarge?: boolean;
+    onComplete?: (user: User) => void;
+  }> = ({ isLarge }) => (
+    <InstanceAddUserButton
+      isLarge={isLarge}
+      resourceId={resourceId}
+      instanceUrn={instanceUrn}
+      onComplete={(draft) => {
+        console.log('Add instance user draft:', draft);
+      }}
+    />
+  );
+
   return (
     <>
       {resource && (
@@ -213,7 +207,7 @@ export const InstanceDetailPageContent = () => {
           {isInstanceAdmin && (
             <UserSearch
               includeSelfAsChild={false}
-              AddUserButton={AddUserPlaceholder}
+              AddUserButton={AddInstanceUserButton}
               users={users}
               indirectUsers={indirectUsers}
               isLoading={

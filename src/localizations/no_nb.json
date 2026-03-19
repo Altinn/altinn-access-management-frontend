@@ -937,7 +937,11 @@
     "back_to_inbox": "Gå til innboks",
     "description": "Her kan du dele en melding/skjema fra innboksen eller få en oversikt over hvem som allerede har tilgang. Bruk søkefeltet til å søke etter personer/virksomheter eller legg dem til som ny bruker.",
     "no_users": "Ingen brukere har tilgang.",
-    "no_access_description": "<b>Du har ikke fullmakt til å gi videre denne tjenesten/meldingen.</b> For å kunne dele og gi tilgang fra innboksen må du ha tilgangspakken: Tilgangsstyrer for enkeltmeldinger, skjema og dialoger."
+    "no_access_description": "<b>Du har ikke fullmakt til å gi videre denne tjenesten/meldingen.</b> For å kunne dele og gi tilgang fra innboksen må du ha tilgangspakken: Tilgangsstyrer for enkeltmeldinger, skjema og dialoger.",
+    "add_user_modal": {
+      "user_will_receive": "Brukeren vil få:",
+      "no_rights_available": "Ingen handlinger tilgjengelig"
+    }
   },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt."

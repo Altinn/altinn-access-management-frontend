@@ -1,0 +1,66 @@
+.largeButton {
+  width: 100%;
+}
+
+.modal {
+  width: min(100%, 42rem);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-4);
+}
+
+.heading {
+  margin-bottom: var(--ds-spacing-1);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-3);
+}
+
+.textField {
+  max-width: 22rem;
+}
+
+.rightsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+}
+
+.rightExpandableContent {
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-3);
+}
+
+.rightChips {
+  display: flex;
+  gap: var(--ds-spacing-2);
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.buttonRow {
+  display: flex;
+  gap: var(--ds-spacing-2);
+}
+
+@media (max-width: 600px) {
+  .modal {
+    width: calc(100% - var(--ds-spacing-4));
+  }
+
+  .textField {
+    max-width: none;
+  }
+}
