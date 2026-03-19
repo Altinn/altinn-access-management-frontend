@@ -14,8 +14,6 @@ import { usePartyRepresentation } from '../../../PartyRepresentationContext/Part
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
-import classes from '../ResourceInfo.module.css';
-import { useRightChips } from './useRightChips';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useHasResourceCheck } from './useHasResourceCheck';
@@ -261,23 +259,13 @@ export const useRightsSection = ({
     }
   };
 
-  const sendRequest = () => {
-    createRequest(resource);
-  };
-
-  const deleteSentRequest = () => {
-    deleteRequest(resource);
-  };
-
-  const { chips } = useRightChips(rights, setRights, classes.chip);
-
   return {
-    chips,
+    rights,
+    setRights,
     saveEditedRights,
     delegateChosenRights,
     revokeResource,
     undelegableActions,
-    rights,
     hasUnsavedChanges,
     hasAccess,
     isDelegationCheckLoading,
@@ -289,9 +277,9 @@ export const useRightsSection = ({
     isActionSuccess,
     isLoading,
     rightsMetaTechnicalErrorDetails,
-    isPendingRequest: hasPendingRequest(resource.identifier),
-    isLoadingRequest: isLoadingRequest(resource.identifier),
-    sendRequest,
-    deleteSentRequest,
+    hasPendingRequest,
+    isLoadingRequest,
+    createRequest,
+    deleteRequest,
   };
 };

@@ -480,6 +480,7 @@
       "access_to_all": "Access to the full service",
       "partial_access": "Access to {{count}} of {{total}} actions",
       "action_description": "These are the technical actions that the service offers. You can grant power of attorney to the entire service or choose specific actions.",
+      "request_action_description": "These are the technical actions that the service offers. You can only request power of attorney for the entire service.",
       "cannot_give_header": "You cannot grant access to:"
     },
     "specific_rights": {
