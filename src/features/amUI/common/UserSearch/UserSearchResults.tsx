@@ -20,6 +20,7 @@ export interface UserSearchResultsProps {
   availableAction: DelegationAction;
   onRevoke?: (user: UserActionTarget) => void;
   onDelegate?: (user: UserActionTarget) => void;
+  onSelect?: (user: UserActionTarget) => void;
   isActionLoading?: boolean;
   includeSelfAsChild?: boolean;
   delegateLabel?: string;
@@ -34,6 +35,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
   availableAction,
   onRevoke,
   onDelegate,
+  onSelect,
   isActionLoading = false,
   includeSelfAsChild = true,
   delegateLabel,
@@ -56,6 +58,11 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             titleAs={titleAs}
             interactive={isInteractive}
             linkTo={getUserLink ? getUserLink(user) : undefined}
+            onSelect={
+              onSelect
+                ? () => onSelect({ id: user.id, name: user.name, type: user.type })
+                : undefined
+            }
             roleDirection='toUser'
             disableLinks={!isInteractive}
             controls={(user) => (

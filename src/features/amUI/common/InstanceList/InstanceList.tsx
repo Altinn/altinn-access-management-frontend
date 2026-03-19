@@ -17,6 +17,7 @@ interface InstanceListProps {
   instances: InstanceDelegation[];
   isLoading?: boolean;
   getItemAs?: (item: InstanceDelegation) => ElementType | undefined;
+  onSelect?: (instance: InstanceDelegation) => void;
 }
 
 const toInstanceListItem = (
@@ -46,7 +47,12 @@ const toInstanceListItem = (
   };
 };
 
-export const InstanceList = ({ instances, isLoading = false, getItemAs }: InstanceListProps) => {
+export const InstanceList = ({
+  instances,
+  isLoading = false,
+  getItemAs,
+  onSelect,
+}: InstanceListProps) => {
   const { t } = useTranslation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
   const hasSearch = debouncedSearchString.trim().length > 0;
@@ -87,8 +93,9 @@ export const InstanceList = ({ instances, isLoading = false, getItemAs }: Instan
               <DialogListItem
                 key={item.id}
                 size='md'
-                as={Component}
-                interactive={Boolean(Component)}
+                as={Component ?? (onSelect ? 'button' : undefined)}
+                interactive={Boolean(Component) || Boolean(onSelect)}
+                onClick={onSelect ? () => onSelect(instanceDelegation) : undefined}
                 {...item}
               />
             );

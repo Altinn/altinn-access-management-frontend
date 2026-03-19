@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
@@ -25,6 +25,9 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 import { CheckmarkIcon, PlusIcon } from '@navikt/aksel-icons';
+import { InstanceEditModal } from '../common/DelegationModal/Instance/InstanceEditModal';
+import { DelegationAction } from '../common/DelegationModal/EditModal';
+import type { UserActionTarget } from '../common/UserSearch/types';
 
 import classes from './InstanceDetailPageContent.module.css';
 
@@ -53,6 +56,14 @@ export const InstanceDetailPageContent = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const { actingParty, fromParty } = usePartyRepresentation();
+
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
+
+  const handleUserSelect = (user: UserActionTarget) => {
+    setSelectedUser(user);
+    modalRef.current?.showModal();
+  };
 
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const instanceUrn = searchParams.get('instanceUrn') ?? '';
@@ -222,9 +233,21 @@ export const InstanceDetailPageContent = () => {
               isActionLoading={isFetchingIndirectConnections}
               canDelegate
               noUsersText={t('instance_detail_page.no_users')}
+              onSelect={handleUserSelect}
             />
           )}
         </div>
+      )}
+      {resource && (
+        <InstanceEditModal
+          ref={modalRef}
+          resource={resource}
+          instanceUrn={instanceUrn}
+          toPartyUuid={selectedUser?.id}
+          toPartyName={selectedUser?.name}
+          onClose={() => setSelectedUser(null)}
+          availableActions={[DelegationAction.REVOKE, DelegationAction.DELEGATE]}
+        />
       )}
     </>
   );

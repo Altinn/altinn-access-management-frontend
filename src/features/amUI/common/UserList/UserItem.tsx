@@ -29,6 +29,7 @@ interface UserItemProps extends Pick<
   disableLinks?: boolean;
   includeSelfAsChild?: boolean;
   linkTo?: string;
+  onSelect?: () => void;
   controls?: (user: ExtendedUser | User) => ReactNode;
 }
 
@@ -58,6 +59,7 @@ export const UserItem = ({
   disableLinks = false,
   includeSelfAsChild = true,
   linkTo,
+  onSelect,
   shadow,
   controls,
   ...props
@@ -167,18 +169,19 @@ export const UserItem = ({
       linkIcon={!hasInheritingUsers && !disableLinks}
       onClick={() => {
         if (hasInheritingUsers) setExpanded(!isExpanded);
+        else if (onSelect) onSelect();
       }}
       as={
-        hasInheritingUsers
+        hasInheritingUsers || onSelect
           ? 'button'
-          : !interactive
-            ? 'div'
-            : (props) => (
+          : interactive
+            ? (props) => (
                 <Link
                   {...props}
                   to={linkTo ?? user.id}
                 />
               )
+            : 'div'
       }
       controls={!hasInheritingUsers && controls && controls(user)}
       titleAs={titleAs}

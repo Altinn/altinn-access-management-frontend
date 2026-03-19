@@ -42,8 +42,9 @@ type RightsSectionProps = {
   rightsMetaTechnicalErrorDetails: { status: string; time: string } | null;
   hasRequestedSingleRight?: boolean;
   isLoadingRequest?: boolean;
-  sendRequest: () => void;
-  deleteRequest: () => void;
+  sendRequest?: () => void;
+  deleteRequest?: () => void;
+  toPartyName?: string;
 };
 
 export const RightsSection = ({
@@ -67,6 +68,7 @@ export const RightsSection = ({
   isLoadingRequest,
   sendRequest,
   deleteRequest,
+  toPartyName: toPartyNameProp,
 }: RightsSectionProps) => {
   const [rightsExpanded, setRightsExpanded] = useState(false);
   const isSmall = useIsMobileOrSmaller();
@@ -74,10 +76,13 @@ export const RightsSection = ({
   const { t } = useTranslation();
   const { toParty } = usePartyRepresentation();
 
-  const toName = formatDisplayName({
-    fullName: toParty?.name ?? '',
-    type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-  });
+  const toName =
+    toPartyNameProp ??
+    formatDisplayName({
+      fullName: toParty?.name ?? '',
+      type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+    });
+  const hasToParty = !!toParty || !!toPartyNameProp;
   const displayResourceAlert =
     !!rightsMetaTechnicalErrorDetails ||
     (availableActions?.includes(DelegationAction.DELEGATE) &&
@@ -206,7 +211,7 @@ export const RightsSection = ({
             {hasAccess ? t('common.update_poa') : t('common.give_poa')}
           </Button>
         )}
-        {hasAccess && toParty && (
+        {hasAccess && hasToParty && (
           <Button
             variant={availableActions?.includes(DelegationAction.DELEGATE) ? 'tertiary' : 'primary'}
             className={classes.deleteButton}

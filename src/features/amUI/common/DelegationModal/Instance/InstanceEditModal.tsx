@@ -1,0 +1,63 @@
+import * as React from 'react';
+import { forwardRef, useEffect } from 'react';
+import { DsDialog } from '@altinn/altinn-components';
+
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { DelegationAction } from '../EditModal';
+import { InstanceInfo } from './InstanceInfo';
+
+import classes from '../DelegationModal.module.css';
+
+export interface InstanceEditModalProps {
+  resource?: ServiceResource;
+  instanceUrn?: string;
+  instanceName?: string;
+  toPartyUuid?: string;
+  toPartyName?: string;
+  availableActions?: DelegationAction[];
+  onClose?: () => void;
+}
+
+export const InstanceEditModal = forwardRef<HTMLDialogElement, InstanceEditModalProps>(
+  (
+    { resource, instanceUrn, instanceName, toPartyUuid, toPartyName, availableActions, onClose },
+    ref,
+  ) => {
+    useEffect(() => {
+      const handleClose = () => onClose?.();
+
+      if (ref && 'current' in ref && ref.current) {
+        ref.current.addEventListener('close', handleClose);
+      }
+      return () => {
+        if (ref && 'current' in ref && ref.current) {
+          ref.current.removeEventListener('close', handleClose);
+        }
+      };
+    }, [onClose, ref]);
+
+    return (
+      <DsDialog
+        ref={ref}
+        className={classes.modalDialog}
+        closedby='any'
+        onClose={onClose}
+      >
+        <div className={classes.content}>
+          {resource && instanceUrn && (
+            <InstanceInfo
+              resource={resource}
+              instanceUrn={instanceUrn}
+              instanceName={instanceName}
+              toPartyUuid={toPartyUuid}
+              toPartyName={toPartyName}
+              availableActions={availableActions}
+            />
+          )}
+        </div>
+      </DsDialog>
+    );
+  },
+);
+
+InstanceEditModal.displayName = 'InstanceEditModal';
