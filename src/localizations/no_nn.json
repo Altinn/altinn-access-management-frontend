@@ -516,7 +516,7 @@
       "request_service": "Be om enkeltteneste",
       "delete_request": "Slett førespurnad",
       "pending_request_info": "Ventar på at nokon i <strong>{{partyName}}</strong> skal handtere di førespurnad om fullmakt",
-      "cannot_request_right": "Du kan ikkje be om fullmakt til denne enkelttenesten.",
+      "cannot_request_right": "Du kan ikkje be om fullmakt til denne tenesten.",
       "sent_request_success": "Førespurnad om fullmakt til {{resource}} er sendt",
       "sent_request_error": "Kunne ikkje sende førespurnad om fullmakt til {{resource}}",
       "withdraw_request_success": "Førespurnad om fullmakt til {{resource}} er sletta",
