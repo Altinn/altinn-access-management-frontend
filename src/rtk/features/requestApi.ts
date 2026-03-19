@@ -90,6 +90,27 @@ export const requestApi = createApi({
       }),
       invalidatesTags: [Tags.PendingSentRequests, 'sentRequests'],
     }),
+    confirmRequest: builder.mutation<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `sent/confirm?party=${party}&id=${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['sentRequests'],
+    }),
+    rejectRequest: builder.mutation<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `received/reject?party=${party}&id=${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['receivedRequests'],
+    }),
+    approveRequest: builder.mutation<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `received/approve?party=${party}&id=${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['receivedRequests'],
+    }),
   }),
 });
 
@@ -100,6 +121,9 @@ export const {
   useGetPendingSingleRightRequestsQuery,
   useCreateResourceRequestMutation,
   useWithdrawRequestMutation,
+  useConfirmRequestMutation,
+  useRejectRequestMutation,
+  useApproveRequestMutation,
 } = requestApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = requestApi;
