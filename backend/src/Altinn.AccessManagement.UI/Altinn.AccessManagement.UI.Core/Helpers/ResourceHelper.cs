@@ -68,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                         }
 
                         // Log failures here to avoid silently swallowing exceptions and to include the resource id
-                        Console.Error.WriteLine($"Failed to load resource '{resourceId}': {ex}");
+                        await Console.Error.WriteLineAsync($"Failed to load resource '{resourceId}': {ex}");
                     }
                 }
 
