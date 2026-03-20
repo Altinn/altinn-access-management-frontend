@@ -1,4 +1,4 @@
-import { useMemo, type ComponentType } from 'react';
+import { useMemo } from 'react';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
@@ -20,7 +20,7 @@ import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 import { useGetIsAdminQuery, useGetIsInstanceAdminQuery } from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
-import { AddUserButton as InstanceAddUserButton } from './AddUserModal';
+import { AddUserButton } from './AddUserModal';
 import { CheckmarkIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons';
 
 import classes from './InstanceDetailPageContent.module.css';
@@ -53,7 +53,6 @@ export const InstanceDetailPageContent = () => {
     isLoading: isInstancesLoading,
     isError: isInstancesError,
     error: instancesError,
-    refetch: refetchInstances,
   } = useGetInstancesQuery(
     {
       party: actingParty?.partyUuid || '',
@@ -85,7 +84,6 @@ export const InstanceDetailPageContent = () => {
     data: indirectConnections,
     isLoading: isLoadingIndirectConnections,
     isFetching: isFetchingIndirectConnections,
-    refetch: refetchIndirectConnections,
   } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
@@ -102,16 +100,12 @@ export const InstanceDetailPageContent = () => {
     [indirectConnections],
   );
 
-  const AddInstanceUserButton = useMemo<ComponentType<{ isLarge?: boolean }>>(
-    () =>
-      ({ isLarge }) => (
-        <InstanceAddUserButton
-          isLarge={isLarge}
-          resourceId={resourceId}
-          instanceUrn={instanceUrn}
-        />
-      ),
-    [resourceId, instanceUrn],
+  const InstanceAddUserButton = ({ isLarge }: { isLarge?: boolean }) => (
+    <AddUserButton
+      isLarge={isLarge}
+      resourceId={resourceId}
+      instanceUrn={instanceUrn}
+    />
   );
 
   const {
@@ -210,7 +204,7 @@ export const InstanceDetailPageContent = () => {
           {isInstanceAdmin && (
             <UserSearch
               includeSelfAsChild={false}
-              AddUserButton={AddInstanceUserButton}
+              AddUserButton={InstanceAddUserButton}
               users={users}
               indirectUsers={indirectUsers}
               isLoading={

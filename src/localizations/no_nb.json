@@ -941,6 +941,7 @@
     "no_users": "Ingen brukere har tilgang.",
     "no_access_description": "<b>Du har ikke fullmakt til å gi videre denne tjenesten/meldingen.</b> For å kunne dele og gi tilgang fra innboksen må du ha tilgangspakken: Tilgangsstyrer for enkeltmeldinger, skjema og dialoger.",
     "add_user_modal": {
+      "heading": "Gi fullmakt til ny bruker",
       "user_will_receive": "Brukeren vil få:"
     }
   },

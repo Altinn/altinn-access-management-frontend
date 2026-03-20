@@ -26,14 +26,6 @@ import { getRightsSummaryTitle, useInstanceRights } from './useInstanceRights';
 
 import classes from './AddUserModal.module.css';
 
-export interface AddUserModalDraft {
-  personIdentifier: string;
-  lastName: string;
-  resourceId: string;
-  instanceUrn: string;
-  selectedRights: string[];
-}
-
 interface AddUserButtonProps {
   resourceId: string;
   instanceUrn: string;
@@ -93,11 +85,8 @@ const AddUserModal = ({
 
   const [personIdentifier, setPersonIdentifier] = useState('');
   const [lastName, setLastName] = useState('');
-  const [personIdentifierFormatErrorKey, setPersonIdentifierFormatErrorKey] = useState<
-    string | null
-  >(null);
-
-  const [lastNameFormatError, setLastNameFormatError] = useState('');
+  const [personIdentifierError, setPersonIdentifierError] = useState<string | null>(null);
+  const [lastNameError, setLastNameError] = useState('');
   const [rightsExpanded, setRightsExpanded] = useState(false);
   const [submitErrorDetails, setSubmitErrorDetails] = useState<{
     status: string;
@@ -116,8 +105,8 @@ const AddUserModal = ({
   const resetForm = () => {
     setPersonIdentifier('');
     setLastName('');
-    setPersonIdentifierFormatErrorKey(null);
-    setLastNameFormatError('');
+    setPersonIdentifierError(null);
+    setLastNameError('');
     resetRights();
     setRightsExpanded(false);
     setSubmitErrorDetails(null);
@@ -140,44 +129,32 @@ const AddUserModal = ({
     [rights],
   );
 
-  const personIdentifierErrorKey = getPersonIdentifierErrorKey(personIdentifier);
+  const personIdentifierValidation = getPersonIdentifierErrorKey(personIdentifier);
   const selectedRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
   const isLastNameValid = lastName.trim().length >= 1;
   const isFormValid =
     !!actingParty?.partyUuid &&
     personIdentifier.trim().length > 0 &&
-    personIdentifierErrorKey === null &&
+    personIdentifierValidation === null &&
     isLastNameValid &&
     selectedRights.length > 0 &&
     !isRightsLoading &&
     !rightsErrorDetails;
 
-  const handleComplete = async () => {
-    if (!actingParty?.partyUuid) {
-      return;
-    }
-
-    const draft = {
-      personIdentifier: personIdentifier.trim(),
-      lastName: lastName.trim(),
-      resourceId,
-      instanceUrn,
-      selectedRights,
-    };
-
+  const handleSubmit = async () => {
     setSubmitErrorDetails(null);
 
     try {
       await delegateInstanceRights({
-        party: actingParty.partyUuid,
-        resource: draft.resourceId,
-        instance: draft.instanceUrn,
+        party: actingParty?.partyUuid || '',
+        resource: resourceId,
+        instance: instanceUrn,
         input: {
           to: {
-            personIdentifier: draft.personIdentifier,
-            lastName: draft.lastName,
+            personIdentifier: personIdentifier.trim(),
+            lastName: lastName.trim(),
           },
-          directRightKeys: draft.selectedRights,
+          directRightKeys: selectedRights,
         },
       }).unwrap();
 
@@ -206,7 +183,7 @@ const AddUserModal = ({
           id={headingId}
           className={classes.heading}
         >
-          {t('new_user_modal.trigger_button_large')}
+          {t('instance_detail_page.add_user_modal.heading')}
         </DsHeading>
 
         {submitErrorDetails && (
@@ -227,8 +204,8 @@ const AddUserModal = ({
             data-size='sm'
             value={personIdentifier}
             onChange={(e) => setPersonIdentifier(e.target.value)}
-            onBlur={() => setPersonIdentifierFormatErrorKey(personIdentifierErrorKey)}
-            error={personIdentifierFormatErrorKey ? t(personIdentifierFormatErrorKey) : null}
+            onBlur={() => setPersonIdentifierError(personIdentifierValidation)}
+            error={personIdentifierError ? t(personIdentifierError) : null}
             disabled={isSubmitting}
           />
           <DsTextfield
@@ -238,11 +215,9 @@ const AddUserModal = ({
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             onBlur={() =>
-              setLastNameFormatError(
-                isLastNameValid ? '' : t('new_user_modal.last_name_format_error'),
-              )
+              setLastNameError(isLastNameValid ? '' : t('new_user_modal.last_name_format_error'))
             }
-            error={lastNameFormatError}
+            error={lastNameError}
             disabled={isSubmitting}
           />
         </div>
@@ -309,7 +284,7 @@ const AddUserModal = ({
         <div className={classes.buttonRow}>
           <DsButton
             onClick={() => {
-              void handleComplete();
+              void handleSubmit();
             }}
             disabled={!isFormValid}
             loading={isSubmitting}
