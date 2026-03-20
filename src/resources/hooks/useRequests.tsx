@@ -8,7 +8,7 @@ import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserA
 import { SystemUser } from '@/features/amUI/systemUser/types';
 import { ActiveConsentListItem } from '@/features/amUI/consent/types';
 import {
-  RequestResourceDto,
+  ResourceDto,
   useGetReceivedRequestsQuery,
   useGetSentRequestsQuery,
 } from '@/rtk/features/requestApi';
@@ -122,7 +122,7 @@ const mapSystemUserRequestToRequest = (request: SystemUser): Request => {
 };
 
 const groupAccessRequests = (
-  requests: RequestResourceDto[],
+  requests: ResourceDto[],
   direction: 'sent' | 'received',
 ): Request[] => [
   ...requests
@@ -148,7 +148,7 @@ const groupAccessRequests = (
 ];
 
 const mapAccessRequestToRequest = (
-  request: RequestResourceDto,
+  request: ResourceDto,
   direction: 'sent' | 'received',
   numberOfRequests: number = 1,
 ): Request => {
