@@ -83,7 +83,7 @@ export const PendingRequests = () => {
   );
 };
 
-interface ResourceAlertProps {
+interface PendingRequestsListProps {
   selectedResource: ServiceResource | null;
   setSelectedResource: (resource: ServiceResource | null) => void;
   onClose: () => void;
@@ -92,7 +92,7 @@ const PendingRequestsList = ({
   onClose,
   selectedResource,
   setSelectedResource,
-}: ResourceAlertProps) => {
+}: PendingRequestsListProps) => {
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
   const { fromParty } = usePartyRepresentation();
