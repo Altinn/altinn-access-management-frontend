@@ -24,6 +24,7 @@ export const PendingRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const { t } = useTranslation();
+  const isSmallScreen = useIsTabletOrSmaller();
 
   const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,7 +70,9 @@ export const PendingRequests = () => {
           border='solid'
           interactive
           as='button'
-          badge={<div>{t('delegation_modal.request.view_requests')}</div>}
+          badge={
+            isSmallScreen ? undefined : <div>{t('delegation_modal.request.view_requests')}</div>
+          }
           onClick={() => {
             setIsModalOpen(true);
             modalRef.current?.showModal();
