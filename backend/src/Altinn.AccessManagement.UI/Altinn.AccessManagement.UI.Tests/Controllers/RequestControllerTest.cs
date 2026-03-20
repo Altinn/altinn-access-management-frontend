@@ -52,6 +52,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetSentRequests returns sent requests for party with resource data included
+        ///     Expected: GetSentRequests returns the requests sent by a party with resource data included
+        /// </summary>
+        [Fact]
+        public async Task GetSentRequests_IncludeResources_ReturnsRequestsForParty()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string path = Path.Combine(_expectedDataPath, "Request", "getSentRequestsWithResources.json");
+            IEnumerable<SingleRightRequest> expectedResponse = Util.GetMockData<IEnumerable<SingleRightRequest>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent?party={party}&to={toParty}&includeResources=true");
+            IEnumerable<SingleRightRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<SingleRightRequest>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
         ///     Test case: GetReceivedRequests returns received requests for party
         ///     Expected: GetReceivedRequests returns the requests received by a party
         /// </summary>
@@ -66,6 +88,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received?party={party}&from={fromParty}");
+            IEnumerable<SingleRightRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<SingleRightRequest>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetReceivedRequests returns received requests for party with resource data included
+        ///     Expected: GetReceivedRequests returns the requests received by a party with resource data included
+        /// </summary>
+        [Fact]
+        public async Task GetReceivedRequests_IncludeResources_ReturnsRequestsForParty()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string fromParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string path = Path.Combine(_expectedDataPath, "Request", "getReceivedRequestsWithResources.json");
+            IEnumerable<SingleRightRequest> expectedResponse = Util.GetMockData<IEnumerable<SingleRightRequest>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received?party={party}&from={fromParty}&includeResources=true");
             IEnumerable<SingleRightRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<SingleRightRequest>>();
 
             // Assert
