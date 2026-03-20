@@ -93,11 +93,7 @@ export const InstanceDetailPageContent = () => {
     },
     {
       skip:
-        !isInstanceAdmin ||
-        !actingParty?.partyUuid ||
-        !fromParty?.partyUuid ||
-        !resourceId ||
-        !instanceUrn,
+        !isAdmin || !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
     },
   );
 
@@ -236,7 +232,7 @@ export const InstanceDetailPageContent = () => {
               />
             )}
           </DsParagraph>
-          {isInstanceAdmin && (
+          {isAdmin ? (
             <UserSearch
               includeSelfAsChild={false}
               AddUserButton={InstanceAddUserButton}
@@ -251,7 +247,9 @@ export const InstanceDetailPageContent = () => {
               onSelect={handleUserSelect}
               onRevoke={handleRevoke}
             />
-          )}
+          ) : isInstanceAdmin ? (
+            <InstanceAddUserButton isLarge />
+          ) : null}
         </div>
       )}
       {resource && (

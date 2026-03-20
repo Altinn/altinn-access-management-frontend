@@ -180,7 +180,7 @@ const AddUserModal = ({
         {submitErrorDetails && (
           <DsAlert data-color='danger'>
             {submitErrorDetails.status === '400' ? (
-              <DsParagraph>{t('new_user_modal.not_found_error_person_ssn')}</DsParagraph>
+              <DsParagraph>{t('new_user_modal.not_found_error_person')}</DsParagraph>
             ) : submitErrorDetails.status === '429' ? (
               <DsParagraph>{t('new_user_modal.too_many_requests_error')}</DsParagraph>
             ) : (
