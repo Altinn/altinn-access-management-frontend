@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -359,7 +360,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpClient client = GetTestClient(instanceServiceMock.Object);
             InstanceRightsDelegationDto input = new()
             {
-                To = new PersonInputDto
+                To = new PersonInput
                 {
                     PersonIdentifier = "20838198385",
                     LastName = "Medaljong"

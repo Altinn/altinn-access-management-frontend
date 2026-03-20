@@ -62,11 +62,7 @@ export const InstanceDetailPageContent = () => {
     },
     {
       skip:
-        !isInstanceAdmin ||
-        !actingParty?.partyUuid ||
-        !fromParty?.partyUuid ||
-        !resourceId ||
-        !instanceUrn,
+        !isAdmin || !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
     },
   );
 
@@ -205,7 +201,7 @@ export const InstanceDetailPageContent = () => {
               />
             )}
           </DsParagraph>
-          {isInstanceAdmin && (
+          {isInstanceAdmin ? (
             <UserSearch
               includeSelfAsChild={false}
               AddUserButton={InstanceAddUserButton}
@@ -218,6 +214,8 @@ export const InstanceDetailPageContent = () => {
               canDelegate
               noUsersText={t('instance_detail_page.no_users')}
             />
+          ) : (
+            <InstanceAddUserButton isLarge />
           )}
         </div>
       )}
