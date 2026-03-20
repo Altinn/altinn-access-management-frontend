@@ -4,7 +4,6 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 
 namespace Altinn.AccessManagement.UI.Core.Helpers
@@ -21,17 +20,18 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <param name="resources">List of resources to map to frontend resource objects</param>
         /// <param name="orgs">List resource owner organizations. Used to look up logo for resource owner</param>
         /// <returns>Output result</returns>
-        public static List<ServiceResourceFE> MapToServiceResourcesFE(string languageCode, IEnumerable<ServiceResource> resources, OrgList orgs)
+        public static List<ServiceResourceFE> MapToServiceResourcesFE(string languageCode, IEnumerable<ServiceResource> resources, Dictionary<string, Models.Common.OrgData> orgs)
         {
             return resources.Select(resource => 
             {
-                orgs.Orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out var org);
+                orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out var org);
                 return new ServiceResourceFE(
                     resource.Identifier,
                     resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
                     resourceType: resource.ResourceType,
                     status: resource.Status,
                     resourceReferences: resource.ResourceReferences,
+                    resourceOwnerOrgcode: resource.HasCompetentAuthority?.Orgcode,
                     resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
                     resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
                     rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     contactPoints: resource.ContactPoints,
                     spatial: resource.Spatial,
                     authorizationReference: resource.AuthorizationReference,
-                    resourceOwnerLogoUrl: org?.Logo);
+                    resourceOwnerLogoUrl: string.IsNullOrWhiteSpace(org?.Emblem) ? org?.Logo : org.Emblem);
             }).ToList();
         }
 
