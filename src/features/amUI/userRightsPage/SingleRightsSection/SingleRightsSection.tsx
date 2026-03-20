@@ -128,7 +128,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
           </DsPopover.TriggerContext>
         </div>
         {isError && <div>{t('user_rights_page.error')}</div>}
-        <PendingRequests />
+        {availableActions.includes(DelegationAction.REQUEST) && <PendingRequests />}
         <div className={classes.singleRightsList}>
           <ResourceList
             resources={resources ?? []}

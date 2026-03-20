@@ -124,7 +124,9 @@ const PendingRequestsList = ({
           <ResourceList
             size={isSmallScreen ? 'sm' : 'md'}
             enableSearch={false}
-            resources={(singleRightRequests || []).map((x) => x.resource).filter((r) => !!r)}
+            resources={(singleRightRequests || [])
+              .map((x) => x.resource)
+              .filter((r): r is ServiceResource => !!r)}
             showDetails={false}
             onSelect={(resource) => setSelectedResource(resource)}
             renderControls={(resource) => {

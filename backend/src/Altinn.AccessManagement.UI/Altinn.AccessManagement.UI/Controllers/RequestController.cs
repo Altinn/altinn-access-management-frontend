@@ -51,9 +51,21 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("sent")]
         public async Task<ActionResult> GetSentRequests([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] List<RequestStatus> status, [FromQuery] bool includeResources, CancellationToken cancellationToken)
         {
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
+                var languageCode = string.Empty;
+                if (includeResources)
+                {
+                    try
+                    {
+                        languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext) ?? string.Empty;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to resolve selected language cookie.");
+                    }
+                }
+
                 var returnVal = await _requestService.GetSentRequests(party, to, status, includeResources, languageCode, cancellationToken);
                 return Ok(returnVal);
             }
@@ -84,9 +96,21 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("received")]
         public async Task<ActionResult> GetReceivedRequests([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, [FromQuery] bool includeResources, CancellationToken cancellationToken)
         {
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
+                var languageCode = string.Empty;
+                if (includeResources)
+                {
+                    try
+                    {
+                        languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext) ?? string.Empty;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to resolve selected language cookie.");
+                    }
+                }
+                
                 var returnVal = await _requestService.GetReceivedRequests(party, from, status, includeResources, languageCode, cancellationToken);
                 return Ok(returnVal);
             }

@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Entity } from '@/dataObjects/dtos/Common';
-import { ServiceResource } from './singleRights/singleRightsApi';
+import type { ServiceResource } from './singleRights/singleRightsApi';
 
 export type RequestStatus = 'None' | 'Draft' | 'Pending' | 'Approved' | 'Rejected' | 'Withdrawn';
 
-export interface ResourceDto {
+export interface RequestDto {
   id: string;
   type: string;
   status: RequestStatus;
@@ -36,7 +36,7 @@ export const requestApi = createApi({
   endpoints: (builder) => ({
     // requests page queries
     getSentRequests: builder.query<
-      ResourceDto[],
+      RequestDto[],
       { party: string; to?: string; includeResources?: boolean; status?: RequestStatus[] }
     >({
       query: ({ party, to, includeResources = false, status = [] }) => {
@@ -49,7 +49,7 @@ export const requestApi = createApi({
       providesTags: ['sentRequests'],
     }),
     getReceivedRequests: builder.query<
-      ResourceDto[],
+      RequestDto[],
       { party: string; from?: string; includeResources?: boolean; status?: RequestStatus[] }
     >({
       query: ({ party, from, includeResources = false, status = [] }) => {
@@ -61,14 +61,14 @@ export const requestApi = createApi({
       },
       providesTags: ['receivedRequests'],
     }),
-    getRequest: builder.query<ResourceDto, { party: string; id: string }>({
+    getRequest: builder.query<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => `${id}?party=${party}`,
       providesTags: ['request'],
     }),
 
     // delegation modal queries and mutations
     getPendingSingleRightRequests: builder.query<
-      ResourceDto[],
+      RequestDto[],
       { party: string; to: string; includeResources?: boolean }
     >({
       query: ({ party, to, includeResources = false }) =>
@@ -76,7 +76,7 @@ export const requestApi = createApi({
       providesTags: [Tags.PendingSentRequests],
     }),
     createResourceRequest: builder.mutation<
-      ResourceDto,
+      RequestDto,
       { party: string; to: string; resource: string }
     >({
       query: ({ party, to, resource }) => ({
@@ -85,7 +85,7 @@ export const requestApi = createApi({
       }),
       invalidatesTags: [Tags.PendingSentRequests, 'sentRequests'],
     }),
-    withdrawRequest: builder.mutation<ResourceDto, { party: string; id: string }>({
+    withdrawRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `sent/withdraw?party=${party}&id=${id}`,
         method: 'DELETE',
