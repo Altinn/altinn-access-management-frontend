@@ -360,7 +360,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpClient client = GetTestClient(instanceServiceMock.Object);
             InstanceRightsDelegationDto input = new()
             {
-                To = new PersonInputDto
+                To = new PersonInput
                 {
                     PersonIdentifier = "20838198385",
                     LastName = "Medaljong"

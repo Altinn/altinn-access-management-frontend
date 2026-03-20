@@ -28,28 +28,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
             List<InstancePermission> instancePermissions = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
-
-            var distinctResourceIds = instancePermissions
-                .Select(p => p.Resource?.RefId)
-                .Where(id => !string.IsNullOrEmpty(id))
-                .Distinct()
-                .ToList();
-
-            var resourceLookup = new Dictionary<string, ServiceResourceFE>();
-            foreach (var resourceId in distinctResourceIds)
-            {
-                var resourceFe = await _resourceService.GetResource(resourceId, languageCode);
-                if (resourceFe != null)
-                {
-                    resourceLookup[resourceId] = resourceFe;
-                }
-            }
-
             List<InstanceDelegation> result = new List<InstanceDelegation>();
+
             foreach (var instancePermission in instancePermissions)
             {
                 string resourceId = instancePermission.Resource?.RefId;
-                if (!string.IsNullOrEmpty(resourceId) && resourceLookup.TryGetValue(resourceId, out var resourceFe))
+
+                if (string.IsNullOrEmpty(resourceId))
+                {
+                    continue;
+                }
+
+                ServiceResourceFE resourceFe = await _resourceService.GetResource(resourceId, languageCode);
+
+                if (resourceFe != null)
                 {
                     result.Add(new InstanceDelegation(resourceFe, instancePermission.Instance, instancePermission.Permissions));
                 }

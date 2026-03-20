@@ -110,7 +110,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/connections/resources/instances/rights?party={party}{(to.HasValue ? $"&to={to.Value}" : string.Empty)}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+                string endpointUrl = $"enduser/connections/resources/instances/rights?party={party}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 string requestBody = JsonSerializer.Serialize(input);
