@@ -185,12 +185,18 @@ const AddUserModal = ({
 
         {submitErrorDetails && (
           <DsAlert data-color='danger'>
-            <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-            <TechnicalErrorParagraphs
-              status={submitErrorDetails.status}
-              time={submitErrorDetails.time}
-              traceId={submitErrorDetails.traceId}
-            />
+            {submitErrorDetails.status === '429' ? (
+              <DsParagraph>{t('new_user_modal.too_many_requests_error')}</DsParagraph>
+            ) : (
+              <>
+                <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+                <TechnicalErrorParagraphs
+                  status={submitErrorDetails.status}
+                  time={submitErrorDetails.time}
+                  traceId={submitErrorDetails.traceId}
+                />
+              </>
+            )}
           </DsAlert>
         )}
 
