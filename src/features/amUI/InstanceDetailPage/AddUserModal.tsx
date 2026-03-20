@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import {
   DsAlert,
   DsButton,
@@ -124,10 +124,7 @@ const AddUserModal = ({
     }
   }, [submitError]);
 
-  const undelegableActions = useMemo(
-    () => rights.filter((r) => !r.delegable).map((r) => r.rightName),
-    [rights],
-  );
+  const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
 
   const personIdentifierValidation = getPersonIdentifierErrorKey(personIdentifier);
   const selectedRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
@@ -204,8 +201,12 @@ const AddUserModal = ({
             data-size='sm'
             value={personIdentifier}
             onChange={(e) => setPersonIdentifier(e.target.value)}
-            onBlur={() => setPersonIdentifierError(personIdentifierValidation)}
-            error={personIdentifierError ? t(personIdentifierError) : null}
+            onBlur={() =>
+              setPersonIdentifierError(
+                personIdentifierValidation ? t(personIdentifierValidation) : null,
+              )
+            }
+            error={personIdentifierError}
             disabled={isSubmitting}
           />
           <DsTextfield
@@ -244,7 +245,7 @@ const AddUserModal = ({
             <ListItem
               loading={isRightsLoading}
               icon={CheckmarkCircleIcon}
-              collapsible={true}
+              collapsible
               size='md'
               title={getRightsSummaryTitle(rights, t)}
               onClick={() => setRightsExpanded(!rightsExpanded)}
