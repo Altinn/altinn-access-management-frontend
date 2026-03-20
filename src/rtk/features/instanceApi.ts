@@ -90,7 +90,6 @@ export const instanceApi = createApi({
         url: `instances/delegation/instances/rights?party=${party}${to ? `&to=${to}` : ''}&resource=${encodeURIComponent(resource)}&instance=${encodeURIComponent(instance)}`,
         method: 'POST',
         body: JSON.stringify(input),
-        responseHandler: 'text',
       }),
       transformResponse: () => undefined,
       invalidatesTags: ['instances', 'instanceRights', 'instanceDelegationCheck'],
