@@ -1,5 +1,4 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -12,48 +11,43 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class InstanceService : IInstanceService
     {
         private readonly IInstanceClient _instanceClient;
+        private readonly IResourceService _resourceService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceService"/> class.
         /// </summary>
         /// <param name="instanceClient">Client for instance delegation data.</param>
-        public InstanceService(IInstanceClient instanceClient)
+        /// <param name="resourceService">Service for resource data.</param>
+        public InstanceService(IInstanceClient instanceClient, IResourceService resourceService)
         {
             _instanceClient = instanceClient;
+            _resourceService = resourceService;
         }
 
         /// <inheritdoc />
         public async Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
-            return (await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance))
-                .Where(instancePermission => !string.IsNullOrEmpty(instancePermission.Resource?.RefId))
-                .Select(instancePermission =>
+            List<InstancePermission> instancePermissions = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
+            List<InstanceDelegation> result = new List<InstanceDelegation>();
+
+            foreach (var instancePermission in instancePermissions)
+            {
+                string resourceId = instancePermission.Resource?.RefId;
+
+                if (string.IsNullOrEmpty(resourceId))
                 {
-                    var instanceResource = instancePermission.Resource;
+                    continue;
+                }
 
-                    ResourceType resourceType = Enum.TryParse(instanceResource.Type?.Name, true, out ResourceType parsedResourceType)
-                        ? parsedResourceType
-                        : ResourceType.Default;
+                ServiceResourceFE resourceFe = await _resourceService.GetResource(resourceId, languageCode);
 
-                    ServiceResourceFE resourceFe = new(
-                        instanceResource.RefId,
-                        instanceResource.Name,
-                        instanceResource.Description,
-                        rightDescription: null,
-                        status: null,
-                        resourceOwnerName: instanceResource.Provider?.Name,
-                        resourceOwnerOrgNumber: instanceResource.Provider?.RefId,
-                        resourceReferences: null,
-                        resourceType: resourceType,
-                        contactPoints: null,
-                        spatial: null,
-                        authorizationReference: null,
-                        resourceOwnerLogoUrl: instanceResource.Provider?.LogoUrl,
-                        resourceOwnerOrgcode: instanceResource.Provider?.Code);
+                if (resourceFe != null)
+                {
+                    result.Add(new InstanceDelegation(resourceFe, instancePermission.Instance, instancePermission.Permissions));
+                }
+            }
 
-                    return new InstanceDelegation(resourceFe, instancePermission.Instance, instancePermission.Permissions);
-                })
-                .ToList();
+            return result;
         }
 
         /// <inheritdoc />
@@ -75,9 +69,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> Delegate(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
+        public async Task<HttpResponseMessage> Delegate(Guid party, Guid? to, string resource, string instance, InstanceRightsDelegationDto input)
         {
-            return await _instanceClient.CreateInstanceRightsAccess(party, to, resource, instance, actionKeys);
+            return await _instanceClient.CreateInstanceRightsAccess(party, to, resource, instance, input);
         }
 
         /// <inheritdoc />

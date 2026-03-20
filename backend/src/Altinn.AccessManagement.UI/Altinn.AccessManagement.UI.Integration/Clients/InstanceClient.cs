@@ -106,19 +106,25 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> CreateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
+        public async Task<HttpResponseMessage> CreateInstanceRightsAccess(Guid party, Guid? to, string resource, string instance, InstanceRightsDelegationDto input)
         {
             try
             {
-                string endpointUrl =
-                    $"enduser/connections/resources/instances/rights?party={party}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+                string endpointUrl = $"enduser/connections/resources/instances/rights?party={party}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var rightKeys = new { directRightKeys = actionKeys };
-                string requestBody = JsonSerializer.Serialize(rightKeys);
+                string requestBody = JsonSerializer.Serialize(input);
                 StringContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
-                return await _client.PostAsync(token, endpointUrl, content);
+                var response = await _client.PostAsync(token, endpointUrl, content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError($"Unexpected http response. Status code: {response.StatusCode}, Reason: {response.ReasonPhrase}");
+                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, response.ReasonPhrase);
+                }
+
+                return response;
             }
             catch (Exception ex)
             {

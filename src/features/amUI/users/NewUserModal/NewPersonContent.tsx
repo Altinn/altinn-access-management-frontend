@@ -4,13 +4,10 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-import { displayPrivDelegation, enableAddUserByUsername } from '@/resources/utils/featureFlagUtils';
+import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
+import { getPersonIdentifierErrorKey } from '../../common/personIdentifierUtils';
 
 export type personInput = { personIdentifier: string; lastName: string };
-
-const isValidSsnFormat = (personIdentifier: string) => /^\d{11}$/.test(personIdentifier);
-const isDigitsOnly = (personIdentifier: string) => /^\d+$/.test(personIdentifier);
-const containsWhitespace = (personIdentifier: string) => /\s/.test(personIdentifier);
 
 export type NewPersonContentProps = {
   errorDetails?: { status: string; time: string } | null;
@@ -27,34 +24,6 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
   >(null);
   const [lastNameFormatError, setLastNameFormatError] = useState<string>('');
   const shouldDisplayPrivDelegation = displayPrivDelegation();
-  const allowUsername = enableAddUserByUsername();
-
-  const getPersonIdentifierErrorKey = (identifier: string) => {
-    const trimmedIdentifier = identifier.trim();
-    if (!trimmedIdentifier.length) {
-      return null;
-    }
-
-    if (!allowUsername) {
-      return !isValidSsnFormat(trimmedIdentifier)
-        ? 'new_user_modal.person_identifier_ssn_format_error'
-        : null;
-    }
-
-    if (containsWhitespace(trimmedIdentifier)) {
-      return 'new_user_modal.person_identifier_whitespace_forbidden_error';
-    }
-
-    if (isDigitsOnly(trimmedIdentifier) && !isValidSsnFormat(trimmedIdentifier)) {
-      return 'new_user_modal.person_identifier_ssn_format_error';
-    }
-
-    if (!isDigitsOnly(trimmedIdentifier) && trimmedIdentifier.length < 6) {
-      return 'new_user_modal.person_identifier_username_format_error';
-    }
-
-    return null;
-  };
 
   const navigateIfValidPerson = () => {
     const personInput = {
@@ -80,7 +49,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
       )}
       <DsTextfield
         className={classes.textField}
-        label={allowUsername ? t('new_user_modal.person_identifier') : t('common.ssn')}
+        label={t('new_user_modal.person_identifier')}
         data-size='sm'
         value={personIdentifier}
         onChange={(e) => setPersonIdentifier(e.target.value)}

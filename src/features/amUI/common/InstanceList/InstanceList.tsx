@@ -28,21 +28,20 @@ const toInstanceListItem = (
   const providerLogoUrl = resource.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
-  const dialogItemId = `${resource.identifier}-${instance.urn}`;
-  const shortId = instance.urn.slice(-10);
+  const dialogItemId = `${resource.identifier}-${instance.refId}`;
+  const shortId = instance.refId.slice(-10);
 
   return {
     id: dialogItemId,
-    title: resource.title,
-    description: `${instance.urn} ${resource.title}`,
+    title: resource.title ?? resource.identifier,
+    description: `${instance.refId} ${resource.title}`,
     sender: {
-      name: resource.resourceOwnerName,
+      name: resource.resourceOwnerName ?? '',
       type: 'company',
-      imageUrl: providerLogoUrl ?? resource.resourceOwnerLogoUrl,
-      imageUrlAlt: resource.resourceOwnerName,
-      colorKey: resource.resourceOwnerOrgcode,
+      imageUrl: providerLogoUrl ?? resource.resourceOwnerLogoUrl ?? undefined,
+      imageUrlAlt: resource.resourceOwnerName ?? '',
     },
-    updatedAt: instance.urn,
+    updatedAt: instance.refId,
     updatedAtLabel: shortId,
   };
 };

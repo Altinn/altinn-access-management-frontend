@@ -92,11 +92,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool AddAllSystemuserCustomers { get; set; }
 
         /// <summary>
-        /// Whether to enable adding users by username
-        /// </summary>
-        public bool EnableAddUserByUsername { get; set; }
-
-        /// <summary>
         /// Whether to enable adding own organization to agent system user is enabled
         /// </summary>
         public bool EnableAddSelfToSystemuser { get; set; }

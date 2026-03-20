@@ -20,7 +20,6 @@ declare global {
       displaySubConnections: boolean;
       displayRoles: boolean;
       addAllSystemuserCustomers: boolean;
-      enableAddUserByUsername: boolean;
       enableAddSelfToSystemuser: boolean;
       enableRequestAccess: boolean;
     };
