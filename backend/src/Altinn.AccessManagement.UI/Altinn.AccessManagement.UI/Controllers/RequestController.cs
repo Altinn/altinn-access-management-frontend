@@ -20,20 +20,17 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly ILogger<RequestController> _logger;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly IRequestService _requestService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="RequestController" /> class
         /// </summary>
         public RequestController(
             IRequestService requestService,
-            ILogger<RequestController> logger,
-            IHttpContextAccessor httpContextAccessor)
+            ILogger<RequestController> logger)
         {
             _requestService = requestService;
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
             _logger = logger;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
