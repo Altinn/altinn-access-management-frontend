@@ -36,6 +36,7 @@ export const useSingleRightRequests = ({
   const {
     data: singleRightRequests,
     isFetching: isRefetching,
+    isLoading: isLoadingRequests,
     isError: isLoadError,
   } = useGetPendingSingleRightRequestsQuery(
     {
@@ -148,5 +149,6 @@ export const useSingleRightRequests = ({
     hasPendingRequest: (resourceId: string) => !!getRequestId(resourceId),
     isLoadingRequest,
     singleRightRequests,
+    isLoadingRequests,
   };
 };
