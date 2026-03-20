@@ -49,7 +49,7 @@ export const PendingRequests = () => {
           <Snackbar />
         </SnackbarProvider>
       </DsDialog>
-      {singleRightRequests?.length && (
+      {singleRightRequests?.length > 0 && (
         <ListItem
           title={t('delegation_modal.request.sent_requests_item')}
           description={`${singleRightRequests.length} ${
