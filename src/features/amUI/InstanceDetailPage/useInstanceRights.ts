@@ -15,9 +15,6 @@ export const getRightsSummaryTitle = (
   t: ReturnType<typeof useTranslation>['t'],
 ): string => {
   const checkedCount = rights.filter((r) => r.checked).length;
-  if (rights.length === 0) {
-    return t('delegation_modal.actions.partial_access', { count: 0, total: 0 });
-  }
   if (checkedCount === rights.length) {
     return t('delegation_modal.actions.access_to_all');
   }

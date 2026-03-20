@@ -59,6 +59,10 @@ export const InstanceDetailPageContent = () => {
       instance: instanceUrn,
     })
       .unwrap()
+      .then(() => {
+        setSelectedUser(null);
+        setRevokeError(null);
+      })
       .catch(() => {
         setRevokeError('revoke');
         setSelectedUser(user);

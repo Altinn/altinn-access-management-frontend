@@ -146,7 +146,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string requestBody = JsonSerializer.Serialize(rightKeys);
                 StringContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
-                return await _client.PutAsync(token, endpointUrl, content);
+                var response = await _client.PutAsync(token, endpointUrl, content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("InstanceClient // UpdateInstanceRightsAccess // Unexpected status {StatusCode} for party={Party}, to={To}, resource={Resource}, instance={Instance}", (int)response.StatusCode, party, to, resource, instance);
+                }
+
+                return response;
             }
             catch (Exception ex)
             {

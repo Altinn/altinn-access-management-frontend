@@ -18,6 +18,7 @@ interface InstanceListProps {
   isLoading?: boolean;
   getItemAs?: (item: InstanceDelegation) => ElementType | undefined;
   onSelect?: (instance: InstanceDelegation) => void;
+  interactive?: boolean;
 }
 
 const toInstanceListItem = (
@@ -51,6 +52,7 @@ export const InstanceList = ({
   isLoading = false,
   getItemAs,
   onSelect,
+  interactive,
 }: InstanceListProps) => {
   const { t } = useTranslation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
@@ -93,7 +95,7 @@ export const InstanceList = ({
                 key={item.id}
                 size='md'
                 as={Component ?? (onSelect ? 'button' : undefined)}
-                interactive={Boolean(Component) || Boolean(onSelect)}
+                interactive={interactive || !!onSelect}
                 onClick={onSelect ? () => onSelect(instanceDelegation) : undefined}
                 {...item}
               />
