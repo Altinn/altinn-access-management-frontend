@@ -30,40 +30,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<SingleRightRequest>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, bool includeResources, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, cancellationToken);
-
-            List<ServiceResourceFE> resources = [];
-            if (includeResources)
-            {
-                resources = await _resourceHelper.EnrichResources(response.Items.Select(x => x.Resource.ReferenceId), languageCode);
-            }
-            
-            return response.Items.Select(x => 
-            {
-                SingleRightRequest request = MapToSingleRightRequest(x);
-                ServiceResourceFE resource = resources.FirstOrDefault(r => r.Identifier == x.Resource.ReferenceId);
-                request.Resource = resource;
-                return request;
-            });
+            return await MapRequestList(response, includeResources, languageCode);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<SingleRightRequest>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, bool includeResources, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, cancellationToken);
-
-            List<ServiceResourceFE> resources = [];
-            if (includeResources)
-            {
-                resources = await _resourceHelper.EnrichResources(response.Items.Select(x => x.Resource.ReferenceId), languageCode);
-            }
-
-            return response.Items.Select(x =>
-            {
-                SingleRightRequest request = MapToSingleRightRequest(x);
-                ServiceResourceFE resource = resources.FirstOrDefault(r => r.Identifier == x.Resource.ReferenceId);
-                request.Resource = resource;
-                return request;
-            });
+            return await MapRequestList(response, includeResources, languageCode);
         }
 
         /// <inheritdoc />
@@ -85,6 +59,30 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             RequestResourceDto response = await _requestClient.WithdrawRequest(party, id, cancellationToken);
             return MapToSingleRightRequest(response);
+        }
+
+        private async Task<IEnumerable<SingleRightRequest>> MapRequestList(PaginatedResult<RequestResourceDto> list, bool includeResources, string languageCode)
+        {
+            Dictionary<string, ServiceResourceFE> resourceDictionary = [];
+            if (includeResources)
+            {
+                var uniqueResourceIds = list.Items
+                    .Select(x => x.Resource.ReferenceId)
+                    .Distinct();
+                var resources = await _resourceHelper.EnrichResources(uniqueResourceIds, languageCode);
+                resourceDictionary = resources.ToDictionary(r => r.Identifier);
+            }
+            
+            return list.Items.Select(x => 
+            {
+                SingleRightRequest request = MapToSingleRightRequest(x);
+                if (resourceDictionary.TryGetValue(x.Resource.ReferenceId, out var resource))
+                {
+                    request.Resource = resource;
+                }
+                
+                return request;
+            });
         }
 
         private static SingleRightRequest MapToSingleRightRequest(RequestResourceDto x)
