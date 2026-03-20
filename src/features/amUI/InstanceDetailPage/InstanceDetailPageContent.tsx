@@ -18,36 +18,12 @@ import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
-import {
-  type User,
-  useGetIsAdminQuery,
-  useGetIsInstanceAdminQuery,
-} from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetIsInstanceAdminQuery } from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
-import { CheckmarkIcon, EnvelopeClosedIcon, PlusIcon } from '@navikt/aksel-icons';
+import { AddUserButton } from './AddUserModal';
+import { CheckmarkIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons';
 
 import classes from './InstanceDetailPageContent.module.css';
-
-// Placeholder component for the "Add user" button in the UserSearch component.
-// This is used to disable the button while still enabling the layout since the functionality is not implemented yet.
-const AddUserPlaceholder = ({
-  isLarge,
-}: {
-  isLarge?: boolean;
-  onComplete?: (user: User) => void;
-}) => {
-  const { t } = useTranslation();
-
-  return (
-    <DsButton
-      disabled
-      variant={isLarge ? 'primary' : 'secondary'}
-    >
-      <PlusIcon aria-hidden={true} />
-      {isLarge ? t('new_user_modal.trigger_button_large') : t('new_user_modal.trigger_button')}
-    </DsButton>
-  );
-};
 
 export const InstanceDetailPageContent = () => {
   const { t } = useTranslation();
@@ -56,7 +32,7 @@ export const InstanceDetailPageContent = () => {
 
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const instanceUrn = searchParams.get('instanceUrn') ?? '';
-  const resourceId = searchParams.get('resourceId') ?? searchParams.get('resourceID') ?? '';
+  const resourceId = searchParams.get('resourceId') ?? '';
   const dialogId = searchParams.get('dialogId');
 
   const {
@@ -86,11 +62,7 @@ export const InstanceDetailPageContent = () => {
     },
     {
       skip:
-        !isInstanceAdmin ||
-        !actingParty?.partyUuid ||
-        !fromParty?.partyUuid ||
-        !resourceId ||
-        !instanceUrn,
+        !isAdmin || !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
     },
   );
 
@@ -122,6 +94,18 @@ export const InstanceDetailPageContent = () => {
   const indirectUsers = useMemo(
     () => mapConnectionsToUserSearchNodes(indirectConnections),
     [indirectConnections],
+  );
+
+  const InstanceAddUserButton = useMemo(
+    () =>
+      ({ isLarge }: { isLarge?: boolean }) => (
+        <AddUserButton
+          isLarge={isLarge}
+          resourceId={resourceId}
+          instanceUrn={instanceUrn}
+        />
+      ),
+    [resourceId, instanceUrn],
   );
 
   const {
@@ -217,10 +201,10 @@ export const InstanceDetailPageContent = () => {
               />
             )}
           </DsParagraph>
-          {isInstanceAdmin && (
+          {isAdmin ? (
             <UserSearch
               includeSelfAsChild={false}
-              AddUserButton={AddUserPlaceholder}
+              AddUserButton={InstanceAddUserButton}
               users={users}
               indirectUsers={indirectUsers}
               isLoading={
@@ -230,7 +214,9 @@ export const InstanceDetailPageContent = () => {
               canDelegate
               noUsersText={t('instance_detail_page.no_users')}
             />
-          )}
+          ) : isInstanceAdmin ? (
+            <InstanceAddUserButton isLarge />
+          ) : null}
         </div>
       )}
     </>

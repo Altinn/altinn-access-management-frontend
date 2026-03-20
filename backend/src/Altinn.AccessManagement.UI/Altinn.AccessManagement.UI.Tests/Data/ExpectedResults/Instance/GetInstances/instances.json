@@ -22,8 +22,7 @@
       "keywords": []
     },
     "instance": {
-      "id": "df333e75-5896-4254-a69f-146736eaf668",
-      "urn": "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668",
+      "refId": "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668",
       "type": {
         "id": "eb7cd8eb-eee4-43cf-814b-f54e143cd954",
         "name": "BrukerstyrtAppInstansDelegering"
@@ -80,8 +79,7 @@
       "keywords": []
     },
     "instance": {
-      "id": "c1d2e3f4-1111-2222-3333-444455556666",
-      "urn": "urn:altinn:instance-id:51599233/c1d2e3f4-1111-2222-3333-444455556666",
+      "refId": "urn:altinn:instance-id:51599233/c1d2e3f4-1111-2222-3333-444455556666",
       "type": {
         "id": "eb7cd8eb-eee4-43cf-814b-f54e143cd954",
         "name": "BrukerstyrtAppInstansDelegering"
@@ -142,8 +140,7 @@
       "keywords": []
     },
     "instance": {
-      "id": "6f4a3c12-8fd1-4a8b-8dc6-777777777777",
-      "urn": "urn:altinn:instance-id:51599233/6f4a3c12-8fd1-4a8b-8dc6-777777777777",
+      "refId": "urn:altinn:instance-id:51599233/6f4a3c12-8fd1-4a8b-8dc6-777777777777",
       "type": {
         "id": "eb7cd8eb-eee4-43cf-814b-f54e143cd954",
         "name": "BrukerstyrtAppInstansDelegering"
@@ -200,8 +197,7 @@
       "keywords": []
     },
     "instance": {
-      "id": "b42df1f3-56f2-436a-bad7-222222222222",
-      "urn": "urn:altinn:instance-id:51599233/b42df1f3-56f2-436a-bad7-222222222222",
+      "refId": "urn:altinn:instance-id:51599233/b42df1f3-56f2-436a-bad7-222222222222",
       "type": {
         "id": "eb7cd8eb-eee4-43cf-814b-f54e143cd954",
         "name": "BrukerstyrtAppInstansDelegering"
