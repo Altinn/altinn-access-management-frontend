@@ -142,7 +142,7 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     });
   });
 
-  test('Slett tilgangspakke hos virksomhet', async ({ page, accessManagementFrontPage }) => {
+  test('Slett enkelttjeneste hos virksomhet', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
     await test.step('sett opp testdata', async () => {
