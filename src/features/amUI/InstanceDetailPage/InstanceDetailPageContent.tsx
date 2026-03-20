@@ -15,7 +15,7 @@ import {
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
+import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 import { useGetIsAdminQuery, useGetIsInstanceAdminQuery } from '@/rtk/features/userInfoApi';
@@ -35,10 +35,30 @@ export const InstanceDetailPageContent = () => {
 
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
+  const [revokeError, setRevokeError] = useState<'revoke' | null>(null);
+  const [removeInstance, { isLoading: isRevoking }] = useRemoveInstanceMutation();
 
   const handleUserSelect = (user: UserActionTarget) => {
+    setRevokeError(null);
     setSelectedUser(user);
     modalRef.current?.showModal();
+  };
+
+  const handleRevoke = (user: UserActionTarget) => {
+    if (!actingParty?.partyUuid || !fromParty?.partyUuid) return;
+    removeInstance({
+      party: actingParty.partyUuid,
+      from: fromParty.partyUuid,
+      to: user.id,
+      resource: resourceId,
+      instance: instanceUrn,
+    })
+      .unwrap()
+      .catch(() => {
+        setRevokeError('revoke');
+        setSelectedUser(user);
+        modalRef.current?.showModal();
+      });
   };
 
   const { getProviderLogoUrl } = useProviderLogoUrl();
@@ -225,10 +245,11 @@ export const InstanceDetailPageContent = () => {
               isLoading={
                 isInstancesLoading || isLoadingIndirectConnections || isInstanceAdminLoading
               }
-              isActionLoading={isFetchingIndirectConnections}
+              isActionLoading={isFetchingIndirectConnections || isRevoking}
               canDelegate
               noUsersText={t('instance_detail_page.no_users')}
               onSelect={handleUserSelect}
+              onRevoke={handleRevoke}
             />
           )}
         </div>
@@ -240,7 +261,11 @@ export const InstanceDetailPageContent = () => {
           instanceUrn={instanceUrn}
           toPartyUuid={selectedUser?.id}
           toPartyName={selectedUser?.name}
-          onClose={() => setSelectedUser(null)}
+          openWithError={revokeError}
+          onClose={() => {
+            setSelectedUser(null);
+            setRevokeError(null);
+          }}
           availableActions={[DelegationAction.REVOKE, DelegationAction.DELEGATE]}
         />
       )}

@@ -63,5 +63,16 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="actionKeys">The updated right keys.</param>
         /// <returns>The backend response.</returns>
         Task<HttpResponseMessage> UpdateInstanceAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys);
+
+        /// <summary>
+        /// Removes an instance delegation and all its rights.
+        /// </summary>
+        /// <param name="party">The acting party performing the removal.</param>
+        /// <param name="from">The party the instance access was delegated from.</param>
+        /// <param name="to">The party the instance access was delegated to.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="instance">The instance urn.</param>
+        /// <returns>The backend response.</returns>
+        Task<HttpResponseMessage> RemoveInstance(Guid party, Guid from, Guid to, string resource, string instance);
     }
 }

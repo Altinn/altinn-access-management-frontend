@@ -15,12 +15,22 @@ export interface InstanceEditModalProps {
   toPartyUuid?: string;
   toPartyName?: string;
   availableActions?: DelegationAction[];
+  openWithError?: 'delegate' | 'revoke' | 'edit' | null;
   onClose?: () => void;
 }
 
 export const InstanceEditModal = forwardRef<HTMLDialogElement, InstanceEditModalProps>(
   (
-    { resource, instanceUrn, instanceName, toPartyUuid, toPartyName, availableActions, onClose },
+    {
+      resource,
+      instanceUrn,
+      instanceName,
+      toPartyUuid,
+      toPartyName,
+      availableActions,
+      openWithError,
+      onClose,
+    },
     ref,
   ) => {
     useEffect(() => {
@@ -52,6 +62,7 @@ export const InstanceEditModal = forwardRef<HTMLDialogElement, InstanceEditModal
               toPartyUuid={toPartyUuid}
               toPartyName={toPartyName}
               availableActions={availableActions}
+              openWithError={openWithError}
             />
           )}
         </div>

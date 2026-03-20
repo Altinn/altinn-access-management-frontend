@@ -154,5 +154,23 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RemoveInstance(Guid party, Guid from, Guid to, string resource, string instance)
+        {
+            try
+            {
+                string endpointUrl =
+                    $"enduser/connections/resources/instances?party={party}&from={from}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                return await _client.DeleteAsync(token, endpointUrl);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // InstanceClient // RemoveInstance // Exception");
+                throw;
+            }
+        }
     }
 }

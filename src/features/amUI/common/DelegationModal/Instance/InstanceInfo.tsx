@@ -29,6 +29,7 @@ export interface InstanceInfoProps {
   toPartyName?: string;
   availableActions?: DelegationAction[];
   onDelegate?: () => void;
+  openWithError?: 'delegate' | 'revoke' | 'edit' | null;
 }
 
 export const InstanceInfo = ({
@@ -39,6 +40,7 @@ export const InstanceInfo = ({
   toPartyName: toPartyNameProp,
   availableActions,
   onDelegate,
+  openWithError,
 }: InstanceInfoProps) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
@@ -71,7 +73,13 @@ export const InstanceInfo = ({
     isActionLoading,
     isActionSuccess,
     rightsMetaTechnicalErrorDetails,
-  } = useInstanceRightsSection({ resource, instanceUrn, toPartyUuid, onDelegate });
+  } = useInstanceRightsSection({
+    resource,
+    instanceUrn,
+    toPartyUuid,
+    onDelegate,
+    initialDelegationError: openWithError,
+  });
 
   const hasDelegableRights = rights.some((r) => r.delegable);
   const showMissingRightsStatus = !hasAccess && rights.length > 0 && !hasDelegableRights;

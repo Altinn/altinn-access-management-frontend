@@ -11,6 +11,7 @@ import {
   useInstanceDelegationCheckQuery,
   useDelegateInstanceRightsMutation,
   useUpdateInstanceRightsMutation,
+  useRemoveInstanceMutation,
 } from '@/rtk/features/instanceApi';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
@@ -23,11 +24,13 @@ export const useInstanceRightsSection = ({
   instanceUrn,
   toPartyUuid: toPartyUuidProp,
   onDelegate,
+  initialDelegationError,
 }: {
   resource: ServiceResource;
   instanceUrn: string;
   toPartyUuid?: string;
   onDelegate?: () => void;
+  initialDelegationError?: 'delegate' | 'revoke' | 'edit' | null;
 }) => {
   const { t } = useTranslation();
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
@@ -45,6 +48,7 @@ export const useInstanceRightsSection = ({
   const { data: reportee } = useGetReporteeQuery();
   const [delegateInstance] = useDelegateInstanceRightsMutation();
   const [updateInstance] = useUpdateInstanceRightsMutation();
+  const [removeInstance] = useRemoveInstanceMutation();
 
   const {
     data: instanceRights,
@@ -86,6 +90,16 @@ export const useInstanceRightsSection = ({
     },
     { skip: !actingParty || !resource.identifier || !instanceUrn },
   );
+
+  useEffect(() => {
+    setDelegationError(null);
+  }, [toPartyUuid]);
+
+  useEffect(() => {
+    if (initialDelegationError) {
+      setDelegationError(initialDelegationError);
+    }
+  }, [initialDelegationError]);
 
   const isLoading = isRightsMetaLoading || isDelegationCheckLoading || isInstanceRightsLoading;
 
@@ -230,7 +244,7 @@ export const useInstanceRightsSection = ({
         to: toPartyUuid,
         resource: resource.identifier,
         instance: instanceUrn,
-        actionKeys,
+        input: { directRightKeys: actionKeys },
       })
         .unwrap()
         .then(onSuccess)
@@ -244,12 +258,12 @@ export const useInstanceRightsSection = ({
   const revokeResource = () => {
     if (actingParty && fromParty && toPartyUuid) {
       applyActionStates();
-      updateInstance({
+      removeInstance({
         party: actingParty.partyUuid,
+        from: fromParty.partyUuid,
         to: toPartyUuid,
         resource: resource.identifier,
         instance: instanceUrn,
-        actionKeys: [],
       })
         .unwrap()
         .then(onSuccess)
