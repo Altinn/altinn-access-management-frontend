@@ -201,7 +201,7 @@ export const InstanceDetailPageContent = () => {
               />
             )}
           </DsParagraph>
-          {isInstanceAdmin ? (
+          {isAdmin ? (
             <UserSearch
               includeSelfAsChild={false}
               AddUserButton={InstanceAddUserButton}
@@ -214,9 +214,9 @@ export const InstanceDetailPageContent = () => {
               canDelegate
               noUsersText={t('instance_detail_page.no_users')}
             />
-          ) : (
+          ) : isInstanceAdmin ? (
             <InstanceAddUserButton isLarge />
-          )}
+          ) : null}
         </div>
       )}
     </>
