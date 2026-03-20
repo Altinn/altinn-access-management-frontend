@@ -147,5 +147,6 @@ export const useSingleRightRequests = ({
     deleteRequest,
     hasPendingRequest: (resourceId: string) => !!getRequestId(resourceId),
     isLoadingRequest,
+    singleRightRequests,
   };
 };
