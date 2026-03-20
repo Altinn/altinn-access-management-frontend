@@ -31,6 +31,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     resourceType: resource.ResourceType,
                     status: resource.Status,
                     resourceReferences: resource.ResourceReferences,
+                    resourceOwnerOrgcode: resource.HasCompetentAuthority?.Orgcode,
                     resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
                     resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
                     rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
