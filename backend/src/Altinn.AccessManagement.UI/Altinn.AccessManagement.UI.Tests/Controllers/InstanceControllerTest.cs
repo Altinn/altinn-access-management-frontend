@@ -615,6 +615,44 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
+        /// <summary>
+        /// Test case: Successfully remove an instance delegation.
+        /// Expected: Returns NoContent.
+        /// </summary>
+        [Fact]
+        public async Task RemoveInstance_Success()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            HttpResponseMessage httpResponse = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+
+            Assert.Equal(HttpStatusCode.NoContent, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Handles unexpected errors when removing an instance delegation.
+        /// Expected: Returns an internal server error.
+        /// </summary>
+        [Fact]
+        public async Task RemoveInstance_InternalServerError()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");// Triggers exception in client mock
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            HttpResponseMessage httpResponse = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
         private HttpClient GetTestClient(IInstanceService instanceService)
         {
             WebApplicationFactory<InstanceController> factory = _factory.WithWebHostBuilder(builder =>
