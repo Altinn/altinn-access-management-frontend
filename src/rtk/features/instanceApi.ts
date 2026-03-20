@@ -8,7 +8,6 @@ import type {
   RightAccess,
   ServiceResource,
 } from './singleRights/singleRightsApi';
-import { resourceApi } from './resourceApi';
 
 interface InstanceType {
   id: string;

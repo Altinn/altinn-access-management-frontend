@@ -100,12 +100,16 @@ export const InstanceDetailPageContent = () => {
     [indirectConnections],
   );
 
-  const InstanceAddUserButton = ({ isLarge }: { isLarge?: boolean }) => (
-    <AddUserButton
-      isLarge={isLarge}
-      resourceId={resourceId}
-      instanceUrn={instanceUrn}
-    />
+  const InstanceAddUserButton = useMemo(
+    () =>
+      ({ isLarge }: { isLarge?: boolean }) => (
+        <AddUserButton
+          isLarge={isLarge}
+          resourceId={resourceId}
+          instanceUrn={instanceUrn}
+        />
+      ),
+    [resourceId, instanceUrn],
   );
 
   const {

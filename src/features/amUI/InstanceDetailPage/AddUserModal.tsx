@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useId, useRef, useState } from 'react';
 import {
   DsAlert,
   DsButton,
@@ -80,8 +80,7 @@ const AddUserModal = ({
   const headingId = useId();
   const { actingParty } = usePartyRepresentation();
   const dispatch = useDispatch();
-  const [delegateInstanceRights, { isLoading: isSubmitting, error: submitError }] =
-    useDelegateInstanceRightsMutation();
+  const [delegateInstanceRights, { isLoading: isSubmitting }] = useDelegateInstanceRightsMutation();
 
   const [personIdentifier, setPersonIdentifier] = useState('');
   const [lastName, setLastName] = useState('');
@@ -112,18 +111,6 @@ const AddUserModal = ({
     setSubmitErrorDetails(null);
   };
 
-  useEffect(() => {
-    if (submitError) {
-      const details = createErrorDetails(submitError);
-      setSubmitErrorDetails(
-        details ?? {
-          status: '500',
-          time: new Date().toISOString(),
-        },
-      );
-    }
-  }, [submitError]);
-
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
 
   const personIdentifierValidation = getPersonIdentifierErrorKey(personIdentifier);
@@ -138,28 +125,35 @@ const AddUserModal = ({
     !isRightsLoading &&
     !rightsErrorDetails;
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     setSubmitErrorDetails(null);
 
-    try {
-      await delegateInstanceRights({
-        party: actingParty?.partyUuid || '',
-        resource: resourceId,
-        instance: instanceUrn,
-        input: {
-          to: {
-            personIdentifier: personIdentifier.trim(),
-            lastName: lastName.trim(),
-          },
-          directRightKeys: selectedRights,
+    delegateInstanceRights({
+      party: actingParty?.partyUuid || '',
+      resource: resourceId,
+      instance: instanceUrn,
+      input: {
+        to: {
+          personIdentifier: personIdentifier.trim(),
+          lastName: lastName.trim(),
         },
-      }).unwrap();
-
-      dispatch(connectionApi.util.invalidateTags(['Connections']));
-      modalRef.current?.close();
-    } catch {
-      // Error state is handled through RTK Query mutation state.
-    }
+        directRightKeys: selectedRights,
+      },
+    })
+      .unwrap()
+      .then(() => {
+        dispatch(connectionApi.util.invalidateTags(['Connections']));
+        modalRef.current?.close();
+      })
+      .catch((error: unknown) => {
+        const details = createErrorDetails(error);
+        setSubmitErrorDetails(
+          details ?? {
+            status: '500',
+            time: new Date().toISOString(),
+          },
+        );
+      });
   };
 
   return (
@@ -185,7 +179,9 @@ const AddUserModal = ({
 
         {submitErrorDetails && (
           <DsAlert data-color='danger'>
-            {submitErrorDetails.status === '429' ? (
+            {submitErrorDetails.status === '400' ? (
+              <DsParagraph>{t('new_user_modal.not_found_error_person_ssn')}</DsParagraph>
+            ) : submitErrorDetails.status === '429' ? (
               <DsParagraph>{t('new_user_modal.too_many_requests_error')}</DsParagraph>
             ) : (
               <>
@@ -290,9 +286,7 @@ const AddUserModal = ({
 
         <div className={classes.buttonRow}>
           <DsButton
-            onClick={() => {
-              void handleSubmit();
-            }}
+            onClick={handleSubmit}
             disabled={!isFormValid}
             loading={isSubmitting}
           >
