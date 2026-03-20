@@ -58,11 +58,9 @@ export const PendingRequests = () => {
       {singleRightRequests.length > 0 && (
         <ListItem
           title={t('delegation_modal.request.sent_requests_item')}
-          description={`${singleRightRequests.length} ${
-            singleRightRequests.length === 1
-              ? t('delegation_modal.request.active_access_request_single')
-              : t('delegation_modal.request.active_access_request_plural')
-          }`}
+          description={t('delegation_modal.request.active_access_request', {
+            count: singleRightRequests.length,
+          })}
           icon={HandshakeIcon}
           linkIcon
           color='neutral'

@@ -524,8 +524,8 @@
       "withdraw_request_success": "Forespørsel om fullmakt til {{resource}} er slettet",
       "withdraw_request_error": "Kunne ikke slette forespørsel om fullmakt til {{resource}}",
       "sent_requests_item": "Forespørsel om tilgang",
-      "active_access_request_single": "aktiv",
-      "active_access_request_plural": "aktive",
+      "active_access_request_one": "{{count}} aktiv",
+      "active_access_request_other": "{{count}} aktive",
       "view_requests": "Se forespørsler",
       "sent_requests_modal_header": "Din forespørsel om tilganger til {{partyName}} er sendt. Du vil få beskjed når de er godkjent."
     }
