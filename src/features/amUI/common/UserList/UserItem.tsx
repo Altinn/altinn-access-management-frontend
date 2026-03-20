@@ -164,7 +164,7 @@ export const UserItem = ({
       type={type}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}
-      interactive={!!hasInheritingUsers || interactive}
+      interactive={!!hasInheritingUsers || !!onSelect || interactive}
       shadow={shadow}
       linkIcon={!hasInheritingUsers && !disableLinks}
       onClick={() => {

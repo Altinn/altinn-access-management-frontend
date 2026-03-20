@@ -103,7 +103,11 @@ export const InstanceInfo = ({
   return (
     <>
       <StatusMessageForScreenReader politenessSetting='assertive'>
-        {delegationError ?? missingAccess ?? ''}
+        {delegationError
+          ? delegationError === 'revoke'
+            ? t('delegation_modal.technical_error_message.revoke_failed')
+            : t('delegation_modal.technical_error_message.message')
+          : (missingAccess ?? '')}
       </StatusMessageForScreenReader>
       <div>
         <ResourceHeading resource={resource} />
@@ -168,7 +172,7 @@ export const InstanceInfo = ({
                 <Button
                   variant={hasDelegateAction ? 'tertiary' : 'primary'}
                   onClick={revokeResource}
-                  disabled={rights.length === 0 || rights.some((r) => r.inherited === true)}
+                  disabled={!rights.some((r) => r.delegated === true && r.inherited !== true)}
                   color='danger'
                 >
                   <MinusCircleIcon aria-hidden='true' />

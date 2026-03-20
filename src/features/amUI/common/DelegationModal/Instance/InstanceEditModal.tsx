@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { forwardRef, useEffect } from 'react';
+import { forwardRef } from 'react';
 import { DsDialog } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -33,19 +33,6 @@ export const InstanceEditModal = forwardRef<HTMLDialogElement, InstanceEditModal
     },
     ref,
   ) => {
-    useEffect(() => {
-      const handleClose = () => onClose?.();
-
-      if (ref && 'current' in ref && ref.current) {
-        ref.current.addEventListener('close', handleClose);
-      }
-      return () => {
-        if (ref && 'current' in ref && ref.current) {
-          ref.current.removeEventListener('close', handleClose);
-        }
-      };
-    }, [onClose, ref]);
-
     return (
       <DsDialog
         ref={ref}

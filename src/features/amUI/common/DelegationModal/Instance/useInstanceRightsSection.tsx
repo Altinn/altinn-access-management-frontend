@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -44,6 +44,13 @@ export const useInstanceRightsSection = ({
   const [missingAccess, setMissingAccess] = useState<string | null>(null);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [isActionSuccess, setIsActionSuccess] = useState(false);
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+    };
+  }, []);
 
   const { data: reportee } = useGetReporteeQuery();
   const [delegateInstance] = useDelegateInstanceRightsMutation();
@@ -63,7 +70,12 @@ export const useInstanceRightsSection = ({
       instance: instanceUrn,
     },
     {
-      skip: !actingParty || !fromParty || !toPartyUuid || !resource.identifier || !instanceUrn,
+      skip:
+        !actingParty?.partyUuid ||
+        !fromParty?.partyUuid ||
+        !toPartyUuid ||
+        !resource.identifier ||
+        !instanceUrn,
     },
   );
 
@@ -88,7 +100,7 @@ export const useInstanceRightsSection = ({
       resource: resource.identifier,
       instance: instanceUrn,
     },
-    { skip: !actingParty || !resource.identifier || !instanceUrn },
+    { skip: !actingParty?.partyUuid || !resource.identifier || !instanceUrn },
   );
 
   useEffect(() => {
@@ -204,7 +216,7 @@ export const useInstanceRightsSection = ({
   const onSuccess = () => {
     setIsActionLoading(false);
     setIsActionSuccess(true);
-    setTimeout(() => setIsActionSuccess(false), 2000);
+    successTimerRef.current = setTimeout(() => setIsActionSuccess(false), 2000);
     onDelegate?.();
   };
 

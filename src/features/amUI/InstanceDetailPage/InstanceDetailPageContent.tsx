@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
@@ -38,10 +38,15 @@ export const InstanceDetailPageContent = () => {
   const [revokeError, setRevokeError] = useState<'revoke' | null>(null);
   const [removeInstance, { isLoading: isRevoking }] = useRemoveInstanceMutation();
 
+  useEffect(() => {
+    if (selectedUser && modalRef.current) {
+      modalRef.current.showModal();
+    }
+  }, [selectedUser]);
+
   const handleUserSelect = (user: UserActionTarget) => {
     setRevokeError(null);
     setSelectedUser(user);
-    modalRef.current?.showModal();
   };
 
   const handleRevoke = (user: UserActionTarget) => {
@@ -57,7 +62,6 @@ export const InstanceDetailPageContent = () => {
       .catch(() => {
         setRevokeError('revoke');
         setSelectedUser(user);
-        modalRef.current?.showModal();
       });
   };
 
@@ -252,13 +256,13 @@ export const InstanceDetailPageContent = () => {
           ) : null}
         </div>
       )}
-      {resource && (
+      {resource && selectedUser && (
         <InstanceEditModal
           ref={modalRef}
           resource={resource}
           instanceUrn={instanceUrn}
-          toPartyUuid={selectedUser?.id}
-          toPartyName={selectedUser?.name}
+          toPartyUuid={selectedUser.id}
+          toPartyName={selectedUser.name}
           openWithError={revokeError}
           onClose={() => {
             setSelectedUser(null);

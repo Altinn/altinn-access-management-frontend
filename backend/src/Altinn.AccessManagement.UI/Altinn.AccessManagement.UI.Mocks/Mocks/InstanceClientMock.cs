@@ -161,7 +161,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             List<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(instancePath);
             bool instanceExists = instances.Any(permission =>
                 string.Equals(permission.Resource?.RefId, resource, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(permission.Instance?.RefId, instance, StringComparison.OrdinalIgnoreCase));
+                string.Equals(permission.Instance?.RefId, instance, StringComparison.OrdinalIgnoreCase) &&
+                permission.Permissions.Any(p => p.From?.Id == from && p.To?.Id == to));
 
             if (!instanceExists)
             {
