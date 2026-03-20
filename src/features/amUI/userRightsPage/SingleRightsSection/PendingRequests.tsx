@@ -26,10 +26,10 @@ export const PendingRequests = () => {
   const { t } = useTranslation();
 
   const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { singleRightRequests } = useSingleRightRequests({
+  const { singleRightRequests = [] } = useSingleRightRequests({
     canRequestRights: true,
-    includeResources: true,
   });
 
   return (
@@ -37,19 +37,24 @@ export const PendingRequests = () => {
       <DsDialog
         ref={modalRef}
         closedby='any'
-        onClose={() => setSelectedResource(null)}
+        onClose={() => {
+          setSelectedResource(null);
+          setIsModalOpen(false);
+        }}
         className={classes.pendingRequestsModal}
       >
         <SnackbarProvider>
-          <PendingRequestsList
-            onClose={() => modalRef.current?.close()}
-            selectedResource={selectedResource}
-            setSelectedResource={setSelectedResource}
-          />
+          {isModalOpen && (
+            <PendingRequestsList
+              onClose={() => modalRef.current?.close()}
+              selectedResource={selectedResource}
+              setSelectedResource={setSelectedResource}
+            />
+          )}
           <Snackbar />
         </SnackbarProvider>
       </DsDialog>
-      {singleRightRequests?.length > 0 && (
+      {singleRightRequests.length > 0 && (
         <ListItem
           title={t('delegation_modal.request.sent_requests_item')}
           description={`${singleRightRequests.length} ${
@@ -65,7 +70,10 @@ export const PendingRequests = () => {
           interactive
           as='button'
           badge={<div>{t('delegation_modal.request.view_requests')}</div>}
-          onClick={() => modalRef.current?.showModal()}
+          onClick={() => {
+            setIsModalOpen(true);
+            modalRef.current?.showModal();
+          }}
         />
       )}
     </>
@@ -86,7 +94,12 @@ const PendingRequestsList = ({
   const isSmallScreen = useIsTabletOrSmaller();
   const { fromParty } = usePartyRepresentation();
 
-  const { singleRightRequests, deleteRequest, isLoadingRequest } = useSingleRightRequests({
+  const {
+    singleRightRequests = [],
+    isLoadingRequests,
+    deleteRequest,
+    isLoadingRequest,
+  } = useSingleRightRequests({
     canRequestRights: true,
     includeResources: true,
   });
@@ -122,9 +135,10 @@ const PendingRequestsList = ({
             })}
           </DsHeading>
           <ResourceList
+            isLoading={isLoadingRequests}
             size={isSmallScreen ? 'sm' : 'md'}
             enableSearch={false}
-            resources={(singleRightRequests || [])
+            resources={singleRightRequests
               .map((x) => x.resource)
               .filter((r): r is ServiceResource => !!r)}
             showDetails={false}
