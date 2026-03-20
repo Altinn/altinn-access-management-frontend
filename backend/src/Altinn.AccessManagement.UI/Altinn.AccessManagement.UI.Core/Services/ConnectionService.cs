@@ -144,5 +144,33 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 throw;
             }
         }
+
+        /// <inheritdoc/>
+        public async Task<List<SimplifiedConnection>> GetAvailableUsers(Guid party)
+        {
+            try
+            {
+                return await _connectionClient.GetAvailableUsers(party);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed fetching available users for {PartyUuid}", party);
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance)
+        {
+            try
+            {
+                return await _connectionClient.GetInstanceUsers(party, resource, instance);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed fetching instance users for {PartyUuid}", party);
+                throw;
+            }
+        }
     }
 }

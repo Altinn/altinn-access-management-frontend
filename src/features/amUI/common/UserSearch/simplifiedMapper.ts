@@ -1,0 +1,57 @@
+import type { SimplifiedConnection, SimplifiedParty } from '@/rtk/features/connectionApi';
+
+import { buildSortKey, normalizeType } from './mapperUtils';
+import type { UserSearchNode } from './types';
+
+/**
+ * Maps a SimplifiedParty (from the limited instance users endpoint) to a UserSearchNode.
+ * Used when the caller has isClientAdmin but not isAdmin, so only basic party info is available.
+ */
+const mapSimplifiedPartyToUserSearchNode = (party: SimplifiedParty): UserSearchNode => ({
+  id: party.id,
+  name: party.name,
+  type: normalizeType(party.type),
+  variant: party.variant,
+  organizationIdentifier: party.organizationIdentifier,
+  isDeleted: party.isDeleted ?? undefined,
+  sortKey: buildSortKey(party.name),
+  roles: [],
+  children: null,
+  // All users from the limited endpoint are direct delegations (not inherited)
+  isInherited: false,
+});
+
+/**
+ * Maps SimplifiedParty[] (from GET connections/resources/instances/users) to UserSearchNode[].
+ * These are users who have access to a specific instance.
+ * Used when isClientAdmin=true but isAdmin=false.
+ */
+export const mapSimplifiedPartiesToUserSearchNodes = (
+  parties?: SimplifiedParty[],
+): UserSearchNode[] => {
+  if (!parties?.length) {
+    return [];
+  }
+
+  return parties.map(mapSimplifiedPartyToUserSearchNode);
+};
+
+/**
+ * Maps SimplifiedConnection[] (from GET connections/users) to UserSearchNode[].
+ * These are indirect connections (users who have some access from the party).
+ * Used when isClientAdmin=true but isAdmin=false.
+ */
+export const mapSimplifiedConnectionsToUserSearchNodes = (
+  connections?: SimplifiedConnection[],
+): UserSearchNode[] => {
+  if (!connections?.length) {
+    return [];
+  }
+
+  return connections.map((connection) => ({
+    ...mapSimplifiedPartyToUserSearchNode(connection.party),
+    children: connection.connections?.length
+      ? mapSimplifiedConnectionsToUserSearchNodes(connection.connections)
+      : null,
+  }));
+};

@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { SimplifiedParty } from './connectionApi';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import type { PersonInput } from './connectionApi';
 import type {
@@ -105,6 +106,21 @@ export const instanceApi = createApi({
       }),
       invalidatesTags: ['instances', 'instanceRights', 'instanceDelegationCheck'],
     }),
+
+    /**
+     * Gets users who have access to a specific instance (simplified parties).
+     * Limited endpoint for client/instance admins without full admin access.
+     * Backend: GET enduser/connections/resources/instances/users
+     */
+    getInstanceUsers: builder.query<
+      SimplifiedParty[],
+      { partyUuid: string; resource: string; instance: string }
+    >({
+      query: ({ partyUuid, resource, instance }) =>
+        `instances/delegation/instances/simplified/users?party=${partyUuid}&resource=${encodeURIComponent(resource)}&instance=${encodeURIComponent(instance)}`,
+      keepUnusedDataFor: 3,
+      providesTags: ['instances'],
+    }),
   }),
 });
 
@@ -114,6 +130,7 @@ export const {
   useInstanceDelegationCheckQuery,
   useDelegateInstanceRightsMutation,
   useUpdateInstanceRightsMutation,
+  useGetInstanceUsersQuery,
 } = instanceApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = instanceApi;

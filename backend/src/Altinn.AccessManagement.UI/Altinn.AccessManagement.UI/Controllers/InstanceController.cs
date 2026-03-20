@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -20,20 +21,24 @@ namespace Altinn.AccessManagement.UI.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IInstanceService _instanceService;
+        private readonly IConnectionService _connectionService;
         private readonly ILogger<InstanceController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceController"/> class.
         /// </summary>
         /// <param name="instanceService">The instance delegation service.</param>
+        /// <param name="connectionService">The connection service (used for simplified instance user queries).</param>
         /// <param name="httpContextAccessor">Accessor for the current http context.</param>
         /// <param name="logger">Logger instance.</param>
         public InstanceController(
             IInstanceService instanceService,
+            IConnectionService connectionService,
             IHttpContextAccessor httpContextAccessor,
             ILogger<InstanceController> logger)
         {
             _instanceService = instanceService;
+            _connectionService = connectionService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
         }
@@ -226,6 +231,44 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 _logger.LogError(ex, "Unexpected exception occurred during update of instance access: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        /// Gets all users who have access to a specific instance (simplified party info).
+        /// Limited endpoint for client/instance admins without full admin access.
+        /// Proxies to backend: GET enduser/connections/resources/instances/users
+        /// </summary>
+        /// <param name="party">The party UUID.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="instance">The instance URN.</param>
+        /// <returns>List of simplified parties representing users with access to the instance.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("delegation/instances/simplified/users")]
+        public async Task<ActionResult<List<SimplifiedParty>>> GetInstanceUsers(
+            [FromQuery] Guid party,
+            [FromQuery] string resource,
+            [FromQuery] string instance)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var users = await _connectionService.GetInstanceUsers(party, resource, instance);
+                return Ok(users);
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetInstanceUsers failed unexpectedly");
+                return StatusCode(500);
             }
         }
     }

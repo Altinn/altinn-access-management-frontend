@@ -9,16 +9,24 @@ import { PageDivider } from '../common/PageDivider/PageDivider';
 import UserSearch from '../common/UserSearch/UserSearch';
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
+import {
+  mapSimplifiedPartiesToUserSearchNodes,
+  mapSimplifiedConnectionsToUserSearchNodes,
+} from '../common/UserSearch/simplifiedMapper';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
+import { useGetRightHoldersQuery, useGetAvailableUsersQuery } from '@/rtk/features/connectionApi';
+import { useGetInstancesQuery, useGetInstanceUsersQuery } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
-import { useGetIsAdminQuery, useGetIsInstanceAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetIsInstanceAdminQuery,
+} from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 import { AddUserButton } from './AddUserModal';
 import { CheckmarkIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons';
@@ -41,12 +49,18 @@ export const InstanceDetailPageContent = () => {
     isError: isAdminError,
     error: isAdminErrorObj,
   } = useGetIsAdminQuery();
+
   const {
     data: isInstanceAdmin,
     isLoading: isInstanceAdminLoading,
     isError: isInstanceAdminError,
     error: isInstanceAdminErrorObj,
   } = useGetIsInstanceAdminQuery();
+
+  // Whether to use limited endpoints: isInstanceAdmin, but not full isAdmin
+  const useLimitedEndpoints = !isAdmin && isInstanceAdmin;
+
+  // --- Full endpoints (isAdmin) ---
 
   const {
     data: instances = [],
@@ -66,7 +80,7 @@ export const InstanceDetailPageContent = () => {
     },
   );
 
-  const users = useMemo(
+  const adminUsers = useMemo(
     () =>
       mapPermissionsToUserSearchNodes(
         instances.flatMap((instanceDelegation) => instanceDelegation.permissions),
@@ -76,6 +90,7 @@ export const InstanceDetailPageContent = () => {
       ),
     [fromParty?.partyUuid, instances],
   );
+
   const {
     data: indirectConnections,
     isLoading: isLoadingIndirectConnections,
@@ -91,10 +106,57 @@ export const InstanceDetailPageContent = () => {
     },
   );
 
-  const indirectUsers = useMemo(
+  const adminIndirectUsers = useMemo(
     () => mapConnectionsToUserSearchNodes(indirectConnections),
     [indirectConnections],
   );
+
+  // --- Limited endpoints (isInstanceAdmin only) ---
+  // These return simplified data when the user lacks full admin access
+
+  const {
+    data: instanceUsers,
+    isLoading: isInstanceUsersLoading,
+    isError: isInstanceUsersError,
+    error: instanceUsersError,
+  } = useGetInstanceUsersQuery(
+    {
+      partyUuid: fromParty?.partyUuid ?? '',
+      resource: resourceId,
+      instance: instanceUrn,
+    },
+    {
+      skip: !useLimitedEndpoints || !fromParty?.partyUuid || !resourceId || !instanceUrn,
+    },
+  );
+
+  const clientAdminUsers = useMemo(
+    () => mapSimplifiedPartiesToUserSearchNodes(instanceUsers),
+    [instanceUsers],
+  );
+
+  const {
+    data: availableUsers,
+    isLoading: isAvailableUsersLoading,
+    isFetching: isFetchingAvailableUsers,
+  } = useGetAvailableUsersQuery(
+    {
+      partyUuid: fromParty?.partyUuid ?? '',
+    },
+    {
+      skip: !useLimitedEndpoints || !fromParty?.partyUuid,
+    },
+  );
+
+  const clientAdminIndirectUsers = useMemo(
+    () => mapSimplifiedConnectionsToUserSearchNodes(availableUsers),
+    [availableUsers],
+  );
+
+  // --- Resolved data: pick from the right source based on access level ---
+
+  const users = isAdmin ? adminUsers : clientAdminUsers;
+  const indirectUsers = isAdmin ? adminIndirectUsers : clientAdminIndirectUsers;
 
   const InstanceAddUserButton = useMemo(
     () =>
@@ -153,9 +215,17 @@ export const InstanceDetailPageContent = () => {
   }
 
   const contentTechnicalError =
-    isAdminError || isInstanceAdminError || isInstancesError || resourceError
+    isAdminError ||
+    isInstanceAdminError ||
+    isInstancesError ||
+    isInstanceUsersError ||
+    resourceError
       ? createErrorDetails(
-          instancesError || isAdminErrorObj || isInstanceAdminErrorObj || resourceError,
+          instancesError ||
+            instanceUsersError ||
+            isAdminErrorObj ||
+            isInstanceAdminErrorObj ||
+            resourceError,
         )
       : null;
 
@@ -202,6 +272,7 @@ export const InstanceDetailPageContent = () => {
             )}
           </DsParagraph>
           {isAdmin ? (
+            // Full admin: use full endpoints with complete user/permission data
             <UserSearch
               includeSelfAsChild={false}
               AddUserButton={InstanceAddUserButton}
@@ -215,7 +286,17 @@ export const InstanceDetailPageContent = () => {
               noUsersText={t('instance_detail_page.no_users')}
             />
           ) : isInstanceAdmin ? (
-            <InstanceAddUserButton isLarge />
+            // Instance admin: use limited endpoints with simplified user data
+            <UserSearch
+              includeSelfAsChild={false}
+              AddUserButton={InstanceAddUserButton}
+              users={users}
+              indirectUsers={indirectUsers}
+              isLoading={isInstanceUsersLoading || isAvailableUsersLoading}
+              isActionLoading={isFetchingAvailableUsers}
+              canDelegate
+              noUsersText={t('instance_detail_page.no_users')}
+            />
           ) : null}
         </div>
       )}
