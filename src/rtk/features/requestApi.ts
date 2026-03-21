@@ -11,9 +11,6 @@ export interface RequestDto {
   from: Entity;
   to: Entity;
   lastUpdated: string;
-}
-
-export interface RequestResourceDto extends RequestDto {
   resourceId: string;
 }
 
@@ -66,15 +63,12 @@ export const requestApi = createApi({
     }),
 
     // delegation modal queries and mutations
-    getPendingSingleRightRequests: builder.query<
-      RequestResourceDto[],
-      { party: string; to: string }
-    >({
+    getPendingSentSingleRightRequests: builder.query<RequestDto[], { party: string; to: string }>({
       query: ({ party, to }) => `sent?party=${party}&to=${to}&status=pending`,
       providesTags: [Tags.PendingSentRequests],
     }),
     createResourceRequest: builder.mutation<
-      RequestResourceDto,
+      RequestDto,
       { party: string; to: string; resource: string }
     >({
       query: ({ party, to, resource }) => ({
@@ -83,12 +77,33 @@ export const requestApi = createApi({
       }),
       invalidatesTags: [Tags.PendingSentRequests, 'sentRequests'],
     }),
-    withdrawRequest: builder.mutation<RequestResourceDto, { party: string; id: string }>({
+    withdrawRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `sent/withdraw?party=${party}&id=${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: [Tags.PendingSentRequests, 'sentRequests'],
+    }),
+    confirmRequest: builder.mutation<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `sent/confirm?party=${party}&id=${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['sentRequests', Tags.PendingSentRequests],
+    }),
+    rejectRequest: builder.mutation<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `received/reject?party=${party}&id=${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['receivedRequests'],
+    }),
+    approveRequest: builder.mutation<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `received/approve?party=${party}&id=${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['receivedRequests'],
     }),
   }),
 });
@@ -97,9 +112,12 @@ export const {
   useGetSentRequestsQuery,
   useGetReceivedRequestsQuery,
   useGetRequestQuery,
-  useGetPendingSingleRightRequestsQuery,
+  useGetPendingSentSingleRightRequestsQuery,
   useCreateResourceRequestMutation,
   useWithdrawRequestMutation,
+  useConfirmRequestMutation,
+  useRejectRequestMutation,
+  useApproveRequestMutation,
 } = requestApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = requestApi;

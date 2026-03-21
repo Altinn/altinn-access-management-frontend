@@ -56,6 +56,27 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return MapToSingleRightRequest(response);
         }
 
+        /// <inheritdoc />
+        public async Task<SingleRightRequest> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.ConfirmRequest(party, id, cancellationToken);
+            return MapToSingleRightRequest(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<SingleRightRequest> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.RejectRequest(party, id, cancellationToken);
+            return MapToSingleRightRequest(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<SingleRightRequest> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.ApproveRequest(party, id, cancellationToken);
+            return MapToSingleRightRequest(response);
+        }
+
         private static SingleRightRequest MapToSingleRightRequest(RequestResourceDto x)
         {
             return new SingleRightRequest()
